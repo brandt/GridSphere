@@ -8,9 +8,15 @@ import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 
 public class TableBean extends BaseBean implements TagBean {
 
-    private DefaultTableModel defaultModel = new DefaultTableModel();
+    protected DefaultTableModel defaultModel = new DefaultTableModel();
 
-    public TableBean() {}
+    public TableBean(String cssStyle) {
+        this.cssStyle = cssStyle;
+    }
+
+    public TableBean() {
+        super();
+    }
 
     public TableBean(DefaultTableModel defaultModel) {
         this.defaultModel = defaultModel;

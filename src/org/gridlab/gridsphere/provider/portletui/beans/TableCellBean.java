@@ -17,13 +17,8 @@ public class TableCellBean extends TagBeanContainer implements TagBean {
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("<td>");
-        Iterator it = container.iterator();
-        while (it.hasNext()) {
-            TagBean tagBean = (TagBean)it.next();
-            sb.append(tagBean.toString());
-            System.err.println("its the tagbean out: " + tagBean.toString());
-        }
+        sb.append("<td class=\"" + cssStyle + "\">");
+        sb.append(super.toString());
         sb.append("</td>");
         return sb.toString();
     }

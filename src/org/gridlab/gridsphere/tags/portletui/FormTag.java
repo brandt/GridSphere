@@ -9,7 +9,7 @@ public class FormTag extends ActionTag {
 
     protected boolean isMultipart = false;
     protected String method = "POST";
-    protected String name = new String();
+    protected String name = "";
 
     public String getName() {
         return name;
@@ -41,8 +41,6 @@ public class FormTag extends ActionTag {
     }
 
     public int doEndTag() throws JspTagException {
-        PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
-
         try {
             JspWriter out = pageContext.getOut();
 

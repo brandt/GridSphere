@@ -35,6 +35,8 @@ public class TableRowTag extends BaseBeanTag {
         System.err.println("in TableRowTag:doEndTag");
         TableTag tableTag = (TableTag)getParent();
         if (tableTag != null) {
+            System.err.println("in TableRowTag: this is the rowbean" + trb.toString());
+
             DefaultTableModel tableModel = tableTag.getTableModel();
             tableModel.addTableRowBean(trb);
         }

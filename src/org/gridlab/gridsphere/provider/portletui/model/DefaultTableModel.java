@@ -10,7 +10,7 @@ import java.util.*;
 
 public class DefaultTableModel extends BaseBean implements TagBean {
 
-    protected List dataList = new ArrayList();
+    protected List dataList = new Vector();
 
     public DefaultTableModel() {}
 
@@ -34,11 +34,13 @@ public class DefaultTableModel extends BaseBean implements TagBean {
             if (obj instanceof String) {
                 System.err.println("its an instanceif String!!!");
                 String value = (String)paramMap.get(key);
-                TextBean tb1 = new TextBean(key);
+                TextBean tb1 = new TextBean();
+                tb1.setText(value);
                 cellbean = new TableCellBean();
                 cellbean.addTagBean(tb1);
                 tableRow.addTableCellBean(cellbean);
-                tb1 = new TextBean(" " + value);
+                tb1 = new TextBean();
+                tb1.setText(" " + value);
                 cellbean = new TableCellBean();
                 cellbean.addTagBean(tb1);
                 tableRow.addTableCellBean(cellbean);

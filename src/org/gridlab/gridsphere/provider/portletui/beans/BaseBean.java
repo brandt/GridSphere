@@ -79,7 +79,7 @@ public abstract class BaseBean implements TagBean {
      * Returns the backgroundcolor of the beans.
      * @return the backgroundcolor
      */
-    public String getBackgroundcolor() {
+    public String getBackgroundColor() {
         return backgroundcolor;
     }
 
@@ -87,7 +87,7 @@ public abstract class BaseBean implements TagBean {
      * Sets the backgoundcolor of the beans.
      * @param backgroundcolor the backgroundcolor to be set
      */
-    public void setBackgroundcolor(String backgroundcolor) {
+    public void setBackgroundColor(String backgroundcolor) {
         this.backgroundcolor = backgroundcolor;
     }
 

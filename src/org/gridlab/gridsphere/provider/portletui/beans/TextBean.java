@@ -7,15 +7,23 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 public class TextBean extends BaseBean implements TagBean {
 
-    protected String label = new String();
+    protected String text = "";
+    protected String key = null;
 
     public TextBean() {
         super();
     }
 
-    public TextBean(String label) {
-        super();
-        this.label = label;
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+        if (request != null) {
+            System.err.println("saving into session");
+            store(this);
+        }
     }
 
     /**
@@ -23,15 +31,12 @@ public class TextBean extends BaseBean implements TagBean {
      * @return label of the bean
      */
     public String getText() {
-        return label;
+        return text;
     }
 
-    /**
-     * Sets the label of the bean
-     * @param label the label to be set
-     */
-    public void setText(String label) {
-        this.label = label;
+
+    public void setText(String text) {
+        this.text = text;
         if (request != null) {
             System.err.println("saving into session");
             store(this);
@@ -39,6 +44,6 @@ public class TextBean extends BaseBean implements TagBean {
     }
 
     public String toString() {
-        return label;
+        return text;
     }
 }

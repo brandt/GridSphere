@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class TagBeanContainer extends BaseBean {
 
@@ -26,6 +27,17 @@ public class TagBeanContainer extends BaseBean {
 
     public List getTagBeans() {
         return container;
+    }
+
+    public String toString() {
+        Iterator it = container.iterator();
+        StringBuffer sb = new StringBuffer();
+        while (it.hasNext()) {
+            TagBean tagBean = (TagBean)it.next();
+            sb.append(tagBean.toString());
+            System.err.println("its the tagbean out: " + tagBean.toString());
+        }
+        return sb.toString();
     }
 
 }

@@ -8,6 +8,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 public class ActionSubmitBean extends BaseBean implements TagBean {
 
     protected String name = "";
+    protected String key = "";
     protected String value = "";
     protected String action = "";
 
@@ -30,6 +31,18 @@ public class ActionSubmitBean extends BaseBean implements TagBean {
 
     public void setValue(String value) {
         this.value = value;
+        if (request != null) {
+            System.err.println("saving into session");
+            store(this);
+        }
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
         if (request != null) {
             System.err.println("saving into session");
             store(this);

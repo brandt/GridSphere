@@ -60,12 +60,20 @@ public class TableTag extends BaseBeanTag {
             store(getBeanKey(), tableBean);
         }
 
-        try {
-            JspWriter out = pageContext.getOut();
-            System.err.println("printing table " + tableBean.toString());
-            out.print(tableBean.toString());
-        } catch (Exception e) {
-            throw new JspTagException(e.getMessage());
+        Object parent = getParent();
+        if (parent instanceof ContainerTag) {
+            System.err.println("setting tablemodel to parent container");
+            ContainerTag t = (ContainerTag)parent;
+            t.addTagBean(tableBean);
+        } else {
+
+            try {
+                JspWriter out = pageContext.getOut();
+                System.err.println("printing table " + tableBean.toString());
+                out.print(tableBean.toString());
+            } catch (Exception e) {
+                throw new JspException(e);
+            }
         }
         return EVAL_PAGE;
     }

@@ -51,13 +51,13 @@ public interface TagBean {
      * Returns the backgroundcolor of the beans.
      * @return the backgroundcolor
      */
-    public String getBackgroundcolor();
+    public String getBackgroundColor();
 
     /**
      * Sets the backgoundcolor of the beans.
      * @param backgroundcolor the backgroundcolor to be set
      */
-    public void setBackgroundcolor(String backgroundcolor);
+    public void setBackgroundColor(String backgroundcolor);
 
     /**
      * Returns the CSS style name of the beans.

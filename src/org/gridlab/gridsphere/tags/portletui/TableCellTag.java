@@ -26,7 +26,10 @@ public class TableCellTag extends ContainerTag {
     }
 
     public int doStartTag() throws JspException {
-        list.clear();
+        // VERY IMPORTANT that cellBean initialized for ech new tag-- do not set anything
+        // as global variable!
+
+        super.doStartTag();
         cellBean = new TableCellBean();
         System.err.println("in TableCellTag:doStartTag");
         TableRowTag rowTag = (TableRowTag)getParent();
@@ -40,13 +43,13 @@ public class TableCellTag extends ContainerTag {
         if (rowTag != null) {
             TableRowBean trb = rowTag.getTableRowBean();
             System.err.println("setting tablecells in tablerow");
-            List tagbeans = getTagBeans();
-            Iterator it = tagbeans.iterator();
 
+            Iterator it = list.iterator();
             while (it.hasNext()) {
                 TagBean tagBean = (TagBean)it.next();
                 System.err.println("adding tagbean " + tagBean.toString());
                 cellBean.addTagBean(tagBean);
+                cellBean.setCssStyle(tagBean.getCssStyle());
             }
             trb.addTableCellBean(cellBean);
             rowTag.setTableRowBean(trb);

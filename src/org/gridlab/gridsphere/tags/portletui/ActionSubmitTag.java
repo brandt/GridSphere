@@ -5,11 +5,12 @@
 
 package org.gridlab.gridsphere.tags.portletui;
 
-import org.gridlab.gridsphere.tags.ui.BaseTag;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionSubmitBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class ActionSubmitTag extends BaseBeanTag {
 
@@ -29,7 +30,14 @@ public class ActionSubmitTag extends BaseBeanTag {
 
     public void setName(String name) {
         this.actionSubmitBean.setName(name);
+    }
 
+    public String getKey() {
+        return actionSubmitBean.getKey();
+    }
+
+    public void setKey(String key) {
+        this.actionSubmitBean.setKey(key);
     }
 
     public String getValue() {
@@ -53,9 +61,18 @@ public class ActionSubmitTag extends BaseBeanTag {
     }
 
     public int doEndTag() throws JspException {
-        FormTag formTag = (FormTag)getParent();
+        FormTag formTag = (FormTag)findAncestorWithClass(this, FormTag.class);
         if (formTag != null) {
             formTag.setAction(actionSubmitBean.getAction());
+        }
+
+        if (!actionSubmitBean.getKey().equals("")) {
+            Locale locale = pageContext.getRequest().getLocale();
+            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+            String localizedText = bundle.getString(actionSubmitBean.getKey());
+            if (localizedText != null) {
+                actionSubmitBean.setValue(localizedText);
+            }
         }
         try {
             JspWriter out = pageContext.getOut();
