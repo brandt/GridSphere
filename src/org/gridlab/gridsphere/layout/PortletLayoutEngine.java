@@ -52,6 +52,7 @@ public class PortletLayoutEngine {
     // Store application tabs in a hash
     private Map applicationTabs = new HashMap();
 
+    private Map guests = new HashMap();
     /**
      * Constructs a concrete instance of the PortletLayoutEngine
      */
@@ -122,9 +123,18 @@ public class PortletLayoutEngine {
         PortletContainer pc = null;
 
         User user = event.getPortletRequest().getUser();
+        PortletSession session = event.getPortletRequest().getPortletSession(true);
 
+        // Need to provide one guest container per users session
         if (user instanceof GuestUser) {
-            return guestContainer;
+            String id = session.getId();
+            if (guests.containsKey(id)) {
+                return (PortletContainer)guests.get(id);
+            } else {
+                PortletContainer newcontainer = new PortletContainer(guestContainer);
+                guests.put(id, newcontainer);
+                return newcontainer;
+            }
 
             // Check if we have user's layout already
         } else if (userLayouts.containsKey(user)) {

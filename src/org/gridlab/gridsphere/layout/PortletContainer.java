@@ -45,6 +45,14 @@ public class PortletContainer {
     public PortletContainer() {
     }
 
+    public PortletContainer(PortletContainer container) {
+        this.COMPONENT_ID = container.getComponentID();
+        this.components = container.getPortletComponents();
+        this.componentIdentifiers = container.getComponentIdentifierList();
+        this.name = container.getContainerName();
+        this.theme = container.getTheme();
+    }
+
     /**
      * Sets the portlet container name
      *
