@@ -6,11 +6,8 @@ package org.gridlab.gridsphere.tags.portletui;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.provider.portletui.beans.BaseBean;
 
-import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import java.util.Enumeration;
 
@@ -31,7 +28,6 @@ public abstract class BaseBeanTag extends BodyTagSupport {
         //System.err.println("in BaseBeanTag: beankey: " + beanId + "_" + compId);
         return beanId + "_" + compId;
     }
-
 
     protected void store(String id, Object object) {
         /*

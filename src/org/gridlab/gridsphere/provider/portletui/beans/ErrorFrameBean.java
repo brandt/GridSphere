@@ -65,10 +65,8 @@ public class ErrorFrameBean extends FrameBean implements TagBean {
 
     public String toString() {
         if ((key == null) && (value == null)) {
-            System.err.println("setting visible false");
             return "";
         } else {
-            System.err.println("setting visible true");
             return super.toString();
 
         }
