@@ -135,30 +135,39 @@ public class FileManagerPortlet extends ActionPortlet {
             File file = userStorage.getFile(user, fileName);
             // ... find the file you want ...
             if (!file.exists()) {
-                throw new FileNotFoundException("Whaur is it? Ah cannae find it!");
+                throw new FileNotFoundException("No file found: " + fileName + " for user: " + user.getUserName());
             }
             log.debug("filename: " + fileName);
             FileDataSource fds = new FileDataSource(file);
-            if (fds == null) {
-                log.debug("grr");
-            }
-            //res.setContentType(fds.getContentType());
-            log.debug("content type = " + fds.getContentType());
 
+            log.debug("content type = " + fds.getContentType());
+            //res.setContentType(fds.getContentType());
+            //res.setContentType("application/download");
+            res.reset();
+            res.resetBuffer();
+            res.setContentType("application/octet-stream");
+            //res.setContentType( "application/unknow" );
+            res.setHeader("Cache-Control","no-cache"); //HTTP 1.1
+            res.setHeader("Pragma","no-cache"); //HTTP 1.0
+            res.setDateHeader ("Expires", 0); //prevents caching at the proxy server
+            res.setHeader("Cache-Control","no-store"); //HTTP 1.1
+
+            log.debug("file length= " + (int)file.length());
             res.setContentLength((int)file.length());
             // force a save as dialog in recent browsers.
-
-            res.setHeader("Content-disposition","attachment; filename="+fileName);
+            res.setHeader("Content-Disposition","attachment; filename=\"" + fileName + "\";");
 
             // you should use a datahandler to write out data from a datasource.
             DataHandler handler = new DataHandler(fds);
             handler.writeTo(res.getOutputStream());
+            System.err.println("OK acttually wrote file to output!! :-)");
         } catch(FileNotFoundException e) {
-            //res.sendError(HttpServletResponse.SC_NOT_FOUND,e.getMessage());
+            log.error("Unable to find file!", e);
         } catch(SecurityException e) {
             // this gets thrown if a security policy applies to the file. see java.io.File for details.
-            //response.sendError(HttpServletResponse.SC_FORBIDDEN,e.getMessage());
-        } catch(IOException ioe) {
+            log.error("A security exception occured!", e);
+        } catch(IOException e) {
+            log.error("Caught IOException", e);
             //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER,e.getMessage());
         }
     }
