@@ -22,7 +22,7 @@ public class GroupRequestImpl implements GroupRequest {
     private GroupEntryImpl entry = null;
     private SportletUserImpl user = null;
     private SportletGroup sgroup = null;
-    private String role = null;
+    private String role = "";
     private String action = GroupAction.ADD.toString();
 
     public GroupRequestImpl() {

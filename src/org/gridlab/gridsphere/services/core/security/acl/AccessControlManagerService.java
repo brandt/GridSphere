@@ -62,8 +62,6 @@ public interface AccessControlManagerService extends PortletService {
 
     public List getGroupEntries(PortletGroup group);
 
-    public List getGroupEntriesForGroups(List groups);
-
     public GroupEntry getGroupEntry(String id);
 
     public GroupEntry getGroupEntry(User user, PortletGroup group);

@@ -36,6 +36,8 @@ public interface LayoutManagerService extends PortletService {
 
     public void addPortletTab(PortletRequest req, PortletTab tab);
 
+    public void addApplicationTab(PortletRequest req, String webAppName);
+
     public void removeSubscribedPortlet(PortletRequest req, String portletClassName);
 
     public void removeSubscribedPortlets(PortletRequest req, List portletClassNames);

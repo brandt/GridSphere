@@ -129,10 +129,6 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
         return aclManager.getGroupEntries(group);
     }
 
-    public List getGroupEntriesForGroups(List groups) {
-        return aclManager.getGroupEntriesForGroups(groups);
-    }
-
     public GroupEntry getGroupEntry(String id) {
         return aclManager.getGroupEntry(id);
     }

@@ -77,7 +77,9 @@ public class AccessControlManager implements AccessControlManagerService {
         Iterator it = webappNames.iterator();
         while (it.hasNext()) {
             String groupName = (String)it.next();
+            System.err.println(groupName);
             if (!existsGroupWithName(groupName)) {
+                log.info("ccreating group " + groupName);
                 createGroup(groupName);
             }
         }
@@ -220,7 +222,7 @@ public class AccessControlManager implements AccessControlManagerService {
             throws InvalidGroupRequestException {
         if (request instanceof GroupRequestImpl) {
             // First validate accesss request
-            validateGroupRequest(request);
+            //validateGroupRequest(request);
             // Then save account request if not already saved
             if (existsGroupRequest(request)) {
                 try {
@@ -244,7 +246,7 @@ public class AccessControlManager implements AccessControlManagerService {
             log.info(msg);
             throw new InvalidGroupRequestException(msg);
         // If group is super but role isn't, throw invalid access request exception
-        } else if (group.equals(PortletRole.SUPER) && (! role.equals(PortletRole.SUPER) )) {
+        } else if (group.equals(SportletGroup.SUPER) && (!role.equals(PortletRole.SUPER) )) {
             String msg = "Super group can only contain super role.";
             log.info(msg);
             throw new InvalidGroupRequestException(msg);
@@ -313,16 +315,6 @@ public class AccessControlManager implements AccessControlManagerService {
     public List getGroupEntries(PortletGroup group) {
         String criteria = "where groupEntry.sportletGroup.oid='" + group.getID() + "'";
         return selectGroupEntries(criteria);
-    }
-
-    public List getGroupEntriesForGroups(List groups) {
-        List sumGroupEntries = null;
-        for (int ii = 0; ii < groups.size(); ++ii) {
-            PortletGroup group = (PortletGroup)groups.get(ii);
-            List groupEntries = getGroupEntries(group);
-            sumGroupEntries.add(groupEntries);
-        }
-        return sumGroupEntries;
     }
 
     private List selectGroupEntries(String criteria) {
