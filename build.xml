@@ -687,8 +687,11 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Run Tomcat tests                                                    -->
     <!-- =================================================================== -->
-    <target name="run-tests" depends="deploy-test"
-        if="catalina.exists" description="Run Junit tests in running Tomcat container">
+    <target name="run-tests" depends="deploy-test">
+        <antcall target="run-test"/>
+    </target>
+
+    <target name="run-test" if="catalina.exists" description="Run Junit tests in running Tomcat container">
 
         <!-- Start the servlet engine, wait for it to be started, run the
         unit tests, stop the servlet engine, wait for it to be stopped.
@@ -738,6 +741,7 @@ Copyright:
     <!-- =================================================================== -->
     <target name="tests">
 
+        <delete dir="${gridsphere.build}/reports"/>
         <mkdir dir="${gridsphere.build}/reports"/>
 
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
