@@ -21,22 +21,6 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
     }
 
     /**
-     * Gets the width in percent for the column.
-     * @return with of the column
-     */
-    public String getWidth() {
-        return width;
-    }
-
-    /**
-     * Sets the width of a column
-     * @param width of the column
-     */
-    public void setWidth(String width) {
-        this.width = width;
-    }
-
-    /**
      * Renders the component
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
