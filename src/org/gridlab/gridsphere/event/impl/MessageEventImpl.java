@@ -18,7 +18,7 @@ public class MessageEventImpl extends EventObject implements MessageEvent {
     private PortletMessage message;
     private PortletRequest req;
 
-    public MessageEventImpl(PortletRequest req, DefaultPortletMessage message) {
+    public MessageEventImpl(PortletRequest req, PortletMessage message) {
         super(req);
         this.req = req;
         this.message = message;
