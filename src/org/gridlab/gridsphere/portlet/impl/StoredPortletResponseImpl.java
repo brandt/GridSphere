@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.PortletResponse;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -13,7 +14,7 @@ public class StoredPortletResponseImpl extends SportletResponse
 {
     private PrintWriter writer;
 
-    public StoredPortletResponseImpl(PortletResponse response, PrintWriter writer)
+    public StoredPortletResponseImpl(HttpServletResponse response, PrintWriter writer)
     {
         super(response);
         this.writer = writer;
