@@ -45,16 +45,20 @@ public class PortletPageFactory implements PortletSessionListener {
 
         newuserLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.NEW_USER_LAYOUT);
 
-        String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
 
         errorPage = PortletLayoutDescriptor.loadPortletPage(errorLayoutFile, layoutMappingFile);
-        guestPage = PortletLayoutDescriptor.loadPortletPage(guestLayoutFile, layoutMappingFile);
         errorPage.init(new ArrayList());
 
         templatePage = PortletLayoutDescriptor.loadPortletPage(templateLayoutPath, layoutMappingFile);
-
-        guestPage.setLayoutDescriptor(guestLayoutFile);
         errorPage.setLayoutDescriptor(errorLayoutFile);
+
+        reloadGuestUserLayout();
+    }
+
+    public void reloadGuestUserLayout() throws IOException, PersistenceManagerException {
+        String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
+        guestPage = PortletLayoutDescriptor.loadPortletPage(guestLayoutFile, layoutMappingFile);
+        guestPage.setLayoutDescriptor(guestLayoutFile);
     }
 
     public static PortletPageFactory getInstance() throws IOException, PersistenceManagerException {
@@ -156,8 +160,6 @@ public class PortletPageFactory implements PortletSessionListener {
 
             sessionManager.addSessionListener(sessionId, this);
 
-            if (page != null) userLayouts.put(sessionId, page);
-
         } catch (Exception e) {
             log.error("Unable to create user layout: ", e);
         }
@@ -196,6 +198,7 @@ public class PortletPageFactory implements PortletSessionListener {
             if (role.equals(PortletRole.SUPER)) {
                 try {
                     page = createFromAllWebApps();
+                    userLayouts.put(page, sessionId);
                 } catch (Exception e) {
                     log.error("Unable to clone layout: ", e);
                 }
