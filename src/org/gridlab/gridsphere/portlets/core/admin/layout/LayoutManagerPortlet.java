@@ -64,10 +64,23 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         TextAreaBean ta = event.getTextAreaBean("bannerTA");
 
-        String filename = this.getPortletConfig().getContext().getRealPath("/html/pagehead.html");
+        String filename = this.getPortletConfig().getContext().getRealPath("/WEB-INF/CustomPortal/layouts/html/pagehead.html");
         BufferedReader reader = new BufferedReader(new FileReader(filename));
         String line = null;
         StringBuffer sb = new StringBuffer();
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+            sb.append("\n");
+        }
+        reader.close();
+        ta.setValue(sb.toString());
+
+        ta = event.getTextAreaBean("footerTA");
+
+        filename = this.getPortletConfig().getContext().getRealPath("/WEB-INF/CustomPortal/layouts/html/pagefooter.html");
+        reader = new BufferedReader(new FileReader(filename));
+        line = null;
+        sb = new StringBuffer();
         while ((line = reader.readLine()) != null) {
             sb.append(line);
             sb.append("\n");
@@ -122,7 +135,20 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         TextAreaBean ta = event.getTextAreaBean("bannerTA");
         String newText = ta.getValue();
-        String filename = this.getPortletConfig().getContext().getRealPath("/html/pagehead.html");
+        String filename = this.getPortletConfig().getContext().getRealPath("/WEB-INF/CustomPortal/layouts/html/pagehead.html");
+
+        FileWriter f = new FileWriter(filename);
+
+        f.write(newText);
+        f.close();
+
+    }
+
+    public void saveFooter(FormEvent event) throws PortletException, IOException {
+
+        TextAreaBean ta = event.getTextAreaBean("footerTA");
+        String newText = ta.getValue();
+        String filename = this.getPortletConfig().getContext().getRealPath("/WEB-INF/CustomPortal/layouts/html/pagefooter.html");
 
         FileWriter f = new FileWriter(filename);
 
