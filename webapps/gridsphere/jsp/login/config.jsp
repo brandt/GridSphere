@@ -119,7 +119,7 @@
 <ui:frame>
 <ui:tablerow>
 <ui:tablecell>
-<ui:actionsubmit action="saveAuthModules" key="APPLY"/>
+<ui:actionsubmit action="doSaveAuthModules" key="APPLY"/>
 </ui:tablecell>
 </ui:tablerow>
 </ui:frame>
