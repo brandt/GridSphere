@@ -4,17 +4,20 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public interface PortletRender {
+public interface LayoutActionListener {
 
     /**
-     * @deprecated
+     * Called first to process component changes from Layout events including window state and portlet mode changes
      */
-    //public void doRender(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException;
+    //public void doProcessEvents(GridSphereEvent gsEvt) throws PortletLayoutException, IOException;
+    public void doLayoutAction(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException;
 
     public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException;
 
