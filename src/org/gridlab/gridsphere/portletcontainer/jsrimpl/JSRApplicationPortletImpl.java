@@ -15,12 +15,7 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDispatcher;
 
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDeploymentDescriptor2;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityRoleRef;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SupportedLocale;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -76,7 +71,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         this.portletClassName = portletDef.getPortletClass().getContent();
         this.portletName = portletDef.getPortletName().getContent();
         this.context = context;
-
+   
         SupportedLocale[] locales = portletDef.getSupportedLocale();
         supportedLocales = new Locale[locales.length];
         for (int i = 0; i < locales.length; i++) {
@@ -289,6 +284,10 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
 
     public Locale[] getSupportedLocales() {
         return supportedLocales;
+    }
+
+    public Supports[] getSupports() {
+        return portletDef.getSupports();
     }
 
     public SecurityRoleRef[] getSecurityRoleRefs() {

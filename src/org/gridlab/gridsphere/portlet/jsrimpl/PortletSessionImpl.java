@@ -104,7 +104,8 @@ public class PortletSessionImpl implements PortletSession
      *                            if name is <code>null</code>.
      */
 
-    public Object getAttribute(String name) {
+    public Object getAttribute(String name) throws IllegalStateException, IllegalArgumentException {
+        if (name == null) throw new IllegalArgumentException("name is NULL");
         return session.getAttribute(name);
     }
 
@@ -124,7 +125,8 @@ public class PortletSessionImpl implements PortletSession
      *                            if name is <code>null</code>.
      */
 
-    public Object getAttribute(String name,int scope) {
+    public Object getAttribute(String name, int scope) throws IllegalStateException, IllegalArgumentException {
+        if (name == null) throw new IllegalArgumentException("name is NULL");
         return session.getAttribute(name);
     }
 
@@ -144,7 +146,7 @@ public class PortletSessionImpl implements PortletSession
      *					invalidated session
      */
 
-    public java.util.Enumeration getAttributeNames() {
+    public java.util.Enumeration getAttributeNames() throws IllegalStateException {
         return session.getAttributeNames();
     }
 
@@ -167,7 +169,7 @@ public class PortletSessionImpl implements PortletSession
      *					invalidated session
      */
 
-    public java.util.Enumeration getAttributeNames(int scope) {
+    public java.util.Enumeration getAttributeNames(int scope) throws IllegalStateException {
         return session.getAttributeNames();
     }
 
@@ -184,7 +186,7 @@ public class PortletSessionImpl implements PortletSession
      *					invalidated session
      */
 
-    public long getCreationTime() {
+    public long getCreationTime() throws IllegalStateException {
         return session.getCreationTime();
     }
 
@@ -250,8 +252,7 @@ public class PortletSessionImpl implements PortletSession
      * @exception IllegalStateException	if this method is called on a
      *					session which has already been invalidated
      */
-
-    public void invalidate() {
+    public void invalidate() throws IllegalStateException {
         session.invalidate();
     }
 
@@ -270,7 +271,7 @@ public class PortletSessionImpl implements PortletSession
      *
      */
 
-    public boolean isNew() {
+    public boolean isNew() throws IllegalStateException {
         return session.isNew();
     }
 
@@ -292,7 +293,8 @@ public class PortletSessionImpl implements PortletSession
      *                            if name is <code>null</code>.
      */
 
-    public void removeAttribute(String name) {
+    public void removeAttribute(String name) throws IllegalStateException, IllegalArgumentException {
+        if (name == null) throw new IllegalArgumentException("name is NULL");
         session.removeAttribute(name);
     }
 
@@ -313,7 +315,8 @@ public class PortletSessionImpl implements PortletSession
      *                            if name is <code>null</code>.
      */
 
-    public void removeAttribute(String name, int scope) {
+    public void removeAttribute(String name, int scope) throws IllegalStateException, IllegalArgumentException {
+        if (name == null) throw new IllegalArgumentException("name is NULL");
         session.removeAttribute(name);
     }
 
@@ -348,7 +351,8 @@ public class PortletSessionImpl implements PortletSession
      *                            if name is <code>null</code>.
      */
 
-    public void setAttribute(String name, Object value) {
+    public void setAttribute(String name, Object value) throws IllegalStateException, IllegalArgumentException {
+        if (name == null) throw new IllegalArgumentException("name is NULL");
         session.setAttribute(name, value);
     }
 
@@ -383,7 +387,8 @@ public class PortletSessionImpl implements PortletSession
      *                            if name is <code>null</code>.
      */
 
-    public void setAttribute(String name, Object value, int scope) {
+    public void setAttribute(String name, Object value, int scope) throws IllegalStateException, IllegalArgumentException {
+        if (name == null) throw new IllegalArgumentException("name is NULL");
         session.setAttribute(name, value);
     }
 

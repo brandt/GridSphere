@@ -1,12 +1,16 @@
 
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
+
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletContext;
 import javax.portlet.PortalContext;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 
 
 /**
@@ -29,8 +33,8 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      *
      * @param req the HttpServletRequest
      */
-    public ActionRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext) {
-        super(req, portalContext, portletContext);
+    public ActionRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext, Supports[] supports) {
+        super(req, portalContext, portletContext, supports);
     }
 
     /**
@@ -52,7 +56,14 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      * @exception java.io.IOException
      *                   if an input or output exception occurred
      */
-    public java.io.InputStream getPortletInputStream () throws java.io.IOException {
+    public java.io.InputStream getPortletInputStream () throws IOException, IllegalStateException {
+        HttpServletRequest req = (HttpServletRequest) super.getRequest();
+        if (req.getMethod().equals("POST")) {
+            String contentType=req.getContentType();
+            if (contentType==null || contentType.equals("application/x-www-form-urlencoded")) {
+                throw new IllegalStateException("User request HTTP POST data is of type application/x-www-form-urlencoded. This data has been already processed by the portal/portlet-container and is available as request parameters.");
+            }
+        }
         return super.getRequest().getInputStream();
     }
 
@@ -73,7 +84,7 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      *                                   <code>getReader()</code>
      */
     public void setCharacterEncoding(String enc)
-            throws java.io.UnsupportedEncodingException {
+            throws UnsupportedEncodingException, IllegalStateException {
         super.getRequest().setCharacterEncoding(enc);
     }
 

@@ -18,12 +18,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.util.Locale;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.*;
 
 
 /**
@@ -43,6 +38,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     protected PortletContext portletContext = null;
     protected PortalContext portalContext = null;
     protected Supports[] supports = null;
+    protected String contextPath = "/";
 
     protected Map props = null;
 
@@ -52,10 +48,14 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *
      * @param req the HttpServletRequest
      */
-    public PortletRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext) {
+    public PortletRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext, Supports[] supports) {
         super(req);
         this.portalContext = portalContext;
         this.portletContext = portletContext;
+        contextPath = this.portletContext.getRealPath("");
+        int l = contextPath.lastIndexOf("/");
+        contextPath = contextPath.substring(l);
+        this.supports = supports;
         props = new HashMap();
     }
 
@@ -318,7 +318,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @see PortletResponse#encodeURL
      */
     public String getContextPath() {
-        return this.getHttpServletRequest().getContextPath();
+        return contextPath;
     }
 
     /**
@@ -510,7 +510,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *             String array (<code>String[]</code>).
      */
     public java.util.Map getParameterMap() {
-        return this.getHttpServletRequest().getParameterMap();
+        return Collections.unmodifiableMap(this.getHttpServletRequest().getParameterMap());
     }
 
     /**
@@ -545,6 +545,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public void setAttribute(String name, Object o) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
+        if (o == null) this.removeAttribute(name);
         this.getHttpServletRequest().setAttribute(name, o);
     }
 

@@ -41,6 +41,8 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
     private boolean redirected;
     private String redirectLocation;
     protected Map renderParams = null;
+    protected PortletMode portletMode;
+    protected WindowState windowState;
 
     /**
      * Constructs an instance of SportletResponse using an
@@ -90,6 +92,8 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         } else if (windowState == WindowState.NORMAL) {
             ws = PortletWindow.State.NORMAL;
         }
+        isRedirectAllowed = false;
+        this.windowState = windowState;
         req.setAttribute(SportletProperties.PORTLET_WINDOW, ws);
     }
 
@@ -137,7 +141,9 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         } else {
             mode = Portlet.Mode.toMode(portletMode.toString());
         }
+        this.portletMode = portletMode;
         req.setAttribute(SportletProperties.PORTLET_MODE, mode);
+        isRedirectAllowed = false;
     }
 
     /**
@@ -181,10 +187,10 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
                 } else {
                     //   provider.setFullPath(location);
                 }
-                //location = res.encodeRedirectURL(provider.toString());
+                location = res.encodeRedirectURL(location.toString());
                 redirectLocation = location;
                 redirected = true;
-                res.sendRedirect(location);
+                //res.sendRedirect(location);
             }
         } else {
             throw new IllegalStateException("Can't invoke sendRedirect() after certain methods have been called");
@@ -318,6 +324,20 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
 
     public Map getRenderParameters() {
         return renderParams;
+    }
+
+    public String getRedirectLocation() {
+        return redirectLocation;
+    }
+
+    public PortletMode getChangedPortletMode()
+    {
+        return this.portletMode;
+    }
+
+    public WindowState getChangedWindowState()
+    {
+        return this.windowState;
     }
 }
 
