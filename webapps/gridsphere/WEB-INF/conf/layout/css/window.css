@@ -16,6 +16,14 @@
   padding: 2px;
 }
 
+#window-title-active {
+  background-color: red;
+  color: #FFFFFF;
+  border: solid 1px black;
+  font-size: 12px;
+  padding: 2px;
+}
+
 #window-title-name {
   color: #FFFFFF;
 }
