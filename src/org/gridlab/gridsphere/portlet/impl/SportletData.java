@@ -133,7 +133,7 @@ public class SportletData extends BaseObject implements PortletData {
     private void convert2hash() {
         for (int i = 0; i < Attributes.size(); i++) {
             SportletDataAttribute ha = (SportletDataAttribute) Attributes.get(i);
-            store.put((String) ha.getKey(), (String) ha.getValue());
+            store.put(ha.getKey(), ha.getValue());
         }
     }
 

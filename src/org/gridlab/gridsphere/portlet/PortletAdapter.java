@@ -114,7 +114,7 @@ public abstract class PortletAdapter extends Portlet {
         String portletID = (String) request.getAttribute(GridSphereProperties.PORTLETID);
         if (portletID == null) {
             // it may be in the request parameter
-            portletID = (String) request.getParameter(GridSphereProperties.PORTLETID);
+            portletID = request.getParameter(GridSphereProperties.PORTLETID);
             if (portletID == null) {
                 log.error("in AbstractPortlet: No PortletID found in request attribute");
                 throw new PortletException("PortletID is null");
@@ -316,7 +316,7 @@ public abstract class PortletAdapter extends Portlet {
      * Sets a transient variable of the concrete portlet.
      *
      * @param name the variable name
-     * @param the variable value
+     * @param value the variable value
      */
     public void setVariable(String name, Object value) {
         if ((name != null) && (value != null))

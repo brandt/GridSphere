@@ -79,7 +79,7 @@ public class SportletSession implements PortletSession {
     }
 
     public final Object getValue(String name) {
-        return (Object) session.getValue(name);
+        return session.getValue(name);
     }
 
     public final String[] getValueNames() {

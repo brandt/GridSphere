@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.portlet.impl.*;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 
 import javax.servlet.*;
@@ -98,7 +97,7 @@ public abstract class Portlet extends HttpServlet
          * Return a portlet mode from parsing a <code>String</code> representation
          * of a portlet mode.
          *
-         * @throws IIlegalArgumentException if the supplied <code>String</code>
+         * @throws IllegalArgumentException if the supplied <code>String</code>
          * does not match a predefined portlet mode.
          */
         public static Portlet.Mode toMode(String mode) throws IllegalArgumentException {
@@ -332,7 +331,7 @@ public abstract class Portlet extends HttpServlet
                 } else if (method.equals(SportletProperties.LOGIN)) {
                     login(portletRequest);
                 } else if (method.equals(SportletProperties.LOGOUT)) {
-                    PortletSession portletSession = (PortletSession) portletRequest.getPortletSession();
+                    PortletSession portletSession = portletRequest.getPortletSession();
                     logout(portletSession);
                 }
             } catch (PortletException e) {

@@ -224,7 +224,7 @@ public class SportletContext implements PortletContext {
      */
     public PortletService getService(Class service)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
-        return (PortletService) factory.createPortletService(service, config, true);
+        return factory.createPortletService(service, config, true);
     }
 
     /**
@@ -234,7 +234,7 @@ public class SportletContext implements PortletContext {
      * <code>PortletServiceAuthorizer</code>.
      *
      * @param service the classname of the service to load
-     * @param User the user requesting a service instance
+     * @param user the user requesting a service instance
      * @return the portlet service
      *
      * @throws PortletServiceUnavailableException if an exception has occurrred
@@ -243,7 +243,7 @@ public class SportletContext implements PortletContext {
      */
     public PortletService getService(Class service, User user)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
-        return (PortletService) factory.createUserPortletService(service, user, config, true);
+        return factory.createUserPortletService(service, user, config, true);
     }
 
     /**

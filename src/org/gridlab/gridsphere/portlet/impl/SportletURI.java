@@ -26,8 +26,7 @@ public class SportletURI implements PortletURI {
     private HttpServletResponse res = null;
     private Map store = new HashMap();
     private boolean redirect = true;
-    private String contextPath;
-    private PortletWindow.State state;
+    private String contextPath = null;
     private String id = "";
 
     /**
@@ -41,7 +40,7 @@ public class SportletURI implements PortletURI {
      * context path obtained from a <code>HttpServletRequest</code>
      *
      * @param res a <code>HttpServletResponse</code>
-     * @param contextName the request context name
+     * @param contextPath the request context path
      */
     public SportletURI(HttpServletResponse res, String contextPath) {
         this.store = new HashMap();

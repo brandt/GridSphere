@@ -4,13 +4,10 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.portlet.PortletApplicationSettings;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 

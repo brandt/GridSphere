@@ -49,7 +49,7 @@ public interface PortletLog {
     /**
      * Logs the given informational text in the portlet log.
      *
-     * @param the informational text to log
+     * @param text the informational text to log
      */
     public void info(String text);
 

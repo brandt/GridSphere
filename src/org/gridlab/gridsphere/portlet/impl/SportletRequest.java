@@ -18,7 +18,7 @@ public interface SportletRequest extends PortletRequest {
     /**
      * Sets the client device that the user connects to the portal with.
      *
-     * @return the client device
+     * @param client the client device
      */
     public void setClient(Client client);
 
@@ -27,7 +27,7 @@ public interface SportletRequest extends PortletRequest {
      * If the portlet is run in <code>CONFIGURE</code> mode, the portlet data
      * is not accessible and this method will return <code>null</code>
      *
-     * @param portlet data the <code>PortletData</code>
+     * @param data the portlet data the <code>PortletData</code>
      */
     public void setData(PortletData data);
 
@@ -51,7 +51,7 @@ public interface SportletRequest extends PortletRequest {
      *
      * @param group the <code>PortletGroup</code> to query the user's roles or null if
      * <code>BASE</code> group
-     * @returns an array of <code>PortletRole</code> objects
+     * @return an array of <code>PortletRole</code> objects
      *
      * @see PortletRole
      */
@@ -61,7 +61,7 @@ public interface SportletRequest extends PortletRequest {
      * Returns the <code>PortletGroup</code> objects representing the users
      * group membership
      *
-     * @returns an array of <code>PortletGroup</code> objects.
+     * @return an array of <code>PortletGroup</code> objects.
      * This method is guaranteed to at least return the <code>BASE</code> group.
      *
      * @see PortletGroup
@@ -71,7 +71,7 @@ public interface SportletRequest extends PortletRequest {
     /**
      * Returns the <code>PortletGroup</code> objects representing the users group membership
      *
-     * @param list a list of <code>PortletGroup</code> objects.
+     * @param groups a list of <code>PortletGroup</code> objects.
      *
      * @see PortletGroup
      */
@@ -94,14 +94,14 @@ public interface SportletRequest extends PortletRequest {
     /**
      * Sets the previos portlet mode.
      *
-     * @param the previous portlet mode
+     * @param previousMode the previous portlet mode
      */
     public void setPreviousMode(Portlet.Mode previousMode);
 
     /**
      * Returns the window that the portlet is running in.
      *
-     * @return the portlet window
+     * @param window the portlet window
      */
     public void setWindow(PortletWindow window);
 

@@ -4,9 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import java.util.Hashtable;
-import java.util.Map;
-
 /**
  * The <code>DefaultPortletMessage</code> is a portlet message with default parameters.
  * You can use this portlet message to construct a portlet message
@@ -14,7 +11,6 @@ import java.util.Map;
  */
 public final class DefaultPortletMessage implements PortletMessage {
 
-    private Map store = new Hashtable();
     private String message = "";
 
     /**

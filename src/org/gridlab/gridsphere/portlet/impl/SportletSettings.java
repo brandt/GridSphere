@@ -8,9 +8,8 @@ import org.gridlab.gridsphere.portlet.Client;
 import org.gridlab.gridsphere.portlet.PortletApplicationSettings;
 import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.LanguageInfo;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.LanguageInfo;
 
 import java.io.IOException;
 import java.util.*;

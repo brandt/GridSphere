@@ -106,7 +106,7 @@ public class SportletRequestImpl implements SportletRequest {
     /**
      * Sets the client device that the user connects to the portal with.
      *
-     * @return the client device
+     * @param client the client device
      */
     public void setClient(Client client) {
         req.getSession().setAttribute(GridSphereProperties.CLIENT, client);
@@ -174,7 +174,7 @@ public class SportletRequestImpl implements SportletRequest {
      * Sets the data of the concrete portlet instance
      * If the portlet is run in CONFIGURE mode, the portlet data is not accessible and this method will return null.
      *
-     * @param portlet data the PortletData
+     * @param data the portlet data
      */
     public void setData(PortletData data) {
         if ((portletSession == null) || (getMode() != Portlet.Mode.EDIT)) return;
@@ -203,7 +203,7 @@ public class SportletRequestImpl implements SportletRequest {
      * is specified, the roles the user has in the BASE group are returned.
      *
      * @param group the PortletGroup to query the user's roles or null if BASE group
-     * @returns an array of PortletRole objects
+     * @return an array of PortletRole objects
      *
      * @see PortletRole
      */
@@ -233,7 +233,7 @@ public class SportletRequestImpl implements SportletRequest {
     /**
      * Returns the PortletGroup objects representing the users group membership
      *
-     * @returns an array of PortletGroup objects. This method is guaranteed to at least
+     * @return an array of PortletGroup objects. This method is guaranteed to at least
      * return the SportletGroup.BASEGroup
      *
      * @see PortletGroup
@@ -249,8 +249,7 @@ public class SportletRequestImpl implements SportletRequest {
     /**
      * Returns the PortletGroup objects representing the users group membership
      *
-     * @returns an array of PortletGroup objects. This method is guaranteed to at least
-     * return the SportletGroup.BASEGroup
+     * @param groups an array of PortletGroup objects.
      *
      * @see PortletGroup
      */
@@ -334,7 +333,7 @@ public class SportletRequestImpl implements SportletRequest {
     /**
      * Returns the window that the portlet is running in.
      *
-     * @return the portlet window
+     * @param window the portlet window
      */
     public void setWindow(PortletWindow window) {
         req.setAttribute(GridSphereProperties.PORTLETWINDOW, window);

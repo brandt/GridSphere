@@ -28,7 +28,7 @@ public interface PortletTitleListener {
      * @param request the portlet request
      * @param response the portlet response
      *
-     * @throws PortletExceptionif the portlet title has trouble fulfilling
+     * @throws PortletException if the portlet title has trouble fulfilling
      * the rendering request
      * @throws IOException if the streaming causes an I/O problem
      */

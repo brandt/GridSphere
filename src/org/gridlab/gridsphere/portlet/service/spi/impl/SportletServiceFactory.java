@@ -21,15 +21,12 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServic
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
-import java.net.URL;
 
 /**
  * The <code>SportletServiceFactory</code> provides a factory for the creation

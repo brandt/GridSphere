@@ -123,14 +123,14 @@ public interface PortletRequest extends HttpServletRequest {
      *
      * @param group the <code>PortletGroup </code>to query the user's roles
      * or <code>null</code> if <code>BASE</code> group
-     * @returns an array of PortletRole objects
+     * @return an array of PortletRole objects
      */
     public List getRoles(PortletGroup group);
 
     /**
      * Returns the PortletGroup objects representing the users group membership
      *
-     * @returns an array of PortletGroup objects
+     * @return an array of PortletGroup objects
      */
     public List getGroups();
 

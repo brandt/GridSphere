@@ -129,7 +129,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
      * This is an alias for the setUserID method, which for all intensive
      * purposes represents the name required for this user to login.
      *
-     * @param String the user id
+     * @param name the user id
      */
     public void setUserName(String name) {
         this.UserID = name;
@@ -306,7 +306,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
     private void convert2hash() {
         for (int i = 0; i < Attributes.size(); i++) {
             SportletUserImplAttribute ha = (SportletUserImplAttribute) Attributes.get(i);
-            store.put((String) ha.getKey(), (String) ha.getValue());
+            store.put(ha.getKey(), ha.getValue());
         }
     }
 
@@ -315,7 +315,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
     }
 
     public void setAttributes(Vector attributes) {
-        attributes = attributes;
+        Attributes = attributes;
     }
 
     public void jdoBeforeCreate(Database database) throws Exception {

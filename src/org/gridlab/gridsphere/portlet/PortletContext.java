@@ -160,7 +160,7 @@ public interface PortletContext extends ServletContext {
      * service is provided with the appropiae access control restrictions on the supplied
      *
      * @param service the classname of the service to load
-     * @param <code>User</code> the user requesting a service instance
+     * @param user the <code>User</code> requesting a service instance
      * @return the portlet service
      *
      * @throws PortletServiceUnavailableException

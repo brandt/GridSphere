@@ -4,10 +4,7 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.exolab.castor.types.AnyNode;
-//import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 
 import javax.servlet.ServletConfig;
@@ -43,12 +40,11 @@ public class SportletConfig implements PortletConfig {
      * object and an application portlet descriptor
      *
      * @param servletConfig a <code>ServletConfig</code>
-     * @param appDescriptor a <code>ApplicationSportletConfig</code>
+     * @param appConfig a <code>ApplicationSportletConfig</code>
      */
     public SportletConfig(ServletConfig servletConfig, ApplicationPortletConfig appConfig) {
         this.servletConfig = servletConfig;
         this.context = new SportletContext(servletConfig);
-        Iterator it;
 
         // set portlet modes
         supportedModes = appConfig.getSupportedModes();
@@ -85,7 +81,6 @@ public class SportletConfig implements PortletConfig {
      * Returns whether the portlet supports the given mode for the given client.
      *
      * @param mode the portlet mode
-     * @param client the given client
      *
      * @return <code>true</code> if the window supports the given state,
      * <code>false</code> otherwise
