@@ -596,8 +596,8 @@ Copyright:
         <copy file="docs/design.pdf" todir="build/docs"/>
         <copy file="docs/jetspeed-eval.pdf" todir="build/docs"/>
 
-
-        <copy todir="${env.CATALINA_HOME}/webapps/gridsphere">
+        <mkdir dir="${env.CATALINA_HOME}/webapps/gridsphere/docs"/>
+        <copy todir="${env.CATALINA_HOME}/webapps/gridsphere/docs">
             <fileset dir="build/docs"/>
         </copy>
 
@@ -606,16 +606,6 @@ Copyright:
 
     </target>
 
-    <!-- =================================================================== -->
-    <!-- Deploys GridSphere Java Server Pages to Tomcat                                        -->
-    <!-- =================================================================== -->
-    <target name="deploy-jsp">
-
-        <copy overwrite="true" todir="${env.CATALINA_HOME}/webapps/gridsphere/jsp">
-            <fileset dir="${build.webapps}/gridsphere/jsp"/>
-        </copy>
-
-    </target>
 
     <!-- =================================================================== -->
     <!-- Deploys GridSphere to Tomcat                                        -->

@@ -20,11 +20,11 @@
         </service-config>
         <service-config>
             <param-name>LDAP_AUTH_MODULE</param-name>
-            <param-value>org.gridlab.portal.services.security.auth.modules.LDAPAuthModule</param-value>
+            <param-value>org.gridlab.gridsphere.services.security.auth.modules.LDAPAuthModule</param-value>
         </service-config>
         <service-config>
             <param-name>MYPROXY_AUTH_MODULE</param-name>
-            <param-value>org.gridlab.portal.services.security.auth.modules.CredentialAuthModule</param-value>
+            <param-value>org.gridlab.gridsphere.services.security.auth.modules.CredentialAuthModule</param-value>
         </service-config>
         <service-config>
             <param-name>LOGIN_MODULE</param-name>
@@ -61,10 +61,13 @@
         <description>Provides Password Management Capabilities</description>
         <interface>org.gridlab.gridsphere.services.core.security.password.PasswordManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.core.security.password.impl.DbmsPasswordManagerService</implementation>
-        <service-config>
-            <param-name>gridsphere.user.password</param-name>
-            <param-value></param-value>
-        </service-config>
+    </service>
+
+    <service>
+        <name>Layout Manager Service</name>
+        <description>Provides Layout Management Capabilities</description>
+        <interface>org.gridlab.gridsphere.services.core.layout.LayoutManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.layout.impl.LayoutManagerServiceImpl</implementation>
     </service>
 
     <service>
