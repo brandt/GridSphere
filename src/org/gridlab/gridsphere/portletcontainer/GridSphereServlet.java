@@ -102,9 +102,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             throw new ServletException("Unable to locate portlet registry service: " + e.getMessage());
         }
 
-        // Get an instance of the UserPortletManager
-        //userPortletManager = UserPortletManager.getDefault();
-
         // Get an instance of the PortletLayoutEngine
         layoutEngine = PortletLayoutEngine.getInstance();
 

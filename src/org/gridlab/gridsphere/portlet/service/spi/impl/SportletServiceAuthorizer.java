@@ -64,7 +64,7 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
     /**
      *  Authorizes operations that require admin user access
      *
-     * @param <code>PortletGroup</code> the portlet group within which the
+     * @param group the <code>PortletGroup</code> within which the
      * user should be an admin if they are not a super user.
      * @throws PortletServiceAuthorizationException if supplied user is not an admin user
      */
@@ -77,7 +77,7 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
     /**
      * Authorizes operations that require super or admin user access
      *
-     * @param <code>PortletGroup</code> the portlet group within which the
+     * @param group the <code>PortletGroup</code> within which the
      * user should be an admin if they are not a super user
      * @throws PortletServiceAuthorizationException if supplied user is not a super or admin user
      */
@@ -93,8 +93,7 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      * Authorizes operations that require either a super user or can be invoked
      * only if the supplied user  matches the associated user
      *
-     * @param <code>PortletGroup</code> the portlet group within which the
-     * user should be an admin if they are not a super user
+     * @param user the <code>User</code> which should be an admin if they are not a super user
      * @throws PortletServiceAuthorizationException if supplied user is
      * not a super or same user
      */

@@ -53,8 +53,8 @@ public class SportletServiceFactory implements PortletServiceFactory {
     private SportletServiceFactory() {
         // Reads in the service definitions from the xml file and stores them in allServices
         // organized according to service interface keys and service definition values
-        String servicesPath = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_SERVICES);
-        String servicesMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_SERVICES_MAPPING);
+        String servicesPath = GridSphereConfig.getProperty(GridSphereConfigProperties.SERVICES_DESCRIPTOR);
+        String servicesMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.SERVICES_MAPPING);
         addServices(servicesPath, servicesMappingPath);
     }
 

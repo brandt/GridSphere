@@ -25,6 +25,13 @@ public interface PortletWebApplication {
     public String getWebApplicationName();
 
     /**
+     * Returns the group owner name of this portlet web application
+     *
+     * @return the group owner name of this portlet web application
+     */
+    public String getGroupOwnerName();
+
+    /**
      * Returns the portlet web application description
      *
      * @return the portlet web application description

@@ -48,7 +48,16 @@ public class PortletDeploymentDescriptor {
     }
 
     /**
-     * Returns a list of portelt definitions
+     * Returns the group owner name of this portlet collection
+     *
+     * @return the group owner name of this portlet collection
+     */
+    public String getGroupOwnerName() {
+        return sportletCollection.getGroupOwnerName();
+    }
+
+    /**
+     * Returns a list of portlet definitions
      *
      * @param defs a list of portlet definitions
      */

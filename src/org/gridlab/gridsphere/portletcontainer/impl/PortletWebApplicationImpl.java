@@ -32,10 +32,12 @@ import org.gridlab.gridsphere.portlet.impl.*;
 public class PortletWebApplicationImpl implements PortletWebApplication {
 
     private PortletLog log = SportletLog.getInstance(PortletWebApplicationImpl.class);
+    private PortletDeploymentDescriptor pdd = null;
     private String webApplicationName = null;
     private Map appPortlets = new Hashtable();
     private RequestDispatcher rd = null;
     private String webAppDescription;
+    private String groupOwnerName;
 
     // PortletLayout engine handles layout.xml
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
@@ -88,6 +90,8 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         loadPortlets(ctx);
         // load layout.xml
         loadLayout(ctx);
+        // load services xml
+        loadServices(ctx);
     }
 
     /**
@@ -98,9 +102,9 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     protected void loadPortlets(ServletContext ctx) {
         // load in the portlet.xml file
         String portletXMLfile = ctx.getRealPath("") + "/WEB-INF/portlet.xml";
-        String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_PORTLET_MAPPING);
+        String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
 
-        PortletDeploymentDescriptor pdd = null;
+        pdd = null;
         try {
             pdd = new PortletDeploymentDescriptor(portletXMLfile, portletMappingFile);
         } catch (Exception e) {
@@ -129,7 +133,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         String layoutXMLfile = ctx.getRealPath("") + "/WEB-INF/layout.xml";
         File f = new File(layoutXMLfile);
         if (f.exists()) {
-            //String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_LAYOUT_MAPPING);
+            //String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
             layoutEngine.addApplicationTab(webApplicationName, layoutXMLfile);
         }
     }
@@ -143,7 +147,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         // load in the portlet.xml file
         String descriptor = ctx.getRealPath("") + "/WEB-INF/PortletServices.xml";
         File f = new File(descriptor);
-        String mapping = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_SERVICES_MAPPING);
+        String mapping = GridSphereConfig.getProperty(GridSphereConfigProperties.SERVICES_MAPPING);
         if (f.exists()) {
             SportletServiceFactory factory = SportletServiceFactory.getInstance();
             factory.addServices(descriptor, mapping);
@@ -168,6 +172,15 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      */
     public String getWebApplicationName() {
         return webApplicationName;
+    }
+
+    /**
+     * Returns the group owner name of this portlet web application
+     *
+     * @return the group owner name of this portlet web application
+     */
+    public String getGroupOwnerName() {
+        return pdd.getGroupOwnerName();
     }
 
     /**
