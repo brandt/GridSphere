@@ -351,6 +351,10 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         compId.setComponentID(list.size());
         compId.setClassName(this.getClass().getName());
         list.add(compId);
+        String pname = portletClass.substring(0, portletClass.length() - 1);
+        pname = pname.substring(0, pname.lastIndexOf("."));
+        pname = pname.substring(pname.lastIndexOf(".")+1);
+        title += ": " + pname;
         doConfig();
         return list;
     }
@@ -375,6 +379,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 if (concPortlet != null) {
                     settings = concPortlet.getPortletSettings();
                 }
+
                 // get window states from application portlet config
                 allowedWindowStates = sort(appConfig.getAllowedWindowStates());
             }
