@@ -286,7 +286,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             session.setAttribute(SportletProperties.PORTLET_USER, user.getID());
             if (aclService.hasSuperRole(user)) {
                 log.debug("User: " + user.getUserName() + " logged in as SUPER");
-                //req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.SUPER);
             }
             List groups = aclService.getGroups(req.getUser());
             Iterator it = groups.iterator();
@@ -341,8 +340,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             FileDataSource fds = new FileDataSource(f);
             res.setContentType(fds.getContentType());
             res.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-
-            // you should use a datahandler to write out data from a datasource.
             DataHandler handler = new DataHandler(fds);
             handler.writeTo(res.getOutputStream());
         } catch (FileNotFoundException e) {
@@ -470,16 +467,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public void sessionDestroyed(HttpSessionEvent event) {
         sessionManager.sessionDestroyed(event);
-        //loginService.sessionDestroyed(event.getSession());
         log.debug("sessionDestroyed('" + event.getSession().getId() + "')");
-        HttpSession s = event.getSession();
-
-        //HttpSession session = event.getSession();
-        //User user = (User) session.getAttribute(SportletProperties.PORTLET_USER);
-        //System.err.println("user : " + user.getUserID() + " expired!");
-        //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();
-        //engine.removeUser(user);
-        //engine.logoutPortlets(event);
     }
 
     /**
@@ -500,14 +488,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public void sessionWillPassivate(HttpSessionEvent event) {
         sessionManager.sessionDestroyed(event);
-        //loginService.sessionDestroyed(event.getSession());
         log.debug("sessionWillPassivate('" + event.getSession().getId() + "')");
-        //HttpSession session = event.getSession();
-        //User user = (User) session.getAttribute(SportletProperties.USER);
-        //System.err.println("user : " + user.getUserID() + " expired!");
-        //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();
-        //engine.removeUser(user);
-        //engine.logoutPortlets(event);
     }
 
 }
