@@ -107,11 +107,16 @@ public class PanelTag extends BaseComponentTag {
     }
 
     public int doStartTag() throws JspException {
+        boolean includeBody = true;
+
         counter = 0;
         if (!beanId.equals("")) {
             panelBean = (PanelBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (panelBean == null) {
-                return SKIP_BODY;
+                panelBean = new PanelBean();
+                this.setBaseComponentBean(panelBean);
+            } else {
+                includeBody = false;
             }
         } else {
             panelBean = new PanelBean();
@@ -135,18 +140,19 @@ public class PanelTag extends BaseComponentTag {
 
         try {
             JspWriter out = pageContext.getOut();
+
             out.print(panelBean.toStartString());
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
-
-        return EVAL_BODY_INCLUDE;
+        if (includeBody) {
+            return EVAL_BODY_INCLUDE;
+        } else {
+            return SKIP_BODY;
+        }
     }
 
     public int doEndTag() throws JspException {
-
-        if (panelBean == null) return EVAL_PAGE;
-
         try {
             JspWriter out = pageContext.getOut();
             out.print(panelBean.toEndString());

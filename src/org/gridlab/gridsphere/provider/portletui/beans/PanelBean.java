@@ -20,7 +20,7 @@ public class PanelBean extends BeanContainer implements TagBean {
     protected String width = PANEL_WIDTH;
 
     private String cols = "100%";
-    private String[] colArray;
+    private String[] colArray = { cols };
     private int numCols = 1;
 
     /**
@@ -143,7 +143,6 @@ public class PanelBean extends BeanContainer implements TagBean {
 
     public String toEndString() {
         StringBuffer sb = new StringBuffer();
-
         int numRows = container.size();
         int i = 0;
         int j = 0;
