@@ -271,9 +271,7 @@ public class PortletURLImpl implements PortletURL {
 
             String encname = URLEncoder.encode(name);
             Object val = store.get(name);
-            if (val instanceof String) {
-
-            } else if (val instanceof String[]) {
+            if (val instanceof String[]) {
                 String[] vals = (String[])val;
                 for (int j = 0; j < vals.length; j++) {
                     String encvalue = URLEncoder.encode(vals[j]);
