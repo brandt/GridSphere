@@ -9,8 +9,10 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.descriptor.*;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
+import org.gridlab.gridsphere.core.persistence.PersistenceException;
 
 import java.util.*;
+import java.io.IOException;
 
 /**
  * The SportletSettings class provides the portlet with its dynamic configuration.
@@ -37,6 +39,7 @@ public class SportletSettings implements PortletSettings {
      * SportletSettings constructor
      * Create a PortletSettings object from a PortletApplication deployment descriptor object
      *
+     * @param pdd the PortletDeploymentDescriptor representing the portlet.xml. Only used for store method
      * @param portletApp the PortletApplication deployment descriptor information
      * @param knownGroups a list of known groups obtained from the AccessControlService
      * @param knownRoles a list of known roles obtained from the AccessControlService
@@ -45,8 +48,8 @@ public class SportletSettings implements PortletSettings {
                             ConcretePortletApplication portletApp,
                             List knownGroups, List knownRoles) {
 
+        this.pdd = pdd;
         this.concretePortletInfo = portletApp.getConcretePortletInfo();
-
         this.concretePortletID = portletApp.getUID();
 
         String localeStr = concretePortletInfo.getDefaultLocale();
@@ -206,8 +209,9 @@ public class SportletSettings implements PortletSettings {
      * Stores all attributes.
      *
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
+     * @throws IOException if the streaming causes an I/O problem
      */
-    public void store() throws AccessDeniedException {
+    public void store() throws AccessDeniedException, IOException {
         if (!hasConfigurePermission) {
             throw new AccessDeniedException("User is unauthorized to store portlet settings");
         }
@@ -220,7 +224,11 @@ public class SportletSettings implements PortletSettings {
             list.add(parms);
         }
         concretePortletInfo.setConfigParamList(list);
-        pdd.save();
+        try {
+            pdd.save();
+        } catch (PersistenceException e) {
+            throw new IOException("Unable to save SportletSettings: " + e.getMessage());
+        }
     }
 
     /**

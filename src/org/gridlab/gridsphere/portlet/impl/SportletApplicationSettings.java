@@ -9,8 +9,10 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.descriptor.*;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
+import org.gridlab.gridsphere.core.persistence.PersistenceException;
 
 import java.util.*;
+import java.io.IOException;
 
 /**
  * The PortletApplicationSettings interface provides the portlet with the application's dynamic configuration.
@@ -94,21 +96,26 @@ public abstract class SportletApplicationSettings implements PortletApplicationS
      * Stores all attributes.
      *
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
+     * @throws IOException if the streaming causes an I/O problem
      */
-    public void store() throws AccessDeniedException {
+    public void store() throws AccessDeniedException, IOException {
         if (!hasConfigurePermission) {
             throw new AccessDeniedException("User is unauthorized to store portlet application settings");
         }
         Enumeration enum = store.elements();
         Vector list = new Vector();
-/*        while (enum.hasMoreElements()) {
+        while (enum.hasMoreElements()) {
             String key = (String)enum.nextElement();
             String value = (String)store.get(key);
             ConfigParam parms = new ConfigParam(key, value);
             list.add(parms);
         }
         portletApp.setContextParamList(list);
-        pdd.save();*/
+        try {
+            pdd.save();
+        } catch (PersistenceException e) {
+            throw new IOException("Unable to save SportletApplicationSettings: " + e.getMessage());
+        }
     }
 
 }
