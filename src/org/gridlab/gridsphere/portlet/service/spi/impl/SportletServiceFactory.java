@@ -44,16 +44,14 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
     // Maintain a single copy of each service instantiated
     // as a classname and PortletServiceProvider pair
-    private Hashtable initServices = new Hashtable();
+    private static Hashtable initServices = new Hashtable();
 
     // Hash of all services key = service interface name, value = SportletServiceDefinition
-    private Hashtable allServices = new Hashtable();
+    private static Hashtable allServices = new Hashtable();
 
     // Hash of all user services
     private static Hashtable userServices = new Hashtable();
 
-    // List of all guest cached guest services
-    private Hashtable guestServices = new Hashtable();
 
     /**
      * Private constructor. Use getDefault() instead.
@@ -71,9 +69,18 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
     }
 
     public void logout(PortletSession session) throws PortletException {
+        log.debug("in logout of SportletServiceFactory");
         String userid = userSessionManager.getUserIdFromSession(session);
         if ((userid != null) && (userServices.containsKey(userid))) {
             log.debug("Removing services for userid: " + userid);
+            Map servs = (Map)userServices.get(userid);
+            Collection c = servs.values();
+            Iterator it = c.iterator();
+            while (it.hasNext()) {
+                PortletServiceProvider psp = (PortletServiceProvider)it.next();
+                psp.destroy();
+                psp = null;
+            }
             userServices.remove(userid);
         }
     }
@@ -136,13 +143,13 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             throw new PortletServiceUnavailableException("Received null service class");
         }
 
+        String serviceName = service.getName();
         // if init'ed service exists then use it
         if (useCachedService) {
-            psp = (PortletServiceProvider) initServices.get(service);
+            psp = (PortletServiceProvider) initServices.get(serviceName);
             if (psp != null) return psp;
         }
 
-        String serviceName = service.getName();
         SportletServiceDefinition def = (SportletServiceDefinition) allServices.get(serviceName);
         if (def == null) {
             log.error("Unable to find portlet service interface: " + serviceName +
@@ -182,7 +189,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             throw new PortletServiceNotFoundException("Unable to initialize portlet service: " + serviceImpl, e);
         }
 
-        initServices.put(service, psp);
+        initServices.put(serviceName, psp);
         return psp;
     }
 
@@ -207,7 +214,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         //PortletServiceProvider psp = null;
 
         String serviceName = service.getName();
-
+        log.debug("Creating a user service: " + serviceName);
         SportletServiceDefinition def = (SportletServiceDefinition) allServices.get(serviceName);
         if (def == null) {
             log.error("Unable to find portlet service interface: " + serviceName +
@@ -229,8 +236,8 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             }
         }
 
-        if ((user instanceof GuestUser) && (guestServices.containsKey(serviceName))) {
-            return (PortletService)guestServices.get(serviceName);
+        if ((user instanceof GuestUser) && (initServices.containsKey(serviceName))) {
+            return (PortletService)initServices.get(serviceName);
         }
 
         /* Create the service implementation */
@@ -266,14 +273,14 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
         try {
             psp.init(portletServiceConfig);
-            initServices.put(service, psp);
+            //initServices.put(service, psp);
         } catch (PortletServiceUnavailableException e) {
             log.error("Unable to initialize portlet service: " + serviceImpl, e);
             throw new PortletServiceNotFoundException("The SportletServiceFactory was unable to initialize the portlet service: " + serviceImpl, e);
         }
 
         if (user instanceof GuestUser) {
-            guestServices.put(serviceName, psp);
+            initServices.put(serviceName, psp);
             return psp;
         }
 
@@ -283,29 +290,12 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         userServiceMap.put(serviceName, psp);
         userServices.put(user.getID(), userServiceMap);
 
-        log.debug("printing user services " + user.getID());
-        Enumeration enum = userServices.keys();
-        while (enum.hasMoreElements()) {
-            String u = (String)enum.nextElement();
-            Map l = (Map)userServices.get(u);
-            Iterator it = l.keySet().iterator();
-            while (it.hasNext()) {
-                log.debug("service: " + (String)it.next());
-            }
-        }
-
-        log.debug("printing guest services");
-        enum = guestServices.keys();
-        while (enum.hasMoreElements()) {
-            String s = (String)enum.nextElement();
-            log.debug("service: " + s);
-        }
-
         List sessions = userSessionManager.getSessions(user);
         if (sessions != null) {
             Iterator it = sessions.iterator();
             while (it.hasNext()) {
                 PortletSession session = (PortletSession)it.next();
+                log.debug("Adding a session listener for session: " + session.getId() + " to portlet session manager");
                 if (session != null) portletSessionManager.addSessionListener(session.getId(), this);
             }
         }
@@ -328,7 +318,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      * @param service the service class to shutdown
      */
     public void shutdownService(Class service) {
-        if (initServices.containsKey(service)) {
+        if (initServices.containsKey(service.getName())) {
             log.info("Shutting down service: " + service.getName());
             PortletServiceProvider psp = (PortletServiceProvider) initServices.get(service);
             psp.destroy();
@@ -343,11 +333,41 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         Enumeration keys = initServices.keys();
         log.info("Shutting down all services:");
         while (keys.hasMoreElements()) {
-            Class service = (Class) keys.nextElement();
-            PortletServiceProvider psp = (PortletServiceProvider) initServices.get(service);
-            log.info("Shutting down service: " + service.getName() + " impl: " + psp.getClass().getName());
+            String serviceName = (String) keys.nextElement();
+            PortletServiceProvider psp = (PortletServiceProvider) initServices.get(serviceName);
+            log.info("Shutting down service: " + serviceName + " impl: " + psp.getClass().getName());
             psp.destroy();
         }
     }
 
+    public void logStatistics() {
+        Enumeration enum = null;
+        log.debug("printing inited services");
+        enum = initServices.keys();
+        String ser = "services:\n";
+        while (enum.hasMoreElements()) {
+            String s = (String)enum.nextElement();
+            ser += s + "\n";
+        }
+        log.debug(ser);
+        Set s = userServices.keySet();
+        Iterator users = s.iterator();
+        log.debug("printing user services ");
+        while (users.hasNext()) {
+            String uid = (String)users.next();
+            log.debug("user: " + uid);
+            enum = userServices.keys();
+            while (enum.hasMoreElements()) {
+                String u = (String)enum.nextElement();
+                Map l = (Map)userServices.get(u);
+                Iterator it = l.keySet().iterator();
+                ser = "services:\n";
+                while (it.hasNext()) {
+                    String j = (String)it.next();
+                    ser += j + "\n";
+                }
+                log.debug(ser);
+            }
+        }
+    }
 }

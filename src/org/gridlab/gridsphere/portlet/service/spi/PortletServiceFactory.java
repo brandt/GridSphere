@@ -22,7 +22,7 @@ public interface PortletServiceFactory {
      *
      * @param service the class of the service
      * @param servletConfig the servlet configuration
-     * @param boolean reuse a previous initialized service if <code>true</code>,
+     * @param useCachedService reuse a previous initialized service if <code>true</code>,
      * otherwise create a new service instance if <code>false</code>
      *
      * @return the instantiated portlet service
@@ -39,7 +39,7 @@ public interface PortletServiceFactory {
      *
      * @param service the class of the service
      * @param servletConfig the servlet configuration
-     * @param boolean reuse a previous initialized service if <code>true</code>,
+     * @param useCachedService boolean reuse a previous initialized service if <code>true</code>,
      * otherwise create a new service instance if <code>false</code>
      *
      * @return the instantiated portlet service
