@@ -1,7 +1,7 @@
 $Id$
 
 	Welcome to GridSphere! 
-=======================================
+========================================
 
 All documentation is located in the docs/ directory. Follow the instructions 
 in the INSTALL file to build the documentation.
@@ -23,5 +23,8 @@ gridsphere-cvs -- Mail list used to receive CVS notifications
 Thank you.
 
 The GridSphere Team	http://www.gridsphere.org
+
+
+
 
 
