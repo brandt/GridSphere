@@ -62,6 +62,12 @@
     </servlet>
 
     <servlet>
+        <servlet-name>LayoutManagerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet</servlet-class>
+    </servlet>
+
+
+    <servlet>
         <servlet-name>PortletApplicationManager</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager</servlet-class>
     </servlet>
@@ -148,6 +154,11 @@
     <servlet-mapping>
         <servlet-name>GroupManagerPortlet</servlet-name>
         <url-pattern>/admin/groups</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>LayoutManagerPortlet</servlet-name>
+        <url-pattern>/admin/layout</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

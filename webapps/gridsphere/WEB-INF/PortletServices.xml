@@ -74,10 +74,21 @@
     </service>
 
     <service>
-        <name>TextMessagingService</name>
+        <name>Text Messaging Service</name>
         <description>Provides the ability to send textmessages to different services</description>
         <interface>org.gridlab.gridsphere.services.core.messaging.TextMessagingService</interface>
         <implementation>org.gridlab.gridsphere.services.core.messaging.impl.TextMessagingServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Locale Service</name>
+        <description>Manages supported list of locales</description>
+        <interface>org.gridlab.gridsphere.services.core.locale.LocaleService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.locale.impl.LocaleServiceImpl</implementation>
+        <service-config>
+            <param-name>display-locale</param-name>
+            <param-value>en,cs,de,fr,hu,pl,it</param-value>
+        </service-config>
     </service>
 
     <service>

@@ -337,6 +337,62 @@
     </portlet-app-def>
 
     <portlet-app-def>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet">
+            <portlet-name>Layout Manager Portlet</portlet-name>
+            <servlet-name>LayoutManagerPortlet</servlet-name>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
+            <supports>
+                <view/>
+                <edit/>
+                <help/>
+            </supports>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet.1">
+            <concrete-portlet>
+                <portlet-name>Layout Manager Portlet</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>Layout Manager</title>
+                    <description>Provides user layout customization</description>
+                </language>
+                <language locale="de">
+                    <title>Layout Managieren</title>
+                    <description>Ermöglicht die benutzerspezifische Anpassung der Darstellung</description>
+                </language>
+                <language locale="fr">
+                    <title>Gestionnaire de Layout</title>
+                    <description>Permet a l'usager de modifier le layout</description>
+                </language>
+                <language locale="it">
+                    <title>Gestione Layout</title>
+                    <description>Consente la personalizzazione del layout utente</description>
+                </language>
+                <language locale="cs">
+                    <title>Správa umístění portletů</title>
+                    <description>Poskytuje uživatelem nastavitelné umístění portletů</description>
+                </language>
+                <language locale="hu">
+                    <title>Felépítés szekesztő</title>
+                    <description>Lehetővé teszi a portletekből egyéni weblapok felépítését</description>
+                </language>
+                <language locale="pl">
+                    <title>Menadżer układów graficznych</title>
+                    <description>Udostępnia użytkownikowi dostosowywanie układów graficznych</description>
+                </language>
+                <config-param>
+                    <param-name>supported-themes</param-name>
+                    <param-value>default, swamp</param-value>
+                </config-param>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
+
+    <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager">
             <portlet-name>Portlet Application Manager</portlet-name>
             <servlet-name>PortletApplicationManager</servlet-name>
@@ -538,10 +594,6 @@
                     <title>Lokalizacja</title>
                     <description>Wybór lokalizacji</description>
                 </language>
-                <config-param>
-                    <param-name>display-locale</param-name>
-                    <param-value>en,cs,de,fr,hu,pl,it</param-value>
-                </config-param>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
