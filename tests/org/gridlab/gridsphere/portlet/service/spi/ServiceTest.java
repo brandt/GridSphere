@@ -9,6 +9,8 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.util.Properties;
@@ -44,12 +46,12 @@ public class ServiceTest extends TestCase {
         // create properties
         props = new Properties();
         FileInputStream fistream = null;
-        //String fullPath = System.getProperty("user.dir") + "/webapps/WEB-INF/conf/PortletServices.properties";
-        String fullPath = "/Users/wehrens/Applications/tomcat-4.1/webapps/gridsphere/WEB-INF/conf/PortletServices.properties";
+        GridSphereConfig gsConfig = GridSphereConfig.getInstance();
+        String serviceProps = gsConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES);
 
-        log.info("loading properties file: " + fullPath);
+        log.info("loading properties file: " + serviceProps);
         try {
-            fistream = new FileInputStream(fullPath);
+            fistream = new FileInputStream(serviceProps);
             props.load(fistream);
         } catch (IOException e) {
             log.error("Unable to load properties file", e);

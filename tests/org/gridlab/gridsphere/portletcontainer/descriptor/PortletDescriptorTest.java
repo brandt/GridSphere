@@ -11,6 +11,8 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portletcontainer.descriptor.*;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.core.persistence.PersistenceException;
 import org.exolab.castor.types.AnyNode;
 
@@ -24,10 +26,10 @@ import java.io.File;
  * This is the base fixture for service testing. Provides a service factory and the
  * properties file.
  */
-public class DescriptorTest extends TestCase {
+public class PortletDescriptorTest extends TestCase {
 
 
-    public DescriptorTest(String name) {
+    public PortletDescriptorTest(String name) {
         super(name);
     }
 
@@ -36,13 +38,13 @@ public class DescriptorTest extends TestCase {
     }
 
     public static Test suite ( ) {
-        return new TestSuite(DescriptorTest.class);
+        return new TestSuite(PortletDescriptorTest.class);
     }
 
     public void testDescriptor() {
         PortletDeploymentDescriptor pdd = null;
-        String portletFile = System.getProperty("user.dir") + "/webapps/WEB-INF/conf/portlet-test.xml";
-        String mappingFile = System.getProperty("user.dir") + "/webapps/WEB-INF/conf/portlet-mapping.xml";
+        String portletFile = "webapps/gridsphere/WEB-INF/conf/test/portlet-test.xml";
+        String mappingFile = "webapps/gridsphere/WEB-INF/conf/mapping/portlet-mapping.xml";
         try {
             pdd = new PortletDeploymentDescriptor(portletFile, mappingFile);
         } catch (IOException e) {
@@ -65,7 +67,6 @@ public class DescriptorTest extends TestCase {
         assertEquals(concreteApps.size(), 2);
         ConcretePortletApplication concreteOne = (ConcretePortletApplication)concreteApps.get(0);
         ConcretePortletApplication concreteTwo = (ConcretePortletApplication)concreteApps.get(1);
-        System.err.println(portletApp.getID());
         assertEquals("org.gridlab.gridsphere.portlets.core.HelloWorld.666", portletApp.getID());
         assertEquals("Hello World", portletApp.getPortletName());
         assertEquals("hello", portletApp.getServletName());
@@ -93,7 +94,6 @@ public class DescriptorTest extends TestCase {
 
 
         // Check concrete one portal data
-        assertEquals("Concrete Hello World - Portlet Sample #1", concreteOne.getName());
         assertEquals("org.gridlab.gridsphere.portlets.core.HelloWorld.666.2", concreteOne.getID());
 
         List contextList = concreteOne.getContextParamList();
@@ -101,14 +101,14 @@ public class DescriptorTest extends TestCase {
         ConfigParam one = (ConfigParam)contextList.get(0);
         ConfigParam two = (ConfigParam)contextList.get(1);
 
-        assertEquals("Portlet Master", one.getParamName());
-        assertEquals("master@domain.com", one.getParamValue());
+        assertEquals("buzzle", one.getParamName());
+        assertEquals("yea", one.getParamValue());
 
-        assertEquals("Portlet Mistress", two.getParamName());
-        assertEquals("mistress@domain.com", two.getParamValue());
+        assertEquals("beezle", two.getParamName());
+        assertEquals("yo", two.getParamValue());
 
         ConcretePortletInfo onePI = concreteOne.getConcretePortletInfo();
-        assertEquals("Hello World", onePI.getName());
+        assertEquals("Hello World 1", onePI.getName());
         assertEquals("en", onePI.getDefaultLocale());
 
         List langList = onePI.getLanguageList();
@@ -150,7 +150,6 @@ public class DescriptorTest extends TestCase {
 
 
         // Check concrete two portal data
-        assertEquals(concreteTwo.getName(), "Concrete Hello World - Portlet Sample #2");
         assertEquals(concreteTwo.getID(), "org.gridlab.gridsphere.portlets.core.HelloWorld.666.4");
 
         configList = concreteTwo.getContextParamList();
@@ -161,7 +160,7 @@ public class DescriptorTest extends TestCase {
         assertEquals(one.getParamValue(), "secondguy@some.com");
 
         onePI = concreteTwo.getConcretePortletInfo();
-        assertEquals(onePI.getName(), "Hello World");
+        assertEquals(onePI.getName(), "Hello World 2");
         assertEquals(onePI.getDefaultLocale(), "en");
 
         langList = onePI.getLanguageList();
