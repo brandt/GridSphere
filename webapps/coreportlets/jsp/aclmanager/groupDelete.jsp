@@ -12,20 +12,20 @@
 <jsp:useBean id="aclManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.AccessControllerBean"
              scope="request"/>
-<form name="AccessContollerPortlet" method="POST" action="<%=aclManagerBean.getGroupDeleteURI()%>">
+<form name="AccessControllerPortlet" method="POST" action="<%=aclManagerBean.getGroupDeleteURI()%>">
   <input type="hidden" name="groupID" value="<%=aclManagerBean.getGroupID()%>"/>
   <script language="JAVASCRIPT">
 
-    function AccessContollerPortlet_confirmDeleteGroup_onClick() {
+    function AccessControllerPortlet_confirmDeleteGroup_onClick() {
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_DELETE_CONFIRM)%>";
       document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
+      document.AccessControllerPortlet.submit();
     }
 
-    function AccessContollerPortlet_cancelDeleteGroup_onClick() {
+    function AccessControllerPortlet_cancelDeleteGroup_onClick() {
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_DELETE_CANCEL)%>";
       document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
+      document.AccessControllerPortlet.submit();
     }
 
   </script>
@@ -56,11 +56,11 @@
             <input type="submit"
                    name="<%=AccessControllerBean.ACTION_GROUP_DELETE_CONFIRM%>"
                    value="Confirm Delete"
-                   onClick="javascript:AccessContollerPortlet_confirmDeleteGroup_onClick()"/>
+                   onClick="javascript:AccessControllerPortlet_confirmDeleteGroup_onClick()"/>
             &nbsp;&nbsp;<input type="submit"
                    name="<%=AccessControllerBean.ACTION_GROUP_DELETE_CANCEL%>"
                    value="Cancel Delete"
-                   onClick="javascript:AccessContollerPortlet_cancelDeleteGroup_onClick()"/>
+                   onClick="javascript:AccessControllerPortlet_cancelDeleteGroup_onClick()"/>
           </td>
         </tr>
       </table>

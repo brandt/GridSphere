@@ -655,7 +655,7 @@ public class AccessControllerBean extends PortletBean {
         addGroupEntry(user, group, PortletRole.USER);
         // If list greater than 1 then iterate through list
         if (groupEntryUserIDs.length > 1) {
-            // But user could have selected "Add all option"
+            // But user could have selected add all option
             // So we have to be careful to not try to add
             // the user with the same id as in add all value
             String firstGroupEntryUserID = groupEntryUserIDs[0];
@@ -669,14 +669,34 @@ public class AccessControllerBean extends PortletBean {
                 System.err.println("Adding user " + groupEntryUserIDs[ii]);
                 addGroupEntry(user, group, PortletRole.USER);
             }
-        } else {
         }
     }
 
     private void removeGroupEntries()
             throws PortletException {
-        String groupEntryID = getParameter("groupEntryID");
-        String groupEntryIDs[] = getParameterValues("groupEntryIDs");
+        // Get ids of entries to remove
+        String groupEntryIDs[] = getParameterValues("groupEntryID");
+        // Add first entry in list
+        GroupEntry entry = this.aclManagerService.getGroupEntry(groupEntryIDs[0]);
+        _log.debug("Removing entry " + groupEntryIDs[0]);
+        removeGroupEntry(entry);
+        // If list greater than 1 then iterate through list
+        if (groupEntryIDs.length > 1) {
+            // But user could have selected remove all option
+            // So we have to be careful to not try to add
+            // the user with the same id as in remove all value
+            String firstGroupEntryID = groupEntryIDs[0];
+            for (int ii = 1; ii < groupEntryIDs.length; ++ii) {
+                // Skip if we already added this user
+                if (groupEntryIDs[ii].equals(firstGroupEntryID)) {
+                    continue;
+                }
+                // Remove this entry from the group
+                entry = this.aclManagerService.getGroupEntry(groupEntryIDs[0]);
+                _log.debug("Removing entry " + groupEntryIDs[ii]);
+                removeGroupEntry(entry);
+            }
+        }
     }
 
     private void removeGroupEntry(GroupEntry right)

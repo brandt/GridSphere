@@ -12,20 +12,21 @@
 <jsp:useBean id="aclManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.AccessControllerBean"
              scope="request"/>
-<form name="AccessContollerPortlet" method="POST" action="<%=aclManagerBean.getGroupEditURI()%>">
+<form name="AccessControllerPortlet" method="POST"
+      action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT)%>">
   <input type="hidden" name="groupID" value="<%=aclManagerBean.getGroupID()%>"/>
   <script language="JAVASCRIPT">
 
-    function AccessContollerPortlet_confirmEditGroup_onClick() {
+    function AccessControllerPortlet_confirmEditGroup_onClick() {
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT_CONFIRM)%>";
       document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
+      document.AccessControllerPortlet.submit();
     }
 
-    function AccessContollerPortlet_cancelEditGroup_onClick() {
+    function AccessControllerPortlet_cancelEditGroup_onClick() {
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT_CANCEL)%>";
       document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
+      document.AccessControllerPortlet.submit();
     }
 
   </script>
@@ -60,11 +61,11 @@
             <input type="submit"
                    name="<%=AccessControllerBean.ACTION_GROUP_EDIT_CONFIRM%>"
                    value="Save Group"
-                   onClick="javascript:AccessContollerPortlet_confirmEditGroup_onClick()"/>
+                   onClick="javascript:AccessControllerPortlet_confirmEditGroup_onClick()"/>
             &nbsp;&nbsp;<input type="submit"
                    name="<%=AccessControllerBean.ACTION_GROUP_EDIT_CANCEL%>"
                    value="Cancel Edit"
-                   onClick="javascript:AccessContollerPortlet_cancelEditGroup_onClick()"/>
+                   onClick="javascript:AccessControllerPortlet_cancelEditGroup_onClick()"/>
           </td>
         </tr>
       </table>

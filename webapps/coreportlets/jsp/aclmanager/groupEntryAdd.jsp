@@ -15,7 +15,7 @@
 <form name="AccessControllerPortlet" method="POST"
       action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_ADD)%>">
   <input type="hidden" name="groupID" value="<%=aclManagerBean.getGroupID()%>"/>
-  <script language="JAVASCRIPT">
+  <script type="text/javascript">
 
     function AccessControllerPortlet_confirmAddGroupEntry_onClick() {
       var validate = GridSphere_CheckBoxList_validateCheckOneOrMore(document.AccessControllerPortlet.groupEntryUserID);
@@ -56,6 +56,119 @@
       document.AccessControllerPortlet.action=action;
       document.AccessControllerPortlet.submit();
     }
+
+  </script>
+<table border="0" cellspacing="1" cellpadding="2" width="100%">
+  <tr>
+    <td>
+      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+        <tr>
+          <td align="center" bgcolor="#6666FF">
+            <font color="WHITE"><strong>
+              Add Users To Group <%=aclManagerBean.getGroupName()%>
+            </strong></font>
+          </td>
+        </tr>
+        <tr>
+          <td bgcolor="WHITE">
+            Select the users you want to add and specify the role they play within this group.
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+        <tr>
+          <td bgcolor="#CCCCCC">
+            <input type="button"
+                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CONFIRM%>"
+                   value="Save"
+                   onClick="javascript:AccessControllerPortlet_confirmAddGroupEntry_onClick()"/>
+            &nbsp;&nbsp;<input type="button"
+                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CANCEL%>"
+                   value="Cancel"
+                   onClick="javascript:AccessControllerPortlet_cancelAddGroupEntry_onClick()"/>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+        <tr>
+          <td bgcolor="#6666FF" align="center" valign="middle" width="12">
+            <font size="-1">
+              <input type="checkbox"
+               name="groupEntryUserID"
+               value=""
+               onClick="javascript:GridSphere_CheckBoxList_checkAll(document.AccessControllerPortlet.groupEntryUserID)"/>
+            </font>
+          </td>
+          <td bgcolor="#6666FF">
+            <font color="WHITE">
+              User Name
+            </font>
+          </td>
+          <td bgcolor="#6666FF">
+            <font color="WHITE">
+              Full Name
+            </font>
+          </td>
+          <td bgcolor="#6666FF">
+            <font color="WHITE">
+              Group Role
+            </font>
+          </td>
+        </tr>
+<%  List usersNotInGroup = aclManagerBean.getUsersNotInGroup();
+    for (int ii = 0; ii < usersNotInGroup.size(); ++ii) {
+         User user = (User)usersNotInGroup.get(ii); %>
+        <tr>
+          <td bgcolor="#CCCCCC" align="center" valign="middle" width="12">
+            <font size="-1">
+              <input type="checkbox"
+               name="groupEntryUserID"
+               value="<%=user.getID()%>"
+               onClick="javascript:GridSphere_CheckBoxList_onClick(document.AccessControllerPortlet.groupEntryUserID,
+                                                                   this)"/>
+            </font>
+          </td>
+          <td bgcolor="WHITE">
+            <%=user.getUserName()%>
+          </td>
+          <td bgcolor="WHITE">
+            <%=user.getFullName()%>
+          </td>
+          <td bgcolor="WHITE">
+             <select name="groupEntryRoleNames<%=ii%>">
+               <option label="USER"
+                       value="user"/>
+               <option label="ADMIN"
+                       value="admin"=/>
+               <option label="GUEST"
+                       value="guest"=/>
+             </select>
+          </td>
+        </tr>
+<% } %>
+      </table>
+    </td>
+  </tr>
+</table>
+</form>
+<script type="text/javascript">
+
+  /**************************************************************************
+   * GridSphere Form Action Functions
+   **************************************************************************/
+
+  function GridSphere_Form_submitAction(form, action) {
+    form.action=action;
+    form.submit();
+  }
 
   /**************************************************************************
    * GridSpehre Check Box List Functions
@@ -173,105 +286,4 @@
     return (list[0].value != "");
   }
 
-  </script>
-<table border="0" cellspacing="1" cellpadding="2" width="100%">
-  <tr>
-    <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
-        <tr>
-          <td align="center" bgcolor="#6666FF">
-            <font color="WHITE"><strong>
-              Add Users To Group <%=aclManagerBean.getGroupName()%>
-            </strong></font>
-          </td>
-        </tr>
-        <tr>
-          <td bgcolor="WHITE">
-            Select the users you want to add and specify the role they play within this group.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
-        <tr>
-          <td bgcolor="#CCCCCC">
-            <input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CONFIRM%>"
-                   value="Save"
-                   onClick="javascript:AccessControllerPortlet_confirmAddGroupEntry_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CANCEL%>"
-                   value="Cancel"
-                   onClick="javascript:AccessControllerPortlet_cancelAddGroupEntry_onClick()"/>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
-        <tr>
-          <td bgcolor="#6666FF" align="center" valign="middle" width="12">
-            <font size="-1">
-              <input type="checkbox"
-               name="groupEntryUserID"
-               value=""
-               onClick="javascript:GridSphere_CheckBoxList_checkAll(document.AccessControllerPortlet.groupEntryUserID)"/>
-            </font>
-          </td>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
-              User Name
-            </font>
-          </td>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
-              Full Name
-            </font>
-          </td>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
-              Group Role
-            </font>
-          </td>
-        </tr>
-<%  List usersNotInGroup = aclManagerBean.getUsersNotInGroup();
-    for (int ii = 0; ii < usersNotInGroup.size(); ++ii) {
-         User user = (User)usersNotInGroup.get(ii); %>
-        <tr>
-          <td bgcolor="#CCCCCC" align="center" valign="middle" width="12">
-            <font size="-1">
-              <input type="checkbox"
-               name="groupEntryUserID"
-               value="<%=user.getID()%>"
-               onClick="javascript:GridSphere_CheckBoxList_onClick(document.AccessControllerPortlet.groupEntryUserID,
-                                                                   this)"/>
-            </font>
-          </td>
-          <td bgcolor="WHITE">
-            <%=user.getUserName()%>
-          </td>
-          <td bgcolor="WHITE">
-            <%=user.getFullName()%>
-          </td>
-          <td bgcolor="WHITE">
-             <select name="groupEntryRoleNames<%=ii%>">
-               <option label="USER"
-                       value="user"/>
-               <option label="ADMIN"
-                       value="admin"=/>
-               <option label="GUEST"
-                       value="guest"=/>
-             </select>
-          </td>
-        </tr>
-<% } %>
-      </table>
-    </td>
-  </tr>
-</table>
-</form>
+</script>

@@ -12,21 +12,21 @@
 <jsp:useBean id="aclManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.AccessControllerBean"
              scope="request"/>
-<form name="AccessContollerPortlet" method="POST" action="<%=aclManagerBean.getGroupViewURI()%>">
+<form name="AccessControllerPortlet" method="POST" action="<%=aclManagerBean.getGroupListURI()%>">
   <input type="hidden" name="groupID" value=""/>
   <script language="JAVASCRIPT">
 
     function AccessControllerPortlet_listGroup_onClick() {
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_LIST)%>";
       document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
+      document.AccessControllerPortlet.submit();
     }
 
     function AccessControllerPortlet_newGroup_onClick() {
       document.AccessControllerPortlet.groupID.value="";
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT)%>";
       document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
+      document.AccessControllerPortlet.submit();
     }
 
   </script>
