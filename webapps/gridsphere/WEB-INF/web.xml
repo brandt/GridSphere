@@ -32,12 +32,20 @@
           <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-
-
     <listener>
         <listener-class>org.gridlab.gridsphere.servlets.GridSphereServlet</listener-class>
     </listener>
+    
+    <!--
+    <context-param>
+         <param-name>contextConfigLocation</param-name>
+         <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
 
+    <listener>
+         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    -->
 
     <servlet>
         <servlet-name>gridsphere</servlet-name>
@@ -88,6 +96,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>SessionManagerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>LocalePortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.locale.LocalePortlet</servlet-class>
     </servlet>
@@ -111,6 +124,7 @@
         <servlet-name>ServletTestRunner</servlet-name>
         <servlet-class>org.apache.cactus.server.runner.ServletTestRunner</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>DatePortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.date.DatePortlet</servlet-class>
@@ -127,7 +141,7 @@
 
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
-        <url-pattern>/gridsphere</url-pattern>
+        <url-pattern>/gridsphere/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -153,6 +167,11 @@
     <servlet-mapping>
         <servlet-name>GroupManagerPortlet</servlet-name>
         <url-pattern>/admin/groups</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SessionManagerPortlet</servlet-name>
+        <url-pattern>/admin/session</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
