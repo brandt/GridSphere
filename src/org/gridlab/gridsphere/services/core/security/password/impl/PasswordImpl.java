@@ -5,10 +5,12 @@ package org.gridlab.gridsphere.services.core.security.password.impl;
 
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridlab.gridsphere.services.core.security.password.Password;
+import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 
 import java.util.Date;
 
-public class DbmsUserPassword implements DbmsPassword {
+public class PasswordImpl implements PasswordEditor {
 
     private String oid = null;
     private SportletUserImpl user;
@@ -20,8 +22,6 @@ public class DbmsUserPassword implements DbmsPassword {
     private Date dateExpires = null;
     private Date dateCreated = null;
     private Date dateLastModified = null;
-
-    private transient boolean validation = false;
 
     public String getOid() {
         return oid;
@@ -45,14 +45,6 @@ public class DbmsUserPassword implements DbmsPassword {
 
     public void setValue(String value) {
         this.value = value;
-    }
-
-    public boolean getValidation() {
-        return validation;
-    }
-
-    public void setValidation(boolean validation) {
-        this.validation = validation;
     }
 
     public long getLifetime() {
@@ -87,10 +79,6 @@ public class DbmsUserPassword implements DbmsPassword {
         this.dateLastModified = dateModified;
     }
 
-    public boolean equals(String value) {
-        return this.value.equals(value);
-    }
-
     public User getUser() {
         return this.user;
     }
@@ -98,13 +86,6 @@ public class DbmsUserPassword implements DbmsPassword {
     public void setUser(User user) {
         this.user = (SportletUserImpl) user;
         this.userName = user.getUserName();
-    }
-
-    /**
-     * Castor method for getting user object.
-     */
-    public SportletUserImpl getSportletUser() {
-        return this.user;
     }
 
     public String getUserName() {
@@ -121,5 +102,13 @@ public class DbmsUserPassword implements DbmsPassword {
     public void setSportletUser(SportletUserImpl user) {
         this.user = user;
     }
+
+    /**
+     * Castor method for getting user object.
+     */
+    public SportletUserImpl getSportletUser() {
+        return this.user;
+    }
+
 }
 

@@ -20,21 +20,19 @@ import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordExc
 import org.gridlab.gridsphere.services.core.security.password.Password;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.services.core.user.AccountRequest;
-import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
 
 import java.util.Date;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class DbmsPasswordManagerService
+public class PasswordManagerServiceImpl
     implements PortletServiceProvider, PasswordManagerService {
 
-    private static PasswordManagerService instance = new DbmsPasswordManagerService();
-    private static PortletLog _log = SportletLog.getInstance(DbmsPasswordManagerService.class);
+    private static PasswordManagerService instance = new PasswordManagerServiceImpl();
+    private static PortletLog _log = SportletLog.getInstance(PasswordManagerService.class);
     private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
-    private String userPasswordImpl = DbmsUserPassword.class.getName();
-    private String requestPasswordImpl = DbmsRequestPassword.class.getName();
+    private String userPasswordImpl = PasswordImpl.class.getName();
+
     private long defaultPasswordLifetime = -1;
 
     /****** PORTLET SERVICE METHODS *******/
@@ -57,57 +55,77 @@ public class DbmsPasswordManagerService
 
 
     public Password getPassword(User user) {
-        return getDbmsPassword(user);
+        return getPasswordImpl(user);
     }
 
-    /**
-     * This method returns the <code>DbmsPassword</code> associated with
-     * a user and is called internally by other methods in this class.
-     */
-    private DbmsPassword getDbmsPassword(User user) {
-        if (user instanceof AccountRequest) {
-            return getDbmsRequestPassword((AccountRequest)user);
-        } else {
-            return getDbmsUserPassword(user);
-        }
-    }
 
     /**
-     * This method returns the <code>DbmsPassword</code> associated with
+     * This method returns the <code>PasswordImpl</code> associated with
      * a user and is called internally by other methods in this class.
      */
-    private DbmsPassword getDbmsUserPassword(User user) {
-        DbmsPassword password = null;
+    private PasswordImpl getPasswordImpl(User user) {
+        PasswordImpl password = null;
         String query = "select pw from "
                      + this.userPasswordImpl
                      + " pw where pw.sportletUser.oid='" + user.getID() + "'";
         try {
-            password = (DbmsPassword)this.pm.restore(query);
+            password = (PasswordImpl)this.pm.restore(query);
         } catch (PersistenceManagerException e) {
             _log.error("Unable to retrieve password for user", e);
         }
         return password;
     }
 
-    /**
-     * This method returns the <code>DbmsPassword</code> associated with
-     * a user and is called internally by other methods in this class.
-     */
-    private DbmsRequestPassword getDbmsRequestPassword(AccountRequest request) {
-        DbmsRequestPassword password = null;
-        String query = "select pw from "
-                     + this.requestPasswordImpl
-                     + " pw where pw.accountRequest.oid='" + request.getID() + "'";
+   public void validateSuppliedPassword(User user, String value)
+          throws InvalidPasswordException {
+        PasswordImpl password = getPasswordImpl(user);
+        if (password == null) {
+            _log.debug("No password found for user");
+            throw new InvalidPasswordException("No password found for user!");
+        }
+       //_log.debug("Stored value is " + password.getValue());
+       //_log.debug("Provided value is " + value);
+
+       // MD5 hash of password value
+       try {
+           MessageDigest md5 = MessageDigest.getInstance("MD5");
+           md5.update(value.getBytes());
+           value = toHex(md5.digest());
+
+           //_log.debug("Hash of value is " + value);
+           if (!password.getValue().equals(value)) {
+               throw new InvalidPasswordException("Supplied password does not match user password!");
+           }
+       } catch (NoSuchAlgorithmException e) {
+           //
+       }
+   }
+
+    public void savePassword(Password editor) {
         try {
-            password = (DbmsRequestPassword)this.pm.restore(query);
-        } catch (PersistenceManagerException e) {
-            _log.error("Unable to retrieve password for user", e);
-        }
-        return password;
-    }
+            if (editor instanceof PasswordImpl) {
+                PasswordImpl pass = (PasswordImpl)editor;
+                try {
+                    MessageDigest md5 = MessageDigest.getInstance("MD5");
+                    md5.update(pass.getValue().getBytes());
+                    String value = toHex(md5.digest());
+                    pass.setValue(value);
+                } catch (NoSuchAlgorithmException e) {
+                    throw new PersistenceManagerException("Can't get MD5 algorithm! " + e.getMessage());
+                }
+                if (pass.getOid() != null) {
+                    pm.update(pass);
+                } else {
+                    pm.create(pass);
+                }
 
-    public void savePassword(Password editor)
-            throws InvalidPasswordException {
+            }
+        } catch (PersistenceManagerException e) {
+            _log.error("Unable to create or update password for user", e);
+        }
+    }
+    /*
+    public void savePassword(Password editor) {
         // Get password attributes
         User user = editor.getUser();
         String value = editor.getValue();
@@ -115,15 +133,15 @@ public class DbmsPasswordManagerService
         // Create or update password
         Date now = new Date();
         // Check if user has password already
-        DbmsPassword password = getDbmsPassword(user);
+        PasswordImpl password = getPasswordImpl(user);
         //System.err.println("original passwd=" + value);
         if (password == null) {
             // Validate the value if requested
             if (editor.getValidation()) {
-                validatePassword(value);
+
             }
             // Instantiate new password
-            password = createDbmsPassword(user);
+            password = createPasswordImpl(user);
 
             // MD5 hash of password value
             if (user instanceof AccountRequest) {
@@ -168,6 +186,7 @@ public class DbmsPasswordManagerService
             */
 
             // Update password
+    /*
             password.setValue(value);
             password.setDateExpires(dateExpires);
             password.setDateLastModified(now);
@@ -178,17 +197,7 @@ public class DbmsPasswordManagerService
             }
         }
     }
-
-    private DbmsPassword createDbmsPassword(User user) {
-        DbmsPassword password = null;
-        if (user instanceof AccountRequestImpl) {
-            password = new DbmsRequestPassword();
-        } else {
-            password = new DbmsUserPassword();
-        }
-        password.setUser(user);
-        return password;
-    }
+        */
 
     public void deletePassword(User user) {
         Password password = getPassword(user);
@@ -210,29 +219,21 @@ public class DbmsPasswordManagerService
         return (password != null);
     }
 
-    public void activatePassword(AccountRequest request, User user)
-            throws InvalidPasswordException {
-        DbmsRequestPassword requestPassword = getDbmsRequestPassword(request);
-        if (requestPassword == null) {
-            String msg = "No password associated with given account request!";
-            _log.debug(msg);
-            throw new InvalidPasswordException(msg);
+    public PasswordEditor editPassword(User user) {
+        PasswordImpl password = this.getPasswordImpl(user);
+        if (password == null) {
+            password = new PasswordImpl();
+            password.setUser(user);
+            this.savePassword(password);
         }
-        // Save user password
-        PasswordEditor passwordBean = new PasswordEditor();
-        passwordBean.setUser(user);
-        passwordBean.setHint(passwordBean.getHint());
-        passwordBean.setPassword(requestPassword.getValue());
-        passwordBean.setDateExpires(requestPassword.getDateExpires());
-        passwordBean.setValidation(false);
-        savePassword(passwordBean);
-        // Delete request password
-        deletePassword(requestPassword);
+        return password;
     }
 
+
+         /*
     public void validatePassword(User user, String newValue)
             throws InvalidPasswordException {
-        DbmsPassword password = getDbmsUserPassword(user);
+        PasswordImpl password = getDbmsUserPassword(user);
         if (password == null) {
             validatePassword(newValue);
         } else {
@@ -266,40 +267,14 @@ public class DbmsPasswordManagerService
             throw new InvalidPasswordException(msg);
         }
     }
-
-    public boolean isPasswordCorrect(User user, String value) {
-        DbmsPassword password = getDbmsUserPassword(user);
-        if (password == null) {
-            _log.debug("No password found for user");
-            return false;
-        }
-        //_log.debug("Stored value is " + password.getValue());
-        //_log.debug("Provided value is " + value);
-
-        // MD5 hash of password value
-        try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            md5.update(value.getBytes());
-            value = toHex(md5.digest());
-        } catch (NoSuchAlgorithmException e) {
-            //
-        }
-        //_log.debug("Hash of value is " + value);
-
-        return password.equals(value);
-    }
-
-    public long getDefaultPasswordLifetime() {
-        return this.defaultPasswordLifetime;
-    }
-
+    */
     /**
      * Return an 8 byte representation of the 32 byte MD5 digest
      *
      * @param digest the message digest
      * @return String 8 byte hexadecimal
      */
-    public static String toHex(byte[] digest) {
+    private static String toHex(byte[] digest) {
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < digest.length; i++) {
             buf.append(Integer.toHexString((int)digest[i] & 0x00FF));
