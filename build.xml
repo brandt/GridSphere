@@ -160,8 +160,21 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Builds and deploys GridSphere                                       -->
     <!-- =================================================================== -->
-    <target name="install" depends="clean, compile, docs, deploy" description="Build and deploy GridSphere">
+    <target name="install" depends="license, clean, compile, docs, deploy" description="Build and deploy GridSphere">
         <antcall target="create-database"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Prints GridSphere license agreement                                 -->
+    <!-- =================================================================== -->
+    <target name="license" description="Prints GridSphere license">
+        <loadfile property="license" srcFile="LICENSE"/>
+        <echo message="${license}"/>
+        <input message="Do you agree to these terms? Hit y or n" validargs="y,n" addProperty="agreed"/>
+        <condition property="do.abort">
+            <equals arg1="n" arg2="${agreed}"/>
+        </condition>
+        <fail if="do.abort">Build aborted by user.</fail>
     </target>
 
     <!-- =================================================================== -->
@@ -788,7 +801,7 @@ Copyright:
     <!-- Mail the HTML reports of  the test results                          -->
     <!-- =================================================================== -->
     <target name="mail">
-        <mail 
+        <mail
             mailhost="mail.nrc.ca"
             from="jean-claude.cote@nrc-cnrc.gc.ca"
             tolist="gridsphere-dev@gridlab.org"
