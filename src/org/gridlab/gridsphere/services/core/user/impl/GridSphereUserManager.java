@@ -1067,22 +1067,28 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
 
     public List getGroupsNotMemberOf(User user) {
         List groupsNotMemberOf = new Vector();
-        Iterator allGroups = getGroups(user).iterator();
-        while (allGroups.hasNext()) {
-            PortletGroup group = (PortletGroup)allGroups.next();
-            if (!isUserInGroup(user, group)) {
-                groupsNotMemberOf.add(user);
+        if (!hasSuperRole(user)) {
+            Iterator allGroups = getGroups(user).iterator();
+            while (allGroups.hasNext()) {
+                PortletGroup group = (PortletGroup)allGroups.next();
+                if (!isUserInGroup(user, group)) {
+                    groupsNotMemberOf.add(user);
+                }
             }
         }
         return groupsNotMemberOf;
     }
 
     public PortletRole getRoleInGroup(User user, PortletGroup group) {
-        GroupEntry entry = getGroupEntry(user, group);
-        if (entry == null) {
-            return PortletRole.GUEST;
+        if (hasSuperRole(user)) {
+            return PortletRole.SUPER;
+        } else {
+            GroupEntry entry = getGroupEntry(user, group);
+            if (entry == null) {
+                return PortletRole.GUEST;
+            }
+            return entry.getRole();
         }
-        return entry.getRole();
     }
 
     private void addGroupEntry(User user, PortletGroup group, PortletRole role) {
