@@ -92,7 +92,7 @@ public class ListBoxItemTag extends BaseComponentTag {
      */
     protected void checkSelectedEntries(ListBoxTag listboxTag) {
         if (selected) {
-            if (!listboxTag.getMultipleSelection()) {
+            if (!listboxTag.getMultiple()) {
                 ListBoxBean listbox = listboxTag.getListBoxBean();
                 List beans = listbox.getBeans();
                 Iterator it = beans.iterator();
