@@ -44,8 +44,8 @@ public class PersistenceManagerRdbms {
     private PersistenceManagerRdbms() {
         super();
         log.info("Entering PM");
-        String DatabaseName = GridSphereConfig.getInstance().getProperty(GridSphereConfigProperties.PERSISTENCE_DBNAME);
-        String ConnectionURL = GridSphereConfig.getInstance().getProperty(GridSphereConfigProperties.PERSISTENCE_CONFIGFILE);
+        String DatabaseName = GridSphereConfig.getProperty(GridSphereConfigProperties.PERSISTENCE_DBNAME);
+        String ConnectionURL = GridSphereConfig.getProperty(GridSphereConfigProperties.PERSISTENCE_CONFIGFILE);
         log.info("Using '" + DatabaseName + "' as Databasename with the configfile '" + ConnectionURL + "'");
         this.Url = ConnectionURL;
         try {

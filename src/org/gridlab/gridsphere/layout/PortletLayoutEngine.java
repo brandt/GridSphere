@@ -48,10 +48,9 @@ public class PortletLayoutEngine {
     }
 
     public void init() throws IOException, DescriptorException {
-        GridSphereConfig gsConfig = GridSphereConfig.getInstance();
-        userLayoutDir = gsConfig.getProperty(GridSphereConfigProperties.USER_LAYOUT_DIR);
-        layoutMappingPath = gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
-        guestLayoutPath =  gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
+        userLayoutDir = GridSphereConfig.getProperty(GridSphereConfigProperties.USER_LAYOUT_DIR);
+        layoutMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
+        guestLayoutPath =  GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
         guestLayout = new PortletLayoutDescriptor(guestLayoutPath, layoutMappingPath);
         guestContainer = guestLayout.getPortletContainer();
         guestContainer.init(new ArrayList());

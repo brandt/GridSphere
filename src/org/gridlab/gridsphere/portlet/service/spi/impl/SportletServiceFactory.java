@@ -20,6 +20,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import java.util.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -51,10 +52,13 @@ public class SportletServiceFactory implements PortletServiceFactory {
     private SportletServiceFactory() {
         // Reads in the service definitions from the xml file and stores them in allServices
         // organized according to service interface keys and service definition values
-        GridSphereConfig gsc = GridSphereConfig.getInstance();
-        String servicesPath = gsc.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_XML);
-        ServiceMappingPath = gsc.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_MAPPING_XML);
+        String servicesPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_XML);
+        ServiceMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_MAPPING_XML);
         addServices(servicesPath, ServiceMappingPath);
+    }
+
+    private SportletServiceFactory(ServletContext ctx) {
+
     }
 
     private void addServices(String servicesPath, String mappingPath) {

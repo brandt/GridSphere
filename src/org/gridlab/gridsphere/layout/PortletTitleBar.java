@@ -257,7 +257,7 @@ public class PortletTitleBar extends BasePortletComponent {
 
         PrintWriter out = res.getWriter();
 
-        String uiTheme = GridSphereConfig.getInstance().getProperty(GridSphereConfigProperties.UI_THEME);
+        String uiTheme = GridSphereConfig.getProperty(GridSphereConfigProperties.UI_THEME);
 
         out.println("<tr><td class=\"window-title\">");
         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>");

@@ -32,8 +32,7 @@ public class PortletWebApplication {
 
         // load in the portlet.xml file
         String portletXMLfile = ctx.getRealPath("") + "/WEB-INF/portlet.xml";
-        GridSphereConfig gsConfig = GridSphereConfig.getInstance();
-        String portletMappingfile = gsConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING_XML);
+        String portletMappingfile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING_XML);
 
         PortletDeploymentDescriptor pdd = null;
         try {

@@ -17,7 +17,6 @@ public class SportletServiceDescriptor extends Descriptor {
 
     private SportletServiceCollection services = null;
 
-    private GridSphereConfig gsConfig = GridSphereConfig.getInstance();
     private String descriptorPath, mappingPath;
 
     public SportletServiceDescriptor(String descriptorFile, String mappingFile) throws IOException, DescriptorException {
@@ -25,8 +24,8 @@ public class SportletServiceDescriptor extends Descriptor {
     }
 
     public SportletServiceDescriptor() throws IOException, DescriptorException {
-        descriptorPath = gsConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_XML);
-        mappingPath = gsConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_MAPPING_XML);
+        descriptorPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_XML);
+        mappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_MAPPING_XML);
         services = (SportletServiceCollection)load(descriptorPath, mappingPath);
     }
 

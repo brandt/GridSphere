@@ -22,9 +22,8 @@ public class PortletLayoutDescriptor extends Descriptor {
     private List containerElements = new ArrayList();
 
     public PortletLayoutDescriptor() throws IOException, DescriptorException {
-        GridSphereConfig gsConfig = GridSphereConfig.getInstance();
-        String layoutDescriptorPath = gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
-        String layoutMappingPath = gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
+        String layoutDescriptorPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
+        String layoutMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
         pc = (PortletContainer)load(layoutDescriptorPath, layoutMappingPath);
     }
 

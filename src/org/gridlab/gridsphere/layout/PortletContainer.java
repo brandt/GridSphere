@@ -103,7 +103,7 @@ public class PortletContainer implements PortletLifecycle {
         SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();
 
-        String uiTheme = GridSphereConfig.getInstance().getProperty(GridSphereConfigProperties.UI_THEME);
+        String uiTheme = GridSphereConfig.getProperty(GridSphereConfigProperties.UI_THEME);
 
         out.println("<html>");
         out.println("<head>");
