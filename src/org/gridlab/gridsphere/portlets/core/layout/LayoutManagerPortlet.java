@@ -159,7 +159,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         // this needs fixing with the portlets available to the user and not the ones that are
         // already in their layout
-        List pnames = layoutMgr.getAllPortletNames(req);
+        List pnames = layoutMgr.getSubscribedPortlets(req);
 
         if (table != null) {
             List rowlayouts = table.getPortletComponents();

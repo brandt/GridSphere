@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.services.core.layout.impl;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
@@ -29,6 +30,8 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     private PortletPageFactory pageFactory = null;
 
     private PortletRegistry portletRegistry = null;
+
+    private Map userPortlets = new Hashtable();
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         try {
@@ -96,8 +99,79 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
 
     }
 
+    public void removePortlet(PortletRequest req, String portletClassNames) {
+
+        PortletPage page = pageFactory.createPortletPage(req);
+        List cidList = page.getComponentIdentifierList();
+        Iterator it = cidList.iterator();
+        while (it.hasNext()) {
+            ComponentIdentifier cid = (ComponentIdentifier)it.next();
+            PortletComponent pc = cid.getPortletComponent();
+            if (pc instanceof PortletFrame) {
+                if (portletClassNames.equals(cid.getPortletClass())) {
+                    System.err.println("component has portlet: " + cid.getPortletClass() + cid.getClassName());
+                    removePortletComponent(pc);
+                }
+            }
+        }
+
+    }
+
     public PortletPage getPortletPage(PortletRequest req) {
         return pageFactory.createPortletPage(req);
+    }
+
+    public List getSubscribedPortlets(PortletRequest req) {
+        User user = req.getUser();
+        String uid = user.getID();
+        if (!userPortlets.containsKey(uid)) {
+            List names = getAllPortletNames(req);
+            userPortlets.put(uid, names);
+        }
+        return (List)userPortlets.get(uid);
+    }
+
+    public void setSubscribedPortlets(PortletRequest req, List portletClassNames) {
+        userPortlets.put(req.getUser().getID(), portletClassNames);
+    }
+
+    public synchronized void addSubscribedPortlet(PortletRequest req, String portletClassName) {
+        User user = req.getUser();
+        String uid = user.getID();
+        if (!userPortlets.containsKey(uid)) {
+            List l = new Vector();
+            l.add(portletClassName);
+            userPortlets.put(uid, l);
+        } else {
+            List l = (List)userPortlets.get(uid);
+            if (!l.contains(portletClassName)) l.add(portletClassName);
+        }
+
+    }
+
+    public void removeSubscribedPortlet(PortletRequest req, String portletClassName) {
+        User user = req.getUser();
+        String uid = user.getID();
+        if (userPortlets.containsKey(uid)) {
+            List l = (List)userPortlets.get(uid);
+            if (l != null) l.remove(portletClassName);
+            removePortlet(req, portletClassName);
+        }
+    }
+
+    public void removeSubscribedPortlets(PortletRequest req, List portletClassNames) {
+        User user = req.getUser();
+        String uid = user.getID();
+        if (userPortlets.containsKey(uid)) {
+            List l = (List)userPortlets.get(uid);
+            Iterator it = portletClassNames.iterator();
+            while (it.hasNext()) {
+                String concId = (String)it.next();
+                if (l.contains(concId)) {
+                    l.remove(concId);
+                }
+            }
+        }
     }
 
     private void removePortletComponent(PortletComponent pc) {
@@ -126,7 +200,8 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
 
             }
         }
-        return Collections.unmodifiableList(portlets);
+        return portlets;
+        //return Collections.unmodifiableList(portlets);
     }
 
     public String[] getTabNames(PortletRequest req) {

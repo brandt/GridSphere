@@ -58,7 +58,7 @@ public class SubscriptionPortlet extends ActionPortlet {
         gsPortlets.clear();
         User user = req.getUser();
 
-        List myNames = layoutMgr.getAllPortletNames(req);
+        List myNames = layoutMgr.getSubscribedPortlets(req);
 
         List groups = aclService.getGroups(user);
         Iterator it = groups.iterator();
@@ -139,8 +139,6 @@ public class SubscriptionPortlet extends ActionPortlet {
             frame.setTableModel(model);
             panel.addBean(frame);
         }
-
-
         setNextState(req, VIEW_JSP);
     }
 
@@ -152,7 +150,7 @@ public class SubscriptionPortlet extends ActionPortlet {
         List removePortlets = new Vector();
 
         // compare to orig list
-        List oldlist = layoutMgr.getAllPortletNames(req);
+        List oldlist = layoutMgr.getSubscribedPortlets(req);
 
 
         // check if new list has new portlets to add
@@ -161,6 +159,7 @@ public class SubscriptionPortlet extends ActionPortlet {
             String pid = (String)it.next();
             if (!oldlist.contains(pid)) {
                 newportlets.add(pid);
+                layoutMgr.addSubscribedPortlet(req, pid);
             }
         }
 
@@ -171,10 +170,14 @@ public class SubscriptionPortlet extends ActionPortlet {
             // don't allow users to remove core portlets
             if (!newlist.contains(pid) && (!gsPortlets.contains(pid))) {
                 removePortlets.add(pid);
+                System.err.println("removing " + pid);
             }
         }
 
+        layoutMgr.removeSubscribedPortlets(req, removePortlets);
+
         // add new portlets to new tab
+        /*
         if (!newportlets.isEmpty()) {
             PortletPage page = layoutMgr.getPortletPage(req);
 
@@ -183,8 +186,11 @@ public class SubscriptionPortlet extends ActionPortlet {
             if (tab == null) {
                 tab = new PortletTab();
                 tab.setTitle("Untitled");
+                pane.addTab(tab);
             }
+
             PortletTableLayout table = new PortletTableLayout();
+
             it = newportlets.iterator();
             while (it.hasNext()) {
                 String pid = (String)it.next();
@@ -199,6 +205,7 @@ public class SubscriptionPortlet extends ActionPortlet {
             tab.setPortletComponent(table);
             layoutMgr.reloadPage(req);
         }
+        */
 
         // remove portlets
         if (!removePortlets.isEmpty()) {
