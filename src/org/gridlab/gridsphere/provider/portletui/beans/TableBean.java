@@ -17,6 +17,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     protected String cellPadding = null;
     protected String border = null;
     protected String width = null;
+    protected String align = null;
 
     /**
      * Constructs a default table bean
@@ -80,6 +81,24 @@ public class TableBean extends BaseComponentBean implements TagBean {
      */
     public String getWidth() {
         return width;
+    }
+
+     /**
+     * Sets the table alignment e.g. "left", "center" or "right"
+     *
+     * @param align the table alignment
+     */
+    public void setAlign(String align) {
+        this.align = align;
+    }
+
+    /**
+     * Returns the table alignment e.g. "left", "center" or "right"
+     *
+     * @return the table alignment
+     */
+    public String getAlign() {
+        return align;
     }
 
     /**

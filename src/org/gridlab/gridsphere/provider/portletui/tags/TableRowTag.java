@@ -18,6 +18,8 @@ public class TableRowTag extends BaseComponentTag {
 
     protected TableRowBean rowBean = null;
     protected boolean isHeader = false;
+    protected String align = null;
+    protected String valign = null;
 
     /**
      * Sets the table row bean
@@ -55,6 +57,42 @@ public class TableRowTag extends BaseComponentTag {
         return isHeader;
     }
 
+    /**
+     * Sets the table alignment e.g. "left", "center" or "right"
+     *
+     * @param align the table alignment
+     */
+    public void setAlign(String align) {
+        this.align = align;
+    }
+
+    /**
+     * Returns the table alignment e.g. "left", "center" or "right"
+     *
+     * @return the table alignment
+     */
+    public String getAlign() {
+        return align;
+    }
+
+    /**
+     * Sets the table vertical alignment e.g. "top", "middle", "bottom" or "baseline"
+     *
+     * @param valign the table vertical alignment
+     */
+    public void setValign(String valign) {
+        this.valign = valign;
+    }
+
+    /**
+     * Returns the table vertical alignment e.g. "top", "middle", "bottom" or "baseline"
+     *
+     * @return the table vertical alignment
+     */
+    public String getValign() {
+        return valign;
+    }
+
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
             rowBean = (TableRowBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
@@ -62,6 +100,8 @@ public class TableRowTag extends BaseComponentTag {
         } else {
             rowBean = new TableRowBean();
             rowBean.setHeader(isHeader);
+            if (align != null) rowBean.setAlign(align);
+            if (valign != null) rowBean.setValign(valign);
         }
 
         try {

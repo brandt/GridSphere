@@ -15,6 +15,9 @@ import java.util.Iterator;
 public class TableCellBean extends BeanContainer implements TagBean {
 
     protected String width = null;
+    protected String height = null;
+    protected String align = null;
+    protected String valign = null;
     protected String TABLE_CELL_STYLE = "portlet-section-body";
 
     /**
@@ -45,6 +48,42 @@ public class TableCellBean extends BeanContainer implements TagBean {
     }
 
     /**
+     * Sets the table alignment e.g. "left", "center" or "right"
+     *
+     * @param align the table alignment
+     */
+    public void setAlign(String align) {
+        this.align = align;
+    }
+
+    /**
+     * Returns the table alignment e.g. "left", "center" or "right"
+     *
+     * @return the table alignment
+     */
+    public String getAlign() {
+        return align;
+    }
+
+    /**
+     * Sets the table vertical alignment e.g. "top", "middle", "bottom" or "baseline"
+     *
+     * @param valign the table vertical alignment
+     */
+    public void setValign(String valign) {
+        this.valign = valign;
+    }
+
+    /**
+     * Returns the table vertical alignment e.g. "top", "middle", "bottom" or "baseline"
+     *
+     * @return the table vertical alignment
+     */
+    public String getValign() {
+        return valign;
+    }
+
+    /**
      * Sets the table cell width
      *
      * @param width the table cell width
@@ -62,11 +101,32 @@ public class TableCellBean extends BeanContainer implements TagBean {
         return width;
     }
 
+    /**
+     * Sets the table cell height
+     *
+     * @param height the table cell height
+     */
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    /**
+     * Returns the table cell height
+     *
+     * @return the table cell height
+     */
+    public String getHeight() {
+        return height;
+    }
+
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<td ");
         if (!cssStyle.equals("")) sb.append("class=\"" + cssStyle + "\"");
         if (width != null) sb.append(" width=\"" + width + "\"");
+        if (height != null) sb.append(" height=\"" + height + "\"");
+        if (align != null) sb.append(" align=\"" + align + "\"");
+        if (valign != null) sb.append(" valign=\"" + valign + "\"");
         sb.append(">");
         Iterator it = container.iterator();
         while (it.hasNext()) {

@@ -21,6 +21,7 @@ public class TableTag extends BaseComponentTag {
     protected String cellPadding = null;
     protected String border = null;
     protected String width = null;
+    protected String align = null;
 
     /**
      * Sets the table model associated with this table
@@ -56,6 +57,24 @@ public class TableTag extends BaseComponentTag {
      */
     public TableBean getTableBean() {
         return tableBean;
+    }
+
+    /**
+     * Sets the table alignment e.g. "left", "center" or "right"
+     *
+     * @param align the table alignment
+     */
+    public void setAlign(String align) {
+        this.align = align;
+    }
+
+    /**
+     * Returns the table alignment e.g. "left", "center" or "right"
+     *
+     * @return the table alignment
+     */
+    public String getAlign() {
+        return align;
     }
 
     /**
@@ -143,7 +162,7 @@ public class TableTag extends BaseComponentTag {
             }
         } else {
             tableBean = new TableBean();
-
+            if (align != null) tableBean.setAlign(align);
             if (width != null) tableBean.setWidth(width);
             if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);
             if (cellPadding != null) tableBean.setCellPadding(cellPadding);

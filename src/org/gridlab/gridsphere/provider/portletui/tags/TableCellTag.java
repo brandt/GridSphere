@@ -18,6 +18,45 @@ public class TableCellTag extends BaseComponentTag {
 
     protected TableCellBean cellBean = null;
     protected String width = null;
+    protected String height = null;
+    protected String align = null;
+    protected String valign = null;
+
+    /**
+     * Sets the table alignment e.g. "left", "center" or "right"
+     *
+     * @param align the table alignment
+     */
+    public void setAlign(String align) {
+        this.align = align;
+    }
+
+    /**
+     * Returns the table alignment e.g. "left", "center" or "right"
+     *
+     * @return the table alignment
+     */
+    public String getAlign() {
+        return align;
+    }
+
+    /**
+     * Sets the table vertical alignment e.g. "top", "middle", "bottom" or "baseline"
+     *
+     * @param valign the table vertical alignment
+     */
+    public void setValign(String valign) {
+        this.valign = valign;
+    }
+
+    /**
+     * Returns the table vertical alignment e.g. "top", "middle", "bottom" or "baseline"
+     *
+     * @return the table vertical alignment
+     */
+    public String getValign() {
+        return valign;
+    }
 
     /**
      * Sets the table cell width
@@ -35,6 +74,24 @@ public class TableCellTag extends BaseComponentTag {
      */
     public String getWidth() {
         return width;
+    }
+
+    /**
+     * Sets the table cell height
+     *
+     * @param height the table cell height
+     */
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    /**
+     * Returns the table cell height
+     *
+     * @return the table cell height
+     */
+    public String getHeight() {
+        return height;
     }
 
     /**
@@ -62,6 +119,9 @@ public class TableCellTag extends BaseComponentTag {
         } else {
             cellBean = new TableCellBean();
             if (width != null) cellBean.setWidth(width);
+            if (height != null) cellBean.setHeight(height);
+            if (align != null) cellBean.setAlign(align);
+            if (valign != null) cellBean.setValign(align);
         }
 
         TableRowTag rowTag = (TableRowTag)getParent();

@@ -20,6 +20,7 @@ public class PanelTag extends BaseComponentTag {
     protected String width = PanelBean.PANEL_WIDTH;
     protected String cellSpacing = PanelBean.PANEL_SPACING;
     protected String cellPadding = PanelBean.PANEL_PADDING;
+    protected String align = null;
     protected String border = PanelBean.PANEL_BORDER;
     protected String cols = "100%";
     protected String[] colArray;
@@ -43,6 +44,24 @@ public class PanelTag extends BaseComponentTag {
      */
     public String getCellpadding() {
         return cellPadding;
+    }
+
+    /**
+     * Sets the table alignment e.g. "left", "center" or "right"
+     *
+     * @param align the table alignment
+     */
+    public void setAlign(String align) {
+        this.align = align;
+    }
+
+    /**
+     * Returns the table alignment e.g. "left", "center" or "right"
+     *
+     * @return the table alignment
+     */
+    public String getAlign() {
+        return align;
     }
 
     /**
@@ -176,6 +195,7 @@ public class PanelTag extends BaseComponentTag {
             panelBean.setCellSpacing(cellSpacing);
             panelBean.setCellPadding(cellPadding);
             panelBean.setBorder(border);
+            if (align != null) panelBean.setAlign(align);
         }
 
         try {

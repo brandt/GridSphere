@@ -21,7 +21,7 @@ public class PanelBean extends BeanContainer implements TagBean {
     protected String cellSpacing = PANEL_SPACING;
     protected String cellPadding = PANEL_PADDING;
     protected String border = PANEL_BORDER;
-
+    protected String align = null;
     protected String width = PANEL_WIDTH;
 
     private String cols = "100%";
@@ -63,6 +63,24 @@ public class PanelBean extends BeanContainer implements TagBean {
      */
     public String getWidth() {
         return width;
+    }
+
+    /**
+     * Sets the table alignment e.g. "left", "center" or "right"
+     *
+     * @param align the table alignment
+     */
+    public void setAlign(String align) {
+        this.align = align;
+    }
+
+    /**
+     * Returns the table alignment e.g. "left", "center" or "right"
+     *
+     * @return the table alignment
+     */
+    public String getAlign() {
+        return align;
     }
 
     /**
@@ -180,6 +198,7 @@ public class PanelBean extends BeanContainer implements TagBean {
         sb.append(" cellpadding=\"" + cellPadding + "\" ");
         sb.append(" border=\"" + border + "\" ");
         sb.append(" width=\"" + width + "\" ");
+        if (align != null) sb.append(" align=\"" + align + "\" ");
         sb.append(">");
         return sb.toString();
     }
