@@ -437,7 +437,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
                     if (req.getParameter(key) == null) {
                         //System.err.println("removing existing render param " + key);
-                        renderParams.remove(key);
+                        it.remove();
                     }
                 }
             }
