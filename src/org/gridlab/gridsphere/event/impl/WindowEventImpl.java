@@ -5,20 +5,27 @@
 package org.gridlab.gridsphere.event.impl;
 
 import org.gridlab.gridsphere.event.WindowEvent;
-import org.gridlab.gridsphere.portlet.PortletAction;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
 
 import java.util.EventObject;
 
 /**
- * An ActionEvent is sent by the portlet container when an HTTP request is received that is associated with an action.
+ * A <code>WindowEventImpl</code> is the <code>WindowEvent</code> implementation
+ * that is responsible for handling window action events e.g. <code>MINIMIZED</code>,
+ *  <code>MAXIMIZED</code> or <code>RESTORED</code>.
  */
 public class WindowEventImpl extends EventObject implements WindowEvent {
 
     private int event = -1;
     private PortletRequest req;
 
+    /**
+     * Constructs an instance of <code>WindowEventImpl</code> with a provided
+     * portlet request and response
+     *
+     * @param req the <code>PortletRequests</code>
+     * @param  windowEvent the window event id
+     */
     public WindowEventImpl(PortletRequest req, int windowEvent) {
         super(req);
         this.req = req;
@@ -38,7 +45,7 @@ public class WindowEventImpl extends EventObject implements WindowEvent {
      * Returns the portlet request that has caused this event. If this event is not triggered by a request,
      * this methods returns null
      *
-     * @return the portlet request
+     * @return the <code>PortletRequest</code>
      */
     public PortletRequest getPortletRequest() {
         return req;

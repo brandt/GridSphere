@@ -5,15 +5,15 @@
 package org.gridlab.gridsphere.event.impl;
 
 import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.portlet.PortletAction;
+import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 
 import java.util.EventObject;
 
 /**
- * An ActionEvent is sent by the portlet container when an HTTP request is received that is associated with an action.
+ * An <code>ActionEvent</code> is sent by the portlet container when an HTTP request is
+ * received that is associated with an action.
  */
 public class ActionEventImpl extends EventObject implements ActionEvent {
 
@@ -22,11 +22,11 @@ public class ActionEventImpl extends EventObject implements ActionEvent {
     private PortletResponse response;
 
     /**
-     * Create an ActionEventImpl
+     * Constructs an instance of ActionEventImpl given an action, request and response
      *
-     * @param action a DefaultPortletAction
-     * @param request the PortletRequest
-     * @param response the PortletResponse
+     * @param action a <code>DefaultPortletAction</code>
+     * @param request the <code>PortletRequest</code>
+     * @param response the <code>PortletResponse</code>
      */
     public ActionEventImpl(DefaultPortletAction action, PortletRequest request, PortletResponse response) {
         super(action);
@@ -47,7 +47,7 @@ public class ActionEventImpl extends EventObject implements ActionEvent {
     /**
      * Return the portlet request associated with this action event
      *
-     * @return portletRequest the PortletRequest
+     * @return portletRequest the <code>PortletRequest</code>
      */
     public PortletRequest getPortletRequest() {
         return request;
@@ -56,7 +56,7 @@ public class ActionEventImpl extends EventObject implements ActionEvent {
     /**
      * Return the portlet response associated with this action event
      *
-     * @return portletResponse the PortletResponse
+     * @return portletResponse the <code>PortletResponse</code>
      */
     public PortletResponse getPortletResponse() {
         return response;

@@ -26,7 +26,7 @@ public interface Event {
     /**
      * Returns the portlet request that has caused this event
      *
-     * @return the portlet request
+     * @return the <code>PortletRequest</code>
      */
     public PortletRequest getPortletRequest();
 
