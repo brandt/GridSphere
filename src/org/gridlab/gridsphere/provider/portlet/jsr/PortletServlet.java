@@ -10,6 +10,8 @@ import org.gridlab.gridsphere.portlet.jsrimpl.*;
 import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
@@ -26,6 +28,7 @@ import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinit
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
+import org.gridlab.gridsphere.services.core.user.LoginService;
 
 import javax.portlet.*;
 import javax.portlet.PortletMode;
@@ -56,6 +59,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.File;
+import java.io.InputStream;
 import java.util.*;
 
 public class PortletServlet extends HttpServlet
@@ -140,6 +144,18 @@ public class PortletServlet extends HttpServlet
         portletContext = new PortletContextImpl(ctx);
 
         prefsManager = PortletPreferencesManager.getInstance();
+
+        // load in any authentication modules if found-- this is a GridSphere extension
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        LoginService loginService = (LoginService)factory.createPortletService(LoginService.class, ctx, true);
+        InputStream is = config.getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
+        if (is != null) {
+            String authModulePath = config.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
+            loginService.loadAuthModules(authModulePath, Thread.currentThread().getContextClassLoader());
+            log.info("loading authentication modules from: " + authModulePath);
+        } else {
+            log.debug("no auth module descriptor found");
+        }
     }
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
