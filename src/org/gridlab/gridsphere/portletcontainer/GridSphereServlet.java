@@ -225,7 +225,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         String password = req.getParameter("password");
 
         try {
-            User user = loginService.login(username, password);
+            PortletData data = req.getData();
+            String authModule = data.getAttribute("auth-module");
+            User user = null;
+            if (authModule == null) {
+                user = loginService.login(username, password);
+            } else {
+                user = loginService.login(username, password, authModule);
+            }
             req.setAttribute(SportletProperties.PORTLET_USER, user);
             req.getSession(true).setAttribute(SportletProperties.PORTLET_USER, user.getID());
             if (aclService.hasSuperRole(user)) {
@@ -416,10 +423,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         //loginService.sessionDestroyed(event.getSession());
         log.debug("sessionDestroyed('" + event.getSession().getId() + "')");
         HttpSession s = event.getSession();
-        Enumeration enum = s.getAttributeNames();
-        while (enum.hasMoreElements()) {
-            System.err.println(" attr names in session: " + (String)enum.nextElement());
-        }
 
         //HttpSession session = event.getSession();
         //User user = (User) session.getAttribute(SportletProperties.PORTLET_USER);
