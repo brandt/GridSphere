@@ -772,7 +772,7 @@ Copyright:
         <!-- copy dist files -->
         <copy file="README" todir="${gridsphere.dist}"/>
         <copy file="LICENSE" todir="${gridsphere.dist}"/>
-        <copy file="config/build/build.deploy.xml" todir="${gridsphere.dist}"/>
+        <copy file="config/build/build.deploy.xml" tofile="${gridsphere.dist}/build.xml"/>
 
         <copy todir="${gridsphere.dist}">
             <fileset dir="${gridsphere.build}">
@@ -791,6 +791,5 @@ Copyright:
             </fileset>
         </copy>
     </target>
-
 
 </project>
