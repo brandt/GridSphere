@@ -9,12 +9,12 @@
 <% List uids = (List)request.getAttribute("uids"); %>
 <% String numSessions = (String)request.getAttribute("num_sessions"); %>
 
-Number of active sessions: <%= numSessions %>
+<ui:text key="SESSION_ACTIVE"/> <%= numSessions %>
 
 
 <br>
 
-Logged in users : <%= uids.size() %>
+ <ui:text key="SESSION_USERS"/> <%= uids.size() %>
 
 <ui:table sortable="true" zebra="true" maxrows="10">
 
