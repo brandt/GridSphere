@@ -77,7 +77,7 @@ public class SportletMessageManager implements PortletMessageManager {
         }
     }
 
-    public void removeAllMessages() {
+    public synchronized void removeAllMessages() {
         messages.clear();
     }
     
@@ -90,11 +90,4 @@ public class SportletMessageManager implements PortletMessageManager {
         return Collections.unmodifiableMap(messages);
     }
 
-    /**
-     * Clears all the messages
-     *
-     */
-    public void clearAllMessages() {
-        messages.clear();
-    }
 }

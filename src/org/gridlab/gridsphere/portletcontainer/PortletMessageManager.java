@@ -40,11 +40,6 @@ public interface PortletMessageManager {
      */
     public Map retrieveAllMessages();
 
-    /**
-     * Clears all the messages
-     */
-    public void clearAllMessages();
-
     public void removeAllMessages();
 
     public void removeMessages(String concretePortletID);
