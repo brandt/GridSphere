@@ -45,12 +45,11 @@
 
     <service>
         <name>User Account Manager Service</name>
-        <user-required>true</user-required>
         <description>Provides User Administration Capabilities</description>
         <interface>org.gridlab.gridsphere.services.core.user.UserManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.core.user.impl.UserManagerServiceImpl</implementation>
         <service-config>
-            <param-name>gridsphere.user.userid</param-name>
+            <param-name>userid</param-name>
             <param-value>root</param-value>
         </service-config>
         <service-config>
@@ -63,7 +62,7 @@
         <name>Password Manager Service</name>
         <description>Provides Password Management Capabilities</description>
         <interface>org.gridlab.gridsphere.services.core.security.password.PasswordManagerService</interface>
-        <implementation>org.gridlab.gridsphere.services.core.security.password.impl.DbmsPasswordManagerService</implementation>
+        <implementation>org.gridlab.gridsphere.services.core.security.password.impl.PasswordManagerServiceImpl</implementation>
     </service>
 
     <service>
