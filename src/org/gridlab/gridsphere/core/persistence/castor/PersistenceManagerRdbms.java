@@ -11,8 +11,11 @@ package org.gridlab.gridsphere.core.persistence.castor;
 
 import org.apache.log4j.Category;
 import org.exolab.castor.jdo.*;
+import org.exolab.castor.jdo.PersistenceException;
 import org.exolab.castor.mapping.MappingException;
 import org.gridlab.gridsphere.core.persistence.*;
+
+//import org.gridlab.gridsphere.core.persistence.*;
 
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+
 
 
 public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
@@ -246,6 +250,13 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
 
     }
 
+    public Object restoreObject(String oql) throws ConfigurationException, RestoreException {
+        this.setQuery(oql);
+        return restoreList().get(0);
+
+    }
+
+
     /**
      * deletes a the given object from storage
      *
@@ -332,4 +343,89 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
         return object;
 
     }
+
+    /**
+     * deletes objects which are matching against the query
+     *
+     * @param query oql query
+     * @throws ConfigurationException
+     * @throws DeleteException  if something went wrong during deletion
+     */
+    public void deleteList(String query) throws ConfigurationException, DeleteException  {
+
+        checkSettings();
+
+        Database db = null;
+        OQLQuery oql = null;
+        QueryResults results = null;
+
+        try {
+            db = getDatabase();
+
+            db.begin();
+            oql = db.getOQLQuery(query);
+            results = oql.execute();
+            while (results.hasMore()) {
+                db.remove(results.next());
+            }
+            db.commit();
+            db.close();
+        } catch (DatabaseNotFoundException e) {
+            cat.error("Exception! " + e);
+            throw new DeleteException("Database not found: "+e);
+        } catch (PersistenceException e) {
+            cat.error("PersistenceException!" + e);
+            throw new DeleteException("Persistence Error: "+e);
+        } catch (NoSuchElementException e) {
+            cat.error("NoSuchElementException!" + e);
+            throw new DeleteException("No such element error: "+e);
+        } catch (MappingException e) {
+            cat.error("MappingException!" + e);
+            throw new DeleteException("Mapping Error: "+e);
+
+        }
+
+    }
+
+    public void deleteList(ParameterList list) throws ConfigurationException, DeleteException  {
+
+        Database db = null;
+        OQLQuery oql = null;
+        QueryResults results = null;
+
+        checkSettings();
+
+        try {
+            db = getDatabase();
+            db.begin();
+
+            while (list.hasMore()) {
+                Parameter p = list.getNextParameter();
+                String query = "select "+p.getTable()+" from "+p.getTable()+" where "+p.getCondition();
+
+                oql = db.getOQLQuery(query);
+                results = oql.execute();
+                while (results.hasMore()) {
+                    db.remove(results.next());
+                }
+
+            }
+
+            db.commit();
+            db.close();
+        } catch (PersistenceException e) {
+            //db.rollback();
+            cat.error("PersistenceException!" + e);
+            throw new DeleteException("Persistence Error: "+e);
+        } catch (MappingException e) {
+            //db.rollback();
+            cat.error("MappingException!" + e);
+            throw new DeleteException("Mapping Error: "+e);
+        } catch (NoSuchElementException e) {
+            //db.rollback();
+            cat.error("NoSuchElementException!" + e);
+            throw new DeleteException("NoSuchElement Error: "+e);
+        }
+    }
+
 }
