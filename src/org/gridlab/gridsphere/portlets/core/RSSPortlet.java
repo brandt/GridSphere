@@ -85,7 +85,7 @@ public class RSSPortlet extends AbstractPortlet {
 
         ListBoxBean lbb = (ListBoxBean)form.getElementBean("lbb");
         ArrayList result = lbb.getSelectedValues();
-        System.out.println("SELECTE IN MULTIPLE");
+        System.out.println("SELECTED IN MULTIPLE");
 
         for (int i=0;i<result.size();i++) {
             System.out.println("RES: "+result.get(i));
@@ -96,6 +96,23 @@ public class RSSPortlet extends AbstractPortlet {
 
         LabelBean lb = (LabelBean)form.getElementBean("lbb-label");
         System.out.println("COLOR of the label was:" +lb.getColor());
+
+        CheckBoxListBean cblb = (CheckBoxListBean)form.getElementBean("os");
+        result = cblb.getSelectedValues();
+        System.out.println("SELECTEDIN IN OS");
+        for (int i=0;i<result.size();i++) {
+            System.out.println("RES: "+result.get(i));
+        }
+
+
+        RadioButtonListBean rblb = (RadioButtonListBean)form.getElementBean("music");
+        result = rblb.getSelectedValues();
+        System.out.println("SELECTEDIN IN Music");
+        for (int i=0;i<result.size();i++) {
+            System.out.println("RES: "+result.get(i));
+        }
+
+
         //System.out.println("Selected Item lbb (value)"+lbb.getSelectedItem().getValue());
 
 
@@ -213,8 +230,7 @@ public class RSSPortlet extends AbstractPortlet {
         text.setBackgroundcolor("black");
         text.store("textid",request);
 
-
-        TextAreaBean tab = new TextAreaBean("tab","",false, false, 20,30);
+        TextAreaBean tab = new TextAreaBean("tab","",false, false, 5,30);
         tab.store("tab",request);
 
         CheckBoxBean cbb = new CheckBoxBean("test","test",false, false);
@@ -243,6 +259,21 @@ public class RSSPortlet extends AbstractPortlet {
         Label label = lbb.getLabel();
         label.setColor("red");
         lbb.store("lbb",request);
+
+        CheckBoxListBean cblb = new CheckBoxListBean("OS");
+        cblb.add("linux","Linux");
+        cblb.add("windows","Windows 95");
+        cblb.add("win2000","Windows 2000/XP");
+        cblb.add("macosx","MacOS X", true);
+        cblb.setLabel("OS");
+        cblb.store("os",request);
+
+        RadioButtonListBean rblb = new RadioButtonListBean("Music");
+        rblb.add("fast","fast");
+        rblb.add("medium","medium");
+        rblb.add("slow","slow", true);
+        rblb.setLabel("music style");
+        rblb.store("music",request);
 
         // under the covers, a fieldbean is stored and mapped to f_name
         getPortletConfig().getContext().include("/jsp/rss/edit.jsp", request, response);
