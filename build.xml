@@ -783,4 +783,23 @@ Copyright:
             <exclude name="${gridsphere.project}-${version}-src.tgz"/>
         </zip>
     </target>
+
+    <!-- =================================================================== -->
+    <!-- Mail the HTML reports of  the test results                          -->
+    <!-- =================================================================== -->
+    <target name="mail">
+        <mail 
+            mailhost="mail.nrc.ca"
+            from="jean-claude.cote@nrc-cnrc.gc.ca"
+            tolist="gridsphere-dev@gridlab.org"
+            subject="GridSphere JUnit Test Results">
+            <message mimetype="text/html" src="${gridsphere.build}/reports/html/junit-noframes.html"/>
+            <fileset dir="${gridsphere.build}/reports">
+                <include name="TESTS-*.xml"/>
+            </fileset>
+        </mail>
+    </target>
+
+
+
 </project>
