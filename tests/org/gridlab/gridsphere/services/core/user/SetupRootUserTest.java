@@ -2,7 +2,7 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.services.user;
+package org.gridlab.gridsphere.services.core.user;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

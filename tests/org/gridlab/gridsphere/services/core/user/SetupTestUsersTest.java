@@ -2,7 +2,7 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.services.user;
+package org.gridlab.gridsphere.services.core.user;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -41,7 +41,6 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
     protected void setUp() {
         super.setUp();
         super.testSetupGroups();
-        log.info(" =====================================  setup");
         // Create a root user services using mock ServletConfig
         try {
             rootUserService = (UserManagerService) factory.createUserPortletService(UserManagerService.class, rootUser, null, true);
@@ -51,8 +50,6 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
     }
 
     public void testSetupUsers() {
-        log.info("- setup users");
-
         // jason, michael should be users
         // oliver will be denied
 
@@ -118,11 +115,10 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
         assertEquals(franz, newfranz);
         rootUserService.deleteAccount(franz);
         newfranz = rootUserService.getUserByUserName("franz");
-        assertEquals(null, newfranz);
+        assertNull(newfranz);
     }
 
     public void teardownUsers() {
-        log.info("- teardown users");
         rootUserService.deleteAccount(jason);
         rootUserService.deleteAccount(michael);
         rootUserService.deleteAccount(oliver);
