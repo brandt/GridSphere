@@ -24,7 +24,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     protected String border = null;
     protected String width = null;
     protected String align = null;
-    protected int currentPage;
+    protected int currentPage = 0;
     protected boolean isSortable = false;
     protected boolean isZebra = false;
     protected String sortableId = "t1";
@@ -33,6 +33,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     private boolean showall = false;
     protected PortletResponse res = null;
     protected String uris = "";
+    protected String uriString = "";
 
     /**
      * Constructs a default table bean
@@ -232,6 +233,10 @@ public class TableBean extends BaseComponentBean implements TagBean {
         this.showall = showall;
     }
 
+    public void setURIString(String uriString) {
+        this.uriString = uriString;
+    }
+
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         if (isSortable) {
@@ -253,7 +258,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
         sb.append("</table>");
         String uri = "";
         if (showall) {
-            uri = res.createURI().toString();
+            uri = uriString;
             sb.append("<a href=\"" + uri + "&" + TableBean.SHOW_PAGES + "\">" + "Show pages" + "</a>");
         }
         if (maxRows > 0) {
@@ -268,13 +273,14 @@ public class TableBean extends BaseComponentBean implements TagBean {
                     sb.append(" | <b>" + c + "</b>");
                 } else {
                     // create an actionlink
-                    uris = res.createURI().toString();
+                    uris = uriString;
                     System.err.println("uri = " + uris);
                     uri = uris + "&" + TableBean.CURRENT_PAGE + "=" + i;
+
                     sb.append(" | " + "<a href=\"" + uri + "\">" + c + "</a>");
                 }
             }
-            uri = res.createURI().toString();
+            uri = uriString;
             sb.append(" | ");
             sb.append("<a href=\"" + uri + "&" + TableBean.SHOW_ALL + "\">" + "Show all" + "</a>");
             rowCount = 0;
@@ -283,7 +289,5 @@ public class TableBean extends BaseComponentBean implements TagBean {
         return sb.toString();
     }
 
-    public void setPortletResponse(PortletResponse res) {
-        this.res = res;
-    }
+
 }

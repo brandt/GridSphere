@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.tagext.Tag;
 
 /**
  * The <code>ActionParamTag</code> is used to specify action paramters (name value pairs) inside of an
@@ -75,8 +76,9 @@ public class ActionParamTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
-        ActionTag actionTag = (ActionTag) getParent();
-        if (actionTag != null) {
+        Tag tag =  getParent();
+        if (tag instanceof ActionTag) {
+            ActionTag actionTag = (ActionTag)tag;
             paramBean = new ActionParamBean(name, value);
             actionTag.addParamBean(paramBean);
         }

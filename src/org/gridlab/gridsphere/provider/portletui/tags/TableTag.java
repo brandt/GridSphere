@@ -5,6 +5,9 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.jsrimpl.RenderResponseImpl;
+import org.gridlab.gridsphere.portlet.jsrimpl.PortletURLImpl;
 import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 
@@ -12,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import javax.portlet.RenderResponse;
+import javax.portlet.PortletURL;
 
 /**
  * A <code>TableTag</code> represents a table element and is defined by a <code>DefaultTableModel</code>
@@ -222,10 +227,25 @@ public class TableTag extends BaseComponentTag {
         boolean includeBody = true;
 
         // get any parameter values if data is divided
+
+
+        if (!beanId.equals("")) {
+            tableBean = (TableBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            if (tableBean == null) {
+                tableBean = new TableBean();
+            } else {
+                includeBody = false;
+            }
+
+        } else {
+            tableBean = new TableBean((HttpServletRequest) pageContext.getRequest());
+        }
+
         if (maxRows > 0) {
             String curPage = pageContext.getRequest().getParameter(TableBean.CURRENT_PAGE);
             if (curPage != null) {
                 currentPage = Integer.valueOf(curPage).intValue();
+                tableBean.setCurrentPage(currentPage);
             }
             String showAll = pageContext.getRequest().getParameter(TableBean.SHOW_ALL);
             if (showAll != null) {
@@ -238,29 +258,19 @@ public class TableTag extends BaseComponentTag {
             }
         }
 
-        if (!beanId.equals("")) {
-            tableBean = (TableBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
-            if (tableBean == null) {
-                tableBean = new TableBean();
-            } else {
-                includeBody = false;
-            }
-
-        } else {
-            tableBean = new TableBean((HttpServletRequest) pageContext.getRequest());
-            if (align != null) tableBean.setAlign(align);
-            if (width != null) tableBean.setWidth(width);
-            if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);
-            if (cellPadding != null) tableBean.setCellPadding(cellPadding);
-            if (border != null) tableBean.setBorder(border);
-            if (sortable) {
-                tableBean.setSortable(sortable);
-                tableBean.setSortableID("td" + this.getUniqueId("gs_tableNum"));
-            }
-            tableBean.setMaxRows(maxRows);
-            tableBean.setZebra(isZebra);
+        if (align != null) tableBean.setAlign(align);
+        if (width != null) tableBean.setWidth(width);
+        if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);
+        if (cellPadding != null) tableBean.setCellPadding(cellPadding);
+        if (border != null) tableBean.setBorder(border);
+        if (sortable) {
+            tableBean.setSortable(sortable);
+            tableBean.setSortableID("td" + this.getUniqueId("gs_tableNum"));
         }
-        tableBean.setCurrentPage(currentPage);
+        tableBean.setMaxRows(maxRows);
+        tableBean.setZebra(isZebra);
+
+
         tableBean.setRowCount(0);
         tableBean.setShowall(isShowAll);
 
@@ -279,7 +289,17 @@ public class TableTag extends BaseComponentTag {
 
     public int doEndTag() throws JspException {
         tableBean.setRowCount(rowCount);
-        tableBean.setPortletResponse((PortletResponse) pageContext.getAttribute("portletResponse"));
+        if (isJSR()) {
+            RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse");
+            PortletURLImpl url = (PortletURLImpl)res.createActionURL();
+            //if (action != null) url.setAction(action);
+            tableBean.setURIString(url.toString());
+        } else {
+            PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
+            PortletURI uri = res.createURI();
+            //if (action != null) uri.addAction(action);
+            tableBean.setURIString(uri.toString());
+        }
         try {
             JspWriter out = pageContext.getOut();
             out.print(tableBean.toEndString());
