@@ -24,12 +24,13 @@ import java.util.*;
  * portlet component, such as another tabbed pane if a double level
  * tabbed pane is desired.
  */
-public class PortletTab extends BasePortletComponent implements Serializable, Cloneable {
+public class PortletTab extends BasePortletComponent implements Serializable, Cloneable, Comparator {
 
     private String title = "?";
     private List titles = new ArrayList();
     private transient boolean selected = false;
     private PortletComponent portletComponent = null;
+    private int tabOrder = -1;
 
     /**
      * Constructs an instance of PortletTab
@@ -47,6 +48,14 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public PortletTab(List titles, PortletComponent portletComponent) {
         this.titles = titles;
         this.portletComponent = portletComponent;
+    }
+
+    public int getTabOrder() {
+        return tabOrder;
+    }
+
+    public void setTabOrder(int tabOrder) {
+        this.tabOrder = tabOrder;
     }
 
     /**
@@ -246,8 +255,31 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         }
     }
 
+    public int compare(Object left, Object right) {
+        int leftID = ((PortletTab) left).getTabOrder();
+        int rightID = ((PortletTab) right).getTabOrder();
+        int result;
+        if (leftID < rightID) {
+            result = -1;
+        } else if (leftID > rightID) {
+            result = 1;
+        } else {
+            result = 0;
+        }
+        return result;
+    }
+
+    public boolean equals(Object object) {
+        if (object != null && (object.getClass().equals(this.getClass()))) {
+            PortletTab portletTab = (PortletTab) object;
+            return (tabOrder == portletTab.getTabOrder());
+        }
+        return false;
+    }
+
     public Object clone() throws CloneNotSupportedException {
         PortletTab t = (PortletTab) super.clone();
+        t.tabOrder = this.tabOrder;
         t.portletComponent = (this.portletComponent == null) ? null : (PortletComponent) this.portletComponent.clone();
         t.selected = this.selected;
         List stitles = Collections.synchronizedList(titles);

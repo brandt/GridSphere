@@ -294,15 +294,6 @@ public class PortletPageFactory implements PortletSessionListener {
 
             pane = newPage.getPortletTabbedPane();
 
-            PortletTabbedPane userPane = getUserTabbedPane(req);
-            if (userPane != null) {
-                List userTabs = userPane.getPortletTabs();
-                for (int i = 0; i < userTabs.size(); i++) {
-                    PortletTab tab = (PortletTab) userTabs.get(i);
-                    log.debug("adding user tab: " + tab.getTitle("en"));
-                    pane.addTab((PortletTab) deepCopy(tab));
-                }
-            }
 
             PortletTabbedPane gsTab = PortletTabRegistry.getGroupTabs(((PortletGroup)req.getAttribute(SportletProperties.PORTLET_GROUP)).getName());
             List tabs = gsTab.getPortletTabs();
@@ -330,6 +321,23 @@ public class PortletPageFactory implements PortletSessionListener {
                     }
                 }
             }
+
+            // place user tabs after group tabs
+            PortletTabbedPane userPane = getUserTabbedPane(req);
+            if (userPane != null) {
+                List userTabs = userPane.getPortletTabs();
+                for (int i = 0; i < userTabs.size(); i++) {
+                    PortletTab tab = (PortletTab) userTabs.get(i);
+                    log.debug("adding user tab: " + tab.getTitle("en"));
+                    pane.addTab((PortletTab) deepCopy(tab));
+                }
+            }
+
+            // sorting tabs
+
+
+            Collections.sort(pane.getPortletTabs(), new PortletTab());
+
 
             // first use default theme
             setPageTheme(newPage, req);
