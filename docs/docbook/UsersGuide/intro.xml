@@ -20,8 +20,7 @@
     the same. The GridSphere source code comes with a README file explaining how
     to build the binary distribution. Both source and binaries come packaged
     with all the necessary third party libraries and requires a GridSphere
-    compatible servlet container, currently Tomcat 4.1+ but NOT Tomcat 5 since that uses the
-    Servlet 2.4 API.
+    compatible servlet container, currently Tomcat 4.1+ and Tomcat 5 are supported
 
     </para>
 
@@ -33,11 +32,10 @@
         <listitem><para>Jakarta Ant 1.5.3-1+ &Ant; is used to compile and deploy
         the GridSphere framework</para>
         </listitem>
-        <listitem><para>Jakarta Tomcat Servlet Container &Tomcat; 4.1.18+ is
-            required. (Currently, only Tomcat 4.1.18+ fully supports the Manager web
+        <listitem><para>Jakarta Tomcat Servlet Container &Tomcat; 4.1+ or Tomcat 5 is
+            required. (Currently, only Tomcat fully supports the Manager web
             application that allows for dynamic portlet management.)
             (Make sure you get the full Tomcat version and not the Light Edition (LE))
-            (Also do NOT download Tomcat 5 since that uses the Servlet 2.4 API. which has not yet been tested)
         </para></listitem>
         </itemizedlist>
     </sect1>
@@ -79,7 +77,7 @@
 	for the GridSphere framework.
 	</para>
 	<orderedlist>
-	<listitem><para>Download Jakarta &Tomcat; 4.1.18+ distribution</para></listitem>
+	<listitem><para>Download Jakarta &Tomcat; distribution</para></listitem>
 	<listitem><para>Unzip tomcat into your preferred location and set the CATALINA_HOME environment to point to this location <important>If using Windows, set the path with forward slashes e.g C:/MyApps/MyTomcat-4.29!</important></para></listitem>
 
     <listitem><para>The Portlet Manager Portlet requires the Tomcat manager webapp to be configured to

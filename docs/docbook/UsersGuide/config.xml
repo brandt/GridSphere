@@ -21,38 +21,19 @@
         <title>Initialized Portlet Web Applications</title>
         When deployed, GridSphere requires access to deployed portlet web applications. Since portlets are packaged according
         to the web application repository (WAR) format defined in the Java 2.3 Servlet Specification, the names of the
-        WAR files or web applications needs to be added to the <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/PortletMaster.xml</filename> file.
-        <example><title>The PortletMaster Descriptor</title>
-        <programlisting><literallayout>
-            <![CDATA[
-<portlet-services>
-    <service>
-        <name>Portlet Manager Service</name>
-        <user-required>true</user-required>
-        <description>
-            Provides Administration Capabilities for Portlet Web Applications
-        </description>
-        <interface>
-            org.gridlab.gridsphere.services.core.registry.PortletManagerService
-        </interface>
-        <implementation>
-            org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl
-        </implementation>
-        <service-config>
-            <param-name>startup-portlet-webapps</param-name>
-            <param-value>gridsphere, examplets</param-value>
-        </service-config>
-    </service>
-</portlet-services>]]>
-        </literallayout></programlisting>
-            <para>
-                The PortletMaster Descriptor is in fact a general PortletServices descriptor, but specifies
-                only a single portlet manager service that needs to be initialized before all other services.
-                The <parameter>startup-portlet-webapps</parameter> parameter indicates which portlet web applications
-                should be initialized at run-time. By default the <emphasis>gridsphere</emphasis> webapp
-                is initialized which contains all the core GridSphere portlets including Login, Logout, User
-                Administration, etc.
-            </para>
+        WAR files or web applications needs to be added as an empty file whose filename is defined by the name of portlet web application
+        to the <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/Portlets</filename> directory. The filename may contain
+        an additional integer suffix ".#" to ensure a priority when the container will load the portlet application. By default,
+        you will see <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/Portlets/gridsphere.1</filename> which instructs
+        the container to load the set of core gridsphere portlets first. Below is a sample directory listing showing
+        a deployed GridSphere and a couple additional portlet applications:
+        <example>
+            <programlisting>
+                <literallayout>
+                 %> ls $CATALINA_HOME/webapps/gridsphere/WEB-INF/Portlets/
+grid            gridsphere.1    jsrtutorial  examplets  mysamples.2
+                </literallayout>
+            </programlisting>
         </example>
     </sect1>
 
