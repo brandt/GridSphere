@@ -35,88 +35,63 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public PersistenceManagerRdbmsImpl() {
         ServletContext ctx = GridSphereConfig.getServletContext();
-        String persistenceConfigDir = ctx.getRealPath("/WEB-INF/persistence/");
-        log.info("Creating Hibernate RDBMS Impl using config in " + persistenceConfigDir);
-        this.factory = getFactory(persistenceConfigDir);
+        String origPropsPath = ctx.getRealPath("/WEB-INF/persistence/hibernate.properties");
+        String gsPropsPath = ctx.getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties");
+        String mappingPath = ctx.getRealPath("/WEB-INF/persistence");
+        File propsFile = new File(gsPropsPath);
+        try {
+            if (!propsFile.exists()) {
+                GridSphereConfig.copyFile(new File(origPropsPath), propsFile);
+                log.info("Copying hibernate properties from " + origPropsPath + " to " + gsPropsPath);
+            }
+            Properties prop = new Properties();
+            prop.load(ctx.getResourceAsStream("/WEB-INF/CustomPortal/database/hibernate.properties"));
+            Configuration cfg = loadConfiguration(mappingPath, prop);
+            factory = cfg.buildSessionFactory();
+        } catch (IOException e) {
+            log.error("Unable to copy file from " + origPropsPath + " to " + gsPropsPath);
+        } catch (HibernateException e) {
+            log.error("Could not instantiate Hibernate Factory " + e);
+        }
+        log.info("Creating Hibernate RDBMS Impl using config in " + gsPropsPath);
     }
 
     public PersistenceManagerRdbmsImpl(String persistenceConfigDir) {
         log.info("Creating Hibernate RDBMS Impl using config in " + persistenceConfigDir);
-        this.factory = getProjectFactory(persistenceConfigDir);
-    }
-
-    private SessionFactory getFactory(String persistenceConfigDir) {
-        Properties hibernateProperties = loadProperties();
-        Configuration cfg = loadConfiguration(persistenceConfigDir, hibernateProperties);
-        SessionFactory factory = null;
-
-        try {
-            factory = cfg.buildSessionFactory();
-        } catch (HibernateException e) {
-            log.error("Could not instantiate Hibernate Factory " + e);
-        }
-        return factory;
-    }
-
-    private SessionFactory getProjectFactory(String persistenceConfigDir) {
-
-        Properties hibernateProperties = null;
 
         String filename = persistenceConfigDir + File.separator + "hibernate.properties";
         File file = new File(filename);
 
-        // if there is no prop file use the one from gridsphere
-        if (!file.exists()) {
-            hibernateProperties = loadProperties();
-            log.info("PersistenceManager: no hibernate.properties defined, using the gridsphere defaults!");
-        } else {
-            hibernateProperties = loadProperties(filename);
-        }
-
-        Configuration cfg = loadConfiguration(persistenceConfigDir, hibernateProperties);
-        SessionFactory factory = null;
-
+        log.debug("Loading properties from :" + file);
+        Properties hibernateProperties = new Properties();
         try {
+            FileInputStream fis = new FileInputStream(file);
+            hibernateProperties.load(fis);
+            Configuration cfg = loadConfiguration(persistenceConfigDir, hibernateProperties);
             factory = cfg.buildSessionFactory();
+        } catch (FileNotFoundException e) {
+            log.error("Could not find Hibernate config file. Make sure you have a file  " + file);
+        } catch (IOException e) {
+            log.error("Could not load Hibernate config File: " + e);
         } catch (HibernateException e) {
             log.error("Could not instantiate Hibernate Factory " + e);
         }
-        return factory;
-    }
 
-    private void configureProperties(InputStream propsStream, String propsFile, Map attributes) {
-        Properties hibernateProperties = new Properties();
-        try {
-            hibernateProperties.load(propsStream);
-        } catch (IOException e) {
-            log.error("Unable to load properties file");
-        }
-        Iterator it = attributes.keySet().iterator();
-        while (it.hasNext()) {
-            String key = (String)it.next();
-            String val = (String)attributes.get(key);
-            hibernateProperties.setProperty(key, val);
-        }
-        try {
-            FileOutputStream fout = new FileOutputStream(propsFile);
-            hibernateProperties.store(fout, "Hibernate properties");
-        } catch (IOException e) {
-            log.error("Unable to save properties file");
-        }
     }
 
     /**
      * Load the mappingfiles from the given dirctory location
      *
-     * @param persistenceConfigDir
-     * @return
+     * @param mappingPath the file path to find hibernate mapping files
+     * @param hibernateProperties the hibernate properties
+     * @return a hibernate configuration object
      */
-    private Configuration loadConfiguration(String persistenceConfigDir, Properties prop) {
+    private Configuration loadConfiguration(String mappingPath, Properties hibernateProperties) {
         Configuration cfg = null;
         try {
             cfg = new Configuration();
-            cfg.setProperties(prop);
-            File mappingdir = new File(persistenceConfigDir);
+            cfg.setProperties(hibernateProperties);
+            File mappingdir = new File(mappingPath);
             String[] children = mappingdir.list();
             if (children == null) {
                 // Either dir does not exist or is not a directory
@@ -125,8 +100,8 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                     // Get filename of file or directory
                     String filename = children[i];
                     if (filename.endsWith(".hbm.xml")) {
-                        log.debug("add hbm file :" + persistenceConfigDir + File.separator + filename);
-                        cfg.addFile(persistenceConfigDir + File.separator + filename);
+                        log.debug("add hbm file :" + mappingPath + File.separator + filename);
+                        cfg.addFile(mappingPath + File.separator + filename);
                     }
                 }
             }
@@ -138,43 +113,6 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         return cfg;
     }
 
-
-    private Properties loadProperties(String file) {
-        log.debug("Loading properties from :" + file);
-        Properties prop = new Properties();
-        try {
-            FileInputStream fis = new FileInputStream(new File(file));
-            prop.load(fis);
-        } catch (FileNotFoundException e) {
-            log.error("Could not find Hibernate config file. Make sure you have a file  " + file);
-        } catch (IOException e) {
-            log.error("Could not load Hibernate config File: " + e);
-        }
-        return prop;
-    }
-
-
-    private Properties loadProperties(InputStream is) {
-        log.debug("Loading properties from :");
-        Properties prop = new Properties();
-        try {
-            prop.load(is);
-        } catch (FileNotFoundException e) {
-            log.error("Could not find Hibernate config file");
-        } catch (IOException e) {
-            log.error("Could not load Hibernate config File: " + e);
-        }
-        return prop;
-
-    }
-
-    /*
-     * for now we just need to load the config from the basedir of gridsphere/WEB-INF/persistence
-     */
-    private Properties loadProperties() {
-        ServletContext ctx = GridSphereConfig.getServletContext();
-        return loadProperties(ctx.getResourceAsStream("/WEB-INF/persistence/hibernate.properties"));
-    }
 
     public void create(Object object) throws PersistenceManagerException {
         try {
@@ -285,4 +223,5 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             throw new PersistenceManagerException(e);
         }
     }
+
 }

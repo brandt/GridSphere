@@ -13,10 +13,9 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -44,7 +43,7 @@ public class DBTask extends Task {
             "FATAL: No database configfile found! ";
     private String CHECK_PROPS =
             "Please check the hibernate.properties file! ";
-    private String DATABASE_CONNECTIN_NOT_VALID =
+    private String DATABASE_CONNECTION_NOT_VALID =
             "FATAL: Database conenction is not valid! ";
     private String CONNECTION_ERROR =
             "FATAL: Could not connect to database! ";
@@ -71,7 +70,7 @@ public class DBTask extends Task {
      */
     public void setConfigDir(String configDir) {
         SportletLog.setConfigureURL(configDir + "/classes/log4j.properties");
-        this.configDir = configDir + "/persistence";
+        this.configDir = configDir;
     }
 
     public void setAction(String action) {
@@ -81,10 +80,10 @@ public class DBTask extends Task {
     private void createDatabase(Configuration cfg) throws BuildException {
         try {
             new SchemaExport(cfg).create(false, true);
+            log.info("Successfully created DB");
         } catch (HibernateException e) {
             throw new BuildException("DB Error: " + CREATION_ERROR + " " + NOT_INSTALLED + " !");
         }
-
     }
 
     private void updateDatabase(Configuration cfg) throws BuildException {
@@ -112,13 +111,25 @@ public class DBTask extends Task {
      * @return
      * @throws BuildException
      */
-    private Properties loadProperties(String path) throws BuildException {
+    private Properties loadProperties() throws BuildException {
         Properties prop = new Properties();
+
+        String hibPath = configDir + File.separator + "CustomPortal" +
+                File.separator + "database" + File.separator + hibernatePropertiesFileName;
+
+        String templateHibernatePath = configDir + File.separator + "persistence" + File.separator + hibernatePropertiesFileName;
+
         try {
-            FileInputStream fis = new FileInputStream(new File(path + File.separator + hibernatePropertiesFileName));
+            File hibFile = new File(hibPath);
+            if (!hibFile.exists()) {
+                log.info("Copying template hibernate properties file from " + templateHibernatePath + " to " + hibPath);
+                GridSphereConfig.copyFile(new File(templateHibernatePath), hibFile);
+            }
+            FileInputStream fis = new FileInputStream(hibPath);
             prop.load(fis);
+            log.info("Using database configuration information from: " + hibPath);
         } catch (IOException e) {
-            throw new BuildException("DB Error:" + CONFIGFILE_ERROR + " (" + path + ")");
+            throw new BuildException("DB Error:" + CONFIGFILE_ERROR + " (" + hibPath + ")");
         }
         return prop;
     }
@@ -136,7 +147,7 @@ public class DBTask extends Task {
             Connection con = dmcp.getConnection();
             dmcp.closeConnection(con);
         } catch (HibernateException e) {
-            throw new BuildException("Error: testDBConnection (1) : " + DATABASE_CONNECTIN_NOT_VALID + " " + CHECK_PROPS + " " + NOT_INSTALLED);
+            throw new BuildException("Error: testDBConnection (1) : " + DATABASE_CONNECTION_NOT_VALID + " " + CHECK_PROPS + " " + NOT_INSTALLED);
         } catch (SQLException e) {
             throw new BuildException("Error: testDBConnection (2) " + CONNECTION_ERROR + " " + CHECK_PROPS + " " + NOT_INSTALLED);
         }
@@ -155,8 +166,8 @@ public class DBTask extends Task {
         try {
             cfg = new Configuration();
             cfg.setProperties(props);
-
-            File mappingdir = new File(configDir);
+            String mappingPath = configDir + File.separator + "persistence";
+            File mappingdir = new File(mappingPath);
             String[] children = mappingdir.list();
             if (children == null) {
                 // Either dir does not exist or is not a directory
@@ -166,7 +177,7 @@ public class DBTask extends Task {
                     // Get filename of file or directory
                     String filename = children[i];
                     if (filename.endsWith(".hbm.xml")) {
-                        cfg.addFile(configDir + File.separator + filename);
+                        cfg.addFile(mappingPath + File.separator + filename);
                         //log.info("loading "+configDir + File.separator + filename);
                     }
                 }
@@ -190,8 +201,7 @@ public class DBTask extends Task {
 
         try {
             // try to load the properties
-            Properties properties = loadProperties(this.configDir);
-            log.info("Loaded DB properties: " + this.configDir);
+            Properties properties = loadProperties();
 
             // test the db connection
             this.testDBConnection(properties);
@@ -216,4 +226,6 @@ public class DBTask extends Task {
             throw new BuildException("The database is not correctly installed!");
         }
     }
+
+
 }
