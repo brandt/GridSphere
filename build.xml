@@ -45,6 +45,7 @@ Copyright:
   <property name="test.cfg.dir"   value="${src.dir}"/>
 
   <property name="gridsphere.dir" value="${env.CATALINA_HOME}/${Name}"/>
+  <property name="gridsphere-hsqldb.dir" value="${gridsphere.dir}/db"/>   <!-- does not work?! oliver -->
   <property name="exclude.dirs" value=""/>
 
   <property name="debug" value="on"/>
@@ -273,7 +274,7 @@ Copyright:
     <target name="db-hsqldb">
       <sql
           driver="org.hsqldb.jdbcDriver"
-          url="jdbc:hsqldb:gridsphere"
+          url="jdbc:hsqldb:conf/gridsphere-db"
           userid="sa"
           password=""
           onerror="continue"
@@ -283,9 +284,10 @@ Copyright:
     </target>
 
     <target name="db-hsqldb-junit">
+      <mkdir dir="db"/>
       <sql
           driver="org.hsqldb.jdbcDriver"
-          url="jdbc:hsqldb:junit"
+          url="jdbc:hsqldb:db/junit-db"
           userid="sa"
           password=""
           onerror="continue"
@@ -368,8 +370,7 @@ Copyright:
             </fileset>
         </copy>
 
-        <replace file="${install.war}/${Name}/WEB-INF/conf/hsqldb.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>
-        <replace file="${install.war}/${Name}/WEB-INF/conf/hsqldb-junit.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>
+     <!--   <replace file="${install.war}/${Name}/WEB-INF/conf/hsqldb-junit.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>   -->
         <copy todir="${env.CATALINA_HOME}/webapps/${Name}">
             <fileset dir="${install.war}/${Name}"/>
         </copy>
@@ -379,6 +380,17 @@ Copyright:
         <!-- Make core gpdk directory if necessary -->
         <mkdir dir="${env.CATALINA_HOME}/gridsphere"/>
         <mkdir dir="${env.CATALINA_HOME}/gridsphere/creds"/>
+    </target>
+
+    <!-- ================================================================= -->
+    <!-- Installs hsqldb to tomcat                                         -->
+    <!-- ================================================================= -->
+    <target name="deploy-hsqldb" depends="mapping, db-hsqldb" description="deploys the hsqldb to tomcat">
+        <replace file="${install.war}/${Name}/WEB-INF/conf/hsqldb.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>
+        <!-- where hsqldb stores the datafiles -->
+        <mkdir dir="${env.CATALINA_HOME}/gridsphere/db"/>
+        <copy file="conf/gridsphere-db.properties" tofile="${env.CATALINA_HOME}/gridsphere/db/gridsphere-db.properties" />
+        <copy file="conf/gridsphere-db.script" tofile="${env.CATALINA_HOME}/gridsphere/db/gridsphere-db.script" />
     </target>
 
 
@@ -472,5 +484,6 @@ Copyright:
     <target name="perfusermanager" depends="compileperf">
         <java classname="org.gridlab.gridsphere.usermanager.PerfUserManager" classpathref="classpath"/>
     </target>
+
 
 </project>
