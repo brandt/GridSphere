@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 1.1//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="org.gridlab.gridsphere.portlet.jsrimpl.PersistencePreferenceAttribute"
+        table="portletprefAttributes"
+        >
+
+        <id
+            name="oid"
+            column="oid"
+            type="java.lang.String"
+            length="32"
+            >
+            <generator class="uuid.hex"/>
+
+        </id>
+
+        <property name="readOnly" type="boolean" column="readonly"/>
+
+        <list name="values" table="portletprefattrvalues">
+            <key column="value_oid"/>
+            <index/>
+            <element column="value" type="string"/>
+        </list>
+
+    </class>
+
+
+</hibernate-mapping>
