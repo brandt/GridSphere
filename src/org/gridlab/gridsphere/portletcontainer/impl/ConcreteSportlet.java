@@ -13,7 +13,7 @@ import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Owner;
-import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.RegisteredPortletException;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 
@@ -23,15 +23,15 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
- * A RegisteredSportlet provides the portlet container with information used to create and manage the
- * portlet's lifecycle. A RegisteredPortlet is created given a PortletApplication and a corresponding
- * ConcretePortletApplication provided by the PortletDeploymentDescriptor. The RegisteredPortlet parses
- * the information provided and provides PortletSettings. The RegisteredPortlet also maintains an instantiated
+ * A ConcreteSportlet provides the portlet container with information used to create and manage the
+ * portlet's lifecycle. A ConcretePortlet is created given a PortletApplication and a corresponding
+ * ConcretePortletApplication provided by the PortletDeploymentDescriptor. The ConcretePortlet parses
+ * the information provided and provides PortletSettings. The ConcretePortlet also maintains an instantiated
  * portlet that is managed by the portlet container.
  */
-public class RegisteredSportlet implements RegisteredPortlet {
+public class ConcreteSportlet implements ConcretePortlet {
 
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(RegisteredSportlet.class);
+    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(ConcreteSportlet.class);
 
     private AbstractPortlet abstractPortlet = null;
     private SportletSettings sportletSettings = null;
@@ -45,15 +45,20 @@ public class RegisteredSportlet implements RegisteredPortlet {
     private Owner owner;
     private List roleList = new Vector();
     private List groupList = new Vector();
+    private List portletModes = new Vector();
+    private List windowStates = new Vector();
     private PortletGroup ownerGroup = SportletGroup.getBaseGroup();
     private PortletRole ownerRole = SportletRole.getGuestRole();
 
-    public RegisteredSportlet(PortletDeploymentDescriptor pdd,
+    /**
+     * Create a ConcreteSportlet
+     */
+    public ConcreteSportlet(PortletDeploymentDescriptor pdd,
                               PortletApplication portletApp,
                               ConcretePortletApplication concreteApp,
                               AccessControlService aclService) throws RegisteredPortletException {
 
-        log.info("in RegisteredSportlet construcor");
+        log.info("in ConcreteSportlet construcor");
 
         this.aclService = aclService;
 
@@ -242,6 +247,26 @@ public class RegisteredSportlet implements RegisteredPortlet {
      */
     public List getSupportedRoles() {
         return roleList;
+    }
+
+    /**
+     * Returns the list of supported portlet modes e.g. EDIT, VIEW, HELP, CONFIGURE
+     *
+     * @return modes the list of allowed portlet modes
+     * @see <code>Portlet.Mode</code>
+     */
+    public List getSupportedPortletModes() {
+        return portletModes;
+    }
+
+    /**
+     * Returns the list of allowed portlet window states e.g. MINIMIZED, MAXIMIZED, RESIZING
+     *
+     * @return modes the list of allowed portlet window states
+     * @see <code>PortletWindow.State</code>
+     */
+    public List getAllowedPortletWindowStates() {
+        return windowStates;
     }
 
 }
