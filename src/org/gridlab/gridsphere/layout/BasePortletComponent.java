@@ -115,7 +115,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         if (this.componentTheme.equals("")) {
             return this.componentTheme;
         } else {
-            System.out.println("\n\n\n\n WE HAVE A COMP THEEME HERE!!!!!\n\n\n\n");
             return "-"+this.componentTheme;
         }
     }
