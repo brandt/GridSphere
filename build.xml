@@ -740,7 +740,7 @@ Copyright:
             <fileset dir="${gridsphere.build}/reports">
                 <include name="TEST-*.xml"/>
             </fileset>
-            <report format="frames" todir="${gridsphere.build}/reports/html"/>
+            <report format="noframes" todir="${gridsphere.build}/reports/html"/>
         </junitreport>
     </target>
 
