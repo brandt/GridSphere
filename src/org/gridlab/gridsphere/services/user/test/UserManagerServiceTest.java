@@ -56,7 +56,7 @@ public class UserManagerServiceTest extends ServiceTest {
         junit.textui.TestRunner.run(suite());
     }
 
-    protected void setUp() throws PortletServiceException {
+    protected void setUp() {
         super.setUp();
         int i;
 
@@ -72,12 +72,24 @@ public class UserManagerServiceTest extends ServiceTest {
         // First we need to create some groups
         log.info("creating fake groups");
         groups = new Vector(GROUPS.length);
-        for (i = 0; i < GROUPS.length; i++) {
-            groups.set(i, GROUPS[i]);
-            aclManagerService.createNewGroup(GROUPS[i]);
+        try {
+            for (i = 0; i < GROUPS.length; i++) {
+                groups.set(i, GROUPS[i]);
+                aclManagerService.createNewGroup(GROUPS[i]);
+            }
+        } catch (PortletServiceException e) {
+            log.error("Unable to create new group: ", e);
+            fail("Unable to create new group");
         }
 
-        List portletGroups = aclService.getAllGroups();
+        List portletGroups = null;
+        try {
+            portletGroups = aclService.getAllGroups();
+        } catch (PortletServiceException e) {
+            log.error("Unable to get all groups: ", e);
+            fail("Unable to get all groups");
+        }
+
         cactus = (PortletGroup)portletGroups.get(0);
         portals = (PortletGroup)portletGroups.get(1);
         triana = (PortletGroup)portletGroups.get(2);
@@ -91,21 +103,36 @@ public class UserManagerServiceTest extends ServiceTest {
         hans = new SportletUserImpl();
         hans.setGivenName(USERS[0]);
         hans.setUserID(USERS[0]);
-        aclManagerService.addUserToSuperRole(hans);
-        aclManagerService.addUserToGroup(hans, cactus, SportletRole.getAdminRole());
+        try {
+            aclManagerService.addUserToSuperRole(hans);
+            aclManagerService.addUserToGroup(hans, cactus, SportletRole.getAdminRole());
+        } catch (PortletServiceException e) {
+            log.error("Unable to add users: ", e);
+            fail("Unable to add users");
+        }
 
         // Lets make user 1 admin of group 1 and 2
         franz = new SportletUserImpl();
         franz.setGivenName(USERS[1]);
         franz.setUserID(USERS[1]);
-        aclManagerService.addUserToGroup(franz, portals, SportletRole.getAdminRole());
-        aclManagerService.addUserToGroup(franz, triana, SportletRole.getAdminRole());
+        try {
+            aclManagerService.addUserToGroup(franz, portals, SportletRole.getAdminRole());
+            aclManagerService.addUserToGroup(franz, triana, SportletRole.getAdminRole());
+        } catch (PortletServiceException e) {
+            log.error("Unable to add users: ", e);
+            fail("Unable to add users");
+        }
 
         // Lets make user 2 admin of group 2
         josef = new SportletUserImpl();
         josef.setGivenName(USERS[2]);
         josef.setUserID(USERS[2]);
-        aclManagerService.addUserToGroup(josef, triana, SportletRole.getAdminRole());
+        try {
+            aclManagerService.addUserToGroup(josef, triana, SportletRole.getAdminRole());
+        } catch (PortletServiceException e) {
+            log.error("Unable to add users: ", e);
+            fail("Unable to add users");
+        }
 
     }
 
@@ -114,7 +141,7 @@ public class UserManagerServiceTest extends ServiceTest {
     }
 
 
-    public void testUserService() throws PortletServiceException {
+    public void testUserService() {
         AccountRequest req1, req2;
         // create mock accounts -- since createAccountRequest just returns new AccountRequest()
         // there's little need to test this method
@@ -140,8 +167,13 @@ public class UserManagerServiceTest extends ServiceTest {
         req2.setDesiredGroups(req2groups);
 
         // submit requests as well
-        userManager.submitAccountRequest(req1);
-        userManager.submitAccountRequest(req2);
+        try {
+            userManager.submitAccountRequest(req1);
+            userManager.submitAccountRequest(req2);
+        } catch (PortletServiceException e) {
+            log.error("Unable to submit account request: ", e);
+            fail("Unable to submit account request");
+        }
 
         List accounts = userManager.getAccountRequests();
         assertEquals(accounts.size(), 2);
@@ -174,6 +206,7 @@ public class UserManagerServiceTest extends ServiceTest {
             userManager.approveGroupRequest(josef, james, triana, null);
             fail("Should raise a PermissionDeniedException");
         } catch (PermissionDeniedException e) {}
+
 
         // Now let franz approve portals group
         try {
@@ -219,11 +252,15 @@ public class UserManagerServiceTest extends ServiceTest {
         String newname = "James Cool Guy";
         AccountRequest newreq = userManager.changeAccountRequest(jamesUser);
         newreq.setFullName(newname);
-        userManager.submitAccountRequest(newreq);
+
         try {
+            userManager.submitAccountRequest(newreq);
             userManager.approveAccountRequest(hans, newreq, null);
         } catch (PermissionDeniedException e) {
             fail("Should NOT raise a PermissionDeniedException");
+        } catch (PortletServiceException e) {
+            log.error("Unable to submit account request: ", e);
+            fail("Unable to submit account request");
         }
 
         // test login

@@ -57,9 +57,6 @@ public class ACLServiceTest extends ServiceTest {
     protected void setUp() {
         super.setUp();
 
-        PropertyConfigurator.configure("conf/log4j.properties");
-
-
         int i;
         log.info("setting up services");
         // create services
