@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:tkucz@icis.pcz.pl">Tomasz Kuczynski</a>
- * @version 0.96 2004/04/01
+ * @version 0.97 2004/05/17
  */
 package org.gridlab.gridsphere.portlets.core.file;
 
@@ -98,7 +98,7 @@ public class CommanderPortlet extends ActionPortlet {
                 filename = util.substitute("s! !!g", filename);
 
                 String path = userData.getPath("left");
-                secureDirectoryService.writeFromStream(user, rootDir, path + filename, fi.getInputStream());
+                secureDirectoryService.writeFromStream(user.getID(), rootDir, path + filename, fi.getInputStream());
                 readDirectories(event, userData);
             } else
                 log.error("Size of uploaded file is to big");
@@ -131,7 +131,7 @@ public class CommanderPortlet extends ActionPortlet {
                 filename = util.substitute("s! !!g", filename);
 
                 String path = userData.getPath("right");
-                secureDirectoryService.writeFromStream(user, rootDir, path + filename, fi.getInputStream());
+                secureDirectoryService.writeFromStream(user.getID(), rootDir, path + filename, fi.getInputStream());
                 readDirectories(event, userData);
             } else
                 log.error("Size of uploaded file is to big");
@@ -159,7 +159,7 @@ public class CommanderPortlet extends ActionPortlet {
                 String path = userData.getPath(sideParam);
                 resourceName = util.substitute("s! !!g", resourceName);
 
-                File newDirectory = secureDirectoryService.getFile(request.getUser(), rootDir, path + resourceName);
+                File newDirectory = secureDirectoryService.getFile(request.getUser().getID(), rootDir, path + resourceName);
                 newDirectory.mkdir();
                 textFieldBean.setValue("");
                 readDirectories(event, userData);
@@ -186,7 +186,7 @@ public class CommanderPortlet extends ActionPortlet {
                 String path = userData.getPath(sideParam);
                 resourceName = util.substitute("s! !!g", resourceName);
 
-                File newFile = secureDirectoryService.getFile(request.getUser(), rootDir, path + resourceName);
+                File newFile = secureDirectoryService.getFile(request.getUser().getID(), rootDir, path + resourceName);
                 newFile.createNewFile();
                 textFieldBean.setValue("");
                 readDirectories(event, userData);
@@ -243,7 +243,7 @@ public class CommanderPortlet extends ActionPortlet {
             while (params.hasMoreElements()) {
                 String param = (String) params.nextElement();
                 if (util.match("m!^" + sideParam + "_(\\d)+$!", param)) {
-                    secureDirectoryService.saveResourceCopy(request.getUser(), rootDir, sourcePath + resources[Integer.parseInt(util.group(1))].getResource(), destinationPath + resources[Integer.parseInt(util.group(1))].getResource());
+                    secureDirectoryService.saveResourceCopy(request.getUser().getID(), rootDir, sourcePath + resources[Integer.parseInt(util.group(1))].getResource(), destinationPath + resources[Integer.parseInt(util.group(1))].getResource());
                 }
             }
             readDirectories(event, userData);
@@ -277,7 +277,7 @@ public class CommanderPortlet extends ActionPortlet {
             while (params.hasMoreElements()) {
                 String param = (String) params.nextElement();
                 if (util.match("m!^" + sideParam + "_(\\d)+$!", param)) {
-                    secureDirectoryService.saveResourceMove(request.getUser(), rootDir, sourcePath + resources[Integer.parseInt(util.group(1))].getResource(), destinationPath + resources[Integer.parseInt(util.group(1))].getResource());
+                    secureDirectoryService.saveResourceMove(request.getUser().getID(), rootDir, sourcePath + resources[Integer.parseInt(util.group(1))].getResource(), destinationPath + resources[Integer.parseInt(util.group(1))].getResource());
                 }
             }
             readDirectories(event, userData);
@@ -308,7 +308,7 @@ public class CommanderPortlet extends ActionPortlet {
             while (params.hasMoreElements()) {
                 String param = (String) params.nextElement();
                 if (util.match("m!^" + sideParam + "_(\\d)+$!", param)) {
-                    secureDirectoryService.deleteResource(request.getUser(), rootDir, path + resources[Integer.parseInt(util.group(1))].getResource(), true);
+                    secureDirectoryService.deleteResource(request.getUser().getID(), rootDir, path + resources[Integer.parseInt(util.group(1))].getResource(), true);
                 }
             }
             readDirectories(event, userData);
@@ -335,7 +335,7 @@ public class CommanderPortlet extends ActionPortlet {
                     userData.getLeftResourceList() :
                     userData.getRightResourceList());
 
-            File file = secureDirectoryService.getFile(request.getUser(), rootDir, userData.getPath(sideParam) + resources[fileNumber].getResource());
+            File file = secureDirectoryService.getFile(request.getUser().getID(), rootDir, userData.getPath(sideParam) + resources[fileNumber].getResource());
             userData.setEditSide(sideParam.equals("left") ? "left" : "right");
             userData.setEditFile(file);
             userData.setState("edit");
@@ -360,7 +360,7 @@ public class CommanderPortlet extends ActionPortlet {
         try {
             StringBufferInputStream stringBufferInputStream = new StringBufferInputStream(fileData);
             SecureDirectoryService secureDirectoryService = (SecureDirectoryService) getPortletConfig().getContext().getService(SecureDirectoryService.class);
-            secureDirectoryService.writeFromStream(request.getUser(), rootDir, userData.getPath(userData.getEditSide()) + userData.getEditFile().getName(), stringBufferInputStream);
+            secureDirectoryService.writeFromStream(request.getUser().getID(), rootDir, userData.getPath(userData.getEditSide()) + userData.getEditFile().getName(), stringBufferInputStream);
             readDirectories(event, userData);
             userData.setState("explore");
         } catch (PortletServiceUnavailableException e) {
@@ -385,11 +385,11 @@ public class CommanderPortlet extends ActionPortlet {
             PortletResponse response = event.getPortletResponse();
             SecureDirectoryService secureDirectoryService = (SecureDirectoryService) getPortletConfig().getContext().getService(SecureDirectoryService.class);
             User user = event.getPortletRequest().getUser();
-            if (secureDirectoryService.appHasDirectory(user, rootDir, true)) {
+            if (secureDirectoryService.appHasDirectory(user.getID(), rootDir, true)) {
                 String leftPath = userData.getPath("left");
                 String rightPath = userData.getPath("right");
-                ResourceInfo[] leftResourceList = secureDirectoryService.getResourceList(user, rootDir, leftPath);
-                ResourceInfo[] rightResourceList = secureDirectoryService.getResourceList(user, rootDir, rightPath);
+                ResourceInfo[] leftResourceList = secureDirectoryService.getResourceList(user.getID(), rootDir, leftPath);
+                ResourceInfo[] rightResourceList = secureDirectoryService.getResourceList(user.getID(), rootDir, rightPath);
 
                 String[] leftURIs = null;
                 String[] rightURIs = null;
@@ -404,7 +404,7 @@ public class CommanderPortlet extends ActionPortlet {
                             uri.addParameter("side", "left");
                             leftURIs[i] = uri.toString();
                         } else {
-                            leftURIs[i] = secureDirectoryService.getFileUrl(user, rootDir, leftPath + leftResourceList[i].getResource(), leftResourceList[i].getResource());
+                            leftURIs[i] = secureDirectoryService.getFileUrl(user.getID(), rootDir, leftPath + leftResourceList[i].getResource(), leftResourceList[i].getResource());
                         }
                     }
                 }
@@ -418,7 +418,7 @@ public class CommanderPortlet extends ActionPortlet {
                             uri.addParameter("side", "right");
                             rightURIs[i] = uri.toString();
                         } else {
-                            rightURIs[i] = secureDirectoryService.getFileUrl(user, rootDir, rightPath + rightResourceList[i].getResource(), rightResourceList[i].getResource());
+                            rightURIs[i] = secureDirectoryService.getFileUrl(user.getID(), rootDir, rightPath + rightResourceList[i].getResource(), rightResourceList[i].getResource());
                         }
                     }
                 }

@@ -216,7 +216,7 @@ public class BannerPortlet extends ActionPortlet {
                 out.println(this.getLocalizedText(request, "BANNER_FILE_NOTFOUND"));
             } else {
                 if (userFile) {
-                    File file = secureDirectoryService.getFile(request.getUser(), rootDir, fileURL);
+                    File file = secureDirectoryService.getFile(request.getUser().getID(), rootDir, fileURL);
                     if (file == null)
                         throw new IOException("Unable to get " + fileURL + " form secure directory service.");
                     FileReader fileReader = new FileReader(file);
@@ -289,9 +289,9 @@ public class BannerPortlet extends ActionPortlet {
     private void readDirectories(FormEvent event, UserData userData) {
         PortletResponse response = event.getPortletResponse();
         User user = event.getPortletRequest().getUser();
-        if (secureDirectoryService.appHasDirectory(user, rootDir, true)) {
+        if (secureDirectoryService.appHasDirectory(user.getID(), rootDir, true)) {
             String path = userData.getPath("left");
-            ResourceInfo[] resourceList = secureDirectoryService.getResourceList(user, rootDir, path);
+            ResourceInfo[] resourceList = secureDirectoryService.getResourceList(user.getID(), rootDir, path);
 
             String[] URIs = null;
 

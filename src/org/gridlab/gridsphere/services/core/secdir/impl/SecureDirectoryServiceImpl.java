@@ -1,10 +1,9 @@
 /**
  * @author <a href="mailto:tkucz@icis.pcz.pl">Tomasz Kuczynski</a>
- * @version 0.5 2004/04/01
+ * @version 0.6 2004/05/17
  */
 package org.gridlab.gridsphere.services.core.secdir.impl;
 
-import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.services.core.secdir.SecureDirectoryService;
@@ -33,7 +32,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
 
     public void init(PortletServiceConfig config) {
         if (!inited) {
-            secureDirPath = config.getServletContext().getRealPath("/WEB-INF/" + SECURE_SERVLET_MAPPING);
+            secureDirPath = org.gridlab.gridsphere.portletcontainer.GridSphereConfig.getServletContext().getRealPath("/WEB-INF/" + SECURE_SERVLET_MAPPING);
             File f = new File(secureDirPath);
             if (!f.exists()) {
                 log.debug("Creating secure directory for users: " + secureDirPath);
@@ -48,21 +47,21 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
 
     }
 
-    public String getFileUrl(User user, String appName, String resource) {
-        return getFileUrl(user, appName, resource, null, null);
+    public String getFileUrl(String userID, String appName, String resource) {
+        return getFileUrl(userID, appName, resource, null, null);
     }
 
-    public String getFileUrl(User user, String appName, String resource, String saveAs) {
-        return getFileUrl(user, appName, resource, saveAs, null);
+    public String getFileUrl(String userID, String appName, String resource, String saveAs) {
+        return getFileUrl(userID, appName, resource, saveAs, null);
     }
 
-    public String getFileUrl(User user, String appName, String resource, String saveAs, String contentType) {
-        if (user == null || appName == null || resource == null || !inited)
+    public String getFileUrl(String userID, String appName, String resource, String saveAs, String contentType) {
+        if (userID == null || appName == null || resource == null || !inited)
             return null;
         String userDirectoryPath;
         resource = util.substitute("s!\\\\!/!g", resource);
         resource = util.substitute("s!^/!!", resource);
-        if ((userDirectoryPath = getUserDirectoryPath(user)) != null) {
+        if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
             String filePath = userDirectoryPath + "/" + appName + "/" + resource;
             File file = new File(filePath);
             if (!file.exists() || file.isDirectory())
@@ -90,8 +89,8 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         }
     }
 
-    public ResourceInfo[] getResourceList(User user, String appName, String path) {
-        if (user == null || appName == null || path == null || !inited)
+    public ResourceInfo[] getResourceList(String userID, String appName, String path) {
+        if (userID == null || appName == null || path == null || !inited)
             return null;
         String userDirectoryPath;
 
@@ -103,7 +102,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             path = util.substitute("s!\\.\\.!.!g", path);
             path = util.substitute("s!^\\.[\\/]!!", path);
         } while (util.match("m!^/|\\.\\.|^\\.[\\/]!", path));
-        if ((userDirectoryPath = getUserDirectoryPath(user)) != null) {
+        if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
             String dirPath = userDirectoryPath + "/" + (appName == null ? "" : appName + "/") + path;
             File directory = new File(dirPath);
             if (!directory.exists() || !directory.isDirectory())
@@ -125,8 +124,8 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         }
     }
 
-    public File getFile(User user, String appName, String resource) {
-        if (user == null || appName == null || resource == null || !inited)
+    public File getFile(String userID, String appName, String resource) {
+        if (userID == null || appName == null || resource == null || !inited)
             return null;
 
         //FOR SECURITY REASONS DO NOT CHANGE THE FOLLOWING REGEXPS (UNLESS YOU KNOW WHAT YOU ARE DOING)
@@ -138,7 +137,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             resource = util.substitute("s!^\\.[\\/]!!", resource);
         } while (util.match("m!^/|\\.\\.|^\\.[\\/]!", resource));
         String userDirectoryPath;
-        if ((userDirectoryPath = getUserDirectoryPath(user)) != null) {
+        if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
             String filePath = userDirectoryPath + "/" + appName;
             File file = new File(filePath);
             if (!file.exists()) {
@@ -169,49 +168,49 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             return null;
     }
 
-    public boolean deleteResource(User user, String appName, String resource) {
-        return deleteResource(user, appName, resource, false);
+    public boolean deleteResource(String userID, String appName, String resource) {
+        return deleteResource(userID, appName, resource, false);
     }
 
-    public boolean deleteResource(User user, String appName, String resource, boolean recursive) {
-        return deleteResource(user, appName, resource, recursive, false);
+    public boolean deleteResource(String userID, String appName, String resource, boolean recursive) {
+        return deleteResource(userID, appName, resource, recursive, false);
     }
 
-    public boolean deleteResource(User user, String appName, String resource, boolean recursive, boolean delTree) {
+    public boolean deleteResource(String userID, String appName, String resource, boolean recursive, boolean delTree) {
 
         //FOR SECURITY REASONS DO NOT CHANGE THE FOLLOWING REGEXPS (UNLESS YOU KNOW WHAT YOU ARE DOING)
 
         do {
             resource = util.substitute("s!\\.\\.!.!g", resource);
         } while (util.match("m!\\.\\.!", resource));
-        if (deleteFile(user, appName, resource, delTree)) {
+        if (deleteFile(userID, appName, resource, delTree)) {
             return true;
         } else
-            return deleteDirectory(user, appName, resource, recursive, delTree);
+            return deleteDirectory(userID, appName, resource, recursive, delTree);
     }
 
-    public boolean saveResourceCopy(User user, String appName, String resourceSource, String resourceDestination) {
+    public boolean saveResourceCopy(String userID, String appName, String resourceSource, String resourceDestination) {
         if (!isInPath(resourceSource, resourceDestination))
-            return copyResource(user, appName, resourceSource, resourceDestination);
+            return copyResource(userID, appName, resourceSource, resourceDestination);
         return false;
     }
 
-    public boolean saveResourceMove(User user, String appName, String resourceSource, String resourceDestination) {
+    public boolean saveResourceMove(String userID, String appName, String resourceSource, String resourceDestination) {
         if (!isInPath(resourceSource, resourceDestination))
-            if (copyResource(user, appName, resourceSource, resourceDestination))
-                return deleteResource(user, appName, resourceSource, true);
+            if (copyResource(userID, appName, resourceSource, resourceDestination))
+                return deleteResource(userID, appName, resourceSource, true);
         return false;
     }
 
-    public boolean fileExists(User user, String appName, String resource) {
-        File file = getFile(user, appName, resource);
+    public boolean fileExists(String userID, String appName, String resource) {
+        File file = getFile(userID, appName, resource);
         if (file == null)
             return false;
         return true;
     }
 
-    public boolean writeFromStream(User user, String appName, String resource, InputStream input) {
-        File file = getFile(user, appName, resource);
+    public boolean writeFromStream(String userID, String appName, String resource, InputStream input) {
+        File file = getFile(userID, appName, resource);
         if (file == null)
             return false;
         try {
@@ -227,24 +226,24 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         }
     }
 
-    public boolean writeFromFile(User user, String appName, String resource, File inputFile) {
+    public boolean writeFromFile(String userID, String appName, String resource, File inputFile) {
         try {
             FileInputStream input = new FileInputStream(inputFile);
-            return writeFromStream(user, appName, resource, input);
+            return writeFromStream(userID, appName, resource, input);
         } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean appHasDirectory(User user, String appName, boolean create) {
-        if (user == null || appName == null || !inited)
+    public boolean appHasDirectory(String userID, String appName, boolean create) {
+        if (userID == null || appName == null || !inited)
             return false;
 
         //FOR SECURITY REASONS DO NOT CHANGE THE FOLLOWING REGEXP (UNLESS YOU KNOW WHAT YOU ARE DOING)
 
         appName = util.substitute("s![\\/.]!!g", appName);
         String userDirectoryPath;
-        if ((userDirectoryPath = getUserDirectoryPath(user)) != null) {
+        if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
             String filePath = userDirectoryPath + "/" + appName;
             File file = new File(filePath);
             if (!file.exists()) {
@@ -292,11 +291,11 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         }
     }
 
-    private String getUserDirectoryPath(User user) {
-        String userDirectoryPath = secureDirPath + "/" + user.getID();
+    private String getUserDirectoryPath(String userID) {
+        String userDirectoryPath = secureDirPath + "/" + userID;
         File userDirectory = new File(userDirectoryPath);
         if (!userDirectory.exists()) {
-            log.debug("Creating directory for user: " + userDirectoryPath);
+            log.debug("Creating directory for userID: " + userDirectoryPath);
             if (!userDirectory.mkdir()) {
                 log.error("Unable to create directory" + userDirectoryPath);
                 return null;
@@ -305,13 +304,13 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         return userDirectoryPath;
     }
 
-    private boolean deleteDirectory(User user, String appName, String resource, boolean recursive, boolean delTree) {
-        if (user == null || appName == null || resource == null || !inited)
+    private boolean deleteDirectory(String userID, String appName, String resource, boolean recursive, boolean delTree) {
+        if (userID == null || appName == null || resource == null || !inited)
             return false;
         resource = util.substitute("s!\\\\!/!g", resource);
         resource = util.substitute("s!^/!!", resource);
         String userDirectoryPath;
-        if ((userDirectoryPath = getUserDirectoryPath(user)) != null) {
+        if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
             String filePath = userDirectoryPath + "/" + appName;
             File file = new File(filePath);
             if (!file.exists()) {
@@ -362,8 +361,8 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         return f.delete();
     }
 
-    private boolean deleteFile(User user, String appName, String resource, boolean delTree) {
-        File file = getFile(user, appName, resource);
+    private boolean deleteFile(String userID, String appName, String resource, boolean delTree) {
+        File file = getFile(userID, appName, resource);
         if (file == null)
             return false;
         if (!file.delete())
@@ -387,13 +386,13 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         return true;
     }
 
-    private boolean copyResource(User user, String appName, String resourceSource, String resourceDestination) {
-        if (user == null || appName == null || resourceSource == null || resourceDestination == null || !inited)
+    private boolean copyResource(String userID, String appName, String resourceSource, String resourceDestination) {
+        if (userID == null || appName == null || resourceSource == null || resourceDestination == null || !inited)
             return false;
         resourceSource = util.substitute("s!\\\\!/!g", resourceSource);
         resourceSource = util.substitute("s!^/!!", resourceSource);
         String userDirectoryPath;
-        if ((userDirectoryPath = getUserDirectoryPath(user)) != null) {
+        if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
             String filePath = userDirectoryPath + "/" + appName;
             File file = new File(filePath);
             if (!file.exists()) {
@@ -405,21 +404,21 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             }
             file = new File(filePath + "/" + resourceSource);
             if (!file.isDirectory()) {
-                return writeFromFile(user, appName, resourceDestination, file);
+                return writeFromFile(userID, appName, resourceDestination, file);
             } else {
                 resourceDestination += "\\\\";
                 resourceDestination = util.substitute("s!\\\\!/!g", resourceDestination);
                 resourceDestination = util.substitute("s!^/!!", resourceDestination);
-                return copyDirectory(user, appName, file, resourceDestination);
+                return copyDirectory(userID, appName, file, resourceDestination);
             }
         } else
             return false;
     }
 
-    private boolean copyDirectory(User user, String appName, File file, String destination) {
+    private boolean copyDirectory(String userID, String appName, File file, String destination) {
         File[] files = file.listFiles();
         boolean toRet = true;
-        String directoryPath = getUserDirectoryPath(user) + "/" + appName + "/" + destination;
+        String directoryPath = getUserDirectoryPath(userID) + "/" + appName + "/" + destination;
         File dirTree = new File(directoryPath);
         if (!dirTree.exists())
             if (!dirTree.mkdirs())
@@ -427,10 +426,10 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
 
         for (int i = 0; i < files.length; ++i) {
             if (files[i].isDirectory()) {
-                if (!copyDirectory(user, appName, files[i], destination + files[i].getName() + "/"))
+                if (!copyDirectory(userID, appName, files[i], destination + files[i].getName() + "/"))
                     toRet = false;
             } else {
-                if (!writeFromFile(user, appName, destination + files[i].getName(), files[i]))
+                if (!writeFromFile(userID, appName, destination + files[i].getName(), files[i]))
                     toRet = false;
             }
         }
