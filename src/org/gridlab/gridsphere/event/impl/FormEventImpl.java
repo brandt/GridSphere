@@ -13,7 +13,7 @@ import java.util.Enumeration;
 
 public class FormEventImpl implements FormEvent {
 
-    private ActionEvent event;
+    protected ActionEvent event;
 
     public FormEventImpl(ActionEvent evt) {
         event = evt;
@@ -41,4 +41,5 @@ public class FormEventImpl implements FormEvent {
         }
         return result;
     }
+
 }

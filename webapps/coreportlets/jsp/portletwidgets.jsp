@@ -43,7 +43,7 @@ In the "any.jsp" file, the following JSP would be included to load in the tag li
 </code>
 
 <p>
-Lines 1 and 2 indicate that the portletWidgets and portletAPI tag libarries are to be used and line 3
+Lines 1 and 2 indicate that the portletWidgets and portletAPI tag libraries are to be used and line 3
 must be called to make the necessary portlet objects i.e. PortletRequest available to the JSP.
 <br>
 The prefix is used to reference the tag library later on e.g. to use the portletWidgets form tag:
@@ -89,6 +89,20 @@ Parameters:
 the <code>actionPerformed(ActionEvent event)</code> portlet method.
 <li><b>method</b> -- (optional) the HTTP method to use either GET or POST by default it's POST
 </ul>
+
+<h4>File Forms</h4>
+
+
+    <table cellspacing=2 cellpadding=2 border=0>
+    <tr>
+    <td align="right">File: </td>
+    <td align="left"><gs:fileinput name="filename" size="8" maxlength="20"/></td>
+    </tr>
+    <tr>
+    <td colspan=5 align="center"><gs:submit name="option" value="Login"/></td>
+    </tr>
+    </table>
+
 
 <h4>Action Parameters</h4>
 Parameters can be associated with forms and actionlinks and can be used to perform action logic in

@@ -7,6 +7,9 @@ package org.gridlab.gridsphere.services.registry;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.event.WindowEvent;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import java.util.List;
 
@@ -18,6 +21,9 @@ import java.util.List;
  * of ConcretePortlet objects.
  */
 public interface PortletManagerService extends PortletService {
+
+    public static final String WEB_APPLICATION_PATH =
+            GridSphereConfig.getProperty(GridSphereConfigProperties.CATALINA_HOME) + "/webapps/";
 
     public void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException;
 
