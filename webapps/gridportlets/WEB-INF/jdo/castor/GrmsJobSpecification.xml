@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
-<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN"
-                         "http://castor.exolab.org/mapping.dtd">
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
 <mapping>
-    <class name="org.gridlab.gridsphere.services.job.impl.grms.GrmsJobSpecification">
+    <class name="org.gridlab.gridsphere.services.grid.job.impl.grms.GrmsJobSpecification">
         <map-to xml="grmsjob"/>
             <field name="Id"
                    type="java.lang.String"
@@ -10,22 +9,22 @@
                 <bind-xml name="appid" node="attribute"/>
             </field>
             <field name="JobDescription"
-                   type="org.gridlab.gridsphere.services.job.impl.grms.SingleJobDescription">
+                   type="org.gridlab.gridsphere.services.grid.job.impl.grms.SingleJobDescription">
                 <bind-xml name="simplejob"/>
             </field>
     </class>
-    <class name="org.gridlab.gridsphere.services.job.impl.grms.SingleJobDescription">
+    <class name="org.gridlab.gridsphere.services.grid.job.impl.grms.SingleJobDescription">
             <field name="ResourceDescription"
-                   type="org.gridlab.gridsphere.services.job.impl.grms.ResourceDescription"
+                   type="org.gridlab.gridsphere.services.grid.job.impl.grms.ResourceDescription"
                    required="false">
                 <bind-xml name="resource"/>
             </field>
             <field name="ApplicationDescription"
-                   type="org.gridlab.gridsphere.services.job.impl.grms.ApplicationDescription">
+                   type="org.gridlab.gridsphere.services.grid.job.impl.grms.ApplicationDescription">
                 <bind-xml name="application"/>
             </field>
     </class>
-    <class name="org.gridlab.gridsphere.services.job.impl.grms.ResourceDescription">
+    <class name="org.gridlab.gridsphere.services.grid.job.impl.grms.ResourceDescription">
             <field name="OsType"
                    type="java.lang.String"
                    required="false">
@@ -87,51 +86,51 @@
                 <bind-xml name="maxcputime" node="element"/>
             </field>
     </class>
-    <class name="org.gridlab.gridsphere.services.job.impl.grms.ApplicationDescription">
+    <class name="org.gridlab.gridsphere.services.grid.job.impl.grms.ApplicationDescription">
         <field name="Executable"
-               type="org.gridlab.gridsphere.services.data.file.FileHandle"
+               type="org.gridlab.gridsphere.services.grid.data.file.FileHandle"
                required="false">
             <bind-xml name="executable"/>
         </field>
         <field name="Arguments"
-               type="org.gridlab.gridsphere.services.job.Arguments">
+               type="org.gridlab.gridsphere.services.grid.job.Arguments">
             <bind-xml name="arguments"/>
         </field>
         <field name="Environment"
-               type="org.gridlab.gridsphere.services.job.Environment"
+               type="org.gridlab.gridsphere.services.grid.job.Environment"
                required="false">
             <bind-xml name="environment"/>
         </field>
         <field name="Stdin"
-               type="org.gridlab.gridsphere.services.data.file.FileHandle"
+               type="org.gridlab.gridsphere.services.grid.data.file.FileHandle"
                required="false">
             <bind-xml name="stdin"/>
         </field>
         <field name="Stdout"
-               type="org.gridlab.gridsphere.services.data.file.FileHandle"
+               type="org.gridlab.gridsphere.services.grid.data.file.FileHandle"
                required="false">
             <bind-xml name="stdout"/>
         </field>
         <field name="Stderr"
-               type="org.gridlab.gridsphere.services.data.file.FileHandle"
+               type="org.gridlab.gridsphere.services.grid.data.file.FileHandle"
                required="false">
             <bind-xml name="stderr"/>
         </field>
     </class>
-    <class name="org.gridlab.gridsphere.services.data.file.FileHandle">
+    <class name="org.gridlab.gridsphere.services.grid.data.file.FileHandle">
         <field name="FileUrl"
                type="java.lang.String">
             <bind-xml name="url" node="element"/>
         </field>
     </class>
-    <class name="org.gridlab.gridsphere.services.job.Arguments">
+    <class name="org.gridlab.gridsphere.services.grid.job.Arguments">
         <field name="ArgumentList"
-               type="org.gridlab.gridsphere.services.job.Argument"
+               type="org.gridlab.gridsphere.services.grid.job.Argument"
                collection="vector">
             <bind-xml matches="*"/>
         </field>
     </class>
-    <class name="org.gridlab.gridsphere.services.job.Argument">
+    <class name="org.gridlab.gridsphere.services.grid.job.Argument">
         <field name="Value"
                type="java.lang.String"
                required="false">
@@ -153,14 +152,14 @@
             <bind-xml name="url" node="element"/>
         </field>
     </class>
-    <class name="org.gridlab.gridsphere.services.job.Environment">
+    <class name="org.gridlab.gridsphere.services.grid.job.Environment">
         <field name="VariableList"
-               type="org.gridlab.gridsphere.services.job.EnvironmentVariable"
+               type="org.gridlab.gridsphere.services.grid.job.EnvironmentVariable"
                collection="vector">
             <bind-xml name="variable" node="element"/>
         </field>
     </class>
-    <class name="org.gridlab.gridsphere.services.job.EnvironmentVariable">
+    <class name="org.gridlab.gridsphere.services.grid.job.EnvironmentVariable">
         <field name="Name"
                type="java.lang.String">
             <bind-xml name="name" node="attribute"/>

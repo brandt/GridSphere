@@ -10,15 +10,10 @@
              class="org.gridlab.gridsphere.portlets.grid.job.JobManagerBean"
              scope="request"/>
 <gs:form action="doListUserJob">
-<table class="portlet-pane" cellspacing="1">
+<table class="portlet-pane" cellspacing="1" width="100%">
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-              List Jobs
-          </td>
-        </tr>
         <tr>
           <td class="portlet-frame-actions">
             <gs:submit name="doListUserJob" value="List Jobs"/>

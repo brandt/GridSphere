@@ -10,7 +10,6 @@
              class="org.gridlab.gridsphere.portlets.core.user.UserManagerBean"
              scope="request"/>
 <portletAPI:init/>
-<% System.out.println(userManagerBean.getActionPerformedParameter("userID")); %>
 <% String userID = (String)userManagerBean.getPortletRequestAttribute("userID"); %>
 <gs:form action="doViewUser">
 <gs:hiddenfield name="userID" value="<%=userID%>"/>

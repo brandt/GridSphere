@@ -17,15 +17,10 @@
 <input type="hidden" name="osVersion" value="<%=jobManagerBean.getParameter("osVersion")%>">
 <input type="hidden" name="osRelease" value="<%=jobManagerBean.getParameter("osRelease")%>">
 --%>
-<table class="portlet-pane" cellspacing="1">
+<table class="portlet-pane" cellspacing="1" width="!00%">
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-              New Job Definition
-          </td>
-        </tr>
         <tr>
           <td class="portlet-frame-message">
               Step 1: Edit Job Application
@@ -47,8 +42,10 @@
           <td class="portlet-frame-label" width="200">
              Executable:
           </td>
-          <td class="portlet-frame-input">
-             <gs:textfield name="executable" value="executable">
+          <td class="portlet-frame-input" width="*">
+             <input type="text"
+                    name="executable"
+                    value="<%=jobManagerBean.getParameter("executable")%>"></input>
           </td>
         </tr>
         <tr>
@@ -96,7 +93,9 @@
         </tr>
         <tr>
           <td class="portlet-frame-input">
-             <gs:textarea name="arguments" value="arguments"/>
+             <textarea name="arguments" cols="50" rows="4">
+               <%=jobManagerBean.getParameter("arguments")%>
+             </textarea>
           </td>
         </tr>
       </table>
@@ -112,7 +111,9 @@
         </tr>
         <tr>
           <td class="portlet-frame-input">
-             <gs:textarea name="environment" value="environment"/>
+             <textarea name="environment" cols="50" rows="4">
+               <%=jobManagerBean.getParameter("environment")%>
+             </textarea>
           </td>
         </tr>
       </table>

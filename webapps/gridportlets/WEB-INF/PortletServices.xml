@@ -1,0 +1,53 @@
+<!--
+
+    Portlet Services XML Descriptor
+
+    Edit this file to add/modify GridSphere Portlet Services
+
+
+    $Id$
+-->
+
+<portlet-services>
+
+    <service>
+        <name>Credential Manager Service</name>
+        <user-required>true</user-required>
+        <description>Provides Authorization Capabilities to Portal Users</description>
+        <interface>org.gridlab.gridsphere.services.grid.security.credential.CredentialManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.grid.security.credential.impl.CredentialManagerServiceImpl</implementation>
+        <service-config>
+            <param-name>permittedCredentialSubjects</param-name>
+            <param-value>/*</param-value>
+        </service-config>
+        <service-config>
+            <param-name>permittedCredentialDescriptions</param-name>
+            <param-value>Allow all credential subjects</param-value>
+        </service-config>
+        <service-config>
+            <param-name>retrievalHost</param-name>
+            <param-value>supergrid.aei.mpg.de</param-value>
+        </service-config>
+        <service-config>
+            <param-name>x509ProxyFile</param-name>
+            <param-value>/tmp/x509up_russell</param-value>
+        </service-config>
+    </service>
+
+    <service>
+        <name>Job Manager Service</name>
+        <user-required>true</user-required>
+        <description>Provides Authorization Capabilities to Portal Users</description>
+        <interface>org.gridlab.gridsphere.services.grid.job.JobManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.grid.job.impl.JobManagerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Gass Manager Service</name>
+        <user-required>true</user-required>
+        <description>Provides Authorization Capabilities to Portal Users</description>
+        <interface>org.gridlab.gridsphere.services.grid.data.gass.GassManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.grid.data.gass.impl.GassManagerServiceImpl</implementation>
+    </service>
+
+</portlet-services>

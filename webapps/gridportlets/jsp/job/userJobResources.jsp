@@ -12,14 +12,10 @@
 <input type="hidden" name="stderr" value="<%=jobManagerBean.getParameter("stderr")%>">
 <input type="hidden" name="arguments" value="<%=jobManagerBean.getParameter("arguments")%>">
 <input type="hidden" name="environment" value="<%=jobManagerBean.getParameter("environment")%>">
-<table class="portlet-pane" cellspacing="1">
+<table class="portlet-pane" cellspacing="1" width="100%">
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-              New Job Definition
-          </td>
         </tr>
         <tr>
           <td class="portlet-frame-message">
@@ -28,7 +24,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-actions">
-            <gs:submit name="doValidateEditUserJob" value="&lt;&lt; Back"/>
+            <gs:submit name="doEditUserJobApplication" value="&lt;&lt; Back"/>
             &nbsp;&nbsp;<gs:submit name="doVerifyEditUserJob" value="Next &gt;&gt;"/>
             &nbsp;&nbsp;<gs:submit name="doCancelEditUserJob" value="Cancel Edit"/>
           </td>
@@ -41,35 +37,12 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-label" width="200">
-             Host Name:
-          </td>
-          <td class="portlet-frame-input">
-             <gs:textfield name="hostName" value="hostName">
-          </td>
-        </tr>
-        <tr>
-          <td class="portlet-frame-label">
-             Job Scheduler:&nbsp;
-          </td>
-          <td class="portlet-frame-input">
-            <select name="jobScheduler">
-              <option value="jobmanager-fork">Fork</option>
-              <option value="jobmanager-lsf">LSF</option>
-              <option value="jobmanager-pbs">PBS</option>
-            </select>
-          </td>
-        </tr>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-label" width="200">
              Computing Host:
           </td>
-          <td class="portlet-frame-input">
-             <gs:textfield name="hostName" value="hostName">
+          <td class="portlet-frame-input" width="*">
+             <input type="text"
+                    name="hostName"
+                    value="<%=jobManagerBean.getParameter("hostName")%>">
           </td>
         </tr>
         <tr>
@@ -84,25 +57,24 @@
             </select>
           </td>
         </tr>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-label" width="200">
+          <td class="portlet-frame-label">
              Minimum Memory:
           </td>
           <td class="portlet-frame-input">
-             <gs:textfield name="memory" value="memory">
+             <input type="text"
+                    name="memory"
+                    value="<%=jobManagerBean.getParameter("memory")%>">
           </td>
         </tr>
         <tr>
-          <td class="portlet-frame-label" width="200">
+          <td class="portlet-frame-label">
              Number of Processors:
           </td>
           <td class="portlet-frame-input">
-             <gs:textfield name="cpuCount" value="cpuCount">
+             <input type="text"
+                    name="cpuCount"
+                    value="<%=jobManagerBean.getParameter("cpuCount")%>">
           </td>
         </tr>
       </table>

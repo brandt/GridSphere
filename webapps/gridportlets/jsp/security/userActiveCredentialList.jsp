@@ -10,11 +10,11 @@
              scope="request"/>
 <gs:form action="doListUserActiveCredential">
   <input type="hidden" name="credentialMappingID" value=""/>
-<table class="portlet-pane" cellspacing="1">
+<table class="portlet-pane" cellspacing="1" width="100%">
 <% if (credentialRetrievalUserBean.isFormInvalid()) { %>
   <tr>
     <td>
-      <table class="portlet-frame" cellspacing="1" width="500">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-message-alert">
             <%=credentialRetrievalUserBean.getFormInvalidMessage()%>
@@ -26,12 +26,7 @@
 <% } %>
   <tr>
     <td>
-      <table class="portlet-frame" cellspacing="1" width="500">
-        <tr>
-          <td class="portlet-frame-title">
-              Retrieve Your Credentials From [<%=credentialRetrievalUserBean.getCredentialRetrievalHost()%>]
-          </td>
-        </tr>
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-actions">
             Password:
@@ -63,7 +58,7 @@
 <% } else { %>
   <tr>
     <td>
-      <table class="portlet-frame" cellspacing="1" width="500">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-title">
               Your Active Credentials
@@ -74,7 +69,7 @@
   </tr>
   <tr>
     <td>
-      <table class="portlet-frame" cellspacing="1" width="500">
+      <table class="portlet-frame" cellspacing="1" width="100%">
          <td class="portlet-frame-header" width="150">
            Label
          </td>
