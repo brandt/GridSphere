@@ -74,7 +74,7 @@ public interface SportletUser extends User {
     public void setUserID(String userID);
 
     /**
-     * This is alias for the getUserID method, which for all intensive
+     * This is an alias for the getUserID method, which for all intensive
      * purposes represents the name required for this user to login.
      *
      * @return String the user id

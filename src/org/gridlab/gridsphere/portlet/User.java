@@ -85,6 +85,14 @@ public interface User {
     public String getUserID();
 
     /**
+     * This is an alias for the getUserID method, which for all intensive
+     * purposes represents the name required for this user to login.
+     *
+     * @return String the user id
+     */
+    public String getLoginName();
+
+    /**
      * Returns the point of time that this user was last logged in, or null if this information is not available.
      * The time is returned in number of milliseconds since January 1, 1970 GMT.
      *

@@ -132,6 +132,16 @@ public class GuestUser implements User {
         return UserID;
     }
 
+    /**
+     * This is an alias for the getUserID method, which for all intensive
+     * purposes represents the name required for this user to login.
+     *
+     * @return String the user id
+     */
+    public String getLoginName() {
+        return UserID;
+    }
+
     public String getOrganization() {
         return Organization;
     }
