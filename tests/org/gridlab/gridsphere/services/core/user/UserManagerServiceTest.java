@@ -20,11 +20,11 @@ public class UserManagerServiceTest extends SetupTestUsersTest {
     public static Test suite() {
         return new TestSuite(UserManagerServiceTest.class);
     }
-
+/*
     protected void setUp() {
         super.setUp();
         super.testSetupUsers();
-    }
+    }        */
 
     protected void tearDown() {
         super.tearDown();

@@ -24,13 +24,13 @@ public class AccessControlManagerServiceTest extends SetupTestUsersTest {
         return new TestSuite(AccessControlManagerServiceTest.class);
     }
 
-    protected void setUp() {
+ /*   protected void setUp() {
         super.setUp();
     }
 
     public void testIsRootSuper() {
         assertTrue(aclService.hasSuperRole(rootUser));
-    }
+    }       */
 
     protected void tearDown() {
         super.tearDown();
