@@ -342,6 +342,11 @@ public class PortletPage implements Serializable, Cloneable {
         }
 
         res.setContentType("text/html; charset=utf-8");
+
+        // page header
+        out.println("<?xml version=\"1.0\"?>");
+        out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"" );
+        out.println("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
         out.println("<html>");
         out.println("<head>");
         out.println("  <title>" + title + "</title>");

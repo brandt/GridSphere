@@ -207,8 +207,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
 
-        if (titleBar != null)
-
         super.actionPerformed(event);
 
         if ((titleBar != null) && (!hasTitleBarEvent)) {
@@ -259,7 +257,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
             PortletRole role = req.getRole();
-
             if (role.compare(role, requiredRole) < 0) return;
 
             PortletResponse res = event.getPortletResponse();
@@ -338,9 +335,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
 
         super.doRender(event);
-
-        PortletRole role = req.getRole();
-        if (role.compare(role, requiredRole) < 0) return;
 
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();

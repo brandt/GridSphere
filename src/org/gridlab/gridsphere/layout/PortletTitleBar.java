@@ -32,8 +32,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private List supportedModes = new ArrayList();
     private Portlet.Mode portletMode = Portlet.Mode.VIEW;
     private Portlet.Mode previousMode = null;
-    //private List listeners = new ArrayList();
-    private PortletSettings settings = null;
+    private transient PortletSettings settings = null;
     private List allowedWindowStates = new ArrayList();
     private String errorMessage = "";
     private boolean hasError = false;
@@ -442,7 +441,15 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         // Localize the window state names
         PortletRequest req = event.getPortletRequest();
-        Locale locale = req.getLocale();
+
+        User user = req.getUser();
+        String loc = (String)user.getAttribute(User.LOCALE);
+        Locale locale = null;
+        if (loc != null) {
+            locale = new Locale(loc, "", "");
+        } else {
+            locale = req.getLocale();
+        }
 
         // create a URI for each of the window states
         PortletStateLink stateLink;
@@ -503,7 +510,14 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
 
          // Localize the portlet mode names
-        Locale locale = req.getLocale();
+        User user = req.getUser();
+        String loc = (String)user.getAttribute(User.LOCALE);
+        Locale locale = null;
+        if (loc != null) {
+            locale = new Locale(loc, "", "");
+        } else {
+            locale = req.getLocale();
+        }
 
         List portletLinks = new ArrayList();
         for (i = 0; i < smodes.size(); i++) {
@@ -540,41 +554,44 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         isActive = true;
 
         PortletRequest req = event.getPortletRequest();
-        User user = req.getUser();
-
-        if (user instanceof GuestUser) return;
 
         PortletComponentEvent lastEvent = event.getLastRenderEvent();
 
         PortletTitleBarEvent titleBarEvent = new PortletTitleBarEventImpl(this, event, COMPONENT_ID);
 
-        if (titleBarEvent.getAction() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY) {
-            PortletResponse res = event.getPortletResponse();
-            windowState = titleBarEvent.getState();
-            WindowEvent winEvent = null;
+        User user = req.getUser();
+        if (!(user instanceof GuestUser)) {
 
-            if (windowState == PortletWindow.State.MAXIMIZED) {
-                winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_MAXIMIZED);
-            } else if (windowState == PortletWindow.State.MINIMIZED) {
-                winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_MINIMIZED);
-            } else if (windowState == PortletWindow.State.RESIZING) {
-                winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_RESTORED);
-            }
-            if (winEvent != null) {
-                try {
-                    PortletInvoker.windowEvent(portletClass, winEvent, req, res);
-                } catch (PortletException e) {
-                    hasError = true;
-                    errorMessage += "Failed to invoke window event method of portlet: " + portletClass;
+            if (titleBarEvent.getAction().getID() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY.getID()) {
+                PortletResponse res = event.getPortletResponse();
+                windowState = titleBarEvent.getState();
+                WindowEvent winEvent = null;
+
+                if (windowState == PortletWindow.State.MAXIMIZED) {
+                    winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_MAXIMIZED);
+                } else if (windowState == PortletWindow.State.MINIMIZED) {
+                    winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_MINIMIZED);
+                } else if (windowState == PortletWindow.State.RESIZING) {
+                    winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_RESTORED);
                 }
+                if (winEvent != null) {
+                    try {
+                        PortletInvoker.windowEvent(portletClass, winEvent, req, res);
+                    } catch (PortletException e) {
+                        hasError = true;
+                        errorMessage += "Failed to invoke window event method of portlet: " + portletClass;
+                    }
+                }
+            } else if (titleBarEvent.getAction().getID() == PortletTitleBarEvent.TitleBarAction.MODE_MODIFY.getID()) {
+                previousMode = portletMode;
+                portletMode = titleBarEvent.getMode();
+
             }
-        } else if (titleBarEvent.getAction() == PortletTitleBarEvent.TitleBarAction.MODE_MODIFY) {
-            previousMode = portletMode;
-            portletMode = titleBarEvent.getMode();
-            req.setMode(portletMode);
-            req.setAttribute(SportletProperties.PREVIOUS_MODE, portletMode);
         }
+
         req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
+        req.setMode(portletMode);
+        req.setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
 
         Iterator it = listeners.iterator();
         PortletComponent comp;
@@ -638,8 +655,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         List modeLinks = null, windowLinks = null;
         User user = req.getUser();
-        if (user instanceof GuestUser) {
-        } else {
+        if (!(user instanceof GuestUser)) {
             if (portletClass != null) {
                 modeLinks = createModeLinks(event);
                 windowLinks = createWindowLinks(event);
@@ -717,7 +733,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         t.errorMessage = this.errorMessage;
         t.hasError = this.hasError;
         // don't clone settings for now
-        t.settings = this.settings;
+        //t.settings = this.settings;
         t.supportedModes = new ArrayList(this.supportedModes.size());
         for (int i = 0; i < this.supportedModes.size(); i++) {
             Portlet.Mode mode = (Portlet.Mode)supportedModes.get(i);
