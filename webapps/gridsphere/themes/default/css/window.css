@@ -12,7 +12,7 @@ Version: $Id$
 }
 
 .window-title-inactive {
-  background-color: #69a8e7;
+  background-color: #6699CC;
   color: #000000;
   width: 100%;
   border-top: 1px solid #0053e2;
@@ -21,7 +21,7 @@ Version: $Id$
 }
 
 .window-title-active {
-  background-color: #69a8e7;
+  background-color: #6699CC;
   color: #000000;
   width: 100%;
   border-top: 1px solid #0053e2;
