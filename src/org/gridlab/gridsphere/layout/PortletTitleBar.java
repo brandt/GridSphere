@@ -313,7 +313,6 @@ public class PortletTitleBar extends BasePortletComponent {
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.actionPerformed(event);
-        System.err.println("I received a TitleBar event!!!!!!!!");
         PortletTitleBarEvent evt = new PortletTitleBarEventImpl(event, COMPONENT_ID);
         PortletRequest req = event.getPortletRequest();
         if (evt.getAction() == PortletTitleBarEvent.Action.WINDOW_MODIFY) {
@@ -387,10 +386,8 @@ public class PortletTitleBar extends BasePortletComponent {
             Iterator modesIt = modeLinks.iterator();
             out.println("<td class=\"window-icon-left\">");
             PortletModeLink mode;
-            System.err.println("printing mode links");
             while (modesIt.hasNext()) {
                 mode = (PortletModeLink) modesIt.next();
-                System.err.println( mode.getModeHref() );
                 out.println("<a href=\"" + mode.getModeHref() + "\"><img border=\"0\" src=\"themes/" + theme + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
             }
             out.println("</td>");
@@ -420,10 +417,8 @@ public class PortletTitleBar extends BasePortletComponent {
             Iterator windowsIt = windowLinks.iterator();
             PortletStateLink state;
             out.println("<td class=\"window-icon-right\">");
-            System.err.println("printing state links");
             while (windowsIt.hasNext()) {
                 state = (PortletStateLink) windowsIt.next();
-                System.err.println( state.getStateHref() );
                 out.println("<a href=\"" + state.getStateHref() + "\"><img border=\"0\" src=\"themes/" + theme + "/" + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\"/></a>");
             }
             out.println("</td>");
