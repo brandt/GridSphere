@@ -568,7 +568,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public List getGroupRequests(PortletGroup group) {
-        String criteria = "where groupRequest.group=\"" + group.getID() + "\"";
+        String criteria = "where groupRequest.sgroup=\"" + group.getID() + "\"";
         return selectGroupRequests(criteria);
     }
 
@@ -765,7 +765,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public List getGroupEntries(PortletGroup group) {
-        String criteria = "where groupEntry.group=\"" + group.getID() + "\"";
+        String criteria = "where groupEntry.sgroup=\"" + group.getID() + "\"";
         return selectGroupEntries(criteria);
     }
 
@@ -804,7 +804,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
 
     private GroupEntryImpl getGroupEntryImpl(User user, PortletGroup group) {
         String criteria = "where groupEntry.user=\"" + user.getID() + "\""
-                        +  " and groupEntry.group=\"" + group.getID() + "\"";
+                        +  " and groupEntry.sgroup=\"" + group.getID() + "\"";
         return selectGroupEntryImpl(criteria);
     }
 
@@ -970,7 +970,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     public List getUsers(PortletGroup group) {
         String oql = "select groupEntry.user from "
                    + jdoGroupEntry
-                   + " groupEntry where group=\""
+                   + " groupEntry where sgroup=\""
                    + group.getID()
                    + "\"";
         try {
@@ -1010,7 +1010,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
             groups = getGroups();
         } else {
             // Otherwise, return groups for given user
-            String oql = "select groupEntry.group from "
+            String oql = "select groupEntry.sgroup from "
                        + jdoGroupEntry
                        + " groupEntry where user=\""
                        + user.getID()

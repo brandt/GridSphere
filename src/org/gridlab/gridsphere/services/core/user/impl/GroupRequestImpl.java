@@ -33,12 +33,12 @@ public class GroupRequestImpl
      */
     private SportletUserImpl user = null;
     /**
-     * @sql-name group
+     * @sql-name sgroup
      * @get-method getSportletGroup
      * @set-method setSportletGroup
      * @required
      */
-    private SportletGroup group = null;
+    private SportletGroup sgroup = null;
     /**
      * @sql-name role
      * @sql-size 256
@@ -60,7 +60,7 @@ public class GroupRequestImpl
     public GroupRequestImpl(GroupEntryImpl entry) {
         this.entry = entry;
         this.user = entry.getSportletUser();
-        this.group = entry.getSportletGroup();
+        this.sgroup = entry.getSportletGroup();
         this.role = entry.getRole().toString();
         this.action = GroupAction.EDIT.toString();
     }
@@ -74,11 +74,11 @@ public class GroupRequestImpl
     }
 
     public PortletGroup getGroup() {
-        return this.group;
+        return this.sgroup;
     }
 
     public void setGroup(PortletGroup group) {
-        this.group = (SportletGroup)group;
+        this.sgroup = (SportletGroup)group;
     }
 
     public PortletRole getRole() {
@@ -144,14 +144,14 @@ public class GroupRequestImpl
      * Castor method for getting group object.
      */
     public SportletGroup getSportletGroup() {
-        return this.group;
+        return this.sgroup;
     }
 
     /**
      * Castor method for setting group object.
      */
     public void setSportletGroup(SportletGroup group) {
-        this.group = group;
+        this.sgroup = group;
     }
 
     /**
