@@ -16,10 +16,6 @@
         <description>Provides Administration Capabilities for Portlet Web Applications</description>
         <interface>org.gridlab.gridsphere.services.core.registry.PortletManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl</implementation>
-        <service-config>
-            <param-name>startup-portlet-webapps</param-name>
-            <param-value>gridsphere</param-value>
-        </service-config>
     </service>
 
 </portlet-services>

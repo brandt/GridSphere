@@ -11,15 +11,13 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
-import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
-import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
+import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.impl.PortletWebApplicationImpl;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 
 import javax.servlet.ServletContext;
 import java.io.IOException;
+import java.io.File;
 import java.util.*;
 
 /**
@@ -43,6 +41,50 @@ public class PortletManager implements PortletManagerService {
      */
     private PortletManager() {}
 
+
+    private class WebappComparator implements Comparator {
+
+        public int compare(Object webapp1, Object webapp2) {
+
+            if (!(webapp1 instanceof String) || !(webapp2 instanceof String)) {
+                throw new ClassCastException("Can only compare string webapp names!!");
+            }
+            String _webapp1 = (String)webapp1;
+            String _webapp2 = (String)webapp2;
+
+            int a = _webapp1.lastIndexOf(".");
+
+            int b = _webapp2.lastIndexOf(".");
+
+            // check if a has a priority and b does not
+            if ((a > 0) && (b < 0)) {
+                return 1;
+            }
+            // check if b has a priority and a does not
+            if ((a < 0) && (b > 0)) {
+                return -1;
+            }
+            // check if a and b do not have a priority then use alphabetical
+            if ((a > 0) && (b > 0)) {
+
+                try {
+                    int a1 = Integer.valueOf(_webapp1.substring(a+1)).intValue();
+                    int a2 = Integer.valueOf(_webapp2.substring(b+1)).intValue();
+                    if (a1 > a2) return 1;
+                    if (a1 < a2) return -1;
+                    if (a1 == a2) return 0;
+                } catch (NumberFormatException e) {
+                    // oh well
+                }
+            }
+
+            // use alphabetical comparison
+            return _webapp1.compareTo(_webapp2);
+
+        }
+
+    }
+
     /**
      * Return an instance of PortletManager
      *
@@ -60,30 +102,58 @@ public class PortletManager implements PortletManagerService {
      */
     public synchronized void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.debug("in init()");
-
         if (!isInitialized) {
             context = config.getServletContext();
-            String webapps = config.getInitParameter(CORE_CONTEXT);
-            if (webapps != null) {
-                try {
+            //String webapps = config.getInitParameter(CORE_CONTEXT);
+
+            String portletsPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/Portlets");
+            File f = new File(portletsPath);
+            if (f.exists() && f.isDirectory()) {
+                String webapps[] = f.list();
+
+                // sort webapps by priority
+                Arrays.sort(webapps, new WebappComparator());
+
+                // get rid of any priority numbers
                 String webapp;
-                StringTokenizer st = new StringTokenizer(webapps, ",");
-                if (st.countTokens() == 0) {
-                    webapp = webapps.trim();
-                    log.debug("adding webapp: " + webapp);
-                    PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
-                    addWebApp(portletWebApp);
-                } else {
-                    while (st.hasMoreTokens()) {
+                int idx = 0;
+                for (int i = 0; i < webapps.length; i++) {
+                    webapp = webapps[i];
+                    if ((idx = webapp.lastIndexOf(".")) > 0) {
+                        webapps[i] = webapp.substring(0, idx);
+                    }
+                }
+
+                if (webapps != null) {
+                    try {
+                        for (int i = 0; i < webapps.length; i++) {
+                            webapp = webapps[i];
+                            PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
+                            addWebApp(portletWebApp);
+                        }
+                        /*
+                        StringTokenizer st = new StringTokenizer(webapps, ",");
+                        if (st.countTokens() == 0) {
+                        webapp = webapps.trim();
+                        log.debug("adding webapp: " + webapp);
+                        PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
+                        addWebApp(portletWebApp);
+                        } else {
+                        while (st.hasMoreTokens()) {
                         webapp = (String) st.nextToken().trim();
                         log.debug("adding webapp: " + webapp);
                         PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
                         addWebApp(portletWebApp);
+                        }
+                        }
+                        */
+                    } catch (PortletException e) {
+                        log.error("Unable to create portlet web application ", e);
                     }
+
                 }
-                } catch (PortletException e) {
-                    log.error("Unable to create portlet web application ", e);
-                }
+            } else {
+                log.error(portletsPath + " does not exist!");
             }
             isInitialized = true;
         }
