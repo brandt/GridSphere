@@ -12,6 +12,8 @@ import org.gridlab.gridsphere.portlets.core.tomcat.TomcatWebAppResult;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
+import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 
 import javax.servlet.UnavailableException;
@@ -27,7 +29,7 @@ import java.util.Map;
  */
 public class PortletApplicationManager extends ActionPortlet {
 
-    private PortletManagerService portletManager = null;
+    //private PortletManagerService portletManager = null;
     private TomcatManagerWrapper tomcat = TomcatManagerWrapper.getInstance();
 
     public void init(PortletConfig config) throws UnavailableException {
@@ -42,6 +44,7 @@ public class PortletApplicationManager extends ActionPortlet {
     public void listPortlets(FormEvent event) throws PortletException {
         FrameBean frame = event.getFrameBean("errorFrame");
         User user = event.getPortletRequest().getUser();
+        PortletManagerService portletManager = null;
         try {
             portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
         } catch (PortletServiceException e) {
@@ -74,7 +77,7 @@ public class PortletApplicationManager extends ActionPortlet {
 
         User user = event.getPortletRequest().getUser();
         FrameBean frame = event.getFrameBean("errorFrame");
-
+        PortletManagerService portletManager = null;
         try {
             portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
         } catch (PortletServiceException e) {
@@ -112,7 +115,7 @@ public class PortletApplicationManager extends ActionPortlet {
                         webAppContext = webAppName.substring(idx);
                         webAppName = webAppContext.substring(1);
                         if (webappsList.contains(webAppName)) {
-                            portletManager.removePortletWebApplication(webAppName, req, res);
+                            portletManager.destroyPortletWebApplication(webAppName, req, res);
                             result = tomcat.removeWebApp(webAppName);
                         }
                     }
@@ -122,31 +125,29 @@ public class PortletApplicationManager extends ActionPortlet {
                 if (webAppContext != null) {
                     //result = tomcat.installWebApp(webAppContext, portletWar);
                     //result = tomcat.startWebApp(webAppName);
-                    portletManager.installPortletWebApplication(webAppName, req, res);
+                    portletManager.initPortletWebApplication(webAppName, req, res);
                 }
             } else if ((operation != null) && (appName!= null)) {
                 if (operation.equals("start")) {
                     result = tomcat.startWebApp(appName);
-                    portletManager.installPortletWebApplication(appName, req, res);
+                    portletManager.initPortletWebApplication(appName, req, res);
                 } else if (operation.equals("stop")) {
                     portletManager.destroyPortletWebApplication(appName, req, res);
                     result = tomcat.stopWebApp(appName);
                 } else if (operation.equals("reload")) {
-                    System.err.println("First we remove web app");
-                    portletManager.removePortletWebApplication(appName, req, res);
-                    System.err.println("Second we use tomcat to reload web app");
-                    result = tomcat.reloadWebApp(appName);
-                    System.err.println("Third we init new web app");
+                    portletManager.destroyPortletWebApplication(appName, req, res);
+                    result = tomcat.stopWebApp(appName);
+                    result = tomcat.startWebApp(appName);
                     portletManager.initPortletWebApplication(appName, req, res);
                 } else if (operation.equals("remove")) {
-                    portletManager.removePortletWebApplication(appName, req, res);
+                    portletManager.destroyPortletWebApplication(appName, req, res);
                     result = tomcat.removeWebApp(appName);
                 } else if (operation.equals("deploy")) {
                     result = tomcat.deployWebApp(appName);
-                    portletManager.installPortletWebApplication(appName, req, res);
+                    portletManager.initPortletWebApplication(appName, req, res);
                 } else if (operation.equals("undeploy")) {
                     result = tomcat.undeployWebApp(appName);
-                    portletManager.removePortletWebApplication(appName, req, res);
+                    portletManager.destroyPortletWebApplication(appName, req, res);
                 }
             }
         } catch (IOException e) {
@@ -161,4 +162,69 @@ public class PortletApplicationManager extends ActionPortlet {
         setNextState(req, "portletmanager/list.jsp");
     }
 
+    public void uploadFile(FormEvent event) throws PortletException {
+        log.debug("in FileManagerPortlet: doUploadFile");
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
+        try {
+            FileInputBean fi = event.getFileInputBean("userfile");
+            User user = event.getPortletRequest().getUser();
+            String fileName = fi.getFileName();
+            System.err.println("filename = " + fileName);
+            if (fileName.equals("")) return;
+            PortletManagerService portletManager = null;
+            try {
+                portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
+            } catch (PortletServiceException e) {
+                FrameBean frame = event.getFrameBean("errorFrame");
+                frame.setValue("PortletRegistry service unavailable! " + e.getMessage());
+                throw new PortletException("PortletRegistry service unavailable! ", e);
+            }
+
+            //tomcat.installWebApp(appName)
+            int isWar = fileName.indexOf(".war");
+            if (isWar > 0) {
+                String appName = fileName.substring(0, isWar);
+                tomcat.installWebApp(appName, fileName);
+                portletManager.initPortletWebApplication(appName, req, res);
+            }
+            log.debug("fileinputbean value=" + fi.getValue());
+        } catch (Exception e) {
+            FrameBean errMsg = event.getFrameBean("errorFrame");
+            errMsg.setValue("Unable to store uploaded file " + e.getMessage());
+            errMsg.setStyle("error");
+            log.error("Unable to store uploaded file ", e);
+        }
+        setNextState(req, "portletmanager/list.jsp");
+    }
+
+    public void deployWebapp(FormEvent event) throws PortletException {
+        log.debug("in FileManagerPortlet: deployWebapp");
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
+        try {
+            TextFieldBean tf = event.getTextFieldBean("webappNameTF");
+            User user = event.getPortletRequest().getUser();
+            String webappName = tf.getValue();
+            if (webappName == null) return;
+            PortletManagerService portletManager = null;
+            try {
+                portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
+            } catch (PortletServiceException e) {
+                FrameBean frame = event.getFrameBean("errorFrame");
+                frame.setValue("PortletRegistry service unavailable! " + e.getMessage());
+                throw new PortletException("PortletRegistry service unavailable! ", e);
+            }
+
+            tomcat.installWebApp(webappName);
+            portletManager.initPortletWebApplication(webappName, req, res);
+
+        } catch (Exception e) {
+            FrameBean errMsg = event.getFrameBean("errorFrame");
+            errMsg.setValue("Unable to deploy webapp " + e.getMessage());
+            errMsg.setStyle("error");
+            log.error("Unable to deploy webapp  ", e);
+        }
+        setNextState(req, "portletmanager/list.jsp");
+    }
 }
