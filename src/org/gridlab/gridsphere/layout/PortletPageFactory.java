@@ -9,10 +9,7 @@ import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -147,24 +144,33 @@ public class PortletPageFactory implements PortletSessionListener {
 
             pane = newPage.getPortletTabbedPane();
 
-            for (int i = 0; i < groups.size(); i++) {
-                PortletGroup g = (PortletGroup)groups.get(i);
-                log.debug("have group: " + g.getName());
-                PortletTabbedPane portletTabs = PortletTabRegistry.getApplicationTabs(g.getName());
+            PortletManager manager = PortletManager.getInstance();
+            List webappNames = manager.getPortletWebApplicationNames();
 
-                List tabs = portletTabs.getPortletTabs();
-                for (int j = 0; j < tabs.size(); j++) {
-                    PortletTab tab = (PortletTab)tabs.get(j);
+            for (int i = 0; i < webappNames.size(); i++) {
+                String webappName = (String)webappNames.get(i);
 
-                    pane.addTab(g.getName(), (PortletTab)tab.clone());
-                    //pane.addTab(g.getName(), (PortletTab)deepCopy(tab));
+                Iterator it = groups.iterator();
+                while (it.hasNext()) {
+                    PortletGroup g = (PortletGroup)it.next();
+                    if (g.getName().equals(webappName)) {
+                        log.debug("have group: " + g.getName());
+                        PortletTabbedPane portletTabs = PortletTabRegistry.getApplicationTabs(webappName);
+                        List tabs = portletTabs.getPortletTabs();
+                        for (int j = 0; j < tabs.size(); j++) {
+                            PortletTab tab = (PortletTab)tabs.get(j);
+
+                            pane.addTab(g.getName(), (PortletTab)tab.clone());
+                            //pane.addTab(g.getName(), (PortletTab)deepCopy(tab));
+                        }
+                    }
                 }
             }
 
             newPage.setPortletTabbedPane(pane);
             //newPage = (PortletPage)templatePage;
         } catch (Exception e) {
-          log.error("Unable to make a clone of the templatePage", e);
+            log.error("Unable to make a clone of the templatePage", e);
 
         }
         newPage.init(new ArrayList());
