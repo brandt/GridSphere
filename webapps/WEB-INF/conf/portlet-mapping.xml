@@ -7,7 +7,6 @@
         <field name="PortletAppList" type="org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication" collection="vector">
             <bind-xml name="portlet-app"/>
         </field>
-
     </class>
 
 
@@ -43,12 +42,26 @@
             <bind-xml name="portlet-description"/>
         </field>
 
+        <field name="InitParam" type="org.gridlab.gridsphere.portletcontainer.descriptor.InitParam">
+            <bind-xml name="init-param"/>
+        </field>
+
         <field name="Group" type="org.gridlab.gridsphere.portletcontainer.descriptor.Group" collection="vector">
             <bind-xml name="group"/>
         </field>
 
         <field name="User" type="org.gridlab.gridsphere.portletcontainer.descriptor.User" collection="vector">
             <bind-xml name="user"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.InitParam">
+        <field name="ParamName" type="string">
+            <bind-xml name="param-name"/>
+        </field>
+
+        <field name="ParamValue" type="string">
+            <bind-xml name="param-value"/>
         </field>
     </class>
 
