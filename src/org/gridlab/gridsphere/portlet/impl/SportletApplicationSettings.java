@@ -126,11 +126,13 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
         }
         portletApp.setContextParamList(list);
         pdd.setConcretePortletApplication(portletApp);
+        /*
         try {
             pdd.save();
         } catch (PersistenceException e) {
             throw new IOException("Unable to save PortletApplicationSettings: " + e.getMessage());
         }
+        */
     }
 
 }

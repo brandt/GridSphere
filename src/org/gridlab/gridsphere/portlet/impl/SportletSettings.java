@@ -234,11 +234,13 @@ public class SportletSettings implements PortletSettings {
         concPortletInfo.setConfigParamList(list);
         concPortletApp.setConcretePortletInfo(concPortletInfo);
         pdd.setConcretePortletApplication(concPortletApp);
+        /*
         try {
             pdd.save();
         } catch (PersistenceException e) {
             throw new IOException("Unable to save PortletSettings: " + e.getMessage());
         }
+        */
     }
 
     /**
