@@ -214,7 +214,7 @@ public class SportletURI implements PortletURI {
             newURL = res.encodeURL(url);
         }
         s.append(newURL);
-        System.err.println("url=" + s.toString());
+        //System.err.println("url=" + s.toString());
         return s.toString();
     }
 
