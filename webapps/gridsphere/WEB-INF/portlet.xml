@@ -20,6 +20,24 @@
     </portlet-app-def>
 
     <portlet-app-def>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.user.storage.PersonalStoragePortlet">
+            <portlet-name>Personal Storage Portlet</portlet-name>
+            <servlet-name>StoragePortlet</servlet-name>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.user.storage.PersonalStoragePortlet.1">
+            <concrete-portlet>
+                <portlet-name>Personal Storage Portlet</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>Personal Storage</title>
+                    <description>Provides users with a virtual filesystem</description>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
+
+    <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.login.LoginPortlet">
             <portlet-name>Login</portlet-name>
             <servlet-name>LoginPortlet</servlet-name>

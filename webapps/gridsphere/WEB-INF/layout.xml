@@ -9,8 +9,10 @@
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <name>Login</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
+                        </portlet-frame>
+                        <portlet-frame>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.user.storage.PersonalStoragePortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>

@@ -41,6 +41,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>StoragePortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.user.storage.PersonalStoragePortlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>ManagerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager</servlet-class>
     </servlet>
@@ -83,6 +88,11 @@
     <servlet-mapping>
        <servlet-name>SubscriptionPortlet</servlet-name>
        <url-pattern>/subscription</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>StoragePortlet</servlet-name>
+       <url-pattern>/user/storage</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

@@ -59,4 +59,16 @@
         <implementation>org.gridlab.gridsphere.services.core.security.password.impl.DbmsPasswordManagerService</implementation>
     </service>
 
+    <service>
+        <name>File Manager Service</name>
+        <description>Provides a temporary storage directory for user's files</description>
+        <interface>org.gridlab.gridsphere.services.core.file.FileManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.file.impl.FileManagerServiceImpl</implementation>
+        <service-config>
+            <param-name>tmp_dir</param-name>
+            <param-value>gridsphere/tempdir</param-value>
+        </service-config>
+    </service>
+
 </portlet-services>
+
