@@ -65,17 +65,17 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     private transient List MyproxyUserNames = new Vector();
 
     /**
-     * field-type org.gridlab.gridsphere.services.user.impl.AccountRequestImplUserdns
-     * sql-name userdnssv
-     * many-key reference
+     * @field-type org.gridlab.gridsphere.services.user.impl.AccountRequestImplUserdns
+     * @sql-name userdnssv
+     * @many-key reference
      */
-    private Vector UserdnsSV = new Vector();            // ready
+    private transient Vector UserdnsSV = new Vector();            // ready
     /**
-     * field-type org.gridlab.gridsphere.services.user.impl.AccountRequestImplMyproxyUserNames
-     * sql-name myproxyusernamessv
-     * many-key reference
+     * @field-type org.gridlab.gridsphere.services.user.impl.AccountRequestImplMyproxyUserNames
+     * @sql-name myproxyusernamessv
+     * @many-key reference
      */
-    private Vector MyproxyUserNamesSV = new Vector();   // ready
+    private transient Vector MyproxyUserNamesSV = new Vector();   // ready
 
 
     public AccountRequestImpl() {
