@@ -198,13 +198,13 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
             String title = getTitleAt(i);
             tab = (PortletTab)tabs.get(i);
             if (tab.isSelected()) {
-                out.println("<td><img src=\"themes/xp/images/tab-active-left.gif\"/></td>");
+                out.println("<td><img src=\"themes/"+theme+"/images/tab-active-left.gif\"/></td>");
                 out.println("<td class=\"tab-active\">" + title + "</td>");
-                out.println("<td><img src=\"themes/xp/images/tab-active-right.gif\"/></td>");
+                out.println("<td><img src=\"themes/"+theme+"/images/tab-active-right.gif\"/></td>");
             } else {
-                out.println("<td><img src=\"themes/xp/images/tab-inactive-left.gif\"/></td>");
+                out.println("<td><img src=\"themes/"+theme+"/images/tab-inactive-left.gif\"/></td>");
                 out.println("<td class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + links[i] + "\" >" +  title + "</a>");
-                out.println("<td><img src=\"themes/xp/images/tab-inactive-right.gif\"/></td>");
+                out.println("<td><img src=\"themes/"+theme+"/images/tab-inactive-right.gif\"/></td>");
             }
             out.println("<td class=\"tab-empty\">&nbsp;</td>");
         }
