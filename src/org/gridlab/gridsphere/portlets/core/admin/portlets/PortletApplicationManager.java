@@ -18,9 +18,7 @@ import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The PortletApplicationManager is a wrapper for the Tomcat manager webapp in 4.1.X which allows dynamic
@@ -53,10 +51,10 @@ public class PortletApplicationManager extends ActionPortlet {
             throw new PortletException("PortletRegistry service unavailable! ", e);
         }
         //TomcatWebAppResult result = tomcat.getWebAppList();
-        List webapps = portletManager.getPortletWebApplicationNames();
+
         List result = new ArrayList();
         try {
-            result = tomcat.getPortletAppList(webapps);
+            result = tomcat.getPortletAppList();
             event.getPortletRequest().setAttribute("result", result);
             System.err.println("result is OK");
         } catch (TomcatManagerException e) {

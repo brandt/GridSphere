@@ -1,7 +1,8 @@
 <%@ page import="java.util.List,
                  java.util.Iterator,
-                 org.gridlab.gridsphere.portlets.core.tomcat.TomcatWebAppResult,
-                 org.gridlab.gridsphere.portlets.core.tomcat.TomcatWebAppDescription" %>
+                 org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat.TomcatWebAppResult,
+                 org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat.TomcatWebAppDescription,
+                 org.gridlab.gridsphere.portlet.PortletGroupFactory" %>
 
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
@@ -16,13 +17,11 @@
 
     <ui:frame>
     <ui:tablerow>
-        <ui:tablecell width="10">
-            <ui:text value="Applications"/>
-        </ui:tablecell>
-    </ui:tablerow>
-    <ui:tablerow>
         <ui:tablecell>
-            <ui:text value="Paths"/>
+            <ui:text value="Portlet web application"/>
+        </ui:tablecell>
+        <ui:tablecell>
+            <ui:text value="Description"/>
         </ui:tablecell>
         <ui:tablecell>
             <ui:text value="Sessions"/>
@@ -41,9 +40,13 @@
 
     <ui:tablerow>
     <ui:tablecell><ui:text value="<%= description.getContextPath() %>"/></ui:tablecell>
+    <ui:tablecell><ui:text value="<%= description.getDescription() %>"/></ui:tablecell>
     <ui:tablecell><ui:text value="<%= description.getRunning() %>"/></ui:tablecell>
     <ui:tablecell><ui:text value="<%= description.getSessions() %>"/></ui:tablecell>
     <ui:tablecell>
+    <% if (PortletGroupFactory.GRIDSPHERE_GROUP.getName().equalsIgnoreCase(description.getContextPath())) { %>
+        <ui:text value="  GridSphere core portlets cannot be redeployed  "/>
+   <% } else { %>
         <ui:actionlink action="doPortletManager" value="  start  ">
             <ui:actionparam name="operation" value="start"/>
             <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
@@ -60,6 +63,7 @@
             <ui:actionparam name="operation" value="remove"/>
             <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
         </ui:actionlink>
+    <% } %>
     </ui:tablecell>
     </ui:tablerow>
 
