@@ -26,6 +26,10 @@
             <param-name>MYPROXY_AUTH_MODULE</param-name>
             <param-value>org.gridlab.portal.services.security.auth.modules.CredentialAuthModule</param-value>
         </service-config>
+        <service-config>
+            <param-name>LOGIN_MODULE</param-name>
+            <param-value>org.gridlab.gridsphere.services.core.user.UserManagerService</param-value>
+        </service-config>
     </service>
 
     <service>
