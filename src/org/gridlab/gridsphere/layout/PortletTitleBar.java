@@ -30,6 +30,7 @@ public class PortletTitleBar extends BasePortletComponent {
     private String portletClass = null;
     private PortletWindow.State windowState = PortletWindow.State.NORMAL;
 
+    private List supportedModes = null;
     private String[] portletModes = null;
     private Portlet.Mode portletMode = Portlet.Mode.VIEW;
     private Portlet.Mode previousMode = null;
@@ -324,12 +325,7 @@ public class PortletTitleBar extends BasePortletComponent {
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
 
             // get supported modes from application portlet config
-            List supportedModes = appConfig.getSupportedModes();
-            portletModes = new String[supportedModes.size()];
-            for (int i = 0; i < supportedModes.size(); i++) {
-                Portlet.Mode mode = (Portlet.Mode)supportedModes.get(i);
-                portletModes[i] = mode.toString();
-            }
+            supportedModes = appConfig.getSupportedModes();
 
             ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
             settings = concPortlet.getPortletSettings();
@@ -410,6 +406,12 @@ public class PortletTitleBar extends BasePortletComponent {
         int i;
 
         PortletResponse res = event.getPortletResponse();
+
+        portletModes = new String[supportedModes.size()];
+        for (int i = 0; i < supportedModes.size(); i++) {
+            Portlet.Mode mode = (Portlet.Mode)supportedModes.get(i);
+            portletModes[i] = mode.toString();
+        }
 
         // subtract current portlet mode
         for (i = 0; i < portletModes.length; i++) {
