@@ -1,16 +1,52 @@
-INSTALL
--------
+$ Id $
 
-1) Add the following to $CATALINA_HOME/conf/server.xml:
+	Building the GridSphere Distribution
+=======================================================
 
-<Context path="/gridsphere" docBase="gridsphere" debug="0"
-                 reloadable="false" crossContext="true">
-     <Logger className="org.apache.catalina.logger.FileLogger"
-                 prefix="localhost_gridsphere_log." suffix=".txt"
-                 timestamp="true"/>
-</Context>
+0)    Building the GridSphere distribution requires Ant 
+available at http://jakarta.apache.org/ant. In addition, make
+sure the $ANT_HOME/lib directory contains junit.jar used for 
+testing and xalan.jar used to construct the documentation from 
+the XSL style sheets. Both junit.jar and xalan.jar are found in 
+the lib directory. 
 
-2) Edit $CATALINA_HOME/conf/tomcat-users.xml and make sure you have the following line:
+1)    The Ant build script, build.xml, uses the build.properties
+file to specify any compilation options. Edit build.properties
+appropriately for your needs.
+
+At this point, simply invoking "ant dist" will create the
+GridSphere distribution.  
+
+The build.xml supports the following basic tasks:
+
+clean -- removes the build and dist directories including all the 
+	 compiled classes
+
+update -- updates the existing source code from CVS
+
+compile-all -- compiles all the GridSphere source code including 
+	       the core framework and all the portlets
+
+dist -- creates a GridSphere distribution in the dist directory 
+	defined in build.properties
+
+deploy -- deploys the GridSphere framwork and all portlets to a 
+	  Tomcat servlet container located at $CATALINA_HOME
+
+docs-all -- compiles all GridSphere docbook documentation and 
+	    builds the Javadoc documenattion from the source code
+
+make-test-reports -- runs all Junit tests and creates HTML
+		     status reports in the build/reports directory. 
+
+To see all the targets invoke "ant --projecthelp".
+
+2) Read the documentation in the docs/ directory found in the 
+build or dist directory for more information on using and developing 
+portlets with GridSphere.
+
+Thanks,
+
+The GridSphere Team		http://www.gridsphere.org
 
 
-<user username="tomcat" password="tomcat" roles="tomcat,manager"/>
