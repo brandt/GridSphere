@@ -25,17 +25,9 @@ public interface FormEvent extends ActionEvent {
     public Object getTagBean(String name);
 
     /**
-     * Gets back the prev. saved bean with the modifications from the userinterface.
-     * @param name name of the bean
-     * @param request requestobject where the bean was stored (in the session of the request)
-     * @return updated elementbean
-     */
-    public Object getTagBean(String name, PortletRequest request);
-
-    /**
      * For debugging
      */
-    public void printRequestParameter(PortletRequest req);
+    public void printRequestParameter();
 
     /**
      * Retrieves bean from the current session.

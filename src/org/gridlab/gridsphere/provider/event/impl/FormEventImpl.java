@@ -152,15 +152,14 @@ public class FormEventImpl implements FormEvent {
 
     /**
      * Prints out all request parameters (debug)
-     * @param req paremter of this request will be printed out
      */
-    public void printRequestParameter(PortletRequest req) {
+    public void printRequestParameter() {
         System.out.println("\n\n show request params\n--------------------\n");
-        Enumeration enum = req.getParameterNames();
+        Enumeration enum = request.getParameterNames();
         while (enum.hasMoreElements()) {
             String name = (String) enum.nextElement();
             System.out.println("name :" + name);
-            String values[] = req.getParameterValues(name);
+            String values[] = request.getParameterValues(name);
             if (values.length == 1) {
                 String pval = values[0];
                 if (pval.length() == 0) {
