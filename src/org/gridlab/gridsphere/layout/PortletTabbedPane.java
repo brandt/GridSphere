@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Vector;
 import java.util.Iterator;
+import java.util.ArrayList;
 
 public class PortletTabbedPane extends BasePortletComponent {
 
@@ -32,7 +32,7 @@ public class PortletTabbedPane extends BasePortletComponent {
     protected String name = PortletTabbedPane.class.getName();
 
     private PortletPanel selectedPanel = null;
-    private Vector tabs = new Vector();
+    private List tabs = new ArrayList();
 
     public PortletTabbedPane() {}
 
@@ -208,7 +208,7 @@ public class PortletTabbedPane extends BasePortletComponent {
         }
     }
 
-    public void setPortletTabs(Vector tabs) {
+    public void setPortletTabs(ArrayList tabs) {
         this.tabs = tabs;
     }
 

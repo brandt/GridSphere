@@ -15,14 +15,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 import java.util.ArrayList;
 
 public class PortletContainer implements PortletLifecycle {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletContainer.class);
 
-    protected List components = new Vector();
+    protected List components = new ArrayList();
     protected List portletComponents = new ArrayList();
     protected LayoutManager layoutManager;
     protected String name = "";
@@ -126,7 +125,7 @@ public class PortletContainer implements PortletLifecycle {
         return components.size();
     }
 
-    public void setPortletComponents(Vector components) {
+    public void setPortletComponents(ArrayList components) {
         this.components = components;
     }
 

@@ -7,8 +7,8 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.util.List;
-import java.util.Vector;
 import java.util.Iterator;
+import java.util.ArrayList;
 import java.io.IOException;
 
 
@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 public abstract class BaseLayoutManager implements LayoutManager, PortletFrameListener {
 
-    protected List components = new Vector();
+    protected List components = new ArrayList();
     protected PortletInsets insets;
 
     public List init(List list) {
@@ -84,7 +84,7 @@ public abstract class BaseLayoutManager implements LayoutManager, PortletFrameLi
         }
     }
 
-    public void setPortletComponents(Vector components) {
+    public void setPortletComponents(ArrayList components) {
         this.components = components;
     }
 

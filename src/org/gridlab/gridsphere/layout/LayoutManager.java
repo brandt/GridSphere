@@ -5,7 +5,7 @@
 package org.gridlab.gridsphere.layout;
 
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 
 
 /**
@@ -14,7 +14,7 @@ import java.util.Vector;
  */
 public interface LayoutManager extends PortletLifecycle {
 
-    public void setPortletComponents(Vector components);
+    public void setPortletComponents(ArrayList components);
 
     public List getPortletComponents();
 
