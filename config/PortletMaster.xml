@@ -1,0 +1,25 @@
+<!--
+
+    Portlet Services XML Descriptor
+
+    Edit this file to add/modify GridSphere Portlet Services
+
+
+    $Id$
+-->
+
+<portlet-services>
+
+    <service>
+        <name>Portlet Manager Service</name>
+        <user-required>true</user-required>
+        <description>Provides Administration Capabilities for Portlet Web Applications</description>
+        <interface>org.gridlab.gridsphere.services.core.registry.PortletManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl</implementation>
+        <service-config>
+            <param-name>coreContext</param-name>
+            <param-value>gridsphere</param-value>
+        </service-config>
+    </service>
+
+</portlet-services>
