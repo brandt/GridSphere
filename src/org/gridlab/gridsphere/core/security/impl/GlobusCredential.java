@@ -2,6 +2,9 @@
  * @author <a href="mailto:russell@aei-potsdam.mpg.de">Michael Paul Russell</a>
  * @version $Id$
  * <p>
+ * Implements a Globus credential by wrapping a Globus proxy object. It also 
+ * provides a method for retrieving the contained Globus proxy for using 
+ * Globus services.
  */
 package org.gridlab.gridsphere.core.security.impl;
 
@@ -36,6 +39,7 @@ public class GlobusCredential implements Credential {
         return this.globusProxy.getTimeLeft();
     }
     
+    /** NOT IMPLEMENTED YET **/
     public Date getTimeExpires() {
         return new Date();
     }

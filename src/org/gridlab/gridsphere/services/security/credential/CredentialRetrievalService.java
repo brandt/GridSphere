@@ -19,11 +19,15 @@
  */
 package org.gridlab.gridsphere.services.security.credential;
 
+/** GridSphere portlet imports **/
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.core.security.Credential;
-import org.gridlab.gridsphere.core.security.CredentialRetrievalException;
 
+/** GridSphere service imports **/
+import org.gridlab.gridsphere.services.security.credential.CredentialRetrievalException;
+
+/** Java imports **/
 import java.util.List;
 
 public interface CredentialRetrievalService extends PortletService {

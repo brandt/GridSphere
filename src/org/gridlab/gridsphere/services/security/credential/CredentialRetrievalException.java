@@ -3,12 +3,12 @@
  * @version $Id$
  *
  * This exception occurs when attempting to retrieve one or more credentials from an
- * online credential retrieval service. It is extended from 
- * <code>org.globus.common.ChainedException</code> so that we may more easily attach 
- * the specific exception generated in the underlying implementation of 
- * <code>org.gridlab.gridsphere.services.CredentialRetrievalService</code>.
+ * online credential retrieval service.
  */
-package org.gridlab.gridsphere.core.security;
+ 
+package org.gridlab.gridsphere.services.security.credential;
+
+import org.gridlab.gridsphere.core.security.CredentialException;
 
 public class CredentialRetrievalException extends CredentialException {
 

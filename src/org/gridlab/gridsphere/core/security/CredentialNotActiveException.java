@@ -2,9 +2,8 @@
  * @author <a href="mailto:russell@aei-potsdam.mpg.de">Michael Paul Russell</a>
  * @version $Id$
  *
- * This exception occurs when specifying a credential in method calls to  
- * <code>org.gridlab.gridsphere.services.CredentialManagerService</code> that is not
- * currently in service for a given user.
+ * This exception occurs when specifying a credential in method calls to 
+ * <code>Credentialmanager</code> that is not currently in service for a given user.
  */
 package org.gridlab.gridsphere.core.security;
 
