@@ -103,6 +103,14 @@ public interface FormEvent extends ActionEvent {
     public PasswordBean getPasswordBean(String beanId);
 
     /**
+     * Return an existing <code>RenderLinkBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a RenderLinkBean
+     */
+    public RenderLinkBean getRenderLinkBean(String beanId);
+
+    /**
      * Return an existing <code>TextAreaBean</code> or create a new one
      *
      * @param beanId the bean identifier

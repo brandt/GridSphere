@@ -238,6 +238,16 @@ public class FormEventImpl implements FormEvent {
         return null;
     }
 
+    /**
+     * Return an existing <code>RenderLinkBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a RenderLinkBean
+     */
+    public RenderLinkBean getRenderLinkBean(String beanId) {
+        return null;
+    }
+
     public ImageBean getImageBean(String beanId) {
         return null;
     }

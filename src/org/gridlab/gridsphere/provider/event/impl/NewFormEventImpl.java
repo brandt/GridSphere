@@ -198,6 +198,22 @@ public class NewFormEventImpl implements FormEvent {
     }
 
     /**
+     * Return an existing <code>RenderLinkBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a RenderLinkBean
+     */
+    public RenderLinkBean getRenderLinkBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (RenderLinkBean)tagBeans.get(beanKey);
+        }
+        RenderLinkBean rb = new RenderLinkBean(request, beanId);
+        tagBeans.put(beanKey, rb);
+        return rb;
+    }
+
+    /**
      * Return an existing <code>PanelBean</code> or create a new one
      *
      * @param beanId the bean identifier
