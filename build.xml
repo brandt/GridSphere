@@ -77,7 +77,7 @@ Copyright:
         <condition property="catalina.exists">
             <available file="${env.CATALINA_HOME}/bin/bootstrap.jar"/>
         </condition>
-        <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
+        <fail message="Unable to find Tomcat! Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
     </target>
 
     <!-- =================================================================== -->
@@ -93,7 +93,7 @@ Copyright:
             <include name="servlet.jar"/>
         </fileset>
 
-        <!-- this is for the servlet JARs in Tomcat 5.1.x -->
+        <!-- this is for the servlet JARs in Tomcat 5.0.x -->
         <fileset dir="${env.CATALINA_HOME}/common/lib">
             <include name="servlet-api.jar"/>
             <include name="jsp-api.jar"/>
@@ -616,8 +616,19 @@ Copyright:
         <copy todir="${build.webapps}/gridsphere">
             <fileset dir="${gswebapp.dir}"/>
         </copy>
+
         <!-- Copy context file -->
-        <copy file="webapps/gridsphere-context.xml" todir="${build.webapps}"/>
+        <if>
+            <available file="${env.CATALINA_HOME}/conf/Catalina" type="dir" property="tomcat5"/>
+            <then>
+                <echo message="Detected Tomcat 5"/>
+                <copy file="webapps/gridsphere-context.xml" tofile="${env.CATALINA_HOME}/conf/Catalina/localhost/gridsphere.xml"/>
+            </then>
+            <else>
+                <echo message="Detected Tomcat 4"/>
+                <copy file="webapps/gridsphere-context.xml" todir="${build.webapps}"/>
+            </else>
+        </if>
 
         <copy overwrite="true" todir="${env.CATALINA_HOME}/shared/lib">
             <fileset dir="lib">
