@@ -60,7 +60,6 @@ public interface PortletManagerService extends PortletService {
     /**
      * Shuts down all currently active portlet web applications from the portlet container
      *
-     * @param webApplicationName the name of the portlet web application
      * @param req the <code>PortletRequest</code>
      * @param res the <code>Portletresponse</code>
      * @throws IOException if an I/O error occurs
@@ -96,6 +95,6 @@ public interface PortletManagerService extends PortletService {
      *
      * @return the list of web application names as <code>String</code> elements
      */
-    public List getPortletWebApplications();
+    public List getPortletWebApplicationNames();
 
 }

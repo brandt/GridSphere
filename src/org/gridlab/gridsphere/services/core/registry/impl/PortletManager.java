@@ -88,13 +88,11 @@ public class PortletManager implements PortletManagerService {
         PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webApplicationName, context);
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
-        List appPortletList = new ArrayList();
         while (it.hasNext()) {
             ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-            appPortletList.add(appPortlet);
             registry.addApplicationPortlet(appPortlet);
         }
-        webapps.put(webApplicationName, appPortletList);
+        webapps.put(webApplicationName, portletWebApp);
     }
 
     public void removePortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) {
@@ -133,7 +131,7 @@ public class PortletManager implements PortletManagerService {
         PortletInvoker.destroyPortletWebApp(webApplicationName, req, res);
     }
 
-    public List getPortletWebApplications() {
+    public List getPortletWebApplicationNames() {
         List l = new ArrayList();
         Set set = webapps.keySet();
         Iterator it = set.iterator();

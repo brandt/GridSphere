@@ -131,8 +131,8 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      *
      * @return the list of web application names as <code>String</code> elements
      */
-    public List getPortletWebApplications() {
-        return portletManager.getPortletWebApplications();
+    public List getPortletWebApplicationNames() {
+        return portletManager.getPortletWebApplicationNames();
     }
 
 
