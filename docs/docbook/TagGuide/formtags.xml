@@ -15,17 +15,36 @@
     </para>
 
     <sect1 id="tagusage"><title>Usage on GridSphere UI Tags</title>
+    <para>
+        The UI tags may be used in both GridSphere/WebSphere portlets or JSR 168 compatible portlets. The following
+        code snippets show the imports that must be included at the beginning of a JSP page to import the UI and portlet
+        tag libraries.
+    </para>
     <example>
-        <title>UI tag usage</title>
-        <para>
-            Every JSP that wishes to use the tag library must include the following code snippet
-            show below:
-        </para>
+        <title>GridSphere UI tag usage</title>
+
         <screen>
 <![CDATA[
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
+]]>
+        </screen>
+        <para>
+            Now the tags can be used within a JSP by using the "ui" reference specified in the taglib
+            directive. The portletAPI directive and tag initialization make the portlet objects available to the
+            tags.
+        </para>
+    </example>
+
+
+    <example>
+        <title>JSR 168 UI tag usage</title>
+        <screen>
+<![CDATA[
+<%@ taglib uri="/portletjsrUI" prefix="ui" %>
+<%@ taglib uri="/portlet" prefix="portlet" %>
+<portlet:defineObjects/>
 ]]>
         </screen>
         <para>
