@@ -441,9 +441,12 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         User user = req.getUser();
         String loc = (String)user.getAttribute(User.LOCALE);
+        String locStr = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
         Locale locale = null;
         if (loc != null) {
             locale = new Locale(loc, "", "");
+        } else if (locStr != null) {
+            locale = new Locale(locStr, "", "");
         } else {
             locale = req.getLocale();
         }
@@ -509,9 +512,12 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
          // Localize the portlet mode names
         User user = req.getUser();
         String loc = (String)user.getAttribute(User.LOCALE);
+        String locStr = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
         Locale locale = null;
         if (loc != null) {
             locale = new Locale(loc, "", "");
+        } else if (locStr != null) {
+            locale = new Locale(locStr, "", "");
         } else {
             locale = req.getLocale();
         }
@@ -635,18 +641,19 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         // get the appropriate title for this client
         Client client = req.getClient();
-
         Locale locale = Locale.getDefault();
         if (settings != null) {
+            String locStr = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
             User user = req.getUser();
             String userlocale = (String)user.getAttribute(User.LOCALE);
             if (userlocale != null) {
                 locale = new Locale(userlocale, "", "");
-                title = settings.getTitle(locale, client);
+            } else if (locStr != null) {
+                locale = new Locale(locStr, "", "");
             } else {
                 locale = settings.getDefaultLocale();
-                title =  settings.getTitle(locale, client);
             }
+            title =  settings.getTitle(locale, client);
         }
 
         List modeLinks = null, windowLinks = null;
@@ -663,8 +670,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
         PrintWriter out = res.getWriter();
 
-
-
         if (isActive) {
             out.println("<tr><td class=\"window-title-active\">");
         } else {
@@ -680,7 +685,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             PortletModeLink mode;
             while (modesIt.hasNext()) {
                 mode = (PortletModeLink) modesIt.next();
-                out.println("<a href=\"" + mode.getHref() + "\"><img border=\"0\" src=\"themes/" + theme + File.separator + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
+                out.println("<a href=\"" + mode.getHref() + "\"><img border=\"0\" src=\"themes" + File.separator + theme + File.separator + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
             }
             out.println("</td>");
         }
