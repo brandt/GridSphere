@@ -412,7 +412,7 @@ Copyright:
             token="@DATABASE_NAME@"
             value="${DATABASE_NAME}"/>
         <replace file="${DATABASE_FILE}"
-            token="@PROJECT_NAME@"
+            token="@PROJECTS_NAME@"
             value="gridsphere"/>
     </target>
 
