@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.validators.StringValidator;
@@ -21,8 +21,8 @@ import org.exolab.castor.xml.validators.StringValidator;
 public class SupportsTypeDescriptor extends org.exolab.castor.xml.util.XMLClassDescriptorImpl {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -46,8 +46,8 @@ public class SupportsTypeDescriptor extends org.exolab.castor.xml.util.XMLClassD
     private org.exolab.castor.xml.XMLFieldDescriptor identity;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public SupportsTypeDescriptor() {
@@ -57,36 +57,35 @@ public class SupportsTypeDescriptor extends org.exolab.castor.xml.util.XMLClassD
 
         //-- set grouping compositor
         setCompositorAsSequence();
-        org.exolab.castor.xml.util.XMLFieldDescriptorImpl  desc           = null;
-        org.exolab.castor.xml.XMLFieldHandler              handler        = null;
-        org.exolab.castor.xml.FieldValidator               fieldValidator = null;
+        org.exolab.castor.xml.util.XMLFieldDescriptorImpl desc = null;
+        org.exolab.castor.xml.XMLFieldHandler handler = null;
+        org.exolab.castor.xml.FieldValidator fieldValidator = null;
         //-- initialize attribute descriptors
 
         //-- _id
         desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(java.lang.String.class, "_id", "id", org.exolab.castor.xml.NodeType.Attribute);
         desc.setImmutable(true);
         handler = (new org.exolab.castor.xml.XMLFieldHandler() {
-            public java.lang.Object getValue( java.lang.Object object )
-                throws IllegalStateException
-            {
+            public java.lang.Object getValue(java.lang.Object object)
+                    throws IllegalStateException {
                 SupportsType target = (SupportsType) object;
                 return target.getId();
             }
-            public void setValue( java.lang.Object object, java.lang.Object value)
-                throws IllegalStateException, IllegalArgumentException
-            {
+
+            public void setValue(java.lang.Object object, java.lang.Object value)
+                    throws IllegalStateException, IllegalArgumentException {
                 try {
                     SupportsType target = (SupportsType) object;
-                    target.setId( (java.lang.String) value);
-                }
-                catch (java.lang.Exception ex) {
+                    target.setId((java.lang.String) value);
+                } catch (java.lang.Exception ex) {
                     throw new IllegalStateException(ex.toString());
                 }
             }
-            public java.lang.Object newInstance( java.lang.Object parent ) {
+
+            public java.lang.Object newInstance(java.lang.Object parent) {
                 return null;
             }
-        } );
+        });
         desc.setHandler(handler);
         addFieldDescriptor(desc);
 
@@ -103,27 +102,26 @@ public class SupportsTypeDescriptor extends org.exolab.castor.xml.util.XMLClassD
         //-- _mimeType
         desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.MimeType.class, "_mimeType", "mime-type", org.exolab.castor.xml.NodeType.Element);
         handler = (new org.exolab.castor.xml.XMLFieldHandler() {
-            public java.lang.Object getValue( java.lang.Object object )
-                throws IllegalStateException
-            {
+            public java.lang.Object getValue(java.lang.Object object)
+                    throws IllegalStateException {
                 SupportsType target = (SupportsType) object;
                 return target.getMimeType();
             }
-            public void setValue( java.lang.Object object, java.lang.Object value)
-                throws IllegalStateException, IllegalArgumentException
-            {
+
+            public void setValue(java.lang.Object object, java.lang.Object value)
+                    throws IllegalStateException, IllegalArgumentException {
                 try {
                     SupportsType target = (SupportsType) object;
-                    target.setMimeType( (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.MimeType) value);
-                }
-                catch (java.lang.Exception ex) {
+                    target.setMimeType((org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.MimeType) value);
+                } catch (java.lang.Exception ex) {
                     throw new IllegalStateException(ex.toString());
                 }
             }
-            public java.lang.Object newInstance( java.lang.Object parent ) {
+
+            public java.lang.Object newInstance(java.lang.Object parent) {
                 return new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.MimeType();
             }
-        } );
+        });
         desc.setHandler(handler);
         desc.setNameSpaceURI("http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd");
         desc.setRequired(true);
@@ -139,27 +137,26 @@ public class SupportsTypeDescriptor extends org.exolab.castor.xml.util.XMLClassD
         //-- _portletModeList
         desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode.class, "_portletModeList", "portlet-mode", org.exolab.castor.xml.NodeType.Element);
         handler = (new org.exolab.castor.xml.XMLFieldHandler() {
-            public java.lang.Object getValue( java.lang.Object object )
-                throws IllegalStateException
-            {
+            public java.lang.Object getValue(java.lang.Object object)
+                    throws IllegalStateException {
                 SupportsType target = (SupportsType) object;
                 return target.getPortletMode();
             }
-            public void setValue( java.lang.Object object, java.lang.Object value)
-                throws IllegalStateException, IllegalArgumentException
-            {
+
+            public void setValue(java.lang.Object object, java.lang.Object value)
+                    throws IllegalStateException, IllegalArgumentException {
                 try {
                     SupportsType target = (SupportsType) object;
-                    target.addPortletMode( (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode) value);
-                }
-                catch (java.lang.Exception ex) {
+                    target.addPortletMode((org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode) value);
+                } catch (java.lang.Exception ex) {
                     throw new IllegalStateException(ex.toString());
                 }
             }
-            public java.lang.Object newInstance( java.lang.Object parent ) {
+
+            public java.lang.Object newInstance(java.lang.Object parent) {
                 return new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode();
             }
-        } );
+        });
         desc.setHandler(handler);
         desc.setNameSpaceURI("http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd");
         desc.setMultivalued(true);
@@ -174,71 +171,63 @@ public class SupportsTypeDescriptor extends org.exolab.castor.xml.util.XMLClassD
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SupportsTypeDescriptor()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
      * Method getAccessMode
      */
-    public org.exolab.castor.mapping.AccessMode getAccessMode()
-    {
+    public org.exolab.castor.mapping.AccessMode getAccessMode() {
         return null;
     } //-- org.exolab.castor.mapping.AccessMode getAccessMode()
 
     /**
      * Method getExtends
      */
-    public org.exolab.castor.mapping.ClassDescriptor getExtends()
-    {
+    public org.exolab.castor.mapping.ClassDescriptor getExtends() {
         return null;
     } //-- org.exolab.castor.mapping.ClassDescriptor getExtends()
 
     /**
      * Method getIdentity
      */
-    public org.exolab.castor.mapping.FieldDescriptor getIdentity()
-    {
+    public org.exolab.castor.mapping.FieldDescriptor getIdentity() {
         return identity;
     } //-- org.exolab.castor.mapping.FieldDescriptor getIdentity()
 
     /**
      * Method getJavaClass
      */
-    public java.lang.Class getJavaClass()
-    {
+    public java.lang.Class getJavaClass() {
         return org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SupportsType.class;
     } //-- java.lang.Class getJavaClass()
 
     /**
      * Method getNameSpacePrefix
      */
-    public java.lang.String getNameSpacePrefix()
-    {
+    public java.lang.String getNameSpacePrefix() {
         return nsPrefix;
     } //-- java.lang.String getNameSpacePrefix()
 
     /**
      * Method getNameSpaceURI
      */
-    public java.lang.String getNameSpaceURI()
-    {
+    public java.lang.String getNameSpaceURI() {
         return nsURI;
     } //-- java.lang.String getNameSpaceURI()
 
     /**
      * Method getValidator
      */
-    public org.exolab.castor.xml.TypeValidator getValidator()
-    {
+    public org.exolab.castor.xml.TypeValidator getValidator() {
         return this;
     } //-- org.exolab.castor.xml.TypeValidator getValidator()
 
     /**
      * Method getXMLName
      */
-    public java.lang.String getXMLName()
-    {
+    public java.lang.String getXMLName() {
         return xmlName;
     } //-- java.lang.String getXMLName()
 

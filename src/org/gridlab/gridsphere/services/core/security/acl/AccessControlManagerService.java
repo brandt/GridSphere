@@ -14,11 +14,12 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 
 import java.util.List;
-import java.util.Set;
 
 public interface AccessControlManagerService extends PortletService {
 
-    /*** PORTLET GROUP METHODS ***/
+    /**
+     * PORTLET GROUP METHODS **
+     */
 
     public List getGroups();
 
@@ -54,7 +55,9 @@ public interface AccessControlManagerService extends PortletService {
     public void denyGroupRequest(GroupRequest request);
     */
 
-    /*** GROUP ENTRY METHODS ***/
+    /**
+     * GROUP ENTRY METHODS **
+     */
 
     public GroupRequest createGroupEntry();
 
@@ -79,7 +82,9 @@ public interface AccessControlManagerService extends PortletService {
     public void saveGroupEntry(GroupEntry groupEntry);
 
 
-    /*** ACCESS CONTROL LOGIC METHODS ***/
+    /**
+     * ACCESS CONTROL LOGIC METHODS **
+     */
 
     public List getGroups(User user);
 

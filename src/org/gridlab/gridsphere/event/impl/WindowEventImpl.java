@@ -12,7 +12,7 @@ import java.util.EventObject;
 /**
  * A <code>WindowEventImpl</code> is the <code>WindowEvent</code> implementation
  * that is responsible for handling window action events e.g. <code>MINIMIZED</code>,
- *  <code>MAXIMIZED</code> or <code>RESTORED</code>.
+ * <code>MAXIMIZED</code> or <code>RESTORED</code>.
  */
 public class WindowEventImpl extends EventObject implements WindowEvent {
 
@@ -23,8 +23,8 @@ public class WindowEventImpl extends EventObject implements WindowEvent {
      * Constructs an instance of <code>WindowEventImpl</code> with a provided
      * portlet request and response
      *
-     * @param req the <code>PortletRequests</code>
-     * @param  windowEvent the window event id
+     * @param req         the <code>PortletRequests</code>
+     * @param windowEvent the window event id
      */
     public WindowEventImpl(PortletRequest req, int windowEvent) {
         super(req);

@@ -1,16 +1,13 @@
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
-import org.gridlab.gridsphere.portlet.jsrimpl.PortletResponseImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
-import javax.portlet.*;
-import javax.servlet.http.HttpServletResponse;
+import javax.portlet.PortalContext;
+import javax.portlet.PortletURL;
+import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
-import java.io.PrintWriter;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
 
 
@@ -66,7 +63,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * If the expiration value is set to 0, caching is disabled
      * for this portlet; if the value is set to -1,
      * the cache does not expire.
-     * <p>
+     * <p/>
      * The value is <code>"portlet.expiration-cache"</code>.
      */
     public static final String EXPIRATION_CACHE = "portlet.expiration-cache";
@@ -74,14 +71,13 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     /**
      * Returns the MIME type that can be used to contribute
      * markup to the render response.
-     * <p>
+     * <p/>
      * If no content type was set previously using the {@link #setContentType} method
      * this method retuns <code>null</code>.
      *
+     * @return the MIME type of the response, or <code>null</code>
+     *         if no content type is set
      * @see #setContentType
-     *
-     * @return   the MIME type of the response, or <code>null</code>
-     *           if no content type is set
      */
     public String getContentType() {
         // in servlet 2.4 we could simply use this:
@@ -95,17 +91,17 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * window state or security modifier is set in the PortletURL the
      * current values are preserved. If a request is triggered by the
      * PortletURL, it results in a render request.
-     * <p>
+     * <p/>
      * The returned URL can be further extended by adding
      * portlet-specific parameters and portlet modes and window states.
-     * <p>
+     * <p/>
      * The created URL will per default not contain any parameters
      * of the current render request.
      *
      * @return a portlet render URL
      */
     public PortletURL createRenderURL() {
-        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse(), portalContext);
+        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse) super.getResponse(), portalContext);
         portletURL.setComponentID((String) req.getAttribute(SportletProperties.COMPONENT_ID));
         return portletURL;
     }
@@ -115,19 +111,19 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * window state or security modifier is set in the PortletURL the
      * current values are preserved. If a request is triggered by the
      * PortletURL, it results in an action request.
-     * <p>
+     * <p/>
      * The returned URL can be further extended by adding
      * portlet-specific parameters and portlet modes and window states.
-     * <p>
+     * <p/>
      * The created URL will per default not contain any parameters
      * of the current render request.
      *
      * @return a portlet action URL
      */
     public PortletURL createActionURL() {
-        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse(), portalContext);
+        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse) super.getResponse(), portalContext);
         portletURL.setAction("");
-        portletURL.setComponentID((String)req.getAttribute(SportletProperties.COMPONENT_ID));
+        portletURL.setComponentID((String) req.getAttribute(SportletProperties.COMPONENT_ID));
         return portletURL;
     }
 
@@ -136,7 +132,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * elements, such as JavaScript variables or function names, to ensure
      * they are unique in the context of the portal page.
      *
-     * @return   the namespace
+     * @return the namespace
      */
     public String getNamespace() {
         return "gridsphere_";
@@ -144,10 +140,10 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
 
     /**
      * This method sets the title of the portlet.
-     * <p>
+     * <p/>
      * The value can be a text String
      *
-     * @param  title    portlet title as text String or resource URI
+     * @param title portlet title as text String or resource URI
      */
     public void setTitle(String title) {
         if (title == null) title = "Unknown portlet title";
@@ -158,18 +154,16 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * Sets the MIME type for the render response. The portlet must
      * set the content type before calling {@link #getWriter} or
      * {@link #getPortletOutputStream}.
-     * <p>
+     * <p/>
      * Calling <code>setContentType</code> after <code>getWriter</code>
      * or <code>getOutputStream</code> does not change the content type.
      *
-     * @param   type  the content MIME type
-     *
-     * @throws  java.lang.IllegalArgumentException
-     *              if the given type is not in the list returned
-     *              by <code>PortletRequest.getResponseContentTypes</code>
-     *
-     * @see  javax.portlet.RenderRequest#getResponseContentTypes
-     * @see  #getContentType
+     * @param type the content MIME type
+     * @throws java.lang.IllegalArgumentException
+     *          if the given type is not in the list returned
+     *          by <code>PortletRequest.getResponseContentTypes</code>
+     * @see javax.portlet.RenderRequest#getResponseContentTypes
+     * @see #getContentType
      */
     public void setContentType(String type) {
         String mimeType = stripCharacterEncoding(type);
@@ -184,14 +178,13 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     /**
      * Returns the name of the charset used for
      * the MIME body sent in this response.
-     *
+     * <p/>
      * <p>See <a href="http://ds.internic.net/rfc/rfc2045.txt">RFC 2047</a>
      * for more information about character encoding and MIME.
      *
      * @return		a <code>String</code> specifying the
-     *			name of the charset, for
-     *			example, <code>ISO-8859-1</code>
-     *
+     * name of the charset, for
+     * example, <code>ISO-8859-1</code>
      */
     public String getCharacterEncoding() {
         return this.getHttpServletResponse().getCharacterEncoding();
@@ -201,25 +194,22 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     /**
      * Returns a PrintWriter object that can send character
      * text to the portal.
-     * <p>
+     * <p/>
      * Before calling this method the content type of the
      * render response must be set using the {@link #setContentType}
      * method.
-     * <p>
+     * <p/>
      * Either this method or {@link #getPortletOutputStream} may be
      * called to write the body, not both.
      *
-     * @return    a <code>PrintWriter</code> object that
-     *		can return character data to the portal
-     *
-     * @exception  java.io.IOException
-     *                 if an input or output exception occurred
-     * @exception  java.lang.IllegalStateException
-     *                 if the <code>getPortletOutputStream</code> method
-     * 		     has been called on this response,
-     *                 or if no content type was set using the
-     *                 <code>setContentType</code> method.
-     *
+     * @return a <code>PrintWriter</code> object that
+     *         can return character data to the portal
+     * @throws java.io.IOException if an input or output exception occurred
+     * @throws java.lang.IllegalStateException
+     *                             if the <code>getPortletOutputStream</code> method
+     *                             has been called on this response,
+     *                             or if no content type was set using the
+     *                             <code>setContentType</code> method.
      * @see #setContentType
      * @see #getPortletOutputStream
      */
@@ -233,10 +223,10 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     /**
      * Returns the locale assigned to the response.
      *
-     * @return  Locale of this response
+     * @return Locale of this response
      */
     public java.util.Locale getLocale() {
-        Locale locale = (Locale)this.req.getSession(true).getAttribute(User.LOCALE);
+        Locale locale = (Locale) this.req.getSession(true).getAttribute(User.LOCALE);
         if (locale != null) return locale;
         locale = this.req.getLocale();
         if (locale != null) return locale;
@@ -248,57 +238,51 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * Sets the preferred buffer size for the body of the response.
      * The portlet container will use a buffer at least as large as
      * the size requested.
-     * <p>
+     * <p/>
      * This method must be called before any response body content is
      * written; if content has been written, or the portlet container
      * does not support buffering, this method may throw an
      * <code>IllegalStateException</code>.
      *
-     * @param size 	the preferred buffer size
-     *
-     * @exception  java.lang.IllegalStateException
-     *                    if this method is called after
-     *			content has been written, or the
-     *                    portlet container does not support buffering
-     *
-     * @see 		#getBufferSize
-     * @see 		#flushBuffer
-     * @see 		#isCommitted
-     * @see 		#reset
+     * @param size the preferred buffer size
+     * @throws java.lang.IllegalStateException
+     *          if this method is called after
+     *          content has been written, or the
+     *          portlet container does not support buffering
+     * @see #getBufferSize
+     * @see #flushBuffer
+     * @see #isCommitted
+     * @see #reset
      */
     public void setBufferSize(int size) {
         throw new IllegalStateException("portlet container does not support buffering");
     }
 
 
-
     /**
      * Returns the actual buffer size used for the response.  If no buffering
      * is used, this method returns 0.
      *
-     * @return	 	the actual buffer size used
-     *
-     * @see 		#setBufferSize
-     * @see 		#flushBuffer
-     * @see 		#isCommitted
-     * @see 		#reset
+     * @return	 the actual buffer size used
+     * @see #setBufferSize
+     * @see #flushBuffer
+     * @see #isCommitted
+     * @see #reset
      */
     public int getBufferSize() {
         return 0;
     }
 
 
-
     /**
      * Forces any content in the buffer to be written to the client.  A call
      * to this method automatically commits the response.
      *
-     * @exception  java.io.IOException  if an error occured when writing the output
-     *
-     * @see 		#setBufferSize
-     * @see 		#getBufferSize
-     * @see 		#isCommitted
-     * @see 		#reset
+     * @throws java.io.IOException if an error occured when writing the output
+     * @see #setBufferSize
+     * @see #getBufferSize
+     * @see #isCommitted
+     * @see #reset
      */
     public void flushBuffer() throws java.io.IOException {
         this.getHttpServletResponse().flushBuffer();
@@ -310,13 +294,13 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * clearing properties set. If the response has been committed,
      * this method throws an <code>IllegalStateException</code>.
      *
-     * @exception  java.lang.IllegalStateException 	if this method is called after
-     *					response is comitted
-     *
-     * @see 		#setBufferSize
-     * @see 		#getBufferSize
-     * @see 		#isCommitted
-     * @see 		#reset
+     * @throws java.lang.IllegalStateException
+     *          if this method is called after
+     *          response is comitted
+     * @see #setBufferSize
+     * @see #getBufferSize
+     * @see #isCommitted
+     * @see #reset
      */
     public void resetBuffer() {
         this.getHttpServletResponse().resetBuffer();
@@ -327,12 +311,11 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * committed.
      *
      * @return		a boolean indicating if the response has been
-     *  		committed
-     *
-     * @see 		#setBufferSize
-     * @see 		#getBufferSize
-     * @see 		#flushBuffer
-     * @see 		#reset
+     * committed
+     * @see #setBufferSize
+     * @see #getBufferSize
+     * @see #flushBuffer
+     * @see #reset
      */
     public boolean isCommitted() {
         return this.getHttpServletResponse().isCommitted();
@@ -344,13 +327,13 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * If the response has been committed, this method throws an
      * <code>IllegalStateException</code>.
      *
-     * @exception java.lang.IllegalStateException  if the response has already been
-     *                                   committed
-     *
-     * @see 		#setBufferSize
-     * @see 		#getBufferSize
-     * @see 		#flushBuffer
-     * @see 		#isCommitted
+     * @throws java.lang.IllegalStateException
+     *          if the response has already been
+     *          committed
+     * @see #setBufferSize
+     * @see #getBufferSize
+     * @see #flushBuffer
+     * @see #isCommitted
      */
     public void reset() {
         this.getHttpServletResponse().reset();
@@ -361,24 +344,22 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * Returns a <code>OutputStream</code> suitable for writing binary
      * data in the response. The portlet container does not encode the
      * binary data.
-     * <p>
+     * <p/>
      * Before calling this method the content type of the
      * render response must be set using the {@link #setContentType}
      * method.
-     * <p>
+     * <p/>
      * Calling <code>flush()</code> on the OutputStream commits the response.
-     * <p>
+     * <p/>
      * Either this method or {@link #getWriter} may be called to write the body, not both.
      *
+     * @throws java.lang.IllegalStateException
+     *                             if the <code>getWriter</code> method
+     *                             has been called on this response, or
+     *                             if no content type was set using the
+     *                             <code>setContentType</code> method.
+     * @throws java.io.IOException if an input or output exception occurred
      * @return	a <code>OutputStream</code> for writing binary data
-     *
-     * @exception java.lang.IllegalStateException   if the <code>getWriter</code> method
-     * 					has been called on this response, or
-     *                                    if no content type was set using the
-     *                                    <code>setContentType</code> method.
-     *
-     * @exception java.io.IOException 	if an input or output exception occurred
-     *
      * @see #setContentType
      * @see #getWriter
      */

@@ -1,10 +1,7 @@
 package org.gridlab.gridsphere.services.core.security.auth.modules.impl;
 
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
-
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -28,6 +25,7 @@ public class AuthModuleEntry {
     public void setModuleClassName(String moduleClassName) {
         this.moduleClassName = moduleClassName;
     }
+
     public String getModuleClassName() {
         return moduleClassName;
     }
@@ -54,7 +52,7 @@ public class AuthModuleEntry {
     /**
      * Sets the value of the attribute with the given name,
      *
-     * @param name the attribute name
+     * @param name  the attribute name
      * @param value the attribute value
      */
     public void setAttribute(String name, String value) {

@@ -7,21 +7,22 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
-import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
  * The abstract <code>PortletFrameLayout</code> acts a container for the layout of portlet frame
  * components and handles PortletFrame events.
- * <p>
+ * <p/>
  * The <code>PortletTableLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
  * that organizes portlets into a grid with a provided number of rows and columns.
  *
@@ -67,15 +68,15 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                 if (userRole.compare(userRole, reqRole) < 0) {
                     it.remove();
                 } else {
-                // all the components have the same theme
-                p.setTheme(theme);
-                p.setCanModify(canModify);
-                // invoke init on each component
-                list = p.init(req, list);
+                    // all the components have the same theme
+                    p.setTheme(theme);
+                    p.setCanModify(canModify);
+                    // invoke init on each component
+                    list = p.init(req, list);
 
-                p.addComponentListener(this);
+                    p.addComponentListener(this);
 
-                p.setParentComponent(this);
+                    p.setParentComponent(this);
                 }
             }
         }
@@ -95,7 +96,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
 
         PortletComponentEvent compEvt = event.getLastRenderEvent();
         if ((compEvt != null) && (compEvt instanceof PortletFrameEvent)) {
-            PortletFrameEvent frameEvent = (PortletFrameEvent)compEvt;
+            PortletFrameEvent frameEvent = (PortletFrameEvent) compEvt;
             handleFrameEvent(frameEvent);
         }
 
@@ -168,19 +169,19 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         //System.err.println("in frame layout: frame has been maximized");
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
-        Iterator it = scomponents.iterator();
-        PortletComponent p = null;
-        int id = event.getID();
-        while (it.hasNext()) {
-            p = (PortletComponent) it.next();
-            // check for the frame that has been maximized
-            if (p.getComponentID() == id) {
-                p.setWidth("100%");
-            } else {
-                // If this is not the right frame, make it invisible
-                p.setVisible(false);
+            Iterator it = scomponents.iterator();
+            PortletComponent p = null;
+            int id = event.getID();
+            while (it.hasNext()) {
+                p = (PortletComponent) it.next();
+                // check for the frame that has been maximized
+                if (p.getComponentID() == id) {
+                    p.setWidth("100%");
+                } else {
+                    // If this is not the right frame, make it invisible
+                    p.setVisible(false);
+                }
             }
-        }
         }
     }
 
@@ -192,18 +193,18 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
     public void handleFrameMinimized(PortletFrameEvent event) {
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
-        Iterator it = scomponents.iterator();
-        PortletComponent p = null;
-        int id = event.getID();
+            Iterator it = scomponents.iterator();
+            PortletComponent p = null;
+            int id = event.getID();
 
-        while (it.hasNext()) {
-            p = (PortletComponent) it.next();
-            if (p.getComponentID() == id) {
-                p.setWidth("");
+            while (it.hasNext()) {
+                p = (PortletComponent) it.next();
+                if (p.getComponentID() == id) {
+                    p.setWidth("");
+                }
+                p.setWidth(p.getDefaultWidth());
+                p.setVisible(true);
             }
-            p.setWidth(p.getDefaultWidth());
-            p.setVisible(true);
-        }
         }
     }
 
@@ -215,22 +216,22 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
     public void handleFrameRestore(PortletFrameEvent event) {
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
-        Iterator it = scomponents.iterator();
-        PortletComponent p = null;
-        int id = event.getID();
-        while (it.hasNext()) {
-            p = (PortletComponent) it.next();
-            if (p.getComponentID() == id) {
-                if (p instanceof PortletFrame) {
-                    PortletFrame f = (PortletFrame)p;
-                    f.setWidth(event.getOriginalWidth());
+            Iterator it = scomponents.iterator();
+            PortletComponent p = null;
+            int id = event.getID();
+            while (it.hasNext()) {
+                p = (PortletComponent) it.next();
+                if (p.getComponentID() == id) {
+                    if (p instanceof PortletFrame) {
+                        PortletFrame f = (PortletFrame) p;
+                        f.setWidth(event.getOriginalWidth());
+                    }
+                    p.setWidth(p.getDefaultWidth());
+                    //p.setWidth("");
+                } else {
+                    p.setVisible(true);
                 }
-                p.setWidth(p.getDefaultWidth());
-                //p.setWidth("");
-            } else {
-                p.setVisible(true);
             }
-        }
         }
     }
 
@@ -243,33 +244,34 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         //System.err.println("Portlet FrameLAyout: in frame closed");
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
-        Iterator it = scomponents.iterator();
-        PortletComponent p = null;
-        int id = event.getID();
-        while (it.hasNext()) {
-            p = (PortletComponent) it.next();
-            // check for the frame that has been closed
-            if (p.getComponentID() == id) {
-                if (p instanceof PortletFrame) {
-                    components.remove(p);
-                    //this.remove(p, event.getRequest());
-                    /*
-                    try {
-                        System.err.println("removing and reinit page");
-                        PortletPageFactory pageFactory = PortletPageFactory.getInstance();
-                        PortletPage page = pageFactory.createPortletPage(event.getRequest());
-                        page.init(event.getRequest(), new Vector());
-                        //page.save();
-                    } catch (Exception e) {
-                        //log.error("Unable to save portlet page", e);
+            Iterator it = scomponents.iterator();
+            PortletComponent p = null;
+            int id = event.getID();
+            while (it.hasNext()) {
+                p = (PortletComponent) it.next();
+                // check for the frame that has been closed
+                if (p.getComponentID() == id) {
+                    if (p instanceof PortletFrame) {
+                        components.remove(p);
+                        //this.remove(p, event.getRequest());
+                        /*
+                        try {
+                            System.err.println("removing and reinit page");
+                            PortletPageFactory pageFactory = PortletPageFactory.getInstance();
+                            PortletPage page = pageFactory.createPortletPage(event.getRequest());
+                            page.init(event.getRequest(), new Vector());
+                            //page.save();
+                        } catch (Exception e) {
+                            //log.error("Unable to save portlet page", e);
+                        }
+                        */
+                        return;
                     }
-                    */
-                    return;
                 }
             }
         }
-        }
     }
+
     /**
      * Performed when a frame event has been received
      *
@@ -329,14 +331,14 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletFrameLayout f = (PortletFrameLayout)super.clone();
+        PortletFrameLayout f = (PortletFrameLayout) super.clone();
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
-        f.components = new ArrayList(scomponents.size());
-        for (int i = 0; i < scomponents.size(); i++) {
-            PortletComponent comp = (PortletComponent)scomponents.get(i);
-            f.components.add(comp.clone());
-        }
+            f.components = new ArrayList(scomponents.size());
+            for (int i = 0; i < scomponents.size(); i++) {
+                PortletComponent comp = (PortletComponent) scomponents.get(i);
+                f.components.add(comp.clone());
+            }
         }
         return f;
     }

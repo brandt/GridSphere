@@ -34,7 +34,7 @@ public class ListBoxItemBean extends SelectElementBean {
     /**
      * Constructs a listbox item bean with a supplied portlet request and bean identifier
      *
-     * @param req the portlet request
+     * @param req    the portlet request
      * @param beanId the bean identifier
      */
     public ListBoxItemBean(HttpServletRequest req, String beanId) {

@@ -6,17 +6,9 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.BufferedOutputStream;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.util.Locale;
 
 /**
  * A <code>SportletResponse</code> provides an implementation of the
@@ -142,7 +134,7 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
     }
 
     private HttpServletResponse getHttpServletResponse() {
-        return (HttpServletResponse)super.getResponse();
+        return (HttpServletResponse) super.getResponse();
     }
 }
 

@@ -16,8 +16,8 @@ import org.gridlab.gridsphere.portletcontainer.impl.PortletWebApplicationImpl;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 
 import javax.servlet.ServletContext;
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -38,7 +38,8 @@ public class PortletManager implements PortletManagerService {
     /**
      * Default instantiation disallowed
      */
-    private PortletManager() {}
+    private PortletManager() {
+    }
 
 
     private static class WebappComparator implements Comparator {
@@ -48,8 +49,8 @@ public class PortletManager implements PortletManagerService {
             if (!(webapp1 instanceof String) || !(webapp2 instanceof String)) {
                 throw new ClassCastException("Can only compare string webapp names!!");
             }
-            String _webapp1 = (String)webapp1;
-            String _webapp2 = (String)webapp2;
+            String _webapp1 = (String) webapp1;
+            String _webapp2 = (String) webapp2;
 
             int a = _webapp1.lastIndexOf(".");
 
@@ -67,8 +68,8 @@ public class PortletManager implements PortletManagerService {
             if ((a > 0) && (b > 0)) {
 
                 try {
-                    int a1 = Integer.valueOf(_webapp1.substring(a+1)).intValue();
-                    int a2 = Integer.valueOf(_webapp2.substring(b+1)).intValue();
+                    int a1 = Integer.valueOf(_webapp1.substring(a + 1)).intValue();
+                    int a2 = Integer.valueOf(_webapp2.substring(b + 1)).intValue();
                     if (a1 > a2) return 1;
                     if (a1 < a2) return -1;
                     if (a1 == a2) return 0;
@@ -97,7 +98,8 @@ public class PortletManager implements PortletManagerService {
      * Initializes portlet web applications that are defined by the <code>PortletManagerService</code>
      *
      * @param config the <code>PortletServiceConfig</code>
-     * @throws PortletServiceUnavailableException if initialization fails
+     * @throws PortletServiceUnavailableException
+     *          if initialization fails
      */
     public synchronized void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.debug("in init()");
@@ -133,7 +135,7 @@ public class PortletManager implements PortletManagerService {
                             log.error("Unable to create portlet web application: " + webapp);
                             e.printStackTrace();
                         }
-                    }          
+                    }
                 }
             } else {
                 log.error(portletsPath + " does not exist!");
@@ -202,7 +204,7 @@ public class PortletManager implements PortletManagerService {
         Iterator it = webapps.iterator();
         List removeWebApps = new ArrayList();
         while (it.hasNext()) {
-            PortletWebApplication webApp = (PortletWebApplication)it.next();
+            PortletWebApplication webApp = (PortletWebApplication) it.next();
 
             if (webApp.getWebApplicationName().equalsIgnoreCase(webApplicationName)) {
                 webApp.destroy();
@@ -235,7 +237,7 @@ public class PortletManager implements PortletManagerService {
         Iterator it = webapps.iterator();
         List removeWebApps = new ArrayList();
         while (it.hasNext()) {
-            PortletWebApplication webApp = (PortletWebApplication)it.next();
+            PortletWebApplication webApp = (PortletWebApplication) it.next();
 
             if (webApp.getWebApplicationName().equalsIgnoreCase(webApplication.getWebApplicationName())) {
                 webApp.destroy();
@@ -261,10 +263,10 @@ public class PortletManager implements PortletManagerService {
     /**
      * Initializes the portlet application
      *
-     * @param webApplicationName  the name of the portlet application
-     * @param req the portlet request
-     * @param res the portlet response
-     * @throws IOException  if an I/O error occurs
+     * @param webApplicationName the name of the portlet application
+     * @param req                the portlet request
+     * @param res                the portlet response
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet exception occurs
      */
     public synchronized void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -279,9 +281,9 @@ public class PortletManager implements PortletManagerService {
      * Initializes the portlet application
      *
      * @param portletWebApplication the portlet web application
-     * @param req the portlet request
-     * @param res the portlet response
-     * @throws IOException  if an I/O error occurs
+     * @param req                   the portlet request
+     * @param res                   the portlet response
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet exception occurs
      */
     public synchronized void initPortletWebApplication(PortletWebApplication portletWebApplication, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -297,8 +299,8 @@ public class PortletManager implements PortletManagerService {
      * Destroys the portlet web application and removes from registry
      *
      * @param webApplicationName the portlet application name
-     * @param req the portlet request
-     * @param res the portlet response
+     * @param req                the portlet request
+     * @param res                the portlet response
      * @throws IOException
      * @throws PortletException
      */
@@ -312,9 +314,9 @@ public class PortletManager implements PortletManagerService {
      * Shuts down the portlet application
      *
      * @param portletWebApplication the portlet web application
-     * @param req the portlet request
-     * @param res the portlet response
-     * @throws IOException  if an I/O error occurs
+     * @param req                   the portlet request
+     * @param res                   the portlet response
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet exception occurs
      */
     public synchronized void destroyPortletWebApplication(PortletWebApplication portletWebApplication, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -335,7 +337,7 @@ public class PortletManager implements PortletManagerService {
         // since the first one represents the "classical" webapp which itself adds the jsr webapp to the
         // registry with the same name
         for (int i = 0; i < webapps.size(); i++) {
-            PortletWebApplication webapp = (PortletWebApplication)webapps.get(i);
+            PortletWebApplication webapp = (PortletWebApplication) webapps.get(i);
             String webappName = webapp.getWebApplicationName();
             if (!l.contains(webappName)) l.add(webappName);
         }
@@ -353,13 +355,13 @@ public class PortletManager implements PortletManagerService {
         // since the first one represents the "classical" webapp which itself adds the jsr webapp to the
         // registry with the same name
         for (int i = 0; i < webapps.size(); i++) {
-            PortletWebApplication webapp = (PortletWebApplication)webapps.get(i);
+            PortletWebApplication webapp = (PortletWebApplication) webapps.get(i);
             String webappName = webapp.getWebApplicationName();
             if (!l.contains(webappName)) l.add(webappName);
         }
         Iterator it = l.iterator();
         while (it.hasNext()) {
-            String s = (String)it.next();
+            String s = (String) it.next();
             int idx = s.indexOf(".");
             if (idx < 0) {
                 if (l.contains(s + ".1")) it.remove();
@@ -377,7 +379,7 @@ public class PortletManager implements PortletManagerService {
     public String getPortletWebApplicationDescription(String webApplicationName) {
         String webappDesc = "Undefined portlet web application";
         for (int i = 0; i < webapps.size(); i++) {
-            PortletWebApplication webApp = (PortletWebApplication)webapps.get(i);
+            PortletWebApplication webApp = (PortletWebApplication) webapps.get(i);
             if (webApp.getWebApplicationName().equalsIgnoreCase(webApplicationName)) {
                 return webApp.getWebApplicationDescription();
             }

@@ -5,7 +5,6 @@ package org.gridlab.gridsphere.services.core.security.password.impl;
 
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.services.core.security.password.Password;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 
 import java.util.Date;

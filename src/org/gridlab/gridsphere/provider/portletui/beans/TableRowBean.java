@@ -37,7 +37,7 @@ public class TableRowBean extends BeanContainer implements TagBean {
     /**
      * Constructs a table row bean from a supplied portlet request and bean identifier
      *
-     * @param req the portlet request
+     * @param req    the portlet request
      * @param beanId the bean identifier
      */
     public TableRowBean(HttpServletRequest req, String beanId) {
@@ -125,7 +125,7 @@ public class TableRowBean extends BeanContainer implements TagBean {
         sb.append(">");
         if (isHeader) {
             setBeanStyles(TABLE_HEADER_STYLE);
-        }  else {
+        } else {
             if (isZebra) {
                 setBeanStyles(TABLE_ALTERNATE_STYLE);
             } else {

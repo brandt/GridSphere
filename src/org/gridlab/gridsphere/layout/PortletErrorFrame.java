@@ -54,7 +54,7 @@ public class PortletErrorFrame extends BasePortletComponent implements Cloneable
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
-        PortletException portletException = (PortletException)req.getAttribute(SportletProperties.ERROR);
+        PortletException portletException = (PortletException) req.getAttribute(SportletProperties.ERROR);
         if (portletException == null) {
             if (message != null) {
                 out.println(message);
@@ -72,7 +72,7 @@ public class PortletErrorFrame extends BasePortletComponent implements Cloneable
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletErrorFrame f = (PortletErrorFrame)super.clone();
+        PortletErrorFrame f = (PortletErrorFrame) super.clone();
         f.message = this.message;
         return f;
     }

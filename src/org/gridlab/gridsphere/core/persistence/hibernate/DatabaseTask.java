@@ -10,7 +10,6 @@ import org.apache.tools.ant.Task;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
@@ -62,17 +61,17 @@ public class DatabaseTask extends Task {
     }
 
 
-
     private void checkDatabase(boolean startUpCheck) throws BuildException {
 
-        if (!startUpCheck) this.configDir =
-                configDir + File.separator + "webapps" + File.separator + webappname +
-                File.separator + "WEB-INF" + File.separator + "persistence";
+        if (!startUpCheck)
+            this.configDir =
+                    configDir + File.separator + "webapps" + File.separator + webappname +
+                    File.separator + "WEB-INF" + File.separator + "persistence";
 
         Properties prop = new Properties();
         String propfilename = configDir + File.separator + "hibernate.properties";
 
-        log.info("config is: "+this.configDir);
+        log.info("config is: " + this.configDir);
         // try to load configfile
         try {
             FileInputStream fis = new FileInputStream(new File(propfilename));

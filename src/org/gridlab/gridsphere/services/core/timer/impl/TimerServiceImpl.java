@@ -5,17 +5,12 @@
  */
 package org.gridlab.gridsphere.services.core.timer.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.timer.TimerService;
+
+import java.util.*;
 
 /**
  * Timer Service implementation based on the java.util.Timer API.
@@ -81,6 +76,7 @@ public class TimerServiceImpl implements PortletServiceProvider, TimerService {
         timer.schedule(task, firstTime, period);
 
     }
+
     public synchronized void scheduleAtFixedRate(String timerId, TimerTask task, long delay, long period) {
         Timer timer = (Timer) timerMap.get(timerId);
         if (timer == null) {

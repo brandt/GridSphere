@@ -4,12 +4,11 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.ServletRequest;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -78,7 +77,7 @@ public abstract class BaseBean implements TagBean {
 
     protected String getBeanKey() {
         String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
-        String compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+        String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
         String beanKey = null;
         if (compId == null) {
             beanKey = beanId + "_" + cid;

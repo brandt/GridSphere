@@ -45,6 +45,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
     /**
      * Returns the startposition of the scrolling
+     *
      * @return startpositio of the scrolling
      */
     public int getStartPos() {
@@ -53,6 +54,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
     /**
      * Sets the startposition of the scrolling
+     *
      * @param startPos position of the scrolling
      */
     public void setStartPos(int startPos) {
@@ -61,6 +63,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
     /**
      * Returns the size of the scrollwindow.
+     *
      * @return size of the scrollwindow
      */
     public int getSize() {
@@ -69,6 +72,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
     /**
      * Sets the size of the scrollwindow.
+     *
      * @param size size of the scrollwindow
      */
     public void setSize(int size) {
@@ -77,6 +81,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
     /**
      * Returns the header of the datagrid.
+     *
      * @return header of the datagrid
      */
     public String getHeader() {
@@ -85,6 +90,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
     /**
      * Sets the header of the datagrid.
+     *
      * @param header header of the datagrid
      */
     public void setHeader(String header) {
@@ -93,6 +99,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
     /**
      * Returns the list of object which will be ieterated over.
+     *
      * @return list of objects
      */
     public List getList() {
@@ -101,6 +108,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
     /**
      * Sets the list of object which will be iterated over
+     *
      * @param list
      */
     public void setList(List list) {
@@ -109,6 +117,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
     /**
      * Returns the PortletURI for this ui component
+     *
      * @return portletURI for this component
      */
     public PortletURI getUri() {
@@ -118,6 +127,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
     /**
      * Sets the PortletURI for this component
+     *
      * @param uri
      */
     public void setUri(PortletURI uri) {
@@ -126,6 +136,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
     /**
      * Gets the width of the datagrid.
+     *
      * @return width of the datagrid
      */
     public String getWidth() {
@@ -134,6 +145,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
     /**
      * Sets the width of the elemet
+     *
      * @param width width of the element
      */
     public void setWidth(String width) {
@@ -147,11 +159,10 @@ public class DataGridBean extends BeanContainer implements TagBean {
             uri.addParameter(beanId + "_pos", new Integer(pos).toString());
             result.append("<a class=\"ui-datagrid-controls-element-active\" href=\"" + uri.toString() + "\"> " + desc + "</a>");
         } else {
-            result.append("<span class=\"ui-datagrid-controls-element-inactive\">"+desc+"</span>");
+            result.append("<span class=\"ui-datagrid-controls-element-inactive\">" + desc + "</span>");
         }
         return result.toString();
     }
-
 
 
     public String toStartString() {
@@ -160,12 +171,12 @@ public class DataGridBean extends BeanContainer implements TagBean {
         // header output
         StringBuffer sb = new StringBuffer();
         sb.append("<table class=\"ui-datagrid\"");
-        if (width!=null) {
-            sb.append(" width=\""+width+"\"");
+        if (width != null) {
+            sb.append(" width=\"" + width + "\"");
         }
         sb.append("><tr><td>");
 
-        if (key!=null) {
+        if (key != null) {
             header = this.getLocalizedText(key, "DataGrid");
         }
 
@@ -173,17 +184,17 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
 
         String prefix = request.getParameter(SportletProperties.PREFIX);
-        if (prefix==null) {
-            prefix="";
+        if (prefix == null) {
+            prefix = "";
         } else {
-            prefix+="_";
+            prefix += "_";
         }
 
-        String req_beanId = request.getParameter(prefix+"beanId");
+        String req_beanId = request.getParameter(prefix + "beanId");
 
         if (req_beanId != null) {
             if (req_beanId.equals(beanId)) {
-                String req_startPos = request.getParameter(prefix+req_beanId + "_pos");
+                String req_startPos = request.getParameter(prefix + req_beanId + "_pos");
                 startPos = Integer.parseInt(req_startPos);
                 if (startPos > list.size()) startPos = list.size();
             }
@@ -195,7 +206,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
 
         // only show controls when the datagridsize is smaller then the size of the list
-        if (this.size<list.size()) {
+        if (this.size < list.size()) {
 
             control = new StringBuffer();
             control.append("<tr><td>");
@@ -246,7 +257,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
             if (endPos > list.size()) {
                 endPos = list.size();
             }
-            if (list != null) control.append(" " + (startPos+1) + "-" + endPos + "(" + list.size() + ")");
+            if (list != null) control.append(" " + (startPos + 1) + "-" + endPos + "(" + list.size() + ")");
 
             control.append("</div>");
 
@@ -304,7 +315,9 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
         sb.append("</table>");
         // appends the controls again at the bottom
-        if (control!=null) { sb.append(control); }
+        if (control != null) {
+            sb.append(control);
+        }
         sb.append("</td></tr></table>");
         return sb.toString();
     }

@@ -9,12 +9,11 @@ package org.gridlab.gridsphere.portletcontainer.jsrimpl;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 
-import javax.portlet.PortletMode;
 import java.util.*;
 
 /**
@@ -32,7 +31,7 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
     private List states = new ArrayList();
 
     /**
-     *  Constructs an instance of ApplicationSportletConfig
+     * Constructs an instance of ApplicationSportletConfig
      */
     public JSRApplicationPortletConfigImpl(PortletApp app, PortletDefinition portletDef) {
         this.id = portletDef.getPortletClass().getContent();
@@ -61,13 +60,13 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
         // defined portlet modes
         for (int i = 0; i < supports.length; i++) {
             List modesAllowed = new ArrayList();
-            Supports s = (Supports)supports[i];
-            org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[])s.getPortletMode();
+            Supports s = (Supports) supports[i];
+            org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[]) s.getPortletMode();
             for (int j = 0; j < modes.length; j++) {
                 org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode m = modes[j];
                 modesAllowed.add(m.getContent());
             }
-            String mimeType = (String)s.getMimeType().getContent();
+            String mimeType = (String) s.getMimeType().getContent();
             //modesAllowed.addAll(cModes);
             tmpMarkups.put(mimeType, modesAllowed);
         }
@@ -76,11 +75,11 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
 
         Iterator it = tmpMarkups.keySet().iterator();
         while (it.hasNext()) {
-            String mtype = (String)it.next();
-            List tmpModes = (List)tmpMarkups.get(mtype);
+            String mtype = (String) it.next();
+            List tmpModes = (List) tmpMarkups.get(mtype);
             List modes = new ArrayList();
             for (int i = 0; i < tmpModes.size(); i++) {
-                String m = (String)tmpModes.get(i);
+                String m = (String) tmpModes.get(i);
                 if (m.equalsIgnoreCase("CONFIG")) {
                     if (!modes.contains(Portlet.Mode.CONFIGURE)) modes.add(Portlet.Mode.CONFIGURE);
                 } else {
@@ -132,7 +131,7 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
      * Returns the allowed window states supported by this portlet
      *
      * @return the <code>List</code> of
-     * <code>PortletWindow.State</code> elements allowed for this portlet
+     *         <code>PortletWindow.State</code> elements allowed for this portlet
      */
     public List getAllowedWindowStates() {
 
@@ -158,11 +157,11 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
     public List getSupportedModes(String markup) {
         Iterator it = markupModes.keySet().iterator();
         while (it.hasNext()) {
-            String mimeType = (String)it.next();
+            String mimeType = (String) it.next();
             int idx1 = mimeType.indexOf(markup);
             int idx2 = markup.indexOf(mimeType);
             if ((idx1 > 0) || (idx2 > 0) || (mimeType.equalsIgnoreCase(markup))) {
-                return (List)markupModes.get(mimeType);
+                return (List) markupModes.get(mimeType);
             }
         }
         return new ArrayList();

@@ -81,6 +81,7 @@ public interface PortletWindow {
 
         /**
          * Returns the portlet window state
+         *
          * @return the portlet window state
          */
         public int getState() {
@@ -93,7 +94,7 @@ public interface PortletWindow {
          * @param windowState the window state expressed as a <code>String</code>
          * @return the portlet window state
          * @throws IllegalArgumentException if the passed in <code>String</code>
-         * does not match any of the defined window states
+         *                                  does not match any of the defined window states
          */
         public static final PortletWindow.State toState(String windowState)
                 throws IllegalArgumentException {
@@ -138,24 +139,28 @@ public interface PortletWindow {
         }
 
         public Object clone() throws CloneNotSupportedException {
-            PortletWindow.State w = (PortletWindow.State)super.clone();
+            PortletWindow.State w = (PortletWindow.State) super.clone();
             w.state = state;
             return w;
         }
 
         public int compare(Object left, Object right) {
-            int leftID  =  ((PortletWindow.State)left).getState();
-            int rightID  = ((PortletWindow.State)right).getState();
+            int leftID = ((PortletWindow.State) left).getState();
+            int rightID = ((PortletWindow.State) right).getState();
             int result;
-            if ( leftID < rightID ) { result = -1; }
-            else if ( leftID > rightID ) { result = 1; }
-            else { result = 0; }
+            if (leftID < rightID) {
+                result = -1;
+            } else if (leftID > rightID) {
+                result = 1;
+            } else {
+                result = 0;
+            }
             return result;
         }
 
         public boolean equals(Object o) {
-            if ((o != null)  && (o instanceof PortletWindow.State)) {
-                return (this.state == ((PortletWindow.State)o).getState() ? true : false);
+            if ((o != null) && (o instanceof PortletWindow.State)) {
+                return (this.state == ((PortletWindow.State) o).getState() ? true : false);
             }
             return false;
         }
@@ -164,7 +169,7 @@ public interface PortletWindow {
             return state;
         }
 
-        private Object readResolve () {
+        private Object readResolve() {
             PortletWindow.State s = PortletWindow.State.NORMAL;
             switch (state) {
                 case NORMAL_STATE:

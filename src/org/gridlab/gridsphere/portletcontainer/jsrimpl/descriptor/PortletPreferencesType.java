@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -18,16 +18,15 @@ import java.util.ArrayList;
 
 /**
  * Portlet persistent preference store.
- *  Used in: portlet
- *
+ * Used in: portlet
  *
  * @version $Revision$ $Date$
  */
 public class PortletPreferencesType implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -45,8 +44,8 @@ public class PortletPreferencesType implements java.io.Serializable {
      */
     private org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator _preferencesValidator;
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public PortletPreferencesType() {
@@ -55,8 +54,8 @@ public class PortletPreferencesType implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletPreferencesType()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
@@ -65,8 +64,7 @@ public class PortletPreferencesType implements java.io.Serializable {
      * @param vPreference
      */
     public void addPreference(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference vPreference)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _preferenceList.add(vPreference);
     } //-- void addPreference(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Preference)
 
@@ -77,24 +75,21 @@ public class PortletPreferencesType implements java.io.Serializable {
      * @param vPreference
      */
     public void addPreference(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference vPreference)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _preferenceList.add(index, vPreference);
     } //-- void addPreference(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Preference)
 
     /**
      * Method clearPreference
      */
-    public void clearPreference()
-    {
+    public void clearPreference() {
         _preferenceList.clear();
     } //-- void clearPreference()
 
     /**
      * Method enumeratePreference
      */
-    public java.util.Enumeration enumeratePreference()
-    {
+    public java.util.Enumeration enumeratePreference() {
         return new org.exolab.castor.util.IteratorEnumeration(_preferenceList.iterator());
     } //-- java.util.Enumeration enumeratePreference()
 
@@ -103,8 +98,7 @@ public class PortletPreferencesType implements java.io.Serializable {
      *
      * @return the value of field 'id'.
      */
-    public java.lang.String getId()
-    {
+    public java.lang.String getId() {
         return this._id;
     } //-- java.lang.String getId()
 
@@ -114,8 +108,7 @@ public class PortletPreferencesType implements java.io.Serializable {
      * @param index
      */
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference getPreference(int index)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _preferenceList.size())) {
             throw new IndexOutOfBoundsException();
@@ -127,8 +120,7 @@ public class PortletPreferencesType implements java.io.Serializable {
     /**
      * Method getPreference
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference[] getPreference()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference[] getPreference() {
         int size = _preferenceList.size();
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference[] mArray = new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference[size];
         for (int index = 0; index < size; index++) {
@@ -140,8 +132,7 @@ public class PortletPreferencesType implements java.io.Serializable {
     /**
      * Method getPreferenceCount
      */
-    public int getPreferenceCount()
-    {
+    public int getPreferenceCount() {
         return _preferenceList.size();
     } //-- int getPreferenceCount()
 
@@ -150,20 +141,17 @@ public class PortletPreferencesType implements java.io.Serializable {
      *
      * @return the value of field 'preferencesValidator'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator getPreferencesValidator()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator getPreferencesValidator() {
         return this._preferencesValidator;
     } //-- java.lang.String getPreferencesValidator()
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -175,8 +163,7 @@ public class PortletPreferencesType implements java.io.Serializable {
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer)
@@ -187,8 +174,7 @@ public class PortletPreferencesType implements java.io.Serializable {
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler)
@@ -198,8 +184,7 @@ public class PortletPreferencesType implements java.io.Serializable {
      *
      * @param vPreference
      */
-    public boolean removePreference(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference vPreference)
-    {
+    public boolean removePreference(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference vPreference) {
         boolean removed = _preferenceList.remove(vPreference);
         return removed;
     } //-- boolean removePreference(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Preference)
@@ -209,8 +194,7 @@ public class PortletPreferencesType implements java.io.Serializable {
      *
      * @param id the value of field 'id'.
      */
-    public void setId(java.lang.String id)
-    {
+    public void setId(java.lang.String id) {
         this._id = id;
     } //-- void setId(java.lang.String)
 
@@ -221,8 +205,7 @@ public class PortletPreferencesType implements java.io.Serializable {
      * @param vPreference
      */
     public void setPreference(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference vPreference)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _preferenceList.size())) {
             throw new IndexOutOfBoundsException();
@@ -235,8 +218,7 @@ public class PortletPreferencesType implements java.io.Serializable {
      *
      * @param preferenceArray
      */
-    public void setPreference(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference[] preferenceArray)
-    {
+    public void setPreference(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference[] preferenceArray) {
         //-- copy array
         _preferenceList.clear();
         for (int i = 0; i < preferenceArray.length; i++) {
@@ -248,10 +230,9 @@ public class PortletPreferencesType implements java.io.Serializable {
      * Sets the value of field 'preferencesValidator'.
      *
      * @param preferencesValidator the value of field
-     * 'preferencesValidator'.
+     *                             'preferencesValidator'.
      */
-    public void setPreferencesValidator(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator preferencesValidator)
-    {
+    public void setPreferencesValidator(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator preferencesValidator) {
         this._preferencesValidator = preferencesValidator;
     } //-- void setPreferencesValidator(java.lang.String)
 
@@ -261,8 +242,7 @@ public class PortletPreferencesType implements java.io.Serializable {
      * @param reader
      */
     public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferencesType) Unmarshaller.unmarshal(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferencesType.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader)
 
@@ -270,8 +250,7 @@ public class PortletPreferencesType implements java.io.Serializable {
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate()

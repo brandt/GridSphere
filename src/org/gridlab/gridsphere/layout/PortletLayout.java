@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * The <code>PortletLayout</code> is responsible for constructing a layout appropriate
  * to the user's layout preferences.
- * <p>
+ * <p/>
  * The <code>PortletFrameLayout</code> provides an abstract implementation of a generic
  * container
  * The <code>PortletTableLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>

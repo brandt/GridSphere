@@ -6,20 +6,20 @@
 
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabListener;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.io.File;
 import java.util.*;
 
 /**
@@ -46,7 +46,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     }
 
     public String getLayoutDescriptor() {
-       return layoutDescriptor;
+        return layoutDescriptor;
     }
 
     /**
@@ -198,7 +198,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     }
 
     public PortletTab getLastPortletTab() {
-        return (PortletTab)tabs.get(tabs.size()-1);
+        return (PortletTab) tabs.get(tabs.size() - 1);
     }
 
     /**

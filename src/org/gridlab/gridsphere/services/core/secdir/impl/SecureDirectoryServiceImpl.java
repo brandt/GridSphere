@@ -4,23 +4,17 @@
  */
 package org.gridlab.gridsphere.services.core.secdir.impl;
 
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.services.core.secdir.SecureDirectoryService;
-import org.gridlab.gridsphere.services.core.secdir.ResourceInfo;
+import org.apache.oro.text.perl.Perl5Util;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.services.core.secdir.ResourceInfo;
+import org.gridlab.gridsphere.services.core.secdir.SecureDirectoryService;
 
+import java.io.*;
 import java.net.URLEncoder;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.IOException;
 import java.util.StringTokenizer;
-
-import org.apache.oro.text.perl.Perl5Util;
 
 public class SecureDirectoryServiceImpl implements SecureDirectoryService, PortletServiceProvider {
 

@@ -39,10 +39,11 @@ public interface LoginService extends PortletService {
      * Returns the associated user if login succeeds.
      * Throws an AuthenticationException if login fails.
      *
-     * @param loginName the login name
+     * @param loginName     the login name
      * @param loginPassword the login password.
      * @return User The associated user.
-     * @throws org.gridlab.gridsphere.services.core.security.auth.AuthorizationException If login unsuccessful
+     * @throws org.gridlab.gridsphere.services.core.security.auth.AuthorizationException
+     *          If login unsuccessful
      */
     public User login(String loginName, String loginPassword)
             throws AuthorizationException;

@@ -4,22 +4,22 @@
  */
 package org.gridlab.gridsphere.portlets.core.admin.layout;
 
+import org.gridlab.gridsphere.layout.PortletPage;
+import org.gridlab.gridsphere.layout.PortletTabRegistry;
+import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
-import org.gridlab.gridsphere.layout.*;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import javax.servlet.UnavailableException;
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class LayoutManagerPortlet extends ActionPortlet {
 
@@ -36,9 +36,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
         super.init(config);
         log.debug("Entering initServices()");
         try {
-            this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
-            this.portalConfigService = (PortalConfigService)config.getContext().getService(PortalConfigService.class);
-            aclManagerService = (AccessControlManagerService)this.getConfig().getContext().getService(AccessControlManagerService.class);
+            this.layoutMgr = (LayoutManagerService) config.getContext().getService(LayoutManagerService.class);
+            this.portalConfigService = (PortalConfigService) config.getContext().getService(PortalConfigService.class);
+            aclManagerService = (AccessControlManagerService) this.getConfig().getContext().getService(AccessControlManagerService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -101,7 +101,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         List tabNames = new ArrayList();
         Iterator it = tabs.keySet().iterator();
         while (it.hasNext()) {
-            tabNames.add((String)it.next());
+            tabNames.add((String) it.next());
         }
 
         req.setAttribute("tabNames", tabNames);
@@ -115,7 +115,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         String name;
         PortletGroup group;
         while (it.hasNext()) {
-            name = (String)it.next();
+            name = (String) it.next();
             group = aclManagerService.getGroupByName(name);
             if (group != null) {
                 groupNames.put(name, group.getDescription());
@@ -153,8 +153,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletPage page = layoutMgr.getPortletPage(req);
 
         page.setTheme(theme);
-        User user =  req.getUser();
-        theme = (String)user.getAttribute(User.THEME);
+        User user = req.getUser();
+        theme = (String) user.getAttribute(User.THEME);
         if (theme != null) page.setTheme(theme);
         layoutMgr.reloadPage(event.getPortletRequest());
     }
@@ -189,7 +189,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         }
 
 
-
     }
 
     public void editGroupLayout(FormEvent event) throws PortletException, IOException {
@@ -204,7 +203,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     public void editGroup(FormEvent event, String group, String layoutPath) throws PortletException, IOException {
 
         PortletRequest req = event.getPortletRequest();
-        
+
         Boolean allowImport = Boolean.TRUE;
 
         if (PortletTabRegistry.getApplicationTabs(group) != null) {
@@ -225,14 +224,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
         Iterator it = tabs.keySet().iterator();
         while (it.hasNext()) {
             ListBoxItemBean item = new ListBoxItemBean();
-            String name = (String)it.next();
+            String name = (String) it.next();
             item.setName(name);
             item.setValue(name);
             appsLB.addBean(item);
         }
 
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(layoutPath), "UTF8"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(layoutPath), "UTF8"));
 
         String line = null;
         StringBuffer sb = new StringBuffer();
@@ -312,7 +310,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         }
     }
 
-    public void editGuestLayout(FormEvent event)  throws PortletException, IOException {
+    public void editGuestLayout(FormEvent event) throws PortletException, IOException {
         PortletRequest req = event.getPortletRequest();
         req.setAttribute("name", "GuestUserLayout.xml");
         req.setAttribute("allowImport", Boolean.FALSE);
@@ -322,8 +320,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         hf.setName("group");
         hf.setValue("guest");
         String guestLayoutPath = PortletTabRegistry.getGuestLayoutFile();
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(guestLayoutPath), "UTF-8"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(guestLayoutPath), "UTF-8"));
 
         String line = null;
         StringBuffer sb = new StringBuffer();
@@ -349,11 +346,11 @@ public class LayoutManagerPortlet extends ActionPortlet {
     }
 
     private void copyFile(File in, File out) throws Exception {
-        FileInputStream fis  = new FileInputStream(in);
+        FileInputStream fis = new FileInputStream(in);
         FileOutputStream fos = new FileOutputStream(out);
         byte[] buf = new byte[1024];
         int i = 0;
-        while((i=fis.read(buf))!=-1) {
+        while ((i = fis.read(buf)) != -1) {
             fos.write(buf, 0, i);
         }
         fis.close();

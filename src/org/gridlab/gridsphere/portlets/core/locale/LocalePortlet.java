@@ -6,8 +6,8 @@ package org.gridlab.gridsphere.portlets.core.locale;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
+import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
@@ -15,7 +15,6 @@ import org.gridlab.gridsphere.services.core.locale.LocaleService;
 
 import javax.servlet.UnavailableException;
 import java.util.Locale;
-import java.util.StringTokenizer;
 
 public class LocalePortlet extends ActionPortlet {
 
@@ -25,7 +24,7 @@ public class LocalePortlet extends ActionPortlet {
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         try {
-            this.localeService = (LocaleService)config.getContext().getService(LocaleService.class);
+            this.localeService = (LocaleService) config.getContext().getService(LocaleService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -78,7 +77,7 @@ public class LocalePortlet extends ActionPortlet {
         if (loc != null) {
             Locale locale = new Locale(loc, "", "");
             session.setAttribute(User.LOCALE, locale);
-            
+
         }
     }
 

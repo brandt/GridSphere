@@ -6,11 +6,11 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
+import javax.portlet.RenderResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.portlet.RenderResponse;
 import java.util.ArrayList;
 
 /**
@@ -76,7 +76,7 @@ public class ActionFormTag extends ActionTag {
             if (res != null) {
                 out.print(createJSRActionURI(res.createRenderURL()).toString());
             } else {
-               out.print(createActionURI());
+                out.print(createActionURI());
             }
             out.print("\" method=\"");
             out.print(method);

@@ -85,29 +85,28 @@ public class SportletContext implements PortletContext {
      * Allows the portlet to delegate the rendering to another resource as
      * specified by the given path. The path has to be relative and will be
      * resolved by this method, so that the portlet's resources are accessed.
-     * <p>
+     * <p/>
      * To access protected resources the path has to be prefixed with /WEB-INF/
      * (e.g. /WEB-INF/myportlet/myportlet.jsp). Otherwise, the direct path is
      * used. (e.g. /myportlet/myportlet.jsp).
-     * <p>
-     *
+     * <p/>
+     * <p/>
      * <b>NONE OF THE DESCRIPTION BELOW IS IMPLEMENTED YET!</b>
      * This method is enabled for multi-language and multi-device support.
      * For example, a jsp file "/myportlet/mytemplate.jsp" will be searched for
      * in the following order, when accessing via HTML-Browser:
-     *
+     * <p/>
      * 1. /myportlet/html/en_US/mytemplate.jsp
      * 2. /myportlet/html/en/mytemplate.jsp
      * 3. /myportlet/html/mytemplate.jsp
      * 4. /myportlet/mytemplate.jsp
      *
-     * @param path the path of the delegate resource
-     * @param request the portlet request
+     * @param path     the path of the delegate resource
+     * @param request  the portlet request
      * @param response the portlet response
-     *
      * @throws PortletException if the delegated resource has trouble fulfilling
-     * the rendering request
-     * @throws IOException if the streaming causes an I/O problem
+     *                          the rendering request
+     * @throws IOException      if the streaming causes an I/O problem
      */
     public void include(String path, PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
@@ -130,7 +129,7 @@ public class SportletContext implements PortletContext {
      * Returns the resource located at the given path as an InputStream object.
      * The data in the InputStream can be of any type or length.
      * The method returns null if no resource exists at the given path.
-     *
+     * <p/>
      * To access protected resources the path has to be prefixed with /WEB-INF/
      * (e.g. /WEB-INF/myportlet/myportlet.jsp). Otherwise, the direct path is
      * used. (e.g. /myportlet/myportlet.jsp).
@@ -146,21 +145,21 @@ public class SportletContext implements PortletContext {
      * Returns the resource located at the given path as an InputStream object.
      * The data in the InputStream can be of any type or length.
      * The method returns null if no resource exists at the given path.
-     *
+     * <p/>
      * To access protected resources the path has to be prefixed with /WEB-INF/
      * (e.g. /WEB-INF/myportlet/myportlet.jsp). Otherwise, the direct path is
      * used. (e.g. /myportlet/myportlet.jsp).
-     *
+     * <p/>
      * This method is enabled for multi-language and multi-device support.
      * For example, a jsp file "/myportlet/mytemplate.jsp" will be searched for
      * in the following order, when accessing via HTML-Browser:
-     *
+     * <p/>
      * 1. /myportlet/html/en_US/mytemplate.jsp
      * 2. /myportlet/html/en/mytemplate.jsp
      * 3. /myportlet/html/mytemplate.jsp
      * 4. /myportlet/mytemplate.jsp
      *
-     * @param path the path to the resource
+     * @param path   the path to the resource
      * @param client the client
      * @param locale the locale
      * @return the input stream
@@ -168,8 +167,8 @@ public class SportletContext implements PortletContext {
     public InputStream getResourceAsStream(String path, Client client, Locale locale) {
         if (path == null) return null;
 
-        int lastComponentIndex=path.lastIndexOf("/");
-        String pathPrefix = path.substring(0, lastComponentIndex+1);
+        int lastComponentIndex = path.lastIndexOf("/");
+        String pathPrefix = path.substring(0, lastComponentIndex + 1);
         String lastComponent = path.substring(lastComponentIndex);
         InputStream resourceStream = null;
         StringBuffer pathBuffer = new StringBuffer();
@@ -201,7 +200,7 @@ public class SportletContext implements PortletContext {
                 if (resourceStream != null) return resourceStream;
             }
 
-            pathBuffer.replace(clientIndex, pathBuffer.length(),lastComponent);
+            pathBuffer.replace(clientIndex, pathBuffer.length(), lastComponent);
             resourceStream = context.getResourceAsStream(pathBuffer.toString());
             if (resourceStream != null) return resourceStream;
         }
@@ -210,15 +209,14 @@ public class SportletContext implements PortletContext {
     }
 
     /**
-     *
      * Returns the localized text resource with the given key and using the
      * given locale.
-     * <p>
+     * <p/>
      * To use this feature, the portlet application's CLASSPATH has to contain
      * a resource bundle with the same name (including the package) as the portlet.
      *
      * @param bundle the name of the resource bundle
-     * @param key the text key
+     * @param key    the text key
      * @param locale the locale
      * @return the localized text resource
      */
@@ -233,7 +231,7 @@ public class SportletContext implements PortletContext {
      * if it has implemented the appropriate listener.
      *
      * @param concretePortletID the concrete portlet to send the message to
-     * @param message the message to be sent
+     * @param message           the message to be sent
      */
     public void send(String concretePortletID, PortletMessage message) {
         PortletMessageManager messageManager = null;
@@ -248,10 +246,11 @@ public class SportletContext implements PortletContext {
      *
      * @param service the classname of the service to load
      * @return the portlet service
-     *
-     * @throws PortletServiceUnavailableException if an exception has occurrred
-     * that interferes with the portlet service's normal initialization
-     * @throws PortletServiceNotFoundException if the PortletService is not found
+     * @throws PortletServiceUnavailableException
+     *          if an exception has occurrred
+     *          that interferes with the portlet service's normal initialization
+     * @throws PortletServiceNotFoundException
+     *          if the PortletService is not found
      */
     public PortletService getService(Class service)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
@@ -265,12 +264,13 @@ public class SportletContext implements PortletContext {
      * <code>PortletServiceAuthorizer</code>.
      *
      * @param service the classname of the service to load
-     * @param user the user requesting a service instance
+     * @param user    the user requesting a service instance
      * @return the portlet service
-     *
-     * @throws PortletServiceUnavailableException if an exception has occurrred
-     * that interferes with the portlet service's normal initialization
-     * @throws PortletServiceNotFoundException if the PortletService is not found
+     * @throws PortletServiceUnavailableException
+     *          if an exception has occurrred
+     *          that interferes with the portlet service's normal initialization
+     * @throws PortletServiceNotFoundException
+     *          if the PortletService is not found
      */
     public PortletService getService(Class service, User user)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
@@ -312,7 +312,7 @@ public class SportletContext implements PortletContext {
      * @return the string containing at least name and version number
      */
     public String getContainerInfo() {
-        return  GridSphereConfig.PROJECT_NAME + "/"
+        return GridSphereConfig.PROJECT_NAME + "/"
                 + getVersionInfo()
                 + "-" + getReleaseInfo();
     }

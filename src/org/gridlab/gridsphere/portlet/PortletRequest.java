@@ -48,7 +48,7 @@ public interface PortletRequest extends HttpServletRequest {
     /**
      * Sets the attribute with the given name and value.
      *
-     * @param name the attribute name
+     * @param name  the attribute name
      * @param value the attribute value
      */
     public void setAttribute(String name, Object value);
@@ -71,12 +71,12 @@ public interface PortletRequest extends HttpServletRequest {
     /**
      * Returns the current session or, if there is no current session and the
      * given flag is true, it creates one and returns it.
-     * <p>
+     * <p/>
      * If the given flag is false and there is no current portlet session, this
      * method returns null.
      *
      * @param create <code>true</code> to create a new session,
-     * <code>false</code> to return <code>null</code> if there is no current session
+     *               <code>false</code> to return <code>null</code> if there is no current session
      */
     public PortletSession getPortletSession(boolean create);
 
@@ -93,7 +93,7 @@ public interface PortletRequest extends HttpServletRequest {
      * with this request. This method returns null if no cookies were sent.
      *
      * @return an array of all the Cookies  included with this request, or
-     * <code>null</code> if the request has no cookies
+     *         <code>null</code> if the request has no cookies
      */
     public Cookie[] getCookies();
 
@@ -154,13 +154,13 @@ public interface PortletRequest extends HttpServletRequest {
      * Returns all the values of the specified request header as an Enumeration of String objects.
      * Some headers, such as Accept-Language can be sent by clients as several headers each with a different
      * value rather than sending the header as a comma separated list.
-     *
+     * <p/>
      * If the request did not include any headers of the specified name, this method returns an empty Enumeration.
      * The header name is case insensitive. You can use this method with any request header.
      *
      * @param name the String specifying the header name
      * @return a Enumeration containing the values of the requested header,
-     * or null  if the request does not have any headers of that name
+     *         or null  if the request does not have any headers of that name
      */
     public Enumeration getHeaders(String name);
 
@@ -185,7 +185,7 @@ public interface PortletRequest extends HttpServletRequest {
     /**
      * Returns the locale of the preferred language. The preference is based on the user's
      * choice of language(s) and/or the client's Accept-Language header.
-     * <p>
+     * <p/>
      * If more than one language is preferred, the locale returned by this
      * method is the one with the highest preference.
      *
@@ -211,12 +211,12 @@ public interface PortletRequest extends HttpServletRequest {
      * returns <code>-1</code>
      * If the header cannot be converted to an integer, this method throws a
      * <code>NumberFormatException</code>
-     * <p>
+     * <p/>
      * The header name is case insensitive.
      *
      * @param name a <code>String</code> specifying the name of a request header
      * @return an integer expressing the value of the request header or -1
-     * if the request doesn't have a header of this name
+     *         if the request doesn't have a header of this name
      */
     public int getIntHeader(String name);
 
@@ -249,7 +249,7 @@ public interface PortletRequest extends HttpServletRequest {
     /**
      * Returns the value of the parameter with the given name, or null if no
      * such parameter exists.
-     * <p>
+     * <p/>
      * You should only use this method when you are sure the parameter has only one value.
      * If not, use getParameterValues(String)
      *
@@ -274,7 +274,7 @@ public interface PortletRequest extends HttpServletRequest {
 
     /**
      * Returns the values of all parameters with the given name.
-     * <p>
+     * <p/>
      * A request can carry more than one parameter with a certain name.
      * This method returns these parameters in the order of appearance.
      *

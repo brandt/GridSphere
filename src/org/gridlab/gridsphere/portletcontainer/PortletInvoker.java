@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Vector;
 
 /**
@@ -31,9 +29,9 @@ public class PortletInvoker {
      * Initializes an application portlet
      *
      * @param concretePortletID the concrete portlet id
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req               the <code>PortletRequest</code>
+     * @param res               the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void init(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -55,9 +53,9 @@ public class PortletInvoker {
      * Initializes a concrete portlet
      *
      * @param concretePortletID the concrete portlet id
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req               the <code>PortletRequest</code>
+     * @param res               the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void initConcrete(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -83,9 +81,9 @@ public class PortletInvoker {
      * Shuts down an application portlet
      *
      * @param concretePortletID the concrete portlet id
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req               the <code>PortletRequest</code>
+     * @param res               the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void destroy(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -105,9 +103,9 @@ public class PortletInvoker {
      * Shuts down a concrete portlet
      *
      * @param concretePortletID the concrete portlet id
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req               the <code>PortletRequest</code>
+     * @param res               the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void destroyConcrete(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -133,9 +131,9 @@ public class PortletInvoker {
      * Initializes a concrete portlet instance for a user
      *
      * @param concretePortletID the concrete portlet id
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req               the <code>PortletRequest</code>
+     * @param res               the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public final static void login(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -154,9 +152,9 @@ public class PortletInvoker {
      * Shutds down a concrete portlet instance for a user
      *
      * @param concretePortletID the concrete portlet id
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req               the <code>PortletRequest</code>
+     * @param res               the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public final static void logout(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -175,9 +173,9 @@ public class PortletInvoker {
      * Performs service method on a concrete portlet instance
      *
      * @param concretePortletID the concrete portlet id
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req               the <code>PortletRequest</code>
+     * @param res               the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public final static void service(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -196,9 +194,9 @@ public class PortletInvoker {
      * Performs action performed method on a concrete portlet instance
      *
      * @param concretePortletID the concrete portlet id
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req               the <code>PortletRequest</code>
+     * @param res               the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public final static void actionPerformed(String concretePortletID, DefaultPortletAction action, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -217,9 +215,9 @@ public class PortletInvoker {
      * Performs doTitle method on a concrete portlet instance
      *
      * @param concretePortletID the concrete portlet id
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req               the <code>PortletRequest</code>
+     * @param res               the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public final static void doTitle(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -239,9 +237,9 @@ public class PortletInvoker {
      * Performs window event method on a concrete portlet instance
      *
      * @param concretePortletID the concrete portlet id
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req               the <code>PortletRequest</code>
+     * @param res               the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public final static void windowEvent(String concretePortletID, WindowEvent winEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -260,9 +258,9 @@ public class PortletInvoker {
      * Performs message event method on a concrete portlet instance
      *
      * @param concretePortletID the concrete portlet id
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req               the <code>PortletRequest</code>
+     * @param res               the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public final static void messageEvent(String concretePortletID, PortletMessage msgEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -282,7 +280,7 @@ public class PortletInvoker {
      *
      * @param req the <code>PortletRequest</code>
      * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public final static synchronized void initAllPortlets(PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -328,9 +326,9 @@ public class PortletInvoker {
      * Initializes all application portlets in a portlet web application
      *
      * @param webApplicationName the name of the portlet web application
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req                the <code>PortletRequest</code>
+     * @param res                the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public final static void initPortletWebApp(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -366,7 +364,7 @@ public class PortletInvoker {
      *
      * @param req the <code>PortletRequest</code>
      * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public final static void destroyAllPortlets(PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -401,9 +399,9 @@ public class PortletInvoker {
      * Shuts down all application portlets in a portlet web application
      *
      * @param webApplicationName the name of the portlet web application
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req                the <code>PortletRequest</code>
+     * @param res                the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public final static void destroyPortletWebApp(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {

@@ -11,26 +11,24 @@ import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
+import org.gridlab.gridsphere.services.core.cache.CacheService;
+import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
+import org.gridlab.gridsphere.services.core.locale.LocaleService;
+import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
-import org.gridlab.gridsphere.services.core.security.acl.InvalidGroupRequestException;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
-import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
+import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
-import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.services.core.utils.DateUtil;
-import org.gridlab.gridsphere.services.core.cache.CacheService;
-import org.gridlab.gridsphere.services.core.locale.LocaleService;
 import org.gridlab.gridsphere.tmf.config.TmfService;
 import org.gridlab.gridsphere.tmf.config.TmfUser;
 
 import javax.servlet.UnavailableException;
-import java.util.*;
 import java.text.DateFormat;
-import java.io.IOException;
+import java.util.*;
 
 public class ProfileManagerPortlet extends ActionPortlet {
 
@@ -51,11 +49,11 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         try {
-            this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
-            this.aclManagerService = (AccessControlManagerService)config.getContext().getService(AccessControlManagerService.class);
-            this.passwordManagerService = (PasswordManagerService)config.getContext().getService(PasswordManagerService.class);
-            this.localeService = (LocaleService)config.getContext().getService(LocaleService.class);
-            this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
+            this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
+            this.aclManagerService = (AccessControlManagerService) config.getContext().getService(AccessControlManagerService.class);
+            this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
+            this.localeService = (LocaleService) config.getContext().getService(LocaleService.class);
+            this.layoutMgr = (LayoutManagerService) config.getContext().getService(LayoutManagerService.class);
             this.tms = (TextMessagingService) config.getContext().getService(TextMessagingService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
@@ -99,19 +97,19 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 user.getLastLoginTime(), DateFormat.FULL, DateFormat.FULL));
         req.setAttribute("username", user.getUserName());
 
-        TextFieldBean userName =  event.getTextFieldBean("userName");
+        TextFieldBean userName = event.getTextFieldBean("userName");
         userName.setValue(user.getUserName());
         userName.setDisabled(disable);
 
-        TextFieldBean fullName =  event.getTextFieldBean("fullName");
+        TextFieldBean fullName = event.getTextFieldBean("fullName");
         fullName.setValue(user.getFullName());
         fullName.setDisabled(disable);
 
-        TextFieldBean organization =  event.getTextFieldBean("organization");
+        TextFieldBean organization = event.getTextFieldBean("organization");
         organization.setValue(user.getOrganization());
         organization.setDisabled(disable);
 
-        TextFieldBean email =  event.getTextFieldBean("emailAddress");
+        TextFieldBean email = event.getTextFieldBean("emailAddress");
         email.setValue(user.getEmailAddress());
         email.setDisabled(disable);
 
@@ -138,15 +136,15 @@ public class ProfileManagerPortlet extends ActionPortlet {
         Map zones = DateUtil.getLocalizedTimeZoneNames(locale);
         Set keys = zones.keySet();
         Iterator it2 = keys.iterator();
-        String userTimeZone = (String)user.getAttribute(User.TIMEZONE);
-        if (userTimeZone==null) {
+        String userTimeZone = (String) user.getAttribute(User.TIMEZONE);
+        if (userTimeZone == null) {
             userTimeZone = TimeZone.getDefault().getID();
         }
 
         while (it2.hasNext()) {
-            String zone = (String)it2.next();
+            String zone = (String) it2.next();
             ListBoxItemBean item = new ListBoxItemBean();
-            item.setValue((String)zones.get(zone));
+            item.setValue((String) zones.get(zone));
             item.setName(zone);
             if (userTimeZone.equals(zone)) {
                 item.setSelected(true);
@@ -171,7 +169,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         tbGroups.setValue(text);
 
         TextBean tbGroupsDesc = new TextBean();
-        String desc =  this.getLocalizedText(req, "PROFILE_GROUP_DESC");
+        String desc = this.getLocalizedText(req, "PROFILE_GROUP_DESC");
         tbGroupsDesc.setValue(desc);
         tcGroups.addBean(tbGroups);
         TableCellBean tcGroupsDesc = new TableCellBean();
@@ -189,7 +187,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             groupsTR = new TableRowBean();
             groupsTC = new TableCellBean();
             groupsDescTC = new TableCellBean();
-            PortletGroup g = (PortletGroup)it.next();
+            PortletGroup g = (PortletGroup) it.next();
             String groupDesc = g.getDescription();
 
             CheckBoxBean cb = new CheckBoxBean();
@@ -219,10 +217,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 String emailAddress = "";
                 if (admins.isEmpty()) {
                     List supers = aclManagerService.getUsersWithSuperRole();
-                    User root = (User)supers.get(0);
+                    User root = (User) supers.get(0);
                     emailAddress = root.getEmailAddress();
                 } else {
-                    User admin = (User)admins.get(0);
+                    User admin = (User) admins.get(0);
                     emailAddress = admin.getEmailAddress();
                 }
                 String mailhref = "&nbsp;<a href=\"mailto:" + emailAddress + "\">" + this.getLocalizedText(req, "GROUP_ADMIN") + "</a>";
@@ -270,7 +268,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         List services = tms.getServices();
 
-        if (services.size()==0) {
+        if (services.size() == 0) {
             TableRowBean noServiceRow = new TableRowBean();
             TableCellBean noServiceCell1 = new TableCellBean();
             TableCellBean noServiceCell2 = new TableCellBean();
@@ -287,7 +285,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         } else {
 
-            for (int i=0;i<services.size();i++) {
+            for (int i = 0; i < services.size(); i++) {
 
                 TmfService tmfservice = (TmfService) services.get(i);
 
@@ -307,9 +305,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 // INPUT
                 TableCellBean tcServiceInput = new TableCellBean();
                 // make inputfield
-                TextFieldBean servicename_input = event.getTextFieldBean("TFSERVICENAME"+tmfservice.getMessageType());
+                TextFieldBean servicename_input = event.getTextFieldBean("TFSERVICENAME" + tmfservice.getMessageType());
                 TmfUser user = tms.getUser(req.getUser().getUserID());
-                if (user!=null) {
+                if (user != null) {
                     servicename_input.setValue(user.getUserNameForMessagetype(tmfservice.getMessageType()));
                 }
                 servicename_input.setDisabled(readonly);
@@ -371,7 +369,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         Iterator geIt = groupEntries.iterator();
         List usergroups = new ArrayList();
         while (geIt.hasNext()) {
-            GroupEntry ge = (GroupEntry)geIt.next();
+            GroupEntry ge = (GroupEntry) geIt.next();
             if (!ge.getGroup().equals(PortletGroupFactory.GRIDSPHERE_GROUP)) {
                 log.debug("user is in group: " + ge.getGroup());
                 //aclManagerService.deleteGroupEntry(ge);
@@ -382,7 +380,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         // approve all selected group requests
         Iterator it = selectedGroups.iterator();
         while (it.hasNext()) {
-            String groupStr = (String)it.next();
+            String groupStr = (String) it.next();
             log.debug("Selected group: " + groupStr);
             PortletGroup selectedGroup = this.aclManagerService.getGroupByName(groupStr);
             if (!usergroups.contains(selectedGroup.getName())) {
@@ -405,7 +403,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         // subtract groups
         it = usergroups.iterator();
         while (it.hasNext()) {
-            String groupStr = (String)it.next();
+            String groupStr = (String) it.next();
             log.debug("Removing group :" + groupStr);
             PortletGroup g = this.aclManagerService.getGroupByName(groupStr);
             GroupEntry entry = this.aclManagerService.getGroupEntry(user, g);
@@ -445,25 +443,24 @@ public class ProfileManagerPortlet extends ActionPortlet {
     }
 
 
-
     public void doSaveMessaging(FormEvent event) {
         // now do the messaging stuff
         PortletRequest req = event.getPortletRequest();
         //User user = req.getUser();
         TmfUser tmfuser = tms.getUser(req.getUser().getUserID());
         // if the user does not exist yet
-        if (tmfuser==null) {
-            tmfuser = new TmfUser(); 
+        if (tmfuser == null) {
+            tmfuser = new TmfUser();
             tmfuser.setName(event.getPortletRequest().getUser().getFullName());
             tmfuser.setUserid(req.getUser().getUserID());
             //tmfuser.setPreferred(h_service.getValue());
         }
 
         List services = tms.getServices();
-        for (int i=0;i<services.size();i++) {
+        for (int i = 0; i < services.size(); i++) {
             TmfService tmfservice = (TmfService) services.get(i);
 
-            TextFieldBean tfb = event.getTextFieldBean("TFSERVICENAME"+tmfservice.getMessageType());
+            TextFieldBean tfb = event.getTextFieldBean("TFSERVICENAME" + tmfservice.getMessageType());
             tmfuser.setMessageType(tmfservice.getMessageType(), tfb.getValue());
         }
 
@@ -526,13 +523,13 @@ public class ProfileManagerPortlet extends ActionPortlet {
         acctReq.setEmailAddress(eMail);
         acctReq.setUserName(userName);
         acctReq.setFullName(fullName);
-        if (locale!=null) {
+        if (locale != null) {
             Locale loc = new Locale(locale, "", "");
             acctReq.setAttribute(User.LOCALE, locale);
             req.getPortletSession(true).setAttribute(User.LOCALE, loc);
         }
 
-        if (timeZone!=null) acctReq.setAttribute(User.TIMEZONE, timeZone);
+        if (timeZone != null) acctReq.setAttribute(User.TIMEZONE, timeZone);
         if (organization != null) acctReq.setOrganization(organization);
 
         log.debug("Exiting validateUser()");

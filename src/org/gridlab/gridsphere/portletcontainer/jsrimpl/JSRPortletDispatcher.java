@@ -8,8 +8,8 @@ import org.gridlab.gridsphere.event.WindowEvent;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
+import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -32,12 +32,13 @@ public class JSRPortletDispatcher implements PortletDispatcher {
     /**
      * Default constructor is kept private
      */
-    private JSRPortletDispatcher() {}
+    private JSRPortletDispatcher() {
+    }
 
     /**
      * Constructs a PortletDispatcher from a <code>RequestDispatcher</code> and an <code>ApplicationPortletConfig</code>
      *
-     * @param rd the <code>RequestDispatcher</code>
+     * @param rd               the <code>RequestDispatcher</code>
      * @param appPortletConfig the <code>ApplicationPortletConfig</code>
      */
     public JSRPortletDispatcher(RequestDispatcher rd, ApplicationPortletConfig appPortletConfig) {
@@ -46,19 +47,19 @@ public class JSRPortletDispatcher implements PortletDispatcher {
 
     /**
      * Called by the portlet container to indicate to this portlet that it is put into service.
-     *
+     * <p/>
      * The portlet container calls the init() method for the whole life-cycle of the portlet.
      * The init() method must complete successfully before concrete portlets are created through
      * the initConcrete() method.
-     *
+     * <p/>
      * The portlet container cannot place the portlet into service if the init() method
-     *
+     * <p/>
      * 1. throws UnavailableException
      * 2. does not return within a time period defined by the portlet container.
      *
      * @param req the servlet request
      * @param res the servlet response
-     * @throws IOException if an I/O errors occurs
+     * @throws IOException      if an I/O errors occurs
      * @throws PortletException if an exception has occurrred during dispatching
      */
     public void init(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
@@ -76,7 +77,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
      * This method is only called once all threads within the portlet's service() method have exited
      * or after a timeout period has passed. After the portlet container calls this method,
      * it will not call the service() method again on this portlet.
-     *
+     * <p/>
      * This method gives the portlet an opportunity to clean up any resources that are
      * being held (for example, memory, file handles, threads).
      *
@@ -99,9 +100,9 @@ public class JSRPortletDispatcher implements PortletDispatcher {
      * The portlet container calls the initConcrete() method for the whole life-cycle of the portlet.
      * The initConcrete() method must complete successfully before concrete portlet instances can be
      * created through the login() method.
-     *
+     * <p/>
      * The portlet container cannot place the portlet into service if the initConcrete() method
-     *
+     * <p/>
      * 1. throws UnavailableException
      * 2. does not return within a time period defined by the portlet container.
      *
@@ -124,7 +125,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
      * This method is only called once all threads within the portlet's service() method have exited
      * or after a timeout period has passed. After the portlet container calls this method,
      * it will not call the service() method again on this portlet.
-     *
+     * <p/>
      * This method gives the portlet an opportunity to clean up any resources that are being
      * held (for example, memory, file handles, threads).
      *
@@ -150,9 +151,8 @@ public class JSRPortletDispatcher implements PortletDispatcher {
      *
      * @param req the portlet request
      * @param res the portlet response
-     *
      * @throws PortletException if the portlet has trouble fulfilling the rendering request
-     * @throws IOException if the streaming causes an I/O problem
+     * @throws IOException      if the streaming causes an I/O problem
      */
     public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
@@ -187,7 +187,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
      *
      * @param req the servlet request
      * @param res the servlet response
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException is an error occurs dispatching the request
      */
     public void logout(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
@@ -207,9 +207,9 @@ public class JSRPortletDispatcher implements PortletDispatcher {
      * Notifies this listener that the action which the listener is watching for has been performed.
      *
      * @param action the default portlet action
-     * @param req the servlet request
-     * @param res the servlet response
-     * @throws IOException if an I/O error occurs
+     * @param req    the servlet request
+     * @param res    the servlet response
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if the listener has trouble fulfilling the request
      */
     public void actionPerformed(PortletAction action, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
@@ -232,10 +232,10 @@ public class JSRPortletDispatcher implements PortletDispatcher {
      * Notifies this listener that the message which the listener is watching for has been performed.
      *
      * @param concreteID the concrete portlet id
-     * @param message the default portlet message
-     * @param req the servlet request
-     * @param res the servlet response
-     * @throws IOException if an I/O error occurs during dispatching
+     * @param message    the default portlet message
+     * @param req        the servlet request
+     * @param res        the servlet response
+     * @throws IOException      if an I/O error occurs during dispatching
      * @throws PortletException if the listener has trouble fulfilling the request
      */
     public void messageEvent(String concreteID, PortletMessage message, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
@@ -257,7 +257,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
      * Called by the portlet container to render the portlet title.
      * The information in the portlet request (like locale, client, and session information) can
      * but doesn't have to be considered to render dynamic titles.. Examples are
-     *
+     * <p/>
      * language-dependant titles for multi-lingual portals
      * shorter titles for WAP phones
      * the number of messages in a mailbox portlet
@@ -265,8 +265,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
      *
      * @param req the servlet request
      * @param res the servlet response
-     *
-     * @throws IOException if an I/O error occurs during dispatching
+     * @throws IOException      if an I/O error occurs during dispatching
      * @throws PortletException if the portlet title has trouble fulfilling the rendering request
      */
     public void doTitle(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
@@ -286,8 +285,8 @@ public class JSRPortletDispatcher implements PortletDispatcher {
      * Notifies this listener that a portlet window has been maximized.
      *
      * @param event the window event
-     * @param req the servlet request
-     * @param res the servlet response
+     * @param req   the servlet request
+     * @param res   the servlet response
      * @throws IOException if an
      */
     public void windowEvent(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
@@ -302,7 +301,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
             log.error("Unable to perform windowEvent");
             throw new PortletException("Unable to perform windowEvent", e);
         }
-        
+
         req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         req.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         req.removeAttribute(SportletProperties.WINDOW_EVENT);

@@ -4,13 +4,13 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 
+import javax.portlet.RenderRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.Tag;
-import javax.portlet.RenderRequest;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -193,7 +193,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     protected void updateBaseComponentBean(BaseComponentBean componentBean) {
         if ((cssStyle != null) && componentBean.getCssStyle() == null) {
             componentBean.setCssClass(cssStyle);
-        }      
+        }
         if ((name != null) && (componentBean.getName() == null)) {
             componentBean.setName(name);
         }
@@ -213,11 +213,11 @@ public abstract class BaseComponentTag extends BaseBeanTag {
 
     protected Locale getLocale() {
         Locale locale = Locale.ENGLISH;
-        PortletRequest req = (PortletRequest)pageContext.getAttribute("portletRequest");
+        PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
         if (req != null) {
             locale = req.getLocale();
         } else {
-            RenderRequest renderReq = (RenderRequest)pageContext.getAttribute("renderRequest");
+            RenderRequest renderReq = (RenderRequest) pageContext.getAttribute("renderRequest");
             locale = renderReq.getLocale();
         }
         return locale;
@@ -236,7 +236,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     public int doStartTag() throws JspException {
         Tag parent = getParent();
         if (parent instanceof PanelTag) {
-            PanelTag panelTag = (PanelTag)parent;
+            PanelTag panelTag = (PanelTag) parent;
 
             int numCols = panelTag.getNumCols();
 
@@ -257,7 +257,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     public int doEndTag() throws JspException {
         Tag parent = getParent();
         if (parent instanceof PanelTag) {
-            PanelTag panelTag = (PanelTag)parent;
+            PanelTag panelTag = (PanelTag) parent;
 
             int numCols = panelTag.getNumCols();
             int thiscol = panelTag.getColumnCounter();

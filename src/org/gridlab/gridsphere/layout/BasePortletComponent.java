@@ -4,19 +4,17 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletGroupFactory;
 import org.gridlab.gridsphere.portlet.PortletMessage;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * <code>BasePortletComponent</code> represents an abstract portlet component with a particular
@@ -179,7 +177,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      * When set to true the portlet component is visible and will be rendered
      *
      * @param isVisible if <code>true</code> portlet component is rendered,
-     * <code>false</code> otherwise
+     *                  <code>false</code> otherwise
      */
     public void setVisible(boolean isVisible) {
         this.isVisible = isVisible;
@@ -229,7 +227,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.actionPerformed(event);
@@ -240,7 +238,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
@@ -265,29 +263,28 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     }
 
     public Object clone() throws CloneNotSupportedException {
-            BasePortletComponent b = (BasePortletComponent)super.clone();
-            b.width = this.width;
-            b.isVisible = this.isVisible;
-            b.name = this.name;
-            b.theme = this.theme;
-            b.label = this.label;
-            b.roleString = this.roleString;
-            b.requiredRole = ((this.requiredRole != null) ? (PortletRole)this.requiredRole.clone() : null);
-            return b;
+        BasePortletComponent b = (BasePortletComponent) super.clone();
+        b.width = this.width;
+        b.isVisible = this.isVisible;
+        b.name = this.name;
+        b.theme = this.theme;
+        b.label = this.label;
+        b.roleString = this.roleString;
+        b.requiredRole = ((this.requiredRole != null) ? (PortletRole) this.requiredRole.clone() : null);
+        return b;
     }
 
 
-
-        /* (non-Javadoc)
-         * @see org.gridlab.gridsphere.layout.PortletComponent#messageEvent(java.lang.String, org.gridlab.gridsphere.portlet.PortletMessage, org.gridlab.gridsphere.portletcontainer.GridSphereEvent)
-         */
-        public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
-                Iterator iter = listeners.iterator();
-                while (iter.hasNext()) {
-                        PortletComponent comp = (PortletComponent) iter.next();
-                        comp.messageEvent(concPortletID, msg, event);
-                }
-
+    /* (non-Javadoc)
+     * @see org.gridlab.gridsphere.layout.PortletComponent#messageEvent(java.lang.String, org.gridlab.gridsphere.portlet.PortletMessage, org.gridlab.gridsphere.portletcontainer.GridSphereEvent)
+     */
+    public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
+        Iterator iter = listeners.iterator();
+        while (iter.hasNext()) {
+            PortletComponent comp = (PortletComponent) iter.next();
+            comp.messageEvent(concPortletID, msg, event);
         }
+
+    }
 
 }

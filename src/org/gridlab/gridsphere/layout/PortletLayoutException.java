@@ -34,7 +34,7 @@ public class PortletLayoutException extends PortletException {
      * and exception
      *
      * @param msg the message
-     * @param t the exception
+     * @param t   the exception
      */
     public PortletLayoutException(String msg, Throwable t) {
         super(msg, t);

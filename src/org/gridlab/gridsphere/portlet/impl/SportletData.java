@@ -6,7 +6,6 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletData;
 
@@ -22,7 +21,7 @@ import java.util.Map;
  * access to the personalized data. The portlet can therefore only read the
  * personalization data. Only when the portlet is in <code>EDIT</code> mode,
  * it has write access to the personalization data.
- * <p>
+ * <p/>
  * This implementation of <code>PortletData</code> uses Castor for Java to SQL
  * bindings
  */
@@ -49,7 +48,8 @@ public class SportletData implements PortletData {
     /**
      * Default constructor cannot be instantiated
      */
-    public SportletData() {}
+    public SportletData() {
+    }
 
     public void setPersistenceManager(PersistenceManagerRdbms pm) {
         this.pm = pm;
@@ -95,7 +95,7 @@ public class SportletData implements PortletData {
     /**
      * Sets the attribute with the given name and value.
      *
-     * @param name the attribute name
+     * @param name  the attribute name
      * @param value the attribute value
      */
     public void setAttribute(String name, String value) {

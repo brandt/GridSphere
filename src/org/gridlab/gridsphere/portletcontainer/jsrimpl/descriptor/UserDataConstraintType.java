@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -18,18 +18,17 @@ import java.util.ArrayList;
 
 /**
  * The user-data-constraintType is used to indicate how
- *  data communicated between the client and portlet should be
- *  protected.
- *  Used in: security-constraint
- *
+ * data communicated between the client and portlet should be
+ * protected.
+ * Used in: security-constraint
  *
  * @version $Revision$ $Date$
  */
 public class UserDataConstraintType implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -48,8 +47,8 @@ public class UserDataConstraintType implements java.io.Serializable {
     private org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType _transportGuarantee;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public UserDataConstraintType() {
@@ -58,8 +57,8 @@ public class UserDataConstraintType implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserDataConstraintType()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
@@ -68,8 +67,7 @@ public class UserDataConstraintType implements java.io.Serializable {
      * @param vDescription
      */
     public void addDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _descriptionList.add(vDescription);
     } //-- void addDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
@@ -80,24 +78,21 @@ public class UserDataConstraintType implements java.io.Serializable {
      * @param vDescription
      */
     public void addDescription(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _descriptionList.add(index, vDescription);
     } //-- void addDescription(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method clearDescription
      */
-    public void clearDescription()
-    {
+    public void clearDescription() {
         _descriptionList.clear();
     } //-- void clearDescription()
 
     /**
      * Method enumerateDescription
      */
-    public java.util.Enumeration enumerateDescription()
-    {
+    public java.util.Enumeration enumerateDescription() {
         return new org.exolab.castor.util.IteratorEnumeration(_descriptionList.iterator());
     } //-- java.util.Enumeration enumerateDescription()
 
@@ -107,8 +102,7 @@ public class UserDataConstraintType implements java.io.Serializable {
      * @param index
      */
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description getDescription(int index)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _descriptionList.size())) {
             throw new IndexOutOfBoundsException();
@@ -120,8 +114,7 @@ public class UserDataConstraintType implements java.io.Serializable {
     /**
      * Method getDescription
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] getDescription()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] getDescription() {
         int size = _descriptionList.size();
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] mArray = new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[size];
         for (int index = 0; index < size; index++) {
@@ -133,8 +126,7 @@ public class UserDataConstraintType implements java.io.Serializable {
     /**
      * Method getDescriptionCount
      */
-    public int getDescriptionCount()
-    {
+    public int getDescriptionCount() {
         return _descriptionList.size();
     } //-- int getDescriptionCount()
 
@@ -143,8 +135,7 @@ public class UserDataConstraintType implements java.io.Serializable {
      *
      * @return the value of field 'id'.
      */
-    public java.lang.String getId()
-    {
+    public java.lang.String getId() {
         return this._id;
     } //-- java.lang.String getId()
 
@@ -153,20 +144,17 @@ public class UserDataConstraintType implements java.io.Serializable {
      *
      * @return the value of field 'transportGuarantee'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType getTransportGuarantee()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType getTransportGuarantee() {
         return this._transportGuarantee;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.types.TransportGuaranteeType getTransportGuarantee()
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -178,8 +166,7 @@ public class UserDataConstraintType implements java.io.Serializable {
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer)
@@ -190,8 +177,7 @@ public class UserDataConstraintType implements java.io.Serializable {
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler)
@@ -201,8 +187,7 @@ public class UserDataConstraintType implements java.io.Serializable {
      *
      * @param vDescription
      */
-    public boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription)
-    {
+    public boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription) {
         boolean removed = _descriptionList.remove(vDescription);
         return removed;
     } //-- boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
@@ -214,8 +199,7 @@ public class UserDataConstraintType implements java.io.Serializable {
      * @param vDescription
      */
     public void setDescription(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _descriptionList.size())) {
             throw new IndexOutOfBoundsException();
@@ -228,8 +212,7 @@ public class UserDataConstraintType implements java.io.Serializable {
      *
      * @param descriptionArray
      */
-    public void setDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] descriptionArray)
-    {
+    public void setDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] descriptionArray) {
         //-- copy array
         _descriptionList.clear();
         for (int i = 0; i < descriptionArray.length; i++) {
@@ -242,8 +225,7 @@ public class UserDataConstraintType implements java.io.Serializable {
      *
      * @param id the value of field 'id'.
      */
-    public void setId(java.lang.String id)
-    {
+    public void setId(java.lang.String id) {
         this._id = id;
     } //-- void setId(java.lang.String)
 
@@ -251,10 +233,9 @@ public class UserDataConstraintType implements java.io.Serializable {
      * Sets the value of field 'transportGuarantee'.
      *
      * @param transportGuarantee the value of field
-     * 'transportGuarantee'.
+     *                           'transportGuarantee'.
      */
-    public void setTransportGuarantee(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType transportGuarantee)
-    {
+    public void setTransportGuarantee(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType transportGuarantee) {
         this._transportGuarantee = transportGuarantee;
     } //-- void setTransportGuarantee(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.types.TransportGuaranteeType)
 
@@ -264,8 +245,7 @@ public class UserDataConstraintType implements java.io.Serializable {
      * @param reader
      */
     public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraintType) Unmarshaller.unmarshal(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraintType.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader)
 
@@ -273,8 +253,7 @@ public class UserDataConstraintType implements java.io.Serializable {
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate()

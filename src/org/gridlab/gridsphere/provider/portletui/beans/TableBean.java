@@ -4,9 +4,8 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -60,7 +59,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     /**
      * Constructs a table bean from a supplied portlet request and bean identifier
      *
-     * @param req the portlet request
+     * @param req    the portlet request
      * @param beanId the bean identifier
      */
     public TableBean(HttpServletRequest req, String beanId) {
@@ -153,7 +152,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     /**
      * Returns the table cell padding
      *
-     * @return  the table cell padding
+     * @return the table cell padding
      */
     public String getCellPadding() {
         return cellPadding;
@@ -171,7 +170,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     /**
      * Returns the tableborder
      *
-     * @return  the table border
+     * @return the table border
      */
     public String getBorder() {
         return border;
@@ -212,6 +211,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     public void setCurrentPage(int currentPage) {
         this.currentPage = currentPage;
     }
+
     public int getCurrentPage() {
         return currentPage;
     }
@@ -251,7 +251,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     public String toEndString() {
         StringBuffer sb = new StringBuffer();
         sb.append("</table>");
-         String uri = "";
+        String uri = "";
         if (showall) {
             uri = res.createURI().toString();
             sb.append("<a href=\"" + uri + "&" + TableBean.SHOW_PAGES + "\">" + "Show pages" + "</a>");
@@ -263,14 +263,14 @@ public class TableBean extends BaseComponentBean implements TagBean {
             sb.append("Page " + dispPage + " out of " + numpages);
 
             for (int i = 0; i < numpages; i++) {
-                c = i+1;
+                c = i + 1;
                 if (c == dispPage) {
                     sb.append(" | <b>" + c + "</b>");
                 } else {
                     // create an actionlink
                     uris = res.createURI().toString();
                     System.err.println("uri = " + uris);
-                    uri = uris+  "&" + TableBean.CURRENT_PAGE + "=" + i;
+                    uri = uris + "&" + TableBean.CURRENT_PAGE + "=" + i;
                     sb.append(" | " + "<a href=\"" + uri + "\">" + c + "</a>");
                 }
             }

@@ -44,7 +44,7 @@ public class SportletSession implements PortletSession {
      * @param session the <code>HttpSession</code>
      */
     public SportletSession(PortletRequest request, HttpSession session) {
-	    this.request = request;
+        this.request = request;
         this.session = session;
     }
 
@@ -81,10 +81,10 @@ public class SportletSession implements PortletSession {
      * are not available, returns empty string.
      */
     private String getCpid() {
-        if(request == null) return "";
+        if (request == null) return "";
         PortletSettings ps = request.getPortletSettings();
-        if(ps == null) return "";
-        return ps.getConcretePortletID()+":";
+        if (ps == null) return "";
+        return ps.getConcretePortletID() + ":";
     }
 
     /**
@@ -93,27 +93,27 @@ public class SportletSession implements PortletSession {
      * namespace conflicts.
      */
     public void setAttribute(String name, Object value) {
-        session.setAttribute(getCpid()+name, value);
+        session.setAttribute(getCpid() + name, value);
     }
 
     /**
      * Returns the value of the attribute with the given name, or null if no attribute with the given name exists. Uses ConcretePortletID prefix.
      */
     public Object getAttribute(String name) {
-        return session.getAttribute(getCpid()+name);
+        return session.getAttribute(getCpid() + name);
     }
 
     /**
      * Returns an enumeration of names of all attributes available to this session. Names are striped of ConcretePortletID prefix.
      */
     public Enumeration getAttributeNames() {
-        if(request==null) return session.getAttributeNames();
+        if (request == null) return session.getAttributeNames();
         String cpid = getCpid();
-        if("".equals(cpid))  return session.getAttributeNames();
+        if ("".equals(cpid)) return session.getAttributeNames();
         Vector s = new Vector();
-        for(Enumeration en = session.getAttributeNames();en.hasMoreElements();) {
+        for (Enumeration en = session.getAttributeNames(); en.hasMoreElements();) {
             String name = (String) en.nextElement();
-            if(name.startsWith(cpid)) {
+            if (name.startsWith(cpid)) {
                 s.add(name.substring(cpid.length()));
             }
         }
@@ -124,7 +124,7 @@ public class SportletSession implements PortletSession {
      * Removes the attribute with the given name. Uses ConcretePortletID prefix.
      */
     public void removeAttribute(String name) {
-        session.removeAttribute(getCpid()+name);
+        session.removeAttribute(getCpid() + name);
     }
 
     public final Object getValue(String name) {

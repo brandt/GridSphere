@@ -18,5 +18,5 @@ public interface PersistenceManagerXml {
 
     public void save(Object object) throws PersistenceManagerException, IOException;
 
-    public Object load() throws  IOException, PersistenceManagerException;
+    public Object load() throws IOException, PersistenceManagerException;
 }

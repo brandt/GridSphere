@@ -20,7 +20,7 @@ import java.util.Locale;
  * The <code>ConcreteSportletConfig</code> provides an implementation of
  * <code>ConcretePortletConfig</code> that uses Castor for XMl to Java
  * data bindings.
- * <p>
+ * <p/>
  * The <code>ConcreteSportletConfig</code> provides concrete portlet
  * configuration information.
  */
@@ -102,7 +102,7 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
     /**
      * Used internally by Castor. Clients should use #getConfigParams
      * instead
-     * <p>
+     * <p/>
      * Returns the configuration parameters of the portlet
      *
      * @return the configuration parameters of the portlet
@@ -113,7 +113,7 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
 
     /**
      * Used internally by Castor.
-     * <p>
+     * <p/>
      * Sets the configuration parameters of the portlet
      *
      * @param configParamList the configuration parameters of the portlet
@@ -143,7 +143,7 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
     /**
      * Used internally by Castor. Clients should use #getConcretePortletScope
      * and #getRequiredRole instead
-     * <p>
+     * <p/>
      * Sets the access restrictions for this portlet
      */
     public void setAccessRestrictions(AccessRestrictions accessRestrictions) {
@@ -153,7 +153,7 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
     /**
      * Used internally by Castor. Clients should use #getConcretePortletScope
      * and #getRequiredRole instead
-     * <p>
+     * <p/>
      * Returns the access restrictions for this portlet
      */
     public AccessRestrictions getAccessRestrictions() {

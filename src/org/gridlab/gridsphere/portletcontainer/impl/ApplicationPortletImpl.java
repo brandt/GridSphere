@@ -13,10 +13,10 @@ import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinition;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * The <code>ApplicationPortletImpl</code> is an implementation of the <code>ApplicationPortlet</code> interface
  * that uses Castor for XML to Java data bindings.
- * <p>
+ * <p/>
  * The <code>ApplicationPortlet</code> represents the portlet application instance
  * defined in the portlet descriptor file.
  */
@@ -46,15 +46,16 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     /**
      * Default constructor is private
      */
-    private ApplicationPortletImpl() {}
+    private ApplicationPortletImpl() {
+    }
 
     /**
      * Constructs an instance of ApplicationPortletImpl
      *
-     * @param pdd the <code>PortletDeploymentDescriptor</code>
-     * @param portletDef a <code>SportletDefinition</code>
+     * @param pdd            the <code>PortletDeploymentDescriptor</code>
+     * @param portletDef     a <code>SportletDefinition</code>
      * @param webApplication the ui application name for this application portlet
-     * @param context the <code>ServletContext</code> containing this application portlet
+     * @param context        the <code>ServletContext</code> containing this application portlet
      */
     public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, SportletDefinition portletDef,
                                   String webApplication, ServletContext context) throws PortletException {
@@ -127,7 +128,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      * @param appPortletConfig the PortletApplication
      */
     public void setApplicationPortletConfig(ApplicationPortletConfig appPortletConfig) {
-        this.appPortletConfig = (ApplicationSportletConfig)appPortletConfig;
+        this.appPortletConfig = (ApplicationSportletConfig) appPortletConfig;
     }
 
     /**
@@ -153,7 +154,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      *
      * @param concretePortletID the concrete portlet ID associated with this ApplicationPortlet
      * @return the ConcretePortlet associated with this ApplicationPortlet with the provided concretePortletID
-     * or null if no concrete portlet with the supplied ID exists
+     *         or null if no concrete portlet with the supplied ID exists
      */
     public ConcretePortlet getConcretePortlet(String concretePortletID) {
         Iterator it = concretePortlets.iterator();

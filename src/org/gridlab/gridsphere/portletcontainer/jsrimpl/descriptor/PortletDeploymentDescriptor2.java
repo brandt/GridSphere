@@ -10,11 +10,9 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- *  The <code>PortletDeploymentDescriptor</code> is responsible for
+ * The <code>PortletDeploymentDescriptor</code> is responsible for
  * marshalling/unmarshalling the XML portlet schema represntation and the
  * associated Java classes using Castor.
  */

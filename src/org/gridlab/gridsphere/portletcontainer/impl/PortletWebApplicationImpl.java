@@ -6,18 +6,18 @@ package org.gridlab.gridsphere.portletcontainer.impl;
 
 import org.gridlab.gridsphere.layout.PortletTabRegistry;
 import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinition;
-import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
+import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
 
 import javax.servlet.ServletContext;
 import java.io.File;
@@ -43,14 +43,15 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     /**
      * Default instantiation is disallowed
      */
-    private PortletWebApplicationImpl() {}
+    private PortletWebApplicationImpl() {
+    }
 
     /**
      * Constructs an instance of a PortletWebApplicationImpl from a supplied ui application name and corresponding
      * <code>ServletContext</code>
      *
      * @param webApplicationName the the web application name
-     * @param context the <code>ServletContext</code>
+     * @param context            the <code>ServletContext</code>
      */
     public PortletWebApplicationImpl(String webApplicationName, ServletContext context) throws PortletException {
         this.webApplicationName = webApplicationName;
@@ -79,7 +80,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         //System.err.println("context path: " + te.getRealPath(""));
 
         if (ctx == null) {
-            log.error( webApplicationName + ": Unable to get ServletContext for: " + contextURIPath);
+            log.error(webApplicationName + ": Unable to get ServletContext for: " + contextURIPath);
             throw new PortletException(webApplicationName + ": Unable to get ServletContext for: " + contextURIPath);
         }
         log.debug("context path: " + ctx.getRealPath(""));

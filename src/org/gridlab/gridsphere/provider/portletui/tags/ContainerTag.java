@@ -7,8 +7,6 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 import org.gridlab.gridsphere.provider.portletui.beans.BeanContainer;
 import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
-
 
 import javax.servlet.jsp.JspException;
 import java.util.ArrayList;

@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- *  A <code>SpecialBean</code> is just a demonstration of how to create a tag/bean pair
+ * A <code>SpecialBean</code> is just a demonstration of how to create a tag/bean pair
  * that can dynamically choose to use JavaScript or not based on browser detection
  */
 public class SpecialBean extends BaseComponentBean implements TagBean {

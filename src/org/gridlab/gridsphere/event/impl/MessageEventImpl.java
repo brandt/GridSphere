@@ -22,7 +22,7 @@ public class MessageEventImpl extends EventObject implements MessageEvent {
     /**
      * Constructs an instance of MessageEventImpl given a portlet request and message
      *
-     * @param req the <code>PortletRequest</code>
+     * @param req     the <code>PortletRequest</code>
      * @param message the <code>PortletMessage</code>
      */
     public MessageEventImpl(PortletRequest req, PortletMessage message) {

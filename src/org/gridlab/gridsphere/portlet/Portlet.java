@@ -5,21 +5,11 @@
 package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.portlet.impl.*;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
-import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSessionAttributeListener;
-import javax.servlet.http.HttpSessionListener;
-import javax.servlet.http.HttpSessionActivationListener;
-import javax.servlet.http.HttpSessionBindingEvent;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Comparator;
@@ -35,7 +25,7 @@ import java.util.ResourceBundle;
  * Flyweight pattern, provided on a per-request basis. A concrete parameterization of a portlet object
  * is referred to as a concrete portlet. The settings of concrete portlets may change at any time caused
  * by administrators modifying portlet settings, e.g. using the config mode of a portlet.
- * <p>
+ * <p/>
  * Additionally, user can have personal views of concrete portlets. Therefore, the transient portlet session
  * and persistent concrete portlet data carries vital information for the portlet to create a personalized
  * user experience. A concrete portlet in conjunction with portlet data creates a concrete portlet instance.
@@ -45,10 +35,10 @@ import java.util.ResourceBundle;
  * The general programming rules for servlets also apply to portlets - instance variables should only used
  * when the intent is to share them between all the parallel threads that concurrently execute a portlet, and
  * portlet code should avoid synchronization unless absolutely required.
- * <p>
+ * <p/>
  * As part of running within the portlet container each portlet has a life-cycle.
  * The corresponding methods are called in the following sequence:
- * <p>
+ * <p/>
  * <ol>
  * <li>The portlet is constructed, then initialized with the init() method.</li>
  * <li>A concrete portlet is initialized with the {@link #initConcrete} method for each PortletSettings.</li>
@@ -57,10 +47,10 @@ import java.util.ResourceBundle;
  * <li>The portlet is taken out of service, then destroyed with the destroy() method,
  * then garbage collected and finalized.</li>
  * </ol>
- * <p>
+ * <p/>
  * The <it>concrete portlet instance</it> is created and destroyed with the login() and logout() methods, respectively.
  * If a portlet provides personalized views these methods should be implemented.
- * <p>
+ * <p/>
  * The portlet container loads and instantiates the portlet class.
  * This can happen during startup of the portal server or later,
  * but no later then when the first request to the portlet has to be serviced.
@@ -115,7 +105,7 @@ public abstract class Portlet extends HttpServlet
          * of a portlet mode.
          *
          * @throws IllegalArgumentException if the supplied <code>String</code>
-         * does not match a predefined portlet mode.
+         *                                  does not match a predefined portlet mode.
          */
         public static Portlet.Mode toMode(String mode) throws IllegalArgumentException {
             if (mode == null) return null;
@@ -163,24 +153,28 @@ public abstract class Portlet extends HttpServlet
         }
 
         public int compare(Object left, Object right) {
-            int leftID  =  ((Portlet.Mode)left).getMode();
-            int rightID  = ((Portlet.Mode)right).getMode();
+            int leftID = ((Portlet.Mode) left).getMode();
+            int rightID = ((Portlet.Mode) right).getMode();
             int result;
-            if ( leftID < rightID ) { result = -1; }
-            else if ( leftID > rightID ) { result = 1; }
-            else { result = 0; }
+            if (leftID < rightID) {
+                result = -1;
+            } else if (leftID > rightID) {
+                result = 1;
+            } else {
+                result = 0;
+            }
             return result;
         }
 
         public Object clone() throws CloneNotSupportedException {
-            Portlet.Mode m = (Portlet.Mode)super.clone();
+            Portlet.Mode m = (Portlet.Mode) super.clone();
             m.mode = this.mode;
             return m;
         }
 
         public boolean equals(Object o) {
-            if ((o != null)  && (o instanceof Portlet.Mode)) {
-                return (this.mode == ((Portlet.Mode)o).getMode() ? true : false);
+            if ((o != null) && (o instanceof Portlet.Mode)) {
+                return (this.mode == ((Portlet.Mode) o).getMode() ? true : false);
             }
             return false;
         }
@@ -189,7 +183,7 @@ public abstract class Portlet extends HttpServlet
             return mode;
         }
 
-        private Object readResolve () {
+        private Object readResolve() {
             Portlet.Mode m = Portlet.Mode.VIEW;
             switch (mode) {
                 case VIEW_MODE:
@@ -212,19 +206,19 @@ public abstract class Portlet extends HttpServlet
 
     /**
      * Called by the portlet container to indicate to this portlet that it is put into service.
-     *
+     * <p/>
      * The portlet container calls the init() method for the whole life-cycle of the portlet.
      * The init() method must complete successfully before concrete portlets are created through
      * the initConcrete() method.
-     *
+     * <p/>
      * The portlet container cannot place the portlet into service if the init() method
-     *
+     * <p/>
      * 1. throws UnavailableException
      * 2. does not return within a time period defined by the portlet container.
      *
      * @param config the portlet configuration
      * @throws UnavailableException if an exception has occurrred that interferes with the portlet's
-     * normal initialization
+     *                              normal initialization
      */
     public abstract void init(PortletConfig config) throws UnavailableException;
 
@@ -233,7 +227,7 @@ public abstract class Portlet extends HttpServlet
      * This method is only called once all threads within the portlet's service() method have exited
      * or after a timeout period has passed. After the portlet container calls this method,
      * it will not call the service() method again on this portlet.
-     *
+     * <p/>
      * This method gives the portlet an opportunity to clean up any resources that are
      * being held (for example, memory, file handles, threads).
      *
@@ -246,9 +240,9 @@ public abstract class Portlet extends HttpServlet
      * The portlet container calls the initConcrete() method for the whole life-cycle of the portlet.
      * The initConcrete() method must complete successfully before concrete portlet instances can be
      * created through the login() method.
-     *
+     * <p/>
      * The portlet container cannot place the portlet into service if the initConcrete() method
-     *
+     * <p/>
      * 1. throws UnavailableException
      * 2. does not return within a time period defined by the portlet container.
      *
@@ -261,7 +255,7 @@ public abstract class Portlet extends HttpServlet
      * This method is only called once all threads within the portlet's service() method have exited
      * or after a timeout period has passed. After the portlet container calls this method,
      * it will not call the service() method again on this portlet.
-     *
+     * <p/>
      * This method gives the portlet an opportunity to clean up any resources that are being
      * held (for example, memory, file handles, threads).
      *
@@ -275,11 +269,10 @@ public abstract class Portlet extends HttpServlet
      * the markup will be different. Also, the portlet can take language preferences and/or
      * personalized settings into account.
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     *
      * @throws PortletException if the portlet has trouble fulfilling the rendering request
-     * @throws IOException if the streaming causes an I/O problem
+     * @throws IOException      if the streaming causes an I/O problem
      */
     public abstract void service(PortletRequest request, PortletResponse response)
             throws PortletException, IOException;
@@ -308,13 +301,13 @@ public abstract class Portlet extends HttpServlet
     /**
      * Returns the time the response of the PortletInfo  object was last modified, in milliseconds since midnight
      * January 1, 1970 GMT. If the time is unknown, this method returns a negative number (the default).
-     *
+     * <p/>
      * Portlets that can quickly determine their last modification time should override this method.
      * This makes browser and proxy caches work more effectively, reducing the load on server and network resources.
      *
      * @param request the portlet request
      * @return long a long integer specifying the time the response of the PortletInfo
-     * object was last modified, in milliseconds since midnight, January 1, 1970 GMT, or -1 if the time is not known
+     *         object was last modified, in milliseconds since midnight, January 1, 1970 GMT, or -1 if the time is not known
      */
     public abstract long getLastModified(PortletRequest request);
 
@@ -383,7 +376,7 @@ public abstract class Portlet extends HttpServlet
             if (method.equals(SportletProperties.INIT)) {
                 ApplicationSportletConfig app = (ApplicationSportletConfig) request.getAttribute(SportletProperties.PORTLET_APPLICATION);
                 if (app != null) {
-                this.portletConfig = new SportletConfig(getServletConfig(), app);
+                    this.portletConfig = new SportletConfig(getServletConfig(), app);
                     init(this.portletConfig);
                 } else {
                     log.error("Unable to perform init(): Received NULL PortletApplication in request");

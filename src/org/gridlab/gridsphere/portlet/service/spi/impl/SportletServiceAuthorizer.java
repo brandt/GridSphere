@@ -42,7 +42,7 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      * Constructs an instance of SportletServiceAuthorizer from a supplied User
      * and GridSphereUserManager
      *
-     * @param user the supplied <code>User</code>
+     * @param user        the supplied <code>User</code>
      * @param userManager an instance of <code>GridSphereUserManager</code>
      */
     public SportletServiceAuthorizer(User user, AccessControlManagerServiceImpl userManager) {
@@ -54,7 +54,7 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      * Returns the internal user associated with this user
      *
      * @return the internal user
-     */ 
+     */
     public User getInternalUser() {
         return user;
     }
@@ -62,7 +62,8 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
     /**
      * Authorizes operations that require super user access
      *
-     * @throws PortletServiceAuthorizationException if supplied user is not a super user
+     * @throws PortletServiceAuthorizationException
+     *          if supplied user is not a super user
      */
     public void authorizeSuperUser() throws PortletServiceAuthorizationException {
         if (!aclManager.hasSuperRole(user)) {
@@ -71,11 +72,12 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
     }
 
     /**
-     *  Authorizes operations that require admin user access
+     * Authorizes operations that require admin user access
      *
      * @param group the <code>PortletGroup</code> within which the
-     * user should be an admin if they are not a super user.
-     * @throws PortletServiceAuthorizationException if supplied user is not an admin user
+     *              user should be an admin if they are not a super user.
+     * @throws PortletServiceAuthorizationException
+     *          if supplied user is not an admin user
      */
     public void authorizeAdminUser(PortletGroup group) throws PortletServiceAuthorizationException {
         if (!aclManager.hasAdminRoleInGroup(user, group)) {
@@ -87,8 +89,9 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      * Authorizes operations that require super or admin user access
      *
      * @param group the <code>PortletGroup</code> within which the
-     * user should be an admin if they are not a super user
-     * @throws PortletServiceAuthorizationException if supplied user is not a super or admin user
+     *              user should be an admin if they are not a super user
+     * @throws PortletServiceAuthorizationException
+     *          if supplied user is not a super or admin user
      */
     public void authorizeSuperOrAdminUser(PortletGroup group)
             throws AuthorizationException {
@@ -103,8 +106,9 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      * only if the supplied user  matches the associated user
      *
      * @param user the <code>User</code> which should be an admin if they are not a super user
-     * @throws PortletServiceAuthorizationException if supplied user is
-     * not a super or same user
+     * @throws PortletServiceAuthorizationException
+     *          if supplied user is
+     *          not a super or same user
      */
     public void authorizeSuperOrSameUser(User user)
             throws AuthorizationException {
@@ -118,11 +122,12 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      * Authorizes operations that require either a super user, or admin user, or
      * can be invoked only if the supplied user  matches the associated user
      *
-     * @param user this <code>User</code>
+     * @param user  this <code>User</code>
      * @param group the <code>PortletGroup</code> within which the
-     * user should be an admin if they are not a super user
-     * @throws PortletServiceAuthorizationException if supplied user is
-     * not a super, admin, or same  user
+     *              user should be an admin if they are not a super user
+     * @throws PortletServiceAuthorizationException
+     *          if supplied user is
+     *          not a super, admin, or same  user
      */
     public void authorizeSuperAdminOrSameUser(User user, PortletGroup group)
             throws AuthorizationException {

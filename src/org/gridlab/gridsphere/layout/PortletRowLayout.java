@@ -10,8 +10,8 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -30,26 +30,26 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
         //out.println("<table width=\"" + width + "\" cellspacing=\"0\" cellpadding=\"0\">");
         out.println("<tbody><tr>");
         List scomponents = Collections.synchronizedList(components);
-        synchronized(scomponents) {
-        for (int i=0;i<scomponents.size();i++) {
-            p = (PortletComponent) scomponents.get(i);
-            //out.println("<td valign=\"top\">");
-            //System.out.println("\n\n\n\n\n WIDTH "+p.getWidth()+"\n\n\n\n");
-            out.println("<td valign=\"top\" width=\""+p.getWidth()+"\">");
+        synchronized (scomponents) {
+            for (int i = 0; i < scomponents.size(); i++) {
+                p = (PortletComponent) scomponents.get(i);
+                //out.println("<td valign=\"top\">");
+                //System.out.println("\n\n\n\n\n WIDTH "+p.getWidth()+"\n\n\n\n");
+                out.println("<td valign=\"top\" width=\"" + p.getWidth() + "\">");
 
 
-            if (p.getVisible()) {
-                p.doRender(event);
+                if (p.getVisible()) {
+                    p.doRender(event);
+                }
+                out.println("</td>");
             }
-            out.println("</td>");
-        }
-        out.println("</tr></tbody></table>");
-        out.println("<!-- END ROW -->");
+            out.println("</tr></tbody></table>");
+            out.println("<!-- END ROW -->");
         }
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletRowLayout g = (PortletRowLayout)super.clone();
+        PortletRowLayout g = (PortletRowLayout) super.clone();
         return g;
     }
 }

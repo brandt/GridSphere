@@ -43,7 +43,7 @@ public interface GridSphereEvent extends Event {
      * Determines if there is an action associated with this event
      *
      * @return <code>true</code> if there is an action associated with this
-     * event, <code>false</code> otherwise
+     *         event, <code>false</code> otherwise
      */
     public boolean hasAction();
 
@@ -53,7 +53,6 @@ public interface GridSphereEvent extends Event {
      * @return the portal layout component id or empty String iff none exists
      */
     public String getPortletComponentID();
-
 
 
     public void addNewRenderEvent(PortletComponentEvent evt);

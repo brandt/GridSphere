@@ -4,8 +4,8 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,7 +32,7 @@ public interface ComponentLifecycle extends ComponentRender {
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException;
 

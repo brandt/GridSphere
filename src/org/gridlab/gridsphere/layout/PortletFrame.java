@@ -374,15 +374,15 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     && (!event.getAction().getName().equals(FRAME_CLOSE_CANCEL_ACTION))) {
                 DefaultPortletAction action = event.getAction();
                 //if (!action.getName().equals("")) {
-                    try {
-                        PortletInvoker.actionPerformed(portletClass, action, req, res);
-                    } catch (Exception e) {
-                        errorFrame.setException(e);
-                    }
-                    String message = (String) req.getAttribute(SportletProperties.PORTLETERROR + portletClass);
-                    if (message != null) {
-                        errorFrame.setMessage(message);
-                    }
+                try {
+                    PortletInvoker.actionPerformed(portletClass, action, req, res);
+                } catch (Exception e) {
+                    errorFrame.setException(e);
+                }
+                String message = (String) req.getAttribute(SportletProperties.PORTLETERROR + portletClass);
+                if (message != null) {
+                    errorFrame.setMessage(message);
+                }
                 //}
                 // in case portlet mode got reset
             }

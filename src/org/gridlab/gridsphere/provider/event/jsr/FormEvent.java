@@ -172,15 +172,17 @@ public interface FormEvent {
 
     public DataGridBean getDataGridBean(String beanId);
 
-    /***
+    /**
      * Return an existing <code>IncludeBean</code> or create a new one
+     *
      * @param beanId
      * @return
      */
     public IncludeBean getIncludeBean(String beanId);
 
-    /***
+    /**
      * Return an existing <code>MessageBoxBean</code> or create a new one
+     *
      * @param beanId
      * @return
      */

@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- *  The <code>FrameBean</code> extends <code>TableBean</code> to provide a stylized table that can also
+ * The <code>FrameBean</code> extends <code>TableBean</code> to provide a stylized table that can also
  * be used to render text messages.
  */
 public class FrameBean extends TableBean implements TagBean {
@@ -44,7 +44,7 @@ public class FrameBean extends TableBean implements TagBean {
     /**
      * Constructs a frame bean from a portlet request and bena identifier
      *
-     * @param req the portlet request
+     * @param req    the portlet request
      * @param beanId the bean identifier
      */
     public FrameBean(HttpServletRequest req, String beanId) {

@@ -21,7 +21,7 @@ public class DefaultListModel {
      * Adds a tag bean to the list in the supplied location
      *
      * @param index the list location to add the tag bean to
-     * @param bean the tag bean
+     * @param bean  the tag bean
      */
     public void addBean(int index, TagBean bean) {
         list.add(index, bean);

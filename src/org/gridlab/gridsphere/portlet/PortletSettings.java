@@ -98,7 +98,7 @@ public interface PortletSettings {
     /**
      * Sets the attribute with the given name and value.
      *
-     * @param name the attribute name
+     * @param name  the attribute name
      * @param value the attribute value
      */
     public void setAttribute(String name, String value);

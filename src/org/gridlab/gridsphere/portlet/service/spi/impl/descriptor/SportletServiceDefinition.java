@@ -5,14 +5,11 @@
 package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
+import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
-import java.util.Enumeration;
-import java.io.IOException;
 
 /**
  * The <code>SportletServiceDefinition</code> defines a portlet service
@@ -41,7 +38,7 @@ public class SportletServiceDefinition {
     /**
      * Returns the portlet service descriptor
      *
-     * @return  descriptor the portlet service descriptor
+     * @return descriptor the portlet service descriptor
      */
     public SportletServiceDescriptor getServiceDescriptor() {
         return serviceDescriptor;
@@ -123,7 +120,7 @@ public class SportletServiceDefinition {
      * Determines if this service is a user service or not
      *
      * @param userRequired if <code>true</code> then portlet service is
-     * an instance of a user service, <code>false</code> otherwise
+     *                     an instance of a user service, <code>false</code> otherwise
      */
     public void setUserRequired(boolean userRequired) {
         this.userRequired = userRequired;
@@ -133,7 +130,7 @@ public class SportletServiceDefinition {
      * Determines if this service is a user service or not
      *
      * @return <code>true</code> if portlet service is
-     * an instance of a user service, <code>false</code> otherwise
+     *         an instance of a user service, <code>false</code> otherwise
      */
     public boolean getUserRequired() {
         return this.userRequired;
@@ -194,7 +191,7 @@ public class SportletServiceDefinition {
             configParamList = new Vector();
         }
         while (enum.hasMoreElements()) {
-            String key = (String)enum.nextElement();
+            String key = (String) enum.nextElement();
             ConfigParam param = new ConfigParam(key, props.getProperty(key));
             configParamList.add(param);
         }

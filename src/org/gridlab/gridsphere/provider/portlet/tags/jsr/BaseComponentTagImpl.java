@@ -21,12 +21,11 @@ public abstract class BaseComponentTagImpl extends BaseComponentTag {
     }
 
     protected String getLocalizedText(String key, String base) {
-        PortletRequest req = (PortletRequest)pageContext.getAttribute("portletRequest");
+        PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
         Locale locale = req.getLocale();
         ResourceBundle bundle = ResourceBundle.getBundle(base, locale);
         return bundle.getString(key);
     }
 
-    
 
 }

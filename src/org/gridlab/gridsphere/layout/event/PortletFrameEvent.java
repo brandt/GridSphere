@@ -12,7 +12,7 @@ public interface PortletFrameEvent extends PortletComponentEvent {
 
     /**
      * An Action defines an immutable set of known window events.
-     *
+     * <p/>
      * <ul>
      * <li>FRAME_MAXIMIZED</li>
      * <li>FRAME_MINIMIZED</li>
@@ -59,7 +59,7 @@ public interface PortletFrameEvent extends PortletComponentEvent {
     /**
      * Used in the case of portlet frame resize when it needs to know the original width of the frame
      *
-     * @return  the portlet frame original width
+     * @return the portlet frame original width
      */
     public String getOriginalWidth();
 

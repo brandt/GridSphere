@@ -14,7 +14,7 @@ public interface MessageEvent extends Event {
 
     /**
      * Event identifier indicating that a message has been received.
-     *
+     * <p/>
      * An event with this id is fired when one portlet (the source) sends a
      * message to another portlet (the target). The target portlet is specified by name.
      */

@@ -2,17 +2,16 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
+import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
-import org.gridlab.gridsphere.services.core.cache.CacheService;
 
 import java.io.*;
 import java.util.*;
@@ -41,7 +40,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private String templateLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/TemplateLayout.xml");
 
-    private String newuserLayoutPath =  GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/users/");
+    private String newuserLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/users/");
 
     // Store user layouts in a hash
     private static Map userLayouts = new Hashtable();
@@ -70,10 +69,10 @@ public class PortletPageFactory implements PortletSessionListener {
             instance = new PortletPageFactory();
             PortletServiceFactory factory = SportletServiceFactory.getInstance();
             try {
-            portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, null, true);
-        } catch (PortletServiceException e) {
-            System.err.println("Unable to init Cache service! " + e.getMessage());
-        }
+                portalConfigService = (PortalConfigService) factory.createPortletService(PortalConfigService.class, null, true);
+            } catch (PortletServiceException e) {
+                System.err.println("Unable to init Cache service! " + e.getMessage());
+            }
         }
         return instance;
     }
@@ -105,12 +104,12 @@ public class PortletPageFactory implements PortletSessionListener {
     public void destroy() {
         Iterator it = guests.keySet().iterator();
         while (it.hasNext()) {
-            String key = (String)it.next();
+            String key = (String) it.next();
             guests.remove(key);
         }
         it = userLayouts.keySet().iterator();
         while (it.hasNext()) {
-            String key = (String)it.next();
+            String key = (String) it.next();
             userLayouts.remove(key);
         }
     }
@@ -124,8 +123,8 @@ public class PortletPageFactory implements PortletSessionListener {
             List tabs = appPane.getPortletTabs();
             try {
                 for (int j = 0; j < tabs.size(); j++) {
-                    PortletTab tab = (PortletTab)tabs.get(j);
-                    pagePane.addTab((PortletTab)deepCopy(tab));
+                    PortletTab tab = (PortletTab) tabs.get(j);
+                    pagePane.addTab((PortletTab) deepCopy(tab));
                 }
             } catch (Exception e) {
                 log.error("Unable to copy application tabs for webapp: " + webAppName);
@@ -144,8 +143,8 @@ public class PortletPageFactory implements PortletSessionListener {
             List tabs = appPane.getPortletTabs();
             try {
                 for (int j = 0; j < tabs.size(); j++) {
-                    PortletTab tab = (PortletTab)tabs.get(j);
-                    pagePane.addTab((PortletTab)deepCopy(tab));
+                    PortletTab tab = (PortletTab) tabs.get(j);
+                    pagePane.addTab((PortletTab) deepCopy(tab));
                 }
             } catch (Exception e) {
                 log.error("Unable to copy application tabs for webapp: " + groupName);
@@ -164,12 +163,12 @@ public class PortletPageFactory implements PortletSessionListener {
             List tabs = appPane.getPortletTabs();
             try {
                 for (int j = 0; j < tabs.size(); j++) {
-                    PortletTab tab = (PortletTab)tabs.get(j);
+                    PortletTab tab = (PortletTab) tabs.get(j);
                     pagePane.removeTab(tab);
                 }
             } catch (Exception e) {
                 log.error("Unable to copy application tabs for webapp: " + groupName);
-            }        
+            }
             page.setPortletTabbedPane(pagePane);
             page.init(req, new ArrayList());
         }
@@ -183,14 +182,14 @@ public class PortletPageFactory implements PortletSessionListener {
         String userLayout = userLayoutDir + File.separator + user.getID();
 
         if (userLayouts.containsKey(sessionId)) {
-            PortletPage page = (PortletPage)userLayouts.get(sessionId);
+            PortletPage page = (PortletPage) userLayouts.get(sessionId);
             PortletTabbedPane pane = new PortletTabbedPane();
             pane.setLayoutDescriptor(userLayout);
             PortletTabbedPane existPane = page.getPortletTabbedPane();
             List tabs = existPane.getPortletTabs();
             Iterator it = tabs.iterator();
             while (it.hasNext()) {
-                PortletTab tab = (PortletTab)it.next();
+                PortletTab tab = (PortletTab) it.next();
                 if (tab.getCanModify()) {
                     pane.addTab(tab);
                 }
@@ -217,15 +216,15 @@ public class PortletPageFactory implements PortletSessionListener {
         }
 
         // check for portlets no longer in groups and remove if necessary
-        Map groups = (Map)req.getAttribute(SportletProperties.PORTLETGROUPS);
+        Map groups = (Map) req.getAttribute(SportletProperties.PORTLETGROUPS);
         List allowedPortlets = new ArrayList();
         Iterator it = groups.keySet().iterator();
         while (it.hasNext()) {
-            PortletGroup g = (PortletGroup)it.next();
+            PortletGroup g = (PortletGroup) it.next();
             Set s = g.getPortletRoleList();
             Iterator sit = s.iterator();
             while (sit.hasNext()) {
-                SportletRoleInfo roleInfo = (SportletRoleInfo)sit.next();
+                SportletRoleInfo roleInfo = (SportletRoleInfo) sit.next();
                 allowedPortlets.add(roleInfo.getPortletClass());
             }
         }
@@ -235,7 +234,7 @@ public class PortletPageFactory implements PortletSessionListener {
         try {
 
             //tmpPage.setLayoutDescriptor(userLayout + ".tmp");
-            PortletTabbedPane tmpPane = (PortletTabbedPane)deepCopy(pane);
+            PortletTabbedPane tmpPane = (PortletTabbedPane) deepCopy(pane);
             tmpPage.setPortletTabbedPane(tmpPane);
             this.setPageTheme(tmpPage, req);
             tmpPage.init(req, new ArrayList());
@@ -248,7 +247,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 it = tmpPage.getComponentIdentifierList().iterator();
                 while (it.hasNext() && (!found)) {
                     found = false;
-                    ComponentIdentifier cid = (ComponentIdentifier)it.next();
+                    ComponentIdentifier cid = (ComponentIdentifier) it.next();
                     if (cid.getPortletComponent() instanceof PortletFrame) {
                         if (!allowedPortlets.contains(cid.getPortletClass())) {
                             PortletComponent pc = cid.getPortletComponent();
@@ -273,14 +272,14 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public PortletPage createFromGroups(PortletRequest req) {
 
-        Map groups = (Map)req.getAttribute(SportletProperties.PORTLETGROUPS);
+        Map groups = (Map) req.getAttribute(SportletProperties.PORTLETGROUPS);
         PortletPage newPage = null;
         PortletTabbedPane pane = null;
 
         try {
 
             //newPage = (PortletPage)templatePage.clone();
-            newPage = (PortletPage)deepCopy(templatePage);
+            newPage = (PortletPage) deepCopy(templatePage);
 
             log.debug("Returning cloned layout from webapps:");
 
@@ -288,25 +287,25 @@ public class PortletPageFactory implements PortletSessionListener {
 
             PortletTabbedPane userPane = getUserTabbedPane(req);
             if (userPane != null) {
-                List  userTabs = userPane.getPortletTabs();
+                List userTabs = userPane.getPortletTabs();
                 for (int i = 0; i < userTabs.size(); i++) {
-                    PortletTab tab = (PortletTab)userTabs.get(i);
+                    PortletTab tab = (PortletTab) userTabs.get(i);
                     log.debug("adding user tab: " + tab.getTitle("en"));
-                    pane.addTab((PortletTab)deepCopy(tab));
+                    pane.addTab((PortletTab) deepCopy(tab));
                 }
             }
 
-            PortletTabbedPane gsTab  = PortletTabRegistry.getGroupTabs(PortletGroupFactory.GRIDSPHERE_GROUP.getName());
+            PortletTabbedPane gsTab = PortletTabRegistry.getGroupTabs(PortletGroupFactory.GRIDSPHERE_GROUP.getName());
             List tabs = gsTab.getPortletTabs();
             for (int j = 0; j < tabs.size(); j++) {
-                PortletTab tab = (PortletTab)tabs.get(j);
+                PortletTab tab = (PortletTab) tabs.get(j);
                 log.debug("adding tab: " + tab.getTitle("en"));
-                pane.addTab((PortletTab)deepCopy(tab));
+                pane.addTab((PortletTab) deepCopy(tab));
             }
 
             Iterator it = groups.keySet().iterator();
             while (it.hasNext()) {
-                PortletGroup g = (PortletGroup)it.next();
+                PortletGroup g = (PortletGroup) it.next();
 
                 if (g.getName().equals(PortletGroupFactory.GRIDSPHERE_GROUP.getName())) continue;
 
@@ -315,10 +314,10 @@ public class PortletPageFactory implements PortletSessionListener {
                 if (portletTabs != null) {
                     tabs = portletTabs.getPortletTabs();
                     for (int j = 0; j < tabs.size(); j++) {
-                        PortletTab tab = (PortletTab)tabs.get(j);
+                        PortletTab tab = (PortletTab) tabs.get(j);
                         log.debug("adding tab: " + tab.getTitle("en"));
                         //pane.addTab(g.getName(), (PortletTab)tab.clone());
-                        pane.addTab((PortletTab)deepCopy(tab));
+                        pane.addTab((PortletTab) deepCopy(tab));
                     }
                 }
             }
@@ -349,8 +348,8 @@ public class PortletPageFactory implements PortletSessionListener {
     protected void setPageTheme(PortletPage page, PortletRequest req) {
         String defaultTheme = portalConfigService.getPortalConfigSettings().getDefaultTheme();
         page.setTheme(defaultTheme);
-        User user =  req.getUser();
-        String theme = (String)user.getAttribute(User.THEME);
+        User user = req.getUser();
+        String theme = (String) user.getAttribute(User.THEME);
         if (theme != null) page.setTheme(theme);
 
     }
@@ -418,14 +417,14 @@ public class PortletPageFactory implements PortletSessionListener {
         PortletTableLayout tableLayout = new PortletTableLayout();
         StringTokenizer tokenizer;
         for (int i = 0; i < portletNames.length; i++) {
-            tokenizer =  new StringTokenizer(portletNames[i], "/");
+            tokenizer = new StringTokenizer(portletNames[i], "/");
             String appName = tokenizer.nextToken();
             String portletName = tokenizer.nextToken();
             String portletClass = registry.getPortletClassName(appName, portletName);
             if (portletClass == null) {
                 log.error("Unable to find portlet class for " + portletName);
             }
-            if ( pageName == null ) {
+            if (pageName == null) {
                 pageName = "TCK_testpage_" + portletName;
             }
             PortletFrame frame = new PortletFrame();
@@ -463,9 +462,9 @@ public class PortletPageFactory implements PortletSessionListener {
         log.debug("User requesting layout: " + user.getUserName());
 
         String[] portletNames = req.getParameterValues("portletName");
-        if ( portletNames != null ) {
+        if (portletNames != null) {
             log.info("Creating TCK LAYOUT!");
-            tckLayout =  createTCKPage(req, portletNames );
+            tckLayout = createTCKPage(req, portletNames);
         }
 
         if (tckLayout != null) {
@@ -481,7 +480,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
         // Need to provide one guest container per users session
         if (userLayouts.containsKey(sessionId)) {
-            page = (PortletPage)userLayouts.get(sessionId);
+            page = (PortletPage) userLayouts.get(sessionId);
             log.debug("Returning existing layout for:" + sessionId + " for user=" + user.getUserName());
         } else {
 
@@ -533,14 +532,14 @@ public class PortletPageFactory implements PortletSessionListener {
         }
 
         if ((id != null) && (guests.containsKey(id))) {
-            return (PortletPage)guests.get(id);
+            return (PortletPage) guests.get(id);
         } else {
             PortletPage newcontainer = null;
             try {
                 //newcontainer = (PortletPage)guestPage.clone();
                 PortletPage guestPage = PortletTabRegistry.getGuestLayoutPage();
 
-                newcontainer = (PortletPage)deepCopy(guestPage);
+                newcontainer = (PortletPage) deepCopy(guestPage);
 
                 String defaultTheme = portalConfigService.getPortalConfigSettings().getDefaultTheme();
                 newcontainer.setTheme(defaultTheme);
@@ -585,49 +584,43 @@ public class PortletPageFactory implements PortletSessionListener {
     }
 
 
-    static public Object deepCopy(Object oldObj) throws Exception
-   {
-      ObjectOutputStream oos = null;
-      ObjectInputStream ois = null;
-      try
-      {
-         ByteArrayOutputStream bos =
-               new ByteArrayOutputStream(); // A
-         oos = new ObjectOutputStream(bos); // B
-         // serialize and pass the object
-         oos.writeObject(oldObj);   // C
-         oos.flush();               // D
-         ByteArrayInputStream bin =
-               new ByteArrayInputStream(bos.toByteArray()); // E
-         ois = new ObjectInputStream(bin);                  // F
-         // return the new object
-         Object ro = ois.readObject(); // G
-          return ro;
-      }
-      catch(Exception e)
-      {
-         System.out.println("Exception in ObjectCloner = " + e);
-         throw(e);
-      }
-      finally
-      {
-         oos.close();
-         ois.close();
-      }
-   }
+    static public Object deepCopy(Object oldObj) throws Exception {
+        ObjectOutputStream oos = null;
+        ObjectInputStream ois = null;
+        try {
+            ByteArrayOutputStream bos =
+                    new ByteArrayOutputStream(); // A
+            oos = new ObjectOutputStream(bos); // B
+            // serialize and pass the object
+            oos.writeObject(oldObj);   // C
+            oos.flush();               // D
+            ByteArrayInputStream bin =
+                    new ByteArrayInputStream(bos.toByteArray()); // E
+            ois = new ObjectInputStream(bin);                  // F
+            // return the new object
+            Object ro = ois.readObject(); // G
+            return ro;
+        } catch (Exception e) {
+            System.out.println("Exception in ObjectCloner = " + e);
+            throw(e);
+        } finally {
+            oos.close();
+            ois.close();
+        }
+    }
 
     public void logStatistics() {
 
         log.debug("number of guest layouts: " + guests.size());
         Iterator it = guests.keySet().iterator();
         while (it.hasNext()) {
-            String id = (String)it.next();
+            String id = (String) it.next();
             log.debug("guest has session: " + id);
         }
         log.debug("number of user layouts: " + userLayouts.size());
         it = userLayouts.keySet().iterator();
         while (it.hasNext()) {
-            String id = (String)it.next();
+            String id = (String) it.next();
             log.debug("user has session: " + id);
         }
 

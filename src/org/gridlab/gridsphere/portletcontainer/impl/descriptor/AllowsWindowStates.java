@@ -27,11 +27,12 @@ public class AllowsWindowStates {
     /**
      * Constructs an instance of AllowsWindowStates
      */
-    public AllowsWindowStates() {}
+    public AllowsWindowStates() {
+    }
 
     /**
      * For use by Castor. Clients should use #setPortletWindowStates
-     * <p>
+     * <p/>
      * Sets the supported window states for this portlet as a list conatining
      * Castor <code>AnyNode</code> elements.
      *
@@ -43,7 +44,7 @@ public class AllowsWindowStates {
 
     /**
      * For use by Castor. Clients should use #setPortletWindowStates
-     * <p>
+     * <p/>
      * Returns the supported window states for this portlet
      *
      * @return the window states list composed of <code>AnyNode</code> elements
@@ -95,7 +96,7 @@ public class AllowsWindowStates {
             }
         }
         for (int i = 0; i < statesAsStates.size(); i++) {
-            PortletWindow.State s = (PortletWindow.State)  statesAsStates.get(i);
+            PortletWindow.State s = (PortletWindow.State) statesAsStates.get(i);
         }
     }
 

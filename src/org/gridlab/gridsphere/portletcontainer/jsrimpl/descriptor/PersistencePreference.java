@@ -44,5 +44,5 @@ public class PersistencePreference {
         this.values = values;
     }
 
-    
+
 }

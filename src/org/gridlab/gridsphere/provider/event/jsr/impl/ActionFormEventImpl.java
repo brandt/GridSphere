@@ -4,18 +4,15 @@
  */
 package org.gridlab.gridsphere.provider.event.jsr.impl;
 
-import org.gridlab.gridsphere.provider.event.jsr.ActionFormEvent;
-import org.gridlab.gridsphere.provider.event.impl.BaseFormEventImpl;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
-import org.gridlab.gridsphere.portlet.jsrimpl.PortletRequestImpl;
-import org.gridlab.gridsphere.portlet.jsrimpl.PortletResponseImpl;
 import org.gridlab.gridsphere.portlet.jsrimpl.ActionRequestImpl;
 import org.gridlab.gridsphere.portlet.jsrimpl.ActionResponseImpl;
+import org.gridlab.gridsphere.provider.event.impl.BaseFormEventImpl;
+import org.gridlab.gridsphere.provider.event.jsr.ActionFormEvent;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
 /**
@@ -31,19 +28,19 @@ public class ActionFormEventImpl extends BaseFormEventImpl implements ActionForm
     /**
      * Constructs an instance of ActionEventImpl given an action, request and response
      *
-     * @param action a <code>DefaultPortletAction</code>
-     * @param request the <code>PortletRequest</code>
+     * @param action   a <code>DefaultPortletAction</code>
+     * @param request  the <code>PortletRequest</code>
      * @param response the <code>PortletResponse</code>
      */
     public ActionFormEventImpl(DefaultPortletAction action, ActionRequest request, ActionResponse response) {
-        super((ActionRequestImpl)request, (ActionResponseImpl)response);
+        super((ActionRequestImpl) request, (ActionResponseImpl) response);
         this.action = action;
         this.request = request;
         this.response = response;
         // Unless tagBeans is null, don't recreate them
         if (tagBeans == null) {
             tagBeans = new HashMap();
-            createTagBeans((HttpServletRequest)request);
+            createTagBeans((HttpServletRequest) request);
         }
         logRequestParameters();
 

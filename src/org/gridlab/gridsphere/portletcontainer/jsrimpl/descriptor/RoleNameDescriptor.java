@@ -7,10 +7,9 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
 //---------------------------------/
-
+//- Imported classes and packages -/
+//---------------------------------/
 
 
 /**
@@ -21,8 +20,8 @@ package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 public class RoleNameDescriptor extends RoleNameTypeDescriptor {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -46,8 +45,8 @@ public class RoleNameDescriptor extends RoleNameTypeDescriptor {
     private org.exolab.castor.xml.XMLFieldDescriptor identity;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public RoleNameDescriptor() {
@@ -58,31 +57,28 @@ public class RoleNameDescriptor extends RoleNameTypeDescriptor {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.RoleNameDescriptor()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
      * Method getAccessMode
      */
-    public org.exolab.castor.mapping.AccessMode getAccessMode()
-    {
+    public org.exolab.castor.mapping.AccessMode getAccessMode() {
         return null;
     } //-- org.exolab.castor.mapping.AccessMode getAccessMode()
 
     /**
      * Method getExtends
      */
-    public org.exolab.castor.mapping.ClassDescriptor getExtends()
-    {
+    public org.exolab.castor.mapping.ClassDescriptor getExtends() {
         return super.getExtends();
     } //-- org.exolab.castor.mapping.ClassDescriptor getExtends()
 
     /**
      * Method getIdentity
      */
-    public org.exolab.castor.mapping.FieldDescriptor getIdentity()
-    {
+    public org.exolab.castor.mapping.FieldDescriptor getIdentity() {
         if (identity == null)
             return super.getIdentity();
         return identity;
@@ -91,40 +87,35 @@ public class RoleNameDescriptor extends RoleNameTypeDescriptor {
     /**
      * Method getJavaClass
      */
-    public Class getJavaClass()
-    {
+    public Class getJavaClass() {
         return RoleName.class;
     } //-- java.lang.Class getJavaClass()
 
     /**
      * Method getNameSpacePrefix
      */
-    public String getNameSpacePrefix()
-    {
+    public String getNameSpacePrefix() {
         return nsPrefix;
     } //-- java.lang.String getNameSpacePrefix()
 
     /**
      * Method getNameSpaceURI
      */
-    public String getNameSpaceURI()
-    {
+    public String getNameSpaceURI() {
         return nsURI;
     } //-- java.lang.String getNameSpaceURI()
 
     /**
      * Method getValidator
      */
-    public org.exolab.castor.xml.TypeValidator getValidator()
-    {
+    public org.exolab.castor.xml.TypeValidator getValidator() {
         return this;
     } //-- org.exolab.castor.xml.TypeValidator getValidator()
 
     /**
      * Method getXMLName
      */
-    public String getXMLName()
-    {
+    public String getXMLName() {
         return xmlName;
     } //-- java.lang.String getXMLName()
 

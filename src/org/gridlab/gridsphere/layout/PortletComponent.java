@@ -5,9 +5,8 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletMessage;
-import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 
@@ -69,7 +68,7 @@ public interface PortletComponent extends ComponentLifecycle {
      * When set to true the portlet component is visible and will be rendered
      *
      * @param isVisible if <code>true</code> portlet component is rendered,
-     * <code>false</code> otherwise
+     *                  <code>false</code> otherwise
      */
     public void setVisible(boolean isVisible);
 
@@ -131,6 +130,7 @@ public interface PortletComponent extends ComponentLifecycle {
 
     /**
      * Delivers a message to the specified concrete portlet
+     *
      * @param concPortletID
      * @param msg
      * @param event

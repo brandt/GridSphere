@@ -16,7 +16,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
  * and that it will happen before the content generation phase. This also means, that no further events
  * will be delivered once the content generation phase has started. For example, message cannot be sent
  * from within the service() methods. The resulting message event will not be delivered and essentially discarded.
- *
+ * <p/>
  * Intelligent portlet containers should provide a cyclic event detection mechanism, so that the portlet
  * container does not come to a screaming halt, if two or more portlets happen to send each other events
  * that are triggered by each other.

@@ -19,18 +19,17 @@ public interface PortletTitleListener {
      * The information in the portlet request (like locale, client, and
      * session information) can but doesn't have to be considered to render
      * dynamic titles.. Examples are
-     * <p>
+     * <p/>
      * language-dependant titles for multi-lingual portals
      * shorter titles for WAP phones
      * the number of messages in a mailbox portlet
      * The session may be null, if the user is not logged in.
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     *
      * @throws PortletException if the portlet title has trouble fulfilling
-     * the rendering request
-     * @throws IOException if the streaming causes an I/O problem
+     *                          the rendering request
+     * @throws IOException      if the streaming causes an I/O problem
      */
     public void doTitle(PortletRequest request, PortletResponse response)
             throws PortletException, IOException;

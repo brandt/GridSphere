@@ -38,7 +38,7 @@ public class PanelBean extends BeanContainer implements TagBean {
     /**
      * Constructs a panel bean from a supplied portlet request and bean identifier
      *
-     * @param req the portlet request
+     * @param req    the portlet request
      * @param beanId the bean identifier
      */
     public PanelBean(HttpServletRequest req, String beanId) {
@@ -149,7 +149,7 @@ public class PanelBean extends BeanContainer implements TagBean {
     /**
      * Returns the panel (table) cell spacing
      *
-     * @return  the panel cell spacing
+     * @return the panel cell spacing
      */
     public String getCellSpacing() {
         return cellSpacing;
@@ -167,7 +167,7 @@ public class PanelBean extends BeanContainer implements TagBean {
     /**
      * Returns the panel (table) cell padding
      *
-     * @return  the panel cell padding
+     * @return the panel cell padding
      */
     public String getCellPadding() {
         return cellPadding;
@@ -185,7 +185,7 @@ public class PanelBean extends BeanContainer implements TagBean {
     /**
      * Returns the panel border
      *
-     * @return  the panel border
+     * @return the panel border
      */
     public String getBorder() {
         return border;

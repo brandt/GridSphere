@@ -23,7 +23,7 @@ public class TomcatManagerException extends Exception {
      * Constructs a new portlet exception with the given text.
      * The portlet container may use the text write it to a log.
      *
-     * @param msg the exception text
+     * @param msg   the exception text
      * @param cause the root cause
      */
     public TomcatManagerException(String msg, Throwable cause) {

@@ -6,12 +6,11 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.RadioButtonBean;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * A <code>RadioButtonTag</code> represents a radio button element
@@ -44,7 +43,7 @@ public class RadioButtonTag extends BaseComponentTag {
         if (!beanId.equals("")) {
             radiobutton = (RadioButtonBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (radiobutton == null) {
-                radiobutton = new RadioButtonBean((HttpServletRequest)pageContext.getRequest(), beanId);
+                radiobutton = new RadioButtonBean((HttpServletRequest) pageContext.getRequest(), beanId);
                 radiobutton.setSelected(selected);
                 this.setBaseComponentBean(radiobutton);
             } else {

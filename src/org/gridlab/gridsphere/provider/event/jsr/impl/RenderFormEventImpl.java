@@ -4,15 +4,15 @@
  */
 package org.gridlab.gridsphere.provider.event.jsr.impl;
 
-import org.gridlab.gridsphere.provider.event.jsr.RenderFormEvent;
-import org.gridlab.gridsphere.provider.event.impl.BaseFormEventImpl;
 import org.gridlab.gridsphere.portlet.jsrimpl.RenderRequestImpl;
 import org.gridlab.gridsphere.portlet.jsrimpl.RenderResponseImpl;
+import org.gridlab.gridsphere.provider.event.impl.BaseFormEventImpl;
+import org.gridlab.gridsphere.provider.event.jsr.RenderFormEvent;
 
-import javax.portlet.RenderResponse;
 import javax.portlet.RenderRequest;
-import java.util.Map;
+import javax.portlet.RenderResponse;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An <code>ActionEvent</code> is sent by the portlet container when an HTTP request is
@@ -26,23 +26,23 @@ public class RenderFormEventImpl extends BaseFormEventImpl implements RenderForm
     /**
      * Constructs an instance of RenderFormEventImpl given a render request and response
      *
-     * @param request the <code>RenderRequest</code>
+     * @param request  the <code>RenderRequest</code>
      * @param response the <code>RenderResponse</code>
      * @param tagBeans a collection of tag beans
      */
     public RenderFormEventImpl(RenderRequest request, RenderResponse response, Map tagBeans) {
-        super((RenderRequestImpl)request, (RenderResponseImpl)response);
+        super((RenderRequestImpl) request, (RenderResponseImpl) response);
         this.request = request;
         this.response = response;
         this.tagBeans = tagBeans;
-            // Unless tagBeans is null, don't recreate them
-            if (tagBeans == null) {
-                tagBeans = new HashMap();
-                createTagBeans((RenderRequestImpl)request);
-            }
-            logRequestParameters();
+        // Unless tagBeans is null, don't recreate them
+        if (tagBeans == null) {
+            tagBeans = new HashMap();
+            createTagBeans((RenderRequestImpl) request);
+        }
+        logRequestParameters();
 
-            logTagBeans();
+        logTagBeans();
     }
 
     /**

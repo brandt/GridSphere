@@ -40,10 +40,10 @@ public interface PortletConfig extends ServletConfig {
     /**
      * Returns whether the portlet supports the given mode for the supplied client
      *
-     * @param mode the portlet mode
-     * @param client the Client 
+     * @param mode   the portlet mode
+     * @param client the Client
      * @return <code>true</code> if the window supports the given state,
-     * <code>false</code> otherwise
+     *         <code>false</code> otherwise
      */
     public boolean supports(Portlet.Mode mode, Client client);
 
@@ -53,7 +53,7 @@ public interface PortletConfig extends ServletConfig {
      *
      * @param state the portlet window state
      * @return <code>true</code> if the window supports the given state,
-     * <code>false</code> otherwise
+     *         <code>false</code> otherwise
      */
     public boolean supports(PortletWindow.State state);
 

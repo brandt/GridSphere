@@ -30,7 +30,7 @@ public class PortletServiceNotFoundException extends PortletServiceException {
      * Constructs a new portlet exception with the given text.
      * The portlet container may use the text write it to a log.
      *
-     * @param text the exception text
+     * @param text  the exception text
      * @param cause the root cause
      */
     public PortletServiceNotFoundException(String text, Throwable cause) {

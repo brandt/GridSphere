@@ -4,8 +4,8 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
@@ -13,9 +13,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Collections;
 
 /**
  * The <code>PortletGridLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
@@ -50,7 +50,7 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable, 
      * no background there can't be a real transparent portlet.
      * Most likely one sets just the background in that one.
      *
-     * @param style  css style of the that layout
+     * @param style css style of the that layout
      */
     public void setStyle(String style) {
         this.style = style;
@@ -109,7 +109,7 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable, 
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
@@ -133,26 +133,26 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable, 
         List scomponents = Collections.synchronizedList(components);
         PortletRole userRole = req.getRole();
         synchronized (scomponents) {
-        for (int i = 0; i < numComponents; i++) {
-            p = (PortletComponent) scomponents.get(i);
-            PortletRole reqRole = PortletRole.toPortletRole(p.getRequiredRoleAsString());
-            if (userRole.compare(userRole, reqRole) >= 0) {
-            if (p.getWidth().equals("100%")) {
-                // make another table around this, just for the padding
-                out.println("<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> ");
-                out.println("<tr><td>");
-                p.doRender(event);
-                out.println("</td></tr></table>");
-                return;
+            for (int i = 0; i < numComponents; i++) {
+                p = (PortletComponent) scomponents.get(i);
+                PortletRole reqRole = PortletRole.toPortletRole(p.getRequiredRoleAsString());
+                if (userRole.compare(userRole, reqRole) >= 0) {
+                    if (p.getWidth().equals("100%")) {
+                        // make another table around this, just for the padding
+                        out.println("<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> ");
+                        out.println("<tr><td>");
+                        p.doRender(event);
+                        out.println("</td></tr></table>");
+                        return;
+                    }
+                }
             }
-            }
-        }
         }
 
         //out.println("<table width=\"" + gwidth + "%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\">");
         out.print("<table ");
         if (!getStyle().equals("")) {
-            out.print(" class='"+getStyle()+"' ");
+            out.print(" class='" + getStyle() + "' ");
         }
         out.println("border=\"0\" width=\"100%\" cellpadding=\"2\" cellspacing=\"0\"> <!-- overall gridlayout table -->");
 
@@ -189,13 +189,13 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable, 
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletGridLayout g = (PortletGridLayout)super.clone();
+        PortletGridLayout g = (PortletGridLayout) super.clone();
         g.numColumns = this.numColumns;
         g.columnString = this.columnString;
         g.style = this.style;
         g.colSizes = new ArrayList(this.numColumns);
         for (int i = 0; i < this.colSizes.size(); i++) {
-            String size = (String)this.colSizes.get(i);
+            String size = (String) this.colSizes.get(i);
             g.colSizes.add(size);
         }
         return g;

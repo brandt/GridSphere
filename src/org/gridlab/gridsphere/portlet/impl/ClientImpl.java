@@ -46,7 +46,7 @@ public class ClientImpl implements Client {
         // Compaq IPAQ: Mozilla/4.0 (compatible; MSIE 4.01; Windows CE; PPC; 240x320)
 
         String browserInfo = "Unknown browser";
-        if (userAgent!=null){
+        if (userAgent != null) {
             int i = userAgent.indexOf(" ");
 
             //System.err.println("mozilla version: " + mozillaVersion);
@@ -56,7 +56,7 @@ public class ClientImpl implements Client {
                 browserInfo = userAgent.substring(j + 1).trim();
             }
         }
-            //System.err.println("browser info: " + browserInfo);
+        //System.err.println("browser info: " + browserInfo);
         mimeType = req.getHeader("accept");
 
         //System.err.println("MIME types: " + mimeTypes);
@@ -153,7 +153,7 @@ public class ClientImpl implements Client {
      *
      * @param capability the <code>Capability</code>
      * @return <code>true</code> if the client has the given
-     * capability, <code>false</code> otherwise
+     *         capability, <code>false</code> otherwise
      */
     public boolean isCapableOf(Capability capability) {
         // XXX: FILL ME IN
@@ -167,7 +167,7 @@ public class ClientImpl implements Client {
      *
      * @param capabilities an array of <code>Capability</code>
      * @return <code>true</code> if the client has the given capability,
-     * <code>false</code> otherwise
+     *         <code>false</code> otherwise
      */
     public boolean isCapableOf(Capability[] capabilities) {
         // XXX: FILL ME IN

@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
-import org.exolab.castor.types.AnyNode;
-import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
@@ -26,7 +24,8 @@ public class Supports {
     /**
      * Constructs an instance of Supports
      */
-    public Supports() {}
+    public Supports() {
+    }
 
     /**
      * Returns the supported list of markups

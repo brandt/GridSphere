@@ -40,7 +40,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
     /**
      * Constructs a text area bean from a supplied portlet request and bean identifier
      *
-     * @param req the portlet request
+     * @param req    the portlet request
      * @param beanId the bean identifier
      */
     public TextAreaBean(HttpServletRequest req, String beanId) {
@@ -51,7 +51,8 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
     }
 
     /**
-     *  Gets the number of columns of the TextArea.
+     * Gets the number of columns of the TextArea.
+     *
      * @return number of columns
      */
     public int getCols() {
@@ -60,6 +61,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
 
     /**
      * Sets the number of columns of the TextArea.
+     *
      * @param cols number of cols
      */
     public void setCols(int cols) {
@@ -68,6 +70,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
 
     /**
      * Return the number of rows of the textarea.
+     *
      * @return number of rows
      */
     public int getRows() {
@@ -76,6 +79,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
 
     /**
      * Sets the number of rows of the textarea.
+     *
      * @param rows number of rows
      */
     public void setRows(int rows) {

@@ -5,22 +5,20 @@
  */
 package org.gridlab.gridsphere.services.core.portal.impl;
 
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Iterator;
 
 /**
  * Portal configuration service is used to manage portal administrative settings
@@ -69,7 +67,7 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
     public PortalConfigSettings getPortalConfigSettings() {
         PortalConfigSettings settings = null;
         try {
-            settings = (PortalConfigSettings)pm.restore("select c from " + PortalConfigSettings.class.getName() + " c");
+            settings = (PortalConfigSettings) pm.restore("select c from " + PortalConfigSettings.class.getName() + " c");
         } catch (PersistenceManagerException e) {
             log.error("Unable to retrieve config settings!", e);
         }

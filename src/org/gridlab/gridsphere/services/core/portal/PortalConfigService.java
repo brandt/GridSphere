@@ -5,7 +5,7 @@
  */
 package org.gridlab.gridsphere.services.core.portal;
 
-import java.util.Date;
+
 
 /**
  * Portal configuration service is used to manage portal administrative settings

@@ -5,8 +5,8 @@
 package org.gridlab.gridsphere.portlet.service.spi;
 
 import javax.servlet.ServletContext;
-import java.util.Enumeration;
 import java.io.IOException;
+import java.util.Enumeration;
 
 /**
  * The <code>PortletServiceConfig</code> is the interface through which
@@ -26,7 +26,7 @@ public interface PortletServiceConfig {
     /**
      * Returns the init parameter with the given name.
      *
-     * @param name the name of the init parameter.
+     * @param name  the name of the init parameter.
      * @param value the value of the init parameter
      */
     public void setInitParameter(String name, String value);
@@ -35,7 +35,7 @@ public interface PortletServiceConfig {
      * Returns the init parameter with the given name. It returns the given default
      * value if the parameter is not found.
      *
-     * @param name the name of the requested init parameter.
+     * @param name         the name of the requested init parameter.
      * @param defaultValue the default value to return.
      * @return the init parameter value if exists, otherwise defaultValue
      */

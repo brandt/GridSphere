@@ -101,7 +101,7 @@ public class ActionLinkTag extends ActionTag {
                 actionlink.setStyle(style);
                 this.setBaseComponentBean(actionlink);
                 paramBeans = new ArrayList();
-            }  else {               
+            } else {
                 if (actionlink.getParamBeanList() != null) {
                     paramBeans = actionlink.getParamBeanList();
                 }

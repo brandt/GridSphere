@@ -77,6 +77,7 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
     /**
      * Adds a BaseComponentBean. This can be a bean like a ActionLink, an ActionMenuItemBean wrapper will
      * be created around it.
+     *
      * @param bean to add
      */
     public void addMenuEntry(BaseComponentBean bean) {
@@ -88,6 +89,7 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
 
     /**
      * Gets the title of the menu.
+     *
      * @return title of the menu
      */
     public String getTitle() {
@@ -96,6 +98,7 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
 
     /**
      * Sets the title of the menu.
+     *
      * @param title title of the menu
      */
     public void setTitle(String title) {
@@ -104,6 +107,7 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
 
     /**
      * Gets the alignment of the menu.
+     *
      * @return alignment
      */
     public String getAlign() {
@@ -112,6 +116,7 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
 
     /**
      * Sets the alignment of the menu.
+     *
      * @param align alignmnet of the menu
      */
     public void setAlign(String align) {
@@ -120,6 +125,7 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
 
     /**
      * Returns true when the parent is another actionmenu.
+     *
      * @return true/false if parent is actionmenu.
      */
     public boolean isHasParentMenu() {
@@ -128,6 +134,7 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
 
     /**
      * Defines if parent is another Actionmenu. Is used for different coloring of the labels. Set automatically.
+     *
      * @param hasParentMenu true/false
      */
     public void setHasParentMenu(boolean hasParentMenu) {

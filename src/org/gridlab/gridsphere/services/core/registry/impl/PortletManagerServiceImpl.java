@@ -31,7 +31,8 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     /**
      * Constructs an instance of PortletManagerServiceImpl
      */
-    public PortletManagerServiceImpl() {}
+    public PortletManagerServiceImpl() {
+    }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.debug("in init()");
@@ -49,9 +50,9 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      * Initializes a portlet web application
      *
      * @param webApplicationName the name of the portlet web application
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>Portletresponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req                the <code>PortletRequest</code>
+     * @param res                the <code>Portletresponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
@@ -62,9 +63,9 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      * Shuts down a currently active portlet web application from the portlet container
      *
      * @param webApplicationName the name of the portlet web application
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>Portletresponse</code>
-     * @throws IOException if an I/O error occurs
+     * @param req                the <code>PortletRequest</code>
+     * @param res                the <code>Portletresponse</code>
+     * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
     public void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {

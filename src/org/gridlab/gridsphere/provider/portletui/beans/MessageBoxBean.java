@@ -1,8 +1,8 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /*
@@ -37,6 +37,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     /**
      * Returns the width of the messagebox
+     *
      * @return width of the messagebox
      */
     public String getWidth() {
@@ -65,6 +66,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     /**
      * Sets the width of the messgebox
+     *
      * @param width witdh of the messagebox
      */
     public void setWidth(String width) {
@@ -73,6 +75,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     /**
      * Gets the height of the messagebox
+     *
      * @return height of the messagebox
      */
     public String getHeight() {
@@ -81,6 +84,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     /**
      * Sets the height of the messageboox
+     *
      * @param height height of the messagebox
      */
     public void setHeight(String height) {
@@ -89,8 +93,9 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     /**
      * Returns the type of the message.
-     * @see TextBean
+     *
      * @return type of the message
+     * @see TextBean
      */
     public String getMessageType() {
         return messageType;
@@ -98,8 +103,9 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     /**
      * Sets the type of the message
-     * @see TextBean
+     *
      * @param messageType
+     * @see TextBean
      */
     public void setMessageType(String messageType) {
         this.messageType = messageType;
@@ -107,6 +113,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     /**
      * Appends text to the messagebox.
+     *
      * @param text text to append
      */
     public void appendText(String text) {
@@ -115,6 +122,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     /**
      * Prepends text to the current text.
+     *
      * @param text text to prepend
      */
     public void prependText(String text) {
@@ -123,6 +131,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     /**
      * Appends a localisation key to the current list of keys.
+     *
      * @param key key to append
      */
     public void appendKey(String key) {
@@ -131,6 +140,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     /**
      * Prepends a localisation key to the current list of keys.
+     *
      * @param key key to prepend
      */
     public void prependKey(String key) {
@@ -139,6 +149,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     /**
      * Removes a key from the list.
+     *
      * @param key key to remove
      */
     public void removeKey(String key) {
@@ -147,6 +158,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     /**
      * Removes the text from the list.
+     *
      * @param text text to be removed
      */
     public void removeText(String text) {
@@ -157,8 +169,8 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
      * Clears the message. This includes the text and the keys for localization.
      */
     public void clearMessage() {
-       this.text = new ArrayList();
-       this.keys = new ArrayList();
+        this.text = new ArrayList();
+        this.keys = new ArrayList();
     }
 
 
@@ -172,18 +184,18 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
         String result = null;
 
         List list = text;
-        if (keys.size()!=0) {
+        if (keys.size() != 0) {
             list = keys;
         }
-        if (list.size()!=0) {
+        if (list.size() != 0) {
             StringBuffer sb = new StringBuffer();
-            for (int i=0;i<list.size();i++) {
+            for (int i = 0; i < list.size(); i++) {
 
-                String message = (String)list.get(i);
-                if (keys.size()!=0) {
+                String message = (String) list.get(i);
+                if (keys.size() != 0) {
                     message = getLocalizedText(message);
                 }
-                if (format) sb.append("<div class=\""+messageType+"\">"+message+"</div>"); else sb.append(message);
+                if (format) sb.append("<div class=\"" + messageType + "\">" + message + "</div>"); else sb.append(message);
             }
             result = sb.toString();
         }
@@ -196,14 +208,14 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
     }
 
     public String toEndString() {
-        this.cssClass="ui-messagebox";
+        this.cssClass = "ui-messagebox";
         StringBuffer sb = new StringBuffer();
         String message = getMessage(true);
-        if (height!=null) this.addCssStyle("height=\""+height+"\"");
-        if (width!=null) this.addCssStyle("width=\""+width+"\"");
+        if (height != null) this.addCssStyle("height=\"" + height + "\"");
+        if (width != null) this.addCssStyle("width=\"" + width + "\"");
         // only return something if we have a message
-        if (message!=null) {
-            sb.append("<div"+getFormattedCss()+">");
+        if (message != null) {
+            sb.append("<div" + getFormattedCss() + ">");
             sb.append(message);
             sb.append("</div>");
         }

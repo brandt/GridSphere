@@ -7,10 +7,9 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
 //---------------------------------/
-
+//- Imported classes and packages -/
+//---------------------------------/
 
 
 /**
@@ -21,8 +20,8 @@ package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 public class PortletNameDescriptor extends PortletNameTypeDescriptor {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -46,8 +45,8 @@ public class PortletNameDescriptor extends PortletNameTypeDescriptor {
     private org.exolab.castor.xml.XMLFieldDescriptor identity;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public PortletNameDescriptor() {
@@ -58,31 +57,28 @@ public class PortletNameDescriptor extends PortletNameTypeDescriptor {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletNameDescriptor()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
      * Method getAccessMode
      */
-    public org.exolab.castor.mapping.AccessMode getAccessMode()
-    {
+    public org.exolab.castor.mapping.AccessMode getAccessMode() {
         return null;
     } //-- org.exolab.castor.mapping.AccessMode getAccessMode()
 
     /**
      * Method getExtends
      */
-    public org.exolab.castor.mapping.ClassDescriptor getExtends()
-    {
+    public org.exolab.castor.mapping.ClassDescriptor getExtends() {
         return super.getExtends();
     } //-- org.exolab.castor.mapping.ClassDescriptor getExtends()
 
     /**
      * Method getIdentity
      */
-    public org.exolab.castor.mapping.FieldDescriptor getIdentity()
-    {
+    public org.exolab.castor.mapping.FieldDescriptor getIdentity() {
         if (identity == null)
             return super.getIdentity();
         return identity;
@@ -91,40 +87,35 @@ public class PortletNameDescriptor extends PortletNameTypeDescriptor {
     /**
      * Method getJavaClass
      */
-    public java.lang.Class getJavaClass()
-    {
+    public java.lang.Class getJavaClass() {
         return org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName.class;
     } //-- java.lang.Class getJavaClass()
 
     /**
      * Method getNameSpacePrefix
      */
-    public java.lang.String getNameSpacePrefix()
-    {
+    public java.lang.String getNameSpacePrefix() {
         return nsPrefix;
     } //-- java.lang.String getNameSpacePrefix()
 
     /**
      * Method getNameSpaceURI
      */
-    public java.lang.String getNameSpaceURI()
-    {
+    public java.lang.String getNameSpaceURI() {
         return nsURI;
     } //-- java.lang.String getNameSpaceURI()
 
     /**
      * Method getValidator
      */
-    public org.exolab.castor.xml.TypeValidator getValidator()
-    {
+    public org.exolab.castor.xml.TypeValidator getValidator() {
         return this;
     } //-- org.exolab.castor.xml.TypeValidator getValidator()
 
     /**
      * Method getXMLName
      */
-    public java.lang.String getXMLName()
-    {
+    public java.lang.String getXMLName() {
         return xmlName;
     } //-- java.lang.String getXMLName()
 

@@ -4,7 +4,6 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
 
 /*
  * @author <a href="mailto:russell@aei.mpg.de">Michael Russell</a>
@@ -52,4 +51,4 @@ public class ActionComponentBean extends IncludeBean {
         log.debug("Storing action component bean " + getBeanKey());
         super.store();
     }
- }
+}

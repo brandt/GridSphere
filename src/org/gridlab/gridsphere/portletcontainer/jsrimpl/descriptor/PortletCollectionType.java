@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -18,18 +18,17 @@ import java.util.ArrayList;
 
 /**
  * The portlet-collectionType is used to identify a subset
- *  of portlets within a portlet application to which a
- *  security constraint applies.
- *  Used in: security-constraint
- *
+ * of portlets within a portlet application to which a
+ * security constraint applies.
+ * Used in: security-constraint
  *
  * @version $Revision$ $Date$
  */
 public class PortletCollectionType implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -38,8 +37,8 @@ public class PortletCollectionType implements java.io.Serializable {
     private java.util.ArrayList _portletNameList;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public PortletCollectionType() {
@@ -48,8 +47,8 @@ public class PortletCollectionType implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletCollectionType()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
@@ -58,8 +57,7 @@ public class PortletCollectionType implements java.io.Serializable {
      * @param vPortletName
      */
     public void addPortletName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName vPortletName)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _portletNameList.add(vPortletName);
     } //-- void addPortletName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletName)
 
@@ -70,24 +68,21 @@ public class PortletCollectionType implements java.io.Serializable {
      * @param vPortletName
      */
     public void addPortletName(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName vPortletName)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _portletNameList.add(index, vPortletName);
     } //-- void addPortletName(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletName)
 
     /**
      * Method clearPortletName
      */
-    public void clearPortletName()
-    {
+    public void clearPortletName() {
         _portletNameList.clear();
     } //-- void clearPortletName()
 
     /**
      * Method enumeratePortletName
      */
-    public java.util.Enumeration enumeratePortletName()
-    {
+    public java.util.Enumeration enumeratePortletName() {
         return new org.exolab.castor.util.IteratorEnumeration(_portletNameList.iterator());
     } //-- java.util.Enumeration enumeratePortletName()
 
@@ -97,8 +92,7 @@ public class PortletCollectionType implements java.io.Serializable {
      * @param index
      */
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName getPortletName(int index)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _portletNameList.size())) {
             throw new IndexOutOfBoundsException();
@@ -110,8 +104,7 @@ public class PortletCollectionType implements java.io.Serializable {
     /**
      * Method getPortletName
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName[] getPortletName()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName[] getPortletName() {
         int size = _portletNameList.size();
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName[] mArray = new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName[size];
         for (int index = 0; index < size; index++) {
@@ -123,20 +116,17 @@ public class PortletCollectionType implements java.io.Serializable {
     /**
      * Method getPortletNameCount
      */
-    public int getPortletNameCount()
-    {
+    public int getPortletNameCount() {
         return _portletNameList.size();
     } //-- int getPortletNameCount()
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -148,8 +138,7 @@ public class PortletCollectionType implements java.io.Serializable {
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer)
@@ -160,8 +149,7 @@ public class PortletCollectionType implements java.io.Serializable {
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler)
@@ -171,8 +159,7 @@ public class PortletCollectionType implements java.io.Serializable {
      *
      * @param vPortletName
      */
-    public boolean removePortletName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName vPortletName)
-    {
+    public boolean removePortletName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName vPortletName) {
         boolean removed = _portletNameList.remove(vPortletName);
         return removed;
     } //-- boolean removePortletName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletName)
@@ -184,8 +171,7 @@ public class PortletCollectionType implements java.io.Serializable {
      * @param vPortletName
      */
     public void setPortletName(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName vPortletName)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _portletNameList.size())) {
             throw new IndexOutOfBoundsException();
@@ -198,8 +184,7 @@ public class PortletCollectionType implements java.io.Serializable {
      *
      * @param portletNameArray
      */
-    public void setPortletName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName[] portletNameArray)
-    {
+    public void setPortletName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName[] portletNameArray) {
         //-- copy array
         _portletNameList.clear();
         for (int i = 0; i < portletNameArray.length; i++) {
@@ -213,8 +198,7 @@ public class PortletCollectionType implements java.io.Serializable {
      * @param reader
      */
     public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletCollectionType) Unmarshaller.unmarshal(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletCollectionType.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader)
 
@@ -222,8 +206,7 @@ public class PortletCollectionType implements java.io.Serializable {
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate()

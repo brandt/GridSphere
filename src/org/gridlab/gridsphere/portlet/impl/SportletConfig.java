@@ -5,16 +5,15 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
-import java.io.File;
 
 /**
  * The <code>SportletConfig</code> class provides the portlet with its
@@ -39,14 +38,15 @@ public class SportletConfig implements PortletConfig {
     /**
      * Cannot instantiate uninitialized SportletConfig
      */
-    private SportletConfig() {}
+    private SportletConfig() {
+    }
 
     /**
      * Constructs an instance of PortletConfig from a servlet configuration
      * object and an application portlet descriptor
      *
      * @param servletConfig a <code>ServletConfig</code>
-     * @param appConfig a <code>ApplicationSportletConfig</code>
+     * @param appConfig     a <code>ApplicationSportletConfig</code>
      */
     public SportletConfig(ServletConfig servletConfig, ApplicationSportletConfig appConfig) {
         this.servletConfig = servletConfig;
@@ -66,7 +66,7 @@ public class SportletConfig implements PortletConfig {
         // the context path
         String ctxPath = context.getRealPath("");
         int i = ctxPath.lastIndexOf(File.separator);
-        groupName = ctxPath.substring(i+1);
+        groupName = ctxPath.substring(i + 1);
 
         //this.logConfig();
     }
@@ -101,15 +101,14 @@ public class SportletConfig implements PortletConfig {
     /**
      * Returns whether the portlet supports the given mode for the given client.
      *
-     * @param mode the portlet mode
+     * @param mode   the portlet mode
      * @param client the client object
-     *
      * @return <code>true</code> if the window supports the given state,
-     * <code>false</code> otherwise
+     *         <code>false</code> otherwise
      */
     public boolean supports(Portlet.Mode mode, Client client) {
-         // set portlet modes
-        List supportedModes = appConfig.getSupportedModes(client.getMimeType());        
+        // set portlet modes
+        List supportedModes = appConfig.getSupportedModes(client.getMimeType());
         return (supportedModes.contains(mode) ? true : false);
     }
 
@@ -118,7 +117,7 @@ public class SportletConfig implements PortletConfig {
      *
      * @param state the portlet window state
      * @return <code>true</code> if the window supports the given state,
-     * <code>false</code> otherwise
+     *         <code>false</code> otherwise
      */
     public boolean supports(PortletWindow.State state) {
         return (allowedStates.contains(state) ? true : false);

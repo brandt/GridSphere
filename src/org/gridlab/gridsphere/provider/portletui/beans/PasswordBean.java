@@ -33,7 +33,7 @@ public class PasswordBean extends TextFieldBean {
     /**
      * Constructs a password bean using a supplied portlet request and bean identifier
      *
-     * @param req the portlet request
+     * @param req    the portlet request
      * @param beanId the bean identifier
      */
     public PasswordBean(HttpServletRequest req, String beanId) {

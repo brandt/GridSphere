@@ -42,7 +42,7 @@ public class PortletException extends ServletException {
      * Constructs a new portlet exception with the given text.
      * The portlet container may use the text write it to a log.
      *
-     * @param text the exception text
+     * @param text  the exception text
      * @param cause the root cause
      */
     public PortletException(String text, Throwable cause) {

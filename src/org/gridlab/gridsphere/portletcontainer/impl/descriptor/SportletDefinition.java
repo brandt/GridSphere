@@ -27,7 +27,7 @@ public class SportletDefinition {
 
     /**
      * Internal method used by Castor
-     * <p>
+     * <p/>
      * Returns a list of concrete portlet definitions
      *
      * @return a list of concrete portlet definitions
@@ -39,7 +39,7 @@ public class SportletDefinition {
 
     /**
      * Internal method used by Castor
-     * <p>
+     * <p/>
      * Sets a list of concrete portlet definitions
      *
      * @param concSportletList a <code>ArrayList</code> of concrete portlet definitions

@@ -1,27 +1,26 @@
 package org.gridlab.gridsphere.core.persistence.hibernate;
 
-import org.apache.tools.ant.Task;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.MappingException;
+import net.sf.hibernate.cfg.Configuration;
+import net.sf.hibernate.connection.DriverManagerConnectionProvider;
+import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
+import net.sf.hibernate.tool.hbm2ddl.SchemaUpdate;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 
-import java.util.Properties;
-import java.util.List;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import net.sf.hibernate.connection.DriverManagerConnectionProvider;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.MappingException;
-import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
-import net.sf.hibernate.tool.hbm2ddl.SchemaUpdate;
-import net.sf.hibernate.cfg.Configuration;
+import java.util.List;
+import java.util.Properties;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
@@ -35,9 +34,9 @@ public class DBTask extends Task {
 
     private PortletLog log = SportletLog.getInstance(DBTask.class);
 
-    public final static String ACTION_CREATE="CREATE";
-    public final static String ACTION_UPDATE="UPDATE";
-    public final static String ACTION_CHECKDB="CHECKDB";
+    public final static String ACTION_CREATE = "CREATE";
+    public final static String ACTION_UPDATE = "UPDATE";
+    public final static String ACTION_CHECKDB = "CHECKDB";
 
     private String MAPPING_ERROR =
             "FATAL: Could not create database! Please check above errormessages! ";
@@ -53,13 +52,13 @@ public class DBTask extends Task {
             "Gridsphere is NOT correctly installed! ";
     private String NO_CORE_TABLES =
             "Some core tables could not be found!";
-    private String CREATION_ERROR = 
+    private String CREATION_ERROR =
             "Could not create database!";
     private String UPDATE_ERROR =
             "Could not update database!";
 
 
-    private String  hibernatePropertiesFileName = "hibernate.properties";
+    private String hibernatePropertiesFileName = "hibernate.properties";
 
     private String configDir = "";
     private String action = "";
@@ -82,7 +81,7 @@ public class DBTask extends Task {
         try {
             new SchemaExport(cfg).create(false, true);
         } catch (HibernateException e) {
-            throw new BuildException("DB Error: "+CREATION_ERROR+" "+NOT_INSTALLED+" !");
+            throw new BuildException("DB Error: " + CREATION_ERROR + " " + NOT_INSTALLED + " !");
         }
 
     }
@@ -91,7 +90,7 @@ public class DBTask extends Task {
         try {
             new SchemaUpdate(cfg).execute(false, true);
         } catch (HibernateException e) {
-            throw new BuildException("DB Error: "+UPDATE_ERROR+" "+NOT_INSTALLED+" !");
+            throw new BuildException("DB Error: " + UPDATE_ERROR + " " + NOT_INSTALLED + " !");
         }
     }
 
@@ -115,10 +114,10 @@ public class DBTask extends Task {
     private Properties loadProperties(String path) throws BuildException {
         Properties prop = new Properties();
         try {
-            FileInputStream fis = new FileInputStream(new File(path+File.separator+hibernatePropertiesFileName));
+            FileInputStream fis = new FileInputStream(new File(path + File.separator + hibernatePropertiesFileName));
             prop.load(fis);
         } catch (IOException e) {
-            throw new BuildException("DB Error:" + CONFIGFILE_ERROR + " ("+path+")");
+            throw new BuildException("DB Error:" + CONFIGFILE_ERROR + " (" + path + ")");
         }
         return prop;
     }
@@ -185,13 +184,13 @@ public class DBTask extends Task {
     public void execute() throws BuildException {
 
         log.info("Database:");
-        log.info("Config: "+this.configDir);
-        log.info("Action: "+this.action);
+        log.info("Config: " + this.configDir);
+        log.info("Action: " + this.action);
 
         try {
             // try to load the properties
             Properties properties = loadProperties(this.configDir);
-            log.info("Loaded DB properties: "+this.configDir);
+            log.info("Loaded DB properties: " + this.configDir);
 
             // test the db connection
             this.testDBConnection(properties);
@@ -205,14 +204,14 @@ public class DBTask extends Task {
                 this.checkDatabase();
             } else if (action.equals(ACTION_CREATE)) {
                 this.createDatabase(cfg);
-            }  else if (action.equals(ACTION_UPDATE)) {
+            } else if (action.equals(ACTION_UPDATE)) {
                 this.updateDatabase(cfg);
             } else {
-                throw new BuildException("Unknown Action specified ("+this.action+")!");
+                throw new BuildException("Unknown Action specified (" + this.action + ")!");
             }
 
         } catch (BuildException e) {
-            log.info("Database not correctly installed.\n"+e);
+            log.info("Database not correctly installed.\n" + e);
             throw new BuildException("The database is not correctly installed!");
         }
     }

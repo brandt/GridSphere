@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * An <code>ApplicationPortlet</code> represents the portlet application instance
  * defined in the portlet descriptor file.
-
+ *
  * @see <code>org.gridlab.gridsphere.portletcontainer.gs.descriptor.ApplicationSportletConfig</code>
  */
 public interface ApplicationPortlet {
@@ -29,9 +29,9 @@ public interface ApplicationPortlet {
      * portlet
      *
      * @param concretePortletID the concrete portlet ID associated with this
-     * <code>ApplicationPortlet</code>
+     *                          <code>ApplicationPortlet</code>
      * @return the <code>ConcretePortlet</code> associated with this
-     * application portlet
+     *         application portlet
      */
     public ConcretePortlet getConcretePortlet(String concretePortletID);
 

@@ -76,6 +76,7 @@ public class ActionMenuTag extends ContainerTag {
 
     /**
      * Sets the key used to identify localized text
+     *
      * @param key the key used to identify localized text
      */
     public void setKey(String key) {

@@ -11,8 +11,8 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * The <code>PortletColumnLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
@@ -49,8 +49,8 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
 
             out.println("<tbody>");
             List scomponents = Collections.synchronizedList(components);
-            synchronized(scomponents) {
-                for (int i=0;i<scomponents.size();i++) {
+            synchronized (scomponents) {
+                for (int i = 0; i < scomponents.size(); i++) {
 
                     p = (PortletComponent) scomponents.get(i);
 
@@ -71,7 +71,7 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletColumnLayout g = (PortletColumnLayout)super.clone();
+        PortletColumnLayout g = (PortletColumnLayout) super.clone();
         return g;
     }
 

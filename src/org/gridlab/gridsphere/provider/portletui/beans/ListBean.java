@@ -38,7 +38,7 @@ public class ListBean extends BaseComponentBean implements TagBean {
      * Constructs a list box bean with a supplied portlet request and bean identifier
      *
      * @param request the portlet request
-     * @param beanId the bean identifier
+     * @param beanId  the bean identifier
      */
     public ListBean(HttpServletRequest request, String beanId) {
         super(NAME);

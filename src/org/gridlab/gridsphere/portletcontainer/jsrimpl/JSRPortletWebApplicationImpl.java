@@ -6,33 +6,24 @@ package org.gridlab.gridsphere.portletcontainer.jsrimpl;
 
 import org.gridlab.gridsphere.layout.PortletTabRegistry;
 import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
-import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDeploymentDescriptor2;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint;
-import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
+import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
+import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
-import javax.portlet.PortalContext;
 import java.io.File;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.List;
 
 /**
  * The <code>PortletWebApplicationImpl</code> is an implementation of a <code>PortletWebApplication</code> that
@@ -56,7 +47,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
     public JSRPortletWebApplicationImpl(ServletContext context, String servletName, ClassLoader loader) throws PortletException {
         String realPath = context.getRealPath("");
         int l = realPath.lastIndexOf(File.separator);
-        String appName = realPath.substring(l+1);
+        String appName = realPath.substring(l + 1);
 
         // Make all jsr portlets have only one concrete instance
         webApplicationName = appName + ".1";
@@ -73,7 +64,6 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
 
         // load group.xml
         loadGroup(context);
-
 
 
     }
@@ -160,7 +150,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
     }
 
     public PortletDefinition getPortletDefinition(String portletClassName) {
-        return (PortletDefinition)portletDefinitions.get(portletClassName);
+        return (PortletDefinition) portletDefinitions.get(portletClassName);
     }
 
     public void destroy() {

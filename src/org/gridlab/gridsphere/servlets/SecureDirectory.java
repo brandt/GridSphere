@@ -4,25 +4,18 @@
  */
 package org.gridlab.gridsphere.servlets;
 
+import org.apache.oro.text.perl.Perl5Util;
+
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-
-import java.io.IOException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import java.util.Enumeration;
-import java.util.Date;
-import java.util.Calendar;
-
+import java.io.*;
 import java.text.DateFormat;
-
-import org.apache.oro.text.perl.Perl5Util;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Enumeration;
 
 public class SecureDirectory extends HttpServlet {
 

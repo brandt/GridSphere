@@ -4,8 +4,8 @@
  */
 package org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat;
 
-import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +13,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class TomcatManagerWrapper {
 
@@ -105,7 +108,7 @@ public class TomcatManagerWrapper {
 
             Iterator it = result.getWebAppDescriptions().iterator();
             while (it.hasNext()) {
-                TomcatWebAppDescription webAppDesc = (TomcatWebAppDescription)it.next();
+                TomcatWebAppDescription webAppDesc = (TomcatWebAppDescription) it.next();
                 //System.err.println(webAppDesc.toString());
                 if (webapps.contains((webAppDesc.getContextPath()))) {
                     String desc = pm.getPortletWebApplicationDescription(webAppDesc.getContextPath());

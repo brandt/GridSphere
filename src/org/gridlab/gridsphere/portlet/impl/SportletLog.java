@@ -5,14 +5,14 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 
-import org.apache.log4j.PropertyConfigurator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.PropertyConfigurator;
 import org.gridlab.gridsphere.portlet.PortletLog;
 
+import java.net.URL;
 import java.util.Hashtable;
 import java.util.Map;
-import java.net.URL;
 
 /**
  * The <code>PortletLog</code> provides the portlet with the ability to log
@@ -20,17 +20,17 @@ import java.net.URL;
  * container. The type and location of of the log is a matter of implementation.
  * Also, whether logging is enabled or not is at the discretion of the
  * portlet container.
- * <p>
+ * <p/>
  * <code>
  * ...
  * PortletLog log = iContext.getLog ();
- *
+ * <p/>
  * if (log.isWarnEnabled())
- *    log.warn ("Can access the content source");
- *
+ * log.warn ("Can access the content source");
+ * <p/>
  * ...
  * </code>
- * <p>
+ * <p/>
  */
 public class SportletLog implements PortletLog {
 
@@ -141,7 +141,7 @@ public class SportletLog implements PortletLog {
     /**
      * Logs the given error text, cause, and a stack trace in the portlet log.
      *
-     * @param text the error text to log
+     * @param text  the error text to log
      * @param cause the cause for logging
      */
     public void error(String text, Throwable cause) {

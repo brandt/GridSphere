@@ -1,18 +1,17 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.provider.portletui.beans.IncludeBean;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
-
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.ServletContext;
+import org.gridlab.gridsphere.provider.portletui.beans.IncludeBean;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
 
 /*
  * @author <a href="mailto:russell@aei.mpg.de">Michael Russell</a>
@@ -21,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  * Includes jsp pages from any web application.
  */
 
-public class  IncludeTag extends BaseBeanTag {
+public class IncludeTag extends BaseBeanTag {
 
     private static PortletLog log = SportletLog.getInstance(IncludeTag.class);
     protected IncludeBean includeBean = null;
@@ -84,7 +83,7 @@ public class  IncludeTag extends BaseBeanTag {
             // Or else this include won't be contained within the parent content
             // but either before or after it.
             //rd.include(request, new ServletResponseWrapperInclude(response, pageContext.getOut()));
-            rd.include(request, new StoredPortletResponseImpl((HttpServletResponse)response, pageContext.getOut()));
+            rd.include(request, new StoredPortletResponseImpl((HttpServletResponse) response, pageContext.getOut()));
             //rd.include(pageContext.getRequest(), pageContext.getResponse());
         } catch (Exception e) {
             log.error("Unable to include page ", e);

@@ -10,23 +10,25 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
-import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
-import org.gridlab.gridsphere.services.core.request.RequestService;
-import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.mail.MailMessage;
 import org.gridlab.gridsphere.services.core.mail.MailService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
+import org.gridlab.gridsphere.services.core.request.GenericRequest;
+import org.gridlab.gridsphere.services.core.request.RequestService;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
+import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
-import javax.servlet.UnavailableException;
 import javax.mail.MessagingException;
+import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.Set;
 
 public class LoginPortlet extends ActionPortlet {
 
@@ -51,12 +53,12 @@ public class LoginPortlet extends ActionPortlet {
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         try {
-            userManagerService = (UserManagerService)getPortletConfig().getContext().getService(UserManagerService.class);
-            aclService = (AccessControlManagerService)getPortletConfig().getContext().getService(AccessControlManagerService.class);
-            passwordManagerService = (PasswordManagerService)getPortletConfig().getContext().getService(PasswordManagerService.class);
-            requestService = (RequestService)getPortletConfig().getContext().getService(RequestService.class);
-            mailService = (MailService)getPortletConfig().getContext().getService(MailService.class);
-            portalConfigService = (PortalConfigService)getPortletConfig().getContext().getService(PortalConfigService.class);
+            userManagerService = (UserManagerService) getPortletConfig().getContext().getService(UserManagerService.class);
+            aclService = (AccessControlManagerService) getPortletConfig().getContext().getService(AccessControlManagerService.class);
+            passwordManagerService = (PasswordManagerService) getPortletConfig().getContext().getService(PasswordManagerService.class);
+            requestService = (RequestService) getPortletConfig().getContext().getService(RequestService.class);
+            mailService = (MailService) getPortletConfig().getContext().getService(MailService.class);
+            portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
             canUserCreateAccount = portalConfigService.getPortalConfigSettings().getCanUserCreateAccount();
         } catch (PortletServiceException e) {
             throw new UnavailableException("Unable to initialize services");
@@ -98,7 +100,7 @@ public class LoginPortlet extends ActionPortlet {
         log.debug("in LoginPortlet: gs_login");
         PortletRequest req = event.getPortletRequest();
 
-        String errorKey = (String)req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
+        String errorKey = (String) req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
 
         if (errorKey != null) {
             MessageBoxBean frame = event.getMessageBoxBean("msg");
@@ -203,14 +205,13 @@ public class LoginPortlet extends ActionPortlet {
             isInvalid = isInvalidPassword(event, message);
         }
         // Throw exception if error was found
-        if (isInvalid){
+        if (isInvalid) {
             throw new PortletException(message.toString());
         }
         log.debug("Exiting validateUser()");
     }
 
-    private boolean isInvalidPassword(FormEvent event, StringBuffer message)
-    {
+    private boolean isInvalidPassword(FormEvent event, StringBuffer message) {
         PortletRequest req = event.getPortletRequest();
         // Validate password
         String passwordValue = event.getPasswordBean("password").getValue();
@@ -292,7 +293,7 @@ public class LoginPortlet extends ActionPortlet {
         Set groups = portalConfigService.getPortalConfigSettings().getDefaultGroups();
         Iterator it = groups.iterator();
         while (it.hasNext()) {
-            PortletGroup group = (PortletGroup)it.next();
+            PortletGroup group = (PortletGroup) it.next();
             GroupRequest groupRequest = this.aclService.createGroupEntry();
             groupRequest.setUser(user);
             groupRequest.setGroup(group);
@@ -365,7 +366,7 @@ public class LoginPortlet extends ActionPortlet {
             createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_NO_EMAIL"));
             return;
         } else {
-            user  = userManagerService.getUserByEmail(emailTF.getValue());
+            user = userManagerService.getUserByEmail(emailTF.getValue());
         }
         if (user == null) {
             createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_NOEXIST"));
@@ -378,7 +379,7 @@ public class LoginPortlet extends ActionPortlet {
         requestService.saveRequest(request);
 
         // mail user
-        MailMessage message =  new MailMessage();
+        MailMessage message = new MailMessage();
         message.setEmailAddress(emailTF.getValue());
         message.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
 

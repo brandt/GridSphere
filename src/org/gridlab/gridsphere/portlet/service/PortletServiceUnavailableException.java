@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlet.service;
 
 
-
 /**
  * The <code>PortletServiceUnavailableException</code> is thrown if a portlet
  * attempts to access an service that cannot be loaded, because an error
@@ -33,7 +32,7 @@ public class PortletServiceUnavailableException extends PortletServiceException 
      * Constructs a new portlet exception with the given text.
      * The portlet container may use the text write it to a log.
      *
-     * @param text the exception text
+     * @param text  the exception text
      * @param cause the root cause
      */
     public PortletServiceUnavailableException(String text, Throwable cause) {

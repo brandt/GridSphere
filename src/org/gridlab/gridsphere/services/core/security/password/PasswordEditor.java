@@ -29,5 +29,4 @@ public interface PasswordEditor extends Password {
     public void setDateLastModified(Date date);
 
 
-
 }

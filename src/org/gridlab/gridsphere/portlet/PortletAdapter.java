@@ -4,12 +4,12 @@
  */
 package org.gridlab.gridsphere.portlet;
 
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
@@ -42,26 +42,26 @@ public abstract class PortletAdapter extends Portlet {
 
     /**
      * Called by the portlet container to indicate to this portlet that it is put into service.
-     *
+     * <p/>
      * The portlet container calls the init() method for the whole life-cycle of the portlet.
      * The init() method must complete successfully before concrete portlets are created through
      * the initConcrete() method.
-     *
+     * <p/>
      * The portlet container cannot place the portlet into service if the init() method
-     *
+     * <p/>
      * 1. throws UnavailableException
      * 2. does not return within a time period defined by the portlet container.
      *
      * @param config the portlet configuration
      * @throws UnavailableException if an exception has occurrred that interferes with the portlet's
-     * normal initialization
+     *                              normal initialization
      */
     public void init(PortletConfig config) throws UnavailableException {
         this.portletConfig = config;
         PortletContext ctx = portletConfig.getContext();
         dataManager = SportletDataManager.getInstance();
         try {
-            aclService = (AccessControlManagerService)ctx.getService(AccessControlManagerService.class, GuestUser.getInstance());
+            aclService = (AccessControlManagerService) ctx.getService(AccessControlManagerService.class, GuestUser.getInstance());
         } catch (PortletServiceException e) {
             log.error("Unable to get an instance of AccessControlManagerService");
             throw new UnavailableException("Unable to get an instance of AccessControlManagerService");
@@ -73,7 +73,7 @@ public abstract class PortletAdapter extends Portlet {
      * This method is only called once all threads within the portlet's service() method have exited
      * or after a timeout period has passed. After the portlet container calls this method,
      * it will not call the service() method again on this portlet.
-     *
+     * <p/>
      * This method gives the portlet an opportunity to clean up any resources that are
      * being held (for example, memory, file handles, threads).
      *
@@ -88,9 +88,9 @@ public abstract class PortletAdapter extends Portlet {
      * The portlet container calls the initConcrete() method for the whole life-cycle of the portlet.
      * The initConcrete() method must complete successfully before concrete portlet instances can be
      * created through the login() method.
-     *
+     * <p/>
      * The portlet container cannot place the portlet into service if the initConcrete() method
-     *
+     * <p/>
      * 1. throws UnavailableException
      * 2. does not return within a time period defined by the portlet container.
      *
@@ -105,7 +105,7 @@ public abstract class PortletAdapter extends Portlet {
      * This method is only called once all threads within the portlet's service() method have exited
      * or after a timeout period has passed. After the portlet container calls this method,
      * it will not call the service() method again on this portlet.
-     *
+     * <p/>
      * This method gives the portlet an opportunity to clean up any resources that are being
      * held (for example, memory, file handles, threads).
      *
@@ -121,11 +121,10 @@ public abstract class PortletAdapter extends Portlet {
      * the markup will be different. Also, the portlet can take language preferences and/or
      * personalized settings into account.
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     *
      * @throws PortletException if the portlet has trouble fulfilling the rendering request
-     * @throws IOException if the streaming causes an I/O problem
+     * @throws IOException      if the streaming causes an I/O problem
      */
     public void service(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         // There must be a portlet ID to know which portlet to service
@@ -161,7 +160,7 @@ public abstract class PortletAdapter extends Portlet {
         //String portletName = portletConfig.getName();
         PortletGroup group = aclService.getGroupByName(groupName);
         if (group == null)
-                group = PortletGroupFactory.createPortletGroup(groupName);
+            group = PortletGroupFactory.createPortletGroup(groupName);
         PortletRole role = aclService.getRoleInGroup(request.getUser(), group);
 
         log.debug("Setting Group: " + group.toString() + " Role: " + role.toString());
@@ -236,13 +235,13 @@ public abstract class PortletAdapter extends Portlet {
     /**
      * Returns the time the response of the PortletInfo  object was last modified, in milliseconds since midnight
      * January 1, 1970 GMT. If the time is unknown, this method returns a negative number (the default).
-     *
+     * <p/>
      * Portlets that can quickly determine their last modification time should override this method.
      * This makes browser and proxy caches work more effectively, reducing the load on server and network resources.
      *
      * @param request the portlet request
      * @return long a long integer specifying the time the response of the PortletInfo
-     * object was last modified, in milliseconds since midnight, January 1, 1970 GMT, or -1 if the time is not known
+     *         object was last modified, in milliseconds since midnight, January 1, 1970 GMT, or -1 if the time is not known
      */
     public long getLastModified(PortletRequest request) {
         // XXX: FILL ME IN
@@ -270,9 +269,8 @@ public abstract class PortletAdapter extends Portlet {
     /**
      * Helper method to handle any errors that occured during processing
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     *
      * @throws IOException if an I/O error occurs
      */
     protected void doError(PortletRequest request, PortletResponse response, String message)
@@ -285,9 +283,8 @@ public abstract class PortletAdapter extends Portlet {
     /**
      * Helper method to handle any errors that occured during processing
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     *
      * @throws IOException if an I/O error occurs
      */
     protected void doError(PortletRequest request, PortletResponse response, Exception exception)
@@ -300,11 +297,10 @@ public abstract class PortletAdapter extends Portlet {
     /**
      * Helper method to serve up the CONFIGURE mode.
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     *
      * @throws PortletException if an error occurs during processing
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     public void doConfigure(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
@@ -315,11 +311,10 @@ public abstract class PortletAdapter extends Portlet {
     /**
      * Helper method to serve up the EDIT mode.
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     *
      * @throws PortletException if an error occurs during processing
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     public void doEdit(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
@@ -330,11 +325,10 @@ public abstract class PortletAdapter extends Portlet {
     /**
      * Helper method to serve up the HELP mode.
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     *
      * @throws PortletException if an error occurs during processing
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     public void doHelp(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
@@ -345,11 +339,10 @@ public abstract class PortletAdapter extends Portlet {
     /**
      * Helper method to serve up the VIEW mode.
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     *
      * @throws PortletException if an error occurs during processing
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     public void doView(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
@@ -362,7 +355,6 @@ public abstract class PortletAdapter extends Portlet {
      *
      * @param name the variable name
      * @return the variable or null if it doesn't exist
-     *
      * @throws AccessDeniedException if the method is called outside of a concrete portlet
      */
     public Object getVariable(String name) throws AccessDeniedException {
@@ -383,7 +375,7 @@ public abstract class PortletAdapter extends Portlet {
     /**
      * Sets a transient variable of the concrete portlet.
      *
-     * @param name the variable name
+     * @param name  the variable name
      * @param value the variable value
      */
     public void setVariable(String name, Object value) {

@@ -6,9 +6,9 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-import javax.servlet.ServletRequest;
 import java.util.Enumeration;
 
 /**
@@ -45,7 +45,7 @@ public abstract class BaseBeanTag extends BodyTagSupport {
     protected String getBeanKey() {
         String cid = (String) pageContext.findAttribute(SportletProperties.COMPONENT_ID);
         ServletRequest request = pageContext.getRequest();
-        String compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+        String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
         String beanKey = null;
         if (compId == null) {
             beanKey = beanId + "_" + cid;

@@ -17,12 +17,13 @@ public class ConfigParam {
     /**
      * Constructs an instance of ConfigParam
      */
-    public ConfigParam() {}
+    public ConfigParam() {
+    }
 
     /**
      * Constructs an instance of ConfigParam with a parameter name and value
      *
-     * @param paramName the parameter name
+     * @param paramName  the parameter name
      * @param paramValue the parameter value
      */
     public ConfigParam(String paramName, String paramValue) {

@@ -7,18 +7,18 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.jsrimpl.PortletURLImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.jsrimpl.PortletURLImpl;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
 
 import javax.portlet.*;
-import javax.servlet.jsp.PageContext;
+import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.TagData;
 import javax.servlet.jsp.tagext.TagExtraInfo;
 import javax.servlet.jsp.tagext.VariableInfo;
-import javax.servlet.jsp.tagext.TagData;
-import javax.servlet.ServletRequest;
 import java.util.Iterator;
 import java.util.List;
 
@@ -192,7 +192,7 @@ public abstract class ActionTag extends BaseComponentTag {
     protected String createJSRActionURI(PortletURL url) throws JspException {
         // Builds a URI containing the actin and associated params
         RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse", PageContext.PAGE_SCOPE);
-        this.actionURL = (PortletURLImpl)url;
+        this.actionURL = (PortletURLImpl) url;
         RenderRequest req = (RenderRequest) pageContext.getAttribute("renderRequest", PageContext.PAGE_SCOPE);
         // action is a required attribute except for FormTag
         if (windowState == null) {
@@ -231,7 +231,7 @@ public abstract class ActionTag extends BaseComponentTag {
         }
 
         ServletRequest request = pageContext.getRequest();
-        String compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+        String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
 
         if (action != null) {
             if (compId == null) {
@@ -287,7 +287,7 @@ public abstract class ActionTag extends BaseComponentTag {
         if (action != null) {
 
             ServletRequest request = pageContext.getRequest();
-            String compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+            String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
             if (compId == null) {
                 portletAction = new DefaultPortletAction(action);
             } else {
@@ -313,7 +313,7 @@ public abstract class ActionTag extends BaseComponentTag {
     }
 
     /**
-     *  A string utility that produces a string composed of
+     * A string utility that produces a string composed of
      * <code>numChars</code> number of characters
      *
      * @param numChars the number of characters in the resulting <code>String</code>

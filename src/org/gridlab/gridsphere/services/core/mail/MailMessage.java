@@ -23,10 +23,10 @@ public class MailMessage {
     /**
      * Constructs a mail message given a subject, sender, body and email address
      *
-     * @param subject the subject of the email
-     * @param body the body of the email
+     * @param subject      the subject of the email
+     * @param body         the body of the email
      * @param emailAddress the recipient to mail job info to
-     * @param sender the reply-to of the mail
+     * @param sender       the reply-to of the mail
      */
     public MailMessage(String subject, String body, String emailAddress, String sender) {
         this.subject = subject;

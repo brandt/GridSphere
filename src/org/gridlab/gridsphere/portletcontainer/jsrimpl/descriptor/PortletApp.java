@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -16,22 +16,20 @@ import org.exolab.castor.xml.Unmarshaller;
 
 /**
  * The portlet-app element is the root of the deployment descriptor
- *  for a portlet application. This element has a required
+ * for a portlet application. This element has a required
  * attribute version
- *  to specify to which version of the schema the deployment
+ * to specify to which version of the schema the deployment
  * descriptor
- *  conforms.
- *
+ * conforms.
  *
  * @version $Revision$ $Date$
  */
 public class PortletApp extends PortletAppType
-implements java.io.Serializable
-{
+        implements java.io.Serializable {
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public PortletApp() {
@@ -39,19 +37,17 @@ implements java.io.Serializable
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletApp()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -63,8 +59,7 @@ implements java.io.Serializable
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer)
@@ -75,8 +70,7 @@ implements java.io.Serializable
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler)
@@ -87,8 +81,7 @@ implements java.io.Serializable
      * @param reader
      */
     public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp) Unmarshaller.unmarshal(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader)
 
@@ -96,8 +89,7 @@ implements java.io.Serializable
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate()

@@ -39,7 +39,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
     private Map markupModes = new HashMap();
 
     /**
-     *  Constructs an instance of ApplicationSportletConfig
+     * Constructs an instance of ApplicationSportletConfig
      */
     public ApplicationSportletConfig() {
     }
@@ -162,7 +162,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
      * Returns the allowed window states supported by this portlet
      *
      * @return the <code>List</code> of
-     * <code>PortletWindow.State</code> elements allowed for this portlet
+     *         <code>PortletWindow.State</code> elements allowed for this portlet
      */
     public List getAllowedWindowStates() {
         List states = allowsWindowStates.getPortletWindowStates();
@@ -180,7 +180,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
      * Returns the allowed window states supported by this portlet
      *
      * @return the <code>List</code> of
-     * <code>PortletWindow.State</code> elements allowed for this portlet
+     *         <code>PortletWindow.State</code> elements allowed for this portlet
      */
     public AllowsWindowStates getAllowsWindowStates() {
         return allowsWindowStates;
@@ -191,7 +191,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
      * Sets the allowed window states supported by this portlet
      *
      * @param windowStates the <code>List</code> of
-     * <code>PortletWindow.State</code> elements allowed for this portlet
+     *                     <code>PortletWindow.State</code> elements allowed for this portlet
      */
     public void setAllowsWindowStates(AllowsWindowStates windowStates) {
         this.allowsWindowStates = windowStates;
@@ -207,7 +207,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
         List modes = new ArrayList();
         Iterator it = markups.iterator();
         while (it.hasNext()) {
-            Markup m = (Markup)it.next();
+            Markup m = (Markup) it.next();
             int idx1 = m.getName().indexOf(markup);
             int idx2 = markup.indexOf(m.getName());
             if ((idx1 > 0) || (idx2 > 0) || (markup.equalsIgnoreCase(m.getName()))) {

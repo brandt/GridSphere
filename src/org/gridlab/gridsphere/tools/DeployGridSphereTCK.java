@@ -1,15 +1,15 @@
 package org.gridlab.gridsphere.tools;
 
-import org.apache.tools.ant.Task;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
 
-import java.util.jar.JarFile;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
-import java.util.Enumeration;
-import java.util.Vector;
-import java.util.List;
 import java.io.*;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
 
 
 public class DeployGridSphereTCK extends Task {
@@ -18,12 +18,12 @@ public class DeployGridSphereTCK extends Task {
     private List portlets = new Vector();
     private List portletapps = new Vector();
 
-    private class WARFilenameFilter implements  FilenameFilter {
+    private class WARFilenameFilter implements FilenameFilter {
 
-      public boolean accept(File dir, String name) {
-          if (name.endsWith(".war")) return true;
-          return false;
-      }
+        public boolean accept(File dir, String name) {
+            if (name.endsWith(".war")) return true;
+            return false;
+        }
     }
 
     public void setWarDir(String warDir) {
@@ -62,13 +62,13 @@ public class DeployGridSphereTCK extends Task {
                 "        <implementation>org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl</implementation>\n" +
                 "        <service-config>\n" +
                 "            <param-name>startup-portlet-webapps</param-name>\n");
-                out.print("<param-value>gridsphere");
-                for (int i = 0; i < portletapps.size(); i++) {
-                    out.print(", " + portletapps.get(i));
-                }
+        out.print("<param-value>gridsphere");
+        for (int i = 0; i < portletapps.size(); i++) {
+            out.print(", " + portletapps.get(i));
+        }
 
 
-                out.print("</param-value>\n" +
+        out.print("</param-value>\n" +
                 "        </service-config>\n" +
                 "    </service>\n" +
                 "\n" +
@@ -90,9 +90,9 @@ public class DeployGridSphereTCK extends Task {
                 "        <title lang=\"en\">GridSphere</title>");
         System.err.println("Number of portlets: " + portlets.size());
         for (int i = 0; i < portlets.size(); i++) {
-            System.err.println((String)portlets.get(i));
+            System.err.println((String) portlets.get(i));
             out.println("<portlet-frame>");
-            out.println("<portlet-class>" + (String)portlets.get(i) + "</portlet-class>");
+            out.println("<portlet-class>" + (String) portlets.get(i) + "</portlet-class>");
             out.println("</portlet-frame>");
         }
         out.println("</portlet-tab></portlet-tabbed-pane></page-layout");
@@ -112,7 +112,7 @@ public class DeployGridSphereTCK extends Task {
         String[] warFiles = warDir.list(new WARFilenameFilter());
 
         byte[] buffer = new byte[1024];
-                int bytesRead;
+        int bytesRead;
 
         // loop thru all WARs
         for (int i = 0; i < warFiles.length; i++) {
@@ -151,7 +151,7 @@ public class DeployGridSphereTCK extends Task {
                     tempJar.write(buffer, 0, bytesRead);
                 }
 
-                }
+            }
 
             tempJar.close();
             jarFile.close();
@@ -169,7 +169,7 @@ public class DeployGridSphereTCK extends Task {
         PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("tmp.xml")));
         boolean hasServletEntry = false;
         boolean domapping = false;
-        while ((line = bis.readLine()) != null)  {
+        while ((line = bis.readLine()) != null) {
             if (line.endsWith("<servlet-mapping>") && (!hasServletEntry)) {
                 out.println("  <servlet>");
                 out.println("    <servlet-name>PortletServlet</servlet-name>");
@@ -178,8 +178,7 @@ public class DeployGridSphereTCK extends Task {
                 out.println(line);
                 domapping = true;
                 hasServletEntry = true;
-            } else
-            if (line.endsWith("<session-config>") && (!hasServletEntry)) {
+            } else if (line.endsWith("<session-config>") && (!hasServletEntry)) {
                 out.println("  <servlet>");
                 out.println("    <servlet-name>PortletServlet</servlet-name>");
                 out.println("    <servlet-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>");
@@ -190,8 +189,7 @@ public class DeployGridSphereTCK extends Task {
                 out.println("  </servlet-mapping>");
                 out.println(line);
                 hasServletEntry = true;
-            } else
-            if ((line.endsWith("</web-app>")) && (!hasServletEntry)) {
+            } else if ((line.endsWith("</web-app>")) && (!hasServletEntry)) {
                 out.println("  <servlet>");
                 out.println("    <servlet-name>PortletServlet</servlet-name>");
                 out.println("    <servlet-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>");
@@ -208,7 +206,7 @@ public class DeployGridSphereTCK extends Task {
                 out.println("  </servlet-mapping>");
                 out.println(line);
                 hasServletEntry = true;
-            }  else {
+            } else {
                 out.println(line);
             }
         }
@@ -230,8 +228,7 @@ public class DeployGridSphereTCK extends Task {
             }
 
             System.out.println(entry.getName() + " added.");
-        }
-        finally {
+        } finally {
             file.close();
         }
 
@@ -263,8 +260,7 @@ public class DeployGridSphereTCK extends Task {
 
             System.out.println(entry.getName() + " added.");
 
-        }
-        finally {
+        } finally {
             file.close();
         }
     }
@@ -294,8 +290,7 @@ public class DeployGridSphereTCK extends Task {
 
             System.out.println(entry.getName() + " added.");
 
-        }
-        finally {
+        } finally {
             file.close();
         }
     }

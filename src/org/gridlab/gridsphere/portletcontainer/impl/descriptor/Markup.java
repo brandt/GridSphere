@@ -27,7 +27,8 @@ public class Markup {
     /**
      * Constructs an instance of SportletModes
      */
-    public Markup() {}
+    public Markup() {
+    }
 
     /**
      * Sets the markup name e.g. html, wml, cml
@@ -50,7 +51,7 @@ public class Markup {
     /**
      * For use by Castor. Clients should consider using #getPortletModes
      * or #getPortletModesAsStrings
-     * <p>
+     * <p/>
      * Returns the modes as defined in the application portlet definition
      *
      * @return a <code>List</code> containing <code>AnyNode</code> elements
@@ -62,11 +63,11 @@ public class Markup {
     /**
      * For use by Castor. Clients should consider using #getPortletModes
      * or #setPortletModesAsStrings
-     * <p>
+     * <p/>
      * Sets the modes as defined in the application portlet definition
      *
      * @param modes an <code>ArrayList</code> containing
-     * <code>AnyNode</code> elements
+     *              <code>AnyNode</code> elements
      */
     public void setModes(ArrayList modes) {
         if (modes != null) this.modes = modes;
@@ -99,7 +100,7 @@ public class Markup {
         return modeStrings;
     }
 
-     /**
+    /**
      * Returns the modes as defined in the application portlet definition
      * as a <code>List</code> containing <code>Portlet.Mode</code> elements
      *
@@ -120,7 +121,7 @@ public class Markup {
                 mode = Portlet.Mode.toMode(a.getLocalName());
                 portletModes.add(mode);
             } catch (Exception e) {
-              log.error("unable to parse mode: " + mode);
+                log.error("unable to parse mode: " + mode);
             }
         }
         return portletModes;

@@ -11,5 +11,5 @@ import java.util.Locale;
 public interface LocaleService extends PortletService {
 
     public Locale[] getSupportedLocales();
-    
+
 }

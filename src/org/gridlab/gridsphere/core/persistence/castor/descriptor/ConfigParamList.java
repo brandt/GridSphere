@@ -16,7 +16,8 @@ public class ConfigParamList {
     private List configList = new ArrayList();
     private Hashtable configHash = new Hashtable();
 
-    public ConfigParamList() {}
+    public ConfigParamList() {
+    }
 
     /**
      * Constructs an instance of ConfigParamList
@@ -67,8 +68,8 @@ public class ConfigParamList {
         String paramName = null;
         String paramVal = null;
         while (enum.hasMoreElements()) {
-            paramName = (String)enum.nextElement();
-            paramVal = (String)configHash.get(paramName);
+            paramName = (String) enum.nextElement();
+            paramVal = (String) configHash.get(paramName);
             configParam = new ConfigParam(paramName, paramVal);
             configList.add(configParam);
         }

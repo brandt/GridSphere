@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletURI;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +40,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     /**
      * Constructs action bean with the supplied portlet request and bean identifier
      *
-     * @param req the portlet request
+     * @param req    the portlet request
      * @param beanId the bean identifier
      */
     public ActionBean(HttpServletRequest req, String beanId) {
@@ -188,7 +186,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     /**
      * Creates and adds an action parameter bean
      *
-     * @param paramName the parameter name
+     * @param paramName  the parameter name
      * @param paramValue the parameter value
      */
     public void addParamBean(String paramName, String paramValue) {

@@ -24,7 +24,8 @@ public class ConcreteSportletDefinition {
     /**
      * Constructs an instance of ConcreteSportletDefinition
      */
-    public ConcreteSportletDefinition() {}
+    public ConcreteSportletDefinition() {
+    }
 
     /**
      * Sets the concrete portlet id
@@ -46,12 +47,12 @@ public class ConcreteSportletDefinition {
 
     /**
      * Used internally by Castor. Clients should use #getPortletContextHash
-     * <p>
+     * <p/>
      * Returns the map of portlet context parameters that are used in the
      * PortletConfig class
      *
      * @return the portlet context parameters as a <code>List</code> with
-     * <code>ConfigParam</code> elements
+     *         <code>ConfigParam</code> elements
      */
     public List getPortletContextList() {
         return this.contextParamList.getConfigParamList();
@@ -59,11 +60,11 @@ public class ConcreteSportletDefinition {
 
     /**
      * Used internally by Castor.
-     * <p>
+     * <p/>
      * Sets the portlet context parameters
      *
      * @param contextList an <code>ArrayList</code> containing
-     * <code>ConfigParam</code> elements
+     *                    <code>ConfigParam</code> elements
      */
     public void setPortletContextList(ArrayList contextList) {
         this.contextParamList.setConfigParamList(contextList);

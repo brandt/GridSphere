@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.layout.event;
 
 
-
 /**
  * A <code>ComponentAction</code> identifies any kind of portlet component action by integer
  */

@@ -34,7 +34,7 @@ public class TextFieldBean extends InputBean implements TagBean {
     /**
      * Constructs a text field bean using the supplied bean name and identifier
      *
-     * @param name the bean name
+     * @param name   the bean name
      * @param beanId the bean identifier
      */
     public TextFieldBean(String name, String beanId) {
@@ -46,7 +46,7 @@ public class TextFieldBean extends InputBean implements TagBean {
     /**
      * Constructs a text field bean from a supplied portlet request and bean identifier
      *
-     * @param req the portlet request
+     * @param req    the portlet request
      * @param beanId the bean identifier
      */
     public TextFieldBean(HttpServletRequest req, String beanId) {

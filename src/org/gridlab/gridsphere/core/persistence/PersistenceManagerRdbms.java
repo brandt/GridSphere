@@ -48,7 +48,7 @@ public interface PersistenceManagerRdbms {
      * Deletes the given object from the storage.
      *
      * @param object Object to be deleted.
-     * @throws PersistenceManagerException  If a persistence error occurs
+     * @throws PersistenceManagerException If a persistence error occurs
      */
     public void delete(Object object) throws PersistenceManagerException;
 
@@ -56,7 +56,7 @@ public interface PersistenceManagerRdbms {
      * Deletes objects from the storage matching the given query.
      *
      * @param query Query describing the objects to be deleted
-     * @throws PersistenceManagerException  If a persistence error occurs
+     * @throws PersistenceManagerException If a persistence error occurs
      */
     public void deleteList(String query) throws PersistenceManagerException;
 
@@ -66,5 +66,5 @@ public interface PersistenceManagerRdbms {
      *
      * @throws PersistenceManagerException
      */
-    public void destroy() throws PersistenceManagerException ;
+    public void destroy() throws PersistenceManagerException;
 }

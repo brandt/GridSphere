@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -18,19 +18,18 @@ import java.util.ArrayList;
 
 /**
  * User attribute defines a user specific attribute that the
- *  portlet application needs. The portlet within this application
- *  can access this attribute via the request parameter USER_INFO
- *  map.
- *  Used in: portlet-app
- *
+ * portlet application needs. The portlet within this application
+ * can access this attribute via the request parameter USER_INFO
+ * map.
+ * Used in: portlet-app
  *
  * @version $Revision$ $Date$
  */
 public class UserAttributeType implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -49,8 +48,8 @@ public class UserAttributeType implements java.io.Serializable {
     private org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name _name;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public UserAttributeType() {
@@ -59,8 +58,8 @@ public class UserAttributeType implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttributeType()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
@@ -69,8 +68,7 @@ public class UserAttributeType implements java.io.Serializable {
      * @param vDescription
      */
     public void addDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _descriptionList.add(vDescription);
     } //-- void addDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
@@ -81,24 +79,21 @@ public class UserAttributeType implements java.io.Serializable {
      * @param vDescription
      */
     public void addDescription(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _descriptionList.add(index, vDescription);
     } //-- void addDescription(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method clearDescription
      */
-    public void clearDescription()
-    {
+    public void clearDescription() {
         _descriptionList.clear();
     } //-- void clearDescription()
 
     /**
      * Method enumerateDescription
      */
-    public java.util.Enumeration enumerateDescription()
-    {
+    public java.util.Enumeration enumerateDescription() {
         return new org.exolab.castor.util.IteratorEnumeration(_descriptionList.iterator());
     } //-- java.util.Enumeration enumerateDescription()
 
@@ -108,8 +103,7 @@ public class UserAttributeType implements java.io.Serializable {
      * @param index
      */
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description getDescription(int index)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _descriptionList.size())) {
             throw new IndexOutOfBoundsException();
@@ -121,8 +115,7 @@ public class UserAttributeType implements java.io.Serializable {
     /**
      * Method getDescription
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] getDescription()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] getDescription() {
         int size = _descriptionList.size();
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] mArray = new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[size];
         for (int index = 0; index < size; index++) {
@@ -134,8 +127,7 @@ public class UserAttributeType implements java.io.Serializable {
     /**
      * Method getDescriptionCount
      */
-    public int getDescriptionCount()
-    {
+    public int getDescriptionCount() {
         return _descriptionList.size();
     } //-- int getDescriptionCount()
 
@@ -144,8 +136,7 @@ public class UserAttributeType implements java.io.Serializable {
      *
      * @return the value of field 'id'.
      */
-    public java.lang.String getId()
-    {
+    public java.lang.String getId() {
         return this._id;
     } //-- java.lang.String getId()
 
@@ -154,20 +145,17 @@ public class UserAttributeType implements java.io.Serializable {
      *
      * @return the value of field 'name'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name getName()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name getName() {
         return this._name;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Name getName()
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -179,8 +167,7 @@ public class UserAttributeType implements java.io.Serializable {
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer)
@@ -191,8 +178,7 @@ public class UserAttributeType implements java.io.Serializable {
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler)
@@ -202,8 +188,7 @@ public class UserAttributeType implements java.io.Serializable {
      *
      * @param vDescription
      */
-    public boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription)
-    {
+    public boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription) {
         boolean removed = _descriptionList.remove(vDescription);
         return removed;
     } //-- boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
@@ -215,8 +200,7 @@ public class UserAttributeType implements java.io.Serializable {
      * @param vDescription
      */
     public void setDescription(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _descriptionList.size())) {
             throw new IndexOutOfBoundsException();
@@ -229,8 +213,7 @@ public class UserAttributeType implements java.io.Serializable {
      *
      * @param descriptionArray
      */
-    public void setDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] descriptionArray)
-    {
+    public void setDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] descriptionArray) {
         //-- copy array
         _descriptionList.clear();
         for (int i = 0; i < descriptionArray.length; i++) {
@@ -243,8 +226,7 @@ public class UserAttributeType implements java.io.Serializable {
      *
      * @param id the value of field 'id'.
      */
-    public void setId(java.lang.String id)
-    {
+    public void setId(java.lang.String id) {
         this._id = id;
     } //-- void setId(java.lang.String)
 
@@ -253,8 +235,7 @@ public class UserAttributeType implements java.io.Serializable {
      *
      * @param name the value of field 'name'.
      */
-    public void setName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name name)
-    {
+    public void setName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name name) {
         this._name = name;
     } //-- void setName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Name)
 
@@ -264,8 +245,7 @@ public class UserAttributeType implements java.io.Serializable {
      * @param reader
      */
     public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttributeType) Unmarshaller.unmarshal(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttributeType.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader)
 
@@ -273,8 +253,7 @@ public class UserAttributeType implements java.io.Serializable {
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate()

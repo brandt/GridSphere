@@ -20,7 +20,7 @@ public class SelectListModel extends DefaultListModel {
      * Set an item in the list to be selected
      *
      * @param index the items location in the list
-     * @param flag is true if the list item is selected, false otherwise
+     * @param flag  is true if the list item is selected, false otherwise
      */
     public void setSelected(int index, boolean flag) {
         ((ListBoxItemBean) list.get(index)).setSelected(flag);

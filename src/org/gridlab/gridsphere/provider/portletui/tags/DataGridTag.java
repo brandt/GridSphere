@@ -3,9 +3,8 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.provider.portletui.beans.DataGridBean;
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
-import org.gridlab.gridsphere.provider.portletui.tags.ContainerTag;
+import org.gridlab.gridsphere.provider.portletui.beans.DataGridBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;

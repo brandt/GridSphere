@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.validators.StringValidator;
@@ -21,8 +21,8 @@ import org.exolab.castor.xml.validators.StringValidator;
 public class PortletClassTypeDescriptor extends org.exolab.castor.xml.util.XMLClassDescriptorImpl {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -46,42 +46,41 @@ public class PortletClassTypeDescriptor extends org.exolab.castor.xml.util.XMLCl
     private org.exolab.castor.xml.XMLFieldDescriptor identity;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public PortletClassTypeDescriptor() {
         super();
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "portlet-classType";
-        org.exolab.castor.xml.util.XMLFieldDescriptorImpl  desc           = null;
-        org.exolab.castor.xml.XMLFieldHandler              handler        = null;
-        org.exolab.castor.xml.FieldValidator               fieldValidator = null;
+        org.exolab.castor.xml.util.XMLFieldDescriptorImpl desc = null;
+        org.exolab.castor.xml.XMLFieldHandler handler = null;
+        org.exolab.castor.xml.FieldValidator fieldValidator = null;
         //-- _content
         desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(String.class, "_content", "PCDATA", org.exolab.castor.xml.NodeType.Text);
         desc.setImmutable(true);
         handler = (new org.exolab.castor.xml.XMLFieldHandler() {
-            public Object getValue( Object object )
-                throws IllegalStateException
-            {
+            public Object getValue(Object object)
+                    throws IllegalStateException {
                 PortletClassType target = (PortletClassType) object;
                 return target.getContent();
             }
-            public void setValue( Object object, Object value)
-                throws IllegalStateException, IllegalArgumentException
-            {
+
+            public void setValue(Object object, Object value)
+                    throws IllegalStateException, IllegalArgumentException {
                 try {
                     PortletClassType target = (PortletClassType) object;
-                    target.setContent( (String) value);
-                }
-                catch (Exception ex) {
+                    target.setContent((String) value);
+                } catch (Exception ex) {
                     throw new IllegalStateException(ex.toString());
                 }
             }
-            public Object newInstance( Object parent ) {
+
+            public Object newInstance(Object parent) {
                 return null;
             }
-        } );
+        });
         desc.setHandler(handler);
         addFieldDescriptor(desc);
 
@@ -100,71 +99,63 @@ public class PortletClassTypeDescriptor extends org.exolab.castor.xml.util.XMLCl
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletClassTypeDescriptor()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
      * Method getAccessMode
      */
-    public org.exolab.castor.mapping.AccessMode getAccessMode()
-    {
+    public org.exolab.castor.mapping.AccessMode getAccessMode() {
         return null;
     } //-- org.exolab.castor.mapping.AccessMode getAccessMode()
 
     /**
      * Method getExtends
      */
-    public org.exolab.castor.mapping.ClassDescriptor getExtends()
-    {
+    public org.exolab.castor.mapping.ClassDescriptor getExtends() {
         return null;
     } //-- org.exolab.castor.mapping.ClassDescriptor getExtends()
 
     /**
      * Method getIdentity
      */
-    public org.exolab.castor.mapping.FieldDescriptor getIdentity()
-    {
+    public org.exolab.castor.mapping.FieldDescriptor getIdentity() {
         return identity;
     } //-- org.exolab.castor.mapping.FieldDescriptor getIdentity()
 
     /**
      * Method getJavaClass
      */
-    public Class getJavaClass()
-    {
+    public Class getJavaClass() {
         return PortletClassType.class;
     } //-- java.lang.Class getJavaClass()
 
     /**
      * Method getNameSpacePrefix
      */
-    public String getNameSpacePrefix()
-    {
+    public String getNameSpacePrefix() {
         return nsPrefix;
     } //-- java.lang.String getNameSpacePrefix()
 
     /**
      * Method getNameSpaceURI
      */
-    public String getNameSpaceURI()
-    {
+    public String getNameSpaceURI() {
         return nsURI;
     } //-- java.lang.String getNameSpaceURI()
 
     /**
      * Method getValidator
      */
-    public org.exolab.castor.xml.TypeValidator getValidator()
-    {
+    public org.exolab.castor.xml.TypeValidator getValidator() {
         return this;
     } //-- org.exolab.castor.xml.TypeValidator getValidator()
 
     /**
      * Method getXMLName
      */
-    public String getXMLName()
-    {
+    public String getXMLName() {
         return xmlName;
     } //-- java.lang.String getXMLName()
 

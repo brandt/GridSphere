@@ -53,12 +53,13 @@ public class ActionPortlet extends AbstractPortlet {
         req.setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, fileName);
         req.setAttribute(SportletProperties.FILE_DOWNLOAD_PATH, path);
     }
+
     /**
      * Sets the next display state. The state specified may be either a JSP or it can
      * be another method name to invoke.
      *
      * @param request the <code>Portletrequest</code>
-     * @param state the next display state
+     * @param state   the next display state
      */
     public void setNextState(PortletRequest request, String state) {
         String id = request.getPortletSettings().getConcretePortletID();
@@ -75,7 +76,7 @@ public class ActionPortlet extends AbstractPortlet {
      */
     protected String getNextState(PortletRequest request) {
         String id = request.getPortletSettings().getConcretePortletID();
-        String state = (String)request.getAttribute(id+".state");
+        String state = (String) request.getAttribute(id + ".state");
         if (state == null) {
             state = DEFAULT_VIEW_PAGE;
             /*
@@ -110,14 +111,14 @@ public class ActionPortlet extends AbstractPortlet {
      */
     public String getNextTitle(PortletRequest request) {
         String id = request.getPortletSettings().getConcretePortletID();
-        log.debug("ActionPortlet in getNextTitle: setting title attribute " + id+".title");
-        String title = (String)request.getAttribute(id+".title");
+        log.debug("ActionPortlet in getNextTitle: setting title attribute " + id + ".title");
+        String title = (String) request.getAttribute(id + ".title");
         if (title == null) {
             Locale locale = request.getLocale();
             title = getPortletSettings().getTitle(locale, null);
             log.debug("Printing default title: " + title);
         }
-        log.debug("next title= " +title);
+        log.debug("next title= " + title);
         return title;
     }
 
@@ -126,7 +127,7 @@ public class ActionPortlet extends AbstractPortlet {
      * Doesn't work since title rendering occurs before title is set!
      *
      * @param request the <code>PortletRequest</code>
-     * @param title the title display in the portlet
+     * @param title   the title display in the portlet
      */
     public void setNextTitle(PortletRequest request, String title) {
         log.debug("Setting title to " + title);
@@ -139,7 +140,7 @@ public class ActionPortlet extends AbstractPortlet {
      * Sets the error to display in the portlet
      *
      * @param request the <code>PortletRequest</code>
-     * @param error the error text to display in the portlet
+     * @param error   the error text to display in the portlet
      */
     protected void setNextError(PortletRequest request, String error) {
         String id = request.getPortletSettings().getConcretePortletID();
@@ -154,7 +155,7 @@ public class ActionPortlet extends AbstractPortlet {
      */
     protected boolean hasError(PortletRequest request) {
         String id = request.getPortletSettings().getConcretePortletID();
-        return (request.getAttribute(id+".error") == null) ? false : true;
+        return (request.getAttribute(id + ".error") == null) ? false : true;
     }
 
     /**
@@ -165,7 +166,7 @@ public class ActionPortlet extends AbstractPortlet {
      */
     protected String getNextError(PortletRequest request) {
         String id = request.getPortletSettings().getConcretePortletID();
-        String error = (String)request.getAttribute(id+".error");
+        String error = (String) request.getAttribute(id + ".error");
         return error;
     }
 
@@ -173,7 +174,7 @@ public class ActionPortlet extends AbstractPortlet {
      * Sets the tag beans obtained from the FormEvent. Used internally and should not
      * normally need to be invoked by portlet developers.
      *
-     * @param request the <code>PortletRequest</code>
+     * @param request  the <code>PortletRequest</code>
      * @param tagBeans a <code>Map</code> containing the portlet UI visual beans
      */
     protected void setTagBeans(PortletRequest request, Map tagBeans) {
@@ -190,7 +191,7 @@ public class ActionPortlet extends AbstractPortlet {
      */
     protected Map getTagBeans(PortletRequest request) {
         String id = request.getPortletSettings().getConcretePortletID();
-        Map tagBeans = (Map)request.getAttribute(id+".form");
+        Map tagBeans = (Map) request.getAttribute(id + ".form");
         return tagBeans;
     }
 
@@ -211,7 +212,6 @@ public class ActionPortlet extends AbstractPortlet {
     }
 
 
-    
     protected void checkUserRole(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
         PortletRole userRole = req.getRole();
@@ -225,14 +225,15 @@ public class ActionPortlet extends AbstractPortlet {
      * appropriate portlet action method.
      *
      * @param event the <code>ActionEvent</code>
-     * @throws org.gridlab.gridsphere.portlet.PortletException if a portlet exception occurs
+     * @throws org.gridlab.gridsphere.portlet.PortletException
+     *          if a portlet exception occurs
      */
     public void actionPerformed(ActionEvent event) throws PortletException {
         log.debug("in ActionPortlet: actionPerformed");
         FormEvent formEvent = new FormEventImpl(event);
 
-        Class[] parameterTypes = new Class[] { FormEvent.class };
-        Object[] arguments = new Object[] { formEvent };
+        Class[] parameterTypes = new Class[]{FormEvent.class};
+        Object[] arguments = new Object[]{formEvent};
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         String methodName = event.getAction().getName();
@@ -262,12 +263,13 @@ public class ActionPortlet extends AbstractPortlet {
     /**
      * Invokes the appropriate portlet action method based on the portlet action received
      *
-     * @param request the portlet request
-     * @param response the portlet response
-     * @param methodName  the method name to invoke
+     * @param request        the portlet request
+     * @param response       the portlet response
+     * @param methodName     the method name to invoke
      * @param parameterTypes the method parameters
-     * @param arguments the method arguments
-     * @throws org.gridlab.gridsphere.portlet.PortletException if an error occurs during the method invocation
+     * @param arguments      the method arguments
+     * @throws org.gridlab.gridsphere.portlet.PortletException
+     *          if an error occurs during the method invocation
      */
     protected void doAction(PortletRequest request, PortletResponse response,
                             String methodName,
@@ -275,7 +277,7 @@ public class ActionPortlet extends AbstractPortlet {
                             Object[] arguments) throws PortletException {
 
         // Get object and class references
-        Object thisObject = (Object)this;
+        Object thisObject = (Object) this;
         Class thisClass = this.getClass();
         // Call method specified by action name
         try {
@@ -308,7 +310,7 @@ public class ActionPortlet extends AbstractPortlet {
     /**
      * Sets an approriate error message to be displayed in the next render cycle
      *
-     * @param req the portlet request
+     * @param req          the portlet request
      * @param errorMessage the error message
      */
     public void doErrorInvalidAction(PortletRequest req, String errorMessage) {
@@ -319,11 +321,11 @@ public class ActionPortlet extends AbstractPortlet {
     /**
      * Renders the supplied JSP page.
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     * @param jsp the JSP page to include
+     * @param jsp      the JSP page to include
      */
-    public void doViewJSP(PortletRequest request, PortletResponse response, String jsp)  {
+    public void doViewJSP(PortletRequest request, PortletResponse response, String jsp) {
         log.debug("Including JSP page:" + jsp);
         try {
             if (jsp.startsWith("/")) {
@@ -340,28 +342,29 @@ public class ActionPortlet extends AbstractPortlet {
     /**
      * Uses #getNextState to either render a JSP or invoke the specified render action method
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     * @throws org.gridlab.gridsphere.portlet.PortletException if a portlet exception occurs
+     * @throws org.gridlab.gridsphere.portlet.PortletException
+     *                             if a portlet exception occurs
      * @throws java.io.IOException if an I/O error occurs
      */
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
 
         String id = request.getPortletSettings().getConcretePortletID();
-        String state = (String)request.getAttribute(id+".state");
+        String state = (String) request.getAttribute(id + ".state");
         if (state == null) {
             log.debug("in ActionPortlet: state is null-- setting to DEFAULT_VIEW_PAGE");
             setNextState(request, DEFAULT_VIEW_PAGE);
         }
         String next = getNextState(request);
         log.debug("in ActionPortlet: portlet id= " + id + " doView next page is= " + next);
-        if (next.endsWith(".jsp"))  {
+        if (next.endsWith(".jsp")) {
             doViewJSP(request, response, next);
         } else {
             Map tagBeans = getTagBeans(request);
             FormEvent formEvent = new FormEventImpl(request, response, tagBeans);
-            Class[] paramTypes = new Class[] { FormEvent.class };
-            Object[] arguments = new Object[] { formEvent };
+            Class[] paramTypes = new Class[]{FormEvent.class};
+            Object[] arguments = new Object[]{formEvent};
 
             doAction(request, response, next, paramTypes, arguments);
             formEvent.store();
@@ -383,9 +386,10 @@ public class ActionPortlet extends AbstractPortlet {
     /**
      * Simply forwards to #doView
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     * @throws org.gridlab.gridsphere.portlet.PortletException if a portlet exception occurs
+     * @throws org.gridlab.gridsphere.portlet.PortletException
+     *                             if a portlet exception occurs
      * @throws java.io.IOException if an I/O error occurs
      */
     public void doEdit(PortletRequest request, PortletResponse response) throws PortletException, IOException {
@@ -397,9 +401,10 @@ public class ActionPortlet extends AbstractPortlet {
     /**
      * Simply forwards to #doView
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     * @throws org.gridlab.gridsphere.portlet.PortletException if a portlet exception occurs
+     * @throws org.gridlab.gridsphere.portlet.PortletException
+     *                             if a portlet exception occurs
      * @throws java.io.IOException if an I/O error occurs
      */
     public void doConfigure(PortletRequest request, PortletResponse response) throws PortletException, IOException {
@@ -411,9 +416,10 @@ public class ActionPortlet extends AbstractPortlet {
     /**
      * Simply forwards to #doView
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     * @throws org.gridlab.gridsphere.portlet.PortletException if a portlet exception occurs
+     * @throws org.gridlab.gridsphere.portlet.PortletException
+     *                             if a portlet exception occurs
      * @throws java.io.IOException if an I/O error occurs
      */
     public void doHelp(PortletRequest request, PortletResponse response) throws PortletException, IOException {
@@ -425,9 +431,10 @@ public class ActionPortlet extends AbstractPortlet {
     /**
      * Renders the title of the portlet
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     * @throws org.gridlab.gridsphere.portlet.PortletException if a portlet exception occurs
+     * @throws org.gridlab.gridsphere.portlet.PortletException
+     *                             if a portlet exception occurs
      * @throws java.io.IOException if an I/O error occurs
      */
     public void doTitle(PortletRequest request, PortletResponse response) throws PortletException, IOException {
@@ -548,7 +555,7 @@ public class ActionPortlet extends AbstractPortlet {
     }
 
     public float getParameterAsFlt(PortletRequest request, String param) {
-        return getParameterAsFlt(request, param, (float)0.0);
+        return getParameterAsFlt(request, param, (float) 0.0);
     }
 
     public float getParameterAsFlt(PortletRequest request, String param, float defaultValue) {
@@ -779,12 +786,11 @@ public class ActionPortlet extends AbstractPortlet {
                 continue;
             }
             String key = paramValue.substring(0, index);
-            String value = paramValue.substring(index+1,paramValue.length());
+            String value = paramValue.substring(index + 1, paramValue.length());
             mapValues.put(key, value);
         }
         return mapValues;
     }
-
 
 
 }

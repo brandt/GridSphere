@@ -6,10 +6,9 @@ package org.gridlab.gridsphere.portletcontainer;
 
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.hibernate.DatabaseTask;
 import org.gridlab.gridsphere.core.persistence.hibernate.DBTask;
-import org.gridlab.gridsphere.layout.*;
+import org.gridlab.gridsphere.layout.PortletLayoutEngine;
+import org.gridlab.gridsphere.layout.PortletPageFactory;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
@@ -73,6 +72,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     //private static PortletRegistry registry = PortletRegistry.getInstance();
 
     private boolean isTCK = false;
+
     /**
      * Initializes the GridSphere portlet container
      *
@@ -255,7 +255,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             List mygroups = aclService.getGroups(user);
             Iterator it = mygroups.iterator();
             while (it.hasNext()) {
-                PortletGroup g = (PortletGroup)it.next();
+                PortletGroup g = (PortletGroup) it.next();
                 role = aclService.getRoleInGroup(user, g);
                 groups.put(g, role);
             }

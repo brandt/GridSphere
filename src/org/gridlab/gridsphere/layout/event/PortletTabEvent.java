@@ -5,18 +5,16 @@
 package org.gridlab.gridsphere.layout.event;
 
 
-
 /**
  * A <code>PortletTabEvent</code> is triggered by a <code>PortletTab</code>
  * when a tab has been selected.
  */
-public interface PortletTabEvent  extends PortletComponentEvent {
+public interface PortletTabEvent extends PortletComponentEvent {
 
     /**
-     *  An Action defines a single tab event action:
-     *
+     * An Action defines a single tab event action:
+     * <p/>
      * <ul><li>TAB_SELECTED</li></ul>
-     *
      */
     public static final class TabAction implements ComponentAction {
 

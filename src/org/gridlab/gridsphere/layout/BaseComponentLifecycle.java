@@ -56,7 +56,7 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
@@ -68,12 +68,12 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public abstract void doRender(GridSphereEvent event) throws PortletLayoutException, IOException;
 
     public Object clone() throws CloneNotSupportedException {
-        BaseComponentLifecycle b = (BaseComponentLifecycle)super.clone();
+        BaseComponentLifecycle b = (BaseComponentLifecycle) super.clone();
         b.COMPONENT_ID = this.COMPONENT_ID;
         b.componentIDStr = this.componentIDStr;
         return b;

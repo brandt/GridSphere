@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class PortletSessionManager implements HttpSessionListener {
 
-    private static PortletSessionManager instance  = new PortletSessionManager();
+    private static PortletSessionManager instance = new PortletSessionManager();
     private PortletLog log = SportletLog.getInstance(PortletSessionManager.class);
 
     private Hashtable sessions = new Hashtable();
@@ -59,29 +59,29 @@ public class PortletSessionManager implements HttpSessionListener {
         //engine.removeUser(user);
         //engine.logoutPortlets(event);
         //synchronized (sessions) {
-            String id = event.getSession().getId();
-            if (id != null) {
-                List sessionListeners = (List)sessions.get(id);
-                if (sessionListeners != null) {
-                    Iterator it = sessionListeners.iterator();
-                    while (it.hasNext()) {
-                        PortletSessionListener sessionListener = (PortletSessionListener)it.next();
-                        PortletSession session = new SportletSession(event.getSession());
-                        try {
-                            log.debug("logging a session listener out: " + sessionListener.getClass());
-                            sessionListener.logout(session);
-                        } catch (PortletException e) {
-                            log.error("Unable to invoke logout on session listener ", e);
-                        }
-                    }
-                    log.debug("Removing session: " + id);
-                    synchronized(sessions) {
-                        sessions.remove(id);
+        String id = event.getSession().getId();
+        if (id != null) {
+            List sessionListeners = (List) sessions.get(id);
+            if (sessionListeners != null) {
+                Iterator it = sessionListeners.iterator();
+                while (it.hasNext()) {
+                    PortletSessionListener sessionListener = (PortletSessionListener) it.next();
+                    PortletSession session = new SportletSession(event.getSession());
+                    try {
+                        log.debug("logging a session listener out: " + sessionListener.getClass());
+                        sessionListener.logout(session);
+                    } catch (PortletException e) {
+                        log.error("Unable to invoke logout on session listener ", e);
                     }
                 }
-            } else {
-                log.info("Not sure why sessionDestroyed listener provides null session id!");
+                log.debug("Removing session: " + id);
+                synchronized (sessions) {
+                    sessions.remove(id);
+                }
             }
+        } else {
+            log.info("Not sure why sessionDestroyed listener provides null session id!");
+        }
         //}
         dumpSessions();
     }
@@ -89,7 +89,7 @@ public class PortletSessionManager implements HttpSessionListener {
     public void addSessionListener(String sessionId, PortletSessionListener sessionListener) {
         log.debug("adding session listener for : " + sessionId + " " + sessionListener.getClass());
 
-        List sessionListeners = (List)sessions.get(sessionId);
+        List sessionListeners = (List) sessions.get(sessionId);
 
         if (sessionListeners == null) {
             //log.debug("session listeners null for id " + sessionId);
@@ -101,6 +101,7 @@ public class PortletSessionManager implements HttpSessionListener {
         sessions.put(sessionId, sessionListeners);
         dumpSessions();
     }
+
     /*
     public void removeSessionListener(String sessionId, PortletSessionListener sessionListener) {
         log.debug("removing session listener for : " + sessionId + " " + sessionListener.getClass());
@@ -119,7 +120,7 @@ public class PortletSessionManager implements HttpSessionListener {
         Set keySet = sessions.keySet();
         Iterator it = keySet.iterator();
         while (it.hasNext()) {
-            log.debug("session #id: " + (String)it.next());
+            log.debug("session #id: " + (String) it.next());
         }
     }
 

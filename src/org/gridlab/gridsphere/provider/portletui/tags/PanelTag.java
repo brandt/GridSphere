@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.PanelBean;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -41,7 +40,7 @@ public class PanelTag extends BaseComponentTag {
     /**
      * Returns the panel (table) cell padding
      *
-     * @return  the panel cell padding
+     * @return the panel cell padding
      */
     public String getCellpadding() {
         return cellPadding;
@@ -77,7 +76,7 @@ public class PanelTag extends BaseComponentTag {
     /**
      * Returns the panel border
      *
-     * @return  the panel border
+     * @return the panel border
      */
     public String getBorder() {
         return border;

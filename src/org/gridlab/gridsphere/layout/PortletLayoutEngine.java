@@ -5,11 +5,7 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletMessage;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
@@ -23,7 +19,7 @@ import java.util.Vector;
  * user's layouts. It also manages portlet web application default layout
  * configurations that can be potentially added to a user layout
  * via the PortletLayout Service.
- * <p>
+ * <p/>
  * The portlet layout engine is a higher level manager of portlet containers
  * that represent a users customized layout. The portlet layout engine is used
  * by the {@link org.gridlab.gridsphere.portletcontainer.GridSphereServlet}
@@ -61,12 +57,12 @@ public class PortletLayoutEngine {
         return instance;
     }
 
-    protected PortletPage getPortletPage(GridSphereEvent event)  {
+    protected PortletPage getPortletPage(GridSphereEvent event) {
 
         PortletRequest req = event.getPortletRequest();
 
         // Check for framework errors
-        Exception portletException = (Exception)req.getAttribute(SportletProperties.ERROR);
+        Exception portletException = (Exception) req.getAttribute(SportletProperties.ERROR);
         if (portletException != null) {
             return pageFactory.createErrorPage(req);
         }
@@ -165,7 +161,7 @@ public class PortletLayoutEngine {
                 // sometimes the page needs reinitializing
                 if (event.getPortletRequest().getAttribute(SportletProperties.INIT_PAGE) != null) {
                     log.info("\n\n\n\n\nreiniting and saving page!!!!!\n\n\n\n\n\n");
-                
+
                     page.init(event.getPortletRequest(), new Vector());
                     PortletTabbedPane pane = pageFactory.getUserTabbedPane(event.getPortletRequest());
                     pane.save();
@@ -192,9 +188,10 @@ public class PortletLayoutEngine {
     /**
      * Delivers a message to a specified concrete portlet on the current portlet page.
      * The method delegates the message delivery to the PortletPage implementation.
+     *
      * @param concPortletID The concrete portlet ID of the target portlet
-     * @param msg The message to deliver
-     * @param event The event associated with the delivery
+     * @param msg           The message to deliver
+     * @param event         The event associated with the delivery
      */
     public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) throws PortletException {
         log.debug("in messageEvent()");

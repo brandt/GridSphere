@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import java.util.Hashtable;
@@ -21,8 +21,8 @@ import java.util.Hashtable;
 public class TransportGuaranteeType implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -71,13 +71,13 @@ public class TransportGuaranteeType implements java.io.Serializable {
     private java.lang.String stringValue = null;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
     public TransportGuaranteeType() {
-          this.type = NONE_TYPE;
-          this.stringValue = "NONE";
-      }
+        this.type = NONE_TYPE;
+        this.stringValue = "NONE";
+    }
 
     private TransportGuaranteeType(int type, java.lang.String value) {
         super();
@@ -86,32 +86,29 @@ public class TransportGuaranteeType implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.types.TransportGuaranteeType(int, java.lang.String)
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
      * Method enumerateReturns an enumeration of all possible
      * instances of TransportGuaranteeType
      */
-    public static java.util.Enumeration enumerate()
-    {
+    public static java.util.Enumeration enumerate() {
         return _memberTable.elements();
     } //-- java.util.Enumeration enumerate()
 
     /**
      * Method getTypeReturns the type of this TransportGuaranteeType
      */
-    public int getType()
-    {
+    public int getType() {
         return this.type;
     } //-- int getType()
 
     /**
      * Method init
      */
-    private static java.util.Hashtable init()
-    {
+    private static java.util.Hashtable init() {
         Hashtable members = new Hashtable();
         members.put("NONE", NONE);
         members.put("INTEGRAL", INTEGRAL);
@@ -125,8 +122,7 @@ public class TransportGuaranteeType implements java.io.Serializable {
      *
      * @return the value of field 'content'.
      */
-    public java.lang.String getContent()
-    {
+    public java.lang.String getContent() {
         return this.stringValue;
     } //-- java.lang.String getContent()
 
@@ -137,8 +133,7 @@ public class TransportGuaranteeType implements java.io.Serializable {
      *
      * @param stringValue the value of field 'content'.
      */
-    public void setContent(java.lang.String stringValue)
-    {
+    public void setContent(java.lang.String stringValue) {
         this.stringValue = stringValue;
     } //-- void setContent(java.lang.String)
 
@@ -146,8 +141,7 @@ public class TransportGuaranteeType implements java.io.Serializable {
      * Method toStringReturns the String representation of this
      * TransportGuaranteeType
      */
-    public java.lang.String toString()
-    {
+    public java.lang.String toString() {
         return this.stringValue;
     } //-- java.lang.String toString()
 
@@ -157,8 +151,7 @@ public class TransportGuaranteeType implements java.io.Serializable {
      *
      * @param string
      */
-    public static org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType valueOf(java.lang.String string)
-    {
+    public static org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType valueOf(java.lang.String string) {
         java.lang.Object obj = null;
         if (string != null) obj = _memberTable.get(string);
         if (obj == null) {

@@ -11,8 +11,8 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
-import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
+import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ public class PasswordAuthModule extends BaseAuthModule {
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         // Get instance of password manager service
         try {
-            this.passwordManager = (PasswordManagerService)factory.createPortletService(PasswordManagerService.class, null, true);
+            this.passwordManager = (PasswordManagerService) factory.createPortletService(PasswordManagerService.class, null, true);
         } catch (Exception e) {
             log.error("Unable to get instance of password manager service!", e);
         }
@@ -44,7 +44,7 @@ public class PasswordAuthModule extends BaseAuthModule {
     }
 
     public String getEnvironmentVariable(String name) {
-        return (String)env.get(name);
+        return (String) env.get(name);
     }
 
     public String getModuleName() {
@@ -57,7 +57,7 @@ public class PasswordAuthModule extends BaseAuthModule {
 
     public int compareTo(Object obj) {
         if ((obj != null) && (obj instanceof LoginAuthModule)) {
-            LoginAuthModule l = (LoginAuthModule)obj;
+            LoginAuthModule l = (LoginAuthModule) obj;
             if (this.PASSWORD_MODULE_PRIORITY < l.getModulePriority()) {
                 return -1;
             } else if (this.PASSWORD_MODULE_PRIORITY > l.getModulePriority()) {

@@ -7,7 +7,6 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
 
 import javax.servlet.jsp.JspException;
 import java.util.Iterator;
@@ -35,6 +34,7 @@ public class ListBoxItemTag extends BaseComponentTag {
 
     /**
      * Sets the key used to identify localized text
+     *
      * @param key the key used to identify localized text
      */
     public void setKey(String key) {

@@ -4,8 +4,8 @@
  */
 package org.gridlab.gridsphere.provider.event.jsr;
 
-import javax.portlet.RenderResponse;
 import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
 /**
  * An <code>ActionEvent</code> is sent by the portlet container when an HTTP request is received that is

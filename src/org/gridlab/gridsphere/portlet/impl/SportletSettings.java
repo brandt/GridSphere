@@ -8,10 +8,9 @@ import org.gridlab.gridsphere.portlet.Client;
 import org.gridlab.gridsphere.portlet.PortletApplicationSettings;
 import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.LanguageInfo;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig;
 import org.gridlab.gridsphere.portletcontainer.impl.ConcreteSportlet;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.LanguageInfo;
 
 import java.io.IOException;
 import java.util.*;
@@ -54,7 +53,7 @@ public class SportletSettings implements PortletSettings {
         this.appSettings = new SportletApplicationSettings(concPortlet);
 
         ConcreteSportletConfig concPortletConf =
-                (ConcreteSportletConfig)concPortlet.getConcretePortletConfig();
+                (ConcreteSportletConfig) concPortlet.getConcretePortletConfig();
         String localeStr = concPortletConf.getDefaultLocale();
         defaultLocale = new Locale(localeStr, "");
         langList = concPortletConf.getLanguageList();
@@ -102,9 +101,9 @@ public class SportletSettings implements PortletSettings {
     public String getTitle(Locale locale, Client client) {
         Iterator it = langList.iterator();
         String title = defaultTitle;
-        
-        if (locale == null) return title; 
-        
+
+        if (locale == null) return title;
+
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo) it.next();
             if (locale.getLanguage().equals(langInfo.getLocale())) {
@@ -165,7 +164,7 @@ public class SportletSettings implements PortletSettings {
         String desc = defaultDescription;
         Iterator it = langList.iterator();
         while (it.hasNext()) {
-            LanguageInfo langInfo = (LanguageInfo)it.next();
+            LanguageInfo langInfo = (LanguageInfo) it.next();
             if (locale.getLanguage().equals(langInfo.getLocale())) {
                 return langInfo.getDescription();
             }
@@ -227,7 +226,7 @@ public class SportletSettings implements PortletSettings {
     /**
      * Sets the attribute with the given name and value.
      *
-     * @param name the attribute name
+     * @param name  the attribute name
      * @param value the attribute value
      */
     public void setAttribute(String name, String value) {
@@ -240,7 +239,7 @@ public class SportletSettings implements PortletSettings {
      * @throws IOException if the streaming causes an I/O problem
      */
     public void store() throws IOException {
-        ConcreteSportletConfig concPortletConf = (ConcreteSportletConfig)concPortlet.getConcretePortletConfig();
+        ConcreteSportletConfig concPortletConf = (ConcreteSportletConfig) concPortlet.getConcretePortletConfig();
         concPortletConf.setConfigAttributes(store);
         concPortlet.setConcretePortletConfig(concPortletConf);
         concPortlet.save();

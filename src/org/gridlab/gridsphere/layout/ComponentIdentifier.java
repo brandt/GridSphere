@@ -77,7 +77,6 @@ public class ComponentIdentifier implements Serializable, Cloneable {
      * Sets the concrete portlet component class name
      *
      * @param className the concrete portlet component class name
-     *
      */
     public void setClassName(String className) {
         this.className = className;
@@ -88,7 +87,7 @@ public class ComponentIdentifier implements Serializable, Cloneable {
      * than return true
      *
      * @return <code>true</code> if this component encaspulates a portlet class,
-     * <code>false</code> otherwise
+     *         <code>false</code> otherwise
      */
     public boolean hasPortlet() {
         return (portletClass != null);
@@ -131,8 +130,8 @@ public class ComponentIdentifier implements Serializable, Cloneable {
     }
 
     public Object clone() throws CloneNotSupportedException {
-        ComponentIdentifier c = (ComponentIdentifier)super.clone();
-        c.component = (this.component == null) ? null : (PortletComponent)this.component.clone();
+        ComponentIdentifier c = (ComponentIdentifier) super.clone();
+        c.component = (this.component == null) ? null : (PortletComponent) this.component.clone();
         c.className = (this.className == null) ? null : this.className;
         c.id = this.id;
         c.label = (this.label == label) ? null : this.label;

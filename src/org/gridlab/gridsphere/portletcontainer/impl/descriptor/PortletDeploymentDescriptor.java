@@ -8,8 +8,6 @@ package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.impl.ConcreteSportlet;
 
 import java.io.IOException;
@@ -18,7 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *  The <code>PortletDeploymentDescriptor</code> is responsible for
+ * The <code>PortletDeploymentDescriptor</code> is responsible for
  * marshalling/unmarshalling the XML portlet schema represntation and the
  * associated Java classes using Castor.
  */
@@ -77,7 +75,7 @@ public class PortletDeploymentDescriptor implements Cloneable {
                     ConcreteSportletDefinition concSportlet = (ConcreteSportletDefinition) concIt.next();
                     if (concID.equals(concSportlet.getConcretePortletID())) {
                         concSportlet.setContextAttributes(concPortlet.getContextAttributes());
-                        concSportlet.setConcreteSportletConfig((ConcreteSportletConfig)concPortlet.getConcretePortletConfig());
+                        concSportlet.setConcreteSportletConfig((ConcreteSportletConfig) concPortlet.getConcretePortletConfig());
                     }
                 }
             }

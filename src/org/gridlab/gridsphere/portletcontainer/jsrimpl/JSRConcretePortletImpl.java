@@ -8,10 +8,10 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDeploymentDescriptor2;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDeploymentDescriptor2;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -35,10 +35,10 @@ public class JSRConcretePortletImpl implements ConcretePortlet {
     /**
      * Constructs an instance of ConcreteSportlet
      *
-     * @param pdd a <code>PortletDeploymentDescriptor2</code>
+     * @param pdd        a <code>PortletDeploymentDescriptor2</code>
      * @param portletDef a concrete portlet descriptor
      */
-    public JSRConcretePortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, JSRConcretePortletConfigImpl concConfig)  {
+    public JSRConcretePortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, JSRConcretePortletConfigImpl concConfig) {
         this.portletDD = pdd;
         this.concConfig = concConfig;
         concreteID = portletDef.getPortletClass().getContent();
@@ -69,7 +69,7 @@ public class JSRConcretePortletImpl implements ConcretePortlet {
      * @param concPortletConfig the concrete portlet configuration
      */
     public void setConcretePortletConfig(ConcretePortletConfig concPortletConfig) {
-        this.concConfig = (JSRConcretePortletConfigImpl)concPortletConfig;
+        this.concConfig = (JSRConcretePortletConfigImpl) concPortletConfig;
     }
 
     /**
@@ -108,7 +108,7 @@ public class JSRConcretePortletImpl implements ConcretePortlet {
             //portletDD.setConcretePortlet(this);
             portletDD.save();
         } catch (PersistenceManagerException e) {
-          //  log.error("Unable to save concrete portlet descriptor! " + concreteID, e);
+            //  log.error("Unable to save concrete portlet descriptor! " + concreteID, e);
         }
     }
 

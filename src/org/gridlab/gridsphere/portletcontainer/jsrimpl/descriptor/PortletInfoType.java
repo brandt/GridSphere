@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -22,8 +22,8 @@ import org.exolab.castor.xml.Unmarshaller;
 public class PortletInfoType implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -47,8 +47,8 @@ public class PortletInfoType implements java.io.Serializable {
     private org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords _keywords;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public PortletInfoType() {
@@ -56,8 +56,8 @@ public class PortletInfoType implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletInfoType()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
@@ -65,8 +65,7 @@ public class PortletInfoType implements java.io.Serializable {
      *
      * @return the value of field 'id'.
      */
-    public java.lang.String getId()
-    {
+    public java.lang.String getId() {
         return this._id;
     } //-- java.lang.String getId()
 
@@ -75,8 +74,7 @@ public class PortletInfoType implements java.io.Serializable {
      *
      * @return the value of field 'keywords'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords getKeywords()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords getKeywords() {
         return this._keywords;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Keywords getKeywords()
 
@@ -85,8 +83,7 @@ public class PortletInfoType implements java.io.Serializable {
      *
      * @return the value of field 'shortTitle'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitle getShortTitle()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitle getShortTitle() {
         return this._shortTitle;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ShortTitle getShortTitle()
 
@@ -95,20 +92,17 @@ public class PortletInfoType implements java.io.Serializable {
      *
      * @return the value of field 'title'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Title getTitle()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Title getTitle() {
         return this._title;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Title getTitle()
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -120,8 +114,7 @@ public class PortletInfoType implements java.io.Serializable {
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer)
@@ -132,8 +125,7 @@ public class PortletInfoType implements java.io.Serializable {
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler)
@@ -143,8 +135,7 @@ public class PortletInfoType implements java.io.Serializable {
      *
      * @param id the value of field 'id'.
      */
-    public void setId(java.lang.String id)
-    {
+    public void setId(java.lang.String id) {
         this._id = id;
     } //-- void setId(java.lang.String)
 
@@ -153,8 +144,7 @@ public class PortletInfoType implements java.io.Serializable {
      *
      * @param keywords the value of field 'keywords'.
      */
-    public void setKeywords(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords keywords)
-    {
+    public void setKeywords(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords keywords) {
         this._keywords = keywords;
     } //-- void setKeywords(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Keywords)
 
@@ -163,8 +153,7 @@ public class PortletInfoType implements java.io.Serializable {
      *
      * @param shortTitle the value of field 'shortTitle'.
      */
-    public void setShortTitle(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitle shortTitle)
-    {
+    public void setShortTitle(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitle shortTitle) {
         this._shortTitle = shortTitle;
     } //-- void setShortTitle(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ShortTitle)
 
@@ -173,8 +162,7 @@ public class PortletInfoType implements java.io.Serializable {
      *
      * @param title the value of field 'title'.
      */
-    public void setTitle(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Title title)
-    {
+    public void setTitle(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Title title) {
         this._title = title;
     } //-- void setTitle(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Title)
 
@@ -184,8 +172,7 @@ public class PortletInfoType implements java.io.Serializable {
      * @param reader
      */
     public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfoType) Unmarshaller.unmarshal(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfoType.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader)
 
@@ -193,8 +180,7 @@ public class PortletInfoType implements java.io.Serializable {
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate()

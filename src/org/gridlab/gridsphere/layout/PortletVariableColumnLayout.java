@@ -10,12 +10,12 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * The <code>PortletVariableColumnLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
- * that organizes portlets into a column, but displays only one of its children. 
+ * that organizes portlets into a column, but displays only one of its children.
  * Displays only the child, which has the same label as is value of session attribute
  * with name <code>variant.layout.mylabel</code> where mylabel is label of this component.
  * If such session attribute doesn't exist, displays the child specified by "variant" attribute.
@@ -57,29 +57,31 @@ public class PortletVariableColumnLayout extends PortletFrameLayout implements C
 
             out.println("<tbody>");
 
-	    //find which variant to display
-	    String thisLabel = this.getLabel();
-	    String sesvariant = null;
-	    if(thisLabel!=null) {
-	        Object _sesvariant = req.getSession(true).getAttribute(this.LABEL_PREFIX+thisLabel);
-	        if(_sesvariant instanceof String) { sesvariant=(String)_sesvariant; }
-	    }
-	    if(sesvariant==null) sesvariant=this.getVariant();
+            //find which variant to display
+            String thisLabel = this.getLabel();
+            String sesvariant = null;
+            if (thisLabel != null) {
+                Object _sesvariant = req.getSession(true).getAttribute(this.LABEL_PREFIX + thisLabel);
+                if (_sesvariant instanceof String) {
+                    sesvariant = (String) _sesvariant;
+                }
+            }
+            if (sesvariant == null) sesvariant = this.getVariant();
 
             List scomponents = Collections.synchronizedList(components);
-            synchronized(scomponents) {
-            for (int i=0;i<scomponents.size();i++) {
-                out.print("<tr><td valign=\"top\">");
+            synchronized (scomponents) {
+                for (int i = 0; i < scomponents.size(); i++) {
+                    out.print("<tr><td valign=\"top\">");
 
-                p = (PortletComponent) scomponents.get(i);
-		String plabel = p.getLabel();
+                    p = (PortletComponent) scomponents.get(i);
+                    String plabel = p.getLabel();
 
-                if (p.getVisible()&&sesvariant.equals(plabel)) {
-                    p.doRender(event);
+                    if (p.getVisible() && sesvariant.equals(plabel)) {
+                        p.doRender(event);
+                    }
+
+                    out.println("</td></tr>");
                 }
-
-                out.println("</td></tr>");
-            }
             }
             out.println("</tbody>");
             out.println("</table> <!-- END COLUMN -->");
@@ -87,7 +89,7 @@ public class PortletVariableColumnLayout extends PortletFrameLayout implements C
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletVariableColumnLayout g = (PortletVariableColumnLayout)super.clone();
+        PortletVariableColumnLayout g = (PortletVariableColumnLayout) super.clone();
         return g;
     }
 

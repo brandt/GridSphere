@@ -13,9 +13,9 @@ import org.gridlab.gridsphere.portlet.impl.SportletSettings;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -42,11 +42,11 @@ public class ConcreteSportlet implements ConcretePortlet {
     /**
      * Constructs an instance of ConcreteSportlet
      *
-     * @param pdd a <code>PortletDeploymentDescriptor</code>
+     * @param pdd              a <code>PortletDeploymentDescriptor</code>
      * @param appPortletConfig an application portlet configuration
-     * @param concSportletDef a concrete portlet descriptor
+     * @param concSportletDef  a concrete portlet descriptor
      */
-    public ConcreteSportlet(PortletDeploymentDescriptor pdd, ApplicationPortletConfig appPortletConfig, ConcreteSportletDefinition concSportletDef) throws PortletException  {
+    public ConcreteSportlet(PortletDeploymentDescriptor pdd, ApplicationPortletConfig appPortletConfig, ConcreteSportletDefinition concSportletDef) throws PortletException {
         this.portletDD = pdd;
         this.concSportletConfig = concSportletDef.getConcreteSportletConfig();
         String appID, cappID;
@@ -58,14 +58,14 @@ public class ConcreteSportlet implements ConcretePortlet {
         //portletName = appPortletConfig.getPortletName();
 
         portletName = concSportletDef.getConcreteSportletConfig().getName();
-        
+
         concreteID = concSportletDef.getConcretePortletID();
         index = concreteID.lastIndexOf(".");
         cappID = concreteID.substring(0, index);
 
         if (!(cappID.equals(appID))) {
             String msg = "The portlet classname defined by the portlet application id: "
-            + appID + " and the concrete portlet classname: " + cappID + " are not equal";
+                    + appID + " and the concrete portlet classname: " + cappID + " are not equal";
             log.error(msg);
             throw new PortletException(msg);
         }
@@ -102,7 +102,7 @@ public class ConcreteSportlet implements ConcretePortlet {
      * @param concPortletConfig the concrete portlet configuration
      */
     public void setConcretePortletConfig(ConcretePortletConfig concPortletConfig) {
-        this.concSportletConfig = (ConcreteSportletConfig)concPortletConfig;
+        this.concSportletConfig = (ConcreteSportletConfig) concPortletConfig;
     }
 
     /**

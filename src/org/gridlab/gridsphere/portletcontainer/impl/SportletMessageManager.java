@@ -33,20 +33,21 @@ public class SportletMessageManager implements PortletMessageManager {
     /**
      * Default constructor instantiation disallowed
      */
-    private SportletMessageManager() {}
+    private SportletMessageManager() {
+    }
 
     /**
      * Sends the supplied message to the portlet specified by the concrete portlet id
-     * <p>
+     * <p/>
      * The portlet(s) with the given name will only receive the message event if it has/they have implemented
      * the appropriate listener.
      *
      * @param concretePortletID the concrete portlet id
-     * @param message the portlet message to be sent
+     * @param message           the portlet message to be sent
      */
     public synchronized void send(String concretePortletID, PortletMessage message) {
         if (concretePortletID == null) {
-                concretePortletID = "*"; 
+            concretePortletID = "*";
         }
         List l = (List) messages.get(concretePortletID);
         if (l == null) l = new ArrayList();
@@ -72,7 +73,7 @@ public class SportletMessageManager implements PortletMessageManager {
 
     public synchronized void removeMessage(String concretePortletID, PortletMessage message) {
         if (messages.containsKey(concretePortletID)) {
-            List l = (List)messages.get(concretePortletID);
+            List l = (List) messages.get(concretePortletID);
             l.remove(message);
         }
     }
@@ -80,7 +81,7 @@ public class SportletMessageManager implements PortletMessageManager {
     public synchronized void removeAllMessages() {
         messages.clear();
     }
-    
+
     /**
      * Retrieves all the messages  removes them from the queue
      *

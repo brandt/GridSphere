@@ -2,7 +2,6 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Set;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
@@ -28,6 +27,7 @@ public class DataGridColumnBean extends BeanContainer {
 
     /**
      * Returns addtl. dynamic Parametervalue. This is a method name which will be called on the object to be included.
+     *
      * @return methodname
      */
     public String getParamValue() {
@@ -36,6 +36,7 @@ public class DataGridColumnBean extends BeanContainer {
 
     /**
      * Sets the Methodname which should be called on the data object while cycling though the list.
+     *
      * @param paramValue methodname to be called on the data object
      */
     public void setParamValue(String paramValue) {
@@ -44,6 +45,7 @@ public class DataGridColumnBean extends BeanContainer {
 
     /**
      * Returns the parametername.
+     *
      * @return parametername
      */
     public String getParamName() {
@@ -52,6 +54,7 @@ public class DataGridColumnBean extends BeanContainer {
 
     /**
      * Sets the parametername for an addtl. parameter to be included.
+     *
      * @param paramName name of the parameter
      */
     public void setParamName(String paramName) {
@@ -69,6 +72,7 @@ public class DataGridColumnBean extends BeanContainer {
     /**
      * Returns the methodname to be called on the object data to set (usually) the value of an included
      * TagBean. Depends on the type of the TagBean.
+     *
      * @return methodname
      */
     public String getVar() {
@@ -78,6 +82,7 @@ public class DataGridColumnBean extends BeanContainer {
     /**
      * Sets the methodname to be called on the object data to set (usually) the value of an included
      * TagBean. Depends on the type of the TagBean.
+     *
      * @param var of the method
      */
 
@@ -87,6 +92,7 @@ public class DataGridColumnBean extends BeanContainer {
 
     /**
      * Returns the Header for the column.
+     *
      * @return header of the column
      */
     public String getHeader() {
@@ -95,6 +101,7 @@ public class DataGridColumnBean extends BeanContainer {
 
     /**
      * Sets the header of the column
+     *
      * @param header of the column
      */
     public void setHeader(String header) {
@@ -137,8 +144,8 @@ public class DataGridColumnBean extends BeanContainer {
                 }
             }
 
-            if (attributes!=null && bean instanceof SelectElementBean) {
-                SelectElementBean seBean = (SelectElementBean)bean;
+            if (attributes != null && bean instanceof SelectElementBean) {
+                SelectElementBean seBean = (SelectElementBean) bean;
                 seBean.setSelected(attributes.isSelected(this.getData(data, this.var)));
                 seBean.setDisabled(attributes.isDisabled(this.getData(data, this.var)));
 
@@ -158,14 +165,15 @@ public class DataGridColumnBean extends BeanContainer {
 
     /**
      * Returns the result of the method call 'method' on object data or null if error occured
-     * @param data Object to be examined
+     *
+     * @param data   Object to be examined
      * @param method methodname to be called
      * @return result of data.method() or null
      */
     private String getData(Object data, String method) {
         String result = null;
 
-        System.out.println("\n\n\n\n Try to call method '"+method+"' on object "+data.getClass().getName()+"\n\n\n");
+        System.out.println("\n\n\n\n Try to call method '" + method + "' on object " + data.getClass().getName() + "\n\n\n");
 
         Class dataClass = data.getClass();
         Method m = null;

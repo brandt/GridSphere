@@ -45,13 +45,13 @@ public interface PortletGroup extends Cloneable {
     public String getLabel();
 
     public Set getPortletRoleList();
-    
+
     /**
      * Tests to see if this group is equal to a supplied group
      *
      * @param object a <code>PortletGroup</code> object
      * @return <code>true</code> if groups are equal, <code>false</code>
-     * otherwise
+     *         otherwise
      */
     public boolean equals(Object object);
 

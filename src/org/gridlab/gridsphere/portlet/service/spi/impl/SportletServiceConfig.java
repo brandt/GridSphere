@@ -4,15 +4,15 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi.impl;
 
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
-import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition;
+import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
 
 import javax.servlet.ServletContext;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
-import java.io.IOException;
 
 /**
  * The <code>SportletServiceConfig</code> provides an implementation
@@ -36,7 +36,7 @@ public class SportletServiceConfig implements PortletServiceConfig {
      * Constructs an instance of SportletServiceConfig using the supplied
      * service class, the configuration properties and the  servlet configuration
      *
-     * @param def the sportlet service definition
+     * @param def            the sportlet service definition
      * @param servletContext the <code>ServletConfig</code>
      */
     public SportletServiceConfig(SportletServiceDefinition def,
@@ -59,7 +59,7 @@ public class SportletServiceConfig implements PortletServiceConfig {
     /**
      * Returns the init parameter with the given name.
      *
-     * @param name the name of the requested init parameter.
+     * @param name  the name of the requested init parameter.
      * @param value the value of the init parameter
      */
     public void setInitParameter(String name, String value) {
@@ -70,7 +70,7 @@ public class SportletServiceConfig implements PortletServiceConfig {
      * Returns the init parameter with the given name. It returns the given default
      * value if the parameter is not found.
      *
-     * @param name the name of the requested init parameter.
+     * @param name         the name of the requested init parameter.
      * @param defaultValue the default value to return.
      * @return the init parameter value if exists, otherwise defaultValue
      */

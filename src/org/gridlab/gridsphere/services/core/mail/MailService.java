@@ -13,7 +13,7 @@ public interface MailService {
 
     public static String MAIL_SERVER_HOST = "gridsphere.mailserver.host";
     public static String MAIL_SENDER = "gridsphere.mail.sender";
-  
+
     String getMailServiceHost();
 
     void setMailServiceHost(String mailServiceHost);

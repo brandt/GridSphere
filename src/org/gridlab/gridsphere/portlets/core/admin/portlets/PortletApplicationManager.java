@@ -11,14 +11,16 @@ import org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat.TomcatManagerW
 import org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat.TomcatWebAppResult;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
-import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
 import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
+import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The PortletApplicationManager is a wrapper for the Tomcat manager webapp in 4.1.X which allows dynamic
@@ -72,19 +74,19 @@ public class PortletApplicationManager extends ActionPortlet {
         FrameBean frame = event.getFrameBean("errorFrame");
         PortletManagerService portletManager = null;
         try {
-            portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
+            portletManager = (PortletManagerService) getConfig().getContext().getService(PortletManagerService.class, user);
         } catch (PortletServiceException e) {
             frame.setKey("PORTLET_ERR_REGISTRY");
             frame.setStyle("error");
         }
 
         Map params = action.getParameters();
-        String operation = (String)params.get("operation");
-        String appName = (String)params.get("context");
+        String operation = (String) params.get("operation");
+        String appName = (String) params.get("context");
         TomcatWebAppResult result = null;
 
         try {
-            if ((operation != null) && (appName!= null)) {
+            if ((operation != null) && (appName != null)) {
                 if (operation.equals("start")) {
                     result = tomcat.startWebApp(req, appName);
                     portletManager.destroyPortletWebApplication(appName, req, res);
@@ -136,7 +138,7 @@ public class PortletApplicationManager extends ActionPortlet {
             if (fileName.equals("")) return;
             PortletManagerService portletManager = null;
             try {
-                portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
+                portletManager = (PortletManagerService) getConfig().getContext().getService(PortletManagerService.class, user);
             } catch (PortletServiceException e) {
                 FrameBean frame = event.getFrameBean("errorFrame");
                 frame.setKey("PORTLET_ERR_REGISTRY");
@@ -172,7 +174,7 @@ public class PortletApplicationManager extends ActionPortlet {
             if (webappName == null) return;
             PortletManagerService portletManager = null;
             try {
-                portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
+                portletManager = (PortletManagerService) getConfig().getContext().getService(PortletManagerService.class, user);
             } catch (PortletServiceException e) {
                 FrameBean frame = event.getFrameBean("errorFrame");
                 frame.setKey("PORTLET_ERR_REGISTRY");

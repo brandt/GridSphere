@@ -6,21 +6,21 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
-import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Collections;
 
 
 /**
  * The abstract <code>PortletFrameLayout</code> acts a container for the layout of portlet frame
  * components and handles PortletFrame events.
- * <p>
+ * <p/>
  * The <code>PortletTableLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
  * that organizes portlets into a grid with a provided number of rows and columns.
  *
@@ -45,16 +45,16 @@ public class PortletContainer extends BasePortletComponent implements
         list = super.init(req, list);
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
-        Iterator it = scomponents.iterator();
-        PortletComponent p = null;
-        while (it.hasNext()) {
-            p = (PortletComponent) it.next();
-            // all the components have the same theme
-            p.setTheme(theme);
-            // invoke init on each component
-            list = p.init(req, list);
-            p.setParentComponent(this);
-        }
+            Iterator it = scomponents.iterator();
+            PortletComponent p = null;
+            while (it.hasNext()) {
+                p = (PortletComponent) it.next();
+                // all the components have the same theme
+                p.setTheme(theme);
+                // invoke init on each component
+                list = p.init(req, list);
+                p.setParentComponent(this);
+            }
         }
         return list;
     }
@@ -71,7 +71,7 @@ public class PortletContainer extends BasePortletComponent implements
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws
             PortletLayoutException, IOException {
@@ -82,17 +82,17 @@ public class PortletContainer extends BasePortletComponent implements
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
-        Iterator it = scomponents.iterator();
-        PortletComponent comp = null;
-        while (it.hasNext()) {
-            comp = (PortletComponent)it.next();
-            comp.doRender(event);
-        }
+            Iterator it = scomponents.iterator();
+            PortletComponent comp = null;
+            while (it.hasNext()) {
+                comp = (PortletComponent) it.next();
+                comp.doRender(event);
+            }
         }
     }
 
@@ -133,14 +133,14 @@ public class PortletContainer extends BasePortletComponent implements
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletContainer f = (PortletContainer)super.clone();
+        PortletContainer f = (PortletContainer) super.clone();
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
-        f.components = new ArrayList(scomponents.size());
-        for (int i = 0; i < scomponents.size(); i++) {
-            PortletComponent comp = (PortletComponent)scomponents.get(i);
-            f.components.add(comp.clone());
-        }
+            f.components = new ArrayList(scomponents.size());
+            for (int i = 0; i < scomponents.size(); i++) {
+                PortletComponent comp = (PortletComponent) scomponents.get(i);
+                f.components.add(comp.clone());
+            }
         }
         return f;
     }

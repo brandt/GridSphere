@@ -84,8 +84,10 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         }
         return factory;
     }
+
     /**
      * Load the mappingfiles from the given dirctory location
+     *
      * @param persistenceConfigDir
      * @return
      */

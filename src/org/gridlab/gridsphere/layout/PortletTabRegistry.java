@@ -1,16 +1,16 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -60,7 +60,8 @@ public class PortletTabRegistry {
         }
     }
 
-    private PortletTabRegistry() {}
+    private PortletTabRegistry() {
+    }
 
     public synchronized static void addGroupTab(String groupName, String tabXMLfile) throws IOException, PersistenceManagerException {
         PortletTabbedPane webAppTabs = PortletLayoutDescriptor.loadPortletTabs(tabXMLfile, layoutMappingFile);
@@ -89,11 +90,11 @@ public class PortletTabRegistry {
     }
 
     public static PortletTabbedPane getApplicationTabs(String webAppName) {
-        return (PortletTabbedPane)applicationTabs.get(webAppName);
+        return (PortletTabbedPane) applicationTabs.get(webAppName);
     }
 
     public static PortletTabbedPane getGroupTabs(String groupName) {
-        return (PortletTabbedPane)groupTabs.get(groupName);
+        return (PortletTabbedPane) groupTabs.get(groupName);
     }
 
 
@@ -117,7 +118,7 @@ public class PortletTabRegistry {
         PortletTab pTab = null;
         PortletFrame pFrame = null;
         while (it.hasNext()) {
-            SportletRoleInfo info = (SportletRoleInfo)it.next();
+            SportletRoleInfo info = (SportletRoleInfo) it.next();
             portletClass = info.getPortletClass();
             reqRole = info.getRole();
             pTab = new PortletTab();
@@ -167,7 +168,7 @@ public class PortletTabRegistry {
     }
 
     public synchronized static void removeGroupTab(String groupName) {
-        String groupFile = (String)tabDescriptors.get(groupName);
+        String groupFile = (String) tabDescriptors.get(groupName);
         if (groupFile != null) {
             File f = new File(groupFile);
             if (f.exists()) f.delete();
@@ -181,7 +182,7 @@ public class PortletTabRegistry {
     }
 
     public static String getTabDescriptorPath(String webAppName) {
-        return (String)tabDescriptors.get(webAppName);
+        return (String) tabDescriptors.get(webAppName);
     }
 
 

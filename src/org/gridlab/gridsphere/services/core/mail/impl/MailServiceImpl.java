@@ -4,10 +4,10 @@
  */
 package org.gridlab.gridsphere.services.core.mail.impl;
 
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.mail.MailMessage;
 import org.gridlab.gridsphere.services.core.mail.MailService;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -26,7 +26,7 @@ public class MailServiceImpl implements PortletServiceProvider, MailService {
     private String mailServiceHost = null;
 
     public void init(PortletServiceConfig config) {
-    
+
     }
 
     public void destroy() {
@@ -55,7 +55,7 @@ public class MailServiceImpl implements PortletServiceProvider, MailService {
         InternetAddress from = new InternetAddress(msg.getSender());
         InternetAddress to[] = InternetAddress.parse(msg.getEmailAddress());
         mimeMessage.setFrom(from);
-        mimeMessage.setRecipients(Message.RecipientType.TO,to);
+        mimeMessage.setRecipients(Message.RecipientType.TO, to);
         mimeMessage.setSubject(msg.getSubject());
         mimeMessage.setSentDate(new Date());
         mimeMessage.setText(msg.getBody());

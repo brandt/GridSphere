@@ -4,16 +4,12 @@
  */
 package org.gridlab.gridsphere.portletcontainer.jsrimpl;
 
-import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SupportedLocale;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityRoleRef;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
 
-import java.util.Locale;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class JSRConcretePortletConfigImpl implements ConcretePortletConfig {
@@ -73,7 +69,7 @@ public class JSRConcretePortletConfigImpl implements ConcretePortletConfig {
     }
 
     public String getDescription(Locale loc) {
-        String desc = (String)descsMap.get(loc.getLanguage());
+        String desc = (String) descsMap.get(loc.getLanguage());
         if (desc == null) {
             desc = portletName;
         }
@@ -81,7 +77,7 @@ public class JSRConcretePortletConfigImpl implements ConcretePortletConfig {
     }
 
     public String getDisplayName(Locale loc) {
-        String disp = (String)dispsMap.get(loc.getLanguage());
+        String disp = (String) dispsMap.get(loc.getLanguage());
         if (disp == null) {
             disp = portletName;
         }

@@ -19,7 +19,8 @@ public class LanguageInfo {
     /**
      * Creates an instance of LanguageInfo
      */
-    public LanguageInfo() {}
+    public LanguageInfo() {
+    }
 
     /**
      * Returns the description of the portlet

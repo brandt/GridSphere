@@ -96,7 +96,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
                 sname = "ui_" + vbName + "_" + beanId + "_" + pname;
             } else {
                 //log.debug("request not null");
-                String compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+                String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
                 if (compId == null) {
                     sname = "ui_" + vbName + "_" + beanId + "_" + pname;
                 } else {

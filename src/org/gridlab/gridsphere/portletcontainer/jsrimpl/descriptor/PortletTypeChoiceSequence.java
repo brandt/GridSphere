@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -22,8 +22,8 @@ import org.exolab.castor.xml.Unmarshaller;
 public class PortletTypeChoiceSequence implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -37,8 +37,8 @@ public class PortletTypeChoiceSequence implements java.io.Serializable {
     private org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo _portletInfo;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public PortletTypeChoiceSequence() {
@@ -46,8 +46,8 @@ public class PortletTypeChoiceSequence implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletTypeChoiceSequence()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
@@ -55,8 +55,7 @@ public class PortletTypeChoiceSequence implements java.io.Serializable {
      * 
      * @return the value of field 'portletInfo'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo getPortletInfo()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo getPortletInfo() {
         return this._portletInfo;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletInfo getPortletInfo()
 
@@ -65,20 +64,17 @@ public class PortletTypeChoiceSequence implements java.io.Serializable {
      * 
      * @return the value of field 'resourceBundle'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundle getResourceBundle()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundle getResourceBundle() {
         return this._resourceBundle;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ResourceBundle getResourceBundle()
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -86,25 +82,23 @@ public class PortletTypeChoiceSequence implements java.io.Serializable {
 
     /**
      * Method marshal
-     * 
+     *
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
+
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer) 
 
     /**
      * Method marshal
-     * 
+     *
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
+
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler) 
 
@@ -113,8 +107,7 @@ public class PortletTypeChoiceSequence implements java.io.Serializable {
      * 
      * @param portletInfo the value of field 'portletInfo'.
      */
-    public void setPortletInfo(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo portletInfo)
-    {
+    public void setPortletInfo(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo portletInfo) {
         this._portletInfo = portletInfo;
     } //-- void setPortletInfo(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletInfo)
 
@@ -123,19 +116,17 @@ public class PortletTypeChoiceSequence implements java.io.Serializable {
      * 
      * @param resourceBundle the value of field 'resourceBundle'.
      */
-    public void setResourceBundle(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundle resourceBundle)
-    {
+    public void setResourceBundle(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundle resourceBundle) {
         this._resourceBundle = resourceBundle;
     } //-- void setResourceBundle(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ResourceBundle)
 
     /**
      * Method unmarshal
-     * 
+     *
      * @param reader
      */
     public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoiceSequence) Unmarshaller.unmarshal(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoiceSequence.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader) 
 
@@ -143,8 +134,7 @@ public class PortletTypeChoiceSequence implements java.io.Serializable {
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate() 

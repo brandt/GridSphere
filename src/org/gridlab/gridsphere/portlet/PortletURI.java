@@ -33,7 +33,7 @@ public interface PortletURI {
      * Adds the given parameter to this URI. A portlet container may wish to prefix the attribute names
      * internally, to preserve a unique namespace for the portlet.
      *
-     * @param name the parameter name
+     * @param name  the parameter name
      * @param value the parameter value
      */
     public void addParameter(String name, String value);
@@ -43,7 +43,7 @@ public interface PortletURI {
      * implementation of the portlet action interface. It can carry any
      * information. How the information is recovered should the next request
      * be for this URI is at the discretion of the portlet container.
-     * <p>
+     * <p/>
      * Unless the ActionListener interface is implemented at the portlet this
      * action will not be delivered.
      *

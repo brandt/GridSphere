@@ -11,7 +11,7 @@ public interface PasswordManagerService extends PortletService {
     public Password getPassword(User user);
 
     public void validateSuppliedPassword(User user, String suppliedPassword)
-          throws InvalidPasswordException;
+            throws InvalidPasswordException;
 
     public void savePassword(Password passwordBean);
 

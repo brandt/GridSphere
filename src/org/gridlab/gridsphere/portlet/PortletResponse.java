@@ -4,10 +4,7 @@
 */
 package org.gridlab.gridsphere.portlet;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * The <code>PortletResponse</code> encapsulates the response sent by the client

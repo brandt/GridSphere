@@ -46,6 +46,7 @@ public class ActionMenuItemBean extends BeanContainer {
     /**
      * Sets the alignment of the MenuItem. If it is added to a @see ActionMenuBean the alignment from that one
      * has will be used.
+     *
      * @param menualign
      */
     public void setAlign(String menualign) {

@@ -8,7 +8,7 @@ package org.gridlab.gridsphere.portlet.impl;
  * <code>SportletProperties</code> conatins all the "hidden" variable names
  * that get transmitted between the portlet container and the portlets to
  * request a particular portlet lifecycle action.
- * <p>
+ * <p/>
  * SportletProperties comtains three kinds of attributes
  * <ul>
  * <li>Lifecycle atttributes specify the lifecycle method to invoke on a
@@ -22,7 +22,7 @@ package org.gridlab.gridsphere.portlet.impl;
 public interface SportletProperties {
 
     /**
-     *  Determines which lifecycle command to invoke
+     * Determines which lifecycle command to invoke
      */
     public static final String PORTLET_LIFECYCLE_METHOD = "org.gridlab.gridsphere.portlet.portletLifecycleMethod";
 
@@ -69,28 +69,28 @@ public interface SportletProperties {
     public static final String PORTLET_APPLICATION = "org.gridlab.gridsphere.portletcontainer.PortletApplication";
 
     /**
-     *  The variable name of the PortletSettings object
+     * The variable name of the PortletSettings object
      */
     public static final String PORTLET_SETTINGS = "org.gridlab.gridsphere.portlet.PortletSettings";
 
     // Portlet events
     /**
-     *  The variable name of the ActionEvent object
+     * The variable name of the ActionEvent object
      */
     public static final String ACTION_EVENT = "org.gridlab.gridsphere.event.ActionEvent";
 
     /**
-     *  The variable name of the MessageEvent object
+     * The variable name of the MessageEvent object
      */
     public static final String MESSAGE_EVENT = "org.gridlab.gridsphere.event.MessageEvent";
 
     /**
-     *  The variable name of the WindowEvent object
+     * The variable name of the WindowEvent object
      */
     public static final String WINDOW_EVENT = "org.gridlab.gridsphere.event.WindowEvent";
 
     /**
-     *  Determines which event listener to notify
+     * Determines which event listener to notify
      */
     public static final String PORTLET_ACTION_METHOD = "org.gridlab.gridsphere.portlet.lifecycle.portletActionMethod";
 
@@ -121,7 +121,7 @@ public interface SportletProperties {
 
     /**
      * Command to perform the windowClosing method on a portlet
-     *
+     * <p/>
      * *NOT IMPLEMENTED*
      */
     public static final String WINDOW_CLOSING = "org.gridlab.gridsphere.portlet.lifecycle.windowClosing";

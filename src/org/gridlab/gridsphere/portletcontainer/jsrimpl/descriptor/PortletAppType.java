@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -24,8 +24,8 @@ import java.util.ArrayList;
 public class PortletAppType implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -64,8 +64,8 @@ public class PortletAppType implements java.io.Serializable {
     private java.util.ArrayList _securityConstraintList;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public PortletAppType() {
@@ -78,8 +78,8 @@ public class PortletAppType implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletAppType()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
@@ -88,8 +88,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vCustomPortletMode
      */
     public void addCustomPortletMode(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode vCustomPortletMode)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _customPortletModeList.add(vCustomPortletMode);
     } //-- void addCustomPortletMode(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomPortletMode)
 
@@ -100,8 +99,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vCustomPortletMode
      */
     public void addCustomPortletMode(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode vCustomPortletMode)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _customPortletModeList.add(index, vCustomPortletMode);
     } //-- void addCustomPortletMode(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomPortletMode)
 
@@ -111,8 +109,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vCustomWindowState
      */
     public void addCustomWindowState(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState vCustomWindowState)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _customWindowStateList.add(vCustomWindowState);
     } //-- void addCustomWindowState(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowState)
 
@@ -123,8 +120,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vCustomWindowState
      */
     public void addCustomWindowState(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState vCustomWindowState)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _customWindowStateList.add(index, vCustomWindowState);
     } //-- void addCustomWindowState(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowState)
 
@@ -134,8 +130,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vPortlet
      */
     public void addPortlet(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition vPortlet)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _portletList.add(vPortlet);
     } //-- void addPortlet(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Portlet)
 
@@ -146,8 +141,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vPortlet
      */
     public void addPortlet(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition vPortlet)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _portletList.add(index, vPortlet);
     } //-- void addPortlet(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Portlet)
 
@@ -157,8 +151,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vSecurityConstraint
      */
     public void addSecurityConstraint(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint vSecurityConstraint)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _securityConstraintList.add(vSecurityConstraint);
     } //-- void addSecurityConstraint(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraint)
 
@@ -169,8 +162,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vSecurityConstraint
      */
     public void addSecurityConstraint(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint vSecurityConstraint)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _securityConstraintList.add(index, vSecurityConstraint);
     } //-- void addSecurityConstraint(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraint)
 
@@ -180,8 +172,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vUserAttribute
      */
     public void addUserAttribute(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute vUserAttribute)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _userAttributeList.add(vUserAttribute);
     } //-- void addUserAttribute(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttribute)
 
@@ -192,88 +183,77 @@ public class PortletAppType implements java.io.Serializable {
      * @param vUserAttribute
      */
     public void addUserAttribute(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute vUserAttribute)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _userAttributeList.add(index, vUserAttribute);
     } //-- void addUserAttribute(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttribute)
 
     /**
      * Method clearCustomPortletMode
      */
-    public void clearCustomPortletMode()
-    {
+    public void clearCustomPortletMode() {
         _customPortletModeList.clear();
     } //-- void clearCustomPortletMode()
 
     /**
      * Method clearCustomWindowState
      */
-    public void clearCustomWindowState()
-    {
+    public void clearCustomWindowState() {
         _customWindowStateList.clear();
     } //-- void clearCustomWindowState()
 
     /**
      * Method clearPortlet
      */
-    public void clearPortlet()
-    {
+    public void clearPortlet() {
         _portletList.clear();
     } //-- void clearPortlet()
 
     /**
      * Method clearSecurityConstraint
      */
-    public void clearSecurityConstraint()
-    {
+    public void clearSecurityConstraint() {
         _securityConstraintList.clear();
     } //-- void clearSecurityConstraint()
 
     /**
      * Method clearUserAttribute
      */
-    public void clearUserAttribute()
-    {
+    public void clearUserAttribute() {
         _userAttributeList.clear();
     } //-- void clearUserAttribute()
 
     /**
      * Method enumerateCustomPortletMode
      */
-    public java.util.Enumeration enumerateCustomPortletMode()
-    {
+    public java.util.Enumeration enumerateCustomPortletMode() {
         return new org.exolab.castor.util.IteratorEnumeration(_customPortletModeList.iterator());
     } //-- java.util.Enumeration enumerateCustomPortletMode()
 
     /**
      * Method enumerateCustomWindowState
      */
-    public java.util.Enumeration enumerateCustomWindowState()
-    {
+    public java.util.Enumeration enumerateCustomWindowState() {
         return new org.exolab.castor.util.IteratorEnumeration(_customWindowStateList.iterator());
     } //-- java.util.Enumeration enumerateCustomWindowState()
 
     /**
      * Method enumeratePortlet
      */
-    public java.util.Enumeration enumeratePortlet()
-    {
+    public java.util.Enumeration enumeratePortlet() {
         return new org.exolab.castor.util.IteratorEnumeration(_portletList.iterator());
     } //-- java.util.Enumeration enumeratePortlet()
 
     /**
      * Method enumerateSecurityConstraint
      */
-    public java.util.Enumeration enumerateSecurityConstraint()
-    {
+    public java.util.Enumeration enumerateSecurityConstraint() {
         return new org.exolab.castor.util.IteratorEnumeration(_securityConstraintList.iterator());
     } //-- java.util.Enumeration enumerateSecurityConstraint()
 
     /**
      * Method enumerateUserAttribute
      */
-    public java.util.Enumeration enumerateUserAttribute()
-    {
+    public java.util.Enumeration enumerateUserAttribute() {
         return new org.exolab.castor.util.IteratorEnumeration(_userAttributeList.iterator());
     } //-- java.util.Enumeration enumerateUserAttribute()
 
@@ -283,8 +263,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param index
      */
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode getCustomPortletMode(int index)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _customPortletModeList.size())) {
             throw new IndexOutOfBoundsException();
@@ -296,8 +275,7 @@ public class PortletAppType implements java.io.Serializable {
     /**
      * Method getCustomPortletMode
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode[] getCustomPortletMode()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode[] getCustomPortletMode() {
         int size = _customPortletModeList.size();
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode[] mArray = new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode[size];
         for (int index = 0; index < size; index++) {
@@ -309,8 +287,7 @@ public class PortletAppType implements java.io.Serializable {
     /**
      * Method getCustomPortletModeCount
      */
-    public int getCustomPortletModeCount()
-    {
+    public int getCustomPortletModeCount() {
         return _customPortletModeList.size();
     } //-- int getCustomPortletModeCount()
 
@@ -320,8 +297,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param index
      */
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState getCustomWindowState(int index)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _customWindowStateList.size())) {
             throw new IndexOutOfBoundsException();
@@ -333,8 +309,7 @@ public class PortletAppType implements java.io.Serializable {
     /**
      * Method getCustomWindowState
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState[] getCustomWindowState()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState[] getCustomWindowState() {
         int size = _customWindowStateList.size();
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState[] mArray = new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState[size];
         for (int index = 0; index < size; index++) {
@@ -346,8 +321,7 @@ public class PortletAppType implements java.io.Serializable {
     /**
      * Method getCustomWindowStateCount
      */
-    public int getCustomWindowStateCount()
-    {
+    public int getCustomWindowStateCount() {
         return _customWindowStateList.size();
     } //-- int getCustomWindowStateCount()
 
@@ -356,8 +330,7 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @return the value of field 'id'.
      */
-    public java.lang.String getId()
-    {
+    public java.lang.String getId() {
         return this._id;
     } //-- java.lang.String getId()
 
@@ -367,8 +340,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param index
      */
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition getPortlet(int index)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _portletList.size())) {
             throw new IndexOutOfBoundsException();
@@ -380,8 +352,7 @@ public class PortletAppType implements java.io.Serializable {
     /**
      * Method getPortlet
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition[] getPortlet()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition[] getPortlet() {
         int size = _portletList.size();
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition[] mArray = new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition[size];
         for (int index = 0; index < size; index++) {
@@ -393,8 +364,7 @@ public class PortletAppType implements java.io.Serializable {
     /**
      * Method getPortletCount
      */
-    public int getPortletCount()
-    {
+    public int getPortletCount() {
         return _portletList.size();
     } //-- int getPortletCount()
 
@@ -404,8 +374,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param index
      */
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint getSecurityConstraint(int index)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _securityConstraintList.size())) {
             throw new IndexOutOfBoundsException();
@@ -417,8 +386,7 @@ public class PortletAppType implements java.io.Serializable {
     /**
      * Method getSecurityConstraint
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint[] getSecurityConstraint()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint[] getSecurityConstraint() {
         int size = _securityConstraintList.size();
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint[] mArray = new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint[size];
         for (int index = 0; index < size; index++) {
@@ -430,8 +398,7 @@ public class PortletAppType implements java.io.Serializable {
     /**
      * Method getSecurityConstraintCount
      */
-    public int getSecurityConstraintCount()
-    {
+    public int getSecurityConstraintCount() {
         return _securityConstraintList.size();
     } //-- int getSecurityConstraintCount()
 
@@ -441,8 +408,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param index
      */
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute getUserAttribute(int index)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _userAttributeList.size())) {
             throw new IndexOutOfBoundsException();
@@ -454,8 +420,7 @@ public class PortletAppType implements java.io.Serializable {
     /**
      * Method getUserAttribute
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute[] getUserAttribute()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute[] getUserAttribute() {
         int size = _userAttributeList.size();
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute[] mArray = new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute[size];
         for (int index = 0; index < size; index++) {
@@ -467,8 +432,7 @@ public class PortletAppType implements java.io.Serializable {
     /**
      * Method getUserAttributeCount
      */
-    public int getUserAttributeCount()
-    {
+    public int getUserAttributeCount() {
         return _userAttributeList.size();
     } //-- int getUserAttributeCount()
 
@@ -477,20 +441,17 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @return the value of field 'version'.
      */
-    public java.lang.String getVersion()
-    {
+    public java.lang.String getVersion() {
         return this._version;
     } //-- java.lang.String getVersion()
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -502,8 +463,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer)
@@ -514,8 +474,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler)
@@ -525,8 +484,7 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @param vCustomPortletMode
      */
-    public boolean removeCustomPortletMode(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode vCustomPortletMode)
-    {
+    public boolean removeCustomPortletMode(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode vCustomPortletMode) {
         boolean removed = _customPortletModeList.remove(vCustomPortletMode);
         return removed;
     } //-- boolean removeCustomPortletMode(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomPortletMode)
@@ -536,8 +494,7 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @param vCustomWindowState
      */
-    public boolean removeCustomWindowState(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState vCustomWindowState)
-    {
+    public boolean removeCustomWindowState(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState vCustomWindowState) {
         boolean removed = _customWindowStateList.remove(vCustomWindowState);
         return removed;
     } //-- boolean removeCustomWindowState(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowState)
@@ -547,8 +504,7 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @param vPortlet
      */
-    public boolean removePortlet(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition vPortlet)
-    {
+    public boolean removePortlet(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition vPortlet) {
         boolean removed = _portletList.remove(vPortlet);
         return removed;
     } //-- boolean removePortlet(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Portlet)
@@ -558,8 +514,7 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @param vSecurityConstraint
      */
-    public boolean removeSecurityConstraint(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint vSecurityConstraint)
-    {
+    public boolean removeSecurityConstraint(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint vSecurityConstraint) {
         boolean removed = _securityConstraintList.remove(vSecurityConstraint);
         return removed;
     } //-- boolean removeSecurityConstraint(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraint)
@@ -569,8 +524,7 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @param vUserAttribute
      */
-    public boolean removeUserAttribute(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute vUserAttribute)
-    {
+    public boolean removeUserAttribute(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute vUserAttribute) {
         boolean removed = _userAttributeList.remove(vUserAttribute);
         return removed;
     } //-- boolean removeUserAttribute(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttribute)
@@ -582,8 +536,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vCustomPortletMode
      */
     public void setCustomPortletMode(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode vCustomPortletMode)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _customPortletModeList.size())) {
             throw new IndexOutOfBoundsException();
@@ -596,8 +549,7 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @param customPortletModeArray
      */
-    public void setCustomPortletMode(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode[] customPortletModeArray)
-    {
+    public void setCustomPortletMode(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode[] customPortletModeArray) {
         //-- copy array
         _customPortletModeList.clear();
         for (int i = 0; i < customPortletModeArray.length; i++) {
@@ -612,8 +564,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vCustomWindowState
      */
     public void setCustomWindowState(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState vCustomWindowState)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _customWindowStateList.size())) {
             throw new IndexOutOfBoundsException();
@@ -626,8 +577,7 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @param customWindowStateArray
      */
-    public void setCustomWindowState(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState[] customWindowStateArray)
-    {
+    public void setCustomWindowState(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState[] customWindowStateArray) {
         //-- copy array
         _customWindowStateList.clear();
         for (int i = 0; i < customWindowStateArray.length; i++) {
@@ -640,8 +590,7 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @param id the value of field 'id'.
      */
-    public void setId(java.lang.String id)
-    {
+    public void setId(java.lang.String id) {
         this._id = id;
     } //-- void setId(java.lang.String)
 
@@ -652,8 +601,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vPortlet
      */
     public void setPortlet(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition vPortlet)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _portletList.size())) {
             throw new IndexOutOfBoundsException();
@@ -666,8 +614,7 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @param portletArray
      */
-    public void setPortlet(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition[] portletArray)
-    {
+    public void setPortlet(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition[] portletArray) {
         //-- copy array
         _portletList.clear();
         for (int i = 0; i < portletArray.length; i++) {
@@ -682,8 +629,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vSecurityConstraint
      */
     public void setSecurityConstraint(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint vSecurityConstraint)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _securityConstraintList.size())) {
             throw new IndexOutOfBoundsException();
@@ -696,8 +642,7 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @param securityConstraintArray
      */
-    public void setSecurityConstraint(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint[] securityConstraintArray)
-    {
+    public void setSecurityConstraint(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint[] securityConstraintArray) {
         //-- copy array
         _securityConstraintList.clear();
         for (int i = 0; i < securityConstraintArray.length; i++) {
@@ -712,8 +657,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param vUserAttribute
      */
     public void setUserAttribute(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute vUserAttribute)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _userAttributeList.size())) {
             throw new IndexOutOfBoundsException();
@@ -726,8 +670,7 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @param userAttributeArray
      */
-    public void setUserAttribute(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute[] userAttributeArray)
-    {
+    public void setUserAttribute(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute[] userAttributeArray) {
         //-- copy array
         _userAttributeList.clear();
         for (int i = 0; i < userAttributeArray.length; i++) {
@@ -740,8 +683,7 @@ public class PortletAppType implements java.io.Serializable {
      *
      * @param version the value of field 'version'.
      */
-    public void setVersion(java.lang.String version)
-    {
+    public void setVersion(java.lang.String version) {
         this._version = version;
     } //-- void setVersion(java.lang.String)
 
@@ -751,8 +693,7 @@ public class PortletAppType implements java.io.Serializable {
      * @param reader
      */
     public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletAppType) Unmarshaller.unmarshal(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletAppType.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader)
 
@@ -760,8 +701,7 @@ public class PortletAppType implements java.io.Serializable {
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate()

@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.PortletApplicationSettings;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.impl.ConcreteSportlet;
 
 import java.io.IOException;
@@ -30,7 +29,8 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
     /**
      * Disallow default instantiation
      */
-    private SportletApplicationSettings() {}
+    private SportletApplicationSettings() {
+    }
 
     /**
      * Constructs an instance of SportletApplicationSettings from a concrete portlet
@@ -74,7 +74,7 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
     /**
      * Sets the attribute with the given name and value.
      *
-     * @param name the attribute name
+     * @param name  the attribute name
      * @param value the attribute value
      */
     public void setAttribute(String name, String value) {

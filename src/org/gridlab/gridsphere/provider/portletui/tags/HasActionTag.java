@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.jsp.JspException;
@@ -37,7 +36,7 @@ public class HasActionTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
-        PortletRequest req = (PortletRequest)pageContext.getAttribute("portletRequest");
+        PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
 
         String paction = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
         if ((paction == null) && (isDefault)) return EVAL_BODY_INCLUDE;

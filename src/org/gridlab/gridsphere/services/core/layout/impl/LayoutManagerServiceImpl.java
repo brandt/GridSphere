@@ -4,20 +4,18 @@
  */
 package org.gridlab.gridsphere.services.core.layout.impl;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.layout.PortletPage;
+import org.gridlab.gridsphere.layout.PortletPageFactory;
+import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
-import org.gridlab.gridsphere.layout.*;
-import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 
-import java.util.*;
-import java.io.IOException;
+import java.util.Vector;
 
 /**
  * The <code>LayoutManagerService</code> manages users layouts
@@ -36,11 +34,12 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         }
     }
 
-    public void destroy() {}
+    public void destroy() {
+    }
 
     public void reloadPage(PortletRequest req) {
         PortletPage page = pageFactory.createPortletPage(req);
-        
+
         page.init(req, new Vector());
     }
 
@@ -61,7 +60,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     }
 
     public PortletTabbedPane createUserTabbedPane(PortletRequest req, int cols, String label) {
-        return pageFactory.createNewUserPane(req, cols, label);    
+        return pageFactory.createNewUserPane(req, cols, label);
     }
 
     public PortletPage getPortletPage(PortletRequest req) {

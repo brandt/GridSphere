@@ -23,7 +23,7 @@ public class ActionParamBean extends BaseBean {
     /**
      * Constructs an action param bean from a supplied portlet request and bean identifier
      *
-     * @param name the action param name
+     * @param name  the action param name
      * @param value the action param value
      */
     public ActionParamBean(String name, String value) {
@@ -43,7 +43,7 @@ public class ActionParamBean extends BaseBean {
     /**
      * Constructs an action param bean from a supplied portlet request and bean identifier
      *
-     * @param req the portlet request
+     * @param req    the portlet request
      * @param beanId the bean identifier
      */
     public ActionParamBean(HttpServletRequest req, String beanId) {

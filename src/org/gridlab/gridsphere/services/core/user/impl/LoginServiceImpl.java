@@ -4,14 +4,14 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.portlet.GuestUser;
-import org.gridlab.gridsphere.portlet.PortletGroupFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
@@ -23,9 +23,6 @@ import org.gridlab.gridsphere.services.core.security.auth.modules.impl.PasswordA
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.LoginUserModule;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -77,7 +74,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
                     " as authentry where authentry.UserId='" + user.getID() + "'" +
                     " and authentry.ModuleClassName='" + moduleClassName + "'";
             log.debug("Query with " + oql);
-            authMod = (AuthModuleEntry)pm.restore(oql);
+            authMod = (AuthModuleEntry) pm.restore(oql);
         } catch (PersistenceManagerException e) {
             e.printStackTrace();
         }
@@ -109,11 +106,11 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         List mods = new Vector();
         Iterator it = result.iterator();
         while (it.hasNext()) {
-            AuthModuleEntry entry = (AuthModuleEntry)it.next();
+            AuthModuleEntry entry = (AuthModuleEntry) it.next();
             String className = entry.getModuleClassName();
             System.err.println("trying to create a new login auth module:" + className);
             try {
-                LoginAuthModule authModule  = (LoginAuthModule)Class.forName(className).newInstance();
+                LoginAuthModule authModule = (LoginAuthModule) Class.forName(className).newInstance();
                 authModule.setAttributes(entry.getAttributes());
                 mods.add(authModule);
             } catch (Exception e) {
@@ -154,7 +151,8 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
      * been instantiated and before it is passed to the requestor.
      *
      * @param config the service configuration
-     * @throws PortletServiceUnavailableException if an error occurs during initialization
+     * @throws PortletServiceUnavailableException
+     *          if an error occurs during initialization
      */
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.debug("in login service init");
@@ -164,13 +162,13 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
             Enumeration enum = config.getInitParameterNames();
             while (enum.hasMoreElements()) {
-                String moduleName = (String)enum.nextElement();
+                String moduleName = (String) enum.nextElement();
                 if (moduleName.equals("LOGIN_MODULE")) {
                     String loginClassName = config.getInitParameter(moduleName);
                     try {
                         PortletServiceFactory factory = SportletServiceFactory.getInstance();
                         Class loginModClass = Class.forName(loginClassName);
-                        activeLoginModule = (LoginUserModule)factory.createPortletService(loginModClass, config.getServletContext(), true);
+                        activeLoginModule = (LoginUserModule) factory.createPortletService(loginModClass, config.getServletContext(), true);
                     } catch (ClassNotFoundException e) {
                         log.error("Unable to create class from class name: " + loginClassName, e);
                     } catch (PortletServiceNotFoundException e) {
@@ -183,7 +181,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
                     if (authModule != null) authModules.put(moduleName, authModule);
                 }*/
             }
-            LoginAuthModule activeModule = (LoginAuthModule)authModules.get("PASSWORD_AUTH_MODULE");
+            LoginAuthModule activeModule = (LoginAuthModule) authModules.get("PASSWORD_AUTH_MODULE");
             activeAuthModules.add(activeModule);
 
             inited = true;
@@ -194,13 +192,13 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         LoginAuthModule authModule = null;
         try {
             Class c = Class.forName(authClassName);
-            Class[] parameterTypes = new Class[] {String.class};
-            Object[] obj = new Object[] { authModuleName };
+            Class[] parameterTypes = new Class[]{String.class};
+            Object[] obj = new Object[]{authModuleName};
             Constructor con = c.getConstructor(parameterTypes);
-            authModule = (LoginAuthModule)con.newInstance(obj);
+            authModule = (LoginAuthModule) con.newInstance(obj);
         } catch (ClassNotFoundException cne) {
             log.error("LoginServiceImpl: Unable to locate class: " + authClassName);
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.error("LoginServiceImpl: Unable to create new LoginAuthModule " + authClassName + "(" + authModuleName + ")");
         }
         log.debug("LoginServiceImpl: created module: " + authModuleName);
@@ -211,14 +209,15 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
      * The destroy method is invoked by the portlet container to destroy a portlet service.
      * This method must free all resources allocated to the portlet service.
      */
-    public void destroy() {}
+    public void destroy() {
+    }
 
     /**
      * Login a user with the given login name and password.
      * Returns the associated user if login succeeds.
      * Throws an AuthenticationException if login fails.
      *
-     * @param loginName the login name
+     * @param loginName     the login name
      * @param loginPassword The login password.
      * @return User The associated user.
      * @throws AuthorizationException if login unsuccessful
@@ -247,8 +246,8 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         boolean success = false;
         while (it.hasNext()) {
             success = false;
-            LoginAuthModule mod = (LoginAuthModule)it.next();
-            log.debug( mod.getModuleName() );
+            LoginAuthModule mod = (LoginAuthModule) it.next();
+            log.debug(mod.getModuleName());
             try {
                 mod.checkAuthorization(user, loginPassword);
                 success = true;

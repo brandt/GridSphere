@@ -6,11 +6,6 @@ package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portlet.PortletRole;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Locale;
-
 /**
  * The <code>ConcretePortletConfig</code> provides concrete portlet
  * configuration information.
@@ -49,7 +44,7 @@ public interface ConcretePortletConfig {
          * @param scope the scope expressed as a <code>String</code>
          * @return the <code>Scope</code> matching the provided String
          * @throws IllegalArgumentException if the provided string cannot
-         * be parsed
+         *                                  be parsed
          */
         public static Scope toScope(String scope) throws IllegalArgumentException {
             if (scope.equalsIgnoreCase("PRIVATE")) return PRIVATE;
@@ -91,7 +86,7 @@ public interface ConcretePortletConfig {
          *
          * @param object the <code>PortletGroup</code> to be tested
          * @return <code>true</code> if the groups are equal, <code>false</code>
-         * otherwise
+         *         otherwise
          */
         public boolean equals(Object object) {
             if (object != null && (object.getClass().equals(this.getClass()))) {

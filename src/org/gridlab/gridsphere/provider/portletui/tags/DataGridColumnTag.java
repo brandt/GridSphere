@@ -1,9 +1,8 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
-import org.gridlab.gridsphere.provider.portletui.beans.DataGridColumnBean;
 import org.gridlab.gridsphere.provider.portletui.beans.DataGridAttributes;
-import org.gridlab.gridsphere.provider.portletui.tags.ContainerTag;
+import org.gridlab.gridsphere.provider.portletui.beans.DataGridColumnBean;
 
 import javax.servlet.jsp.JspException;
 import java.util.Iterator;

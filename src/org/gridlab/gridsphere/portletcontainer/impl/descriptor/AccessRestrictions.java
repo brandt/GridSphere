@@ -9,12 +9,12 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 
 
 /**
- *  The <code>AccessRestrictions</code> class is responsible for specifying
+ * The <code>AccessRestrictions</code> class is responsible for specifying
  * what access rights are required to access this portlet. Visibility/Scope
  * can be either <code>PUBLIC</code> (information about this portlet is made
  * available to all) or <code>PRIVATE</code> implying that only authorzed
  * users of this portlet can view information about it.
- * <p>
+ * <p/>
  * <code>AccessRestrictions</code> also determnines which roles can have access to
  * this portlet.
  */
@@ -31,14 +31,14 @@ public class AccessRestrictions {
 
     /**
      * Intended for use only by Castor. Clients hould use #setScope instead.
-     * <p>
+     * <p/>
      * Sets the visibility of this portlet. Possible values are <code>PUBLIC</code>
      * meaning that anyone can view portlet meta-information, or <code>PRIVATE</code>
      * which restricts information about this portlet to those with proper access
      * determined
      *
      * @param visibility the visibility of this portlet, either <code>PUBLIC</code>
-     * or <code>PRIVATE</code>
+     *                   or <code>PRIVATE</code>
      */
     public void setVisibility(String visibility) {
         this.visibility = visibility;
@@ -46,14 +46,14 @@ public class AccessRestrictions {
 
     /**
      * Intended for use only by Castor. Clients should use #getScope instead.
-     * <p>
+     * <p/>
      * Returns the visibility of this portlet. Possible values are <code>PUBLIC</code>
      * meaning that anyone can view portlet meta-information, or <code>PRIVATE</code>
      * which restricts information about this portlet to those with proper access
      * determined
      *
      * @return the visibility of this portlet, either <code>PUBLIC</code>
-     * or <code>PRIVATE</code>
+     *         or <code>PRIVATE</code>
      */
     public String getVisibility() {
         return visibility;
@@ -86,11 +86,11 @@ public class AccessRestrictions {
     /**
      * Internal method intended for use by Castor. Clients should use
      * #setPortletRole instead
-     * <p>
+     * <p/>
      * Sets the portlet role required to have access to this portlet
      *
      * @param role a <code>String</role> representation of a
-     * <code>PortletRole</code>
+     *             <code>PortletRole</code>
      */
     public void setRole(String role) {
         this.role = role;
@@ -99,11 +99,11 @@ public class AccessRestrictions {
     /**
      * Internal method intended for use by Castor. Clients should use
      * #getPortletRole instead
-     * <p>
+     * <p/>
      * Returns the portlet role required to have access to this portlet
      *
      * @return role a <code>String</role> representation of a
-     * <code>PortletRole</code>
+     *         <code>PortletRole</code>
      */
     public String getRole() {
         return role;

@@ -32,7 +32,7 @@ public class PersistenceManagerException extends Exception {
     /**
      * Constructs a new persistence exception with the given text.
      *
-     * @param text the exception text
+     * @param text  the exception text
      * @param cause the root cause
      */
     public PersistenceManagerException(String text, Throwable cause) {

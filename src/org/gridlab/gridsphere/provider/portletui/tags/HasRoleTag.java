@@ -60,7 +60,7 @@ public class HasRoleTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
-        PortletRequest req = (PortletRequest)pageContext.getAttribute("portletRequest");
+        PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
         PortletRole userRole = req.getRole();
 
         if (userRole != null) {

@@ -1,16 +1,11 @@
-
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.RenderRequest;
-import javax.portlet.ActionRequest;
-import javax.portlet.PortletContext;
-import javax.portlet.PortalContext;
+import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -24,8 +19,7 @@ import java.io.IOException;
  * @see PortletRequest
  * @see RenderRequest
  */
-public class ActionRequestImpl extends PortletRequestImpl implements ActionRequest
-{
+public class ActionRequestImpl extends PortletRequestImpl implements ActionRequest {
 
     /**
      * Constructor creates a proxy for a HttpServletRequest
@@ -42,25 +36,22 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      * portal as binary data using
      * an <CODE>InputStream</CODE>. Either this method or
      * {@link #getReader} may be called to read the body, but not both.
-     * <p>
+     * <p/>
      * For HTTP POST data of type application/x-www-form-urlencoded
      * this method throws an <code>IllegalStateException</code>
      * as this data has been already processed by the
      * portal/portlet-container and is available as request parameters.
      *
      * @return an input stream containing the body of the request
-     *
-     * @exception IllegalStateException
-     *                   if getReader was already called, or it is a
-     *                   HTTP POST data of type application/x-www-form-urlencoded
-     * @exception java.io.IOException
-     *                   if an input or output exception occurred
+     * @throws IllegalStateException if getReader was already called, or it is a
+     *                               HTTP POST data of type application/x-www-form-urlencoded
+     * @throws java.io.IOException   if an input or output exception occurred
      */
-    public java.io.InputStream getPortletInputStream () throws IOException, IllegalStateException {
+    public java.io.InputStream getPortletInputStream() throws IOException, IllegalStateException {
         HttpServletRequest req = (HttpServletRequest) super.getRequest();
         if (req.getMethod().equals("POST")) {
-            String contentType=req.getContentType();
-            if (contentType==null || contentType.equals("application/x-www-form-urlencoded")) {
+            String contentType = req.getContentType();
+            if (contentType == null || contentType.equals("application/x-www-form-urlencoded")) {
                 throw new IllegalStateException("User request HTTP POST data is of type application/x-www-form-urlencoded. This data has been already processed by the portal/portlet-container and is available as request parameters.");
             }
         }
@@ -72,17 +63,16 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      * Overrides the name of the character encoding used in the body of this
      * request. This method must be called prior to reading input
      * using {@link #getReader} or {@link #getPortletInputStream}.
-     * <p>
+     * <p/>
      * This method only sets the character set for the Reader that the
      * {@link #getReader} method returns.
      *
      * @param	enc	a <code>String</code> containing the name of
-     *			the chararacter encoding.
-     *
+     * the chararacter encoding.
      * @exception		java.io.UnsupportedEncodingException if this is not a valid encoding
-     * @exception		IllegalStateException      if this method is called after
-     *                                   reading request parameters or reading input using
-     *                                   <code>getReader()</code>
+     * @exception		IllegalStateException if this method is called after
+     * reading request parameters or reading input using
+     * <code>getReader()</code>
      */
     public void setCharacterEncoding(String enc)
             throws UnsupportedEncodingException, IllegalStateException {
@@ -99,25 +89,21 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      * data according to the character encoding used on the body.
      * Either this method or {@link #getPortletInputStream} may be called to read the
      * body, not both.
-     * <p>
+     * <p/>
      * For HTTP POST data of type application/x-www-form-urlencoded
      * this method throws an <code>IllegalStateException</code>
      * as this data has been already processed by the
      * portal/portlet-container and is available as request parameters.
      *
+     * @throws java.io.UnsupportedEncodingException
+     *                               if the character set encoding used is
+     *                               not supported and the text cannot be decoded
+     * @throws IllegalStateException if {@link #getPortletInputStream} method
+     *                               has been called on this request,  it is a
+     *                               HTTP POST data of type application/x-www-form-urlencoded.
+     * @throws java.io.IOException   if an input or output exception occurred
      * @return	a <code>BufferedReader</code>
-     *		containing the body of the request
-     *
-     * @exception  java.io.UnsupportedEncodingException
-     *                 if the character set encoding used is
-     * 		     not supported and the text cannot be decoded
-     * @exception  IllegalStateException
-     *                 if {@link #getPortletInputStream} method
-     * 		     has been called on this request,  it is a
-     *                   HTTP POST data of type application/x-www-form-urlencoded.
-     * @exception  java.io.IOException
-     *                 if an input or output exception occurred
-     *
+     * containing the body of the request
      * @see #getPortletInputStream
      */
     public java.io.BufferedReader getReader()
@@ -132,8 +118,8 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      * does not specify a character encoding.
      *
      * @return		a <code>String</code> containing the name of
-     *			the chararacter encoding, or <code>null</code>
-     *			if the request does not specify a character encoding.
+     * the chararacter encoding, or <code>null</code>
+     * if the request does not specify a character encoding.
      */
     public String getCharacterEncoding() {
         return super.getRequest().getCharacterEncoding();
@@ -144,8 +130,8 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      * or null if the type is not known.
      *
      * @return		a <code>String</code> containing the name
-     *			of the MIME type of the request, or null
-     *                    if the type is not known.
+     * of the MIME type of the request, or null
+     * if the type is not known.
      */
     public String getContentType() {
         return super.getRequest().getContentType();
@@ -156,10 +142,8 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      * which is made available by the input stream, or -1 if the
      * length is not known.
      *
-     *
      * @return		an integer containing the length of the
-     * 			request body or -1 if the length is not known
-     *
+     * request body or -1 if the length is not known
      */
     public int getContentLength() {
         return super.getRequest().getContentLength();

@@ -16,12 +16,12 @@ public interface PortletMessageManager {
 
     /**
      * Sends the supplied message to the portlet specified by the concrete portlet id
-     * <p>
+     * <p/>
      * The portlet(s) with the given name will only receive the message event if it has/they have implemented
      * the appropriate listener.
      *
      * @param concretePortletID the concrete portlet id
-     * @param message the portlet message to be sent
+     * @param message           the portlet message to be sent
      */
     public void send(String concretePortletID, PortletMessage message);
 

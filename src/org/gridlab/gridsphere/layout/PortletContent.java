@@ -22,7 +22,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
     private String textFile = null;
 
     /**
-     *  Constructs an instance of PortletContent
+     * Constructs an instance of PortletContent
      */
     public PortletContent() {
     }
@@ -51,7 +51,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
@@ -68,7 +68,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletContent t = (PortletContent)super.clone();
+        PortletContent t = (PortletContent) super.clone();
         t.textFile = this.textFile;
         return t;
     }

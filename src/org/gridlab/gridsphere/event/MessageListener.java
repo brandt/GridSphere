@@ -19,7 +19,6 @@ public interface MessageListener extends EventListener {
      * Gives notification taht a message has been received
      *
      * @param event the message event
-     *
      * @throws PortletException if the listener has trouble fulfilling the request
      */
     public void messageReceived(MessageEvent event) throws PortletException;

@@ -1,7 +1,7 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 
 /*
@@ -64,13 +64,13 @@ public class DataGridAttributes {
         items.put(name, attribute);
     }
 
-    public void setReadonly (String name, boolean flag) {
+    public void setReadonly(String name, boolean flag) {
         Attribute attribute = this.getAttribute(name);
         attribute.setReadonly(flag);
         items.put(name, attribute);
     }
 
-    public void setDisabled (String name, boolean flag) {
+    public void setDisabled(String name, boolean flag) {
         Attribute attribute = this.getAttribute(name);
         attribute.setDisabled(flag);
         items.put(name, attribute);
@@ -93,8 +93,8 @@ public class DataGridAttributes {
     }
 
     private Attribute getAttribute(String name) {
-        if (items.containsKey(name))  {
-            return (Attribute)items.get(name);
+        if (items.containsKey(name)) {
+            return (Attribute) items.get(name);
         } else {
             return new Attribute();
         }

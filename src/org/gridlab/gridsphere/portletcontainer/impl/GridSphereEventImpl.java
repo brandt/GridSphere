@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * The <code>GridSphereEventImpl</code> is an implementation of the <code>GridSphereEvent</code> interface.
- * <p>
+ * <p/>
  * A <code>GridSphereEvent</code> represents a general portlet container
  * event. The <code>GridSphereEvent</code> is passed into components that
  * need to access the <code>PortletRequest</code>
@@ -35,7 +35,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
     protected Stack events = null;
 
-    public GridSphereEventImpl(AccessControlManagerService  aclService, PortletContext ctx, HttpServletRequest req, HttpServletResponse res) {
+    public GridSphereEventImpl(AccessControlManagerService aclService, PortletContext ctx, HttpServletRequest req, HttpServletResponse res) {
 
         portletRequest = new SportletRequestImpl(req);
         portletResponse = new SportletResponse(res, portletRequest);
@@ -120,7 +120,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
                         int hasvalue = namevalue.indexOf("=");
                         if (hasvalue > 0) {
                             paramName = namevalue.substring(0, hasvalue);
-                            paramVal = namevalue.substring(hasvalue+1);
+                            paramVal = namevalue.substring(hasvalue + 1);
                             if (paramName.equals(SportletProperties.PREFIX)) {
                                 prefix = paramVal;
                             } else {
@@ -133,10 +133,10 @@ public class GridSphereEventImpl implements GridSphereEvent {
                     // put unprefixed params in action
                     Iterator it = tmpParams.keySet().iterator();
                     while (it.hasNext()) {
-                        String n = (String)it.next();
-                        String v = (String)tmpParams.get(n);
+                        String n = (String) it.next();
+                        String v = (String) tmpParams.get(n);
                         if (!prefix.equals("")) {
-                            n = n.substring(prefix.length()+1);
+                            n = n.substring(prefix.length() + 1);
                         }
                         action.addParameter(n, v);
                     }
@@ -208,6 +208,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
     }
 
     public PortletComponentEvent getLastRenderEvent() {
-        return (events.isEmpty() ? null : (PortletComponentEvent)events.pop());
+        return (events.isEmpty() ? null : (PortletComponentEvent) events.pop());
     }
 }

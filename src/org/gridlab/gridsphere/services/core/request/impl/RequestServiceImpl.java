@@ -3,15 +3,15 @@
  */
 package org.gridlab.gridsphere.services.core.request.impl;
 
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.services.core.request.RequestService;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
+import org.gridlab.gridsphere.services.core.request.RequestService;
 
 public class RequestServiceImpl implements RequestService, PortletServiceProvider {
 
@@ -28,10 +28,10 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
     public GenericRequest getRequest(String requestId) {
         GenericRequest request = null;
         String query = "select gsreq from "
-                     + GenericRequest.class.getName()
-                     + " gsreq where gsreq.oid='" + requestId + "'";
+                + GenericRequest.class.getName()
+                + " gsreq where gsreq.oid='" + requestId + "'";
         try {
-            request = (GenericRequest)this.pm.restore(query);
+            request = (GenericRequest) this.pm.restore(query);
         } catch (PersistenceManagerException e) {
             log.error("Unable to retrieve request: " + requestId, e);
         }

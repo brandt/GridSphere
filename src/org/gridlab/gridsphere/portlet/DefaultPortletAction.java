@@ -6,9 +6,9 @@ package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.Serializable;
 
 /**
  * The <code>DefaultPortletAction</code> is a portlet action with default parameters.
@@ -39,7 +39,7 @@ public final class DefaultPortletAction implements PortletAction, Serializable {
     /**
      * Adds a parameters to this action
      *
-     * @param name the name of the parameter
+     * @param name  the name of the parameter
      * @param value the value of the parameter
      */
     public void addParameter(String name, Object value) {
@@ -52,7 +52,7 @@ public final class DefaultPortletAction implements PortletAction, Serializable {
      * @return all parameters as a map
      */
     public String getParameter(String name) {
-        return (String)store.get(name);
+        return (String) store.get(name);
     }
 
     /**
@@ -95,10 +95,10 @@ public final class DefaultPortletAction implements PortletAction, Serializable {
         buffer.append(name);
         Object[] parameterNames = store.keySet().toArray();
         for (int ii = 0; ii < parameterNames.length; ++ii) {
-            String parameterName = (String)parameterNames[ii];
+            String parameterName = (String) parameterNames[ii];
             Object o = store.get(parameterName);
             if (o instanceof String) {
-                String parameterValue = (String)o;
+                String parameterValue = (String) o;
                 buffer.append("&");
                 buffer.append(parameterName);
                 buffer.append("=");

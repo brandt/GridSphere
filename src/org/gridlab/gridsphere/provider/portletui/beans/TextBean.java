@@ -49,7 +49,7 @@ public class TextBean extends BaseComponentBean implements TagBean {
     /**
      * Constructs a text bean from a supplied portlet request and bean identifier
      *
-     * @param req the portlet request
+     * @param req    the portlet request
      * @param beanId the bean identifier
      */
     public TextBean(HttpServletRequest req, String beanId) {

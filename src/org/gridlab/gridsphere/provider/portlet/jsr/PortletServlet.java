@@ -4,42 +4,28 @@
 */
 package org.gridlab.gridsphere.provider.portlet.jsr;
 
+import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.GuestUser;
-import org.gridlab.gridsphere.portlet.jsrimpl.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.jsrimpl.*;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRPortletWebApplicationImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRPortletWebApplicationImpl;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 
 import javax.portlet.*;
-import javax.portlet.PortletMode;
-import javax.portlet.PortletPreferences;
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionActivationListener;
-import javax.servlet.http.HttpSessionAttributeListener;
-import javax.servlet.http.HttpSessionBindingEvent;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
+import javax.portlet.UnavailableException;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
-import java.util.ResourceBundle;
 
-public class PortletServlet  extends HttpServlet
+public class PortletServlet extends HttpServlet
         implements Servlet, ServletConfig, ServletContextListener,
         HttpSessionAttributeListener, HttpSessionListener, HttpSessionActivationListener {
 
@@ -84,7 +70,7 @@ public class PortletServlet  extends HttpServlet
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
-            JSRApplicationPortletImpl appPortlet = (JSRApplicationPortletImpl)it.next();
+            JSRApplicationPortletImpl appPortlet = (JSRApplicationPortletImpl) it.next();
             String portletClass = appPortlet.getPortletClassName();
             try {
                 // instantiate portlet classes
@@ -121,8 +107,8 @@ public class PortletServlet  extends HttpServlet
             Set set = portlets.keySet();
             Iterator it = set.iterator();
             while (it.hasNext()) {
-                String portletClass = (String)it.next();
-                Portlet portlet = (Portlet)portlets.get(portletClass);
+                String portletClass = (String) it.next();
+                Portlet portlet = (Portlet) portlets.get(portletClass);
                 log.debug("in PortletServlet: service(): Initializing portlet " + portletClass);
                 PortletDefinition portletDef = portletWebApp.getPortletDefinition(portletClass);
 
@@ -146,8 +132,8 @@ public class PortletServlet  extends HttpServlet
         } else if (method.equals(SportletProperties.DESTROY)) {
             Iterator it = portlets.keySet().iterator();
             while (it.hasNext()) {
-                String portletClass = (String)it.next();
-                Portlet portlet = (Portlet)portlets.get(portletClass);
+                String portletClass = (String) it.next();
+                Portlet portlet = (Portlet) portlets.get(portletClass);
                 log.debug("in PortletServlet: service(): Destroying portlet " + portletClass);
                 try {
                     portlet.destroy();
@@ -176,16 +162,16 @@ public class PortletServlet  extends HttpServlet
         }
 
         log.debug("have a portlet id " + portletClassName + " component id= " + compId);
-        Portlet portlet = (Portlet)portlets.get(portletClassName);
+        Portlet portlet = (Portlet) portlets.get(portletClassName);
 
         JSRApplicationPortletImpl appPortlet =
-                (JSRApplicationPortletImpl)registry.getApplicationPortlet(portletClassName);
+                (JSRApplicationPortletImpl) registry.getApplicationPortlet(portletClassName);
 
         Supports[] supports = appPortlet.getSupports();
   
 
         // perform user conversion from gridsphere to JSR model
-        User user = (User)request.getAttribute(SportletProperties.PORTLET_USER);
+        User user = (User) request.getAttribute(SportletProperties.PORTLET_USER);
         Map userInfo;
 
         if (user instanceof GuestUser) {
@@ -261,8 +247,8 @@ public class PortletServlet  extends HttpServlet
                         request.setAttribute(SportletProperties.PORTLETERROR + portletClassName, e.getMessage());
                         throw new ServletException(e);
                     }
-                    Map params = ((ActionResponseImpl)actionResponse).getRenderParameters();
-                    String cid = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
+                    Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
+                    String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
                     actionRequest.setAttribute("renderParams" + "_" + portletClassName + "_" + cid, params);
                     log.debug("placing render params in attribute: " + "renderParams" + "_" + portletClassName + "_" + cid);
                     //actionRequest.clearParameters();
@@ -299,7 +285,7 @@ public class PortletServlet  extends HttpServlet
             log.error("in PortletServlet: service(): No " + SportletProperties.PORTLET_LIFECYCLE_METHOD + " found in request!");
         }
         request.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
-}
+    }
 
 /*
 protected void setGroupAndRole(PortletRequest request, PortletResponse response) {
@@ -322,7 +308,7 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
 
     protected void doTitle(Portlet portlet, RenderRequest request, RenderResponse response) throws PortletException {
         try {
-            GenericPortlet genPortlet = ((GenericPortlet)portlet);
+            GenericPortlet genPortlet = ((GenericPortlet) portlet);
             if (genPortlet.getPortletConfig() == null) throw new PortletException("Unable to get PortletConfig from Porltlet");
             ResourceBundle resBundle = genPortlet.getPortletConfig().getResourceBundle(request.getLocale());
             String title = resBundle.getString("javax.portlet.title");
@@ -333,7 +319,6 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
             log.error("printing title failed", e);
         }
     }
-
 
 
     protected void doRender(Portlet portlet, RenderRequest request, RenderResponse response) {
@@ -393,45 +378,45 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
             location = aResponse.getRedirectLocation();
 
             if (location != null) {
-            //if (location == null) {
+                //if (location == null) {
 
                 //if (location.indexOf("://") < 0 ) {
-             /*
-                    PortletURLImpl redirectUrl = new PortletURLImpl(servletRequest, servletResponse, portalContext, false);
-                    //TODO: don't send changes in case of exception -> PORTLET:SPEC:17
+                /*
+                       PortletURLImpl redirectUrl = new PortletURLImpl(servletRequest, servletResponse, portalContext, false);
+                       //TODO: don't send changes in case of exception -> PORTLET:SPEC:17
 
-                    // get the changings of this portlet entity that might be set during action handling
-                    // change portlet mode
-                    //redirectUrl.setContextPath(actionRequest.getContextPath());
-                    try {
-                        if (aResponse.getChangedPortletMode() != null) {
-                            redirectUrl.setPortletMode(aResponse.getChangedPortletMode());
-                        } else {
-                            redirectUrl.setPortletMode(actionRequest.getPortletMode());
-                        }
-                    } catch (PortletModeException e) {
-                        e.printStackTrace();
-                    }
+                       // get the changings of this portlet entity that might be set during action handling
+                       // change portlet mode
+                       //redirectUrl.setContextPath(actionRequest.getContextPath());
+                       try {
+                           if (aResponse.getChangedPortletMode() != null) {
+                               redirectUrl.setPortletMode(aResponse.getChangedPortletMode());
+                           } else {
+                               redirectUrl.setPortletMode(actionRequest.getPortletMode());
+                           }
+                       } catch (PortletModeException e) {
+                           e.printStackTrace();
+                       }
 
-                    // change window state
-                    try {
-                        if (aResponse.getChangedWindowState() != null) {
-                            redirectUrl.setWindowState(aResponse.getChangedWindowState());
-                        } else {
-                            redirectUrl.setWindowState(actionRequest.getWindowState());
-                        }
+                       // change window state
+                       try {
+                           if (aResponse.getChangedWindowState() != null) {
+                               redirectUrl.setWindowState(aResponse.getChangedWindowState());
+                           } else {
+                               redirectUrl.setWindowState(actionRequest.getWindowState());
+                           }
 
-                    } catch (WindowStateException e) {
-                        e.printStackTrace();
-                    }
-                    // get render parameters
-                    Map renderParameter = aResponse.getRenderParameters();
-                    redirectUrl.setComponentID((String) servletRequest.getParameter(SportletProperties.COMPONENT_ID));
-                    redirectUrl.setParameters(renderParameter);
-                    System.err.println("redirecting url " +  redirectUrl.toString());
-                    location = servletResponse.encodeRedirectURL(redirectUrl.toString());
-               //}
-                */
+                       } catch (WindowStateException e) {
+                           e.printStackTrace();
+                       }
+                       // get render parameters
+                       Map renderParameter = aResponse.getRenderParameters();
+                       redirectUrl.setComponentID((String) servletRequest.getParameter(SportletProperties.COMPONENT_ID));
+                       redirectUrl.setParameters(renderParameter);
+                       System.err.println("redirecting url " +  redirectUrl.toString());
+                       location = servletResponse.encodeRedirectURL(redirectUrl.toString());
+                  //}
+                   */
                 javax.servlet.http.HttpServletResponse redirectResponse = servletResponse;
                 while (redirectResponse instanceof javax.servlet.http.HttpServletResponseWrapper) {
                     redirectResponse = (javax.servlet.http.HttpServletResponse)

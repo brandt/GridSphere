@@ -59,7 +59,7 @@ public class PersistencePreferenceAttribute {
         return (String[]) this.values.toArray(array);
     }
 
-    public void setValue(String value)  {
+    public void setValue(String value) {
         setAValues(new String[]{value});
     }
 

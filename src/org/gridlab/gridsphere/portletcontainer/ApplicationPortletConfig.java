@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -38,7 +37,7 @@ public interface ApplicationPortletConfig {
      * Returns the allowed window states supported by this portlet
      *
      * @return the <code>List</code> of
-     * <code>PortletWindow.State</code> elements allowed for this portlet
+     *         <code>PortletWindow.State</code> elements allowed for this portlet
      */
     public List getAllowedWindowStates();
 

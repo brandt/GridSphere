@@ -24,13 +24,13 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 public class AuthorizationUtility {
 
     public static final String SUPER_ONLY_MESSAGE =
-        "User must have super user privileges to call this method";
+            "User must have super user privileges to call this method";
     public static final String SUPER_OR_ADMIN_MESSAGE =
-        "User must have super user privileges or be the same user to call this method";
+            "User must have super user privileges or be the same user to call this method";
     public static final String SUPER_OR_SAME_MESSAGE =
-        "User must have super user privileges or be the same user to call this method";
+            "User must have super user privileges or be the same user to call this method";
     public static final String NULL_USER_MESSAGE =
-        "User is null! Cannot call this method.";
+            "User is null! Cannot call this method.";
 
     private static PortletLog _log = SportletLog.getInstance(AuthorizationUtility.class);
     private static UserManagerService _userManager = null;
@@ -44,10 +44,10 @@ public class AuthorizationUtility {
         // Instantiate helper services
         try {
             _userManager
-                = (UserManagerService)
+                    = (UserManagerService)
                     factory.createPortletService(UserManagerService.class, null, true);
             _aclManagerService
-                = (AccessControlManagerService)
+                    = (AccessControlManagerService)
                     factory.createPortletService(AccessControlManagerService.class, null, true);
         } catch (Exception e) {
             _log.error("Unable to initialize services: ", e);
@@ -79,6 +79,7 @@ public class AuthorizationUtility {
 
     /**
      * Throws AuthorizationException if supplied user not a super user.
+     *
      * @param method the method being called.
      */
     public void authorizeSuperUser(String method)
@@ -96,7 +97,7 @@ public class AuthorizationUtility {
      * or an admin user within the specified group.
      *
      * @param group The portlet group within which the user should
-     *        be an admin if they are not a super user.
+     *              be an admin if they are not a super user.
      */
     public void authorizeSuperOrAdminUser(PortletGroup group)
             throws AuthorizationException {
@@ -104,7 +105,7 @@ public class AuthorizationUtility {
             throwAuthorizationException(NULL_USER_MESSAGE, null);
         }
         if (_aclManagerService.hasSuperRole(this.user) ||
-            _aclManagerService.hasAdminRoleInGroup(this.user, group)) {
+                _aclManagerService.hasAdminRoleInGroup(this.user, group)) {
             throwAuthorizationException(SUPER_OR_ADMIN_MESSAGE, null);
         }
     }
@@ -113,8 +114,8 @@ public class AuthorizationUtility {
      * Throws AuthorizationException if supplied user is not a super user
      * or an admin user within the specified group.
      *
-     * @param group the portlet group within which the user should
-     *        be an admin if they are not a super user.
+     * @param group  the portlet group within which the user should
+     *               be an admin if they are not a super user.
      * @param method the method being called.
      */
     public void authorizeSuperOrAdminUser(PortletGroup group, String method)
@@ -123,7 +124,7 @@ public class AuthorizationUtility {
             throwAuthorizationException(NULL_USER_MESSAGE, method);
         }
         if (_aclManagerService.hasSuperRole(this.user) ||
-            _aclManagerService.hasAdminRoleInGroup(this.user, group)) {
+                _aclManagerService.hasAdminRoleInGroup(this.user, group)) {
             throwAuthorizationException(SUPER_OR_ADMIN_MESSAGE, method);
         }
     }
@@ -133,10 +134,10 @@ public class AuthorizationUtility {
      * or not the same user as specified in this method.
      *
      * @param user the user this supplied user should be equal to if
-     *        if the supplied user is not a super user.
+     *             if the supplied user is not a super user.
      */
     public void authorizeSuperOrSameUser(User user)
-             throws AuthorizationException {
+            throws AuthorizationException {
         if (this.user == null || user == null) {
             throwAuthorizationException(NULL_USER_MESSAGE, null);
         }
@@ -149,12 +150,12 @@ public class AuthorizationUtility {
      * Throws AuthorizationException if supplied user not a super user
      * or not the same user as specified in this method.
      *
-     * @param user the user this supplied user should be equal to if
-     *        if the supplied user is not a super user.
+     * @param user   the user this supplied user should be equal to if
+     *               if the supplied user is not a super user.
      * @param method the method being called.
      */
     public void authorizeSuperOrSameUser(User user, String method)
-             throws AuthorizationException {
+            throws AuthorizationException {
         if (this.user == null || user == null) {
             throwAuthorizationException(NULL_USER_MESSAGE, method);
         }
@@ -183,4 +184,4 @@ public class AuthorizationUtility {
         buffer.append(message);
         throw new AuthorizationException(buffer.toString());
     }
- }
+}

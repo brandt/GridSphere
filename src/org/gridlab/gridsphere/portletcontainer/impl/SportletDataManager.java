@@ -10,12 +10,9 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.PortletData;
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletData;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
-import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 
 /**
  * The <code>SportletDataManager</code> provides a a singleton implementation of the <code>PortletDataManager</code>
@@ -44,7 +41,7 @@ public class SportletDataManager implements PortletDataManager {
     /**
      * Returns the users portlet data for the specified portlet
      *
-     * @param user the <code>User</code>
+     * @param user      the <code>User</code>
      * @param portletID the concrete portlet id
      * @return the PortletData for this portlet or null if none exists.
      */

@@ -4,19 +4,26 @@
  */
 package org.gridlab.gridsphere.portlets.core.layout;
 
+import org.gridlab.gridsphere.layout.PortletPage;
+import org.gridlab.gridsphere.layout.PortletTab;
+import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
-import org.gridlab.gridsphere.provider.portletui.beans.*;
+import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
+import org.gridlab.gridsphere.provider.portletui.beans.RadioButtonBean;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.layout.*;
 
 import javax.servlet.UnavailableException;
-import java.util.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class UserLayoutPortlet extends ActionPortlet {
 
@@ -30,8 +37,8 @@ public class UserLayoutPortlet extends ActionPortlet {
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         try {
-            this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
-            this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
+            this.layoutMgr = (LayoutManagerService) config.getContext().getService(LayoutManagerService.class);
+            this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
 
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
@@ -57,7 +64,7 @@ public class UserLayoutPortlet extends ActionPortlet {
 
 
         PortletTab tab = pane.getLastPortletTab();
-       
+
         pane.save();
         PortletPage page = layoutMgr.getPortletPage(event.getPortletRequest());
         PortletTabbedPane mypane = page.getPortletTabbedPane();
@@ -73,7 +80,7 @@ public class UserLayoutPortlet extends ActionPortlet {
         List tabs = pane.getPortletTabs();
         Iterator it = tabs.iterator();
         while (it.hasNext()) {
-            PortletTab tab = (PortletTab)it.next();
+            PortletTab tab = (PortletTab) it.next();
             if (tab.getLabel().equals(label)) {
                 it.remove();
             }
@@ -83,7 +90,7 @@ public class UserLayoutPortlet extends ActionPortlet {
         PortletTabbedPane mypane = page.getPortletTabbedPane();
         it = mypane.getPortletTabs().iterator();
         while (it.hasNext()) {
-            PortletTab tab = (PortletTab)it.next();
+            PortletTab tab = (PortletTab) it.next();
             if (tab.getLabel().equals(label)) {
                 it.remove();
             }
@@ -101,7 +108,7 @@ public class UserLayoutPortlet extends ActionPortlet {
         List tabs = pane.getPortletTabs();
         Iterator it = tabs.iterator();
         while (it.hasNext()) {
-            PortletTab tab = (PortletTab)it.next();
+            PortletTab tab = (PortletTab) it.next();
             if (tab.getLabel().equals(label)) {
                 tab.setTitle(lang, name);
             }
@@ -111,7 +118,7 @@ public class UserLayoutPortlet extends ActionPortlet {
         PortletTabbedPane mypane = page.getPortletTabbedPane();
         it = mypane.getPortletTabs().iterator();
         while (it.hasNext()) {
-            PortletTab tab = (PortletTab)it.next();
+            PortletTab tab = (PortletTab) it.next();
             if (tab.getLabel().equals(label)) {
                 tab.setTitle(lang, name);
             }
@@ -124,7 +131,7 @@ public class UserLayoutPortlet extends ActionPortlet {
         PortletResponse res = event.getPortletResponse();
 
         req.setAttribute("lang", req.getLocale().getLanguage());
-        
+
         ListBoxBean themeLB = event.getListBoxBean("themeLB");
         PortletPage page = layoutMgr.getPortletPage(req);
         String theme = page.getTheme();
@@ -133,7 +140,7 @@ public class UserLayoutPortlet extends ActionPortlet {
         StringTokenizer st = new StringTokenizer(themes, ",");
         while (st.hasMoreTokens()) {
             ListBoxItemBean lb = new ListBoxItemBean();
-            String val = (String)st.nextElement();
+            String val = (String) st.nextElement();
             lb.setValue(val.trim());
             if (val.trim().equalsIgnoreCase(theme)) lb.setSelected(true);
             themeLB.addBean(lb);
@@ -158,13 +165,13 @@ public class UserLayoutPortlet extends ActionPortlet {
         User user = req.getUser();
         SportletUser acctReq = userManagerService.editUser(user);
         if (user != null) {
-        acctReq.setAttribute(User.THEME, theme);
-        userManagerService.saveUser(acctReq);
+            acctReq.setAttribute(User.THEME, theme);
+            userManagerService.saveUser(acctReq);
         }
 
         PortletPage page = layoutMgr.getPortletPage(req);
         page.setTheme(theme);
-        layoutMgr.reloadPage(req);       
+        layoutMgr.reloadPage(req);
     }
 
 }

@@ -6,17 +6,15 @@
 
 package org.gridlab.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
-import org.gridlab.gridsphere.provider.portletui.tags.DataGridColumnTag;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * A <code>TextFieldTag</code> represents a text field element
@@ -79,7 +77,7 @@ public class TextFieldTag extends BaseComponentTag {
             textFieldBean = (TextFieldBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (textFieldBean == null) {
                 log.debug("Creating new text field bean");
-                textFieldBean = new TextFieldBean((HttpServletRequest)pageContext.getRequest(), beanId);
+                textFieldBean = new TextFieldBean((HttpServletRequest) pageContext.getRequest(), beanId);
                 if (maxlength != 0) textFieldBean.setMaxLength(maxlength);
                 if (size != 0) textFieldBean.setSize(size);
                 this.setBaseComponentBean(textFieldBean);

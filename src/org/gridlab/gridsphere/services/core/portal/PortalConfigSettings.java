@@ -22,7 +22,8 @@ public class PortalConfigSettings {
 
     private Map attributes = new HashMap();
 
-    public PortalConfigSettings() {}
+    public PortalConfigSettings() {
+    }
 
     public String getOid() {
         return oid;
@@ -73,13 +74,13 @@ public class PortalConfigSettings {
      * @return the attribute value
      */
     public String getAttribute(String name) {
-        return (String)attributes.get(name);
+        return (String) attributes.get(name);
     }
 
     /**
      * Sets the value of the attribute with the given name,
      *
-     * @param name the attribute name
+     * @param name  the attribute name
      * @param value the attribute value
      */
     public void setAttribute(String name, String value) {

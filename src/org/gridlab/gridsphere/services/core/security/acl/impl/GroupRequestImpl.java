@@ -26,8 +26,8 @@ public class GroupRequestImpl implements GroupRequest {
     }
 
     public GroupRequestImpl(GroupEntry groupEntry) {
-        this.user = (SportletUserImpl)groupEntry.getUser();
-        this.sgroup = (SportletGroup)groupEntry.getGroup();
+        this.user = (SportletUserImpl) groupEntry.getUser();
+        this.sgroup = (SportletGroup) groupEntry.getGroup();
         this.role = groupEntry.getRole().toString();
     }
 
@@ -48,7 +48,7 @@ public class GroupRequestImpl implements GroupRequest {
     }
 
     public void setGroup(PortletGroup group) {
-        this.sgroup = (SportletGroup)group;
+        this.sgroup = (SportletGroup) group;
     }
 
     public PortletRole getRole() {
@@ -77,7 +77,7 @@ public class GroupRequestImpl implements GroupRequest {
     }
 
     public void setUser(User user) {
-        this.user = (SportletUserImpl)user;
+        this.user = (SportletUserImpl) user;
     }
 
     /**

@@ -24,16 +24,18 @@ public interface PortletServiceAuthorizer {
     /**
      * Authorizes operations that require super user access
      *
-     * @throws PortletServiceAuthorizationException if supplied user is not a super user
+     * @throws PortletServiceAuthorizationException
+     *          if supplied user is not a super user
      */
     public void authorizeSuperUser() throws PortletServiceAuthorizationException;
 
     /**
-     *  Authorizes operations that require admin user access
+     * Authorizes operations that require admin user access
      *
      * @param group the portlet group within which the
-     * user should be an admin if they are not a super user.
-     * @throws PortletServiceAuthorizationException if supplied user is not an admin user
+     *              user should be an admin if they are not a super user.
+     * @throws PortletServiceAuthorizationException
+     *          if supplied user is not an admin user
      */
     public void authorizeAdminUser(PortletGroup group) throws PortletServiceAuthorizationException;
 
@@ -41,8 +43,9 @@ public interface PortletServiceAuthorizer {
      * Authorizes operations that require super or admin user access
      *
      * @param group the portlet group within which the
-     * user should be an admin if they are not a super user
-     * @throws PortletServiceAuthorizationException if supplied user is not a super or admin user
+     *              user should be an admin if they are not a super user
+     * @throws PortletServiceAuthorizationException
+     *          if supplied user is not a super or admin user
      */
     public void authorizeSuperOrAdminUser(PortletGroup group) throws PortletServiceAuthorizationException;
 
@@ -51,9 +54,10 @@ public interface PortletServiceAuthorizer {
      * only if the supplied user  matches the associated user
      *
      * @param user the portlet group within which the
-     * user should be an admin if they are not a super user
-     * @throws PortletServiceAuthorizationException if supplied user is
-     * not a super or same user
+     *             user should be an admin if they are not a super user
+     * @throws PortletServiceAuthorizationException
+     *          if supplied user is
+     *          not a super or same user
      */
     public void authorizeSuperOrSameUser(User user) throws PortletServiceAuthorizationException;
 
@@ -62,9 +66,10 @@ public interface PortletServiceAuthorizer {
      * can be invoked only if the supplied user  matches the associated user
      *
      * @param user the portlet group within which the
-     * user should be an admin if they are not a super user
-     * @throws PortletServiceAuthorizationException if supplied user is
-     * not a super, admin, or same  user
+     *             user should be an admin if they are not a super user
+     * @throws PortletServiceAuthorizationException
+     *          if supplied user is
+     *          not a super, admin, or same  user
      */
     public void authorizeSuperAdminOrSameUser(User user, PortletGroup group) throws PortletServiceAuthorizationException;
 }

@@ -57,11 +57,7 @@
 
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 
 /**
@@ -69,8 +65,7 @@ import java.util.NoSuchElementException;
  * Collection, i.e. <code>Iterator</code> classes.
  */
 
-public final class Enumerator implements Enumeration
-{
+public final class Enumerator implements Enumeration {
 
 
     // Iterator over which the Enumeration takes place
@@ -82,8 +77,7 @@ public final class Enumerator implements Enumeration
      *
      * @param collection Collection with values that should be enumerated
      */
-    public Enumerator(Collection collection)
-    {
+    public Enumerator(Collection collection) {
         this(collection.iterator());
     }
 
@@ -94,8 +88,7 @@ public final class Enumerator implements Enumeration
      *
      * @param iterator Iterator to be wrapped
      */
-    public Enumerator(Iterator iterator)
-    {
+    public Enumerator(Iterator iterator) {
         super();
         this.iterator = iterator;
     }
@@ -106,23 +99,20 @@ public final class Enumerator implements Enumeration
      *
      * @param map Map with values that should be enumerated
      */
-    public Enumerator(Map map)
-    {
+    public Enumerator(Map map) {
         this(map.values().iterator());
     }
-
 
 
     /**
      * Tests if this enumeration contains more elements.
      *
-     * @return <code>true</code> if this enumeration contains at 
-     *          least one more element to provide,
-     *          <code>false</code> otherwise.
+     * @return <code>true</code> if this enumeration contains at
+     *         least one more element to provide,
+     *         <code>false</code> otherwise.
      */
-    public boolean hasMoreElements()
-    {
-        return(iterator.hasNext());
+    public boolean hasMoreElements() {
+        return (iterator.hasNext());
     }
 
 
@@ -130,11 +120,10 @@ public final class Enumerator implements Enumeration
      * Returns the next element of this enumeration.
      *
      * @return the next element of this enumeration
-     *
-     * @exception NoSuchElementException if no more elements exist
+     * @throws NoSuchElementException if no more elements exist
      */
     public Object nextElement() throws NoSuchElementException {
-        return(iterator.next());
+        return (iterator.next());
     }
 
 

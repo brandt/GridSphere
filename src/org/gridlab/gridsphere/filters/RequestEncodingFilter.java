@@ -24,68 +24,65 @@
 package org.gridlab.gridsphere.filters;
 
 
-import java.io.*;
 import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
 
 /**
- * 
  * RequestEncodingFilter - set the encoding of request to UTF-8,
  * if it was not set by web-client.
- *@author Ruslan Shevchenko &lt;rssh@gradsoft.ua&gt;
  *
+ * @author Ruslan Shevchenko &lt;rssh@gradsoft.ua&gt;
  */
 public class RequestEncodingFilter implements Filter {
 
 
-	public void init(FilterConfig filterConfig) {
-		filterConfig_ = filterConfig;
-                String enabledString=filterConfig.getInitParameter("enabled");
-                if (enabledString!=null) {
-                   if (enabledString.equals("true")) {
-                      enabled_=true;
-                   }else if(enabledString.equals("false")) {
-                      enabled_=false;
-                   }else{
-                      filterConfig.getServletContext().log("RequestEncodingFilter: enabled must be true or false, set to true");
-                      enabled_=true;
-                   }
-                }
-                String encoding=filterConfig.getInitParameter("encoding");
-                if (encoding!=null) {
-                   encoding_=encoding;
-                }
-	}
+    public void init(FilterConfig filterConfig) {
+        filterConfig_ = filterConfig;
+        String enabledString = filterConfig.getInitParameter("enabled");
+        if (enabledString != null) {
+            if (enabledString.equals("true")) {
+                enabled_ = true;
+            } else if (enabledString.equals("false")) {
+                enabled_ = false;
+            } else {
+                filterConfig.getServletContext().log("RequestEncodingFilter: enabled must be true or false, set to true");
+                enabled_ = true;
+            }
+        }
+        String encoding = filterConfig.getInitParameter("encoding");
+        if (encoding != null) {
+            encoding_ = encoding;
+        }
+    }
 
-	public void destroy() {
-	}
+    public void destroy() {
+    }
 
-	public void doFilter(ServletRequest request, ServletResponse response,
-						 FilterChain chain)
-		throws IOException, ServletException 
-        {
-           	if (enabled_) {
-                        String originalEncoding=request.getCharacterEncoding();
-                        if (originalEncoding==null) {
-                           request.setCharacterEncoding(encoding_);
-                        }else{
-                           getFilterConfig().getServletContext().log("RequestEncodingFilter:keep original"+originalEncoding);
-                        }
-                }
-	        chain.doFilter(request, response);
-	}
+    public void doFilter(ServletRequest request, ServletResponse response,
+                         FilterChain chain)
+            throws IOException, ServletException {
+        if (enabled_) {
+            String originalEncoding = request.getCharacterEncoding();
+            if (originalEncoding == null) {
+                request.setCharacterEncoding(encoding_);
+            } else {
+                getFilterConfig().getServletContext().log("RequestEncodingFilter:keep original" + originalEncoding);
+            }
+        }
+        chain.doFilter(request, response);
+    }
 
-	public FilterConfig getFilterConfig() {
-		return filterConfig_;
-	}
+    public FilterConfig getFilterConfig() {
+        return filterConfig_;
+    }
 
-	public void setFilterConfig(FilterConfig filterConfig) {
-		init(filterConfig);
-	}
+    public void setFilterConfig(FilterConfig filterConfig) {
+        init(filterConfig);
+    }
 
 
-	private FilterConfig filterConfig_;
-        private boolean      enabled_ = true;
-        private String       encoding_ = "UTF-8";
+    private FilterConfig filterConfig_;
+    private boolean enabled_ = true;
+    private String encoding_ = "UTF-8";
 
 }

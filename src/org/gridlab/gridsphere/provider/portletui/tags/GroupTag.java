@@ -1,8 +1,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.GroupBean;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;

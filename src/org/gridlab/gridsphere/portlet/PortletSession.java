@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlet;
 
 import javax.servlet.http.HttpSession;
-import java.util.Enumeration;
 
 
 /**

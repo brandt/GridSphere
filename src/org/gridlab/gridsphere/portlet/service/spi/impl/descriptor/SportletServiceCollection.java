@@ -19,8 +19,7 @@ public class SportletServiceCollection {
      * Sets the list of portlet service definitions
      *
      * @param servicesList a <code>Vector</code> containing
-     * portlet service definitions
-     *
+     *                     portlet service definitions
      * @see SportletServiceDefinition
      */
     public void setPortletServicesList(Vector servicesList) {
@@ -31,7 +30,6 @@ public class SportletServiceCollection {
      * Returns the list of portlet service definitions
      *
      * @return a list containing the portlet service definitions
-     *
      * @see SportletServiceDefinition
      */
     public List getPortletServicesList() {

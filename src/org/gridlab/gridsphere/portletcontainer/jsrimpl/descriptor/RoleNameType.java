@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -16,19 +16,18 @@ import org.exolab.castor.xml.Unmarshaller;
 
 /**
  * The role-name element is a reference to a defined security role.
- *
- *  The role-name element must contain the name of one of the
- *  security roles defined in the security-role elements.
- *  Used in: security-role-ref
- *
+ * <p/>
+ * The role-name element must contain the name of one of the
+ * security roles defined in the security-role elements.
+ * Used in: security-role-ref
  *
  * @version $Revision$ $Date$
  */
 public class RoleNameType implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -37,8 +36,8 @@ public class RoleNameType implements java.io.Serializable {
     private String _content = "";
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public RoleNameType() {
@@ -47,8 +46,8 @@ public class RoleNameType implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.RoleNameType()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
@@ -57,20 +56,17 @@ public class RoleNameType implements java.io.Serializable {
      *
      * @return the value of field 'content'.
      */
-    public String getContent()
-    {
+    public String getContent() {
         return this._content;
     } //-- java.lang.String getContent()
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -82,8 +78,7 @@ public class RoleNameType implements java.io.Serializable {
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer)
@@ -94,8 +89,7 @@ public class RoleNameType implements java.io.Serializable {
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler)
@@ -106,8 +100,7 @@ public class RoleNameType implements java.io.Serializable {
      *
      * @param content the value of field 'content'.
      */
-    public void setContent(String content)
-    {
+    public void setContent(String content) {
         this._content = content;
     } //-- void setContent(java.lang.String)
 
@@ -117,8 +110,7 @@ public class RoleNameType implements java.io.Serializable {
      * @param reader
      */
     public static Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (RoleNameType) Unmarshaller.unmarshal(RoleNameType.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader)
 
@@ -126,8 +118,7 @@ public class RoleNameType implements java.io.Serializable {
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate()

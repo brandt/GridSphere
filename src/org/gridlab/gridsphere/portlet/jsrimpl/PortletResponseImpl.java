@@ -1,19 +1,14 @@
-
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
-
-import javax.portlet.PortletResponse;
-import javax.portlet.PortletURL;
 import javax.portlet.PortalContext;
+import javax.portlet.PortletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * The <CODE>PortletResponse</CODE> defines the base interface to assist a
@@ -27,8 +22,7 @@ import java.util.ArrayList;
  * @see javax.portlet.ActionResponse
  * @see javax.portlet.RenderResponse
  */
-public abstract class PortletResponseImpl extends HttpServletResponseWrapper implements PortletResponse
-{
+public abstract class PortletResponseImpl extends HttpServletResponseWrapper implements PortletResponse {
     protected HttpServletRequest req = null;
     protected Map properties = null;
 
@@ -49,21 +43,20 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
 
     /**
      * Adds a String property to an existing key to be returned to the portal.
-     * <p>
+     * <p/>
      * This method allows response properties to have multiple values.
-     * <p>
+     * <p/>
      * Properties can be used by portlets to provide vendor specific
      * information to the portal.
      *
-     * @param  key    the key of the property to be returned to the portal
-     * @param  value  the value of the property to be returned to the portal
-     *
-     * @exception  java.lang.IllegalArgumentException
-     *                            if key is <code>null</code>.
+     * @param key   the key of the property to be returned to the portal
+     * @param value the value of the property to be returned to the portal
+     * @throws java.lang.IllegalArgumentException
+     *          if key is <code>null</code>.
      */
     public void addProperty(String key, String value) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
-        List vals = (List)properties.get(key);
+        List vals = (List) properties.get(key);
         if (vals == null) {
             vals = new ArrayList();
         }
@@ -73,21 +66,20 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
 
     /**
      * Sets a String property to be returned to the portal.
-     * <p>
+     * <p/>
      * Properties can be used by portlets to provide vendor specific
      * information to the portal.
-     * <p>
+     * <p/>
      * This method resets all properties previously added with the same key.
      *
-     * @param  key    the key of the property to be returned to the portal
-     * @param  value  the value of the property to be returned to the portal
-     *
-     * @exception  java.lang.IllegalArgumentException
-     *                            if key is <code>null</code>.
+     * @param key   the key of the property to be returned to the portal
+     * @param value the value of the property to be returned to the portal
+     * @throws java.lang.IllegalArgumentException
+     *          if key is <code>null</code>.
      */
     public void setProperty(String key, String value) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
-        List vals = (List)properties.get(key);
+        List vals = (List) properties.get(key);
         if (vals == null) {
             vals = new ArrayList();
         }
@@ -99,26 +91,23 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
     /**
      * Returns the encoded URL of the resource, like servlets,
      * JSPs, images and other static files, at the given path.
-     * <p>
+     * <p/>
      * Some portal/portlet-container implementation may require
      * those URLs to contain implementation specific data encoded
      * in it. Because of that, portlets should use this method to
      * create such URLs.
-     * <p>
+     * <p/>
      * The <code>encodeURL</code> method may include the session ID
      * and other portal/portlet-container specific information into the URL.
      * If encoding is not needed, it returns the URL unchanged.
      *
-     * @param   path
-     *          the URI path to the resource. This must be either
-     *          an absolute URL (e.g.
-     *          <code>http://my.co/myportal/mywebap/myfolder/myresource.gif</code>)
-     *          or a full path URI (e.g. <code>/myportal/mywebap/myfolder/myresource.gif</code>).
-     *
-     * @exception  java.lang.IllegalArgumentException
-     *                            if path doesn't have a leading slash or is not an absolute URL
-     *
-     * @return   the encoded resource URL as string
+     * @param path the URI path to the resource. This must be either
+     *             an absolute URL (e.g.
+     *             <code>http://my.co/myportal/mywebap/myfolder/myresource.gif</code>)
+     *             or a full path URI (e.g. <code>/myportal/mywebap/myfolder/myresource.gif</code>).
+     * @return the encoded resource URL as string
+     * @throws java.lang.IllegalArgumentException
+     *          if path doesn't have a leading slash or is not an absolute URL
      */
     public String encodeURL(String path) {
         if (path.indexOf("://") == -1 && !path.startsWith("/")) {
@@ -128,9 +117,8 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
     }
 
 
-
     protected HttpServletResponse getHttpServletResponse() {
-        return (HttpServletResponse)super.getResponse();
+        return (HttpServletResponse) super.getResponse();
     }
 
 }

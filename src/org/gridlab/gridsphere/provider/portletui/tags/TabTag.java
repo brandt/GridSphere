@@ -5,8 +5,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TabBean;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
-import org.gridlab.gridsphere.provider.portletui.tags.TabbedPaneTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;

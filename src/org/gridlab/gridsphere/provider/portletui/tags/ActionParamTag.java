@@ -59,7 +59,7 @@ public class ActionParamTag extends TagSupport {
     /**
      * Sets the action parameter bean
      *
-     * @param paramBean  the action parameter bean
+     * @param paramBean the action parameter bean
      */
     public void setParamBean(ActionParamBean paramBean) {
         this.paramBean = paramBean;

@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -16,28 +16,27 @@ import org.exolab.castor.xml.Unmarshaller;
 
 /**
  * The description element is used to provide text describing the
- *  parent element. The description element should include any
- *  information that the portlet application war file producer
+ * parent element. The description element should include any
+ * information that the portlet application war file producer
  * wants
- *  to provide to the consumer of the portlet application war file
- *  (i.e., to the Deployer). Typically, the tools used by the
- *  portlet application war file consumer will display the
- *  description when processing the parent element that contains
+ * to provide to the consumer of the portlet application war file
+ * (i.e., to the Deployer). Typically, the tools used by the
+ * portlet application war file consumer will display the
+ * description when processing the parent element that contains
  * the
- *  description. It has an optional attribute xml:lang to indicate
- *  which language is used in the description according to
- *  RFC 1766 (http://www.ietf.org/rfc/rfc1766.txt). The default
- *  value of this attribute is English(“en”).
- *  Used in: init-param, portlet, portlet-app, security-role
- *
+ * description. It has an optional attribute xml:lang to indicate
+ * which language is used in the description according to
+ * RFC 1766 (http://www.ietf.org/rfc/rfc1766.txt). The default
+ * value of this attribute is English(“en”).
+ * Used in: init-param, portlet, portlet-app, security-role
  *
  * @version $Revision$ $Date$
  */
 public class DescriptionType implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -48,13 +47,13 @@ public class DescriptionType implements java.io.Serializable {
     /**
      * In due course, we should install the relevant ISO 2- and
      * 3-letter
-     *  codes as the enumerated possible values . . .
+     * codes as the enumerated possible values . . .
      */
     private java.lang.String _lang;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public DescriptionType() {
@@ -63,8 +62,8 @@ public class DescriptionType implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DescriptionType()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
@@ -73,8 +72,7 @@ public class DescriptionType implements java.io.Serializable {
      *
      * @return the value of field 'content'.
      */
-    public java.lang.String getContent()
-    {
+    public java.lang.String getContent() {
         return this._content;
     } //-- java.lang.String getContent()
 
@@ -82,24 +80,21 @@ public class DescriptionType implements java.io.Serializable {
      * Returns the value of field 'lang'. The field 'lang' has the
      * following description: In due course, we should install the
      * relevant ISO 2- and 3-letter
-     *  codes as the enumerated possible values . . .
+     * codes as the enumerated possible values . . .
      *
      * @return the value of field 'lang'.
      */
-    public java.lang.String getLang()
-    {
+    public java.lang.String getLang() {
         return this._lang;
     } //-- java.lang.String getLang()
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -111,8 +106,7 @@ public class DescriptionType implements java.io.Serializable {
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer)
@@ -123,8 +117,7 @@ public class DescriptionType implements java.io.Serializable {
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler)
@@ -135,8 +128,7 @@ public class DescriptionType implements java.io.Serializable {
      *
      * @param content the value of field 'content'.
      */
-    public void setContent(java.lang.String content)
-    {
+    public void setContent(java.lang.String content) {
         this._content = content;
     } //-- void setContent(java.lang.String)
 
@@ -144,12 +136,11 @@ public class DescriptionType implements java.io.Serializable {
      * Sets the value of field 'lang'. The field 'lang' has the
      * following description: In due course, we should install the
      * relevant ISO 2- and 3-letter
-     *  codes as the enumerated possible values . . .
+     * codes as the enumerated possible values . . .
      *
      * @param lang the value of field 'lang'.
      */
-    public void setLang(java.lang.String lang)
-    {
+    public void setLang(java.lang.String lang) {
         this._lang = lang;
     } //-- void setLang(java.lang.String)
 
@@ -159,8 +150,7 @@ public class DescriptionType implements java.io.Serializable {
      * @param reader
      */
     public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DescriptionType) Unmarshaller.unmarshal(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DescriptionType.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader)
 
@@ -168,8 +158,7 @@ public class DescriptionType implements java.io.Serializable {
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate()

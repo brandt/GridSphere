@@ -16,13 +16,12 @@ import org.gridlab.gridsphere.services.core.security.password.Password;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 
-import java.util.Date;
-import java.util.Calendar;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 
 public class PasswordManagerServiceImpl
-    implements PortletServiceProvider, PasswordManagerService {
+        implements PortletServiceProvider, PasswordManagerService {
 
     private static PasswordManagerService instance = new PasswordManagerServiceImpl();
     private static PortletLog _log = SportletLog.getInstance(PasswordManagerServiceImpl.class);
@@ -52,45 +51,45 @@ public class PasswordManagerServiceImpl
     private PasswordImpl getPasswordImpl(User user) {
         PasswordImpl password = null;
         String query = "select pw from "
-                     + this.userPasswordImpl
-                     + " pw where pw.sportletUser.oid='" + user.getID() + "'";
+                + this.userPasswordImpl
+                + " pw where pw.sportletUser.oid='" + user.getID() + "'";
         try {
-            password = (PasswordImpl)this.pm.restore(query);
+            password = (PasswordImpl) this.pm.restore(query);
         } catch (PersistenceManagerException e) {
             _log.error("Unable to retrieve password for user", e);
         }
         return password;
     }
 
-   public void validateSuppliedPassword(User user, String value)
-          throws InvalidPasswordException {
+    public void validateSuppliedPassword(User user, String value)
+            throws InvalidPasswordException {
         PasswordImpl password = getPasswordImpl(user);
         if (password == null) {
             _log.debug("No password found for user");
             throw new InvalidPasswordException("No password found for user!");
         }
-       //_log.debug("Stored value is " + password.getValue());
-       //_log.debug("Provided value is " + value);
+        //_log.debug("Stored value is " + password.getValue());
+        //_log.debug("Provided value is " + value);
 
-       // MD5 hash of password value
-       try {
-           MessageDigest md5 = MessageDigest.getInstance("MD5");
-           md5.update(value.getBytes());
-           value = toHex(md5.digest());
+        // MD5 hash of password value
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(value.getBytes());
+            value = toHex(md5.digest());
 
-           //_log.debug("Hash of value is " + value);
-           if (!password.getValue().equals(value)) {
-               throw new InvalidPasswordException("Supplied password does not match user password!");
-           }
-       } catch (NoSuchAlgorithmException e) {
-           //
-       }
-   }
+            //_log.debug("Hash of value is " + value);
+            if (!password.getValue().equals(value)) {
+                throw new InvalidPasswordException("Supplied password does not match user password!");
+            }
+        } catch (NoSuchAlgorithmException e) {
+            //
+        }
+    }
 
     public void savePassword(Password editor) {
         try {
             if (editor instanceof PasswordImpl) {
-                PasswordImpl pass = (PasswordImpl)editor;
+                PasswordImpl pass = (PasswordImpl) editor;
                 try {
                     MessageDigest md5 = MessageDigest.getInstance("MD5");
                     md5.update(pass.getValue().getBytes());
@@ -151,7 +150,7 @@ public class PasswordManagerServiceImpl
     private static String toHex(byte[] digest) {
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < digest.length; i++) {
-            buf.append(Integer.toHexString((int)digest[i] & 0x00FF));
+            buf.append(Integer.toHexString((int) digest[i] & 0x00FF));
         }
         return buf.toString();
     }

@@ -6,15 +6,13 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
-import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -53,6 +51,7 @@ public class PortletPage implements Serializable, Cloneable {
 
     private Hashtable labelsHash = new Hashtable();
     private Hashtable portletHash = new Hashtable();
+
     /**
      * Constructs an instance of PortletPage
      */
@@ -110,7 +109,7 @@ public class PortletPage implements Serializable, Cloneable {
     /**
      * Sets the keywords used in rendering output
      *
-     * @param keywords  used in rendering output
+     * @param keywords used in rendering output
      */
     public void setKeywords(String keywords) {
         this.keywords = keywords;
@@ -203,7 +202,7 @@ public class PortletPage implements Serializable, Cloneable {
 
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
-            cacheService = (CacheService)factory.createPortletService(CacheService.class, null, true);
+            cacheService = (CacheService) factory.createPortletService(CacheService.class, null, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
@@ -231,7 +230,7 @@ public class PortletPage implements Serializable, Cloneable {
 
         Iterator it = componentIdentifiers.iterator();
         while (it.hasNext()) {
-            ComponentIdentifier cid = (ComponentIdentifier)it.next();
+            ComponentIdentifier cid = (ComponentIdentifier) it.next();
             String compLabel = cid.getComponentLabel();
             if (cid.hasPortlet()) {
                 String portletClass = cid.getPortletClass();
@@ -313,7 +312,7 @@ public class PortletPage implements Serializable, Cloneable {
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
 
@@ -329,7 +328,7 @@ public class PortletPage implements Serializable, Cloneable {
             int compIntId = -1;
             if (labelsHash.containsKey(cid)) {
                 Integer cint = (Integer) labelsHash.get(cid);
-                compIntId =  cint.intValue();
+                compIntId = cint.intValue();
                 compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
             } else {
                 // try converting to integer
@@ -363,7 +362,7 @@ public class PortletPage implements Serializable, Cloneable {
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
 
@@ -386,7 +385,7 @@ public class PortletPage implements Serializable, Cloneable {
             // means the writer has already been obtained
             return;
         }
-        
+
         res.setContentType("text/html; charset=utf-8");
 
         // page header
@@ -419,20 +418,20 @@ public class PortletPage implements Serializable, Cloneable {
 
     public Object clone() throws CloneNotSupportedException {
         int i;
-        PortletPage c = (PortletPage)super.clone();
+        PortletPage c = (PortletPage) super.clone();
         c.theme = theme;
         c.COMPONENT_ID = this.COMPONENT_ID;
         c.theme = this.theme;
         List compList = new Vector(this.componentIdentifiers.size());
         for (i = 0; i < this.componentIdentifiers.size(); i++) {
-            ComponentIdentifier cid = (ComponentIdentifier)this.componentIdentifiers.get(i);
+            ComponentIdentifier cid = (ComponentIdentifier) this.componentIdentifiers.get(i);
             compList.add(new ComponentIdentifier(cid));
         }
         c.componentIdentifiers = compList;
         c.title = title;
-        c.headerContainer = (this.headerContainer == null) ? null : (PortletContainer)this.headerContainer.clone();
-        c.footerContainer = (this.footerContainer == null ) ? null : (PortletContainer)this.footerContainer.clone();
-        c.tabbedPane = (this.tabbedPane == null) ? null : (PortletTabbedPane)this.tabbedPane.clone();
+        c.headerContainer = (this.headerContainer == null) ? null : (PortletContainer) this.headerContainer.clone();
+        c.footerContainer = (this.footerContainer == null) ? null : (PortletContainer) this.footerContainer.clone();
+        c.tabbedPane = (this.tabbedPane == null) ? null : (PortletTabbedPane) this.tabbedPane.clone();
         return c;
     }
 
@@ -459,9 +458,10 @@ public class PortletPage implements Serializable, Cloneable {
      * Processes a message. The message is directed at a concrete portlet with
      * a given concrete portlet ID. If the target ID is "*" the message is delivered
      * to every portlet in the PortletPage.
-     * @param concPortletID  The target concrete portlet's ID
-     * @param msg  The message to deliver
-     * @param event The GridsphereEvent associated with the message delivery
+     *
+     * @param concPortletID The target concrete portlet's ID
+     * @param msg           The message to deliver
+     * @param event         The GridsphereEvent associated with the message delivery
      */
     public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) throws PortletException {
 
@@ -473,7 +473,7 @@ public class PortletPage implements Serializable, Cloneable {
                 Integer cint = (Integer) entry.getValue();
                 String portletID = (String) entry.getKey();
 
-                int compIntId =  cint.intValue();
+                int compIntId = cint.intValue();
                 ComponentIdentifier compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
 
                 if (compId != null) {
@@ -488,7 +488,7 @@ public class PortletPage implements Serializable, Cloneable {
                     }
                 }
             }
-            return ;
+            return;
         }
 
 
@@ -501,10 +501,10 @@ public class PortletPage implements Serializable, Cloneable {
         int compIntId = -1;
         if (portletHash.containsKey(concPortletID)) {
             Integer cint = (Integer) portletHash.get(concPortletID);
-            compIntId =  cint.intValue();
+            compIntId = cint.intValue();
             compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
         } else {
-            throw new PortletException("Delivery of the message "+msg.toString()+" failed: "+concPortletID+" not found");
+            throw new PortletException("Delivery of the message " + msg.toString() + " failed: " + concPortletID + " not found");
         }
 
         if (compId != null) {

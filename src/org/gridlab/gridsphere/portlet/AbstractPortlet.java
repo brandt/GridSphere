@@ -43,11 +43,10 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
      * the markup will be different. Also, the portlet can take language preferences and/or
      * personalized settings into account.
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     *
      * @throws PortletException if the portlet has trouble fulfilling the rendering request
-     * @throws IOException if the streaming causes an I/O problem
+     * @throws IOException      if the streaming causes an I/O problem
      */
     public void service(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
@@ -114,7 +113,6 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
      * Notifies this listener that the message which the listener is watching for has been performed.
      *
      * @param event the message event
-     *
      * @throws PortletException if the listener has trouble fulfilling the request
      */
     public void messageReceived(MessageEvent event) throws PortletException {
@@ -124,17 +122,16 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
      * Called by the portlet container to render the portlet title.
      * The information in the portlet request (like locale, client, and session information) can
      * but doesn't have to be considered to render dynamic titles.. Examples are
-     *
+     * <p/>
      * language-dependant titles for multi-lingual portals
      * shorter titles for WAP phones
      * the number of messages in a mailbox portlet
      * The session may be null, if the user is not logged in.
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
-     *
      * @throws PortletException if the portlet title has trouble fulfilling the rendering request
-     * @throws IOException if the streaming causes an I/O problem
+     * @throws IOException      if the streaming causes an I/O problem
      */
     public void doTitle(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         PortletSettings settings = request.getPortletSettings();

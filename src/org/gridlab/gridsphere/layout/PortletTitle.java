@@ -16,7 +16,7 @@ public class PortletTitle implements Serializable, Cloneable {
     private String text = "";
 
     /**
-     *  Constructs an instance of PortletContent
+     * Constructs an instance of PortletContent
      */
     public PortletTitle() {
     }
@@ -58,7 +58,7 @@ public class PortletTitle implements Serializable, Cloneable {
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletTitle t = (PortletTitle)super.clone();
+        PortletTitle t = (PortletTitle) super.clone();
         t.lang = this.lang;
         t.text = this.text;
         return t;

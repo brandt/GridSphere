@@ -400,7 +400,7 @@ public abstract class BaseFormEventImpl {
     public MessageBoxBean getMessageBoxBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (MessageBoxBean)tagBeans.get(beanKey);
+            return (MessageBoxBean) tagBeans.get(beanKey);
         }
         MessageBoxBean messageBoxBean = new MessageBoxBean(request, beanId);
         tagBeans.put(beanKey, messageBoxBean);
@@ -506,7 +506,7 @@ public abstract class BaseFormEventImpl {
                 int index = beanId.lastIndexOf("%");
                 if (index > -1 && index != beanId.length()) {
                     beanKey = beanId;
-                    beanId = beanId.substring(index+1);
+                    beanId = beanId.substring(index + 1);
                 } else {
                     beanKey = getBeanKey(beanId);
                 }

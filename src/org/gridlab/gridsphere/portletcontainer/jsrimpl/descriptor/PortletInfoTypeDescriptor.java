@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.validators.StringValidator;
@@ -21,8 +21,8 @@ import org.exolab.castor.xml.validators.StringValidator;
 public class PortletInfoTypeDescriptor extends org.exolab.castor.xml.util.XMLClassDescriptorImpl {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -46,8 +46,8 @@ public class PortletInfoTypeDescriptor extends org.exolab.castor.xml.util.XMLCla
     private org.exolab.castor.xml.XMLFieldDescriptor identity;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public PortletInfoTypeDescriptor() {
@@ -57,36 +57,35 @@ public class PortletInfoTypeDescriptor extends org.exolab.castor.xml.util.XMLCla
 
         //-- set grouping compositor
         setCompositorAsSequence();
-        org.exolab.castor.xml.util.XMLFieldDescriptorImpl  desc           = null;
-        org.exolab.castor.xml.XMLFieldHandler              handler        = null;
-        org.exolab.castor.xml.FieldValidator               fieldValidator = null;
+        org.exolab.castor.xml.util.XMLFieldDescriptorImpl desc = null;
+        org.exolab.castor.xml.XMLFieldHandler handler = null;
+        org.exolab.castor.xml.FieldValidator fieldValidator = null;
         //-- initialize attribute descriptors
 
         //-- _id
         desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(java.lang.String.class, "_id", "id", org.exolab.castor.xml.NodeType.Attribute);
         desc.setImmutable(true);
         handler = (new org.exolab.castor.xml.XMLFieldHandler() {
-            public java.lang.Object getValue( java.lang.Object object )
-                throws IllegalStateException
-            {
+            public java.lang.Object getValue(java.lang.Object object)
+                    throws IllegalStateException {
                 PortletInfoType target = (PortletInfoType) object;
                 return target.getId();
             }
-            public void setValue( java.lang.Object object, java.lang.Object value)
-                throws IllegalStateException, IllegalArgumentException
-            {
+
+            public void setValue(java.lang.Object object, java.lang.Object value)
+                    throws IllegalStateException, IllegalArgumentException {
                 try {
                     PortletInfoType target = (PortletInfoType) object;
-                    target.setId( (java.lang.String) value);
-                }
-                catch (java.lang.Exception ex) {
+                    target.setId((java.lang.String) value);
+                } catch (java.lang.Exception ex) {
                     throw new IllegalStateException(ex.toString());
                 }
             }
-            public java.lang.Object newInstance( java.lang.Object parent ) {
+
+            public java.lang.Object newInstance(java.lang.Object parent) {
                 return null;
             }
-        } );
+        });
         desc.setHandler(handler);
         addFieldDescriptor(desc);
 
@@ -103,27 +102,26 @@ public class PortletInfoTypeDescriptor extends org.exolab.castor.xml.util.XMLCla
         //-- _title
         desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Title.class, "_title", "title", org.exolab.castor.xml.NodeType.Element);
         handler = (new org.exolab.castor.xml.XMLFieldHandler() {
-            public java.lang.Object getValue( java.lang.Object object )
-                throws IllegalStateException
-            {
+            public java.lang.Object getValue(java.lang.Object object)
+                    throws IllegalStateException {
                 PortletInfoType target = (PortletInfoType) object;
                 return target.getTitle();
             }
-            public void setValue( java.lang.Object object, java.lang.Object value)
-                throws IllegalStateException, IllegalArgumentException
-            {
+
+            public void setValue(java.lang.Object object, java.lang.Object value)
+                    throws IllegalStateException, IllegalArgumentException {
                 try {
                     PortletInfoType target = (PortletInfoType) object;
-                    target.setTitle( (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Title) value);
-                }
-                catch (java.lang.Exception ex) {
+                    target.setTitle((org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Title) value);
+                } catch (java.lang.Exception ex) {
                     throw new IllegalStateException(ex.toString());
                 }
             }
-            public java.lang.Object newInstance( java.lang.Object parent ) {
+
+            public java.lang.Object newInstance(java.lang.Object parent) {
                 return new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Title();
             }
-        } );
+        });
         desc.setHandler(handler);
         desc.setNameSpaceURI("http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd");
         desc.setRequired(true);
@@ -139,27 +137,26 @@ public class PortletInfoTypeDescriptor extends org.exolab.castor.xml.util.XMLCla
         //-- _shortTitle
         desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitle.class, "_shortTitle", "short-title", org.exolab.castor.xml.NodeType.Element);
         handler = (new org.exolab.castor.xml.XMLFieldHandler() {
-            public java.lang.Object getValue( java.lang.Object object )
-                throws IllegalStateException
-            {
+            public java.lang.Object getValue(java.lang.Object object)
+                    throws IllegalStateException {
                 PortletInfoType target = (PortletInfoType) object;
                 return target.getShortTitle();
             }
-            public void setValue( java.lang.Object object, java.lang.Object value)
-                throws IllegalStateException, IllegalArgumentException
-            {
+
+            public void setValue(java.lang.Object object, java.lang.Object value)
+                    throws IllegalStateException, IllegalArgumentException {
                 try {
                     PortletInfoType target = (PortletInfoType) object;
-                    target.setShortTitle( (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitle) value);
-                }
-                catch (java.lang.Exception ex) {
+                    target.setShortTitle((org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitle) value);
+                } catch (java.lang.Exception ex) {
                     throw new IllegalStateException(ex.toString());
                 }
             }
-            public java.lang.Object newInstance( java.lang.Object parent ) {
+
+            public java.lang.Object newInstance(java.lang.Object parent) {
                 return new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitle();
             }
-        } );
+        });
         desc.setHandler(handler);
         desc.setNameSpaceURI("http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd");
         desc.setMultivalued(false);
@@ -173,27 +170,26 @@ public class PortletInfoTypeDescriptor extends org.exolab.castor.xml.util.XMLCla
         //-- _keywords
         desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords.class, "_keywords", "keywords", org.exolab.castor.xml.NodeType.Element);
         handler = (new org.exolab.castor.xml.XMLFieldHandler() {
-            public java.lang.Object getValue( java.lang.Object object )
-                throws IllegalStateException
-            {
+            public java.lang.Object getValue(java.lang.Object object)
+                    throws IllegalStateException {
                 PortletInfoType target = (PortletInfoType) object;
                 return target.getKeywords();
             }
-            public void setValue( java.lang.Object object, java.lang.Object value)
-                throws IllegalStateException, IllegalArgumentException
-            {
+
+            public void setValue(java.lang.Object object, java.lang.Object value)
+                    throws IllegalStateException, IllegalArgumentException {
                 try {
                     PortletInfoType target = (PortletInfoType) object;
-                    target.setKeywords( (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords) value);
-                }
-                catch (java.lang.Exception ex) {
+                    target.setKeywords((org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords) value);
+                } catch (java.lang.Exception ex) {
                     throw new IllegalStateException(ex.toString());
                 }
             }
-            public java.lang.Object newInstance( java.lang.Object parent ) {
+
+            public java.lang.Object newInstance(java.lang.Object parent) {
                 return new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords();
             }
-        } );
+        });
         desc.setHandler(handler);
         desc.setNameSpaceURI("http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd");
         desc.setMultivalued(false);
@@ -207,71 +203,63 @@ public class PortletInfoTypeDescriptor extends org.exolab.castor.xml.util.XMLCla
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletInfoTypeDescriptor()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
      * Method getAccessMode
      */
-    public org.exolab.castor.mapping.AccessMode getAccessMode()
-    {
+    public org.exolab.castor.mapping.AccessMode getAccessMode() {
         return null;
     } //-- org.exolab.castor.mapping.AccessMode getAccessMode()
 
     /**
      * Method getExtends
      */
-    public org.exolab.castor.mapping.ClassDescriptor getExtends()
-    {
+    public org.exolab.castor.mapping.ClassDescriptor getExtends() {
         return null;
     } //-- org.exolab.castor.mapping.ClassDescriptor getExtends()
 
     /**
      * Method getIdentity
      */
-    public org.exolab.castor.mapping.FieldDescriptor getIdentity()
-    {
+    public org.exolab.castor.mapping.FieldDescriptor getIdentity() {
         return identity;
     } //-- org.exolab.castor.mapping.FieldDescriptor getIdentity()
 
     /**
      * Method getJavaClass
      */
-    public java.lang.Class getJavaClass()
-    {
+    public java.lang.Class getJavaClass() {
         return org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfoType.class;
     } //-- java.lang.Class getJavaClass()
 
     /**
      * Method getNameSpacePrefix
      */
-    public java.lang.String getNameSpacePrefix()
-    {
+    public java.lang.String getNameSpacePrefix() {
         return nsPrefix;
     } //-- java.lang.String getNameSpacePrefix()
 
     /**
      * Method getNameSpaceURI
      */
-    public java.lang.String getNameSpaceURI()
-    {
+    public java.lang.String getNameSpaceURI() {
         return nsURI;
     } //-- java.lang.String getNameSpaceURI()
 
     /**
      * Method getValidator
      */
-    public org.exolab.castor.xml.TypeValidator getValidator()
-    {
+    public org.exolab.castor.xml.TypeValidator getValidator() {
         return this;
     } //-- org.exolab.castor.xml.TypeValidator getValidator()
 
     /**
      * Method getXMLName
      */
-    public java.lang.String getXMLName()
-    {
+    public java.lang.String getXMLName() {
         return xmlName;
     } //-- java.lang.String getXMLName()
 

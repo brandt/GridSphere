@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TableCellBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TableRowBean;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -181,7 +180,7 @@ public class TableCellTag extends BaseComponentTag {
         if (rowTag.getHeader()) {
             cellBean.setCssClass(TableRowBean.TABLE_HEADER_STYLE);
         } else if (rowTag.getZebra()) {
-            cellBean.setCssClass(TableRowBean.TABLE_ALTERNATE_STYLE);   
+            cellBean.setCssClass(TableRowBean.TABLE_ALTERNATE_STYLE);
         }
 
         try {

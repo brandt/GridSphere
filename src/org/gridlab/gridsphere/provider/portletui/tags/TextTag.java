@@ -7,8 +7,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
-import org.gridlab.gridsphere.provider.portletui.tags.DataGridColumnTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -89,6 +87,7 @@ public class TextTag extends BaseComponentTag {
 
     /**
      * Sets the key used to identify localized text
+     *
      * @param key the key used to identify localized text
      */
     public void setKey(String key) {

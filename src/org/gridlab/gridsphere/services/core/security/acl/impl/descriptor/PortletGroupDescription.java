@@ -1,8 +1,7 @@
-
 package org.gridlab.gridsphere.services.core.security.acl.impl.descriptor;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 public class PortletGroupDescription {
 
@@ -12,7 +11,8 @@ public class PortletGroupDescription {
 
     private Set portletRoleList = new HashSet();
 
-    public PortletGroupDescription() {}
+    public PortletGroupDescription() {
+    }
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;

@@ -8,18 +8,20 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
-
-import org.gridlab.gridsphere.services.core.security.acl.*;
-import org.gridlab.gridsphere.services.core.user.impl.*;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
+import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.user.impl.UserManagerServiceImpl;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 public class AccessControlManagerServiceImpl implements PortletServiceProvider, AccessControlManagerService {
 
@@ -53,7 +55,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         log.info("Entering initGroups()");
 
         //initSportletGroup((SportletGroup)SportletGroup.SUPER);
-        initSportletGroup((SportletGroup)PortletGroupFactory.GRIDSPHERE_GROUP);
+        initSportletGroup((SportletGroup) PortletGroupFactory.GRIDSPHERE_GROUP);
 
         // NO MORE CREATING GROUPS FROM WEBAPP NAMES
         /*
@@ -106,7 +108,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     public GroupRequest editGroupEntry(GroupEntry groupEntry) {
-        GroupRequest request = (GroupRequest)this.getGroupEntry(groupEntry.getID());
+        GroupRequest request = (GroupRequest) this.getGroupEntry(groupEntry.getID());
         return request;
     }
 
@@ -127,9 +129,9 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
     private List selectGroupEntries(String criteria) {
         String oql = "select groupRequest from "
-                   + jdoGroupRequest
-                   + " groupRequest "
-                   + criteria;
+                + jdoGroupRequest
+                + " groupRequest "
+                + criteria;
         try {
             return pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
@@ -150,17 +152,17 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
     private GroupRequestImpl getGroupRequestImpl(User user, PortletGroup group) {
         String criteria = " where groupRequest.sportletUser.oid='" + user.getID() + "'"
-                       +  " and groupRequest.sportletGroup.oid='" + group.getID() + "'";
+                + " and groupRequest.sportletGroup.oid='" + group.getID() + "'";
         return selectGroupRequestImpl(criteria);
     }
 
     private GroupRequestImpl selectGroupRequestImpl(String criteria) {
         String oql = "select groupRequest from "
-                   + jdoGroupRequest
-                   + " groupRequest "
-                   + criteria;
+                + jdoGroupRequest
+                + " groupRequest "
+                + criteria;
         try {
-            return (GroupRequestImpl)pm.restore(oql);
+            return (GroupRequestImpl) pm.restore(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving access right";
             log.error(msg, e);
@@ -168,19 +170,19 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         }
     }
 
-   private boolean existsGroupEntry(GroupEntry entry) {
-       GroupRequestImpl rightImpl = (GroupRequestImpl)entry;
-       String oql = "select groupRequest.oid from "
-                  + jdoGroupRequest
-                  + " groupRequest where groupRequest.oid='"
-                  + rightImpl.getOid() + "'";
-       try {
-           return (pm.restore(oql) != null);
-       } catch (PersistenceManagerException e) {
-           String msg = "Error retrieving access right";
-           log.error(msg, e);
-       }
-       return false;
+    private boolean existsGroupEntry(GroupEntry entry) {
+        GroupRequestImpl rightImpl = (GroupRequestImpl) entry;
+        String oql = "select groupRequest.oid from "
+                + jdoGroupRequest
+                + " groupRequest where groupRequest.oid='"
+                + rightImpl.getOid() + "'";
+        try {
+            return (pm.restore(oql) != null);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving access right";
+            log.error(msg, e);
+        }
+        return false;
     }
 
     public void saveGroupEntry(GroupEntry entry) {
@@ -214,7 +216,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     public void deleteGroupEntries(User user) {
         Iterator groupEntries = getGroupEntries(user).iterator();
         while (groupEntries.hasNext()) {
-            GroupEntry groupEntry = (GroupEntry)groupEntries.next();
+            GroupEntry groupEntry = (GroupEntry) groupEntries.next();
             deleteGroupEntry(groupEntry);
         }
     }
@@ -252,7 +254,6 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
 
-
     private SportletGroup selectSportletGroup(String criteria) {
         // Build object query
         StringBuffer oqlBuffer = new StringBuffer();
@@ -264,7 +265,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         String oql = oqlBuffer.toString();
         log.debug(oql);
         try {
-            return (SportletGroup)pm.restore(oql);
+            return (SportletGroup) pm.restore(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving portlet group";
             log.error(msg, e);
@@ -279,7 +280,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     public PortletGroup createGroup(SportletGroup portletGroup) {
         Iterator it = portletGroup.getPortletRoleList().iterator();
         while (it.hasNext()) {
-            SportletRoleInfo info = (SportletRoleInfo)it.next();
+            SportletRoleInfo info = (SportletRoleInfo) it.next();
             try {
                 if (info.getOid() == null) {
                     pm.create(info);
@@ -287,12 +288,12 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
                     pm.update(info);
                 }
             } catch (PersistenceManagerException e) {
-                log.error("Error creating SportletRoleInfo "+info.getRole(), e);
+                log.error("Error creating SportletRoleInfo " + info.getRole(), e);
             }
         }
         portletGroup.setPortletRoleList(portletGroup.getPortletRoleList());
         try {
-            if (portletGroup.getOid()==null) {
+            if (portletGroup.getOid() == null) {
                 pm.create(portletGroup);
             } else {
                 pm.update(portletGroup);
@@ -316,10 +317,10 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
     public List getUsers(PortletGroup group) {
         String oql = "select groupEntry.sportletUser from "
-                   + jdoGroupRequest
-                   + " groupEntry where groupRequest.sportletGroup.oid='"
-                   + group.getID()
-                   + "'";
+                + jdoGroupRequest
+                + " groupEntry where groupRequest.sportletGroup.oid='"
+                + group.getID()
+                + "'";
         try {
             return pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
@@ -334,7 +335,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         Iterator it = users.iterator();
         List l = new Vector();
         while (it.hasNext()) {
-            User u = (User)it.next();
+            User u = (User) it.next();
             System.err.println("Checking if " + u.getFullName() + " has " + role);
             if (this.hasRoleInGroup(u, group, role)) {
                 System.err.println("user has role in group" + u.getFullName() + " " + u.getEmailAddress());
@@ -349,11 +350,11 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         List usersNotInGroup = new Vector();
         Iterator allUsers = userManager.getUsers().iterator();
         while (allUsers.hasNext()) {
-            User user = (User)allUsers.next();
+            User user = (User) allUsers.next();
             // If user has super role, don't include
-         //   if (hasSuperRole(user)) {
-           //     continue;
-          //  }
+            //   if (hasSuperRole(user)) {
+            //     continue;
+            //  }
             // Else, if user not in group, then include
             if (!isUserInGroup(user, group)) {
                 usersNotInGroup.add(user);
@@ -372,20 +373,20 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         //if (hasSuperRole(user)) {
         //    groups = getGroups();
         //} else {
-            // Otherwise, return groups for given user
-            String oql = "select groupRequest.sportletGroup from "
-                       + jdoGroupRequest
-                       + " groupRequest where groupRequest.sportletUser.oid='"
-                       + user.getID()
-                       + "'";
-            try {
-                groups = pm.restoreList(oql);
-            } catch (PersistenceManagerException e) {
-                String msg = "Error retrieving access right";
-                log.error(msg, e);
-                return new Vector();
-            }
-       // }
+        // Otherwise, return groups for given user
+        String oql = "select groupRequest.sportletGroup from "
+                + jdoGroupRequest
+                + " groupRequest where groupRequest.sportletUser.oid='"
+                + user.getID()
+                + "'";
+        try {
+            groups = pm.restoreList(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving access right";
+            log.error(msg, e);
+            return new Vector();
+        }
+        // }
         return groups;
     }
 
@@ -394,7 +395,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         if (!hasSuperRole(user)) {
             Iterator allGroups = getGroups(user).iterator();
             while (allGroups.hasNext()) {
-                PortletGroup group = (PortletGroup)allGroups.next();
+                PortletGroup group = (PortletGroup) allGroups.next();
                 if (!isUserInGroup(user, group)) {
                     groupsNotMemberOf.add(user);
                 }
@@ -407,11 +408,11 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         //if (hasSuperRole(user)) {
         //    return PortletRole.SUPER;
         //} else {
-            GroupEntry entry = getGroupEntry(user, group);
-            if (entry == null) {
-                return PortletRole.GUEST;
-            }
-            return entry.getRole();
+        GroupEntry entry = getGroupEntry(user, group);
+        if (entry == null) {
+            return PortletRole.GUEST;
+        }
+        return entry.getRole();
         //}
     }
 
@@ -449,7 +450,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         List supers = new Vector();
         Iterator it = users.iterator();
         while (it.hasNext()) {
-            User u = (User)it.next();
+            User u = (User) it.next();
             if (this.hasRoleInGroup(u, SportletGroup.CORE, PortletRole.SUPER)) {
                 supers.add(u);
             }

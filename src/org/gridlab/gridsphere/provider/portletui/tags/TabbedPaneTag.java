@@ -4,19 +4,18 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.provider.portletui.beans.TabbedPaneBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TabBean;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.provider.portletui.beans.TabBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TabbedPaneBean;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import java.util.List;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * A <code>TableTag</code> represents a table element and is defined by a <code>DefaultTableModel</code>
@@ -117,7 +116,7 @@ public class TabbedPaneTag extends BaseComponentTag {
 
             // make sure currentTab is active
             for (int i = 0; i < tabBeans.size(); i++) {
-                TabBean tabBean = (TabBean)tabBeans.get(i);
+                TabBean tabBean = (TabBean) tabBeans.get(i);
                 if (currentTab == i) {
                     tabBean.setActive(true);
                 } else {
@@ -131,7 +130,7 @@ public class TabbedPaneTag extends BaseComponentTag {
             w.print("<tr>");
             int twidth = 100;
             if (width.endsWith("%")) {
-                twidth = Integer.valueOf(width.substring(0, width.length()-1)).intValue();
+                twidth = Integer.valueOf(width.substring(0, width.length() - 1)).intValue();
             } else {
                 twidth = Integer.valueOf(width).intValue();
             }
@@ -139,7 +138,7 @@ public class TabbedPaneTag extends BaseComponentTag {
             int tabwidth = twidth / tabBeans.size();
             for (int i = 0; i < tabBeans.size(); i++) {
                 w.print("<td width=\"" + tabwidth + "%\">");
-                TabBean tabBean = (TabBean)tabBeans.get(i);
+                TabBean tabBean = (TabBean) tabBeans.get(i);
                 String target = paneId + i;
                 if (tabBean.getActive()) {
                     w.print("<a name=" + target + ">" + tabBean.getTitle() + "</a>");
@@ -160,7 +159,7 @@ public class TabbedPaneTag extends BaseComponentTag {
 
             // second include active tab page
             for (int i = 0; i < tabBeans.size(); i++) {
-                TabBean tabBean = (TabBean)tabBeans.get(i);
+                TabBean tabBean = (TabBean) tabBeans.get(i);
                 if (tabBean.getActive()) {
                     String jspPage = tabBean.getPage();
                     System.err.println("jsp page=" + jspPage);

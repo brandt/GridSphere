@@ -13,17 +13,17 @@ import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
 import org.gridlab.gridsphere.provider.portletui.beans.HiddenFieldBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
-import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
+import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 
 import javax.servlet.UnavailableException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Iterator;
 
 public class UserManagerPortlet extends ActionPortlet {
 
@@ -45,10 +45,10 @@ public class UserManagerPortlet extends ActionPortlet {
         super.init(config);
         log.debug("Entering initServices()");
         try {
-            this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
-            this.aclManagerService = (AccessControlManagerService)config.getContext().getService(AccessControlManagerService.class);
-            this.passwordManagerService = (PasswordManagerService)config.getContext().getService(PasswordManagerService.class);
-            this.portalConfigService = (PortalConfigService)getPortletConfig().getContext().getService(PortalConfigService.class);
+            this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
+            this.aclManagerService = (AccessControlManagerService) config.getContext().getService(AccessControlManagerService.class);
+            this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
+            this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -271,7 +271,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
         // If user already exists and password unchanged, no problem
         if (passwordValue.length() == 0 &&
-                   confirmPasswordValue.length() == 0) {
+                confirmPasswordValue.length() == 0) {
             if (newuser) {
                 message.append(this.getLocalizedText(req, "USER_PASSWORD_BLANK") + "<br>");
                 return true;
@@ -358,7 +358,7 @@ public class UserManagerPortlet extends ActionPortlet {
             Set groups = portalConfigService.getPortalConfigSettings().getDefaultGroups();
             Iterator it = groups.iterator();
             while (it.hasNext()) {
-                PortletGroup group = (PortletGroup)it.next();
+                PortletGroup group = (PortletGroup) it.next();
                 GroupRequest groupRequest = this.aclManagerService.createGroupEntry();
                 groupRequest.setUser(user);
                 groupRequest.setRole(selectedRole);
@@ -402,7 +402,7 @@ public class UserManagerPortlet extends ActionPortlet {
             return PortletRole.USER;
         } else {
             // Otherwise, return the first selected value
-            String userRoleItem = (String)userRoleList.get(0);
+            String userRoleItem = (String) userRoleList.get(0);
             log.debug("Selected role was " + userRoleItem);
             return PortletRole.toPortletRole(userRoleItem);
         }

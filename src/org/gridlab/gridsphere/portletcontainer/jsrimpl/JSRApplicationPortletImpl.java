@@ -6,29 +6,27 @@ package org.gridlab.gridsphere.portletcontainer.jsrimpl;
 
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.jsrimpl.PortalContextImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-
+import org.gridlab.gridsphere.portlet.jsrimpl.PortalContextImpl;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDispatcher;
-
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
 
+import javax.portlet.PortalContext;
+import javax.portlet.Portlet;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
-import javax.portlet.Portlet;
-import javax.portlet.PortalContext;
-import java.util.*;
 import java.net.URLEncoder;
+import java.util.*;
 
 /**
  * The <code>ApplicationPortletImpl</code> is an implementation of the <code>ApplicationPortlet</code> interface
  * that uses Castor for XML to Java data bindings.
- * <p>
+ * <p/>
  * The <code>ApplicationPortlet</code> represents the portlet application instance
  * defined in the portlet descriptor file.
  */
@@ -51,15 +49,16 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
     /**
      * Default constructor is private
      */
-    private JSRApplicationPortletImpl() {}
+    private JSRApplicationPortletImpl() {
+    }
 
     /**
      * Constructs an instance of ApplicationPortletImpl
      *
-     * @param pdd the <code>PortletDeploymentDescriptor</code>
-     * @param portletDef the portlet definition
+     * @param pdd            the <code>PortletDeploymentDescriptor</code>
+     * @param portletDef     the portlet definition
      * @param webApplication the ui application name for this application portlet
-     * @param context the <code>ServletContext</code> containing this application portlet
+     * @param context        the <code>ServletContext</code> containing this application portlet
      */
     public JSRApplicationPortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, String servletName, String webApplication, ServletContext context) throws PortletException {
         this.portletDef = portletDef;
@@ -68,7 +67,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         this.portletClassName = portletDef.getPortletClass().getContent();
         this.portletName = portletDef.getPortletName().getContent();
         this.context = context;
-   
+
         SupportedLocale[] locales = portletDef.getSupportedLocale();
         supportedLocales = new Locale[locales.length];
         for (int i = 0; i < locales.length; i++) {
@@ -120,14 +119,14 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
      * portlet
      *
      * @param concretePortletID the concrete portlet ID associated with this
-     * <code>ApplicationPortlet</code>
+     *                          <code>ApplicationPortlet</code>
      * @return the <code>ConcretePortlet</code> associated with this
-     * application portlet
+     *         application portlet
      */
     public ConcretePortlet getConcretePortlet(String concretePortletID) {
         Iterator it = concPortlets.iterator();
         while (it.hasNext()) {
-            ConcretePortlet conc = (ConcretePortlet)it.next();
+            ConcretePortlet conc = (ConcretePortlet) it.next();
             if (conc.getConcretePortletID().equals(concretePortletID)) return conc;
         }
         return null;
@@ -153,14 +152,14 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         return webAppName;
     }
 
-     /**
+    /**
      * Returns the id of a PortletApplication
      *
      * @return the id of the PortletApplication
      */
     public String getApplicationPortletID() {
         return portletClassName;
-     }
+    }
 
     /**
      * Returns a PortletDispatcher for this ApplicationPortlet
@@ -170,10 +169,10 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
     public PortletDispatcher getPortletDispatcher(org.gridlab.gridsphere.portlet.PortletRequest req, org.gridlab.gridsphere.portlet.PortletResponse res) {
 
         //System.err.println("in getPortletDispatcher: cid=" + req.getAttribute(SportletProperties.COMPONENT_ID));
-        String cid = (String)req.getAttribute(SportletProperties.COMPONENT_ID);
+        String cid = (String) req.getAttribute(SportletProperties.COMPONENT_ID);
 
         // TODO fix my hack to get any render params and pass them as queryInfo to the portlet
-        Map params = (Map)req.getAttribute("renderParams" + "_" + portletClassName + "_" + cid);
+        Map params = (Map) req.getAttribute("renderParams" + "_" + portletClassName + "_" + cid);
         String extraInfo = "";
 
         if (params == null) {
@@ -193,18 +192,18 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
             } else {
                 extraInfo += "?";
             }
-            String name = (String)it.next();
+            String name = (String) it.next();
 
             String encname = URLEncoder.encode(name);
             Object val = params.get(name);
             if (val instanceof String[]) {
-                String[] vals = (String[])val;
+                String[] vals = (String[]) val;
                 for (int j = 0; j < vals.length - 1; j++) {
                     String encvalue = URLEncoder.encode(vals[j]);
                     extraInfo += encname + "=" + encvalue + "&";
                 }
-                String encvalue = URLEncoder.encode(vals[vals.length-1]);
-                extraInfo +=  encname + "=" + encvalue;
+                String encvalue = URLEncoder.encode(vals[vals.length - 1]);
+                extraInfo += encname + "=" + encvalue;
             } else if (val instanceof String) {
                 String aval = (String) params.get(name);
                 if ((aval != null) && (!aval.equals(""))) {
@@ -219,12 +218,12 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
 
 
         // before it adds ".1" to real webappName
-        String realWebAppName = webAppName.substring(0,webAppName.length() - 2);
+        String realWebAppName = webAppName.substring(0, webAppName.length() - 2);
 
        
         //System.err.println("in getPortletDispatcher of jsr query string " + "/jsr/" + realWebAppName  + extraInfo);
         // TODO change dangerously hardcoded value!!!
-        RequestDispatcher rd = context.getRequestDispatcher("/jsr/" + realWebAppName  + extraInfo);
+        RequestDispatcher rd = context.getRequestDispatcher("/jsr/" + realWebAppName + extraInfo);
         //RequestDispatcher rd = context.getNamedDispatcher(servletName);
 
         if (rd == null) {

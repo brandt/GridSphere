@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -18,17 +18,16 @@ import java.util.ArrayList;
 
 /**
  * The init-param element contains a name/value pair as an
- *  initialization param of the portlet
- *  Used in:portlet
- *
+ * initialization param of the portlet
+ * Used in:portlet
  *
  * @version $Revision$ $Date$
  */
 public class InitParamType implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -52,8 +51,8 @@ public class InitParamType implements java.io.Serializable {
     private org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value _value;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public InitParamType() {
@@ -62,8 +61,8 @@ public class InitParamType implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.InitParamType()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
@@ -72,8 +71,7 @@ public class InitParamType implements java.io.Serializable {
      * @param vDescription
      */
     public void addDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _descriptionList.add(vDescription);
     } //-- void addDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
@@ -84,24 +82,21 @@ public class InitParamType implements java.io.Serializable {
      * @param vDescription
      */
     public void addDescription(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _descriptionList.add(index, vDescription);
     } //-- void addDescription(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method clearDescription
      */
-    public void clearDescription()
-    {
+    public void clearDescription() {
         _descriptionList.clear();
     } //-- void clearDescription()
 
     /**
      * Method enumerateDescription
      */
-    public java.util.Enumeration enumerateDescription()
-    {
+    public java.util.Enumeration enumerateDescription() {
         return new org.exolab.castor.util.IteratorEnumeration(_descriptionList.iterator());
     } //-- java.util.Enumeration enumerateDescription()
 
@@ -111,8 +106,7 @@ public class InitParamType implements java.io.Serializable {
      * @param index
      */
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description getDescription(int index)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _descriptionList.size())) {
             throw new IndexOutOfBoundsException();
@@ -124,8 +118,7 @@ public class InitParamType implements java.io.Serializable {
     /**
      * Method getDescription
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] getDescription()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] getDescription() {
         int size = _descriptionList.size();
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] mArray = new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[size];
         for (int index = 0; index < size; index++) {
@@ -137,8 +130,7 @@ public class InitParamType implements java.io.Serializable {
     /**
      * Method getDescriptionCount
      */
-    public int getDescriptionCount()
-    {
+    public int getDescriptionCount() {
         return _descriptionList.size();
     } //-- int getDescriptionCount()
 
@@ -147,8 +139,7 @@ public class InitParamType implements java.io.Serializable {
      *
      * @return the value of field 'id'.
      */
-    public java.lang.String getId()
-    {
+    public java.lang.String getId() {
         return this._id;
     } //-- java.lang.String getId()
 
@@ -157,8 +148,7 @@ public class InitParamType implements java.io.Serializable {
      *
      * @return the value of field 'name'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name getName()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name getName() {
         return this._name;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Name getName()
 
@@ -167,20 +157,17 @@ public class InitParamType implements java.io.Serializable {
      *
      * @return the value of field 'value'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value getValue()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value getValue() {
         return this._value;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Value getValue()
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -192,8 +179,7 @@ public class InitParamType implements java.io.Serializable {
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer)
@@ -204,8 +190,7 @@ public class InitParamType implements java.io.Serializable {
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler)
@@ -215,8 +200,7 @@ public class InitParamType implements java.io.Serializable {
      *
      * @param vDescription
      */
-    public boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription)
-    {
+    public boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription) {
         boolean removed = _descriptionList.remove(vDescription);
         return removed;
     } //-- boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
@@ -228,8 +212,7 @@ public class InitParamType implements java.io.Serializable {
      * @param vDescription
      */
     public void setDescription(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description vDescription)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _descriptionList.size())) {
             throw new IndexOutOfBoundsException();
@@ -242,8 +225,7 @@ public class InitParamType implements java.io.Serializable {
      *
      * @param descriptionArray
      */
-    public void setDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] descriptionArray)
-    {
+    public void setDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] descriptionArray) {
         //-- copy array
         _descriptionList.clear();
         for (int i = 0; i < descriptionArray.length; i++) {
@@ -256,8 +238,7 @@ public class InitParamType implements java.io.Serializable {
      *
      * @param id the value of field 'id'.
      */
-    public void setId(java.lang.String id)
-    {
+    public void setId(java.lang.String id) {
         this._id = id;
     } //-- void setId(java.lang.String)
 
@@ -266,8 +247,7 @@ public class InitParamType implements java.io.Serializable {
      *
      * @param name the value of field 'name'.
      */
-    public void setName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name name)
-    {
+    public void setName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name name) {
         this._name = name;
     } //-- void setName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Name)
 
@@ -276,8 +256,7 @@ public class InitParamType implements java.io.Serializable {
      *
      * @param value the value of field 'value'.
      */
-    public void setValue(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value value)
-    {
+    public void setValue(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value value) {
         this._value = value;
     } //-- void setValue(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Value)
 
@@ -287,8 +266,7 @@ public class InitParamType implements java.io.Serializable {
      * @param reader
      */
     public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.InitParamType) Unmarshaller.unmarshal(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.InitParamType.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader)
 
@@ -296,8 +274,7 @@ public class InitParamType implements java.io.Serializable {
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate()

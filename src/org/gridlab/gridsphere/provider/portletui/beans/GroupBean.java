@@ -5,7 +5,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
  */
 public class GroupBean extends BeanContainer implements TagBean {
 
-    private String label= null;
+    private String label = null;
     private String height = null;
     private String width = null;
 
@@ -36,13 +36,13 @@ public class GroupBean extends BeanContainer implements TagBean {
 
     public String toStartString() {
 
-        if (width!=null) this.addCssStyle(" width=\""+width+"\" ");
-        if (height!=null) this.addCssStyle(" height=\""+height+"\" ");
+        if (width != null) this.addCssStyle(" width=\"" + width + "\" ");
+        if (height != null) this.addCssStyle(" height=\"" + height + "\" ");
 
         StringBuffer sb = new StringBuffer();
-        sb.append("<fieldset"+getFormattedCss()+">");
-        if (this.label!=null) {
-            sb.append("<legend>"+label+"</legend>");
+        sb.append("<fieldset" + getFormattedCss() + ">");
+        if (this.label != null) {
+            sb.append("<legend>" + label + "</legend>");
         }
         return sb.toString();
     }

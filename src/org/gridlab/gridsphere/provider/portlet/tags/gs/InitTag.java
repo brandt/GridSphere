@@ -16,7 +16,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagSupport;
 
 /**
@@ -29,13 +28,13 @@ public class InitTag extends TagSupport {
         ServletRequest req = pageContext.getRequest();
         PortletRequest portletRequest = null;
         if (req instanceof HttpServletRequest) {
-            HttpServletRequest hReq = (HttpServletRequest)req;
+            HttpServletRequest hReq = (HttpServletRequest) req;
             portletRequest = new SportletRequestImpl(hReq);
             pageContext.setAttribute("portletRequest", portletRequest);
         }
         ServletResponse res = pageContext.getResponse();
         if (res instanceof HttpServletResponse) {
-            HttpServletResponse hRes = (HttpServletResponse)res;
+            HttpServletResponse hRes = (HttpServletResponse) res;
             PortletResponse portletResponse = new SportletResponse(hRes, portletRequest);
             pageContext.setAttribute("portletResponse", portletResponse);
         }

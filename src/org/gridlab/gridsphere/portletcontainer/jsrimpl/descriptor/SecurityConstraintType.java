@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -18,17 +18,16 @@ import java.util.ArrayList;
 
 /**
  * The security-constraintType is used to associate
- *  intended security constraints with one or more portlets.
- *  Used in: portlet-app
- *
+ * intended security constraints with one or more portlets.
+ * Used in: portlet-app
  *
  * @version $Revision$ $Date$
  */
 public class SecurityConstraintType implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -52,8 +51,8 @@ public class SecurityConstraintType implements java.io.Serializable {
     private org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraint _userDataConstraint;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public SecurityConstraintType() {
@@ -62,8 +61,8 @@ public class SecurityConstraintType implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraintType()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
@@ -72,8 +71,7 @@ public class SecurityConstraintType implements java.io.Serializable {
      * @param vDisplayName
      */
     public void addDisplayName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName vDisplayName)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _displayNameList.add(vDisplayName);
     } //-- void addDisplayName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayName)
 
@@ -84,24 +82,21 @@ public class SecurityConstraintType implements java.io.Serializable {
      * @param vDisplayName
      */
     public void addDisplayName(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName vDisplayName)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         _displayNameList.add(index, vDisplayName);
     } //-- void addDisplayName(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayName)
 
     /**
      * Method clearDisplayName
      */
-    public void clearDisplayName()
-    {
+    public void clearDisplayName() {
         _displayNameList.clear();
     } //-- void clearDisplayName()
 
     /**
      * Method enumerateDisplayName
      */
-    public java.util.Enumeration enumerateDisplayName()
-    {
+    public java.util.Enumeration enumerateDisplayName() {
         return new org.exolab.castor.util.IteratorEnumeration(_displayNameList.iterator());
     } //-- java.util.Enumeration enumerateDisplayName()
 
@@ -111,8 +106,7 @@ public class SecurityConstraintType implements java.io.Serializable {
      * @param index
      */
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName getDisplayName(int index)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _displayNameList.size())) {
             throw new IndexOutOfBoundsException();
@@ -124,8 +118,7 @@ public class SecurityConstraintType implements java.io.Serializable {
     /**
      * Method getDisplayName
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName[] getDisplayName()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName[] getDisplayName() {
         int size = _displayNameList.size();
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName[] mArray = new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName[size];
         for (int index = 0; index < size; index++) {
@@ -137,8 +130,7 @@ public class SecurityConstraintType implements java.io.Serializable {
     /**
      * Method getDisplayNameCount
      */
-    public int getDisplayNameCount()
-    {
+    public int getDisplayNameCount() {
         return _displayNameList.size();
     } //-- int getDisplayNameCount()
 
@@ -147,8 +139,7 @@ public class SecurityConstraintType implements java.io.Serializable {
      *
      * @return the value of field 'id'.
      */
-    public java.lang.String getId()
-    {
+    public java.lang.String getId() {
         return this._id;
     } //-- java.lang.String getId()
 
@@ -157,8 +148,7 @@ public class SecurityConstraintType implements java.io.Serializable {
      *
      * @return the value of field 'portletCollection'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletCollection getPortletCollection()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletCollection getPortletCollection() {
         return this._portletCollection;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletCollection getPortletCollection()
 
@@ -167,20 +157,17 @@ public class SecurityConstraintType implements java.io.Serializable {
      *
      * @return the value of field 'userDataConstraint'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraint getUserDataConstraint()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraint getUserDataConstraint() {
         return this._userDataConstraint;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserDataConstraint getUserDataConstraint()
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -192,8 +179,7 @@ public class SecurityConstraintType implements java.io.Serializable {
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer)
@@ -204,8 +190,7 @@ public class SecurityConstraintType implements java.io.Serializable {
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler)
@@ -215,8 +200,7 @@ public class SecurityConstraintType implements java.io.Serializable {
      *
      * @param vDisplayName
      */
-    public boolean removeDisplayName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName vDisplayName)
-    {
+    public boolean removeDisplayName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName vDisplayName) {
         boolean removed = _displayNameList.remove(vDisplayName);
         return removed;
     } //-- boolean removeDisplayName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayName)
@@ -228,8 +212,7 @@ public class SecurityConstraintType implements java.io.Serializable {
      * @param vDisplayName
      */
     public void setDisplayName(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName vDisplayName)
-        throws java.lang.IndexOutOfBoundsException
-    {
+            throws java.lang.IndexOutOfBoundsException {
         //-- check bounds for index
         if ((index < 0) || (index > _displayNameList.size())) {
             throw new IndexOutOfBoundsException();
@@ -242,8 +225,7 @@ public class SecurityConstraintType implements java.io.Serializable {
      *
      * @param displayNameArray
      */
-    public void setDisplayName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName[] displayNameArray)
-    {
+    public void setDisplayName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName[] displayNameArray) {
         //-- copy array
         _displayNameList.clear();
         for (int i = 0; i < displayNameArray.length; i++) {
@@ -256,8 +238,7 @@ public class SecurityConstraintType implements java.io.Serializable {
      *
      * @param id the value of field 'id'.
      */
-    public void setId(java.lang.String id)
-    {
+    public void setId(java.lang.String id) {
         this._id = id;
     } //-- void setId(java.lang.String)
 
@@ -265,10 +246,9 @@ public class SecurityConstraintType implements java.io.Serializable {
      * Sets the value of field 'portletCollection'.
      *
      * @param portletCollection the value of field
-     * 'portletCollection'.
+     *                          'portletCollection'.
      */
-    public void setPortletCollection(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletCollection portletCollection)
-    {
+    public void setPortletCollection(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletCollection portletCollection) {
         this._portletCollection = portletCollection;
     } //-- void setPortletCollection(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletCollection)
 
@@ -276,10 +256,9 @@ public class SecurityConstraintType implements java.io.Serializable {
      * Sets the value of field 'userDataConstraint'.
      *
      * @param userDataConstraint the value of field
-     * 'userDataConstraint'.
+     *                           'userDataConstraint'.
      */
-    public void setUserDataConstraint(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraint userDataConstraint)
-    {
+    public void setUserDataConstraint(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraint userDataConstraint) {
         this._userDataConstraint = userDataConstraint;
     } //-- void setUserDataConstraint(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserDataConstraint)
 
@@ -289,8 +268,7 @@ public class SecurityConstraintType implements java.io.Serializable {
      * @param reader
      */
     public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraintType) Unmarshaller.unmarshal(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraintType.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader)
 
@@ -298,8 +276,7 @@ public class SecurityConstraintType implements java.io.Serializable {
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate()

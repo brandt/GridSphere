@@ -6,22 +6,17 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabEvent;
-import org.gridlab.gridsphere.layout.event.PortletTabListener;
 import org.gridlab.gridsphere.layout.event.impl.PortletTabEventImpl;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * A <code>PortletTab</code> represents the visual tab graphical interface and is contained
@@ -41,12 +36,12 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      */
     public PortletTab() {
     }
-    
+
     /**
      * Constructs an instance of PortletTab with the supplied title and
      * portlet component.
      *
-     * @param titles the titles of the portlet tab
+     * @param titles           the titles of the portlet tab
      * @param portletComponent any portlet component to represent beneath the tab
      */
     public PortletTab(List titles, PortletComponent portletComponent) {
@@ -95,7 +90,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         Iterator it = titles.iterator();
         String defTitle = title;
         while (it.hasNext()) {
-            PortletTitle t = (PortletTitle)it.next();
+            PortletTitle t = (PortletTitle) it.next();
             if (t.getLang() == null) t.setLang(Locale.ENGLISH.getLanguage());
             if (lang.equals(t.getLang())) return t.getText();
             if (t.getLang().regionMatches(0, lang, 0, 2)) return t.getText();
@@ -111,7 +106,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         if (title == null) throw new IllegalArgumentException("title is NULL");
 
         while (it.hasNext()) {
-            PortletTitle t = (PortletTitle)it.next();
+            PortletTitle t = (PortletTitle) it.next();
             if (lang.equalsIgnoreCase(t.getLang())) {
                 found = true;
                 t.setText(title);
@@ -126,7 +121,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     }
 
     /**
-     *  Creates the portlet tab title links that are rendered by the
+     * Creates the portlet tab title links that are rendered by the
      * {@link PortletTabbedPane}
      *
      * @param event the gridsphere event
@@ -216,7 +211,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
 
@@ -226,7 +221,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         PortletTabEvent tabEvent = new PortletTabEventImpl(this, event.getPortletRequest(), PortletTabEvent.TabAction.TAB_SELECTED, COMPONENT_ID);
         List l = Collections.synchronizedList(listeners);
 
-        synchronized(l) {
+        synchronized (l) {
             Iterator it = l.iterator();
             PortletComponent comp;
             while (it.hasNext()) {
@@ -242,7 +237,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRole userRole = event.getPortletRequest().getRole();
@@ -252,14 +247,14 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletTab t = (PortletTab)super.clone();
-        t.portletComponent = (this.portletComponent == null) ? null : (PortletComponent)this.portletComponent.clone();
+        PortletTab t = (PortletTab) super.clone();
+        t.portletComponent = (this.portletComponent == null) ? null : (PortletComponent) this.portletComponent.clone();
         t.selected = this.selected;
         List stitles = Collections.synchronizedList(titles);
         synchronized (stitles) {
             t.titles = new ArrayList(stitles.size());
             for (int i = 0; i < stitles.size(); i++) {
-                PortletTitle title = (PortletTitle)stitles.get(i);
+                PortletTitle title = (PortletTitle) stitles.get(i);
                 t.titles.add(title.clone());
             }
         }

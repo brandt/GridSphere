@@ -30,7 +30,7 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      * portal event and the portlet title bar component id
      *
      * @param event the GridSphereEvent
-     * @param id the portlet title bar component id
+     * @param id    the portlet title bar component id
      */
     public PortletTitleBarEventImpl(PortletTitleBar titleBar, GridSphereEvent event, int id) {
         this.titleBar = titleBar;

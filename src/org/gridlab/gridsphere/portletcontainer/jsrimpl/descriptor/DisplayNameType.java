@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -16,25 +16,24 @@ import org.exolab.castor.xml.Unmarshaller;
 
 /**
  * The display-name type contains a short name that is intended
- *  to be displayed by tools. It is used by display-name
- *  elements. The display name need not be unique.
- *  Example:
- *  ...
- *  Employee Self Service
- *
- *  It has an optional attribute xml:lang to indicate
- *  which language is used in the description according to
- *  RFC 1766 (http://www.ietf.org/rfc/rfc1766.txt). The default
- *  value of this attribute is English(“en”).
- *
+ * to be displayed by tools. It is used by display-name
+ * elements. The display name need not be unique.
+ * Example:
+ * ...
+ * Employee Self Service
+ * <p/>
+ * It has an optional attribute xml:lang to indicate
+ * which language is used in the description according to
+ * RFC 1766 (http://www.ietf.org/rfc/rfc1766.txt). The default
+ * value of this attribute is English(“en”).
  *
  * @version $Revision$ $Date$
  */
 public class DisplayNameType implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -45,13 +44,13 @@ public class DisplayNameType implements java.io.Serializable {
     /**
      * In due course, we should install the relevant ISO 2- and
      * 3-letter
-     *  codes as the enumerated possible values . . .
+     * codes as the enumerated possible values . . .
      */
     private java.lang.String _lang;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public DisplayNameType() {
@@ -60,8 +59,8 @@ public class DisplayNameType implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayNameType()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
@@ -70,8 +69,7 @@ public class DisplayNameType implements java.io.Serializable {
      *
      * @return the value of field 'content'.
      */
-    public java.lang.String getContent()
-    {
+    public java.lang.String getContent() {
         return this._content;
     } //-- java.lang.String getContent()
 
@@ -79,24 +77,21 @@ public class DisplayNameType implements java.io.Serializable {
      * Returns the value of field 'lang'. The field 'lang' has the
      * following description: In due course, we should install the
      * relevant ISO 2- and 3-letter
-     *  codes as the enumerated possible values . . .
+     * codes as the enumerated possible values . . .
      *
      * @return the value of field 'lang'.
      */
-    public java.lang.String getLang()
-    {
+    public java.lang.String getLang() {
         return this._lang;
     } //-- java.lang.String getLang()
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -108,8 +103,7 @@ public class DisplayNameType implements java.io.Serializable {
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer)
@@ -120,8 +114,7 @@ public class DisplayNameType implements java.io.Serializable {
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
 
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler)
@@ -132,8 +125,7 @@ public class DisplayNameType implements java.io.Serializable {
      *
      * @param content the value of field 'content'.
      */
-    public void setContent(java.lang.String content)
-    {
+    public void setContent(java.lang.String content) {
         this._content = content;
     } //-- void setContent(java.lang.String)
 
@@ -141,12 +133,11 @@ public class DisplayNameType implements java.io.Serializable {
      * Sets the value of field 'lang'. The field 'lang' has the
      * following description: In due course, we should install the
      * relevant ISO 2- and 3-letter
-     *  codes as the enumerated possible values . . .
+     * codes as the enumerated possible values . . .
      *
      * @param lang the value of field 'lang'.
      */
-    public void setLang(java.lang.String lang)
-    {
+    public void setLang(java.lang.String lang) {
         this._lang = lang;
     } //-- void setLang(java.lang.String)
 
@@ -156,8 +147,7 @@ public class DisplayNameType implements java.io.Serializable {
      * @param reader
      */
     public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayNameType) Unmarshaller.unmarshal(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayNameType.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader)
 
@@ -165,8 +155,7 @@ public class DisplayNameType implements java.io.Serializable {
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate()

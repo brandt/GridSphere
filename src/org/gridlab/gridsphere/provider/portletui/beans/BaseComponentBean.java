@@ -84,6 +84,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
 
     /**
      * Sets the key used to identify localized text
+     *
      * @param key the key used to identify localized text
      */
     public void setKey(String key) {
@@ -92,6 +93,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
 
     /**
      * Returns true if bean is in disabled state.
+     *
      * @return state
      */
     public boolean isDisabled() {
@@ -212,6 +214,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
 
     /**
      * Returns the current css class of the element.
+     *
      * @return css class of the element
      */
     public String getCssClass() {
@@ -220,6 +223,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
 
     /**
      * Sets the css class of the element. If null nothing will be changed.
+     *
      * @param cssClass
      */
     public void setCssClass(String cssClass) {
@@ -228,6 +232,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
 
     /**
      * Returns the formatted css commands for inserting into html components.
+     *
      * @return formatted css string for style/class attribute
      */
     protected String getFormattedCss() {
@@ -243,6 +248,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
 
     /**
      * Adds a css style to the exiting style.
+     *
      * @param style style to be added
      */
     public void addCssStyle(String style) {

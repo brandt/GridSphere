@@ -6,8 +6,8 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
 import java.util.*;
 
@@ -37,7 +37,7 @@ public class SportletURI implements PortletURI {
      * Constructs a SportletURI from a <code>HttpServletResponse</code> and a
      * context path obtained from a <code>HttpServletRequest</code>
      *
-     * @param res a <code>HttpServletResponse</code>
+     * @param res         a <code>HttpServletResponse</code>
      * @param contextPath the request context path
      */
     public SportletURI(HttpServletRequest req, HttpServletResponse res, String contextPath) {
@@ -57,7 +57,7 @@ public class SportletURI implements PortletURI {
      * Constructs a SportletURI from a <code>HttpServletResponse</code> and a
      * context path obtained from a <code>HttpServletRequest</code>
      *
-     * @param res a <code>HttpServletResponse</code>
+     * @param res         a <code>HttpServletResponse</code>
      * @param contextPath the request context path
      */
     public SportletURI(HttpServletRequest req, HttpServletResponse res, String contextPath, boolean isSecure) {
@@ -78,7 +78,7 @@ public class SportletURI implements PortletURI {
      * Determines if the generated URI should be referring back to itself
      *
      * @param redirect <code>true</code> if the generated URI should be
-     * redirected, <code>false</code> otherwise
+     *                 redirected, <code>false</code> otherwise
      */
     public void setReturn(boolean redirect) {
         this.redirect = redirect;
@@ -89,7 +89,7 @@ public class SportletURI implements PortletURI {
      * prefix the attribute names internally, to preserve a unique namespace
      * for the portlet.
      *
-     * @param name the parameter name
+     * @param name  the parameter name
      * @param value the parameter value
      */
     public void addParameter(String name, String value) {
@@ -102,6 +102,7 @@ public class SportletURI implements PortletURI {
 
     /**
      * Removes the given parameter from this URI.
+     *
      * @param name
      */
     public void removeParameter(String name) {
@@ -127,7 +128,7 @@ public class SportletURI implements PortletURI {
      * implementation of the portlet action interface. It can carry any information.
      * How the information is recovered should the next request be for this URI is
      * at the discretion of the portlet container.
-     * <p>
+     * <p/>
      * Unless the ActionListener interface is implemented at the portlet this
      * action will not be delivered.
      *
@@ -202,7 +203,7 @@ public class SportletURI implements PortletURI {
         while (it.hasNext()) {
             if (!firstParam)
                 url += "&";
-            String name = (String)it.next();
+            String name = (String) it.next();
 
             String encname = URLEncoder.encode(name);
             String val = (String) store.get(name);

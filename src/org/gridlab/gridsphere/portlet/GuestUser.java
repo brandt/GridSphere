@@ -65,7 +65,7 @@ public class GuestUser implements User {
     /**
      * Sets the value of the attribute with the given name.
      *
-     * @param name the attribute name
+     * @param name  the attribute name
      * @param value the attribute value
      */
     public void setAttribute(String name, Object value) {

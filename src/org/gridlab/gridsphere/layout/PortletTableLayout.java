@@ -6,19 +6,15 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
-import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
-import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.*;
 
 /**
@@ -32,7 +28,9 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
     protected static final String PORTLET_ADD_ACTION = "gs_addPortlet";
     protected static final String PORTLET_NO_ACTION = "gs_none";
 
-    /** css Style of the table */
+    /**
+     * css Style of the table
+     */
     protected String style = null;
 
 
@@ -70,12 +68,12 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
     private PortletComponent getMaximizedComponent(List components) {
         PortletComponent p = null;
         List scomponents = Collections.synchronizedList(components);
-        synchronized(scomponents) {
-            for (int i=0;i<scomponents.size();i++) {
-                p = (PortletComponent)scomponents.get(i);
+        synchronized (scomponents) {
+            for (int i = 0; i < scomponents.size(); i++) {
+                p = (PortletComponent) scomponents.get(i);
                 if (p instanceof PortletLayout) {
-                    PortletComponent layout = this.getMaximizedComponent(((PortletLayout)p).getPortletComponents());
-                    if (layout!=null) {
+                    PortletComponent layout = this.getMaximizedComponent(((PortletLayout) p).getPortletComponents());
+                    if (layout != null) {
                         p = layout;
                     }
                 }
@@ -100,15 +98,15 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
 
         // first loop thru rows to see if one is empty for the requested column
         if (!components.isEmpty()) {
-            Object o  = components.get(0);
+            Object o = components.get(0);
             if (o instanceof PortletFrameLayout) {
-                PortletFrameLayout r = (PortletFrameLayout)o;
+                PortletFrameLayout r = (PortletFrameLayout) o;
                 List cols = r.getPortletComponents();
 
                 Object c = cols.get(col);
 
                 if (c instanceof PortletFrameLayout) {
-                    PortletFrameLayout existingColumn = (PortletFrameLayout)c;
+                    PortletFrameLayout existingColumn = (PortletFrameLayout) c;
 
                     if (!portletClass.equals("")) {
                         PortletFrame frame = new PortletFrame();
@@ -123,12 +121,12 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
     }
 
     public void customActionPerformed(GridSphereEvent event) throws
-               PortletLayoutException, IOException {
+            PortletLayoutException, IOException {
 
         if (event.hasAction()) {
-           if (event.getAction().getName().equals(PORTLET_ADD_ACTION)) {
-               addPortlet(event);
-           }
+            if (event.getAction().getName().equals(PORTLET_ADD_ACTION)) {
+                addPortlet(event);
+            }
         }
     }
 
@@ -155,12 +153,12 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
         */
         List scomponents = Collections.synchronizedList(components);
-        synchronized(scomponents) {
-            for (int i=0;i<scomponents.size();i++) {
-                p = (PortletComponent)scomponents.get(i);
+        synchronized (scomponents) {
+            for (int i = 0; i < scomponents.size(); i++) {
+                p = (PortletComponent) scomponents.get(i);
                 if (p instanceof PortletLayout) {
                     PortletComponent maxi = getMaximizedComponent(scomponents);
-                    if (maxi!=null) {
+                    if (maxi != null) {
                         out.println("<table border=\"0\" width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"><tbody><tr><td>");
                         maxi.doRender(event);
                         out.println("</td></tr></tbody></table>");
@@ -174,12 +172,12 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
 
             // starting of the gridtable
             out.println("<table ");
-            if (this.style!=null) {
-                out.print("class=\""+this.style+"\" ");
+            if (this.style != null) {
+                out.print("class=\"" + this.style + "\" ");
             }
             out.println("border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tbody>");
 
-            for (int i=0;i<scomponents.size();i++) {
+            for (int i = 0; i < scomponents.size(); i++) {
                 p = (PortletComponent) scomponents.get(i);
                 //out.println("<tr><td valign=\"top\" width=\"100%\">");
                 out.println("<tr><td valign=\"top\" width=\"" + p.getWidth() + "\">");
@@ -206,7 +204,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         if (!components.isEmpty()) {
             Object o = components.get(0);
             if (o instanceof PortletFrameLayout) {
-                PortletFrameLayout layout = (PortletRowLayout)o;
+                PortletFrameLayout layout = (PortletRowLayout) o;
                 out.println(" <!-- START ROW --> ");
                 out.println("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">");
                 out.println("<tbody><tr>");
@@ -215,7 +213,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                 for (int j = 0; j < cols.size(); j++) {
                     o = cols.get(j);
                     if (o instanceof PortletFrameLayout) {
-                        PortletFrameLayout col = (PortletFrameLayout)o;
+                        PortletFrameLayout col = (PortletFrameLayout) o;
                         out.println("<td valign=\"top\" width=\"" + col.getWidth() + "\">");
                         out.println("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
 
@@ -243,23 +241,23 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         Locale locale = req.getLocale();
         PortletRegistry registry = PortletRegistry.getInstance();
         req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
-        
+
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
         PortletURI uri = res.createURI();
         uri.addAction(PORTLET_ADD_ACTION);
 
-        Map groups = (Map)req.getAttribute(SportletProperties.PORTLETGROUPS);
+        Map groups = (Map) req.getAttribute(SportletProperties.PORTLETGROUPS);
 
         Map availPortlets = new HashMap();
         Iterator it = groups.keySet().iterator();
         while (it.hasNext()) {
-            PortletGroup g = (PortletGroup)it.next();
+            PortletGroup g = (PortletGroup) it.next();
             if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP)) continue;
             Iterator sit = g.getPortletRoleList().iterator();
-            PortletRole role = (PortletRole)groups.get(g);
+            PortletRole role = (PortletRole) groups.get(g);
             while (sit.hasNext()) {
-                SportletRoleInfo info = (SportletRoleInfo)sit.next();
+                SportletRoleInfo info = (SportletRoleInfo) sit.next();
                 String pclass = info.getPortletClass();
                 PortletRole reqRole = info.getPortletRole();
                 if (role.compare(role, reqRole) >= 0) {
@@ -295,8 +293,8 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         }
         it = availPortlets.keySet().iterator();
         while (it.hasNext()) {
-            String pclass = (String)it.next();
-            String dispName = (String)availPortlets.get(pclass);
+            String pclass = (String) it.next();
+            String dispName = (String) availPortlets.get(pclass);
             out.println("<option value=\"" + pclass + "\">" + dispName + "</option>");
         }
 
@@ -307,7 +305,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
 
 
     public Object clone() throws CloneNotSupportedException {
-        PortletTableLayout g = (PortletTableLayout)super.clone();
+        PortletTableLayout g = (PortletTableLayout) super.clone();
         g.style = this.style;
         return g;
     }

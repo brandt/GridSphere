@@ -7,7 +7,6 @@ package org.gridlab.gridsphere.portletcontainer;
 import org.gridlab.gridsphere.portlet.PortletSettings;
 
 import java.io.IOException;
-import java.util.Hashtable;
 import java.util.Locale;
 
 /**

@@ -47,7 +47,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
      * Constructs a list box bean with a supplied portlet request and bean identifier
      *
      * @param request the portlet request
-     * @param beanId the bean identifier
+     * @param beanId  the bean identifier
      */
     public ListBoxBean(HttpServletRequest request, String beanId) {
         super(NAME);
@@ -104,7 +104,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
             if (request == null) {
                 sname = "ui_" + vbName + "_" + beanId + "_" + pname;
             } else {
-                String compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+                String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
                 if (compId == null) {
                     sname = "ui_" + vbName + "_" + beanId + "_" + pname;
                 } else {
@@ -140,6 +140,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
 
     /**
      * Returns the selected value of the list. This is only useful with multiple selection disabled.
+     *
      * @return selected value of the list, null if nothing is selected
      */
     public String getSelectedValue() {
@@ -188,6 +189,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
 
     /**
      * Returns the selected values of the list.
+     *
      * @return selected values of the list
      */
     public List getSelectedValues() {
@@ -196,6 +198,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
 
     /**
      * Returns the selected names of the list
+     *
      * @return selected names of the list
      */
     public List getSelectedNames() {
@@ -204,6 +207,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
 
     /**
      * Returns the selected values of the list.
+     *
      * @return selected values of the list
      */
     public String getSelectedName() {
@@ -219,7 +223,8 @@ public class ListBoxBean extends BeanContainer implements TagBean {
 
     /**
      * Returns the selected items of the list
-     * @return  the selected item of the list
+     *
+     * @return the selected item of the list
      */
     public List getSelectedItems() {
         ArrayList result = new ArrayList();

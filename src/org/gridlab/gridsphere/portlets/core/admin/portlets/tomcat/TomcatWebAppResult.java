@@ -17,7 +17,8 @@ public class TomcatWebAppResult {
     private String description = "";
     private List webAppDescriptions = new Vector();
 
-    public TomcatWebAppResult() {}
+    public TomcatWebAppResult() {
+    }
 
     public TomcatWebAppResult(String returnCode, String description) {
         this.returnCode = returnCode;

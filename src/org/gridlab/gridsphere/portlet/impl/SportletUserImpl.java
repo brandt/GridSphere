@@ -22,7 +22,7 @@ import java.util.Map;
  * and is an abstract view on the user-specific data.
  * Apart from a set of pre-defined, fixed set of attributes,
  * the interface gives access to user profile data.
- * <p>
+ * <p/>
  * This implementation of <code>SportletUserImpl</code> uses Castor for Java to SQL
  * bindings
  */
@@ -245,7 +245,7 @@ public class SportletUserImpl implements SportletUser, HttpSessionBindingListene
     /**
      * Sets the value of the attribute with the given name,
      *
-     * @param name the attribute name
+     * @param name  the attribute name
      * @param value the attribute value
      */
     public void setAttribute(String name, String value) {

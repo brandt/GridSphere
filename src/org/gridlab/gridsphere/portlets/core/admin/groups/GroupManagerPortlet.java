@@ -3,27 +3,27 @@
 */
 package org.gridlab.gridsphere.portlets.core.admin.groups;
 
+import org.gridlab.gridsphere.layout.PortletTabRegistry;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
+import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
+import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
-import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
-import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.layout.PortletTabRegistry;
 
 import javax.servlet.UnavailableException;
 import java.util.*;
@@ -45,7 +45,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     // Portlet services
     private UserManagerService userManagerService = null;
     private AccessControlManagerService aclManagerService = null;
-    private LayoutManagerService  layoutMgr = null;
+    private LayoutManagerService layoutMgr = null;
     private PortalConfigService portalConfigService = null;
 
     private PortletManager portletMgr = null;
@@ -55,10 +55,10 @@ public class GroupManagerPortlet extends ActionPortlet {
         super.init(config);
         log.debug("Entering initServices()");
         try {
-            this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
-            this.aclManagerService = (AccessControlManagerService)this.getConfig().getContext().getService(AccessControlManagerService.class);
-            this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
-            this.portalConfigService = (PortalConfigService)getPortletConfig().getContext().getService(PortalConfigService.class);
+            this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
+            this.aclManagerService = (AccessControlManagerService) this.getConfig().getContext().getService(AccessControlManagerService.class);
+            this.layoutMgr = (LayoutManagerService) config.getContext().getService(LayoutManagerService.class);
+            this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -84,7 +84,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         List groups = aclManagerService.getGroups();
         Iterator it = groups.iterator();
         while (it.hasNext()) {
-            PortletGroup g = (PortletGroup)it.next();
+            PortletGroup g = (PortletGroup) it.next();
 
             //String desc = g.getDescription();
             if ((aclManagerService.hasAdminRoleInGroup(user, g)) && (!g.equals(PortletGroupFactory.GRIDSPHERE_GROUP))) {
@@ -115,19 +115,19 @@ public class GroupManagerPortlet extends ActionPortlet {
         Set portletRoleList = null;
         DefaultPortletAction action = event.getAction();
         if (action != null) {
-        String groupId = action.getParameter("groupID");
-        if (groupId != null) {
-            group = aclManagerService.getGroup(groupId);
-            TextFieldBean groupNameTF = event.getTextFieldBean("groupNameTF");
-            groupNameTF.setValue(group.getName());
-            TextFieldBean groupDescTF = event.getTextFieldBean("groupDescTF");
-            groupDescTF.setValue(group.getDescription());
-            if (!group.isPublic()) req.setAttribute("isPrivate", "true");
+            String groupId = action.getParameter("groupID");
+            if (groupId != null) {
+                group = aclManagerService.getGroup(groupId);
+                TextFieldBean groupNameTF = event.getTextFieldBean("groupNameTF");
+                groupNameTF.setValue(group.getName());
+                TextFieldBean groupDescTF = event.getTextFieldBean("groupDescTF");
+                groupDescTF.setValue(group.getDescription());
+                if (!group.isPublic()) req.setAttribute("isPrivate", "true");
 
-            portletRoleList = group.getPortletRoleList();
-            HiddenFieldBean gid = event.getHiddenFieldBean("groupId");
-            gid.setValue(groupId);
-        }
+                portletRoleList = group.getPortletRoleList();
+                HiddenFieldBean gid = event.getHiddenFieldBean("groupId");
+                gid.setValue(groupId);
+            }
         }
 
 
@@ -144,7 +144,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         while (it.hasNext()) {
 
 
-            String g = (String)it.next();
+            String g = (String) it.next();
 
             if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP.toString())) continue;
 
@@ -178,12 +178,12 @@ public class GroupManagerPortlet extends ActionPortlet {
             if (appColl.isEmpty()) appColl = portletRegistry.getApplicationPortlets(g);
             Iterator appIt = appColl.iterator();
             while (appIt.hasNext()) {
-                ApplicationPortlet app = (ApplicationPortlet)appIt.next();
+                ApplicationPortlet app = (ApplicationPortlet) appIt.next();
                 List concPortlets = app.getConcretePortlets();
                 Iterator cit = concPortlets.iterator();
                 while (cit.hasNext()) {
                     boolean found = false;
-                    ConcretePortlet conc = (ConcretePortlet)cit.next();
+                    ConcretePortlet conc = (ConcretePortlet) cit.next();
                     String concID = conc.getConcretePortletID();
 
                     PortletRole reqrole = conc.getConcretePortletConfig().getRequiredRole();
@@ -204,7 +204,7 @@ public class GroupManagerPortlet extends ActionPortlet {
                             Iterator pit = portletRoleList.iterator();
                             while (pit.hasNext() && (!found)) {
 
-                                SportletRoleInfo info = (SportletRoleInfo)pit.next();
+                                SportletRoleInfo info = (SportletRoleInfo) pit.next();
                                 if (info.getPortletClass().equals(concID)) {
                                     cb.setSelected(true);
                                     PortletRole reqRole = info.getPortletRole();
@@ -289,7 +289,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         Iterator it = webappNames.iterator();
         Set portletRoles = new HashSet();
         while (it.hasNext()) {
-            String g = (String)it.next();
+            String g = (String) it.next();
             if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP.toString())) {
                 continue;
             }
@@ -298,11 +298,11 @@ public class GroupManagerPortlet extends ActionPortlet {
 
             Iterator appIt = appColl.iterator();
             while (appIt.hasNext()) {
-                ApplicationPortlet app = (ApplicationPortlet)appIt.next();
+                ApplicationPortlet app = (ApplicationPortlet) appIt.next();
                 List concPortlets = app.getConcretePortlets();
                 Iterator cit = concPortlets.iterator();
                 while (cit.hasNext()) {
-                    ConcretePortlet conc = (ConcretePortlet)cit.next();
+                    ConcretePortlet conc = (ConcretePortlet) cit.next();
                     String concID = conc.getConcretePortletID();
                     ListBoxBean lb = evt.getListBoxBean(concID + "LB");
                     CheckBoxBean cb = evt.getCheckBoxBean(concID + "CB");
@@ -578,7 +578,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         tm.addTableRowBean(tr);
         Iterator it = groups.iterator();
         while (it.hasNext()) {
-            PortletGroup g = (PortletGroup)it.next();
+            PortletGroup g = (PortletGroup) it.next();
             tr = new TableRowBean();
             tc = new TableCellBean();
             CheckBoxBean cb = new CheckBoxBean();
@@ -623,7 +623,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         defaultGroups = configSettings.getDefaultGroups();
         Iterator it = groups.iterator();
         while (it.hasNext()) {
-            String name = (String)it.next();
+            String name = (String) it.next();
             PortletGroup g = aclManagerService.getGroupByName(name);
             if (g != null) defaultGroups.add(g);
         }
@@ -668,7 +668,7 @@ public class GroupManagerPortlet extends ActionPortlet {
             groupNameBean.setValue("");
             groupLabelBean.setValue("");
             groupDescBean.setValue("");
-        }  else {
+        } else {
             // Set attributes
             groupNameBean.setValue(group.getName());
             groupLabelBean.setValue(group.getLabel());
@@ -699,7 +699,7 @@ public class GroupManagerPortlet extends ActionPortlet {
             Iterator userIterator = usersNotInGroupList.iterator();
             while (userIterator.hasNext()) {
                 // Get next user
-                User user = (User)userIterator.next();
+                User user = (User) userIterator.next();
                 //String userID = user.getID();
                 String userName = user.getUserName();
 
@@ -816,7 +816,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         for (int ii = 0; ii < groupEntryIDList.size(); ++ii) {
             // Get entry to remove
-            String groupEntryID = (String)groupEntryIDList.get(ii);
+            String groupEntryID = (String) groupEntryIDList.get(ii);
             GroupEntry entry = aclManagerService.getGroupEntry(groupEntryID);
             // Remove group entry
             removeGroupEntry(entry);

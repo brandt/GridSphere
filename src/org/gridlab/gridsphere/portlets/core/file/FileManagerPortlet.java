@@ -23,7 +23,7 @@ public class FileManagerPortlet extends ActionPortlet {
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         try {
-            userStorage = (FileManagerService)config.getContext().getService(FileManagerService.class);
+            userStorage = (FileManagerService) config.getContext().getService(FileManagerService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize FileManagerService", e);
         }
@@ -72,8 +72,8 @@ public class FileManagerPortlet extends ActionPortlet {
             int size = fi.getSize();
             if (size > FileInputBean.MAX_UPLOAD_SIZE) {
                 FrameBean errMsg = event.getFrameBean("errorFrame");
-	            errMsg.setValue(this.getLocalizedText(event.getPortletRequest(), "FILE_UPLOAD_TOOBIG"));
-	            errMsg.setStyle("error");
+                errMsg.setValue(this.getLocalizedText(event.getPortletRequest(), "FILE_UPLOAD_TOOBIG"));
+                errMsg.setStyle("error");
                 return;
             }
             log.info("filename = " + fileName);
@@ -93,9 +93,9 @@ public class FileManagerPortlet extends ActionPortlet {
             log.debug("fileinputbean value=" + fi.getValue());
         } catch (Exception e) {
             FrameBean errMsg = event.getFrameBean("errorFrame");
-	        errMsg.setValue(this.getLocalizedText(event.getPortletRequest(), "FILE_UPLOAD_FAIL"));
-	        errMsg.setStyle("error");
-	        log.error("Unable to store uploaded file ", e);
+            errMsg.setValue(this.getLocalizedText(event.getPortletRequest(), "FILE_UPLOAD_FAIL"));
+            errMsg.setStyle("error");
+            log.error("Unable to store uploaded file ", e);
         }
         setNextState(event.getPortletRequest(), DEFAULT_VIEW_PAGE);
     }
@@ -111,7 +111,7 @@ public class FileManagerPortlet extends ActionPortlet {
         Iterator it = files.iterator();
         String fname = null;
         while (it.hasNext()) {
-            fname = (String)it.next();
+            fname = (String) it.next();
             userStorage.deleteFile(user, fname);
         }
 
@@ -163,7 +163,7 @@ public class FileManagerPortlet extends ActionPortlet {
         Iterator it = files.iterator();
         String fileName = null;
         while (it.hasNext()) {
-            fileName = (String)it.next();
+            fileName = (String) it.next();
         }
         String path = userStorage.getLocationPath(user, fileName);
         setFileDownloadEvent(req, fileName, path);
@@ -199,14 +199,14 @@ public class FileManagerPortlet extends ActionPortlet {
             } catch (FileNotFoundException e) {
                 log.error("Error opening file:" + file, e);
                 FrameBean error = event.getFrameBean("errorFrame");
-                error.setValue(this.getLocalizedText(req, "FILE_OPEN_FAIL")+ " " + file);
+                error.setValue(this.getLocalizedText(req, "FILE_OPEN_FAIL") + " " + file);
                 error.setStyle(FrameBean.ERROR_TYPE);
                 setNextState(req, DEFAULT_VIEW_PAGE);
             } catch (IOException e) {
                 log.error("Error opening file:" + file, e);
                 FrameBean error = event.getFrameBean("errorFrame");
                 error.setStyle(FrameBean.ERROR_TYPE);
-                error.setValue(this.getLocalizedText(req, "FILE_OPEN_FAIL")+ " " + file);
+                error.setValue(this.getLocalizedText(req, "FILE_OPEN_FAIL") + " " + file);
                 setNextState(req, DEFAULT_VIEW_PAGE);
             }
         }

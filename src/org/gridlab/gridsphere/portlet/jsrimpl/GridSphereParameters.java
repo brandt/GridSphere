@@ -3,9 +3,8 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
-import java.net.URLEncoder;
 import java.net.URLDecoder;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,7 +41,7 @@ public class GridSphereParameters {
         parseQueryString(queryString);
 
         this.targetedCid = request.getParameter(SportletProperties.COMPONENT_ID);
-        this.mycid = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
+        this.mycid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
     }
 
     public void parseQueryString(String queryString) {
@@ -52,13 +51,13 @@ public class GridSphereParameters {
         StringTokenizer st = new StringTokenizer(queryString, "&");
 
         while (st.hasMoreTokens()) {
-            String namevar = (String)st.nextElement();
+            String namevar = (String) st.nextElement();
 
             StringTokenizer st2 = new StringTokenizer(namevar, "=");
-            String name = (String)st2.nextElement();
+            String name = (String) st2.nextElement();
             String value = "";
             if (st2.hasMoreElements()) {
-                value = (String)st2.nextElement();
+                value = (String) st2.nextElement();
             }
 
             name = URLDecoder.decode(name);
@@ -67,24 +66,24 @@ public class GridSphereParameters {
             if (name.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
                 String sname = name.substring(3);
                 if (renderParams.containsKey(sname)) {
-                    String[] s = (String[])renderParams.get(sname);
-                    String[] tmp = new String[s.length+1];
+                    String[] s = (String[]) renderParams.get(sname);
+                    String[] tmp = new String[s.length + 1];
                     System.arraycopy(s, 0, tmp, 0, s.length);
                     tmp[s.length] = value;
                     renderParams.put(sname, tmp);
                 } else {
-                    renderParams.put(sname, new String[] {value} );
+                    renderParams.put(sname, new String[]{value});
                 }
             } else {
                 if (!reservedParams.contains(name)) {
                     if (params.containsKey(name)) {
-                        String[] s = (String[])params.get(name);
-                        String[] tmp = new String[s.length+1];
+                        String[] s = (String[]) params.get(name);
+                        String[] tmp = new String[s.length + 1];
                         System.arraycopy(s, 0, tmp, 0, s.length);
                         tmp[s.length] = value;
                         params.put(name, tmp);
                     } else {
-                        params.put(name, new String[] { value} );
+                        params.put(name, new String[]{value});
                     }
                 }
             }
@@ -94,8 +93,8 @@ public class GridSphereParameters {
 
     private void overlayRequestParams() {
         for (Enumeration parameters = req.getParameterNames(); parameters.hasMoreElements();) {
-            String   paramName   = (String)parameters.nextElement();
-            String[] paramValues = (String[])req.getParameterValues(paramName);
+            String paramName = (String) parameters.nextElement();
+            String[] paramValues = (String[]) req.getParameterValues(paramName);
             if (!reservedParams.contains(paramName)) {
                 if (paramName.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
                     String name = paramName.substring(3);
@@ -135,11 +134,11 @@ public class GridSphereParameters {
         if (mycid.equals(targetedCid)) {
             Iterator it = renderParams.keySet().iterator();
             while (it.hasNext()) {
-                String key = (String)it.next();
-                String[] renderVals = (String[])renderParams.get(key);
+                String key = (String) it.next();
+                String[] renderVals = (String[]) renderParams.get(key);
                 if (map.containsKey(key)) {
-                    String[] vals = (String[])map.get(key);
-                    String[] tmp = new String[vals.length+renderVals.length];
+                    String[] vals = (String[]) map.get(key);
+                    String[] tmp = new String[vals.length + renderVals.length];
                     System.arraycopy(vals, 0, tmp, 0, vals.length);
                     System.arraycopy(renderVals, 0, tmp, vals.length, renderVals.length);
                     map.put(key, tmp);

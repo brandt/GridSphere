@@ -1,14 +1,14 @@
 package org.gridlab.gridsphere.services.core.messaging.impl;
 
-import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
+import org.gridlab.gridsphere.tmf.TmfConfig;
 import org.gridlab.gridsphere.tmf.TmfCore;
 import org.gridlab.gridsphere.tmf.TmfMessage;
-import org.gridlab.gridsphere.tmf.TmfConfig;
 import org.gridlab.gridsphere.tmf.config.TmfUser;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
  * @version $Id$
  */
 
-public class TextMessagingServiceImpl  implements TextMessagingService, PortletServiceProvider {
+public class TextMessagingServiceImpl implements TextMessagingService, PortletServiceProvider {
 
     private static PortletLog log = SportletLog.getInstance(TextMessagingServiceImpl.class);
 
@@ -35,7 +35,7 @@ public class TextMessagingServiceImpl  implements TextMessagingService, PortletS
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         String configfile = config.getServletContext().getRealPath("WEB-INF/tmfconfig");
 
-        log.info("Starting up TextMessagingService with config "+configfile);
+        log.info("Starting up TextMessagingService with config " + configfile);
 
         core = TmfCore.getInstance(configfile);
         core.startupServices();
@@ -47,6 +47,7 @@ public class TextMessagingServiceImpl  implements TextMessagingService, PortletS
 
     /**
      * Returns a list of tmf users objects
+     *
      * @return a list of tmf users
      */
     public List getUsers() {
@@ -72,7 +73,7 @@ public class TextMessagingServiceImpl  implements TextMessagingService, PortletS
     public boolean isUserOnService(String userid, String messagetype) {
         TmfConfig config = core.getTmfConfig();
         TmfUser u = config.getUser(userid);
-        boolean result = (u.getUserNameForMessagetype(messagetype)!=null);
+        boolean result = (u.getUserNameForMessagetype(messagetype) != null);
         return result;
     }
 

@@ -11,11 +11,12 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
+
 /**
  * The <code>ImageTag</code> represents an href img element
  */
 public class ImageTag extends BaseComponentTag {
-  
+
     protected ImageBean urlImageBean = null;
     protected String src = null;
     protected String border = null;

@@ -15,7 +15,7 @@ public interface SportletUser extends User {
     /**
      * Sets the value of the attribute with the given name,
      *
-     * @param name the attribute name
+     * @param name  the attribute name
      * @param value the attribute value
      */
     public void setAttribute(String name, String value);
@@ -54,7 +54,6 @@ public interface SportletUser extends User {
      * Sets the organization the user belongs to
      *
      * @param organization the organization name
-     *
      */
     public void setOrganization(String organization);
 

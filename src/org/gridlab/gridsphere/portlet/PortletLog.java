@@ -10,14 +10,14 @@ package org.gridlab.gridsphere.portlet;
  * container. The type and location of of the log is a matter of implementation.
  * Also, whether logging is enabled or not is at the discretion of the portlet
  * container.
- * <p>
+ * <p/>
  * <code>
- *  ...
+ * ...
  * PortletLog log = iContext.getLog ();
- *
+ * <p/>
  * if (log.isWarnEnabled())
- *    log.warn ("Can access the content source");
- *
+ * log.warn ("Can access the content source");
+ * <p/>
  * ...
  * </code>
  */
@@ -27,7 +27,7 @@ public interface PortletLog {
      * Returns whether the debug level of the portlet log is enabled.
      *
      * @return <code>true</code> if debbuging is enabled, <code>false</code>
-     * otherwise
+     *         otherwise
      */
     public boolean isDebugEnabled();
 
@@ -42,7 +42,7 @@ public interface PortletLog {
      * Returns whether the info level of the portlet log is enabled.
      *
      * @return <code>true</code> if the log is enabled,
-     * <code>>false</code> otherwise
+     *         <code>>false</code> otherwise
      */
     public boolean isInfoEnabled();
 
@@ -57,7 +57,7 @@ public interface PortletLog {
      * Returns whether the warn level of the portlet log is enabled.
      *
      * @return <code>true</code> if the log is enabled,
-     * <code>false</code> otherwise
+     *         <code>false</code> otherwise
      */
     public boolean isWarnEnabled();
 
@@ -72,7 +72,7 @@ public interface PortletLog {
      * Returns whether the error level of the portlet log is enabled.
      *
      * @return <code>true</code> if the log is enabled,
-     * <code>false</code> otherwise
+     *         <code>false</code> otherwise
      */
     public boolean isErrorEnabled();
 
@@ -86,7 +86,7 @@ public interface PortletLog {
     /**
      * Logs the given error text, cause, and a stack trace in the portlet log.
      *
-     * @param text the error text to log
+     * @param text  the error text to log
      * @param cause the cause for logging
      */
     public void error(String text, Throwable cause);

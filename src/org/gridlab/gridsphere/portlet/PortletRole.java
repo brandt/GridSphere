@@ -12,7 +12,7 @@ import java.util.Comparator;
  * The <code>PortletRole</code> describes the supported portlet roles used
  * by the portal. In general, <code>Group</code>s contain <code>User</codes
  * with a single <code>PortleRole</code>
- * <p>
+ * <p/>
  * Over time, we plan on allowing users to have more than one role
  *
  * @see org.gridlab.gridsphere.portlet.PortletGroup
@@ -56,7 +56,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
      *
      * @param portletRole a portlet role name
      * @throws IllegalArgumentException if the <code>String</code> does
-     * not match any of the pre-defined roles
+     *                                  not match any of the pre-defined roles
      */
     public static PortletRole toPortletRole(String portletRole)
             throws IllegalArgumentException {
@@ -83,6 +83,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
 
     /**
      * Returns a unique id for this role
+     *
      * @return a unique id for this role
      */
     public int getID() {
@@ -147,19 +148,23 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletRole r = (PortletRole)super.clone();
+        PortletRole r = (PortletRole) super.clone();
         r.roleName = this.roleName;
         r.priority = this.priority;
         return r;
     }
 
     public int compare(Object left, Object right) {
-        int leftID  =  ((PortletRole)left).getID();
-        int rightID  = ((PortletRole)right).getID();
+        int leftID = ((PortletRole) left).getID();
+        int rightID = ((PortletRole) right).getID();
         int result;
-        if ( leftID < rightID ) { result = -1; }
-        else if ( leftID > rightID ) { result = 1; }
-        else { result = 0; }
+        if (leftID < rightID) {
+            result = -1;
+        } else if (leftID > rightID) {
+            result = 1;
+        } else {
+            result = 0;
+        }
         return result;
     }
 

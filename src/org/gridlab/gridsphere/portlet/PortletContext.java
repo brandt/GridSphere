@@ -49,25 +49,24 @@ public interface PortletContext extends ServletContext {
     /**
      * Allows the portlet to delegate the rendering to another resource as specified by the given path.
      * The path has to be relative and will be resolved by this method, so that the portlet's resources are accessed.
-     *
+     * <p/>
      * To access protected resources the path has to be prefixed with /WEB-INF/
      * (e.g. /WEB-INF/myportlet/myportlet.jsp). Otherwise, the direct path is used. (e.g. /myportlet/myportlet.jsp).
-
+     * <p/>
      * This method is enabled for multi-language and multi-device support.
      * For example, a jsp file "/myportlet/mytemplate.jsp" will be searched for in the following order,
      * when accessing via HTML-Browser:
-     *
+     * <p/>
      * 1. /myportlet/html/en_US/mytemplate.jsp
      * 2. /myportlet/html/en/mytemplate.jsp
      * 3. /myportlet/html/mytemplate.jsp
      * 4. /myportlet/mytemplate.jsp
      *
-     * @param path the path of the delegate resource
-     * @param request the portlet request
+     * @param path     the path of the delegate resource
+     * @param request  the portlet request
      * @param response the portlet response
-     *
      * @throws PortletException if the delegated resource has trouble fulfilling the rendering request
-     * @throws IOException if the streaming causes an I/O problem
+     * @throws IOException      if the streaming causes an I/O problem
      */
     public void include(String path, PortletRequest request, PortletResponse response)
             throws PortletException, IOException;
@@ -76,7 +75,7 @@ public interface PortletContext extends ServletContext {
      * Returns the resource located at the given path as an InputStream object.
      * The data in the InputStream can be of any type or length.
      * The method returns null if no resource exists at the given path.
-     *
+     * <p/>
      * To access protected resources the path has to be prefixed with /WEB-INF/
      * (e.g. /WEB-INF/myportlet/myportlet.jsp). Otherwise, the direct path is used. (e.g. /myportlet/myportlet.jsp).
      *
@@ -89,20 +88,20 @@ public interface PortletContext extends ServletContext {
      * Returns the resource located at the given path as an InputStream object.
      * The data in the InputStream can be of any type or length.
      * The method returns null if no resource exists at the given path.
-     *
+     * <p/>
      * To access protected resources the path has to be prefixed with /WEB-INF/
      * (e.g. /WEB-INF/myportlet/myportlet.jsp). Otherwise, the direct path is used. (e.g. /myportlet/myportlet.jsp).
-     *
+     * <p/>
      * This method is enabled for multi-language and multi-device support.
      * For example, a jsp file "/myportlet/mytemplate.jsp" will be searched for in the following order,
      * when accessing via HTML-Browser:
-     *
+     * <p/>
      * 1. /myportlet/html/en_US/mytemplate.jsp
      * 2. /myportlet/html/en/mytemplate.jsp
      * 3. /myportlet/html/mytemplate.jsp
      * 4. /myportlet/mytemplate.jsp
      *
-     * @param path the path to the resource
+     * @param path   the path to the resource
      * @param client the client
      * @param locale the locale
      * @return the input stream
@@ -111,12 +110,12 @@ public interface PortletContext extends ServletContext {
 
     /**
      * Returns the localized text resource with the given key and using the given locale.
-     *
+     * <p/>
      * To use this feature, the portlet application's CLASSPATH has to contain a resource bundle
      * with the same name (including the package) as the portlet.
      *
      * @param bundle the name of the resource bundle
-     * @param key the text key
+     * @param key    the text key
      * @param locale the locale
      * @return the localized text resource
      */
@@ -128,12 +127,12 @@ public interface PortletContext extends ServletContext {
      * If more than one instance of the portlet with the given id exists on the current page, the message is sent
      * to every single instance of that portlet. If the source portlet has the same name as the target portlet(s),
      * the message will not be sent to avoid possible cyclic calls.
-     *
+     * <p/>
      * The portlet(s) with the given name will only receive the message event if it has/they have implemented
      * the appropriate listener.
      *
      * @param concretePortletID the concrete portlet ID of the portlet(s) to send the message to
-     * @param message the message to be sent
+     * @param message           the message to be sent
      */
     public void send(String concretePortletID, PortletMessage message);
 
@@ -144,11 +143,11 @@ public interface PortletContext extends ServletContext {
      *
      * @param service the classname of the service to load
      * @return the portlet service
-     *
      * @throws PortletServiceUnavailableException
-     *      if an exception has occurrred that interferes with the portlet
-     *      service's normal initialization
-     * @throws PortletServiceNotFoundException if the PortletService is not found
+     *          if an exception has occurrred that interferes with the portlet
+     *          service's normal initialization
+     * @throws PortletServiceNotFoundException
+     *          if the PortletService is not found
      */
     public PortletService getService(Class service)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException;
@@ -160,12 +159,12 @@ public interface PortletContext extends ServletContext {
      * service is provided with the appropiae access control restrictions on the supplied
      *
      * @param service the classname of the service to load
-     * @param user the <code>User</code> requesting a service instance
+     * @param user    the <code>User</code> requesting a service instance
      * @return the portlet service
-     *
      * @throws PortletServiceUnavailableException
-     *      if an exception has occurrred that interferes with the portlet service's normal initialization
-     * @throws PortletServiceNotFoundException if the PortletService is not found
+     *          if an exception has occurrred that interferes with the portlet service's normal initialization
+     * @throws PortletServiceNotFoundException
+     *          if the PortletService is not found
      */
     public PortletService getService(Class service, User user)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException;

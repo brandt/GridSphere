@@ -4,12 +4,10 @@
  */
 package org.gridlab.gridsphere.services.core.layout;
 
+import org.gridlab.gridsphere.layout.PortletPage;
+import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.layout.*;
-
-import java.util.List;
 
 /**
  * The <code>LayoutManagerService</code> manages users layouts
@@ -29,5 +27,5 @@ public interface LayoutManagerService extends PortletService {
     public PortletTabbedPane createUserTabbedPane(PortletRequest req, int cols, String label);
 
     public PortletPage getPortletPage(PortletRequest req);
-  
+
 }

@@ -4,8 +4,8 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import java.util.*;
@@ -66,7 +66,7 @@ public class PortletRegistry {
         Collection coll = allApplicationPortlets.values();
         Iterator it = coll.iterator();
         while (it.hasNext()) {
-            ApplicationPortlet app = (ApplicationPortlet)it.next();
+            ApplicationPortlet app = (ApplicationPortlet) it.next();
             if (app.getApplicationPortletID().equals(applicationPortletID)) return app;
         }
         log.debug("Unable to find " + applicationPortletID + " in registry");
@@ -77,15 +77,15 @@ public class PortletRegistry {
         Collection appColl = getAllApplicationPortlets();
         Iterator appIt = appColl.iterator();
         while (appIt.hasNext()) {
-            ApplicationPortlet app = (ApplicationPortlet)appIt.next();
+            ApplicationPortlet app = (ApplicationPortlet) appIt.next();
             if (app.getWebApplicationName().startsWith(appName)) {
-            List concPortlets = app.getConcretePortlets();
-            Iterator cit = concPortlets.iterator();
-            while (cit.hasNext()) {
-                ConcretePortlet conc = (ConcretePortlet)cit.next();
-                String name = conc.getPortletName();
-                if (name.equals(portletName)) return conc.getConcretePortletID();
-            }
+                List concPortlets = app.getConcretePortlets();
+                Iterator cit = concPortlets.iterator();
+                while (cit.hasNext()) {
+                    ConcretePortlet conc = (ConcretePortlet) cit.next();
+                    String name = conc.getPortletName();
+                    if (name.equals(portletName)) return conc.getConcretePortletID();
+                }
             }
         }
         return null;
@@ -113,7 +113,7 @@ public class PortletRegistry {
         ApplicationPortlet appPortlet;
         Iterator it = set.iterator();
         while (it.hasNext()) {
-            String concretePortletID = (String)it.next();
+            String concretePortletID = (String) it.next();
             appPortlet = (ApplicationPortlet) allApplicationPortlets.get(concretePortletID);
             if (appPortlet.getWebApplicationName().equals((webApplicationName))) {
                 webappPortlets.add(appPortlet);
@@ -127,11 +127,11 @@ public class PortletRegistry {
         List appColl = getApplicationPortlets(webApplicationName);
         Iterator appIt = appColl.iterator();
         while (appIt.hasNext()) {
-            ApplicationPortlet app = (ApplicationPortlet)appIt.next();
+            ApplicationPortlet app = (ApplicationPortlet) appIt.next();
             List concPortlets = app.getConcretePortlets();
             Iterator cit = concPortlets.iterator();
             while (cit.hasNext()) {
-                ConcretePortlet conc = (ConcretePortlet)cit.next();
+                ConcretePortlet conc = (ConcretePortlet) cit.next();
                 String concID = conc.getConcretePortletID();
                 PortletRole reqrole = conc.getConcretePortletConfig().getRequiredRole();
                 if (role.compare(role, reqrole) >= 0) {
@@ -147,11 +147,11 @@ public class PortletRegistry {
         Collection appColl = getAllApplicationPortlets();
         Iterator appIt = appColl.iterator();
         while (appIt.hasNext()) {
-            ApplicationPortlet app = (ApplicationPortlet)appIt.next();
+            ApplicationPortlet app = (ApplicationPortlet) appIt.next();
             List concPortlets = app.getConcretePortlets();
             Iterator cit = concPortlets.iterator();
             while (cit.hasNext()) {
-                ConcretePortlet conc = (ConcretePortlet)cit.next();
+                ConcretePortlet conc = (ConcretePortlet) cit.next();
                 String concID = conc.getConcretePortletID();
                 newlist.add(concID);
             }
@@ -169,12 +169,12 @@ public class PortletRegistry {
         int i = concretePortletID.lastIndexOf(".");
         if (i < 0) return "";
         // check to see if it has number at the end
-        String numStr = concretePortletID.substring(i+1);
+        String numStr = concretePortletID.substring(i + 1);
         String appID = "";
         try {
             Integer.parseInt(numStr);
             appID = concretePortletID.substring(0, i);
-        }  catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             appID = concretePortletID;
         }
         return appID;
@@ -184,14 +184,14 @@ public class PortletRegistry {
         log.debug("Displaying Portlet registry contents:\n");
         Iterator it = allApplicationPortlets.keySet().iterator();
         while (it.hasNext()) {
-            String appID = (String)it.next();
-            ApplicationPortlet appPortlet = (ApplicationPortlet)allApplicationPortlets.get(appID);
+            String appID = (String) it.next();
+            ApplicationPortlet appPortlet = (ApplicationPortlet) allApplicationPortlets.get(appID);
             log.debug("\tApplication portlet : " + appPortlet.getApplicationPortletID() + "\n");
             log.debug("\t" + appPortlet + "\n");
             List concPortlets = appPortlet.getConcretePortlets();
             Iterator concIt = concPortlets.iterator();
             while (concIt.hasNext()) {
-                ConcretePortlet conc = (ConcretePortlet)concIt.next();
+                ConcretePortlet conc = (ConcretePortlet) concIt.next();
                 log.debug("\t\tConcrete portlet : " + conc.getConcretePortletID() + "\n");
                 log.debug("\t" + conc + "\n");
             }

@@ -1,18 +1,14 @@
 /**
-  * Copyright 2003 IBM Corporation and Sun Microsystems, Inc.
-  * All rights reserved.
-  * Use is subject to license terms.
-  */
+ * Copyright 2003 IBM Corporation and Sun Microsystems, Inc.
+ * All rights reserved.
+ * Use is subject to license terms.
+ */
 
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.ActionRequest;
-import javax.portlet.RenderRequest;
-import javax.portlet.PortalContext;
-import javax.portlet.PortletContext;
+import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
 
 

@@ -9,8 +9,8 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * The <code>SportletServiceDescriptor</code> provides the portlet service
@@ -60,7 +60,7 @@ public class SportletServiceDescriptor {
         List serviceDefs = services.getPortletServicesList();
         Iterator it = serviceDefs.iterator();
         while (it.hasNext()) {
-            SportletServiceDefinition def = (SportletServiceDefinition)it.next();
+            SportletServiceDefinition def = (SportletServiceDefinition) it.next();
             if (definition.getServiceName().equals(def.getServiceName())) {
                 def.setConfigParamList(definition.getConfigParamList());
             }
@@ -70,7 +70,7 @@ public class SportletServiceDescriptor {
     /**
      * Saves the portlet service descriptor
      *
-     * @throws IOException if an I/O error occurs
+     * @throws IOException                 if an I/O error occurs
      * @throws PersistenceManagerException if a Castor error occurs during the marshalling
      */
     public void save() throws IOException, PersistenceManagerException {

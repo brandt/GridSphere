@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TableRowBean;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -117,7 +116,7 @@ public class TableRowTag extends BaseComponentTag {
 
         Tag parent = this.getParent();
         if (parent instanceof TableTag) {
-            TableTag tableTag = (TableTag)parent;
+            TableTag tableTag = (TableTag) parent;
             int maxrows = tableTag.getMaxrows();
 
             // logic to determine if alternate (darkened row) should be set
@@ -138,7 +137,7 @@ public class TableRowTag extends BaseComponentTag {
             int currpage = tableTag.getCurrentPage();
             if (!isHeader) {
                 if (maxrows > 0) {
-                    if ((tableTag.getRowCount() <= maxrows * currpage) || (tableTag.getRowCount() > maxrows * (currpage + 1) )) {
+                    if ((tableTag.getRowCount() <= maxrows * currpage) || (tableTag.getRowCount() > maxrows * (currpage + 1))) {
                         return EVAL_PAGE;
                     }
                 }
@@ -158,7 +157,6 @@ public class TableRowTag extends BaseComponentTag {
             //rowBean.setCssClass(this.cssClass);
             //rowBean.setCssStyle(this.cssStyle);
         }
-
 
 
         try {

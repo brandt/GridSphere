@@ -41,25 +41,26 @@ public class PersistenceManagerFactory {
 
     /**
      * Creates a new persistencemanager.
+     *
      * @param webappname
      */
     public static synchronized PersistenceManagerRdbms createPersistenceManagerRdbms(String webappname) {
         if (!databases.containsKey(webappname)) {
-            log.info("Creating new PM for :"+webappname);
+            log.info("Creating new PM for :" + webappname);
             ServletContext ctx = GridSphereConfig.getServletContext();
             //todo init from webappstartup with real fullpath? Did not work after loses...
-            String path = ctx.getRealPath("../"+webappname+"/WEB-INF/persistence/");
+            String path = ctx.getRealPath("../" + webappname + "/WEB-INF/persistence/");
             PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(path);
             databases.put(webappname, pm);
         }
-        return (PersistenceManagerRdbms)databases.get(webappname);
+        return (PersistenceManagerRdbms) databases.get(webappname);
     }
 
     /**
      * Returns an instance of a PersistenceManagerXML from a descriptor and mapping URL
      *
      * @param descriptorURL the descriptor location
-     * @param mappingURL the mapping location
+     * @param mappingURL    the mapping location
      * @return an instance of PersistenceManagerXmlImpl
      */
     public static PersistenceManagerXml createPersistenceManagerXml(String descriptorURL, String mappingURL) {
@@ -71,13 +72,13 @@ public class PersistenceManagerFactory {
         Set allpms = databases.keySet();
         Iterator it = allpms.iterator();
         while (it.hasNext()) {
-            String pmname = (String)it.next();
-            PersistenceManagerRdbms pm = (PersistenceManagerRdbms)databases.get(pmname);
-            log.info("  shutdown persistencemanager for "+pmname);
+            String pmname = (String) it.next();
+            PersistenceManagerRdbms pm = (PersistenceManagerRdbms) databases.get(pmname);
+            log.info("  shutdown persistencemanager for " + pmname);
             try {
                 pm.destroy();
             } catch (PersistenceManagerException e) {
-                log.debug("Could not shutdown PersistenceManager "+pmname);
+                log.debug("Could not shutdown PersistenceManager " + pmname);
             }
         }
     }

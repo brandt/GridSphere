@@ -8,7 +8,9 @@ import org.gridlab.gridsphere.portlet.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -37,7 +39,7 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
      * @return the client device
      */
     public Client getClient() {
-        Client client = (Client)this.getHttpServletRequest().getSession().getAttribute(SportletProperties.CLIENT);
+        Client client = (Client) this.getHttpServletRequest().getSession().getAttribute(SportletProperties.CLIENT);
         if (client == null) {
             client = new ClientImpl(this.getHttpServletRequest());
             this.getHttpServletRequest().getSession().setAttribute(SportletProperties.CLIENT, client);
@@ -75,7 +77,7 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
     /**
      * Returns the current session or, if there is no current session and the given flag is true,
      * it creates one and returns it.
-     *
+     * <p/>
      * If the given flag is false and there is no current portlet session, this method returns null.
      *
      * @param create true to create a new session, false to return null if there is no current session
@@ -104,7 +106,7 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
         // clear this.getHttpServletRequest()uest attributes
         Enumeration attrnames = this.getHttpServletRequest().getAttributeNames();
         while (attrnames.hasMoreElements()) {
-            String name = (String)attrnames.nextElement();
+            String name = (String) attrnames.nextElement();
             this.getHttpServletRequest().setAttribute(name, null);
         }
     }
@@ -137,9 +139,8 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
      * Returns the user object. The user object contains useful information about the user and his or her preferences.
      * If the user has not logged in or does not grant access to the portlet, this method creates a GuestUser
      *
-     * @see GuestUser
-     *
      * @return the User object
+     * @see GuestUser
      */
     public User getUser() {
         User user = (User) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_USER);
@@ -151,7 +152,7 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
     }
 
     public PortletRole getRole() {
-        PortletRole role = (PortletRole)this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_ROLE);
+        PortletRole role = (PortletRole) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_ROLE);
         if (role == null) {
             return PortletRole.GUEST;
         }
@@ -167,7 +168,6 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
      * Returns the PortletGroup objects representing the users group membership
      *
      * @param groups an array of PortletGroup objects.
-     *
      * @see PortletGroup
      */
     public void setGroup(List groups) {
@@ -177,7 +177,7 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
     /**
      * Returns the locale of the preferred language. The preference is based on the user's
      * choice of language(s) and/or the client's Accept-Language header.
-     *
+     * <p/>
      * If more than one language is preferred, the locale returned by this
      * method is the one with the highest preference.
      *
@@ -185,11 +185,11 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
      */
     public Locale getLocale() {
         Locale locale = null;
-        locale = (Locale)this.getPortletSession(true).getAttribute(User.LOCALE);
+        locale = (Locale) this.getPortletSession(true).getAttribute(User.LOCALE);
         if (locale != null) return locale;
         User user = getUser();
         if (!(user instanceof GuestUser)) {
-            String loc = (String)user.getAttribute(User.LOCALE);
+            String loc = (String) user.getAttribute(User.LOCALE);
             if (loc != null) {
                 locale = new Locale(loc, "", "");
                 this.getPortletSession(true).setAttribute(User.LOCALE, locale);
@@ -337,6 +337,6 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
     }
 
     private HttpServletRequest getHttpServletRequest() {
-        return (HttpServletRequest)super.getRequest();
+        return (HttpServletRequest) super.getRequest();
     }
 }

@@ -4,15 +4,14 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags;
 
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
-import org.gridlab.gridsphere.portlet.PortletResponse;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * A <code>TableTag</code> represents a table element and is defined by a <code>DefaultTableModel</code>
@@ -116,7 +115,7 @@ public class TableTag extends BaseComponentTag {
     /**
      * Returns the panel (table) cell padding
      *
-     * @return  the panel cell padding
+     * @return the panel cell padding
      */
     public String getCellpadding() {
         return cellPadding;
@@ -134,7 +133,7 @@ public class TableTag extends BaseComponentTag {
     /**
      * Returns the panel border
      *
-     * @return  the panel border
+     * @return the panel border
      */
     public String getBorder() {
         return border;
@@ -248,7 +247,7 @@ public class TableTag extends BaseComponentTag {
             }
 
         } else {
-            tableBean = new TableBean((HttpServletRequest)pageContext.getRequest());
+            tableBean = new TableBean((HttpServletRequest) pageContext.getRequest());
             if (align != null) tableBean.setAlign(align);
             if (width != null) tableBean.setWidth(width);
             if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);

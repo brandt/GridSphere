@@ -7,8 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-  //---------------------------------/
- //- Imported classes and packages -/
+//---------------------------------/
+//- Imported classes and packages -/
 //---------------------------------/
 
 import org.exolab.castor.xml.Marshaller;
@@ -22,8 +22,8 @@ import org.exolab.castor.xml.Unmarshaller;
 public class PortletTypeChoice implements java.io.Serializable {
 
 
-      //--------------------------/
-     //- Class/Member Variables -/
+    //--------------------------/
+    //- Class/Member Variables -/
     //--------------------------/
 
     /**
@@ -37,8 +37,8 @@ public class PortletTypeChoice implements java.io.Serializable {
     private org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo _portletInfo;
 
 
-      //----------------/
-     //- Constructors -/
+    //----------------/
+    //- Constructors -/
     //----------------/
 
     public PortletTypeChoice() {
@@ -46,8 +46,8 @@ public class PortletTypeChoice implements java.io.Serializable {
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletTypeChoice()
 
 
-      //-----------/
-     //- Methods -/
+    //-----------/
+    //- Methods -/
     //-----------/
 
     /**
@@ -55,8 +55,7 @@ public class PortletTypeChoice implements java.io.Serializable {
      * 
      * @return the value of field 'portletInfo'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo getPortletInfo()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo getPortletInfo() {
         return this._portletInfo;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletInfo getPortletInfo()
 
@@ -65,20 +64,17 @@ public class PortletTypeChoice implements java.io.Serializable {
      * 
      * @return the value of field 'portletTypeChoiceSequence'.
      */
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoiceSequence getPortletTypeChoiceSequence()
-    {
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoiceSequence getPortletTypeChoiceSequence() {
         return this._portletTypeChoiceSequence;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletTypeChoiceSequence getPortletTypeChoiceSequence()
 
     /**
      * Method isValid
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         try {
             validate();
-        }
-        catch (org.exolab.castor.xml.ValidationException vex) {
+        } catch (org.exolab.castor.xml.ValidationException vex) {
             return false;
         }
         return true;
@@ -86,25 +82,23 @@ public class PortletTypeChoice implements java.io.Serializable {
 
     /**
      * Method marshal
-     * 
+     *
      * @param out
      */
     public void marshal(java.io.Writer out)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
+
         Marshaller.marshal(this, out);
     } //-- void marshal(java.io.Writer) 
 
     /**
      * Method marshal
-     * 
+     *
      * @param handler
      */
     public void marshal(org.xml.sax.ContentHandler handler)
-        throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
-        
+            throws java.io.IOException, org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
+
         Marshaller.marshal(this, handler);
     } //-- void marshal(org.xml.sax.ContentHandler) 
 
@@ -113,30 +107,27 @@ public class PortletTypeChoice implements java.io.Serializable {
      * 
      * @param portletInfo the value of field 'portletInfo'.
      */
-    public void setPortletInfo(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo portletInfo)
-    {
+    public void setPortletInfo(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo portletInfo) {
         this._portletInfo = portletInfo;
     } //-- void setPortletInfo(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletInfo)
 
     /**
      * Sets the value of field 'portletTypeChoiceSequence'.
-     * 
+     *
      * @param portletTypeChoiceSequence the value of field
-     * 'portletTypeChoiceSequence'.
+     *                                  'portletTypeChoiceSequence'.
      */
-    public void setPortletTypeChoiceSequence(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoiceSequence portletTypeChoiceSequence)
-    {
+    public void setPortletTypeChoiceSequence(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoiceSequence portletTypeChoiceSequence) {
         this._portletTypeChoiceSequence = portletTypeChoiceSequence;
     } //-- void setPortletTypeChoiceSequence(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletTypeChoiceSequence)
 
     /**
      * Method unmarshal
-     * 
+     *
      * @param reader
      */
     public static java.lang.Object unmarshal(java.io.Reader reader)
-        throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.MarshalException, org.exolab.castor.xml.ValidationException {
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoice) Unmarshaller.unmarshal(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoice.class, reader);
     } //-- java.lang.Object unmarshal(java.io.Reader) 
 
@@ -144,8 +135,7 @@ public class PortletTypeChoice implements java.io.Serializable {
      * Method validate
      */
     public void validate()
-        throws org.exolab.castor.xml.ValidationException
-    {
+            throws org.exolab.castor.xml.ValidationException {
         org.exolab.castor.xml.Validator validator = new org.exolab.castor.xml.Validator();
         validator.validate(this);
     } //-- void validate() 

@@ -24,8 +24,8 @@ public class ActionEventImpl extends EventObject implements ActionEvent {
     /**
      * Constructs an instance of ActionEventImpl given an action, request and response
      *
-     * @param action a <code>DefaultPortletAction</code>
-     * @param request the <code>PortletRequest</code>
+     * @param action   a <code>DefaultPortletAction</code>
+     * @param request  the <code>PortletRequest</code>
      * @param response the <code>PortletResponse</code>
      */
     public ActionEventImpl(DefaultPortletAction action, PortletRequest request, PortletResponse response) {

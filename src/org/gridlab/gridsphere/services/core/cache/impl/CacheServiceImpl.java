@@ -5,23 +5,19 @@
  */
 package org.gridlab.gridsphere.services.core.cache.impl;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
 
+import java.util.*;
+
 /**
- * Simple CacheService implementation 
+ * Simple CacheService implementation
  */
 public class CacheServiceImpl implements PortletServiceProvider, CacheService {
 
-    private Map key2object = null;    
+    private Map key2object = null;
     private boolean isCachingOn = true;
 
     private static class CacheObject {
@@ -82,7 +78,7 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
         long currentTime = System.currentTimeMillis();
         while (cacheIter.hasNext()) {
             CacheObject cobj = (CacheObject) cacheIter.next();
-            if ( cobj.delay > 0 && cobj.expiration < currentTime) {
+            if (cobj.delay > 0 && cobj.expiration < currentTime) {
                 expiredKeys.add(cobj.key);
             }
         }

@@ -33,7 +33,7 @@ public class HiddenFieldBean extends TextFieldBean {
     /**
      * Constructs a hidden field bean with the supplied portlet request and bean identifier
      *
-     * @param req the portlet request
+     * @param req    the portlet request
      * @param beanId the bean identifier
      */
     public HiddenFieldBean(HttpServletRequest req, String beanId) {

@@ -174,22 +174,25 @@ public interface FormEvent extends ActionEvent {
 
     public DataGridBean getDataGridBean(String beanId);
 
-    /***
+    /**
      * Return an existing <code>IncludeBean</code> or create a new one
+     *
      * @param beanId
      * @return an include bean
      */
     public IncludeBean getIncludeBean(String beanId);
 
-    /***
+    /**
      * Return an existing <code>ActionComponentBean</code> or create a new one
+     *
      * @param beanId
      * @return an action component bean
      */
     public ActionComponentBean getActionComponentBean(String beanId);
 
-    /***
+    /**
      * Return an existing <code>MessageBoxBean</code> or create a new one
+     *
      * @param beanId
      * @return a message box bean
      */
