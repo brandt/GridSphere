@@ -193,6 +193,19 @@ Copyright:
   </target>
 
   <!-- =================================================================== -->
+  <!-- Creates a Portlet API JAR library archive                           -->
+  <!-- =================================================================== -->
+  <target name="portlet-impl-jar" depends="compile" description="Create ${build.lib}/portletImpl.jar">
+    <jar jarfile="${build.lib}/portletImpl.jar" basedir="${classes.dir}" >
+        <include name="log4j.properties"/>
+        <include name="org/gridlab/gridsphere/portlet/impl/**" />
+        <include name="org/gridlab/gridsphere/portlet/impl/**" />
+        <include name="org/gridlab/gridsphere/event/impl/**" />
+        <include name="${conf.dir}/log4j.properties"/>
+    </jar>
+  </target>
+
+  <!-- =================================================================== -->
   <!-- Creates the Portlet Widgets Tag Library                             -->
   <!-- =================================================================== -->
   <target name="portlet-widgets-jar" depends="compile" description="Create ${build.lib}/portlet-widget-tags.jar">
@@ -353,7 +366,7 @@ Copyright:
   <!-- ================================================================= -->
   <!-- Deploys core portlets to a local server                              -->
   <!-- ================================================================= -->
-  <target name="deploy" depends="deploy-prepare, deploy-hsqldb, deploy-gs, deploy-portlets"/>
+  <target name="deploy" depends="deploy-prepare, deploy-gs, deploy-portlets"/>
 
 
     <!-- ================================================================= -->
@@ -385,6 +398,11 @@ Copyright:
             </fileset>
         </copy>
 
+        <!-- Installs hsqldb to tomcat                                         -->
+        <replace file="${build.war}/${Name}/WEB-INF/conf/hsqldb.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>
+        <copy file="conf/gridsphere-db.properties" tofile="${env.CATALINA_HOME}/gridsphere/db/gridsphere-db.properties" />
+        <copy file="conf/gridsphere-db.script" tofile="${env.CATALINA_HOME}/gridsphere/db/gridsphere-db.script" />
+
      <!--   <replace file="${build.war}/${Name}/WEB-INF/conf/hsqldb-junit.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>   -->
         <copy todir="${env.CATALINA_HOME}/webapps/${Name}">
             <fileset dir="${build.war}/${Name}"/>
@@ -393,16 +411,6 @@ Copyright:
         <copy file="conf/log4j.properties" tofile="${env.CATALINA_HOME}/webapps/${Name}/WEB-INF/log4j.properties" />
 
     </target>
-
-    <!-- ================================================================= -->
-    <!-- Installs hsqldb to tomcat                                         -->
-    <!-- ================================================================= -->
-    <target name="deploy-hsqldb" depends="mapping, db-hsqldb" description="deploys the hsqldb to tomcat">
-        <replace file="${build.war}/${Name}/WEB-INF/conf/hsqldb.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>
-        <copy file="conf/gridsphere-db.properties" tofile="${env.CATALINA_HOME}/gridsphere/db/gridsphere-db.properties" />
-        <copy file="conf/gridsphere-db.script" tofile="${env.CATALINA_HOME}/gridsphere/db/gridsphere-db.script" />
-    </target>
-
 
     <!-- ================================================================= -->
     <!-- Deploys core portlets to a local server                           -->
