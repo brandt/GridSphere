@@ -32,8 +32,9 @@ Code
 + doHelp (Jason)
 	Get JScript code from Michael to display a new window
 + Allow multiple portlet deployment descriptors to deploy portlets/
-+ Finish Portlet Message Service
 + Layout -- add 2 attributes to PortletFram for insets, outsets, make Logo and Title cool (Jason, Oliver)
+	-- update I added the attributes to Frame (Jason)
++ Fix PortletTitleBar to display configure mode oonly for admin or super role
 + Unit testing core services (Jason or Oliver)
 + Move Jsmash and InstantMessage somewhere else (Oliver)
 	(We'll leave the issue of whether to include IM in release to future version)
@@ -41,3 +42,5 @@ Code
 Code refinement
 ===============
 + Please Javadoc all your code and run Tools->Layout Code to optimize imports. Consider renaming variables to be more specific and descriptive. 
+
+http://java.sun.com/j2se/javadoc/writingdoccomments
