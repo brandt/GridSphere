@@ -75,6 +75,12 @@
                     <description>Portlet umożliwia zalogowanie się</description>
                     <keywords>portlet logowanie loguj</keywords>
                 </language>
+				<language locale="ar">
+                    <title>الدخول</title>
+                    <title-short>الدخول</title-short>
+                    <description>البرنامج الذي يمكن من الدخول للنظام</description>
+                    <keywords>برنامج الدخول</keywords>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -137,6 +143,12 @@
                     <description>Portlet umożliwia wylogowanie się</description>
                     <keywords>portlet wylogowanie wyloguj</keywords>
                 </language>
+				<language locale="ar">
+                    <title>الخروج</title>
+                    <title-short>الخروج</title-short>
+                    <description>البرنامج الذي يمكن من الخروج من النظام</description>
+                    <keywords>برنامج الخروج</keywords>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -197,6 +209,12 @@
                     <title>Menadżer kont użytkowników</title>
                     <description>Umożliwia administratorowi portalu administrowanie kontami użytkowników</description>
                 </language>
+				<language locale="ar">
+                    <title>مدير حساب المستخدم</title>
+                    <title-short>مدير حساب المستخدم</title-short>
+                    <description>يمكن مدير النظام من إدارة حسابات المستخدمين</description>
+                    <keywords>إدارة حساب المستخدم</keywords>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -251,6 +269,10 @@
                     <title>Menadżer grup portletów</title>
                     <description>Umożliwia administratorowi portalu administrowanie grupami portletów</description>
                 </language>
+				<language locale="ar">
+                    <title>مدير مجموعة البرنامج</title>
+                    <description>يمكن مدير النظام لإدارة مجموعات البرامج</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -304,6 +326,10 @@
                 <language locale="pl">
                     <title>Menadżer układów graficznych</title>
                     <description>Udostępnia użytkownikowi dostosowywanie układów graficznych</description>
+                </language>
+				<language locale="ar">
+                    <title>مدير التنسيق</title>
+                    <description>يمكن المستخدم لتعديل التنسيق</description>
                 </language>
                 <config-param>
                     <param-name>supported-themes</param-name>
@@ -363,6 +389,10 @@
                     <title>Menadżer portletów</title>
                     <description>Umożliwia administratorowi portalu administrowanie portletami</description>
                 </language>
+				<language locale="ar">
+                    <title>مدير تطبيق البرنامج</title>
+                    <description>يمكن مدير النظام لإدارة البرامج</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -416,6 +446,10 @@
                 <language locale="pl">
                     <title>Menadżer układów graficznych</title>
                     <description>Udostępnia użytkownikowi dostosowywanie układów graficznych</description>
+                </language>
+				<language locale="ar">
+                    <title>مدير التنسيق</title>
+                    <description>يمكن تعديل تنسيق المستخدم</description>
                 </language>
                 <config-param>
                     <param-name>supported-themes</param-name>
@@ -474,6 +508,10 @@
                     <title>Menadżer profili</title>
                     <description>Dostosowywanie profili użytkownika</description>
                 </language>
+				<language locale="ar">
+                    <title>مدير الملف</title>
+                    <description>تعديل ملف المستخدمين</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -521,6 +559,10 @@
                     <title>Lokalizacja</title>
                     <description>Wybór lokalizacji</description>
                 </language>
+				<language locale="ar">
+                    <title>اللغة</title>
+                    <description>إختيار اللغة</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -558,6 +600,12 @@
                     <description>Ermöglicht das Konfigurieren der Textnachrichtendienste</description>
                     <keywords>textnachrichtendienst </keywords>
                 </language>
+				<language locale="ar">
+                    <title>تعديل خدمات التراسل</title>
+                    <title-short>خدمات التراسل</title-short>
+                    <description>برنامج يساعد على تعديل خدمات التراسل</description>
+                    <keywords>برنامج خدمات التراسل</keywords>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -578,6 +626,12 @@
                     <title-short>Date</title-short>
                     <description>Portlet provides date capabilities</description>
                     <keywords>portlet date</keywords>
+                </language>
+				<language locale="ar">
+                    <title>التاريخ</title>
+                    <title-short>التاريخ</title-short>
+                    <description>برنامج يزود خدمة التاريخ</description>
+                    <keywords>برنامج التاريخ</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -608,6 +662,12 @@
                     <title-short>Session Manager</title-short>
                     <description>Displays portal sessions</description>
                     <keywords>portlet session</keywords>
+                </language>
+				<language locale="ar">
+                    <title>مدير الفترة</title>
+                    <title-short>مدير الفترة</title-short>
+                    <description>عرض فترات النظام</description>
+                    <keywords>برنامج الفترة</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
