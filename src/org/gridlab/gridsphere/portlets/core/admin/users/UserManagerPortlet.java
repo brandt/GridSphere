@@ -80,7 +80,7 @@ public class UserManagerPortlet extends ActionPortlet {
             hf.setValue(user.getID());
             PortletGroup coreGroup = aclManagerService.getCoreGroup();
             PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
-            req.setAttribute("role", role.toString());
+            req.setAttribute("role", role.getText(req.getLocale()));
             setNextState(req, DO_VIEW_USER_VIEW);
         } else {
             setNextState(req, DEFAULT_VIEW_PAGE);
@@ -164,7 +164,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
             PortletGroup coreGroup = aclManagerService.getCoreGroup();
             PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
-            req.setAttribute("role", role.toString());
+            req.setAttribute("role", role.getText(req.getLocale()));
 
             setNextState(req, "doListUsers");
         } catch (PortletException e) {
@@ -188,7 +188,7 @@ public class UserManagerPortlet extends ActionPortlet {
             req.setAttribute("user", user);
             PortletGroup coreGroup = aclManagerService.getCoreGroup();
             PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
-            req.setAttribute("role", role.toString());
+            req.setAttribute("role", role.getText(req.getLocale()));
             this.userManagerService.deleteUser(user);
             createSuccessMessage(evt, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
         }
@@ -253,9 +253,11 @@ public class UserManagerPortlet extends ActionPortlet {
             isInvalid = true;
         }
 
-        
-        if (isInvalidPassword(event, newuser)){
-        	isInvalid = true;
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+            if (isInvalidPassword(event, newuser)){
+                isInvalid = true;
+            }
         }
         // Throw exception if error was found
         if (isInvalid) {
@@ -392,14 +394,18 @@ public class UserManagerPortlet extends ActionPortlet {
     }
 
     private void setSelectedUserRole(FormEvent event, PortletRole role) {
+        PortletRequest req = event.getPortletRequest();
         ListBoxBean roleListBean = event.getListBoxBean("userRole");
         roleListBean.clear();
         ListBoxItemBean userRole = new ListBoxItemBean();
         ListBoxItemBean adminRole = new ListBoxItemBean();
         ListBoxItemBean superRole = new ListBoxItemBean();
-        userRole.setValue(PortletRole.USER.toString());
-        adminRole.setValue(PortletRole.ADMIN.toString());
-        superRole.setValue(PortletRole.SUPER.toString());
+        userRole.setValue(PortletRole.USER.getText(req.getLocale()));
+        userRole.setName(PortletRole.USER.getName());
+        adminRole.setValue(PortletRole.ADMIN.getText(req.getLocale()));
+        adminRole.setName(PortletRole.ADMIN.getName());
+        superRole.setValue(PortletRole.SUPER.getText(req.getLocale()));
+        superRole.setName(PortletRole.SUPER.getName());
         if (role.equals(PortletRole.USER)) {
             userRole.setSelected(true);
         } else if (role.equals(PortletRole.ADMIN)) {
@@ -415,7 +421,7 @@ public class UserManagerPortlet extends ActionPortlet {
     private PortletRole getSelectedUserRole(FormEvent event) {
         // Iterate through list, return selected value
         ListBoxBean roleListBean = event.getListBoxBean("userRole");
-        List userRoleList = roleListBean.getSelectedValues();
+        List userRoleList = roleListBean.getSelectedNames();
         if (userRoleList.size() == 0) {
             log.debug("No role was selected, setting to user");
             // Impossible, but if not selected return user role
