@@ -18,7 +18,7 @@ public class UserSessionManager implements PortletSessionListener {
     private static UserSessionManager instance  = new UserSessionManager();
     private PortletLog log = SportletLog.getInstance(UserSessionManager.class);
 
-    private Map userSessions = new HashMap();
+    private Map userSessions = new Hashtable();
 
     private UserSessionManager() {
     }
@@ -28,19 +28,20 @@ public class UserSessionManager implements PortletSessionListener {
     }
 
     public PortletSession getSession(User user) {
-        return (PortletSession)userSessions.get(user);
+        return (PortletSession)userSessions.get(user.getUserID());
 
     }
 
     public void setSession(User user, PortletSession session) {
-        userSessions.put(user, session);
+        log.error("Setting session for user " + user.getUserID());
+        userSessions.put(user.getUserID(), session);
         sessionManager.addSessionListener(session.getId(), this);
     }
 
-    public User getUserFromSession(PortletSession session) {
+    public String getUserIdFromSession(PortletSession session) {
         Iterator it = userSessions.keySet().iterator();
         while (it.hasNext()) {
-            User u = (User)it.next();
+            String u = (String)it.next();
                 PortletSession s = (PortletSession)userSessions.get(u);
                 if (s.getId().equals(session.getId())) {
                     return u;
@@ -49,7 +50,7 @@ public class UserSessionManager implements PortletSessionListener {
         return null;
     }
 
-    public List getUsers() {
+    public List getUserIds() {
         List l = new ArrayList();
         Iterator it = userSessions.keySet().iterator();
         while (it.hasNext()) {
@@ -72,6 +73,8 @@ public class UserSessionManager implements PortletSessionListener {
     }
 
     public void logout(PortletSession session) {
+        log.debug("before logout");
+        dumpSessions();
         if (userSessions.containsValue(session)) {
             Iterator it = userSessions.keySet().iterator();
             while (it.hasNext()) {
@@ -83,11 +86,14 @@ public class UserSessionManager implements PortletSessionListener {
                 }
             }
         }
+        log.debug("after logout");
+        dumpSessions();
     }
 
     public void removeSession(User user) {
+        log.error("Removing session for user " + user.getUserID());
         PortletSession s = getSession(user);
-        s.invalidate();
+        if (s != null) s.invalidate();
         userSessions.remove(user);
     }
 
@@ -97,10 +103,9 @@ public class UserSessionManager implements PortletSessionListener {
         Set keySet = userSessions.keySet();
         Iterator it = keySet.iterator();
         while (it.hasNext()) {
-            User u = (User)it.next();
-            log.info(u.toString());
-            PortletSession s = getSession(u);
-            log.info(" has session id: " + s.getId());
+            String u = (String)it.next();
+            PortletSession s = (PortletSession)userSessions.get(u);
+            log.info("User: " + u + " has session id: " + s.getId());
 
         }
     }

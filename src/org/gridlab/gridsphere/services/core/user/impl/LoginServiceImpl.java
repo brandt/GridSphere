@@ -6,6 +6,8 @@ package org.gridlab.gridsphere.services.core.user.impl;
 
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletGroupFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
@@ -13,31 +15,55 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.user.LoginService;
+import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.services.core.security.auth.LoginAuthModule;
 
 import java.util.*;
 import java.lang.reflect.Constructor;
 
+/**
+ * The <code>LoginService</code> is the primary interface that defines the login method used to obtain a
+ * <code>User</code> from a username and password. The <code>LoginService</code> is configured
+ * dynamically at run-time with login authorization modules. By default the PASSWORD_AUTH_MODULE is
+ * selected which uses the GridSphere database to store passwords. Other authorization modules
+ * can use external directory servers such as LDAP, etc
+ */
 public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
     private GridSphereUserManager userManager = GridSphereUserManager.getInstance();
+    private UserSessionManager userSessionManager = UserSessionManager.getInstance();
     private PortletLog log = SportletLog.getInstance(LoginServiceImpl.class);
     private Map authModules = new HashMap();
-    private LoginAuthModule activeModule = null;
+    private List activeModules = new ArrayList();
     PortletServiceAuthorizer authorizer = null;
 
     public LoginServiceImpl(PortletServiceAuthorizer authorizer) {
         this.authorizer = authorizer;
     }
 
-    public void setActiveAuthModule(LoginAuthModule activeModule) {
+    public List getActiveAuthModules() {
         authorizer.authorizeSuperUser();
-        this.activeModule = activeModule;
+        return activeModules;
     }
 
-    public Map getSupportedAuthModules() {
+    public void setActiveAuthModules(List activeModules) {
         authorizer.authorizeSuperUser();
-        return authModules;
+        this.activeModules = activeModules;
+    }
+
+    public List getSupportedAuthModules() {
+        authorizer.authorizeSuperUser();
+        List mods = new ArrayList(authModules.size());
+        Iterator it = authModules.values().iterator();
+        while (it.hasNext()) {
+            mods.add(it.next());
+        }
+        return mods;
+    }
+
+    public List getActiveUserIds() {
+        authorizer.authorizeAdminUser(PortletGroupFactory.GRIDSPHERE_GROUP);
+        return userSessionManager.getUserIds();
     }
 
     /**
@@ -57,7 +83,8 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             LoginAuthModule authModule = createNewAuthModule(authModuleName, authClassName);
             if (authModule != null) authModules.put(authModuleName, authModule);
         }
-        activeModule = (LoginAuthModule)authModules.get("PASSWORD_AUTH_MODULE");
+        LoginAuthModule activeModule = (LoginAuthModule)authModules.get("PASSWORD_AUTH_MODULE");
+        activeModules.add(activeModule);
     }
 
     private LoginAuthModule createNewAuthModule(String authModuleName, String authClassName) {
@@ -72,11 +99,10 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             log.error("LoginServiceImpl: Unable to locate class: " + authClassName);
         } catch(Exception e) {
             log.error("LoginServiceImpl: Unable to create new LoginAuthModule " + authClassName + "(" + authModuleName + ")");
-
         }
+        log.debug("LoginServiceImpl: created module: " + authModuleName);
         return authModule;
     }
-
 
     /**
      * The destroy method is invoked by the portlet container to destroy a portlet service.
@@ -101,11 +127,15 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         }
 
         User user = userManager.getUserByUserName(loginName);
-        if (user == null) throw new AuthorizationException("User does not exist in database");
+        if (user == null) throw new AuthorizationException("User " + loginName + " does not exist");
 
-        System.err.println("Active module is: " + activeModule.getModuleName());
-
-        activeModule.checkAuthorization(user, loginPassword);
+        Iterator it = activeModules.iterator();
+        log.debug("Active modules are: ");
+        while (it.hasNext()) {
+            LoginAuthModule mod = (LoginAuthModule)it.next();
+            log.debug( mod.getModuleName() );
+            mod.checkAuthorization(user, loginPassword);
+        }
         return user;
     }
 
