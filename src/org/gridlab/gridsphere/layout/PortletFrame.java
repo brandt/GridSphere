@@ -505,14 +505,20 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
                 //System.err.println("in portlet frame render: class= " + portletClass + " setting prev mode= " + req.getPreviousMode() + " cur mode= " + req.getMode());
                 if (hasError(req)) {
-                    doRenderError(postframe, req, wrappedResponse);
+                    doRenderCustomError(postframe, req, wrappedResponse);
+                    if (storedWriter.toString().equals("")) {
+                        doRenderError(postframe, req, wrappedResponse);
+                    }
                     postframe.append(storedWriter.toString());
                 } else {
                     try {
                         PortletInvoker.service(portletClass, req, wrappedResponse);
                         postframe.append(storedWriter.toString());
                     } catch (PortletException e) {
-                        doRenderError(postframe, req, wrappedResponse);
+                        doRenderCustomError(postframe, req, wrappedResponse);
+                        if (storedWriter.toString().equals("")) {
+                            doRenderError(postframe, req, wrappedResponse);
+                        }
                         postframe.append(storedWriter.toString());
                     }
                 }
@@ -567,6 +573,19 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
     }
 
+    public void doRenderCustomError(StringBuffer postframe, PortletRequest req, PortletResponse res) {
+        Throwable ex = (Throwable)req.getAttribute(SportletProperties.PORTLETERROR + portletClass);
+        if (ex != null) {
+            try {
+                req.setAttribute("error", ex);
+                RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/gs_error.jsp");
+                dispatcher.include(req, res);
+            } catch (Exception e) {
+                System.err.println("Unable to include custom error page!!");
+                ex.printStackTrace();
+            }
+        }
+    }
     public Object clone() throws CloneNotSupportedException {
         PortletFrame f = (PortletFrame) super.clone();
         f.titleBar = (this.titleBar == null) ? null : (PortletTitleBar) this.titleBar.clone();
