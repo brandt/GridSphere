@@ -768,13 +768,12 @@ Copyright:
     </target>
 
 
-    <target name="sourcetarball">
-        <antcall target="clean"/>
+    <target name="sourcetarball" depends="clean">
         <tstamp/>
 
         <tar destfile="../${gridsphere.project}-${version}-${DSTAMP}-src.tgz" compression="gzip">
 
-            <tarfileset dir=".">
+            <tarfileset dir="." prefix="${gridsphere.project}-${version}">
                 <exclude name="**/CVS"/>
                 <exclude name="*.ipr"/>
                 <exclude name="*.iws"/>
