@@ -973,6 +973,14 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         return selectSportletGroup("where portletGroup.ObjectID=\"" + id + "\"");
     }
 
+    public PortletGroup getBaseGroup() {
+        return SportletGroup.BASE;
+    }
+
+    public PortletGroup getSuperGroup() {
+        return SportletGroup.SUPER;
+    }
+
     public PortletGroup getGroupByName(String name) {
         return getSportletGroupByName(name);
     }
