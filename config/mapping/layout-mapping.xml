@@ -61,8 +61,8 @@
         <field name="Columns" type="string">
             <bind-xml name="columns" node="attribute"/>
         </field>
-        <field name="CssStyle" type="string">
-            <bind-xml name="cssstyle" node="attribute"/>
+        <field name="Style" type="string">
+            <bind-xml name="style" node="attribute"/>
         </field>
     </class>
 

@@ -22,7 +22,7 @@ public class PortletGridLayout extends PortletFrameLayout {
     private int numColumns;
     private int[] colSizes;
     private String columnString;
-    private String cssStyle = "";
+    private String style = "";
 
     /**
      * Constructs an instance of PortletGridLayout
@@ -41,8 +41,8 @@ public class PortletGridLayout extends PortletFrameLayout {
      *
      * @return css style name
      */
-    public String getCssStyle() {
-        return cssStyle;
+    public String getStyle() {
+        return style;
     }
 
     /**
@@ -51,10 +51,10 @@ public class PortletGridLayout extends PortletFrameLayout {
      * no background there can't be a real transparent portlet.
      * Most likely one sets just the background in that one.
      *
-     * @param cssStyle  css style of the that layout
+     * @param style  css style of the that layout
      */
-    public void setCssStyle(String cssStyle) {
-        this.cssStyle = cssStyle;
+    public void setStyle(String style) {
+        this.style = style;
     }
 
     /**
@@ -143,8 +143,8 @@ public class PortletGridLayout extends PortletFrameLayout {
 
         //out.println("<table width=\"" + gwidth + "%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\">");
         out.print("<table ");
-        if (!getCssStyle().equals("")) {
-            out.print(" class='"+getCssStyle()+"' ");
+        if (!getStyle().equals("")) {
+            out.print(" class='"+getStyle()+"' ");
         }
         out.println("border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> <!-- overall gridlayout table -->");
 

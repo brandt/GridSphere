@@ -21,7 +21,7 @@
 -->
 
 <portlet-panel>
-    <grid-layout columns="80,20" cssstyle="layout-header">
+    <grid-layout columns="80,20" style="layout-header">
         <portlet-text include="/html/pagehead.html"/>
         <portlet-frame transparent="true" outer-padding="0">
             <portlet-class>org.gridlab.gridsphere.portlets.core.LogoutPortlet.1</portlet-class>
@@ -31,8 +31,6 @@
 
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane selected="0" style="menu">
-  <!--  <selected>0</selected>
-    <style>menu</style>      -->
     <portlet-tab>
         <title>Home</title>
         <portlet-tabbed-pane selected="0" style="sub-menu">
