@@ -8,6 +8,8 @@ package org.gridlab.gridsphere.services.core.cache.impl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
 
 import java.util.*;
@@ -17,8 +19,17 @@ import java.util.*;
  */
 public class CacheServiceImpl implements PortletServiceProvider, CacheService {
 
+    private PortletLog log = SportletLog.getInstance(CacheServiceImpl.class);
     private Map key2object = null;
     private boolean isCachingOn = true;
+
+    private class CacheSweeperTask extends TimerTask {
+
+        public void run() {
+            clearExpiredEntries();
+        }
+
+    }
 
     private static class CacheObject {
         public String key;
@@ -50,6 +61,9 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
             isCachingOn = false;
         }
         key2object = new HashMap();
+        Timer timer = new Timer(true);
+        timer.schedule(new CacheSweeperTask(),  Calendar.getInstance().getTime(), 1000 * 60 ); // 1 minute intervals
+
     }
 
     public synchronized void destroy() {
@@ -73,6 +87,7 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
     }
 
     protected synchronized void clearExpiredEntries() {
+        //log.debug("Updating render cache");
         Set expiredKeys = new HashSet();
         Iterator cacheIter = key2object.values().iterator();
         long currentTime = System.currentTimeMillis();
