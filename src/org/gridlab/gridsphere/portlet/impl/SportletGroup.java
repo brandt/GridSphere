@@ -8,15 +8,16 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * <code>SportletGroup</code> is the implementation of <code>PortletGroup</code>
  * Portlet API interface to define portal groups.
- * <p>
+ * <p/>
  * This implemnetation uses Castor doclets to generate the SQL data bindings
- *
+ * 
  * @see org.gridlab.gridsphere.portlet.PortletRole
- *
  */
 public class SportletGroup implements Serializable, Cloneable, PortletGroup {
 
@@ -38,6 +39,7 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
 
     private String Name = new String();
     private boolean isPublic = true;
+    private Set portletRoleList = new HashSet();
 
     /**
      * Constructs an instance of SportletGroup
@@ -55,6 +57,14 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
         super();
         if (groupName == null) Name = "Unknown Group";
         this.Name = groupName;
+    }
+
+    public Set getPortletRoleList() {
+        return portletRoleList;
+    }
+
+    public void setPortletRoleList(Set portletRoleList) {
+        this.portletRoleList = portletRoleList;
     }
 
     public String getOid() {
@@ -94,7 +104,7 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
             label = "";
         } else {
             label = Name.substring(0, 1).toUpperCase()
-                  + Name.substring(1);
+                    + Name.substring(1);
         }
         return label;
     }
@@ -122,7 +132,7 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
      *
      * @param object the <code>PortletGroup</code> to be tested
      * @return <code>true</code> if the groups are equal, <code>false</code>
-     * otherwise
+     *         otherwise
      */
     public boolean equals(Object object) {
         if (object != null && (object.getClass().equals(this.getClass()))) {
@@ -133,7 +143,7 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
     }
 
     public Object clone() throws CloneNotSupportedException {
-        SportletGroup s = (SportletGroup)super.clone();
+        SportletGroup s = (SportletGroup) super.clone();
         s.Name = this.Name;
         return s;
     }
