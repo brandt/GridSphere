@@ -10,41 +10,19 @@
 
 <web-app>
 
+    <display-name>GridSphere Portlet Container</display-name>
+
+    <description>
+        GridSphere Portlet Container
+    </description>
+
+    <listener>
+        <listener-class>org.gridlab.gridsphere.portletcontainer.GridSphereServlet</listener-class>
+    </listener>
+
     <servlet>
         <servlet-name>gridsphere</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portletcontainer.GridSphereServlet</servlet-class>
-        <init-param>
-            <param-name>gridsphere.properties</param-name>
-            <param-value>WEB-INF/conf/gridsphere.properties</param-value>
-        </init-param>
-        <init-param>
-            <param-name>PortletServices.properties</param-name>
-            <param-value>WEB-INF/conf/PortletServices.properties</param-value>
-        </init-param>
-        <init-param>
-            <param-name>log4j.properties</param-name>
-            <param-value>WEB-INF/conf/log4j.properties</param-value>
-        </init-param>
-        <init-param>
-            <param-name>portlet.xml</param-name>
-            <param-value>WEB-INF/conf/portlet.xml</param-value>
-        </init-param>
-        <init-param>
-            <param-name>portlet-mapping.xml</param-name>
-            <param-value>WEB-INF/conf/portlet-mapping.xml</param-value>
-        </init-param>
-        <init-param>
-            <param-name>layout.xml</param-name>
-            <param-value>WEB-INF/conf/layout.xml</param-value>
-        </init-param>
-        <init-param>
-            <param-name>layout-mapping.xml</param-name>
-            <param-value>WEB-INF/conf/layout-mapping.xml</param-value>
-        </init-param>
-        <init-param>
-            <param-name>user-layouts</param-name>
-            <param-value>user-layouts</param-value>
-        </init-param>
     </servlet>
 
     <servlet>
