@@ -106,6 +106,9 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         if (isMultiple) {
             sb.append(" multiple='multiple'");
         }
+        if (disabled) {
+            sb.append(" disabled ");
+        }
         if (onChange != null) {
             sb.append(" onChange='" + onChange + "'");
         }
