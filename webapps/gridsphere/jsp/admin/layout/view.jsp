@@ -1,9 +1,9 @@
-<%@ page import="java.util.Iterator, java.util.List "%>
+<%@ page import="java.util.Iterator,
+                 java.util.Map"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
-<% List groupNames = (List)request.getAttribute("groupNames"); %>
-<% List groupDescs = (List)request.getAttribute("groupDescs"); %>
+<% Map groupNames = (Map)request.getAttribute("groupNames"); %>
 
 <portletAPI:init/>
 <ui:form>
@@ -34,11 +34,10 @@
 </ui:tablerow>
 <p>
 
-<%  Iterator it = groupNames.iterator();
-    Iterator cit = groupDescs.iterator();
-    while (it.hasNext() && cit.hasNext()) {
+<%  Iterator it = groupNames.keySet().iterator();
+    while (it.hasNext()) {
     String group = (String)it.next();
-    String groupDesc = (String)cit.next();
+    String groupDesc = (String)groupNames.get(group);
 %>
 <ui:tablerow>
 <ui:tablecell>
