@@ -20,7 +20,8 @@
     the same. The GridSphere source code comes with a README file explaining how
     to build the binary distribution. Both source and binaries come packaged
     with all the necessary third party libraries and requires a GridSphere
-    compatible servlet container, currently Tomcat 4.1+.
+    compatible servlet container, currently Tomcat 4.1+ but NOT Tomcat 5 since that uses the
+    Servlet 2.4 API.
 
     </para>
 
@@ -36,6 +37,7 @@
             required. (Currently, only Tomcat 4.1.18 fully supports the Manager web
             application that allows for dynamic portlet management.)
             (Make sure you get the full Tomcat version and not the Light Edition (LE))
+            (Also do NOT download Tomcat 5 since that uses the Servlet 2.4 API. which has not yet been tested)
         </para></listitem>
         </itemizedlist>
     </sect1>
