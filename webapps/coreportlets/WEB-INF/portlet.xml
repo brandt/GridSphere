@@ -481,22 +481,74 @@
             <description>Provides tools for administering user accounts</description>
             <keywords>user account administration</keywords>
         </language>
-        <group>
-            <group-name>ANY</group-name>
-        </group>
         <owner>
             <role-name>SUPER</role-name>
         </owner>
-        <group>
-            <group-name>ANY</group-name>
-        </group>
         <role>
-            <role-name>SUPER</role-name>
+            <role-name>ADMIN</role-name>
         </role>
     </concrete-portlet>
 </concrete-portlet-app>
 
 </portlet-app-def>
 
+<portlet-app-def>
+
+<portlet-app id="org.gridlab.gridsphere.portlets.core.AccessControllerPortlet">
+    <portlet-name>Access Control Manager</portlet-name>
+    <servlet-name>AccessControllerPortlet</servlet-name>
+    <portlet-config>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </portlet-config>
+    <cache>
+        <expires>120</expires>
+        <shared>false</shared>
+    </cache>
+    <allows>
+        <maximized/>
+        <minimized/>
+        <resizing/>
+    </allows>
+    <supports>
+        <markup name="html">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+        <markup name="wml">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+    </supports>
+</portlet-app>
+
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.AccessControllerPortlet.1">
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </context-param>
+    <concrete-portlet>
+        <portlet-name>Access Control Manager</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Access Control Manager</title>
+            <title-short>AccessControlManager</title-short>
+            <description>Provides tools for administering access to portlets</description>
+            <keywords>access control user group role administration</keywords>
+        </language>
+        <owner>
+            <role-name>SUPER</role-name>
+        </owner>
+        <role>
+            <role-name>ADMIN</role-name>
+        </role>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
 
 </portlet-app-collection>

@@ -95,18 +95,18 @@
         </tr>
         <tr>
           <td bgcolor="#CCCCCC">
-             Organization:&nbsp;
-          </td>
-          <td bgcolor="WHITE">
-             <%=userManagerBean.getOrganization()%>
-          </td>
-        </tr>
-        <tr>
-          <td bgcolor="#CCCCCC">
              Email Address:&nbsp;
           </td>
           <td bgcolor="WHITE">
              <%=userManagerBean.getEmailAddress()%>
+          </td>
+        </tr>
+        <tr>
+          <td bgcolor="#CCCCCC">
+             Organization:&nbsp;
+          </td>
+          <td bgcolor="WHITE">
+             <%=userManagerBean.getOrganization()%>
           </td>
         </tr>
       </table>

@@ -19,8 +19,8 @@ import java.util.Random;
  */
 public class SportletGroup extends BaseObject implements PortletGroup {
 
-    public static final String SUPER_GROUP = "0";
-    public static final String BASE_GROUP = "1";
+    public static final String SUPER_GROUP = "super";
+    public static final String BASE_GROUP = "base";
 
     /**
      * @sql-size 128
@@ -74,4 +74,26 @@ public class SportletGroup extends BaseObject implements PortletGroup {
         return false;
     }
 
+    public boolean equals(String object) {
+        if (object == null) {
+            return false;
+        }
+        String thisGroup = getName();
+        String thatGroup = (String)object;
+        return thisGroup.equals(thatGroup);
+    }
+
+    public boolean equals(PortletGroup object) {
+        if (object == null) {
+            return false;
+        }
+        String thisGroup = toString();
+        String thatGroup = ((PortletGroup)object).toString();
+        return thisGroup.equals(thatGroup);
+    }
+
+
+    public String toString() {
+        return Name;
+    }
 }

@@ -1,0 +1,29 @@
+/*
+ * Created by IntelliJ IDEA.
+ * User: russell
+ * Date: Jan 30, 2003
+ * Time: 12:55:09 PM
+ * To change template for new interface use 
+ * Code Style | Class Templates options (Tools | IDE Options).
+ */
+package org.gridlab.gridsphere.services.security.acl;
+
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.User;
+
+public interface GroupRequest extends GroupEntry {
+
+    public static final String ACTION_ADD = "add";
+    public static final String ACTION_REMOVE = "remove";
+
+    public void setUser(User user);
+
+    public void setGroup(PortletGroup group);
+
+    public void setRole(PortletRole role);
+
+    public String getAction();
+
+    public void setAction(String action);
+}

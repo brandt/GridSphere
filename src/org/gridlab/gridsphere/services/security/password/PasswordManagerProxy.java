@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.services.security.AuthorizationUtility;
+import org.gridlab.gridsphere.services.user.AccountRequest;
 
 import java.util.Date;
 import java.util.List;
@@ -52,6 +53,16 @@ public class PasswordManagerProxy
         return this.passwordManager.getPasswords();
     }
 
+    public List getAccountRequestPasswords() {
+        authorizer.authorizeSuperUser();
+        return this.passwordManager.getPasswords();
+    }
+
+    public List getUserPasswords() {
+        authorizer.authorizeSuperUser();
+        return this.passwordManager.getUserPasswords();
+    }
+
     public Password getPassword(User user) {
         authorizer.authorizeSuperOrSameUser(user);
         return this.passwordManager.getPassword(user);
@@ -62,28 +73,27 @@ public class PasswordManagerProxy
         return this.passwordManager.editPassword(user);
     }
 
+    public void validatePassword(String password)
+          throws InvalidPasswordException {
+        this.passwordManager.validatePassword(password);
+    }
+
+    public void validatePassword(User user, String password)
+          throws InvalidPasswordException {
+        authorizer.authorizeSuperOrSameUser(user);
+        this.passwordManager.validatePassword(user, password);
+    }
+
     public void savePassword(PasswordBean password)
-            throws PasswordInvalidException {
-        authorizer.authorizeSuperUser();
+            throws InvalidPasswordException {
+        // Super or same user can call
+        User user = password.getUser();
+        authorizer.authorizeSuperOrSameUser(user);
+        // But only super can request no validation
+        if (!password.getValidation()) {
+            authorizer.authorizeSuperUser();
+        }
         this.passwordManager.savePassword(password);
-    }
-
-    public void savePassword(PasswordBean password, boolean validatePassword)
-            throws PasswordInvalidException {
-        authorizer.authorizeSuperUser();
-        this.passwordManager.savePassword(password, validatePassword);
-    }
-
-    public void savePassword(User user, String value)
-            throws PasswordInvalidException {
-       authorizer.authorizeSuperOrSameUser(user);
-       this.passwordManager.savePassword(user, value);
-    }
-
-    public void savePassword(User user, String value, boolean validatePassword)
-            throws PasswordInvalidException {
-        authorizer.authorizeSuperUser();
-        this.passwordManager.savePassword(user, value, validatePassword);
     }
 
     public void deletePassword(User user) {
@@ -96,15 +106,10 @@ public class PasswordManagerProxy
         return this.passwordManager.hasPassword(user);
     }
 
-    public void validatePassword(String password)
-          throws PasswordInvalidException {
-        this.passwordManager.validatePassword(password);
-    }
-
-    public void validatePassword(User user, String password)
-          throws PasswordInvalidException {
-        authorizer.authorizeSuperOrSameUser(user);
-        this.passwordManager.validatePassword(user, password);
+    public void activatePassword(AccountRequest request, User user)
+          throws InvalidPasswordException {
+        authorizer.authorizeSuperUser();
+        this.passwordManager.activatePassword(request, user);
     }
 
     public boolean isPasswordCorrect(User user, String password) {
@@ -115,31 +120,4 @@ public class PasswordManagerProxy
     public long getDefaultPasswordLifetime() {
         return this.passwordManager.getDefaultPasswordLifetime();
     }
-
-    /***
-    public Password createPassword(User user, String password)
-            throws PasswordInvalidException;
-
-    public Password createPassword(User user, String password, boolean validatePasword)
-            throws PasswordInvalidException;
-
-    public void resetPassword(User user, String password)
-            throws PasswordInvalidException, PasswordNotFoundException;
-
-    public void updatePassword(User user, String password)
-            throws PasswordInvalidException, PasswordNotFoundException;
-
-    public Date getDatePasswordExpires(User user)
-            throws PasswordNotFoundException;
-
-    public void setDatePasswordExpires(User user, Date date)
-            throws PasswordNotFoundException;
-
-    public String getPasswordHint(User user)
-            throws PasswordNotFoundException;
-
-    public void setPasswordHint(User user, String hint)
-            throws PasswordNotFoundException;
-
-    ***/
 }

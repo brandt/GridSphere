@@ -12,26 +12,24 @@
     </service>
 
     <service>
-        <name>Access Control Service</name>
-        <description>Provides Access Control for Portlets</description>
-        <interface>org.gridlab.gridsphere.services.security.acl.AccessControlService</interface>
-        <implementation>org.gridlab.gridsphere.services.security.acl.impl.AccessControlServiceImpl</implementation>
+        <name>Login Service</name>
+        <description>Provides Login Capabilities</description>
+        <interface>org.gridlab.gridsphere.services.user.LoginService</interface>
+        <implementation>org.gridlab.gridsphere.services.user.impl.UserManagerServiceImpl</implementation>
     </service>
 
     <service>
         <name>Access Control Manager Service</name>
         <description>Provides Authorization Capabilities to Portal Users</description>
-        <user>true</user>
         <interface>org.gridlab.gridsphere.services.security.acl.AccessControlManagerService</interface>
-        <implementation>org.gridlab.gridsphere.services.security.acl.impl.SecureAccessControlManagerService</implementation>
+        <implementation>org.gridlab.gridsphere.services.user.impl.UserManagerServiceImpl</implementation>
     </service>
 
     <service>
-        <name>User Manager Service</name>
+        <name>User Account Manager Service</name>
         <description>Provides User Administration Capabilities</description>
-        <user>true</user>
         <interface>org.gridlab.gridsphere.services.user.UserManagerService</interface>
-        <implementation>org.gridlab.gridsphere.services.user.impl.SecureUserManagerService</implementation>
+        <implementation>org.gridlab.gridsphere.services.user.impl.UserManagerServiceImpl</implementation>
         <service-config>
             <param-name>userID</param-name>
             <param-value>root</param-value>
@@ -43,21 +41,17 @@
     </service>
 
     <service>
-        <name>Credential Manager Service</name>
-        <description>Provides Credential Management Capabilities</description>
-        <interface>org.gridlab.gridsphere.services.security.credential.CredentialManagerService</interface>
-        <implementation>org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialManagerService</implementation>
-        <service-config>
-            <param-name>retrievalHost</param-name>
-            <param-value>myproxy.gridlab.org</param-value>
-        </service-config>
-    </service>
-
-    <service>
         <name>Password Manager Service</name>
         <description>Provides Password Management Capabilities</description>
         <interface>org.gridlab.gridsphere.services.security.password.PasswordManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.security.password.impl.DbmsPasswordManagerService</implementation>
+    </service>
+
+    <service>
+        <name>Credential Manager Service</name>
+        <description>Provides Credential Management Capabilities</description>
+        <interface>org.gridlab.gridsphere.services.security.credential.CredentialManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialManagerService</implementation>
         <service-config>
             <param-name>retrievalHost</param-name>
             <param-value>myproxy.gridlab.org</param-value>

@@ -1,84 +1,109 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
- * @version $Id$
+ * Created by IntelliJ IDEA.
+ * User: russell
+ * Date: Jan 31, 2003
+ * Time: 4:06:44 AM
+ * To change template for new class use 
+ * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.services.security.acl;
 
-import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.core.mail.MailMessage;
+
+import java.util.List;
 
 public interface AccessControlManagerService extends PortletService {
 
-    /**
-     * Promotes a user to the role of super
-     *
-     * @param user the Role object
-     */
-    public void addUserToSuperRole(User user) throws PortletServiceException ;
+    /*** PORTLET GROUP METHODS ***/
 
-    /**
-     * Creates a new group
-     *
-     * @param groupName the name of the new group
-     */
-    public void createNewGroup(String groupName) throws PortletServiceException ;
+    public List selectGroups(String criteria);
 
-    /**
-     * Creates a new group
-     *
-     * @param groupName the name of the new group
-     */
-    public PortletGroup getGroup(String groupName);
+    public List getGroups();
 
+    public PortletGroup getGroup(String groupId);
 
-    /**
-     * Rename an existing group
-     *
-     * @param group the PortletGroup to modify
-     * @param newGroupName the name of the new group
-     */
-    public void renameGroup(PortletGroup group, String newGroupName) throws PortletServiceException ;
+    public PortletGroup getGroupByName(String groupName);
 
-    /**
-     * Removes a group
-     *
-     * @param groupName the PortletGroup
-     */
-    public void removeGroup(String groupName) throws PortletServiceException ;
+    public PortletGroup createGroup(String groupName);
 
-    /**
-     * Removes a group
-     *
-     * @param group the PortletGroup
-     */
-    public void removeGroup(PortletGroup group) throws PortletServiceException ;
+    public void deleteGroup(PortletGroup group);
 
+    /*** GROUP REQUEST METHODS ***/
 
-    /**
-     * Add a user to a group with a specified role
-     *
-     * @param user the Role object
-     * @param group the PortletGroup
-     */
-    public void approveUserInGroup(User user, PortletGroup group) throws PortletServiceException ;
+    public List getGroupRequests();
 
+    public List getGroupRequests(User user);
 
-    /**
-     * Removes a user from a group
-     *
-     * @param user the user object
-     * @param group the PortletGroup
-     */
-    public void removeUserFromGroup(User user, PortletGroup group) throws PortletServiceException ;
+    public List getGroupRequests(PortletGroup group);
 
+    public List selectGroupRequests(String criteria);
 
-    /**
-     * Removes a user from the grouprequest for a group
-     * @param user user object
-     * @param group the group
-     */
-    public void removeUserGroupRequest(User user, PortletGroup group) throws PortletServiceException ;
+    public GroupRequest getGroupRequest(String id);
+
+    public GroupRequest createGroupRequest(User user);
+
+    public void validateGroupRequest(GroupRequest request)
+            throws InvalidGroupRequestException;
+
+    public void submitGroupRequest(GroupRequest request)
+            throws InvalidGroupRequestException;
+
+    public void submitGroupRequest(GroupRequest request, MailMessage mailMessage)
+            throws InvalidGroupRequestException;
+
+    public void approveGroupRequest(GroupRequest request);
+
+    public void approveGroupRequest(GroupRequest request, MailMessage mailMessage);
+
+    public void denyGroupRequest(GroupRequest request);
+
+    public void denyGroupRequest(GroupRequest request, MailMessage mailMessage);
+
+    /*** GROUP ENTRY METHODS ***/
+
+    public List getGroupEntries();
+
+    public List getGroupEntries(User user);
+
+    public List getGroupEntries(PortletGroup group);
+
+    public List selectGroupEntries(String criteria);
+
+    public GroupEntry getGroupEntry(String id);
+
+    public GroupEntry getGroupEntry(User user, PortletGroup group);
+
+    /*** ACCESS CONTROL LOGIC METHODS ***/
+
+    public List getGroups(User user);
+
+    public List getGroupsNotMemberOf(User user);
+
+    public List getUsers(PortletGroup group);
+
+    public List getUsersNotInGroup(PortletGroup group);
+
+    public boolean isUserInGroup(User user, PortletGroup group);
+
+    public PortletRole getRoleInGroup(User user, PortletGroup group);
+
+    public boolean hasRoleInGroup(User user, PortletGroup group, PortletRole role);
+
+    public boolean hasAdminRoleInGroup(User user, PortletGroup group);
+
+    public boolean hasUserRoleInGroup(User user, PortletGroup group);
+
+    public boolean hasGuestRoleInGroup(User user, PortletGroup group);
+
+    public List getUsersWithSuperRole();
+
+    public void grantSuperRole(User user);
+
+    public void revokeSuperRole(User user);
+
+    public boolean hasSuperRole(User user);
 }

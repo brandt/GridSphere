@@ -20,6 +20,7 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 
+import org.gridlab.gridsphere.services.user.LoginService;
 import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.user.PermissionDeniedException;
@@ -44,8 +45,9 @@ public class CredentialManagerServiceTest extends ServiceTest {
     // Service variables
     private static PortletLog _log = SportletLog.getInstance(CredentialManagerServiceTest.class);
     private PersistenceManagerRdbms _pm = PersistenceManagerRdbms.getInstance();
-    private UserManagerService userManager = null;
-    private CredentialManagerService credentialManager = null;
+    private LoginService loginService = null;
+    private UserManagerService userManagerService = null;
+    private CredentialManagerService credentialManagerService = null;
     // User variables
     private User rootUser;
     private User testUser;
@@ -80,9 +82,11 @@ public class CredentialManagerServiceTest extends ServiceTest {
         _log.info(" =====================================  setup");
         // Create both services using mock ServletConfig
         try {
-            this.userManager
+            this.loginService
+                    = (LoginService)factory.createPortletService(LoginService.class, null, true);
+            this.userManagerService
                     = (UserManagerService)factory.createPortletService(UserManagerService.class, null, true);
-            this.credentialManager
+            this.credentialManagerService
                     = (CredentialManagerService)factory.createPortletService(CredentialManagerService.class, null, true);
         } catch (Exception e) {
             _log.error("Unable to initialize services: ", e);
@@ -99,7 +103,7 @@ public class CredentialManagerServiceTest extends ServiceTest {
         User superUser = null;
         //return userManager.getUser("root");
         try {
-            superUser = userManager.login("root", "");
+            superUser = loginService.login("root", "");
         } catch (AuthenticationException e) {
             String msg = "Unable to login as root!";
             log.error(msg, e);
@@ -116,26 +120,24 @@ public class CredentialManagerServiceTest extends ServiceTest {
     private User createTestUser(User rootUser) {
         _log.info("- create test user");
         User testUser = null;
-        AccountRequest req1 = userManager.createAccountRequest();
+        AccountRequest req1 = userManagerService.createAccountRequest();
         req1.setUserID("test");
         req1.setGivenName("Test");
+        req1.setPasswordValidation(false);
         try {
-            this.userManager.submitAccountRequest(req1);
-            this.userManager.approveAccountRequest(rootUser, req1, null);
-            testUser = this.userManager.getUser(this.rootUser, "test");
+            this.userManagerService.submitAccountRequest(req1);
+            this.userManagerService.approveAccountRequest(req1);
+            testUser = this.userManagerService.getUser("test");
         } catch (PortletServiceException e) {
             _log.error("Exception " + e);
             fail("failed to generate AccountRequests");
-        } catch (PermissionDeniedException e) {
-            _log.error("Exception " + e);
-            fail("No permissions!");
         }
         return testUser;
     }
 
     private void deleteUsers() {
         try {
-            this.userManager.removeUser(rootUser, "test");
+            this.userManagerService.deleteAccount(testUser);
         } catch (PermissionDeniedException e) {
             _log.error("Exception " + e);
             fail("No permissions!");
@@ -161,55 +163,55 @@ public class CredentialManagerServiceTest extends ServiceTest {
 
         /*** Test get permissions (should be empty) ***/
         _log.info("Testing get permissions. Should be 0 entries.");
-        permissions = this.credentialManager.getCredentialPermissions();
+        permissions = this.credentialManagerService.getCredentialPermissions();
         numPermissions = permissions.size();
 
         /*** Test create globus permission ***/
         _log.info("Testing create globus permission.");
-        permission = this.credentialManager.createCredentialPermission(this.globusSubjects,
+        permission = this.credentialManagerService.createCredentialPermission(this.globusSubjects,
                                                                        this.globusDescription);
         /*** Test get permissions (should be 1 entry) ***/
         _log.info("Testing get permissions. Should be 1 entry");
-        permissions = this.credentialManager.getCredentialPermissions();
+        permissions = this.credentialManagerService.getCredentialPermissions();
         assertEquals(numPermissions+1, permissions.size());
 
         /*** Test retrieve globus permission ***/
         _log.info("Testing retrieve globus permission.");
-        permission = this.credentialManager.getCredentialPermission(globusSubjects);
+        permission = this.credentialManagerService.getCredentialPermission(globusSubjects);
         assertEquals(this.globusSubjects, permission.getPermittedSubjects());
         assertEquals(this.globusDescription, permission.getDescription());
 
         /*** Test create ncsa permission ***/
         _log.info("Testing create ncsa permission.");
-        permission = this.credentialManager.createCredentialPermission(this.ncsaSubjects,
+        permission = this.credentialManagerService.createCredentialPermission(this.ncsaSubjects,
                                                                        this.ncsaDescription);
 
         /*** Test list permissions (should be 2 entries) ***/
         _log.info("Testing get permissions. Should be 2 entries.");
-        permissions = this.credentialManager.getCredentialPermissions();
+        permissions = this.credentialManagerService.getCredentialPermissions();
         assertEquals(numPermissions+2, permissions.size());
 
         /*** Test globus credential is permitted ***/
         _log.info("Testing globus credential is permitted.");
-        answer = this.credentialManager.isCredentialPermitted(globusDummy);
+        answer = this.credentialManagerService.isCredentialPermitted(globusDummy);
         assertEquals(true, answer);
 
         /*** Test ncsa credential is permitted ***/
         _log.info("Testing ncsa credential is permitted.");
-        answer = this.credentialManager.isCredentialPermitted(ncsaDummy);
+        answer = this.credentialManagerService.isCredentialPermitted(ncsaDummy);
         assertEquals(true, answer);
 
         /*** Test sdsc credential is not permitted ***/
         _log.info("Testing sdsc credential is not permitted.");
-        answer = this.credentialManager.isCredentialPermitted(sdscDummy);
+        answer = this.credentialManagerService.isCredentialPermitted(sdscDummy);
         assertEquals(false, answer);
 
         /*** Test delete permission ***/
         _log.info("Testing delete globus permission. Should be 1 entry left.");
         // Delete permission
-        this.credentialManager.deleteCredentialPermission(this.globusSubjects);
+        this.credentialManagerService.deleteCredentialPermission(this.globusSubjects);
         // Test number of permissions
-        permissions = this.credentialManager.getCredentialPermissions();
+        permissions = this.credentialManagerService.getCredentialPermissions();
         assertEquals(numPermissions+1, permissions.size());
         // Test that permission is ncsa
         _log.info("Testing get permissions. This should be ncsa entry.");
@@ -218,26 +220,26 @@ public class CredentialManagerServiceTest extends ServiceTest {
 
         /*** Test globus credential is not permitted ***/
         _log.info("Testing globus is no longer permitted.");
-        answer = this.credentialManager.isCredentialPermitted(globusDummy);
+        answer = this.credentialManagerService.isCredentialPermitted(globusDummy);
         assertEquals(false, answer);
 
         /*** Test ncsa credential is still permitted ***/
         _log.info("Testing ncsa is still permitted.");
         ncsaDummy = "/O=Grid/O=NCSA/OU=Dummy User";
-        answer = this.credentialManager.isCredentialPermitted(ncsaDummy);
+        answer = this.credentialManagerService.isCredentialPermitted(ncsaDummy);
         assertEquals(true, answer);
 
         /*** Test remove ncsa permission ***/
         _log.info("Testing remove ncsa permission.");
         // Delete permission
-        this.credentialManager.deleteCredentialPermission(this.ncsaSubjects);
+        this.credentialManagerService.deleteCredentialPermission(this.ncsaSubjects);
         // Test number of permissions left...
-        permissions = this.credentialManager.getCredentialPermissions();
+        permissions = this.credentialManagerService.getCredentialPermissions();
         assertEquals(numPermissions, permissions.size());
 
         /*** Test "*" permission (Should permit all credentials) ***/
         _log.info("Testing \"all\" permission. Should permit all credentials.");
-        permission = this.credentialManager.createCredentialPermission(this.allSubjects,
+        permission = this.credentialManagerService.createCredentialPermission(this.allSubjects,
                                                                        this.allDescription);
         _log.info("Testing globus permission...");
         answer = permission.isCredentialPermitted(globusDummy);
@@ -251,9 +253,9 @@ public class CredentialManagerServiceTest extends ServiceTest {
 
         /*** Test remove last permission ***/
         _log.info("Testing remove last permission. Should be 0 entries now.");
-        this.credentialManager.deleteCredentialPermission(this.allSubjects);
+        this.credentialManagerService.deleteCredentialPermission(this.allSubjects);
         // Test number of permissions left...
-        permissions = this.credentialManager.getCredentialPermissions();
+        permissions = this.credentialManagerService.getCredentialPermissions();
         assertEquals(numPermissions, permissions.size());
     }
 
@@ -269,19 +271,19 @@ public class CredentialManagerServiceTest extends ServiceTest {
         List hosts = null;
 
         // Get initial number of all mappings
-        mappings = this.credentialManager.getCredentialMappings();
+        mappings = this.credentialManagerService.getCredentialMappings();
         numMappings = mappings.size();
         // Get initial number of root user mappings
-        mappings = this.credentialManager.getCredentialMappings(this.rootUser);
+        mappings = this.credentialManagerService.getCredentialMappings(this.rootUser);
         numRootMappings = mappings.size();
         // Get initial number of test user mappings
-        mappings = this.credentialManager.getCredentialMappings(this.testUser);
+        mappings = this.credentialManagerService.getCredentialMappings(this.testUser);
         numTestMappings = mappings.size();
 
         /*** Test create guest mapping without globus permission. ***/
         _log.info("Testing create guest mapping without globus permission.");
         try {
-            mapping = this.credentialManager.createCredentialMapping(this.guestSubject,
+            mapping = this.credentialManagerService.createCredentialMapping(this.guestSubject,
                                                                      this.testUser);
             fail("This is bad. At this point, globus credentials should not be permitted.");
         } catch (CredentialNotPermittedException e) {
@@ -289,15 +291,15 @@ public class CredentialManagerServiceTest extends ServiceTest {
         }
         // Testing number of mappings
         _log.info("Testing get all mappings. Should be 0 entries.");
-        hosts = this.credentialManager.getCredentialMappings();
+        hosts = this.credentialManagerService.getCredentialMappings();
         assertEquals(numMappings, mappings.size());
 
         /*** Test create guest mapping with globus permission. ***/
         _log.info("Creating globus permissions.");
-        permission = this.credentialManager.createCredentialPermission(this.globusSubjects);
+        permission = this.credentialManagerService.createCredentialPermission(this.globusSubjects);
         _log.info("Testing create guest mapping with globus permission.");
         try {
-            mapping = this.credentialManager.createCredentialMapping(this.guestSubject,
+            mapping = this.credentialManagerService.createCredentialMapping(this.guestSubject,
                                                                      this.testUser);
         } catch (CredentialNotPermittedException e) {
             String msg = "This is bad. At this point, globus credentials should be permitted.";
@@ -306,12 +308,12 @@ public class CredentialManagerServiceTest extends ServiceTest {
         }
         // Testing number of mappings
         _log.info("Testing get all mappings. Should be 1 entry.");
-        mappings = this.credentialManager.getCredentialMappings();
+        mappings = this.credentialManagerService.getCredentialMappings();
         assertEquals(numMappings+1, mappings.size());
 
         /*** Test get mapping for guest subject. ***/
         _log.info("Testing get mapping for guest subject.");
-        mapping = this.credentialManager.getCredentialMapping(this.guestSubject);
+        mapping = this.credentialManagerService.getCredentialMapping(this.guestSubject);
         assertEquals(this.guestSubject, mapping.getSubject());
         assertEquals(this.testUser.getID(), mapping.getUser().getID());
         assertEquals(null, mapping.getTag());
@@ -320,22 +322,22 @@ public class CredentialManagerServiceTest extends ServiceTest {
 
         /*** Test get mappings for root user. Should be 0 entries. ***/
         _log.info("Testing get mappings for root user. Should be 0 entries.");
-        mappings = this.credentialManager.getCredentialMappings(this.rootUser);
+        mappings = this.credentialManagerService.getCredentialMappings(this.rootUser);
         assertEquals(numRootMappings, mappings.size());
 
         /*** Test get mappings for test user. Should be 1 entry. ***/
         _log.info("Testing get mappings for test user. Should be 1 entry.");
-        mappings = this.credentialManager.getCredentialMappings(this.testUser);
+        mappings = this.credentialManagerService.getCredentialMappings(this.testUser);
         assertEquals(numTestMappings+1, mappings.size());
 
         /*** Test update mapping tag for guest subject. ***/
         _log.info("Testing update mapping tag for guest subject.");
         try {
-            this.credentialManager.setCredentialTag(guestSubject, guestTag);
+            this.credentialManagerService.setCredentialTag(guestSubject, guestTag);
         } catch (CredentialMappingNotFoundException e) {
             _log.error("This is bad. At this point, globus credentials should be permitted.", e);
         }
-        mapping = this.credentialManager.getCredentialMapping(this.guestSubject);
+        mapping = this.credentialManagerService.getCredentialMapping(this.guestSubject);
         assertEquals(this.guestSubject, mapping.getSubject());
         assertEquals(this.testUser.getID(), mapping.getUser().getID());
         assertEquals(this.guestTag, mapping.getTag());
@@ -348,12 +350,12 @@ public class CredentialManagerServiceTest extends ServiceTest {
         hosts.add(this.guestHost1);
         hosts.add(this.guestHost2);
         try {
-            this.credentialManager.addCredentialHosts(guestSubject, hosts);
+            this.credentialManagerService.addCredentialHosts(guestSubject, hosts);
         } catch (CredentialMappingNotFoundException e) {
             _log.error("This is bad. At this point, globus credentials should be permitted.", e);
         }
         _log.info("Asserting number of hosts for guest subject...");
-        mapping = this.credentialManager.getCredentialMapping(this.guestSubject);
+        mapping = this.credentialManagerService.getCredentialMapping(this.guestSubject);
         hosts = mapping.getHosts();
         assertEquals(2, hosts.size());
 
@@ -368,11 +370,11 @@ public class CredentialManagerServiceTest extends ServiceTest {
 
         /*** Testing delete mappping. ***/
         _log.info("Testing delete mapping for guest subject.");
-        this.credentialManager.deleteCredentialMapping(this.guestSubject);
+        this.credentialManagerService.deleteCredentialMapping(this.guestSubject);
 
         /*** Test get all mappings. Should be 0 entries. ***/
         _log.info("Testing get all mappings. Should be 0 entries.");
-        mappings = this.credentialManager.getCredentialMappings();
+        mappings = this.credentialManagerService.getCredentialMappings();
         assertEquals(numMappings, mappings.size());
     }
 

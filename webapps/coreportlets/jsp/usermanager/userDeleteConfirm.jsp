@@ -14,6 +14,12 @@
       document.UserManagerPortlet.action="<%=userManagerBean.getUserListURI()%>";
       document.UserManagerPortlet.submit();
     }
+
+    function UserManagerPortlet_newUser_onClick() {
+      document.UserManagerPortlet.userID.value="";
+      document.UserManagerPortlet.action="<%=userManagerBean.getUserEditURI()%>";
+      document.UserManagerPortlet.submit();
+    }
   </script>
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
   <tr>
@@ -25,6 +31,10 @@
                    name="<%=UserManagerBean.ACTION_USER_LIST%>"
                    value="List Users"
                    onClick="javascript:UserManagerPortlet_listUser_onClick()"/>
+            &&<input type="button"
+                   name="<%=UserManagerBean.ACTION_USER_EDIT%>"
+                   value="New User"
+                   onClick="javascript:UserManagerPortlet_newUser_onClick()"/>
           </td>
         </tr>
       </table>
@@ -86,18 +96,18 @@
         </tr>
         <tr>
           <td bgcolor="#CCCCCC">
-             Organization:&nbsp;
-          </td>
-          <td bgcolor="WHITE">
-             <%=userManagerBean.getOrganization()%>
-          </td>
-        </tr>
-        <tr>
-          <td bgcolor="#CCCCCC">
              Email Address:&nbsp;
           </td>
           <td bgcolor="WHITE">
              <%=userManagerBean.getEmailAddress()%>
+          </td>
+        </tr>
+        <tr>
+          <td bgcolor="#CCCCCC">
+             Organization:&nbsp;
+          </td>
+          <td bgcolor="WHITE">
+             <%=userManagerBean.getOrganization()%>
           </td>
         </tr>
       </table>

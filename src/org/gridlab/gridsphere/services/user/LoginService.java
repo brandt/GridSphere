@@ -18,10 +18,6 @@ import org.gridlab.gridsphere.services.security.AuthenticationModule;
 
 public interface LoginService extends PortletService {
 
-    public List getAuthenticationModules();
-
-    public AuthenticationModule getAuthenticationModule(String name);
-
     /**
      * Login a user with the given login name and password.
      * Returns the associated user if login succeeds.

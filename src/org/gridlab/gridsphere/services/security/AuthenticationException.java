@@ -8,10 +8,12 @@
  */
 package org.gridlab.gridsphere.services.security;
 
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+
 import java.util.Map;
 import java.util.TreeMap;
 
-public class AuthenticationException extends Exception {
+public class AuthenticationException extends PortletServiceException {
 
     private Map invalidParameters = new TreeMap();
 

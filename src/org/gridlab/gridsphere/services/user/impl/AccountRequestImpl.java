@@ -14,14 +14,16 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
+import org.gridlab.gridsphere.services.security.password.PasswordBean;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 
 import java.util.List;
 import java.util.Vector;
 import java.util.Enumeration;
+import java.util.Date;
 
 /**
- * @table arimpl
+ * @table accountrequest
  *
  */
 public class AccountRequestImpl extends BaseObject implements AccountRequest {
@@ -76,9 +78,15 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     private  Vector MyproxyUserNamesSV = new Vector();
     //@todo needs to be saved
 
+    // Password bean
+    private transient PasswordBean passwordBean = null;
+    // New user flag
+    private transient boolean isNewUser = false;
 
     public AccountRequestImpl() {
         super();
+        this.isNewUser = true;
+        this.passwordBean = new PasswordBean(this);
     }
 
     public AccountRequestImpl(User user) {
@@ -89,6 +97,7 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
         setGivenName(user.getGivenName());
         setOrganization(user.getOrganization());
         setUserID(user.getUserID());
+        this.passwordBean = new PasswordBean(this);
     }
 
     /**
@@ -365,6 +374,62 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
         } catch (PersistenceManagerException e) {
             e.printStackTrace();
         }
+    }
+
+    public PasswordBean getPassword() {
+        return this.passwordBean;
+    }
+
+    public void setPassword(PasswordBean passwordBean) {
+        this.passwordBean = passwordBean;
+    }
+
+    public String getPasswordValue() {
+        return this.passwordBean.getValue();
+    }
+
+    public void setPasswordValue(String value) {
+        this.passwordBean.setValue(value);
+    }
+
+    public String getPasswordHint() {
+        return this.passwordBean.getHint();
+    }
+
+    public void setPasswordHint(String hint) {
+        this.passwordBean.setHint(hint);
+    }
+
+    public Date getPasswordDateExpires() {
+        return this.passwordBean.getDateExpires();
+    }
+
+    public void setPasswordDateExpires(Date dateExpires) {
+        this.passwordBean.setDateExpires(dateExpires);
+    }
+
+    public long getPasswordLifetime() {
+        return this.passwordBean.getLifetime();
+    }
+
+    public void setPasswordLifetime(long lifetime) {
+        this.passwordBean.setLifetime(lifetime);
+    }
+
+    public boolean getPasswordValidation() {
+        return this.passwordBean.getValidation();
+    }
+
+    public void setPasswordValidation(boolean flag) {
+        this.passwordBean.setValidation(flag);
+    }
+
+    public boolean getPasswordHasChanged() {
+        return this.passwordBean.isDirty();
+    }
+
+    public boolean isNewUser() {
+        return this.isNewUser;
     }
 
     /**

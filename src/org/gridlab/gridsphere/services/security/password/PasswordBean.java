@@ -15,12 +15,16 @@ import java.util.Date;
 public class PasswordBean implements Password {
 
     private User user = null;
-    private String hint = new String();
     private long lifetime = -1;
     private Date dateExpires = null;
     private Date dateCreated = null;
     private Date dateLastModified = null;
-    private String value = new String();
+
+    private transient String hint = new String();
+    private transient String value = new String();
+    private transient boolean validation = true;
+
+    private transient boolean isDirty = false;
 
     public PasswordBean() {
     }
@@ -87,6 +91,11 @@ public class PasswordBean implements Password {
 
     public void setValue(String value) {
         this.value = value;
+        this.isDirty = true;
+    }
+
+    public boolean isDirty() {
+        return this.isDirty;
     }
 
     public boolean equals(String value) {
@@ -109,5 +118,13 @@ public class PasswordBean implements Password {
             long now = (new Date()).getTime();
             this.lifetime = dateExpires.getTime() - now;
         }
+    }
+
+    public boolean getValidation() {
+        return this.validation;
+    }
+
+    public void setValidation(boolean flag) {
+        this.validation = flag;
     }
 }

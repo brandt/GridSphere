@@ -15,6 +15,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.services.user.UserManagerService;
+import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 
 /**
  * This utility class provides useful methods for authorizing users to call methods.
@@ -33,6 +34,7 @@ public class AuthorizationUtility {
 
     private static PortletLog _log = SportletLog.getInstance(AuthorizationUtility.class);
     private static UserManagerService _userManager = null;
+    private static AccessControlManagerService _aclManagerService = null;
     private Class caller = null;
     private User user = null;
 
@@ -44,6 +46,9 @@ public class AuthorizationUtility {
             _userManager
                 = (UserManagerService)
                     factory.createPortletService(UserManagerService.class, null, true);
+            _aclManagerService
+                = (AccessControlManagerService)
+                    factory.createPortletService(AccessControlManagerService.class, null, true);
         } catch (Exception e) {
             _log.error("Unable to initialize services: ", e);
         }
@@ -68,7 +73,7 @@ public class AuthorizationUtility {
         if (this.user == null) {
             throwAuthorizationException(NULL_USER_MESSAGE, null);
         }
-        if (_userManager.isSuperUser(this.user)) {
+        if (_aclManagerService.hasSuperRole(this.user)) {
             throwAuthorizationException(SUPER_ONLY_MESSAGE, null);
         }
     }
@@ -82,7 +87,7 @@ public class AuthorizationUtility {
         if (this.user == null) {
             throwAuthorizationException(NULL_USER_MESSAGE, method);
         }
-        if (_userManager.isSuperUser(this.user)) {
+        if (_aclManagerService.hasSuperRole(this.user)) {
             throwAuthorizationException(SUPER_ONLY_MESSAGE, method);
         }
     }
@@ -99,7 +104,8 @@ public class AuthorizationUtility {
         if (this.user == null) {
             throwAuthorizationException(NULL_USER_MESSAGE, null);
         }
-        if (_userManager.isSuperUser(this.user) || _userManager.isAdminUser(this.user, group)) {
+        if (_aclManagerService.hasSuperRole(this.user) ||
+            _aclManagerService.hasAdminRoleInGroup(this.user, group)) {
             throwAuthorizationException(SUPER_OR_ADMIN_MESSAGE, null);
         }
     }
@@ -117,7 +123,8 @@ public class AuthorizationUtility {
         if (this.user == null) {
             throwAuthorizationException(NULL_USER_MESSAGE, method);
         }
-        if (_userManager.isSuperUser(this.user) || _userManager.isAdminUser(this.user, group)) {
+        if (_aclManagerService.hasSuperRole(this.user) ||
+            _aclManagerService.hasAdminRoleInGroup(this.user, group)) {
             throwAuthorizationException(SUPER_OR_ADMIN_MESSAGE, method);
         }
     }
@@ -134,7 +141,7 @@ public class AuthorizationUtility {
         if (this.user == null || user == null) {
             throwAuthorizationException(NULL_USER_MESSAGE, null);
         }
-        if (_userManager.isSuperUser(this.user) || this.user.equals(user)) {
+        if (_aclManagerService.hasSuperRole(this.user) || this.user.equals(user)) {
             throwAuthorizationException(SUPER_OR_SAME_MESSAGE, null);
         }
     }
@@ -152,7 +159,7 @@ public class AuthorizationUtility {
         if (this.user == null || user == null) {
             throwAuthorizationException(NULL_USER_MESSAGE, method);
         }
-        if (_userManager.isSuperUser(this.user) || this.user.equals(user)) {
+        if (_aclManagerService.hasSuperRole(this.user) || this.user.equals(user)) {
             throwAuthorizationException(SUPER_OR_SAME_MESSAGE, method);
         }
     }

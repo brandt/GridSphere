@@ -55,6 +55,11 @@
         <servlet-class>org.gridlab.gridsphere.portlets.core.UserManagerPortlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>AccessControllerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
        <servlet-name>HelloWorld</servlet-name>
        <url-pattern>/hello</url-pattern>
@@ -82,7 +87,12 @@
 
     <servlet-mapping>
        <servlet-name>UserManagerPortlet</servlet-name>
-       <url-pattern>/adminstration/users</url-pattern>
+       <url-pattern>/adminstration/accounts</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>AccessControllerPortlet</servlet-name>
+       <url-pattern>/adminstration/access</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

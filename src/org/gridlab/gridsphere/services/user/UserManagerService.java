@@ -1,46 +1,34 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
- * @version $Id$
+ * Created by IntelliJ IDEA.
+ * User: russell
+ * Date: Jan 31, 2003
+ * Time: 3:58:16 AM
+ * To change template for new interface use 
+ * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.services.user;
 
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletData;
-import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.services.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.core.mail.MailMessage;
-import org.gridlab.gridsphere.services.security.AuthenticationException;
+import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.service.PortletService;
 
 import java.util.List;
-import java.util.Map;
 
-/**
- * The UserManagerService manages users and account requests. Thru the UserManagerService
- * new portal accounts can be requested and granted or denied. Role objects can be retrieved
- * and removed.
- */
 public interface UserManagerService extends PortletService {
 
     /**
-     * Create a new account request. An internal ID is assigned the request
-     *
-     * @return a new AccountRequest
-     */
-    public AccountRequest createAccountRequest();
+      * Administrators can retrieve all pending account request
+      *
+      * @return a list of pending account requests
+      */
+    public List selectAccountRequests(String criteria);
 
     /**
-     * Submit the account request to the queue for administrative approval
-     *
-     * @param request the <code>AccountRequest</code> to submit
-     */
-    public void submitAccountRequest(AccountRequest request) throws PortletServiceException ;
-
-    /**
-     * Administrators can retrieve all pending account request
-     *
-     * @return a list of pending account requests
-     */
+      * Administrators can retrieve all pending account request
+      *
+      * @return a list of pending account requests
+      */
     public List getAccountRequests();
 
     /**
@@ -49,155 +37,139 @@ public interface UserManagerService extends PortletService {
      * @param user id of account request
      * @return account request for given user id
      */
-    public AccountRequest getAccountRequest(String userID);
+    public AccountRequest getAccountRequest(String oid);
 
     /**
-     * Approve a new or modified account request.
-     * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      * Create a new account request. An internal ID is assigned the request
+      *
+      * @return a new AccountRequest
+      */
+    public AccountRequest createAccountRequest();
+
+    /**
+      * Create a change account request. An internal ID is assigned the request
+      *
+      * @return a new AccountRequest
+      */
+    public AccountRequest createAccountRequest(User user);
+
+    /**
+     * Validate account request.
      *
-     * @param request the <code>AccountRequest</code> to approve
-     * @param mailMessage the <code>MailMessage</code> to use for notification
+     * @param request the <code>AccountRequest</code> to submit
      */
-    public void approveAccountRequest(User approver, AccountRequest request, MailMessage mailMessage)
-            throws PermissionDeniedException;
+    public void validateAccountRequest(AccountRequest request)
+            throws InvalidAccountRequestException, InvalidPasswordException;
 
     /**
-     * Deny a new or modified account request
-     * If mailMessage is non-null, a mail message will be sent out to the account requestor
+     * Submit the account request to the queue for administrative approval
      *
-     * @param request the <code>AccountRequest</code> to approve
-     * @param mailMessage the <code>MailMessage</code> to use for notification
+     * @param request the <code>AccountRequest</code> to submit
      */
-    public void denyAccountRequest(User denier, AccountRequest request, MailMessage mailMessage)
-            throws PermissionDeniedException;
+    public void submitAccountRequest(AccountRequest request)
+            throws InvalidAccountRequestException, InvalidPasswordException;
+
+     /**
+      * Submit the account request to the queue for administrative approval
+      *
+      * @param request the <code>AccountRequest</code> to submit
+      */
+    public void submitAccountRequest(AccountRequest request, MailMessage mailMessage)
+            throws InvalidAccountRequestException, InvalidPasswordException;
 
     /**
-     * Approve a new or modified account group request
-     * If mailMessage is non-null, a mail message will be sent out to the account requestor
-     *
-     * @param request the <code>User</code> to approve
-     * @param group the group to approve admittance into
-     * @param mailMessage the <code>MailMessage</code> to use for notification
-     */
-    public void approveGroupRequest(User approver, User request, PortletGroup group, MailMessage mailMessage)
-            throws PermissionDeniedException;
+      * Approve a new or modified account request.
+      * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      *
+      * @param request the <code>AccountRequest</code> to approve
+      * @param mailMessage the <code>MailMessage</code> to use for notification
+      */
+    public User approveAccountRequest(AccountRequest request);
 
     /**
-     * Deny a new or modified account group request
-     * If mailMessage is non-null, a mail message will be sent out to the account requestor
-     *
-     * @param request the <code>User</code> to approve
-     * @param group the group to deny admittance into
-     * @param mailMessage the <code>MailMessage</code> to use for notification
-     */
-    public void denyGroupRequest(User denier, User request, PortletGroup group, MailMessage mailMessage)
-            throws PermissionDeniedException;
+      * Approve a new or modified account request.
+      * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      *
+      * @param request the <code>AccountRequest</code> to approve
+      * @param mailMessage the <code>MailMessage</code> to use for notification
+      */
+    public User approveAccountRequest(AccountRequest request, MailMessage mailMessage);
 
     /**
-     * Modify an existing user account. Changes must be approved
-     * (or should only some changes need to be approved??)
-     *
-     * @param user the Role wishing to modify their account
-     * @return a new AccountRequest
-     */
-    public AccountRequest changeAccountRequest(User user);
+      * Approve a new or modified account request.
+      * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      *
+      * @param request the <code>AccountRequest</code> to approve
+      * @param mailMessage the <code>MailMessage</code> to use for notification
+      */
+    public void denyAccountRequest(AccountRequest request);
 
     /**
-     * Retrieves a user object with the given username from this service.
-     * Requires a user with the "super user" privileges, since this
-     * by-passes the normal login mechanism of retrieving a user object.
-     *
-     * @param User The super user requesting the user object
-     * @param String The user name or login id of the user in question
-     * @throws PermissionDeniedException If approver is not a super user
-     */
-    public User getUser(User approver, String userName)
-            throws PermissionDeniedException;
-
+      * Approve a new or modified account request.
+      * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      *
+      * @param request the <code>AccountRequest</code> to approve
+      * @param mailMessage the <code>MailMessage</code> to use for notification
+      */
+    public void denyAccountRequest(AccountRequest request, MailMessage mailMessage);
 
     /**
-     * Saves a user object with the given username from this service.
-     * Requires a user with the "super user" privileges.
-     *
-     * @param User The super user requesting the user object
-     * @param String The user name or login id of the user in question
-     * @throws PermissionDeniedException If approver is not a super user
-     */
-    public void saveUser(User approver, User user)
-            throws PermissionDeniedException;
+      * Approve a new or modified account request.
+      * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      *
+      * @param request the <code>AccountRequest</code> to approve
+      * @param mailMessage the <code>MailMessage</code> to use for notification
+      */
+    public void deleteAccount(User user);
 
     /**
-     * Removes a user object with the given username from this service.
-     * Requires a user with the "super user" privileges.
-     *
-     * @param User The super user requesting the user object
-     * @param String The user name or login id of the user in question
-     * @throws PermissionDeniedException If approver is not a super user
-     */
-    public void removeUser(User approver, String userName)
-            throws PermissionDeniedException;
-
-    /**
-     * Gets a user by the unique ID
-     * @param ID unique ID
-     * @return requested user
-     */
-    public User getUserByID(String ID);
+      * Approve a new or modified account request.
+      * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      *
+      * @param request the <code>AccountRequest</code> to approve
+      * @param mailMessage the <code>MailMessage</code> to use for notification
+      */
+    public void deleteAccount(User user, MailMessage mailMessage);
 
     /**
      * Return a list of all portal users
      *
      * @return a list containing all Role objects
      */
-    public List getAllUsers();
+    public List selectUsers(String criteria);
 
     /**
-     * Checks to see if account exists for a user
-     *
-     * @param userID the user login ID
-     * @return true if the user exists, false otherwise
-     */
-    public boolean userExists(String userName);
+      * Administrators can retrieve all pending account request
+      *
+      * @return a list of pending account requests
+      */
+    public List getUsers();
 
     /**
-     * checks if the user is super user
-     *
-     * @param user userobject to be examined
-     * @return true is the user is usperuser, false otherwise
-     */
-    public boolean isSuperUser(User user);
+      * Retrieves a user object with the given username from this service.
+      * Requires a user with the "super user" AccessRights, since this
+      * by-passes the normal login mechanism of retrieving a user object.
+      *
+      * @param User The super user requesting the user object
+      * @param String The user name or login id of the user in question
+      */
+    public User getUser(String id);
 
     /**
-     * Checks if the user is an admin user in a given group
-     * @param user the user
-     * @param group in that group
-     * @return true/false if he is an admin
-     */
-    public boolean isAdminUser(User user, PortletGroup group);
+      * Retrieves a user object with the given username from this service.
+      * Requires a user with the "super user" AccessRights, since this
+      * by-passes the normal login mechanism of retrieving a user object.
+      *
+      * @param User The super user requesting the user object
+      * @param String The user name or login id of the user in question
+      */
+    public User getUserByLoginName(String loginName);
 
     /**
-     * Login a user with the given login name and password.
-     * Returns the associated user if login succeeds.
-     * Throws an AuthenticationException if login fails.
-     *
-     * @param String The login name or user id.
-     * @param String The login password.
-     * @return User The associated user.
-     * @throws AuthenticationException If login unsuccessful
-     */
-    public User login(String loginName, String loginPassword)
-            throws AuthenticationException;
-
-    /**
-     * Login a user with the given login parameters.
-     * Returns the associated user if login succeeds.
-     * Throws an AuthenticationException if login fails.
-     *
-     * @param Map The login parameters.
-     * @return User The associated user.
-     * @throws AuthenticationException If login unsuccessful
-     */
-    public User login(Map parameters)
-            throws AuthenticationException;
-
+      * Checks to see if account exists for a user
+      *
+      * @param userID the user login ID
+      * @return true if the user exists, false otherwise
+      */
+    public boolean existsUserWithLoginName(String loginName);
 }

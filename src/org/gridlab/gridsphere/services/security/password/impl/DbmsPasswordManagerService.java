@@ -15,8 +15,11 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.services.security.password.*;
 import org.gridlab.gridsphere.services.user.UserManagerService;
+import org.gridlab.gridsphere.services.user.AccountRequest;
+import org.gridlab.gridsphere.services.user.impl.AccountRequestImpl;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
@@ -29,7 +32,8 @@ public class DbmsPasswordManagerService
 
     private static PortletLog _log = SportletLog.getInstance(DbmsPasswordManagerService.class);
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
-    private String passwordImpl = DbmsPassword.class.getName();
+    private String userPasswordImpl = DbmsUserPassword.class.getName();
+    private String requestPasswordImpl = DbmsRequestPassword.class.getName();
     private long defaultPasswordLifetime = -1;
 
     /****** PORTLET SERVICE METHODS *******/
@@ -52,9 +56,32 @@ public class DbmsPasswordManagerService
     /****** PASSWORD SERVICE METHODS *******/
 
     public List getPasswords() {
+        List userPasswords = getUserPasswords();
+        List requestPasswords = getAccountRequestPasswords();
+        Vector allPasswords = new Vector();
+        allPasswords.add(userPasswords);
+        allPasswords.add(requestPasswords);
+        return allPasswords;
+    }
+
+    public List getAccountRequestPasswords() {
         List passwords = null;
         String query = "select pw from "
-                     + this.passwordImpl
+                     + this.requestPasswordImpl
+                     + " pw";
+        try {
+            passwords = this.pm.restoreList(query);
+        } catch (PersistenceManagerException e) {
+            _log.error("Unable to retrieve passwords", e);
+            passwords = new Vector();
+        }
+        return passwords;
+    }
+
+    public List getUserPasswords() {
+        List passwords = null;
+        String query = "select pw from "
+                     + this.userPasswordImpl
                      + " pw";
         try {
             passwords = this.pm.restoreList(query);
@@ -74,9 +101,21 @@ public class DbmsPasswordManagerService
      * a user and is called internally by other methods in this class.
      */
     private DbmsPassword getDbmsPassword(User user) {
+        if (user instanceof AccountRequest) {
+            return getDbmsRequestPassword((AccountRequest)user);
+        } else {
+            return getDbmsUserPassword(user);
+        }
+    }
+
+    /**
+     * This method returns the <code>DbmsPassword</code> associated with
+     * a user and is called internally by other methods in this class.
+     */
+    private DbmsPassword getDbmsUserPassword(User user) {
         DbmsPassword password = null;
         String query = "select pw from "
-                     + this.passwordImpl
+                     + this.userPasswordImpl
                      + " pw where pw.user=" + user.getID();
         try {
             password = (DbmsPassword)this.pm.restoreObject(query);
@@ -86,9 +125,26 @@ public class DbmsPasswordManagerService
         return password;
     }
 
+    /**
+     * This method returns the <code>DbmsPassword</code> associated with
+     * a user and is called internally by other methods in this class.
+     */
+    private DbmsRequestPassword getDbmsRequestPassword(AccountRequest request) {
+        DbmsRequestPassword password = null;
+        String query = "select pw from "
+                     + this.requestPasswordImpl
+                     + " pw where pw.user=" + request.getID();
+        try {
+            password = (DbmsRequestPassword)this.pm.restoreObject(query);
+        } catch (PersistenceManagerException e) {
+            _log.error("Unable to retrieve password for user", e);
+        }
+        return password;
+    }
+
     public PasswordBean editPassword(User user) {
         PasswordBean editor = null;
-        Password password = getDbmsPassword(user);
+        Password password = getDbmsUserPassword(user);
         if (password == null) {
             long lifetime = getDefaultPasswordLifetime();
             editor = new PasswordBean(user);
@@ -100,12 +156,7 @@ public class DbmsPasswordManagerService
     }
 
     public void savePassword(PasswordBean editor)
-            throws PasswordInvalidException {
-        savePassword(editor, true);
-    }
-
-    public void savePassword(PasswordBean editor, boolean validatePassword)
-            throws PasswordInvalidException {
+            throws InvalidPasswordException {
         // Get password attributes
         User user = editor.getUser();
         String hint = editor.getHint();
@@ -117,15 +168,16 @@ public class DbmsPasswordManagerService
         DbmsPassword password = getDbmsPassword(user);
         if (password == null) {
             // Validate the value if requested
-            if (validatePassword) {
+            if (editor.getValidation()) {
                 validatePassword(value);
             }
-            password = new DbmsPassword();
-            password.setUser(user);
+            // Instantiate new password
+            password = createDbmsPassword(user);
             password.setValue(value);
             password.setDateExpires(dateExpires);
             password.setDateCreated(now);
             password.setDateLastModified(now);
+            // Create record of password
             try {
                 this.pm.create(password);
             } catch (PersistenceManagerException e) {
@@ -133,9 +185,11 @@ public class DbmsPasswordManagerService
             }
         } else {
             // Validate the value if requested
-            if (validatePassword) {
-                validatePassword(password, value);
+            if (editor.getValidation()) {
+                String oldValue = password.getValue();
+                validatePassword(oldValue, value);
             }
+            // Update password
             password.setValue(value);
             password.setDateExpires(dateExpires);
             password.setDateLastModified(now);
@@ -147,31 +201,29 @@ public class DbmsPasswordManagerService
         }
     }
 
-    public void savePassword(User user, String value)
-            throws PasswordInvalidException {
-        savePassword(user, value, true);
-    }
-
-    public void savePassword(User user, String value, boolean validatePassword)
-            throws PasswordInvalidException {
-        // Get password editor
-        PasswordBean editor = editPassword(user);
-        // Save new value
-        editor.setValue(value);
-        // Reset date expires
-        editor.resetDateExpires();
-        // Save password changes
-        savePassword(editor, validatePassword);
+    private DbmsPassword createDbmsPassword(User user) {
+        DbmsPassword password = null;
+        if (user instanceof AccountRequestImpl) {
+            password = new DbmsRequestPassword();
+        } else {
+            password = new DbmsUserPassword();
+        }
+        password.setUser(user);
+        return password;
     }
 
     public void deletePassword(User user) {
         Password password = getPassword(user);
         if (password != null) {
-            try {
-                this.pm.delete(password);
-            } catch (PersistenceManagerException e) {
-                _log.error("Unable to delete password", e);
-            }
+            deletePassword(password);
+        }
+    }
+
+    private void deletePassword(Password password) {
+        try {
+            this.pm.delete(password);
+        } catch (PersistenceManagerException e) {
+            _log.error("Unable to delete password", e);
         }
     }
 
@@ -180,45 +232,65 @@ public class DbmsPasswordManagerService
         return (password != null);
     }
 
+    public void activatePassword(AccountRequest request, User user)
+            throws InvalidPasswordException {
+        DbmsRequestPassword requestPassword = getDbmsRequestPassword(request);
+        if (requestPassword == null) {
+            String msg = "No password associated with given account request!";
+            _log.debug(msg);
+            throw new InvalidPasswordException(msg);
+        }
+        // Save user password
+        PasswordBean passwordBean = new PasswordBean();
+        passwordBean.setUser(user);
+        passwordBean.setHint(passwordBean.getHint());
+        passwordBean.setValue(requestPassword.getValue());
+        passwordBean.setDateExpires(requestPassword.getDateExpires());
+        passwordBean.setValidation(false);
+        savePassword(passwordBean);
+        // Delete request password
+        deletePassword(requestPassword);
+    }
+
     public void validatePassword(User user, String newValue)
-            throws PasswordInvalidException {
-        DbmsPassword password = getDbmsPassword(user);
+            throws InvalidPasswordException {
+        DbmsPassword password = getDbmsUserPassword(user);
         if (password == null) {
             validatePassword(newValue);
         } else {
-            validatePassword(password, newValue);
+            String oldValue = password.getValue();
+            validatePassword(oldValue, newValue);
         }
     }
 
-    private void validatePassword(DbmsPassword password, String newValue)
-            throws PasswordInvalidException {
-        String oldValue = password.getValue();
+    private void validatePassword(String oldValue, String newValue)
+            throws InvalidPasswordException {
         if (oldValue.equals(newValue)) {
             String msg = "New password must be different from the old value.";
-            throw new PasswordInvalidException(msg);
+            throw new InvalidPasswordException(msg);
         }
         validatePassword(newValue);
     }
 
     public void validatePassword(String password)
-          throws PasswordInvalidException {
+          throws InvalidPasswordException {
         if (password == null) {
             String msg = "Password is not set.";
-            throw new PasswordInvalidException(msg);
+            throw new InvalidPasswordException(msg);
         }
         password = password.trim();
         if (password.length() == 0) {
             String msg = "Password is blank.";
-            throw new PasswordInvalidException(msg);
+            throw new InvalidPasswordException(msg);
         }
         if (password.length() < 5) {
             String msg = "Password must be longer than 5 characters.";
-            throw new PasswordInvalidException(msg);
+            throw new InvalidPasswordException(msg);
         }
     }
 
     public boolean isPasswordCorrect(User user, String value) {
-        DbmsPassword password = getDbmsPassword(user);
+        DbmsPassword password = getDbmsUserPassword(user);
         if (password == null) {
             _log.debug("No password found for user");
             return false;
@@ -231,115 +303,4 @@ public class DbmsPasswordManagerService
     public long getDefaultPasswordLifetime() {
         return this.defaultPasswordLifetime;
     }
-
-    /***
-    public Password createPassword(User user, String value, boolean validatePassword)
-            throws PasswordInvalidException {
-        // First validate the value if requested
-        if (validatePassword) {
-            validatePassword(value);
-        }
-        // Then check if user already has password
-        DbmsPassword password = getDbmsPassword(user);
-        if (password != null) {
-            String msg = "User already has password.";
-            throw new PasswordInvalidException(msg);
-        }
-        password = new DbmsPassword();
-        password.setUser(user);
-        password.setValue(value);
-        try {
-            this.pm.create(password);
-        } catch (PersistenceManagerException e) {
-            _log.error("Unable to create password", e);
-        }
-        return password;
-    }
-
-    public Password createPassword(User user, String value)
-            throws PasswordInvalidException {
-        return createPassword(user, value, true);
-    }
-
-    public void resetPassword(User user, String value)
-            throws PasswordInvalidException {
-        // First validate the new value
-        validatePassword(value);
-        // Next delete the old password
-        deletePassword(user);
-        // Then create a new password
-        DbmsPassword password = new DbmsPassword();
-        password.setUser(user);
-        password.setValue(value);
-        try {
-            this.pm.create(password);
-        } catch (PersistenceManagerException e) {
-            _log.error("Unable to create password", e);
-        }
-    }
-
-    public void updatePassword(User user, String value)
-            throws PasswordInvalidException, PasswordNotFoundException {
-        // First check if user already has password
-        DbmsPassword password = getDbmsPassword(user);
-        if (password == null) {
-            String msg = "A password must first be created for this user.";
-            throw new PasswordNotFoundException(msg);
-        }
-        String oldValue = password.getValue();
-        // Then validate the new value
-        validatePassword(oldValue, value);
-        // Then update the password
-        password.setValue(value);
-        try {
-            this.pm.update(password);
-        } catch (PersistenceManagerException e) {
-            _log.error("Unable to update password", e);
-        }
-    }
-
-     public Date getDatePasswordExpires(User user)
-             throws PasswordNotFoundException {
-         DbmsPassword password = getDbmsPassword(user);
-         if (password == null) {
-             String msg = "No password found for user " + user.getUserID();
-             _log.error(msg);
-             throw new PasswordNotFoundException(msg);
-         }
-         return password.getDateExpires();
-     }
-
-     public void setDatePasswordExpires(User user, Date date)
-             throws PasswordNotFoundException {
-         DbmsPassword password = getDbmsPassword(user);
-         if (password == null) {
-             String msg = "No password found for user " + user.getUserID();
-             _log.error(msg);
-             throw new PasswordNotFoundException(msg);
-         }
-         password.setDateExpires(date);
-     }
-
-     public String getPasswordHint(User user)
-             throws PasswordNotFoundException {
-         DbmsPassword password = getDbmsPassword(user);
-         if (password == null) {
-             String msg = "No password found for user " + user.getUserID();
-             _log.error(msg);
-             throw new PasswordNotFoundException(msg);
-         }
-         return password.getHint();
-     }
-
-     public void setPasswordHint(User user, String hint)
-             throws PasswordNotFoundException {
-         DbmsPassword password = getDbmsPassword(user);
-         if (password == null) {
-             String msg = "No password found for user " + user.getUserID();
-             _log.error(msg);
-             throw new PasswordNotFoundException(msg);
-         }
-         password.setHint(hint);
-     }
-    ***/
 }

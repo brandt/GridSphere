@@ -8,24 +8,47 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
+import org.gridlab.gridsphere.services.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.security.password.PasswordBean;
 
 import java.util.List;
+import java.util.Date;
 
 public interface AccountRequest extends SportletUser {
 
-    /**
-     * Adds the AccountRequest to the group with that role
-     *
-     * @param group
-     * @param role
-     */
+    /*** Password methods ***/
+
+    public PasswordBean getPassword();
+
+    public String getPasswordValue();
+
+    public void setPasswordValue(String value);
+
+    public String getPasswordHint();
+
+    public void setPasswordHint(String value);
+
+    public Date getPasswordDateExpires();
+
+    public void setPasswordDateExpires(Date date);
+
+    public long getPasswordLifetime();
+
+    public void setPasswordLifetime(long lifetime);
+
+    public boolean getPasswordValidation();
+
+    public void setPasswordValidation(boolean flag);
+
+    public boolean getPasswordHasChanged();
+
+    /*** ACL methods ***/
+
     public void addToGroup(PortletGroup group, PortletRole role);
 
-    /**
-     * Prints the contents of the account request to a String
-     *
-     * @return the account request information
-     */
-    public String toString();
+    /*** Other methods ***/
 
+    public boolean isNewUser();
+
+    public String toString();
 }

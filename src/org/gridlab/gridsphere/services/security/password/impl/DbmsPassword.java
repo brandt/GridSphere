@@ -15,122 +15,21 @@ import org.gridlab.gridsphere.core.persistence.BaseObject;
 
 import java.util.Date;
 
-/**
- * @table userpassword
- */
-public class DbmsPassword extends BaseObject implements Password {
+public interface DbmsPassword extends Password  {
 
-    /**
-     * @sql-name user
-     * @get-method getSportletUser
-     * @set-method setSportletUser
-     * @required
-     */
-    private SportletUserImpl user;
-    /**
-     * @sql-size 32
-     * @sql-name value
-     * @required
-     */
-    private String value = new String();
-    /**
-     * @sql-size 256
-     * @sql-name hint
-     */
-    private String hint = new String();
+    public void setUser(User user);
 
-    /**
-     * @sql-name lifetime
-     * @required
-     */
-    private long lifetime = -1;
-    /**
-     * @sql-name dateexpires
-     */
-    private Date dateExpires = null;
-    /**
-     * @sql-name datecreated
-     * @required
-     */
-    private Date dateCreated = null;
-    /**
-     * @sql-name datelastmodified
-     * @required
-     */
-    private Date dateLastModified = null;
+    public void setHint(String hint);
 
-    public User getUser() {
-        return this.user;
-    }
+    public String getValue();
 
-    public void setUser(User user) {
-        this.user = (SportletUserImpl)user;
-    }
+    public void setValue(String value);
 
-    public String getHint() {
-        return this.hint;
-    }
+    public void setLifetime(long lifetime);
 
-    public void setHint(String hint) {
-        this.hint = hint;
-    }
+    public void setDateExpires(Date dateExpires);
 
-    public String getValue() {
-        return this.value;
-    }
+    public void setDateCreated(Date dateCreated);
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public long getLifetime() {
-        return this.lifetime;
-    }
-
-    public void setLifetime(long lifetime) {
-        this.lifetime = lifetime;
-    }
-
-
-    public Date getDateExpires() {
-        return this.dateExpires;
-    }
-
-    public void setDateExpires(Date dateExpires) {
-        this.dateExpires = dateExpires;
-    }
-
-    public Date getDateCreated() {
-        return this.dateCreated;
-    }
-
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public Date getDateLastModified() {
-        return this.dateLastModified;
-    }
-
-    public void setDateLastModified(Date dateModified) {
-        this.dateLastModified = dateModified;
-    }
-
-    public boolean equals(String value) {
-        return this.value.equals(value);
-    }
-
-    /**
-     * Castor method for getting user object.
-     */
-    public SportletUserImpl getSportletUser() {
-        return this.user;
-    }
-
-    /**
-     * Castor method for setting user object.
-     */
-    public void setSportletUser(SportletUserImpl user) {
-        this.user = user;
-    }
+    public void setDateLastModified(Date dateModified);
 }

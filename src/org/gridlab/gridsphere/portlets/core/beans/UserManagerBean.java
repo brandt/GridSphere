@@ -3,28 +3,31 @@
  * User: russell
  * Date: Jan 20, 2003
  * Time: 1:07:28 AM
- * To change template for new class use 
+ * To change template for new class use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.portlets.core.beans;
 
-import org.gridlab.gridsphere.services.security.password.PasswordInvalidException;
+import org.gridlab.gridsphere.services.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.security.password.Password;
 import org.gridlab.gridsphere.services.security.password.PasswordBean;
+import org.gridlab.gridsphere.services.security.acl.*;
 import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.user.PermissionDeniedException;
+import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portletcontainer.descriptor.Role;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 
 import javax.servlet.UnavailableException;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
+import java.util.Iterator;
 import java.security.acl.Group;
 import java.io.PrintWriter;
 
@@ -41,7 +44,7 @@ public class UserManagerBean extends PortletBean {
     public static final String PAGE_USER_EDIT = "/jsp/usermanager/userEdit.jsp";
     public static final String PAGE_USER_DELETE = "/jsp/usermanager/userDelete.jsp";
     public static final String PAGE_USER_DELETE_CONFIRM = "/jsp/usermanager/userDeleteConfirm.jsp";
-    // Portlet request actions available within this portlet
+    // Portlet actions available within this portlet
     public static final String ACTION_USER_LIST = "userList";
     public static final String ACTION_USER_VIEW = "userView";
     public static final String ACTION_USER_EDIT = "userEdit";
@@ -56,6 +59,7 @@ public class UserManagerBean extends PortletBean {
     // Portlet services
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
+    private AccessControlManagerService aclManagerService = null;
     // Form validation
     private boolean isFormInvalid = false;
     private String formInvalidMessage = new String();
@@ -72,12 +76,12 @@ public class UserManagerBean extends PortletBean {
     private String organization = new String();
     // Password attributes
     private Password password = null;
-    private String passwordValue = null;
-    private String passwordConfirmation = null;
+    private String passwordValue = new String();
+    private String passwordConfirmation = new String();
     private Date datePasswordExpires = null;
     private long passwordLifetime = -1;
     // ACL attributes
-    private Role role = null;
+    private PortletRole baseGroupRole = PortletRole.USER;
 
     public UserManagerBean() {
         super();
@@ -95,6 +99,8 @@ public class UserManagerBean extends PortletBean {
         PortletContext context = config.getContext();
         this.userManagerService =
                 (UserManagerService)context.getService(UserManagerService.class);
+        this.aclManagerService =
+                (AccessControlManagerService)context.getService(AccessControlManagerService.class);
         this.passwordManagerService =
                 (PasswordManagerService)context.getService(PasswordManagerService.class);
         _log.debug("Exiting initServices()");
@@ -304,7 +310,7 @@ public class UserManagerBean extends PortletBean {
 
     public void createUserDeleteCancelURI() {
         PortletURI cancelURI = response.createReturnURI();
-        cancelURI.addAction(new DefaultPortletAction(ACTION_USER_EDIT_CANCEL));
+        cancelURI.addAction(new DefaultPortletAction(ACTION_USER_DELETE_CANCEL));
         request.setAttribute(ACTION_USER_DELETE_CANCEL, cancelURI.toString());
     }
 
@@ -486,34 +492,86 @@ public class UserManagerBean extends PortletBean {
         return new Vector();
     }
 
-    public Role getUserRole() {
-        return this.role;
+    public PortletRole getRoleInBaseGroup() {
+        return this.baseGroupRole;
     }
 
-    public void setUserRole(Role role) {
-        this.role = role;
+    public void setRoleInBaseGroup(PortletRole role) {
+        this.baseGroupRole = role;
     }
 
-    public void setUserRole(String roleName) {
+    public void setRoleInBaseGroup(String role) {
+        try {
+            this.baseGroupRole = PortletRole.toPortletRole(role);
+            _log.debug("Set base role to " + baseGroupRole);
+        } catch (Exception e) {
+            _log.error("Unable to instantiate role " + role, e);
+            this.baseGroupRole = PortletRole.USER;
+        }
     }
 
-    private boolean existsUser(String userName) {
-        return this.userManagerService.userExists(userName);
+    public List getAllRolesInBaseGroup() {
+        return getAllRolesInGroup(PortletGroup.BASE);
+    }
+
+    public List getAllRolesInGroup(PortletGroup group) {
+        List allRoles = new Vector();
+        if (group.equals(PortletGroup.SUPER)) {
+            allRoles.add(PortletRole.SUPER);
+        } else {
+            allRoles.add(PortletRole.GUEST);
+            allRoles.add(PortletRole.USER);
+            allRoles.add(PortletRole.ADMIN);
+            if (group.equals(PortletGroup.BASE)) {
+                allRoles.add(PortletRole.SUPER);
+            }
+        }
+        return allRoles;
+    }
+
+    private boolean existsUserWithLoginName(String userName) {
+        return this.userManagerService.existsUserWithLoginName(userName);
     }
 
     private void loadUserList() {
-        this.userList = this.userManagerService.getAllUsers();
+        this.userList = this.userManagerService.getUsers();
     }
 
     private void loadUser() {
-        // Load user
+        // Get user id
         String userID = getParameter("userID");
-        User user = this.userManagerService.getUserByID(userID);
+        // Load user
+        loadUser(userID);
+    }
+
+    private void loadUser(String userID) {
+        User user = this.userManagerService.getUser(userID);
         if (user != null) {
             // Save user attributes
             setUser(user);
             // Then load password
             loadPassword();
+            // Load user acl
+            loadAccessRights();
+        }
+    }
+
+    private void loadPassword() {
+        Password password = this.passwordManagerService.getPassword(this.user);
+        if (password != null) {
+            setPassword(password);
+        }
+    }
+
+    private void loadAccessRights() {
+        if (this.aclManagerService.hasSuperRole(this.user)) {
+            this.baseGroupRole = PortletRole.SUPER;
+        } else {
+            this.baseGroupRole =
+                    this.aclManagerService.getRoleInGroup(this.user, PortletGroup.BASE);
+            if (this.baseGroupRole == null) {
+                this.baseGroupRole = PortletRole.USER;
+            }
         }
     }
 
@@ -524,9 +582,29 @@ public class UserManagerBean extends PortletBean {
         setUserName(getParameter("userName"));
         setFamilyName(getParameter("familyName"));
         setGivenName(getParameter("givenName"));
-        setFullName(getParameter("fullName"));
+        resetFullName();
         setEmailAddress(getParameter("emailAddress"));
         setOrganization(getParameter("organization"));
+        // Validate user
+        validateUser();
+        // Then edit password
+        editPassword();
+        // Then edit access rights
+        editAccessRights();
+    }
+
+    private void resetFullName() {
+        StringBuffer buffer = new StringBuffer();
+        if (this.givenName.length() > 0) {
+            buffer.append(this.givenName);
+            buffer.append(" ");
+        }
+        buffer.append(this.familyName);
+        this.fullName = buffer.toString();
+    }
+
+    private void validateUser()
+            throws PortletException {
         // Validate user parameters
         if (this.userName.equals("")) {
             throw new PortletException("User name can't be blank.");
@@ -537,74 +615,19 @@ public class UserManagerBean extends PortletBean {
         if (this.givenName.equals("")) {
             throw new PortletException("Given name can't be blank.");
         }
-        // Then edit password
-        editPassword();
-    }
-
-    private void saveUser()
-            throws PortletException {
-        // Get account request
-        AccountRequest account = null;
-        if (this.user == null) {
-            account = this.userManagerService.createAccountRequest();
-            // Save id created for this account request
-            setUserID(account.getID());
-        } else {
-            account = this.userManagerService.changeAccountRequest(this.user);
-        }
-        // Set account request attributes
-        account.setUserID(getUserName());
-        account.setFamilyName(getFamilyName());
-        account.setGivenName(getGivenName());
-        account.setFullName(getFullName());
-        account.setEmailAddress(getEmailAddress());
-        account.setOrganization(getOrganization());
-        // Submit the account request
-        this.userManagerService.submitAccountRequest(account);
-        // Approvate account request
-        User approver = getPortletUser();
-        try {
-            this.userManagerService.approveAccountRequest(approver, account, null);
-        } catch (PermissionDeniedException e) {
-            throw new PortletException(e.getMessage());
-        }
-        // Load user if currently null (was a new user)
-        if (this.user == null) {
-            this.user = this.userManagerService.getUserByID(getUserID());
-        }
-        // Then save password
-        savePassword();
-    }
-
-    private void deleteUser() {
-        // First delete password
-        deletePassword();
-        // Then delete user
-        try {
-            User approver = getPortletUser();
-            this.userManagerService.removeUser(approver, userName);
-        } catch (PermissionDeniedException e) {
-            _log.error("Error deleting user", e);
-        }
-        // Blank out user id to be safe (but keep other attributes for display).
-        setUserID("");
-    }
-
-    private void loadPassword() {
-        this.password = this.passwordManagerService.getPassword(this.user);
-        if (password != null) {
-            setPassword(password);
-        }
     }
 
     private void editPassword()
             throws PortletException {
-        // Apply password parameters
-        // Note: We access request.getParameter() directly
-        // in case password was not changed. See logic below.
-        setPasswordValue(request.getParameter("passwordValue"));
-        setPasswordConfirmation(request.getParameter("passwordConfirmation"));
+        setPasswordValue(getParameter("passwordValue"));
+        setPasswordConfirmation(getParameter("passwordConfirmation"));
         setPasswordLifetime(getParameterAsLng("passwordLifetime", -1));
+        // validate password parameters
+        validatePassword();
+    }
+
+    private void validatePassword()
+            throws PortletException {
         if (this.passwordValue.length() == 0) {
             // New users must be given a password
             if (this.user == null) {
@@ -617,31 +640,100 @@ public class UserManagerBean extends PortletBean {
             }
             try {
                 this.passwordManagerService.validatePassword(passwordValue);
-            } catch (PasswordInvalidException e) {
+            } catch (InvalidPasswordException e) {
                 throw new PortletException(e.getMessage());
             }
         }
     }
 
-    private void savePassword()
+    private void editAccessRights()
             throws PortletException {
+        setRoleInBaseGroup(getParameter("baseGroupRole"));
+    }
+
+    private void saveUser()
+            throws PortletException {
+        // Get account user
+        User user = getUser();
+        AccountRequest accountRequest = null;
+        // If user is new
+        if (user == null) {
+            // Create new account request
+            accountRequest = this.userManagerService.createAccountRequest();
+            // Save id created for this account request
+            setUserID(accountRequest.getID());
+        } else {
+            // Create edit account request
+            accountRequest = this.userManagerService.createAccountRequest(user);
+        }
+        // Edit account profile attributes
+        editAccountRequestProfile(accountRequest);
+        // Edit account password attributes
+        editAccountRequestPassword(accountRequest);
+        // Submit account request
+        this.userManagerService.submitAccountRequest(accountRequest);
+        // Approve account request
+        user = this.userManagerService.approveAccountRequest(accountRequest);
+        // Reset user
+        setUser(user);
+        // Save user access rights
+        saveAccessRights();
+    }
+
+    private void editAccountRequestProfile(AccountRequest accountRequest) {
+        accountRequest.setLoginName(getUserName());
+        accountRequest.setFamilyName(getFamilyName());
+        accountRequest.setGivenName(getGivenName());
+        accountRequest.setFullName(getFullName());
+        accountRequest.setEmailAddress(getEmailAddress());
+        accountRequest.setOrganization(getOrganization());
+    }
+
+    private void editAccountRequestPassword(AccountRequest accountRequest) {
+        String passwordValue = getPasswordValue();
         // Save password parameters if password was altered
-        if (this.passwordValue.length() > 0) {
-            PasswordBean passwordBean = new PasswordBean();
-            passwordBean.setUser(getUser());
-            passwordBean.setValue(getPasswordValue());
-            passwordBean.setLifetime(getPasswordLifetime());
-            try {
-                this.passwordManagerService.savePassword(passwordBean);
-            } catch (PasswordInvalidException e) {
-                throw new PortletException(e.getMessage());
-            }
+        if (passwordValue.length() > 0) {
+            accountRequest.setPasswordValue(passwordValue);
+            accountRequest.setPasswordDateExpires(getDatePasswordExpires());
         }
     }
 
-    private void deletePassword() {
-        if (this.user != null) {
-            this.passwordManagerService.deletePassword(this.user);
+    private void saveAccessRights()
+            throws PortletException {
+        // Given user
+        User user = getUser();
+        // Chosen role in base group
+        PortletRole role = getRoleInBaseGroup();
+        // Create appropriate access request
+        GroupRequest accessRequest = this.aclManagerService.createGroupRequest(user);
+        accessRequest.setAction(GroupRequest.ACTION_ADD);
+        accessRequest.setGroup(PortletGroup.BASE);
+        // If super role was chosen
+        if (role.equals(PortletRole.SUPER)) {
+            _log.debug("Granting super role");
+            // Grant super role
+            this.aclManagerService.grantSuperRole(user);
+            _log.debug("Granting admin role in base group");
+            // Set admin role in base group
+            accessRequest.setRole(PortletRole.ADMIN);
+        } else {
+            // Revoke super role
+            this.aclManagerService.revokeSuperRole(user);
+            _log.debug("Granting " + role + " role in base group");
+            // Grant chosen role in base group
+            accessRequest.setRole(role);
+        }
+        this.aclManagerService.submitGroupRequest(accessRequest);
+        this.aclManagerService.approveGroupRequest(accessRequest);
+    }
+
+    private void deleteUser() {
+        // Delete our user
+        User user = getUser();
+        if (user != null) {
+            this.userManagerService.deleteAccount(user);
+            // Blank out user id to be safe.
+            setUserID("");
         }
     }
 }

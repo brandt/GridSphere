@@ -12,10 +12,10 @@ public class PortletRole  {
 
     private int role;
 
+    public static final int SUPER_ROLE = 0;
     public static final int GUEST_ROLE = 1;
     public static final int USER_ROLE  = 2;
     public static final int ADMIN_ROLE = 3;
-    public static final int SUPER_ROLE = 4;
 
     public static final PortletRole GUEST = new PortletRole(GUEST_ROLE);
     public static final PortletRole USER = new PortletRole(USER_ROLE);
@@ -80,5 +80,23 @@ public class PortletRole  {
     public boolean isSuper() {
         if (role == SUPER_ROLE) return true;
         return false;
+    }
+
+    public boolean equals(String object) {
+        if (object == null) {
+            return false;
+        }
+        String thisRole = toString();
+        String thatRole = (String)object;
+        return thisRole.equals(thatRole);
+    }
+
+    public boolean equals(PortletRole object) {
+        if (object == null) {
+            return false;
+        }
+        String thisRole = toString();
+        String thatRole = ((PortletRole)object).toString();
+        return thisRole.equals(thatRole);
     }
 }

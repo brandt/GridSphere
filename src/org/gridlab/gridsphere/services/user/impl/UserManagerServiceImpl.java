@@ -1,731 +1,199 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
- * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
- * @version $Id$
+ * Created by IntelliJ IDEA.
+ * User: russell
+ * Date: Jan 29, 2003
+ * Time: 2:23:19 AM
+ * To change template for new class use
+ * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.services.user.impl;
 
-import org.gridlab.gridsphere.core.mail.MailMessage;
-import org.gridlab.gridsphere.core.mail.MailUtils;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
-import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.services.user.*;
+import org.gridlab.gridsphere.services.security.acl.*;
 import org.gridlab.gridsphere.services.security.AuthenticationException;
 import org.gridlab.gridsphere.services.security.AuthenticationModule;
-import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.security.acl.AccessControlService;
-import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
 import org.gridlab.gridsphere.services.security.impl.PasswordAuthenticationModule;
 import org.gridlab.gridsphere.services.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.services.user.AccountRequest;
-import org.gridlab.gridsphere.services.user.PermissionDeniedException;
-import org.gridlab.gridsphere.services.user.UserManagerService;
+import org.gridlab.gridsphere.services.security.password.InvalidPasswordException;
+import org.gridlab.gridsphere.services.security.password.PasswordBean;
+import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.core.mail.MailMessage;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
-import javax.mail.MessagingException;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
+import java.util.Iterator;
 import java.util.Vector;
 
-/**
- * The UserManagerService manages users and account requests. Thru the UserManagerService
- * new portal accounts can be requested and granted or denied. Role objects can be retrieved
- * and removed.
- */
-class UserManagerServiceImpl implements PortletServiceProvider, UserManagerService {
+public class UserManagerServiceImpl
+        implements PortletServiceProvider,
+                   LoginService,
+                   UserManagerService,
+                   AccessControlManagerService {
 
     private static PortletLog log = SportletLog.getInstance(UserManagerServiceImpl.class);
     private static PortletServiceFactory factory = SportletServiceFactory.getInstance();
-    private static AccessControlService aclService = null;
-    private static AccessControlManagerService aclManager = null;
-    private static PasswordManagerService passwordManager = null;
-
-    private String jdoUserACL = new String();   // object name for UserACL
-    private String jdoARImpl = new String();    // ... for AccountRequest
-    private String jdoSUImpl = new String();    // ... for SportletUserImpl
-
-
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
-
+    private PasswordManagerService passwordManagerService = null;
     private List authenticationModules = new Vector();
 
-    private static final UserManagerServiceImpl instance = new UserManagerServiceImpl();
-    private static int numClients = 0;
-    private static int MAX_CLIENTS = 1;
+    private String jdoUser = SportletUserImpl.class.getName();
+    private String jdoAccountRequest = AccountRequestImpl.class.getName();
+    private String jdoGroupRequest = GroupRequestImpl.class.getName();
+    private String jdoGroupEntry = GroupEntryImpl.class.getName();
+    private String jdoPortletGroup = SportletGroup.class.getName();
 
-    // Only single instance allowed of this class
-    public static UserManagerServiceImpl getInstance() {
-        //numClients++;
-        //if (numClients <= MAX_CLIENTS)
-        return instance;
-        //return null;
-    }
-
-    public UserManagerServiceImpl() {
-        jdoSUImpl = SportletUserImpl.class.getName();
-        jdoARImpl = AccountRequestImpl.class.getName();
-        jdoUserACL = UserACL.class.getName();
-    }
-
-    /**
-     * Initializes the portlet service.
-     * The init method is invoked by the portlet container immediately after a portlet service has
-     * been instantiated and before it is passed to the requestor.
-     *
-     * @param config the service configuration
-     * @throws PortletServiceUnavailableException if an error occurs during initialization
-     */
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+        log.info("Entering init()");
         initServices(config);
+        initAccessControl(config);
         initRootUser(config);
         initAuthenticationModules();
+        log.info("Entering init()");
     }
 
     private void initServices(PortletServiceConfig config)
             throws PortletServiceUnavailableException {
+        log.info("Entering initServices()");
         try {
-            aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, config.getServletConfig(), true);
-            aclManager = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, config.getServletConfig(), true);
-            passwordManager = (PasswordManagerService) factory.createPortletService(PasswordManagerService.class, config.getServletConfig(), true);
+            passwordManagerService =
+                (PasswordManagerService)
+                    this.factory.createPortletService(PasswordManagerService.class,
+                                                      config.getServletConfig(),
+                                                      true);
             log.info("in init()");
         } catch (PortletServiceNotFoundException e) {
-            throw new PortletServiceUnavailableException("Unable to find portlet services: AccessControlService and AccessControlManagerService");
+            String msg = "Unable to create portlet service instances";
+            log.error(msg, e);
+            throw new PortletServiceUnavailableException(msg);
         }
+        log.info("Entering initServices()");
     }
-
-    private void initRootUser(PortletServiceConfig config)
-            throws PortletServiceUnavailableException {
-        /** 1. Retrieve root user properties **/
-        // Login name
-        String userID = config.getInitParameter("userID", "root").trim();
-        log.info("Root user login name = " + userID);
-        /** 2. Create root user account if doesn't exist **/
-        User user = this.getUser(userID);
-        if (user == null) {
-            log.info("Retrieving root user properties");
-            AccountRequest rootRequest = createAccountRequest();
-            rootRequest.setUserID(userID);
-            // Family name
-            String familyName = config.getInitParameter("familyName", "User").trim();
-            log.info("Root user family name = " + familyName);
-            rootRequest.setFamilyName(familyName);
-            // Given name
-            String givenName = config.getInitParameter("givenName", "Root").trim();
-            log.info("Root user given name = " + givenName);
-            rootRequest.setGivenName(givenName);
-            // Organization
-            String organization = config.getInitParameter("organization", "GridSphere").trim();
-            log.info("Root user organization = " + organization);
-            rootRequest.setOrganization(organization);
-            /* Create root user account */
-            log.info("Creating root user account");
-            createAccount(rootRequest);
-            /* Make sure we have a root user */
-            user = getUser(userID);
-            if (user == null) {
-                String msg = "Unable to create root user!";
-                //throw new PortletServiceUnavailableException(msg);
-            }
-            /* Create root password */
-            String password = config.getInitParameter("password", "").trim();
-            log.info("Creating root password " + password);
-            if (password.equals("")) {
-                log.info("Root user has no password! Please create one as soon as possible.");
-            }
-            try {
-                // Create password, but don't try to validate it...
-                this.passwordManager.savePassword(user, password, false);
-            } catch (Exception e) {
-                String msg = "Unable to create password for root user";
-                log.error(msg, e);
-                //throw new PortletServiceUnavailableException(msg);
-            }
-            if (user == null) {
-                String msg = "User is null!";
-                //throw new PortletServiceUnavailableException(msg);
-            }
-
-            log.info("Granting root user super user privileges.");
-            try {
-                aclManager.addUserToSuperRole(user);
-            } catch (PortletServiceException e) {
-                String msg = "Unable to add root user to super role";
-                log.error(msg, e);
-                //throw new PortletServiceUnavailableException(msg);
-            }
-        } else {
-            log.info("Root user exists...");
-        }
-    }
-
-    /**
-     * The destroy method is invoked by the portlet container to destroy a portlet service.
-     * This method must free all resources allocated to the portlet service.
-     */
-    public void destroy() {
-        log.info("in destroy()");
-    }
-
-    private void createAccount(AccountRequest request) {
-        try {
-            submitAccountRequest(request);
-            approveAccountRequest((AccountRequestImpl) request);
-        } catch (PortletServiceException e) {
-            log.error("Unable to save account", e);
-        }
-    }
-
-    /**
-     * Create a new account request. A unique ID is assigned to this request, that can't be modified by the client.
-     * When an account request is submitted, the ID is checked
-     */
-    public AccountRequest createAccountRequest() {
-        AccountRequestImpl newacct = new AccountRequestImpl();
-        return newacct;
-    }
-
-    /**
-     * Modify an existing user account. Changes must be approved
-     * @param user
-     * @return
-     */
-    public AccountRequest changeAccountRequest(User user) {
-        // get user from DB
-        // create an AccountRequestImpl from User
-        // when modifications are made to account request they go thru submission process again
-
-        AccountRequest ar = new AccountRequestImpl(user);
-
-        return ar;
-    }
-
-    /**
-     * Submit the account request to the queue for administrative approval
-     * @param request
-     * @throws PortletServiceException
-     */
-    public void submitAccountRequest(AccountRequest request) throws PortletServiceException {
-
-        try {
-            pm.create(request);
-        } catch (PersistenceManagerException e) {
-            log.info("conf error " + e);
-        }
-
-        // mail the super user
-        String newAcctSubject = "GridSphere: New Role Request";
-        String newAcctBody = "New user request from: " + request.toString();
-        String portalRoot = "gridsphere-admin@gridlab.org";
-
-        String newGroupSubject = "GridSphere: New Group Addition Request";
-        String newGroupBody = "New user request to join group from: " + request.toString();
-
-        MailMessage superMsg = new MailMessage(newAcctSubject, newAcctBody, request.getEmailAddress(), "");
-        MailMessage adminMsg = new MailMessage(newGroupSubject, newGroupBody, request.getEmailAddress(), "");
-
-        // do that later in the approveRequest thing
-/*
-        try {
-            // notify super users of new account
-            Iterator rootIt = aclService.getSuperUsers().iterator();
-            while (rootIt.hasNext()) {
-                String sender = (String) rootIt.next();
-                superMsg.setSender(sender);
-                MailUtils.sendMail(superMsg, "localhost");
-            }
-
-        } catch (MessagingException e) {
-            log.error("Failed to mail message to: " + request.getEmailAddress(), e);
-        }
-*/
-    }
-
-    /**
-     * Administrators can retrieve all pending account request
-     */
-    public List getAccountRequests() {
-
-        String command =
-                "select ar from " + jdoARImpl + " ar";
-        List requests = null;
-        try {
-            requests = pm.restoreList(command);
-        } catch (PersistenceManagerException e) {
-            log.info("Config error " + e);
-        }
-        return requests;
-    }
-
-    /**
-     * Returns the account request for the given user id
-     *
-     * @param user id of account request
-     * @return account request for given user id
-     */
-    public AccountRequest getAccountRequest(String id) {
-        return getAccountRequestImpl(id);
-    }
-
-    public boolean accountRequestExists(String id) {
-        return (getAccountRequest(id) != null);
-    }
-
-    private AccountRequestImpl getAccountRequestImpl(String id) {
-        AccountRequestImpl requestImpl = null;
-        String command =
-                "select ar from " + jdoARImpl + " ar where ar.ObjectID=" + id;
-        try {
-            requestImpl = (AccountRequestImpl) pm.restoreObject(command);
-        } catch (PersistenceManagerException e) {
-            log.error("PM Exception :" + e);
-        }
-        return requestImpl;
-    }
-
-    /**
-     * Approve a new or modified account request
-     *
-     * @param approver user who approves this request (should better be a superuser)
-     * @param request accountrquest to be approved
-     * @param mailMessage message to be send ouut
-     * @throws PermissionDeniedException if the approver is not allowed to approve that request
-     */
-    public void approveAccountRequest(User approver, AccountRequest request, MailMessage mailMessage)
-            throws PermissionDeniedException {
-        if (!accountRequestExists(request.getID())) {
-            throw new PermissionDeniedException("Account request has not been submitted");
-        }
-        //@todo check if a user with that userid already exists!
-        if (isSuperUser(approver)) {
-            approveAccountRequest((AccountRequestImpl) request, mailMessage);
-        } else {
-            log.info("User '" + approver.getGivenName() + "' tried to approve User '" + request.getGivenName() + "' (denied) ");
-            throw new PermissionDeniedException("Permission denied ");
-        }
-    }
-
-    /**
-     */
-    private void approveAccountRequest(AccountRequest request, MailMessage mailMessage) {
-        // Approve the request
-        approveAccountRequest(request);
-        // Mail the user
-        try {
-            if (mailMessage != null)
-                MailUtils.sendMail(mailMessage, "localhost");
-        } catch (MessagingException e) {
-            log.error("Unable to send mail: ", e);
-        }
-    }
-
-    /**
-     */
-    private void approveAccountRequest(AccountRequest request) {
-        User user = null;
-        String username = request.getUserID();
-        // now need to check wheter new account or an existing should be modified
-        if (userExists(username)) {
-            // update user and delete request
-            user = modifyExistingUser((AccountRequestImpl) request, (SportletUser) getUser(username));
-            try {
-                pm.update(user);
-                pm.delete(request);
-            } catch (PersistenceManagerException e) {
-                log.error("PM Exception :" + e);
-            }
-        } else {
-            // create user and delete request
-            user = makeNewUser((AccountRequestImpl) request);
-            try {
-                pm.create(user);
-                pm.delete(request);
-            } catch (PersistenceManagerException e) {
-                log.error("PM Exception :" + e);
-            }
-        }
-    }
-
-    /**
-     * Creates a new SportletUser from an AccountRequestImpl
-     */
-    private SportletUser makeNewUser(AccountRequestImpl requestImpl) {
-        SportletUserImpl newuser = new SportletUserImpl();
-        modifyExistingUser(requestImpl, newuser);
-        return newuser;
-    }
-
-    /**
-     * Changes a SportletUser to the values of an accountrequest
-     * @param requestImpl
-     * @param user
-     * @return the changes portletuser
-     */
-    private SportletUser modifyExistingUser(AccountRequestImpl requestImpl, SportletUser user) {
-        user.setEmailAddress(requestImpl.getEmailAddress());
-        user.setFamilyName(requestImpl.getFamilyName());
-        user.setFullName(requestImpl.getFullName());
-        user.setGivenName(requestImpl.getGivenName());
-        user.setID("" + requestImpl.getID());
-        user.setUserID(requestImpl.getUserID());
-        return user;
-    }
-
-    /**
-     * Deny a new or modified account request
-     *
-     * @param denier user who denies the request
-     * @param request accountrequest to be denied
-     * @param mailMessage message to send out
-     * @throws PermissionDeniedException if the denier is no allowed to deny
-     */
-    public void denyAccountRequest(User denier, AccountRequest request, MailMessage mailMessage)
-            throws PermissionDeniedException {
-        if (isSuperUser(denier)) {
-
-            // @todo should somehow be in a transaction
-
-            String userid = request.getID();
-            String command =
-                    "select acl from " + jdoUserACL + " acl where " +
-                    "UserID=\"" + request.getID() + "\"";
-
-            try {
-                pm.delete(request);
-                // only delete the requested groups when the user did not exist before!
-                if (!userExists(userid)) {
-                    pm.deleteList(command);
-                }
-            } catch (PersistenceManagerException e) {
-                log.error("PM Exception :" + e);
-            }
-            // Mail the user
-            try {
-                if (mailMessage != null)
-                    MailUtils.sendMail(mailMessage, "localhost");
-            } catch (MessagingException e) {
-                log.error("Unable to send mail: ", e);
-            }
-        } else {
-            throw new PermissionDeniedException("Permission denied to deny Accountrequest for user " + request.getGivenName());
-        }
-    }
-
-    /**
-     * Approve a new or modified account group request
-     * @param approver
-     * @param user
-     * @param group
-     * @param mailMessage
-     * @throws PermissionDeniedException
-     */
-    public void approveGroupRequest(User approver, User user, PortletGroup group, MailMessage mailMessage)
-            throws PermissionDeniedException {
-        if (isAdminUser(approver, group) || isSuperUser(approver)) {
-            try {
-                aclManager.approveUserInGroup(user, group);
-            } catch (PortletServiceException e) {
-                log.error("PortletService Exeption " + e);
-            }
-            // Mail the user
-            try {
-                if (mailMessage != null)
-                    MailUtils.sendMail(mailMessage, "localhost");
-            } catch (MessagingException e) {
-                log.error("Unable to send mail: ", e);
-            }
-        } else {
-            throw new PermissionDeniedException("User " + approver.getGivenName() + " is not allowed to approve the " +
-                    group.getName() + " group");
-        }
-    }
-
-    /**
-     * Deny a new or modified account group request
-     * @param denier
-     * @param user
-     * @param group
-     * @param mailMessage
-     * @throws PermissionDeniedException
-     */
-    public void denyGroupRequest(User denier, User user, PortletGroup group, MailMessage mailMessage)
-            throws PermissionDeniedException {
-
-        if (isAdminUser(denier, group) || (isSuperUser(denier))) {
-            try {
-                aclManager.removeUserGroupRequest(user, group);
-                // Mail the user
-                if (mailMessage != null) {
-                    MailUtils.sendMail(mailMessage, "localhost");
-                }
-            } catch (PortletServiceException e) {
-                log.error("Exception " + e);
-            } catch (MessagingException e) {
-                log.error("Unable to send mail: ", e);
-            }
-        } else {
-            throw new PermissionDeniedException("Permission Denied!");
-        }
-    }
-
-    /**
-     * Retrieves a user object with the given username from this service.
-     * Requires a user with the "super user" privileges, since this
-     * by-passes the normal login mechanism of retrieving a user object.
-     *
-     * @param User The super user requesting the user object
-     * @param String The user name or login id of the user in question
-     * @throws PermissionDeniedException If approver is not a super user
-     */
-    public User getUser(User approver, String userName)
-            throws PermissionDeniedException {
-        if (isSuperUser(approver)) {
-            return getUser(userName);
-        } else {
-            throw new PermissionDeniedException("User "
-                    + approver.getGivenName()
-                    + " wanted to retrieve "
-                    + userName + " (denied)");
-        }
-    }
-
-    /**
-     * Remove a user permanently.
-     * @param approver
-     * @param userN
-     * @throws PermissionDeniedException
-     */
-    public void saveUser(User approver, User user) throws PermissionDeniedException {
-        if (isSuperUser(approver)) {
-            saveUser(user);
-        } else {
-            throw new PermissionDeniedException("User "
-                    + approver.getGivenName()
-                    + " wanted to save "
-                    + user.getUserID() + " (denied)");
-        }
-    }
-
-    /**
-     * Remove a user permanently.
-     * @param approver
-     * @param userName
-     * @throws PermissionDeniedException
-     */
-    public void removeUser(User approver, String userName) throws PermissionDeniedException {
-        if (isSuperUser(approver)) {
-            removeUser(userName);
-        } else {
-            throw new PermissionDeniedException("User "
-                    + approver.getGivenName()
-                    + " wanted to retrieve "
-                    + userName + " (denied)");
-        }
-    }
-
-    /**
-     * Return a list of all portal users
-     * @return  list of user objects
-     */
-    public List getAllUsers() {
-        String command =
-                "select user from " + jdoSUImpl + " user";
-        List result = null;
-        try {
-            result = pm.restoreList(command);
-        } catch (PersistenceManagerException e) {
-            log.error("Exception " + e);
-        }
-        return result;
-    }
-
-    /**
-     * Used internally by other methods in this class
-     */
-    private User getUser(String name) {
-        String command =
-                "select u from " + jdoSUImpl + " u where u.UserID=\"" + name + "\"";
-        return selectUser(command);
-
-    }
-
-    /**
-     * Gets a user by the unique ID
-     * @param ID unique ID
-     * @return requested user
-     */
-    public User getUserByID(String ID) {
-        String command =
-                "select u from " + jdoSUImpl + " u where u.ObjectID=\"" + ID + "\"";
-        return selectUser(command);
-    }
-
-    /**
-     * Used internally by other methods in this classs.
-     * Returns a sportlet user with given oql.
-     *
-     * @param command the oql query
-     * @return the requested user
-     */
-    private SportletUserImpl selectUser(String oql) {
-        SportletUserImpl user = null;
-        try {
-            user = (SportletUserImpl) pm.restoreObject(oql);
-        } catch (PersistenceManagerException e) {
-            log.error("PM Exception :" + e.toString());
-        }
-        return user;
-    }
-
-    /**
-     * save the userobjects to the database
-     * @param user the userobject
-     * @todo check/pass up the exception
-     */
-    public void saveUser(User user) {
-        try {
-            if (existsUserID(user.getID())) {
-                pm.update(user);
-            } else {
-                pm.create(user);
-            }
-        } catch (PersistenceManagerException e) {
-            log.error("PM Exception :" + e.toString());
-        }
-    }
-
-    /**
-     * save the userobjects to the database
-     * @param user the userobject
-     * @todo check/pass up the exception
-     */
-    public void removeUser(String userName) {
-        if (userExists(userName)) {
-            User user = getUser(userName);
-            try {
-                List groups = aclService.getGroups(user);
-                for (int i = 0; i < groups.size(); i++) {
-                    PortletGroup group = (PortletGroup) groups.get(i);
-                    if (group == null) {
-                        log.error("Why in the hell is this group object null?!!!!!!");
-                    }
-                    aclManager.removeUserFromGroup(user, group);
-                }
-                pm.delete(user);
-            } catch (PortletServiceException e) {
-                log.error("Could not delete the ACL of the user " + e);
-            } catch (PersistenceManagerException e) {
-                log.error("Could not delete User " + e);
-            }
-        } else {
-            log.debug("User " + userName + " does not exist in database.");
-        }
-    }
-
-    /**
-     * Checks to see if account exists for a user
-     * @param userName
-     * @return true/false if user exists/not exists
-     */
-    public boolean userExists(String userName) {
-        String command =
-                "select user from " + jdoSUImpl + " user where UserID=\"" + userName + "\"";
-        SportletUser user = null;
-        try {
-            user = (SportletUser) pm.restoreObject(command);
-        } catch (PersistenceManagerException e) {
-            log.error("Exception " + e);
-        }
-        return !(user == null);
-    }
-
-    /**
-     * Checks if a user with a given unique ID already exists
-     *
-     * @param ID the unique ID
-     * @return true/false if the user exists
-     */
-    public boolean existsUserID(String ID) {
-        String command =
-                "select user from " + jdoSUImpl + " user where ObjectID=\"" + ID + "\"";
-        SportletUser user = null;
-        try {
-            user = (SportletUser) pm.restoreObject(command);
-        } catch (PersistenceManagerException e) {
-            log.error("Exception " + e);
-        }
-        return !(user == null);
-    }
-
-    /**
-     * checks if the user is superuser
-     *
-     * @param user userobject to be examined
-     * @return true is the user is usperuser, false otherwise
-     */
-    public boolean isSuperUser(User user) {
-        try {
-            return aclService.hasRoleInGroup(user, PortletGroup.SUPER, PortletRole.SUPER);
-        } catch (PortletServiceException e) {
-            log.error("Exception :" + e);
-            return false;
-        }
-    }
-
-    /**
-     * Checks if the user is an adminuser in a given group
-     * @param user the user
-     * @param group in that group
-     * @return true/false if he is an admin
-     */
-    public boolean isAdminUser(User user, PortletGroup group) {
-        try {
-            return aclService.hasRoleInGroup(user, group, PortletRole.ADMIN);
-        } catch (PortletServiceException e) {
-            log.error("Exception :" + e);
-            return false;
-        }
-    }
-
 
     private void initAuthenticationModules() {
         authenticationModules.add(new PasswordAuthenticationModule());
     }
 
-    /* Why are these needed? JN
-
-    public List getAuthenticationModules() {
-        return this.authenticationModules;
+    private void initAccessControl(PortletServiceConfig config)
+            throws PortletServiceUnavailableException {
+        log.info("Entering initGroups()");
+        // Creating groups
+        initGroup(PortletGroup.SUPER);
+        initGroup(PortletGroup.BASE);
+        log.info("Entering initServices()");
     }
 
-    public AuthenticationModule getAuthenticationModule(String name) {
-        Iterator modules = this.authenticationModules.iterator();
-        while (modules.hasNext()) {
-            AuthenticationModule module = (AuthenticationModule)modules.next();
-            if (module.getName().equals(name)) {
-                return module;
+    private void initGroup(PortletGroup group) {
+        if (group instanceof SportletGroup) {
+            initSportletGroup((SportletGroup) group);
+        }
+    }
+
+    private void initSportletGroup(SportletGroup group) {
+        String groupName = group.getName();
+        SportletGroup testGroup = getSportletGroupByName(groupName);
+        if (testGroup == null) {
+            log.info("Creating group " + groupName);
+            try {
+                pm.create(group);
+            } catch (PersistenceManagerException e) {
+                String msg = "Error creating portlet group " + groupName;
+                log.error(msg, e);
+            }
+        } else {
+            String groupId = testGroup.getID();
+            log.info("Setting group " + groupName + " id to " + groupId);
+            group.setID(groupId);
+        }
+    }
+
+    private void initRootUser(PortletServiceConfig config)
+            throws PortletServiceUnavailableException {
+        log.info("Entering initRootUser()");
+        /** 1. Retrieve root user properties **/
+        // Login name
+        String loginName = config.getInitParameter("loginName", "root").trim();
+        log.info("Root user login name = " + loginName);
+        /** 2. Create root user account if doesn't exist **/
+        User rootUser = getUserByLoginName(loginName);
+        if (rootUser == null) {
+            /* Retrieve root user properties */
+            log.info("Retrieving root user properties");
+            String familyName = config.getInitParameter("familyName", "User").trim();
+            log.info("Root user family name = " + familyName);
+            String givenName = config.getInitParameter("givenName", "Root").trim();
+            log.info("Root user given name = " + givenName);
+            String fullName = config.getInitParameter("fullName", "").trim();
+            log.info("Root user full name = " + givenName);
+            String organization = config.getInitParameter("organization", "GridSphere").trim();
+            log.info("Root user organization = " + organization);
+            String emailAddress = config.getInitParameter("emailAddress", "root@localhost").trim();
+            log.info("Root user email address = " + emailAddress);
+            String password = config.getInitParameter("password", "").trim();
+            if (password.equals("")) {
+                log.warn("Root user password is blank. Please create a password as soon as possible!");
+            }
+            /* Set root user profile */
+            AccountRequest rootRequest = createAccountRequest();
+            rootRequest.setUserID(loginName);
+            rootRequest.setFamilyName(familyName);
+            rootRequest.setGivenName(givenName);
+            rootRequest.setFullName(fullName);
+            rootRequest.setOrganization(organization);
+            rootRequest.setEmailAddress(emailAddress);
+            /* Set root user password */
+            rootRequest.setPasswordValue(password);
+            rootRequest.setPasswordDateExpires(null);
+            rootRequest.setPasswordValidation(false);
+            /* Create root user account */
+            log.info("Creating root user account.");
+            try {
+                submitAccountRequest(rootRequest);
+                approveAccountRequest(rootRequest);
+            } catch (InvalidAccountRequestException e) {
+                log.error("Unable to create account for root user", e);
+                throw new PortletServiceUnavailableException(e.getMessage());
+            } catch (InvalidPasswordException e) {
+                log.error("Unable to create account for root user", e);
+                throw new PortletServiceUnavailableException(e.getMessage());
+            }
+            /* Retrieve root user object */
+            rootUser = getUserByLoginName(loginName);
+            /* Grant super role to root user */
+            log.info("Granting super role to root user.");
+            grantSuperRole(rootUser);
+        } else {
+            log.info("Root user exists.");
+            if (!hasSuperRole(rootUser)) {
+                log.info("Root user does not have super role! Granting now...");
+                /* Grant super role to root user */
+                grantSuperRole(rootUser);
             }
         }
-        return null;
+        log.info("Exiting initRootUser()");
     }
-    */
+
+    public void destroy() {
+        log.info("Calling destroy()");
+    }
 
     public User login(String username, String password)
             throws AuthenticationException {
-        User user = getUser(username);
+        User user = getAuthUser(username);
         AuthenticationException ex = null;
         Iterator modules = this.authenticationModules.iterator();
         while (modules.hasNext()) {
@@ -745,24 +213,24 @@ class UserManagerServiceImpl implements PortletServiceProvider, UserManagerServi
     }
 
     public User login(Map parameters)
-            throws AuthenticationException {
-        User user = getAuthUser(parameters);
-        AuthenticationException ex = null;
-        Iterator modules = this.authenticationModules.iterator();
-        while (modules.hasNext()) {
-            AuthenticationModule module = (AuthenticationModule) modules.next();
-            try {
-                module.authenticate(user, parameters);
-            } catch (AuthenticationException e) {
-                if (ex == null) {
-                    ex = e;
-                }
-            }
-        }
-        if (ex != null) {
-            throw ex;
-        }
-        return user;
+             throws AuthenticationException {
+         User user = getAuthUser(parameters);
+         AuthenticationException ex = null;
+         Iterator modules = this.authenticationModules.iterator();
+         while (modules.hasNext()) {
+             AuthenticationModule module = (AuthenticationModule) modules.next();
+             try {
+                 module.authenticate(user, parameters);
+             } catch (AuthenticationException e) {
+                 if (ex == null) {
+                     ex = e;
+                 }
+             }
+         }
+         if (ex != null) {
+             throw ex;
+         }
+         return user;
     }
 
     private User getAuthUser(Map parameters)
@@ -771,23 +239,824 @@ class UserManagerServiceImpl implements PortletServiceProvider, UserManagerServi
         return getAuthUser(username);
     }
 
-    private User getAuthUser(String username)
+    private User getAuthUser(String loginName)
             throws AuthenticationException {
-        log.debug("Attempting to retrieve user " + username);
-        User user = null;
-        if (username == null) {
+        log.debug("Attempting to retrieve user " + loginName);
+        if (loginName == null) {
             AuthenticationException ex = new AuthenticationException();
             ex.putInvalidParameter("username", "No username provided.");
             throw ex;
         }
-        user = getUser(username);
+        User user = getUserByLoginName(loginName);
         if (user == null) {
-            log.debug("Unable to retrieve user " + username);
+            log.debug("Unable to retrieve user " + loginName);
             AuthenticationException ex = new AuthenticationException();
             ex.putInvalidParameter("username", "Invalid username provided.");
             throw ex;
         }
-        log.debug("Successfully retrieved user " + username);
+        log.debug("Successfully retrieved user " + loginName);
         return user;
+    }
+
+    public List selectAccountRequests(String criteria) {
+        String oql = "select accountRequest from "
+                   + this.jdoAccountRequest
+                   + " accountRequest "
+                   + criteria;
+        try {
+            return pm.restoreList(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving account request";
+            log.error(msg, e);
+            return new Vector();
+        }
+    }
+
+    public List getAccountRequests() {
+        return selectAccountRequests("");
+    }
+
+    public AccountRequest getAccountRequest(String oid) {
+        String oql = "select accountRequest from "
+                   + jdoAccountRequest
+                   + " accountRequest where accountRequest.ObjectID=" + oid;
+        try {
+            return (AccountRequest)pm.restoreObject(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving account request";
+            log.error(msg, e);
+            return null;
+        }
+    }
+
+    public AccountRequest createAccountRequest() {
+        return new AccountRequestImpl();
+    }
+
+    public AccountRequest createAccountRequest(User user) {
+        AccountRequestImpl request = new AccountRequestImpl();
+        request.setID(user.getID());
+        request.setLoginName(user.getLoginName());
+        request.setFamilyName(user.getFamilyName());
+        request.setGivenName(user.getGivenName());
+        request.setFullName(user.getFullName());
+        request.setOrganization(user.getOrganization());
+        request.setEmailAddress(user.getEmailAddress());
+        return request;
+    }
+
+    public void submitAccountRequest(AccountRequest request)
+            throws InvalidAccountRequestException, InvalidPasswordException {
+        submitAccountRequest(request, null);
+    }
+
+    public void submitAccountRequest(AccountRequest request, MailMessage mailMessage)
+            throws InvalidAccountRequestException, InvalidPasswordException {
+         if (request instanceof AccountRequestImpl) {
+             // Save account request if not already saved
+             if (!existsAccountRequest(request)) {
+                 // First validate account request
+                 validateAccountRequest(request);
+                 /* Store account request */
+                 try {
+                     pm.create(request);
+                 } catch (PersistenceManagerException e) {
+                     String msg = "Error saving account request";
+                     log.error(msg, e);
+                 }
+                 /* Store passsword for requested account */
+                 saveAccountRequestPassword(request);
+             }
+             // Send message if not null
+         }
+    }
+
+    public void validateAccountRequest(AccountRequest request)
+            throws InvalidAccountRequestException, InvalidPasswordException {
+        // Then validate password
+        validatePassword(request);
+    }
+
+    private void validatePassword(AccountRequest request)
+            throws InvalidPasswordException {
+        // Then validate password if requested
+        User user = getUser(request.getID());
+        if (user == null) {
+            if (request.getPasswordValidation()) {
+                log.info("Validating password for account request");
+                this.passwordManagerService.validatePassword(request.getPasswordValue());
+            } else {
+                log.info("Not validating password for account request");
+            }
+        } else {
+            if (request.getPasswordValidation() && request.getPasswordHasChanged()) {
+                log.info("Validating password for account request");
+                this.passwordManagerService.validatePassword(user, request.getPasswordValue());
+            } else {
+                log.info("Not validating password for account request");
+            }
+        }
+    }
+
+    private void saveAccountRequestPassword(AccountRequest request)
+            throws InvalidPasswordException {
+        // Get password editor from account request
+        PasswordBean passwordBean = request.getPassword();
+        // Check if password wasn't edited
+        if (!passwordBean.isDirty()) {
+            // Get user id from account request
+            String userID = request.getID();
+            // If user exists for account request
+            if (existsUserWithID(userID)) {
+                // No need to change password
+                log.debug("No changes to user password were made");
+                return;
+            }
+        }
+        // Otherwise attempt to save password edits
+        this.passwordManagerService.savePassword(passwordBean);
+    }
+
+    private boolean existsAccountRequest(AccountRequest request) {
+        AccountRequestImpl requestImpl = (AccountRequestImpl)request;
+        String oql = "select accountRequest.ObjectID from "
+                   + jdoAccountRequest
+                   + " accountRequest where accountRequest.ObjectID="
+                   + requestImpl.getOid();
+        try {
+            return (pm.restoreObject(oql) != null);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving account request";
+            log.error(msg, e);
+        }
+        return false;
+    }
+
+    public User approveAccountRequest(AccountRequest request) {
+        return approveAccountRequest(request, null);
+    }
+
+    public User approveAccountRequest(AccountRequest request, MailMessage mailMessage) {
+        if (request instanceof AccountRequestImpl) {
+            // Edit user from account request
+            SportletUserImpl user = editSportletUserImpl(request);
+            // Save user from account request
+            saveSportletUserImpl(user);
+            // Activate user password
+            activateAccountRequestPassword(request, user);
+            // Activate user access rights
+            activateAccountRequestGroupEntries(request, user);
+            // Delete account request
+            deleteAccountRequest(request);
+            // Send message if not null
+            return user;
+        }
+        return null;
+    }
+
+    private void activateAccountRequestPassword(AccountRequest request, User user) {
+        // If a new password was submitted with account request
+        if (this.passwordManagerService.hasPassword(request)) {
+            // Activate user password
+            try {
+                this.passwordManagerService.activatePassword(request, user);
+            } catch (InvalidPasswordException e) {
+                log.error("Invalid password during account request approval!!!", e);
+            }
+        }
+    }
+
+    private void activateAccountRequestGroupEntries(AccountRequest request, User user) {
+        // If new user then set initial set acl
+        if (request.isNewUser()) {
+            // Grant user role in base group
+            addUserToGroup(user, PortletGroup.BASE,  PortletRole.USER);
+        }
+    }
+
+    public void denyAccountRequest(AccountRequest request) {
+        denyAccountRequest(request, null);
+    }
+
+    public void denyAccountRequest(AccountRequest request, MailMessage mailMessage) {
+        if (request instanceof AccountRequestImpl) {
+            // Delete account request
+            deleteAccountRequest(request);
+            // Send message if not null
+        }
+    }
+
+    private void deleteAccountRequest(AccountRequest request) {
+        try {
+            pm.delete(request);
+        } catch(PersistenceManagerException e) {
+            String msg = "Unable to delete account request";
+            log.error(msg, e);
+        }
+    }
+
+    public void deleteAccount(User user) {
+        deleteAccount(user, null);
+    }
+
+    public void deleteAccount(User user, MailMessage mailMessage) {
+        if (user instanceof SportletUserImpl) {
+            // First delete user password
+            this.passwordManagerService.deletePassword(user);
+            // Then delete user acl
+            deleteGroupEntries(user);
+            // Then delete user object
+            deleteSportletUserImpl((SportletUserImpl)user);
+            // Send message if not null
+        }
+    }
+
+    public List selectUsers(String criteria) {
+        String oql = "select user from "
+                   + this.jdoUser
+                   + " user "
+                   + criteria;
+        try {
+            return pm.restoreList(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving users with criteria " + criteria;
+            log.error(msg, e);
+            return new Vector();
+        }
+    }
+
+    public List getUsers() {
+        return selectUsers("");
+    }
+
+    public User getUser(String id) {
+        return getSportletUserImpl(id);
+    }
+
+    public User getUserByLoginName(String loginName) {
+        return getSportletUserImplByLoginName(loginName);
+    }
+
+    private SportletUserImpl getSportletUserImpl(String id) {
+        return selectSportletUserImpl("where user.ObjectID=\"" + id + "\"");
+    }
+
+    private SportletUserImpl getSportletUserImplByLoginName(String loginName) {
+        return selectSportletUserImpl("where user.UserID=\"" + loginName + "\"");
+    }
+
+    private SportletUserImpl selectSportletUserImpl(String criteria) {
+        String oql = "select user from "
+                   + jdoUser
+                   + " user "
+                   + criteria;
+        try {
+            return (SportletUserImpl)pm.restoreObject(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving user with criteria " + criteria;
+            log.error(msg, e);
+            return null;
+        }
+    }
+
+    private SportletUserImpl editSportletUserImpl(AccountRequest request) {
+        /* TODO: Account request id should not be same as user id */
+        String userID = request.getID();
+        SportletUserImpl user = getSportletUserImpl(userID);
+        if (user == null) {
+            user = new SportletUserImpl();
+            user.setID(userID);
+        }
+        user.setLoginName(request.getLoginName());
+        user.setFamilyName(request.getFamilyName());
+        user.setGivenName(request.getGivenName());
+        user.setFullName(request.getFullName());
+        user.setOrganization(request.getOrganization());
+        user.setEmailAddress(request.getEmailAddress());
+        return user;
+    }
+
+    private void saveSportletUserImpl(SportletUserImpl user) {
+        // Create or update user
+        if (existsSportletUserImpl(user)) {
+            try {
+                pm.update(user);
+            } catch (PersistenceManagerException e) {
+                String msg = "Error updating user";
+                log.error(msg, e);
+            }
+        } else {
+            try {
+                pm.create(user);
+            } catch (PersistenceManagerException e) {
+                String msg = "Error creating user";
+                log.error(msg, e);
+            }
+        }
+    }
+
+    private void deleteSportletUserImpl(SportletUserImpl user) {
+        try {
+            pm.delete(user);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error deleting user";
+            log.error(msg, e);
+        }
+    }
+
+    public boolean existsUserWithID(String userID) {
+        String criteria = "where user.ObjectID=\"" + userID + "\"";
+        return existsSportletUserImpl(criteria);
+    }
+
+    public boolean existsUserWithLoginName(String loginName) {
+        String criteria = "where user.UserID=\"" + loginName + "\"";
+        return existsSportletUserImpl(criteria);
+    }
+
+    private boolean existsSportletUserImpl(SportletUserImpl user) {
+        String criteria = "where user.ObjectID=\"" + user.getOid() + "\"";
+        return existsSportletUserImpl(criteria);
+    }
+
+    private boolean existsSportletUserImpl(String criteria) {
+        String oql = "select user.ObjectID from "
+                   + jdoUser
+                   + " user "
+                   + criteria;
+        try {
+            return (pm.restoreObject(oql) != null);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving account request";
+            log.error(msg, e);
+        }
+        return false;
+    }
+
+    public List getGroupRequests() {
+        String criteria = "";
+        return selectGroupRequests(criteria);
+    }
+
+    public List getGroupRequests(User user) {
+        String criteria = "where groupRequest.user=\"" + user.getID() + "\"";
+        return selectGroupRequests(criteria);
+    }
+
+    public List getGroupRequests(PortletGroup group) {
+        String criteria = "where groupRequest.group=\"" + group.getID() + "\"";
+        return selectGroupRequests(criteria);
+    }
+
+    public List selectGroupRequests(String criteria) {
+        String oql = "select groupRequest from "
+                   + jdoGroupRequest
+                   + " groupRequest "
+                   + criteria;
+        try {
+            return pm.restoreList(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving account request";
+            log.error(msg, e);
+            return new Vector();
+        }
+    }
+
+    public GroupRequest getGroupRequest(String id) {
+        return getGroupRequestImpl(id);
+    }
+
+    private GroupRequestImpl getGroupRequestImpl(String id) {
+        String criteria = "where groupRequest.ObjectID=\"" + id + "\"";
+        return selectGroupRequestImpl(criteria);
+    }
+
+    public GroupRequestImpl selectGroupRequestImpl(String criteria) {
+        String oql = "select groupRequest from "
+                   + jdoGroupRequest
+                   + " groupRequest "
+                   + criteria;
+        try {
+            return (GroupRequestImpl)pm.restoreObject(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving account request";
+            log.error(msg, e);
+            return null;
+        }
+    }
+
+    private boolean existsGroupRequest(GroupRequest request) {
+       GroupRequestImpl requestImpl = (GroupRequestImpl)request;
+       String oql = "select groupRequest.ObjectID from "
+                  + jdoGroupRequest
+                  + " groupRequest where groupRequest.ObjectID="
+                  + requestImpl.getOid();
+       try {
+           return (pm.restoreObject(oql) != null);
+       } catch (PersistenceManagerException e) {
+           String msg = "Error retrieving account request";
+           log.error(msg, e);
+       }
+       return false;
+    }
+
+    private void saveGroupRequest(GroupRequest request) {
+        // Create or update access request
+        if (!existsGroupRequest(request)) {
+            try {
+                pm.create(request);
+            } catch (PersistenceManagerException e) {
+                String msg = "Error creating access request";
+                log.error(msg, e);
+            }
+        }
+    }
+
+    private void deleteGroupRequest(GroupRequest request) {
+        try {
+            pm.delete(request);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error deleting access request";
+            log.error(msg, e);
+        }
+    }
+
+    public GroupRequest createGroupRequest(User user) {
+        GroupRequest request = new GroupRequestImpl();
+        request.setUser(user);
+        return request;
+    }
+
+    public void submitGroupRequest(GroupRequest request)
+            throws InvalidGroupRequestException {
+        submitGroupRequest(request, null);
+    }
+
+    public void submitGroupRequest(GroupRequest request, MailMessage mailMessage)
+            throws InvalidGroupRequestException {
+        if (request instanceof AccountRequestImpl) {
+            // First validate accesss request
+            validateGroupRequest(request);
+            // Then save account request if not already saved
+            if (!existsGroupRequest(request)) {
+                try {
+                    pm.create(request);
+                } catch (PersistenceManagerException e) {
+                    String msg = "Error saving account request";
+                    log.error(msg, e);
+                }
+            }
+            // Send message if not null
+        }
+    }
+
+    public void validateGroupRequest(GroupRequest request)
+            throws InvalidGroupRequestException {
+        PortletGroup group = request.getGroup();
+        PortletRole role = request.getRole();
+        // If role is super but group isn't, throw invalid access request exception
+        if (role.equals(PortletRole.SUPER) && (! group.equals(PortletGroup.SUPER) )) {
+            String msg = "Super role can only exist in super group.";
+            log.info(msg);
+            throw new InvalidGroupRequestException(msg);
+        // If group is super but role isn't, throw invalid access request exception
+        } else if (group.equals(PortletRole.SUPER) && (! role.equals(PortletRole.SUPER) )) {
+            String msg = "Super group can only contain super role.";
+            log.info(msg);
+            throw new InvalidGroupRequestException(msg);
+        } else if (! (role.equals(PortletRole.ADMIN) ||
+                      role.equals(PortletRole.USER)  ||
+                      role.equals(PortletRole.GUEST) )) {
+            String msg = "Portlet role [" + role + "] not recognized.";
+            log.info(msg);
+            throw new InvalidGroupRequestException(msg);
+        }
+    }
+
+    public void approveGroupRequest(GroupRequest request) {
+        approveGroupRequest(request, null);
+    }
+
+    public void approveGroupRequest(GroupRequest request, MailMessage mailMessage) {
+        if (request instanceof GroupRequestImpl) {
+            // Get request attributes
+            User user = request.getUser();
+            PortletGroup group = request.getGroup();
+            String action = request.getAction();
+            // Perform requested action
+            if (action.equals(GroupRequest.ACTION_ADD)) {
+                PortletRole role = request.getRole();
+                addUserToGroup(user, group, role);
+            } else {
+                removeUserFromGroup(user, group);
+            }
+            // Delete account request
+            deleteGroupRequest(request);
+            // Send message if not null
+        }
+    }
+
+    public void denyGroupRequest(GroupRequest request) {
+        denyGroupRequest(request, null);
+    }
+
+    public void denyGroupRequest(GroupRequest request, MailMessage mailMessage) {
+        if (request instanceof GroupRequestImpl) {
+            // Delete account request
+            deleteGroupRequest(request);
+            // Send message if not null
+        }
+    }
+
+    public List getGroupEntries() {
+        String criteria = "";
+        return selectGroupEntries(criteria);
+    }
+
+    public List getGroupEntries(User user) {
+        String criteria = "where groupEntry.user=\"" + user.getID() + "\"";
+        return selectGroupEntries(criteria);
+    }
+
+    public List getGroupEntries(PortletGroup group) {
+        String criteria = "where groupEntry.group=\"" + group.getID() + "\"";
+        return selectGroupEntries(criteria);
+    }
+
+    public List selectGroupEntries(String criteria) {
+        String oql = "select groupEntry from "
+                   + jdoGroupEntry
+                   + " groupEntry "
+                   + criteria;
+        try {
+            return pm.restoreList(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving access right";
+            log.error(msg, e);
+            return new Vector();
+        }
+    }
+
+    public GroupEntry getGroupEntry(String id) {
+        String criteria = "where groupEntry.ObjectID=\"" + id + "\"";
+        return selectGroupEntryImpl(criteria);
+    }
+
+    public GroupEntry getGroupEntry(User user, PortletGroup group) {
+        return getGroupEntryImpl(user, group);
+    }
+
+    private GroupEntryImpl getGroupEntryImpl(User user, PortletGroup group) {
+        String criteria = "where groupEntry.user=\"" + user.getID() + "\""
+                        +  " and groupEntry.group=\"" + group.getID() + "\"";
+        return selectGroupEntryImpl(criteria);
+    }
+
+    private GroupEntryImpl selectGroupEntryImpl(String criteria) {
+        String oql = "select groupEntry from "
+                   + jdoGroupEntry
+                   + " groupEntry "
+                   + criteria;
+        try {
+            return (GroupEntryImpl)pm.restoreObject(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving access right";
+            log.error(msg, e);
+            return null;
+        }
+    }
+
+   private boolean existsGroupEntry(GroupEntry right) {
+       GroupEntryImpl rightImpl = (GroupEntryImpl)right;
+       String oql = "select groupEntry.ObjectID from "
+                  + jdoGroupEntry
+                  + " groupEntry where groupEntry.ObjectID="
+                  + rightImpl.getOid();
+       try {
+           return (pm.restoreObject(oql) != null);
+       } catch (PersistenceManagerException e) {
+           String msg = "Error retrieving access right";
+           log.error(msg, e);
+       }
+       return false;
+    }
+
+    private void saveGroupEntry(GroupEntry right) {
+        // Create or update access right
+        if (!existsGroupEntry(right)) {
+            try {
+                pm.create(right);
+            } catch (PersistenceManagerException e) {
+                String msg = "Error creating access right";
+                log.error(msg, e);
+            }
+        }
+    }
+
+    private void deleteGroupEntry(GroupEntry right) {
+        try {
+            pm.delete(right);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error deleting access right";
+            log.error(msg, e);
+        }
+    }
+
+    private void deleteGroupEntries(User user) {
+        Iterator groupEntries = getGroupEntries(user).iterator();
+        while (groupEntries.hasNext()) {
+            GroupEntry groupEntry = (GroupEntry)groupEntries.next();
+            deleteGroupEntry(groupEntry);
+        }
+    }
+
+    public List getGroups() {
+        return selectGroups("");
+    }
+
+    public List selectGroups(String criteria) {
+        String oql = "select portletGroup from "
+                   + jdoPortletGroup
+                   + " portletGroup "
+                   + criteria;
+        try {
+            return pm.restoreList(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving portlet groups";
+            log.error(msg, e);
+            return new Vector();
+        }
+    }
+
+    public PortletGroup getGroup(String id) {
+        return selectSportletGroup("where portletGroup.ObjectID=\"" + id + "\"");
+    }
+
+    public PortletGroup getGroupByName(String name) {
+        return getSportletGroupByName(name);
+    }
+
+    private SportletGroup getSportletGroupByName(String name) {
+        return selectSportletGroup("where portletGroup.Name=\"" + name + "\"");
+    }
+
+    private SportletGroup selectSportletGroup(String criteria) {
+        String oql = "select portletGroup from "
+                   + jdoPortletGroup
+                   + " portletGroup "
+                   + criteria;
+        try {
+            return (SportletGroup)pm.restoreObject(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving portlet groups";
+            log.error(msg, e);
+            return null;
+        }
+    }
+
+    public boolean existsGroupWithName(String groupName) {
+        return (getGroupByName(groupName) != null);
+    }
+
+    public PortletGroup createGroup(String groupName) {
+        SportletGroup group = getSportletGroupByName(groupName);
+        if (group == null) {
+            group = new SportletGroup();
+            group.setName(groupName);
+            try {
+                pm.create(group);
+            } catch (PersistenceManagerException e) {
+                String msg = "Error creating portlet group " + groupName;
+                log.error(msg, e);
+            }
+        }
+        return group;
+    }
+
+    public void deleteGroup(PortletGroup group) {
+        try {
+            pm.delete(group);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error deleting portlet group";
+            log.error(msg, e);
+        }
+    }
+
+    public List getUsers(PortletGroup group) {
+        String oql = "select groupEntry.user from "
+                   + jdoGroupEntry
+                   + " groupEntry where group=\""
+                   + group.getID()
+                   + "\"";
+        try {
+            return pm.restoreList(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving access right";
+            log.error(msg, e);
+            return new Vector();
+        }
+    }
+
+    public List getUsersNotInGroup(PortletGroup group) {
+        List usersNotInGroup = new Vector();
+        Iterator allUsers = getUsers().iterator();
+        while (allUsers.hasNext()) {
+            User user = (User)allUsers.next();
+            if (!isUserInGroup(user, group)) {
+                usersNotInGroup.add(user);
+            }
+        }
+        return usersNotInGroup;
+    }
+
+    public boolean isUserInGroup(User user, PortletGroup group) {
+        return (getGroupEntry(user, group) != null);
+    }
+
+    public List getGroups(User user) {
+        String oql = "select groupEntry.group from "
+                   + jdoGroupEntry
+                   + " groupEntry where user=\""
+                   + user.getID()
+                   + "\"";
+        try {
+            return pm.restoreList(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving access right";
+            log.error(msg, e);
+            return new Vector();
+        }
+    }
+
+    public List getGroupsNotMemberOf(User user) {
+        List groupsNotMemberOf = new Vector();
+        Iterator allGroups = getGroups(user).iterator();
+        while (allGroups.hasNext()) {
+            PortletGroup group = (PortletGroup)allGroups.next();
+            if (!isUserInGroup(user, group)) {
+                groupsNotMemberOf.add(user);
+            }
+        }
+        return groupsNotMemberOf;
+    }
+
+    public PortletRole getRoleInGroup(User user, PortletGroup group) {
+        GroupEntry right = getGroupEntry(user, group);
+        if (right == null) {
+            return null;
+        }
+        return right.getRole();
+    }
+
+    private void addUserToGroup(User user, PortletGroup group, PortletRole role) {
+        GroupEntryImpl right = getGroupEntryImpl(user, group);
+        if (right != null) {
+            deleteGroupEntry(right);
+        }
+        right = new GroupEntryImpl();
+        right.setUser(user);
+        right.setGroup(group);
+        right.setRole(role);
+        saveGroupEntry(right);
+    }
+
+    private void removeUserFromGroup(User user, PortletGroup group) {
+        GroupEntry right = getGroupEntry(user, group);
+        if (right != null) {
+            deleteGroupEntry(right);
+        }
+    }
+
+    public boolean hasRoleInGroup(User user, PortletGroup group, PortletRole role) {
+        PortletRole test = getRoleInGroup(user, group);
+        return test.equals(role);
+    }
+
+    public boolean hasAdminRoleInGroup(User user, PortletGroup group) {
+        return hasRoleInGroup(user, group, PortletRole.ADMIN);
+    }
+
+    public boolean hasUserRoleInGroup(User user, PortletGroup group) {
+        return hasRoleInGroup(user, group, PortletRole.USER);
+    }
+
+    public boolean hasGuestRoleInGroup(User user, PortletGroup group) {
+        return hasRoleInGroup(user, group, PortletRole.GUEST);
+    }
+
+    public List getUsersWithSuperRole() {
+        return getUsers(PortletGroup.SUPER);
+    }
+
+    public void grantSuperRole(User user) {
+        addUserToGroup(user, PortletGroup.SUPER, PortletRole.SUPER);
+    }
+
+    public void revokeSuperRole(User user) {
+        removeUserFromGroup(user, PortletGroup.SUPER);
+    }
+
+    public boolean hasSuperRole(User user) {
+        return isUserInGroup(user, PortletGroup.SUPER);
     }
 }

@@ -1,6 +1,7 @@
 <%@ page import="org.gridlab.gridsphere.portlet.User,
                  org.gridlab.gridsphere.portlets.core.beans.UserManagerBean,
-                 java.util.List" %>
+                 java.util.List,
+                 org.gridlab.gridsphere.portlet.PortletRole" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
@@ -97,12 +98,12 @@
         </tr>
         <tr>
           <td bgcolor="#CCCCCC">
-             Full Name:&nbsp;
+             Email Address:&nbsp;
           </td>
           <td bgcolor="WHITE">
              <input type="text"
-                    name="fullName"
-                    value="<%=userManagerBean.getFullName()%>"/>
+                    name="emailAddress"
+                    value="<%=userManagerBean.getEmailAddress()%>"/>
           </td>
         </tr>
         <tr>
@@ -117,12 +118,25 @@
         </tr>
         <tr>
           <td bgcolor="#CCCCCC">
-             Email Address:&nbsp;
+             Base Role:&nbsp;
           </td>
           <td bgcolor="WHITE">
-             <input type="text"
-                    name="emailAddress"
-                    value="<%=userManagerBean.getEmailAddress()%>"/>
+             <select name="baseGroupRole">
+               <% PortletRole thisRole = userManagerBean.getRoleInBaseGroup();
+                   List allRoles = userManagerBean.getAllRolesInBaseGroup();
+                   for (int ii = 0; ii < allRoles.size(); ++ii) {
+                       PortletRole thatRole = (PortletRole)allRoles.get(ii);
+                       if (thisRole.equals(thatRole)) { %>
+               <option label="<%=thatRole.toString()%>"
+                       value="<%=thatRole.toString()%>"
+                       selected="true"/>
+               <%     } else { %>
+               <option label="<%=thatRole.toString()%>"
+                       value="<%=thatRole.toString()%>"/>
+               <%     }
+
+                    } %>
+             </select>
           </td>
         </tr>
         <tr>

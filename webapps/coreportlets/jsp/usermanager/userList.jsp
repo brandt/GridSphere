@@ -60,9 +60,6 @@
             Full Name
           </td>
           <td bgcolor="#CCCCCC">
-            Organization
-          </td>
-          <td bgcolor="#CCCCCC">
             Email Address
           </td>
         </tr>
@@ -70,7 +67,7 @@
    int numUsers = userList.size();
    if (numUsers == 0) { %>
         <tr>
-          <td bgcolor="WHITE" colspan="5">
+          <td bgcolor="WHITE" colspan="4">
             <font color="DARKRED">
               No user accounts in database.
             </font>
@@ -90,9 +87,6 @@
           </td>
           <td bgcolor="WHITE">
             <%=user.getFullName()%>
-          </td>
-          <td bgcolor="WHITE">
-            <%=user.getOrganization()%>
           </td>
           <td bgcolor="WHITE">
             <%=user.getEmailAddress()%>

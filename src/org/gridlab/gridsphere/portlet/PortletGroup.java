@@ -20,6 +20,8 @@ public interface PortletGroup {
 
     public String getID();
 
+    public boolean equals(Object object);
+
     public String toString();
 
 }
