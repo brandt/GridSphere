@@ -62,7 +62,7 @@ Copyright:
     <fileset dir="${env.TOMCAT_HOME}/common/lib">
       <include name="*.jar"/>
     </fileset>
-    <fileset dir="lib">
+    <fileset dir="lib/">
      <include name="*.jar"/>
     </fileset>
     <pathelement path="${java.class.path}"/>
@@ -197,6 +197,54 @@ Copyright:
 	<delete quiet="true" dir="${build.dir}"/>
 	<delete quiet="true" dir="${reports.tests}"/>
   </target>
+
+  <!-- =================================================================== -->
+  <!-- Creates castor definitions                                          -->
+  <!-- =================================================================== -->
+    <target name="mapping" depends="compile">
+        <javadoc packagenames="org.gridlab.gridsphere.*"
+            sourcepath="src"
+            private="true"
+            doclet="org.castor.doclet.ddl.DDL"
+            docletpath="lib/jdom.jar;lib/castor-doclet.jar"
+            additionalparam=" -J-DFILE=conf/dbcreate.sql  -J-DDB_TYPE=db2 -J-DLOG=1">
+        <classpath refid="classpath"/>
+        </javadoc>
+        <javadoc packagenames="org.gridlab.gridsphere.*"
+            sourcepath="src"
+            private="true"
+            doclet="org.castor.doclet.jdo.JDO"
+            docletpath="lib/jdom.jar;lib/castor-doclet.jar"
+            additionalparam="-J-DFILE=webapps/WEB-INF/conf/mapping/postgresmapping.xml -J-DLOG=1">
+        <classpath refid="classpath"/>
+        </javadoc>
+    </target>
+
+
+    <target name="mysql" depends="mapping">
+      <sql
+          driver="org.gjt.mm.mysql.Driver"
+          url="jdbc:mysql://127.0.0.1/portaltest"
+          userid="root"
+          password=""
+          onerror="continue"
+          src="conf/dbcreate.sql">
+          <classpath refid="classpath"/>
+        </sql>
+    </target>
+
+    <target name="postgres">
+      <sql
+          driver="org.postgresql.Driver"
+          url="jdbc:postgresql:testdb"
+          userid="wehrens"
+          password=""
+          onerror="continue"
+          src="conf/dbcreate.sql">
+          <classpath refid="classpath"/>
+        </sql>
+    </target>
+
 
   <!-- =================================================================== -->
   <!-- Creates the API documentation                                       -->
