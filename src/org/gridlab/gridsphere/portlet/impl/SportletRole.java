@@ -50,10 +50,6 @@ public class SportletRole implements PortletRole {
         return new SportletRole(SUPER);
     }
 
-    public boolean isCandidateRole() {
-        return (role == CANDIDATE);
-    }
-
     public boolean isGuestRole() {
         return (role == GUEST);
     }
