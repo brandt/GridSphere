@@ -1,7 +1,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.MessageBoxBean;
-import org.gridlab.gridsphere.provider.portletui.beans.MessageStyle;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -16,7 +15,7 @@ public class MessageBoxTag extends BaseComponentTag {
 
     protected MessageBoxBean messageBoxBean = null;
     protected String key = null;
-    protected String style = MessageStyle.MSG_INFO;
+    protected String style = null;
 
     /**
      * Returns the key used to identify localized text
@@ -90,7 +89,7 @@ public class MessageBoxTag extends BaseComponentTag {
             this.setBaseComponentBean(messageBoxBean);
         }
         if (style != null) {
-            messageBoxBean.setMessageType(style);    
+            messageBoxBean.setMessageType(style);
         }
         if (key != null) {
             messageBoxBean.setValue(getLocalizedText(key));
