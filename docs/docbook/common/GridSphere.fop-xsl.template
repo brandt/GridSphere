@@ -2,8 +2,10 @@
 <!-- $Id$ -->
 <!--
 
-  A stylesheet used commonly for Tapestry documentation.
-  
+A stylesheet used for GridSphere documentation.
+
+  A big thanks to Tapestry project http://jakarta.apache.org/proposals/tapestry 
+
   -->
   
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -15,6 +17,15 @@
      to this relative directory. -->
      
 <xsl:import href="@docbook.xsl.base@/fo/docbook.xsl"/>
+
+<!-- Specify title page properties -->
+<!-- <xsl:include href="titlepage.xsl"/> -->
+
+<!-- this gets rid of verso titlepage -->
+<xsl:template name="book.titlepage.verso">
+</xsl:template>
+<xsl:template name="book.titlepage.before.verso">
+</xsl:template>
 
 <!-- Enable shading of verbatim blocks, such as programlisting. -->
  
@@ -40,6 +51,9 @@
       <xsl:attribute name="space-before.maximum">1.2em</xsl:attribute>
       <xsl:attribute name="text-align">start</xsl:attribute>
 </xsl:attribute-set>
+
+<xsl:template name="book.titlepage.separator">
+</xsl:template>
 
 </xsl:stylesheet>
 
