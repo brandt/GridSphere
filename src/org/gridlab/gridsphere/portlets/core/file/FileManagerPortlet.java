@@ -46,15 +46,17 @@ public class FileManagerPortlet extends ActionPortlet {
         lb.clear();
         String[] list = userStorage.getUserFileList(user);
         // set the list box size to number of files plus padding
-        if (list.length == 0) {
+        if (list == null) {
             list = new String[] {"empty directory"};
         }
+
         lb.setSize(list.length + 3);
         for (int i = 0; i < list.length; i++) {
             ListBoxItemBean item = new ListBoxItemBean();
             item.setValue(list[i]);
             lb.addBean(item);
         }
+
         setNextState(request, "filemanager/view.jsp");
     }
 
@@ -64,13 +66,15 @@ public class FileManagerPortlet extends ActionPortlet {
             FileInputBean fi = event.getFileInputBean("userfile");
             User user = event.getPortletRequest().getUser();
             File f = fi.getFile();
+            if (f == null) return;
             String fileName = fi.getFileName();
+            if (fileName.equals("")) return;
             userStorage.storeFile(user, f, fileName);
             //String location = userStorage.getLocationPath(user, "myfile");
             //log.debug("fileinputbean value=" + fi.getValue() + " location to store=" + location);
             //fi.saveFile(location);
         } catch (IOException e) {
-            setNextError(event.getPortletRequest(), "Unable to store uploaded file " + e.getMessage());
+            log.error("Unable to store uploaded file " + e.getMessage());
         }
         setNextState(event.getPortletRequest(), DEFAULT_VIEW_PAGE);
     }
@@ -141,7 +145,6 @@ public class FileManagerPortlet extends ActionPortlet {
             fileName = (String)it.next();
         }
 
-
         try {
             File file = userStorage.getFile(user, fileName);
             // ... find the file you want ...
@@ -156,12 +159,12 @@ public class FileManagerPortlet extends ActionPortlet {
             //res.setContentType("application/download");
             res.reset();
             res.resetBuffer();
-            res.setContentType("application/octet-stream");
+            //res.setContentType("application/octet-stream");
+            res.setContentType("application/x-jason");
             //res.setContentType( "application/unknow" );
             res.setHeader("Cache-Control","no-cache"); //HTTP 1.1
             res.setHeader("Pragma","no-cache"); //HTTP 1.0
             res.setDateHeader ("Expires", 0); //prevents caching at the proxy server
-            res.setHeader("Cache-Control","no-store"); //HTTP 1.1
 
             log.debug("file length= " + (int)file.length());
             res.setContentLength((int)file.length());

@@ -25,21 +25,17 @@ public class ListBoxItemTag extends BaseComponentTag {
     }
 
     public int doStartTag() throws JspException {
-
-        ListBoxTag listBoxTag = (ListBoxTag)getParent();
-        if (listBoxTag != null) {
-            System.err.println("Setting list box item tag: " + name + " " + value);
-            listboxitem = new ListBoxItemBean(beanId);
-            this.setBaseComponentBean(listboxitem);
-            listBoxTag.addTagBean(listboxitem);
-        }
-
-        return SKIP_BODY;
+        return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspException {
-
-
+        Object tag = getParent();
+        if (tag instanceof ListBoxTag) {
+            ListBoxTag listBoxTag = (ListBoxTag)tag;
+            listboxitem = new ListBoxItemBean();
+            this.setBaseComponentBean(listboxitem);
+            listBoxTag.addTagBean(listboxitem);
+        }
         return EVAL_PAGE;
     }
 

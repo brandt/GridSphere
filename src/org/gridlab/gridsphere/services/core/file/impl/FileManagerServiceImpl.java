@@ -83,7 +83,7 @@ public class FileManagerServiceImpl implements FileManagerService, PortletServic
         if (f.exists()) {
             return f.list();
         } else {
-            return new String[] {""};
+            return null;
         }
     }
 
