@@ -21,6 +21,7 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
+import org.gridlab.gridsphere.services.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.user.PermissionDeniedException;
 import org.gridlab.gridsphere.services.user.UserManagerService;
@@ -38,7 +39,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     private static PortletLog log = SportletLog.getInstance(UserManagerServiceImpl.class);
     private static PortletServiceFactory factory = SportletServiceFactory.getInstance();
     private static AccessControlService aclService = null;
-    private static AccessControlManagerService aclManagerService = null;
+    private static AccessControlManagerService aclManager = null;
+    private static PasswordManagerService passwordManager = null;
 
     private String jdoUserACL = new String();   // object name for UserACL
     private String jdoARImpl = new String();    // ... for AccountRequest
@@ -64,12 +66,84 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @throws PortletServiceUnavailableException if an error occurs during initialization
      */
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+        initServices(config);
+        initRootUser(config);
+    }
+
+    private void initServices(PortletServiceConfig config)
+        throws PortletServiceUnavailableException {
         try {
             aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, config.getServletConfig(), true);
-            aclManagerService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, config.getServletConfig(), true);
+            aclManager = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, config.getServletConfig(), true);
+            passwordManager = (PasswordManagerService) factory.createPortletService(PasswordManagerService.class, config.getServletConfig(), true);
             log.info("in init()");
         } catch (PortletServiceNotFoundException e) {
             throw new PortletServiceUnavailableException("Unable to find portlet services: AccessControlService and AccessControlManagerService");
+        }
+    }
+
+    private void initRootUser(PortletServiceConfig config)
+            throws PortletServiceUnavailableException {
+        /** 1. Retrieve root user properties **/
+        // Login name
+        String userID = config.getInitParameter("userID", "root").trim();
+        log.info("Root user login name = " + userID);
+        /** 2. Create root user account if doesn't exist **/
+        User user = this.getUser(userID);
+        if (user == null) {
+            log.info("Retrieving root user properties");
+            AccountRequest rootRequest = createAccountRequest();
+            rootRequest.setUserID(userID);
+            // Family name
+            String familyName = config.getInitParameter("familyName", "User").trim();
+            log.info("Root user family name = " + familyName);
+            rootRequest.setFamilyName(familyName);
+            // Given name
+            String givenName = config.getInitParameter("givenName", "Root").trim();
+            log.info("Root user given name = " + givenName);
+            rootRequest.setGivenName(givenName);
+            // Organization
+            String organization = config.getInitParameter("organization", "GridSphere").trim();
+            log.info("Root user organization = " + organization);
+            rootRequest.setOrganization(organization);
+            /* Create root user account */
+            log.info("Creating root user account");
+            createAccount(rootRequest);
+            /* Make sure we have a root user */
+            user = getUser(userID);
+            if (user == null) {
+                String msg = "Unable to create root user!";
+                //throw new PortletServiceUnavailableException(msg);
+            }
+            /* Create root password */
+            log.info("Creating root password.");
+            String password = config.getInitParameter("password", "").trim();
+            if (password.equals("")) {
+                log.info("Root user has no password! Please create one as soon as possible.");
+            }
+            try {
+                // Create password, but don't try to validate it...
+                this.passwordManager.createPassword(user, password, false);
+            } catch (Exception e) {
+                String msg = "Unable to create password for root user";
+                log.error(msg, e);
+                //throw new PortletServiceUnavailableException(msg);
+            }
+            if (user == null) {
+                String msg = "User is null!";
+                //throw new PortletServiceUnavailableException(msg);
+            }
+
+            log.info("Granting root user super user privileges.");
+            try {
+                aclManager.addUserToSuperRole(user);
+            } catch (PortletServiceException e) {
+                String msg = "Unable to add root user to super role";
+                log.error(msg, e);
+                //throw new PortletServiceUnavailableException(msg);
+            }
+        } else {
+            log.info("Root user exists...");
         }
     }
 
@@ -81,6 +155,15 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         log.info("in destroy()");
     }
 
+    private void createAccount(AccountRequest request) {
+        try {
+            submitAccountRequest(request);
+            approveAccountRequest((AccountRequestImpl)request);
+        } catch (PortletServiceException e) {
+            log.error("Unable to save account", e);
+        }
+    }
+
     /**
      * Create a new account request. A unique ID is assigned to this request, that can't be modified by the client.
      * When an account request is submitted, the ID is checked
@@ -88,6 +171,21 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public AccountRequest createAccountRequest() {
         AccountRequestImpl newacct = new AccountRequestImpl();
         return newacct;
+    }
+
+    /**
+     * Modify an existing user account. Changes must be approved
+     * @param user
+     * @return
+     */
+    public AccountRequest changeAccountRequest(User user) {
+        // get user from DB
+        // create an AccountRequestImpl from User
+        // when modifications are made to account request they go thru submission process again
+
+        AccountRequest ar = new AccountRequestImpl(user);
+
+        return ar;
     }
 
     /**
@@ -148,6 +246,32 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     /**
+     * Returns the account request for the given user id
+     *
+     * @param user id of account request
+     * @return account request for given user id
+     */
+    public AccountRequest getAccountRequest(String id) {
+        return getAccountRequestImpl(id);
+    }
+
+    public boolean existsAccountRequest(String id) {
+        return (getAccountRequest(id) != null);
+    }
+
+    private AccountRequestImpl getAccountRequestImpl(String id) {
+        AccountRequestImpl requestImpl = null;
+        String command =
+                "select ar from "+jdoARImpl+" ar where ar.ObjectID=" + id;
+        try {
+            requestImpl = (AccountRequestImpl) pm.restoreObject(command);
+        } catch (PersistenceManagerException e) {
+            log.error("PM Exception :" + e);
+        }
+        return requestImpl;
+    }
+
+    /**
      * Approve a new or modified account request
      *
      * @param approver user who approves this request (should better be a superuser)
@@ -157,50 +281,82 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public void approveAccountRequest(User approver, AccountRequest request, MailMessage mailMessage)
             throws PermissionDeniedException {
-
+        if ( ! existsAccountRequest(request.getID()) ) {
+            throw new PermissionDeniedException("Account request has not been submitted");
+        }
         //@todo check if a user with that userid already exists!
         if (isSuperUser(approver)) {
-            String userid = request.getID();
-            AccountRequestImpl requestImpl = null;
-            String command =
-                    "select ar from "+jdoARImpl+" ar where ar.ObjectID=" + userid;
-            try {
-                requestImpl = (AccountRequestImpl) pm.restoreObject(command);
-            } catch (PersistenceManagerException e) {
-                log.error("PM Exception :" + e);
-            }
-
-            SportletUserImpl user = null;
-
-            // now need to check wheter new account or an existing should be modified
-            if (existsUserID(userid)) {
-                user = (SportletUserImpl) modifyExistingUser(requestImpl, (SportletUser) getUserByID(userid));
-            } else {
-                // make a new user
-                user = (SportletUserImpl) makeNewUser(requestImpl);
-            }
-            // now delete the request and create/update the user
-            try {
-                if (existsUserID(userid)) {
-                    pm.update(user);
-                } else {
-                    pm.create(user);
-                }
-                pm.delete(requestImpl);
-            } catch (PersistenceManagerException e) {
-                log.error("PM Exception :" + e);
-            }
-            // Mail the user
-            try {
-                if (mailMessage != null)
-                    MailUtils.sendMail(mailMessage, "localhost");
-            } catch (MessagingException e) {
-                log.error("Unable to send mail: ", e);
-            }
+            approveAccountRequest((AccountRequestImpl)request, mailMessage);
         } else {
             log.info("User '" + approver.getGivenName() + "' tried to approve User '" + request.getGivenName() + "' (denied) ");
             throw new PermissionDeniedException("Permission denied ");
         }
+    }
+
+    /**
+     */
+    private void approveAccountRequest(AccountRequest request, MailMessage mailMessage) {
+        // Approve the request
+        approveAccountRequest(request);
+        // Mail the user
+        try {
+            if (mailMessage != null)
+                MailUtils.sendMail(mailMessage, "localhost");
+        } catch (MessagingException e) {
+            log.error("Unable to send mail: ", e);
+        }
+    }
+
+    /**
+     */
+    private void approveAccountRequest(AccountRequest request) {
+        User user = null;
+        String username= request.getUserID();
+        // now need to check wheter new account or an existing should be modified
+        if (existsUser(username)) {
+            // update user and delete request
+            user = modifyExistingUser((AccountRequestImpl)request, (SportletUser) getUser(username));
+            try {
+                pm.update(user);
+                pm.delete(request);
+            } catch (PersistenceManagerException e) {
+                log.error("PM Exception :" + e);
+            }
+        } else {
+            // create user and delete request
+            user = makeNewUser((AccountRequestImpl)request);
+            try {
+                pm.create(user);
+                pm.delete(request);
+            } catch (PersistenceManagerException e) {
+                log.error("PM Exception :" + e);
+            }
+        }
+    }
+
+    /**
+     * Creates a new SportletUser from an AccountRequestImpl
+     */
+    private SportletUser makeNewUser(AccountRequestImpl requestImpl) {
+        SportletUserImpl newuser = new SportletUserImpl();
+        modifyExistingUser(requestImpl, newuser);
+        return newuser;
+    }
+
+    /**
+     * Changes a SportletUser to the values of an accountrequest
+     * @param requestImpl
+     * @param user
+     * @return the changes portletuser
+     */
+    private SportletUser modifyExistingUser(AccountRequestImpl requestImpl, SportletUser user) {
+        user.setEmailAddress(requestImpl.getEmailAddress());
+        user.setFamilyName(requestImpl.getFamilyName());
+        user.setFullName(requestImpl.getFullName());
+        user.setGivenName(requestImpl.getGivenName());
+        user.setID("" + requestImpl.getID());
+        user.setUserID(requestImpl.getUserID());
+        return user;
     }
 
     /**
@@ -214,23 +370,19 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public void denyAccountRequest(User denier, AccountRequest request, MailMessage mailMessage)
             throws PermissionDeniedException {
         if (isSuperUser(denier)) {
-            // @TODO share code with approveAccountrequest
+
             // @todo should somehow be in a transaction
 
             String userid = request.getID();
-            AccountRequestImpl requestImpl = null;
             String command =
-                    "select ar from "+jdoARImpl+" ar where ar.ObjectID=" + userid;
-            String command2 =
                     "select acl from "+jdoUserACL+" acl where " +
                     "UserID=\"" + request.getID() + "\"";
 
             try {
-                requestImpl = (AccountRequestImpl) pm.restoreObject(command);
-                pm.delete(requestImpl);
+                pm.delete(request);
                 // only delete the requested groups when the user did not exist before!
                 if (!existsUser(userid)) {
-                    pm.deleteList(command2);
+                    pm.deleteList(command);
                 }
             } catch (PersistenceManagerException e) {
                 log.error("PM Exception :" + e);
@@ -259,7 +411,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             throws PermissionDeniedException {
         if (isAdminUser(approver, group) || isSuperUser(approver)) {
             try {
-                aclManagerService.approveUserInGroup(user, group);
+                aclManager.approveUserInGroup(user, group);
             } catch (PortletServiceException e) {
                 log.error("PortletService Exeption " + e);
             }
@@ -289,7 +441,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
         if (isAdminUser(denier, group) || (isSuperUser(denier))) {
             try {
-                aclManagerService.removeUserGroupRequest(user, group);
+                aclManager.removeUserGroupRequest(user, group);
                 // Mail the user
                 if (mailMessage != null) {
                     MailUtils.sendMail(mailMessage, "localhost");
@@ -302,21 +454,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         } else {
             throw new PermissionDeniedException("Permission Denied!");
         }
-    }
-
-    /**
-     * Modify an existing user account. Changes must be approved
-     * @param user
-     * @return
-     */
-    public AccountRequest changeAccountRequest(User user) {
-        // get user from DB
-        // create an AccountRequestImpl from User
-        // when modifications are made to account request they go thru submission process again
-
-        AccountRequest ar = new AccountRequestImpl(user);
-
-        return ar;
     }
 
     /**
@@ -394,22 +531,18 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     /**
-     * Retrieves a user object with the given username from this service.
-     * Requires a user with the "super user" privileges, since this
-     * by-passes the normal login mechanism of retrieving a user object.
-     *
-     * @param User The super user requesting the user object
-     * @param String The user name or login id of the user in question
-     * @throws PermissionDeniedException If approver is not a super user
+     * Remove a user permanently.
+     * @param approver
+     * @param userN
+     * @throws PermissionDeniedException
      */
-    public void saveUser(User approver, User user)
-            throws PermissionDeniedException {
+    public void saveUser(User approver, User user) throws PermissionDeniedException {
         if (isSuperUser(approver)) {
-            updateUser(user);
+            saveUser(user);
         } else {
             throw new PermissionDeniedException("User "
                                                + approver.getGivenName()
-                                               + " wanted to make changes "
+                                               + " wanted to save "
                                                + user.getUserID() + " (denied)");
         }
     }
@@ -445,31 +578,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             log.error("Exception " + e);
         }
         return result;
-    }
-
-    /**
-     * Creates a new SportletUser from an AccountRequestImpl
-     */
-    protected SportletUser makeNewUser(AccountRequestImpl requestImpl) {
-        SportletUserImpl newuser = new SportletUserImpl();
-        modifyExistingUser(requestImpl, newuser);
-        return newuser;
-    }
-
-    /**
-     * Changes a SportletUser to the values of an accountrequest
-     * @param requestImpl
-     * @param user
-     * @return the changes portletuser
-     */
-    protected SportletUser modifyExistingUser(AccountRequestImpl requestImpl, SportletUser user) {
-        user.setEmailAddress(requestImpl.getEmailAddress());
-        user.setFamilyName(requestImpl.getFamilyName());
-        user.setFullName(requestImpl.getFullName());
-        user.setGivenName(requestImpl.getGivenName());
-        user.setID("" + requestImpl.getID());
-        user.setUserID(requestImpl.getUserID());
-        return user;
     }
 
     /**
@@ -523,36 +631,19 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     /**
-     * Create a user in the database
-     * @param String the userobject
-     * @return User the new user
-     */
-    public User createUser(String userName) {
-        SportletUserImpl user = null;
-        if (existsUser(userName)) {
-            user = getSportletUser(userName);
-        } else {
-            user = new SportletUserImpl();
-            user.setUserID(userName);
-            try {
-                pm.create(user);
-            } catch (PersistenceManagerException e) {
-                log.error("Persistence Exception !"+e);
-            }
-        }
-        return user;
-    }
-
-    /**
      * save the userobjects to the database
      * @param user the userobject
      * @todo check/pass up the exception
      */
-    private void updateUser(User user) {
+    public void saveUser(User user) {
         try {
-            pm.update(user);
+            if (existsUserID(user.getID())) {
+                pm.update(user);
+            } else {
+                pm.create(user);
+            }
         } catch (PersistenceManagerException e) {
-            log.error("Persistence Exception !"+e);
+            log.error("PM Exception :" + e.toString());
         }
     }
 
@@ -571,7 +662,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                     if (group == null) {
                         log.error("Why in the hell is this group object null?!!!!!!");
                     }
-                    aclManagerService.removeUserFromGroup(user, group);
+                    aclManager.removeUserFromGroup(user, group);
                 }
                 pm.delete(user);
             } catch (PortletServiceException e) {

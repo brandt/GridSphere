@@ -27,12 +27,27 @@ public interface AccessControlManagerService extends PortletService {
     public void createNewGroup(String groupName) throws PortletServiceException ;
 
     /**
+     * Creates a new group
+     *
+     * @param groupName the name of the new group
+     */
+    public PortletGroup getGroup(String groupName);
+
+
+    /**
      * Rename an existing group
      *
      * @param group the PortletGroup to modify
      * @param newGroupName the name of the new group
      */
     public void renameGroup(PortletGroup group, String newGroupName) throws PortletServiceException ;
+
+    /**
+     * Removes a group
+     *
+     * @param groupName the PortletGroup
+     */
+    public void removeGroup(String groupName) throws PortletServiceException ;
 
     /**
      * Removes a group

@@ -44,6 +44,17 @@
     </service>
 
     <service>
+        <name>Password Manager Service</name>
+        <description>Provides Password Management Capabilities</description>
+        <interface>org.gridlab.gridsphere.services.security.password.PasswordManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.security.password.impl.DbmsPasswordManagerService</implementation>
+        <service-config>
+            <param-name>retrievalHost</param-name>
+            <param-value>myproxy.gridlab.org</param-value>
+        </service-config>
+    </service>
+
+    <service>
         <name>Login Service</name>
         <description>Provides Login Capabilities</description>
         <interface>org.gridlab.gridsphere.services.user.LoginService</interface>

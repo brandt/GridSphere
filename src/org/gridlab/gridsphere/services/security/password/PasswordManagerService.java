@@ -22,6 +22,9 @@ public interface PasswordManagerService {
     public Password createPassword(User user, String password)
             throws PasswordInvalidException;
 
+    public Password createPassword(User user, String password, boolean validatePasword)
+            throws PasswordInvalidException;
+
     public void resetPassword(User user, String password)
             throws PasswordInvalidException, PasswordNotFoundException;
 

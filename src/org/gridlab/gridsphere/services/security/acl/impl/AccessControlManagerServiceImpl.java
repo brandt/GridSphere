@@ -79,6 +79,33 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     /**
+     * Retrieve a new group
+     *
+     * @param Name the name of the new group
+     * @throws PortletServiceException
+     */
+    public PortletGroup getGroup(String name) {
+        return getSportletGroup(name);
+    }
+
+    /**
+     * Retrieve a new group
+     *
+     * @param Name the name of the new group
+     * @throws PortletServiceException
+     */
+    private SportletGroup getSportletGroup(String name) {
+        String oql = "select g from " + jdoSportletGroup + " g where g.Name=\"" + name + "\"";
+        try {
+            return (SportletGroup)pm.restoreObject(oql);
+        } catch (PersistenceManagerException e) {
+            log.error("Transaction Exception " + e);
+            return null;
+        }
+    }
+
+
+    /**
      * Creates a new group
      *
      * @param Name the name of the new group
@@ -110,6 +137,20 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             pm.update(pg);
         } catch (PersistenceManagerException e) {
             throw new PortletServiceException("Persistence Error:" + e.toString());
+        }
+    }
+
+    /**
+     * Removes a group
+     *
+     * @param group the PortletGroup
+     */
+    public void removeGroup(String groupName) throws PortletServiceException {
+        SportletGroup group = getSportletGroup(groupName);
+        if (group == null) {
+            log.warn("Attempting to delete a group that doesn't exist");
+        } else {
+            removeGroup(group);
         }
     }
 

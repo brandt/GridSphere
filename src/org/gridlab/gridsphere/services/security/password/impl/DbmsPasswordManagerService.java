@@ -88,10 +88,12 @@ public class DbmsPasswordManagerService
         return password;
     }
 
-    public Password createPassword(User user, String value)
+    public Password createPassword(User user, String value, boolean validatePassword)
             throws PasswordInvalidException {
-        // First validate the value
-        validatePassword(value);
+         // First validate the value if requested
+         if (validatePassword) {
+            validatePassword(value);
+        }
         // Then check if user already has password
         DbmsPassword password = getDbmsPassword(user);
         if (password != null) {
@@ -107,6 +109,11 @@ public class DbmsPasswordManagerService
             _log.error("Unable to create password", e);
         }
         return password;
+    }
+
+    public Password createPassword(User user, String value)
+            throws PasswordInvalidException {
+        return createPassword(user, value, true);
     }
 
     public void resetPassword(User user, String value)

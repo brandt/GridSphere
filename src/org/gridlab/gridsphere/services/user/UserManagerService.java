@@ -42,6 +42,14 @@ public interface UserManagerService extends PortletService {
     public List getAccountRequests();
 
     /**
+     * Returns the account request for the given user id
+     *
+     * @param user id of account request
+     * @return account request for given user id
+     */
+    public AccountRequest getAccountRequest(String userID);
+
+    /**
      * Approve a new or modified account request.
      * If mailMessage is non-null, a mail message will be sent out to the account requestor
      *
@@ -118,21 +126,32 @@ public interface UserManagerService extends PortletService {
      * @param User The super user requesting the user object
      * @param String The user name or login id of the user in question
      * @throws PermissionDeniedException If approver is not a super user
+     public User createUser(User approver, String userName)
+            throws PermissionDeniedException;
+     */
+
+    /**
+     * Retrieves a user object with the given username from this service.
+     * Requires a user with the "super user" privileges, since this
+     * by-passes the normal login mechanism of retrieving a user object.
+     *
+     * @param User The super user requesting the user object
+     * @param String The user name or login id of the user in question
+     * @throws PermissionDeniedException If approver is not a super user
      */
     public User getUser(User approver, String userName)
             throws PermissionDeniedException;
 
     /**
-     * Saves changes to a user object with the given username from this service.
+     * Saves a user object with the given username from this service.
      * Requires a user with the "super user" privileges.
      *
-     * @param User The super user making changes to the given user
-     * @param User The given use
+     * @param User The super user requesting the user object
+     * @param String The user name or login id of the user in question
      * @throws PermissionDeniedException If approver is not a super user
      */
     public void saveUser(User approver, User user)
             throws PermissionDeniedException;
-
 
     /**
      * Removes a user object with the given username from this service.
@@ -159,22 +178,6 @@ public interface UserManagerService extends PortletService {
      * @throws PermissionDeniedException If approver is not a super user
      */
     public User getUser(String userName);
-
-    /**
-     * Removes a user object with the given username from this service.
-     *
-     * @param String The user name or login id of the user in question
-     * @throws PermissionDeniedException If approver is not a super user
-     */
-    public User createUser(String userName);
-
-    /**
-     * Removes a user object with the given username from this service.
-     *
-     * @param String The user name or login id of the user in question
-     * @throws PermissionDeniedException If approver is not a super user
-     */
-    public void removeUser(String userName);
 
     /**
      * Checks to see if account exists for a user

@@ -95,30 +95,8 @@ public class CredentialManagerServiceTest extends ServiceTest {
     }
 
     private void createUsers() {
-        this.rootUser = createRootUser();
+        this.rootUser = this.userManager.getUser("root");
         this.testUser = createTestUser(this.rootUser);
-    }
-
-    private User createRootUser() {
-        _log.info("- create root user");
-        // create a superuser - faked
-        SportletUserImpl root = new SportletUserImpl();
-        root.setUserID("root");
-        root.setGivenName("Root");
-
-        UserACL rootacl = new UserACL();
-        rootacl.setUserID(root.getOid());
-        rootacl.setRoleID(PortletRole.SUPER.getID());
-        rootacl.setGroupID(PortletGroup.SUPER.getID());
-        rootacl.setStatus(UserACL.STATUS_APPROVED);
-
-        try {
-            _pm.create(root);
-            _pm.create(rootacl);
-        } catch (PersistenceManagerException e) {
-            _log.error("Exception " + e);
-        }
-        return root;
     }
 
     private User createTestUser(User rootUser) {
@@ -144,7 +122,6 @@ public class CredentialManagerServiceTest extends ServiceTest {
     private void deleteUsers() {
         try {
             this.userManager.removeUser(rootUser, "test");
-            this.userManager.removeUser(rootUser, "root");
         } catch (PermissionDeniedException e) {
             _log.error("Exception " + e);
             fail("No permissions!");

@@ -48,7 +48,7 @@ public class DbmsPassword extends BaseObject implements Password {
      */
     private Date dateCreated = null;
     /**
-     * @sql-name datemodified
+     * @sql-name datelastmodified
      * @required
      */
     private Date dateLastModified = null;
