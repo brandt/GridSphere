@@ -246,6 +246,10 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         this.parent = parent;
     }
 
+    public void remove(PortletComponent pc, PortletRequest req) {
+
+    }
+
     /**
      * Performs an action on this portlet component
      *

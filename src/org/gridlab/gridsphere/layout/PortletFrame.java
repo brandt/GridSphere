@@ -179,6 +179,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         return list;
     }
 
+    public void remove(PortletComponent pc, PortletRequest req) {
+        if (parent != null) parent.remove(this, req);
+    }
 
     /**
      * Fires a frame event notification

@@ -275,7 +275,6 @@ public class PortletPageFactory implements PortletSessionListener {
 
             for (int i = 0; i < webappNames.size(); i++) {
                 String webappName = (String)webappNames.get(i);
-
                 Iterator it = groups.iterator();
                 while (it.hasNext()) {
                     PortletGroup g = (PortletGroup)it.next();

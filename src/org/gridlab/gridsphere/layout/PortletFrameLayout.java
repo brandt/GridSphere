@@ -85,6 +85,13 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         return list;
     }
 
+    public void remove(PortletComponent pc, PortletRequest req) {
+        components.remove(pc);
+        if (getPortletComponents().isEmpty()) {
+            parent.remove(this, req);
+        }
+    }
+
     /**
      * Destroys this portlet component
      */

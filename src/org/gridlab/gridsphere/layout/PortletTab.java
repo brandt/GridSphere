@@ -205,6 +205,11 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         return list;
     }
 
+    public void remove(PortletComponent pc, PortletRequest req) {
+        portletComponent = null;
+        parent.remove(this, req);
+    }
+
     /**
      * Performs an action on this portlet tab component
      *

@@ -437,6 +437,11 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         }
     }
 
+    public void remove(PortletComponent pc, PortletRequest req) {
+        tabs.remove(pc);
+        if (tabs.isEmpty()) parent.remove(this, req);
+    }
+
     public Object clone() throws CloneNotSupportedException {
         PortletTabbedPane t = (PortletTabbedPane)super.clone();
         t.style = this.style;
