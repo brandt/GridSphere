@@ -86,11 +86,7 @@ public class PortletServlet extends HttpServlet
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        String propsFile = config.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties");
-        File f = new File(propsFile);
-        if (f.exists()) {
-            SportletLog.setConfigureURL(propsFile);
-        }
+       
         // load descriptor files
         log.debug("in init of PortletServlet");
 
@@ -230,9 +226,12 @@ public class PortletServlet extends HttpServlet
         JSRApplicationPortletImpl appPortlet =
                 (JSRApplicationPortletImpl) registry.getApplicationPortlet(pid);
 
+        if (appPortlet == null) {
+            log.error("Unable to get portlet from registry identified by: " + pid);
+            return;
+        }
+
         Supports[] supports = appPortlet.getSupports();
-
-
         setPortletModes(request, appPortlet);
 
 
