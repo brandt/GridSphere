@@ -64,7 +64,8 @@
             <fileset dir="config/database"/>
         </copy>
 
-
+        <property name="DATABASE_NAME"
+                  value="${project.name}"/>
         <property name="DATABASE_FILE"
                   value="${project.dir}/config/database/database.xml"/>
         <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
