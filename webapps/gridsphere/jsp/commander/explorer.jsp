@@ -1,244 +1,336 @@
-<%@ page import="org.gridlab.gridsphere.services.core.secdir.ResourceInfo,
-                java.util.Date"%>
+<%@ page import="java.util.Locale,
+                 org.gridlab.gridsphere.services.core.secdir.ResourceInfo,
+                 java.util.Date"%>
+<%@ taglib uri="/portletUI" prefix="ui" %>
+<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+
+<portletAPI:init/>
+
 <jsp:useBean id="userData" class="org.gridlab.gridsphere.portlets.core.file.UserData" scope="request" />
-<jsp:useBean id="formURIs" class="java.util.HashMap" scope="request"/>
 <jsp:useBean id="leftEditURIs" class="java.util.List" scope="request"/>
 <jsp:useBean id="rightEditURIs" class="java.util.List" scope="request"/>
 
-<table border="1" cellpadding="2" cellspacing="0" width="100%">
 <% if(!userData.getCorrect().booleanValue()){ %>
-  <tr>
-    <td class="portlet-msg-info" style="text-align: center">
-      Secure directory service unavailable !!!
-    </td>
-  </tr>
+<ui:panel width="100%">
+    <ui:frame beanId="errorFrame"/>
+</ui:panel>
 <% }else{ %>
-    <tr>
-      <td class="portlet-section-header" width="50%">
-        <b><%=userData.getPath("left")%></b>
-      </td>
-      <td class="portlet-section-header" width="50%">
-        <b><%=userData.getPath("right")%></b>
-      </td>
-    </tr>
-  <tr>
-    <td style="vertical-align: top; width:50%">
-     <form action="<%=formURIs.get("explorer_left")%>" method="post" enctype="multipart/form-data">
-     <table border="0" cellpadding="2" cellspacing="0" width="100%">
-      <tr>
-        <td class="portlet-msg-info" colspan="2" style="text-align: center" width="66%">
-          File: &nbsp;<input type="file" name="file"/>
-        </td>
-        <td class="portlet-msg-info" style="text-align: center" width="34%">
-          <input type="submit" name="formAction" value="upload"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="portlet-msg-info" style="text-align: center">
-          <input type="submit" name="formAction" value="copy"/>
-        </td>
-        <td class="portlet-msg-info" style="text-align: center">
-          <input type="submit" name="formAction" value="move"/>
-        </td>
-        <td class="portlet-msg-info" style="text-align: center">
-          <input type="submit" name="formAction" value="delete"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="portlet-msg-info" style="text-align: center">
-          <input type="edit" name="resourceName"/>
-        </td>
-        <td class="portlet-msg-info" style="text-align: center">
-          <input type="submit" name="formAction" value="mkdir"/>
-        </td>
-        <td class="portlet-msg-info" style="text-align: center">
-          <input type="submit" name="formAction" value="new file"/>
-        </td>
-      </tr>
-     </table>
-     <br/><table border="0" cellpadding="2" cellspacing="0" width="100%">
-     <tr>
-       <td class="portlet-section-header" width="20">&nbsp;</td>
-       <td class="portlet-section-header" style="text-align: left">resource</td>
-       <td class="portlet-section-header" width="50" style="text-align: right">size</td>
-       <td class="portlet-section-header" width="160" style="text-align: center">last modified</td>
-       <td class="portlet-section-header" width="30">&nbsp;</td>
-     </tr>
-  <%
-      String[] URIs=userData.getLeftURIs();
-      ResourceInfo[] resources=userData.getLeftResourceList();
+<ui:table width="100%">
+<ui:tablerow>
+    <ui:tablecell width="50%" valign="top">
+    <ui:table width="100%">
+        <ui:tablerow header="true">
+            <ui:tablecell >
+                 <%=userData.getPath("left")%>
+            </ui:tablecell>
+        </ui:tablerow>
+    <ui:fileform action="uploadFileLeft">
+        <ui:tablerow>
+            <ui:tablecell>
+            <ui:table width="100%">
+            <ui:tablerow>
+                <ui:tablecell width="100">
+                    <ui:text key="COMMANDER_FILE_NAME"/>
+                </ui:tablecell>
+                <ui:tablecell width="60">
+                    <ui:fileinput beanId="userfileLeft" size="20" maxlength="20"/>
+                </ui:tablecell>
+                <ui:tablecell width="100">
+                    <ui:actionsubmit action="uploadFileLeft" key="COMMANDER_FILE_UPLOAD"/>
+                </ui:tablecell>
+            </ui:tablerow>
+            </ui:table>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:fileform>
+    <ui:form>
+    <ui:hiddenfield name="side" value="left"/>
+        <ui:tablerow>
+            <ui:tablecell>
+            <ui:table width="100%">
+            <ui:tablerow>
+                <ui:tablecell width="14%">
+                    <ui:text key="COMMANDER_DIR_FILE_NAME"/>
+                </ui:tablecell>
+                <ui:tablecell width="20%">
+                    <ui:textfield beanId="resourceNameleft"/>
+                </ui:tablecell>
+                <ui:tablecell width="33%">
+                    <ui:actionsubmit action="newDirectory" key="COMMANDER_MKDIR"/>
+                </ui:tablecell>
+               <ui:tablecell width="33%">
+                    <ui:actionsubmit action="newFile" key="COMMANDER_TOUCH"/>
+                </ui:tablecell>
+            </ui:tablerow>
+            </ui:table>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:form>
+    <ui:form>
+    <ui:hiddenfield name="side" value="left"/>
+        <ui:tablerow>
+            <ui:tablecell>
+            <ui:table width="100%">
+            <%
+                String[] URIs=userData.getLeftURIs();
+                ResourceInfo[] resources=userData.getLeftResourceList();
 
-      if(URIs!=null && resources!=null){
-          for(int i=0;i<URIs.length;++i){
-              if(resources[i].isDirectory()){
-          %>
-  <tr>
-    <td class="portlet-msg-info" style="text-align: center" width="20">
-      <% if(i>0){ %>
-        <input type="checkbox" name="left_<%= i %>">
-      <% }else{ %>
-        &nbsp;
-      <% } %>
-    </td>
-    <td class="portlet-msg-info">
-      <a href="<%= URIs[i] %>"><b><%= resources[i].getResource() %></b></a>
-    </td>
-    <td class="portlet-msg-info">
-      &nbsp;
-    </td>
-    <td class="portlet-msg-info" style="text-align: left">
-      <%= new Date(resources[i].getLastModified()).toString() %>
-    </td>
-    <td class="portlet-msg-info">
-      &nbsp;
-    </td>
-   </tr>
-              <%
-          }
-      }
-      for(int i=0;i<URIs.length;++i){
-          if(!resources[i].isDirectory()){
-          %>
-  <tr>
-    <td class="portlet-msg-info" style="text-align: center" width="20">
-      <input type="checkbox" name="left_<%= i %>"/>
-    </td>
-    <td class="portlet-msg-info">
-      <a href="<%= URIs[i] %>"><%= resources[i].getResource() %></a>
-    </td>
-    <td class="portlet-msg-info" style="text-align: right;margin-right:15 px">
-      <%= resources[i].getLength() %>
-    </td>
-    <td class="portlet-msg-info" style="text-align: left">
-      <%= new Date(resources[i].getLastModified()).toString() %>
-    </td>
-    <td class="portlet-msg-info" style="text-align: right;margin-right:10 px" width="40">
-      <a href="<%= leftEditURIs.get(i) %>">edit</a>
-    </td>
-   </tr>
-              <%
-              }
-          }
-      }else{
-    %>
-     <tr>
-       <td class="portlet-msg-info" colspan="5" style="text-align: center"><br/>Unable to read directory <a href="<%= formURIs.get("leftFix") %>">go to root directory</a></td>
-     </tr>
-    <%
-      }
-    %>
-    </form>
-    </table>
-    </td>
-    <td style="vertical-align: top; width:50%">
-     <form action="<%=formURIs.get("explorer_right")%>" method="post" enctype="multipart/form-data">
-     <table border="0" cellpadding="2" cellspacing="0" width="100%">
-      <tr>
-        <td class="portlet-msg-info" colspan="2" style="text-align: center" width="66%">
-          File: &nbsp;<input type="file" name="file"/>
-        </td>
-        <td class="portlet-msg-info" style="text-align: center"  width="34%">
-          <input type="submit" name="formAction" value="upload"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="portlet-msg-info" style="text-align: center">
-          <input type="submit" name="formAction" value="copy"/>
-        </td>
-        <td class="portlet-msg-info" style="text-align: center">
-          <input type="submit" name="formAction" value="move"/>
-        </td>
-        <td class="portlet-msg-info" style="text-align: center">
-          <input type="submit" name="formAction" value="delete"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="portlet-msg-info" style="text-align: center">
-          <input type="edit" name="resourceName"/>
-        </td>
-        <td class="portlet-msg-info" style="text-align: center">
-          <input type="submit" name="formAction" value="mkdir"/>
-        </td>
-        <td class="portlet-msg-info" style="text-align: center">
-          <input type="submit" name="formAction" value="new file"/>
-        </td>
-      </tr>
-     </table>
-<br/><table border="0" cellpadding="2" cellspacing="0" width="100%">
-     <tr>
-       <td class="portlet-section-header" width="20">&nbsp;</td>
-       <td class="portlet-section-header" style="text-align: left">resource</td>
-       <td class="portlet-section-header" width="50" style="text-align: right">size</td>
-       <td class="portlet-section-header" width="160" style="text-align: center">last modified</td>
-       <td class="portlet-section-header" width="30">&nbsp;</td>
-     </tr>
-  <%
-      URIs=userData.getRightURIs();
-      resources=userData.getRightResourceList();
+                if(URIs!=null && resources!=null){
+            %>
+                    <ui:tablerow header="true">
+                        <ui:tablecell width="20"/>
+                        <ui:tablecell>
+                            <ui:text key="COMMANDER_RESOURCE"/>
+                        </ui:tablecell>
+                        <ui:tablecell width="50">
+                            <ui:text key="COMMANDER_SIZE"/>
+                        </ui:tablecell>
+                        <ui:tablecell width="160">
+                            <ui:text key="COMMANDER_LAST_MODIFIED"/>
+                        </ui:tablecell>
+                        <ui:tablecell width="30"/>
+                    </ui:tablerow>
+             <%
+                for(int i=0;i<URIs.length;++i){
+                    if(resources[i].isDirectory()){
+             %>
+                    <ui:tablerow>
+                        <ui:tablecell width="20">
+                            <% if(i>0){ %>
+                                <input type="checkbox" name="left_<%= i %>"/>
+                            <% } %>
+                        </ui:tablecell>
+                        <ui:tablecell>
+                            <a href="<%= URIs[i] %>"><b><%= resources[i].getResource() %></b></a>
+                        </ui:tablecell>
+                        <ui:tablecell width="50"/>
+                        <ui:tablecell width="160">
+                            <ui:text>
+                                <%= new Date(resources[i].getLastModified()).toString()%>
+                            </ui:text>
+                        </ui:tablecell>
+                        <ui:tablecell width="30"/>
+                    </ui:tablerow>
+            <%
+                    }
+                }
+                for(int i=0;i<URIs.length;++i){
+                    if(!resources[i].isDirectory()){
+             %>
+                    <ui:tablerow>
+                        <ui:tablecell width="20">
+                            <% if(i>0){ %>
+                                <input type="checkbox" name="left_<%= i %>"/>
+                            <% } %>
+                        </ui:tablecell>
+                        <ui:tablecell>
+                            <a href="<%= URIs[i] %>"><%= resources[i].getResource() %></a>
+                        </ui:tablecell>
+                        <ui:tablecell width="50">
+                            <ui:text>
+                                <%= resources[i].getLength() %>
+                            </ui:text>
+                        </ui:tablecell>
+                        <ui:tablecell width="160">
+                            <ui:text>
+                                <%= new Date(resources[i].getLastModified()).toString()%>
+                            </ui:text>
+                        </ui:tablecell>
+                        <ui:tablecell width="30">
+                            <a href="<%= leftEditURIs.get(i) %>"><ui:text key="COMMANDER_EDIT"/></a>
+                        </ui:tablecell>
+                    </ui:tablerow>
+            <%
+                    }
+                }
+            }else{ %>
+                <ui:tablerow>
+                    <ui:tablecell width="100%">
+                        <ui:text style="error" key="COMMANDER_ERROR_DIR_READ"/>
+                        <ui:actionlink action="gotoRootDirLeft" key="COMMANDER_ERROR_DIR_BACK"/>
+                    </ui:tablecell>
+                </ui:tablerow>
+            <% } %>
+            </ui:table>
+            </ui:tablecell>
+        </ui:tablerow>
+        <ui:tablerow>
+            <ui:tablecell>
+            <ui:table width="100%">
+            <ui:tablerow>
+                <ui:tablecell width="33%">
+                    <ui:actionsubmit action="copy" key="COMMANDER_COPY"/>
+                </ui:tablecell>
+                <ui:tablecell width="34%">
+                    <ui:actionsubmit action="move" key="COMMANDER_MOVE"/>
+                </ui:tablecell>
+                <ui:tablecell width="33%">
+                    <ui:actionsubmit action="delete" key="COMMANDER_DELETE"/>
+                </ui:tablecell>
+            </ui:tablerow>
+            </ui:table>
+            </ui:tablecell>
+        </ui:tablerow>
+        </ui:form>
+    </ui:table>
+    </ui:tablecell>
+    <ui:tablecell width="50%" valign="top">
+    <ui:table width="100%">
+        <ui:tablerow header="true">
+            <ui:tablecell >
+                 <%=userData.getPath("right")%>
+            </ui:tablecell>
+        </ui:tablerow>
+    <ui:fileform action="uploadFileRight">
+        <ui:tablerow>
+            <ui:tablecell>
+            <ui:table width="100%">
+            <ui:tablerow>
+                <ui:tablecell width="100">
+                    <ui:text key="COMMANDER_FILE_NAME"/>
+                </ui:tablecell>
+                <ui:tablecell width="60">
+                    <ui:fileinput beanId="userfileRight" size="20" maxlength="20"/>
+                </ui:tablecell>
+                <ui:tablecell width="100">
+                    <ui:actionsubmit action="uploadFileRight" key="COMMANDER_FILE_UPLOAD"/>
+                </ui:tablecell>
+            </ui:tablerow>
+            </ui:table>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:fileform>
+    <ui:form>
+    <ui:hiddenfield name="side" value="right"/>
+        <ui:tablerow>
+            <ui:tablecell>
+            <ui:table width="100%">
+            <ui:tablerow>
+                <ui:tablecell width="14%">
+                    <ui:text key="COMMANDER_DIR_FILE_NAME"/>
+                </ui:tablecell>
+                <ui:tablecell width="20%">
+                    <ui:textfield beanId="resourceNameright"/>
+                </ui:tablecell>
+                <ui:tablecell width="33%">
+                    <ui:actionsubmit action="newDirectory" key="COMMANDER_MKDIR"/>
+                </ui:tablecell>
+               <ui:tablecell width="33%">
+                    <ui:actionsubmit action="newFile" key="COMMANDER_TOUCH"/>
+                </ui:tablecell>
+            </ui:tablerow>
+            </ui:table>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:form>
+    <ui:form>
+    <ui:hiddenfield name="side" value="right"/>
+        <ui:tablerow>
+            <ui:tablecell>
+            <ui:table width="100%">
+            <%
+                String[] URIs=userData.getRightURIs();
+                ResourceInfo[] resources=userData.getRightResourceList();
 
-      if(URIs!=null && resources!=null){
-          for(int i=0;i<URIs.length;++i){
-              if(resources[i].isDirectory()){
-          %>
-  <tr>
-    <td class="portlet-msg-info" style="text-align: center" width="20">
-      <% if(i>0){ %>
-        <input type="checkbox" name="right_<%= i %>"/>
-      <% }else{ %>
-        &nbsp;
-      <% } %>
-    </td>
-    <td class="portlet-msg-info">
-      <a href="<%= URIs[i] %>"><b><%= resources[i].getResource() %></b></a>
-    </td>
-    <td class="portlet-msg-info">
-      &nbsp;
-    </td>
-    <td class="portlet-msg-info" style="text-align: left">
-      <%= new Date(resources[i].getLastModified()).toString() %>
-    </td>
-    <td class="portlet-msg-info">
-      &nbsp;
-    </td>
-   </tr>
-              <%
-          }
-      }
-      for(int i=0;i<URIs.length;++i){
-          if(!resources[i].isDirectory()){
-          %>
-  <tr>
-    <td class="portlet-msg-info" style="text-align: center" width="20">
-      <input type="checkbox" name="right_<%= i %>">
-    </td>
-    <td class="portlet-msg-info">
-      <a href="<%= URIs[i] %>"><%= resources[i].getResource() %></a>
-    </td>
-    <td class="portlet-msg-info" style="text-align: right;margin-right:15 px">
-      <%= resources[i].getLength() %>
-    </td>
-    <td class="portlet-msg-info" style="text-align: left">
-      <%= new Date(resources[i].getLastModified()).toString() %>
-    </td>
-    <td class="portlet-msg-info" style="text-align: right;margin-right:10 px" width="40">
-      <a href="<%= rightEditURIs.get(i) %>">edit</a>
-    </td>
-   </tr>
-              <%
-              }
-          }
-      }else{
-    %>
-     <tr>
-       <td class="portlet-msg-info" colspan="5" style="text-align: center"><br/>Unable to read directory <a href="<%= formURIs.get("rightFix") %>">go to root directory</a></td>
-     </tr>
-    <%
-      }
-    %>
-    </form>
-    </table>
-    </td>
-    </tr>
-    <%
-  } %>
-</table>
+                if(URIs!=null && resources!=null){
+            %>
+                    <ui:tablerow header="true">
+                        <ui:tablecell width="20"/>
+                        <ui:tablecell>
+                            <ui:text key="COMMANDER_RESOURCE"/>
+                        </ui:tablecell>
+                        <ui:tablecell width="50">
+                            <ui:text key="COMMANDER_SIZE"/>
+                        </ui:tablecell>
+                        <ui:tablecell width="160">
+                            <ui:text key="COMMANDER_LAST_MODIFIED"/>
+                        </ui:tablecell>
+                        <ui:tablecell width="30"/>
+                    </ui:tablerow>
+             <%
+                for(int i=0;i<URIs.length;++i){
+                    if(resources[i].isDirectory()){
+             %>
+                    <ui:tablerow>
+                        <ui:tablecell width="20">
+                            <% if(i>0){ %>
+                                <input type="checkbox" name="right_<%= i %>"/>
+                            <% } %>
+                        </ui:tablecell>
+                        <ui:tablecell>
+                            <a href="<%= URIs[i] %>"><b><%= resources[i].getResource() %></b></a>
+                        </ui:tablecell>
+                        <ui:tablecell width="50"/>
+                        <ui:tablecell width="160">
+                            <ui:text>
+                                <%= new Date(resources[i].getLastModified()).toString()%>
+                            </ui:text>
+                        </ui:tablecell>
+                        <ui:tablecell width="30"/>
+                    </ui:tablerow>
+            <%
+                    }
+                }
+                for(int i=0;i<URIs.length;++i){
+                    if(!resources[i].isDirectory()){
+             %>
+                    <ui:tablerow>
+                        <ui:tablecell width="20">
+                            <% if(i>0){ %>
+                                <input type="checkbox" name="right_<%= i %>"/>
+                            <% } %>
+                        </ui:tablecell>
+                        <ui:tablecell>
+                            <a href="<%= URIs[i] %>"><%= resources[i].getResource() %></a>
+                        </ui:tablecell>
+                        <ui:tablecell width="50">
+                            <ui:text>
+                                <%= resources[i].getLength() %>
+                            </ui:text>
+                        </ui:tablecell>
+                        <ui:tablecell width="160">
+                            <ui:text>
+                                <%= new Date(resources[i].getLastModified()).toString()%>
+                            </ui:text>
+                        </ui:tablecell>
+                        <ui:tablecell width="30">
+                            <a href="<%= rightEditURIs.get(i) %>"><ui:text key="COMMANDER_EDIT"/></a>
+                        </ui:tablecell>
+                    </ui:tablerow>
+            <%
+                    }
+                }
+            }else{ %>
+                <ui:tablerow>
+                    <ui:tablecell width="100%">
+                        <ui:text style="error" key="COMMANDER_ERROR_DIR_READ"/>
+                        <ui:actionlink action="gotoRootDirRight" key="COMMANDER_ERROR_DIR_BACK"/>
+                    </ui:tablecell>
+                </ui:tablerow>
+            <% } %>
+            </ui:table>
+            </ui:tablecell>
+        </ui:tablerow>
+        <ui:tablerow>
+            <ui:tablecell>
+            <ui:table width="100%">
+            <ui:tablerow>
+                <ui:tablecell width="33%">
+                    <ui:actionsubmit action="copy" key="COMMANDER_COPY"/>
+                </ui:tablecell>
+                <ui:tablecell width="34%">
+                    <ui:actionsubmit action="move" key="COMMANDER_MOVE"/>
+                </ui:tablecell>
+                <ui:tablecell width="33%">
+                    <ui:actionsubmit action="delete" key="COMMANDER_DELETE"/>
+                </ui:tablecell>
+            </ui:tablerow>
+            </ui:table>
+            </ui:tablecell>
+        </ui:tablerow>
+        </ui:form>
+    </ui:table>
+    </ui:tablecell>
+</ui:tablerow>
+</ui:table>
+<% } %>
