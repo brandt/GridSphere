@@ -42,6 +42,11 @@ public class TagBeanFactory {
         String id = tagBean.getBeanId();
         if (!id.equals("")) {
         //System.err.println("Storing bean: " + id + " " + getBeanKey(req, id));
+            // if it's a password make sure password value is not set
+            if (tagBean instanceof PasswordBean) {
+                PasswordBean pbean = (PasswordBean)tagBean;
+                pbean.setValue("");
+            }
         req.getSession(true).setAttribute(getBeanKey(req, id), tagBean);
         } else {
             //System.err.println("trying to store bean without id to session");
