@@ -2,6 +2,7 @@ package org.gridlab.gridsphere.services.core.user;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 
 import java.util.*;
@@ -22,6 +23,25 @@ public class UserSessionManager implements PortletSessionListener {
 
     public static UserSessionManager getInstance() {
         return instance;
+    }
+    public void destroy() {
+        log.debug("Destroying all user sessions");
+        Set keys = userSessions.keySet();
+        Iterator it = keys.iterator();
+        while (it.hasNext()) {
+            String uid = (String)it.next();
+            List sessions = (List)userSessions.get(uid);
+            Iterator sit = sessions.iterator();
+            while (sit.hasNext()) {
+                PortletSession s = (PortletSession)sit.next();
+                try {
+                    s.invalidate();
+                } catch (IllegalStateException e) {
+                    log.debug("Session already invalidated");
+                }
+            }
+            userSessions.remove(uid);
+        }
     }
 
     public List getSessions(User user) {
@@ -66,17 +86,6 @@ public class UserSessionManager implements PortletSessionListener {
         return l;
     }
 
-    /*
-    public List getSessions() {
-        List l = new ArrayList();
-        Iterator it = userSessions.values().iterator();
-        while (it.hasNext()) {
-            l.add(it.next());
-        }
-        return l;
-    }
-    */
-
     public void login(PortletRequest request) {
         // so far do nothing
     }
@@ -91,8 +100,13 @@ public class UserSessionManager implements PortletSessionListener {
             log.debug("checking if user " + uid + " has session" + session.getId());
             if (sessions.contains(session)) {
                 log.debug("Logging out user: " +  uid + " session: " + session.getId());
+                session.removeAttribute(SportletProperties.PORTLET_USER);
                 sessions.remove(session);
-                //userManagerService.logoffUser(uid);
+                try {
+                    session.invalidate();
+                } catch (IllegalStateException e) {
+                    log.debug("Session already invalidated");
+                }
             }
         }
         dumpSessions();
@@ -108,7 +122,6 @@ public class UserSessionManager implements PortletSessionListener {
                 PortletSession session = (PortletSession)it.next();
                 if (session != null) {
                     try {
-                        log.debug("invalidating session " + session.getId());
                         session.invalidate();
                     } catch (IllegalStateException e) {
                         log.debug("session " + session.getId() + " for user " + user.getID() + " has already been invalidated!");
