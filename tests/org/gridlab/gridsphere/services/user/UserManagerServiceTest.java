@@ -2,10 +2,7 @@ package org.gridlab.gridsphere.services.user;
 
 import org.gridlab.gridsphere.portlet.service.spi.ServiceTest;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
@@ -100,6 +97,28 @@ public class UserManagerServiceTest extends ServiceTest {
 
 
     // === tests
+
+    public void testSportletData() {
+        log.info("+ testSportletData");
+        User jason = userManager.loginUser("jason", null);
+        SportletData pd = (SportletData)userManager.getPortletData(jason, "1");
+        // @todo check this usage!
+        pd.enableConfigurePermission(true);
+
+        try {
+            pd.setAttribute("test","result");
+        } catch (AccessDeniedException e) {
+
+        }
+        userManager.setPortletData(jason, "1", pd);
+
+
+
+        User jason2 = userManager.loginUser("jason", null);
+        PortletData pd2 = userManager.getPortletData(jason2, "1");
+        String result = pd2.getAttribute("test");
+        assertEquals("result", result);
+    }
 
     public void testSportletUserAttributes() {
         log.info("+ testSportletuserAttributes");
