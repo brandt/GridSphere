@@ -70,16 +70,14 @@ public class FileManagerPortlet extends ActionPortlet {
             String fileName = fi.getFileName();
 	        System.err.println("filename = " + fileName);
             if (fileName.equals("")) return;
-            userStorage.storeFile(user, fi, fileName);
 
-            //String location = userStorage.getLocationPath(user, "myfile");
+            userStorage.storeFile(user, fi, fileName);
             log.debug("fileinputbean value=" + fi.getValue());
-            //fi.saveFile(location);
         } catch (Exception e) {
-	    FrameBean errMsg = event.getFrameBean("errorFrame");
-	    errMsg.setValue("Unable to store uploaded file " + e.getMessage());
-	    errMsg.setStyle("error");
-	   log.error("Unable to store uploaded file ", e);
+	        FrameBean errMsg = event.getFrameBean("errorFrame");
+	        errMsg.setValue("Unable to store uploaded file " + e.getMessage());
+	        errMsg.setStyle("error");
+	        log.error("Unable to store uploaded file ", e);
         }
         setNextState(event.getPortletRequest(), DEFAULT_VIEW_PAGE);
     }
