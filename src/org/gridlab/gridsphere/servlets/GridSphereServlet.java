@@ -19,6 +19,7 @@ import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
+import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
@@ -412,8 +413,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 removeUserCookie(event);
             }
 
-
         } catch (AuthorizationException err) {
+            log.debug(err.getMessage());
+            req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
+        } catch (AuthenticationException err) {
             log.debug(err.getMessage());
             req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
         }
