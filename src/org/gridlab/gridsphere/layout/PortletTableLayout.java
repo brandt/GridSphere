@@ -129,7 +129,17 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
             }
         }
     }
-
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    	String markupName=event.getPortletRequest().getClient().getMarkupName();
+    	if (markupName.equals("html")){
+    		doRenderHTML(event);
+    	}
+    	else
+    	{
+    		doRenderWML(event);
+    	}
+    }
+    public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
     /**
      * Renders the portlet grid layout component
      *
@@ -137,7 +147,67 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
      * @throws PortletLayoutException if a layout error occurs during rendering
      * @throws IOException            if an I/O error occurs during rendering
      */
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    super.doRender(event);
+
+    PortletResponse res = event.getPortletResponse();
+    PrintWriter out = res.getWriter();
+
+    PortletComponent p = null;
+
+    // check if one window is maximized
+    /*
+    StringBuffer frame = new StringBuffer();
+    StringWriter storedWriter = new StringWriter();
+    PrintWriter writer = new PrintWriter(storedWriter);
+    PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
+    */
+    List scomponents = Collections.synchronizedList(components);
+    synchronized (scomponents) {
+        for (int i = 0; i < scomponents.size(); i++) {
+            p = (PortletComponent) scomponents.get(i);
+            if (p instanceof PortletLayout) {
+                PortletComponent maxi = getMaximizedComponent(scomponents);
+                if (maxi != null) {
+                    //out.println("<table border=\"0\" width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"><tbody><tr><td>");
+                    maxi.doRender(event);
+                    out.println("<p />");
+                    //out.println("</td></tr></tbody></table>");
+                    if ((canModify) && (!hasFrameMaximized)) {
+                        renderUserSelects(event);
+                    }
+                    return;
+                }
+            }
+        }
+
+        // starting of the gridtable
+        //out.println("<table ");
+        if (this.style != null) {
+           // out.print("class=\"" + this.style + "\" ");
+        }
+        //out.println("border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tbody>");
+
+        for (int i = 0; i < scomponents.size(); i++) {
+            p = (PortletComponent) scomponents.get(i);
+            
+            //out.println("<tr><td valign=\"top\" width=\"" + p.getWidth() + "\">");
+            if (p.getVisible()) {
+                p.doRender(event);
+                //out.println("grid comp: "+i);
+            }
+            out.println ("<p />");
+            //out.println("</td> </tr>");
+        }
+
+        /** setup bottom add portlet listbox */
+        if ((canModify) && (!hasFrameMaximized)) {
+            renderUserSelects(event);
+        }
+
+        //out.println("</tbody></table>");
+    }
+}
+    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
 
         PortletResponse res = event.getPortletResponse();
@@ -277,7 +347,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
             }
         }
 
-        out.println("<form action=\"" + uri.toString() + "\" + method=\"POST\" name=\"addform\">");
+        out.println("<form action=\"" + uri.toString() + "\"  method=\"POST\" name=\"addform\">"); //WAP 2.0 changes: method instead of + method
         out.println("<input type=\"hidden\" name=\"" + PORTLET_COL + "\" value=\"" + col + "\"/>");
 
         ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
@@ -299,7 +369,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         }
 
         out.println("</select>");
-        out.println("<input type=\"submit\" name=\"gs_action=addportlet\" value=\"" + addButton + "\"");
+        out.println("<input type=\"submit\" name=\"gs_action=addportlet\" value=\"" + addButton + "\">");//WAP 2.0 changes:added a closing > 
         out.println("</form>");
     }
 
