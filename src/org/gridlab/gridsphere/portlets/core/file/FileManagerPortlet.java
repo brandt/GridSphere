@@ -146,6 +146,8 @@ public class FileManagerPortlet extends ActionPortlet {
             fileName = (String)it.next();
         }
 
+        InputStream in = null;
+
         try {
             File file = userStorage.getFile(user, fileName);
             // ... find the file you want ...
@@ -161,21 +163,30 @@ public class FileManagerPortlet extends ActionPortlet {
             res.reset();
             res.resetBuffer();
             //res.setContentType("application/octet-stream");
-            res.setContentType("application/x-jason");
+            res.setContentType("application/x-download");
             //res.setContentType( "application/unknow" );
-            res.setHeader("Cache-Control","no-cache"); //HTTP 1.1
-            res.setHeader("Pragma","no-cache"); //HTTP 1.0
-            res.setDateHeader ("Expires", 0); //prevents caching at the proxy server
+            //res.setHeader("Cache-Control","no-cache"); //HTTP 1.1
+            //res.setHeader("Pragma","no-cache"); //HTTP 1.0
+            //res.setDateHeader ("Expires", 0); //prevents caching at the proxy server
 
             log.debug("file length= " + (int)file.length());
             res.setContentLength((int)file.length());
             // force a save as dialog in recent browsers.
-            //res.setHeader("Content-Disposition","attachment; filename=\"" + fileName + "\";");
+            res.setHeader("Content-Disposition","attachment; filename=" + fileName);
             //res.setHeader("Content-Disposition","attachment");
 
+
+                in = new BufferedInputStream(new FileInputStream(fileName));
+                byte[] buf = new byte[4 * 1024];
+                int bytesRead;
+                while ((bytesRead = in.read(buf)) != -1) {
+                    res.getOutputStream().write(buf, 0, bytesRead);
+                }
+
+
             // you should use a datahandler to write out data from a datasource.
-            DataHandler handler = new DataHandler(fds);
-            handler.writeTo(res.getOutputStream());
+            //DataHandler handler = new DataHandler(fds);
+            //handler.writeTo(res.getOutputStream());
         } catch(FileNotFoundException e) {
             log.error("Unable to find file!", e);
         } catch(SecurityException e) {
@@ -184,6 +195,7 @@ public class FileManagerPortlet extends ActionPortlet {
         } catch(IOException e) {
             log.error("Caught IOException", e);
             //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER,e.getMessage());
+
         }
     }
 

@@ -149,6 +149,7 @@ public class BannerPortlet extends ActionPortlet {
             //alert.setStyle("");
 
         } else {
+            lb.clear();
             lb.setSize(list.length + 3);
             for (int i = 0; i < list.length; i++) {
                 ListBoxItemBean item = new ListBoxItemBean();
@@ -179,15 +180,16 @@ public class BannerPortlet extends ActionPortlet {
         }
 
         //setNextState(request, fileURL);
+        PrintWriter out = null;
         try {
             if (fileURL.equals("")) {
-                PrintWriter out = response.getWriter();
+                out = response.getWriter();
                 out.println("Unable to locate file!");
             } else {
-
                 getPortletConfig().getContext().include(fileURL, request, response);
             }
         } catch (IOException e) {
+            out.println("Unable to locate file: " + fileURL + "!");
             log.error("Unable to find file: " + fileURL);
         }
     }

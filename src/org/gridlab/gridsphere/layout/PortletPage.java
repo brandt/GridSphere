@@ -254,7 +254,7 @@ public class PortletPage implements Serializable, Cloneable {
         PortletResponse res = event.getPortletResponse();
         while (it.hasNext()) {
             cid = (ComponentIdentifier) it.next();
-            if (cid.getPortletClass().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
+            if (cid.getPortletComponent() instanceof PortletFrame) {
                 f = (PortletFrame) cid.getPortletComponent();
                 PortletInvoker.logout(f.getPortletClass(), req, res);
             }

@@ -20,8 +20,13 @@
 
 <ui:form>
 
+<% boolean disabled = false; %>
+
 <%
     Iterator it = supportedModules.iterator();
+    if (supportedModules.size() == 1) {
+        disabled = true;
+    }
     while (it.hasNext()) {
         LoginAuthModule loginAuthModule = (LoginAuthModule)it.next();
         String authModuleName = loginAuthModule.getModuleName();
