@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
+import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -72,6 +73,7 @@ public class GridSphereServlet extends HttpServlet {
             log.error("Unable to initialize Portlet Layout Engine: ", e);
             throw new ServletException("Unable to initialize Portlet Layout Engine: " + e.getMessage());
         }
+
     }
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -82,8 +84,9 @@ public class GridSphereServlet extends HttpServlet {
             firstDoGet = false;
         }
 
+        GridSphereEvent event = new GridSphereEventImpl(getServletConfig(), req, res);
 
-        PortletRequestParser requestParser = new PortletRequestParser(req);
+        //PortletRequestParser requestParser = new PortletRequestParser(req);
         /*
         if (requestParser.hasPortletAction()) {
 
@@ -101,8 +104,8 @@ public class GridSphereServlet extends HttpServlet {
 
         // Render layout
         try {
-            User user = requestParser.getUser();
-            layoutEngine.service(user, context, req, res);
+            //User user = requestParser.getUser();
+            layoutEngine.service(event);
         } catch (PortletException e) {
             handleException(res, e);
         }

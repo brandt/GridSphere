@@ -6,10 +6,8 @@ package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.event.MessageEvent;
 import org.gridlab.gridsphere.event.WindowEvent;
-import org.gridlab.gridsphere.portlet.PortletAction;
-import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletSettings;
+import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.PortletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;

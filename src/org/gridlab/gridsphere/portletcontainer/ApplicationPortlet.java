@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
+import org.gridlab.gridsphere.portlet.AbstractPortlet;
 
 import java.util.List;
 

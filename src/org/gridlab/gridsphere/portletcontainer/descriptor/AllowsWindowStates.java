@@ -5,14 +5,19 @@
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
 import org.exolab.castor.types.AnyNode;
+import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portlet.Portlet;
+import org.gridlab.gridsphere.portlet.impl.SportletWindow;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.ArrayList;
 
 public class AllowsWindowStates {
 
     private List windowStates = new Vector();
     private List statesAsStrings = null;
+    private List statesAsStates = null;
 
     public void setWindowStates(Vector windowStates) {
         this.windowStates = windowStates;
@@ -38,4 +43,23 @@ public class AllowsWindowStates {
         return statesAsStrings;
     }
 
+    protected void convert2WindowStates() {
+        AnyNode a = null;
+        PortletWindow.State state;
+        statesAsStates = new ArrayList();
+        for (int i = 0; i < windowStates.size(); i++) {
+            a = (AnyNode)windowStates.get(i);
+            try {
+                state = SportletWindow.State.toPortletWindowState(a.getLocalName());
+                statesAsStates.add(state);
+            } catch (Exception e) {}
+        }
+    }
+
+    public List getPortletWindowStates() {
+        if (statesAsStates == null) {
+            convert2WindowStates();
+        }
+        return statesAsStates;
+    }
 }
