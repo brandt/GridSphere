@@ -22,8 +22,6 @@ Copyright:
 
 <project name="GridSphere" default="compile" basedir=".">
 
-  <property file="gridsphere.properties"/>
-
   <property name="project"        value="GridSphere"/>
   <property name="Name"           value="gridsphere"/>
   <property name="version"        value="0.9"/>
@@ -136,9 +134,9 @@ Copyright:
     <!-- backup, deploy and preprocess the properties file -->
     <copy file="conf/gridsphere.properties" tofile="conf/gridsphere.properties.bak"/>
     <copy file="conf/gridsphere.properties" tofile="${classes.dir}/${Name}/gridsphere.properties"/>
-    <replace file="${classes.dir}/${project}/gridsphere.properties" token="@TOMCAT_HOME@" value="${env.TOMCAT_HOME}"/>
-    <replace file="${classes.dir}/${project}/gridsphere.properties" token="@GRIDSPHERE_WEBAPP@" value="${env.TOMCAT_HOME}/webapps/${Name}"/>
-    <replace file="${classes.dir}/${project}/gridsphere.properties" token="@GRIDSPHERE_HOME@" value="${env.TOMCAT_HOME}/${Name}"/>
+    <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@TOMCAT_HOME@" value="${env.TOMCAT_HOME}"/>
+    <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@GRIDSPHERE_WEBAPP@" value="${env.TOMCAT_HOME}/webapps/${Name}"/>
+    <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@GRIDSPHERE_HOME@" value="${env.TOMCAT_HOME}/${Name}"/>
 
     <javac  srcdir="${src.dir}"
 		destdir="${classes.dir}"
