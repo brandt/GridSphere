@@ -35,6 +35,7 @@ public class PortletDeploymentDescriptor extends Descriptor {
      */
     public PortletDeploymentDescriptor(String portletFilePath, String mappingFilePath) throws IOException, DescriptorException {
         this.mappingFilePath = mappingFilePath;
+        this.portletFilePath = portletFilePath;
         sportletCollection = (SportletCollection) load(portletFilePath, mappingFilePath);
     }
 
