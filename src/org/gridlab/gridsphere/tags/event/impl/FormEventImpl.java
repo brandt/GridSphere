@@ -38,7 +38,7 @@ public class FormEventImpl implements FormEvent {
      * @return name of the button which was pressed
      */
     public String getPressedSubmitButton() {
-        String result = new String();
+        String result = null;
 
         PortletRequest req = event.getPortletRequest();
         Enumeration enum = req.getParameterNames();
