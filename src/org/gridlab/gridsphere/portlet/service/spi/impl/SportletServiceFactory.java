@@ -178,16 +178,36 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         Properties configProperties = def.getConfigProperties();
 
         ServletContext ctx = (ServletContext)serviceContexts.get(serviceName);
-        PortletServiceConfig portletServiceConfig =
-                new SportletServiceConfig(service, configProperties, ctx);
+        PortletServiceConfig portletServiceConfig = new SportletServiceConfig(service, configProperties, ctx);
 
         try {
             psp = (PortletServiceProvider) Class.forName(serviceImpl).newInstance();
-        } catch (Exception e) {
+        }
+        catch (InstantiationException e) {
+            // InstantiationException - if this Class represents an abstract class, an interface, an array class, a primitive type, or void; or if the class has no nullary constructor; or if the instantiation fails for some other reason. 
+            log.error("Unable to create portlet service: " + serviceImpl, e);
+            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl + " Class represents an abstract class, an interface, an array class, a primitive type, or void; or if the class has no nullary constructor; or if the instantiation fails for some other reason.", e);
+        }
+        catch (IllegalAccessException e) {
+            // IllegalAccessException - if the class or its nullary constructor is not accessible. 
+            log.error("Unable to create portlet service: " + serviceImpl, e);
+            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl + " class or its nullary constructor is not accessible." , e);
+        }
+        catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            log.error("Unable to create portlet service: " + serviceImpl, e);
+            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl + " Class not found.", e);
+        }
+        catch (ExceptionInInitializerError e) {
+            // the initialization provoked by this method fails.
+            log.error("Unable to create portlet service: " + serviceImpl, e);
+            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl + " the initialization provoked by this method fails.", e);
+        }
+        catch (Exception e) {
             log.error("Unable to create portlet service: " + serviceImpl, e);
             throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl, e);
         }
-
+        
         try {
             psp.init(portletServiceConfig);
         } catch (PortletServiceUnavailableException e) {
