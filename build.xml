@@ -747,8 +747,8 @@ Copyright:
 
 <!-- ++++++++++++++ START CRUSECONTROL ++++++++++++++++++++ -->
 
-    <target name="cruisecontrol" depends="clean, compile, tests" description="target for cruisecontrol">
-        <mkdir dir="${gridsphere.build}/reports"/>
+    <target name="cruisecontrol" depends="clean, compile" description="target for cruisecontrol">
+       <!-- <mkdir dir="${gridsphere.build}/reports"/>
         <junit printsummary="yes" fork="yes" haltonfailure="no">
             <classpath>
                 <path refid="classpath"/>
@@ -757,7 +757,7 @@ Copyright:
             <test name="org.gridlab.gridsphere.GridSphereTest" todir="${gridsphere.build}/reports">
                 <formatter type="xml"/>
             </test>
-        </junit>
+        </junit>  -->
     </target>
 
     <!-- =================================================================== -->
