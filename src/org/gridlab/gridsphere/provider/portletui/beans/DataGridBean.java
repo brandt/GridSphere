@@ -2,6 +2,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.util.List;
 
@@ -117,12 +118,12 @@ public class DataGridBean extends BeanContainer implements TagBean {
     }
 
 
-    private String createLink(PortletURI uri, int pos, String desc, boolean renderlink) {
+    private String createLink(PortletURI uri, int pos, String desc, boolean renderlink, String prefix) {
         StringBuffer result = new StringBuffer();
 
         result.append("<span class=\"ui-datagrid-controls-element\">");
         if (renderlink) {
-            uri.addParameter(beanId + "_pos", new Integer(pos).toString());
+            uri.addParameter(prefix+beanId + "_pos", new Integer(pos).toString());
             result.append("<a href=\"" + uri.toString() + "\"> " + desc + "</a>");
         } else {
             result.append(desc);
@@ -141,10 +142,17 @@ public class DataGridBean extends BeanContainer implements TagBean {
         if (header != null) sb.append("<div class=\"ui-datagrid-title\">" + header + "</div></td></tr><tr><td>\n");
 
 
-        String req_beanId = request.getParameter("beanId");
+        String prefix = request.getParameter(SportletProperties.PREFIX);
+        if (prefix==null) {
+            prefix="";
+        } else {
+            prefix+="_";
+        }
+        String req_beanId = request.getParameter(prefix+"beanId");
+
         if (req_beanId != null) {
             if (req_beanId.equals(beanId)) {
-                String req_startPos = request.getParameter(req_beanId + "_pos");
+                String req_startPos = request.getParameter(prefix+req_beanId + "_pos");
                 startPos = new Integer(req_startPos).intValue();
                 if (startPos > list.size()) startPos = list.size();
             }
@@ -163,7 +171,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
         } else {
             renderlink = true;
         }
-        sb.append(createLink(uri, 0, this.getLocalizedText("UI_DATAGRID_START"), renderlink));
+        sb.append(createLink(uri, 0, this.getLocalizedText("UI_DATAGRID_START"), renderlink, prefix));
 
         // go to prev link
         int newPrevPos = startPos - size;
@@ -173,7 +181,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
         } else {
             renderlink = true;
         }
-        sb.append(createLink(uri, newPrevPos, this.getLocalizedText("UI_DATAGRID_PREV"), renderlink));
+        sb.append(createLink(uri, newPrevPos, this.getLocalizedText("UI_DATAGRID_PREV"), renderlink, prefix));
 
         // go to next link
         int newNextPos = startPos + size;
@@ -184,7 +192,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
             renderlink = true;
         }
         if (newNextPos < 0) newNextPos = 0;
-        sb.append(createLink(uri, newNextPos, this.getLocalizedText("UI_DATAGRID_NEXT"), renderlink));
+        sb.append(createLink(uri, newNextPos, this.getLocalizedText("UI_DATAGRID_NEXT"), renderlink, prefix));
 
         // go to end link
         int newEndPos = list.size() - size;
@@ -194,7 +202,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
         } else {
             renderlink = true;
         }
-        sb.append(createLink(uri, newEndPos, this.getLocalizedText("UI_DATAGRID_END"), renderlink));
+        sb.append(createLink(uri, newEndPos, this.getLocalizedText("UI_DATAGRID_END"), renderlink, prefix));
 
         int endPos = startPos + size;
         if (endPos > list.size()) {
