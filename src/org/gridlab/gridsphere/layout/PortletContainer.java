@@ -23,7 +23,7 @@ import java.util.List;
  * concrete portlet components and provides lifecycle methods for traversing
  * the tree of components and handling actions and performing rendering.
  */
-public class PortletContainer {
+public class PortletContainer implements Cloneable {
 
     protected int COMPONENT_ID = 0;
 
@@ -47,10 +47,10 @@ public class PortletContainer {
 
     public PortletContainer(PortletContainer container) {
         this.COMPONENT_ID = container.getComponentID();
-        this.components = container.getPortletComponents();
-        this.componentIdentifiers = container.getComponentIdentifierList();
-        this.name = container.getContainerName();
+        this.componentIdentifiers = new ArrayList(container.getComponentIdentifierList());
+        this.components = new ArrayList(container.getPortletComponents());
         this.theme = container.getTheme();
+        this.name = container.getContainerName();
     }
 
     /**
@@ -266,4 +266,5 @@ public class PortletContainer {
         }
         out.println("</body></html>");
     }
+
 }
