@@ -34,7 +34,6 @@ public class LoginServiceImpl
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
     private UserManagerService userManager = null;
     private List authenticationModules = new Vector();
-    private AuthenticationModule rootAuthenticationModule = null;
 
     /****** PORTLET SERVICE METHODS *******/
 

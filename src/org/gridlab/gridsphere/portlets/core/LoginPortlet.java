@@ -28,8 +28,8 @@ public class LoginPortlet extends AbstractPortlet {
     private UserManagerService userService = null;
     private LoginService loginService = null;
 
-    private static final String LOGIN_ERROR_ATTR = "LOGIN_ERROR";
-    private static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
+    public static final String LOGIN_ERROR_FLAG = "LOGIN_ERROR";
+    public static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -50,8 +50,10 @@ public class LoginPortlet extends AbstractPortlet {
         System.err.println("actionPerformed() in LoginPortlet");
 
         if (_action instanceof DefaultPortletAction) {
+            log.info("YO WE IN ACTION PERFORMED!");
             DefaultPortletAction action = (DefaultPortletAction) _action;
             if (action.getName().equals(PortletProperties.LOGIN)) {
+                log.info("YO WE IN DEFAULT ACTION!");
                 PortletRequest req = evt.getPortletRequest();
 
                 String username = (String) req.getParameter("username");
@@ -64,6 +66,7 @@ public class LoginPortlet extends AbstractPortlet {
                 // VERY IMPORTANT USER CHECK
                 // CHECK INPUT FIELDS THOROUGHLY STRING LENGTH, VERIFY CREDENTIALS, ETC
                 if ((username.trim().equals("portal")) && (password.trim().equals("schmortal"))) {
+                    log.info("YO WE IN PORTAL!");
                     //User user = userService.loginUser(nam, password);
                     SportletUser user = new SportletUserImpl();
                     user.setUserID(username);
@@ -74,8 +77,9 @@ public class LoginPortlet extends AbstractPortlet {
                     user.setGivenName("Joey");
 
                     System.err.println("Creating new user");
-                    session.setAttribute(GridSphereProperties.USER, user);
+                    session.setAttribute(GridSphereProperties.USER, (User) user);
                 } else {
+                    log.info("YO WE NOT IN PORTAL!");
                     try {
                         // Retrieve login parameters from request
                         Map parameters = req.getParameterMap();
@@ -87,7 +91,7 @@ public class LoginPortlet extends AbstractPortlet {
                         if(log.isDebugEnabled()) {
                             log.debug(err.getMessage());
                         }
-                        req.setAttribute(LOGIN_ERROR_ATTR, LOGIN_ERROR_UNKNOWN);
+                        req.setAttribute(LOGIN_ERROR_FLAG, LOGIN_ERROR_UNKNOWN);
                     }
                 }
             }
@@ -101,8 +105,10 @@ public class LoginPortlet extends AbstractPortlet {
         request.setAttribute("login", loginURI.toString());
         User user = request.getUser();
         if (user instanceof GuestUser) {
+            log.info("YO WE IN GUEST USER!");
             getPortletConfig().getContext().include("/jsp/login.jsp", request, response);
         } else {
+            log.info("YO WE IN VIEW USER!");
             getPortletConfig().getContext().include("/jsp/viewuser.jsp", request, response);
         }
     }
