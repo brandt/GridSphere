@@ -6,6 +6,7 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 
+<% PortletGroup coreGroup = (PortletGroup)request.getAttribute("coreGroup"); %>
 <% List groupList = (List)request.getAttribute("groupList"); %>
 
 <ui:form>
@@ -44,7 +45,7 @@
                             </ui:actionlink>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <% if (group.getName().equals(SportletGroup.CORE.getName())) { %>
+                            <% if (group.getName().equals(coreGroup.getName())) { %>
                                 <ui:hasrole role="super">
                                     <ui:actionlink action="doViewViewGroup" key="GROUP_EDIT_USERS">
                                         <ui:actionparam name="groupID" value="<%= group.getID() %>"/>
@@ -60,7 +61,7 @@
                             <ui:text value="<%= group.getDescription() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
-                        <% if (!group.getName().equals(SportletGroup.CORE.getName())) { %>
+                        <% if (!group.getName().equals(coreGroup.getName())) { %>
                             <ui:actionsubmit action="deleteGroup" key="DELETE">
                                 <ui:actionparam name="groupID" value="<%= group.getID() %>"/>
                             </ui:actionsubmit>

@@ -1,8 +1,7 @@
 <%@ page import="java.util.List,
                  java.util.Iterator,
                  org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat.TomcatWebAppResult,
-                 org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat.TomcatWebAppDescription,
-                 org.gridlab.gridsphere.portlet.PortletGroupFactory" %>
+                 org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat.TomcatWebAppDescription" %>
 
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
@@ -43,9 +42,9 @@
     <ui:tablecell><ui:text value="<%= description.getRunning() %>"/></ui:tablecell>
     <ui:tablecell><ui:text value="<%= description.getSessions() %>"/></ui:tablecell>
     <ui:tablecell>
-    <% if (PortletGroupFactory.GRIDSPHERE_GROUP.getName().equalsIgnoreCase(description.getContextPath())) { %>
+    <% if ("gridsphere".equalsIgnoreCase(description.getContextPath())) { %>
         <ui:text key="PORTLET_GS_MSG"/>
-   <% } else { %>
+    <% } else { %>
     <% if (description.getRunningState() == TomcatWebAppDescription.STOPPED) { %>
         &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_START">
             <ui:actionparam name="operation" value="start"/>

@@ -23,6 +23,9 @@
         <field name="PortletRoleInfo" type="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo" collection="set">
             <bind-xml name="portlet-role-info"/>
         </field>
+        <field name="Core" type="string">
+            <bind-xml name="core" node="attribute"/>
+        </field>
     </class>
 
     <class name="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo">

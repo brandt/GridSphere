@@ -4,7 +4,7 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
 <% Map groupNames = (Map)request.getAttribute("groupNames"); %>
-
+<% String coregroup = (String)request.getAttribute("coreGroup"); %>
 <portletAPI:init/>
 
 <ui:messagebox beanId="msg"/>
@@ -66,7 +66,7 @@
 
 
 <ui:tablecell>
-<% if (group.equals("gridsphere")) { %>
+<% if (group.equals(coregroup)) { %>
 <ui:hasrole role="super">
 <ui:actionlink action="editGroupLayout" key="EDIT">
     <ui:actionparam name="group" value="<%= group %>"/>
@@ -79,7 +79,7 @@
 <% } %>
 </ui:tablecell>
 <ui:tablecell>
-<% if (!group.equals("gridsphere")) { %>
+<% if (!group.equals(coregroup)) { %>
 <ui:actionlink action="deleteLayout" key="DELETE">
     <ui:actionparam name="group" value="<%= group %>"/>
 </ui:actionlink>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<portlet-group>
-    <group-name>GridSphere</group-name>
+<portlet-group core="true">
+    <group-name>gridsphere</group-name>
     <group-description>Core GridSphere Group</group-description>
     <group-visibility>PUBLIC</group-visibility>
     <portlet-role-info>
