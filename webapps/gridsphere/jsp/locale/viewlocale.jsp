@@ -16,7 +16,12 @@
     </td>
     <td>
     <ui:listbox beanId="localeLB"/>
-    <ui:actionsubmit action="selectLang" value="ok" hideifjs="true"/>
+    <%-- <ui:actionsubmit action="selectLang" value="ok" hideifjs="true"/> --%>
+    <!-- the following three lines are the important bit, along with having the
+functionality available on your server -->
+<noscript>
+    <ui:actionsubmit action="selectLang" value="ok"/>
+</noscript>
     </td>
     </tr>
     </table>
