@@ -132,7 +132,10 @@ public class GroupManagerPortlet extends ActionPortlet {
 
             String g = (String) it.next();
 
-            if (g.equals(coreGroup.getName()) && ((group != null) && (!group.equals(coreGroup))))  continue;
+            if (g.equals(coreGroup.getName())) {
+                if (group == null) continue;
+                if (!group.equals(coreGroup)) continue;
+            }
 
             TableRowBean tr = new TableRowBean();
             tr.setHeader(true);
