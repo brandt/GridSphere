@@ -64,21 +64,18 @@ public class PortletPreferencesManager {
                 log.debug("No prefs exist-- storing prefs for user: " + user.getID() + " portlet: " + portletID);
                 org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefDesc = appPortlet.getPortletPreferences();
                 prefs = new PortletPreferencesImpl(prefDesc, loader);
+                prefs.setPersistenceManager(pm);
                 prefs.setPortletId(portletID);
                 prefs.setUserId(user.getID());
                 prefs.store();
             } else {
+                prefs.setPersistenceManager(pm);
                 log.debug("Retrieved prefs for user: " + user.getID() + " portlet: " + portletID);
             }
-            prefs.setPersistenceManager(pm);
         } catch (Exception e) {
             log.error("Error attempting to restore persistent preferences: ", e);
         }
         return prefs;
-    }
-
-    public void setPortletPreferences(javax.portlet.PortletPreferences prefs) {
-        // TODO
     }
 
 }

@@ -62,9 +62,11 @@ public class SportletDataManager implements PortletDataManager {
             data = new SportletData();
             data.setPortletID(portletID);
             data.setUserID(user.getID());
+            data.setPersistenceManager(pm);
             pm.create(data);
+        } else {
+            data.setPersistenceManager(pm);
         }
-        data.setPersistenceManager(pm);
         return data;
     }
 
