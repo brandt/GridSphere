@@ -162,6 +162,14 @@ public class PortletManager implements PortletManagerService {
 
     private void addPortletFile(String webappName) {
         String portletsPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/Portlets");
+
+        File f = new File(portletsPath);
+        if (f.exists() && f.isDirectory()) {
+            String[] webappFiles = f.list();
+            for (int i = 0; i < webappFiles.length; i++) {
+                if (webappFiles[i].startsWith(webappName) || webappName.startsWith(webappFiles[i])) return;
+            }
+        }
         File newfile = new File(portletsPath + File.separator + webappName);
         try {
             newfile.createNewFile();
@@ -172,9 +180,15 @@ public class PortletManager implements PortletManagerService {
 
     private void removePortletFile(String webappName) {
         String portletsPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/Portlets");
-        File newfile = new File(portletsPath + File.separator + webappName);
-        if (newfile.exists()) {
-            newfile.delete();
+        File f = new File(portletsPath);
+        if (f.exists() && f.isDirectory()) {
+            String[] webappFiles = f.list();
+            for (int i = 0; i < webappFiles.length; i++) {
+                if (webappFiles[i].startsWith(webappName) || webappName.startsWith(webappFiles[i])) {
+                    File newfile = new File(portletsPath + File.separator + webappFiles[i]);
+                    newfile.delete();
+                }
+            }
         }
     }
 
