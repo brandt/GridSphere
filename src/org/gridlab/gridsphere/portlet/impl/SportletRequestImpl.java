@@ -15,10 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Enumeration;
-import java.util.Locale;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * The SportletRequestImpl encapsulates the request sent by the client to the portlet.
@@ -210,8 +207,8 @@ public class SportletRequestImpl implements SportletRequest {
      *
      * @see PortletRole
      */
-    public PortletRole[] getRoles(PortletGroup group) {
-        return (PortletRole[])req.getAttribute(GridSphereProperties.PORTLETROLES);
+    public List getRoles(PortletGroup group) {
+        return (List)req.getAttribute(GridSphereProperties.PORTLETROLES);
     }
 
     /**
@@ -223,7 +220,7 @@ public class SportletRequestImpl implements SportletRequest {
      *
      * @see PortletRole
      */
-    public void setRoles(PortletGroup group, PortletRole[] roles) {
+    public void setRoles(PortletGroup group, List roles) {
         req.setAttribute(GridSphereProperties.PORTLETROLES, roles);
     }
 
@@ -236,9 +233,22 @@ public class SportletRequestImpl implements SportletRequest {
      *
      * @see PortletGroup
      */
-    public PortletGroup[] getGroups() {
-        return (PortletGroup[])req.getAttribute(GridSphereProperties.PORTLETGROUPS);
+    public List getGroups() {
+        return (List)req.getAttribute(GridSphereProperties.PORTLETGROUPS);
     }
+
+    /**
+     * Returns the PortletGroup objects representing the users group membership
+     *
+     * @returns an array of PortletGroup objects. This method is guaranteed to at least
+     * return the PortletGroup.BaseGroup
+     *
+     * @see PortletGroup
+     */
+    public void setGroups(List groups) {
+        req.setAttribute(GridSphereProperties.PORTLETGROUPS, groups);
+    }
+
 
     /**
      * Returns the locale of the preferred language. The preference is based on the user's
@@ -382,6 +392,8 @@ public class SportletRequestImpl implements SportletRequest {
      * @return a map of parameters
      */
     public Map getParameterMap() {
+        return req.getParameterMap();
+        /*
         String name;
         Map paramMap = new HashMap();
         Enumeration enum = req.getParameterNames();
@@ -391,6 +403,7 @@ public class SportletRequestImpl implements SportletRequest {
             paramMap.put(name, values);
         }
         return paramMap;
+        */
     }
 
     /**
