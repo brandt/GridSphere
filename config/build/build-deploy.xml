@@ -93,7 +93,7 @@ Build include file for the GridSphere Portal source code, see build.xml
                         <filter token="PRECOMPILED-JSP" value="${web.inc}"/>
                     </filterset>
                 </copy>
-
+                <delete file="${gridsphere.build}/webapps/gridsphere/WEB-INF/web-xml.tmpl"/>
             </then>
         </if>
     </target>
