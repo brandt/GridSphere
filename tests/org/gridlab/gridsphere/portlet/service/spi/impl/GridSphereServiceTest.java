@@ -12,7 +12,6 @@ import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerTest;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ServiceDescriptorTest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDescriptorTest;
-import org.gridlab.gridsphere.services.security.credential.CredentialManagerServiceTest;
 import org.gridlab.gridsphere.services.user.SetupRootUserTest;
 import org.gridlab.gridsphere.services.user.SetupTestGroupsTest;
 import org.gridlab.gridsphere.services.user.SetupTestUsersTest;

@@ -9,8 +9,6 @@ import junit.framework.TestSuite;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
-import java.util.List;
-
 public class SetupTestGroupsTest extends SetupRootUserTest {
 
     protected static AccessControlManagerService rootAclService = null;
