@@ -228,7 +228,7 @@ public class PortletServlet extends HttpServlet
             myModes.add(m.toString());
         }
         org.gridlab.gridsphere.portlet.Portlet.Mode mode = (org.gridlab.gridsphere.portlet.Portlet.Mode) request.getAttribute(SportletProperties.PORTLET_MODE);
-
+        if (mode == null) mode = org.gridlab.gridsphere.portlet.Portlet.Mode.VIEW;
         if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.VIEW) {
             m = PortletMode.VIEW;
         } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.EDIT) {

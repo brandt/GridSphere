@@ -176,7 +176,7 @@ public interface FormEvent {
      * Return an existing <code>IncludeBean</code> or create a new one
      *
      * @param beanId
-     * @return
+     * @return an include bean
      */
     public IncludeBean getIncludeBean(String beanId);
 
@@ -184,7 +184,7 @@ public interface FormEvent {
      * Return an existing <code>MessageBoxBean</code> or create a new one
      *
      * @param beanId
-     * @return
+     * @return a mesage box bean
      */
     public MessageBoxBean getMessageBoxBean(String beanId);
 
