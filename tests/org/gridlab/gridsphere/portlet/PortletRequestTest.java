@@ -28,7 +28,7 @@ public class PortletRequestTest extends GridSphereServletTest {
 
     protected void setUp() {
         super.setUp();
-        super.testCreateServlet();
+        super.testInitGridSphere();
     }
 
     public void testCreatePortletRequest() {
