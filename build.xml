@@ -215,7 +215,7 @@ Copyright:
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="lib/jdom.jar;lib/castor-doclet.jar"
-            additionalparam="-J-DFILE=webapps/WEB-INF/conf/mapping/postgresmapping.xml -J-DLOG=1">
+            additionalparam="-J-DFILE=webapps/WEB-INF/conf/mapping/docletmapping.xml -J-DLOG=1">
         <classpath refid="classpath"/>
         </javadoc>
     </target>
@@ -244,6 +244,19 @@ Copyright:
           <classpath refid="classpath"/>
         </sql>
     </target>
+
+    <target name="hsqldb">
+      <sql
+          driver="org.hsqldb.jdbcDriver"
+          url="jdbc:hsqldb:testdb"
+          userid="sa"
+          password=""
+          onerror="continue"
+          src="conf/dbcreate.sql">
+          <classpath refid="classpath"/>
+        </sql>
+    </target>
+
 
 
   <!-- =================================================================== -->
