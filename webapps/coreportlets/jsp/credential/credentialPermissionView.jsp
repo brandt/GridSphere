@@ -1,34 +1,34 @@
-<%@ page import="org.gridlab.gridsphere.services.security.credential.CredentialPermission,
-                 org.gridlab.gridsphere.portlets.grid.beans.CredentialPermissionBean,
+<%@ page import="org.gridlab.gridsphere.services.grid.security.credential.CredentialPermission,
+                 org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminBean,
                  java.util.List" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 <jsp:useBean id="credentialPermissionBean"
-             class="org.gridlab.gridsphere.portlets.grid.beans.CredentialPermissionBean"
+             class="org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminBean"
              scope="request"/>
 <form name="CredentialPermissionPortlet" method="POST"
-      action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_VIEW)%>">
+      action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_VIEW)%>">
   <input type="hidden" name="credentialPermissionID" value="<%=credentialPermissionBean.getCredentialPermissionID()%>"/>
   <script type="text/javascript">
     function CredentialPermissionPortlet_listCredentialPermission_onClick() {
-      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_LIST)%>";
+      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_LIST)%>";
       document.CredentialPermissionPortlet.submit();
     }
 
     function CredentialPermissionPortlet_newCredentialPermission_onClick(credentialPermissionID) {
       document.CredentialPermissionPortlet.credentialPermissionID.value="";
-      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_EDIT)%>";
+      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT)%>";
       document.CredentialPermissionPortlet.submit();
     }
 
     function CredentialPermissionPortlet_editCredentialPermission_onClick() {
-      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_EDIT)%>";
+      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT)%>";
       document.CredentialPermissionPortlet.submit();
     }
 
     function CredentialPermissionPortlet_deleteCredentialPermission_onClick() {
-      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_DELETE)%>";
+      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_DELETE)%>";
       document.CredentialPermissionPortlet.submit();
     }
   </script>
@@ -44,15 +44,15 @@
         <tr>
           <td class="portlet-frame-actions">
             <input type="button"
-                   name="<%=CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_LIST%>"
+                   name="<%=CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_LIST%>"
                    value="List Permissions"
                    onClick="javascript:CredentialPermissionPortlet_listCredentialPermission_onClick()"/>
             &nbsp;&nbsp;<input type="button"
-                   name="<%=CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_EDIT%>"
+                   name="<%=CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT%>"
                    value="New Permission"
                    onClick="javascript:CredentialPermissionPortlet_newCredentialPermission_onClick()"/>
             &nbsp;&nbsp;<input type="button"
-                   name="<%=CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_DELETE%>"
+                   name="<%=CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_DELETE%>"
                    value="Delete Permission"
                    onClick="javascript:CredentialPermissionPortlet_deleteCredentialPermission_onClick()"/>
           </td>

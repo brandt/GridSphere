@@ -1,16 +1,12 @@
 /*
- * Created by IntelliJ IDEA.
- * User: russell
- * Date: Jan 22, 2003
- * Time: 11:07:24 AM
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
+ * @author <a href="mailto:michael.russell@aei.mpg.de">Michael Russell</a>
+ * @version $Id$
  */
 package org.gridlab.gridsphere.portlets.core.beans;
 
-import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
+import org.gridlab.gridsphere.portlet.*;
 
 import java.util.*;
 import java.lang.reflect.Method;

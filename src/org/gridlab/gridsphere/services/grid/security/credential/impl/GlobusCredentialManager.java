@@ -33,6 +33,8 @@ import java.util.Vector;
 public final class GlobusCredentialManager
     implements PortletServiceProvider, CredentialManagerService {
 
+    private static GlobusCredentialManager _instance = null;
+
     private static PortletLog _log = SportletLog.getInstance(GlobusCredentialManager.class);
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
     private CredentialRetrievalClient retrievalClient = null;
@@ -40,6 +42,18 @@ public final class GlobusCredentialManager
     private String credentialPermissionImpl = GlobusCredentialPermission.class.getName();
     private String credentialMappingImpl = GlobusCredentialMapping.class.getName();
     private String credentialMappingRequestImpl = GlobusCredentialMappingRequest.class.getName();
+
+    /****** CONSTRUCTOR METHODS *******/
+
+    private GlobusCredentialManager() {
+    }
+
+    public static GlobusCredentialManager getInstance() {
+        if (_instance == null) {
+            _instance = new GlobusCredentialManager();
+        }
+        return _instance;
+    }
 
     /****** PORTLET SERVICE METHODS *******/
 

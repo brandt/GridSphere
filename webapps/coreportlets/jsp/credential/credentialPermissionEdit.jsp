@@ -1,23 +1,23 @@
-<%@ page import="org.gridlab.gridsphere.services.security.credential.CredentialPermission,
-                 org.gridlab.gridsphere.portlets.grid.beans.CredentialPermissionBean,
+<%@ page import="org.gridlab.gridsphere.services.grid.security.credential.CredentialPermission,
+                 org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminBean,
                  java.util.List" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 <jsp:useBean id="credentialPermissionBean"
-             class="org.gridlab.gridsphere.portlets.grid.beans.CredentialPermissionBean"
+             class="org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminBean"
              scope="request"/>
 <form name="CredentialPermissionPortlet" method="POST"
-      action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_EDIT)%>">
+      action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT)%>">
   <input type="hidden" name="credentialPermissionID" value="<%=credentialPermissionBean.getCredentialPermissionID()%>"/>
   <script type="text/javascript">
     function CredentialPermissionPortlet_editConfirmCredentialPermission_onClick() {
-      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_EDIT_CONFIRM)%>";
+      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT_CONFIRM)%>";
       document.CredentialPermissionPortlet.submit();
     }
 
     function CredentialPermissionPortlet_editCancelCredentialPermission_onClick() {
-      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_EDIT_CANCEL)%>";
+      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT_CANCEL)%>";
       document.CredentialPermissionPortlet.submit();
     }
   </script>
@@ -46,11 +46,11 @@
         <tr>
           <td class="portlet-frame-actions">
             <input type="button"
-                   name="<%=CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_EDIT_CONFIRM%>"
+                   name="<%=CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT_CONFIRM%>"
                    value="Save Permission"
                    onClick="javascript:CredentialPermissionPortlet_editConfirmCredentialPermission_onClick()"/>
             &nbsp;&nbsp;<input type="button"
-                   name="<%=CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_EDIT_CANCEL%>"
+                   name="<%=CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT_CANCEL%>"
                    value="Cancel Edit"
                    onClick="javascript:CredentialPermissionPortlet_editCancelCredentialPermission_onClick()"/>
           </td>

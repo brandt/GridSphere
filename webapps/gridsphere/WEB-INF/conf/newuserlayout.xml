@@ -115,16 +115,16 @@
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <name>CredentialPermissionPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.grid.CredentialPermissionPortlet.1</portlet-class>
+                            <name>CredentialPermissionAdminPortlet</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminPortlet.1</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
-                            <name>CredentialMappingPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.grid.CredentialMappingPortlet.1</portlet-class>
+                            <name>CredentialMappingAdminPortlet</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminPortlet.1</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
-                            <name>ActiveCredentialPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.grid.ActiveCredentialPortlet.1</portlet-class>
+                            <name>CredentialManagerAdminPortlet</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialManagerAdminPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>

@@ -5,7 +5,7 @@
                  org.gridlab.gridsphere.portlet.PortletRole,
                  org.gridlab.gridsphere.portlet.PortletGroup,
                  java.util.Iterator,
-                 org.gridlab.gridsphere.services.security.acl.GroupEntry" %>
+                 org.gridlab.gridsphere.services.core.security.acl.GroupEntry" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>

@@ -492,7 +492,7 @@
 
 <portlet-app-def>
 
-<portlet-app id="org.gridlab.gridsphere.portlets.grid.CredentialMappingPortlet">
+<portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminPortlet">
     <portlet-name>Credential Mapping Manager</portlet-name>
     <servlet-name>CredentialMappingPortlet</servlet-name>
     <portlet-config>
@@ -524,7 +524,7 @@
     </supports>
 </portlet-app>
 
-<concrete-portlet-app id="org.gridlab.gridsphere.portlets.grid.CredentialMappingPortlet.1">
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminPortlet.1">
     <context-param>
         <param-name>Portlet Master</param-name>
         <param-value>yourid@yourdomain.com</param-value>
@@ -548,7 +548,7 @@
 
 <portlet-app-def>
 
-<portlet-app id="org.gridlab.gridsphere.portlets.grid.CredentialPermissionPortlet">
+<portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminPortlet">
     <portlet-name>Credential Permission Manager</portlet-name>
     <servlet-name>CredentialPermissionPortlet</servlet-name>
     <portlet-config>
@@ -579,7 +579,7 @@
         </markup>
     </supports>
 </portlet-app>
-<concrete-portlet-app id="org.gridlab.gridsphere.portlets.grid.CredentialPermissionPortlet.1">
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminPortlet.1">
     <context-param>
         <param-name>Portlet Master</param-name>
         <param-value>yourid@yourdomain.com</param-value>
@@ -603,7 +603,7 @@
 
 <portlet-app-def>
 
-<portlet-app id="org.gridlab.gridsphere.portlets.grid.ActiveCredentialPortlet">
+<portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialManagerAdminPortlet">
     <portlet-name>Active Credential Manager</portlet-name>
     <servlet-name>ActiveCredentialPortlet</servlet-name>
     <portlet-config>
@@ -634,7 +634,7 @@
         </markup>
     </supports>
 </portlet-app>
-<concrete-portlet-app id="org.gridlab.gridsphere.portlets.grid.ActiveCredentialPortlet.1">
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialManagerAdminPortlet.1">
     <context-param>
         <param-name>Portlet Master</param-name>
         <param-value>yourid@yourdomain.com</param-value>
