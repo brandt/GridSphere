@@ -3,7 +3,7 @@
  */
 package org.gridlab.gridsphere.services.core.request;
 
-import java.util.Date;
+import java.util.*;
 
 public class GenericRequest {
 
@@ -11,6 +11,7 @@ public class GenericRequest {
     private String userID = "";
     private String label = "";
     private Date lifetime = null;
+    private Map attributes = new HashMap();
 
     public String getLabel() {
         return label;
@@ -43,4 +44,35 @@ public class GenericRequest {
     public void setLifetime(Date lifetime) {
         this.lifetime = lifetime;
     }
+
+    public Map getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map attributes) {
+        this.attributes = attributes;
+    }
+
+    /**
+     * Returns the value of the attribute with the given name,s
+     * or null if no attribute with the given name exists.
+     *
+     * @param name the attribute name
+     * @return the attribute value
+     */
+    public String getAttribute(String name) {
+        return (String)attributes.get(name);
+    }
+
+    /**
+     * Sets the value of the attribute with the given name,
+     *
+     * @param name  the attribute name
+     * @param value the attribute value
+     */
+    public void setAttribute(String name, String value) {
+        attributes.put(name, value);
+    }
+
+
 }

@@ -26,7 +26,6 @@ import org.gridlab.gridsphere.services.core.user.LoginService;
 
 import javax.mail.MessagingException;
 import javax.servlet.UnavailableException;
-import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -34,7 +33,10 @@ import java.util.*;
 public class LoginPortlet extends ActionPortlet {
 
     private static String FORGOT_PASSWORD_LABEL ="forgotpassword";
-    private static long PASSWORD_REQUEST_LIFETIME = 1000*60*24*7; // 1 week
+    private static String ACTIVATE_ACCOUNT_LABEL ="activateaccount";
+
+
+    private static long REQUEST_LIFETIME = 1000*60*24*3; // 3 days
     
     public static final String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
     public static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
@@ -134,6 +136,10 @@ public class LoginPortlet extends ActionPortlet {
         if (!canUserCreateAccount) return;
 
         PortletRequest req = evt.getPortletRequest();
+
+        MessageBoxBean msg = evt.getMessageBoxBean("msg");
+        msg.setKey("LOGIN_CREATE_ACCT");
+
         setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
         log.debug("in doViewNewUser");
     }
@@ -141,18 +147,17 @@ public class LoginPortlet extends ActionPortlet {
     public void doConfirmEditUser(FormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
-        //User user = loadUser(evt);
+
         if (!canUserCreateAccount) return;
 
         try {
             //check if the user is new or not
             validateUser(evt);
             //new and valid user and will save it
-            User user = saveUser(evt);
-            //show the data of this user
-            createSuccessMessage(evt, this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
-                    "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN") +
-                    " " + user.getUserName());
+
+
+            notifyNewUser(evt);
+
             setNextState(req, "doViewUser");
         } catch (PortletException e) {
             //invalid user, an exception was thrown
@@ -187,14 +192,6 @@ public class LoginPortlet extends ActionPortlet {
             createErrorMessage(event, this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br>");
             isInvalid = true;
         }
-        /*
-        // Validate given name
-        String givenName = event.getTextFieldBean("givenName").getValue();
-        if (givenName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_GIVENNAME_BLANK") + "<br>");
-            isInvalid = true;
-        }
-        */
 
         // Validate e-mail
         String eMail = event.getTextFieldBean("emailAddress").getValue();
@@ -250,7 +247,7 @@ public class LoginPortlet extends ActionPortlet {
         return false;
     }
 
-    private User saveUser(FormEvent event) {
+    private User saveUser(GenericRequest request) {
         log.debug("Entering saveUser()");
         // Account request
 
@@ -258,16 +255,20 @@ public class LoginPortlet extends ActionPortlet {
 
         SportletUser newuser = this.userManagerService.createUser();
 
-
         // Edit account attributes
-        editSportletUser(event, newuser);
+        newuser.setUserName(request.getAttribute("userName"));
+        newuser.setFullName(request.getAttribute("fullName"));
+        newuser.setEmailAddress(request.getAttribute("emailAddress"));
+        newuser.setOrganization(request.getAttribute("organization"));
+
         // Submit changes
         this.userManagerService.saveUser(newuser);
 
         PasswordEditor editor = passwordManagerService.editPassword(newuser);
-        String password = event.getPasswordBean("password").getValue();
+        String password = request.getAttribute("password");
+
         editor.setValue(password);
-        passwordManagerService.savePassword(editor);
+        passwordManagerService.saveHashedPassword(editor);
 
         // Save user role
         saveUserRole(newuser);
@@ -277,12 +278,10 @@ public class LoginPortlet extends ActionPortlet {
 
     private void editSportletUser(FormEvent event, SportletUser SportletUser) {
         log.debug("Entering editSportletUser()");
-        SportletUser.setUserName(event.getTextFieldBean("userName").getValue());
-        //SportletUser.setFamilyName(event.getTextFieldBean("familyName").getValue());
-        //SportletUser.setGivenName(event.getTextFieldBean("givenName").getValue());
-        SportletUser.setFullName(event.getTextFieldBean("fullName").getValue());
-        SportletUser.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
-        SportletUser.setOrganization(event.getTextFieldBean("organization").getValue());
+        //SportletUser.setUserName(event.getTextFieldBean("userName").getValue());
+        //SportletUser.setFullName(event.getTextFieldBean("fullName").getValue());
+        //SportletUser.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
+        //SportletUser.setOrganization(event.getTextFieldBean("organization").getValue());
 
         log.debug("Exiting editSportletUser()");
     }
@@ -384,7 +383,7 @@ public class LoginPortlet extends ActionPortlet {
         GenericRequest request = requestService.createRequest(FORGOT_PASSWORD_LABEL);
         long now = Calendar.getInstance().getTime().getTime();
 
-        request.setLifetime(new Date(now + PASSWORD_REQUEST_LIFETIME));
+        request.setLifetime(new Date(now + REQUEST_LIFETIME));
         request.setUserID(user.getID());
         requestService.saveRequest(request);
 
@@ -423,6 +422,72 @@ public class LoginPortlet extends ActionPortlet {
 
     }
 
+    public void notifyNewUser(FormEvent evt) {
+        PortletRequest req = evt.getPortletRequest();
+        PortletResponse res = evt.getPortletResponse();
+
+
+        TextFieldBean emailTF = evt.getTextFieldBean("emailAddress");
+
+        if (emailTF.getValue().equals("")) {
+            createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_NO_EMAIL"));
+            return;
+        }
+
+        // create a request
+        GenericRequest request = requestService.createRequest(ACTIVATE_ACCOUNT_LABEL);
+        long now = Calendar.getInstance().getTime().getTime();
+
+        request.setLifetime(new Date(now + REQUEST_LIFETIME));
+
+        // request.setUserID(user.getID());
+
+        request.setAttribute("userName", evt.getTextFieldBean("userName").getValue());
+        request.setAttribute("fullName", evt.getTextFieldBean("fullName").getValue());
+        request.setAttribute("emailAddress", evt.getTextFieldBean("emailAddress").getValue());
+        request.setAttribute("organization", evt.getTextFieldBean("organization").getValue());
+
+        // put hashed pass in request
+        String pass = evt.getPasswordBean("password").getValue();
+        pass = passwordManagerService.getHashedPassword(pass);
+        request.setAttribute("password", pass);
+        requestService.saveRequest(request);
+
+        // mail user
+        MailMessage message = new MailMessage();
+        message.setEmailAddress(emailTF.getValue());
+        message.setSubject(getLocalizedText(req, "MAIL_ACCT_HEADER"));
+
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        if (settings.getAttribute(MailService.MAIL_SERVER_HOST) != null) {
+            mailService.setMailServiceHost(settings.getAttribute(MailService.MAIL_SERVER_HOST));
+        }
+        if (settings.getAttribute(MailService.MAIL_SENDER) != null) {
+            message.setSender(settings.getAttribute(MailService.MAIL_SENDER));
+        }
+
+        StringBuffer body = new StringBuffer();
+
+        body.append(getLocalizedText(req, "LOGIN_ACTIVATE_MAIL") + "\n\n");
+
+        PortletURI uri = res.createURI();
+        uri.addAction("activate");
+        uri.addParameter("reqid", request.getOid());
+
+        body.append(uri.toString());
+        message.setBody(body.toString());
+
+        try {
+            mailService.sendMail(message);
+        } catch (MessagingException e) {
+            log.error("Unable to send mail message!", e);
+            createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
+            return;
+        }
+        createSuccessMessage(evt, this.getLocalizedText(req, "LOGIN_ACCT_MAIL"));
+
+    }
+
     private void createErrorMessage(FormEvent evt, String text) {
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
         msg.setValue(text);
@@ -448,6 +513,26 @@ public class LoginPortlet extends ActionPortlet {
             setNextState(req, DO_NEW_PASSWORD);
         } else {
             setNextState(req, DEFAULT_VIEW_PAGE);
+        }
+
+    }
+
+    public void activate(FormEvent evt) {
+
+        PortletRequest req = evt.getPortletRequest();
+
+        String id = req.getParameter("reqid");
+
+        GenericRequest request = requestService.getRequest(id, ACTIVATE_ACCOUNT_LABEL);
+        if (request != null) {
+            User user = saveUser(request);
+
+            createSuccessMessage(evt, this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
+                    "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN") +
+                    " " + user.getUserName());
+
+            requestService.deleteRequest(request);
+            setNextState(req, "doViewUser");
         }
 
     }
