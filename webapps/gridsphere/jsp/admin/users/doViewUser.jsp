@@ -1,5 +1,7 @@
-<jsp:useBean id="user" class="org.gridlab.gridsphere.portlet.User" scope="request"/>
+<%@ page import="org.gridlab.gridsphere.portlet.User"%>
 <jsp:useBean id="role" class="java.lang.String" scope="request"/>
+
+<% User user = (User)request.getAttribute("user"); %>
 
 <ui:frame>
         <ui:tablerow>
