@@ -102,7 +102,10 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     private void initSportletGroup(SportletGroup group) {
         String groupName = group.getName();
         if (!existsGroupWithName(groupName)) {
-            pm.create(group);
+            try {
+                pm.create(group);
+            } catch (Exception e) {
+            }
         }
     }
 
