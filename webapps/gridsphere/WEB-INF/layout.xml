@@ -38,29 +38,12 @@
                 <title lang="cs">Nastavení</title>
                 <table-layout>
                     <row-layout>
-                        <column-layout>
+                        <column-layout width="50%">
                             <portlet-frame label="profile">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-            <portlet-tab label="subscribe">
-                <title lang="en">Subscription</title>
-                <title lang="it">Sottoscrizione</title>
-                <title lang="pl">Subskrypcje</title>
-                <title lang="hu">Feliratkozás</title>
-                <title lang="fr">Inscription</title>
-                <title lang="de">Abonnieren</title>
-                <title lang="cs">Správa portletů</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout>
-                            <portlet-frame label="subscription">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet.1</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
+                        <column-layout width="50%"/>
                     </row-layout>
                 </table-layout>
             </portlet-tab>
@@ -74,11 +57,12 @@
                 <title lang="cs">Umísťování</title>
                 <table-layout>
                     <row-layout>
-                        <column-layout>
+                        <column-layout width="50%">
                             <portlet-frame label="layout">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
+                        <column-layout width="50%"/>
                     </row-layout>
                 </table-layout>
             </portlet-tab>
@@ -160,11 +144,12 @@
                 <title lang="cs">Skupiny</title>
                 <table-layout>
                     <row-layout>
-                        <column-layout width="100%">
+                        <column-layout width="50%">
                             <portlet-frame label="groupmanager">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
+                        <column-layout width="50%"/>
                     </row-layout>
                 </table-layout>
             </portlet-tab>

@@ -18,6 +18,7 @@
 
 <br>
 <ui:text key="PROFILE_LASTLOGIN"/>  <b><%= logintime %></b>
+<ui:panel cols="50%, 50%">
 <ui:frame>
     <ui:tablerow>
         <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
@@ -35,6 +36,8 @@
         <ui:tablecell><ui:text key="ORGANIZATION"/></ui:tablecell>
         <ui:tablecell><ui:textfield beanId="organization"/></ui:tablecell>
     </ui:tablerow>
+</ui:frame>
+<ui:frame>
     <ui:tablerow>
         <ui:tablecell><ui:text key="LOCALE"/></ui:tablecell>
         <ui:tablecell><ui:image src="<%= flag %>" alt="<%= locale.getDisplayLanguage() %>" title="<%= locale.getDisplayLanguage() %>"/><ui:listbox beanId="userlocale"/></ui:tablecell>
@@ -43,7 +46,12 @@
         <ui:tablecell><ui:text key="TIMEZONE"/></ui:tablecell>
         <ui:tablecell><ui:listbox beanId="timezones"/></ui:tablecell>
     </ui:tablerow>
+
 </ui:frame>
+
+</ui:panel>
+
+<ui:panel>
 
 <ui:frame beanId="messagingFrame"/>
 
@@ -53,3 +61,4 @@
 
 <ui:actionlink portletMode="edit" key="EDIT"/> <ui:text key="PROFILE_SETTINGS"/>
 
+</ui:panel>
