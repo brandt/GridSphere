@@ -452,7 +452,7 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
             Portlet por = (Portlet)portlet;
             if (por instanceof GenericPortlet) {
                 GenericPortlet genPortlet = ((GenericPortlet) portlet);
-                if (genPortlet.getPortletConfig() == null) throw new PortletException("Unable to get PortletConfig from Porltlet");
+                if (genPortlet.getPortletConfig() == null) throw new PortletException("Unable to get PortletConfig from Portlet");
                 ResourceBundle resBundle = genPortlet.getPortletConfig().getResourceBundle(request.getLocale());
                 String title = resBundle.getString("javax.portlet.title");
                 response.setContentType("text/html");
