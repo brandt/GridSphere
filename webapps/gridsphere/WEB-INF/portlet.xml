@@ -547,7 +547,7 @@
                 <portlet-name>MessagingServicesPortlet</portlet-name>
                 <default-locale>en</default-locale>
                 <language locale="en">
-                    <title>Configure MessagingServices</title>
+                    <title>Configure Messaging Services</title>
                     <title-short>Messaging Services</title-short>
                     <description>Portlet provides configuration of messaging services capabilities</description>
                     <keywords>portlet messaging services</keywords>
