@@ -6,19 +6,7 @@ package org.gridlab.gridsphere.portlet.service.spi.impl;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.apache.cactus.ServletTestCase;
-import org.apache.log4j.PropertyConfigurator;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerTest;
-import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ServiceDescriptorTest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDescriptorTest;
-import org.gridlab.gridsphere.services.user.SetupRootUserTest;
-import org.gridlab.gridsphere.services.user.SetupTestGroupsTest;
-import org.gridlab.gridsphere.services.user.SetupTestUsersTest;
-import org.gridlab.gridsphere.services.user.UserManagerServiceTest;
-import org.gridlab.gridsphere.GridSphereTest;
-
-import java.net.URL;
 
 /**
  * Simple class to build a TestSuite out of the individual test classes.
