@@ -87,6 +87,12 @@
                     <description>البرنامج الذي يمكن من الدخول للنظام</description>
                     <keywords>برنامج الدخول</keywords>
                 </language>
+                <language locale="nl">
+                    <title>Login</title>
+                    <title-short>Login</title-short>
+                    <description>Portlet biedt login mogelijkheden</description>
+                    <keywords>portlet login</keywords>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -160,6 +166,12 @@
                     <title-short>الخروج</title-short>
                     <description>البرنامج الذي يمكن من الخروج من النظام</description>
                     <keywords>برنامج الخروج</keywords>
+                </language>
+                <language locale="nl">
+                    <title>Log uit</title>
+                    <title-short>Log uit</title-short>
+                    <description>Portlet biedt log uit nogelijkheden</description>
+                    <keywords>portlet log uit</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -295,6 +307,10 @@
                     <title>مدير مجموعة البرنامج</title>
                     <description>يمكن مدير النظام لإدارة مجموعات البرامج</description>
                 </language>
+                <language locale="nl">
+                    <title>Portlet Groep Manager</title>
+                    <description>Administratoren kunnen de portlet groepen beheren</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -356,6 +372,10 @@
 				<language locale="ar">
                     <title>مدير التنسيق</title>
                     <description>يمكن المستخدم لتعديل التنسيق</description>
+                </language>
+                <language locale="nl">
+                    <title>Layout Manager</title>
+                    <description>Gebruikers kunnen hun eigen layout bepalen</description>
                 </language>
                 <config-param>
                     <param-name>supported-themes</param-name>
@@ -423,6 +443,10 @@
                     <title>مدير تطبيق البرنامج</title>
                     <description>يمكن مدير النظام لإدارة البرامج</description>
                 </language>
+                <language locale="nl">
+                    <title>Portlet Toepassings Manager</title>
+                    <description>Portal administratoren kunnen portlets beheren</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -484,6 +508,10 @@
 				<language locale="ar">
                     <title>مدير التنسيق</title>
                     <description>يمكن تعديل تنسيق المستخدم</description>
+                </language>
+                <language locale="nl">
+                    <title>Layout Manager</title>
+                    <description>Gebruikers kunnen hun eigen layout bepalen</description>
                 </language>
                 <config-param>
                     <param-name>supported-themes</param-name>
@@ -550,6 +578,10 @@
                     <title>مدير الملف</title>
                     <description>تعديل ملف المستخدمين</description>
                 </language>
+                <language locale="nl">
+                    <title>Profiel Manager</title>
+                    <description>Beheer gebruikersprofielen</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -605,6 +637,10 @@
                     <title>اللغة</title>
                     <description>إختيار اللغة</description>
                 </language>
+                 <language locale="nl">
+                    <title>Landinstelling</title>
+                    <description>Selecteer een landinstelling</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -654,6 +690,12 @@
                     <description>برنامج يساعد على تعديل خدمات التراسل</description>
                     <keywords>برنامج خدمات التراسل</keywords>
                 </language>
+                <language locale="nl">
+                    <title>Configureer Berichten Services</title>
+                    <title-short>Berichten Services</title-short>
+                    <description>Deze portlet biedt de mogelijkheid om de berichten configuratie aan te passen</description>
+                    <keywords>portlet berichten services</keywords>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -680,6 +722,12 @@
                     <title-short>التاريخ</title-short>
                     <description>برنامج يزود خدمة التاريخ</description>
                     <keywords>برنامج التاريخ</keywords>
+                </language>
+                <language locale="nl">
+                    <title>Datum</title>
+                    <title-short>Datum</title-short>
+                    <description>Portlet biedt datum functionaliteiten</description>
+                    <keywords>portlet datum</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -722,6 +770,12 @@
                     <title-short>مدير الفترة</title-short>
                     <description>عرض فترات النظام</description>
                     <keywords>برنامج الفترة</keywords>
+                </language>
+                <language locale="nl">
+                    <title>Session Manager</title>
+                    <title-short>Session Manager</title-short>
+                    <description>Toont de portal sessions</description>
+                    <keywords>portlet session</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
