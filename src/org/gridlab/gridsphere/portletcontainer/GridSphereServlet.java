@@ -55,7 +55,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static PortletLayoutEngine layoutEngine = null;
 
     private PortletContext context = null;
-    private static boolean firstDoGet = true;
+    private static Boolean firstDoGet = Boolean.TRUE;
 
     /**
      * Initializes the GridSphere portlet container
@@ -126,10 +126,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletResponse portletRes = event.getPortletResponse();
 
         // If first time being called, instantiate all portlets
-        if (firstDoGet) {
+        synchronized (firstDoGet) {
             //PortletInvoker dispatcher = event.getPortletEventDispatcher();
             PortletInvoker.initAllPortlets(portletReq, portletRes);
-            firstDoGet = false;
+            firstDoGet = Boolean.FALSE;
         }
 
         // Handle user login and logout

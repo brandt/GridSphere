@@ -294,7 +294,7 @@ public class PortletDispatcher {
      * @param req a <code>HttpServletRequest</code>
      * @param res a <code>HttpServletResponse</code>
      */
-    protected void include(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+    protected synchronized void include(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         rd.include(req, res);
     }
 

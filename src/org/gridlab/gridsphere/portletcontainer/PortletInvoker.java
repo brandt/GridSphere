@@ -33,7 +33,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void init(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public static  final void init(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in init " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -57,7 +57,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void initConcrete(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public static  final void initConcrete(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in initConcrete " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -81,7 +81,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void destroy(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public static  final void destroy(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in destroy " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -103,7 +103,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void destroyConcrete(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public static  final void destroyConcrete(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in destroyConcrete " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -127,7 +127,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void login(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static void login(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in login " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -148,7 +148,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void logout(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static  void logout(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.info("in logout " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -169,7 +169,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void service(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static  void service(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in service " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -190,7 +190,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void actionPerformed(String concretePortletID, DefaultPortletAction action, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static  void actionPerformed(String concretePortletID, DefaultPortletAction action, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in actionPerformed " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -211,7 +211,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void doTitle(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static  void doTitle(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in doTitle " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -232,7 +232,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void windowEvent(String concretePortletID, WindowEvent winEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static  void windowEvent(String concretePortletID, WindowEvent winEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in windowEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -253,7 +253,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void messageEvent(String concretePortletID, DefaultPortletMessage msgEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static  void messageEvent(String concretePortletID, DefaultPortletMessage msgEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in messageEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -273,7 +273,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void initAllPortlets(PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static  void initAllPortlets(PortletRequest req, PortletResponse res) throws IOException, PortletException {
         // Initialize all concrete portlets for each application portlet
         Collection appPortlets = registry.getAllApplicationPortlets();
         PortletDispatcher portletDispatcher = null;
@@ -306,7 +306,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void initPortletWebApp(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static  void initPortletWebApp(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         // Initialize all concrete portlets for each application portlet
         Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
         PortletDispatcher portletDispatcher = null;
@@ -338,7 +338,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void destroyAllPortlets(PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static  void destroyAllPortlets(PortletRequest req, PortletResponse res) throws IOException, PortletException {
         // First destroy all concrete portlets for each application portlet
         Collection appPortlets = registry.getAllApplicationPortlets();
         PortletDispatcher portletDispatcher = null;
@@ -371,7 +371,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static synchronized void destroyPortletWebApp(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static  void destroyPortletWebApp(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         // First destroy all concrete portlets for each application portlet
         Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
         PortletDispatcher portletDispatcher = null;
