@@ -219,10 +219,10 @@ public class UserManagerBean extends ActionEventHandler {
                 // Create new table row
                 TableRowBean rowBean = new TableRowBean();
                 // User name with user id action link
-                ActionLinkBean userIDLinkBean
-                        = new ActionLinkBean(createPortletURI(), viewActionName, user.getID());
-                userIDLinkBean.addParamBean("userID", user.getUserName());
-                TableCellBean cellBean = createTableCellBean(userIDLinkBean);
+                ActionLinkBean userNameLinkBean
+                        = new ActionLinkBean(createPortletURI(), viewActionName, user.getUserName());
+                userNameLinkBean.addParamBean("userID", user.getID());
+                TableCellBean cellBean = createTableCellBean(userNameLinkBean);
                 rowBean.add(cellBean);
                 // Full name
                 TextBean fullNameBean = new TextBean(user.getFullName());
@@ -250,6 +250,7 @@ public class UserManagerBean extends ActionEventHandler {
         log.debug("Entering loadUser()");
         String userID = getActionPerformedParameter("userID");
         this.user = this.userManagerService.getUser(userID);
+        log.debug("Loading user with id " + userID);
         if (this.user != null) {
             //this.password = this.passwordManagerService.getValue(this.user);
             this.userRole = this.aclManagerService.getRoleInGroup(this.user, SportletGroup.CORE);
