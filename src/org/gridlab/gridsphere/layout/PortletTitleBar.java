@@ -197,8 +197,8 @@ public class PortletTitleBar extends BasePortletComponent {
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletTitleBarEvent evt = new PortletTitleBarEventImpl(event, COMPONENT_ID);
+        SportletRequest req = event.getSportletRequest();
         if (evt.getAction() == PortletTitleBarEvent.Action.WINDOW_MODIFY) {
-            PortletRequest req = event.getSportletRequest();
             PortletResponse res = event.getSportletResponse();
             UserPortletManager userManager = event.getUserPortletManager();
             portletWindowState = evt.getState();
@@ -221,6 +221,8 @@ public class PortletTitleBar extends BasePortletComponent {
         } else if (evt.getAction() == PortletTitleBarEvent.Action.MODE_MODIFY) {
             previousMode = portletMode;
             portletMode = evt.getMode();
+            req.setMode(portletMode);
+            req.setPreviousMode(portletMode);
         }
         if (evt != null) fireTitleBarAction(evt);
     }

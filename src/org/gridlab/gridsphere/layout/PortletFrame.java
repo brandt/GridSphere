@@ -146,17 +146,14 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 req.setMode(Portlet.Mode.VIEW);
             }
         }
-        req.setModeModifier(Portlet.ModeModifier.CURRENT);
 
         // Set the portlet data
-        /*
         PortletData data = null;
         try {
             UserManagerService userManager = (UserManagerService)ctx.getService(UserManagerService.class);
             data = userManager.getPortletData(req.getUser(), portletClass);
         } catch (PortletServiceException e) {}
         req.setData(data);
-        */
 
         // now perform actionPerformed on Portlet if it has an action
         DefaultPortletAction action = event.getAction();
@@ -168,6 +165,8 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 error = new PortletErrorMessage(portletClass, e);
             }
         }
+        // in case portlet mode got reset
+        titleBar.setPortletMode(req.getMode());
 
     }
 
@@ -185,10 +184,9 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         out.println("<!-- PORTLET STARTS HERE -->");
         //out.println("<div class=\"window-main\">");
         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">");        // this is the main table around one portlet
-        req.setMode(Portlet.Mode.VIEW);
-        req.setPreviousMode(Portlet.Mode.VIEW);
+
+        // Render title bar
         if (titleBar != null) titleBar.doRender(event);
-        //req.setMode(titleBar.getPortletMode());
 
 
         if (error != null) {
