@@ -66,6 +66,8 @@
 <h3><ui:text key="PROFILE_CONFIG_MESSAGING" style="nostyle"/></h3>
 <ui:group>
 <ui:frame beanId="messagingFrame"/>
+<p>
+<ui:actionsubmit action="doSaveMessaging" key="SAVE"/>
 </ui:group>
 </ui:form>
 
