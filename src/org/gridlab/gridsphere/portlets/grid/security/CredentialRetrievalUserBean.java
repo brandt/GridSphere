@@ -59,6 +59,7 @@ public class CredentialRetrievalUserBean extends PortletBean {
 
     private void initView() {
         setTitle("Credential Retrieval");
+        setPage(PAGE_USER_ACTIVE_CREDENTIAL_LIST);
     }
 
     public void doDefaultViewAction()
@@ -89,15 +90,21 @@ public class CredentialRetrievalUserBean extends PortletBean {
     public void doRetrieveUserCredential()
             throws PortletException {
         this.log.debug("Entering doRetrieveUserCredential");
+        System.out.println("Entering doRetrieveUserCredential");
         try {
+            System.out.println("Retrieving credentials");
             retrieveUserCredentials();
         } catch (Exception e) {
+            System.out.println("Error retrieving credentials");
             setIsFormInvalid(true);
             setFormInvalidMessage(e.getMessage());
         }
+        System.out.println("Loading active credentials");
         loadUserActiveCredentialMappingList();
+        System.out.println("Loaded active credentials");
         setPage(PAGE_USER_ACTIVE_CREDENTIAL_LIST);
         this.log.debug("Exiting doRetrieveUserCredential");
+        System.out.println("Exiting doRetrieveUserCredential");
     }
 
     public void doRefreshUserCredential()
@@ -188,7 +195,12 @@ public class CredentialRetrievalUserBean extends PortletBean {
 
     private void loadUserActiveCredentialMappingList()
             throws PortletException {
-        this.credentialMappingList = this.credentialManagerService.getActiveCredentialMappings(this.user);
+        this.log.debug("Entering doDestroyUserCredential");
+        System.out.println("Entering loadUserActiveCredentialMappingList");
+        User user = getPortletUser();
+        this.credentialMappingList = this.credentialManagerService.getActiveCredentialMappings(user);
+        this.log.debug("Exiting loadUserActiveCredentialMappingList");
+        System.out.println("Exiting loadUserActiveCredentialMappingList");
     }
 
     private void loadUserActiveCredentialMapping()
@@ -223,9 +235,10 @@ public class CredentialRetrievalUserBean extends PortletBean {
 
     private void retrieveUserCredentials()
             throws PortletException {
-        if (this.credentialManagerService.hasCredentialMappings(this.user)) {
+        User user = getPortletUser();
+        if (this.credentialManagerService.hasCredentialMappings(user)) {
             String password = getParameter("password");
-            this.credentialManagerService.retrieveCredentials(this.user, password);
+            this.credentialManagerService.retrieveCredentials(user, password);
         } else {
             String message = "There are no credentials mapped to your account. "
                            + "If you wish to use Grid credentials, please see "

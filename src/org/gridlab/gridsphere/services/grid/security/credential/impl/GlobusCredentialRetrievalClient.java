@@ -20,6 +20,8 @@ import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
 import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
 import org.globus.gsi.gssapi.GlobusGSSException;
+import org.ietf.jgss.GSSCredential;
+import org.gridforum.jgss.ExtendedGSSManager;
 
 /** JDK imports **/
 import java.util.List;
@@ -36,7 +38,7 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
     private static PortletLog _log = SportletLog.getInstance(GlobusCredentialRetrievalClient.class);
 
     private MyProxy myProxy = null;
-    private GlobusGSSCredentialImpl portalProxy = null;
+    private GSSCredential portalProxy = null;
     private long lifetime = 0;
 
     private GlobusCredentialRetrievalClient() {
@@ -90,29 +92,17 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
         this.lifetime = lifetime;
     }
 
-    GlobusCredential getPortalCredential()
+    private GSSCredential getPortalGlobusProxy()
             throws CredentialException {
-        GlobusGSSCredentialImpl proxy = null;
-        proxy = getPortalGlobusProxy();
-        if (proxy == null) {
-            return null;
-        }
-        return new GlobusCredential(proxy);
-    }
-
-    GlobusGSSCredentialImpl getPortalGlobusProxy()
-            throws CredentialException {
-        // If portal proxy is null....
         if (this.portalProxy == null) {
-            // Otherwise, attempt to get default user globus proxy
             _log.debug("Portal credential has not been set yet");
             try {
-                org.globus.gsi.GlobusCredential globusProxy
-                        = org.globus.gsi.GlobusCredential.getDefaultCredential();
-
-            } catch (org.globus.gsi.GlobusCredentialException e) {
-                _log.error("Unable to get default user globus proxy", e);
-                throw new CredentialException(e.getMessage());
+                ExtendedGSSManager manager = (ExtendedGSSManager)ExtendedGSSManager.getInstance();
+                this.portalProxy = manager.createCredential(GSSCredential.INITIATE_AND_ACCEPT);
+            } catch (Exception e) {
+                String m = "Error getting portal credential";
+                _log.error(m, e);
+                throw new CredentialException(m, e);
             }
         }
         return this.portalProxy;
@@ -163,10 +153,10 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
         // Retrieve credential from MyProxy
         GlobusCredential credential = myProxyGet(username, passphrase, lifetime);
         // Throw exception if subject not what we expected
-        if (!isSubjectValid(credential, subject)) {
-            String m = "Expected credential with subject " + subject
-                     + ", MyProxy returned credential with subject "
-                     + credential.getSubject();
+        if (!credential.getDN().equals(subject)) {
+            String m = "Expected credential with identity " + subject
+                     + ", MyProxy returned credential with identity "
+                     + credential.getDN();
             CredentialRetrievalException e = new CredentialRetrievalException(m);
             _log.error(m, e);
             throw e;
@@ -183,7 +173,7 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
             _log.debug("Lifetime = " + lifetime);
         }
         // Get portal proxy
-        GlobusGSSCredentialImpl portalProxy = null;
+        GSSCredential portalProxy = null;
         try {
             portalProxy = getPortalGlobusProxy();
         } catch (CredentialException e) {
@@ -210,13 +200,6 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
         }
         _log.info("Exiting myProxyGet(username, passphrase, lifetime)");
         return credential;
-    }
-
-    private boolean isSubjectValid(GlobusCredential credential, String expectedSubject) {
-        String credentialSubject = credential.getSubject();
-        _log.info("Testing if credential subject [" + credentialSubject
-                   + "] matches expected subject [" + expectedSubject + "]");
-        return (credential.getSubject().indexOf(expectedSubject) > -1);
     }
 
     /**

@@ -32,6 +32,7 @@ import org.globus.axis.transport.GSIHTTPSender;
 import org.globus.axis.transport.GSIHTTPTransport;
 import org.globus.axis.util.Util;
 import org.globus.gsi.gssapi.auth.NoAuthorization;
+import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
 
 import org.gridlab.resmgmt.GsiScenarioBroker;
 import org.gridlab.resmgmt.GsiScenarioBrokerServiceLocator;
@@ -49,6 +50,7 @@ import org.gridlab.gridsphere.services.grid.system.Local;
 import org.gridlab.gridsphere.services.grid.security.credential.impl.GlobusCredentialManager;
 import org.gridlab.gridsphere.services.grid.security.credential.impl.GlobusCredential;
 import org.gridlab.gridsphere.services.grid.security.credential.Credential;
+import org.gridlab.gridsphere.services.grid.security.credential.CredentialException;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
 
@@ -56,6 +58,7 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.ietf.jgss.GSSCredential;
+import org.gridforum.jgss.ExtendedGSSManager;
 
 public class GrmsJobManager implements JobManagerService {
 
@@ -651,6 +654,19 @@ public class GrmsJobManager implements JobManagerService {
             return credential.getGSSProxy();
         } else {
             _logger.info("GrmsJobManager: User has no active proxies");
+            GSSCredential portalProxy = getPortalGlobusProxy();
+            return portalProxy;
+        }
+    }
+
+    private GSSCredential getPortalGlobusProxy() {
+        _logger.debug("Portal credential has not been set yet");
+        try {
+            ExtendedGSSManager manager = (ExtendedGSSManager)ExtendedGSSManager.getInstance();
+            return manager.createCredential(GSSCredential.INITIATE_AND_ACCEPT);
+        } catch (Exception e) {
+            String m = "Error getting portal credential";
+            _logger.error(m, e);
             return null;
         }
     }

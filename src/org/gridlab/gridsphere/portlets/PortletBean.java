@@ -183,6 +183,8 @@ public class PortletBean {
             setActionEvent(actionEvent);
             // Get action method to perform
             String methodName = getActionMethodName();
+            this.log.debug("Performing method " + methodName);
+            System.out.println("Performing method " + methodName);
             // Invoke action method
             invokeActionMethod(methodName);
         }
@@ -245,7 +247,7 @@ public class PortletBean {
         String errorMessage = "Attempt to access undefined portlet action "
                             + this.getClass().getName()
                             + "."
-                            + getActionPerformedName()
+                            + getActionMethodName()
                             + "()";
         this.log.error(errorMessage);
     }

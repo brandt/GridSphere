@@ -28,8 +28,8 @@ public class GlobusCredential implements Credential {
 
     public GlobusCredential(GlobusGSSCredentialImpl globusCredential) {
         this.gssCredential = globusCredential;
+        this.dn = globusCredential.getGlobusCredential().getIdentity();
         this.subject = translateSubject(globusCredential.getGlobusCredential().getSubject());
-        this.dn = retrieveDN(this.subject);
     }
 
     public GSSCredential getGSSProxy() {

@@ -24,14 +24,13 @@ public class CredentialRetrievalUserPortlet extends AbstractPortlet {
 
     public void actionPerformed(ActionEvent event) throws PortletException {
         getPortletLog().debug("Entering actionPerformed()");
-        PortletAction action = event.getAction();
         //'Get the portlet request and response
         PortletRequest request = event.getPortletRequest();
         PortletResponse response = event.getPortletResponse();
         // Get instance of user manager bean
         CredentialRetrievalUserBean credentialRetrievalUserBean = getCredentialRetrievalUserBean(request, response);
         // Then perform given action
-        credentialRetrievalUserBean.doViewAction(action);
+        credentialRetrievalUserBean.doViewAction(event);
         getPortletLog().debug("Exiting actionPerformed()");
     }
 
@@ -41,11 +40,12 @@ public class CredentialRetrievalUserPortlet extends AbstractPortlet {
         // Get instance of user manager bean
         CredentialRetrievalUserBean credentialRetrievalUserBean = getCredentialRetrievalUserBean(request, response);
         // If no action performed, then perform list users
-        if (credentialRetrievalUserBean.getActionPerformed() == null) {
+        if (credentialRetrievalUserBean.getActionEvent() == null) {
             credentialRetrievalUserBean.doDefaultViewAction();
         }
         // Get next page to display
         String nextPage = credentialRetrievalUserBean.getPage();
+        System.out.println("CredentialRetrievalUserPortlet nextPage = " + nextPage);
         // Include the given page
         getPortletConfig().getContext().include(nextPage, request, response);
         getPortletLog().debug("Exiting doView()");
