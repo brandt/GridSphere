@@ -35,6 +35,10 @@ public class Groups extends BaseObject implements PortletGroup {
         Name = name;
     }
 
+    public boolean isBaseGroup() {
+        return false;
+    }
+
 }
 
 
