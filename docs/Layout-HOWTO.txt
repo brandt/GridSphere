@@ -54,10 +54,12 @@ PortletFrame -- A Portletframe is a visual represntation of a portlet. It includ
                 instance of the portlet class from the portlet registry service and invokes the service() method)
 
 
-Every portlet component also provides a doRender method with the following signature:
+Every portlet component also provides the following three methods:
 
 public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res)
             throws PortletLayoutException, IOException;
+
+
 
 During rendering, the PortletContainer which contains all the other components is traversed and the doRender()
 method is invoked for each component. The doRender() method may optionally print HTML to an OutputStream

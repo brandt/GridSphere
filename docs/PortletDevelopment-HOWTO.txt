@@ -16,7 +16,15 @@ Developing Portlets in the GridSphere Framework
 1. Portlet Concepts
 
 Portlets are defined as visual components that can be organized into portal web pages. Portlets
-provide "mini-applications" that can either display informational content or provide access to other services.
+provide "mini-applications" that can either display informational content or provide access to other services. The
+GridSphere portal allows users to customize their workspace by adding and removing portlets as needed. In addition
+to standard window states like minimized or maximized, portlets can also provide various "modes". The standard portlet
+modes are "view", "edit", "configure" and "help". As an example, consider a Stock Quote portlet that allows users to
+customize their stock quote information. View mode would display a user's stock information. Help mode provides users
+with informational content about the stock quote portlet and how to use it. Edit mode allows users to change the list
+of stocks they are intersted in monitoring. Finally, Configure mode allows portlet administrators to change persistent
+settings such as the stock quote service that is contacted.
+
 The architecture of GridSphere and API definitions of key portlet concepts matches the portlet API provided
 by IBM WebSphere to a large extent. An excellent source of more information on portlets and portlet development
 is the WebSphere 4.1 Portlet Developer's Guide.
@@ -34,6 +42,8 @@ javax.servlet.http.HttpServlet
             org.gridlab.gridsphere.portlet.AbstractPortlet
                 ...
                 com.mycom.MyPortlet
+
+2. Portlet Lifecycle
 
 
 2. Portlet Deployment Descriptors
@@ -213,10 +223,9 @@ The concrete portlet description defines the following properties:
 
 PortletRequest and PortletResponse
 
-The two most funadamental interfaces in the Portlet API after the portlet classes themselves are the PortletRequest
-and PortletResponse objects. These two mirror closely the HttpServletRequest and HttpServletResponse counterparts
-and offer all the previous methods and some additional portlet specific ones. The following methods are defined by
-the PortletRequest:
+The two most funadamental interfaces in the Portlet API  are the PortletRequest and PortletResponse objects.
+These two mirror closely the HttpServletRequest and HttpServletResponse counterparts and offer all the previous methods
+and some additional portlet specific ones. The following methods are defined by the PortletRequest:
 
  + Client getClient() -- returns a Client object representing the browser device being used by the client
  + PortletData getData() -- returns the user-specific persistent data for the active portlet
@@ -226,13 +235,43 @@ the PortletRequest:
  + Portlet.Mode getPreviousMode() -- return the previous portlet mode of this portlet
  + User getUser() -- return the User object
  + PortletWindow getWindow() -- return the portlet window representing the window state of this portlet
- + void setModeModifier(Portlet.ModeModifier modeModifier) --
+ + void setModeModifier(Portlet.ModeModifier modeModifier) -- sets the next portlet mode to display
 
-PortletRequest:
+Client
+The Client defines the user's browser type and supported mime-types. The purpose of the client object is to allow
+portlet developers with mechanisms for customizing output based on device type. The client object can be used to detect
+a browser that may be running on a cell phone or wireless PDA.
 
-PortletResponse:
+PortletData
+The PortletData defines any user specific persistent information for the active portlet. In the example stock quote
+portlet, the PortletData could be used to store a user's financial information, past trades made, etc.
 
-PortletSession:
+Portlet.Mode
+The PortletMode is the current mode of the active portlet. The allowed modes are Portlet.Mode.VIEW, Portlet.Mode.EDIT,
+Portlet.Mode.CONFIGURE, and Portlet.Mode.HELP.
+
+PortletSession
+The PortletSession is another wrapper for an HttpSession and offers the standard setAttribute/getAttribute methods for
+storing data in a HttpSession.
+
+PortletSettings
+The PortletSettings encapsulates concrete portlet information and is configurable by the portlet administrator. The
+PortletSettings provides access to the portlet's title, PortletApplicationSettings and configuration attributes from
+from the concrete portlet definition in the portlet.xml file.
+
+PortletWindow
+The PortletWindow provides window state information about the currently active portlet such as minimized or maximized.
+
+Portlet.ModeModifer
+The Portlet.ModeModifier is supposed to
+
+
+PortletResponse
+
+Like the PortletRequest, the PortletResponse is a wrapper for HttpServletResponse and offers all the same methods via
+an actual proxy HttpServletResponse object. In addition, the PortletResponse provides support for creating customized
+URI's (Uniform Resource Identifiers) used to construct portlet links.
+
 
 PortletConfig:
 
