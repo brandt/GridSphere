@@ -15,6 +15,12 @@ import javax.servlet.ServletConfig;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+/**
+ * A RegsiteredSportlet provides the portlet container with information used to create and manage the
+ * portlet's lifecycle. A RegsiteredPortlet is responsible for parsing the portlet.xml file for
+ * portlet settings and portlet configuration information. The RegisteredPortlet also maintains an instantiated
+ * portlet that is managed by the portlet container.
+ */
 public class RegisteredSportletImpl implements RegisteredSportlet {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(RegisteredSportletImpl.class);
@@ -62,14 +68,25 @@ public class RegisteredSportletImpl implements RegisteredSportlet {
         }
     }
 
+    /**
+     * Returns the portlet configuration for this portlet
+     *
+     * @return the portlet configuration
+     */
     public PortletConfig getPortletConfig() {
         return portletConfig;
     }
+
 
     public void setPortletConfig(PortletConfig portletConfig) {
         this.portletConfig = portletConfig;
     }
 
+    /**
+     * Returns the portlet settings for this portlet
+     *
+     * @return the portlet settings
+     */
     public PortletSettings getPortletSettings() {
         return portletSettings;
     }
@@ -78,6 +95,11 @@ public class RegisteredSportletImpl implements RegisteredSportlet {
         this.portletSettings = portletSettings;
     }
 
+    /**
+     * Return the name of this portlet
+     *
+     * @return the portlet name
+     */
     public String getPortletName() {
         return portletName;
     }
@@ -86,6 +108,11 @@ public class RegisteredSportletImpl implements RegisteredSportlet {
         this.portletName = portletName;
     }
 
+    /**
+     * Return the instantiated abstract portlet instance
+     *
+     * @return the instantiated abstract portlet instance
+     */
     public AbstractPortlet getActivePortlet() {
         return abstractPortlet;
     }
