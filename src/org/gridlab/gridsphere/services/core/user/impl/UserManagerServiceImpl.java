@@ -100,16 +100,6 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
         userManager.submitAccountRequest(request);
     }
 
-     /**
-      * Submit the account request to the queue for administrative approval
-      *
-      * @param request the <code>AccountRequest</code> to submit
-      */
-    public void submitAccountRequest(AccountRequest request, MailMessage mailMessage)
-            throws InvalidAccountRequestException {
-         userManager.submitAccountRequest(request, mailMessage);
-     }
-
     /**
       * Approve a new or modified account request.
       * If mailMessage is non-null, a mail message will be sent out to the account requestor
@@ -125,31 +115,9 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
       * If mailMessage is non-null, a mail message will be sent out to the account requestor
       *
       * @param request the <code>AccountRequest</code> to approve
-      * @param mailMessage the <code>MailMessage</code> to use for notification
-      */
-    public User approveAccountRequest(AccountRequest request, MailMessage mailMessage) {
-        return userManager.approveAccountRequest(request, mailMessage);
-    }
-
-    /**
-      * Approve a new or modified account request.
-      * If mailMessage is non-null, a mail message will be sent out to the account requestor
-      *
-      * @param request the <code>AccountRequest</code> to approve
       */
     public void denyAccountRequest(AccountRequest request) {
         userManager.denyAccountRequest(request);
-    }
-
-    /**
-      * Approve a new or modified account request.
-      * If mailMessage is non-null, a mail message will be sent out to the account requestor
-      *
-      * @param request the <code>AccountRequest</code> to approve
-      * @param mailMessage the <code>MailMessage</code> to use for notification
-      */
-    public void denyAccountRequest(AccountRequest request, MailMessage mailMessage) {
-        userManager.denyAccountRequest(request, mailMessage);
     }
 
     /**
