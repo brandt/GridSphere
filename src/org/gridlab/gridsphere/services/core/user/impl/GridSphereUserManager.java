@@ -440,11 +440,13 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public User getLoggedInUser(String loginName) {
-        SportletUserImpl u = getSportletUserImplByLoginName(loginName);
-        long now = Calendar.getInstance().getTime().getTime();
-        u.setLastLoginTime(now);
-        saveSportletUserImpl(u);
-        return u;
+        SportletUserImpl user = getSportletUserImplByLoginName(loginName);
+        if (user != null) {
+            long now = Calendar.getInstance().getTime().getTime();
+            user.setLastLoginTime(now);
+            saveSportletUserImpl(user);
+        }
+        return user;
     }
 
     public User getUserByUserName(String loginName) {
