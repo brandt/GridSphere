@@ -5,9 +5,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
-import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
-import org.gridlab.gridsphere.provider.portletui.tags.ActionParamTag;
-import org.gridlab.gridsphere.provider.portletui.tags.ActionTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -17,7 +14,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  * The <code>ActionParamTag</code> is used to specify action paramters (name value pairs) inside of an
  * <code>ActionLinkTag</code> or an <code>ActionSubmitTag</code>
  */
-public class ActionParamTagImpl extends TagSupport implements ActionParamTag {
+public class ActionParamTagImpl extends TagSupport {
 
     protected String name = "";
     protected String value = "";
@@ -78,7 +75,7 @@ public class ActionParamTagImpl extends TagSupport implements ActionParamTag {
     }
 
     public int doStartTag() throws JspException {
-        ActionTag actionTag = (ActionTag) getParent();
+        ActionTagImpl actionTag = (ActionTagImpl) getParent();
         if (actionTag != null) {
             //System.err.println("Setting action param bean: " + name + " " + value);
 

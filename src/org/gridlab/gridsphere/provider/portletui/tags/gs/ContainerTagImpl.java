@@ -7,8 +7,7 @@ package org.gridlab.gridsphere.provider.portletui.tags.gs;
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 import org.gridlab.gridsphere.provider.portletui.beans.BeanContainer;
 import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.ContainerTag;
+
 
 import javax.servlet.jsp.JspException;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import java.util.List;
  * The abstract <code>ContainerTag</code> provides a bean container used by other tags that are themselves containers
  * for nested tags.
  */
-public abstract class ContainerTagImpl extends BaseComponentTagImpl implements ContainerTag {
+public abstract class ContainerTagImpl extends BaseComponentTagImpl {
 
     // make sure it is initalized, otherwise adding a tag throws NPE
     protected List list = new ArrayList();

@@ -5,10 +5,7 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
-import org.gridlab.gridsphere.provider.portletui.tags.FrameTag;
-import org.gridlab.gridsphere.provider.portletui.tags.PanelTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -19,7 +16,7 @@ import java.util.ResourceBundle;
 /**
  * A <code>FrameTag</code> is a stylized <code>TableTag</code> that can also be used to set text messages
  */
-public class FrameTagImpl extends TableTagImpl implements FrameTag {
+public class FrameTagImpl extends TableTagImpl {
 
     protected String style = null;
     protected String key = null;
@@ -144,7 +141,7 @@ public class FrameTagImpl extends TableTagImpl implements FrameTag {
         tableBean.setRowCount(rowCount);
 
 
-        PanelTag panelTag = (PanelTag) findAncestorWithClass(this, PanelTagImpl.class);
+        PanelTagImpl panelTag = (PanelTagImpl) findAncestorWithClass(this, PanelTagImpl.class);
         if (panelTag != null) {
 
             int numCols = panelTag.getNumCols();
@@ -189,7 +186,7 @@ public class FrameTagImpl extends TableTagImpl implements FrameTag {
             throw new JspException(e.getMessage());
         }
 
-        PanelTag panelTag = (PanelTag) findAncestorWithClass(this, PanelTagImpl.class);
+        PanelTagImpl panelTag = (PanelTagImpl) findAncestorWithClass(this, PanelTagImpl.class);
         if (panelTag != null) {
             int numCols = panelTag.getNumCols();
             int thiscol = panelTag.getColumnCounter();

@@ -4,11 +4,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.provider.portletui.beans.DataGridBean;
-import org.gridlab.gridsphere.provider.portletui.beans.DataGridColumnBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.ContainerTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.DataGridTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -22,7 +18,7 @@ import java.util.Vector;
  * @version $Id$
  */
 
-public class DataGridTagImpl extends ContainerTagImpl implements DataGridTag {
+public class DataGridTagImpl extends ContainerTagImpl {
 
     private int size = 10;
     private String header = null;

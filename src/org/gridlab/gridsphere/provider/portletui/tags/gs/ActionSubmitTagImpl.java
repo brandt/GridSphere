@@ -6,8 +6,6 @@ package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionSubmitBean;
-import org.gridlab.gridsphere.provider.portletui.tags.ActionSubmitTag;
-import org.gridlab.gridsphere.provider.portletui.tags.ContainerTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -18,7 +16,7 @@ import java.util.Iterator;
  * An <code>ActionSubmitTag</code> provides a button element that includes a <code>DefaultPortletAction</code> and may
  * also include nested <code>ActionParamTag</code>s
  */
-public class ActionSubmitTagImpl extends ActionTagImpl implements ActionSubmitTag {
+public class ActionSubmitTagImpl extends ActionTagImpl {
 
     protected String key = "";
 
@@ -50,7 +48,7 @@ public class ActionSubmitTagImpl extends ActionTagImpl implements ActionSubmitTa
         if (actionSubmitBean == null) actionSubmitBean = new ActionSubmitBean();
         paramBeans = new ArrayList();
 
-        actionSubmitBean.setName(createActionURI().toString());
+        actionSubmitBean.setName(createActionURI());
 
         if (anchor != null) actionSubmitBean.setAnchor(anchor);
 
@@ -74,8 +72,8 @@ public class ActionSubmitTagImpl extends ActionTagImpl implements ActionSubmitTa
         }
 
         Object parentTag = getParent();
-        if (parentTag instanceof ContainerTag) {
-            ContainerTag containerTag = (ContainerTag) parentTag;
+        if (parentTag instanceof ContainerTagImpl) {
+            ContainerTagImpl containerTag = (ContainerTagImpl) parentTag;
             containerTag.addTagBean(actionSubmitBean);
 
         }

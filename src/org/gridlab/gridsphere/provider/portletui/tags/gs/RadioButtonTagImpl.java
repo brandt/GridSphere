@@ -6,10 +6,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.RadioButtonBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.RadioButtonTag;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -18,7 +14,7 @@ import javax.servlet.jsp.PageContext;
 /**
  * A <code>RadioButtonTag</code> represents a radio button element
  */
-public class RadioButtonTagImpl extends BaseComponentTagImpl implements RadioButtonTag {
+public class RadioButtonTagImpl extends BaseComponentTagImpl {
 
     protected RadioButtonBean radiobutton = null;
     protected boolean selected = false;

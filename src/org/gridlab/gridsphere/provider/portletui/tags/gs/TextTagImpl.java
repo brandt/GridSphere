@@ -7,12 +7,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.DataGridColumnTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.DataGridColumnTag;
-import org.gridlab.gridsphere.provider.portletui.tags.TextTag;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.DataGridColumnTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -22,7 +16,7 @@ import javax.servlet.jsp.tagext.Tag;
 /**
  * A <code>TextTag</code> represents text to be displayed
  */
-public class TextTagImpl extends BaseComponentTagImpl implements TextTag {
+public class TextTagImpl extends BaseComponentTagImpl {
 
     protected TextBean textBean = null;
     protected String key = null;
@@ -123,16 +117,13 @@ public class TextTagImpl extends BaseComponentTagImpl implements TextTag {
 
 
 
-        if (this.getBodyContent() != null) {
-            System.err.println("body= " + this.getBodyContent().getString());
-        }
+        // this doesn't work anymore
         if ((bodyContent != null) && (value == null)) {
             textBean.setValue(bodyContent.getString());
-            System.err.println("in text tag: body= " + bodyContent.getString());
         }
 
         Tag parent = getParent();
-        if (parent instanceof DataGridColumnTag) {
+        if (parent instanceof DataGridColumnTagImpl) {
             DataGridColumnTagImpl dataGridColumnTag = (DataGridColumnTagImpl) parent;
             dataGridColumnTag.addTagBean(this.textBean);
         } else {

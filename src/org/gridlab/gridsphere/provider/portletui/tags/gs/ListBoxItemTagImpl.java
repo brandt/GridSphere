@@ -7,9 +7,6 @@ package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.ListBoxItemTag;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
 import java.util.Iterator;
@@ -20,7 +17,7 @@ import java.util.ResourceBundle;
 /**
  * A <code>ListBoxItemtag</code> represents a list box element
  */
-public class ListBoxItemTagImpl extends BaseComponentTagImpl implements ListBoxItemTag {
+public class ListBoxItemTagImpl extends BaseComponentTagImpl {
 
     protected ListBoxItemBean listboxitem = null;
     protected boolean selected = false;

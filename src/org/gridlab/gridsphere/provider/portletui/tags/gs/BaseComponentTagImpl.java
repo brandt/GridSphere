@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
-import org.gridlab.gridsphere.provider.portletui.tags.ComponentTag;
-import org.gridlab.gridsphere.provider.portletui.tags.PanelTag;
 import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
@@ -20,7 +18,7 @@ import java.util.ResourceBundle;
  * The abstract <code>BaseComponentTag</code> is used by all UI tags to provide CSS support and general
  * name, value attributes
  */
-public abstract class BaseComponentTagImpl extends BaseComponentTag implements ComponentTag {
+public abstract class BaseComponentTagImpl extends BaseComponentTag {
 
     protected String getLocalizedText(String key) {
         return getLocalizedText(key, "Portlet");
@@ -39,8 +37,8 @@ public abstract class BaseComponentTagImpl extends BaseComponentTag implements C
 
     public int doStartTag() throws JspException {
         Tag parent = getParent();
-        if (parent instanceof PanelTag) {
-            PanelTag panelTag = (PanelTag)parent;
+        if (parent instanceof PanelTagImpl) {
+            PanelTagImpl panelTag = (PanelTagImpl)parent;
 
             int numCols = panelTag.getNumCols();
 
@@ -60,8 +58,8 @@ public abstract class BaseComponentTagImpl extends BaseComponentTag implements C
 
     public int doEndTag() throws JspException {
         Tag parent = getParent();
-        if (parent instanceof PanelTag) {
-            PanelTag panelTag = (PanelTag)parent;
+        if (parent instanceof PanelTagImpl) {
+            PanelTagImpl panelTag = (PanelTagImpl)parent;
 
             int numCols = panelTag.getNumCols();
             int thiscol = panelTag.getColumnCounter();

@@ -7,8 +7,6 @@ package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.ContainerTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.ListBoxTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -19,7 +17,7 @@ import java.util.Vector;
 /**
  * A <code>ListBoxTag</code> represents a list box element
  */
-public class ListBoxTagImpl extends ContainerTagImpl implements ListBoxTag {
+public class ListBoxTagImpl extends ContainerTagImpl {
 
     protected ListBoxBean listbox = null;
     protected boolean isMultiple = false;

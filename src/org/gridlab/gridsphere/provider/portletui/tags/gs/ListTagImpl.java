@@ -6,9 +6,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ListBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.ListTag;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -17,7 +14,7 @@ import javax.servlet.jsp.PageContext;
 /**
  * A <code>ListBoxTag</code> represents a list box element
  */
-public class ListTagImpl extends BaseComponentTagImpl implements ListTag {
+public class ListTagImpl extends BaseComponentTagImpl {
 
     protected ListBean listBean = null;
 

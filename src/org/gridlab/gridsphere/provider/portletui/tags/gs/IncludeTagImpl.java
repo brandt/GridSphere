@@ -1,7 +1,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.IncludeBean;
-import org.gridlab.gridsphere.provider.portletui.tags.IncludeTag;
 import org.gridlab.gridsphere.provider.portletui.tags.BaseBeanTag;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -23,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * Includes jsp pages from any web application.
  */
 
-public class IncludeTagImpl extends BaseBeanTag implements IncludeTag {
+public class IncludeTagImpl extends BaseBeanTag {
 
     private static PortletLog log = SportletLog.getInstance(IncludeTagImpl.class);
     private IncludeBean includeBean = null;

@@ -3,7 +3,6 @@ package org.gridlab.gridsphere.provider.portletui.tags.gs;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionMenuBean;
-import org.gridlab.gridsphere.provider.portletui.tags.ActionMenuTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -15,7 +14,7 @@ import javax.servlet.jsp.tagext.Tag;
  * @version $Id$
  */
 
-public class ActionMenuTagImpl extends ContainerTagImpl implements ActionMenuTag {
+public class ActionMenuTagImpl extends ContainerTagImpl {
 
     protected ActionMenuBean actionMenuBean = null;
     protected String layout = null;
@@ -97,7 +96,7 @@ public class ActionMenuTagImpl extends ContainerTagImpl implements ActionMenuTag
         }
 
         Tag parent = getParent();
-        if (parent instanceof ActionMenuTag) {
+        if (parent instanceof ActionMenuTagImpl) {
             actionMenuBean.setHasParentMenu(true);
         }
 

@@ -7,13 +7,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.DataGridColumnTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.DataGridColumnTag;
-import org.gridlab.gridsphere.provider.portletui.tags.TextFieldTag;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.DataGridColumnTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.DataGridColumnTagImpl;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -23,7 +16,7 @@ import javax.servlet.jsp.tagext.Tag;
 /**
  * A <code>TextFieldTag</code> represents a text field element
  */
-public class TextFieldTagImpl extends BaseComponentTagImpl implements TextFieldTag {
+public class TextFieldTagImpl extends BaseComponentTagImpl {
 
     protected TextFieldBean textFieldBean = null;
     protected int size = 0;
@@ -96,7 +89,7 @@ public class TextFieldTagImpl extends BaseComponentTagImpl implements TextFieldT
 
         //debug();
         Tag parent = getParent();
-        if (parent instanceof DataGridColumnTag) {
+        if (parent instanceof DataGridColumnTagImpl) {
             DataGridColumnTagImpl dataGridColumnTag = (DataGridColumnTagImpl) parent;
             textFieldBean.setBeanIdSource(this.beanIdSource);
             dataGridColumnTag.addTagBean(this.textFieldBean);

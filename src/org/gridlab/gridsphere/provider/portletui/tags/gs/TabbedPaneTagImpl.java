@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TabbedPaneBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TabBean;
-import org.gridlab.gridsphere.provider.portletui.tags.TabbedPaneTag;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
 
@@ -21,7 +20,7 @@ import java.io.PrintWriter;
 /**
  * A <code>TableTag</code> represents a table element and is defined by a <code>DefaultTableModel</code>
  */
-public class TabbedPaneTagImpl extends BaseComponentTagImpl implements TabbedPaneTag {
+public class TabbedPaneTagImpl extends BaseComponentTagImpl {
 
     protected TabbedPaneBean tabbedPaneBean = null;
     protected String paneId = null;

@@ -1,8 +1,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.MessageBoxBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -12,7 +10,6 @@ import javax.servlet.jsp.PageContext;
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id$
  */
-
 public class MessageBoxTagImpl extends BaseComponentTagImpl {
 
     protected MessageBoxBean messageBoxBean = null;
@@ -41,7 +38,6 @@ public class MessageBoxTagImpl extends BaseComponentTagImpl {
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
-
 
         return EVAL_PAGE;
     }

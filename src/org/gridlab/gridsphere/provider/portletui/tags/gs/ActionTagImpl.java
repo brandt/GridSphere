@@ -5,10 +5,19 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.Portlet;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.jsrimpl.PortletURLImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
-import org.gridlab.gridsphere.provider.portletui.tags.ActionTag;
+import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
 
+import javax.portlet.*;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.TagExtraInfo;
+import javax.servlet.jsp.tagext.VariableInfo;
+import javax.servlet.jsp.tagext.TagData;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,17 +25,52 @@ import java.util.List;
  * The abstract <code>ActionTag</code> is used by other Action tags to contain <code>DefaultPortletAction</code>s
  * and possibly <code>ActionParamTag</code>s
  */
-public abstract class ActionTagImpl extends BaseComponentTagImpl implements ActionTag {
+public abstract class ActionTagImpl extends BaseComponentTagImpl {
 
     protected String action = null;
     protected String anchor = null;
+    protected String var = null;
+    protected String key = null;
     protected boolean isSecure = false;
     protected PortletURI actionURI = null;
+    protected PortletURLImpl actionURL = null;
     protected String windowState = null;
     protected String portletMode = null;
     protected DefaultPortletAction portletAction = null;
     protected List paramBeans = null;
     protected String label = null;
+    protected ImageBean imageBean = null;
+
+    public static class TEI extends TagExtraInfo {
+
+        public VariableInfo[] getVariableInfo(TagData tagData) {
+            VariableInfo vi[] = null;
+            String var = tagData.getAttributeString("var");
+            if (var != null) {
+                vi = new VariableInfo[1];
+                vi[0] = new VariableInfo(var, "java.lang.String", true, VariableInfo.AT_BEGIN);
+            }
+            return vi;
+        }
+    }
+
+    /**
+     * Sets the name of the variable to export as a RenderURL object
+     *
+     * @param var the name of the variable to export as a RenderURL object
+     */
+    public void setVar(String var) {
+        this.var = var;
+    }
+
+    /**
+     * Returns the name of the exported RenderURL object
+     *
+     * @return the exported variable
+     */
+    public String getVar() {
+        return var;
+    }
 
     /**
      * Sets the text that should be added at the end of generated URL
@@ -44,6 +88,24 @@ public abstract class ActionTagImpl extends BaseComponentTagImpl implements Acti
      */
     public String getAnchor() {
         return anchor;
+    }
+
+    /**
+     * Sets the action link key used to locate localized text
+     *
+     * @param key the action link key
+     */
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    /**
+     * Returns the action link key used to locate localized text
+     *
+     * @return the action link key
+     */
+    public String getKey() {
+        return key;
     }
 
     /**
@@ -126,7 +188,76 @@ public abstract class ActionTagImpl extends BaseComponentTagImpl implements Acti
         return paramBeans;
     }
 
-    public PortletURI createActionURI() {
+    protected String createJSRActionURI(PortletURL url) throws JspException {
+        // Builds a URI containing the actin and associated params
+        RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+        this.actionURL = (PortletURLImpl)url;
+        RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
+        // action is a required attribute except for FormTag
+        if (windowState == null) {
+            windowState = req.getWindowState().toString();
+        }
+        if (portletMode == null) {
+            portletMode = req.getPortletMode().toString();
+        }
+
+        if (label != null) {
+            //actionURL = res.createRenderURL();
+            res.setProperty("label", label);
+        }
+        if (windowState != null) {
+            WindowState state = new WindowState(windowState);
+            try {
+                //actionURL = res.createRenderURL();
+                System.err.println("set state to:" + state);
+                actionURL.setWindowState(state);
+            } catch (WindowStateException e) {
+                throw new JspException("Unknown window state in renderURL tag: " + windowState);
+            }
+        }
+        if (portletMode != null) {
+            PortletMode mode = new PortletMode(portletMode);
+            try {
+                //actionURL = res.createRenderURL();
+                actionURL.setPortletMode(mode);
+                System.err.println("set mode to:" + mode);
+            } catch (PortletModeException e) {
+                throw new JspException("Unknown portlet mode in renderURL tag: " + portletMode);
+            }
+        }
+
+        if (action != null) {
+            portletAction = new DefaultPortletAction(action);
+        }
+        if (!paramBeans.isEmpty()) {
+            String id = createUniquePrefix(2);
+            //portletAction.addParameter(SportletProperties.PREFIX, id);
+            //actionURL.setParameter(SportletProperties.PREFIX, id);
+            Iterator it = paramBeans.iterator();
+            while (it.hasNext()) {
+                ActionParamBean pbean = (ActionParamBean)it.next();
+                actionURL.setParameter(pbean.getName(), pbean.getValue());
+            }
+        }
+        if (action != null) {
+            System.err.println("stting action :" + action);
+            actionURL.setAction(action);
+        }
+        //if (!action.equals("render"))
+        //}
+        System.err.println("printing URL = " + actionURL.toString());
+        return actionURL.toString();
+    }
+
+    public String createActionURI() throws JspException {
+        if (isJSR()) {
+            RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+            return createJSRActionURI(res.createActionURL());
+        }
+        return createGSActionURI();
+    }
+
+    public String createGSActionURI() throws JspException {
         // Builds a URI containing the actin and associated params
         PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
 
@@ -158,7 +289,7 @@ public abstract class ActionTagImpl extends BaseComponentTagImpl implements Acti
             }
             actionURI.addAction(portletAction);
         }
-        return actionURI;
+        return actionURI.toString();
 
     }
 

@@ -6,9 +6,6 @@ package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TableCellBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TableRowBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.TableCellTag;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -17,7 +14,7 @@ import javax.servlet.jsp.PageContext;
 /**
  * A <code>TableCellTag</code> represents a table cell element contained by a <code>TableRowTag</code>
  */
-public class TableCellTagImpl extends BaseComponentTagImpl implements TableCellTag {
+public class TableCellTagImpl extends BaseComponentTagImpl {
 
     protected TableCellBean cellBean = null;
     protected String width = null;

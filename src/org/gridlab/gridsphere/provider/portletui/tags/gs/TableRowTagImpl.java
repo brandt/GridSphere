@@ -5,9 +5,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TableRowBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.TableRowTag;
-import org.gridlab.gridsphere.provider.portletui.tags.TableTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -18,7 +15,7 @@ import javax.servlet.jsp.tagext.Tag;
  * The <code>TableRowTag</code> represents a table row element that is conatined within a <code>TableTag</code>
  * and itself may contain <code>TableCellTag</code>s
  */
-public class TableRowTagImpl extends BaseComponentTagImpl implements TableRowTag {
+public class TableRowTagImpl extends BaseComponentTagImpl {
 
     protected TableRowBean rowBean = null;
     protected boolean isHeader = false;
@@ -118,8 +115,8 @@ public class TableRowTagImpl extends BaseComponentTagImpl implements TableRowTag
     public int doStartTag() throws JspException {
 
         Tag parent = this.getParent();
-        if (parent instanceof TableTag) {
-            TableTag tableTag = (TableTag)parent;
+        if (parent instanceof TableTagImpl) {
+            TableTagImpl tableTag = (TableTagImpl)parent;
             int maxrows = tableTag.getMaxrows();
 
             // logic to determine if alternate (darkened row) should be set

@@ -7,9 +7,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.PasswordBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.PasswordTag;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -18,7 +15,7 @@ import javax.servlet.jsp.PageContext;
 /**
  * A <code>PasswordTag</code> provides a password tag for represnting HTML password input elements
  */
-public class PasswordTagImpl extends BaseComponentTagImpl implements PasswordTag {
+public class PasswordTagImpl extends BaseComponentTagImpl {
 
     protected PasswordBean passwordBean = null;
 

@@ -3,20 +3,17 @@ package org.gridlab.gridsphere.provider.portletui.tags.gs;
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 import org.gridlab.gridsphere.provider.portletui.beans.DataGridColumnBean;
 import org.gridlab.gridsphere.provider.portletui.beans.DataGridAttributes;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.ContainerTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.DataGridColumnTag;
 
 import javax.servlet.jsp.JspException;
 import java.util.Iterator;
 import java.util.Vector;
-import java.util.Set;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id$
  */
 
-public class DataGridColumnTagImpl extends ContainerTagImpl implements DataGridColumnTag {
+public class DataGridColumnTagImpl extends ContainerTagImpl {
 
     private String header = null;
     private String var = null;

@@ -233,7 +233,12 @@ public class PortletServlet  extends HttpServlet
                     renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
                     renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
                     log.debug("in PortletServlet: do title " + portletClassName);
-                    doTitle(portlet, renderRequest, renderResponse);
+                    try {
+                        doTitle(portlet, renderRequest, renderResponse);
+                    } catch (PortletException e) {
+                        log.error("Error during doTitle:", e);
+                        throw new ServletException(e);
+                    }
                 } else {
                     PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), false);
                     request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
@@ -305,9 +310,11 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
 }
 */
 
-    protected void doTitle(Portlet portlet, RenderRequest request, RenderResponse response) {
+    protected void doTitle(Portlet portlet, RenderRequest request, RenderResponse response) throws PortletException {
         try {
-            ResourceBundle resBundle = ((GenericPortlet)portlet).getPortletConfig().getResourceBundle(request.getLocale());
+            GenericPortlet genPortlet = ((GenericPortlet)portlet);
+            if (genPortlet.getPortletConfig() == null) throw new PortletException("Unable to get PortletConfig from Porltlet");
+            ResourceBundle resBundle = genPortlet.getPortletConfig().getResourceBundle(request.getLocale());
             String title = resBundle.getString("javax.portlet.title");
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();

@@ -5,8 +5,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.FileInputTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -15,7 +13,7 @@ import javax.servlet.jsp.PageContext;
 /**
  * A <code>FileInputTag</code> represnts a file input element to be used for uploading files
  */
-public class FileInputTagImpl extends BaseComponentTagImpl implements FileInputTag {
+public class FileInputTagImpl extends BaseComponentTagImpl {
 
     protected FileInputBean fileInputBean = null;
     protected int size = 0;

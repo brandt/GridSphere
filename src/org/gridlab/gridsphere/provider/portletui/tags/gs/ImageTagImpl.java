@@ -8,11 +8,6 @@ package org.gridlab.gridsphere.provider.portletui.tags.gs;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.ActionLinkTag;
-import org.gridlab.gridsphere.provider.portletui.tags.ImageTag;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -22,7 +17,7 @@ import javax.servlet.jsp.tagext.Tag;
 /**
  * The <code>ImageTag</code> represents an href img element
  */
-public class ImageTagImpl extends BaseComponentTagImpl implements ImageTag {
+public class ImageTagImpl extends BaseComponentTagImpl {
     private static PortletLog log = SportletLog.getInstance(ImageTagImpl.class);
 
     protected ImageBean urlImageBean = null;
@@ -184,8 +179,8 @@ public class ImageTagImpl extends BaseComponentTagImpl implements ImageTag {
         }
 
         Tag parent = getParent();
-        if (parent instanceof ActionLinkTag) {
-            ActionLinkTag actionTag = (ActionLinkTag) parent;
+        if (parent instanceof ActionLinkTagImpl) {
+            ActionLinkTagImpl actionTag = (ActionLinkTagImpl) parent;
             actionTag.setImageBean(urlImageBean);
         } else {
             try {

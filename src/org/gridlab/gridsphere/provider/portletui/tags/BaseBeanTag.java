@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.provider.portletui.tags.BeanTag;
 
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
@@ -15,7 +14,7 @@ import java.util.Enumeration;
  * The abstract <code>BaseBeanTag</code> is a base class used by all UI tags that provides support for
  * a bean identifier and a flag for indicating whether JavaScript is enabled.
  */
-public abstract class BaseBeanTag extends BodyTagSupport implements BeanTag {
+public abstract class BaseBeanTag extends BodyTagSupport {
 
     protected String beanId = "";
 
@@ -105,4 +104,10 @@ public abstract class BaseBeanTag extends BodyTagSupport implements BeanTag {
         return uniqueId;
     }
 
+    protected boolean isJSR() {
+        // simply check for existence of jsr portlet objects
+        Object o = pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
+        if (o == null) return false;
+        return true;
+    }
 }

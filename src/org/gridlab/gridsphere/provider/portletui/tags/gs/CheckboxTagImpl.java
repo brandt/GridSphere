@@ -6,11 +6,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.CheckBoxTag;
-import org.gridlab.gridsphere.provider.portletui.tags.DataGridColumnTag;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -20,7 +15,7 @@ import javax.servlet.jsp.tagext.Tag;
 /**
  * A <code>CheckBoxTag</code> provides a checkbox element
  */
-public class CheckboxTagImpl extends BaseComponentTagImpl implements CheckBoxTag {
+public class CheckboxTagImpl extends BaseComponentTagImpl {
 
     protected CheckBoxBean checkbox = null;
     protected boolean selected = false;
@@ -62,7 +57,7 @@ public class CheckboxTagImpl extends BaseComponentTagImpl implements CheckBoxTag
         //debug();
 
         Tag parent = getParent();
-        if (parent instanceof DataGridColumnTag) {
+        if (parent instanceof DataGridColumnTagImpl) {
             DataGridColumnTagImpl dataGridColumnTag = (DataGridColumnTagImpl) parent;
             dataGridColumnTag.addTagBean(this.checkbox);
         } else {

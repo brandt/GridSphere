@@ -5,17 +5,12 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseBeanTag;
-import org.gridlab.gridsphere.provider.portletui.tags.ComponentTag;
-
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 /**
  * The abstract <code>BaseComponentTag</code> is used by all UI tags to provide CSS support and general
  * name, value attributes
  */
-public abstract class BaseComponentTag extends BaseBeanTag implements ComponentTag {
+public abstract class BaseComponentTag extends BaseBeanTag {
 
     protected String name = null;
     protected String value = null;

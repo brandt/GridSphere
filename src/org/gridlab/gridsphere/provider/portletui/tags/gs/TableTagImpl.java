@@ -6,22 +6,17 @@ package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.TableTag;
-import org.gridlab.gridsphere.provider.portletui.tags.PanelTag;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * A <code>TableTag</code> represents a table element and is defined by a <code>DefaultTableModel</code>
  */
-public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
+public class TableTagImpl extends BaseComponentTagImpl {
 
     protected TableBean tableBean = null;
     protected String cellSpacing = null;

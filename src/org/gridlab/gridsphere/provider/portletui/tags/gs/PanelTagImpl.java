@@ -5,9 +5,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.PanelBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.PanelTag;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -18,7 +15,7 @@ import java.util.StringTokenizer;
  * A <code>PanelTag</code> represents a stylized table that generally conatins other <code>TableTag</code> or
  * <code>FrameTag</code> nested tags
  */
-public class PanelTagImpl extends BaseComponentTagImpl implements PanelTag {
+public class PanelTagImpl extends BaseComponentTagImpl {
 
     protected String width = PanelBean.PANEL_WIDTH;
     protected String cellSpacing = PanelBean.PANEL_SPACING;

@@ -4,25 +4,16 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
-import org.gridlab.gridsphere.provider.portletui.beans.TableRowBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TabBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.TableRowTag;
-import org.gridlab.gridsphere.provider.portletui.tags.TableTag;
-import org.gridlab.gridsphere.provider.portletui.tags.TabbedPaneTag;
-import org.gridlab.gridsphere.provider.portletui.tags.TabTag;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.Tag;
 
 /**
  * The <code>TableRowTag</code> represents a table row element that is conatined within a <code>TableTag</code>
  * and itself may contain <code>TableCellTag</code>s
  */
-public class TabTagImpl extends BaseComponentTagImpl implements TabTag {
+public class TabTagImpl extends BaseComponentTagImpl {
 
     protected TabBean tabBean = null;
     protected boolean isActive = false;
@@ -60,7 +51,7 @@ public class TabTagImpl extends BaseComponentTagImpl implements TabTag {
 
     public int doStartTag() throws JspException {
         System.err.println("tabtag in doStartTag");
-        TabbedPaneTag tabbedPaneTag = (TabbedPaneTag) findAncestorWithClass(this, TabbedPaneTagImpl.class);
+        TabbedPaneTagImpl tabbedPaneTag = (TabbedPaneTagImpl) findAncestorWithClass(this, TabbedPaneTagImpl.class);
         if (tabbedPaneTag != null) {
 
             // need to determine which rows to display

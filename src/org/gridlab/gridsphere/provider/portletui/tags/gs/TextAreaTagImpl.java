@@ -5,10 +5,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TextAreaBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.TextAreaTag;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -17,7 +13,7 @@ import javax.servlet.jsp.PageContext;
 /**
  * A <code>TextAreaTag</code> represents a text area element
  */
-public class TextAreaTagImpl extends BaseComponentTagImpl implements TextAreaTag {
+public class TextAreaTagImpl extends BaseComponentTagImpl {
 
     protected TextAreaBean textAreaBean = null;
     protected int cols = 0;

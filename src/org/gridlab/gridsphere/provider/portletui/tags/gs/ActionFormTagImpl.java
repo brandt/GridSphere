@@ -4,9 +4,13 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
+import javax.portlet.RenderResponse;
 import java.util.ArrayList;
 
 /**
@@ -66,7 +70,14 @@ public class ActionFormTagImpl extends ActionTagImpl {
 
             out.print("<form ");
             out.print("action=\"");
-            out.print(createActionURI().toString());
+
+            // if using JSR then create render link
+            RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+            if (res != null) {
+                out.print(createJSRActionURI(res.createRenderURL()).toString());
+            } else {
+               out.print(createActionURI());
+            }
             out.print("\" method=\"");
             out.print(method);
             out.print("\"");

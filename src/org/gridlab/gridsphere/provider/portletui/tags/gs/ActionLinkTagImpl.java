@@ -7,9 +7,6 @@ package org.gridlab.gridsphere.provider.portletui.tags.gs;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
-import org.gridlab.gridsphere.provider.portletui.tags.ActionLinkTag;
-import org.gridlab.gridsphere.provider.portletui.tags.ActionMenuTag;
-import org.gridlab.gridsphere.provider.portletui.tags.DataGridColumnTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -21,10 +18,10 @@ import java.util.ArrayList;
  * The <code>ActionLinkTag</code> provides a hyperlink element that includes a <code>DefaultPortletAction</code>
  * and can contain nested <code>ActionParamTag</code>s
  */
-public class ActionLinkTagImpl extends ActionTagImpl implements ActionLinkTag {
+public class ActionLinkTagImpl extends ActionTagImpl {
 
     protected ActionLinkBean actionlink = null;
-    protected String key = null;
+
     protected String style = TextBean.MSG_INFO;
     protected ImageBean imageBean = null;
 
@@ -104,6 +101,7 @@ public class ActionLinkTagImpl extends ActionTagImpl implements ActionLinkTag {
                 actionlink.setStyle(style);
                 this.setBaseComponentBean(actionlink);
             }
+
         } else {
             actionlink = new ActionLinkBean();
             this.setBaseComponentBean(actionlink);
@@ -114,8 +112,8 @@ public class ActionLinkTagImpl extends ActionTagImpl implements ActionLinkTag {
         if (anchor != null) actionlink.setAnchor(anchor);
 
         Tag parent = getParent();
-        if (parent instanceof ActionMenuTag) {
-            ActionMenuTag actionMenuTag = (ActionMenuTag) parent;
+        if (parent instanceof ActionMenuTagImpl) {
+            ActionMenuTagImpl actionMenuTag = (ActionMenuTagImpl) parent;
             if (!actionMenuTag.getLayout().equals("horizontal")) {
                 actionlink.setCssStyle("display: block");
             }
@@ -133,7 +131,11 @@ public class ActionLinkTagImpl extends ActionTagImpl implements ActionLinkTag {
 
     public int doEndTag() throws JspException {
 
-        actionlink.setPortletURI(createActionURI());
+        if (!beanId.equals("")) {
+            paramBeans = actionlink.getParamBeanList();
+        }
+        
+        actionlink.setPortletURI(createGSActionURI());
 
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
@@ -147,7 +149,7 @@ public class ActionLinkTagImpl extends ActionTagImpl implements ActionLinkTag {
 
 
         Tag parent = getParent();
-        if (parent instanceof DataGridColumnTag) {
+        if (parent instanceof DataGridColumnTagImpl) {
             DataGridColumnTagImpl dataGridColumnTag = (DataGridColumnTagImpl) parent;
             dataGridColumnTag.addTagBean(this.actionlink);
         } else {

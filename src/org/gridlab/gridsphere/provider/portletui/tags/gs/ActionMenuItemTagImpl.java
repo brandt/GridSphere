@@ -1,8 +1,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionMenuItemBean;
-import org.gridlab.gridsphere.provider.portletui.tags.ActionMenuItemTag;
-import org.gridlab.gridsphere.provider.portletui.tags.ActionMenuTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -14,7 +12,7 @@ import javax.servlet.jsp.tagext.Tag;
  * @version $Id$
  */
 
-public class ActionMenuItemTagImpl extends ContainerTagImpl implements ActionMenuItemTag {
+public class ActionMenuItemTagImpl extends ContainerTagImpl {
 
     protected boolean seperator = false;
     protected ActionMenuItemBean actionMenuItemBean = null;
@@ -42,8 +40,8 @@ public class ActionMenuItemTagImpl extends ContainerTagImpl implements ActionMen
         //if (info!=null && actionMenuItemBean.getInfo()==null) actionMenuItemBean.setInfo(info);
 
         Tag parent = getParent();
-        if (parent instanceof ActionMenuTag) {
-            ActionMenuTag actionMenuTag = (ActionMenuTag) parent;
+        if (parent instanceof ActionMenuTagImpl) {
+            ActionMenuTagImpl actionMenuTag = (ActionMenuTagImpl) parent;
             if (actionMenuTag.getLayout() != null) actionMenuItemBean.setAlign(actionMenuTag.getLayout());
             if (actionMenuTag.getMenuType() != null) actionMenuItemBean.setMenuType(actionMenuTag.getMenuType());
         }
