@@ -105,8 +105,8 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             throws PortletServiceUnavailableException {
         log.info("Entering initGroups()");
         // Creating groups
-        initGroup(PortletGroup.SUPER);
-        initGroup(PortletGroup.BASE);
+        initGroup(SportletGroup.SUPER);
+        initGroup(SportletGroup.BASE);
         log.info("Entering initServices()");
     }
 
@@ -450,7 +450,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         // If new user then set initial set acl
         if (request.isNewUser()) {
             // Grant user role in base group
-            addGroupEntry(user, PortletGroup.BASE,  PortletRole.USER);
+            addGroupEntry(user, SportletGroup.BASE,  PortletRole.USER);
         }
     }
 
@@ -753,7 +753,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         PortletGroup group = request.getGroup();
         PortletRole role = request.getRole();
         // If role is super but group isn't, throw invalid access request exception
-        if (role.equals(PortletRole.SUPER) && (! group.equals(PortletGroup.SUPER) )) {
+        if (role.equals(PortletRole.SUPER) && (! group.equals(SportletGroup.SUPER) )) {
             String msg = "Super role can only exist in super group.";
             log.info(msg);
             throw new InvalidGroupRequestException(msg);
@@ -955,7 +955,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             oqlBuffer.append(" and ");
         }
         oqlBuffer.append("portletGroup.ObjectID !=\"");
-        oqlBuffer.append(PortletGroup.SUPER.getID());
+        oqlBuffer.append(SportletGroup.SUPER.getID());
         oqlBuffer.append("\"");
         // Generate object query
         String oql = oqlBuffer.toString();
@@ -1131,18 +1131,18 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     public List getUsersWithSuperRole() {
-        return getUsers(PortletGroup.SUPER);
+        return getUsers(SportletGroup.SUPER);
     }
 
     public void grantSuperRole(User user) {
-        addGroupEntry(user, PortletGroup.SUPER, PortletRole.SUPER);
+        addGroupEntry(user, SportletGroup.SUPER, PortletRole.SUPER);
     }
 
     public void revokeSuperRole(User user) {
-        removeGroupEntry(user, PortletGroup.SUPER);
+        removeGroupEntry(user, SportletGroup.SUPER);
     }
 
     public boolean hasSuperRole(User user) {
-        return isUserInGroup(user, PortletGroup.SUPER);
+        return isUserInGroup(user, SportletGroup.SUPER);
     }
 }
