@@ -51,11 +51,7 @@ public class SportletData implements PortletData {
      */
     public SportletData() {}
 
-    /**
-     * Constructs an instance of SportletData that uses the given persistencemanager
-     */
-    public SportletData(PersistenceManagerRdbms pm) {
-        super();
+    public void setPersistenceManager(PersistenceManagerRdbms pm) {
         this.pm = pm;
     }
 
