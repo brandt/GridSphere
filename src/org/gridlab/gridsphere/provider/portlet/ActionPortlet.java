@@ -44,6 +44,7 @@ public class ActionPortlet extends AbstractPortlet {
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
+        Locale.setDefault(Locale.ENGLISH);
     }
 
     public void initConcrete(PortletSettings settings) throws UnavailableException {
