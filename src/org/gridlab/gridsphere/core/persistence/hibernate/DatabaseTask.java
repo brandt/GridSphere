@@ -36,6 +36,7 @@ public class DatabaseTask extends Task {
     private PortletLog log = SportletLog.getInstance(DatabaseTask.class);
 
     private String configDir = null;
+    private String webappname = "gridsphere";  // fallback to gs if nothing is specified
     private String MAPPING_ERROR =
             "FATAL: Could not create database! Please check above errormessages! ";
     private String CONFIGFILE_ERROR =
@@ -52,20 +53,25 @@ public class DatabaseTask extends Task {
             "Some core tables could not be found!";
 
     public void setConfigDir(String configDir) {
-        this.configDir =
-                configDir + File.separator + "webapps" + File.separator + "gridsphere" + File.separator + "WEB-INF" + File.separator + "persistence";
-
-        log.info("Setting configdir to: " + this.configDir);
+        this.configDir = configDir;
     }
+
+    public void setWebappname(String appName) {
+        this.webappname = appName;
+    }
+
 
 
     private void checkDatabase(boolean startUpCheck) throws BuildException {
 
-        // @todo seetinb the configdir appr. to system (win / unix)
+        if (!startUpCheck) this.configDir =
+                configDir + File.separator + "webapps" + File.separator + webappname +
+                File.separator + "WEB-INF" + File.separator + "persistence";
+
         Properties prop = new Properties();
         String propfilename = configDir + File.separator + "hibernate.properties";
-        log.info("create db: " + propfilename);
 
+        
         // try to load configfile
         try {
             FileInputStream fis = new FileInputStream(new File(propfilename));
