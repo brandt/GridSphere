@@ -19,8 +19,12 @@ public interface LoginAuthModule extends Comparable {
 
     public String getModuleName();
 
+    public String getModuleDescription();
+
     public int getModulePriority();
 
+    public boolean isModuleActive();
+    
     public void checkAuthorization(User user, String password) throws AuthorizationException;
 
 }

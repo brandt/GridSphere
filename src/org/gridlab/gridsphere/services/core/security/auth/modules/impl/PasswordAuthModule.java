@@ -11,23 +11,22 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
+import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PasswordAuthModule extends BaseAuthModule {
+public class PasswordAuthModule extends BaseAuthModule implements LoginAuthModule {
 
-    private static final int PASSWORD_MODULE_PRIORITY = 100;
-    private String moduleName;
     private PasswordManagerService passwordManager = null;
 
     private PortletLog log = SportletLog.getInstance(PasswordAuthModule.class);
-    private Map env = new HashMap();
 
-    public PasswordAuthModule(String moduleName) {
-        this.moduleName = moduleName;
+    public PasswordAuthModule(AuthModuleDefinition moduleDef) {
+
+        super(moduleDef);
 
         // Get instance of service factory
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
@@ -37,36 +36,6 @@ public class PasswordAuthModule extends BaseAuthModule {
         } catch (Exception e) {
             log.error("Unable to get instance of password manager service!", e);
         }
-    }
-
-    public void setEnvironmentVariable(String name, String value) {
-        env.put(name, value);
-    }
-
-    public String getEnvironmentVariable(String name) {
-        return (String) env.get(name);
-    }
-
-    public String getModuleName() {
-        return moduleName;
-    }
-
-    public int getModulePriority() {
-        return PASSWORD_MODULE_PRIORITY;
-    }
-
-    public int compareTo(Object obj) {
-        if ((obj != null) && (obj instanceof LoginAuthModule)) {
-            LoginAuthModule l = (LoginAuthModule) obj;
-            if (this.PASSWORD_MODULE_PRIORITY < l.getModulePriority()) {
-                return -1;
-            } else if (this.PASSWORD_MODULE_PRIORITY > l.getModulePriority()) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-        throw new ClassCastException("Unable to compare supplied object to this module");
     }
 
     public void checkAuthorization(User user, String password) throws AuthorizationException {
@@ -91,5 +60,6 @@ public class PasswordAuthModule extends BaseAuthModule {
             throw ex;
         }
     }
+
 
 }
