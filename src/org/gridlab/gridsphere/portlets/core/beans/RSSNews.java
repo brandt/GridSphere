@@ -66,7 +66,12 @@ public class RSSNews {
     }
 
     public String getHTML(String url) {
-        return getHTML(getFeed(url));
+        RSSFeed feed = getFeed(url);
+        if (feed==null) {
+            return "<b>This feed is not available anymore.</b>";
+        } else {
+            return getHTML(getFeed(url));
+        }
     }
 
     public String getHTML(RSSFeed feed) {
