@@ -586,7 +586,7 @@ Copyright:
             <link href="http://jakarta.apache.org/log4j/docs/api/" />
 
             <link href="http://www.junit.org/junit/javadoc/3.8/" />
-	    
+
             <group title="GridSphere Framework API"
                    packages="org.gridlab.gridsphere:org.gridlab.gridsphere.*"/>
 
@@ -747,8 +747,8 @@ Copyright:
 
 <!-- ++++++++++++++ START CRUSECONTROL ++++++++++++++++++++ -->
 
-    <target name="cruisecontrol" depends="clean, docbook, compile" description="target for cruisecontrol">
-<!--        <mkdir dir="${gridsphere.build}/reports"/>
+    <target name="cruisecontrol" depends="clean, docbook, compile, tests" description="target for cruisecontrol">
+        <mkdir dir="${gridsphere.build}/reports"/>
         <junit printsummary="yes" fork="yes" haltonfailure="no">
             <classpath>
                 <path refid="classpath"/>
@@ -757,7 +757,7 @@ Copyright:
             <test name="org.gridlab.gridsphere.GridSphereTest" todir="${gridsphere.build}/reports">
                 <formatter type="xml"/>
             </test>
-        </junit>     -->
+        </junit>
     </target>
 
     <!-- =================================================================== -->
