@@ -372,6 +372,38 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     //System.err.println("setting title mode to " + mymode);
                     titleBar.setPortletMode(mymode);
                 }
+
+		// see if state has been set
+                PortletFrameEventImpl frameEvent = null;
+                PortletWindow.State mystate  = (PortletWindow.State)request.getAttribute(SportletProperties.PORTLET_WINDOW);
+                if (mystate != null) {
+                    //System.err.println("setting title state to " + mystate);
+                    titleBar.setWindowState(mystate);
+
+                    if (mystate == PortletWindow.State.MINIMIZED) {
+                        renderPortlet = false;
+                    } else if (mystate == PortletWindow.State.RESIZING) {
+                        renderPortlet = true;
+                        frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_RESTORED, COMPONENT_ID);
+                        frameEvent.setOriginalWidth(originalWidth);
+                    } else if (mystate == PortletWindow.State.MAXIMIZED) {
+                        renderPortlet = true;
+                        frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);
+                    }
+
+                    List slisteners = Collections.synchronizedList(listeners);
+                    synchronized (slisteners) {
+                        Iterator it = slisteners.iterator();
+                        PortletComponent comp;
+                        while (it.hasNext()) {
+                            comp = (PortletComponent) it.next();
+                            event.addNewRenderEvent(frameEvent);
+                            comp.actionPerformed(event);
+                        }
+                    }
+
+
+                }
             }
 
             // see if render params are set
