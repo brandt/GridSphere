@@ -204,7 +204,7 @@ public class PortletManager implements PortletManagerService {
     protected synchronized void removePortletWebApplication(String webApplicationName) {
         log.debug("in removePortletWebApplication: " + webApplicationName);
         Iterator it = webapps.iterator();
-        List removeWebApps = new ArrayList();
+
         while (it.hasNext()) {
             PortletWebApplication webApp = (PortletWebApplication) it.next();
 
@@ -217,14 +217,8 @@ public class PortletManager implements PortletManagerService {
                     registry.removeApplicationPortlet(appPortlet);
                 }
                 log.debug("removing " + webApp.getWebApplicationName());
-                //webapps.remove(webApp);
-                removeWebApps.add(webApp);
+                it.remove();
             }
-        }
-
-        it = removeWebApps.iterator();
-        while (it.hasNext()) {
-            webapps.remove(it.next());
         }
         removePortletFile(webApplicationName);
     }
@@ -255,7 +249,7 @@ public class PortletManager implements PortletManagerService {
                 it.remove();
             }
         }
-       
+
         removePortletFile(webApplication.getWebApplicationName());
     }
 
