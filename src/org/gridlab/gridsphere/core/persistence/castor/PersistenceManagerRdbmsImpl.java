@@ -17,6 +17,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.BaseObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -58,6 +59,8 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     public void create(Object object) throws PersistenceManagerException {
 
         Database db = null;
+        BaseObject b = (BaseObject)object;
+        log.debug("Trying to save object with oid "+b.getOid()+" class: "+b.getClass().getName());
 
         try {
             db = jdo.getDatabase();
@@ -89,6 +92,8 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
      */
     public void update(Object object) throws PersistenceManagerException {
         Database db = null;
+        BaseObject b = (BaseObject)object;
+        log.debug("Trying to update object with oid "+b.getOid()+" class: "+b.getClass().getName());
         // get Database
         try {
             db = jdo.getDatabase();

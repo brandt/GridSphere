@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
+ * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id$
  *
  * All objects which want to be persistent to a rdbms have to extend this
@@ -46,15 +46,21 @@ public class BaseObject implements TimeStampable, Persistent {
 
     public BaseObject() {
         super();
-        this.ObjectID = UniqueID.get();
+        UniqueID uid = UniqueID.getInstance();
+        this.ObjectID = uid.get();
+        timestamp = 0;
+        log.debug("constructor oid:" + ObjectID);
     }
 
     /**
      * Init the object.
      */
-    public void init() {
+/*    public void init() {
         timestamp = 0;
-    }
+        UniqueID uid = UniqueID.getInstance();
+        this.ObjectID = uid.get();
+        log.debug("Init ");
+    }                           */
 
     /**
      * Returns the timestamp
@@ -133,17 +139,17 @@ public class BaseObject implements TimeStampable, Persistent {
 
         Vector newVector = new Vector();
 
-        for (int i=0;i<vector.size();i++) {
+        for (int i = 0; i < vector.size(); i++) {
 
             Object v = new Object();
 
             try {
                 v = cl.newInstance();
 
-                Method m1 = cl.getMethod("setValue", new Class[] { String.class } );
-                Method m2 = cl.getMethod("setReference", new Class[] { Object.class } );
-                m1.invoke(v, new Object[] { vector.get(i) } );
-                m2.invoke(v, new Object[] { object } );
+                Method m1 = cl.getMethod("setValue", new Class[]{String.class});
+                Method m2 = cl.getMethod("setReference", new Class[]{Object.class});
+                m1.invoke(v, new Object[]{vector.get(i)});
+                m2.invoke(v, new Object[]{object});
             } catch (InstantiationException e) {
             } catch (IllegalAccessException e) {
             } catch (NoSuchMethodException e) {
@@ -172,8 +178,8 @@ public class BaseObject implements TimeStampable, Persistent {
 
         Vector newVector = new Vector();
 
-        for (int i=0;i<vector.size();i++) {
-            StringVector sv = (StringVector)vector.get(i);
+        for (int i = 0; i < vector.size(); i++) {
+            StringVector sv = (StringVector) vector.get(i);
             newVector.add(sv.getValue());
         }
 
@@ -186,7 +192,7 @@ public class BaseObject implements TimeStampable, Persistent {
      * @return User information represented as a String
      */
     public boolean equals(Object object) {
-        return this.ObjectID.equals(((BaseObject)object).ObjectID);
+        return this.ObjectID.equals(((BaseObject) object).ObjectID);
     }
 }
 

@@ -37,7 +37,8 @@ public class Attribute extends BaseObject {
     public Attribute(String k, String v) {
         Key = k;
         Value = v;
-        this.setOid(UniqueID.get());
+        UniqueID uid = UniqueID.getInstance();
+        this.setOid(uid.get());
     }
 
     public String getKey() {
