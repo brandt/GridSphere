@@ -15,13 +15,11 @@ package org.gridlab.gridsphere.core.security;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.core.security.Credential;
 import org.gridlab.gridsphere.core.security.CredentialPermission;
-import org.gridlab.gridsphere.core.security.CredentialHostMapping;
-import org.gridlab.gridsphere.core.security.CredentialUserMapping;
+import org.gridlab.gridsphere.core.security.CredentialPermissionNotFoundException;
+import org.gridlab.gridsphere.core.security.CredentialMap;
+import org.gridlab.gridsphere.core.security.CredentialMapNotFoundException;
 import org.gridlab.gridsphere.core.security.CredentialExpiredException;
 import org.gridlab.gridsphere.core.security.CredentialNotActiveException;
-import org.gridlab.gridsphere.core.security.CredentialPermissionNotFoundException;
-import org.gridlab.gridsphere.core.security.CredentialHostMappingNotFoundException;
-import org.gridlab.gridsphere.core.security.CredentialUserMappingNotFoundException;
 
 import java.util.List;
 
