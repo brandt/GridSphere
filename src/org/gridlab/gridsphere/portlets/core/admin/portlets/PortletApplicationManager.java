@@ -52,14 +52,19 @@ public class PortletApplicationManager extends ActionPortlet {
 
     public void listPortlets(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
-        List result = new ArrayList();
+        List portletapps = new ArrayList();
+        List otherapps = new ArrayList();
+
         try {
-            result = tomcat.getPortletAppList(req);
-            event.getPortletRequest().setAttribute("result", result);
+            portletapps = tomcat.getPortletAppList(req);
+            otherapps = tomcat.getNonPortletAppList(req);
+            event.getPortletRequest().setAttribute("result", portletapps);
+            event.getPortletRequest().setAttribute("others", otherapps);
             log.info("result is OK");
         } catch (TomcatManagerException e) {
             log.error("Unable to retrieve list of portlets. Make sure tomcat-users.xml has been edited according to the UserGuide.");
-            event.getPortletRequest().setAttribute("result", result);
+            event.getPortletRequest().setAttribute("result", portletapps);
+            event.getPortletRequest().setAttribute("others", otherapps);
             MessageBoxBean msg = event.getMessageBoxBean("msg");
             msg.setKey("PORTLET_ERR_LIST");
             msg.setMessageType(MessageStyle.MSG_ERROR);

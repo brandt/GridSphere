@@ -110,6 +110,25 @@ public class TomcatManagerWrapper {
         return l;
     }
 
+    public List getNonPortletAppList(PortletRequest req) throws TomcatManagerException {
+        List webapps = pm.getPortletWebApplicationNames();
+        List l = new ArrayList();
+        TomcatWebAppResult result = doCommand(req, "/list");
+        if (result != null) {
+            Iterator it = result.getWebAppDescriptions().iterator();
+            while (it.hasNext()) {
+                TomcatWebAppDescription webAppDesc = (TomcatWebAppDescription) it.next();
+                //System.err.println(webAppDesc.toString());
+                if (!webapps.contains((webAppDesc.getContextPath()))) {
+                    //String desc = pm.getPortletWebApplicationDescription(webAppDesc.getContextPath());
+                    //webAppDesc.setDescription("");
+                    l.add(webAppDesc);
+                }
+            }
+        }
+        return l;
+    }
+
     public TomcatWebAppResult reloadWebApp(PortletRequest req, String context) throws TomcatManagerException {
         if (!context.startsWith("/")) context = "/" + context;
         return doCommand(req, "/reload?path=" + context);

@@ -10,7 +10,7 @@
 
 <ui:messagebox beanId="msg"/>
 
-<ui:group label="Current portlet applications">
+<ui:group key="PORTLET_CURRENT">
 
     <ui:frame>
     <ui:tablerow header="true">
@@ -67,6 +67,67 @@
             <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
         </ui:actionlink>
     <% } %>
+    </ui:tablecell>
+    </ui:tablerow>
+
+    <% } %>
+
+</ui:frame>
+</ui:group>
+
+<ui:group key="PORTLET_NON">
+
+    <ui:frame>
+    <ui:tablerow header="true">
+        <ui:tablecell>
+            <ui:text key="PORTLET_NONWEBAPP"/>
+        </ui:tablecell>
+        <ui:tablecell>
+            <ui:text key="PORTLET_DESC"/>
+        </ui:tablecell>
+        <ui:tablecell>
+            <ui:text key="PORTLET_RUNNING"/>
+        </ui:tablecell>
+         <ui:tablecell>
+            <ui:text key="PORTLET_SESSIONS"/>
+        </ui:tablecell>
+        <ui:tablecell>
+            <ui:text key="PORTLET_ACTIONS"/>
+        </ui:tablecell>
+    </ui:tablerow>
+
+<% List results = (List)request.getAttribute("others"); %>
+<% Iterator its = results.iterator(); %>
+<% while (its.hasNext()) { %>
+<% TomcatWebAppDescription description = (TomcatWebAppDescription)its.next(); %>
+
+    <ui:tablerow>
+    <ui:tablecell><ui:text value="<%= description.getContextPath() %>"/></ui:tablecell>
+    <ui:tablecell><ui:text value="<%= description.getDescription() %>"/></ui:tablecell>
+    <ui:tablecell><ui:text value="<%= description.getRunning() %>"/></ui:tablecell>
+    <ui:tablecell><ui:text value="<%= description.getSessions() %>"/></ui:tablecell>
+    <ui:tablecell>
+    <% if (description.getRunningState() == TomcatWebAppDescription.STOPPED) { %>
+        &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_START">
+            <ui:actionparam name="operation" value="start"/>
+            <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
+        </ui:actionlink>&nbsp;&nbsp;
+        &nbsp;&nbsp;<ui:text key="PORTLET_STOP"/>&nbsp;&nbsp;
+      <% } else { %>
+        &nbsp;&nbsp;<ui:text key="PORTLET_START"/>&nbsp;&nbsp;
+        &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_STOP">
+            <ui:actionparam name="operation" value="stop"/>
+            <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
+        </ui:actionlink>&nbsp;&nbsp;
+      <% } %>
+        &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_RELOAD">
+            <ui:actionparam name="operation" value="reload"/>
+            <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
+        </ui:actionlink>&nbsp;&nbsp;
+        &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_REMOVE">&nbsp;&nbsp;
+            <ui:actionparam name="operation" value="remove"/>
+            <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
+        </ui:actionlink>
     </ui:tablecell>
     </ui:tablerow>
 
