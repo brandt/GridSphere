@@ -75,9 +75,12 @@ public class PortletTabRegistry {
     }
 
     public static void loadPage(String file) throws IOException, PersistenceManagerException {
-        guestPage = PortletLayoutDescriptor.loadPortletPage(file, layoutMappingFile);
+        PortletLayoutDescriptor.loadPortletPage(file, layoutMappingFile);
     }
 
+    public static void loadTab(String file) throws IOException, PersistenceManagerException {
+        PortletLayoutDescriptor.loadPortletTabs(file, layoutMappingFile);
+    }
 
     public static PortletPage getGuestLayoutPage() {
         if (guestPage == null) {
