@@ -230,7 +230,7 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
             String newkey = SportletProperties.RENDER_PARAM_PREFIX + key;
             params.put(newkey, vals);
         }
-
+        renderParams.clear();
         renderParams.putAll(params);
 
         isRedirectAllowed = false;
