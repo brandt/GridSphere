@@ -72,10 +72,10 @@ public class NoteServiceImpl implements NoteService, PortletServiceProvider {
                 return "";
             } catch (PersistenceManagerException e) {
                 e.printStackTrace();
-                return "Error: Problem creating note " + name + " in storage.";
+                return "NOTEPAD_DBERROR";
             }
         }
-        return "Error: Note with name " + name + " already exists.";
+        return "NOTEPAD_NOTEEXISTS";
     }
 
     public void deleteNote(Note Note) {
@@ -116,7 +116,7 @@ public class NoteServiceImpl implements NoteService, PortletServiceProvider {
             pm.update(Note);
         } catch (PersistenceManagerException e) {
             e.printStackTrace();
-            return "Error: updating note " + Note.getName() + " failed.";
+            return "NOTEPAD_DBERROR";
         }
         return "";
     }

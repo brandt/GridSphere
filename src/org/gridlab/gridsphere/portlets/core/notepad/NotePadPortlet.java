@@ -82,7 +82,7 @@ public class NotePadPortlet extends ActionPortlet {
             setNextState(request, "showList");
         } else {
             FrameBean frame = event.getFrameBean("errorFrame");
-            frame.setValue(message);
+            frame.setKey(message);
             frame.setStyle(FrameBean.ERROR_TYPE);
             request.setAttribute("np_action", "new");
             Note note = new Note();
@@ -115,7 +115,7 @@ public class NotePadPortlet extends ActionPortlet {
         String message = noteservice.update(Note);
         if (!message.equals("")) {
             FrameBean frame = event.getFrameBean("errorFrame");
-            frame.setValue(message);
+            frame.setKey(message);
         }
         TextFieldBean search = event.getTextFieldBean("search");
         request.setAttribute("np_action", "view");
