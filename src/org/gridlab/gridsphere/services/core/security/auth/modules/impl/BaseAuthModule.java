@@ -45,7 +45,6 @@ public abstract class BaseAuthModule implements Comparable {
     }
 
     public String getModuleDescription(Locale locale) {
-        System.err.println("hello");
         List modDescs = moduleDef.getModuleDescriptions();
         if (locale == null) throw new IllegalArgumentException("locale is NULL");
         Iterator it = modDescs.iterator();
