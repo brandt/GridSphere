@@ -10,12 +10,12 @@
       <td width="100%">
         <table width="100%" border="0" cellspacing="1" cellpadding="1" bgcolor="<%= linecolor %>">
           <tr>
-            <td><img src="/gridsphere/images/help.gif" align=left></td>
+            <td><img src="images/help.gif" align=left></td>
             <td height="20" align="left" valign="middle">
               <font color="#FFFFFF" face="<%= font %>">
               &nbsp;<%= title %>
               </font></td>
-             <td><img src="/gridsphere/images/window.gif" align=right></td>
+             <td><img src="images/window.gif" align=right></td>
           </tr>
         </table>
       </td>
