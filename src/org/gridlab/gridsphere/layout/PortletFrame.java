@@ -35,7 +35,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     public static final String FRAME_CLOSE_CANCEL_ACTION = "cancelClose";
 
-    private CacheService cacheService = null;
+    private transient CacheService cacheService = null;
 
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
@@ -373,7 +373,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     && (!event.getAction().getName().equals(FRAME_CLOSE_OK_ACTION))
                     && (!event.getAction().getName().equals(FRAME_CLOSE_CANCEL_ACTION))) {
                 DefaultPortletAction action = event.getAction();
-                if (!action.getName().equals("")) {
+                //if (!action.getName().equals("")) {
                     try {
                         PortletInvoker.actionPerformed(portletClass, action, req, res);
                     } catch (Exception e) {
@@ -383,7 +383,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     if (message != null) {
                         errorFrame.setMessage(message);
                     }
-                }
+                //}
                 // in case portlet mode got reset
             }
 

@@ -375,7 +375,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      */
     protected void doConfig() {
         PortletRegistry registryManager = PortletRegistry.getInstance();
-        String appID = registryManager.getApplicationPortletID(portletClass);
+        String appID = PortletRegistry.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
         if (appPortlet != null) {
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
@@ -488,7 +488,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         List supportedModes = new ArrayList();
         // set portlet modes
         PortletRegistry registryManager = PortletRegistry.getInstance();
-        String appID = registryManager.getApplicationPortletID(portletClass);
+        String appID = PortletRegistry.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
         if (appPortlet != null) {
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
@@ -714,7 +714,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
             ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
             String value = bundle.getString("PORTLET_UNAVAILABLE");
-            title = portletClass + " is currently unavailable!\n";
+            title = portletClass + value + "\n";
             hasError = true;
             errorMessage = "PortletException:"+e.getMessage();
             log.error(portletClass + " is currently unavailable:",e);

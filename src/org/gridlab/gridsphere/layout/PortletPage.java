@@ -31,7 +31,7 @@ public class PortletPage implements Serializable, Cloneable {
 
     protected int COMPONENT_ID = -1;
 
-    protected CacheService cacheService = null;
+    protected transient CacheService cacheService = null;
 
     protected PortletContainer footerContainer = null;
     protected PortletContainer headerContainer = null;

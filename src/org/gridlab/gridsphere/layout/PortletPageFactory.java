@@ -4,10 +4,10 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
-import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 
 import java.io.*;
 import java.util.*;
@@ -179,6 +179,49 @@ public class PortletPageFactory implements PortletSessionListener {
                 log.error("Unable to make a clone of the templatePage", e);
             }
         }
+
+        // check for portlets no longer in groups and remove if necessary
+        Map groups = (Map)req.getAttribute(SportletProperties.PORTLETGROUPS);
+        List allowedPortlets = new ArrayList();
+        Iterator it = groups.keySet().iterator();
+        while (it.hasNext()) {
+            PortletGroup g = (PortletGroup)it.next();
+            Set s = g.getPortletRoleList();
+            Iterator sit = s.iterator();
+            while (sit.hasNext()) {
+                SportletRoleInfo roleInfo = (SportletRoleInfo)sit.next();
+                allowedPortlets.add(roleInfo.getPortletClass());
+            }
+        }
+
+        // create tmp page
+        try {
+        PortletPage tmpPage = new PortletPage();
+        //tmpPage.setLayoutDescriptor(userLayout + ".tmp");
+        tmpPage.setPortletTabbedPane((PortletTabbedPane)deepCopy(pane));
+        tmpPage.init(req, new ArrayList());
+        List complist = tmpPage.getComponentIdentifierList();
+
+        it = complist.iterator();
+        while (it.hasNext()) {
+            ComponentIdentifier cid = (ComponentIdentifier)it.next();
+            if (cid.getPortletComponent() instanceof PortletFrame) {
+                if (!allowedPortlets.contains(cid.getPortletClass())) {
+                    PortletComponent pc = cid.getPortletComponent();
+                    PortletComponent parent = pc.getParentComponent();
+                    System.err.println("removing portlet class= " + cid.getPortletClass());
+                    //parent.remove(pc, req);
+                }
+            }
+        }
+
+        pane.save();
+
+        } catch (Exception e) {
+            log.error("Unable to save user pane!", e);
+        }
+
+
         return pane;
     }
 
@@ -201,10 +244,6 @@ public class PortletPageFactory implements PortletSessionListener {
 
             pane = newPage.getPortletTabbedPane();
 
-
-            // @TODO see if user has a "user" tab
-
-
             PortletTabbedPane userPane = getUserTabbedPane(req);
             if (userPane != null) {
                 List  userTabs = userPane.getPortletTabs();
@@ -215,42 +254,33 @@ public class PortletPageFactory implements PortletSessionListener {
                 }
             }
 
-            // get groups that a user is member of
-            PortletManager manager = PortletManager.getInstance();
-            List webappNames = manager.getPortletWebApplicationNames();
-
             PortletTabbedPane gsTab  = PortletTabRegistry.getGroupTabs(PortletGroupFactory.GRIDSPHERE_GROUP.getName());
             List tabs = gsTab.getPortletTabs();
             for (int j = 0; j < tabs.size(); j++) {
                 PortletTab tab = (PortletTab)tabs.get(j);
                 System.err.println("adding tab: " + tab.getTitle("en"));
-                //pane.addTab(g.getName(), (PortletTab)tab.clone());
                 pane.addTab((PortletTab)deepCopy(tab));
             }
 
+            Iterator it = groups.keySet().iterator();
+            while (it.hasNext()) {
+                PortletGroup g = (PortletGroup)it.next();
 
-            //for (int i = 0; i < webappNames.size(); i++) {
-             //   String webappName = (String)webappNames.get(i);
-                Iterator it = groups.keySet().iterator();
-                while (it.hasNext()) {
-                    PortletGroup g = (PortletGroup)it.next();
+                if (g.getName().equals(PortletGroupFactory.GRIDSPHERE_GROUP.getName())) continue;
 
-                    if (g.getName().equals(PortletGroupFactory.GRIDSPHERE_GROUP.getName())) continue;
-                    //if (g.getName().equals(webappName)) {
-                    log.debug("adding group layout: " + g.getName());
-                    PortletTabbedPane portletTabs = PortletTabRegistry.getGroupTabs(g.getName());
-                    if (portletTabs != null) {
-                        tabs = portletTabs.getPortletTabs();
-                        for (int j = 0; j < tabs.size(); j++) {
-                            PortletTab tab = (PortletTab)tabs.get(j);
-                            System.err.println("adding tab: " + tab.getTitle("en"));
-                            //pane.addTab(g.getName(), (PortletTab)tab.clone());
-                            pane.addTab((PortletTab)deepCopy(tab));
-                        }
+                log.debug("adding group layout: " + g.getName());
+                PortletTabbedPane portletTabs = PortletTabRegistry.getGroupTabs(g.getName());
+                if (portletTabs != null) {
+                    tabs = portletTabs.getPortletTabs();
+                    for (int j = 0; j < tabs.size(); j++) {
+                        PortletTab tab = (PortletTab)tabs.get(j);
+                        System.err.println("adding tab: " + tab.getTitle("en"));
+                        //pane.addTab(g.getName(), (PortletTab)tab.clone());
+                        pane.addTab((PortletTab)deepCopy(tab));
                     }
-                    //}
                 }
-            //}
+            }
+
             User user = req.getUser();
             String theme = (String)user.getAttribute(User.THEME);
             if (theme != null) newPage.setTheme(theme);
