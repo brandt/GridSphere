@@ -4,7 +4,9 @@
 
 <portletAPI:init/>
 
-<jsp:useBean id="locale" class="java.util.Locale" scope="request"/>
+<% Locale locale = (Locale)request.getAttribute("locale"); %>
+
+<br>
 
 <ui:form name="localeform" action="selectLang">
     <% String flag = "/gridsphere/html/flags/"+locale.getLanguage() +".gif"; %>
