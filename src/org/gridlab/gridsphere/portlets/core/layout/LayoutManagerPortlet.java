@@ -55,6 +55,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         ListBoxBean themeLB = event.getListBoxBean("themeLB");
+
+        String theme = layoutMgr.getTheme(req);
         themeLB.clear();
         String themes = getPortletSettings().getAttribute("supported-themes");
         StringTokenizer st = new StringTokenizer(themes, ",");
@@ -62,6 +64,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             ListBoxItemBean lb = new ListBoxItemBean();
             String val = (String)st.nextElement();
             lb.setValue(val.trim());
+            if (val.trim().equalsIgnoreCase(theme)) lb.setSelected(true);
             themeLB.addBean(lb);
         }
 
