@@ -37,6 +37,8 @@
             <portlet-tab label="home">
                 <title lang="en">Home</title>
                 <title lang="it">Inizio</title>
+		<title lang="pl">Start</title>
+		<title lang="hu">Üdvözöllek</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="70%">

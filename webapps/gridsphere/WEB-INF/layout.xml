@@ -5,10 +5,14 @@
         <title lang="en">Welcome</title>
         <title lang="de">Willkommen</title>
         <title lang="it">Benvenuto</title>
+	<title lang="pl">Witamy</title>
+	<title lang="hu">Üdvözöllek</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="home">
                 <title lang="en">Home</title>
                 <title lang="it">Inizio</title>
+		<title lang="pl">Start</title>
+		<title lang="hu">Otthon</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -22,6 +26,8 @@
             <portlet-tab label="settings">
                 <title lang="en">Settings</title>
                 <title lang="it">Preferenze</title>
+		<title lang="pl">Ustawienia</title>
+		<title lang="hu">Beállítások</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -35,6 +41,8 @@
             <portlet-tab label="subscribe">
                 <title lang="en">Subscription</title>
                 <title lang="it">Sottoscrizione</title>
+		<title lang="pl">Subskrypcje</title>
+		<title lang="hu">Feliratkozás</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -48,6 +56,7 @@
             <portlet-tab label="layouttab">
                 <title lang="en">Layout</title>
                 <title lang="it">Layout</title>
+		<title lang="hu">Kinézet</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -61,6 +70,7 @@
             <portlet-tab label="utilities">
                 <title lang="en">Utilities</title>
                 <title lang="it">Utilità</title>
+		<title lang="hu">Segédprogramok</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -88,9 +98,13 @@
     <portlet-tab label="admin" required-role="SUPER">
         <title lang="en">Administration</title>
         <title lang="it">Amministrazione</title>
+	<title lang="pl">Administracja</title>
+	<title lang="hu">Adminisztráció</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="portlets">
                 <title lang="en">Portlets</title>
+		<title lang="pl">Portlety</title>
+		<title lang="hu">Portletek</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="30%">
@@ -109,6 +123,7 @@
             <portlet-tab label="users">
                 <title lang="en">Users</title>
                 <title lang="it">Utenti</title>
+		<title lang="hu">Felhasználók</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -123,6 +138,8 @@
             <portlet-tab label="groups">
                 <title lang="en">Groups</title>
                 <title lang="it">Gruppi</title>
+		<title lang="pl">Grupy</title>
+		<title lang="hu">Csoportok</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
