@@ -515,7 +515,16 @@ public class AccessControlManager implements AccessControlManagerService {
             Iterator it = portletRoleList.iterator();
             while (it.hasNext()) {
                 SportletRoleInfo info = (SportletRoleInfo)it.next();
-                System.err.println("role= " + info.getRole() + " class=" + info.getPortletClass());
+                System.err.println("XXX role= " + info.getRole() + " class=" + info.getPortletClass()+" OID "+info.getOid());
+                try {
+                    if (info.getOid()==null) {
+                        pm.create(info);
+                    } else {
+                        pm.update(info);
+                    }
+                } catch (PersistenceManagerException e) {
+                    log.error("Error creating SportletRoleInfo "+info.getRole(), e);
+                }
             }
             group.setPortletRoleList(portletRoleList);
             try {
