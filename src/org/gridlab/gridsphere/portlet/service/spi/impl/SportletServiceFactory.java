@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portlet.service.spi.impl;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.impl.GuestUser;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
@@ -19,8 +20,6 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServic
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
-import org.gridlab.gridsphere.services.security.acl.impl.AccessControlManagerServiceImpl;
-import org.gridlab.gridsphere.services.user.impl.UserManagerServiceImpl;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -50,9 +49,6 @@ public class SportletServiceFactory implements PortletServiceFactory {
 
     private String serviceMappingPath;
 
-    //private AccessControlManagerServiceImpl aclManagerService = AccessControlManagerServiceImpl.getInstance();
-    //private UserManagerServiceImpl userManagerService = UserManagerServiceImpl.getInstance();
-
     /**
      * Private constructor. Use getInstance() instead.
      */
@@ -62,6 +58,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
         String servicesPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_XML);
         serviceMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_MAPPING_XML);
         addServices(servicesPath, serviceMappingPath);
+
     }
 
     private SportletServiceFactory(ServletContext context) {
@@ -97,17 +94,6 @@ public class SportletServiceFactory implements PortletServiceFactory {
     }
 
     public static SportletServiceFactory getInstance() {
-        return instance;
-    }
-
-    public static SportletServiceFactory getInstance(ServletContext ctx) {
-        String contextName = ctx.getServletContextName();
-        if (serviceFactories.contains(contextName)) {
-            return (SportletServiceFactory) serviceFactories.get(contextName);
-        } else {
-            SportletServiceFactory newFactory = new SportletServiceFactory(ctx);
-            serviceFactories.put(contextName, newFactory);
-        }
         return instance;
     }
 
@@ -149,6 +135,11 @@ public class SportletServiceFactory implements PortletServiceFactory {
             throw new PortletServiceNotFoundException("Unable to find portlet service: " + serviceName);
         }
 
+        // if user is required then pass in Guest user privileges
+        if (def.getUserRequired()) {
+            return createPortletUserService(service, GuestUser.getInstance(), servletConfig, useCachedService);
+        }
+
         /* Create the service implementation */
         String serviceImpl = def.getImplementation();
         if (serviceImpl == null) {
@@ -162,6 +153,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
 
         PortletServiceConfig portletServiceConfig =
                 new SportletServiceConfig(service, configProperties, servletConfig);
+
         try {
             psp = (PortletServiceProvider) Class.forName(serviceImpl).newInstance();
         } catch (Exception e) {
@@ -199,9 +191,6 @@ public class SportletServiceFactory implements PortletServiceFactory {
 
         String serviceName = service.getName();
 
-        // get instance of ACL service
-        PortletService serviceImpl = createPortletService(service, servletConfig, useCachedService);
-
         SportletServiceDefinition def = (SportletServiceDefinition) allServices.get(serviceName);
         if (def == null) {
             log.error("Unable to find portlet service interface: " + serviceName +
@@ -209,23 +198,27 @@ public class SportletServiceFactory implements PortletServiceFactory {
             throw new PortletServiceNotFoundException("Unable to find portlet service: " + serviceName);
         }
 
+        if (!def.getUserRequired()) {
+            return createPortletService(service, servletConfig, useCachedService);
+        }
+
         /* Create the service implementation */
-        String serviceWrapperName = def.getSecureWrapper();
-        if (serviceWrapperName == null) {
-            log.error("Unable to find secure wrapper implementing portlet service: " + serviceWrapperName +
+        String serviceImpl = def.getImplementation();
+        if (serviceImpl == null) {
+            log.error("Unable to find implementing portlet service: " + serviceName +
                     " . Please check PortletServices.xml file for proper service entry");
-            throw new PortletServiceNotFoundException("Unable to find implementing portlet service wrapper for interface: " + serviceWrapperName);
+            throw new PortletServiceNotFoundException("Unable to find implementing portlet service for interface: " + serviceName);
         }
 
         // instantiate wrapper with user and impl
         try {
-            Class c = Class.forName(serviceWrapperName);
-            Class[] parameterTypes = new Class[]{PortletServiceProvider.class, User.class};
-            Object[] obj = new Object[]{serviceImpl, user};
+            Class c = Class.forName(serviceImpl);
+            Class[] parameterTypes = new Class[]{User.class};
+            Object[] obj = new Object[]{user};
             Constructor con = c.getConstructor(parameterTypes);
             psp = (PortletServiceProvider) con.newInstance(obj);
         } catch (Exception e) {
-            log.error("Unable to create portlet service wrapper: " + serviceWrapperName, e);
+            log.error("Unable to create portlet service wrapper: " + serviceImpl, e);
             throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceName);
         }
         return psp;

@@ -20,6 +20,7 @@ public class SportletServiceDefinition {
     protected String Interface = "";
     protected String Implementation = "";
     protected String SecureWrapper = "";
+    protected boolean UserRequired = false;
     protected List ConfigParamList = new Vector();
     protected Properties configProps = null;
 
@@ -63,6 +64,13 @@ public class SportletServiceDefinition {
         this.SecureWrapper = SecureWrapper;
     }
 
+    public void setUserRequired(boolean UserRequired) {
+        this.UserRequired = UserRequired;
+    }
+
+    public boolean getUserRequired() {
+        return UserRequired;
+    }
 
     public void setConfigParamList(Vector ConfigParamList) {
         this.ConfigParamList = ConfigParamList;
