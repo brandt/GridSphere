@@ -33,8 +33,6 @@ Copyright:
     <property name="project.name" value="@PROJECT_NAME@"/>
     <property name="project.title" value="@PROJECT_TITLE@"/>
 
-    <!-- ow <property name="gridsphere.home" value="../.."/>  -->
-
     <property name="optimize" value="false"/>
     <property name="debug" value="on"/>
     <property name="deprecation" value="true"/>
@@ -117,9 +115,6 @@ Copyright:
         <mkdir dir="${build.webapp}"/>
         <mkdir dir="${build.docs}"/>
 
-        <!-- ow -->
-        <!-- home of deployed gridsphere -->
-        <property name="GRIDSPHERE_HOME" value="${env.CATALINA_HOME}/gridsphere"/>
         <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/test"/>
 
         <echo message="--- Build environment for ${project} ---"/>
@@ -131,7 +126,6 @@ Copyright:
         <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}"/>
         <echo message="CATALINA_HOME is set to = ${env.CATALINA_HOME}"/>
         <echo message="TEST_HOME is set to = ${TEST_HOME}"/>
-        <echo message="GRIDSPHERE_HOME is set to = ${GRIDSPHERE_HOME}"/>
 
         <echo message="--- Property values ---"/>
         <echo message="debug=${debug}"/>
