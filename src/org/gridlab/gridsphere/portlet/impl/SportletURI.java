@@ -142,24 +142,6 @@ public class SportletURI implements PortletURI {
     }
 
     /**
-     * Adds ActionParameter to the URI.
-     *
-     * @param name name of the parameter
-     * @param value value of the parameter
-     */
-    public void addActionParameter(String name, String value) {
-        store.put(id+"_"+name, value);
-    }
-
-    /**
-     * Removes an actionParameter from the URI
-     * @param name name of the parameter to be removed
-     */
-    public void removeActionParameter(String name) {
-        store.remove(id+"_"+name);
-    }
-
-    /**
      * Sets the window state that will be invoked by this URI
      *
      * @param state the window state that will be invoked by this URI
