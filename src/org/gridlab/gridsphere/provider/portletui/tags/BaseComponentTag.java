@@ -191,8 +191,11 @@ public abstract class BaseComponentTag extends BaseBeanTag {
      * @param componentBean a ui bean
      */
     protected void updateBaseComponentBean(BaseComponentBean componentBean) {
+        if ((cssClass != null) && componentBean.getCssClass() == null) {
+            componentBean.setCssClass(cssClass);
+        }
         if ((cssStyle != null) && componentBean.getCssStyle() == null) {
-            componentBean.setCssClass(cssStyle);
+            componentBean.setCssStyle(cssStyle);
         }
         if ((name != null) && (componentBean.getName() == null)) {
             componentBean.setName(name);
@@ -208,6 +211,9 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     }
 
     protected void overrideBaseComponentBean(BaseComponentBean componentBean) {
+        if (cssClass != null) {
+            componentBean.setCssClass(cssClass);
+        }
         if (cssStyle != null) {
             componentBean.setCssClass(cssStyle);
         }
@@ -222,6 +228,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         } else {
             supportsJS = false;
         }
+
     }
 
     protected String getLocalizedText(String key) {

@@ -8,6 +8,7 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 import org.gridlab.gridsphere.provider.portletui.beans.MessageStyle;
+import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -95,6 +96,23 @@ public class TextTag extends BaseComponentTag {
         this.key = key;
     }
 
+    protected void setBaseComponentBean(BaseComponentBean componentBean) {
+        super.setBaseComponentBean(componentBean);
+        if (style != null) ((TextBean)componentBean).setStyle(style);
+    }
+
+    protected void updateBaseComponentBean(BaseComponentBean componentBean) {
+        super.setBaseComponentBean(componentBean);
+        if (style != null && ((TextBean)componentBean).getStyle() == null) {
+            ((TextBean)componentBean).setStyle(style);
+        }
+    }
+
+    protected void overrideBaseComponentBean(BaseComponentBean componentBean) {
+        super.setBaseComponentBean(componentBean);
+        if (style != null) ((TextBean)componentBean).setStyle(style);
+    }
+
     public int doStartTag() throws JspException {
         return EVAL_BODY_BUFFERED;
     }
@@ -107,7 +125,8 @@ public class TextTag extends BaseComponentTag {
                 textBean = new TextBean();
                 this.setBaseComponentBean(textBean);
             } else {
-                this.updateBaseComponentBean(textBean);
+                //this.updateBaseComponentBean(textBean);
+                this.overrideBaseComponentBean(textBean);
                 key = textBean.getValue();
             }
         } else {

@@ -116,7 +116,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
      */
     protected String checkDisabled() {
         if (disabled) {
-            return " disabled='disabled' ";
+            return " disabled ";
         } else {
             return "";
         }
@@ -141,13 +141,13 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     }
 
     /**
-     * Returns 'disabled' string if bean is read-only, blank string otherwise
+     * Returns 'readonly' string if bean is read-only, blank string otherwise
      *
-     * @return 'disabled' string if bean is read-only, blank string otherwise
+     * @return 'readonly' string if bean is read-only, blank string otherwise
      */
     protected String checkReadOnly() {
         if (readonly) {
-            return " readonly='readonly' ";
+            return " readonly ";
         } else {
             return "";
         }
