@@ -53,7 +53,7 @@ public class CheckboxTag extends BaseComponentTag {
             checkbox.setSelected(selected);
             this.setBaseComponentBean(checkbox);
         }
-
+        if (selected) checkbox.setSelected(selected);
         //debug();
 
         Tag parent = getParent();
