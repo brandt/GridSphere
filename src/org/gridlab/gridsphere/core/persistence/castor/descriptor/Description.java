@@ -2,23 +2,23 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.layout;
+package org.gridlab.gridsphere.core.persistence.castor.descriptor;
 
 import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * <code>PortletTitle</code> is used to store a locale dependent title
+ * <code>Description</code> is used to store a locale dependent titloe or description
  */
-public class PortletTitle implements Serializable, Cloneable {
+public class Description implements Serializable, Cloneable {
 
     private String lang = Locale.ENGLISH.getLanguage();
     private String text = "";
 
     /**
-     * Constructs an instance of PortletContent
+     * Constructs an instance of a Description
      */
-    public PortletTitle() {
+    public Description() {
     }
 
     /**
@@ -58,7 +58,7 @@ public class PortletTitle implements Serializable, Cloneable {
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletTitle t = (PortletTitle) super.clone();
+        Description t = (Description) super.clone();
         t.lang = this.lang;
         t.text = this.text;
         return t;
