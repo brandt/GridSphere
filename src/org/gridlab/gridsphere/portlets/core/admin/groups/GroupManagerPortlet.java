@@ -529,12 +529,12 @@ public class GroupManagerPortlet extends ActionPortlet {
         tr.setHeader(true);
 
         TextBean text = new TextBean();
-        text.setValue("Default");
+        text.setKey("GROUP_DEFAULT");
         tc.addBean(text);
 
         TableCellBean tc2 = new TableCellBean();
         TextBean text2 = new TextBean();
-        text2.setValue("Group name");
+        text2.setKey("GROUP_NAME");
         tc2.addBean(text2);
 
         tr.addBean(tc);
