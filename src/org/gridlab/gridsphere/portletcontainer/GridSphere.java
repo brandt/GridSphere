@@ -75,10 +75,10 @@ public class GridSphere extends HttpServlet {
             // Get a portlet config object
             portletConfig = new SportletConfig(config);
 
-            layoutEngine = PortletLayoutEngine.getInstance(portletConfig);
+            //layoutEngine = PortletLayoutEngine.getInstance(portletConfig);
 
             // used for debugging to reload descriptor each time
-            layoutEngine.setAutomaticReload(true);
+            //layoutEngine.setAutomaticReload(true);
 
         } catch (Exception e) {
             initFailure = e;
@@ -114,6 +114,7 @@ public class GridSphere extends HttpServlet {
         PortletRequest portletRequest = new SportletRequest(req);
         PortletResponse portletResponse = new SportletResponse(res, portletRequest);
 
+        layoutEngine = new PortletLayoutEngine(portletConfig);
         ActionEvent actionEvent = null;
         AbstractPortlet activePortlet = null;
 
