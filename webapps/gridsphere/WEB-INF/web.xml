@@ -88,6 +88,11 @@
         <servlet-class>org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>SubscriptionPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
        <url-pattern>/gridsphere</url-pattern>
@@ -141,6 +146,11 @@
     <servlet-mapping>
         <servlet-name>NotePadPortlet</servlet-name>
         <url-pattern>/note/notepad</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SubscriptionPortlet</servlet-name>
+        <url-pattern>/subscription</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>
