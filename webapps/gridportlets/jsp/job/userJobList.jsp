@@ -62,14 +62,14 @@
 <%   for (int ii = 0; ii < numUsers; ++ii) {
       System.out.println("job " + ii + " for user");
        Job job = (Job)userJobList.get(ii);
+       String jobID = job.getID();
        JobSpecification jobSpecification = (JobSpecification)job.getJobSpecification();%>
         <tr>
           <td class="portlet-frame-text">
-            <% PortletURI actionURI = jobManagerBean.getPortletActionURI("doViewUserJob");
-               actionURI.addParameter("jobID", job.getID()); %>
-            <a href="<%=actionURI%>">
-              <%=job.getID()%>
-            </a>
+            <gs:actionlink action="doViewUserJob" label="start">
+              <gs:actionparam name="jobID" value="<%=jobID%>"/>
+              <gs:actionparam name="context" value="<%=jobID%>"/>
+            </gs:actionlink>
           </td>
           <td class="portlet-frame-text">
             <%=job.getRuntimeHost()%>
