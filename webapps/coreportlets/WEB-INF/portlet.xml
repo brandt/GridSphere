@@ -254,10 +254,10 @@
         <portlet-name>Logout</portlet-name>
         <default-locale>en</default-locale>
         <language locale="en_US">
-            <title>Login</title>
-            <title-short>Login</title-short>
+            <title>Logout</title>
+            <title-short>Logout</title-short>
             <description>Portlet provides logout capabilities</description>
-            <keywords>portlet login</keywords>
+            <keywords>portlet logout</keywords>
         </language>
         <owner>
             <group-name>CACTUS</group-name>
