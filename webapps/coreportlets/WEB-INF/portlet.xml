@@ -49,16 +49,9 @@
             <description>Hello World - Sample Portlet #1</description>
             <keywords>portlet hello world</keywords>
         </language>
-        <owner>
-            <group-name>CACTUS</group-name>
-            <role-name>ADMIN</role-name>
-        </owner>
-        <group>
-            <group-name>ANY</group-name>
-        </group>
-        <role>
-            <role-name>GUEST</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
         <config-param>
             <param-name>Portlet Master</param-name>
             <param-value>yourid@yourdomain.com</param-value>
@@ -84,16 +77,9 @@
             <param-name>Portlet Master</param-name>
             <param-value>yourid@yourdomain.com</param-value>
         </config-param>
-        <owner>
-            <group-name>CACTUS</group-name>
-            <role-name>ADMIN</role-name>
-        </owner>
-        <group>
-            <group-name>ANY</group-name>
-        </group>
-        <role>
-            <role-name>GUEST</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -133,16 +119,9 @@
             <description>Hallo Welt - Beispiel Portlet #1</description>
             <keywords>portlet hallo welt</keywords>
         </language>
-        <owner>
-            <group-name>CACTUS</group-name>
-            <role-name>ADMIN</role-name>
-        </owner>
-        <group>
-            <group-name>ANY</group-name>
-        </group>
-        <role>
-            <role-name>GUEST</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -196,16 +175,9 @@
             <description>Portlet provides login capabilities</description>
             <keywords>portlet login</keywords>
         </language>
-        <owner>
-            <group-name>CACTUS</group-name>
-            <role-name>ADMIN</role-name>
-        </owner>
-        <group>
-            <group-name>ANY</group-name>
-        </group>
-        <role>
-            <role-name>GUEST</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -259,16 +231,9 @@
             <description>Portlet provides logout capabilities</description>
             <keywords>portlet logout</keywords>
         </language>
-        <owner>
-            <group-name>CACTUS</group-name>
-            <role-name>ADMIN</role-name>
-        </owner>
-        <group>
-            <group-name>ANY</group-name>
-        </group>
-        <role>
-            <role-name>GUEST</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -295,15 +260,9 @@
             <description>Portlet provides subscription capabilities</description>
             <keywords>portlet subscription</keywords>
         </language>
-        <owner>
-            <role-name>SUPER</role-name>
-        </owner>
-        <group>
-            <group-name>ANY</group-name>
-        </group>
-        <role>
-            <role-name>GUEST</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -351,16 +310,9 @@
             <title>Portlet API Demo</title>
             <description>Displays Portlet Variables and Settings</description>
         </language>
-        <owner>
-            <group-name>CACTUS</group-name>
-            <role-name>ADMIN</role-name>
-        </owner>
-        <group>
-            <group-name>ANY</group-name>
-        </group>
-        <role>
-            <role-name>GUEST</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
         <config-param>
             <param-name>Portlet Master</param-name>
             <param-value>yourid@yourdomain.com</param-value>
@@ -418,16 +370,9 @@
             <description>a rss portlet</description>
             <keywords>rss portlet</keywords>
         </language>
-        <owner>
-            <group-name>CACTUS</group-name>
-            <role-name>ADMIN</role-name>
-        </owner>
-        <group>
-            <group-name>ANY</group-name>
-        </group>
-        <role>
-            <role-name>GUEST</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -481,15 +426,9 @@
             <description>Provides tools for administering user accounts</description>
             <keywords>user account administration</keywords>
         </language>
-        <owner>
-            <role-name>SUPER</role-name>
-        </owner>
-        <group>
-            <group-name>BASE</group-name>
-        </group>
-        <role>
-            <role-name>ADMIN</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -543,15 +482,9 @@
             <description>Provides tools for administering access to portlets</description>
             <keywords>access control user group role administration</keywords>
         </language>
-        <owner>
-            <role-name>SUPER</role-name>
-        </owner>
-        <group>
-            <group-name>BASE</group-name>
-        </group>
-        <role>
-            <role-name>ADMIN</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -605,15 +538,9 @@
             <description>Enables administrators to map credentials to users.</description>
             <keywords>credential mapping user administration</keywords>
         </language>
-        <owner>
-            <role-name>SUPER</role-name>
-        </owner>
-        <group>
-            <group-name>BASE</group-name>
-        </group>
-        <role>
-            <role-name>ADMIN</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -666,15 +593,9 @@
             <description>Enables administrators to specify what credentials are permitted for use in GridSphere.</description>
             <keywords>credential permission user administration</keywords>
         </language>
-        <owner>
-            <role-name>SUPER</role-name>
-        </owner>
-        <group>
-            <group-name>BASE</group-name>
-        </group>
-        <role>
-            <role-name>ADMIN</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -727,15 +648,9 @@
             <description>Enables administrators to see what credentials are in use.</description>
             <keywords>active credential user administration</keywords>
         </language>
-        <owner>
-            <role-name>SUPER</role-name>
-        </owner>
-        <group>
-            <group-name>BASE</group-name>
-        </group>
-        <role>
-            <role-name>ADMIN</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
