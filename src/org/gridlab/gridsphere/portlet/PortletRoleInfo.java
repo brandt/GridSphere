@@ -11,6 +11,15 @@ public class PortletRoleInfo {
     private transient PortletRole portletRole;
     private String portletClass = new String();
     private String role = new String();
+    private String oid = new String();
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
 
     public PortletRole getPortletRole() {
         return portletRole;
