@@ -52,7 +52,7 @@ public class LoginPortlet extends AbstractPortlet {
                 // VERY IMPORTANT USER CHECK
                 // CHECK INPUT FIELDS THOROUGHLY STRING LENGTH, VERIFY CREDENTIALS, ETC
                 if ((username.trim().equals("portal")) && (password.trim().equals("schmortal"))) {
-                    //User user = userService.loginUser(name);
+                    //User user = userService.loginUser(nam, password);
                     SportletUser user = new SportletUserImpl();
                     user.setUserID(username);
                     user.setID("45");

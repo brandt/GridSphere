@@ -35,13 +35,17 @@ public class GlobusCredential implements Credential {
         return this.globusProxy.getSubject();
     }
     
+    public Date getTimeExpires() {
+        long value = (new Date()).getTime() + this.globusProxy.getTimeLeft();
+        return new Date(value);
+    }
+
     public long getTimeLeft() {
         return this.globusProxy.getTimeLeft();
     }
     
-    /** NOT IMPLEMENTED YET **/
-    public Date getTimeExpires() {
-        return new Date();
+    public boolean isExpired() {
+        return (this.globusProxy.getTimeLeft() == 0);
     }
 
     public void destroy() {

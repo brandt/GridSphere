@@ -12,6 +12,7 @@ package org.gridlab.gridsphere.core.security;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.portlet.User;
 
 import java.util.Date;
 import java.util.List;
@@ -19,16 +20,15 @@ import java.util.Vector;
 
 public class CredentialMap extends BaseObject {
 
+    private User user = null;
     private String subject= null;
-    private String userID = null;
-    private String retrievalID = null;
-    private Vector hostNames = null;
+    private String tag = null;
     private String description = null;
+    private Vector hosts = null;
 
     /**
-     * The default constructor is private so that it can never be called. 
      */
-    private CredentialMap() {
+    public CredentialMap() {
     }
     
     /** 
@@ -43,15 +43,33 @@ public class CredentialMap extends BaseObject {
      * @param <code>String</code> The credential subject.
      * @param <code>String</code> The portlet user id.
      */
-    public CredentialMap(String subject, String userID) {
+    public CredentialMap(User user, String subject) {
+        this.user = user;
         this.subject = subject;
-        this.userID = userID;
-        this.retrievalID = null;
-        this.hostNames = new Vector();
+        this.tag = user.getUserID();
         this.description = "";
+        this.hosts = new Vector();
     }
 
-    /** 
+    /**
+     * Returns the portlet user to which this credential subject is mapped.
+     *
+     * @return <code>String</code> The portlet user id.
+     */
+    public User getUser() {
+        return this.user;
+    }
+
+    /**
+     * Sets the portlet user to which this credential subject is mapped.
+     *
+     * @return <code>String</code> The portlet user id.
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
      * Returns the credential subject in this map.
      *
      * @return <code>String</code> The credential subject.
@@ -60,53 +78,76 @@ public class CredentialMap extends BaseObject {
         return this.subject;
     }
 
-    /** 
-     * Returns the portlet user id to which this credential subject is mapped.
+    /**
+     * Returns the credential subject in this map.
      *
-     * @return <code>String</code> The portlet user id.
+     * @return <code>String</code> The credential subject.
      */
-    public String getUserID() {
-        return this.userID;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
-    
-    /** 
+
+    /**
      * Returns the id used to retrieve the credential from a credential retrieval service.
      *
      * @return <code>String</code> The retrieval id.
      */
-    public String getRetrievalID() {
-        return this.retrievalID;
+    public String getTag() {
+        return this.tag;
     }
 
-    /** 
+    /**
      * Sets the id used to retrieve the credential from a credential retrieval service.
      *
      * @param <code>String</code> The retrieval id.
      */
-    public void setRetrievalID(String id) {
-        this.retrievalID = id;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
-    /** 
+    /**
+     * Returns a description of this credential mapping.
+     *
+     * @return <code>String</code> The description.
+     */
+    public String getDescription() {
+        return this.description;
+    }
+
+    /**
+     * Sets the description of this credential mapping.
+     *
+     * @param <code>String</code> The description.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
      * Returns the list of hostnames to which this credential subject is mapped.
     /** 
      * Returns the list of hostnames to which this credential subject is mapped.
      *
      * @return <code>List</code> of <code>String</code> The hostnames.
      */
-    public List getHostNames() {
-        return this.hostNames;
+    public Vector getHosts() {
+        return this.hosts;
     }
     
-    /** 
+
+    public void setHosts(Vector hosts) {
+        this.hosts = hosts;
+    }
+
+    /**
      * Adds the given hostname to the list of hostnames to which this credential subject
      * is mapped.
      *
      * @param <code>String</code> The hostname.
      */
-    public void addHostName(String hostName) {
-        if (!this.hostNames.contains(hostName)) {
-            this.hostNames.add(hostName);
+    public void addHost(String host) {
+        if (!this.hosts.contains(host)) {
+            this.hosts.add(host);
         }
     }
 
@@ -116,10 +157,10 @@ public class CredentialMap extends BaseObject {
      *
      * @param <code>List</code> of <code>String</code> The list of hostnames.
      */
-    public void addHostName(List hostNames) {
-        for (int ii = 0; ii < hostNames.size(); ++ii) {
-            String hostName = (String)hostNames.get(ii);
-            addHostName(hostName);
+    public void addHost(List hosts) {
+        for (int ii = 0; ii < hosts.size(); ++ii) {
+            String host = (String)hosts.get(ii);
+            addHost(host);
         }
     }
 
@@ -129,9 +170,9 @@ public class CredentialMap extends BaseObject {
      *
      * @param <code>String</code> The hostname.
      */
-    public void removeHostName(String hostName) {
-        if (this.hostNames.contains(hostName)) {
-            this.hostNames.remove(hostName);
+    public void removeHost(String host) {
+        if (this.hosts.contains(host)) {
+            this.hosts.remove(host);
         }
     }
     
@@ -143,25 +184,7 @@ public class CredentialMap extends BaseObject {
      *
      * @return <code>boolean</code>
      */
-    public boolean hasHostName(String hostName) {
-        return (this.hostNames.contains(hostName));
-    }
-
-    /** 
-     * Returns a description of this credential mapping.
-     *
-     * @return <code>String</code> The description.
-     */
-    public String getDescription() {
-        return this.description;
-    }
-
-    /** 
-     * Sets the description of this credential mapping.
-     *
-     * @param <code>String</code> The description.
-     */
-    public void setDescription(String description) {
-        this.description = description;
+    public boolean hasHost(String host) {
+        return (this.hosts.contains(host));
     }
 }

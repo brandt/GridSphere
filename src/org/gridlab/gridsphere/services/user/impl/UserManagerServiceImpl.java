@@ -389,7 +389,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param command the oql query
      * @return the requested user
      */
-    private User getUser(String command) {
+    public User getUser(String command) {
         SportletUserImpl user = null;
         try {
             user = (SportletUserImpl) pm.restoreObject(command);

@@ -17,6 +17,8 @@ public interface Credential {
     
     public Date getTimeExpires();
 
+    public boolean isExpired();
+
     public String toString();
 
     public void destroy();

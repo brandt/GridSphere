@@ -26,7 +26,7 @@ import java.util.Vector;
 
 public class GlobusCredentialRetrievalClient implements CredentialRetrievalClient {
 
-    public static final String DEFAULT_HOSTNAME = "localhost";
+    public static final String DEFAULT_HOST = "localhost";
     public static final int DEFAULT_PORT = MyProxy.DEFAULT_PORT;
     public static final long DEFAULT_LIFETIME = 36000;
 
@@ -39,28 +39,28 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
       // Force explicit setting of hostname and port
     }
     
-    public GlobusCredentialRetrievalClient(String hostname, int port) {
-        _log.info("Entering GlobusCredentialRetrievalClient(hostname, port)");
-        _log.info("MyProxy hostname = " + hostname);
+    public GlobusCredentialRetrievalClient(String host, int port) {
+        _log.info("Entering GlobusCredentialRetrievalClient(host, port)");
+        _log.info("MyProxy host = " + host);
         _log.info("MyProxy port = " + port);
         long lifetime = DEFAULT_LIFETIME;
         _log.info("MyProxy lifetime = " + lifetime);
         /** Apply init parameters **/
         // MyProxy instance
-        this.myProxy = new MyProxy(hostname, port);
+        this.myProxy = new MyProxy(host, port);
         // Default lifetime
         this.lifetime = lifetime;
         _log.info("Exiting GlobusCredentialRetrievalClient(hostname, port)");
     }
 
-    public GlobusCredentialRetrievalClient(String hostname, int port, long lifetime) {
-        _log.info("Entering GlobusCredentialRetrievalClient(hostname, port, lifetime)");
-        _log.info("MyProxy hostname = " + hostname);
+    public GlobusCredentialRetrievalClient(String host, int port, long lifetime) {
+        _log.info("Entering GlobusCredentialRetrievalClient(host, port, lifetime)");
+        _log.info("MyProxy host = " + host);
         _log.info("MyProxy port = " + port);
         _log.info("MyProxy lifetime = " + lifetime);
         /** Apply init parameters **/
         // MyProxy instance
-        this.myProxy = new MyProxy(hostname, port);
+        this.myProxy = new MyProxy(host, port);
         // Default lifetime
         this.lifetime = lifetime;
         _log.info("Exiting GlobusCredentialRetrievalClient(hostname, port, lifetime)");
@@ -70,7 +70,7 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
         return MyProxy.MYPROXY_PROTOCOL_VERSION;
     }
 
-    public String getHostname() {
+    public String getHost() {
         return this.myProxy.getHost();
     }
 

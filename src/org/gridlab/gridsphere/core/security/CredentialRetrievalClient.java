@@ -41,7 +41,7 @@ public interface CredentialRetrievalClient {
      * 
      * @return <code>String</code> describing hostname.
      */
-    public String getHostname();
+    public String getHost();
 
     /**
      * Returns the port for the credential retrieval service.

@@ -127,6 +127,11 @@ public interface UserManagerService extends PortletService {
     public void setPortletData(User user, String portletID, PortletData data);
 
     /**
+     * Get user from DB
+     */
+    public User getUser(String userName);
+
+    /**
      * Save user to DB
      */
     public void saveUser(String userName);

@@ -13,390 +13,136 @@
 package org.gridlab.gridsphere.core.security;
 
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.security.Credential;
 import org.gridlab.gridsphere.core.security.CredentialNotActiveException;
 import org.gridlab.gridsphere.core.security.CredentialPermission;
 import org.gridlab.gridsphere.core.security.CredentialPermissionNotFoundException;
+import org.gridlab.gridsphere.core.security.CredentialNotPermittedException;
 import org.gridlab.gridsphere.core.security.CredentialMap;
 import org.gridlab.gridsphere.core.security.CredentialMapNotFoundException;
 import org.gridlab.gridsphere.core.security.CredentialExpiredException;
 import org.gridlab.gridsphere.core.security.CredentialRetrievalClient;
 import org.gridlab.gridsphere.core.security.CredentialRetrievalException;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
 
 public interface CredentialManager {
 
-    /****** CREDENTIAL PERMISSION PERSISTENCE METHODS *******/
+    /****** CREDENTIAL PERMISSION METHODS *******/
 
-    /**
-     * Loads the credential permissions currently stored by this credential manager.
-     * 
-     * @return <code>List</code> of <code>CredentialPermission</code> 
-     *         The list of credential permissions.
-     */
-    public List loadCredentialPermissions();
+    public List getCredentialPermissions();
 
-    /**
-     * Loads a credential permission from storage based on its object id.
-     * 
-     * @param <code>String</code> The object id of the credential permission.
-     *
-     * @return <code>CredentialPermission</code> The credential permission of interest.
-     */
-    public CredentialPermission loadCredentialPermission(String oid)
-        throws CredentialPermissionNotFoundException;
+    public CredentialPermission getCredentialPermission(String oid);
 
-    /**
-     * Loads a credential permission from storage based on its subject pattern.
-     * 
-     * @param <code>String</code> The subject pattern of the credential permission.
-     *
-     * @return <code>CredentialPermission</code> The credential permission of interest.
-     */
-    public CredentialPermission loadCredentialPermissionWithSubjectPattern(String pattern)
-        throws CredentialPermissionNotFoundException;
+    public CredentialPermission getCredentialPermissionWithSubjectPattern(String pattern);
 
-    /**
-     * Stores or updates a credential permission for this credential manager.
-     *
-     * @param <code>CredentialPermission</code> The credential permission to save.
-     */
     public void saveCredentialPermission(CredentialPermission permission);
 
-    /**
-     * Delete a credential permission in storage.
-     *
-     * @param <code>String</code> The object id of the credential permission to delete.
-     */
-    public void deleteCredentialPermission(String oid)
-        throws CredentialPermissionNotFoundException;
+    public void removeCredentialPermission(String oid);
 
     /****** CREDENTIAL PERMISSION CONVENIENCE METHODS *******/
 
-    /**
-     * Returns true if the given credential subject is permitted for use by this 
-     * credential manager, false otherwise. Permission is determined by testing
-     * if the given subject matches the subject pattern of any one of the
-     * stored credential permissions.
-     *
-     * @return <code>boolean</code>
-     */
-    public boolean isSubjectPermitted(String subject);
+    public boolean isCredentialPermitted(String subject);
 
     /****** CREDENTIAL MAP PERSISTENCE METHODS *******/
 
-    /**
-     * Loads the credential maps currently stored by this credential manager.
-     * 
-     * @return <code>List</code> of <code>CredentialMap<code> 
-     *         The list of credential maps.
-     */
-    public List loadCredentialMaps();
+    public List getCredentialMaps();
 
-    /**
-     * Loads a credential map from storage based on its object id.
-     * 
-     * @param <code>String</code> The object id of the credential map.
-     *
-     * @return <code>CredentialMap</code> The credential map of interest.
-     */
-    public CredentialMap loadCredentialMap(String oid)
-        throws CredentialMapNotFoundException;
+    public CredentialMap getCredentialMap(String oid);
 
-    /**
-     * Loads a credential map from storage based on its credential subject.
-     * 
-     * @param <code>String</code> The object id of the credential map.
-     *
-     * @return <code>CredentialMap</code> The credential map of interest.
-     */
-    public CredentialMap loadCredentialMapForSubject(String subject)
-        throws CredentialMapNotFoundException;
-
-    /**
-     * Loads the credential maps containing the id of the given porltet user.
-     * 
-     * @param <code>User<code> The portlet user.
-     *
-     * @return <code>List</code> of <code>CredentialMap</code> 
-     *         The credential maps of interest.
-     */
-    public List loadCredentialMapsForUser(User user);
-
-    /**
-     * Stores or updates a credential map for this credential manager.
-     *
-     * @param <code>CredentialPermission</code> The credential map to save.
-     */
     public void saveCredentialMap(CredentialMap map)
-        throws CredentialPermissionNotFoundException;
+            throws CredentialNotPermittedException;
 
-    /**
-     * Deletes a credential map from storage.
-     *
-     * @param <code>String</code> The object id of the credential map to delete.
-     */
-    public void deleteCredentialMap(String oid)
-        throws CredentialMapNotFoundException;
+    public void removeCredentialMap(String oid);
 
-    /**
-     * Deletes the credential map with the given credential sbject from storage.
-     *
-     * @param <code>String</code> The credential subject of the credential map to delete.
-     */
-    public void deleteCredentialMapForSubject(String subject)
-        throws CredentialMapNotFoundException;
+    public List getCredentialMaps(User user);
 
-    /**
-     * Deletes the credential maps containing the id of the given portlet user.
-     *
-     * @param <code>String</code> The object id of the credential map to delete.
-     */
-    public void deleteCredentialMapsForUser(User user);
+    public void removeCredentialMaps(User user);
+
+    public CredentialMap getCredentialMapWithSubject(String subject);
+
+    public void removeCredentialMapWithSubject(String subject);
 
     /****** CREDENTIAL MAP CONVENIENCE METHODS *******/
 
-    /**
-     * Returns the portlet user mapped to the given credential subject.
-     *
-     * @param <code>String<code> The credential subject.
-     *
-     * @return <code>User</code> The portlet user to which the given subject maps.
-     */
-    public User getUserMappedToSubject(String subject)
-        throws CredentialMapNotFoundException;
+    public User getCredentialUser(String subject);
 
-    /**
-     * Returns the list of credential subjects mapped to the given portlet user.
-     *
-     * @param <code>User<code> The portlet user.
-     *
-     * @return <code>List</code> of <code>String</code> 
-     *         The subjects mapped to the given portlet user.
-     */
-    public List getSubjectsMappedToUser(User user);
+    public List getCredentialSubjects(User user);
 
-    /**
-     * Returns true if the given credential subject is mapped to the given portlet user.
-     *
-     * @param <code>String<code> The credential subject.
-     *
-     * @param <code>User<code> The portlet user.
-     *
-     * @return <code>boolean</code>
-     */
-    public boolean isSubjectMappedToUser(String subject, User user);
+    public void addCredentialSubject(User user, String subject)
+            throws CredentialNotPermittedException;
 
-    /**
-     * Returns the list of hostnames mapped to the given credential subject.
-     *
-     * @param <code>String<code> The credential subject.
-     *
-     * @return <code>List</code> of <code>String</code> 
-     *         The subjects mapped to the given portlet user.
-     */
-    public List getHostNamesMappedToSubject(String subject)
-        throws CredentialMapNotFoundException;
+    public void removeCredentialSubject(User user, String subject);
 
-    /**
-     * Returns the list of credential subjects mapped to the given hostname.
-     *
-     * @param <code>String<code> The hostname.
-     *
-     * @return <code>List</code> of <code>String</code> 
-     *         The subjects mapping to the given hostname.
-     */
-    public List getSubjectsMappedToHostName(String hostName);
+    public List getCredentialTags(User user);
 
-    /**
-     * Returns true if the given credential subject is mapped to the given hostname.
-     *
-     * @param <code>String<code> The credential subject.
-     *
-     * @param <code>String<code> The hostname.
-     *
-     * @return <code>boolean</code>
-     */
-    public boolean isSubjectMappedToHostName(String subject, String hostName);
+    public String getCredentialTag(String subject)
+            throws CredentialMapNotFoundException;
 
-    /**
-     * Returns the retrieval id mapped to the given credential subject.
-     *
-     * @param <code>String<code> The credential subject.
-     *
-     * @return <code>String</code> The retrieval id to which the given subject maps.
-     */
-    public String getRetrievalIDMappedToSubject(String subject)
-        throws CredentialMapNotFoundException;
+    public void setCredentialTag(String subject, String tag)
+            throws CredentialMapNotFoundException;
+
+    public List getCredentialHosts(String subject)
+            throws CredentialMapNotFoundException;
+
+    public void addCredentialHost(String subject, String host)
+            throws CredentialMapNotFoundException;
+
+    public void removeCredentialHost(String subject, String host)
+            throws CredentialMapNotFoundException;
+
+    public List getCredentialSubjectsForHost(String host);
+
+    public List getCredentialSubjectsForHost(User user, String host);
 
     /****** CREDENTIAL RETRIEVAL METHODS *******/
 
-    /**
-     * Returns the client to the online credential retrieval service this
-     * credential manager uses.
-     *
-     * @return <code>String<code> The online credential retrieval serviced protocol.
-     */
-    public CredentialRetrievalClient getCredentialRetrievalClient();
-
-    /**
-     * Returns the protocol of the online credential retrieval service this
-     * credential manager uses.
-     *
-     * @return <code>String<code> The online credential retrieval serviced protocol.
-     */
     public String getCredentialRetrievalProtocol();
 
-    /**
-     * Returns the hostname of the online credential retrieval service this
-     * credential manager uses.
-     *
-     * @return <code>String<code> The online credential retrieval service hostname.
-     */
-    public String getCredentialRetrievalHostname();
+    public String getCredentialRetrievalHost();
 
-    /**
-     * Returns the port of the online credential retrieval service this
-     * credential manager uses.
-     *
-     * @return <code>ing<code> The online credential retrieval service port.
-     */
     public int getCredentialRetrievalPort();
 
-    /**
-     * Returns the credential lifetime of the online credential retrieval service this
-     * credential manager uses.
-     *
-     * @return <code>long<code> The online credential retrieval service credential lifetime.
-     */
     public long getCredentialRetrievalLifetime();
 
-    /**
-     * Attempts to retrieve credentials for each subject that is mapped to a 
-     * retrieval id from an online credential retrieval client for the given user
-     * and passphrase. These credentials are stored in the vault and can then be 
-     * used as required on behalf of the user.
-     *
-     * @param <code>User<code> The user whose credentials to retrieve.
-     *
-     * @param <code>String<code> The retrieval client passphrase.
-     */
     public void retrieveCredentials(User user, String passphrase)
-        throws CredentialMapNotFoundException,
-               CredentialRetrievalException;
+            throws CredentialRetrievalException;
 
-    /****** CREDENTIAL "VAULT" METHODS *******/
+    /****** CREDENTIAL STORAGE METHODS *******/
 
-    /**
-     * Returns the credentials currently held in vault by this credential 
-     * manager mapped to the given portlet user.
-     *
-     * @param <code>User<code> The portlet user.
-     *
-     * @return <code>List</code> of <code>Credential<code> 
-     *        The portlet user's credentials.
-     *
-     * @return <code>boolean</code>
-     */
-    public List getCredentials(User user);
-    
-    /**
-     * Returns the credential with the given subject from the vault.
-     *
-     * @param <code>String<code> The credential subject.
-     *
-     * @return <code>Credential<code> The credential with the given subject.
-     */
-    public Credential getCredential(String subject)
-        throws CredentialMapNotFoundException,
-               CredentialNotActiveException;
+    public void storeCredential(Credential credential)
+            throws CredentialNotPermittedException;
 
-    /**
-     * Stores the given credential in memory for use at a later time.
-     *
-     * @param <code>Credential<code> The credential.
-     */
-    public void putCredential(Credential credential)
-        throws CredentialPermissionNotFoundException, 
-               CredentialMapNotFoundException,
-               CredentialExpiredException;
+    public void storeCredentials(List credentials)
+            throws CredentialNotPermittedException;
 
-    /**
-     * Stores the given credentials in the vault for use at a later time.
-     *
-     * @param <code>List</code> of <code>Credential<code> The credential.
-     */
-    public void putCredentials(List credentials)
-        throws CredentialPermissionNotFoundException, 
-               CredentialMapNotFoundException,
-               CredentialExpiredException;
+    public void destroyCredential(String subject);
 
-    /**
-     * Removes the credential with the given subject from the vault and
-     * calls the credential's destroy method so that it can no longer be used.
-     *
-     * @param <code>String<code> The credential subject.
-     */
-    public void destroyCredential(String subject)
-        throws CredentialMapNotFoundException,
-               CredentialNotActiveException;
-
-    /**
-     * Removes the credential with the given subject from the vault and
-     * destroys the credentials mapped to the given portlet user.
-     *
-     * @param <code>User<code> The portlet user.
-     */
     public void destroyCredentials(User user);
-    
-    /**
-     * Returns true if one or more credentials in vault for the given portlet user.
-     *
-     * @param <code>User<code> The portlet user.
-     *
-     * @return <code>boolean</code>
-     */
-    public boolean hasCredentials(User user);
 
-    /**
-     * Returns true if a credential with the given subject is in the vault.
-     *
-     * @param <code>String<code> The credential subject.
-     *
-     * @return <code>boolean</code>
-     */
-    public boolean hasCredential(String subject);
+    public List getActiveCredentials(User user);
 
-    /**
-     * Retrieves the credentials in vault mapped to the given portlet user and hostname.
-     *
-     * @param <code>User<code> The portlet user.
-     *
-     * @param <code>String<code> The hostname.
-     *
-     * @return <code>boolean</code>
-     */
-    public List getCredentialsForHostName(User user, String hostName)
-        throws CredentialMapNotFoundException,
-               CredentialNotActiveException;
+    public Credential getActiveCredential(String subject);
 
-    /**
-     * Returns the credential subjects of the credentials currently in vault.
-     * 
-     * @return <code>List</code> of <code>String<code> 
-     &         The subjects for all active credentials.
-     */
+    public List getActiveCredentialsForHost(User user, String host);
+
+    public boolean isActiveCredential(String subject);
+
+    public boolean hasActiveCredentials(User user);
+
     public List getActiveCredentialSubjects();
 
-    /**
-     * Returns the credential subjects of the credentials currently in vault for
-     * the given portlet user.
-     * 
-     * @param <code>User</code> The user in question.
-     *
-     * @return <code>List</code> of <code>String<code> 
-     &         The subjects for this user's active credentials.
-     */
     public List getActiveCredentialSubjects(User user);
 }
