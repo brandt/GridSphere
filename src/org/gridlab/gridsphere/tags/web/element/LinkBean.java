@@ -14,7 +14,10 @@ public interface LinkBean extends ElementBean {
      */
     public void setLink(String link);
 
-
+    /**
+     * Gets the link string.
+     * @return the linkstring
+     */
     public String getLink();
 
 }

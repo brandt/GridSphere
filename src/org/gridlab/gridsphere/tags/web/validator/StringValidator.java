@@ -8,7 +8,7 @@
  */
 package org.gridlab.gridsphere.tags.web.validator;
 
-import org.gridlab.gridsphere.tags.web.InputTag;
+import org.gridlab.gridsphere.tags.web.BaseTag;
 
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.JspException;
@@ -50,7 +50,7 @@ public class StringValidator extends TagSupport implements Validator {
     }
 
     public boolean isValid() {
-        InputTag input = (InputTag)getParent();
+        BaseTag input = (BaseTag)getParent();
         String name = input.getName();
 
         return true;

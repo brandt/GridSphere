@@ -15,7 +15,7 @@ public class TextFieldBean extends ReadOnlyBaseBean implements InputBean {
     }
 
     public TextFieldBean(String name, String value, boolean disabled, boolean readonly, int size, int maxlength) {
-      //  super(name, value, disabled, readonly);
+        //  super(name, value, disabled, readonly);
         super();
         this.name = name;
         this.value = value;
@@ -51,8 +51,8 @@ public class TextFieldBean extends ReadOnlyBaseBean implements InputBean {
     }
 
     public String toString() {
-        return "<input type='" + inputtype + "' name='" + getIdRef()+name + "' value='" + value + "' size='"
-                + size + "' maxlength='" + maxlength + "'/>";
+        return getCSS("<input type='" + inputtype + "' name='" + getTagName() + name + "' value='" + value + "' size='"
+                + size + "' maxlength='" + maxlength + "'/>");
     }
 
 }

@@ -6,14 +6,14 @@
 package org.gridlab.gridsphere.tags.web;
 
 import org.gridlab.gridsphere.tags.web.element.TextAreaBean;
- 
+
 import javax.servlet.jsp.JspException;
 
-public class TextAreaTag extends InputTag {
+public class TextAreaTag extends BaseTag {
 
     public int doStartTag() throws JspException {
-        if (element.equals("")) {
-            this.htmlelement = new TextAreaBean(name, value, isDisabled,  isReadonly, rows, cols);
+        if (bean.equals("")) {
+            this.htmlelement = new TextAreaBean(name, value, isDisabled, isReadonly, rows, cols);
         }
         return super.doStartTag();
     }

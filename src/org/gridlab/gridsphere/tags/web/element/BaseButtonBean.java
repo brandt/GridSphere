@@ -26,6 +26,6 @@ public class BaseButtonBean extends BaseNameValueBean implements ButtonBean {
     }
 
     public String toString() {
-        return "<input type='" + type + "' name='" + name + "' value='" + value + "'/>";
+        return "<input type='" + type + "' name='" + getTagName() + name + "' value='" + value + "'/>";
     }
 }

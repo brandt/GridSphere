@@ -19,7 +19,7 @@ public abstract class SelectElementBean extends BaseNameValueBean implements Sel
     }
 
 
-    public String checkSelected(String select) {
+    protected String checkSelected(String select) {
         if (selected) {
             return " " + select + "='" + select + "' ";
         } else {
@@ -27,17 +27,25 @@ public abstract class SelectElementBean extends BaseNameValueBean implements Sel
         }
     }
 
+    /**
+     * Sets the selected status of the bean.
+     * @param flag status of the bean
+     */
     public void setSelected(boolean flag) {
         this.selected = flag;
     }
 
+    /**
+     * Returns the selected status of the bean
+     * @return selected status
+     */
     public boolean isSelected() {
         return selected;
     }
 
     public String toString(String type) {
-        return "<input type='"+type+"' name='"+getIdRef()+name+"' value='"+value+"' "+checkDisabled()+" "+checkSelected("checked")+
-            "/>";
+        return "<input type='" + type + "' name='" + name + "' value='" + value + "' " + checkDisabled() + " " + checkSelected("checked") +
+                "/>";
     }
 
     public void update(String[] values) {

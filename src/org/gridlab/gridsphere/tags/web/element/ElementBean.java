@@ -11,6 +11,10 @@ public interface ElementBean {
 
     public String getId();
 
+    /**
+     * Sets the ID od the bean.
+     * @param id id of the bean
+     */
     public void setId(String id);
 
     /**
@@ -25,16 +29,40 @@ public interface ElementBean {
      */
     public String getColor();
 
+    /**
+     * Gets the font of the element.
+     * @return font of the element
+     */
     public String getFont();
 
+    /**
+     * Sets the font of the element.
+     * @param font the font to set
+     */
     public void setFont(String font);
 
+    /**
+     * Returns the backgroundcolor of the element.
+     * @return the backgroundcolor
+     */
     public String getBackgroundcolor();
 
+    /**
+     * Sets the backgoundcolor of the element.
+     * @param backgroundcolor the backgroundcolor to be set
+     */
     public void setBackgroundcolor(String backgroundcolor);
 
+    /**
+     * Returns the CSS style name of the element.
+     * @return the name of the css style
+     */
     public String getCssStyle();
 
+    /**
+     * Sets the CSS style of the element.
+     * @param style css style name to set for the element
+     */
     public void setCssStyle(String style);
 
     /**

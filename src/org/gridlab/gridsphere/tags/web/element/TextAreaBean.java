@@ -49,8 +49,8 @@ public class TextAreaBean extends ReadOnlyBaseBean implements TAElementBean {
     }
 
     public String toString() {
-        return "<textarea name='"+name+"' cols='"+cols+"' rows='"+rows+"' "+checkDisabled()+" "+checkReadonly()+">"+
-            value+"</textarea>";
+        return "<textarea name='" + name + "' cols='" + cols + "' rows='" + rows + "' " + checkDisabled() + " " + checkReadonly() + ">" +
+                value + "</textarea>";
 
     }
 

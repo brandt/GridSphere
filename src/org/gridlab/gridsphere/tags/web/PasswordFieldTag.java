@@ -9,11 +9,11 @@ import org.gridlab.gridsphere.tags.web.element.PasswordBean;
 
 import javax.servlet.jsp.JspException;
 
-public class PasswordFieldTag extends InputTag {
+public class PasswordFieldTag extends BaseTag {
 
     public int doStartTag() throws JspException {
-        if (element.equals("")) {
-            this.htmlelement = new PasswordBean(name, value, isDisabled,  isReadonly, size, maxLength);
+        if (bean.equals("")) {
+            this.htmlelement = new PasswordBean(name, value, isDisabled, isReadonly, size, maxLength);
         }
         return super.doStartTag();
     }

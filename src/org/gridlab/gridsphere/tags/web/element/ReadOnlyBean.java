@@ -7,7 +7,15 @@ package org.gridlab.gridsphere.tags.web.element;
 
 public interface ReadOnlyBean extends NameValueBean {
 
+    /**
+     * Sets the bean to readonly.
+     * @param flag status of the bean
+     */
     public void setReadonly(boolean flag);
 
+    /**
+     * Returns the readonly status of the bean
+     * @return readonly status
+     */
     public boolean isReadonly();
 }

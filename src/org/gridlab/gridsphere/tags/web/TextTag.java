@@ -5,14 +5,11 @@
 
 package org.gridlab.gridsphere.tags.web;
 
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.tags.web.element.TextBean;
 
-import javax.servlet.jsp.tagext.TagSupport;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.JspException;
 
-public class TextTag extends TagSupport {
+public class TextTag extends BaseTag {
 
     private String text = new String();
     private TextBean textelement = new TextBean();
@@ -26,15 +23,11 @@ public class TextTag extends TagSupport {
         this.text = text;
     }
 
-    public int doStartTag() throws JspTagException {
-        textelement.setLabel(text);
-        try {
-            JspWriter out = pageContext.getOut();
-            out.println(textelement);
-        } catch (Exception e) {
-            throw new JspTagException(e.getMessage());
+    public int doStartTag() throws JspException {
+        if (bean.equals("")) {
+            this.htmlelement = new TextBean(text);
         }
-        return EVAL_PAGE;
+        return super.doStartTag();
     }
 
 }

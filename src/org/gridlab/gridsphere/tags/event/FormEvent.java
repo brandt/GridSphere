@@ -37,17 +37,10 @@ public interface FormEvent {
     public String[] getSelectedCheckBoxValues (String checkboxgroupname);
 
     /**
-     * Gets back the original saved bean.
-     * @param name name of the bean
-     * @return ElementBean
-     */
-    public Object getElementBean(String name);
-
-    /**
      * Gets back the bean with the modifications from the userinterface.
      * @param name name of the bean
      * @return updated elementbean
      */
-    public Object getUpdatedElementBean(String name);
+    public Object getElementBean(String name);
 
 }

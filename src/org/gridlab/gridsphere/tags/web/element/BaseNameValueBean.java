@@ -23,7 +23,11 @@ public abstract class BaseNameValueBean extends BaseElementBean implements NameV
         this.id = name;
     }
 
-    public String checkDisabled() {
+    /**
+     * Returns disabled String if bean is disabled
+     * @return String depending if bean is disabled
+     */
+    protected String checkDisabled() {
         if (disabled) {
             return " disabled='disabled' ";
         } else {

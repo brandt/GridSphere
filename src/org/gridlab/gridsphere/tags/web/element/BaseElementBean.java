@@ -12,26 +12,14 @@ import javax.servlet.http.HttpSession;
 public abstract class BaseElementBean implements ElementBean {
 
     protected String id = new String();
-    protected String color;
-    protected String backgroundcolor;
-    protected String cssStyle;
-    protected String font;
+    protected String color = new String();
+    protected String backgroundcolor = new String();
+    protected String cssStyle = new String();
+    protected String font = new String();
 
 
     public BaseElementBean() {
         super();
-    }
-
-    /**
-     * Returns the id with append _ if this != "". This is used for generating unqiue html names for elements.
-     * @return idref
-     */
-    protected String getIdRef() {
-        if (!id.equals("")) {
-            return id+"_";
-        } else {
-            return "";
-        }
     }
 
     /**
@@ -125,6 +113,35 @@ public abstract class BaseElementBean implements ElementBean {
         request.setAttribute(id, this);
         HttpSession session = request.getSession();
         session.setAttribute(id, this);
+    }
+
+    /**
+     * Returns the String prepended to all form element names in the html code
+     * @return tagidentifier
+     */
+    protected String getTagName() {
+        return "gstag:";
+    }
+
+    protected String getCSS(String text) {
+        String css = "<span ";
+        if (!cssStyle.equals("")) {
+            css = css + " class='" + cssStyle + "' ";
+        }
+        css = css + " style='";
+        if (!color.equals("")) {
+            css = css + "color:" + color + ";";
+        }
+        if (!font.equals("")) {
+            css = css + "font:" + font + ";";
+        }
+        if (!backgroundcolor.equals("")) {
+            css = css + "background:" + backgroundcolor + ";";
+        }
+
+        css = css + "'>";
+        css = css + text + "</span>";
+        return css;
     }
 
 }
