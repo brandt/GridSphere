@@ -139,6 +139,10 @@ public class DataGridBean extends BeanContainer implements TagBean {
         StringBuffer sb = new StringBuffer();
         sb.append("<table class=\"ui-datagrid\"><tr><td>");
 
+        if (key!=null) {
+            this.getLocalizedText(key, "DataGrid");
+        }
+
         if (header != null) sb.append("<div class=\"ui-datagrid-title\">" + header + "</div></td></tr><tr><td>\n");
 
 
