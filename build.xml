@@ -171,7 +171,7 @@ Copyright:
     <!-- Prints GridSphere license agreement                                 -->
     <!-- =================================================================== -->
     <target name="license" description="Prints GridSphere license">
-        <loadfile property="license" srcFile="LICENSE"/>
+        <loadfile property="license" srcFile="LICENSE.txt"/>
         <echo message="${license}"/>
         <input message="Do you agree to these terms? Hit y or n" validargs="y,n" addProperty="agreed"/>
         <condition property="do.abort">
@@ -681,7 +681,7 @@ Copyright:
         <mkdir dir="${gridsphere.dist}"/>
 
         <copy file="README" todir="${gridsphere.dist}"/>
-        <copy file="LICENSE" todir="${gridsphere.dist}"/>
+        <copy file="LICENSE.txt" todir="${gridsphere.dist}"/>
         <copy file="config/build/build.deploy.xml" tofile="${gridsphere.dist}/build.xml"/>
         <copy file="build.properties" tofile="${gridsphere.dist}/build.properties"/>
 
