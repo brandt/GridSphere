@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE project [
-    <!ENTITY docbook-setup SYSTEM "file:../common/docbook-setup.xml">
+    <!ENTITY docbook-setup SYSTEM "../common/docbook-setup.xml">
 ]>
 
 <project name="GridSphere Reference Guide" default="install">
