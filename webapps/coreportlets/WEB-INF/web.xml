@@ -16,16 +16,6 @@
     </description>
 
     <servlet>
-        <servlet-name>HelloWorld</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>HalloWelt</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.examples.HalloWelt</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>LoginPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet</servlet-class>
     </servlet>
@@ -38,11 +28,6 @@
     <servlet>
         <servlet-name>SubscriptionPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.SubscriptionPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>DemoPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.examples.DemoPortlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -59,16 +44,6 @@
         <servlet-name>AccessControllerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet</servlet-class>
     </servlet>
-
-    <servlet-mapping>
-       <servlet-name>HelloWorld</servlet-name>
-       <url-pattern>/hello</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-       <servlet-name>HalloWelt</servlet-name>
-       <url-pattern>/hallo</url-pattern>
-    </servlet-mapping>
 
     <servlet-mapping>
        <servlet-name>LoginPortlet</servlet-name>

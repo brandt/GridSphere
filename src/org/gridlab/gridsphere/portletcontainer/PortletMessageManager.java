@@ -2,7 +2,7 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.services.core.message;
+package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.User;
@@ -12,11 +12,12 @@ import org.gridlab.gridsphere.layout.PortletLayoutException;
 import org.gridlab.gridsphere.layout.PortletContainer;
 
 import java.util.List;
+import java.util.Map;
 
 /**
- * The PortletMessageService
+ * The PortletMessageManager
  */
-public interface PortletMessageService extends PortletService {
+public interface PortletMessageManager {
 
     /**
      * Sends the given message to all portlets on the same page that have the given name regardless of the portlet application.
@@ -46,5 +47,21 @@ public interface PortletMessageService extends PortletService {
      * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
     public List retrieveMessages(String portletName) throws AccessDeniedException;
+
+    /**
+     * Retrieves all the messages  removes them from the queue
+     *
+     * @return a list of PortletMessage objects
+     *
+     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
+     */
+    public Map retrieveAllMessages() throws AccessDeniedException;
+
+    /**
+     * Clears all the messages
+     *
+     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
+     */
+    public void clearAllMessages() throws AccessDeniedException;
 
 }

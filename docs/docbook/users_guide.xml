@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<!--
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+    Author:     Jason Novotny
+    Version:    $Id$
+-->
+
+<article>
+  <articleinfo>
+    <title>GridSphere Framework User's Guide</title>
+    <author>
+      <firstname>Jason</firstname>
+      <surname>Novotny</surname>
+      <affiliation>
+        <address><email>novotny@aei.mpg.de</email></address>
+      </affiliation>
+    </author>
+        <copyright>
+      <year>2003</year>
+    </copyright>
+  </articleinfo>
+
+  <sect1>
+    <title>Introduction</title>
+    <para>
+    The GridSphere User's Guide describes how to setup and configure GridSphere.
+    For more information on developing and packaging portlets, please consult
+    the GridSphere Portlet Developer's Guide. The current implementation is
+    based upon the GridSphere Technical Design Document. The GridSphere portal
+    framework comes in both source and binary forms. Binaries can be created
+    from the source code and in both cases, the build environment is generally
+    the same. The GridSphere source code comes with a README file explaining how
+    how to build the binary distribution. Both source and binaries come packaged
+    with all the necessary third party libraries and requires only a GridSphere
+    compatible servlet container.
+    </para>
+  </sect1>
+
+  <sect1>
+    <title>Installation</title>
+
+    <sect2>
+        <title>Required Tools and Applications</title>
+        <itemizedlist>
+        <listitem><para>JDK 1.3.1+ <ulink url="http://java.sun.com/j2se">
+        http://java.sun.com/j2se</ulink> or JRE if you don't need to build any
+        source</para></listitem>
+        <listitem><para>Jakarta Ant 1.4.1+
+        <ulink url="http://jakarta.apache.org/ant">
+        http://jakarta.apache.org/ant</ulink>Ant is used to compile and deploy
+        the GridSphere framework</para>
+        </listitem>
+        <listitem><para>Jakarta Tomcat Servlet Container 4.1.18+ is required.
+        (Currently, only Tomcat 4.1.18 supports the Manager web application that
+        allows for dynamic portlet management.)
+        </para></listitem>
+        </itemizedlist>
+    </sect2>
+
+    <sect2>
+
+
+    </sect2>
+
+
+  </sect1>
+
+</article>

@@ -1,6 +1,5 @@
 /*
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
- * @team sonicteam
  * @version $Id$
  *
  * All objects which want to be persistent to a rdbms have to extend this
@@ -10,6 +9,8 @@
 package org.gridlab.gridsphere.core.persistence;
 
 import org.exolab.castor.jdo.Database;
+import org.exolab.castor.jdo.TimeStampable;
+import org.exolab.castor.jdo.Persistent;
 import org.gridlab.gridsphere.core.persistence.castor.StringVector;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
-public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exolab.castor.jdo.Persistent {
+public class BaseObject implements TimeStampable, Persistent {
 
     protected transient static PortletLog log = SportletLog.getInstance(BaseObject.class);
 

@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.message.PortletMessageService;
+import org.gridlab.gridsphere.portletcontainer.PortletMessageManager;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -21,22 +22,17 @@ import java.util.Map;
 /**
  * The PortletMessageService provides customization support for user layouts
  */
-public class PortletMessageServiceImpl implements PortletMessageService, PortletServiceProvider {
+public class SportletMessageManager implements PortletMessageManager {
 
-    private static PortletLog log = SportletLog.getInstance(PortletMessageServiceImpl.class);
+    private static PortletLog log = SportletLog.getInstance(SportletMessageManager.class);
+    private static PortletMessageManager instance = new SportletMessageManager();
     private Map messages = new Hashtable();
 
-    /**
-     * The init method is responsible for parsing portlet.xml and creating ConcretePortlet objects based on the
-     * entries. The RegisteredPortlets are managed by the PortletRegistryService.
-     */
-    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        log.info("in init()");
+    public static PortletMessageManager getInstance() {
+        return instance;
     }
 
-    public void destroy() {
-        log.info("in destroy()");
-    }
+    private SportletMessageManager() {}
 
     /**
      * Sends the given message to all portlets on the same page that have the given name regardless of the portlet application.
@@ -55,11 +51,11 @@ public class PortletMessageServiceImpl implements PortletMessageService, Portlet
      *
      * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
-    public void send(String portletName, PortletMessage message) throws AccessDeniedException {
-        List l = (List) messages.get(portletName);
+    public void send(String concretePortletID, PortletMessage message) throws AccessDeniedException {
+        List l = (List) messages.get(concretePortletID);
         if (l == null) l = new ArrayList();
         l.add(message);
-        messages.put(portletName, l);
+        messages.put(concretePortletID, l);
     }
 
     /**
@@ -70,13 +66,33 @@ public class PortletMessageServiceImpl implements PortletMessageService, Portlet
      *
      * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
-    public List retrieveMessages(String portletName) throws AccessDeniedException {
+    public List retrieveMessages(String concretePortletID) throws AccessDeniedException {
         List messageList = new ArrayList();
-        List l = (List) messages.get(portletName);
+        List l = (List) messages.get(concretePortletID);
         if (l != null) {
             messageList.addAll(l);
             messages.remove(l);
         }
         return messageList;
+    }
+
+    /**
+     * Retrieves all the messages  removes them from the queue
+     *
+     * @return a list of PortletMessage objects
+     *
+     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
+     */
+    public Map retrieveAllMessages() throws AccessDeniedException {
+        return messages;
+    }
+
+    /**
+     * Clears all the messages
+     *
+     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
+     */
+    public void clearAllMessages() throws AccessDeniedException {
+        messages = null;
     }
 }

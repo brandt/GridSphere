@@ -9,14 +9,9 @@ import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.tags.event.FormEvent;
 import org.gridlab.gridsphere.tags.event.impl.FormEventImpl;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletData;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
-import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
 import org.gridlab.gridsphere.tags.web.element.*;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -119,16 +114,15 @@ public class RSSPortlet extends AbstractPortlet {
 
         System.out.println("========================================================\n\n\n\n\n");
 
-        /*
-            PortletData data = req.getData();
-            data.setAttribute("myattr","testing");
-            try {
-                data.store();
-            } catch (PersistenceManagerException e) {
-                System.out.println("ERROR: "+e);
-            }
-            System.out.println("\n\n\n\nATTRIBUTE "+data.getAttribute("myattr"));
-        */
+        PortletData data = req.getData();
+        data.setAttribute("myattr","testing");
+        try {
+            data.store();
+        } catch (IOException e) {
+            System.out.println("ERROR: "+e);
+        }
+        System.out.println("\n\n\n\nATTRIBUTE "+data.getAttribute("myattr"));
+
         String button = form.getPressedSubmitButton();
 
         System.out.println(">>>>>>>>>>>>> Button "+button);
