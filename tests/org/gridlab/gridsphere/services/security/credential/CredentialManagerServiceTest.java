@@ -21,6 +21,7 @@ import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.security.credential.*;
+import org.gridlab.gridsphere.services.grid.security.credential.*;
 
 import java.util.List;
 import java.util.Vector;

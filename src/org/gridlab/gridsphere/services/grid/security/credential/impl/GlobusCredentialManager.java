@@ -18,8 +18,6 @@ import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 
-import org.gridlab.gridsphere.services.security.credential.*;
-
 import org.gridlab.gridsphere.services.grid.security.credential.*;
 
 import org.globus.security.GlobusProxy;

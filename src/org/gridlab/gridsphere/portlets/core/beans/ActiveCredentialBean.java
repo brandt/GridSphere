@@ -9,7 +9,7 @@
 package org.gridlab.gridsphere.portlets.core.beans;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.services.security.credential.*;
+import org.gridlab.gridsphere.services.grid.security.credential.*;
 
 import java.util.List;
 

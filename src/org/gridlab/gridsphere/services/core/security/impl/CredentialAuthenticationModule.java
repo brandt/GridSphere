@@ -15,9 +15,9 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.AuthenticationModule;
-import org.gridlab.gridsphere.services.security.credential.Credential;
-import org.gridlab.gridsphere.services.security.credential.CredentialManagerService;
-import org.gridlab.gridsphere.services.security.credential.CredentialRetrievalException;
+import org.gridlab.gridsphere.services.grid.security.credential.Credential;
+import org.gridlab.gridsphere.services.grid.security.credential.CredentialManagerService;
+import org.gridlab.gridsphere.services.grid.security.credential.CredentialRetrievalException;
 
 import java.util.Map;
 

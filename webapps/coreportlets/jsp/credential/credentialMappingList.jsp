@@ -1,4 +1,4 @@
-<%@ page import="org.gridlab.gridsphere.services.security.credential.CredentialMapping,
+<%@ page import="org.gridlab.gridsphere.services.grid.security.credential.CredentialMapping,
                  org.gridlab.gridsphere.portlets.core.beans.CredentialMappingBean,
                  java.util.List" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
