@@ -64,7 +64,7 @@ public class RSSPortlet extends AbstractPortlet {
         if (_action instanceof DefaultPortletAction) {
             DefaultPortletAction action = (DefaultPortletAction) _action;
             PortletRequest req = evt.getPortletRequest();
-            _url = (String) req.getParameter("picture_url");
+            _url = (String) req.getParameter("rss_url");
             _lastFetched = 0;
 
         }
@@ -98,8 +98,8 @@ public class RSSPortlet extends AbstractPortlet {
         PortletURI pictureURI = response.createURI();
         DefaultPortletAction defAction = new DefaultPortletAction(PortletProperties.ACTION_PERFORMED);
         pictureURI.addAction(defAction);
-        request.setAttribute("picture_url", pictureURI.toString());
-        getPortletConfig().getContext().include("/jsp/slideshow.jsp", request, response);
+        request.setAttribute("rss_url", pictureURI.toString());
+        getPortletConfig().getContext().include("/jsp/rss.jsp", request, response);
     }
 
     public void doHelp(PortletRequest request, PortletResponse response) throws PortletException, IOException {
