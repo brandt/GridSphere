@@ -11,6 +11,10 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
+import org.gridlab.gridsphere.services.container.registry.PortletRegistryServiceException;
+import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryServiceImpl;
+import org.gridlab.gridsphere.services.container.caching.CachingService;
+import org.gridlab.gridsphere.services.container.caching.impl.PortletCachingServiceImpl;
 import org.gridlab.gridsphere.event.ActionEvent;
 
 import java.io.IOException;
@@ -55,10 +59,11 @@ public class PortletFrame extends BasePortletComponent {
         super.doRender(ctx, req, res);
         log.debug("in doRender()");
         PortletRegistryService registryService = null;
-
+        //CachingService cachingService = null;
         try {
-            registryService = (PortletRegistryService) ctx.getService(PortletRegistryService.class);
-        } catch (PortletServiceException e) {
+            //cachingService = PortletCachingServiceImpl.getInstance();
+            registryService = PortletRegistryServiceImpl.getInstance();
+        } catch (PortletRegistryServiceException e) {
             log.error("Failed to get registry instance in PortletFrame: ", e);
             throw new PortletLayoutException("Unable to get portlet instance");
         }
@@ -66,9 +71,9 @@ public class PortletFrame extends BasePortletComponent {
         if (border == null) border = new PortletBorder();
 
         System.err.println("contacting registry for portlet: " + portletClass);
-        ConcretePortlet registeredPortlet = registryService.getConcretePortlet(portletClass);
-        AbstractPortlet abstractPortlet = registeredPortlet.getActivePortlet();
-        PortletSettings settings = registeredPortlet.getPortletSettings(false);
+        ConcretePortlet concretePortlet = registryService.getConcretePortlet(portletClass);
+        AbstractPortlet abstractPortlet = concretePortlet.getAbstractPortlet();
+        PortletSettings settings = concretePortlet.getSportletSettings();
 
         // Set the portlet ID
         req.setAttribute(GridSphereProperties.PORTLETID, settings.getConcretePortletID());
