@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class PersistenceManagerXml  {
 
-    protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerXml.class);
+    protected final static PortletLog log = SportletLog.getInstance(PersistenceManagerXml.class);
 
     private static PersistenceManagerXml instance = new PersistenceManagerXml();
     private String mappingFile = null;
@@ -128,14 +128,15 @@ public class PersistenceManagerXml  {
             Class cl = object.getClass();
             log.debug("Wrote object of type " + cl.getName() + " to XMLFile " + getConnectionURL());
         } catch (ValidationException e) {
-            log.error("Unable to marshal object: ", e);
-            throw new PersistenceManagerException("Validation Error", e);
+            log.error("Unable to marshal object: " + e.getException().toString());
+            throw new PersistenceManagerException("Validation Error" + e.getException().toString());
         } catch (MarshalException e) {
-            log.error("Unable to marshal object: ", e);
-            throw new PersistenceManagerException("Marshal Error", e);
+            log.error("Unable to marshal object: " + e.getException().toString());
+            throw new PersistenceManagerException("Marshal Error: " + e.getException().toString());
         } catch (MappingException e) {
-            log.error("Unable to marshal object: ", e);
-            throw new PersistenceManagerException("Mapping Error", e);
+            log.error("Unable to marshal object: " + e.getException().toString());
+            e.printStackTrace();
+            throw new PersistenceManagerException("Mapping Error" + e.getException().toString());
         }
 
     }
@@ -160,14 +161,14 @@ public class PersistenceManagerXml  {
             Unmarshaller unmarshal = new Unmarshaller(mapping);
             object = unmarshal.unmarshal(filereader);
         } catch (MappingException e) {
-            log.error("Exception ", e);
-            throw new PersistenceManagerException("Mapping Error", e);
+            log.error("MappingException: " + e.getException().toString());
+            throw new PersistenceManagerException("Mapping Error" + e.getException().toString());
         } catch (MarshalException e) {
-            log.error("MarshalException ", e);
-            throw new PersistenceManagerException("Marshal Error", e);
+            log.error("MarshalException " + e.getException().toString());
+            throw new PersistenceManagerException("Marshal Error" + e.getException().toString());
         } catch (ValidationException e) {
-            log.error("ValidationException ", e);
-            throw new PersistenceManagerException("Validation Error", e);
+            log.error("ValidationException " + e.getException().toString());
+            throw new PersistenceManagerException("Validation Error" + e.getException().toString());
         }
         return object;
     }
