@@ -61,7 +61,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         try {
             factory = cfg.buildSessionFactory();
         } catch (HibernateException e) {
-            log.error("Could not instanciate Hibernate Factory " + e);
+            log.error("Could not instantiate Hibernate Factory " + e);
         }
         return factory;
     }
@@ -87,7 +87,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         try {
             factory = cfg.buildSessionFactory();
         } catch (HibernateException e) {
-            log.error("Could not instanciate Hibernate Factory " + e);
+            log.error("Could not instantiate Hibernate Factory " + e);
         }
         return factory;
     }
