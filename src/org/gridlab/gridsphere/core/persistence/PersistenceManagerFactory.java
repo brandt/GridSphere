@@ -27,8 +27,8 @@ public class PersistenceManagerFactory {
 
     public static synchronized PersistenceManagerRdbms createGridSphereRdbms() {
 
-        String databaseConfigFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DATABASE_CONFIG);
-        String databaseName = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DATABASE_NAME);
+        String databaseConfigFile = GridSphereConfig.getProperty(GridSphereConfigProperties.DATABASE_CONFIG);
+        String databaseName = GridSphereConfig.getProperty(GridSphereConfigProperties.DATABASE_NAME);
 
         if (!databases.containsKey(databaseName)) {
             PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(databaseName, databaseConfigFile);

@@ -265,7 +265,6 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
      * @throws PersistenceManagerException is a persistence error occurs
      */
     public void deleteList(String query) throws PersistenceManagerException {
-
         Database db = null;
         OQLQuery oql = null;
         QueryResults results = null;
@@ -339,4 +338,5 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             }
         }
     }
+
 }
