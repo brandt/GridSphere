@@ -685,9 +685,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             pname = pname.substring(pname.lastIndexOf(".")+1);
             ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
             String value = bundle.getString("PORTLET_UNAVAILABLE");
-            title = value + " : " + pname;
-            //out.println(title);
-            errorMessage = portletClass + " is currently unavailable!\n";
+            title = portletClass + " is currently unavailable!\n";
             hasError = true;
         }
 
