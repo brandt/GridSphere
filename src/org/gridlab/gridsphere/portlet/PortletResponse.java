@@ -78,6 +78,14 @@ public interface PortletResponse extends HttpServletResponse {
     public PortletURI createURI(PortletWindow.State state);
 
     /**
+     * Creates a portlet URI pointing to another portal component
+     *
+     * @return the portlet component label
+     */
+    public PortletURI createURI(String componentLabel);
+
+
+    /**
      * Maps the given string value into this portlet's namespace.
      *
      * @param aValue the string value

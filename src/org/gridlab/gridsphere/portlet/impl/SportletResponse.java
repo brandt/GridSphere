@@ -8,7 +8,6 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.PortletWindow;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -120,6 +119,18 @@ public class SportletResponse implements PortletResponse {
     public PortletURI createURI() {
         SportletURI sportletURI = new SportletURI(res, req.getContextPath());
         addURIParameters(sportletURI);
+        sportletURI.setReturn(false);
+        return sportletURI;
+    }
+
+    /**
+     * Creates a portlet URI pointing to another portal component
+     *
+     * @return the portlet component label
+     */
+    public PortletURI createURI(String componentLabel) {
+        SportletURI sportletURI = new SportletURI(res, req.getContextPath());
+        sportletURI.addParameter(SportletProperties.COMPONENT_ID, componentLabel);
         sportletURI.setReturn(false);
         return sportletURI;
     }

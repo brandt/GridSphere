@@ -88,11 +88,14 @@ public final class DefaultPortletAction implements PortletAction {
         Object[] parameterNames = store.keySet().toArray();
         for (int ii = 0; ii < parameterNames.length; ++ii) {
             String parameterName = (String)parameterNames[ii];
-            String parameterValue = (String)store.get(parameterName);
-            buffer.append("&");
-            buffer.append(parameterName);
-            buffer.append("=");
-            buffer.append(parameterValue);
+            Object o = store.get(parameterName);
+            if (o instanceof String) {
+                String parameterValue = (String)o;
+                buffer.append("&");
+                buffer.append(parameterName);
+                buffer.append("=");
+                buffer.append(parameterValue);
+            }
         }
         return buffer.toString();
     }
