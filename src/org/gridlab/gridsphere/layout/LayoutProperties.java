@@ -19,8 +19,10 @@ public class LayoutProperties {
     public static final String TITLE = "title";
     public static final String LINECOLOR = "linecolor";
     public static final String FONT = "font";
-    public static final String PORTLETMODE = "portletmode";
-    public static final String WINDOWSTATE = "windowstate";
+    public static final String PORTLETMODES = "portletmode";
+    public static final String PORTLETMODELINKS = "portletmodelinks";
+    public static final String WINDOWSTATES = "windowstate";
+    public static final String WINDOWSTATELINKS = "windowstatelinks";
 
     /* These are used by the PortletFrame */
     public static final String EDITURI = "edituri";
