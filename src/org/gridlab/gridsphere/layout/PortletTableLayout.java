@@ -260,6 +260,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                 SportletRoleInfo info = (SportletRoleInfo) sit.next();
                 String pclass = info.getPortletClass();
                 PortletRole reqRole = info.getPortletRole();
+
                 if (role.compare(role, reqRole) >= 0) {
                     if (!availPortlets.containsKey(pclass)) {
                         String appID = PortletRegistry.getApplicationPortletID(info.getPortletClass());
@@ -268,12 +269,11 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                             ConcretePortlet concPortlet = appPortlet.getConcretePortlet(info.getPortletClass());
 
                             String dispName = concPortlet.getDisplayName(locale);
-
+                            //System.err.println("show portlet = " + dispName);
                             availPortlets.put(pclass, dispName);
                         }
                     }
                 }
-
             }
         }
 

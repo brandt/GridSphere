@@ -29,6 +29,7 @@ import javax.servlet.http.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 
@@ -109,6 +110,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @throws IOException      if an I/O error occurs
      * @throws ServletException if a servlet error occurs
      */
+
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         processRequest(req, res);
     }
@@ -199,6 +201,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         setTCKUser(portletReq);
 
+
         layoutEngine.service(event);
 
         log.debug("Session stats");
@@ -259,9 +262,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 role = aclService.getRoleInGroup(user, g);
                 groups.put(g, role);
             }
-
-
         }
+
+        // req.getPortletRole returns the role user has in core gridsphere group
+        role = aclService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
 
         // set user, role and groups in request
         req.setAttribute(SportletProperties.PORTLET_USER, user);

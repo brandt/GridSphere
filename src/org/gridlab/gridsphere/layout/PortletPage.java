@@ -348,9 +348,13 @@ public class PortletPage implements Serializable, Cloneable {
             if (compId != null) {
                 PortletComponent comp = compId.getPortletComponent();
                 // perform an action if the component is non null
+                PortletRole userRole = event.getPortletRequest().getRole();
+                System.err.println("in portlt page role= " + userRole.getName());
+                if (userRole.compare(userRole, comp.getRequiredRole()) >= 0) {
                 if (comp != null) {
                     //System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
                     comp.actionPerformed(event);
+                }
                 }
             }
         }
@@ -379,14 +383,14 @@ public class PortletPage implements Serializable, Cloneable {
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = null;
 
+        // set content to UTF-8 for il8n
+        res.setContentType("text/html; charset=utf-8");
         try {
             out = res.getWriter();
         } catch (IllegalStateException e) {
             // means the writer has already been obtained
             return;
         }
-
-        res.setContentType("text/html; charset=utf-8");
 
         // page header
         //out.println("<?xml version=\"1.0\"?>");

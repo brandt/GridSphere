@@ -11,9 +11,7 @@ import org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat.TomcatManagerW
 import org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat.TomcatWebAppResult;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
-import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
-import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
+import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 
 import javax.servlet.UnavailableException;
@@ -45,7 +43,6 @@ public class PortletApplicationManager extends ActionPortlet {
     }
 
     public void listPortlets(FormEvent event) throws PortletException {
-        FrameBean frame = event.getFrameBean("errorFrame");
         PortletRequest req = event.getPortletRequest();
         List result = new ArrayList();
         try {
@@ -55,8 +52,9 @@ public class PortletApplicationManager extends ActionPortlet {
         } catch (TomcatManagerException e) {
             log.error("Unable to retrieve list of portlets. Make sure tomcat-users.xml has been edited according to the UserGuide.");
             event.getPortletRequest().setAttribute("result", result);
-            frame.setKey("PORTLET_ERR_LIST");
-            frame.setStyle(FrameBean.ERROR_TYPE);
+            MessageBoxBean msg = event.getMessageBoxBean("msg");
+            msg.setKey("PORTLET_ERR_LIST");
+            msg.setMessageType(TextBean.MSG_ERROR);
         }
 
         //if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
@@ -71,13 +69,13 @@ public class PortletApplicationManager extends ActionPortlet {
         PortletResponse res = event.getPortletResponse();
 
         User user = event.getPortletRequest().getUser();
-        FrameBean frame = event.getFrameBean("errorFrame");
+        MessageBoxBean msg = event.getMessageBoxBean("msg");
         PortletManagerService portletManager = null;
         try {
             portletManager = (PortletManagerService) getConfig().getContext().getService(PortletManagerService.class, user);
         } catch (PortletServiceException e) {
-            frame.setKey("PORTLET_ERR_REGISTRY");
-            frame.setStyle("error");
+            msg.setKey("PORTLET_ERR_REGISTRY");
+            msg.setMessageType(TextBean.MSG_ERROR);
         }
 
         Map params = action.getParameters();
@@ -89,36 +87,43 @@ public class PortletApplicationManager extends ActionPortlet {
             if ((operation != null) && (appName != null)) {
                 if (operation.equals("start")) {
                     result = tomcat.startWebApp(req, appName);
+                    this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                     portletManager.destroyPortletWebApplication(appName, req, res);
                     portletManager.initPortletWebApplication(appName, req, res);
                 } else if (operation.equals("stop")) {
                     result = tomcat.stopWebApp(req, appName);
+                    this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                     //portletManager.destroyPortletWebApplication(appName, req, res);
                 } else if (operation.equals("reload")) {
                     portletManager.destroyPortletWebApplication(appName, req, res);
                     result = tomcat.stopWebApp(req, appName);
                     result = tomcat.startWebApp(req, appName);
+                    this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                     portletManager.initPortletWebApplication(appName, req, res);
                 } else if (operation.equals("remove")) {
                     portletManager.destroyPortletWebApplication(appName, req, res);
                     result = tomcat.removeWebApp(req, appName);
+                    this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                 } else if (operation.equals("deploy")) {
                     result = tomcat.deployWebApp(req, appName);
                     result = tomcat.startWebApp(req, appName);
+                    this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                     portletManager.initPortletWebApplication(appName, req, res);
                 } else if (operation.equals("undeploy")) {
                     result = tomcat.undeployWebApp(req, appName);
+                    this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                     portletManager.destroyPortletWebApplication(appName, req, res);
                 }
+
             }
         } catch (IOException e) {
             log.error("Caught IOException!", e);
-            frame.setKey("PORTLET_ERR_IO");
-            frame.setStyle("error");
+            msg.setKey("PORTLET_ERR_IO");
+            msg.setMessageType(TextBean.MSG_ERROR);
         } catch (TomcatManagerException e) {
             log.error("Caught TomcatmanagerException!", e);
-            frame.setKey("PORTLET_ERR_TOMCAT");
-            frame.setStyle("error");
+            msg.setKey("PORTLET_ERR_TOMCAT");
+            msg.setMessageType(TextBean.MSG_ERROR);
         }
         req.setAttribute("result", result);
         if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
@@ -140,8 +145,9 @@ public class PortletApplicationManager extends ActionPortlet {
             try {
                 portletManager = (PortletManagerService) getConfig().getContext().getService(PortletManagerService.class, user);
             } catch (PortletServiceException e) {
-                FrameBean frame = event.getFrameBean("errorFrame");
-                frame.setKey("PORTLET_ERR_REGISTRY");
+                MessageBoxBean msg = event.getMessageBoxBean("msg");
+                msg.setKey("PORTLET_ERR_REGISTRY");
+                msg.setMessageType(TextBean.MSG_ERROR);
                 throw new PortletException("PortletRegistry service unavailable! ", e);
             }
 
@@ -154,9 +160,9 @@ public class PortletApplicationManager extends ActionPortlet {
             }
             log.debug("fileinputbean value=" + fi.getValue());
         } catch (Exception e) {
-            FrameBean errMsg = event.getFrameBean("errorFrame");
+            MessageBoxBean errMsg = event.getMessageBoxBean("errorFrame");
             errMsg.setKey("PORTLET_ERR_UPLOAD");
-            errMsg.setStyle("error");
+            errMsg.setMessageType(TextBean.MSG_ERROR);
             log.error("Unable to store uploaded file ", e);
         }
         setNextState(req, DEFAULT_VIEW_PAGE);
@@ -176,20 +182,29 @@ public class PortletApplicationManager extends ActionPortlet {
             try {
                 portletManager = (PortletManagerService) getConfig().getContext().getService(PortletManagerService.class, user);
             } catch (PortletServiceException e) {
-                FrameBean frame = event.getFrameBean("errorFrame");
-                frame.setKey("PORTLET_ERR_REGISTRY");
+                createErrorMessage(event, this.getLocalizedText(req, "PORTLET_ERR_REGISTRY"));
                 throw new PortletException("PortletRegistry service unavailable! ", e);
             }
 
             tomcat.installWebApp(req, webappName);
             portletManager.initPortletWebApplication(webappName, req, res);
-
+            createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_DEPLOY") + " " + webappName);
         } catch (Exception e) {
-            FrameBean errMsg = event.getFrameBean("errorFrame");
-            errMsg.setKey("PORTLET_ERR_DEPLOY");
-            errMsg.setStyle("error");
+            createErrorMessage(event, this.getLocalizedText(req, "PORTLET_ERR_DEPLOY"));
             log.error("Unable to deploy webapp  ", e);
         }
         setNextState(req, DEFAULT_VIEW_PAGE);
+    }
+
+    private void createErrorMessage(FormEvent event, String msg) {
+        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
+        msgBox.setMessageType(TextBean.MSG_ERROR);
+        msgBox.setValue(msg);
+    }
+
+    private void createSuccessMessage(FormEvent event, String msg) {
+        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
+        msgBox.setMessageType(TextBean.MSG_SUCCESS);
+        msgBox.setValue(msg);
     }
 }

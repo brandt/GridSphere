@@ -4,23 +4,54 @@
 */
 package org.gridlab.gridsphere.provider.portlet.jsr;
 
+import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.jsrimpl.*;
+
 import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
+
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+
+import org.gridlab.gridsphere.portlet.impl.ClientImpl;
+
 import org.gridlab.gridsphere.portlet.jsrimpl.*;
+
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRPortletWebApplicationImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 
 import javax.portlet.*;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
+import javax.portlet.Portlet;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletContext;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionActivationListener;
+import javax.servlet.http.HttpSessionAttributeListener;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 import javax.portlet.UnavailableException;
 import javax.servlet.*;
 import javax.servlet.http.*;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -167,8 +198,53 @@ public class PortletServlet extends HttpServlet
         JSRApplicationPortletImpl appPortlet =
                 (JSRApplicationPortletImpl) registry.getApplicationPortlet(portletClassName);
 
-        Supports[] supports = appPortlet.getSupports();
-  
+        //Supports[] supports = appPortlet.getSupports();
+
+        ApplicationPortletConfig appPortletConfig = appPortlet.getApplicationPortletConfig();
+
+        Client client = (Client)request.getSession().getAttribute(SportletProperties.CLIENT);
+        if (client == null) {
+            client = new ClientImpl(request);
+            request.getSession().setAttribute(SportletProperties.CLIENT, client);
+        }
+        List appModes = appPortletConfig.getSupportedModes(client.getMimeType());
+        // convert modes from GridSphere type to JSR
+        Iterator it = appModes.iterator();
+        List myModes = new ArrayList();
+        PortletMode m = PortletMode.VIEW;
+        while (it.hasNext()) {
+            org.gridlab.gridsphere.portlet.Portlet.Mode mode = (org.gridlab.gridsphere.portlet.Portlet.Mode)it.next();
+            if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.VIEW) {
+            m = PortletMode.VIEW;
+        } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.EDIT) {
+            m = PortletMode.EDIT;
+        } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.HELP) {
+            m = PortletMode.HELP;
+        } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.CONFIGURE) {
+            m = new PortletMode("config");
+        } else {
+            m = new PortletMode(mode.toString());
+        }
+            myModes.add(m.toString());
+        }
+        org.gridlab.gridsphere.portlet.Portlet.Mode mode = (org.gridlab.gridsphere.portlet.Portlet.Mode) request.getAttribute(SportletProperties.PORTLET_MODE);
+
+        if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.VIEW) {
+            m = PortletMode.VIEW;
+        } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.EDIT) {
+            m = PortletMode.EDIT;
+        } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.HELP) {
+            m = PortletMode.HELP;
+        } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.CONFIGURE) {
+            m = new PortletMode("config");
+        } else {
+            m = new PortletMode(mode.toString());
+        }
+
+        request.setAttribute(SportletProperties.ALLOWED_MODES, myModes);
+
+        request.setAttribute(SportletProperties.PORTLET_MODE_JSR, m);
+
 
         // perform user conversion from gridsphere to JSR model
         User user = (User) request.getAttribute(SportletProperties.PORTLET_USER);
@@ -218,7 +294,7 @@ public class PortletServlet extends HttpServlet
             if (action != null) {
                 log.debug("in PortletServlet: action is not NULL");
                 if (action.equals(SportletProperties.DO_TITLE)) {
-                    RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
+                    RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext);
                     RenderResponse renderResponse = new RenderResponseImpl(request, response, portalContext);
                     renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
                     renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
@@ -236,7 +312,7 @@ public class PortletServlet extends HttpServlet
                 } else if (action.equals(SportletProperties.ACTION_PERFORMED)) {
                     PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), false);
                     request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
-                    ActionRequestImpl actionRequest = new ActionRequestImpl(request, portalContext, portletContext, supports);
+                    ActionRequestImpl actionRequest = new ActionRequestImpl(request, portalContext, portletContext);
                     ActionResponse actionResponse = new ActionResponseImpl(request, response, portalContext);
                     //setGroupAndRole(actionRequest, actionResponse);
                     log.debug("in PortletServlet: action handling portlet " + portletClassName);
@@ -258,8 +334,10 @@ public class PortletServlet extends HttpServlet
                 PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), true);
                 request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
 
-                RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
+
+                RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext);
                 RenderResponse renderResponse = new RenderResponseImpl(request, response, portalContext);
+
                 renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
                 renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
                 //setGroupAndRole(renderRequest, renderResponse);

@@ -80,12 +80,17 @@ public class ActionPortlet extends GenericPortlet {
      */
     protected String getNextState(PortletRequest request) {
         String id = getUniqueId();
+        String state = (String)request.getAttribute(id+".state");
+        /*
+=======
         String state = (String) request.getAttribute(id + ".state");
+>>>>>>> 1.9
         if (state == null) {
             state = DEFAULT_VIEW_PAGE;
         } else {
             log.debug("in ActionPortlet: in getNextState: a page has been set to:" + state);
         }
+        */
         return state;
     }
 
@@ -229,6 +234,10 @@ public class ActionPortlet extends GenericPortlet {
                             Class[] parameterTypes,
                             Object[] arguments) throws PortletException {
 
+        // reset next state
+        String id = getUniqueId();
+        request.removeAttribute(id + ".state");
+
         // Get object and class references
         Object thisObject = (Object) this;
         Class thisClass = this.getClass();
@@ -280,7 +289,7 @@ public class ActionPortlet extends GenericPortlet {
      */
     public void doViewJSP(RenderRequest request, RenderResponse response, String jsp) {
         log.debug("Including JSP page:" + jsp);
-        response.setContentType("text/html");
+        response.setContentType("text/html; charset=utf-8");
         try {
             if (jsp.startsWith("/")) {
                 getPortletConfig().getPortletContext().getRequestDispatcher(jsp).include(request, response);
@@ -322,17 +331,36 @@ public class ActionPortlet extends GenericPortlet {
             doAction(request, response, next, paramTypes, arguments);
             formEvent.store();
             next = getNextState(request);
-            log.debug("in doView: next page is= " + next);
-            doViewJSP(request, response, next);
+            if (next != null) {
+                log.debug("in doView: next page is= " + next);
+                doViewJSP(request, response, next);
 
-            if (hasError(request)) {
-                PrintWriter out = response.getWriter();
-                log.debug("hasError = true");
-                String message = getNextError(request);
-                out.println(message);
+                if (hasError(request)) {
+                    PrintWriter out = response.getWriter();
+                    log.debug("hasError = true");
+                    String message = getNextError(request);
+                    out.println(message);
+                }
             }
 
 
+        }
+    }
+
+    protected void doDispatch(RenderRequest request,
+                              RenderResponse response) throws PortletException, java.io.IOException {
+        WindowState state = request.getWindowState();
+        try {
+            super.doDispatch(request, response);
+        } catch (PortletException e) {
+            if (!state.equals(WindowState.MINIMIZED)) {
+                PortletMode mode = request.getPortletMode();
+                if (mode.toString().equalsIgnoreCase("CONFIG")) {
+                    doConfigure(request, response);
+                } else {
+                    throw new PortletException("unknown portlet mode: " + mode);
+                }
+            }
         }
     }
 

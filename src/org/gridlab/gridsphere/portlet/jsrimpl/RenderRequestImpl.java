@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 /**
@@ -31,8 +32,8 @@ public class RenderRequestImpl extends PortletRequestImpl implements RenderReque
      *
      * @param req the HttpServletRequest
      */
-    public RenderRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext, Supports[] supports) {
-        super(req, portalContext, portletContext, supports);
+    public RenderRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext) {
+        super(req, portalContext, portletContext);
     }
 
 

@@ -6,6 +6,8 @@ import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -27,8 +29,8 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      *
      * @param req the HttpServletRequest
      */
-    public ActionRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext, Supports[] supports) {
-        super(req, portalContext, portletContext, supports);
+    public ActionRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext) {
+        super(req, portalContext, portletContext);
     }
 
     /**

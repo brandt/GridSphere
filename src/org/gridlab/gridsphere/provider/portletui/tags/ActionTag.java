@@ -203,12 +203,11 @@ public abstract class ActionTag extends BaseComponentTag {
         }
 
         if (label != null) {
-            //actionURL = res.createRenderURL();
             res.setProperty("label", label);
             action = null;
-
             actionURL.setComponentID(label);
         }
+
         if (windowState != null) {
             WindowState state = new WindowState(windowState);
             try {

@@ -4,6 +4,8 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
+import org.gridlab.gridsphere.portlet.PortletLog;
+
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,15 +36,13 @@ import java.util.Map;
  */
 public class SportletLog implements PortletLog {
 
-
     static {
+        //LogManager.setRepositorySelector();
         URL propsURL = SportletLog.class.getResource("/gridsphere/log4j.properties");
         PropertyConfigurator.configure(propsURL);
     }
 
     private static Map logMap = new Hashtable();
-    private static String thisClassName = SportletLog.class.getName() + ".";
-    //private Logger logger;
 
     private Log logger;
 

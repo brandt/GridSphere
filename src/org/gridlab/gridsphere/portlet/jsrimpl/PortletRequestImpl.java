@@ -41,7 +41,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
 
     protected Map props = null;
 
-    protected List modesAllowed = null;
+    //protected List modesAllowed = null;
 
     protected GridSphereParameters portalParameters = null;
 
@@ -53,15 +53,16 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *
      * @param req the HttpServletRequest
      */
-    public PortletRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext, Supports[] supports) {
+    public PortletRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext) {
         super(req);
         this.portalContext = portalContext;
         this.portletContext = portletContext;
         contextPath = this.portletContext.getRealPath("");
         int l = contextPath.lastIndexOf(File.separator);
         contextPath = contextPath.substring(l);
-        this.supports = supports;
+        //this.supports = supports;
         props = new HashMap();
+        /*
         modesAllowed = new ArrayList();
         for (int i = 0; i < supports.length; i++) {
             Supports s = (Supports) supports[i];
@@ -78,8 +79,9 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             modesAllowed.add(m.toString());
         }
         */
-        if (!modesAllowed.contains(PortletMode.VIEW.toString())) modesAllowed.add(PortletMode.VIEW.toString());
-        req.setAttribute(SportletProperties.ALLOWED_MODES, modesAllowed);
+        //if (!modesAllowed.contains(PortletMode.VIEW.toString())) modesAllowed.add(PortletMode.VIEW.toString());
+
+
 
         portalParameters = new GridSphereParameters(req);
 
@@ -163,7 +165,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *         given portlet mode
      */
     public boolean isPortletModeAllowed(PortletMode mode) {
-
+        List modesAllowed = (List)this.getHttpServletRequest().getAttribute(SportletProperties.ALLOWED_MODES);
         if (modesAllowed.contains(mode.toString())) return true;
         /*
         Enumeration modesEnum = portalContext.getSupportedPortletModes();
@@ -193,6 +195,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             m = PortletMode.EDIT;
         } else if (mode == Portlet.Mode.HELP) {
             m = PortletMode.HELP;
+        } else if (mode == Portlet.Mode.CONFIGURE) {
+            m = new PortletMode("config");
         } else {
             m = new PortletMode(mode.toString());
         }

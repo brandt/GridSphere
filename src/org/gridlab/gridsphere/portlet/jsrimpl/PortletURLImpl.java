@@ -41,7 +41,6 @@ public class PortletURLImpl implements PortletURL {
     private boolean redirect = true;
     private String contextPath = null;
     private PortalContext context = null;
-    private List allowedModes = null;
 
     private String action = null;
     private String cid = null;
@@ -61,7 +60,6 @@ public class PortletURLImpl implements PortletURL {
         this.context = context;
         this.contextPath = "/gridsphere"; //req.getContextPath();
         this.isSecure = req.isSecure();
-        allowedModes = (List) req.getAttribute(SportletProperties.ALLOWED_MODES);
     }
 
     public void setContextPath(String contextPath) {
@@ -134,20 +132,10 @@ public class PortletURLImpl implements PortletURL {
     public void setPortletMode(PortletMode portletMode)
             throws PortletModeException {
         if (portletMode == null) throw new IllegalArgumentException("Portlet mode cannot be null");
-
-        /*
-        boolean isSupported = false;
-        Enumeration enum = context.getSupportedPortletModes();
-        while (enum.hasMoreElements()) {
-        PortletMode supported = (PortletMode)enum.nextElement();
-        if (supported.equals(portletMode)) {
-        isSupported = true;
-        break;
-        }
-        }
-        */
+        List allowedModes = (List) req.getAttribute(SportletProperties.ALLOWED_MODES);
         if (allowedModes.contains(portletMode.toString())) {
             mode = portletMode;
+            req.setAttribute(SportletProperties.PORTLET_MODE_JSR, mode);
         } else {
             throw new PortletModeException("Illegal portlet mode", portletMode);
         }

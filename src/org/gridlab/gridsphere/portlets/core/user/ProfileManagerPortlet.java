@@ -174,8 +174,16 @@ public class ProfileManagerPortlet extends ActionPortlet {
         tcGroups.addBean(tbGroups);
         TableCellBean tcGroupsDesc = new TableCellBean();
         tcGroupsDesc.addBean(tbGroupsDesc);
+
+        TextBean tbRole = new TextBean();
+        String role = this.getLocalizedText(req, "PROFILE_ROLE_DESC");
+        tbRole.setValue(role);
+        TableCellBean tcRole = new TableCellBean();
+        tcRole.addBean(tbRole);
+
         tr.addBean(tcGroups);
         tr.addBean(tcGroupsDesc);
+        tr.addBean(tcRole);
         model.addTableRowBean(tr);
 
         List groups = aclManagerService.getGroups();
@@ -183,10 +191,12 @@ public class ProfileManagerPortlet extends ActionPortlet {
         TableRowBean groupsTR = null;
         TableCellBean groupsTC = null;
         TableCellBean groupsDescTC = null;
+        TableCellBean roleTC = null;
         while (it.hasNext()) {
             groupsTR = new TableRowBean();
             groupsTC = new TableCellBean();
             groupsDescTC = new TableCellBean();
+            roleTC = new TableCellBean();
             PortletGroup g = (PortletGroup) it.next();
             String groupDesc = g.getDescription();
 
@@ -229,8 +239,16 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 groupsDescTC.addBean(priv);
                 groupsDescTC.addBean(mailTB);
             }
+
+            PortletRole r = aclManagerService.getRoleInGroup(user, g);
+            TextBean roletext = new TextBean();
+            if (r.equals(PortletRole.GUEST)) r = PortletRole.USER;
+            roletext.setValue(r.getName());
+            roleTC.addBean(roletext);
+
             groupsTR.addBean(groupsTC);
             groupsTR.addBean(groupsDescTC);
+            groupsTR.addBean(roleTC);
             model.addTableRowBean(groupsTR);
         }
 
