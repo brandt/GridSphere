@@ -18,6 +18,8 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
     private List text = new ArrayList();
     private List keys = new ArrayList();
     private String messageType = TextBean.MSG_INFO;
+    private String width = null;
+    private String height = null;
 
     public MessageBoxBean() {
         super(NAME);
@@ -34,10 +36,52 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
         this.request = req;
     }
 
+    /**
+     * Returns the width of the messagebox
+     * @return width of the messagebox
+     */
+    public String getWidth() {
+        return width;
+    }
+
+    /**
+     * Sets the width of the messgebox
+     * @param width witdh of the messagebox
+     */
+    public void setWidth(String width) {
+        this.width = width;
+    }
+
+    /**
+     * Gets the height of the messagebox
+     * @return height of the messagebox
+     */
+    public String getHeight() {
+        return height;
+    }
+
+    /**
+     * Sets the height of the messageboox
+     * @param height height of the messagebox
+     */
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    /**
+     * Returns the type of the message.
+     * @see TextBean
+     * @return type of the message
+     */
     public String getMessageType() {
         return messageType;
     }
 
+    /**
+     * Sets the type of the message
+     * @see TextBean
+     * @param messageType
+     */
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
@@ -134,6 +178,8 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
         this.cssClass="ui-messagebox";
         StringBuffer sb = new StringBuffer();
         String message = getMessage();
+        if (height!=null) this.addCssStyle("height=\""+height+"\"");
+        if (width!=null) this.addCssStyle("width=\""+width+"\"");
         // only return something if we have a message
         if (message!=null) {
             sb.append("<div"+getFormattedCss()+">");
