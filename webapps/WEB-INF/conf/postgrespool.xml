@@ -1,0 +1,9 @@
+<!DOCTYPE databases PUBLIC "-//EXOLAB/Castor JDO Configuration DTD Version 1.0//EN" "http://castor.exolab.org/jdo-conf.dtd">
+
+<database name="testdb" engine="postgresql" >
+    <data-source class-name="com.codestudio.sql.PoolManDataSource">
+        <params database-name="testdb"/>
+    </data-source>
+
+     <mapping href="webapps/WEB-INF/conf/mapping/docletmapping.xml"/>
+</database>
