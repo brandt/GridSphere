@@ -7,20 +7,8 @@
 <jsp:useBean id="userManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
              scope="request"/>
-<form name="UserManagerPortlet" method="POST"
-      action="userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_DELETE)%>">
+<gs:form action="doDeleteUser">
   <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
-  <script type="text/javascript">
-    function UserManagerPortlet_confirmDeleteUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_DELETE_CONFIRM)%>";
-      document.UserManagerPortlet.submit();
-    }
-
-    function UserManagerPortlet_cancelDeleteUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_DELETE_CANCEL)%>";
-      document.UserManagerPortlet.submit();
-    }
-  </script>
 <table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
@@ -50,14 +38,8 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-actions">
-            <input type="button"
-                   name="<%=UserManagerBean.ACTION_USER_DELETE_CONFIRM%>"
-                   value="Confirm Delete"
-                   onClick="javascript:UserManagerPortlet_confirmDeleteUser_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=UserManagerBean.ACTION_USER_DELETE_CANCEL%>"
-                   value="Cancel Delete"
-                   onClick="javascript:UserManagerPortlet_cancelDeleteUser_onClick()"/>
+            <gs:submit name="doConfirmDeleteUser" value="Confirm Delete"/>
+            &nbsp;&nbsp;<gs:submit name="doCancelDeleteUser" value="Cancel Delete"/>
           </td>
         </tr>
       </table>
@@ -118,4 +100,4 @@
     </td>
   </tr>
 </table>
-</form>
+</gs:form>

@@ -38,15 +38,7 @@ public class UserManagerBean extends PortletBean {
     public static final String PAGE_USER_EDIT = "/jsp/usermanager/userEdit.jsp";
     public static final String PAGE_USER_DELETE = "/jsp/usermanager/userDelete.jsp";
     public static final String PAGE_USER_DELETE_CONFIRM = "/jsp/usermanager/userDeleteConfirm.jsp";
-    // Portlet actions available within this portlet
-    public static final String ACTION_USER_LIST = "doListUser";
-    public static final String ACTION_USER_VIEW = "doViewUser";
-    public static final String ACTION_USER_EDIT = "doEditUser";
-    public static final String ACTION_USER_EDIT_CONFIRM = "doConfirmEditUser";
-    public static final String ACTION_USER_EDIT_CANCEL = "doCancelEditUser";
-    public static final String ACTION_USER_DELETE = "doDeleteUser";
-    public static final String ACTION_USER_DELETE_CONFIRM = "doConfirmDeleteUser";
-    public static final String ACTION_USER_DELETE_CANCEL = "doCancelDeleteUser";
+
     // Portlet services
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
@@ -111,6 +103,12 @@ public class UserManagerBean extends PortletBean {
             throws PortletException {
         loadUser();
         setPage(PAGE_USER_VIEW);
+    }
+
+    public void doNewUser()
+            throws PortletException {
+        loadUser();
+        setPage(PAGE_USER_EDIT);
     }
 
     public void doEditUser()

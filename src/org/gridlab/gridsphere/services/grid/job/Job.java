@@ -15,7 +15,7 @@ import org.gridlab.gridsphere.portlet.User;
 
 public interface Job {
 
-    public String getId();
+    public String getID();
 
     public User getUser();
 

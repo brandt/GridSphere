@@ -39,7 +39,7 @@ public class GrmsJob implements Job {
         this.jobSpecification = jobSpecification;
     }
 
-    public String getId() {
+    public String getID() {
         return this.jobId;
     }
 

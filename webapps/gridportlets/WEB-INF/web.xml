@@ -40,6 +40,11 @@
         <servlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialMappingUserPortlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>JobManagerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.grid.job.JobManagerPortlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
        <servlet-name>CredentialMappingAdminPortlet</servlet-name>
        <url-pattern>/adminstration/credential/mapping</url-pattern>
@@ -63,6 +68,11 @@
     <servlet-mapping>
        <servlet-name>CredentialMappingUserPortlet</servlet-name>
        <url-pattern>/grid/credential/mapping`</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>JobManagerPortlet</servlet-name>
+       <url-pattern>/grid/job</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>

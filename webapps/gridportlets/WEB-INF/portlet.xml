@@ -204,4 +204,42 @@
 
 </portlet-app-def>
 
+<!-- JobManagerPortlet -->
+
+<portlet-app-def>
+
+<portlet-app id="org.gridlab.gridsphere.portlets.grid.job.JobManagerPortlet">
+    <portlet-name>Job Submission and Migration Manager</portlet-name>
+    <servlet-name>JobManagerPortlet</servlet-name>
+    <portlet-config>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </portlet-config>
+    <cache>
+        <expires>120</expires>
+        <shared>false</shared>
+    </cache>
+</portlet-app>
+
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.grid.job.JobManagerPortlet.1">
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </context-param>
+    <concrete-portlet>
+        <portlet-name>Job Submission and Migration Manager</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Job Submission and Migration Manager</title>
+            <title-short>JobManagerPortlet</title-short>
+            <description>
+               Enables portal users to submit jobs to the Grid.
+            </description>
+            <keywords>job submission manager user</keywords>
+        </language>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
+
 </portlet-app-collection>

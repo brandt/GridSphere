@@ -41,7 +41,7 @@ public class GrmsJobStatusMessenger extends JobStatusMessenger {
         if (!emailTo.equals("")) {
             // Retrieve job information
             String userId = user.getID();
-            String jobId = job.getId();
+            String jobId = job.getID();
             JobStatus jobStatus = job.getJobStatus();
             JobSpecification jobSpecification = job.getJobSpecification();
             Date dateStatusChanged = job.getDateStatusChanged();
@@ -98,7 +98,7 @@ public class GrmsJobStatusMessenger extends JobStatusMessenger {
         // Attempt to sms user
         if (!smsTo.equals("")) {
             // Retrieve job information
-            String jobId = job.getId();
+            String jobId = job.getID();
             JobStatus jobStatus = job.getJobStatus();
             Date dateStatusChanged = job.getDateStatusChanged();
             // Create message content

@@ -49,7 +49,7 @@ public abstract class AbstractJobMonitor extends Thread implements JobMonitor {
     }
 
     public void addJob(Job job) {
-        String jobId = job.getId();
+        String jobId = job.getID();
         System.out.println("JobMonitor: Adding job "
           + jobId + " with status " + job.getJobStatus());
         this.jobMap.put(jobId, job);
@@ -80,7 +80,7 @@ public abstract class AbstractJobMonitor extends Thread implements JobMonitor {
             Iterator jobIterator = getJobs();
             while (jobIterator.hasNext()) {
                 Job job = (Job)jobIterator.next();
-                String jobId = job.getId();
+                String jobId = job.getID();
                 // Check if we can monitor job
                 if (canMonitorJob(job)) {
                     System.out.println("JobMonitor: Updating job "

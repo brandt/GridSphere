@@ -309,7 +309,7 @@ public class GrmsJobManager implements JobManagerService {
 
     void updateJob(User user, GrmsJob job)
             throws JobManagerException {
-        String jobId = job.getId();
+        String jobId = job.getID();
         JobStatus jobStatus = job.getJobStatus();
         // If job status is unknown, we must query for job information
         if (jobStatus.equals(JobStatus.STATUS_UNKNOWN)) {
@@ -462,7 +462,7 @@ public class GrmsJobManager implements JobManagerService {
     public void migrateJob(User user, Job job)
             throws JobManagerException {
         // Retrieve job id
-        String jobId = job.getId();
+        String jobId = job.getID();
         // Retrieve job specification from original job
         JobSpecification oldSpecification = job.getJobSpecification();
         // Pre-process job specification
@@ -495,7 +495,7 @@ public class GrmsJobManager implements JobManagerService {
     public void migrateJob(User user, Job job, JobSpecification newSpecification)
             throws JobManagerException {
         // Retrieve rjob id
-        String jobId = job.getId();
+        String jobId = job.getID();
         // Pre-process job specification
         preProcess(user, newSpecification);
         // Submit new job specification for job id
@@ -638,7 +638,7 @@ public class GrmsJobManager implements JobManagerService {
         throws JobManagerException {
         User user = job.getUser();
         Map jobMap = getJobMap(user, false);
-        String jobId = job.getId();
+        String jobId = job.getID();
         jobMap.put(jobId, job);
    }
 
@@ -646,7 +646,7 @@ public class GrmsJobManager implements JobManagerService {
             throws JobManagerException {
         User user = job.getUser();
         Map jobMap = getJobMap(user, false);
-        String jobId = job.getId();
+        String jobId = job.getID();
         if (jobMap.containsKey(jobId)) {
             jobMap.remove(jobId);
         }

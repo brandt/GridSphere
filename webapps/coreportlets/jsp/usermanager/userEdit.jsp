@@ -8,20 +8,8 @@
 <jsp:useBean id="userManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
              scope="request"/>
-<form name="UserManagerPortlet" method="POST"
-      action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_EDIT)%>">
+<gs:form action="doEditUser">
   <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
-  <script type="text/javascript">
-    function UserManagerPortlet_confirmEditUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_EDIT_CONFIRM)%>";
-      document.UserManagerPortlet.submit();
-    }
-
-    function UserManagerPortlet_cancelEditUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_EDIT_CANCEL)%>";
-      document.UserManagerPortlet.submit();
-    }
-  </script>
 <table class="portlet-pane" cellspacing="1">
 <% if (userManagerBean.isFormInvalid()) { %>
   <tr>
@@ -50,14 +38,8 @@
         </tr>
         <tr>
           <td class="portlet-frame-actions">
-            <input type="button"
-                   name="<%=UserManagerBean.ACTION_USER_EDIT_CONFIRM%>"
-                   value="Save User"
-                   onClick="javascript:UserManagerPortlet_confirmEditUser_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=UserManagerBean.ACTION_USER_EDIT_CANCEL%>"
-                   value="Cancel Edit"
-                   onClick="javascript:UserManagerPortlet_cancelEditUser_onClick()"/>
+            <gs:submit name="doConfirmEditUser" value="Save User"/>
+            &nbsp;&nbsp;<gs:submit name="doCancelEditUser" value="Cancel Edit"/>
           </td>
         </tr>
       </table>
@@ -163,4 +145,4 @@
     </td>
   </tr>
 </table>
-</form>
+</gs:form>

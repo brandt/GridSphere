@@ -1,33 +1,14 @@
 <%@ page import="org.gridlab.gridsphere.portlet.User,
                  org.gridlab.gridsphere.portlets.core.beans.UserManagerBean,
-                 java.util.List" %>
+                 java.util.List,
+                 org.gridlab.gridsphere.portlet.PortletURI" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 <jsp:useBean id="userManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
              scope="request"/>
-<form name="UserManagerPortlet" method="POST"
-      action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_LIST)%>">
-  <input type="hidden" name="userID" value=""/>
-  <script type="text/javascript">
-    function UserManagerPortlet_listUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_LIST)%>";
-      document.UserManagerPortlet.submit();
-    }
-
-    function UserManagerPortlet_newUser_onClick(userID) {
-      document.UserManagerPortlet.userID.value="";
-      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_EDIT)%>";
-      document.UserManagerPortlet.submit();
-    }
-
-    function UserManagerPortlet_viewUser_onClick(userID) {
-      document.UserManagerPortlet.userID.value=userID;
-      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_VIEW)%>";
-      document.UserManagerPortlet.submit();
-    }
-  </script>
+<gs:form action="doListUser">
 <table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
@@ -39,14 +20,8 @@
         </tr>
         <tr>
           <td class="portlet-frame-actions">
-            <input type="button"
-                   name="<%=UserManagerBean.ACTION_USER_LIST%>"
-                   value="List Users"
-                   onClick="javascript:UserManagerPortlet_listUser_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=UserManagerBean.ACTION_USER_EDIT%>"
-                   value="New User"
-                   onClick="javascript:UserManagerPortlet_newUser_onClick()"/>
+            <gs:submit name="doListUser" value="List Users"/>
+            &nbsp;&nbsp;<gs:submit name="doNewUser" value="New User"/>
           </td>
         </tr>
       </table>
@@ -82,7 +57,9 @@
        User user = (User)userList.get(ii); %>
         <tr>
           <td class="portlet-frame-text">
-            <a href="javascript:UserManagerPortlet_viewUser_onClick('<%=user.getID()%>')">
+            <% PortletURI actionURI = userManagerBean.getPortletActionURI("doViewUser");
+               actionURI.addParameter("userID", user.getID()); %>
+            <a href="<%=actionURI%>">
               <%=user.getUserID()%>
             </a>
           </td>
@@ -102,4 +79,4 @@
     </td>
   </tr>
 </table>
-</form>
+</gs:form>

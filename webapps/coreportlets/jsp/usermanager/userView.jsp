@@ -10,31 +10,8 @@
 <jsp:useBean id="userManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
              scope="request"/>
-<form name="UserManagerPortlet" method="POST"
-      action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_VIEW)%>">
+<gs:form action="doViewUser">
   <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
-  <script type="text/javascript">
-    function UserManagerPortlet_listUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_LIST)%>";
-      document.UserManagerPortlet.submit();
-    }
-
-    function UserManagerPortlet_newUser_onClick(userID) {
-      document.UserManagerPortlet.userID.value="";
-      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_EDIT)%>";
-      document.UserManagerPortlet.submit();
-    }
-
-    function UserManagerPortlet_editUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_EDIT)%>";
-      document.UserManagerPortlet.submit();
-    }
-
-    function UserManagerPortlet_deleteUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_DELETE)%>";
-      document.UserManagerPortlet.submit();
-    }
-  </script>
 <table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
@@ -46,22 +23,10 @@
         </tr>
         <tr>
           <td class="portlet-frame-actions">
-            <input type="button"
-                   name="<%=UserManagerBean.ACTION_USER_LIST%>"
-                   value="List Users"
-                   onClick="javascript:UserManagerPortlet_listUser_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=UserManagerBean.ACTION_USER_EDIT%>"
-                   value="New User"
-                   onClick="javascript:UserManagerPortlet_newUser_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=UserManagerBean.ACTION_USER_EDIT%>"
-                   value="Edit User"
-                   onClick="javascript:UserManagerPortlet_editUser_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=UserManagerBean.ACTION_USER_DELETE%>"
-                   value="Delete User"
-                   onClick="javascript:UserManagerPortlet_deleteUser_onClick()"/>
+            <gs:submit name="doListUser" value="List Users"/>
+            &nbsp;&nbsp;<gs:submit name="doNewUser" value="New User"/>
+            &nbsp;&nbsp;<gs:submit name="doEditUser" value="Edit User"/>
+            &nbsp;&nbsp;<gs:submit name="doDeleteUser" value="Delete User"/>
           </td>
         </tr>
       </table>
@@ -122,4 +87,4 @@
     </td>
   </tr>
 </table>
-</form>
+</gs:form>

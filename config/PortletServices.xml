@@ -93,6 +93,14 @@
     </service>
 
     <service>
+        <name>Job Manager Service</name>
+        <user-required>true</user-required>
+        <description>Provides Job Submission and Management Capabilities</description>
+        <interface>org.gridlab.gridsphere.services.grid.job.JobManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.grid.job.impl.JobManagerServiceImpl</implementation>
+    </service>
+
+    <service>
         <name>Layout Service</name>
         <description>Provides Layout Capabilities</description>
         <interface>org.gridlab.gridsphere.services.core.layout.LayoutManagerService</interface>

@@ -10,6 +10,7 @@ package org.gridlab.gridsphere.portlets.core;
 
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
@@ -36,14 +37,15 @@ public class UserManagerPortlet extends AbstractPortlet {
 
     public void actionPerformed(ActionEvent event) throws PortletException {
         getPortletLog().debug("Entering actionPerformed()");
-        PortletAction action = event.getAction();
+        //PortletAction action = event.getAction();
         //'Get the portlet request and response
         PortletRequest request = event.getPortletRequest();
         PortletResponse response = event.getPortletResponse();
         // Get instance of user manager bean
         UserManagerBean userManagerBean = getUserManagerBean(request, response);
         // Then perform given action
-        userManagerBean.doViewAction(action);
+        userManagerBean.doViewAction(event);
+        //userManagerBean.doViewAction(action);
         getPortletLog().debug("Exiting actionPerformed()");
     }
 
@@ -52,7 +54,8 @@ public class UserManagerPortlet extends AbstractPortlet {
         getPortletLog().debug("Entering doView()");
         // Get instance of user manager bean
         UserManagerBean userManagerBean = getUserManagerBean(request, response);
-        if (userManagerBean.getActionPerformed() == null) {
+        //if (userManagerBean.getActionPerformed() == null) {
+        if (userManagerBean.getActionEvent() == null) {
             userManagerBean.doDefaultViewAction();
         }
         // Get next page from do view
