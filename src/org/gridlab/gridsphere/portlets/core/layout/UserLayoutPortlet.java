@@ -54,11 +54,16 @@ public class UserLayoutPortlet extends ActionPortlet {
     public void createNewTab(FormEvent event) throws PortletException, IOException {
 
         String tabName = event.getTextFieldBean("userTabTF").getValue();
-        RadioButtonBean rb = event.getRadioButtonBean("colsRB");
-        String rbtype = rb.getSelectedValue();
+        //RadioButtonBean rb = event.getRadioButtonBean("colsRB");
+        //String rbtype = rb.getSelectedValue();
 
+        String rbtype = event.getPortletRequest().getParameter("colsRB");
         int cols = Integer.valueOf(rbtype).intValue();
-
+        if (tabName == null) {
+            createErrorMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUT_NOTAB_ERROR"));
+            return;
+        }
+        log.debug("creating tab " + tabName + " cols= " + cols);
         PortletTabbedPane pane = layoutMgr.getUserTabbedPane(event.getPortletRequest());
         if (pane != null) {
         Iterator it = pane.getPortletTabs().iterator();
@@ -70,6 +75,7 @@ public class UserLayoutPortlet extends ActionPortlet {
             }
         }
         }
+
 
         pane = layoutMgr.createUserTabbedPane(event.getPortletRequest(), cols, tabName);
 
