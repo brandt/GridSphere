@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.core.persistence.hibernate;
 
 import net.sf.hibernate.*;
 import net.sf.hibernate.cfg.Configuration;
-import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceSession;

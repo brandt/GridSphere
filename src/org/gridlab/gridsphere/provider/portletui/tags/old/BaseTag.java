@@ -4,18 +4,15 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags.old;
 
-import org.gridlab.gridsphere.provider.ui.beans.TagBean;
-import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.provider.ui.beans.TagBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
-import javax.servlet.ServletRequest;
 
 public class BaseTag extends TagSupport {
 

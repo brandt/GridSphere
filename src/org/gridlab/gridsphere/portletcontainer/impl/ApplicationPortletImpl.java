@@ -4,17 +4,22 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletException;
+import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portletcontainer.*;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.*;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinition;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
-import java.util.ArrayList;
 
 /**
  * The <code>ApplicationPortletImpl</code> is an implementation of the <code>ApplicationPortlet</code> interface

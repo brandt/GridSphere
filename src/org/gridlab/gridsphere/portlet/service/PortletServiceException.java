@@ -6,9 +6,6 @@ package org.gridlab.gridsphere.portlet.service;
 
 import org.gridlab.gridsphere.portlet.PortletException;
 
-import java.io.PrintStream;
-import java.io.PrintWriter;
-
 /**
  * The <code>PortletServiceException</code> is the base class of all
  * checked exceptions thrown by portlet services.

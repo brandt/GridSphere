@@ -1,11 +1,11 @@
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
-import java.util.*;
 import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>

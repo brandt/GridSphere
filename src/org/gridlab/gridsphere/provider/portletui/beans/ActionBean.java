@@ -4,12 +4,10 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletURI;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**

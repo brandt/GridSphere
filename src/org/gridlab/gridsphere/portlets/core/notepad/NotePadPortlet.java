@@ -5,13 +5,16 @@
 package org.gridlab.gridsphere.portlets.core.notepad;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
-import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.services.core.note.NoteService;
+import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
+import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
+import org.gridlab.gridsphere.provider.portletui.beans.HiddenFieldBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextAreaBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridlab.gridsphere.services.core.note.Note;
+import org.gridlab.gridsphere.services.core.note.NoteService;
 
 import javax.servlet.UnavailableException;
 import java.util.List;

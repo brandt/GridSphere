@@ -6,18 +6,17 @@ package org.gridlab.gridsphere.portlets.core.file;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
-
+import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
+import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.file.FileManagerService;
 
-import javax.servlet.UnavailableException;
-import javax.activation.FileDataSource;
 import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.servlet.UnavailableException;
 import java.io.*;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 public class FileManagerPortlet extends ActionPortlet {
 

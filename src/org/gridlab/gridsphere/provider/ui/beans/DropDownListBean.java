@@ -5,13 +5,12 @@
 
 package org.gridlab.gridsphere.provider.ui.beans;
 
-import org.gridlab.gridsphere.provider.ui.model.SelectList;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.provider.ui.model.SelectList;
 
-import java.util.Iterator;
-import java.util.Vector;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class DropDownListBean extends BaseListBean implements DropDownList {

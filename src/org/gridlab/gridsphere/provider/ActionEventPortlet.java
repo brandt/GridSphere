@@ -4,12 +4,11 @@
  */
 package org.gridlab.gridsphere.provider;
 
-import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.portlet.*;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * @deprecated This class is no longer supported

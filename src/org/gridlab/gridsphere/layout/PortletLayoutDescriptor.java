@@ -5,12 +5,11 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * The <code>PortletLayoutDescriptor</code> is responsible for marshalling and

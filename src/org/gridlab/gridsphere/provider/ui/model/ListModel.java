@@ -4,7 +4,7 @@
  */
 
 package org.gridlab.gridsphere.provider.ui.model;
-import java.util.Iterator;
+
 
 public interface ListModel {
 

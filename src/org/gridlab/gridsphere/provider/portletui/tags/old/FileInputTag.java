@@ -4,9 +4,7 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags.old;
 
-import org.gridlab.gridsphere.provider.ui.beans.PasswordBean;
 import org.gridlab.gridsphere.provider.ui.beans.FileInputBean;
-import org.gridlab.gridsphere.provider.portletui.tags.old.BaseTag;
 
 import javax.servlet.jsp.JspException;
 

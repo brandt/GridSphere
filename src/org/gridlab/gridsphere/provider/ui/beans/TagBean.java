@@ -7,8 +7,6 @@ package org.gridlab.gridsphere.provider.ui.beans;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 
-import javax.servlet.ServletRequest;
-
 public interface TagBean {
 
     public void setCID(String id);

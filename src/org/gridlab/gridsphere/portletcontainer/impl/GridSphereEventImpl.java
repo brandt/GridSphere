@@ -4,16 +4,17 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
+import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Stack;
+import java.util.StringTokenizer;
 
 /**
  * The <code>GridSphereEventImpl</code> is an implementation of the <code>GridSphereEvent</code> interface.

@@ -9,7 +9,6 @@
 package org.gridlab.gridsphere.portlets.core.tomcat;
 
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 public class TomcatWebAppResult {

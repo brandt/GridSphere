@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.layout.event;
 
-import org.gridlab.gridsphere.layout.PortletTab;
+
 
 /**
  * A <code>PortletTabEvent</code> is triggered by a <code>PortletTab</code>

@@ -4,26 +4,26 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletGroupFactory;
 import org.gridlab.gridsphere.portlet.GuestUser;
+import org.gridlab.gridsphere.portlet.PortletGroupFactory;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
-import org.gridlab.gridsphere.services.core.user.LoginService;
-import org.gridlab.gridsphere.services.core.user.UserSessionManager;
-import org.gridlab.gridsphere.services.core.user.LoginUserModule;
 import org.gridlab.gridsphere.services.core.security.auth.LoginAuthModule;
+import org.gridlab.gridsphere.services.core.user.LoginService;
+import org.gridlab.gridsphere.services.core.user.LoginUserModule;
+import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
-import java.util.*;
 import java.lang.reflect.Constructor;
+import java.util.*;
 
 /**
  * The <code>LoginService</code> is the primary interface that defines the login method used to obtain a

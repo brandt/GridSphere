@@ -7,13 +7,11 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
-import java.util.Iterator;
 
 /**
  * <code>BasePortletComponent</code> represents an abstract portlet component with a particular

@@ -6,22 +6,21 @@
 
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabListener;
-import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
-import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Iterator;
 
 /**
  * The <code>PortletTabbedPane</code> represents the visual portlet tabbed pane interface

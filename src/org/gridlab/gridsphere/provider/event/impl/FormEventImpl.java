@@ -10,39 +10,35 @@
 package org.gridlab.gridsphere.provider.event.impl;
 
 import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.provider.event.FormEvent;
-import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.event.FormEvent;
+import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
+import org.gridlab.gridsphere.provider.portletui.beans.*;
+import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
+import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
+import org.gridlab.gridsphere.provider.portletui.beans.HiddenFieldBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
+import org.gridlab.gridsphere.provider.portletui.beans.PasswordBean;
+import org.gridlab.gridsphere.provider.portletui.beans.RadioButtonBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextAreaBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridlab.gridsphere.provider.ui.beans.*;
 import org.gridlab.gridsphere.provider.ui.beans.TableBean;
 import org.gridlab.gridsphere.provider.ui.beans.TableCellBean;
 import org.gridlab.gridsphere.provider.ui.beans.TableRowBean;
 import org.gridlab.gridsphere.provider.ui.beans.TagBean;
-//import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
-import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
-import org.gridlab.gridsphere.provider.portletui.beans.PasswordBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextAreaBean;
-import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
-import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
-import org.gridlab.gridsphere.provider.portletui.beans.HiddenFieldBean;
-import org.gridlab.gridsphere.provider.portletui.beans.RadioButtonBean;
-import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
-
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
-import java.io.IOException;
 
 public class FormEventImpl implements FormEvent {
 

@@ -1,6 +1,5 @@
 package org.gridlab.gridsphere.services.core.security.auth;
 
-import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.portlet.User;
 
 /**

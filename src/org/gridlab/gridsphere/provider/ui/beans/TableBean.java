@@ -6,7 +6,6 @@
 package org.gridlab.gridsphere.provider.ui.beans;
 
 import org.gridlab.gridsphere.provider.ui.model.DefaultList;
-import org.gridlab.gridsphere.portlet.PortletRequest;
 
 import java.util.Iterator;
 

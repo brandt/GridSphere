@@ -6,8 +6,6 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 
-import java.util.List;
-
 /**
  * A <code>SportletRequest</code> turns the immutable <code>PortletRequest</code>
  * into a stateful mutable object with all the additional set methods not defined

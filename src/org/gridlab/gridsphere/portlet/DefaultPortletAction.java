@@ -4,7 +4,8 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The <code>DefaultPortletAction</code> is a portlet action with default parameters.

@@ -4,9 +4,9 @@
  */
 package org.gridlab.gridsphere.services.core.note;
 
-import org.radeox.engine.context.RenderContext;
-import org.radeox.engine.context.BaseRenderContext;
 import org.radeox.EngineManager;
+import org.radeox.engine.context.BaseRenderContext;
+import org.radeox.engine.context.RenderContext;
 
 import java.util.Date;
 

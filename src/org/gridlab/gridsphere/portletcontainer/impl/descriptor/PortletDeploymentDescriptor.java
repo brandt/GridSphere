@@ -5,12 +5,11 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXmlImpl;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 
 import java.io.IOException;
 import java.util.ArrayList;

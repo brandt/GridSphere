@@ -6,19 +6,17 @@ package org.gridlab.gridsphere.portlets.core.file;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
-
+import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
+import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridlab.gridsphere.services.core.file.FileManagerService;
-import org.gridlab.gridsphere.layout.PortletFrame;
 
 import javax.servlet.UnavailableException;
-import javax.activation.FileDataSource;
-import javax.activation.DataHandler;
-import java.io.*;
-import java.util.List;
-import java.util.Iterator;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class BannerPortlet extends ActionPortlet {
 

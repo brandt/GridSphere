@@ -4,10 +4,10 @@
  */
 package org.gridlab.gridsphere.layout.event.impl;
 
-import org.gridlab.gridsphere.layout.PortletTab;
 import org.gridlab.gridsphere.layout.PortletComponent;
-import org.gridlab.gridsphere.layout.event.PortletTabEvent;
+import org.gridlab.gridsphere.layout.PortletTab;
 import org.gridlab.gridsphere.layout.event.ComponentAction;
+import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 
 /**
  * A <code>PortletTabEventImpl</code> is the concrete implementation of

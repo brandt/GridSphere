@@ -4,9 +4,9 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
 
 import java.io.IOException;
 

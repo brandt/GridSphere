@@ -4,10 +4,10 @@
  */
 package org.gridlab.gridsphere.layout.event.impl;
 
-import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
-import org.gridlab.gridsphere.layout.event.ComponentAction;
 import org.gridlab.gridsphere.layout.PortletComponent;
 import org.gridlab.gridsphere.layout.PortletFrame;
+import org.gridlab.gridsphere.layout.event.ComponentAction;
+import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
 
 /**
  * A <code>PortletFrameEventImpl</code> is the concrete implementation of

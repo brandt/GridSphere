@@ -10,9 +10,9 @@ import org.apache.log4j.Priority;
 import org.apache.log4j.PropertyConfigurator;
 import org.gridlab.gridsphere.portlet.PortletLog;
 
+import java.net.URL;
 import java.util.Hashtable;
 import java.util.Map;
-import java.net.URL;
 
 /**
  * The <code>PortletLog</code> provides the portlet with the ability to log

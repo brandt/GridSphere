@@ -5,14 +5,12 @@
 
 package org.gridlab.gridsphere.provider.ui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpSession;
-import javax.servlet.ServletRequest;
 
 /**
  * <code>BaseElementBean</code> is an implementation of the TagBean interface.

@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.Enumeration;
 
 /**
  * The <code>PortletWindow</code> represents the window that encloses a portlet.

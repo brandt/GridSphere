@@ -4,8 +4,7 @@
  */
 package org.gridlab.gridsphere.portlet.service;
 
-import java.io.PrintStream;
-import java.io.PrintWriter;
+
 
 /**
  * The <code>PortletServiceUnavailableException</code> is thrown if a portlet

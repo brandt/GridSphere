@@ -9,7 +9,10 @@ import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.List;
 
 /**
  * The <code>SportletConfig</code> class provides the portlet with its

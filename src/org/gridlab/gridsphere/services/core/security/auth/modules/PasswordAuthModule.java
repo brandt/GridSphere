@@ -4,14 +4,14 @@
  */
 package org.gridlab.gridsphere.services.core.security.auth.modules;
 
-import org.gridlab.gridsphere.services.core.security.auth.LoginAuthModule;
-import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
-import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
+import org.gridlab.gridsphere.services.core.security.auth.LoginAuthModule;
+import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 
 import java.util.HashMap;
 import java.util.Map;

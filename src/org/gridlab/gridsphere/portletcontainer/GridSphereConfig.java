@@ -4,9 +4,8 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletConfig;
-import java.util.MissingResourceException;
+import javax.servlet.ServletContext;
 import java.util.ResourceBundle;
 
 /**

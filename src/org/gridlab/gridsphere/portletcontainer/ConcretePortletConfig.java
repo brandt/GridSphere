@@ -4,12 +4,11 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions;
 import org.gridlab.gridsphere.portlet.PortletRole;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 /**
  * The <code>ConcretePortletConfig</code> provides concrete portlet

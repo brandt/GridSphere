@@ -4,6 +4,7 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi.impl;
 
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
@@ -17,11 +18,9 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServic
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
-import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
 
 import javax.servlet.ServletConfig;
 import java.io.IOException;

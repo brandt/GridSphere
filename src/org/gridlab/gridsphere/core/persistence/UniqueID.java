@@ -9,10 +9,8 @@
 
 package org.gridlab.gridsphere.core.persistence;
 
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
-
-import java.util.Random;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 public class UniqueID {
 

@@ -4,8 +4,7 @@
  */
 package org.gridlab.gridsphere.layout.event;
 
-import org.gridlab.gridsphere.portlet.Portlet;
-import org.gridlab.gridsphere.portlet.PortletWindow;
+
 
 /**
  * A <code>ComponentAction</code> identifies any kind of portlet component action by integer

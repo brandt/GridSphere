@@ -12,7 +12,6 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.PrintWriter;
 
 /**
  * <code>PortletContent</code> is used to display the contents of an included

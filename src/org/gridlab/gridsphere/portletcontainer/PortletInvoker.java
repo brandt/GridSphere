@@ -8,10 +8,10 @@ import org.gridlab.gridsphere.event.WindowEvent;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
-import java.util.Iterator;
-import java.util.Collection;
-import java.util.List;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * The <code>PortletInvoker</code> provides static lifecycle routines for performing portlet operations on

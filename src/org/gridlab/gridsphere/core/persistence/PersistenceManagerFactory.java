@@ -5,15 +5,17 @@
  */
 package org.gridlab.gridsphere.core.persistence;
 
-import org.gridlab.gridsphere.core.persistence.*;
-import org.gridlab.gridsphere.core.persistence.hibernate.PersistenceManagerRdbmsImpl;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXmlImpl;
+import org.gridlab.gridsphere.core.persistence.hibernate.PersistenceManagerRdbmsImpl;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.servlet.ServletContext;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class PersistenceManagerFactory {
 

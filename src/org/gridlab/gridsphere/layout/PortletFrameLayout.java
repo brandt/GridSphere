@@ -5,9 +5,8 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
-import org.gridlab.gridsphere.layout.event.PortletFrameListener;
 import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
+import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;

@@ -6,7 +6,6 @@
 package org.gridlab.gridsphere.portlet;
 
 import java.io.Serializable;
-import java.io.ObjectStreamException;
 import java.util.Comparator;
 
 /**

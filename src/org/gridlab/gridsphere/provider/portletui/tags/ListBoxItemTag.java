@@ -5,14 +5,12 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 

@@ -4,12 +4,12 @@
  */
 package org.gridlab.gridsphere.provider.ui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
+import org.gridlab.gridsphere.portlet.PortletURI;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class ActionLinkBean extends TextBean implements Link {
 

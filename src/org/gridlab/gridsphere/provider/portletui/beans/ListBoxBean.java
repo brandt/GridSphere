@@ -5,9 +5,7 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import java.util.ArrayList;
 import java.util.Iterator;

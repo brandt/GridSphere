@@ -4,8 +4,8 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.PortletSession;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletSession;
 import org.gridlab.gridsphere.portlet.PortletSettings;
 
 import javax.servlet.ServletContext;

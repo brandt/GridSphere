@@ -5,11 +5,7 @@
 
 package org.gridlab.gridsphere.core.persistence.castor.descriptor;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * A <code>ConfigParamList</code> is a container for <code>ConfigParam</code>

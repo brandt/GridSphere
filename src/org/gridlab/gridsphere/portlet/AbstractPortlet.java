@@ -8,7 +8,6 @@ import org.gridlab.gridsphere.event.*;
 import org.gridlab.gridsphere.event.impl.ActionEventImpl;
 import org.gridlab.gridsphere.event.impl.MessageEventImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.io.IOException;
 import java.io.PrintWriter;

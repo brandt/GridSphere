@@ -11,8 +11,6 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.ArrayList;
 
 /**
  * The <code>PortletTableLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>

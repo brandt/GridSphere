@@ -4,20 +4,11 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParamList;
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletSettings;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 
 /**
  * A <code>ConcreteSportletDefinition</code> defines the concrete portlet id,

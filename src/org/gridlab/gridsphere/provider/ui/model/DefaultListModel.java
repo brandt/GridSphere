@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.provider.ui.model;
 
 import org.gridlab.gridsphere.provider.ui.beans.TagBean;
 
-import java.util.Enumeration;
 import java.util.Iterator;
 
 public interface DefaultListModel extends AbstractListModel {

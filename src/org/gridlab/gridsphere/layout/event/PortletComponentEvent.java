@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.layout.event;
 
-import org.gridlab.gridsphere.layout.PortletTab;
 import org.gridlab.gridsphere.layout.PortletComponent;
 
 /**

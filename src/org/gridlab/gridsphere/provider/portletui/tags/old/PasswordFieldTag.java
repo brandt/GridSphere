@@ -5,8 +5,6 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags.old;
 
-import org.gridlab.gridsphere.provider.portletui.tags.old.BaseTag;
-
 import javax.servlet.jsp.JspException;
 
 public class PasswordFieldTag extends BaseTag {

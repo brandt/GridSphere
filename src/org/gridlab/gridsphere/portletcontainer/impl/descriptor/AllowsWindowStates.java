@@ -5,8 +5,8 @@
 package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
 import org.exolab.castor.types.AnyNode;
-import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import java.util.ArrayList;

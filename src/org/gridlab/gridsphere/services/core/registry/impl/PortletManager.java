@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.services.core.registry.impl;
 
-import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRequest;
