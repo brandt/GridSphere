@@ -173,16 +173,20 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
     }
 
     public boolean deleteResource(User user, String appName, String resource, boolean recursive) {
+        return deleteResource(user, appName, resource, recursive, false);
+    }
+
+    public boolean deleteResource(User user, String appName, String resource, boolean recursive, boolean delTree) {
 
         //FOR SECURITY REASONS DO NOT CHANGE THE FOLLOWING REGEXPS (UNLESS YOU KNOW WHAT YOU ARE DOING)
 
         do {
             resource = util.substitute("s!\\.\\.!.!g", resource);
         } while (util.match("m!\\.\\.!", resource));
-        if (deleteFile(user, appName, resource)) {
+        if (deleteFile(user, appName, resource, delTree)) {
             return true;
         } else
-            return deleteDirectory(user, appName, resource, recursive);
+            return deleteDirectory(user, appName, resource, recursive, delTree);
     }
 
     public boolean saveResourceCopy(User user, String appName, String resourceSource, String resourceDestination) {
@@ -303,7 +307,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         return userDirectoryPath;
     }
 
-    private boolean deleteDirectory(User user, String appName, String resource, boolean recursive) {
+    private boolean deleteDirectory(User user, String appName, String resource, boolean recursive, boolean delTree) {
         if (user == null || appName == null || resource == null || !inited)
             return false;
         resource = util.substitute("s!\\\\!/!g", resource);
@@ -325,7 +329,25 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
                 return false;
             if (!recursive)
                 return file.delete();
-            return deleteDirectory(file);
+            if (!delTree)
+                return deleteDirectory(file);
+            boolean toRet = deleteDirectory(file);
+
+            File secureDir = new File(secureDirPath);
+            String parent = file.getParent();
+            while (parent != null) {
+                File dir = new File(parent);
+                if (dir.isDirectory()) { //just to be sure ;-)
+                    if (dir.compareTo(secureDir) == 0)
+                        break;
+                    if (!dir.delete())
+                        break;
+                } else
+                    break;
+                parent = dir.getParent();
+            }
+
+            return toRet;
         } else
             return false;
     }
@@ -342,25 +364,27 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         return f.delete();
     }
 
-    private boolean deleteFile(User user, String appName, String resource) {
+    private boolean deleteFile(User user, String appName, String resource, boolean delTree) {
         File file = getFile(user, appName, resource);
         if (file == null)
             return false;
         if (!file.delete())
             return false;
 
-        File secureDir = new File(secureDirPath);
-        String parent = file.getParent();
-        while (parent != null) {
-            File dir = new File(parent);
-            if (dir.isDirectory()) { //just to be sure ;-)
-                if (dir.compareTo(secureDir) == 0)
+        if (delTree) {
+            File secureDir = new File(secureDirPath);
+            String parent = file.getParent();
+            while (parent != null) {
+                File dir = new File(parent);
+                if (dir.isDirectory()) { //just to be sure ;-)
+                    if (dir.compareTo(secureDir) == 0)
+                        break;
+                    if (!dir.delete())
+                        break;
+                } else
                     break;
-                if (!dir.delete())
-                    break;
-            } else
-                break;
-            parent = dir.getParent();
+                parent = dir.getParent();
+            }
         }
         return true;
     }

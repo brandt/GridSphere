@@ -29,6 +29,8 @@ public interface SecureDirectoryService extends PortletService {
 
     public boolean deleteResource(User user, String appName, String resource, boolean recursive);
 
+    public boolean deleteResource(User user, String appName, String resource, boolean recursive, boolean delTree);
+
     public boolean saveResourceCopy(User user, String appName, String resourceSource, String resourceDestination);
 
     public boolean saveResourceMove(User user, String appName, String resourceSource, String resourceDestination);
