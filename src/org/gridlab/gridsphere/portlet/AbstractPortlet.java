@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Locale;
 
 
 /**
@@ -134,7 +135,20 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
      */
     public void doTitle(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         PortletSettings settings = request.getPortletSettings();
-        String title = settings.getTitle(request.getLocale(), request.getClient());
+        String title = "";
+        Client client = request.getClient();
+        if (settings != null) {
+            User user = request.getUser();
+            String userlocale = (String)user.getAttribute(User.LOCALE);
+            if (userlocale != null) {
+                Locale locale = new Locale(userlocale, "", "");
+                title = settings.getTitle(locale, client);
+            } else {
+                Locale deflocale = settings.getDefaultLocale();
+                String deftitle =  settings.getTitle(deflocale, client);
+                title = deftitle;
+            }
+        }
         PrintWriter out = response.getWriter();
         out.println(title);
     }
