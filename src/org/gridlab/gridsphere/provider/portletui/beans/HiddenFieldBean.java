@@ -48,7 +48,6 @@ public class HiddenFieldBean extends TextFieldBean {
     }
 
     public void store() {
-        System.out.println("HiddenFieldBean.store( " + getBeanKey() + "," + value + ")");
         super.store();
     }
 }

@@ -26,12 +26,10 @@ public class HiddenFieldTag extends BaseComponentTag {
         if (!beanId.equals("")) {
             hidden = (HiddenFieldBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (hidden == null) {
-                System.out.println("Not found HiddenFieldBean.store( " + getBeanKey() + ")");
                 hidden = new HiddenFieldBean(beanId);
 
                 this.setBaseComponentBean(hidden);
             } else {
-                System.out.println("Found HiddenFieldBean( " + getBeanKey() + "," + hidden.getValue() + ")");
                 this.updateBaseComponentBean(hidden);
             }
         } else {
