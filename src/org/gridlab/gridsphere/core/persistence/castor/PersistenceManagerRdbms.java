@@ -47,6 +47,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
         log.info("Using '" + DatabaseName + "' as Databasename with the configfile '" + ConnectionURL + "'");
     }
 
+
     public PersistenceManagerRdbms(String databasename, String url) {
         super();
         DatabaseName = databasename;
@@ -113,14 +114,11 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
      */
     private Database getDatabase() throws
             DatabaseNotFoundException, PersistenceException, MappingException {
-
         JDO.loadConfiguration(this.getConnectionURL());
 
-        JDO jdo;
-        Database db;
-
-        jdo = new JDO(this.getDatabaseName());
-        db = jdo.getDatabase();
+        JDO jdo = new JDO(this.getDatabaseName());
+        jdo.setTransactionManager(null);
+        Database db = jdo.getDatabase();
         return db;
 
     }
