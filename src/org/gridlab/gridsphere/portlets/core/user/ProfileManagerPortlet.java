@@ -541,7 +541,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         log.debug("creating account request for user: " + user.getID());
         SportletUser acctReq = userManagerService.editUser(user);
         acctReq.setEmailAddress(eMail);
-        acctReq.setUserName(userName);
         acctReq.setFullName(fullName);
         if (locale != null) {
             Locale loc = new Locale(locale, "", "");
