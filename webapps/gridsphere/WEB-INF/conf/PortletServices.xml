@@ -65,10 +65,10 @@
     </service>
 
     <service>
-        <name>Login Service</name>
-        <description>Provides Login Capabilities</description>
-        <interface>org.gridlab.gridsphere.services.user.LoginService</interface>
-        <implementation>org.gridlab.gridsphere.services.user.impl.LoginServiceImpl</implementation>
+        <name>Layout Service</name>
+        <description>Provides Layout Capabilities</description>
+        <interface>org.gridlab.gridsphere.services.layout.LayoutManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.layout.impl.LayoutManagerServiceImpl</implementation>
     </service>
 
 </portlet-services>
