@@ -94,19 +94,18 @@ public class PersistenceManagerRdbms {
 
         Database db = null;
 
-        //SportletGroup sa = (SportletGroup)object;
-        //log.info("Name: "+sa.getName());
-
         try {
             db = jdo.getDatabase();
             db.begin();
             db.create(object);
             db.commit();
-            db.close();
         } catch (PersistenceException e) {
             log.error("PersistenceException " + e);
             throw new PersistenceManagerException("Persistence Error " + e);
+        }  finally {
+            if (db != null) db.close();
         }
+
     }
 
     /**
