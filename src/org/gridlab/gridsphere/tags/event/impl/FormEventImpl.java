@@ -5,22 +5,22 @@
 
 package org.gridlab.gridsphere.tags.event.impl ;
 
-import org.gridlab.gridsphere.tags.event.FormEvent;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.tags.web.element.Element;
-import org.gridlab.gridsphere.tags.web.element.NameValueDisableBean;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.DefaultPortletAction;
+import org.gridlab.gridsphere.tags.event.FormEvent;
 import org.gridlab.gridsphere.tags.web.element.CheckBoxBean;
 import org.gridlab.gridsphere.tags.web.element.NameBean;
 
-
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.Enumeration;
 
 public class FormEventImpl implements FormEvent {
 
     protected ActionEvent event;
     protected PortletRequest request;
+    protected PortletResponse response;
 
     public FormEventImpl(PortletRequest request) {
         this.request = request;
@@ -31,10 +31,21 @@ public class FormEventImpl implements FormEvent {
         request = evt.getPortletRequest();
     }
 
+    public PortletRequest getPortletRequest() {
+        return request;
+    }
+
+    public PortletResponse getPortletResponse() {
+        return response;
+    }
+
+    public  DefaultPortletAction getAction() {
+        return event.getAction();
+    }
+
     /**
      * Returns the name of the pressed submit button. To use this for form has to follow the convention
      * that the names of all submit-type buttons start with 'submit:' (and only those and no other elements)
-     * @parameter event the actionevent
      * @return name of the button which was pressed
      */
     public String getPressedSubmitButton() {

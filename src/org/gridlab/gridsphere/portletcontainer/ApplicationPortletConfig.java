@@ -16,7 +16,7 @@ public interface ApplicationPortletConfig {
     /**
      * Returns the portlet application id
      *
-     * @returns the portlet application id
+     * @return the portlet application id
      */
     public String getApplicationPortletID();
 
@@ -30,7 +30,7 @@ public interface ApplicationPortletConfig {
     /**
      * Returns the name of a servlet associated with this portlet defined in web.xml as <servlet-name>
      *
-     * @returns the servlet name
+     * @return the servlet name
      */
     public String getServletName();
 
@@ -44,7 +44,7 @@ public interface ApplicationPortletConfig {
     /**
      * Returns the portlet application name
      *
-     * @returns name portlet application name
+     * @return name portlet application name
      */
     public String getPortletName();
 

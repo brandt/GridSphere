@@ -33,7 +33,6 @@ public class TextFieldBean extends ReadOnlyBaseBean implements Input {
         this.size = size;
     }
 
-
     public String getInputtype() {
         return inputtype;
     }

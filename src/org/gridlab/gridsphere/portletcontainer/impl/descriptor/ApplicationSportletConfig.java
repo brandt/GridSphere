@@ -24,9 +24,6 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
     private String portletName = new String();
     private String servletName = new String();
 
-    // configuration list used by Castor
-    private List configList = new ArrayList();
-
     // configuration hash exported to clients
     private ConfigParamList configParamList = new ConfigParamList();
 
@@ -48,7 +45,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
     /**
      * Returns the portlet application id
      *
-     * @returns the portlet application id
+     * @return the portlet application id
      */
     public String getApplicationPortletID() {
         return id;
@@ -67,7 +64,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
      * Returns the name of a servlet associated with this portlet defined
      * in web.xml as <servlet-name>
      *
-     * @returns the servlet name
+     * @return the servlet name
      */
     public String getServletName() {
         return servletName;
@@ -86,7 +83,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
     /**
      * Returns the portlet application name
      *
-     * @returns the portlet application name
+     * @return the portlet application name
      */
     public String getPortletName() {
         return portletName;
@@ -95,7 +92,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
     /**
      * Sets the name of a PortletApplication
      *
-     * @param name name of a PortletApplication
+     * @param portletName name of a PortletApplication
      */
     public void setPortletName(String portletName) {
         this.portletName = portletName;
@@ -141,9 +138,9 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
 
     /**
      * Used internally by Castor. Not fully implemented yet.
-     * Sets the configuration paarameter map
+     * Returns the portlet caching information
      *
-     * @param configList the <code>List</code> of <code>ConfigParam</code>s
+     * @return the cache info
      */
     public CacheInfo getCacheInfo() {
         return cacheInfo;
@@ -160,29 +157,6 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
     }
 
     /**
-     * Used internally by Castor.
-     * <p>
-     * Sets the allowed window states supported by this portlet
-     *
-     * @param allowsWindowStates the allowed window states for this portlet
-     */
-    public void setAllowsWindowStates(AllowsWindowStates allowsWindowStates) {
-        this.allowsWindowStates = allowsWindowStates;
-    }
-
-    /**
-     * Used internally by Castor. Clients should use #getAllowedWindowStates
-     * instead.
-     * <p>
-     * Returns the allowed window states supported by this portlet
-     *
-     * @return the allowed window states for this portlet
-     */
-    public AllowsWindowStates getAllowsWindowStates() {
-        return allowsWindowStates;
-    }
-
-    /**
      * Returns the allowed window states supported by this portlet
      *
      * @return the <code>List</code> of
@@ -193,26 +167,25 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
     }
 
     /**
-     * Used internally by Castor. Clients should use #getSupportedModes
-     * instead.
-     * <p>
-     * Sets the supported portlet modes for this portlet
+     * Internally used by Castor
+     * Returns the allowed window states supported by this portlet
      *
-     * @param supportsModes the supported portlet modes
-     *
+     * @return the <code>List</code> of
+     * <code>PortletWindow.State</code> elements allowed for this portlet
      */
-    public void setSupportsModes(SupportsModes supportsModes) {
-        this.supportsModes = supportsModes;
+    public AllowsWindowStates getAllowsWindowStates() {
+        return allowsWindowStates;
     }
 
     /**
-     * Used internally by Castor. Clients should use #getSupportedModes
-     * instead.
+     * Internal for use by Castor.
+     * Sets the allowed window states supported by this portlet
      *
-     * @return the supported modes for this portlet
+     * @param windowStates the <code>List</code> of
+     * <code>PortletWindow.State</code> elements allowed for this portlet
      */
-    public SupportsModes getSupportsModes() {
-        return supportsModes;
+    public void setAllowsWindowStates(AllowsWindowStates windowStates) {
+        this.allowsWindowStates = windowStates;
     }
 
     /**
@@ -225,5 +198,24 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
         return supportsModes.getPortletModes();
     }
 
+    /**
+     * Used internally by Castor. Clients should use #getSupportedModes
+     * instead.
+     *
+     * @return the supported modes for this portlet
+     */
+    public SupportsModes getSupportsModes() {
+        return this.supportsModes;
+    }
+
+    /**
+     * Used internally by Castor. Clients should use #getSupportedModes
+     * instead.
+     *
+     * @param supportsModes the supported modes for this portlet
+     */
+    public void setSupportsModes(SupportsModes supportsModes) {
+        this.supportsModes = supportsModes;
+    }
 }
 

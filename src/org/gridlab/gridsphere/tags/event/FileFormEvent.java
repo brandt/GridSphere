@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.event;
 
-import java.io.File;
+
 
 public interface FileFormEvent extends FormEvent {
 

@@ -15,7 +15,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.net.URL;
 
 /**
  * The <code>PortletLayoutEngine</code> is a singleton that is responsible for managing
@@ -43,9 +42,7 @@ public class PortletLayoutEngine {
     private String newuserLayoutPath;
     private PortletContainer newuserContainer;
 
-    private String userLayoutDir = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_NEW_USER_LAYOUT);
-
-    private Class clazz = this.getClass();
+    private String userLayoutDir = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_LAYOUT_DIR);
 
     private String error = "";
 
@@ -108,9 +105,6 @@ public class PortletLayoutEngine {
         guestContainer.init(new ArrayList());
 
         newuserLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_NEW_USER_LAYOUT);
-        URL newUserURL = clazz.getResource(newuserLayoutPath);
-        if (newUserURL == null) throw new IOException("Unable to find: " + GridSphereConfigProperties.GRIDSPHERE_NEW_USER_LAYOUT);
-        newuserLayoutPath = newUserURL.getFile();
 
         newuserContainer = PortletLayoutDescriptor.loadPortletContainer(newuserLayoutPath, layoutMappingFile);
         newuserContainer.init(new ArrayList());
@@ -164,12 +158,11 @@ public class PortletLayoutEngine {
     /**
      * Services a portlet container instance by rendering its presentation
      *
-     * @param evemt the gridsphere event
+     * @param event the gridsphere event
      * @throws IOException if an I/O error occcurs during processing
      */
     public void service(GridSphereEvent event) throws IOException {
         log.debug("in service()");
-        boolean doLayoutAction = false;
         PortletContainer pc = null;
 
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
@@ -180,7 +173,6 @@ public class PortletLayoutEngine {
             pc.doRender(event);
         } catch (PortletLayoutException e) {
             error = e.getMessage();
-            PortletRequest req = event.getPortletRequest();
             //req.logRequest();
             log.error("Caught LayoutException: ", e);
         }
@@ -204,6 +196,7 @@ public class PortletLayoutEngine {
         log.debug("in loginPortlets()");
         try {
             PortletContainer pc = getPortletContainer(event);
+            //pc.loginPortlets(event);
         } catch (PortletException e) {
             log.error("Unable to login portlets", e);
         }
@@ -243,8 +236,6 @@ public class PortletLayoutEngine {
             pc.actionPerformed(event);
         } catch (PortletLayoutException e) {
             error = e.getMessage();
-            PortletRequest req = event.getPortletRequest();
-            //req.logRequest();
             log.error("Caught LayoutException: ", e);
         }
     }

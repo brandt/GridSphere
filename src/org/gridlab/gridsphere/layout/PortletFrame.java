@@ -29,12 +29,10 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
 
-    private String componentIDStr = null;
-
     private String portletClass = null;
     private PortletTitleBar titleBar = null;
     private List listeners = new ArrayList();
-    private PortletErrorMessage error = new PortletErrorMessage();
+    private PortletErrorMessage errorFrame = new PortletErrorMessage();
     private boolean transparent = false;
     private String innerPadding = "";
     private String outerPadding = "";
@@ -46,14 +44,14 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
         private String id = "";
         private Exception e = null;
-        private String msg = null;
+        private String msg = "";
 
         public PortletErrorMessage() {
 
         }
 
         public boolean hasMessage() {
-            return ((msg != null) ? true: false);
+            return (msg.equals("") ? false: true);
         }
 
         public String getPortletID() {
@@ -256,7 +254,6 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         // process events
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-        PortletContext ctx = event.getPortletContext();
 
         req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
 
@@ -280,7 +277,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 data = dataManager.getPortletData(req.getUser(), portletClass);
                 req.setAttribute(GridSphereProperties.PORTLETDATA, data);
             } catch (PersistenceManagerException e) {
-                error.setMessage("Unable to retrieve user's portlet data", e);
+                errorFrame.setMessage("Unable to retrieve user's portlet data", e);
             }
         }
 
@@ -291,8 +288,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             try {
                 PortletInvoker.actionPerformed(portletClass, action, req, res);
             } catch (PortletException e) {
-                error.setMessage("Unable to perform action");
-                error.setException(e);
+                errorFrame.setMessage("Unable to perform action", e);
             }
         }
         // in case portlet mode got reset
@@ -318,10 +314,10 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         PortletData data = null;
         if (!(user instanceof GuestUser)) {
             try {
-            data = dataManager.getPortletData(req.getUser(), portletClass);
-            req.setAttribute(GridSphereProperties.PORTLETDATA, data);
+                data = dataManager.getPortletData(req.getUser(), portletClass);
+                req.setAttribute(GridSphereProperties.PORTLETDATA, data);
             } catch (PersistenceManagerException e) {
-                error.setMessage("Unable to retrieve user's portlet data", e);
+                errorFrame.setMessage("Unable to retrieve user's portlet data", e);
             }
         }
 
@@ -333,31 +329,36 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">");        // this is the main table around one portlet
 
         // Render title bar
-        if (titleBar != null) titleBar.doRender(event);
-
-        if (error != null) {
-            out.println(error.getMessage());
-        } else {
-            if (renderPortlet) {
-                if (!transparent) {
-                    out.println("<tr><td class=\"window-content\">");      // now the portlet content begins
-                } else {
-                    out.println("<tr><td>");
-                }
-
-                try {
-                    PortletInvoker.service(portletClass, req, res);
-                } catch (PortletException e) {
-                    out.println("Portlet Unavailable");
-                    out.println(e.toString());
-                    e.printStackTrace();
-                }
-                out.println("</td></tr>");
-            } else {
-                out.println("<tr><td class=\"window-content-minimize\">");      // now the portlet content begins
-                out.println("</td></tr>");
+        if (titleBar != null) {
+            titleBar.doRender(event);
+            if (titleBar.hasRenderError()) {
+                errorFrame.setMessage(titleBar.getErrorMessage());
             }
         }
+        if (renderPortlet) {
+            if (!transparent) {
+                out.println("<tr><td class=\"window-content\">");      // now the portlet content begins
+            } else {
+                out.println("<tr><td>");
+            }
+
+            try {
+                PortletInvoker.service(portletClass, req, res);
+            } catch (PortletException e) {
+                errorFrame.setMessage("Unable to invoke service method", e);
+            }
+
+            if (errorFrame.hasMessage()) {
+                out.println(errorFrame.getMessage());
+            }
+
+            out.println("</td></tr>");
+        } else {
+            out.println("<tr><td class=\"window-content-minimize\">");      // now the portlet content begins
+            out.println("</td></tr>");
+        }
+
+
         out.println("</table>");
         out.println("<!--- PORTLET ENDS HERE -->");
     }

@@ -6,6 +6,8 @@ package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
 import org.exolab.castor.types.AnyNode;
 import org.gridlab.gridsphere.portlet.Portlet;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.List;
 public class SupportsModes {
 
     private List portletModes = new ArrayList();
+    private PortletLog log = SportletLog.getInstance(SupportsModes.class);
 
     /**
      * Constructs an instance of SportletModes
@@ -43,11 +46,11 @@ public class SupportsModes {
      * <p>
      * Sets the modes as defined in the application portlet definition
      *
-     * @param portletModes an <code>ArrayList</code> containing
+     * @param modes an <code>ArrayList</code> containing
      * <code>AnyNode</code> elements
      */
     public void setModes(ArrayList modes) {
-        this.portletModes = modes;
+        if (modes != null) this.portletModes = modes;
     }
 
     /**
@@ -59,14 +62,20 @@ public class SupportsModes {
     public List getPortletModesAsStrings() {
         List modes = new ArrayList();
         if (portletModes.isEmpty()) {
-            this.portletModes.add(Portlet.Mode.CONFIGURE);
-            this.portletModes.add(Portlet.Mode.EDIT);
-            this.portletModes.add(Portlet.Mode.HELP);
-            this.portletModes.add(Portlet.Mode.VIEW);
+            modes.add(Portlet.Mode.CONFIGURE.toString());
+            modes.add(Portlet.Mode.EDIT.toString());
+            modes.add(Portlet.Mode.HELP.toString());
+            modes.add(Portlet.Mode.VIEW.toString());
         }
         for (int i = 0; i < portletModes.size(); i++) {
             AnyNode a = (AnyNode) portletModes.get(i);
-            modes.add( a.getLocalName() );
+            Portlet.Mode mode = null;
+            try {
+                mode = Portlet.Mode.toMode(a.getLocalName());
+                modes.add(mode.toString());
+            } catch (IllegalArgumentException e) {
+                log.error("unable to parse mode: " + mode);
+            }
         }
         return modes;
     }
@@ -80,18 +89,19 @@ public class SupportsModes {
     public List getPortletModes() {
         List modes = new ArrayList();
         if (portletModes.isEmpty()) {
-            this.portletModes.add(Portlet.Mode.CONFIGURE);
-            this.portletModes.add(Portlet.Mode.EDIT);
-            this.portletModes.add(Portlet.Mode.HELP);
-            this.portletModes.add(Portlet.Mode.VIEW);
+            modes.add(Portlet.Mode.CONFIGURE);
+            modes.add(Portlet.Mode.EDIT);
+            modes.add(Portlet.Mode.HELP);
+            modes.add(Portlet.Mode.VIEW);
         }
         for (int i = 0; i < portletModes.size(); i++) {
             AnyNode a = (AnyNode) portletModes.get(i);
+            Portlet.Mode mode = null;
             try {
-                Portlet.Mode mode = Portlet.Mode.toMode(a.getLocalName());
+                mode = Portlet.Mode.toMode(a.getLocalName());
                 modes.add(mode);
             } catch (Exception e) {
-              // do nothing if can't parse
+              log.error("unable to parse mode: " + mode);
             }
         }
         return modes;

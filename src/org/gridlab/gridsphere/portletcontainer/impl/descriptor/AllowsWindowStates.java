@@ -6,6 +6,8 @@ package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
 import org.exolab.castor.types.AnyNode;
 import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +19,15 @@ import java.util.List;
  */
 public class AllowsWindowStates {
 
+    private PortletLog log = SportletLog.getInstance(AllowsWindowStates.class);
     private List windowStates = new ArrayList();
-    private List statesAsStrings = null;
-    private List statesAsStates = null;
+    private List statesAsStrings = new ArrayList();
+    private List statesAsStates = new ArrayList();
 
     /**
      * Constructs an instance of AllowsWindowStates
      */
-    public AllowsWindowStates() {
-    }
+    public AllowsWindowStates() {}
 
     /**
      * For use by Castor. Clients should use #setPortletWindowStates
@@ -36,7 +38,7 @@ public class AllowsWindowStates {
      * @param windowStates an <code>ArrayList</code> containing the window states
      */
     public void setWindowStates(ArrayList windowStates) {
-        this.windowStates = windowStates;
+        if (windowStates != null) this.windowStates = windowStates;
     }
 
     /**
@@ -51,28 +53,13 @@ public class AllowsWindowStates {
     }
 
     /**
-     * Convert <code>AnyNode</code> representation of window states into
-     * <code>String</code>s
-     */
-    protected void convertStates() {
-        AnyNode a = null;
-        statesAsStrings = new ArrayList();
-        for (int i = 0; i < windowStates.size(); i++) {
-            a = (AnyNode) windowStates.get(i);
-            statesAsStrings.add(a.getLocalName());
-        }
-    }
-
-    /**
      * Return the list of window states as a <code>List</code> of
      * <code>String</code>s
      *
      * @return the list of window states
      */
     public List getWindowStatesAsStrings() {
-        if (statesAsStrings == null) {
-            convertStates();
-        }
+        if (statesAsStrings.isEmpty()) updateStates();
         return statesAsStrings;
     }
 
@@ -80,17 +67,33 @@ public class AllowsWindowStates {
      * Convert the window states into a list of <code>PortletWindow.State</code>
      * elements
      */
-    protected void convert2WindowStates() {
+    protected void updateStates() {
         AnyNode a = null;
-        PortletWindow.State state;
-        statesAsStates = new ArrayList();
+        PortletWindow.State state = null;
+        if (windowStates.isEmpty()) {
+            if (statesAsStates.isEmpty()) {
+                statesAsStates.add(PortletWindow.State.MINIMIZED);
+                statesAsStates.add(PortletWindow.State.RESIZING);
+                statesAsStates.add(PortletWindow.State.MAXIMIZED);
+            }
+            if (statesAsStrings.isEmpty()) {
+                statesAsStrings.add(PortletWindow.State.MINIMIZED.toString());
+                statesAsStrings.add(PortletWindow.State.RESIZING.toString());
+                statesAsStrings.add(PortletWindow.State.MAXIMIZED.toString());
+            }
+        }
         for (int i = 0; i < windowStates.size(); i++) {
             a = (AnyNode) windowStates.get(i);
             try {
                 state = PortletWindow.State.toState(a.getLocalName());
                 statesAsStates.add(state);
-            } catch (Exception e) {  // do nothing
+                statesAsStrings.add(state.toString());
+            } catch (IllegalArgumentException e) {
+                log.error("unable to parse state: " + state);
             }
+        }
+        for (int i = 0; i < statesAsStates.size(); i++) {
+            PortletWindow.State s = (PortletWindow.State)  statesAsStates.get(i);
         }
     }
 
@@ -100,9 +103,10 @@ public class AllowsWindowStates {
      * @return the allowed window states
      */
     public List getPortletWindowStates() {
-        if (statesAsStates == null) {
-            convert2WindowStates();
+        if (statesAsStates.isEmpty()) {
+            updateStates();
         }
         return statesAsStates;
     }
+
 }

@@ -20,7 +20,6 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.apache.log4j.PropertyConfigurator;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContextEvent;
@@ -60,8 +59,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     /* GridSphere Portlet layout Engine handles rendering */
     private static PortletLayoutEngine layoutEngine = null;
-
-    private static List userSessions = new Vector();
 
     private PortletContext context = null;
     private static boolean firstDoGet = true;
@@ -208,7 +205,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     /**
      * Handles login requests
      *
-     * @event a <code>GridSphereEvent</code>
+     * @param event a <code>GridSphereEvent</code>
      */
     protected void login(GridSphereEvent event) {
         log.debug("in login of GridSphere Servlet");
@@ -218,8 +215,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletRequest req = event.getPortletRequest();
         PortletSession session = req.getPortletSession(true);
 
-        String username = (String) req.getParameter("username");
-        String password = (String) req.getParameter("password");
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
 
         if ((username.trim().equals("portal")) && (password.trim().equals("schmortal"))) {
             log.info("YO WE IN PORTAL!");
@@ -232,7 +229,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             user.setGivenName("Joey");
 
             System.err.println("Creating new user");
-            session.setAttribute(GridSphereProperties.USER, (User) user);
+            session.setAttribute(GridSphereProperties.USER, user);
         } else {
             try {
                 User user = loginService.login(username, password);
@@ -248,7 +245,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     /**
      * Handles logout requests
      *
-     * @event a <code>GridSphereEvent</code>
+     * @param event a <code>GridSphereEvent</code>
      */
     protected void logout(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
@@ -365,10 +362,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void sessionDestroyed(HttpSessionEvent event) {
         log.info("sessionDestroyed('" + event.getSession().getId() + "')");
         HttpSession session = event.getSession();
-        User user = (User) session.getAttribute(GridSphereProperties.USER);
-        System.err.println("user : " + user.getUserID() + " expired!");
-        PortletLayoutEngine engine = PortletLayoutEngine.getInstance();
-        engine.removeUser(user);
+        //User user = (User) session.getAttribute(GridSphereProperties.USER);
+        //System.err.println("user : " + user.getUserID() + " expired!");
+        //PortletLayoutEngine engine = PortletLayoutEngine.getInstance();
+        //engine.removeUser(user);
         //engine.logoutPortlets(event);
     }
 

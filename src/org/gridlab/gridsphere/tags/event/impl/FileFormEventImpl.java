@@ -5,23 +5,16 @@
 
 package org.gridlab.gridsphere.tags.event.impl ;
 
-import org.gridlab.gridsphere.tags.event.FormEvent;
-import org.gridlab.gridsphere.tags.event.FileFormEvent;
-import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.tags.web.element.Element;
-import org.gridlab.gridsphere.tags.web.element.NameValueDisableBean;
-import org.gridlab.gridsphere.tags.event.FileFormException;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletException;
-import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
+import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.tags.event.FileFormEvent;
+import org.gridlab.gridsphere.tags.event.FileFormException;
 
-import java.util.Enumeration;
+import java.io.File;
 import java.util.Iterator;
 import java.util.List;
-import java.io.File;
-import java.io.FileOutputStream;
 
 public class FileFormEventImpl extends FormEventImpl implements FileFormEvent {
 

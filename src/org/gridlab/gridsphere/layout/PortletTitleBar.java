@@ -11,9 +11,6 @@ import org.gridlab.gridsphere.layout.event.PortletTitleBarListener;
 import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.*;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.AllowsWindowStates;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.SupportsModes;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -42,7 +39,8 @@ public class PortletTitleBar extends BasePortletComponent {
     private PortletSettings settings;
     private List modeList = null;
     private String[] windowStates = null;
-    private String ErrorMessage = null;
+    private String errorMessage = "";
+    private boolean hasError = false;
 
     /**
      * Link is an abstract representation of a hyperlink with an href, image and
@@ -224,10 +222,12 @@ public class PortletTitleBar extends BasePortletComponent {
      * @see PortletWindow.State
      */
     public void setWindowState(String state) {
-        try {
-            this.windowState = PortletWindow.State.toState(state);
-        } catch (IllegalArgumentException e) {
-            // do nothing
+        if (state != null) {
+            try {
+                this.windowState = PortletWindow.State.toState(state);
+            } catch (IllegalArgumentException e) {
+                // do nothing
+            }
         }
     }
 
@@ -244,7 +244,7 @@ public class PortletTitleBar extends BasePortletComponent {
     /**
      * Sets the portlet mode of this title bar
      *
-     * @param state the portlet mode expressed as a string
+     * @param mode the portlet mode expressed as a string
      * @see Portlet.Mode
      */
     public void setPortletMode(String mode) {
@@ -273,6 +273,20 @@ public class PortletTitleBar extends BasePortletComponent {
      */
     public void addTitleBarListener(PortletTitleBarListener listener) {
         listeners.add(listener);
+    }
+
+    /**
+     * Indicates an error ocurred suring the processing of this title bar
+     *
+     * @return <code>true</code> if an error occured during rendering,
+     * <code>false</code> otherwise
+     */
+    public boolean hasRenderError() {
+        return hasError;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
     /**
@@ -310,6 +324,7 @@ public class PortletTitleBar extends BasePortletComponent {
 
             // get supported modes from application portlet config
             List supportedModes = appConfig.getSupportedModes();
+            portletModes = new String[supportedModes.size()];
             for (int i = 0; i < supportedModes.size(); i++) {
                 Portlet.Mode mode = (Portlet.Mode)supportedModes.get(i);
                 portletModes[i] = mode.toString();
@@ -319,9 +334,11 @@ public class PortletTitleBar extends BasePortletComponent {
             settings = concPortlet.getPortletSettings();
 
             // get window states from application portlet config
-            List allowsWindowStates = appConfig.getAllowedWindowStates();
-            for (int i = 0; i < supportedModes.size(); i++) {
-                PortletWindow.State state = (PortletWindow.State)allowsWindowStates.get(i);
+            List allowedWindowStates = appConfig.getAllowedWindowStates();
+
+            windowStates = new String[allowedWindowStates.size()];
+            for (int i = 0; i < allowedWindowStates.size(); i++) {
+                PortletWindow.State state = (PortletWindow.State)allowedWindowStates.get(i);
                 windowStates[i] = state.toString();
             }
 
@@ -335,10 +352,8 @@ public class PortletTitleBar extends BasePortletComponent {
      * @return a list of window state hyperlinks
      */
     protected List createWindowLinks(GridSphereEvent event) {
-
         PortletURI portletURI;
         PortletResponse res = event.getPortletResponse();
-
 
         for (int i = 0; i < windowStates.length; i++) {
             // remove current state from list
@@ -359,8 +374,10 @@ public class PortletTitleBar extends BasePortletComponent {
                 stateLink.setHref(portletURI.toString());
                 stateLinks.add(stateLink);
             } catch (IllegalArgumentException e) {
-                ErrorMessage += "Unable to create window state link: " + windowStates[i] + "\n";
+                errorMessage += "Unable to create window state link: " + windowStates[i] + "\n";
+                hasError = true;
             }
+
         }
         return stateLinks;
     }
@@ -375,24 +392,19 @@ public class PortletTitleBar extends BasePortletComponent {
 
         int i;
 
-        PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-
-        // get client preferred markup
-        Client client = req.getClient();
 
         // subtract current portlet mode
         for (i = 0; i < portletModes.length; i++) {
             if (portletModes[i].equalsIgnoreCase(portletMode.toString())) {
                 portletModes[i] = "";
             }
-
         }
 
         // create a URI for each of the portlet modes
         PortletURI portletURI;
         PortletModeLink modeLink;
-        List portletLinks = new Vector();
+        List portletLinks = new ArrayList();
         for (i = 0; i < portletModes.length; i++) {
             portletURI = res.createURI();
             portletURI.addParameter(GridSphereProperties.COMPONENT_ID, this.componentIDStr);
@@ -403,7 +415,7 @@ public class PortletTitleBar extends BasePortletComponent {
                 modeLink.setHref(portletURI.toString());
                 portletLinks.add(modeLink);
             } catch (IllegalArgumentException e) {
-                // do nothing
+
             }
         }
         return portletLinks;
@@ -436,7 +448,8 @@ public class PortletTitleBar extends BasePortletComponent {
                     //userManager.windowEvent(portletClass, winEvent, req, res);
                     PortletInvoker.windowEvent(portletClass, winEvent, req, res);
                 } catch (PortletException e) {
-                    throw new PortletLayoutException("Failed to invoke window event method of portlet: " + portletClass);
+                    hasError = true;
+                    errorMessage += "Failed to invoke window event method of portlet: " + portletClass;
                 }
             }
         } else if (evt.getAction() == PortletTitleBarEvent.Action.MODE_MODIFY) {
@@ -481,8 +494,7 @@ public class PortletTitleBar extends BasePortletComponent {
 
         if (settings == null) {
             doConfig();
-        }
-        if (settings != null) {
+        } else {
             title = settings.getTitle(req.getLocale(), client);
         }
 
@@ -491,9 +503,7 @@ public class PortletTitleBar extends BasePortletComponent {
         if (user instanceof GuestUser) {
         } else {
             if (portletClass != null) {
-                if (modeList != null) {
-                    modeLinks = createModeLinks(event);
-                }
+                modeLinks = createModeLinks(event);
                 windowLinks = createWindowLinks(event);
             }
         }
@@ -526,8 +536,8 @@ public class PortletTitleBar extends BasePortletComponent {
                 PortletInvoker.doTitle(portletClass, req, res);
                 out.println(" (" + portletMode.toString() + ") ");
             } catch (PortletException e) {
-                ErrorMessage += "Unable to invoke doTitle on active portlet\n";
-                throw new PortletLayoutException("Unable to invoke doTitle on active portlet " + portletClass + "  " + COMPONENT_ID, e);
+                errorMessage += "Unable to invoke doTitle on active portlet\n";
+                hasError = true;
             }
 
         } else {
