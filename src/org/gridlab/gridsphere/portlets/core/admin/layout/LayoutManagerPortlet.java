@@ -15,6 +15,7 @@ import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.layout.*;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 
 import javax.servlet.UnavailableException;
 import java.util.*;
@@ -29,6 +30,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     // Portlet services
     private LayoutManagerService layoutMgr = null;
     private PortalConfigService portalConfigService = null;
+    private AccessControlManagerService aclManagerService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -36,6 +38,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         try {
             this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
             this.portalConfigService = (PortalConfigService)config.getContext().getService(PortalConfigService.class);
+            aclManagerService = (AccessControlManagerService)this.getConfig().getContext().getService(AccessControlManagerService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -109,13 +112,11 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         User user = req.getUser();
 
-        AccessControlManagerService aclService = getACLService(user);
-
         String name;
         PortletGroup group;
         while (it.hasNext()) {
             name = (String)it.next();
-            group = aclService.getGroupByName(name);
+            group = aclManagerService.getGroupByName(name);
             if (group != null) {
                 groupNames.put(name, group.getDescription());
             }
@@ -123,16 +124,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         req.setAttribute("groupNames", groupNames);
 
         setNextState(req, VIEW_JSP);
-    }
-
-    public AccessControlManagerService getACLService(User user) {
-        AccessControlManagerService aclManagerService = null;
-        try {
-            aclManagerService = (AccessControlManagerService)this.getConfig().getContext().getService(AccessControlManagerService.class, user);
-        } catch (PortletServiceException e) {
-            log.error("Unable to initialize services!", e);
-        }
-        return aclManagerService;
     }
 
     public void saveBanner(FormEvent event) throws PortletException, IOException {
@@ -185,12 +176,19 @@ public class LayoutManagerPortlet extends ActionPortlet {
         groupPane.setLayoutDescriptor(thisFile);
 
         groupPane.save();
+        try {
+            PortletTabRegistry.reloadTab(val, thisFile);
+            saveLayout(event);
 
-        PortletTabRegistry.reloadTab(val, thisFile);
+            String groupLayoutPath = PortletTabRegistry.getTabDescriptorPath(thisgroup);
+            editGroup(event, thisgroup, groupLayoutPath);
 
-        saveLayout(event);
+        } catch (Exception e) {
+            log.error("Unable to reload tab", e);
 
-        editGroup(event, thisgroup);
+        }
+
+
 
     }
 
@@ -198,12 +196,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         String group = event.getAction().getParameter("group");
 
-        editGroup(event, group);
+        String groupLayoutPath = PortletTabRegistry.getTabDescriptorPath(group);
+        editGroup(event, group, groupLayoutPath);
 
     }
 
-    public void editGroup(FormEvent event, String group) throws PortletException, IOException {
-        String groupLayoutPath = PortletTabRegistry.getTabDescriptorPath(group);
+    public void editGroup(FormEvent event, String group, String layoutPath) throws PortletException, IOException {
+
         PortletRequest req = event.getPortletRequest();
         
         Boolean allowImport = Boolean.TRUE;
@@ -233,7 +232,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         }
 
         BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(groupLayoutPath), "UTF8"));
+                new InputStreamReader(new FileInputStream(layoutPath), "UTF8"));
 
         String line = null;
         StringBuffer sb = new StringBuffer();
@@ -255,7 +254,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         //this.checkSuperRole(event);
 
         User user = event.getPortletRequest().getUser();
-        AccessControlManagerService aclService = getACLService(user);
         HiddenFieldBean groupHF = event.getHiddenFieldBean("layoutHF");
         TextAreaBean ta = event.getTextAreaBean("layoutFile");
         String newText = ta.getValue();
@@ -263,34 +261,55 @@ public class LayoutManagerPortlet extends ActionPortlet {
         if (groupHF.getValue().equals("guest")) {
             this.checkSuperRole(event);
             String guestFile = PortletTabRegistry.getGuestLayoutFile();
-            Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(guestFile), "UTF-8"));
+            String tmpFile = guestFile + "-tmp";
+            Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpFile), "UTF-8"));
             byte[] text = newText.getBytes("iso-8859-1");
             String newstring = new String(text, "UTF-8");
             out.write(newstring);
             out.close();
             try {
                 PortletTabRegistry.reloadGuestLayout();
-            } catch (PersistenceManagerException e) {
+                copyFile(new File(tmpFile), new File(guestFile));
 
+                createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUTMGR_VALID_LAYOUT"));
+            } catch (Exception e) {
+                createErrorMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUTMGR_INVALID_LAYOUT"));
+            } finally {
+                File f = new File(tmpFile);
+                f.delete();
             }
             return;
         }
 
-        PortletGroup group = aclService.getGroupByName(groupHF.getValue());
-        if (!aclService.hasSuperRole(user) && !aclService.hasAdminRoleInGroup(user, group)) {
+        PortletGroup group = aclManagerService.getGroupByName(groupHF.getValue());
+        if (!aclManagerService.hasSuperRole(user) && !aclManagerService.hasAdminRoleInGroup(user, group)) {
             return;
         }
-        
+
         String groupFile = PortletTabRegistry.getTabDescriptorPath(group.getName());
         log.info("saving group layout: " + group.getName());
-        Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(groupFile), "UTF-8"));
+        String tmpFile = groupFile + "-tmp";
+        Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpFile), "UTF-8"));
         byte[] text = newText.getBytes("iso-8859-1");
         String newstring = new String(text, "UTF-8");
         out.write(newstring);
         out.close();
 
-        PortletTabRegistry.reloadTab(groupHF.getValue(), groupFile);
-       
+        // first validate tab
+        try {
+            PortletTabRegistry.reloadTab(groupHF.getValue(), tmpFile);
+            copyFile(new File(tmpFile), new File(groupFile));
+
+            createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUTMGR_VALID_LAYOUT"));
+        } catch (Exception e) {
+            // ok use old tab
+            log.error("Unable to reload new tab!", e);
+            createErrorMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUTMGR_INVALID_LAYOUT"));
+            editGroup(event, group.getName(), tmpFile);
+        } finally {
+            File f = new File(tmpFile);
+            f.delete();
+        }
     }
 
     public void editGuestLayout(FormEvent event)  throws PortletException, IOException {
@@ -325,6 +344,31 @@ public class LayoutManagerPortlet extends ActionPortlet {
         String group = event.getAction().getParameter("group");
 
         PortletTabRegistry.removeGroupTab(group);
+        createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUTMGR_DELETE_LAYOUT") + "  " + group);
         setNextState(req, VIEW_JSP);
+    }
+
+    private void copyFile(File in, File out) throws Exception {
+        FileInputStream fis  = new FileInputStream(in);
+        FileOutputStream fos = new FileOutputStream(out);
+        byte[] buf = new byte[1024];
+        int i = 0;
+        while((i=fis.read(buf))!=-1) {
+            fos.write(buf, 0, i);
+        }
+        fis.close();
+        fos.close();
+    }
+
+    private void createErrorMessage(FormEvent event, String msg) {
+        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
+        msgBox.setMessageType(TextBean.MSG_ERROR);
+        msgBox.setValue(msg);
+    }
+
+    private void createSuccessMessage(FormEvent event, String msg) {
+        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
+        msgBox.setMessageType(TextBean.MSG_SUCCESS);
+        msgBox.setValue(msg);
     }
 }
