@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.*;
 
 import java.io.IOException;
@@ -28,6 +29,8 @@ import java.util.*;
  * The title bar contains portlet mode and window state as well as a title.
  */
 public class PortletTitleBar extends BasePortletComponent implements Serializable, Cloneable {
+
+    private static PortletLog log = SportletLog.getInstance(PortletTitleBar.class);
 
     private String title = "unknown title";
     private String portletClass = null;
@@ -695,13 +698,13 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             //out.println(" (" + portletMode.toString() + ") ");
             title = storedWriter.toString();
         } catch (PortletException e) {
-            String pname = portletClass.substring(0, portletClass.length() - 1);
-            pname = pname.substring(0, pname.lastIndexOf("."));
-            pname = pname.substring(pname.lastIndexOf(".")+1);
+
             ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
             String value = bundle.getString("PORTLET_UNAVAILABLE");
             title = portletClass + " is currently unavailable!\n";
             hasError = true;
+            errorMessage = "PortletException:"+e.getMessage();
+            log.error(portletClass + " is currently unavailable:",e);
         }
 
         storedWriter = new StringWriter();
