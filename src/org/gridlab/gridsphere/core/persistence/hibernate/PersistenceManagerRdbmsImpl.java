@@ -30,6 +30,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private final static int CMD_RESTORE_LIST = 4;
     private final static int CMD_UPDATE = 5;
     private final static int CMD_CREATE = 6;
+    private final static int CMD_SAVEORUPDATE = 7;
 
     static Properties prop = new Properties();
 
@@ -178,6 +179,15 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         }
     }
 
+    public void saveOrUpdate(Object object) throws PersistenceManagerException {
+        try {
+            doTransaction(object, "", CMD_SAVEORUPDATE);
+        } catch (Exception e) {
+            log.error("Could not create or update object", e);
+            throw new PersistenceManagerException(e);
+        }
+    }
+
     public Object restore(String query) throws PersistenceManagerException {
         List list = restoreList(query);
         if (list.size() == 0) {
@@ -238,6 +248,9 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                     break;
                 case CMD_UPDATE:
                     session.update(object);
+                    break;
+                case CMD_SAVEORUPDATE:
+                    session.saveOrUpdate(object);
                     break;
                 case CMD_RESTORE_LIST:
                     q = session.createQuery(query);

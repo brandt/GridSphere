@@ -37,6 +37,14 @@ public interface PersistenceManagerRdbms {
     public void update(Object object) throws PersistenceManagerException;
 
     /**
+     * Saves or updates the given (already existing) object in the permanent storage.
+     *
+     * @param object Object to be updated
+     * @throws PersistenceManagerException If object could not be updated
+     */
+    public void saveOrUpdate(Object object) throws PersistenceManagerException;
+
+    /**
      * Restores an object matching the query. If multiple are found the first
      * is returned.
      *
