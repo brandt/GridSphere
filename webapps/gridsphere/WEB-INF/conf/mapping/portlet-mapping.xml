@@ -22,7 +22,7 @@
         <field name="ID" type="string">
             <bind-xml name="id" node="attribute"/>
         </field>
-        <field name="ContextParamList" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam" collection="vector">
+        <field name="ContextParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="vector">
             <bind-xml name="context-param"/>
         </field>
         <field name="ConcretePortletInfo" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletInfo">
@@ -49,7 +49,7 @@
         <field name="RoleList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Role" collection="vector">
             <bind-xml name="role"/>
         </field>
-        <field name="ConfigParamList" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam" collection="vector">
+        <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="vector">
             <bind-xml name="config-param"/>
         </field>
     </class>
@@ -83,7 +83,7 @@
         <field name="ServletName" type="string">
             <bind-xml name="servlet-name"/>
         </field>
-        <field name="ConfigParamList" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam" collection="vector">
+        <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="vector">
             <bind-xml name="portlet-config"/>
         </field>
         <field name="CacheInfo" type="org.gridlab.gridsphere.portletcontainer.descriptor.CacheInfo">
@@ -127,7 +127,7 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam">
+    <class name="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam">
         <field name="ParamName" type="string">
             <bind-xml name="param-name"/>
         </field>
