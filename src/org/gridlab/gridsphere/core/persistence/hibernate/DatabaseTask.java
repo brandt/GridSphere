@@ -7,12 +7,17 @@ import net.sf.hibernate.connection.DriverManagerConnectionProvider;
 import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.portlet.User;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 
 /*
@@ -38,17 +43,17 @@ public class DatabaseTask extends Task {
             "FATAL: Could not connect to database! ";
     private String NOT_INSTALLED =
             "Gridsphere is NOT correctly installed! ";
-
+    private String NO_CORE_TABLES =
+            "Some core tables could not be found!";
 
     public void setConfigDir(String configDir) {
         this.configDir = configDir;
+        //System.out.println("Setting configdir to: "+this.configDir);
     }
 
-    private void Error(String msg) {
-        System.out.println("\n\n\n" + msg + "\n\n\n");
-    }
 
-    public void execute() throws BuildException {
+    private void checkDatabase(boolean startUpCheck) throws BuildException {
+
         Properties prop = new Properties();
         String propfilename = configDir + File.separator + "hibernate.properties";
         System.out.println("create db: " + propfilename);
@@ -58,8 +63,7 @@ public class DatabaseTask extends Task {
             FileInputStream fis = new FileInputStream(new File(propfilename));
             prop.load(fis);
         } catch (IOException e) {
-            this.Error("DB Creation Error 1. " + CONFIGFILE_ERROR + " in " + propfilename);
-            System.exit(1);
+            throw new BuildException("DB Creation dbError 1. " + CONFIGFILE_ERROR + " in " + propfilename);
         }
 
         // try to get a db connection
@@ -69,11 +73,9 @@ public class DatabaseTask extends Task {
             Connection con = dmcp.getConnection();
             dmcp.closeConnection(con);
         } catch (HibernateException e) {
-            this.Error("DB Creation Error 2. " + DATABASE_CONNECTIN_NOT_VALID + " " + CHECK_PROPS + " " + NOT_INSTALLED);
-            System.exit(1);
+            throw new BuildException("DB Creation dbError 2. " + DATABASE_CONNECTIN_NOT_VALID + " " + CHECK_PROPS + " " + NOT_INSTALLED);
         } catch (SQLException e) {
-            this.Error("DB Creation Error 3. " + CONNECTION_ERROR + " " + CHECK_PROPS + " " + NOT_INSTALLED);
-            System.exit(1);
+            throw new BuildException("DB Creation dbError 3. " + CONNECTION_ERROR + " " + CHECK_PROPS + " " + NOT_INSTALLED);
         }
 
         // load mapping files and create db
@@ -94,15 +96,44 @@ public class DatabaseTask extends Task {
                         cfg.addFile(configDir + File.separator + filename);
                     }
                 }
-                new SchemaExport(cfg).create(false, true);
+                if (!startUpCheck) {
+                    new SchemaExport(cfg).create(false, true);
+                } else {
+                    // check if actual tables really exist in the db
+                    PersistenceManagerRdbms rdbms = PersistenceManagerFactory.createGridSphereRdbms();
+                    try {
+                        // check if there is the user table, should be enough
+                        List r = rdbms.restoreList("from " + User.class.getName());
+                    } catch (PersistenceManagerException e) {
+
+                        throw new BuildException("DB Creation dbError 6. " + NO_CORE_TABLES + " " + NOT_INSTALLED);
+                    }
+                }
             }
 
         } catch (MappingException e) {
-            this.Error("DB Creation Error 4. " + MAPPING_ERROR + " " + NOT_INSTALLED);
-            System.exit(1);
+            throw new BuildException("DB Creation dbError 4. " + MAPPING_ERROR + " " + NOT_INSTALLED);
         } catch (HibernateException e) {
-            this.Error("DB Creation Error 5. " + MAPPING_ERROR + " " + NOT_INSTALLED);
-            System.exit(1);
+            throw new BuildException("DB Creation dbError 5. " + MAPPING_ERROR + " " + NOT_INSTALLED);
         }
     }
+
+    public void execute() throws BuildException {
+        checkDatabase(false);
+    }
+
+    public boolean checkDBSetup(String config) {
+        this.configDir = config;
+        boolean result = true;
+        try {
+            checkDatabase(true);
+        } catch (BuildException e) {
+            System.out.println(e.getMessage());
+            result = false;
+        }
+        return result;
+    }
+
+
 }
+
