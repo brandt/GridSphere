@@ -1326,6 +1326,263 @@
             </example>
         </sect2>
 
+
+        <sect2 id="datagridtag">
+            <title>DataGridTag</title>
+            <para>
+                This tag displays a a 'scrollable' table.
+            </para>
+            <table>
+                <title>Attributes to datagrid</title>
+                <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
+                    <thead>
+                        <row>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>beanId</entry><entry>yes</entry><entry>string: unique identifier</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>size</entry><entry>no</entry><entry>string: size of the 'scollable' window</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>header</entry><entry>no</entry><entry>string: header for the datagrid</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>list</entry><entry>no</entry><entry>list: list of objects to be displayed</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of datagrid</title>
+                Datagrid is used in conjunction with datagridcolumn.
+                <screen>
+<![CDATA[
+<ui:datagrid beanId="userlistdg" size="4" header="List of Users" list="<%=users%>">
+...
+</ui:datagrid>
+ ]]>
+                </screen>
+                This creates a table with the first 4 entries of the list users. DataGridColumn is needed to specify any
+                columns which be displayed.
+            </example>
+        </sect2>
+
+
+        <sect2 id="datagridcolumntag">
+            <title>DataGridColumnTag</title>
+            <para>
+                This tag displays an entry in a 'scrollable' datagrid table.  Only used inside a datagridtag.
+            </para>
+            <table>
+                <title>Attributes to datagridcolumn</title>
+                <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
+                    <thead>
+                        <row>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>source</entry><entry>no</entry><entry>string: specifies the name of the method which will
+                            be called on the itemslist of the datagridtag to set the displayvalue </entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>header</entry><entry>no</entry><entry>string: header for the datagridcolumn</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>source</entry><entry>no</entry><entry>string: methodname to be called on the elements
+                            of the datagrid to be set as value of the child objects</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>paramname</entry><entry>no</entry><entry>string: if the child of datagridcolumntag is
+                            an actionlink this parametername will be added to the link (with the value of paramvalue)</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>paramvalue</entry><entry>yes</entry><entry>string: if the child of datagridcolumhtag is
+                            an actionlink this is the name of the method to be called on the itemlist of a datagridtag to
+                            generate an actionparameter with the name of paramname and the generated value</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <important>
+                The value for the localized keys has to be defined in the <filename>WEB-INF/classes/DataGrid(de|cs|nl...).properties</filename>
+                file.
+            </important>
+            <important>
+                Only actionlink, checkbox and text are supported inside a datagridcolumn.
+            </important>
+            <important>
+                All methodcalls on the list objects of the datagrid must return strings!
+            </important>
+            <example>
+                <title>Usage of datagrid</title>
+                DatagridColun is used in conhunction with datagrid.
+                <screen>
+<![CDATA[
+   <ui:datagrid beanId="userlistdg" size="4" header="List of Users" list="<%=users%>">
+       <ui:datagridcolumn header="Name" source="getName">
+            <ui:text/>
+        </ui:datagridcolumn>
+    </ui:datagrid>
+ ]]>
+
+                </screen>
+                This creates a table with the first 4 entries of the list users. The first column will have the heading
+                'Name' and will generate the values by calling the method 'getName' on the elements of the list users.
+
+                <screen>
+<![CDATA[
+   <ui:datagrid beanId="userlistdg" size="4" header="List of Users" list="<%=users%>">
+      <ui:datagridcolumn header="Username" source="getName" paramname="oid" paramvalue="getOid">
+           <ui:actionlink action="viewUser">
+               <ui:actionparam name="menu" value="action"/>
+           </ui:actionlink>
+       </ui:datagridcolumn>
+    </ui:datagrid>
+ ]]>
+
+                </screen>
+                This creates a table with the first 4 entries of the list users. The first column will have the heading
+                'Username' and will generate a link with the value of 'getName' on the list of users. Furthermore each
+                entry will be a link with the calling the method 'viewUser' in the Portlet. Two types of parameters are defined
+                here. The dynamic one is has the name 'oid' and the value of that will be the result of the methodcall
+                'getOid' on the items of the list users defined in the datagridtag. The second parameter is a static parameter.
+                Each ActionLink has also the parameter 'menu' with the value 'action'. Only one dynamic parameter is supported.
+
+                <screen>
+<![CDATA[
+   <ui:datagrid beanId="userlistdg" size="4" header="List of Users" list="<%=users%>">
+       <ui:datagridcolumn source="getOid">
+           <ui:checkbox beanId="checkBox"/>
+       </ui:datagridcolumn>
+    </ui:datagrid>
+ ]]>
+
+                </screen>
+                This creates a table with the first 4 entries of the list users. This will generate a checkbox in each row
+                with the name 'checkbox' and the value of the method call 'getOid' on the list of users.
+
+            </example>
+
+        </sect2>
+
+
+
+
+
+
+           <sect2 id="ActionMenuTag">
+            <title>ActionMenuTag</title>
+            <para>
+                This tag displays a menu.
+            </para>
+            <table>
+                <title>Attributes to datagrid</title>
+                <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
+                    <thead>
+                        <row>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>title</entry><entry>no</entry><entry>string: title of the menu</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>align</entry><entry>no</entry><entry>string: alignment of the menu, either 'vertical' or 'horizontal' (default)</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>key</entry><entry>no</entry><entry>string: key for the localized header of the menu</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+               <important>
+                   The value for the localized keys has to be defined in the <filename>WEB-INF/classes/ActionMenu(de|cs|nl...).properties</filename>
+                   file.
+               </important>
+            <example>
+                <title>Usage of ActionMenuTag</title>
+                    ActionMenuTag is used in conjuntion with ActionMenuItemTag
+                <screen>
+<![CDATA[
+<ui:actionmenu title="Menu" align="vertical" >
+...
+</ui:actionmenu>
+ ]]>
+                </screen>
+                This creates a a vertical menu with the title 'Menu'.
+            </example>
+        </sect2>
+
+
+        <sect2 id="ActionMenuItemTag">
+         <title>ActionMenuItemTag</title>
+         <para>
+             This tag displays a menuitem within a ActionMenutag.
+         </para>
+         <table>
+             <title>Attributes to datagrid</title>
+             <tgroup cols="3">
+                 <colspec colwidth="*"/>
+                 <colspec colwidth="*"/>
+                 <colspec colwidth="4*"/>
+                 <thead>
+                     <row>
+                         <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                     </row>
+                 </thead>
+             </tgroup>
+         </table>
+         <example>
+             <title>Usage of ActionMenuItemTag</title>
+                 ActionMenuItemTag is used in conjuntion with ActionMenuTag.
+             <screen>
+ <![CDATA[
+ <ui:actionmenu title="Menu" align="vertical" >
+     <ui:actionmenuitem>
+        <ui:actionlink action="showList" value="Show List"/>
+     </ui:actionmenuitem>
+ </ui:actionmenu>
+  ]]>
+             </screen>
+             This creates a a vertical menu with the title 'Menu' and one entry. This entry is an ActionLink with an action
+             ShowList and a value 'Show List'. Any UI tag can be used inside an actionmenuitem.
+         </example>
+     </sect2>
+
     </sect1>
 
 </chapter>
