@@ -4,6 +4,8 @@
  */
 package org.gridlab.gridsphere.services.user;
 
+import org.gridlab.gridsphere.portlet.PortletGroup;
+
 import java.util.List;
 
 public interface AccountRequest {
@@ -13,7 +15,7 @@ public interface AccountRequest {
      *
      * @return the internal unique id
      */
-    public int getID();
+    public String getID();
 
     /**
      * Sets the user id of the user, or null if the user id is not available.
@@ -85,7 +87,7 @@ public interface AccountRequest {
     /**
      * Sets the given e-mail of the user.
      *
-     * @param the email address
+     * @param emailAddress the email address
      */
     public void setEmailAddress(String emailAddress);
 
@@ -106,7 +108,7 @@ public interface AccountRequest {
     /**
      * Sets the list of myproxy user names that can be used for this user
      *
-     * @param the list of myproxy user names expressed as Strings
+     * @param myproxyUserNames the list of myproxy user names expressed as Strings
      */
     public void setMyproxyUserNames(List myproxyUserNames);
 
@@ -127,7 +129,6 @@ public interface AccountRequest {
     /**
      * Returns the list of myproxy user names that can be used for this user
      *
-     * @param userdns the array of strings containing user DN information
      */
     public List getMyProxyUserDN();
 
@@ -140,8 +141,6 @@ public interface AccountRequest {
 
     /**
      * Returns the list of groups the user wishes to join
-     *
-     * @param groups the array of strings containg the groups the user wishes to join
      */
     public List getDesiredGroups();
 
