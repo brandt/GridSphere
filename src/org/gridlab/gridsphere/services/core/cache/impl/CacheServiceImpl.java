@@ -27,6 +27,8 @@ import org.gridlab.gridsphere.services.core.timer.TimerService;
  */
 public class CacheServiceImpl implements PortletServiceProvider, CacheService {
 
+    private TimerService timerService = null;
+    private Map key2object = null;    
     private boolean isCachingOn = true;
 
     /**
@@ -68,10 +70,6 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
             }
         }
     }
-
-    TimerService timerService;
-    Map key2object;
-
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
