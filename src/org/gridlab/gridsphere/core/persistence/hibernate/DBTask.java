@@ -70,7 +70,8 @@ public class DBTask extends Task {
      * @param configDir full path to the configuration directory
      */
     public void setConfigDir(String configDir) {
-        this.configDir = configDir;
+        SportletLog.setConfigureURL(configDir + "/classes/log4j.properties");
+        this.configDir = configDir + "/persistence";
     }
 
     public void setAction(String action) {
