@@ -311,7 +311,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
             // make inputfield
             TextFieldBean servicename_input = event.getTextFieldBean("TFSERVICENAME"+tmfservice.getMessageType());
             TmfUser user = tms.getUser(req.getUser().getUserID());
-            servicename_input.setValue(user.getUserNameForMessagetype(tmfservice.getMessageType()));
+            if (user!=null) {
+                servicename_input.setValue(user.getUserNameForMessagetype(tmfservice.getMessageType()));
+            }
             servicename_input.setDisabled(readonly);
             tcServiceInput.addBean(servicename_input);
             trService.addBean(tcServiceInput);
