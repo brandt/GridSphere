@@ -18,7 +18,7 @@ Invoke "ant help"
 
 -->
 
-<project name="GridSphere 2" default="help">
+<project name="GridSphere" default="help">
 
 
     <!-- get environment vars -->
@@ -70,19 +70,6 @@ Invoke "ant help"
         </classpath>
     </taskdef>
 
-    <path id="classpath">
-        <pathelement location="${build.classes}"/>
-        <fileset dir="lib">
-            <exclude name="*.LICENSE"/>
-            <include name="*.jar"/>
-        </fileset>
-
-        <fileset dir="lib/jetty/lib/">
-            <exclude name="*.LICENSE"/>
-            <include name="*.jar"/>
-        </fileset>
-
-    </path>
 
     <!-- ============================= Include the other build files =============================== -->
 
@@ -118,22 +105,28 @@ Invoke "ant help"
             <then>
                 <echo message="Installing for Tomcat"/>
                 <property name="appserver.home" value="${env.CATALINA_HOME}"/>
-<!--                <if>
-                    <available file="${appserver.home}/conf/tomcat-users.xml"/>
-                    <available file="${appserver.home}/conf/tomcat-users.xml"/>
-                    <then></then>
-                    <else>
-                        <var name="appserver.home" value="${env.APPSERVER_HOME}"/>
-                    </else>
-                </if>-->
+                <property name="servlet-api.file" value="${appserver.home}/common/lib/servlet-api.jar"/>
             </then>
-
-            <else>
+        </if>
+        <if>
+            <equals arg1="${gridsphere.appserver}" arg2="jetty"/>
+            <then>
+                <echo message="Installing for Jetty"/>
                 <property name="appserver.home" value="${env.APPSERVER_HOME}"/>
-            </else>
+                <property name="servlet-api.file" value="${appserver.home}/lib/javax.servlet.jar"/>
+            </then>
         </if>
 
+        <path id="classpath">
+            <pathelement location="${build.classes}"/>
+            <fileset dir="lib">
+                <exclude name="*.LICENSE"/>
+                <include name="*.jar"/>
+            </fileset>
+            <fileset file="${servlet-api.file}"/>
+        </path>
 
+        <echo message="${servlet-api.file}"/>
         <echo message="GridSphere Webserver is ${gridsphere.appserver}"/>
         <echo message="GridSphere will be deployed to ${appserver.home}"/>
     </target>
