@@ -9,11 +9,13 @@ import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.tags.event.FormEvent;
 import org.gridlab.gridsphere.tags.event.impl.FormEventImpl;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletData;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.tags.web.element.InputFieldBean;
+import org.gridlab.gridsphere.tags.web.element.TextFieldBean;
+import org.gridlab.gridsphere.tags.web.element.CheckBoxBean;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -65,10 +67,21 @@ public class RSSPortlet extends AbstractPortlet {
 
         FormEvent form = new FormEventImpl(evt);
 
-        InputFieldBean fieldBean = (InputFieldBean)form.getElementBean("f");
-        //InputFieldBean field2 = (InputFieldBean)form.getUpdatedElementBean("f");
-        System.out.println("\n\n\n\nVALUE:"+fieldBean.getValue()+"\nVALUE2:\n\n");
+        TextFieldBean fieldBean = (TextFieldBean)form.getElementBean("f");
+        System.out.println("\n\n\n\nVALUE 1 :"+fieldBean.getValue());
+        /**
+        PortletData data = new SportletData();
+        if (data.getAttribute("myattr").equals("")) {
 
+            data.setAttribute("myattr","testing");
+            try {
+                data.store();
+            } catch (PersistenceManagerException e) {
+                System.out.println("ERROR: "+e);
+            }
+        } else {
+            System.out.println("\n\n\n\nATTRIBUTE "+data.getAttribute("myattr"));
+        }     **/
         String button = form.getPressedSubmitButton();
 
         if (_action.getName().equals("rss_edit")) {
@@ -157,8 +170,12 @@ public class RSSPortlet extends AbstractPortlet {
         returnURI.addAction(defAction);
 
         // code prototyping
-        InputFieldBean fieldBean = new InputFieldBean("jason", "oliver", false, false, 20, 30);
+        TextFieldBean fieldBean = new TextFieldBean("jason", "oliver", false, false, 20, 30);
         fieldBean.store("f", request);
+
+        CheckBoxBean cbb = new CheckBoxBean("test","test",false, false);
+        cbb.store("cbb", request);
+
         // under the covers, a fieldbean is stored and mapped to f_name
         getPortletConfig().getContext().include("/jsp/rss/edit.jsp", request, response);
     }
