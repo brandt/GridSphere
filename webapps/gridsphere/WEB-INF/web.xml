@@ -67,11 +67,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>NotePadPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>ProfileManagerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet</servlet-class>
     </servlet>

@@ -74,13 +74,6 @@
     </service>
 
     <service>
-        <name>NotePadService</name>
-        <description>Provides a database storage for textnotes</description>
-        <interface>org.gridlab.gridsphere.services.core.note.NoteService</interface>
-        <implementation>org.gridlab.gridsphere.services.core.note.impl.NoteServiceImpl</implementation>
-    </service>
-
-    <service>
         <name>TextMessagingService</name>
         <description>Provides the ability to send textmessages to different services</description>
         <interface>org.gridlab.gridsphere.services.core.messaging.TextMessagingService</interface>
