@@ -62,8 +62,11 @@ public class LoginPortlet extends AbstractPortlet {
                     //User user = userService.loginUser(name);
                     SportletUser user = new SportletUserImpl();
                     user.setUserID(username);
+                    user.setID("45");
                     user.setFullName("Joe B. Portal");
                     user.setEmailAddress("joe@portal.com");
+                    user.setFamilyName("Portal");
+                    user.setGivenName("Joey");
 
                     System.err.println("Creating new user");
                     PortletSession session = req.getPortletSession(true);
@@ -87,7 +90,7 @@ public class LoginPortlet extends AbstractPortlet {
         if (user instanceof GuestUser) {
             getPortletConfig().getContext().include("/jsp/login.jsp", request, response);
         } else {
-            getPortletConfig().getContext().include("/jsp/showstatus.jsp", request, response);
+            getPortletConfig().getContext().include("/jsp/viewuser.jsp", request, response);
         }
 
     }
