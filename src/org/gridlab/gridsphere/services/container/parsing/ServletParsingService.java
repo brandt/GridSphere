@@ -4,17 +4,24 @@
  */
 package org.gridlab.gridsphere.services.container.parsing;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletService;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletConfig;
+import java.util.List;
 
 public interface ServletParsingService extends PortletService {
 
-    public PortletRequest getPortletRequest(HttpServletRequest req);
+    public PortletRequest getPortletRequest(HttpServletRequest request);
 
-    public PortletResponse getPortletResponse(HttpServletResponse res);
+    public PortletResponse getPortletResponse(HttpServletResponse response);
+
+    public PortletSettings getPortletSettings(PortletApplication portletApp, List knownGroups, List knownRoles);
+
+    public PortletConfig getPortletConfig(ServletConfig config);
+
 
 }

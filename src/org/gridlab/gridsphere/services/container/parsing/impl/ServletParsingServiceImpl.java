@@ -4,19 +4,18 @@
  */
 package org.gridlab.gridsphere.services.container.parsing.impl;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletResponseImpl;
+import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.container.parsing.ServletParsingService;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletConfig;
+import java.util.List;
 
 public class ServletParsingServiceImpl implements PortletServiceProvider, ServletParsingService {
 
@@ -32,21 +31,6 @@ public class ServletParsingServiceImpl implements PortletServiceProvider, Servle
 
     public PortletRequest getPortletRequest(HttpServletRequest request) {
         SportletRequestImpl req = new SportletRequestImpl(request);
-
-        // XXX: FIX THIS -- NEED TO PASS ON PORTLETSETTINGS FROM REGISTRY
-        //req.setPortletSettings(null);
-
-
-
-        // Uncomment to look at request header
-        //sportletRequest.logRequest();
-
-        // Configure user
-        /*
-        if (req.getUser()) {
-
-        }
-        */
         return (PortletRequest) req;
     }
 
@@ -57,6 +41,21 @@ public class ServletParsingServiceImpl implements PortletServiceProvider, Servle
 
     public void putPortletRequest(PortletRequest req) {
 
+    }
+
+    public PortletSettings getPortletSettings(PortletApplication portletApp, List knownGroups, List knownRoles) {
+        SportletSettings settings = new SportletSettings(portletApp, knownGroups, knownRoles);
+        return settings;
+    }
+
+    public PortletConfig getPortletConfig(ServletConfig config) {
+        SportletConfig portletConfig = new SportletConfig(config);
+        return portletConfig;
+    }
+
+    public PortletContext getPortletContext(ServletConfig config) {
+        SportletContext portletContext = new SportletContext(config);
+        return portletContext;
     }
 
 }
