@@ -274,7 +274,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     }
 
 
-    public void deleteGroupLayout(FormEvent event) throws PortletException, IOException {
+    public void deleteLayout(FormEvent event) throws PortletException, IOException {
         PortletRequest req = event.getPortletRequest();
 
         String group = event.getAction().getParameter("group");
