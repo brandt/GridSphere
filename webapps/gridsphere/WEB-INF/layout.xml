@@ -48,6 +48,7 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
+        </portlet-tabbed-pane>
     </portlet-tab>
     <portlet-tab label="admin" required-role="ADMIN">
         <title lang="en">Administration</title>
