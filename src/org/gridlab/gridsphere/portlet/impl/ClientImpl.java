@@ -86,7 +86,7 @@ public class ClientImpl implements Client {
         int i = mimeType.indexOf("html");
         if (i < 0) {
             // IE 5.2 on  Mac OS X
-            if (mimeType.equals("*/*")) {
+            if (mimeType.indexOf("*/*") >= 0) {
                 mimeType = MIME_TYPES[0];
                 markupName = MARKUP_TYPES[0];
             }
