@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The LayoutManagerService provies customization support for user layouts
+ * The PortletMessageService provides customization support for user layouts
  */
 public class PortletMessageServiceImpl implements PortletMessageService, PortletServiceProvider {
 
