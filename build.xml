@@ -159,6 +159,7 @@ Copyright:
         <echo message="install                Builds and deploys GridSphere and makes documentation"/>
         <echo message="clean                  Cleans up the build directory              "/>
         <echo message="compile                Compiles GridSphere source code   "/>
+        <echo message="create-database        Creates a new, fresh database for gridsphere"/>
         <echo message="docs                   Creates Javadoc API and GridSphere guides  "/>
         <echo message="run-tests              Builds and runs the JUnit tests            "/>
         <echo message="test-reports           Creates HTML test reports from the JUnit test results"/>
