@@ -23,6 +23,7 @@ import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.user.UserManagerService;
+import org.gridlab.gridsphere.services.user.PermissionDeniedException;
 
 import javax.mail.MessagingException;
 import java.util.*;
@@ -102,7 +103,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * Create a new account request. A unique ID is assigned to this request, that can't be modified by the client.
      * When an account request is submitted, the ID is checked
      */
-    public org.gridlab.gridsphere.services.user.AccountRequest createAccountRequest() {
+    public AccountRequest createAccountRequest() {
         AccountRequestImpl newacct = new AccountRequestImpl();
         newAccountRequests.add(newacct);
         newacct.setID(uniqueID);
@@ -113,7 +114,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     /**
      * Submit the account request to the queue for administrative approval
      */
-    public void submitAccountRequest(org.gridlab.gridsphere.services.user.AccountRequest request) {
+    public void submitAccountRequest(AccountRequest request) {
 
         int i;
 
@@ -179,7 +180,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     /**
      * Approve a new or modified account request
      */
-    public void approveAccountRequest(AccountRequest request, MailMessage mailMessage) {
+    public void approveAccountRequest(User approver, AccountRequest request, MailMessage mailMessage)
+            throws PermissionDeniedException {
 
         // See if group exists or not
         // add request to list
@@ -208,7 +210,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     /**
      * Deny a new or modified account request
      */
-    public void denyAccountRequest(AccountRequest request, MailMessage mailMessage) {
+    public void denyAccountRequest(User denier, AccountRequest request, MailMessage mailMessage)
+            throws PermissionDeniedException {
+
         int userid = request.getID();
         AccountRequestImpl requestImpl = null;
         Iterator it = userData.getAccountRequests().iterator();
@@ -233,7 +237,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     /**
      * Approve a new or modified account group request
      */
-    public void approveGroupRequest(AccountRequest request, String groupName, MailMessage mailMessage) {
+    public void approveGroupRequest(User approver, AccountRequest request, PortletGroup group, MailMessage mailMessage)
+            throws PermissionDeniedException {
         if (!userData.getAccountRequests().contains(request)) return;
 
         // first see if user exists or if user is still in account request stage
@@ -245,7 +250,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         while (it.hasNext()) {
             AccountRequestImpl a = (AccountRequestImpl) it.next();
             if (a.getID() == userid) {
-                a.addApprovedGroup(groupName);
+                a.addApprovedGroup(group);
             }
         }
 
@@ -261,7 +266,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     /**
      * Deny a new or modified account group request
      */
-    public void denyGroupRequest(AccountRequest request, String groupName, MailMessage mailMessage) {
+    public void denyGroupRequest(User denier, AccountRequest request, PortletGroup group, MailMessage mailMessage)
+            throws PermissionDeniedException {
+
         if (!userData.getAccountRequests().contains(request)) return;
 
         // first see if user exists or if user is still in account request stage
@@ -271,9 +278,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         // add request to list
         Iterator it = newAccountRequests.iterator();
         while (it.hasNext()) {
-            AccountRequestImpl a = (AccountRequestImpl) it.next();
+            AccountRequestImpl a = (AccountRequestImpl)it.next();
             if (a.getID() == userid) {
-                a.addApprovedGroup(groupName);
+                a.addApprovedGroup(group);
             }
         }
 
@@ -317,7 +324,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     /**
      * Remove a user permanently!
      */
-    public void removeUser(String userName) {
+    public void removeUser(User approver, String userName) throws PermissionDeniedException {
 
     }
 
