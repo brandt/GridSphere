@@ -474,7 +474,7 @@ Copyright:
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
             docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
-            additionalparam="-J-DFILE=${gridsphere.core}/database/dbcreate.sql -J-DDB_TYPE=${gridsphere.database.type} -J-DLOG=1">
+            additionalparam="-J-DFILE=${gridsphere.core}/database/dbcreate.sql -J-DDB_TYPE=${DATABASE_TYPE} -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
         <javadoc packagenames="*"
@@ -653,7 +653,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Deploys GridSphere to Tomcat                                        -->
     <!-- =================================================================== -->
-    <target name="deploy" depends="gridsphere-jar, jar, docs" description="Deploys GridSphere to a local server">
+    <target name="deploy" depends="gridsphere-jar, jar" description="Deploys GridSphere to a local server">
         <ant target="deploy-install"/>
     </target>
 
