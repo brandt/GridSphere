@@ -52,6 +52,14 @@ public class PortletTitleBar extends BasePortletComponent {
 
     public PortletTitleBar() {}
 
+    public void setPortletClass(String portletClass) {
+        this.portletClass = portletClass;
+    }
+
+    public String getPortletClass() {
+        return portletClass;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -90,14 +98,6 @@ public class PortletTitleBar extends BasePortletComponent {
 
     public void setThickness(String thickness) {
         this.thickness = thickness;
-    }
-
-    public void setPortletClass(String portletClass) {
-        this.portletClass = portletClass;
-    }
-
-    public String getPortletClass() {
-        return portletClass;
     }
 
     public void setPortletWindowState(PortletWindow portletWindow) {

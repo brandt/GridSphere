@@ -31,11 +31,19 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     private String componentIDStr = null;
 
     private PortletWindow portletWindow = null;
-
+    private String portletClass = null;
     private PortletTitleBar titleBar = new PortletTitleBar();
     private List listeners = new ArrayList();
 
     public PortletFrame() {}
+
+    public void setPortletClass(String portletClass) {
+        this.portletClass = portletClass;
+    }
+
+    public String getPortletClass() {
+        return portletClass;
+    }
 
     public void setPortletTitleBar(PortletTitleBar titleBar) {
         this.titleBar = titleBar;
@@ -60,19 +68,22 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         list = super.init(list);
         componentIDStr = String.valueOf(COMPONENT_ID);
         list.add((PortletComponent)titleBar);
-        list = titleBar.init(list);
-        titleBar.addTitleBarListener(this);
+        if (portletClass != null) {
+            titleBar.setPortletClass(portletClass);
+            list = titleBar.init(list);
+            titleBar.addTitleBarListener(this);
+        }
         return list;
     }
 
     public void login(GridSphereEvent event) {
         UserPortletManager userPortletManager = event.getUserPortletManager();
-        //userPortletManager.initUserPortlet(titleBar.getPortletClass(), event.getSportletRequest(), event.getSportletResponse());
+        //userPortletManager.initUserPortlet(portletClass, event.getSportletRequest(), event.getSportletResponse());
     }
 
     public void logout(GridSphereEvent event) {
         UserPortletManager userPortletManager = event.getUserPortletManager();
-        //userPortletManager.destroyUserPortlet(titleBar.getPortletClass(), event.getSportletRequest(), event.getSportletResponse());
+        //userPortletManager.destroyUserPortlet(portletClass, event.getSportletRequest(), event.getSportletResponse());
     }
 
     public void addFrameListener(PortletFrameListener listener) {
@@ -130,7 +141,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         PortletData data = null;
         try {
             UserManagerService userManager = (UserManagerService)ctx.getService(UserManagerService.class);
-            data = userManager.getPortletData(req.getUser(), titleBar.getPortletClass());
+            data = userManager.getPortletData(req.getUser(), portletClass);
         } catch (PortletServiceException e) {}
         req.setData(data);
 
@@ -140,9 +151,9 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             DefaultPortletAction action = new DefaultPortletAction(actionStr);
             try {
                 UserPortletManager userPortletManager = event.getUserPortletManager();
-                userPortletManager.actionPerformed(titleBar.getPortletClass(), action, req, res);
+                userPortletManager.actionPerformed(portletClass, action, req, res);
             } catch (PortletException e) {
-                System.err.println("titleBar.getPortletClass()= " + titleBar.getPortletClass() + "  " + actionStr);
+                System.err.println("titleBar.getPortletClass()= " + portletClass + "  " + actionStr);
             }
         }
 
@@ -168,14 +179,14 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         out.println("\"" + bgColor + "\"<tr><td width=\"25%\" valign=\"center\">");
 
         PortletErrorMessage error = (PortletErrorMessage)req.getAttribute(GridSphereProperties.PORTLETERROR);
-        if ((error != null) && (error.getPortletID() == titleBar.getPortletClass())) {
+        if ((error != null) && (error.getPortletID() == portletClass)) {
             out.println("<b>Error!</b>");
             out.println(error.getMessage());
         } else {
             if (renderPortlet) {
                 UserPortletManager userPortletManager = event.getUserPortletManager();
                 try {
-                    userPortletManager.service(titleBar.getPortletClass(), req, res);
+                    userPortletManager.service(portletClass, req, res);
                 } catch (PortletException e) {
                     out.println(e.getMessage());
                 }
