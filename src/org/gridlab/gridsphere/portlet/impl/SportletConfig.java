@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import java.io.File;
 
 /**
  * The <code>SportletConfig</code> class provides the portlet with its
@@ -64,7 +65,7 @@ public class SportletConfig implements PortletConfig {
         // the group name is the web application name which can be found from
         // the context path
         String ctxPath = context.getRealPath("");
-        int i = ctxPath.lastIndexOf("/");
+        int i = ctxPath.lastIndexOf(File.separator);
         groupName = ctxPath.substring(i+1);
 
         //this.logConfig();

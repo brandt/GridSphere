@@ -718,7 +718,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             out.println("<td class=\"window-icon-right\">");
             while (windowsIt.hasNext()) {
                 state = (PortletStateLink) windowsIt.next();
-                out.println("<a href=\"" + state.getHref() + "\"><img border=\"0\" src=\"themes/" + theme + "/" + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\"/></a>");
+                out.println("<a href=\"" + state.getHref() + "\"><img border=\"0\" src=\"themes/" + theme + File.separator + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\"/></a>");
             }
             out.println("</td>");
         }
