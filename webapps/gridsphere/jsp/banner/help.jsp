@@ -20,6 +20,6 @@ The banner portlet is used for displaying content to portal users. The following
 <p>
 <b>Tips :-)</b>
 <p>
-For portlet developers, it is useful to use the file manager portlet to upload and edit JSP files conatining
+For portlet developers, it is useful to use the file manager portlet to upload and edit JSP files containing
 UI tags and configure this portlet to display them. This make interactive portlet presentation development
 much easier!

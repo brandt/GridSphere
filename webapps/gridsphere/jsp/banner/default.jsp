@@ -1,2 +1,2 @@
 
-This is just default file, you can change it to whatver you want!
+This is just default file, you can change it to whatever you want!
