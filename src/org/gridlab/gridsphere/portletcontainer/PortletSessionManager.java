@@ -75,7 +75,9 @@ public class PortletSessionManager implements HttpSessionListener {
                         }
                     }
                     log.debug("Removing session: " + id);
-                    sessions.remove(id);
+                    synchronized(sessions) {
+                        sessions.remove(id);
+                    }
                 }
             } else {
                 log.info("Not sure why sessionDestroyed listener provides null session id!");
@@ -111,7 +113,7 @@ public class PortletSessionManager implements HttpSessionListener {
         dumpSessions();
     }
     */
-    public void dumpSessions() {
+    public synchronized void dumpSessions() {
         log.debug("PortletSessionManager Session information:");
         log.debug("# current sessions: " + sessions.size());
         Set keySet = sessions.keySet();
