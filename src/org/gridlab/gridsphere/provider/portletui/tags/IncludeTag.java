@@ -1,7 +1,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.IncludeBean;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseBeanTag;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;

@@ -5,8 +5,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.PortletLog;
 
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
@@ -18,8 +16,6 @@ import java.util.Enumeration;
  * a bean identifier and a flag for indicating whether JavaScript is enabled.
  */
 public abstract class BaseBeanTag extends BodyTagSupport {
-
-    private transient static PortletLog log = SportletLog.getInstance(BaseBeanTag.class);
 
     protected String beanId = "";
 

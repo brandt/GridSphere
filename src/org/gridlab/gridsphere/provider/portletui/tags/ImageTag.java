@@ -5,24 +5,17 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
-import org.gridlab.gridsphere.provider.portletui.tags.ActionLinkTag;
-import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * The <code>ImageTag</code> represents an href img element
  */
 public class ImageTag extends BaseComponentTag {
-    private static PortletLog log = SportletLog.getInstance(ImageTag.class);
-
+  
     protected ImageBean urlImageBean = null;
     protected String src = null;
     protected String border = null;
