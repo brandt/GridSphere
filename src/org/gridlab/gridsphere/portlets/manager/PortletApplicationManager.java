@@ -5,17 +5,15 @@
 package org.gridlab.gridsphere.portlets.manager;
 
 import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.event.FormEvent;
-import org.gridlab.gridsphere.event.FileFormEvent;
-import org.gridlab.gridsphere.event.FileFormException;
-import org.gridlab.gridsphere.event.impl.FormEventImpl;
-import org.gridlab.gridsphere.event.impl.FileFormEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.portlets.manager.tomcat.TomcatManagerWrapper;
 import org.gridlab.gridsphere.portlets.manager.tomcat.TomcatWebAppResult;
+import org.gridlab.gridsphere.tags.event.FileFormEvent;
+import org.gridlab.gridsphere.tags.event.FileFormException;
+import org.gridlab.gridsphere.tags.event.impl.FileFormEventImpl;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.FileUpload;
