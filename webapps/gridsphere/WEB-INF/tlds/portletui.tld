@@ -294,6 +294,11 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>multiple</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>name</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -319,6 +324,16 @@
         </attribute>
         <attribute>
             <name>selected</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>key</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

@@ -13,6 +13,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * A <code>ListBoxItemtag</code> represents a list box element
@@ -21,6 +23,25 @@ public class ListBoxItemTag extends BaseComponentTag {
 
     protected ListBoxItemBean listboxitem = null;
     protected boolean selected = false;
+    protected String key = null;
+
+    /**
+     * Returns the key used to identify localized text
+     *
+     * @return the key used to identify localized text
+     */
+    public String getKey() {
+        return key;
+    }
+
+    /**
+     * Sets the key used to identify localized text
+     * @param key the key used to identify localized text
+     */
+    public void setKey(String key) {
+        this.key = key;
+    }
+
 
     /**
      * Sets the element to be selected
@@ -92,6 +113,11 @@ public class ListBoxItemTag extends BaseComponentTag {
         if (listboxTag != null) {
             //System.err.println("Setting action param bean: " + name + " " + value);
             ListBoxItemBean listboxitem = new ListBoxItemBean();
+            if (key != null) {
+                Locale locale = pageContext.getRequest().getLocale();
+                ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+                listboxitem.setValue(bundle.getString(key));
+            }
             this.setBaseComponentBean(listboxitem);
             // check that item doesn't already exist
             if (!itemExists(listboxTag)) {
