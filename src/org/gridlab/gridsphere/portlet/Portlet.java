@@ -333,11 +333,11 @@ public abstract class Portlet extends HttpServlet
     /**
      * Initializes the PortletConfig using the ui.xml file entry for this portlet
      */
-    public final void init(ServletConfig config) throws ServletException {
+    public void init(ServletConfig config) throws ServletException {
         super.init(config);
     }
 
-    public final void init() throws ServletException {
+    public void init() throws ServletException {
         super.init();
     }
 
@@ -365,7 +365,7 @@ public abstract class Portlet extends HttpServlet
         return super.getServletInfo();
     }
 
-    public final void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+    public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
         super.service(request, response);
     }
 
@@ -438,7 +438,7 @@ public abstract class Portlet extends HttpServlet
         super.doDelete(req, res);
     }
 
-    public final void destroy() {
+    public void destroy() {
         super.destroy();
     }
 
