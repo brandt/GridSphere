@@ -122,14 +122,12 @@ public class DataGridBean extends BeanContainer implements TagBean {
     private String createLink(PortletURI uri, int pos, String desc, boolean renderlink) {
         StringBuffer result = new StringBuffer();
 
-        result.append("<span class=\"ui-datagrid-controls-element\">");
         if (renderlink) {
             uri.addParameter(beanId + "_pos", new Integer(pos).toString());
-            result.append("<a href=\"" + uri.toString() + "\"> " + desc + "</a>");
+            result.append("<a class=\"ui-datagrid-controls-element-active\" href=\"" + uri.toString() + "\"> " + desc + "</a>");
         } else {
-            result.append(desc);
+            result.append("<span class=\"ui-datagrid-controls-element-inactive\">"+desc+"</span>");
         }
-        result.append("</span>");
         return result.toString();
     }
 
