@@ -67,6 +67,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private boolean isClosing = false;
 
     private Map renderParams = new HashMap();
+    private boolean onlyRender = true;
 
     //private StringBuffer frame = new StringBuffer();
 
@@ -357,6 +358,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 DefaultPortletAction action = event.getAction();
 
                 renderParams.clear();
+		onlyRender = false;
 
                 try {
                     PortletInvoker.actionPerformed((String)request.getAttribute(SportletProperties.PORTLETID), action, request, res);
@@ -434,6 +436,21 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
+
+	// check for render params
+        if ((onlyRender) && (event.getPortletComponentID().equals(componentIDStr))) {
+            Map tmpParams = (Map)req.getParameterMap();
+            if (tmpParams != null) {
+                Iterator it = tmpParams.keySet().iterator();
+                while (it.hasNext()) {
+                    String key = (String)it.next();
+                    String[] paramValues = req.getParameterValues( key );
+                    if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
+                        renderParams.put(key, tmpParams.get(key));
+                    }
+                }
+            }
+        }
      
         User user = req.getUser();
         if (!(user instanceof GuestUser)) {
