@@ -143,7 +143,8 @@ public class FileInputBean extends InputBean implements TagBean {
             } catch (Exception e) {
                 throw new IOException("Unable to save file: " + e);
             }
-        }
+        }else throw new IOException("Unable to save file: savedFileItem==null!");
+
     }
 
 
