@@ -15,7 +15,15 @@ import org.gridlab.gridsphere.portlet.PortletWindow;
  */
 public class SportletWindow implements PortletWindow {
 
-    private PortletWindow.State state = new PortletWindow.State(PortletWindow.State.NORMAL);
+    private PortletWindow.State state = null;
+
+    public SportletWindow() {
+        this.state = new PortletWindow.State(PortletWindow.State.NORMAL);
+    }
+
+    public SportletWindow(PortletWindow.State state) {
+        this.state = state;
+    }
 
     /**
      * Return the portlet window state.
