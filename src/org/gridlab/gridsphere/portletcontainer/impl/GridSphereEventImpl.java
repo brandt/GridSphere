@@ -12,9 +12,7 @@ import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerSer
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
-import java.util.Stack;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * The <code>GridSphereEventImpl</code> is an implementation of the <code>GridSphereEvent</code> interface.
@@ -114,6 +112,8 @@ public class GridSphereEventImpl implements GridSphereEvent {
                     log.debug("Received " + action);
                     String paramName = "";
                     String paramVal = "";
+                    Map tmpParams = new HashMap();
+                    String prefix = "";
                     while (st.hasMoreTokens()) {
                         // now check for "=" separating name and value
                         String namevalue = st.nextToken();
@@ -121,11 +121,26 @@ public class GridSphereEventImpl implements GridSphereEvent {
                         if (hasvalue > 0) {
                             paramName = namevalue.substring(0, hasvalue);
                             paramVal = namevalue.substring(hasvalue+1);
-                            action.addParameter(paramName, paramVal);
+                            if (paramName.equals(SportletProperties.PREFIX)) {
+                                prefix = paramVal;
+                            } else {
+                                tmpParams.put(paramName, paramVal);
+                            }
                         } else {
-                            action.addParameter(namevalue, paramVal);
+                            tmpParams.put(namevalue, paramVal);
                         }
                     }
+                    // put unprefixed params in action
+                    Iterator it = tmpParams.keySet().iterator();
+                    while (it.hasNext()) {
+                        String n = (String)it.next();
+                        String v = (String)tmpParams.get(n);
+                        if (!prefix.equals("")) {
+                            n = n.substring(prefix.length()+1);
+                        }
+                        action.addParameter(n, v);
+                    }
+                    tmpParams = null;
                 }
 
             }
