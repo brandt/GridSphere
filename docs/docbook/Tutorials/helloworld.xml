@@ -291,8 +291,8 @@ public class HelloWorld  extends AbstractPortlet {
 ]]>
             </programlisting>
             </example>
-            The last part is to optionally edit the <filename>$CATALINA_HOME/gridsphere/GuestUserLayout.xml</filename> or
-            the <filename>config/layouts/GuestUserLayout.xml</filename> in the source directory of gridsphere in order
+            The last part is to optionally edit the <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/layouts/GuestUserLayout.xml</filename> or
+            the <filename>webapps/gridsphere/WEB-INF/layouts/GuestUserLayout.xml</filename> in the source directory of gridsphere in order
             to make the new portlet available to guest users. If you
             choose the second way you have to redeploy gridsphere.
             The <filename>GuestUserLayout.xml</filename> should have a section inside some grid-layout tag which
