@@ -306,7 +306,15 @@ public class PortletURLImpl implements PortletURL {
             url += "&" + SportletProperties.PORTLET_WINDOW + "=" + state.toString();
         }
         if (action != null) {
-            url += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
+            try {
+                //System.out.println("Encoding action " + action);
+                String enaction = URLEncoder.encode(action, "UTF-8");
+                //System.out.println("Encoded action = " + enaction);
+                url += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + enaction;
+            } catch (UnsupportedEncodingException e) {
+                System.err.println("Unable to support UTF-8 encoding!");
+                url += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
+            }
         }
 
         //boolean firstParam = true;
