@@ -182,11 +182,6 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         PrintWriter out = res.getWriter();
 
         // Render tabs titles
-
-        ///out.println("<div class=\"tab-pane\">");
-        ///out.println("<div class=\"tab-menu\">");
-        ///out.println("<span class=\"tab-empty\">&nbsp;</span>");
-
         out.println("<table class=\"tab-pane\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
         out.println("<tr>");
 
@@ -195,12 +190,9 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
             String title = getTitleAt(i);
             tab = (PortletTab)tabs.get(i);
             if (tab.isSelected()) {
-           ///     out.println("<span class=\"tab-active\">" + title + "</span>");
-
                 out.println("<td class=\"tab-active\">" + title + "</td>");
             } else {
-           ///     out.println("<span class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a></span>");
-                out.println("<td class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a>");
+                out.println("<td class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + links[i] + "\" >" +  title + "</a>");
             }
             out.println("<td class=\"tab-empty\">&nbsp;</td>");
         }
@@ -248,8 +240,6 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         } else {
             doRenderMenu(event, links);
         }
-        ///out.println("</div></div>");//<div id=\"tab-bar\"></div>");
-        out.println("</tr></table>");
 
     }
 
