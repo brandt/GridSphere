@@ -35,7 +35,8 @@ container to Tomcat.
 
 The build.xml supports the following basic tasks:
 
-install -- builds and deploys GridSphere and makes the documentation
+install -- builds and deploys GridSphere, makes the documentation and
+           installs the database
 
 clean -- removes the build and dist directories including all the
 	 compiled classes
@@ -46,6 +47,9 @@ compile -- compiles the GridSphere source code
 
 deploy -- deploys the GridSphere framework and all portlets to a
 	  Tomcat servlet container located at $CATALINA_HOME
+
+createdatabase - creates a new, fresh database with original
+                 GridSphere settings, this wipes out your current database!
 
 docs -- compiles all GridSphere docbook documentation and
 	builds the Javadoc documentation from the source code
