@@ -16,3 +16,4 @@ Changes since GridSphere 1.0
 + PortletGroup can be public or private and is supported in GroupManagerPortlet
 + LoginPortlet configure mode can disallow anonymous account registration
 + More localized text in properties files 
++ Added Administrator's docbook guide
