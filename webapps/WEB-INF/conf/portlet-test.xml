@@ -35,12 +35,19 @@
             <description>Hier ist ein gleicht portlet</description>
             <keywords>portlet hallo welt</keywords>
         </language>
+        <owner>
+            <role-name>SUPER</role-name>
+        </owner>
         <group>
             <group-name>ANY</group-name>
         </group>
         <role>
             <role-name>GUEST</role-name>
         </role>
+        <config-param>
+            <param-name>Portlet Mistress</param-name>
+            <param-value>mistress@domain.com</param-value>
+        </config-param>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -59,12 +66,20 @@
             <description>Here is another simple portlet</description>
             <keywords>portlet hello world</keywords>
         </language>
+        <owner>
+            <group-name>CACTUS</group-name>
+            <role-name>ADMIN</role-name>
+        </owner>
         <group>
             <group-name>CACTUS</group-name>
         </group>
         <role>
             <role-name>USER</role-name>
         </role>
+        <config-param>
+            <param-name>Portlet Master</param-name>
+            <param-value>secondguy@some.com</param-value>
+        </config-param>
     </concrete-portlet>
 </concrete-portlet-app>
 

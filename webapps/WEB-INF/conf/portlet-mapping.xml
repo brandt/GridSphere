@@ -46,7 +46,7 @@
         <field name="LanguageList" type="org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo" collection="vector">
             <bind-xml name="language"/>
         </field>
-        <field name="OwnerList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Owner">
+        <field name="Owner" type="org.gridlab.gridsphere.portletcontainer.descriptor.Owner">
             <bind-xml name="owner"/>
         </field>
         <field name="GroupList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Group" collection="vector">
@@ -54,6 +54,9 @@
         </field>
         <field name="RoleList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Role" collection="vector">
             <bind-xml name="role"/>
+        </field>
+        <field name="ConfigParamList" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam" collection="vector">
+            <bind-xml name="config-param"/>
         </field>
     </class>
 
