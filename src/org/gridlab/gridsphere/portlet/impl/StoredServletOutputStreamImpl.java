@@ -16,9 +16,19 @@ public class StoredServletOutputStreamImpl extends ServletOutputStream {
         writer.write(b);
     }
 
+    /*
+    public void flush() throws IOException {
+        writer.flush();
+    }
+    */
     public String toString() {
-        return writer.toString();    
+        return writer.toString();
     }
 
+    /*
+    public void close() throws IOException {
+        writer.flush();
+    }
+    */
 }
 
