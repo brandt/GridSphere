@@ -103,8 +103,6 @@ public class LoginPortlet extends ActionPortlet {
         if (!canUserCreateAccount) return;
 
         PortletRequest req = evt.getPortletRequest();
-
-        setNextTitle(req, "User Account Manager [New User]");
         setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
         log.debug("in doViewNewUser");
     }
@@ -120,7 +118,6 @@ public class LoginPortlet extends ActionPortlet {
             validateUser(evt);
             //new and valid user and will save it
             User user = saveUser(evt);
-            setNextTitle(req, "User Account Manager [View User]");
             //show the data of this user
             FrameBean frame = evt.getFrameBean("errorFrame");
             frame.setValue("New account created.<br> Please login as " + user.getUserName());
@@ -131,7 +128,6 @@ public class LoginPortlet extends ActionPortlet {
             FrameBean err = evt.getFrameBean("errorFrame");
             err.setValue(e.getMessage());
             err.setStyle("error");
-            setNextTitle(req, "User Account Manager [Edit User]");
             //back to edit
             setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
         }

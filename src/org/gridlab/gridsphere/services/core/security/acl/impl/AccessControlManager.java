@@ -25,6 +25,7 @@ import org.gridlab.gridsphere.services.core.user.impl.UserManager;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.ArrayList;
 
 public class AccessControlManager implements AccessControlManagerService {
 
@@ -79,7 +80,7 @@ public class AccessControlManager implements AccessControlManagerService {
             String groupName = (String)it.next();
             System.err.println(groupName);
             if (!existsGroupWithName(groupName)) {
-                log.info("ccreating group " + groupName);
+                log.info("creating group " + groupName);
                 createGroup(groupName);
             }
         }
@@ -525,6 +526,21 @@ public class AccessControlManager implements AccessControlManagerService {
             log.error(msg, e);
             return new Vector();
         }
+    }
+
+    public List getUsers(PortletGroup group, PortletRole role) {
+        List users = this.getUsers(group);
+        Iterator it = users.iterator();
+        List l = new Vector();
+        while (it.hasNext()) {
+            User u = (User)it.next();
+            System.err.println("Checking if " + u.getFullName() + " has " + role);
+            if (this.hasRoleInGroup(u, group, role)) {
+                System.err.println("user has role in group" + u.getFullName() + " " + u.getEmailAddress());
+                l.add(u);
+            }
+        }
+        return l;
     }
 
     public void modifyGroupAccess(PortletGroup group, boolean isPublic) {

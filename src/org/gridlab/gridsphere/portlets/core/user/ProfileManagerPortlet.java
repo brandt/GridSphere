@@ -197,11 +197,18 @@ public class ProfileManagerPortlet extends ActionPortlet {
             groupsDescTC.addBean(groupDescTB);
             if (!g.isPublic()) {
                 TextBean priv = event.getTextBean("privateTB");
-                priv.setValue("&nbsp;&nbsp;This group is private. Please email the ");
-                List supers = aclManagerService.getUsersWithSuperRole();
-                User root = (User)supers.get(0);
-                String mailhref = "<a href=\"mailto:" + root.getEmailAddress() + "\">portal administrator</a>";
-                System.err.println(mailhref);
+                priv.setValue("&nbsp;&nbsp;" + this.getLocalizedText(req, "GROUP_NOTIFY"));
+                List admins = aclManagerService.getUsers(g, PortletRole.ADMIN);
+                String emailAddress = "";
+                if (admins.isEmpty()) {
+                    List supers = aclManagerService.getUsersWithSuperRole();
+                    User root = (User)supers.get(0);
+                    emailAddress = root.getEmailAddress();
+                } else {
+                    User admin = (User)admins.get(0);
+                    emailAddress = admin.getEmailAddress();
+                }
+                String mailhref = "&nbsp;<a href=\"mailto:" + emailAddress + "\">" + this.getLocalizedText(req, "GROUP_ADMIN") + "</a>";
                 TextBean mailTB = new TextBean();
                 mailTB.setValue(mailhref);
                 groupsDescTC.addBean(priv);
@@ -232,7 +239,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         String text = this.getLocalizedText(req, "PROFILE_MESSAGING_SERVICE");
         tbMessagingDesc.setValue(text);
         tcMessagingDesc.addBean(tbMessagingDesc);
-        tbMessagingUserid = event. getTextBean("tbMessagingUserid");
+        tbMessagingUserid = event.getTextBean("tbMessagingUserid");
         text = this.getLocalizedText(req, "PROFILE_MESSAGING_USERID");
         tbMessagingUserid.setValue(text);
         tcMessagingUserid.addBean(tbMessagingUserid);
@@ -249,20 +256,20 @@ public class ProfileManagerPortlet extends ActionPortlet {
             TmfService tmfservice = (TmfService) services.get(i);
 
             // tablerow
-            TableRowBean trService = event.getTableRowBean("TRSERVICE"+tmfservice.getMessageType());
+            TableRowBean trService = new TableRowBean();
 
             // NAME
-            TableCellBean tcServiceName = event.getTableCellBean("TCSERVICENAME"+tmfservice.getMessageType());
+            TableCellBean tcServiceName = new TableCellBean();
             // make text
-            TextBean servicename = event.getTextBean("TSERVICENAME"+tmfservice.getMessageType());
+            TextBean servicename = new TextBean();
             servicename.setValue(tmfservice.getDescription());
             tcServiceName.addBean(servicename);
             trService.addBean(tcServiceName);
 
             // INPUT
-            TableCellBean tcServiceInput = event.getTableCellBean("TCSERVCIEINPUT_"+tmfservice.getMessageType());
+            TableCellBean tcServiceInput = new TableCellBean();
             // make inputfield
-            TextFieldBean servicename_input = event.getTextFieldBean("TFSERVICENAME"+tmfservice.getMessageType());
+            TextFieldBean servicename_input = new TextFieldBean();
             TmfUser user = tms.getUser(req.getUser().getUserID());
             if (user!=null) {
                 servicename_input.setValue(user.getUserNameForMessagetype(tmfservice.getMessageType()));
@@ -270,7 +277,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
             servicename_input.setDisabled(readonly);
             tcServiceInput.addBean(servicename_input);
             trService.addBean(tcServiceInput);
-
             model.addTableRowBean(trService);
         }
         return model;

@@ -29,8 +29,6 @@ public class BannerPortlet extends ActionPortlet {
     private static final String HELP_JSP = "banner/help.jsp";
     private static final String EDIT_JSP = "banner/edit.jsp";
 
-    private static final String HELP_TITLE = "Banner Portlet Help";
-    private static final String EDIT_TITLE = "Edit Display Page";
     private static final String TITLE = "title";
     private static final String FILE = "file";
 
@@ -209,15 +207,15 @@ public class BannerPortlet extends ActionPortlet {
             if (!(user instanceof GuestUser)) {
                 PortletData data = request.getData();
                 title = data.getAttribute(TITLE);
-                if (title == null) title = HELP_TITLE;
+                if (title == null) title = this.getLocalizedText(request, "BANNER_HELP");
             } else {
                 title = defaultTitle;
             }
             out.println(title);
         } else if (request.getMode() == Portlet.Mode.HELP) {
-            out.println(HELP_TITLE);
+            out.println(this.getLocalizedText(request, "BANNER_HELP"));
         } else {
-            out.println(EDIT_TITLE);
+            out.println(this.getLocalizedText(request, "BANNER_EDIT"));
         }
     }
 

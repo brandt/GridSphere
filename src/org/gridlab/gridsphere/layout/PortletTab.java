@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.layout.event.impl.PortletTabEventImpl;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
@@ -238,7 +239,10 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      * @throws IOException if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-        portletComponent.doRender(event);
+        PortletRole userRole = event.getPortletRequest().getRole();
+        if (userRole.compare(userRole, requiredRole) >= 0) {
+            portletComponent.doRender(event);
+        }
     }
 
     public Object clone() throws CloneNotSupportedException {

@@ -219,10 +219,9 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      */
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
-        if (selectedIndex < 0) selectedIndex = 0;
+        selectedIndex = 0;
         PortletTab tab = null;
         List stabs = Collections.synchronizedList(tabs);
-        PortletRole userRole = req.getRole();
 
         synchronized (stabs) {
             int i = 0;
@@ -231,9 +230,10 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
             while (it.hasNext()) {
                 tab = (PortletTab)it.next();
                 tab.setTheme(theme);
-                if (selectedIndex == i) tab.setSelected(true);
+                if (selectedIndex == i) {
+                    tab.setSelected(true);
+                }
                 list = tab.init(req, list);
-
                 tab.addComponentListener(this);
                 tab.setParentComponent(this);
                 i++;
@@ -360,6 +360,11 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                         out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-right.gif\"/></td>");
                     }
                     out.println("<td class=\"tab-empty\">&nbsp;</td>");
+                }  else {
+                    // if role is < required role we try selecting the next possible tab
+                    int index = (i + 1) % tabs.size();
+                    PortletTab newtab = (PortletTab) stabs.get(index);
+                    this.setSelectedPortletTab(newtab);
                 }
             }
             out.println("<td class=\"tab-fillup\">&nbsp;</td></tr></table>");
@@ -409,6 +414,11 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                         out.println("<a class=\"tab-sub-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a>");
                         out.println("</span></td>");
                     }
+                } else {
+                    // if role is < required role we try selecting the next possible tab
+                    int index = (i + 1) % tabs.size();
+                    PortletTab newtab = (PortletTab) stabs.get(index);
+                    this.setSelectedPortletTab(newtab);
                 }
             }
 
@@ -434,6 +444,9 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         // is set, then the selected tab index is the startIndex = 0
 
         if (event.getPortletComponentID().equals("")) {
+
+            System.err.println("\tReceived null component id in tabbed pane!!!!\t");
+
             this.setSelectedPortletTab((PortletTab)tabs.get(selectedIndex));
         }
 

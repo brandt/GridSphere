@@ -168,6 +168,10 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
         return aclManager.getUsers(group);
     }
 
+    public List getUsers(PortletGroup group, PortletRole role) {
+        return aclManager.getUsers(group, role);
+    }
+
     public List getUsersNotInGroup(PortletGroup group) {
         return aclManager.getUsersNotInGroup(group);
     }

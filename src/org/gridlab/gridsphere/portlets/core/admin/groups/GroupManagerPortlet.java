@@ -66,18 +66,28 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
         User user = req.getUser();
         List groupDescs = new Vector();
-        List groupList = getACLService(user).getGroups();
-        Iterator it = groupList.iterator();
+        List groupList = new Vector();
+        List groups = getACLService(user).getGroups();
+        Iterator it = groups.iterator();
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup)it.next();
+            AccessControlManagerService aclService = getACLService(user);
+            String desc = aclService.getGroupDescription(g);
+            if ((aclService.hasAdminRoleInGroup(user, g)) && (!g.equals(PortletGroupFactory.GRIDSPHERE_GROUP))) {
+                System.err.println("user " + user.getFullName() + " is admin");
             //System.err.println("group= " + g.getName() + " ispublic=" + g.isPublic());
-            String desc = getACLService(user).getGroupDescription(g);
+
             //System.err.println("desc=" + desc);
-            groupDescs.add(desc);
+                groupDescs.add(desc);
+                groupList.add(g);
+            } else if (aclService.hasSuperRole(user)) {
+                System.err.println("user " + user.getFullName() + " is super");
+                groupDescs.add(desc);
+                groupList.add(g);
+            }
         }
         req.setAttribute("groupList", groupList);
         req.setAttribute("groupDescs", groupDescs);
-        setNextTitle(req, "Portlet Group Manager [List Groups]");
         setNextState(req, DO_VIEW_GROUP_LIST);
         this.log.debug("Exiting doViewListGroup");
     }
@@ -96,7 +106,6 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletGroup group = loadGroup(evt, groupId);
 
         setGroupEntryList(evt, group);
-        setNextTitle(req, "Portlet Group Manager [View Group]");
         setNextState(req, DO_VIEW_GROUP_VIEW);
         this.log.debug("Exiting doViewViewGroup");
     }
@@ -109,7 +118,6 @@ public class GroupManagerPortlet extends ActionPortlet {
         loadGroup(evt);
         GroupEntry groupEntry = loadGroupEntry(evt);
         viewGroupEntry(evt, groupEntry);
-        setNextTitle(req, "Portlet Group Manager [View Group Entry]");
         setNextState(req, DO_VIEW_GROUP_ENTRY_VIEW);
         this.log.debug("Exiting doViewViewGroupEntry");
     }
@@ -120,7 +128,6 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
         loadGroup(evt);
         loadGroupEntry(evt);
-        setNextTitle(req, "Portlet Group Manager [Edit Group Entry]");
         setNextState(req, DO_VIEW_GROUP_ENTRY_EDIT);
         this.log.debug("Exiting doViewEditGroupEntry");
     }
@@ -133,9 +140,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         GroupEntry groupEntry = loadGroupEntry(evt);
 
         viewGroupEntry(evt, groupEntry);
-        setNextTitle(req, "Portlet Group Manager [View Group Entry]");
         setNextState(req, DO_VIEW_GROUP_ENTRY_VIEW);
-
         this.log.debug("Exiting doViewConfirmEditGroupEntry");
     }
 
@@ -155,7 +160,6 @@ public class GroupManagerPortlet extends ActionPortlet {
         List usersNotInGroupList = getACLService(user).getUsersNotInGroup(group);
 
         viewUsersNotInGroupList(evt, usersNotInGroupList);
-        setNextTitle(req, "Portlet Group Manager [Add User]");
         setNextState(req, DO_VIEW_GROUP_ENTRY_ADD);
         this.log.debug("Exiting doViewAddGroupEntry");
     }
@@ -175,8 +179,6 @@ public class GroupManagerPortlet extends ActionPortlet {
             List usersNotInGroupList = getACLService(user).getUsersNotInGroup(group);
 
             viewUsersNotInGroupList(evt, usersNotInGroupList);
-
-            setNextTitle(req, "Portlet Group Manager [Add User]");
             setNextState(req, DO_VIEW_GROUP_ENTRY_ADD);
         }
     }
@@ -194,7 +196,6 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
         PortletGroup group = loadGroup(evt);
         setGroupEntryList(evt, group);
-        setNextTitle(req, "Portlet Group Manager [Remove Users]");
         setNextState(req, DO_VIEW_GROUP_ENTRY_REMOVE);
         this.log.debug("Exiting doViewRemoveGroupEntry");
     }
@@ -205,7 +206,6 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
         loadGroup(evt);
         removeGroupEntries(evt);
-        setNextTitle(req, "Portlet Group Manager [Users Removed]");
         setNextState(req, DO_VIEW_GROUP_ENTRY_REMOVE_CONFIRM);
         this.log.debug("Exiting doViewConfirmRemoveGroupEntry");
     }
@@ -273,12 +273,13 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     private void viewUsersNotInGroupList(FormEvent evt, List usersNotInGroupList) {
         log.debug("Entering viewUsersNotInGroupList()");
+        PortletRequest req = evt.getPortletRequest();
         ListBoxBean usersNotInGroupListBox = evt.getListBoxBean("usersNotInGroupList");
         usersNotInGroupListBox.setMultipleSelection(false);
         usersNotInGroupListBox.setSize(1);
         if (usersNotInGroupList.size() == 0) {
             ListBoxItemBean item = new ListBoxItemBean();
-            item.setValue("&lt;No more users to add to this group&gt;");
+            item.setValue("&lt;" + this.getLocalizedText(req, "GROUP_NOUSERS") + "&gt;");
             usersNotInGroupListBox.addBean(item);
         } else {
             // Add rows to table

@@ -61,7 +61,6 @@ public class UserManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
         List userList = this.userManagerService.getUsers();
         req.setAttribute("userList", userList);
-        setNextTitle(req, "User Account Manager [List Users]");
         setNextState(req, DO_VIEW_USER_LIST);
     }
 
@@ -77,7 +76,6 @@ public class UserManagerPortlet extends ActionPortlet {
         hf.setValue(user.getID());
         PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
         req.setAttribute("role", role.toString());
-        setNextTitle(req, "User Account Manager [View User]");
         setNextState(req, DO_VIEW_USER_VIEW);
     }
 
@@ -90,7 +88,6 @@ public class UserManagerPortlet extends ActionPortlet {
         hf.setValue("true");
 
         setSelectedUserRole(evt, PortletRole.USER);
-        setNextTitle(req, "User Account Manager [New User]");
         setNextState(req, DO_VIEW_USER_EDIT);
         log.debug("in doViewNewUser");
     }
@@ -116,7 +113,6 @@ public class UserManagerPortlet extends ActionPortlet {
 
         setUserValues(evt, user);
 
-        setNextTitle(req, "User Account Manager [Edit User]");
         setNextState(req, DO_VIEW_USER_EDIT);
     }
 
@@ -146,13 +142,11 @@ public class UserManagerPortlet extends ActionPortlet {
 
             PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
             req.setAttribute("role", role.toString());
-            setNextTitle(req, "User Account Manager [View User]");
             setNextState(req, DO_VIEW_USER_VIEW);
         } catch (PortletException e) {
             FrameBean err = evt.getFrameBean("errorFrame");
             err.setValue(e.getMessage());
             err.setStyle("alert");
-            setNextTitle(req, "User Account Manager [Edit User]");
             setNextState(req, DO_VIEW_USER_EDIT);
         }
     }
@@ -171,7 +165,6 @@ public class UserManagerPortlet extends ActionPortlet {
         req.setAttribute("user", user);
         PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
         req.setAttribute("role", role.toString());
-        setNextTitle(req, "User Account Manager [Delete User]");
         setNextState(req, DO_VIEW_USER_DELETE);
     }
 
@@ -185,7 +178,6 @@ public class UserManagerPortlet extends ActionPortlet {
         PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
         req.setAttribute("role", role.toString());
         this.userManagerService.deleteAccount(user);
-        setNextTitle(req, "User Account Manager [Deleted User]");
         setNextState(req, DO_VIEW_USER_DELETE_CONFIRM);
     }
 
@@ -209,18 +201,19 @@ public class UserManagerPortlet extends ActionPortlet {
     private void validateUser(FormEvent event, boolean newuser)
             throws PortletException {
         log.debug("Entering validateUser()");
+        PortletRequest req = event.getPortletRequest();
         StringBuffer message = new StringBuffer();
         boolean isInvalid = false;
         // Validate user name
         String userName = event.getTextFieldBean("userName").getValue();
         if (userName.equals("")) {
-            message.append("User name cannot be blank<br>");
+            message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
             isInvalid = true;
         }
 
         if (newuser) {
             if (this.userManagerService.existsUserName(userName)) {
-                message.append("A user already exists with the same user name, please use a different name.<br>");
+                message.append(this.getLocalizedText(req, "USER_EXISTS") + "<br>");
                 isInvalid = true;
             }
         }
