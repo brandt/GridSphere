@@ -80,15 +80,15 @@ public class TextTag extends BaseComponentTag {
             textBean = (TextBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (textBean == null) {
                 textBean = new TextBean();
+                this.setBaseComponentBean(textBean);
+            } else {
+                this.updateBaseComponentBean(textBean);
             }
-            key = textBean.getKey();
         } else {
             textBean = new TextBean();
             this.setBaseComponentBean(textBean);
             textBean.setStyle(style);
         }
-
-        this.setBaseComponentBean(textBean);
 
         if (key != null) {
             textBean.setValue(getLocalizedText(key));
