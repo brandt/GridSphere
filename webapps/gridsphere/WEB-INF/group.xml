@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<portlet-group>
+    <group-name>GridSphere</group-name>
+    <group-description>Core GridSphere Group</group-description>
+    <group-visibility>PUBLIC</group-visibility>
+    <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
+        <required-role>USER</required-role>
+    </portlet-role-info>
+    <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet.1</portlet-class>
+        <required-role>USER</required-role>
+    </portlet-role-info>
+    <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet.1</portlet-class>
+        <required-role>USER</required-role>
+    </portlet-role-info>
+    <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
+        <required-role>SUPER</required-role>
+    </portlet-role-info>
+    <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
+        <required-role>SUPER</required-role>
+    </portlet-role-info>
+    <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet.1</portlet-class>
+        <required-role>ADMIN</required-role>
+    </portlet-role-info>
+    <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1</portlet-class>
+        <required-role>ADMIN</required-role>
+    </portlet-role-info>
+</portlet-group>
