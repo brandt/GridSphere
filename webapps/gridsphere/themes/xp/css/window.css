@@ -11,7 +11,7 @@ Version: $Id$
    padding: 2px;
 }
 
-.window-title {
+.window-title-inactive {
   background-color: #0053e2;
   color: #000000;
   font-size: 12px;
@@ -22,6 +22,16 @@ Version: $Id$
   border-left: 1px solid #0053e2;
 }
 
+.window-title-active {
+  background-color: orange;
+  color: #000000;
+  font-size: 12px;
+  height: 15px;
+  width: 100%;
+  border-top: 1px solid #0053e2;
+  border-right: 1px solid #0053e2;
+  border-left: 1px solid #0053e2;
+}
 
 .window-title-name {
   color: white;
