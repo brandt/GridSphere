@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.event.*;
 import org.gridlab.gridsphere.event.impl.ActionEventImpl;
+import org.gridlab.gridsphere.event.impl.MessageEventImpl;
 
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
@@ -75,6 +76,11 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                 DefaultPortletAction action = (DefaultPortletAction)request.getAttribute(SportletProperties.ACTION_EVENT);
                 ActionEvent evt =  new ActionEventImpl(action, request, response);
                 actionPerformed(evt);
+            } else if (method.equals(SportletProperties.MESSAGE_RECEIVED)) {
+                // Set the appropiate portlet action
+                DefaultPortletMessage msg = (DefaultPortletMessage)request.getAttribute(SportletProperties.MESSAGE_EVENT);
+                MessageEvent evt = new MessageEventImpl(request, msg);
+                messageReceived(evt);
             }
         }
         request.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);

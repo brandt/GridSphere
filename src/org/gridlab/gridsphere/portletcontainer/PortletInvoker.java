@@ -102,19 +102,23 @@ public class PortletInvoker {
     }
 
     public static final void windowEvent(String concretePortletID, WindowEvent winEvent, PortletRequest req, PortletResponse res) throws PortletException {
-        log.info("in portletWindowEvent " + concretePortletID);
+        log.info("in windowEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletDispatcher dispatcher = appPortlet.getPortletWrapper();
         dispatcher.windowEvent(winEvent, req, res);
     }
 
-    public static final void messageEvent(String concretePortletID, MessageEvent msgEvent, PortletRequest req, PortletResponse res) throws PortletException {
-        log.info("in portletMessageEvent " + concretePortletID);
+    public static final void messageEvent(String concretePortletID, DefaultPortletMessage msgEvent, PortletRequest req, PortletResponse res) throws PortletException {
+        log.info("in messageEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-        PortletDispatcher dispatcher = appPortlet.getPortletWrapper();
-        dispatcher.messageEvent(msgEvent, req, res);
+        if (appPortlet != null) {
+            PortletDispatcher dispatcher = appPortlet.getPortletWrapper();
+            dispatcher.messageEvent(msgEvent, req, res);
+        } else {
+            log.info("in messageEvent: Unable to find portlet in registry: " + concretePortletID);
+        }
     }
 
     public static final void initAllPortlets(PortletRequest req, PortletResponse res) throws PortletException {

@@ -37,6 +37,7 @@ public class HalloWelt extends AbstractPortlet {
     }
 
     public void messageReceived(MessageEvent event) throws PortletException {
+            log.info("in messageReceived!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             PortletRequest request = event.getPortletRequest();
             PortletMessage msg = event.getMessage();
             request.getSession().setAttribute("message", msg.toString());

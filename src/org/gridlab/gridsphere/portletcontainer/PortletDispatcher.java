@@ -210,8 +210,8 @@ public class PortletDispatcher {
      *
      * @throws PortletException if the listener has trouble fulfilling the request
      */
-    public void messageEvent(MessageEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        req.setAttribute(SportletProperties.MESSAGE_EVENT, event);
+    public void messageEvent(DefaultPortletMessage message, HttpServletRequest req, HttpServletResponse res) throws PortletException {
+        req.setAttribute(SportletProperties.MESSAGE_EVENT, message);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.MESSAGE_RECEIVED);
         try {

@@ -142,23 +142,22 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
 
         /* This is where we get ACL info and update sportlet request */
-        PortletRequest sreq = event.getPortletRequest();
-        User user = sreq.getUser();
+        User user = portletReq.getUser();
         PortletRole role = PortletRole.GUEST;
         List groups = new ArrayList();
         if (user instanceof GuestUser) {
             groups.add(PortletGroup.BASE);
-            sreq.setAttribute(GridSphereProperties.PORTLETROLES, role);
-            sreq.setAttribute(GridSphereProperties.PORTLETGROUPS, groups);
+            portletReq.setAttribute(GridSphereProperties.PORTLETROLES, role);
+            portletReq.setAttribute(GridSphereProperties.PORTLETGROUPS, groups);
         } else {
             groups = aclService.getGroups(user);
             Iterator git = groups.iterator();
             PortletGroup group = null;
             while (git.hasNext()) {
                 group = (PortletGroup)git.next();
-                role = aclService.getRoleInGroup(sreq.getUser(), group);
+                role = aclService.getRoleInGroup(portletReq.getUser(), group);
             }
-            //sreq.setAttribute();
+            //portletReq.setAttribute();
         }
 
         // Render layout
@@ -167,7 +166,22 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         // Handle any outstanding messages
         Map portletMessageLists = messageManager.retrieveAllMessages();
-        //
+        if (!portletMessageLists.isEmpty()) {
+            Set keys = portletMessageLists.keySet();
+            Iterator it = keys.iterator();
+            String concPortletID = null;
+            List messages = null;
+            while (it.hasNext()) {
+                concPortletID = (String)it.next();
+                messages = (List)portletMessageLists.get(concPortletID);
+                Iterator newit = messages.iterator();
+                while (newit.hasNext()) {
+                    DefaultPortletMessage msg = (DefaultPortletMessage)newit.next();
+                    PortletInvoker.messageEvent(concPortletID, msg, portletReq, portletRes);
+                }
+            }
+
+        }
 
         layoutEngine.service(event);
     }

@@ -92,6 +92,6 @@ public class SportletMessageManager implements PortletMessageManager {
      * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
     public void clearAllMessages() throws AccessDeniedException {
-        messages = null;
+        messages.clear();
     }
 }
