@@ -4,10 +4,9 @@
   "../common/docbook-xml-4.3CR1/docbookx.dtd" [
   <!-- Useful snippets -->
 
-<!ENTITY % GridSphereLinks SYSTEM "../common/GridSphereLinks.xml">
+<!ENTITY GridSphereLinks SYSTEM "file:../common/GridSphereLinks.xml">
 
-  %GridSphereLinks;
-
+  
 <!-- Each chapter is in its own file -->
 
 <!ENTITY portlet-intro SYSTEM "portlet-intro.xml">
@@ -16,7 +15,8 @@
 <!ENTITY portlet-layout SYSTEM "portlet-layout.xml">
 <!ENTITY portlet-services SYSTEM "portlet-services.xml">
 <!ENTITY portlet-persistence SYSTEM "portlet-persistence.xml">
-<!ENTITY portlet-resources SYSTEM "portlet-auth.xml">
+<!ENTITY portlet-auth SYSTEM "portlet-auth.xml">
+<!ENTITY gridsphere-files SYSTEM "gridsphere-files.xml">
 <!ENTITY portlet-resources SYSTEM "portlet-resources.xml">
 
 <!-- Application, page, library, component specification entities  -->
@@ -40,6 +40,8 @@
   &portlet-layout;
   &portlet-services;
   &portlet-persistence;
+  &portlet-auth;
+  &gridsphere-files;
   &portlet-resources;
 
 </book>
