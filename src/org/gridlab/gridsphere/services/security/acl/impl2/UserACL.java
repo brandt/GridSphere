@@ -7,27 +7,50 @@
 package org.gridlab.gridsphere.services.security.acl.impl2;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
+import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletRole;
 
-public class UserACL extends BaseObject {
+public class UserACL extends BaseObject  {
     static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(UserACL.class.getName());
 
-    private String User;
-    private GroupACL GroupACL;
 
-    public String getUser() {
-        return User;
+    private String UserID;
+    private int RoleID;
+    private int GroupID;
+
+    public UserACL() {
+        super();
+    };
+
+    public UserACL(String userid, int roleid, int groupid) {
+        this.UserID = userid;
+        this.RoleID = roleid;
+        this.GroupID = groupid;
+        cat.info("new useracl "+userid+" role: "+roleid+" group "+groupid);
     }
 
-    public void setUser(String user) {
-        User = user;
+    public String getUserID() {
+        return UserID;
     }
 
-    public GroupACL getGroupACL() {
-        return GroupACL;
+    public void setUserID(String userID) {
+        UserID = userID;
     }
 
-    public void setGroupACL(GroupACL group) {
-        this.GroupACL = group;
+    public int getRoleID() {
+        return RoleID;
+    }
+
+    public void setRoleID(int roleID) {
+        RoleID = roleID;
+    }
+
+    public int getGroupID() {
+        return GroupID;
+    }
+
+    public void setGroupID(int groupID) {
+        GroupID = groupID;
     }
 }
 
