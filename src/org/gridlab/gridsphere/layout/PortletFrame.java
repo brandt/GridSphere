@@ -201,6 +201,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 }
                 UserPortletManager userPortletManager = event.getUserPortletManager();
                 try {
+                    System.err.println("mode is " + req.getMode());
                     userPortletManager.service(portletClass, req, res);
                 } catch (PortletException e) {
                     out.println("Portlet Unavailable");

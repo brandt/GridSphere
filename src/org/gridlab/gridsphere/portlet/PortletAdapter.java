@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import javax.servlet.UnavailableException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.jsp.JspException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSessionEvent;
 import java.io.IOException;
@@ -143,20 +144,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
         String method = (String)request.getAttribute(PortletProperties.PORTLET_ACTION_METHOD);
         if (method != null) return;
 
-        Portlet.ModeModifier modifier = (Portlet.ModeModifier)request.getAttribute(GridSphereProperties.MODEMODIFIER);
-
-        if (modifier == Portlet.ModeModifier.CURRENT) {
-            request.setAttribute(GridSphereProperties.PORTLETMODE, request.getMode());
-            request.setAttribute(GridSphereProperties.PREVIOUSMODE, request.getPreviousMode());
-        } else if (modifier == Portlet.ModeModifier.PREVIOUS) {
-            request.setAttribute(GridSphereProperties.PORTLETMODE, request.getPreviousMode());
-        } else if (modifier == Portlet.ModeModifier.REQUESTED) {
-            request.setAttribute(GridSphereProperties.PORTLETMODE, request.getMode());
-            request.setAttribute(GridSphereProperties.PREVIOUSMODE, request.getPreviousMode());
-        }
-
         Portlet.Mode mode = request.getMode();
-        Portlet.Mode previousMode = request.getPreviousMode();
+        if (mode == null) mode = Portlet.Mode.VIEW;
 
         if (mode != null) {
             switch (mode.getMode()) {
@@ -176,11 +165,12 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
                     log.error("Received invalid PortletMode command : " + mode);
                     throw new PortletException("Received invalid PortletMode command: " + mode);
             }
+            //JspException jspException = (JspException)request.getAttribute("javax.servlet.jsp.jspException");
+
         } else {
             log.error("Received NULL PortletMode command");
             throw new PortletException("Received NULL PortletMode command");
         }
-        //request.removeAttribute(GridSphereProperties.PORTLETMODE);
     }
 
     /**
