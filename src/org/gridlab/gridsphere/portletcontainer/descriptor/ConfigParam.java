@@ -13,8 +13,8 @@ public class ConfigParam {
     public ConfigParam() {}
 
     public ConfigParam(String ParamName, String ParamValue) {
-        ParamName = this.ParamName;
-        ParamValue = this.ParamValue;
+        this.ParamName = ParamName;
+        this.ParamValue = ParamValue;
     }
 
     /**

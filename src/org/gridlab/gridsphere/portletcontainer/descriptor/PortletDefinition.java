@@ -14,7 +14,7 @@ public class PortletDefinition {
     private PortletApplication portletApp = new PortletApplication();
     private Vector concreteApps = new Vector();
 
-    public List getConcreteApps() {
+    public Vector getConcreteApps() {
         return concreteApps;
     }
 

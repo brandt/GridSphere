@@ -6,8 +6,8 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 
 public class CacheInfo {
 
-    private long expires;
-    private String shared;
+    private long expires = -1;
+    private String shared = "false";
 
     public long getExpires() {
         return expires;

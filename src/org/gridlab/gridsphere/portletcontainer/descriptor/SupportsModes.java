@@ -9,7 +9,7 @@ import java.util.List;
 
 public class SupportsModes {
 
-    private List markupList;
+    private List markupList = new Vector();
 
     public void setMarkupList(Vector markupList) {
         this.markupList = markupList;

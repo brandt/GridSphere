@@ -18,7 +18,7 @@ public class PortletCollection {
      *
      * @return vector of portletapps
      */
-    public List getPortletDefList() {
+    public Vector getPortletDefList() {
         return PortletDefList;
     }
 

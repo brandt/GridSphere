@@ -13,7 +13,7 @@ public class ConcretePortletApplication {
 
     private String uid = new String();
     private String name = new String();
-    private List contextParamList = new Vector();
+    private Vector contextParamList = new Vector();
     private ConcretePortletInfo portletInfo = new ConcretePortletInfo();
 
     public ConcretePortletApplication() {}
@@ -59,7 +59,7 @@ public class ConcretePortletApplication {
      *
      * @returns description of the portlet
      */
-    public List getContextParamList() {
+    public Vector getContextParamList() {
         return contextParamList;
     }
 
