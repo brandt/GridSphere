@@ -3,7 +3,7 @@
     <commands>commands.xml</commands>
     <service enabled="false">
         <config>services/aim.xml</config>
-        <classname>org.gridlab.gridsphere.tmf.services.AIMService</classname>
+        <classname>org.gridlab.gridsphere.tmf.services.AimService</classname>
     </service>
     <service enabled="false">
         <config>services/mail.xml</config>
