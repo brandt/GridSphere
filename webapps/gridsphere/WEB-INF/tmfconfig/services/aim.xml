@@ -4,6 +4,14 @@
     <messagetype>aim</messagetype>
     <description>MESSAGING_SERVICE_AIM</description>
     <param>
+        <key>Tocserver</key>
+        <value>toc.oscar.aol.com</value>
+    </param>
+    <param>
+        <key>Tocport</key>
+        <value>5959</value>
+    </param>
+    <param>
         <key>Username</key>
         <value></value>
     </param>
