@@ -110,6 +110,8 @@ public class ActionLinkTag extends ActionTag {
 
         if (name != null) actionlink.setName(name);
         if (anchor != null) actionlink.setAnchor(anchor);
+        if (action != null) actionlink.setAction(action);
+        if (value != null) actionlink.setValue(value);
 
         Tag parent = getParent();
         if (parent instanceof ActionMenuTag) {
