@@ -9,6 +9,7 @@
     <mapping href="webapps/WEB-INF/conf/acl-mapping.xml" />
     <mapping href="webapps/WEB-INF/conf/useracl-mapping.xml"/>
     <mapping href="webapps/WEB-INF/conf/sportletuserimpl-mapping.xml"/>
-    <mapping href="webapps/WEB-INF/conf/hashattribute-mapping.xml"/>
+    <mapping href="webapps/WEB-INF/conf/accountrequestimpl-mapping.xml"/>
+
 
 </database>
