@@ -43,7 +43,6 @@ public class TableBean extends NameBean implements Updateable {
         if (!backgroundcolor.equals("")) {
             css = css + "background:" + backgroundcolor + ";";
         }
-
         css = css + "'";
         return css;
     }

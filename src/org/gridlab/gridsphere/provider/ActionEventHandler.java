@@ -161,13 +161,13 @@ public class ActionEventHandler {
         ***/
     }
 
-    public Object getTagBean(String beanName) {
+    public TagBean getTagBean(String beanName) {
         // If form event is null, it was a link event
         if (this.formEvent == null) {
             return null;
         } else {
             // Then we return the tag bean with form event
-            return this.formEvent.getTagBean(beanName);
+            return (TagBean)this.formEvent.getTagBean(beanName);
         }
     }
 

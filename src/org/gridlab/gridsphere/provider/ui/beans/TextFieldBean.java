@@ -81,6 +81,31 @@ public class TextFieldBean extends ReadOnlyBaseBean implements Input {
     }
 
     public String toString() {
+/**
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<input type='");
+        buffer.append(inputtype);
+        buffer.append("' name='");
+        buffer.append(getTagName());
+        buffer.append(name);
+        buffer.append("' value='");
+        buffer.append(value);
+        buffer.append("' ");
+        if (maxlength > 0) {
+            buffer.append("maxlength='");
+            buffer.append(maxlength);
+            buffer.append("' ");
+        }
+        if (size > 0) {
+            buffer.append("size='");
+            buffer.append(size);
+            buffer.append("' ");
+        }
+        buffer.append(checkReadonly());
+        buffer.append(checkDisabled());
+        buffer.append("/>");
+        return getCSS(buffer.toString());
+        **/
         return getCSS("<input type='" + inputtype + "' name='" + getTagName() + name + "' value='" + value + "' size='"
                 + size + "' maxlength='" + maxlength +"'"+checkReadonly()+checkDisabled()+"/>");
     }

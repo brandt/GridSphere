@@ -251,13 +251,13 @@ public class UserManagerBean extends ActionEventHandler {
 
             // Clear user attributes
             userIDBean = new HiddenFieldBean("userID", "");
-            userNameBean = new TextBean();
-            familyNameBean = new TextBean();
-            givenNameBean = new TextBean();
-            fullNameBean = new TextBean();
-            emailAddressBean = new TextBean();
-            organizationBean = new TextBean();
-            userRoleBean = new TextBean();
+            userNameBean = new TextBean("");
+            familyNameBean = new TextBean("");
+            givenNameBean = new TextBean("");
+            fullNameBean = new TextBean("");
+            emailAddressBean = new TextBean("");
+            organizationBean = new TextBean("");
+            userRoleBean = new TextBean("");
 
         } else {
 
@@ -307,19 +307,20 @@ public class UserManagerBean extends ActionEventHandler {
             organizationEditBean = new TextFieldBean("organization", "");
         } else {
             userIDBean = new HiddenFieldBean("userID", this.user.getID());
-            userNameBean = new TextBean(this.user.getUserName());
+            userNameEditBean = new TextFieldBean("userName", this.user.getUserName());
+            userNameEditBean.setDisabled(true);
+            userNameEditBean.setReadonly(true);
             familyNameEditBean = new TextFieldBean("familyName", this.user.getFamilyName());
             givenNameEditBean = new TextFieldBean("givenName", this.user.getGivenName());
             fullNameEditBean = new TextFieldBean("fullName", this.user.getFullName());
             resetFullName(fullNameEditBean);
             emailAddressEditBean = new TextFieldBean("emailAddress", this.user.getEmailAddress());
             organizationEditBean = new TextFieldBean("organization", this.user.getOrganization());
-            userRoleEditBean.store("userRole", portletRequest);
         }
 
         // Store the beans
         userIDBean.store("userID", portletRequest);
-        userNameBean.store("userName", portletRequest);
+        userNameEditBean.store("userName", portletRequest);
         familyNameEditBean.store("familyName", portletRequest);
         givenNameEditBean.store("givenName", portletRequest);
         fullNameEditBean.store("fullName", portletRequest);
