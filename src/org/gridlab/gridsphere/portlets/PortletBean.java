@@ -10,8 +10,11 @@ import org.gridlab.gridsphere.portlet.*;
 
 import java.util.*;
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 public class PortletBean {
+
+    public static final String PAGE_ERROR_UNDEFINED_ACTION = "/jsp/error/undefinedAction.jsp";
 
     protected PortletConfig config = null;
     protected PortletContext context = null;
@@ -141,35 +144,54 @@ public class PortletBean {
 
     public void doViewAction(PortletAction action)
             throws PortletException {
-        this.log.debug("Entering doAction(Object, String)");
-        // If action is not specified do default action
+        this.log.debug("Entering doAction(PortletAction)");
+        // If action is not specified do error undefined action
         if (action == null) {
-            doDefaultViewAction();
-            return;
-        }
-        // Get object and class references
-        Object thisObject = (Object)this;
-        Class thisClass = thisObject.getClass();
-        // Set action performed (even if it fails below)
-        setActionPerformed(action);
-        // Get name of action peformed
-        String actionName = getActionPerformedName();
-        // Call method specified by action name
-        try {
-            if (this.log.isDebugEnabled()) {
-                this.log.debug("Getting method " + thisClass.getName() + "." + action + "()");
+            doErrorUndefinedAction();
+        } else {
+            // Get object and class references
+            Object thisObject = (Object)this;
+            Class thisClass = this.getClass();
+            // Set action performed (even if it fails below)
+            setActionPerformed(action);
+            // Get name of action peformed
+            String actionName = getActionPerformedName();
+            // Call method specified by action name
+            try {
+                if (this.log.isDebugEnabled()) {
+                    this.log.debug("Getting method " + thisClass.getName() + "." + action + "()");
+                }
+                Method actionMethod = thisClass.getMethod(actionName, null);
+                this.log.debug("Invoking method");
+                actionMethod.invoke(thisObject, null);
+            } catch (NoSuchMethodException e) {
+                // If action is not illegal do error undefined action
+                doErrorUndefinedAction();
+            } catch (IllegalAccessException e) {
+                // If action is not illegal do error undefined action
+                doErrorUndefinedAction();
+            } catch (InvocationTargetException e) {
+                // If action is not illegal do error undefined action
+                doErrorUndefinedAction();
             }
-            Method actionMethod = thisClass.getMethod(actionName, null);
-            this.log.debug("Invoking method");
-            actionMethod.invoke(thisObject, null);
-        } catch (Exception e) {
-            throw new PortletException(e);
         }
-        this.log.debug("Exiting doAction(Object, String)");
+        this.log.debug("Exiting doAction(PortletAction)");
     }
 
     public void doDefaultViewAction()
             throws PortletException {
+    }
+
+    public void doErrorUndefinedAction()
+            throws PortletException {
+        setTitle("Error: Undefined Action");
+        setPage(PAGE_ERROR_UNDEFINED_ACTION);
+        String errorMessage = "Attempt to access undefined portlet action "
+                            + this.getClass().getName()
+                            + "."
+                            + getActionPerformedName()
+                            + "()";
+        this.log.error(errorMessage);
     }
 
     public boolean isFormInvalid() {

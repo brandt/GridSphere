@@ -105,7 +105,7 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CONFIRM%>"
                    value="Add Users"

@@ -262,9 +262,16 @@ public class CredentialMappingAdminBean extends PortletBean {
 
     public void editCredentialMapping()
             throws PortletException {
-        this.credentialSubject = getParameter("credentialSubject");
-        if (credentialSubject.equals("")) {
-            throw new PortletException("You must specify a subject for the given credential");
+        if (this.credentialMappingID.equals("")) {
+            this.credentialSubject = getParameter("credentialSubject");
+            if (credentialSubject.equals("")) {
+                throw new PortletException("You must specify a subject for the given credential");
+            }
+            String credentialUserID = getParameter("credentialUserID");
+            if (credentialUserID.equals("")) {
+                throw new PortletException("You must select a user to map to the given credential");
+            }
+            this.credentialUser = this.userManagerService.getUser(credentialUserID);
         }
         this.credentialLabel = getParameter("credentialLabel");
         if (credentialLabel.equals("")) {
@@ -273,14 +280,6 @@ public class CredentialMappingAdminBean extends PortletBean {
         this.credentialTag = getParameter("credentialTag");
         if (credentialTag.equals("")) {
             throw new PortletException("You must specify a tag for the given credential");
-        }
-        String credentialUserID = getParameter("credentialUserID");
-        if (credentialUserID.equals("")) {
-            throw new PortletException("You must select a user to map to the given credential");
-        }
-        this.credentialUser = this.userManagerService.getUser(credentialUserID);
-        if (credentialUser == null) {
-            throw new PortletException("The user you have selected does not exist");
         }
     }
 

@@ -12,25 +12,42 @@
       action="<%=credentialRetrievalUserBean.getPortletActionURI("doListUserActiveCredential")%>">
   <input type="hidden" name="credentialMappingID" value=""/>
   <script type="text/javascript">
-    function CredentialRetrievalUserPortlet_listUserActiveCredentialMapping_onClick() {
-      document.CredentialRetrievalUserPortlet.action="doListUserActiveCredentialMapping";
+    function CredentialRetrievalUserPortlet_listUserActiveCredential_onClick() {
+      document.CredentialRetrievalUserPortlet.action="<%=credentialRetrievalUserBean.getPortletActionURI("doListUserActiveCredential")%>";
       document.CredentialRetrievalUserPortlet.submit();
     }
 
-    function CredentialRetrievalUserPortlet_viewUserActiveCredentialMapping_onClick(credentialMappingID) {
+    function CredentialRetrievalUserPortlet_viewUserActiveCredential_onClick(credentialMappingID) {
       document.CredentialRetrievalUserPortlet.credentialMappingID.value=credentialMappingID;
-      document.CredentialRetrievalUserPortlet.action="doViewUserActiveCredentialMapping";
+      document.CredentialRetrievalUserPortlet.action="<%=credentialRetrievalUserBean.getPortletActionURI("doViewUserActiveCredential")%>";
       document.CredentialRetrievalUserPortlet.submit();
     }
 
-    function CredentialRetrievalUserPortlet_retrieveUserCredential_onClick(credentialMappingID) {
-      document.CredentialRetrievalUserPortlet.action="doRetrieveUserCredential";
+    function CredentialRetrievalUserPortlet_retrieveUserCredential_onClick() {
+      document.CredentialRetrievalUserPortlet.action="<%=credentialRetrievalUserBean.getPortletActionURI("doRetrieveUserCredential")%>";
       document.CredentialRetrievalUserPortlet.submit();
     }
 
-    function CredentialRetrievalUserPortlet_destroyUserCredential_onClick(credentialMappingID) {
-      document.CredentialRetrievalUserPortlet.action="doDestroyUserCredential";
-      document.CredentialRetrievalUserPortlet.submit();
+    function CredentialRetrievalUserPortlet_refreshUserCredential_onClick() {
+      var validate = GridSphere_CheckBoxList_validateCheckOneOrMore(document.CredentialRetrievalUserPortlet.credentialMappingID);
+      // Validate remove action
+      if (validate == false) {
+        alert("Please select the credentials you would like to refresh.");
+      } else {
+        document.CredentialRetrievalUserPortlet.action="<%=credentialRetrievalUserBean.getPortletActionURI("doRefreshUserCredential")%>";
+        document.CredentialRetrievalUserPortlet.submit();
+      }
+    }
+
+    function CredentialRetrievalUserPortlet_destroyUserCredential_onClick() {
+      var validate = GridSphere_CheckBoxList_validateCheckOneOrMore(document.CredentialRetrievalUserPortlet.credentialMappingID);
+      // Validate remove action
+      if (validate == false) {
+        alert("Please select the credentials you would like to destroy.");
+      } else {
+        document.CredentialRetrievalUserPortlet.action="<%=credentialRetrievalUserBean.getPortletActionURI("doDestroyUserCredential")%>";
+        document.CredentialRetrievalUserPortlet.submit();
+      }
     }
   </script>
 <table class="portlet-pane" cellspacing="1">
@@ -39,15 +56,16 @@
       <table class="portlet-frame" cellspacing="1" width="500">
         <tr>
           <td class="portlet-frame-title">
-              Retrieve Your Credentials
+              Retrieve Your Credentials From [<%=credentialRetrievalUserBean.getCredentialRetrievalHost()%>]
           </td>
         </tr>
         <tr>
-          <td class="portlet-frame-input">
-            <input type="password"
-                   name="passphrase"
+          <td class="portlet-frame-actions">
+            Password:
+            &nbsp;&nbsp;<input type="password"
+                   name="password"
                    value=""/>
-            <input type="button"
+            &nbsp;&nbsp;<input type="button"
                    name="doRetrieveUserCredential"
                    value="Submit"
                    onClick="javascript:CredentialRetrievalUserPortlet_retrieveUserCredential_onClick()"/>
@@ -56,6 +74,23 @@
       </table>
     </td>
   </tr>
+<% List credentialMappingList = credentialRetrievalUserBean.getCredentialMappingList();
+   int numCredentialMappings = credentialMappingList.size();
+   if (numCredentialMappings == 0) { %>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-text-alert">
+              None of your credentials have been activated yet.
+          </td>
+        </tr>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+<% } else { %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="500">
@@ -69,7 +104,11 @@
             <input type="button"
                    name="doListUserActiveCredential"
                    value="List Credentials"
-                   onClick="javascript:CredentialRetrievalUserPortlet_listUserActiveCredentialMapping_onClick()"/>
+                   onClick="javascript:CredentialRetrievalUserPortlet_listUserActiveCredential_onClick()"/>
+            &nbsp;&nbsp;<input type="button"
+                   name="doRefreshUserCredential"
+                   value="Refresh Credentials"
+                   onClick="javascript:CredentialRetrievalUserPortlet_refreshUserCredential_onClick()"/>
             &nbsp;&nbsp;<input type="button"
                    name="doDestroyUserCredential"
                    value="Destroy Credentials"
@@ -81,17 +120,14 @@
   </tr>
   <tr>
     <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-<% List credentialMappingList = credentialRetrievalUserBean.getCredentialMappingList();
-   int numCredentials = credentialMappingList.size();
-   if (numCredentials == 0) { %>
+      <table class="portlet-frame" cellspacing="1" width="500">
         <tr>
-          <td class="portlet-frame-text-alert">
-              None of your credentials have been activated yet.
+          <td class="portlet-frame-header-checkbox">
+              <input type="checkbox"
+               name="credentialMappingID"
+               value=""
+               onClick="javascript:GridSphere_CheckBoxList_checkAll(document.AccessControllerPortlet.groupEntryUserID)"/>
           </td>
-        </tr>
-<% } else { %>
-       <tr>
          <td class="portlet-frame-header" width="150">
            Label
          </td>
@@ -102,12 +138,18 @@
            Time Left
          </td>
        </tr>
-<%   for (int ii = 0; ii < numCredentials; ++ii) {
+<%   for (int ii = 0; ii < numCredentialMappings; ++ii) {
        CredentialMapping credentialMapping = (CredentialMapping)credentialMappingList.get(ii);
-       Credential credential = (Credential)credentialMapping.getCredential(); %>
+       Credential credential = credentialMapping.getCredential(); %>
         <tr>
+          <td class="portlet-frame-entry-checkbox">
+              <input type="checkbox"
+               name="credentialMappingID"
+               value="<%=credentialMapping.getID()%>"
+               onClick="javascript:GridSphere_CheckBoxList_onClick(document.CredentialRetrievalUserPortlet.credentialMappingID,
+                                                                   this)"/>
           <td class="portlet-frame-text">
-            <a href="javascript:CredentialRetrievalUserPortlet_viewUserActiveCredentialMapping_onClick('<%=credentialMapping.getID()%>')">
+            <a href="javascript:CredentialRetrievalUserPortlet_viewUserActiveCredential_onClick('<%=credentialMapping.getID()%>')">
               <%=credentialMapping.getLabel()%>
             </a>
           </td>

@@ -67,19 +67,19 @@ public class CredentialRetrievalUserBean extends PortletBean {
 
     public void doDefaultViewAction()
             throws PortletException {
-        doListUserActiveCredentials();
+        doListUserActiveCredential();
     }
 
     /******************************************
      * Credential retrieval actions
      ******************************************/
 
-    public void doListUserActiveCredentials()
+    public void doListUserActiveCredential()
             throws PortletException {
-        this.log.debug("Entering doListActiveCredentials");
+        this.log.debug("Entering doListActiveCredential");
         loadUserActiveCredentialMappingList();
         setPage(PAGE_USER_ACTIVE_CREDENTIAL_LIST);
-        this.log.debug("Exiting doListActiveCredentials");
+        this.log.debug("Exiting doListActiveCredential");
     }
 
     public void doViewUserActiveCredential()
@@ -90,47 +90,51 @@ public class CredentialRetrievalUserBean extends PortletBean {
         this.log.debug("Exiting doViewActiveCredential");
     }
 
-    public void doRetrieveUserCredentials()
+    public void doRetrieveUserCredential()
             throws PortletException {
-        this.log.debug("Entering doRetrieveCredentials");
+        this.log.debug("Entering doRetrieveCredential");
         retrieveCredentials();
         setPage(PAGE_USER_ACTIVE_CREDENTIAL_LIST);
-        this.log.debug("Exiting doRetrieveCredentials");
+        this.log.debug("Exiting doRetrieveCredential");
     }
 
-    public void doRefreshUserCredentials()
+    public void doRefreshUserCredential()
             throws PortletException {
-        this.log.debug("Entering doRefreshCredentials");
+        this.log.debug("Entering doRefreshCredential");
         refreshCredentials();
         setPage(PAGE_USER_ACTIVE_CREDENTIAL_LIST);
-        this.log.debug("Exiting doRefreshCredentials");
+        this.log.debug("Exiting doRefreshCredential");
     }
 
-    public void doDestroyUserCredentials()
+    public void doDestroyUserCredential()
              throws PortletException {
-         this.log.debug("Entering doDestroyCredentials");
+         this.log.debug("Entering doDestroyCredential");
          setPage(PAGE_USER_CREDENTIAL_DESTROY);
-         this.log.debug("Exiting doDestroyCredentials");
+         this.log.debug("Exiting doDestroyCredential");
      }
 
-    public void doConfirmDestroyUserCredentials()
+    public void doConfirmDestroyUserCredential()
              throws PortletException {
-         this.log.debug("Entering doConfirmDestroyCredentials");
+         this.log.debug("Entering doConfirmDestroyCredential");
          destroyCredentials();
          setPage(PAGE_USER_CREDENTIAL_DESTROY_CONFIRM);
-         this.log.debug("Exiting doConfirmDestroyCredentials");
+         this.log.debug("Exiting doConfirmDestroyCredential");
      }
 
-     public void doCancelDestroyUserCredentials()
+     public void doCancelDestroyUserCredential()
               throws PortletException {
-          this.log.debug("Entering doCancelDestroyCredentials");
-          doListUserActiveCredentials();
-          this.log.debug("Exiting doCancelDestroyCredentials");
+          this.log.debug("Entering doCancelDestroyCredential");
+          doListUserActiveCredential();
+          this.log.debug("Exiting doCancelDestroyCredential");
      }
 
     /******************************************
      * Credential retrieval methods
      ******************************************/
+
+    public String getCredentialRetrievalHost() {
+        return this.credentialManagerService.getCredentialRetrievalHost();
+    }
 
     public List getCredentialMappingList() {
         return this.credentialMappingList;
