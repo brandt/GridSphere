@@ -117,7 +117,7 @@ public abstract class PortletAdapter extends Portlet {
             portletID = request.getParameter(GridSphereProperties.PORTLETID);
             if (portletID == null) {
                 log.error("in AbstractPortlet: No PortletID found in request attribute");
-                doError(request, response, "in AbstractPortlet: No PortletID found in request attribute");
+                return;
             }
         }
 

@@ -58,8 +58,8 @@ public interface PortletWindow {
          */
         private static final int NORMAL_STATE = 0;
         private static final int MINIMIZED_STATE = 1;
-        private static final int MAXIMIZED_STATE = 2;
-        private static final int RESIZING_STATE = 3;
+        private static final int RESIZING_STATE = 2;
+        private static final int MAXIMIZED_STATE = 3;
         private static final int CLOSED_STATE = 4;
         private static final int DETACHED_STATE = 5;
 

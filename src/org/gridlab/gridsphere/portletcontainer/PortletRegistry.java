@@ -79,7 +79,6 @@ public class PortletRegistry {
         Iterator it = set.iterator();
         while (it.hasNext()) {
             String concretePortletID = (String)it.next();
-            System.err.println(concretePortletID);
             appPortlet = (ApplicationPortlet) allApplicationPortlets.get(concretePortletID);
             if (appPortlet.getWebApplicationName().equals((webApplicationName))) {
                 webappPortlets.add(appPortlet);

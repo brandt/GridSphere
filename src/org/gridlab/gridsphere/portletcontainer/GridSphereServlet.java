@@ -147,11 +147,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 logout(event);
             }
         }
-        // All these are we application names
-
-        System.err.println(context.getServletContextName()); // -- Description
-        System.err.println(req.getServletPath());
-        System.err.println(req.getContextPath());
 
         /* This is where we get ACL info and update sportlet request */
         User user = portletReq.getUser();
@@ -224,7 +219,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             user.setFamilyName("Portal");
             user.setGivenName("Joey");
 
-            System.err.println("Creating new user");
             session.setAttribute(GridSphereProperties.USER, user);
         } else {
             try {
