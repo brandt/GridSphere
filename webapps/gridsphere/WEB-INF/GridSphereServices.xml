@@ -150,5 +150,11 @@
         <interface>org.gridlab.gridsphere.services.core.secdir.SecureDirectoryService</interface>
         <implementation>org.gridlab.gridsphere.services.core.secdir.impl.SecureDirectoryServiceImpl</implementation>
     </service>
-    
+
+    <service>
+        <name>Chart Service</name>
+        <description>Provides chart generation and management capabilities</description>
+        <interface>org.gridlab.gridsphere.services.core.charts.ChartService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.charts.impl.ChartServiceImpl</implementation>
+    </service>
 </portlet-services>

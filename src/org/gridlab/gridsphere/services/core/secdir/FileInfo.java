@@ -4,20 +4,13 @@
  */
 package org.gridlab.gridsphere.services.core.secdir;
 
-/**
- * Created by IntelliJ IDEA.
- * User: docentt
- * Date: Mar 22, 2004
- * Time: 1:20:20 PM
- * To change this template use File | Settings | File Templates.
- */
-public class ResourceInfo {
+public class FileInfo {
     private String resource;
     private boolean isDirectory;
     private long lastModified;
     private long length;
 
-    public ResourceInfo(String resource, boolean directory, long lastModified, long length) {
+    public FileInfo(String resource, boolean directory, long lastModified, long length) {
         this.resource = resource;
         isDirectory = directory;
         this.lastModified = lastModified;

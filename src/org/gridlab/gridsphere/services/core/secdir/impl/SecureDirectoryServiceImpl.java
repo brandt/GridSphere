@@ -9,8 +9,9 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.services.core.secdir.ResourceInfo;
+import org.gridlab.gridsphere.services.core.secdir.FileInfo;
 import org.gridlab.gridsphere.services.core.secdir.SecureDirectoryService;
+import org.gridlab.gridsphere.services.core.secdir.FileLocationID;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -42,15 +43,14 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
 
     }
 
-    public String getFileUrl(String userID, String appName, String resource) {
-        return getFileUrl(userID, appName, resource, null, null);
+    public String getFileUrl(FileLocationID fileLocationID) {
+        return getDownloadFileUrl(fileLocationID, null, null);
     }
 
-    public String getFileUrl(String userID, String appName, String resource, String saveAs) {
-        return getFileUrl(userID, appName, resource, saveAs, null);
-    }
-
-    public String getFileUrl(String userID, String appName, String resource, String saveAs, String contentType) {
+    public String getDownloadFileUrl(FileLocationID fileLocationID, String saveAs, String contentType) {
+        String userID = fileLocationID.getUserID();
+        String appName = fileLocationID.getCategory();
+        String resource = fileLocationID.getFilePath();
         if (userID == null || appName == null || resource == null || !inited)
             return null;
         String userDirectoryPath;
@@ -84,7 +84,10 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         }
     }
 
-    public ResourceInfo[] getResourceList(String userID, String appName, String path) {
+    public FileInfo[] getFileList(FileLocationID fileLocationID) {
+        String userID = fileLocationID.getUserID();
+        String appName = fileLocationID.getCategory();
+        String path = fileLocationID.getFilePath();
         if (userID == null || appName == null || path == null || !inited)
             return null;
         String userDirectoryPath;
@@ -104,14 +107,14 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
                 return null;
             String[] directoryList = directory.list();
             int start = 1; //(path.length() == 0 ? 0 : 1);
-            ResourceInfo[] resourceList = new ResourceInfo[directoryList.length + start];
+            FileInfo[] resourceList = new FileInfo[directoryList.length + start];
             if (start == 1) {
-                resourceList[0] = new ResourceInfo("..", true, directory.lastModified(), 0);
+                resourceList[0] = new FileInfo("..", true, directory.lastModified(), 0);
             }
             for (int i = 0; i < directoryList.length; ++i) {
                 String resourceName = directoryList[i];
                 File file = new File(dirPath + resourceName);
-                resourceList[i + start] = new ResourceInfo(resourceName, file.isDirectory(), file.lastModified(), file.length());
+                resourceList[i + start] = new FileInfo(resourceName, file.isDirectory(), file.lastModified(), file.length());
             }
             return resourceList;
         } else {
@@ -119,7 +122,10 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         }
     }
 
-    public File getFile(String userID, String appName, String resource) {
+    public File getFile(FileLocationID fileLocationID) {
+        String userID = fileLocationID.getUserID();
+        String appName = fileLocationID.getCategory();
+        String resource = fileLocationID.getFilePath();
         if (userID == null || appName == null || resource == null || !inited)
             return null;
 
@@ -163,15 +169,18 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             return null;
     }
 
-    public boolean deleteResource(String userID, String appName, String resource) {
-        return deleteResource(userID, appName, resource, false);
+    public boolean deleteFile(FileLocationID fileLocationID) {
+        return deleteFile(fileLocationID, false);
     }
 
-    public boolean deleteResource(String userID, String appName, String resource, boolean recursive) {
-        return deleteResource(userID, appName, resource, recursive, false);
+    public boolean deleteFile(FileLocationID fileLocationID, boolean recursive) {
+        return deleteFile(fileLocationID, recursive, false);
     }
 
-    public boolean deleteResource(String userID, String appName, String resource, boolean recursive, boolean delTree) {
+    public boolean deleteFile(FileLocationID fileLocationID, boolean recursive, boolean delTree) {
+        String userID = fileLocationID.getUserID();
+        String appName = fileLocationID.getCategory();
+        String resource = fileLocationID.getFilePath();
 
         //FOR SECURITY REASONS DO NOT CHANGE THE FOLLOWING REGEXPS (UNLESS YOU KNOW WHAT YOU ARE DOING)
 
@@ -184,72 +193,61 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             return deleteDirectory(userID, appName, resource, recursive, delTree);
     }
 
-    public boolean saveResourceCopy(String userID, String appName, String resourceSource, String resourceDestination) {
-        if (!isInPath(resourceSource, resourceDestination))
-            return copyResource(userID, appName, resourceSource, resourceDestination);
+    public boolean copyFile(FileLocationID srcFileLocationID, String fileDest) {
+        String userID = srcFileLocationID.getUserID();
+        String appName = srcFileLocationID.getCategory();
+        String resourceSource = srcFileLocationID.getFilePath();
+        if (!isInPath(resourceSource, fileDest))
+            return copyResource(userID, appName, resourceSource, fileDest);
         return false;
     }
 
-    public boolean saveResourceMove(String userID, String appName, String resourceSource, String resourceDestination) {
-        if (!isInPath(resourceSource, resourceDestination))
-            if (copyResource(userID, appName, resourceSource, resourceDestination))
-                return deleteResource(userID, appName, resourceSource, true);
+    public boolean moveFile(FileLocationID srcFileLocationID, String fileDest) {
+        String userID = srcFileLocationID.getUserID();
+        String appName = srcFileLocationID.getCategory();
+        String resourceSource = srcFileLocationID.getFilePath();
+        if (!isInPath(resourceSource, fileDest))
+            if (copyResource(userID, appName, resourceSource, fileDest))
+                return deleteFile(new FileLocationID(userID, appName, resourceSource), true);
         return false;
     }
 
-    public boolean fileExists(String userID, String appName, String resource) {
-        File file = getFile(userID, appName, resource);
+    public void addFile(FileLocationID fileLocationID, InputStream inputStream) throws IOException {
+        String userID = fileLocationID.getUserID();
+        String appName = fileLocationID.getCategory();
+        String resource = fileLocationID.getFilePath();
+        File file = getFile(fileLocationID);
         if (file == null)
-            return false;
-        return true;
-    }
-
-    public boolean writeFromStream(String userID, String appName, String resource, InputStream input) {
-        File file = getFile(userID, appName, resource);
-        if (file == null)
-            return false;
+            throw new IOException("Unable to add file for (USERID=" + userID + ",CATEGORY=" + appName + ",FILENAME=" + resource + ") !");
         try {
             file.delete();
             if (!file.createNewFile())
-                return false;
+                throw new IOException("Unable to add file for (USERID=" + userID + ",CATEGORY=" + appName + ",FILENAME=" + resource + ") ! Can't create file.");
             FileOutputStream output = new FileOutputStream(file);
-            rewrite(input, output);
+            rewrite(inputStream, output);
             output.close();
-            return true;
         } catch (Exception e) {
-            return false;
+            throw new IOException("Unable to add file for (USERID=" + userID + ",CATEGORY=" + appName + ",FILENAME=" + resource + ") !" + e.getMessage());
         }
     }
 
-    public boolean writeFromFile(String userID, String appName, String resource, File inputFile) {
-        try {
-            FileInputStream input = new FileInputStream(inputFile);
-            return writeFromStream(userID, appName, resource, input);
-        } catch (Exception e) {
-            return false;
-        }
+    public void addFile(FileLocationID fileLocationID, File inputFile) throws IOException {
+        FileInputStream input = new FileInputStream(inputFile);
+        addFile(fileLocationID, input);
     }
 
-    public boolean appHasDirectory(String userID, String appName, boolean create) {
-        if (userID == null || appName == null || !inited)
+    public boolean categoryExistsForUser(String userID, String category) {
+        if (userID == null || category == null || !inited)
             return false;
 
         //FOR SECURITY REASONS DO NOT CHANGE THE FOLLOWING REGEXP (UNLESS YOU KNOW WHAT YOU ARE DOING)
 
-        appName = util.substitute("s![\\/.]!!g", appName);
+        category = util.substitute("s![\\/.]!!g", category);
         String userDirectoryPath;
         if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
-            String filePath = userDirectoryPath + "/" + appName;
+            String filePath = userDirectoryPath + "/" + category;
             File file = new File(filePath);
             if (!file.exists()) {
-                if (create) {
-                    if (!file.mkdir()) {
-                        log.error("Unable to create directory for application " + filePath);
-                        return false;
-                    } else {
-                        return true;
-                    }
-                }
                 return false;
             } else if (!file.isDirectory()) {
                 return false;
@@ -258,6 +256,44 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             }
         }
         return false;
+    }
+
+    public void createCategoryForUser(String userID, String category) throws IOException {
+        if (userID == null || category == null || !inited) {
+            if (!inited)
+                throw new IOException("Unable to create category for user ! SecureDirectory service is not initialized.");
+            throw new IOException("Unable to create category for user (USERID=" + userID + ",CATEGORY=" + category + ")");
+        }
+
+        //FOR SECURITY REASONS DO NOT CHANGE THE FOLLOWING REGEXP (UNLESS YOU KNOW WHAT YOU ARE DOING)
+
+        category = util.substitute("s![\\/.]!!g", category);
+        String userDirectoryPath;
+        if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
+            String filePath = userDirectoryPath + "/" + category;
+            File file = new File(filePath);
+            if (!file.exists()) {
+                if (!file.mkdir()) {
+                    log.error("Unable to create directory for application " + filePath);
+                    throw new IOException("Unable to create category for user (USERID=" + userID + ",CATEGORY=" + category + ") ! Can't create directory.");
+                }
+            } else {
+                return;
+            }
+        } else {
+            throw new IOException("Unable to create category for user (USERID=" + userID + ",CATEGORY=" + category + ")! Can't get user directory.");
+        }
+    }
+
+    public boolean fileExists(FileLocationID fileLocationID) {
+        File file = getFile(fileLocationID);
+        if (file == null)
+            return false;
+        return true;
+    }
+
+    public FileLocationID createFileLocationID(String userID, String category, String fileName) {
+        return new FileLocationID(userID, category, fileName);
     }
 
     private boolean isInPath(String examineIsPath, String examineInPath) {
@@ -357,7 +393,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
     }
 
     private boolean deleteFile(String userID, String appName, String resource, boolean delTree) {
-        File file = getFile(userID, appName, resource);
+        File file = getFile(new FileLocationID(userID, appName, resource));
         if (file == null)
             return false;
         if (!file.delete())
@@ -399,7 +435,12 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             }
             file = new File(filePath + File.separator + resourceSource);
             if (!file.isDirectory()) {
-                return writeFromFile(userID, appName, resourceDestination, file);
+                try {
+                    addFile(new FileLocationID(userID, appName, resourceDestination), file);
+                    return true;
+                } catch (IOException e) {
+                    return false;
+                }
             } else {
                 resourceDestination += "\\\\";
                 resourceDestination = util.substitute("s!\\\\!/!g", resourceDestination);
@@ -424,8 +465,11 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
                 if (!copyDirectory(userID, appName, files[i], destination + files[i].getName() + File.separator))
                     toRet = false;
             } else {
-                if (!writeFromFile(userID, appName, destination + files[i].getName(), files[i]))
+                try {
+                    addFile(new FileLocationID(userID, appName, destination + files[i].getName()), files[i]);
+                } catch (IOException e) {
                     toRet = false;
+                }
             }
         }
         return toRet;

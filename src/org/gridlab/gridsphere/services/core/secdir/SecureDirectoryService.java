@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:tkucz@icis.pcz.pl">Tomasz Kuczynski</a>
- * @version 0.4 2004/05/17
+ * @version 1.0 2004/08/16
  */
 package org.gridlab.gridsphere.services.core.secdir;
 
@@ -8,13 +8,14 @@ import org.gridlab.gridsphere.portlet.service.PortletService;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.IOException;
 
 /**
  * The <code>SecureDirectoryService</code> manages a temporary secure directory used for the storage of
  * user's persistent data. Resources are accessible by browser using URLs only when user is logged in.
  * Every user works using separate directory based on his user ID.
  * <p/>
- * Parameter "appName" is root of filesystem f.e. "Commander" for CommanderPortlet.
+ * Parameter "category" is root of filesystem f.e. "Commander" for CommanderPortlet.
  * More then one portlet can share one root. Number of roots is unlimited.
  * One portlet can use unlimited amount of roots.
  * <p/>
@@ -24,166 +25,158 @@ import java.io.InputStream;
 public interface SecureDirectoryService extends PortletService {
 
     /**
+     * Creates a file location path to store files using the following strategy:
+     *
+     * location path = "/<userID>/<category>/<fileName>"
+     *
+     * The fileName
+     *
+     * @param userID the user id
+     * @param category a category name define root of user's virtual filesystem
+     * @param fileName the name of the file, this can be any file path e.g. "context.xml"
+     * or "/newdir/files/context.xml"
+     *
+     * @return a constructed file location path from the supplied parameters
+     */
+    public FileLocationID createFileLocationID(String userID, String category, String fileName);
+
+    /**
      * Returns URL that points at resource in SecureDirectory
      *
-     * @param userID   described above
-     * @param appName  described above
-     * @param resource is path, and filename of resource
-     * @return URL that allows to access resource using Web Browser (f.e. include resource to the portlet as an image in <img> tag)
+     * @param fileLocationID the file location id
+     *
+     * @return URL that represents the location of the file to be used in a hyperlink, etc.
      */
-
-    public String getFileUrl(String userID, String appName, String resource);
+    public String getFileUrl(FileLocationID fileLocationID);
 
     /**
      * Returns URL that allows to download resource from SecureDirectory
      *
-     * @param userID   described above
-     * @param appName  described above
-     * @param resource is path, and filename of resource
+     * @param fileLocationID the file location id
      * @param saveAs   filename for resource which will be sent to the browser
+     * @param contentType if non-null forces the content type that should be set by HTTP server
      * @return URL that allows to download resource using Web Browser (forces on browser save as dialog box)
      */
-
-    public String getFileUrl(String userID, String appName, String resource, String saveAs);
-
-    /**
-     * Returns URL that allows to download resource from SecureDirectory (allows to force MIME type)
-     *
-     * @param userID      described above
-     * @param appName     described above
-     * @param resource    is path, and filename of resource
-     * @param saveAs      filename for resource which will be sent to the browser
-     * @param contentType is MIME type of data accessible through URL
-     * @return URL that allows to download resource using Web Browser (forces on browser save as dialog box)
-     */
-
-    public String getFileUrl(String userID, String appName, String resource, String saveAs, String contentType);
+    public String getDownloadFileUrl(FileLocationID fileLocationID, String saveAs, String contentType);
 
     /**
      * Returns array of descriptors of resources in some path in SecureDirectory (something like ls/dir command for SecureDirectoryService)
      *
-     * @param userID  described above
-     * @param appName described above
-     * @param path    directory which should be listed ("/" for main(root) directory)
-     * @return array of descriptors of resources
+     * @param fileLocationID a file location id that includes a path
+     *
+     * @return array of file information
      */
-
-    public ResourceInfo[] getResourceList(String userID, String appName, String path);
+    public FileInfo[] getFileList(FileLocationID fileLocationID);
 
     /**
      * Returns file object for the resource in SecureDirectory
      *
-     * @param userID   described above
-     * @param appName  described above
-     * @param resource is path, and filename of resource
+     * @param fileLocationID the file location id
+     *
      * @return file object for the resource in SecureDirectory or null if resource doesn't exist
      */
-
-    public File getFile(String userID, String appName, String resource);
-
-    /**
-     * Rewrites data from stream to resource in SecureDirectory
-     *
-     * @param userID   described above
-     * @param appName  described above
-     * @param resource is path, and filename of resource
-     * @param input    is input stream
-     * @return success = true / fail = false
-     */
-
-    public boolean writeFromStream(String userID, String appName, String resource, InputStream input);
+    public File getFile(FileLocationID fileLocationID);
 
     /**
-     * Rewrites data from file object to resource in SecureDirectory
+     * Adds resource to SecureDirectory
      *
-     * @param userID    described above
-     * @param appName   described above
-     * @param resource  is path, and filename of resource
-     * @param inputFile is input file object
-     * @return success = true / fail = false
+     * @param fileLocationID the file location id
+     *
+     * @param inputFile java.io.File object to add
+     *
+     * @throws java.io.IOException if fails to add resource
      */
+    public void addFile(FileLocationID fileLocationID, File inputFile) throws IOException;
 
-    public boolean writeFromFile(String userID, String appName, String resource, File inputFile);
+    /**
+     * Adds resource to SecureDirectory
+     *
+     * @param fileLocationID the file location id
+     *
+     * @param inputStream java.io.InputStream object to add
+     *
+     * @throws java.io.IOException if fails to add resource
+     */
+    public void addFile(FileLocationID fileLocationID, InputStream inputStream) throws IOException;
 
     /**
      * Removes resource in SecureDirectory
      *
-     * @param userID   described above
-     * @param appName  described above
-     * @param resource is path, and filename of resource
+     * @param fileLocationID the handle to the file to be deleted
+     *
      * @return success = true / fail = false
      */
-
-    public boolean deleteResource(String userID, String appName, String resource);
+    public boolean deleteFile(FileLocationID fileLocationID);
 
     /**
      * Removes resource in SecureDirectory (allows to remove subdirectories recursively)
      *
-     * @param userID    described above
-     * @param appName   described above
-     * @param resource  is path, and filename of resource
+     * @param fileLocationID the handle to the file to be deleted
      * @param recursive set to true to delete directory and its subdirectories
+     *
      * @return success = true / fail = false
      */
-
-    public boolean deleteResource(String userID, String appName, String resource, boolean recursive);
+    public boolean deleteFile(FileLocationID fileLocationID, boolean recursive);
 
     /**
      * Removes resource in SecureDirectory (allows to remove subdirectories recursively/allows to remove parentdirectories recursively)
      *
-     * @param userID    described above
-     * @param appName   described above
-     * @param resource  is path, and filename of resource
+     * @param fileLocationID the handle to the file to be deleted
      * @param recursive set to true to delete directory and its subdirectories
      * @param delTree   set to true to delete tree of all empty parentdirectores
+     *
      * @return success = true / fail = false
      */
-
-    public boolean deleteResource(String userID, String appName, String resource, boolean recursive, boolean delTree);
+    public boolean deleteFile(FileLocationID fileLocationID, boolean recursive, boolean delTree);
 
     /**
      * Copies one resource to another one in SecureDirectory (checks if copying is save - if it is not copying directory to its subdirectory)
      *
-     * @param userID              described above
-     * @param appName             described above
-     * @param resourceSource      is path, and filename of source resource
-     * @param resourceDestination is path, and filename of destination resource
+     * @param srcFileLocationID source file location id
+     * @param fileDest the name of the destination file, this can be any file path e.g. "context.xml"
+     * or "/newdir/files/context.xml"
+     *
      * @return success = true / fail = false
      */
-
-    public boolean saveResourceCopy(String userID, String appName, String resourceSource, String resourceDestination);
+    public boolean copyFile(FileLocationID srcFileLocationID, String fileDest);
 
     /**
      * Moves one resource to another one in SecureDirectory (checks if moving is save - if it is not moving directory to its subdirectory)
      *
-     * @param userID              described above
-     * @param appName             described above
-     * @param resourceSource      is path, and filename of source resource
-     * @param resourceDestination is path, and filename of destination resource
+     * @param srcFileLocationID source file location id
+     * @param fileDest the name of the destination file, this can be any file path e.g. "context.xml"
+     * or "/newdir/files/context.xml"
+     *
      * @return success = true / fail = false
      */
-
-    public boolean saveResourceMove(String userID, String appName, String resourceSource, String resourceDestination);
+    public boolean moveFile(FileLocationID srcFileLocationID, String fileDest);
 
     /**
      * Checks if resource exists in SecureDirectory
      *
-     * @param userID   described above
-     * @param appName  described above
-     * @param resource is path, and filename of resource
-     * @return true - exists / false doesn't exist
+     * @param fileLocationID source file location id
+     *
+     * @return exists = true / doesn't exist = false
      */
-
-    public boolean fileExists(String userID, String appName, String resource);
+    public boolean fileExists(FileLocationID fileLocationID);
 
     /**
-     * Checks if appName root exists in SecureDirectory (can create appName root)
+     * Checks if category exists for user
      *
-     * @param userID  described above
-     * @param appName described above
-     * @param create  set to true to create if it doesn't exist
-     * @return true - exists / false doesn't exist
+     * @param userID the user id
+     * @param category a category name define root of user's virtual filesystem
+     *
+     * @return true - category exists/false - category doesn't exist
      */
+    public boolean categoryExistsForUser(String userID, String category);
 
-    public boolean appHasDirectory(String userID, String appName, boolean create);
+    /**
+     * Creates category for user
+     *
+     * @param userID the user id
+     * @param category a category name define root of user's virtual filesystem
+     *
+     * @throws java.io.IOException - if method fails
+     */
+    public void createCategoryForUser(String userID, String category) throws IOException;
 }
