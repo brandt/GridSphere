@@ -324,58 +324,61 @@ public class ProfileManagerPortlet extends ActionPortlet {
         }
 
         CheckBoxBean groupsCB = event.getCheckBoxBean("groupCheckBox");
-        List groups = groupsCB.getSelectedValues();
+        List selectedGroups = groupsCB.getSelectedValues();
 
-
+        // first get groups user is already in
         List groupEntries = aclManagerService.getGroupEntries(user);
         Iterator geIt = groupEntries.iterator();
         List usergroups = new ArrayList();
         while (geIt.hasNext()) {
             GroupEntry ge = (GroupEntry)geIt.next();
             if (!ge.getGroup().equals(PortletGroupFactory.GRIDSPHERE_GROUP)) {
-                aclManagerService.deleteGroupEntry(ge);
+                System.err.println("user is in group: " + ge.getGroup());
+                //aclManagerService.deleteGroupEntry(ge);
                 usergroups.add(ge.getGroup().getName());
             }
         }
 
         // approve all selected group requests
-        Iterator it = groups.iterator();
+        Iterator it = selectedGroups.iterator();
         while (it.hasNext()) {
             String groupStr = (String)it.next();
-            PortletGroup g = this.aclManagerService.getGroupByName(groupStr);
-            GroupEntry ge = this.aclManagerService.getGroupEntry(user, g);
-            if (!usergroups.contains(g.getName())) {
+            System.err.println("Selected group: " + groupStr);
+            PortletGroup selectedGroup = this.aclManagerService.getGroupByName(groupStr);
+            GroupEntry ge = this.aclManagerService.getGroupEntry(user, selectedGroup);
+            if (!usergroups.contains(selectedGroup.getName())) {
+                System.err.println("does not have group: " + selectedGroup.getName());
+                GroupRequest groupRequest = this.aclManagerService.createGroupRequest(ge);
+                groupRequest.setUser(user);
+                groupRequest.setGroup(selectedGroup);
+                groupRequest.setRole(PortletRole.USER);
+                groupRequest.setGroupAction(GroupAction.ADD);
 
-            GroupRequest groupRequest = this.aclManagerService.createGroupRequest(ge);
-            groupRequest.setUser(user);
-            groupRequest.setGroup(g);
-            groupRequest.setRole(PortletRole.USER);
-            groupRequest.setGroupAction(GroupAction.ADD);
-
-            // Create access right
-            try {
-                this.aclManagerService.submitGroupRequest(groupRequest);
-            } catch (InvalidGroupRequestException e) {
-                log.error("in ProfileManagerPortlet invalid group request", e);
+                // Create access right
+                try {
+                    this.aclManagerService.submitGroupRequest(groupRequest);
+                } catch (InvalidGroupRequestException e) {
+                    log.error("in ProfileManagerPortlet invalid group request", e);
+                }
+                this.aclManagerService.approveGroupRequest(groupRequest);
+                System.err.println("adding tab " + selectedGroup.getName());
+                this.layoutMgr.addApplicationTab(req, selectedGroup.getName());
+                this.layoutMgr.reloadPage(req);
             }
-            this.aclManagerService.approveGroupRequest(groupRequest);
-                usergroups.remove(g.getName());
-            }
-            this.layoutMgr.addApplicationTab(req, g.getName());
-
-            this.layoutMgr.reloadPage(req);
+            usergroups.remove(selectedGroup.getName());
         }
 
         // subtract groups
-
         it = usergroups.iterator();
         while (it.hasNext()) {
             String groupStr = (String)it.next();
+            System.err.println("Removing group :" + groupStr);
             PortletGroup g = this.aclManagerService.getGroupByName(groupStr);
             GroupEntry entry = this.aclManagerService.getGroupEntry(user, g);
             GroupRequest groupRequest = this.aclManagerService.createGroupRequest(entry);
             groupRequest.setGroupAction(GroupAction.REMOVE);
             groupRequest.setRole(PortletRole.USER);
+
             // Create access right
             try {
                 this.aclManagerService.submitGroupRequest(groupRequest);

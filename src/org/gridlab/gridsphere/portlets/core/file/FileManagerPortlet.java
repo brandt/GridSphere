@@ -84,6 +84,7 @@ public class FileManagerPortlet extends ActionPortlet {
                 if (!f.mkdirs()) throw new IOException("Unable to create dir: " + userLoc);
             }
             String path = userStorage.getLocationPath(user, fileName);
+
             System.err.println("storeFile: " + path);
             fi.saveFile(path);
 

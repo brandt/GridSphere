@@ -99,7 +99,7 @@ public class SubscriptionPortlet extends ActionPortlet {
                     String concID = conc.getConcretePortletID();
 
                     PortletRole reqrole = conc.getConcretePortletConfig().getRequiredRole();
-                    System.err.println(concID + " " + reqrole);
+                    log.debug("subscribed to portlet: " + concID + " " + reqrole);
                     if (role.compare(role, reqrole) >= 0) {
                         // build an interface
                         CheckBoxBean cb = new CheckBoxBean(req, "portletsCB");
@@ -121,17 +121,19 @@ public class SubscriptionPortlet extends ActionPortlet {
 
                         TableCellBean newtc2 = new TableCellBean();
                         TextBean tb = new TextBean();
-                        int li = concID.lastIndexOf(".");
-                        concID = concID.substring(0, li);
-                        li = concID.lastIndexOf(".");
-                        concID = concID.substring(li+1);
+
+                        // set 2nd column to portlet display name from concrete portlet
+                        Locale loc = req.getLocale();
+
+                        concID = conc.getDisplayName(loc);
                         tb.setValue(concID);
                         newtc2.addBean(tb);
                         newtr.addBean(newtc2);
                         newtc = new TableCellBean();
                         TextBean tb2 = new TextBean();
-                        Locale loc = req.getLocale();
-                        tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
+
+                        // set 3rd column to portlet description from concrete portlet
+                        tb2.setValue(conc.getDescription(loc));
                         newtc.addBean(tb2);
                         newtr.addBean(newtc);
                         model.addTableRowBean(newtr);
@@ -161,7 +163,7 @@ public class SubscriptionPortlet extends ActionPortlet {
             String pid = (String)it.next();
             if (!oldlist.contains(pid)) {
                 newportlets.add(pid);
-                layoutMgr.addSubscribedPortlet(req, pid);
+                //layoutMgr.addSubscribedPortlet(req, pid);
             }
         }
 
@@ -180,6 +182,10 @@ public class SubscriptionPortlet extends ActionPortlet {
 
         // remove portlets
         if (!removePortlets.isEmpty()) {
+            log.info("removing portlets");
+            for (int i = 0; i < removePortlets.size(); i++) {
+                log.info(" " + removePortlets.get(i));
+            }
             layoutMgr.removePortlets(req, removePortlets);
             layoutMgr.reloadPage(req);
         }

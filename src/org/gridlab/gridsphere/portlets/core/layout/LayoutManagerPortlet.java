@@ -88,7 +88,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             seltabsLB.addBean(item);
             TextFieldBean tf = new TextFieldBean();
             tf.setBeanId("tab" + i);
-            tf.setValue((String)tabNames.get(0));
+            tf.setValue((String)tabNames.get(i));
             tabsTC.addBean(tf);
             if ((tabNames.get(i)).equals(tabName)) item.setSelected(true);
         }

@@ -104,7 +104,8 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
             if (pc instanceof PortletFrame) {
                 if (portletClassNames.contains(cid.getPortletClass())) {
                     log.debug("component has portlet: " + cid.getPortletClass());
-                    removePortletComponent(pc, req);
+                    //removePortletComponent(pc, req);
+                    pc.remove(null, req);
                     removeSubscribedPortlet(req, cid.getPortletClass());
                 }
             }
@@ -124,7 +125,8 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
             if (pc instanceof PortletFrame) {
                 if (portletClassNames.contains(cid.getPortletClass())) {
                     log.debug("component has portlet: " + cid.getPortletClass());
-                    removePortletComponent(pc, req);
+                    //removePortletComponent(pc, req);
+                    pc.remove(null, req);
                     removeSubscribedPortlet(req, cid.getPortletClass());
                 }
             }
@@ -136,7 +138,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         }
     }
 
-    public void removePortlet(PortletRequest req, String portletClassNames) {
+    public void removePortlet(PortletRequest req, String portletClassName) {
 
         PortletPage page = pageFactory.createPortletPage(req);
         List cidList = page.getComponentIdentifierList();
@@ -145,9 +147,10 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
             ComponentIdentifier cid = (ComponentIdentifier)it.next();
             PortletComponent pc = cid.getPortletComponent();
             if (pc instanceof PortletFrame) {
-                if (portletClassNames.equals(cid.getPortletClass())) {
+                if (portletClassName.equals(cid.getPortletClass())) {
                     log.debug("component has portlet: " + cid.getPortletClass());
-                    removePortletComponent(pc, req);
+                    //removePortletComponent(pc, req);
+                    pc.remove(null, req);
                     removeSubscribedPortlet(req, cid.getPortletClass());
                 }
             }
@@ -212,55 +215,6 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
                     l.remove(concId);
                 }
             }
-        }
-    }
-
-    private synchronized void removePortletComponent(PortletComponent pc, PortletRequest req) {
-        String loc = req.getLocale().getLanguage();
-        if (pc == null) return;
-        PortletComponent parent = pc.getParentComponent();
-        if (parent == null) return;
-
-        /* Perform delete based on parent component */
-        if (parent instanceof PortletFrameLayout) {
-            log.info("parent is a frame layout");
-
-            PortletFrameLayout layout = (PortletFrameLayout)parent;
-            log.info("removing frame layout ");
-            layout.removePortletComponent(pc);
-            if (layout.getPortletComponents().isEmpty()) {
-                System.err.println("no more frames- removing frame layout");
-                removePortletComponent(layout, req);
-            }
-
-        }
-        if (parent instanceof PortletTab) {
-            log.info("parent is a tab");
-            PortletTab tab = (PortletTab)parent;
-            log.info("removing tab " + tab.getTitle(loc));
-            PortletComponent comp = tab.getPortletComponent();
-            //if (comp instanceof PortletTabbedPane) {
-            //    if
-            //} else {
-                tab.removePortletComponent();
-                removePortletComponent(tab, req);
-            //}
-        }
-        if (parent instanceof PortletTabbedPane) {
-            log.info("parent is a tabbed pane");
-            PortletTabbedPane pane = (PortletTabbedPane)parent;
-            PortletTab tab = (PortletTab)pc;
-            log.info("removing tab " + tab.getTitle(loc));
-
-
-            if ((tab.getPortletComponent() == null) && pane.getPortletTabs().size() == 1) {
-                pane.removeTab(tab);
-                log.info("continuing  " + tab.getTitle(loc));
-                removePortletComponent(pane, req);
-            }  else {
-                pane.removeTab(tab);
-            }
-
         }
     }
 
