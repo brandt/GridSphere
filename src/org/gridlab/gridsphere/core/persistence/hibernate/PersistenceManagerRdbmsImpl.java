@@ -97,8 +97,8 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                     // Get filename of file or directory
                     String filename = children[i];
                     if (filename.endsWith(".hbm.xml")) {
-                        log.debug("add hbm file :" + persistenceConfigDir + "/" + filename);
-                        cfg.addFile(persistenceConfigDir + "/" + filename);
+                        log.debug("add hbm file :" + persistenceConfigDir + File.separator + filename);
+                        cfg.addFile(persistenceConfigDir + File.separator + filename);
                     }
                 }
             }

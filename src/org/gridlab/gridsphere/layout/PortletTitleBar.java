@@ -17,6 +17,7 @@ import org.gridlab.gridsphere.portletcontainer.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.File;
 import java.util.*;
 
 /**
@@ -679,7 +680,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             PortletModeLink mode;
             while (modesIt.hasNext()) {
                 mode = (PortletModeLink) modesIt.next();
-                out.println("<a href=\"" + mode.getHref() + "\"><img border=\"0\" src=\"themes/" + theme + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
+                out.println("<a href=\"" + mode.getHref() + "\"><img border=\"0\" src=\"themes/" + theme + File.separator + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
             }
             out.println("</td>");
         }
