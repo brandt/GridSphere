@@ -402,7 +402,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
             String groupStr = (String)it.next();
             log.debug("Selected group: " + groupStr);
             PortletGroup selectedGroup = this.aclManagerService.getGroupByName(groupStr);
-            GroupEntry ge = this.aclManagerService.getGroupEntry(user, selectedGroup);
             if (!usergroups.contains(selectedGroup.getName())) {
                 log.debug("does not have group: " + selectedGroup.getName());
                 GroupRequest groupRequest = this.aclManagerService.createGroupEntry();
@@ -411,7 +410,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 groupRequest.setRole(PortletRole.USER);
 
                 this.aclManagerService.saveGroupEntry(groupRequest);
-
 
                 log.debug("adding tab " + selectedGroup.getName());
 
