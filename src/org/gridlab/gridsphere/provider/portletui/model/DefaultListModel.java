@@ -1,15 +1,14 @@
 /*
- * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-
 package org.gridlab.gridsphere.provider.portletui.model;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * A <code>DefaultListModel</code> is a general tag bean container that stores tag beans in a list
