@@ -40,5 +40,15 @@
                 <ui:tablecell/>
             </ui:tablerow>
         </ui:frame>
+      </ui:panel>
+
+      <ui:panel>
+       <ui:frame>
+         <ui:tablerow>
+         <ui:tablecell>
+                    <ui:actionlink action="doNewUser" key="LOGIN_SIGNUP"/>
+         </ui:tablecell>
+         </ui:tablerow>
+          </ui:frame>
     </ui:panel>
 </ui:form>

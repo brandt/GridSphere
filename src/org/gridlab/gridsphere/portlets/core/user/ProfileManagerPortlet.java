@@ -141,7 +141,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         organization.setValue(user.getOrganization());
         organization.setDisabled(disable);
 
-        TextFieldBean email =  event.getTextFieldBean("emailAddress");
+        TextFieldBean email =  event.getTextFieldBean("email");
         email.setValue(user.getEmailAddress());
         email.setDisabled(disable);
 
@@ -251,7 +251,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         TextFieldBean orgTF =  event.getTextFieldBean("organization");
         String organization = orgTF.getValue();
 
-        TextFieldBean emailTF =  event.getTextFieldBean("emailAddress");
+        TextFieldBean emailTF =  event.getTextFieldBean("email");
         String email = emailTF.getValue();
 
         // fill in locale

@@ -246,6 +246,9 @@ public class UserManagerPortlet extends ActionPortlet {
         } else if ((eMail.indexOf("@") < 0)) {
             message.append("Please provide a valid E-mail address<br>");
             isInvalid = true;
+        } else if ((eMail.indexOf(".") < 0)) {
+            message.append("Please provide a valid E-mail address<br>");
+            isInvalid = true;
         }
 
 

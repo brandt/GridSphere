@@ -24,7 +24,7 @@ Edit Settings for <b><%= username %></b>
     </ui:tablerow>
     <ui:tablerow>
         <ui:tablecell><ui:text value="Email Address: "/></ui:tablecell>
-        <ui:tablecell><ui:textfield beanId="emailAddress"/></ui:tablecell>
+        <ui:tablecell><ui:textfield beanId="email"/></ui:tablecell>
     </ui:tablerow>
     <ui:tablerow>
         <ui:tablecell><ui:text value="Organization: "/></ui:tablecell>
