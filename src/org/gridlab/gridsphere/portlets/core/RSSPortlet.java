@@ -6,14 +6,14 @@
 package org.gridlab.gridsphere.portlets.core;
 
 import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.event.FormEvent;
-import org.gridlab.gridsphere.event.impl.FormEventImpl;
+import org.gridlab.gridsphere.tags.event.FormEvent;
+import org.gridlab.gridsphere.tags.event.impl.FormEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.user.UserManagerService;
-import org.gridlab.gridsphere.tags.web.element.InputField;
+import org.gridlab.gridsphere.tags.web.element.InputFieldBean;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -58,21 +58,26 @@ public class RSSPortlet extends AbstractPortlet {
 
     public void actionPerformed(ActionEvent evt) {
 
+        System.out.println("========================================================\n\n\n\n\n");
 
         DefaultPortletAction _action = evt.getAction();
         PortletRequest req = evt.getPortletRequest();
 
         FormEvent form = new FormEventImpl(evt);
 
+        InputFieldBean fieldBean = (InputFieldBean)form.getElementBean("f");
+        //InputFieldBean field2 = (InputFieldBean)form.getUpdatedElementBean("f");
+        System.out.println("\n\n\n\nVALUE:"+fieldBean.getValue()+"\nVALUE2:\n\n");
+
         String button = form.getPressedSubmitButton();
 
         if (_action.getName().equals("rss_edit")) {
             if (button.equals("show")) {
-                String temp_url = req.getParameter("rss_url");
+               /* String temp_url = req.getParameter("rss_url");
                 if (!temp_url.equals(_url)) {
                     _lastFetched = 0;
                     _url=temp_url;
-                }
+                } */
                 req.setMode(Portlet.Mode.VIEW);
             }
             if (button.equals("cancel")) {
@@ -81,11 +86,11 @@ public class RSSPortlet extends AbstractPortlet {
             if (button.equals("check")) {
                 //@TODO need to put the RSS feed into a bean!
                 req.setMode(Portlet.Mode.EDIT);
-                Document doc = getRSSFeed(req.getParameter("rss_url"));
+               /* Document doc = getRSSFeed(req.getParameter("rss_url"));
                 Element root = doc.getRootElement();
                 String version = root.getAttributeValue("version");
                 if (version.equals("2.0")) { req.setAttribute("rss_support","yes");} else {req.setAttribute("rss_support","no");}
-            }
+            */}
         }
 
         if (_action.getName().equals("rss_configure")) {
@@ -150,7 +155,11 @@ public class RSSPortlet extends AbstractPortlet {
 
         DefaultPortletAction defAction = new DefaultPortletAction("rss_edit");
         returnURI.addAction(defAction);
-        request.setAttribute("f", new InputField("name", "value", false, false, 20, 30));
+
+        // code prototyping
+        InputFieldBean fieldBean = new InputFieldBean("jason", "oliver", false, false, 20, 30);
+        fieldBean.store("f", request);
+        // under the covers, a fieldbean is stored and mapped to f_name
         getPortletConfig().getContext().include("/jsp/rss/edit.jsp", request, response);
     }
 
