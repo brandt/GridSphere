@@ -317,22 +317,14 @@ public class PortletURLImpl implements PortletURL {
             }
         }
 
-        //boolean firstParam = true;
         Iterator it = set.iterator();
         try {
             while (it.hasNext()) {
-                //if (!firstParam)
                 url += "&";
                 String name = (String) it.next();
 
                 String encname = null;
-
-                // if its a render url, the parameters must be prefixed
-                //if (isAction) {
                 encname = URLEncoder.encode(name, "UTF-8");
-                //} else {
-                //    encname = URLEncoder.encode(SportletProperties.RENDER_PARAM_PREFIX + name);
-                //}
 
                 Object val = store.get(name);
                 if (val instanceof String[]) {
@@ -352,7 +344,6 @@ public class PortletURLImpl implements PortletURL {
                         url += encname;
                     }
                 }
-                //firstParam = false;
             }
 
         } catch (UnsupportedEncodingException e) {
