@@ -12,12 +12,14 @@ import org.gridlab.gridsphere.layout.event.PortletTitleBarListener;
 import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portletcontainer.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.File;
+import java.io.StringWriter;
 import java.util.*;
 
 /**
@@ -37,6 +39,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private String errorMessage = "";
     private boolean hasError = false;
     private boolean isActive = false;
+    private StringBuffer prebufferedTitle = new StringBuffer();
+    private StringBuffer postbufferedTitle = new StringBuffer();
 
 
     /**
@@ -634,63 +638,85 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         req.setMode(portletMode);
         req.setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
         req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
-        PrintWriter out = res.getWriter();
+
+        // TODO try to cache portlet's rendering---
+        StringWriter storedWriter = new StringWriter();
+        PrintWriter writer = new PrintWriter(storedWriter);
+        PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
 
         if (isActive) {
-            out.println("<tr><td class=\"window-title-active\">");
+            writer.println("<tr><td class=\"window-title-active\">");
         } else {
-            out.println("<tr><td class=\"window-title-inactive\">");
+            writer.println("<tr><td class=\"window-title-inactive\">");
         }
         isActive = false;
-        out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>");
+        writer.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>");
 
         // Output portlet mode icons
         if (modeLinks != null) {
             Iterator modesIt = modeLinks.iterator();
-            out.println("<td class=\"window-icon-left\">");
+            writer.println("<td class=\"window-icon-left\">");
             PortletModeLink mode;
             while (modesIt.hasNext()) {
                 mode = (PortletModeLink) modesIt.next();
-                out.println("<a href=\"" + mode.getHref() + "\"><img border=\"0\" src=\"themes" + File.separator + theme + File.separator + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
+                writer.println("<a href=\"" + mode.getHref() + "\"><img border=\"0\" src=\"themes" + File.separator + theme + File.separator + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
             }
-            out.println("</td>");
+            writer.println("</td>");
         }
 
         // Invoke doTitle of portlet whose action was perfomed
         //String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
-        out.println("<td class=\"window-title-name\">");
+        writer.println("<td class=\"window-title-name\">");
+
+        prebufferedTitle = storedWriter.getBuffer();
+
+        storedWriter = new StringWriter();
+        writer = new PrintWriter(storedWriter);
+        wrappedResponse = new StoredPortletResponseImpl(res, writer);
 
         try {
             //System.err.println("invoking  doTitle:" + title);
-            PortletInvoker.doTitle(portletClass, req, res);
+            PortletInvoker.doTitle(portletClass, req, wrappedResponse);
             //out.println(" (" + portletMode.toString() + ") ");
+            title = storedWriter.toString();
         } catch (PortletException e) {
             String pname = portletClass.substring(0, portletClass.length() - 1);
             pname = pname.substring(0, pname.lastIndexOf("."));
             pname = pname.substring(pname.lastIndexOf(".")+1);
             ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
             String value = bundle.getString("PORTLET_UNAVAILABLE");
-            title = value + " : " + pname;
-            out.println(title);
-            errorMessage = portletClass + " is currently unavailable!\n";
+            title = portletClass + " is currently unavailable!\n";
             hasError = true;
         }
 
-        out.println("</td>");
+        storedWriter = new StringWriter();
+        writer = new PrintWriter(storedWriter);
+
+        writer.println("</td>");
 
         // Output window state icons
         if (windowLinks != null) {
             Iterator windowsIt = windowLinks.iterator();
             PortletStateLink state;
-            out.println("<td class=\"window-icon-right\">");
+            writer.println("<td class=\"window-icon-right\">");
             while (windowsIt.hasNext()) {
                 state = (PortletStateLink) windowsIt.next();
-                out.println("<a href=\"" + state.getHref() + "\"><img border=\"0\" src=\"themes/" + theme + File.separator + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\"/></a>");
+                writer.println("<a href=\"" + state.getHref() + "\"><img border=\"0\" src=\"themes/" + theme + File.separator + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\"/></a>");
             }
-            out.println("</td>");
+            writer.println("</td>");
         }
-        out.println("</tr></table>");
-        out.println("</td></tr>");
+        writer.println("</tr></table>");
+        writer.println("</td></tr>");
+
+        postbufferedTitle = storedWriter.getBuffer();
+    }
+
+    public StringBuffer getPreBufferedTitle() {
+        return prebufferedTitle;
+    }
+
+    public StringBuffer getPostBufferedTitle() {
+        return postbufferedTitle;
     }
 
     public Object clone() throws CloneNotSupportedException {
