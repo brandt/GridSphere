@@ -4,14 +4,16 @@
  */
 package org.gridlab.gridsphere.services.container.registry;
 
-import org.gridlab.gridsphere.portlet.PortletAction;
-import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.PortletWrapper;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * The PortletRegistryService acts as a repository for portlets and makes them available to the portlet
@@ -45,6 +47,8 @@ public class UserPortletManager {
     }
 
     public void initUserPortlets(HttpServletRequest req, HttpServletResponse res) {
+        User user = (User)req.getSession().getAttribute(GridSphereProperties.USER);
+        //if (userPortletsHash
         // foreach portlet p in User u
         //   login(p.id, req, res);
     }

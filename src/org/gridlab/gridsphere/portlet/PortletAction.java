@@ -13,8 +13,4 @@ package org.gridlab.gridsphere.portlet;
  */
 public interface PortletAction {
 
-    public static final String LOGIN = "login";
-    public static final String LOGOUT = "logout";
-    public static final String CHANGEMODE = "changemode";
-    public static final String CHANGESTATE = "changestate";
 }

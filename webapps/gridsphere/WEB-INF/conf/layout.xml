@@ -73,7 +73,7 @@
                         <thickness>2</thickness>
                     </portlet-border>
                     <window-state>normal</window-state>
-                    <portlet-mode>edit</portlet-mode>
+                    <portlet-mode>view</portlet-mode>
                     <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
                 </portlet-frame>
 
@@ -126,7 +126,7 @@
                             <thickness>2</thickness>
                         </portlet-border>
                         <window-state>normal</window-state>
-                        <portlet-mode>fuck</portlet-mode>
+                        <portlet-mode>view</portlet-mode>
                         <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
                     </portlet-frame>
                 </flow-layout>

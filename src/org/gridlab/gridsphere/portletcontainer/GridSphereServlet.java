@@ -83,8 +83,26 @@ public class GridSphereServlet extends HttpServlet {
         }
 
         PortletRequestParser requestParser = new PortletRequestParser(req);
+/*
+        GridSphereEvent event = new GridSphereEventImpl(req);
 
-        if (requestParser.hasAction()) {
+        if (event.getAction().equals(GridSphereAction.LOGIN)) {
+        }
+
+        if (event.getAction().equals(GridSphereAction.LOGOUT)) {
+
+        }
+
+        if (event.getAction().equals(GridSphereAction.MODECHANGE)) {
+
+        }
+
+        if (event.getAction().equals(GridSphereAction.WINDOWCHANGE)) {
+
+        }
+*/
+
+        if (requestParser.hasPortletAction()) {
 
             System.err.println("Received ACTION: " + requestParser.toString());
 
@@ -100,7 +118,7 @@ public class GridSphereServlet extends HttpServlet {
         // Render layout
         try {
             User user = requestParser.getUser();
-            layoutEngine.doRender(user, context, req, res);
+            layoutEngine.service(user, context, req, res);
         } catch (PortletException e) {
             handleException(res, e);
         }

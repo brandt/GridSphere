@@ -4,6 +4,8 @@
  */
 package org.gridlab.gridsphere.portlet;
 
+import java.io.Serializable;
+
 /**
  * The PortletWindow represents the window that encloses a portlet.
  * The portlet window can send events on manipulation of its various window controls,
@@ -16,7 +18,7 @@ public interface PortletWindow {
     /**
      * State describes Window state
      */
-    public static class State {
+    public static class State implements Serializable {
 
         /**
          * The standard "one-of many" window state on a page.

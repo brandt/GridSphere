@@ -17,60 +17,23 @@ public class SportletWindow implements PortletWindow {
 
     private PortletWindow.State state = null;
 
-    /**
-     * The standard "one-of many" window state on a page.
-     */
-    public static final PortletWindow NORMAL = new SportletWindow(PortletWindow.State.NORMAL);
+    private SportletWindow() {}
 
-    /**
-     * The standard "one-of many" window state on a page.
-     */
-    public static final PortletWindow MAXIMIZED = new SportletWindow(PortletWindow.State.MAXIMIZED);
-
-    /**
-     * In this window state the portlet is displayed minimzed which means that only the portlet title is showns
-     */
-    public static final PortletWindow MINIMIZED = new SportletWindow(PortletWindow.State.MINIMIZED);
-
-    /**
-     *  The window is or will be closed and thus is not shown on the portal page anymore.
-     */
-    public static final PortletWindow CLOSED = new SportletWindow(PortletWindow.State.CLOSED);
-
-    /**
-     * Allows the portlet window to be detached of the normal content view of the portal and thus
-     * be shown in a separate window.
-     */
-    public static final PortletWindow DETACHED = new SportletWindow(PortletWindow.State.DETACHED);
-
-    /**
-     * Allows the portlet window to be resized
-     */
-    public static final PortletWindow RESIZING = new SportletWindow(PortletWindow.State.RESIZING);
-
-    private SportletWindow() {
-        this.state = PortletWindow.State.NORMAL;
-    }
-
-    private SportletWindow(PortletWindow.State state) {
-        this.state = state;
-    }
-
-    public static PortletWindow getInstance(String windowState) {
-        if (windowState.equals(PortletWindow.State.NORMAL.toString())) {
-            return NORMAL;
-        } else if (windowState.equals(PortletWindow.State.MAXIMIZED.toString())) {
-            return MAXIMIZED;
-        } else if (windowState.equals(PortletWindow.State.MINIMIZED.toString())) {
-            return MINIMIZED;
-        } else if (windowState.equals(PortletWindow.State.CLOSED.toString())) {
-            return CLOSED;
-        } else if (windowState.equals(PortletWindow.State.DETACHED.toString())) {
-            return DETACHED;
-        } else if (windowState.equals(PortletWindow.State.RESIZING.toString())) {
-            return RESIZING;
+    public SportletWindow(String windowState) throws Exception {
+        if (windowState.equalsIgnoreCase(PortletWindow.State.NORMAL.toString())) {
+            state = PortletWindow.State.NORMAL;
+        } else if (windowState.equalsIgnoreCase(PortletWindow.State.MAXIMIZED.toString())) {
+            state = PortletWindow.State.MAXIMIZED;
+        } else if (windowState.equalsIgnoreCase(PortletWindow.State.MINIMIZED.toString())) {
+            state = PortletWindow.State.MINIMIZED;
+        } else if (windowState.equalsIgnoreCase(PortletWindow.State.CLOSED.toString())) {
+            state = PortletWindow.State.CLOSED;
+        } else if (windowState.equalsIgnoreCase(PortletWindow.State.DETACHED.toString())) {
+            state = PortletWindow.State.DETACHED;
+        } else if (windowState.equalsIgnoreCase(PortletWindow.State.RESIZING.toString())) {
+            state = PortletWindow.State.RESIZING;
         } else {
-            return null;
+            throw new Exception("Unable to create PortletWindow for state: "  + windowState);
         }
     }
 
@@ -90,10 +53,6 @@ public class SportletWindow implements PortletWindow {
      */
     public void setWindowState(PortletWindow.State state) {
         this.state = state;
-    }
-
-    public String toString() {
-        return state.toString();
     }
 
 }

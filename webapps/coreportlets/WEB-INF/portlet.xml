@@ -103,6 +103,18 @@
 <portlet-app id="org.gridlab.gridsphere.portlets.core.HalloWelt.624">
     <portlet-name>Hallo Welt Portlet Application</portlet-name>
     <servlet-name>HalloWelt</servlet-name>
+    <allows>
+        <maximized/>
+        <minimized/>
+    </allows>
+    <supports>
+        <markup name="html">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+    </supports>
 </portlet-app>
 
 <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.HalloWelt.624.2">

@@ -23,8 +23,6 @@ import java.util.List;
 public final class PortletRequestParser implements PortletAction {
 
     private String concreteID;
-    private User user = null;
-    private Client client = null;
     private HttpServletRequest req = null;
 
     /**
@@ -33,15 +31,21 @@ public final class PortletRequestParser implements PortletAction {
     public PortletRequestParser(HttpServletRequest req) {
         this.req = req;
         concreteID = req.getParameter(GridSphereProperties.PORTLETID);
-        user = (User)req.getSession().getAttribute(GridSphereProperties.USER);
-        if (user == null) user = GuestUser.getInstance();
+        User user = (User)req.getSession().getAttribute(GridSphereProperties.USER);
+        if (user == null) {
+            user = GuestUser.getInstance();
+            req.getSession().setAttribute(GridSphereProperties.USER, user);
+        }
 
         //Portlet.Mode previousMode = (Portlet.Mode)req.getParameter(GridSphereProperties.PORTLETMODE);
             //Portlet.Mode mode = Portlet.Mode.VIEW;
             //req.setAttribute(GridSphereProperties.PORTLETMODE, mode);
 
-        client = new ClientImpl(req);
-        req.setAttribute(GridSphereProperties.CLIENT, client);
+        Client client = (Client)req.getSession().getAttribute(GridSphereProperties.CLIENT);
+        if (client == null) {
+            client = new ClientImpl(req);
+            req.getSession().setAttribute(GridSphereProperties.CLIENT, client);
+        }
 
         if (concreteID != null) {
             PortletRegistryManager registry = PortletRegistryManager.getInstance();
@@ -68,9 +72,10 @@ public final class PortletRequestParser implements PortletAction {
         }
     }
 
-    public boolean hasAction() {
-        if (getName() != null)
+    public boolean hasPortletAction() {
+        if (getName() != null) {
             return true;
+        }
         return false;
     }
 
@@ -87,11 +92,11 @@ public final class PortletRequestParser implements PortletAction {
     }
 
     public Client getClient() {
-        return client;
+        return (Client)req.getSession().getAttribute(GridSphereProperties.CLIENT);
     }
 
     public User getUser() {
-        return user;
+        return (User)req.getSession().getAttribute(GridSphereProperties.USER);
     }
 
     /**

@@ -12,6 +12,7 @@ import java.util.Vector;
 public class AllowsWindowStates {
 
     private List windowStates = new Vector();
+    private List statesAsStrings = null;
 
     public void setWindowStates(Vector windowStates) {
         this.windowStates = windowStates;
@@ -21,13 +22,20 @@ public class AllowsWindowStates {
         return windowStates;
     }
 
-    public String[] getWindowStatesAsStrings() {
-        String[] states = new String[windowStates.size()];
+    protected void convertStates() {
+        AnyNode a = null;
+        statesAsStrings = new Vector();
         for (int i = 0; i < windowStates.size(); i++) {
-            AnyNode a = (AnyNode)windowStates.get(i);
-            states[i] = a.getLocalName();
+            a = (AnyNode)windowStates.get(i);
+            statesAsStrings.add(a.getLocalName());
         }
-        return states;
+    }
+
+    public List getWindowStatesAsStrings() {
+        if (statesAsStrings == null) {
+            convertStates();
+        }
+        return statesAsStrings;
     }
 
 }

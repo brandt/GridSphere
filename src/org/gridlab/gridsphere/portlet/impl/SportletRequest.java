@@ -47,7 +47,7 @@ public class SportletRequest implements PortletRequest {
     private Portlet.ModeModifier modeModifier;
 
     // A representation of the client
-    private Client client = null;
+    //private Client client = null;
 
     // Contains user specific portlet data
     private PortletData data = null;
@@ -70,7 +70,6 @@ public class SportletRequest implements PortletRequest {
         if (portletSession == null)
             portletSession = new SportletSession(req.getSession(true));
         this.req = req;
-        this.client = new ClientImpl(req);
         //this.logRequest();
 
         // clear old settings
@@ -125,7 +124,7 @@ public class SportletRequest implements PortletRequest {
      * @return the client device
      */
     public Client getClient() {
-        return client;
+        return (Client)req.getSession().getAttribute(GridSphereProperties.CLIENT);
     }
 
     /**
