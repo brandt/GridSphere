@@ -43,7 +43,8 @@
         <title>Editing group information</title>
         <para>
             The Administration=>Groups tab shows the "Group Manager" portlet that displays all the known portlet groups.
-            A portlet group is associated with a portlet web application and the administrator can configure
+            Portlet groups can be dynamically created and are associated with a collection of portlets. In addition a group defines
+            access rights for the portlets, and a flag to indicate
             which groups are public and private. Normally a new user has access only to the
             GridSphere group but may join additional groups via the "Profile Manager" portlet in the Welcome=>Settings
             tab. Users may immediately join any groups that are public on the portal. If the group is private, then the
@@ -51,7 +52,8 @@
         </para>
         <para>
             A user that is granted the ADMIN role, an administrator,  when logged in will also have access to the "Group Manager" portlet.
-            An administrator has the capability to add and remove users to the group they are administrator of.
+            An administrator has the capability to add and remove users to the group they are administrator of as well as
+ creating and editing groups on the portal.
         </para>
     </sect1>
 
@@ -61,7 +63,7 @@
             The Administration=>Portlets tab displays the "Portlet Application Manager" portlet that displays the
             status of all known portlet groups. An admin may stop or restart a portlet group as well as deploy new
             portlet web applications to the portal. These features use the Tomcat manager web application to
-            perform web application reloading and initialization. If a portlet web application has any portlet services,
+            perform web application reloading and initialization. If a GridSpher portlet web application has any portlet services,
             these features will not work, since the service classes that are deployed to $CATALINA_HOME/shared/lib
             may not be restarted by the manager web application. We'll be working on this in a future release. For now,
             this portlet is useful if your webapp is a simple collection of portlets and no portlet services. Otherwise,
@@ -70,30 +72,10 @@
     </sect1>
 
     <sect1>
-        <title>Portlet administration</title>
+        <title>Portal customization</title>
         <para>
-            The Administration=>Portlets tab displays the "Portlet Application Manager" portlet that displays the
-            status of all known portlet groups. An admin may stop or restart a portlet group as well as deploy new
-            portlet web applications to the portal. These features use the Tomcat manager web application to
-            perform web application reloading and initialization. If a portlet web application has any portlet services,
-            these features will not work, since the service classes that are deployed to
-            <filename>$CATALINA_HOME/shared/lib</filename>
-            may not be restarted by the manager web application. We'll be working on this in a future release. For now,
-            this portlet is useful if your webapp is a simple collection of portlets and no portlet services. Otherwise,
-            you are better off restarting the portal from the command line if portlet re-initialization is desired.
-        </para>
-    </sect1>
-
-    <sect1>
-        <title>Portlet subscription and customization</title>
-        <para>
-            When deploying new portlets to the portal, there are two ways to import them into your layout. For full
-            customization, you must go to the Welcome=>Subscription tab to the "Subscription" portlet. This allows
-            you to select/deselect the portlets in your subscription. After that, you can go to the Welcome=>Layout
-            tab to the "Layout Manager" portlet and you now have the ability to create/modify/remove tabs and portlets
-            associated with tabs. The second approach is to click on the <emphasis>Reset layout</emphasis> button in
-            the "Layout Manager" portlet and this will reset your layout according to group membership and destroy
-            any customizations that were made previously.
+            The Welcome->Layout portlet allows users to customize the theme and add/edit/delete personalized portal
+            pages. Once a new page is created, portlets can be added via the newly created page.
         </para>
     </sect1>
 

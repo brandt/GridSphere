@@ -76,7 +76,7 @@
                     <filename>WEB-INF/</filename> - contains GridSphere configuration files, layouts, and database
                 </member>
                 <member>
-                    <filename>WEB-INF/PortletMaster.xml</filename> - contains the master descriptor file used to define portlet web applications
+                    <filename>WEB-INF/Portlets/</filename> - contains empty files whoise filenames identify external portlet applications to load
                 </member>
                 <member>
                     <filename>WEB-INF/portlet.xml</filename> - contains the portlet descriptor for core portlets
@@ -122,6 +122,9 @@
             Once the tests have finished, you can invoke
             <programlisting>ant test-reports</programlisting>
             to create a nice HTML output of all the JUnit test results.
+        </para>
+        <para>
+           GridSphere has passed the JSR 168 portlet technology kit (TCK) distributed by Sun and is 100% JSR 168 compliant.
         </para>
     </sect1>
 
