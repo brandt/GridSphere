@@ -33,7 +33,7 @@ Version: $Id$
 }
 
 .portlet-frame-title {
-  background-color: #7997DE;
+  background-color: #CCCCFF;
   border: none;
   color: #FFFFFF;
   font-family: inherit;
@@ -46,7 +46,7 @@ Version: $Id$
 }
 
 .portlet-frame-actions {
-  background-color: #7997DE;
+  background-color: #FFFFFF;
   border: none;
   color: #000000;
   font-family: inherit;

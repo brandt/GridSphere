@@ -6,63 +6,56 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
 <portletAPI:init/>
-
 <jsp:useBean id="login" class="java.lang.String" scope="request"/>
-
-<table border=0 cellpadding=1 cellspacing=0 width="181" bgcolor=6699CC><tr><td><font color=FFFFFF><b>&nbsp;Get Proxy from Server</b></font></td></tr>
-</table>
-
-<table border=0 cellpadding=0 cellspacing=0 width="178">
-<tr>
-<td width=1 bgcolor=cccccc>
+<gs:form action="login">
 <% if (request.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG) != null) { %>
-<tr>
-  <td width=1000>
-    <table cellspacing=0 cellpadding=0 border=0>
-      <tr>
-        <td>
-          <font color="DARKRED"><bold>
+<table class="portlet-pane" cellspacing="1" width="200">
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-message-alert">
             Your username and/or password is incorrect. Please try again.
-          </bold></font>
-        </td>
-      </tr>
-    </table>
-  </td>
-</tr>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
 <% } %>
-<td width=1000>
-    <table border=0 cellpadding=3 cellspacing=0 width="178"><tr><td valign=top>
-
-    <gs:form action="login">
-
-    <table cellspacing=2 cellpadding=2 border=0>
-    <tr>
-    <td align="right">Username: </td>
-    <td align="left">
-        <input type="text" name="username" size="8" maxlength="20"/>
+<table class="portlet-pane" cellspacing="1" width="200">
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-label" width="100">
+             User Name:
+          </td>
+          <td class="portlet-frame-text">
+            <input type="text" name="username" size="20" maxlength="20"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label">
+             Password:
+          </td>
+          <td class="portlet-frame-text">
+             <input type="password" name="password" size="20" maxlength="20"/>
+          </td>
+        </tr>
+      </table>
     </td>
-    </tr>
-    <tr>
-    <td align="right">Password: </td>
-    <td align="left">
-        <input type="password" name="password" size="8" maxlength="20"/>
+  </tr>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-text">
+            <input type="submit" name="option" value="Login"/>
+          </td>
+        </tr>
+      </table>
     </td>
-    </tr>
-    <tr>
-    <td colspan=5 align="center"><input type="submit" name="option" value="Login"/></td>
-    </tr>
-    </table>
-    </gs:form>
-
-</td>
-</tr>
+  </tr>
 </table>
-</td>
-<table border=0 cellpadding=0 cellspacing=0 width="190">
-<tr><td></td></tr>
-</table>
-<p>
-
-<table border=0 cellpadding=0 cellspacing=0 width=190>
-<tr><td></td></tr>
-</table>
+</gs:form>
