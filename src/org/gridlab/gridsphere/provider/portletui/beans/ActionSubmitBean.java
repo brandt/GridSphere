@@ -49,7 +49,7 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     }
 
     public String toStartString() {
-        return "<input " + getFormattedCss() + " type=\"submit\" ";
+        return "<input " + getFormattedCss() + " type=\"submit\" " + checkDisabled();
     }
 
     public String toEndString() {

@@ -41,11 +41,15 @@ public class ActionSubmitTag extends ActionTag {
     }
 
     public int doStartTag() throws JspException {
-        actionSubmitBean = new ActionSubmitBean();
         if (!beanId.equals("")) {
             actionSubmitBean = (ActionSubmitBean) pageContext.getAttribute(getBeanKey());
+            if (actionSubmitBean == null) {
+                actionSubmitBean = new ActionSubmitBean();
+            }
+        } else {
+            actionSubmitBean = new ActionSubmitBean();
         }
-        if (actionSubmitBean == null) actionSubmitBean = new ActionSubmitBean();
+
         paramBeans = new ArrayList();
 
         actionSubmitBean.setName(createActionURI());

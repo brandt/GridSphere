@@ -101,7 +101,6 @@ public class ActionLinkTag extends ActionTag {
                 actionlink.setStyle(style);
                 this.setBaseComponentBean(actionlink);
             }
-
         } else {
             actionlink = new ActionLinkBean();
             this.setBaseComponentBean(actionlink);

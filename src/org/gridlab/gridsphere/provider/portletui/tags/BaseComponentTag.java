@@ -193,7 +193,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     protected void updateBaseComponentBean(BaseComponentBean componentBean) {
         if ((cssStyle != null) && componentBean.getCssStyle() == null) {
             componentBean.setCssClass(cssStyle);
-        }
+        }      
         if ((name != null) && (componentBean.getName() == null)) {
             componentBean.setName(name);
         }
