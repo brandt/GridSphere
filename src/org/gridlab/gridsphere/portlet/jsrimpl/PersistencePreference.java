@@ -53,8 +53,18 @@ public class PersistencePreference implements PortletPreferences {
             for (int i = 0; i < values.length; i++) {
                 ppa.values.add(values[i]);
             }
+            attributes.put(key, ppa);
         }
 
+    }
+
+
+    public Map getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map attributes) {
+        this.attributes = attributes;
     }
 
     public String getOid() {
@@ -80,15 +90,21 @@ public class PersistencePreference implements PortletPreferences {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+    /**
+     public Set getStoreattr() {
+     return storeattr;
+     }
 
-    public Map getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(Map attributes) {
-        this.attributes = attributes;
-    }
-
+     public void setStoreattr(Set storeattr) {
+     this.storeattr = storeattr;
+     attributes = new HashMap();
+     Iterator it = this.storeattr.iterator();
+     while (it.hasNext()) {
+     PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute)it.next();
+     attributes.put(ppa.getKey(), ppa);
+     }
+     }
+     **/
     /**
      * Returns true, if the value of this key cannot be modified by the user.
      * <p/>
@@ -320,11 +336,20 @@ public class PersistencePreference implements PortletPreferences {
      */
 
     public void store() throws IOException, ValidatorException {
+        /*storeattr = new HashSet();
+        Iterator it = attributes.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String)it.next();
+            PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute)attributes.get(key);
+            ppa.setKey(key);
+            storeattr.add(ppa);
+        } */
         try {
             if (this.getOid() != null) {
                 pm.update(this);
             } else {
                 pm.create(this);
+
             }
         } catch (PersistenceManagerException e) {
             throw new IOException(e.getMessage());

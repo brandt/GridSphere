@@ -13,9 +13,18 @@ public class PersistencePreferenceAttribute {
 
     private String oid = null;
     protected boolean readonly = false;
+    protected String key = null;
     protected List values = new ArrayList();
 
-
+    /**
+     * public String getKey() {
+     * return key;
+     * }
+     * <p/>
+     * public void setKey(String key) {
+     * this.key = key;
+     * }
+     */
     public String getOid() {
         return oid;
     }
@@ -59,4 +68,5 @@ public class PersistencePreferenceAttribute {
     public String getValue() {
         return (String) values.get(0);
     }
+
 }
