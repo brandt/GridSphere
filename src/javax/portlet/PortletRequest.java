@@ -5,9 +5,6 @@
  */
 package javax.portlet;
 
-import org.gridlab.gridsphere.portlet.User;
-
-
 /**
  * The <CODE>PortletRequest</CODE> defines the base interface to provide client
  * request information to a portlet. The portlet container uses two specialized
