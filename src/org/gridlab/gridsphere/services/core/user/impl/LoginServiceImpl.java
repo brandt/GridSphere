@@ -87,6 +87,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             }
             LoginAuthModule activeModule = (LoginAuthModule)authModules.get("PASSWORD_AUTH_MODULE");
             activeModules.add(activeModule);
+            inited = true;
         }
     }
 
