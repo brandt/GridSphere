@@ -291,6 +291,7 @@ Copyright:
         <jar jarfile="lib/portlet-api.jar" basedir="${build.classes}">
             <include name="org/gridlab/gridsphere/portlet/**"/>
             <include name="org/gridlab/gridsphere/event/**"/>
+            <exclude name="**/*Test.class"/>
             <include name="gridsphere/log4j.properties"/>
         </jar>
     </target>
@@ -586,6 +587,7 @@ Copyright:
                 <exclude name="*.LICENSE"/>
             </fileset>
             <fileset dir="lib">
+                <exclude name="gridsphere-test.jar"/>
                 <exclude name="gridsphere-ui-tags.jar"/>
                 <exclude name="coreportlets.jar"/>
                 <exclude name="ext/**"/>
