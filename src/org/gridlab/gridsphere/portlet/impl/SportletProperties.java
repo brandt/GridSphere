@@ -64,11 +64,6 @@ public interface SportletProperties {
 
     // Portlet obects
     /**
-     * The variable name of the PortletConfig object
-     */
-    public static final String PORTLET_CONFIG = "org.gridlab.gridsphere.portlet.PortletConfig";
-
-    /**
      * The variable name of the PortletApplication object
      */
     public static final String PORTLET_APPLICATION = "org.gridlab.gridsphere.portletcontainer.PortletApplication";
@@ -172,10 +167,26 @@ public interface SportletProperties {
 
     public static final String PORTLET_USER = "org.gridlab.gridsphere.portlet.User";
 
+    /**
+     * The variable name of the PortletConfig object
+     */
+    public static final String PORTLET_CONFIG = "javax.portlet.config";
+
+    public static final String PORTAL_CONTEXT = "javax.portlet.context";
+
+    public static final String PORTLET_PREFERENCES = "javax.portlet.preferences";
+
     public static final String PORTLET_GROUP = "org.gridlab.gridsphere.portlet.PortletGroup";
 
     public static final String PORTLET_ROLE = "org.gridlab.gridsphere.portlet.PortletRole";
 
+    public static final String RENDER_REQUEST = "javax.portlet.request";
+
+    public static final String RENDER_RESPONSE = "javax.portlet.response";
+
     public static final String PORTLETGROUPS = "org.gridlab.gridsphere.portlet.groups";
 
+    public static final String LOCALE = "org.gridlab.gridsphere.portlet.Locale";
+
+    public static final String PORTLET_SERVLET = "org.gridlab.gridsphere.portlets.PortletServlet";
 }

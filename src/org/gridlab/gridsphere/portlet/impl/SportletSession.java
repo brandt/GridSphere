@@ -60,11 +60,9 @@ public class SportletSession implements PortletSession {
         return session.getLastAccessedTime();
     }
 
-
     public final ServletContext getServletContext() {
-        return null;
+        return session.getServletContext();
     }
-
 
     public final void setMaxInactiveInterval(int interval) {
         session.setMaxInactiveInterval(interval);

@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -47,7 +48,7 @@ public class SportletConfig implements PortletConfig {
      * @param servletConfig a <code>ServletConfig</code>
      * @param appConfig a <code>ApplicationSportletConfig</code>
      */
-    public SportletConfig(ServletConfig servletConfig, ApplicationPortletConfig appConfig) {
+    public SportletConfig(ServletConfig servletConfig, ApplicationSportletConfig appConfig) {
         this.servletConfig = servletConfig;
         this.context = new SportletContext(servletConfig);
 

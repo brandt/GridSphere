@@ -10,6 +10,8 @@ import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.LanguageInfo;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig;
+import org.gridlab.gridsphere.portletcontainer.impl.ConcreteSportlet;
 
 import java.io.IOException;
 import java.util.*;
@@ -45,14 +47,14 @@ public class SportletSettings implements PortletSettings {
      *
      * @param concPortlet the concrete portlet
      */
-    public SportletSettings(ConcretePortlet concPortlet) {
+    public SportletSettings(ConcreteSportlet concPortlet) {
 
         this.concPortlet = concPortlet;
         this.concretePortletID = concPortlet.getConcretePortletID();
         this.appSettings = new SportletApplicationSettings(concPortlet);
 
-        ConcretePortletConfig concPortletConf =
-                concPortlet.getConcretePortletConfig();
+        ConcreteSportletConfig concPortletConf =
+                (ConcreteSportletConfig)concPortlet.getConcretePortletConfig();
         String localeStr = concPortletConf.getDefaultLocale();
         defaultLocale = new Locale(localeStr, "");
         langList = concPortletConf.getLanguageList();
@@ -238,7 +240,7 @@ public class SportletSettings implements PortletSettings {
      * @throws IOException if the streaming causes an I/O problem
      */
     public void store() throws IOException {
-        ConcretePortletConfig concPortletConf = concPortlet.getConcretePortletConfig();
+        ConcreteSportletConfig concPortletConf = (ConcreteSportletConfig)concPortlet.getConcretePortletConfig();
         concPortletConf.setConfigAttributes(store);
         concPortlet.setConcretePortletConfig(concPortletConf);
         concPortlet.save();

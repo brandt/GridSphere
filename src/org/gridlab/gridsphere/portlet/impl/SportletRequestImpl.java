@@ -4,19 +4,10 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.apache.commons.fileupload.DiskFileUpload;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.FileUpload;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.*;
 
 
@@ -26,19 +17,9 @@ import java.util.*;
  * A HttpServletRequest object is used in composition to perform most of
  * the required methods.
  */
-public class SportletRequestImpl implements SportletRequest {
-
-    // The actual servlet request we are wrapping
-    private HttpServletRequest req = null;
+public class SportletRequestImpl extends HttpServletRequestWrapper implements SportletRequest {
 
     private static PortletLog log = SportletLog.getInstance(SportletRequest.class);
-
-
-    /**
-     * Cannot instantiate uninitialized SportletRequestImpl
-     */
-    private SportletRequestImpl() {
-    }
 
     /**
      * Constructor creates a proxy for a HttpServletRequest
@@ -47,48 +28,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param req the HttpServletRequest
      */
     public SportletRequestImpl(HttpServletRequest req) {
-        this.req = req;
-    }
-
-    /**
-     * Returns the value of the attribute with the given name,
-     * or null if no attribute with the given name exists.
-     *
-     * @param name the attribute name
-     * @return the attribute value
-     */
-    public Object getAttribute(String name) {
-        return req.getAttribute(name);
-    }
-
-    /**
-     * Returns an enumeration of names of all attributes available to this request.
-     * This method returns an empty enumeration if the request has no attributes available to it.
-     *
-     * @return the attribute names
-     */
-    public Enumeration getAttributeNames() {
-        return req.getAttributeNames();
-    }
-
-    /**
-     * Sets the attribute with the given name and value.
-     *
-     * @param name the attribute name
-     *
-     * @param value the attribute value
-     */
-    public void setAttribute(String name, Object value) {
-        req.setAttribute(name, value);
-    }
-
-    /**
-     * Removes the attribute with the given name.
-     *
-     * @param name the attribute name to remove
-     */
-    public void removeAttribute(String name) {
-        req.removeAttribute(name);
+        super(req);
     }
 
     /**
@@ -97,10 +37,10 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the client device
      */
     public Client getClient() {
-        Client client = (Client) req.getSession().getAttribute(SportletProperties.CLIENT);
+        Client client = (Client)this.getHttpServletRequest().getSession().getAttribute(SportletProperties.CLIENT);
         if (client == null) {
-            client = new ClientImpl(req);
-            req.getSession().setAttribute(SportletProperties.CLIENT, client);
+            client = new ClientImpl(this.getHttpServletRequest());
+            this.getHttpServletRequest().getSession().setAttribute(SportletProperties.CLIENT, client);
         }
         return client;
     }
@@ -111,16 +51,16 @@ public class SportletRequestImpl implements SportletRequest {
      * @param client the client device
      */
     public void setClient(Client client) {
-        req.getSession().setAttribute(SportletProperties.CLIENT, client);
+        this.getHttpServletRequest().getSession().setAttribute(SportletProperties.CLIENT, client);
     }
 
     /**
-     * Returns whether this request was made using a secure channel, such as HTTPS.
+     * Returns whether this this.getHttpServletRequest()uest was made using a secure channel, such as HTTPS.
      *
      * @return true if channel is secure, false otherwise
      */
     public boolean isSecure() {
-        return req.isSecure();
+        return this.getHttpServletRequest().isSecure();
     }
 
     /**
@@ -129,7 +69,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet session
      */
     public PortletSession getPortletSession() {
-        return new SportletSession(req.getSession(true));
+        return new SportletSession(this.getHttpServletRequest().getSession(true));
     }
 
     /**
@@ -142,31 +82,30 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet session
      */
     public PortletSession getPortletSession(boolean create) {
-        if ((req.getSession() == null) && (create == false)) {
+        if ((this.getHttpServletRequest().getSession() == null) && (create == false)) {
             return null;
         }
-        return new SportletSession(req.getSession(true));
+        return new SportletSession(this.getHttpServletRequest().getSession(true));
     }
 
     /**
-     * Returns an array containing all of the Cookie  objects the client sent with this request. This method returns null if no cookies were sent.
+     * Returns an array containing all of the Cookie  objects the client sent with this this.getHttpServletRequest()uest. This method returns null if no cookies were sent.
      *
-     * @return an array of all the Cookies  included with this request, or null  if the request has no cookies
+     * @return an array of all the Cookies  included with this this.getHttpServletRequest()uest, or null  if the this.getHttpServletRequest()uest has no cookies
      */
     public Cookie[] getCookies() {
-        return req.getCookies();
+        return this.getHttpServletRequest().getCookies();
     }
 
     /**
-     * Clears all of the request attributes associated with this request
+     * Clears all of the this.getHttpServletRequest()uest attributes associated with this this.getHttpServletRequest()uest
      */
     public void invalidate() {
-        // clear request attributes
-        Enumeration attrnames = req.getAttributeNames();
+        // clear this.getHttpServletRequest()uest attributes
+        Enumeration attrnames = this.getHttpServletRequest().getAttributeNames();
         while (attrnames.hasMoreElements()) {
             String name = (String)attrnames.nextElement();
-            req.getAttribute(name);
-            req.setAttribute(name, null);
+            this.getHttpServletRequest().setAttribute(name, null);
         }
     }
 
@@ -180,7 +119,7 @@ public class SportletRequestImpl implements SportletRequest {
         if (getMode() == Portlet.Mode.CONFIGURE) {
             return null;
         }
-        return (PortletData) req.getAttribute(SportletProperties.PORTLET_DATA);
+        return (PortletData) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_DATA);
     }
 
     /**
@@ -191,7 +130,7 @@ public class SportletRequestImpl implements SportletRequest {
      */
     public void setData(PortletData data) {
         if (getMode() != Portlet.Mode.EDIT) return;
-        req.setAttribute(SportletProperties.PORTLET_DATA, data);
+        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_DATA, data);
     }
 
     /**
@@ -203,16 +142,16 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the User object
      */
     public User getUser() {
-        User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
+        User user = (User) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_USER);
         if (user == null) {
             user = GuestUser.getInstance();
-            req.setAttribute(SportletProperties.PORTLET_USER, user);
+            this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_USER, user);
         }
         return user;
     }
 
     public PortletRole getRole() {
-        PortletRole role = (PortletRole)req.getAttribute(SportletProperties.PORTLET_ROLE);
+        PortletRole role = (PortletRole)this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_ROLE);
         if (role == null) {
             return PortletRole.GUEST;
         }
@@ -221,7 +160,7 @@ public class SportletRequestImpl implements SportletRequest {
 
 
     public void setRole(PortletRole role) {
-        req.setAttribute(SportletProperties.PORTLET_ROLE, role);
+        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_ROLE, role);
     }
 
     /**
@@ -232,18 +171,18 @@ public class SportletRequestImpl implements SportletRequest {
      * @see PortletGroup
      */
     public void setGroup(List groups) {
-        req.setAttribute(SportletProperties.PORTLET_GROUP, groups);
+        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_GROUP, groups);
     }
 
     public PortletGroup getGroup() {
-        PortletGroup group = (PortletGroup)req.getAttribute(SportletProperties.PORTLET_GROUP);
+        PortletGroup group = (PortletGroup)this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_GROUP);
         if (group == null) return PortletGroupFactory.createPortletGroup("unknown group");
         return group;
     }
 
 
     public void setGroup(PortletGroup group) {
-        req.setAttribute(SportletProperties.PORTLET_GROUP, group);
+        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_GROUP, group);
     }
 
     /**
@@ -258,7 +197,7 @@ public class SportletRequestImpl implements SportletRequest {
     public Locale getLocale() {
         Locale locale = (Locale)this.getPortletSession(true).getAttribute(User.LOCALE);
         if (locale != null) return locale;
-        locale = req.getLocale();
+        locale = this.getHttpServletRequest().getLocale();
         if (locale != null) return locale;
         return Locale.ENGLISH;
     }
@@ -266,14 +205,14 @@ public class SportletRequestImpl implements SportletRequest {
     /**
      * Returns an Enumeration of Locale objects indicating, in decreasing order starting
      * with the preferred locale, the locales that are acceptable to the client based on
-     * the Accept-Language header. If the client request doesn't provide an Accept-Language
+     * the Accept-Language header. If the client this.getHttpServletRequest()uest doesn't provide an Accept-Language
      * header, this method returns an Enumeration containing one Locale, the default
      * locale for the server.
      *
      * @return an Enumeration of Locale objects
      */
     public Enumeration getLocales() {
-        return req.getLocales();
+        return this.getHttpServletRequest().getLocales();
     }
 
     /**
@@ -282,7 +221,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet settings
      */
     public PortletSettings getPortletSettings() {
-        return (PortletSettings) req.getAttribute(SportletProperties.PORTLET_SETTINGS);
+        return (PortletSettings) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_SETTINGS);
     }
 
     /**
@@ -291,7 +230,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param settings the portlet settings
      */
     public void setPortletSettings(PortletSettings settings) {
-        req.setAttribute(SportletProperties.PORTLET_SETTINGS, settings);
+        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_SETTINGS, settings);
     }
 
 
@@ -301,7 +240,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the previous portlet mode
      */
     public Portlet.Mode getPreviousMode() {
-        Portlet.Mode prev = (Portlet.Mode) req.getAttribute(SportletProperties.PREVIOUS_MODE);
+        Portlet.Mode prev = (Portlet.Mode) this.getHttpServletRequest().getAttribute(SportletProperties.PREVIOUS_MODE);
         if (prev == null) prev = Portlet.Mode.VIEW;
         return prev;
     }
@@ -312,7 +251,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param previousMode the previous portlet mode
      */
     public void setPreviousMode(Portlet.Mode previousMode) {
-        req.setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
+        this.getHttpServletRequest().setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
     }
 
     /**
@@ -321,7 +260,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet window
      */
     public PortletWindow.State getWindowState() {
-        return (PortletWindow.State) req.getAttribute(SportletProperties.PORTLET_WINDOW);
+        return (PortletWindow.State) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_WINDOW);
     }
 
     /**
@@ -330,7 +269,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param state the portlet window state
      */
     public void setWindowState(PortletWindow.State state) {
-        req.setAttribute(SportletProperties.PORTLET_WINDOW, state);
+        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_WINDOW, state);
     }
 
     /**
@@ -339,7 +278,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet mode
      */
     public Portlet.Mode getMode() {
-        return (Portlet.Mode) req.getAttribute(SportletProperties.PORTLET_MODE);
+        return (Portlet.Mode) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_MODE);
     }
 
     /**
@@ -348,210 +287,12 @@ public class SportletRequestImpl implements SportletRequest {
      * @param mode the portlet mode
      */
     public void setMode(Portlet.Mode mode) {
-        req.setAttribute(SportletProperties.PORTLET_MODE, mode);
-    }
-
-    /**
-     * Returns the value of the parameter with the given name, or null if no such parameter exists.
-     *
-     * You should only use this method when you are sure the parameter has only one value.
-     * If not, use getParameterValues(String)
-     *
-     * @param name the parameter name
-     * @return the parameter value
-     */
-    public final String getParameter(String name) {
-        return req.getParameter(name);
-    }
-
-    /**
-     * Returns a map of the parameters of this request.
-     *
-     * @return a map of parameters
-     */
-    public Map getParameterMap() {
-        return req.getParameterMap();
-    }
-
-    /**
-     * Returns an enumeration of all parameter names.
-     *
-     * @return the enumeration of parameter names
-     */
-    public Enumeration getParameterNames() {
-        return req.getParameterNames();
-    }
-
-    /**
-     * Returns the values of all parameters with the given name.
-     *
-     * A request can carry more than one parameter with a certain name.
-     * This method returns these parameters in the order of appearance.
-     *
-     * @param name the parameter name
-     * @return the array of parameter values
-     */
-    public String[] getParameterValues(String name) {
-        return req.getParameterValues(name);
-    }
-
-    public long getDateHeader(String name) {
-        return req.getDateHeader(name);
-    }
-
-    public String getHeader(String name) {
-        return req.getHeader(name);
-    }
-
-    public Enumeration getHeaders(String name) {
-        return req.getHeaders(name);
-    }
-
-    public Enumeration getHeaderNames() {
-        return req.getHeaderNames();
-    }
-
-    public int getIntHeader(String name) {
-        return req.getIntHeader(name);
+        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_MODE, mode);
     }
 
     public void invalidateCache() {
         // XXX: FILL ME IN
     }
-
-    public final String getAuthType() {
-        return req.getAuthType();
-    }
-
-    public final String getMethod() {
-        return req.getMethod();
-    }
-
-    public final String getPathInfo() {
-        return req.getPathInfo();
-    }
-
-    public final String getPathTranslated() {
-        return req.getPathTranslated();
-    }
-
-    public final String getContextPath() {
-        return req.getContextPath();
-    }
-
-    public final String getQueryString() {
-        return req.getQueryString();
-    }
-
-    public final String getRemoteUser() {
-        return req.getRemoteUser();
-    }
-
-    public final boolean isUserInRole(String role) {
-        return req.isUserInRole(role);
-    }
-
-    public final java.security.Principal getUserPrincipal() {
-        return req.getUserPrincipal();
-    }
-
-    public final String getRequestedSessionId() {
-        return req.getRequestedSessionId();
-    }
-
-    public final boolean isRequestedSessionIdValid() {
-        return req.isRequestedSessionIdValid();
-    }
-
-    public final boolean isRequestedSessionIdFromCookie() {
-        return req.isRequestedSessionIdFromCookie();
-    }
-
-    public final boolean isRequestedSessionIdFromURL() {
-        return req.isRequestedSessionIdFromURL();
-    }
-
-    public boolean isRequestedSessionIdFromUrl() {
-        return req.isRequestedSessionIdFromUrl();
-    }
-
-    public final String getRequestURI() {
-        return req.getRequestURI();
-    }
-
-    public final StringBuffer getRequestURL() {
-        return req.getRequestURL();
-    }
-
-    public final String getServletPath() {
-        return req.getServletPath();
-    }
-
-    public final HttpSession getSession() {
-        return req.getSession();
-    }
-
-    public final HttpSession getSession(boolean create) {
-        return req.getSession(create);
-    }
-
-    // The ServletRequest methods
-    public final ServletInputStream getInputStream() throws IOException {
-        return req.getInputStream();
-    }
-
-    public final String getCharacterEncoding() {
-        return req.getCharacterEncoding();
-    }
-
-    public final void setCharacterEncoding(String enc) throws UnsupportedEncodingException {
-        req.setCharacterEncoding(enc);
-    }
-
-    public final int getContentLength() {
-        return req.getContentLength();
-    }
-
-    public final String getContentType() {
-        return req.getContentType();
-    }
-
-    public final String getProtocol() {
-        return req.getProtocol();
-    }
-
-    public final String getScheme() {
-        return req.getScheme();
-    }
-
-    public final String getServerName() {
-        return req.getServerName();
-    }
-
-    public final int getServerPort() {
-        return req.getServerPort();
-    }
-
-    public final BufferedReader getReader() throws IOException {
-        return req.getReader();
-    }
-
-    public final String getRemoteAddr() {
-        return req.getRemoteAddr();
-    }
-
-    public final String getRemoteHost() {
-        return req.getRemoteHost();
-    }
-
-    public final RequestDispatcher getRequestDispatcher(String path) {
-        return req.getRequestDispatcher(path);
-    }
-
-    public final String getRealPath(String path) {
-        return req.getRealPath(path);
-    }
-
 
     // Primarily used for debugging
     public void logRequest() {
@@ -560,7 +301,7 @@ public class SportletRequestImpl implements SportletRequest {
         Enumeration enum, eenum;
 
         log.debug("PortletRequest Information");
-        log.debug("\trequest headers: ");
+        log.debug("\tthis.getHttpServletRequest()uest headers: ");
 
         enum = getHeaderNames();
         while (enum.hasMoreElements()) {
@@ -575,25 +316,28 @@ public class SportletRequestImpl implements SportletRequest {
         log.debug("\tcontent type: " + getContentType());
         if (getCookies() != null)
             log.debug("\tcookies are present");
-        log.debug("\trequest method: " + getMethod());
+        log.debug("\tthis.getHttpServletRequest()uest method: " + getMethod());
         log.debug("\tremote host: " + getRemoteHost() + " " + getRemoteAddr());
-        log.debug("\trequest scheme: " + getScheme());
-        log.debug("\trequest attribute names: ");
+        log.debug("\tthis.getHttpServletRequest()uest scheme: " + getScheme());
+        log.debug("\tthis.getHttpServletRequest()uest attribute names: ");
         enum = getAttributeNames();
         while (enum.hasMoreElements()) {
             name = (String) enum.nextElement();
             attrvalue = (Object) getAttribute(name);
             log.debug("\t\tname=" + name + " object type=" + attrvalue.getClass().getName());
         }
-        log.debug("\trequest parameter names: note if a parameter has multiple values, only the first beans is displayed ");
+        log.debug("\tthis.getHttpServletRequest()uest parameter names: note if a parameter has multiple values, only the first beans is displayed ");
         enum = getParameterNames();
         while (enum.hasMoreElements()) {
             name = (String) enum.nextElement();
             paramvalue = getParameter(name);
             log.debug("\t\tname=" + name + " value=" + paramvalue);
         }
-        log.debug("\trequest parameter info: ");
-        log.debug("\trequest path info: " + req.getPathInfo());
+        log.debug("\tthis.getHttpServletRequest()uest parameter info: ");
+        log.debug("\tthis.getHttpServletRequest()uest path info: " + this.getHttpServletRequest().getPathInfo());
     }
 
+    private HttpServletRequest getHttpServletRequest() {
+        return (HttpServletRequest)super.getRequest();
+    }
 }

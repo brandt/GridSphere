@@ -153,8 +153,6 @@ public class SportletContext implements PortletContext {
      * (e.g. /WEB-INF/myportlet/myportlet.jsp). Otherwise, the direct path is
      * used. (e.g. /myportlet/myportlet.jsp).
      *
-     * <b>NONE OF THE DESCRIPTION BELOW IS IMPLEMENTED YET!</b>
-     *
      * This method is enabled for multi-language and multi-device support.
      * For example, a jsp file "/myportlet/mytemplate.jsp" will be searched for
      * in the following order, when accessing via HTML-Browser:
@@ -169,54 +167,51 @@ public class SportletContext implements PortletContext {
      * @param locale the locale
      * @return the input stream
      */
-    public InputStream getResourceAsStream(String path, Client client, Locale locale) {            
-            if (path == null) return null;
+    public InputStream getResourceAsStream(String path, Client client, Locale locale) {
+        if (path == null) return null;
 
-            int lastComponentIndex=path.lastIndexOf("/");
-            String pathPrefix = path.substring(0, lastComponentIndex+1);
-            String lastComponent = path.substring(lastComponentIndex);
-            InputStream resourceStream = null;
-            StringBuffer pathBuffer = new StringBuffer();
-            
-            pathBuffer.append(pathPrefix);
+        int lastComponentIndex=path.lastIndexOf("/");
+        String pathPrefix = path.substring(0, lastComponentIndex+1);
+        String lastComponent = path.substring(lastComponentIndex);
+        InputStream resourceStream = null;
+        StringBuffer pathBuffer = new StringBuffer();
 
-            if (client != null) {
-                    String markupName = client.getMarkupName();
-                    pathBuffer.append(markupName);
-                    int clientIndex = pathBuffer.length();
-                            
-                    if (locale != null) {
-                            String language = locale.getLanguage();
-                            String country = locale.getCountry();
-                            pathBuffer.append("/");
-                            pathBuffer.append(language);
-                            
-                            int langIndex = pathBuffer.length();
-                            if (!country.equals("")) {                                    
-                                    pathBuffer.append("_");
-                                    pathBuffer.append(country);
-                                    pathBuffer.append(lastComponent);                                    
-                                    resourceStream = context.getResourceAsStream(pathBuffer.toString());
-                                    if (resourceStream != null) return resourceStream;
-                            } 
-                            
-                            pathBuffer.replace(langIndex, pathBuffer.length(), lastComponent);
-                            resourceStream = context.getResourceAsStream(pathBuffer.toString());
-                            if (resourceStream != null) return resourceStream;
-                    }
-                    
-                    pathBuffer.replace(clientIndex, pathBuffer.length(),lastComponent);
+        pathBuffer.append(pathPrefix);
+
+        if (client != null) {
+            String markupName = client.getMarkupName();
+            pathBuffer.append(markupName);
+            int clientIndex = pathBuffer.length();
+
+            if (locale != null) {
+                String language = locale.getLanguage();
+                String country = locale.getCountry();
+                pathBuffer.append("/");
+                pathBuffer.append(language);
+
+                int langIndex = pathBuffer.length();
+                if (!country.equals("")) {
+                    pathBuffer.append("_");
+                    pathBuffer.append(country);
+                    pathBuffer.append(lastComponent);
                     resourceStream = context.getResourceAsStream(pathBuffer.toString());
-                    if (resourceStream != null) return resourceStream;                    
+                    if (resourceStream != null) return resourceStream;
+                }
+
+                pathBuffer.replace(langIndex, pathBuffer.length(), lastComponent);
+                resourceStream = context.getResourceAsStream(pathBuffer.toString());
+                if (resourceStream != null) return resourceStream;
             }
-            
-            
-            
-            return context.getResourceAsStream(path);
+
+            pathBuffer.replace(clientIndex, pathBuffer.length(),lastComponent);
+            resourceStream = context.getResourceAsStream(pathBuffer.toString());
+            if (resourceStream != null) return resourceStream;
+        }
+
+        return context.getResourceAsStream(path);
     }
 
     /**
-     * <b>NONE OF THE DESCRIPTION BELOW IS IMPLEMENTED YET!</b>
      *
      * Returns the localized text resource with the given key and using the
      * given locale.

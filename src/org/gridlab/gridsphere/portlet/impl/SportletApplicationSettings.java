@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.PortletApplicationSettings;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridlab.gridsphere.portletcontainer.impl.ConcreteSportlet;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -23,7 +24,7 @@ import java.util.Hashtable;
  */
 public class SportletApplicationSettings implements PortletApplicationSettings {
 
-    protected ConcretePortlet concPortlet = null;
+    protected ConcreteSportlet concPortlet = null;
     protected Hashtable store = new Hashtable();
 
     /**
@@ -36,7 +37,7 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
      *
      * @param concPortlet the concrete portlet
      */
-    public SportletApplicationSettings(ConcretePortlet concPortlet) {
+    public SportletApplicationSettings(ConcreteSportlet concPortlet) {
         this.concPortlet = concPortlet;
         store = concPortlet.getContextAttributes();
     }
