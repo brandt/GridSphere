@@ -116,6 +116,12 @@
         <mkdir dir="${project.dir}/webapp/html"/>
         <mkdir dir="${project.dir}/webapp/jsp"/>
 
+        <!-- copy over database stuff for mapping generation -->
+        <mkdir dir="${project.dir}/config/database/castor"/>
+        <copy file="src/org/gridlab/gridsphere/core/persistence/BaseObject.java" tofile="${project.dir}/config/database/castor/BaseObject.java"/>
+        <copy file="src/org/gridlab/gridsphere/portlet/impl/SportletData.java" tofile="${project.dir}/config/database/castor/SportletData.java"/>
+        <copy file="src/org/gridlab/gridsphere/portlet/impl/SportletDataAttribute.java" tofile="${project.dir}/config/database/castor/SportletDataAttribute.java"/>
+
         <echo>Creation of new portlet project ${portlet.title} in projects/${project.name} is complete.</echo>
         <echo>Please edit src/ webapps/ and webapps/WEB-INF/{web.xml, layout.xml, PortletServices.xml} appropriately</echo>
     </target>
