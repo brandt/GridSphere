@@ -6,17 +6,24 @@
 package org.gridlab.gridsphere.portlets.core;
 
 import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.event.FormEvent;
+import org.gridlab.gridsphere.event.impl.FormEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.user.UserManagerService;
+import org.gridlab.gridsphere.tags.web.model.ListBoxModel;
+import org.gridlab.gridsphere.tags.web.model.ListSelectItem;
+import org.gridlab.gridsphere.tags.web.model.CheckBoxModel;
+import org.gridlab.gridsphere.tags.web.model.CheckBoxItem;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
 import javax.servlet.UnavailableException;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.Transformer;
@@ -28,9 +35,7 @@ import java.io.PrintWriter;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.MalformedURLException;
-import java.util.Vector;
-import java.util.List;
-import java.util.Iterator;
+import java.util.*;
 
 public class RSSPortlet extends AbstractPortlet {
 
@@ -38,11 +43,26 @@ public class RSSPortlet extends AbstractPortlet {
     long _lastFetched = 0;
     int _fetch_interval = 5*6000;        // in millisec
     Document RSSFeed = new Document(new Element("rss"));
-
+    ListBoxModel model = new ListBoxModel();
+    CheckBoxModel cbmodel = new CheckBoxModel();
+    String selectedcheckboxes = new String();
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         System.err.println("init() in RSSPortlet");
+        model.setName("Labeltest");
+        cbmodel.setName("checkboxtest");
+        for (int i=1;i<9;i++) {
+            ListSelectItem item = new ListSelectItem("label "+i,"value "+i);
+            if (i==4) { item.setSelected(true); }
+            model.addItem(item);
+            CheckBoxItem cbitem = new CheckBoxItem("label "+i,"value "+i,true);
+            if (i==4) { cbitem.disable(); cbitem.setSelected(false);}
+            cbmodel.addItem(cbitem);
+
+        }
+        model.setListboxsize(6);
+        model.setMultipleSelection(true);
     }
 
     private Document getRSSFeed(String url) {
@@ -62,15 +82,73 @@ public class RSSPortlet extends AbstractPortlet {
     }
 
     public void actionPerformed(ActionEvent evt) {
-        PortletAction _action = evt.getAction();
 
-        DefaultPortletAction action = (DefaultPortletAction) _action;
-        log.info("============================> "+action.getName() );
+
+        DefaultPortletAction _action = evt.getAction();
         PortletRequest req = evt.getPortletRequest();
-        _url = (String) req.getParameter("rss_url");
-        log.info("=============> got new url "+_url);
-        _lastFetched = 0;
-        req.setMode(Portlet.Mode.VIEW);
+
+        FormEvent form = new FormEventImpl(evt);
+
+        String button = form.getPressedSubmitButton();
+
+        if (_action.getName().equals("rss_edit")) {
+            if (button.equals("show")) {
+                String temp_url = req.getParameter("rss_url");
+                if (!temp_url.equals(_url)) {
+                    _lastFetched = 0;
+                    _url=temp_url;
+                }
+                req.setMode(Portlet.Mode.VIEW);
+            }
+            if (button.equals("cancel")) {
+                req.setMode(Portlet.Mode.VIEW);
+            }
+            if (button.equals("check")) {
+                //@TODO need to put the RSS feed into a bean!
+                req.setMode(Portlet.Mode.EDIT);
+                Document doc = getRSSFeed(req.getParameter("rss_url"));
+                Element root = doc.getRootElement();
+                String version = root.getAttributeValue("version");
+                if (version.equals("2.0")) { req.setAttribute("rss_support","yes");} else {req.setAttribute("rss_support","no");}
+            }
+        }
+
+        if (_action.getName().equals("rss_configure")) {
+            if (button.equals("cancel")) {
+                req.setMode(Portlet.Mode.VIEW);
+            }
+            if (button.equals("delete")) {
+                String[] result = form.getSelectedListBoxValues("Labeltest");
+                for (int i=0;i<result.length;i++) {
+                    model.removeItem(result[i]);
+                }
+            }
+            if (button.equals("ok")) {
+                String[] result = form.getSelectedListBoxValues("Labeltest");
+                req.setMode(Portlet.Mode.VIEW);
+            }
+
+            if (button.equals("add")) {
+                String name = req.getParameter("rss_name");
+                String url = req.getParameter("rss_url");
+                model.addItem(new ListSelectItem(name, url, true));
+                model.unselectAll();
+
+                String result[] = form.getSelectedCheckBoxValues(cbmodel.getName());
+                selectedcheckboxes = "";
+                for (int i=0;i<result.length;i++) {
+                    selectedcheckboxes = selectedcheckboxes+" "+result[i];
+                }
+
+                model = form.adjustListBoxModel(model);
+
+/*                cbmodel.unselectAll();
+                for (int i=0;i<result.length;i++) {
+                    ((CheckBoxItem)cbmodel.getItem(result[i])).setSelected(true);
+                }*/
+            }
+
+        }
 
     }
 
@@ -81,16 +159,16 @@ public class RSSPortlet extends AbstractPortlet {
             RSSFeed = getRSSFeed(_url);
 
         } else {
-            out.println("Document was cached.");
+            out.println("Document was cached.<br>");
         }
         Element root = RSSFeed.getRootElement();
         PortletURI loginURI = response.createURI();
         String version = "unknown";
-        version = (String)root.getAttributeValue("version");
+        version = root.getAttributeValue("version");
         out.println("RSS freed from URL: "+_url);
 
         try {
-            if (version.equals("2.0")) {
+            if (version.equals("2.0") || version.equals("3.14159265359")) {
                 List items = root.getChild("channel").getChildren("item");
                 Iterator it = items.iterator();
                 out.println("<ul>");
@@ -102,9 +180,11 @@ public class RSSPortlet extends AbstractPortlet {
                     out.println("<li><a target=\"_new\" href=\""+link+"\">"+title+"</a><br/>"+desc+"</li>");
                 }
                 out.println("</ul>");
+            } else {
+                out.println("Unsupported RSS feed version ("+version+")");
             }
         } catch (Exception e) {
-            out.println("Unsupported RSS feed version.");
+            out.println("This is a not a RSS feed.");
             System.out.println("============> "+e);
         }
     }
@@ -116,7 +196,22 @@ public class RSSPortlet extends AbstractPortlet {
         DefaultPortletAction defAction = new DefaultPortletAction("rss_edit");
         returnURI.addAction(defAction);
         request.setAttribute("rss_url", returnURI.toString());
-        getPortletConfig().getContext().include("/jsp/rss.jsp", request, response);
+        getPortletConfig().getContext().include("/jsp/rss/edit.jsp", request, response);
+    }
+
+    public void doConfigure(PortletRequest request, PortletResponse response)
+            throws PortletException, IOException {
+        PortletURI returnURI = response.createReturnURI();
+
+
+        DefaultPortletAction defAction = new DefaultPortletAction("rss_configure");
+        returnURI.addAction(defAction);
+        request.setAttribute("rss_url", returnURI.toString());
+        request.setAttribute("rss_listbox", model);
+        request.setAttribute("rss_checkboxlist", cbmodel);
+        request.setAttribute("rss_selcheckboxes", selectedcheckboxes);
+
+        getPortletConfig().getContext().include("/jsp/rss/configure.jsp", request, response);
     }
 
     public void doHelp(PortletRequest request, PortletResponse response) throws PortletException, IOException {
