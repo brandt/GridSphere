@@ -26,11 +26,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>ManagerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>LoginPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet</servlet-class>
     </servlet>
@@ -46,13 +41,18 @@
     </servlet>
 
     <servlet>
-        <servlet-name>UserManagerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet</servlet-class>
+        <servlet-name>ManagerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager</servlet-class>
     </servlet>
 
     <servlet>
-        <servlet-name>AccessControllerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet</servlet-class>
+        <servlet-name>UserManagerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>GroupManagerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -68,11 +68,6 @@
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
        <url-pattern>/gridsphere</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>ManagerPortlet</servlet-name>
-        <url-pattern>/appmanager</url-pattern>
     </servlet-mapping>
 
      <servlet-mapping>
@@ -91,13 +86,18 @@
     </servlet-mapping>
 
     <servlet-mapping>
-       <servlet-name>UserManagerPortlet</servlet-name>
-       <url-pattern>/adminstration/accounts</url-pattern>
+        <servlet-name>ManagerPortlet</servlet-name>
+        <url-pattern>/appmanager</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-       <servlet-name>AccessControllerPortlet</servlet-name>
-       <url-pattern>/adminstration/access</url-pattern>
+        <servlet-name>UserManagerPortlet</servlet-name>
+        <url-pattern>/admin/users</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>GroupManagerPortlet</servlet-name>
+        <url-pattern>/admin/groups</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

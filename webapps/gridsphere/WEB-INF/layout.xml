@@ -27,21 +27,21 @@
                 </portlet-panel>
             </portlet-tab>
             <portlet-tab>
-                <title>Accounts</title>
+                <title>Users</title>
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet.1</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
             </portlet-tab>
             <portlet-tab>
-                <title>Access</title>
+                <title>Groups</title>
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet.1</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
@@ -49,7 +49,4 @@
         </portlet-tabbed-pane>
     </portlet-tab>
 </portlet-tabbed-pane>
-
-
-
 

@@ -60,19 +60,19 @@
     </portlet-app-def>
 
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet">
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet">
             <portlet-name>User Account Manager</portlet-name>
             <servlet-name>UserManagerPortlet</servlet-name>
         </portlet-app>
 
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet.1">
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1">
             <concrete-portlet>
                 <portlet-name>User Account Manager</portlet-name>
                 <default-locale>en</default-locale>
                 <language locale="en_US">
                     <title>User Account Manager</title>
                     <title-short>UserManager</title-short>
-                    <description>Provides tools for administering user accounts</description>
+                    <description>Enables portal administrators to administer user accounts</description>
                     <keywords>user account administration</keywords>
                 </language>
             </concrete-portlet>
@@ -80,20 +80,18 @@
     </portlet-app-def>
 
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.AccessControllerPortlet">
-            <portlet-name>Access Control Manager</portlet-name>
-            <servlet-name>AccessControllerPortlet</servlet-name>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet">
+            <portlet-name>Portlet Group Manager</portlet-name>
+            <servlet-name>GroupManagerPortlet</servlet-name>
         </portlet-app>
 
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.AccessControllerPortlet.1">
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1">
             <concrete-portlet>
-                <portlet-name>Access Control Manager</portlet-name>
+                <portlet-name>Portlet Group Manager</portlet-name>
                 <default-locale>en</default-locale>
                 <language locale="en_US">
-                    <title>Access Control Manager</title>
-                    <title-short>AccessControlManager</title-short>
-                    <description>Provides tools for administering access to portlets</description>
-                    <keywords>access control user group role administration</keywords>
+                    <title>Portlet Group Manager</title>
+                    <description>Enables portal administrators to administer portlet groups</description>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
