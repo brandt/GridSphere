@@ -1452,6 +1452,7 @@
             <para>
                 This tag displays a a 'scrollable' table.
             </para>
+            <important>The DataGridTag will NOT work with JSR 168 portlets and requires major changes. Its use is discouraged for now.</important>
             <table>
                 <title>Attributes to datagrid</title>
                 <tgroup cols="3">
