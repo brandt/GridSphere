@@ -8,8 +8,7 @@
 
 package org.gridlab.gridsphere.core.persistence;
 
-public class DeleteException extends Exception {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(DeleteException.class.getName());
+public class DeleteException extends PersistenceException {
 
     public DeleteException () {
         super();
@@ -18,7 +17,6 @@ public class DeleteException extends Exception {
     public DeleteException(String msg) {
         super(msg);
     }
-
 
 }
 

@@ -6,8 +6,7 @@
 
 package org.gridlab.gridsphere.core.persistence;
 
-public class QueryException extends Exception {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(QueryException.class.getName());
+public class QueryException extends PersistenceException {
 
     public QueryException() {
         super();

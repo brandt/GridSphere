@@ -9,10 +9,7 @@
 
 package org.gridlab.gridsphere.core.persistence;
 
-public class ConfigurationException extends Exception {
-
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(ConfigurationException.class.getName());
-
+public class ConfigurationException extends PersistenceException {
 
     public ConfigurationException() {
         super();
@@ -21,7 +18,6 @@ public class ConfigurationException extends Exception {
     public ConfigurationException(String msg) {
         super(msg);
     }
-
 
 }
 

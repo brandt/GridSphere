@@ -6,8 +6,7 @@
 
 package org.gridlab.gridsphere.core.persistence;
 
-public class TransactionException extends Exception {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(TransactionException.class.getName());
+public class TransactionException extends PersistenceException {
 
     public TransactionException () {
         super();

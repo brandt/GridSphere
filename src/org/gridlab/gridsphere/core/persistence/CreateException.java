@@ -8,8 +8,7 @@
 
 package org.gridlab.gridsphere.core.persistence;
 
-public class CreateException extends Exception {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(CreateException.class.getName());
+public class CreateException extends PersistenceException {
 
     public CreateException() {
         super();
