@@ -2,7 +2,7 @@
     <name>SMS sending Service</name>
     <security>insecure</security>
     <messagetype>sms</messagetype>
-    <description>Gateway for sending SMS.</description>
+    <description>MESSAGING_SERVICE_SMS</description>
     <param>
         <key>Smashhost</key>
         <value></value>

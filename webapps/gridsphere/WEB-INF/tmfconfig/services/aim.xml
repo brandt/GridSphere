@@ -2,7 +2,7 @@
     <name>AIM - AOL IM</name>
     <security>insecure</security>
     <messagetype>aim</messagetype>
-    <description>Service to send messages to AIM/Apple iChat.</description>
+    <description>MESSAGING_SERVICE_AIM</description>
     <param>
         <key>Username</key>
         <value></value>

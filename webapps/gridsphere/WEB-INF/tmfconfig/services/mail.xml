@@ -2,7 +2,7 @@
     <name>Mail</name>
     <security>insecure</security>
     <messagetype>mail</messagetype>
-    <description>Service used to send messages via email</description>
+    <description>MESSAGING_SERVICE_AIM</description>
     <param>
         <key>MailServer</key>
         <value></value>
