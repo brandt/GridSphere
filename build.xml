@@ -90,7 +90,6 @@ Copyright:
         <!-- this is for the servlet JARs in Tomcat 4.1.x -->
         <fileset dir="${env.CATALINA_HOME}/common/lib">
             <include name="activation.jar"/>
-            <include name="jasper-runtime.jar"/>
             <include name="servlet.jar"/>
         </fileset>
 
