@@ -10,6 +10,10 @@
 package org.gridlab.gridsphere.core.persistence;
 
 import org.exolab.castor.jdo.Database;
+import org.gridlab.gridsphere.core.persistence.castor.StringVector;
+
+import java.util.Vector;
+import java.util.List;
 
 public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exolab.castor.jdo.Persistent {
 
@@ -87,6 +91,42 @@ public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exol
     }
 
     public void jdoUpdate() throws Exception {
+    }
+
+
+    /**
+     * converts a vector with jus strings to a castor-saveable
+     * vector (containing stringvectors)
+     *
+     * @param object the reference object
+     * @param vector the vector to be converted
+     * @return a vector of stringobjects
+     */
+    public Vector convertToStringVector(Object object, List vector) {
+
+        Vector newVector = new Vector();
+
+        for (int i=0;i<vector.size();i++) {
+            StringVector sv = new StringVector(object,(String)vector.get(i));
+            newVector.add(sv);
+        }
+        return newVector;
+    }
+
+    /**
+     * converts a vector of stringvectors to a normal vector of strings
+     *
+     * @param a vector of stringvector objects
+     * @return a vector of strings
+     */
+    public Vector convertToVector(List vector) {
+        Vector newVector = new Vector();
+
+        for (int i=0;i<vector.size();i++) {
+            StringVector sv = (StringVector)vector.get(i);
+            newVector.add(sv.getValue());
+        }
+        return newVector;
     }
 }
 
