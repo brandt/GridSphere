@@ -21,10 +21,10 @@ public class ImageTag extends BaseComponentTag {
     private static PortletLog log = SportletLog.getInstance(ImageTag.class);
 
     protected ImageBean urlImageBean = null;
-    protected String src = new String();
-    protected String border = new String();
-    protected String title = new String();
-    protected String alt = new String();
+    protected String src = null;
+    protected String border = null;
+    protected String title = null;
+    protected String alt = null;
     protected String width = null;
     protected String height = null;
     protected String align = null;
@@ -156,13 +156,13 @@ public class ImageTag extends BaseComponentTag {
     }
 
     private void setImageBean(ImageBean urlImageBean) {
-        urlImageBean.setAlt(alt);
-        urlImageBean.setTitle(title);
-        urlImageBean.setSrc(src);
-        urlImageBean.setBorder(border);
-        urlImageBean.setWidth(width);
-        urlImageBean.setHeight(height);
-        urlImageBean.setAlign(align);
+        if (alt != null) urlImageBean.setAlt(alt);
+        if (title != null) urlImageBean.setTitle(title);
+        if (src != null) urlImageBean.setSrc(src);
+        if (border != null) urlImageBean.setBorder(border);
+        if (width != null) urlImageBean.setWidth(width);
+        if (height != null) urlImageBean.setHeight(height);
+        if (align != null) urlImageBean.setAlign(align);
     }
 
     public int doStartTag() throws JspException {
@@ -172,6 +172,7 @@ public class ImageTag extends BaseComponentTag {
                 urlImageBean = new ImageBean();
                 setImageBean(urlImageBean);
             }
+            setImageBean(urlImageBean);
         } else {
             urlImageBean = new ImageBean();
             setImageBean(urlImageBean);
