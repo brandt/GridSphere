@@ -35,13 +35,13 @@ public class TextMessagingPortlet extends ActionPortlet {
         }
         DEFAULT_VIEW_PAGE = "doStart";
         DEFAULT_EDIT_PAGE = "doEditAccounts";
+        DEFAULT_HELP_PAGE = "messaging/help.jsp";
     }
 
     // start form
 
     public void doStart(FormEvent event) {
 
-        PortletRequest request = event.getPortletRequest();
         List users = tms.getUsers();
         ListBoxBean userlist = event.getListBoxBean("userlist");
         userlist.setSize(10);
