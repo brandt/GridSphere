@@ -400,7 +400,7 @@ public abstract class BaseFormEventImpl {
                 if (pval.length() == 0) {
                     pval = "no value";
                 }
-                System.out.println(" value : " + pval);
+                if (!name.startsWith("ui_pb")) System.out.println(" value : " + pval);
             } else {
                 System.out.println(" value :");
                 for (int i = 0; i < values.length; i++) {
