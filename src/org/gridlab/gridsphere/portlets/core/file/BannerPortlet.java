@@ -66,8 +66,9 @@ public class BannerPortlet extends ActionPortlet {
       * @throws PortletException
       */
      public void doConfigureViewFile(FormEvent event) throws PortletException {
-         PortletRequest req = event.getPortletRequest();
 
+         PortletRequest req = event.getPortletRequest();
+         checkAdminMethod(event);
          TextFieldBean displayTitle = event.getTextFieldBean("displayTitle");
          displayTitle.setValue(getTitle());
 
@@ -78,6 +79,7 @@ public class BannerPortlet extends ActionPortlet {
 
     public void setConfigureDisplayFile(FormEvent event) throws PortletException {
         log.debug("in BannerPortlet: setConfigureDisplayFile");
+        checkAdminMethod(event);
         PortletRequest req = event.getPortletRequest();
         TextFieldBean displayFile = event.getTextFieldBean("displayFile");
         String defaultFileURL = displayFile.getValue();
@@ -101,6 +103,7 @@ public class BannerPortlet extends ActionPortlet {
 
     public void setEditDisplayFile(FormEvent event) throws PortletException {
         log.debug("in BannerPortlet: setEditDisplayFile");
+        checkUserMethod(event);
         FrameBean alert = event.getFrameBean("alert");
         PortletRequest req = event.getPortletRequest();
         ListBoxBean lb = event.getListBoxBean("filelist");
@@ -141,6 +144,7 @@ public class BannerPortlet extends ActionPortlet {
       * @throws PortletException
       */
     public void doEditViewFile(FormEvent event) throws PortletException {
+        checkUserMethod(event);
         ListBoxBean lb = event.getListBoxBean("filelist");
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
