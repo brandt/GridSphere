@@ -84,37 +84,28 @@ shutdown. A <link linkend='portlet-services-descriptor'>portlet services descrip
 <sect1 id="portlet-services-descriptor">
     <title>Portlet Services Descriptor</title>
     <para>
-The portlet services descriptor file located in <filename>WEB-INF/PortletServices.xml</filename> specifies
-the services provided by this portlet web application. The following example shows service definitions for
-    the login and access control manager services.
+The portlet services descriptor file located in <filename>WEB-INF/PortletServices.xml</filename> of the portlet web application specifies
+the services provided by this portlet web application. GridSphere core services are defined in
+ <filename>WEB-INF/GridSphereServices.xml</filename> of the gridsphere webapp. The following example shows service definitions for
+  an example service.
     </para>
    <informalexample id="services.def"><programlisting>
 
        &lt;portlet-services&gt;  <co id="portlet.services.def"/>
 
            &lt;service&gt;   <co id="service.def"/>
-               &lt;name&gt;Login Service&lt;/name&gt;       <co id="service.name.def"/>
-               &lt;description&gt;Provides Login Capabilities&lt;/description&gt;   <co id="service.desc.def"/>
-               &lt;interface&gt;org.gridlab.gridsphere.services.core.user.LoginService&lt;/interface&gt;   <co id="service.iface.def"/>
+               &lt;name&gt;Example Service&lt;/name&gt;       <co id="service.name.def"/>
+               &lt;description&gt;Provides Special Capabilities&lt;/description&gt;   <co id="service.desc.def"/>
+               &lt;interface&gt;org.gridlab.gridsphere.services.core.example.ExampleService&lt;/interface&gt;   <co id="service.iface.def"/>
                &lt;implementation&gt;
-                    org.gridlab.gridsphere.services.core.user.impl.LoginServiceImpl
+                    org.gridlab.gridsphere.services.core.example.impl.ExampleServiceImpl
                &lt;/implementation&gt;  <co id="service.impl.def"/>
-           &lt;/service&gt;
-
-           &lt;service&gt;
-               &lt;name&gt;Access Control Manager Service&lt;/name&gt;
-               &lt;user-required&gt;true&lt;/user-required&gt;   <co id="service.user.def"/>
-               &lt;description&gt;Provides Authorization Capabilities to Portal Users&lt;/description&gt;
-               &lt;interface&gt;
-                       org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService
-               &lt;/interface&gt;
-               &lt;implementation&gt;
-                       org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl
-               &lt;/implementation&gt;
+               &lt;user-required&gt;false&lt;/user-required&gt;  <co id="service.user.def"/>
+               &lt;load-on-startup&gt;false&lt;/load-on-startup&gt;  <co id="service.loadstartup.def"/>
                &lt;service-config&gt;         <co id="service.config.def"/>
-                &lt;param-name&gt;some parameter&lt;/param-name&gt;
-                &lt;param-value&gt;some value&lt;/param-value&gt;
-            &lt;/service-config&gt;
+                   &lt;param-name&gt;some parameter&lt;/param-name&gt;
+                   &lt;param-value&gt;some value&lt;/param-value&gt;
+               &lt;/service-config&gt;
            &lt;/service&gt;
 
        &lt;/portlet-services&gt;
@@ -154,7 +145,13 @@ the services provided by this portlet web application. The following example sho
             <callout arearefs="service.user.def">
             <para>
            This must be set to true for user services, where a User object will be supplied to create the
-           service instance.
+           service instance. The default is false
+            </para>
+            </callout>
+            <callout arearefs="service.loadstartup.def">
+            <para>
+           This should be set top true of the service should be initialized at startup time. Normally a service
+                is initialized when it is first used. The default is false.
             </para>
             </callout>
             <callout arearefs="service.config.def">
