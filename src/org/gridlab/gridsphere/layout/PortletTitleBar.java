@@ -287,6 +287,11 @@ public class PortletTitleBar extends BasePortletComponent {
         return hasError;
     }
 
+    /**
+     * Returns any errors associated with the functioning of this title bar
+     *
+     * @return any title bar errors that occured
+     */
     public String getErrorMessage() {
         return errorMessage;
     }
@@ -402,11 +407,9 @@ public class PortletTitleBar extends BasePortletComponent {
      * @return a list of portlet mode hyperlinks
      */
     public List createModeLinks(GridSphereEvent event) {
-
         int i;
-
         PortletResponse res = event.getPortletResponse();
-
+        // make modes from supported modes
         portletModes = new String[supportedModes.size()];
         for (i = 0; i < supportedModes.size(); i++) {
             Portlet.Mode mode = (Portlet.Mode)supportedModes.get(i);
