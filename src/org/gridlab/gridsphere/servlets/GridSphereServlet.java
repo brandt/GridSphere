@@ -144,7 +144,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 try {
                     dt.execute();
                 } catch (Exception e) {
-                    RequestDispatcher rd = req.getRequestDispatcher("/jsp/dberror.jsp");
+                    RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/database_error.jsp");
                     log.error("Check DB failed: ", e);
                     req.setAttribute("error", "DB Error! Please contact your GridSphere/Database Administrator!");
                     rd.forward(req, res);
@@ -168,7 +168,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     layoutEngine.init();
                 } catch (Exception e) {
                     log.error("GridSphere initialization failed!", e);
-                    RequestDispatcher rd = req.getRequestDispatcher("/jsp/error.jsp");
+                    RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/init_error.jsp");
                     req.setAttribute("error", e);
                     rd.forward(req, res);
                     return;
