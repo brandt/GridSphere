@@ -126,8 +126,8 @@ public interface PortletComponent extends ComponentLifecycle {
 
     public void remove(PortletComponent pc, PortletRequest req);
 
-    public StringBuffer getBufferedOutput();
-
+    public StringBuffer getBufferedOutput(PortletRequest req);
+    
     /**
      * Delivers a message to the specified concrete portlet
      *

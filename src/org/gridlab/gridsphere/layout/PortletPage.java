@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -18,6 +19,7 @@ import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerSer
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.*;
 import java.util.List;
 import java.awt.*;
@@ -56,7 +58,7 @@ public class PortletPage implements Serializable, Cloneable {
     private Hashtable labelsHash = new Hashtable();
     private Hashtable portletHash = new Hashtable();
 
-    private boolean isFlushed = true;
+
     /**
      * Constructs an instance of PortletPage
      */
@@ -421,30 +423,19 @@ public class PortletPage implements Serializable, Cloneable {
         PortletRequest req = event.getPortletRequest();
         Client client = req.getClient();
 
-        // this ensures that one render request is handled at a time  for a client
-        while (!isFlushed) {
-            try {
-                Thread.sleep(100);
-            } catch (Exception e) {
-
-            }
-        }
-        isFlushed = false;
-
         // handle any client logic to determin which markup to display
-    	String markupName=event.getPortletRequest().getClient().getMarkupName();
+    	String markupName = event.getPortletRequest().getClient().getMarkupName();
     	if (markupName.equals("html")) {
     		doRenderHTML(event);
     	} else {
     		doRenderWML(event);
     	}
-        isFlushed = true;
-
     }
+
     public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
 
         PortletResponse res = event.getPortletResponse();
-       
+
         PrintWriter out = null;
 
         // set content to UTF-8 for il8n
@@ -462,8 +453,7 @@ public class PortletPage implements Serializable, Cloneable {
         out.println("<!DOCTYPE html PUBLIC \"-//WAPFORUM//DTD XHTML Mobile 1.0//EN\" \"http://www.wapforum.org/DTD/xhtml-mobile10.dtd\">");
         out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
         out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css/defaultwap.css\" rel=\"stylesheet\"/>");
-        //out.println("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");        
-		
+        //out.println("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
         //out.println("<wml>");
         out.println("<head>");
 
@@ -474,7 +464,7 @@ public class PortletPage implements Serializable, Cloneable {
         //out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
         //        "/default.css\" rel=\"stylesheet\"/>");
         //out.println("<link rel=\"icon\" href=\"images/favicon.ico\" type=\"imge/x-icon\">");
-        //out.println("<link rel=\"shortcut icon\" href=\"images/favicon.ico\" type=\"image/x-icon\">");       
+        //out.println("<link rel=\"shortcut icon\" href=\"images/favicon.ico\" type=\"image/x-icon\">");
         out.println("</head><body>");
 
         // A Portal page in 3 lines -- voila!
@@ -486,23 +476,16 @@ public class PortletPage implements Serializable, Cloneable {
         if (footerContainer != null) footerContainer.doRender(event);
 
         out.println("</body></html>");
-      
     }
+
     public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
 
         PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();
 
-        PrintWriter out = null;
+        StringWriter sout = new StringWriter();
+        PrintWriter writer = new PrintWriter(sout);
 
-        // set content to UTF-8 for il8n
-        //res.setContentType("text/html; charset=utf-8");
-        try {
-            out = res.getWriter();
-        } catch (IllegalStateException e) {
-            // means the writer has already been obtained
-            return;
-        }
 
         // page header
         //out.println("<?xml version=\"1.0\"?>");
@@ -511,46 +494,57 @@ public class PortletPage implements Serializable, Cloneable {
         Locale locale = req.getLocale();
         ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
         if (orientation.isLeftToRight()) {
-            out.println("<html>");
+            writer.println("<html>");
         } else {
-            out.println("<html dir=\"rtl\">");
+            writer.println("<html dir=\"rtl\">");
         }
 
-        out.println("<head>");
+        writer.println("<head>");
 
-        out.println("  <title>" + title + "</title>");
-        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
-        out.println("<meta name=\"keywords\" content=\"" + keywords + "\"/>");
-        out.println("<meta http-equiv=\"Pragma\" content=\"no-cache\"/>");
-        out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
+        writer.println("  <title>" + title + "</title>");
+        writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
+        writer.println("<meta name=\"keywords\" content=\"" + keywords + "\"/>");
+        writer.println("<meta http-equiv=\"Pragma\" content=\"no-cache\"/>");
+        writer.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
                 "/default.css\" rel=\"stylesheet\"/>");
-        out.println("<link rel=\"icon\" href=\"images/favicon.ico\" type=\"imge/x-icon\">");
-        out.println("<link rel=\"shortcut icon\" href=\"images/favicon.ico\" type=\"image/x-icon\">");
-        out.println("<script language=\"JavaScript\" src=\"javascript/gridsphere.js\"></script>");
-        out.println("</head><body>");
-
+        writer.println("<link rel=\"icon\" href=\"images/favicon.ico\" type=\"imge/x-icon\">");
+        writer.println("<link rel=\"shortcut icon\" href=\"images/favicon.ico\" type=\"image/x-icon\">");
+        writer.println("<script language=\"JavaScript\" src=\"javascript/gridsphere.js\"></script>");
+        writer.println("</head><body>");
 
         // A Portal page in 3 lines -- voila!
         //  -------- header ---------
         if (headerContainer != null) {
             headerContainer.doRender(event);
-            out.println(headerContainer.getBufferedOutput());
+            writer.println(headerContainer.getBufferedOutput(req));
         }
-
 
         // ..| tabs | here |....
         if (tabbedPane != null) {
             tabbedPane.doRender(event);
-            out.println(tabbedPane.getBufferedOutput());
+            writer.println(tabbedPane.getBufferedOutput(req));
         }
         //.... the footer ..........
         if (footerContainer != null) {
             footerContainer.doRender(event);
-            out.println(footerContainer.getBufferedOutput());
+            writer.println(footerContainer.getBufferedOutput(req));
         }
 
-        out.println("</body></html>");
-        out.flush();
+        writer.println("</body></html>");
+        //out.flush();
+
+        PrintWriter out = null;
+        // set content to UTF-8 for il8n
+        //res.setContentType("text/html; charset=utf-8");
+        try {
+            out = res.getWriter();
+        } catch (IllegalStateException e) {
+            // means the writer has already been obtained
+            return;
+        }
+        out.println(sout);
+        writer.flush();
+
     }
 
     public Object clone() throws CloneNotSupportedException {
@@ -628,11 +622,8 @@ public class PortletPage implements Serializable, Cloneable {
             return;
         }
 
-
         // the component id determines where in the list the portlet component is
-
         // first check the hash
-
         ComponentIdentifier compId = null;
 
         int compIntId = -1;

@@ -40,8 +40,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private String errorMessage = "";
     private boolean hasError = false;
     private boolean isActive = false;
-    private StringBuffer prebufferedTitle = new StringBuffer();
-    private StringBuffer postbufferedTitle = new StringBuffer();
+    //private StringBuffer prebufferedTitle = new StringBuffer();
+    //private StringBuffer postbufferedTitle = new StringBuffer();
     private transient AccessControlManagerService aclService = null;
 
 
@@ -755,8 +755,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         //String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
         writer.println("<td class=\"windowTitle\"><nobr>");//WAP 2.0 <nobr> added 
 
-        prebufferedTitle = storedWriter.getBuffer();     
-
+        //prebufferedTitle = storedWriter.getBuffer();
+        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre", storedWriter.getBuffer().toString());
         storedWriter = new StringWriter();
         writer = new PrintWriter(storedWriter);
         wrappedResponse = new StoredPortletResponseImpl(res, writer);
@@ -795,7 +795,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         writer.println("</tr></table>");
         writer.println("</td></tr>");
 
-        postbufferedTitle = storedWriter.getBuffer();
+        //postbufferedTitle = storedWriter.getBuffer();
+        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post", storedWriter.getBuffer().toString());
     }
 
     public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
@@ -854,8 +855,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         //String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
         writer.println("<td class=\"window-title-name\">");
 
-        prebufferedTitle = storedWriter.getBuffer();
-
+        //prebufferedTitle = storedWriter.getBuffer();
+         req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre", storedWriter.getBuffer().toString());
         storedWriter = new StringWriter();
         writer = new PrintWriter(storedWriter);
         wrappedResponse = new StoredPortletResponseImpl(res, writer);
@@ -894,15 +895,16 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         writer.println("</tr></table>");
         writer.println("</td></tr>");
 
-        postbufferedTitle = storedWriter.getBuffer();
+        //postbufferedTitle = storedWriter.getBuffer();
+        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post", storedWriter.getBuffer().toString());
     }
 
-    public StringBuffer getPreBufferedTitle() {
-        return prebufferedTitle;
+    public String getPreBufferedTitle(PortletRequest req) {
+        return (String)req.getAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre");
     }
 
-    public StringBuffer getPostBufferedTitle() {
-        return postbufferedTitle;
+    public String getPostBufferedTitle(PortletRequest req) {
+        return (String)req.getAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post");
     }
 
     public Object clone() throws CloneNotSupportedException {

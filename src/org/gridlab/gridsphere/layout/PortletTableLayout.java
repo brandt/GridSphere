@@ -33,7 +33,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
      */
     protected String style = null;
 
-    protected StringBuffer table = null;
+    //protected StringBuffer table = null;
 
     /**
      * Constructs an instance of PortletTableLayout
@@ -175,7 +175,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                         out.println("<p />");
                         //out.println("</td></tr></tbody></table>");
                         if ((canModify) && (!hasFrameMaximized)) {
-                            renderUserSelects(event);
+                            renderUserSelects(event, new StringBuffer());
                         }
                         return;
                     }
@@ -203,7 +203,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
 
             /** setup bottom add portlet listbox */
             if ((canModify) && (!hasFrameMaximized)) {
-                renderUserSelects(event);
+                renderUserSelects(event, new StringBuffer());
             }
 
             //out.println("</tbody></table>");
@@ -215,7 +215,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         PortletResponse res = event.getPortletResponse();
         //PrintWriter out = res.getWriter();
 
-        table = new StringBuffer();
+        StringBuffer table = new StringBuffer();
         PortletComponent p = null;
 
         // check if one window is maximized
@@ -234,11 +234,12 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                     if (maxi != null) {
                         table.append("<table border=\"0\" width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"><tbody><tr><td>");
                         maxi.doRender(event);
-                        table.append(maxi.getBufferedOutput());
+                        table.append(maxi.getBufferedOutput(event.getPortletRequest()));
                         table.append("</td></tr></tbody></table>");
                         if ((canModify) && (!hasFrameMaximized)) {
-                            renderUserSelects(event);
+                            renderUserSelects(event, table);
                         }
+                        event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, table);
                         return;
                     }
                 }
@@ -257,7 +258,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                 table.append("<tr><td valign=\"top\" width=\"" + p.getWidth() + "\">");
                 if (p.getVisible()) {
                     p.doRender(event);
-                    table.append(p.getBufferedOutput());
+                    table.append(p.getBufferedOutput(event.getPortletRequest()));
                     //out.println("grid comp: "+i);
                 }
                 table.append("</td> </tr>");
@@ -265,18 +266,18 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
 
             /** setup bottom add portlet listbox */
             if ((canModify) && (!hasFrameMaximized)) {
-                renderUserSelects(event);
+                renderUserSelects(event, table);
             }
 
             table.append("</tbody></table>");
+            event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, table);
         }
     }
 
-    public StringBuffer getBufferedOutput() {
-        return table;
-    }
-    public void renderUserSelects(GridSphereEvent event) throws IOException {
+
+    public void renderUserSelects(GridSphereEvent event, StringBuffer table) throws IOException {
         //PrintWriter out = event.getPortletResponse().getWriter();
+
         table.append("<tr><td valign=\"top\" width=\"100%\">");
         //out.println("<tr>");
         if (!components.isEmpty()) {
@@ -298,7 +299,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                         table.append("<tbody><tr><td>");
 
                         // render add portlets listbox
-                        renderAddPortlets(event, j);
+                        renderAddPortlets(event, j, table);
 
                         table.append("</td></tr></tbody>");
                         table.append("</table> <!-- END COLUMN -->");
@@ -314,7 +315,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         table.append("</td> </tr>");
     }
 
-    public void renderAddPortlets(GridSphereEvent event, int col) throws IOException {
+    public void renderAddPortlets(GridSphereEvent event, int col, StringBuffer table) throws IOException {
         PortletRequest req = event.getPortletRequest();
         Locale locale = req.getLocale();
         PortletRegistry registry = PortletRegistry.getInstance();

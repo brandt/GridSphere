@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.Description;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -33,7 +34,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     private PortletComponent portletComponent = null;
     private int tabOrder = 50;
 
-    protected StringBuffer tab = null;
+    //protected StringBuffer tab = new StringBuffer();
     /**
      * Constructs an instance of PortletTab
      */
@@ -101,7 +102,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         Iterator it = titles.iterator();
         String defTitle = title;
         while (it.hasNext()) {
-            PortletTitle t = (PortletTitle) it.next();
+            Description t = (Description) it.next();
             if (t.getLang() == null) t.setLang(Locale.ENGLISH.getLanguage());
             if (lang.equals(t.getLang())) return t.getText();
             if (t.getLang().regionMatches(0, lang, 0, 2)) return t.getText();
@@ -117,14 +118,14 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         if (title == null) throw new IllegalArgumentException("title is NULL");
 
         while (it.hasNext()) {
-            PortletTitle t = (PortletTitle) it.next();
+            Description t = (Description) it.next();
             if (lang.equalsIgnoreCase(t.getLang())) {
                 found = true;
                 t.setText(title);
             }
         }
         if (!found) {
-            PortletTitle t = new PortletTitle();
+            Description t = new Description();
             t.setLang(lang);
             t.setText(title);
             titles.add(t);
@@ -227,7 +228,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
 
         super.actionPerformed(event);
-        tab = null;
+
         PortletComponentEvent compEvt = event.getLastRenderEvent();
         PortletTabEvent tabEvent = new PortletTabEventImpl(this, event.getPortletRequest(), PortletTabEvent.TabAction.TAB_SELECTED, COMPONENT_ID);
         List l = Collections.synchronizedList(listeners);
@@ -252,16 +253,15 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRole userRole = event.getPortletRequest().getRole();
-        tab = new StringBuffer();
+        StringBuffer tab = new StringBuffer();
         if (userRole.compare(userRole, requiredRole) >= 0) {
             portletComponent.doRender(event);
-            tab.append(portletComponent.getBufferedOutput());
+            tab.append(portletComponent.getBufferedOutput(event.getPortletRequest()));
         }
+        event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, tab);
     }
 
-    public StringBuffer getBufferedOutput() {
-        return tab;
-    }
+
 
     public int compare(Object left, Object right) {
         int leftID = ((PortletTab) left).getTabOrder();
@@ -294,7 +294,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         synchronized (stitles) {
             t.titles = new ArrayList(stitles.size());
             for (int i = 0; i < stitles.size(); i++) {
-                PortletTitle title = (PortletTitle) stitles.get(i);
+                Description title = (Description) stitles.get(i);
                 t.titles.add(title.clone());
             }
         }

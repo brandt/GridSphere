@@ -1,15 +1,13 @@
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 
@@ -108,17 +106,9 @@ public class PortletPageFactory implements PortletSessionListener {
         }
     }
 
-    public void destroy() {
-        Iterator it = guests.keySet().iterator();
-        while (it.hasNext()) {
-            String key = (String) it.next();
-            guests.remove(key);
-        }
-        it = userLayouts.keySet().iterator();
-        while (it.hasNext()) {
-            String key = (String) it.next();
-            userLayouts.remove(key);
-        }
+    public synchronized void destroy() {
+        guests.clear();
+        userLayouts.clear();
     }
     
     public void addPortletGroupTab(PortletRequest req, String groupName) {
