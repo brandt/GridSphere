@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portlet.PortletRole;
  */
 public class SportletRoleInfo {
 
-    private String portletRole;
+    private String portletRole = new String();
     private String portletClass = new String();
     private String oid = new String();
 

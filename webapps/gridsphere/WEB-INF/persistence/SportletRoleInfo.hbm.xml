@@ -7,7 +7,7 @@
 <hibernate-mapping>
     <class
         name="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo"
-        table="portletroleinfo"
+        table="sportletroleinfo"
         >
 
         <id
@@ -21,7 +21,7 @@
         </id>
 
         <property name="PortletClass" type="string" column="portletclass"/>
-        <property name="PortletRole" type="string" column="portletrole"/>
+        <property name="Role" type="string" column="portletrole"/>
 
     </class>
 </hibernate-mapping>
