@@ -10,8 +10,6 @@
   <display-name>Portlet Widgets</display-name>
   <description>GridSphere Visual Portlet Widgets library</description>
 
-
-
   <tag>
     <name>actionparam</name>
     <tag-class>org.gridlab.gridsphere.tags.web.ParamTag</tag-class>
@@ -39,7 +37,7 @@
         Wraps HTML file input tag
     </description>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -85,7 +83,7 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -104,7 +102,7 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -123,7 +121,7 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -137,7 +135,7 @@
         Wraps HTML input checkbox tag
     </description>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -171,7 +169,7 @@
         Wraps HTML input radio button tag
     </description>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -205,7 +203,7 @@
         Wraps HTML input text tag
     </description>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -249,7 +247,7 @@
         Wraps HTML input file upload tag
     </description>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -278,7 +276,7 @@
         Wraps HTML input text tag
     </description>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -323,7 +321,7 @@
         Wraps HTML input text tag
     </description>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -400,7 +398,7 @@
         Wraps HTML submit input tag
     </description>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -424,7 +422,7 @@
         makes a dropdownlist
     </description>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>true</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -438,8 +436,8 @@
         makes a listbox
     </description>
     <attribute>
-        <name>tagbean</name>
-        <required>true</required>
+        <name>bean</name>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
@@ -452,7 +450,7 @@
         makes a checkboxlist
     </description>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>true</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -466,7 +464,7 @@
         makes a radiobuttonlist
     </description>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>true</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -481,7 +479,7 @@
         makes a hidden text field
     </description>
     <attribute>
-        <name>tagbean</name>
+        <name>bean</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
