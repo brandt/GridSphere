@@ -27,22 +27,22 @@ public interface PortletWindow {
         /**
          * The standard "one-of many" window state on a page.
          */
-        public static final PortletWindow.State NORMAL = new PortletWindow.State(PortletWindow.State.NORMAL_STATE);
+        public static final PortletWindow.State NORMAL = new PortletWindow.State(PortletWindow.State.NORMAL_STATE, "NORMAL");
 
         /**
          * The standard "one-of many" window state on a page.
          */
-        public static final PortletWindow.State MAXIMIZED = new PortletWindow.State(PortletWindow.State.MAXIMIZED_STATE);
+        public static final PortletWindow.State MAXIMIZED = new PortletWindow.State(PortletWindow.State.MAXIMIZED_STATE, "MAXIMIZED");
 
         /**
          * In this window state the portlet is displayed minimzed which means that only the portlet title is showns
          */
-        public static final PortletWindow.State MINIMIZED = new PortletWindow.State(PortletWindow.State.MINIMIZED_STATE);
+        public static final PortletWindow.State MINIMIZED = new PortletWindow.State(PortletWindow.State.MINIMIZED_STATE, "MINIMIZED");
 
         /**
          * Allows the portlet window to be resized
          */
-        public static final PortletWindow.State RESIZING = new PortletWindow.State(PortletWindow.State.RESIZING_STATE);
+        public static final PortletWindow.State RESIZING = new PortletWindow.State(PortletWindow.State.RESIZING_STATE, "RESIZING");
 
         /**
          * The ordering here is also used in the layout of icons
@@ -53,6 +53,9 @@ public interface PortletWindow {
         private static final int MAXIMIZED_STATE = 3;
 
         private int state = NORMAL_STATE;
+        private String stateString = "";
+
+        private static int numStates = 4;
 
         /**
          * Constructs an instance of State
@@ -65,8 +68,9 @@ public interface PortletWindow {
          *
          * @param state the state id
          */
-        private State(int state) {
+        private State(int state, String stateString) {
             this.state = state;
+            this.stateString = stateString;
         }
 
         /**
@@ -96,7 +100,9 @@ public interface PortletWindow {
             } else if ("RESIZING".equalsIgnoreCase(windowState)) {
                 return PortletWindow.State.RESIZING;
             } else {
-                throw new IllegalArgumentException("Unable to parse state: " + windowState);
+                PortletWindow.State newstate = new PortletWindow.State(numStates, windowState);
+                numStates++;
+                return newstate;
             }
         }
 
@@ -107,16 +113,7 @@ public interface PortletWindow {
          * @return the window state expressed as a <code>String</code>
          */
         public String toString() {
-            if (state == NORMAL_STATE) {
-                return "NORMAL";
-            } else if (state == MAXIMIZED_STATE) {
-                return "MAXIMIZED";
-            } else if (state == MINIMIZED_STATE) {
-                return "MINIMIZED";
-            } else if (state == RESIZING_STATE) {
-                return "RESIZING";
-            }
-            return "Unknown State!";
+            return stateString;
         }
 
         /**

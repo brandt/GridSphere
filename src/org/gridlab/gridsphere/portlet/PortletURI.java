@@ -39,12 +39,6 @@ public interface PortletURI {
     public void addParameter(String name, String value);
 
     /**
-     * Removes the given parameter from this URI.
-     * @param name parameter to be removed
-     */
-    public void removeParameter(String name);
-
-    /**
      * Adds the given action to this URI. The action is a portlet-defined
      * implementation of the portlet action interface. It can carry any
      * information. How the information is recovered should the next request

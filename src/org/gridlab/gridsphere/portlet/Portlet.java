@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portlet;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
 import javax.servlet.*;
@@ -91,20 +92,22 @@ public abstract class Portlet extends HttpServlet
         protected static final int VIEW_MODE = 3;
         protected static final int HELP_MODE = 4;
 
-        public static final Mode EDIT = new Mode(EDIT_MODE);
-        public static final Mode VIEW = new Mode(VIEW_MODE);
-        public static final Mode HELP = new Mode(HELP_MODE);
-        public static final Mode CONFIGURE = new Mode(CONFIGURE_MODE);
+        public static final Mode EDIT = new Mode(EDIT_MODE, "EDIT");
+        public static final Mode VIEW = new Mode(VIEW_MODE, "VIEW");
+        public static final Mode HELP = new Mode(HELP_MODE, "HELP");
+        public static final Mode CONFIGURE = new Mode(CONFIGURE_MODE, "CONFIGURE");
 
         private int mode = VIEW_MODE;
+        private String modeString = "VIEW";
 
         /**
          * Private constructor creates pre-defined Mode objects
          *
          * @param mode the portlet mode to create
          */
-        private Mode(int mode) {
+        private Mode(int mode, String modeString) {
             this.mode = mode;
+            this.modeString = modeString;
         }
 
         /**
@@ -143,17 +146,7 @@ public abstract class Portlet extends HttpServlet
          * @return the portlet mode as a <code>String</code>
          */
         public String toString() {
-            String tagstring = "Unknown Portlet Mode!";
-            if (mode == EDIT_MODE) {
-                tagstring = "EDIT";
-            } else if (mode == HELP_MODE) {
-                tagstring = "HELP";
-            } else if (mode == CONFIGURE_MODE) {
-                tagstring = "CONFIGURE";
-            } else if (mode == VIEW_MODE) {
-                tagstring = "VIEW";
-            }
-            return tagstring;
+            return modeString;
         }
 
         /**
@@ -388,7 +381,7 @@ public abstract class Portlet extends HttpServlet
         if (method != null) {
 
             if (method.equals(SportletProperties.INIT)) {
-                ApplicationPortletConfig app = (ApplicationPortletConfig) request.getAttribute(SportletProperties.PORTLET_APPLICATION);
+                ApplicationSportletConfig app = (ApplicationSportletConfig) request.getAttribute(SportletProperties.PORTLET_APPLICATION);
                 if (app != null) {
                 this.portletConfig = new SportletConfig(getServletConfig(), app);
                     init(this.portletConfig);

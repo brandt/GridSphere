@@ -57,6 +57,11 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
     private static Hashtable serviceContexts = new Hashtable();
 
 
+    // Hash of all user services
+    private static Hashtable classLoaders = new Hashtable();
+
+    private static Hashtable webappServices = new Hashtable();
+
     /**
      * Private constructor. Use getDefault() instead.
      */
@@ -116,6 +121,39 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
         }
+    }
+
+    /**
+     * Umarshalls services from the descriptor file found in servicesPath
+     * using the mapping file specified
+     *
+     * @param servicesPath the path to the portlet services descriptor file
+     * @param mappingPath the path to the portlet services mapping file
+     */
+    public synchronized void addServices(String webappName, ServletContext ctx, String servicesPath, String mappingPath, ClassLoader loader) {
+        SportletServiceDescriptor descriptor = null;
+        try {
+            descriptor = new SportletServiceDescriptor(servicesPath, mappingPath);
+        } catch (IOException e) {
+            log.error("IO error unmarshalling " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
+            return;
+        } catch (PersistenceManagerException e) {
+            log.error("Unable to unmarshall " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
+            return;
+        }
+        SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
+        List services = serviceCollection.getPortletServicesList();
+        List webapplist = new ArrayList();
+        Iterator it = services.iterator();
+        while (it.hasNext()) {
+            SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
+            allServices.put(serviceDef.getServiceInterface(), serviceDef);
+            log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
+            serviceContexts.put(serviceDef.getServiceInterface(), ctx);
+            classLoaders.put(serviceDef.getServiceInterface(), loader);
+            webapplist.add(serviceDef.getServiceInterface());
+        }
+        webappServices.put(webappName, webapplist);
     }
 
     public static synchronized SportletServiceFactory getInstance() {
@@ -181,7 +219,12 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         PortletServiceConfig portletServiceConfig = new SportletServiceConfig(service, configProperties, ctx);
 
         try {
-            psp = (PortletServiceProvider) Class.forName(serviceImpl).newInstance();
+            ClassLoader loader = (ClassLoader)classLoaders.get(serviceName);
+            if (loader != null) {
+                psp = (PortletServiceProvider) Class.forName(serviceImpl, true, loader).newInstance();
+            } else {
+                psp = (PortletServiceProvider) Class.forName(serviceImpl).newInstance();
+            }
         }
         catch (InstantiationException e) {
             // InstantiationException - if this Class represents an abstract class, an interface, an array class, a primitive type, or void; or if the class has no nullary constructor; or if the instantiation fails for some other reason. 
@@ -194,7 +237,6 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl + " class or its nullary constructor is not accessible." , e);
         }
         catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
             log.error("Unable to create portlet service: " + serviceImpl, e);
             throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl + " Class not found.", e);
         }
@@ -364,35 +406,82 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             log.info("Shutting down service: " + serviceName + " impl: " + psp.getClass().getName());
             psp.destroy();
         }
+        initServices = null;
+        userServices = null;
+        serviceContexts = null;
+        classLoaders = null;
+        allServices = null;
+        webappServices = null;
+    }
+
+    /**
+     * Shuts down all portlet services managed by this factory
+     */
+    public void shutdownServices(String webappName) {
+        // Calls destroy() on all services we know about
+        List services = (List)webappServices.get(webappName);
+        if (services == null) return;
+        log.info("Shutting down  portlet services for webapp: " + webappName);
+        List remServices = new ArrayList();
+        Iterator it = services.iterator();
+        while (it.hasNext()) {
+            String iface = (String)it.next();
+            Enumeration keys = initServices.keys();
+            while (keys.hasMoreElements()) {
+                String serviceName = (String) keys.nextElement();
+                if (serviceName.equals(iface)) {
+                    PortletServiceProvider psp = (PortletServiceProvider) initServices.get(serviceName);
+                    if (psp != null) {
+                        log.info("Shutting down service: " + serviceName + " impl: " + psp.getClass().getName());
+                        psp.destroy();
+                        remServices.add(serviceName);
+                    }
+                }
+            }
+        }
+        it = remServices.iterator();
+        while (it.hasNext()) {
+            String serviceName = (String)it.next();
+            initServices.remove(serviceName);
+            allServices.remove(serviceName);
+            classLoaders.remove(serviceName);
+            serviceContexts.remove(serviceName);
+            userServices.remove(serviceName);
+        }
+        webappServices.remove(webappName);
     }
 
     public void logStatistics() {
         Enumeration enum = null;
-        log.debug("printing inited services");
-        enum = initServices.keys();
-        String ser = "services:\n";
-        while (enum.hasMoreElements()) {
-            String s = (String)enum.nextElement();
-            ser += s + "\n";
-        }
-        log.debug(ser);
-        Set s = userServices.keySet();
-        Iterator users = s.iterator();
-        log.debug("printing user services ");
-        while (users.hasNext()) {
-            String uid = (String)users.next();
-            log.debug("user: " + uid);
-            enum = userServices.keys();
+        if (initServices != null) {
+            log.debug("printing inited services");
+            enum = initServices.keys();
+            String ser = "services:\n";
             while (enum.hasMoreElements()) {
-                String u = (String)enum.nextElement();
-                Map l = (Map)userServices.get(u);
-                Iterator it = l.keySet().iterator();
-                ser = "services:\n";
-                while (it.hasNext()) {
-                    String j = (String)it.next();
-                    ser += j + "\n";
+                String s = (String)enum.nextElement();
+                ser += s + "\n";
+            }
+            log.debug(ser);
+        }
+        if (userServices != null) {
+            Set s = userServices.keySet();
+            Iterator users = s.iterator();
+            log.debug("printing user services ");
+            while (users.hasNext()) {
+                String uid = (String)users.next();
+                log.debug("user: " + uid);
+                enum = userServices.keys();
+                while (enum.hasMoreElements()) {
+                    String u = (String)enum.nextElement();
+                    Map l = (Map)userServices.get(u);
+                    Iterator it = l.keySet().iterator();
+                    String ser = "services:\n";
+                    while (it.hasNext()) {
+                        String j = (String)it.next();
+                        ser += j + "\n";
+                    }
+                    log.debug(ser);
                 }
-                log.debug(ser);
             }
         }
     }
