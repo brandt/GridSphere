@@ -17,7 +17,7 @@
         </ui:tablerow>
     </ui:frame>
 
-    <ui:table sortable="true" zebra="true" maxrows="2">
+    <ui:table sortable="true" zebra="true" maxrows="20">
                 <ui:tablerow header="true">
                     <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
                     <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
