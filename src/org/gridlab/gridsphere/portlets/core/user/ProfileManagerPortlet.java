@@ -230,7 +230,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             TextBean groupTB = new TextBean();
             groupTB.setValue(g.getName());
             if (!g.isPublic()) {
-                groupsTC.setDisabled(true);
+                cb.setDisabled(true);
             }
             groupsTC.addBean(cb);
             groupsTC.addBean(groupTB);
