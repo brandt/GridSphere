@@ -7,36 +7,19 @@ package org.gridlab.gridsphere.provider.portlet.jsr;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.GuestUser;
-import org.gridlab.gridsphere.portlet.jsrimpl.PortletConfigImpl;
-import org.gridlab.gridsphere.portlet.jsrimpl.PortletPreferencesManager;
-import org.gridlab.gridsphere.portlet.jsrimpl.ActionResponseImpl;
-import org.gridlab.gridsphere.portlet.jsrimpl.ActionRequestImpl;
-import org.gridlab.gridsphere.portlet.jsrimpl.RenderRequestImpl;
-import org.gridlab.gridsphere.portlet.jsrimpl.RenderResponseImpl;
-import org.gridlab.gridsphere.portlet.jsrimpl.PortletContextImpl;
+import org.gridlab.gridsphere.portlet.jsrimpl.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRPortletWebApplicationImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortalContext;
-import javax.portlet.Portlet;
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletContext;
-import javax.portlet.PortletException;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.PortletMode;
-import javax.portlet.PortletPreferences;
-import javax.portlet.GenericPortlet;
-import javax.portlet.PortletRequest;
+import javax.portlet.*;
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -56,12 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.PrintWriter;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.HashMap;
+import java.util.*;
 
 public class PortletServlet  extends HttpServlet
         implements Servlet, ServletConfig, Serializable, ServletContextListener,
@@ -143,7 +121,11 @@ public class PortletServlet  extends HttpServlet
         String method = (String) request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
 
         if (method.equals(SportletProperties.INIT)) {
-            Iterator it = portlets.keySet().iterator();
+
+
+                Set set = portlets.keySet();
+            synchronized(set) {
+                Iterator it = set.iterator();
             while (it.hasNext()) {
                 String portletClass = (String)it.next();
                 Portlet portlet = (Portlet)portlets.get(portletClass);
@@ -160,18 +142,21 @@ public class PortletServlet  extends HttpServlet
                     portlets.remove(portletClass);
                 }
             }
+            }
             manager.addWebApp(portletWebApp);
             return;
         } else if (method.equals(SportletProperties.INIT_CONCRETE)) {
             // do nothing for concrete portlets
             return;
         } else if (method.equals(SportletProperties.DESTROY)) {
+            synchronized(portlets) {
             Iterator it = portlets.keySet().iterator();
             while (it.hasNext()) {
                 String portletClass = (String)it.next();
                 Portlet portlet = (Portlet)portlets.get(portletClass);
                 log.debug("in PortletServlet: service(): Destroying portlet " + portletClass);
                 portlet.destroy();
+            }
             }
             manager.removePortletWebApplication(portletWebApp);
             return;
@@ -196,6 +181,8 @@ public class PortletServlet  extends HttpServlet
 
         JSRApplicationPortletImpl appPortlet =
                 (JSRApplicationPortletImpl)registry.getApplicationPortlet(portletClassName);
+
+        Supports[] supports = appPortlet.getSupports();
 
         // perform user conversion from gridsphere to JSR model
         User user = (User)request.getAttribute(SportletProperties.PORTLET_USER);
@@ -237,27 +224,22 @@ public class PortletServlet  extends HttpServlet
             if (action != null) {
                 log.debug("in PortletServlet: action is not NULL");
                 if (action.equals(SportletProperties.DO_TITLE)) {
-                    RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext);
+                    RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
                     RenderResponse renderResponse = new RenderResponseImpl(request, response);
                     renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
                     renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
                     log.debug("in PortletServlet: do title " + portletClassName);
                     doTitle(portlet, renderRequest, renderResponse);
                 } else {
-                    ActionRequest actionRequest = new ActionRequestImpl(request, portalContext, portletContext);
+                    ActionRequest actionRequest = new ActionRequestImpl(request, portalContext, portletContext, supports);
                     ActionResponse actionResponse = new ActionResponseImpl(request, response);
                     //setGroupAndRole(actionRequest, actionResponse);
                     log.debug("in PortletServlet: action handling portlet " + portletClassName);
                     doAction(portlet, actionRequest, actionResponse);
-
-                    if (actionResponse instanceof ActionResponseImpl) {
-                        System.err.println("placing render params in attribute: " + "renderParams" + "_" + portletClassName);
-                        Map params = ((ActionResponseImpl)actionResponse).getRenderParameters();
-                        actionRequest.setAttribute("renderParams" + "_" + portletClassName, params);
-                    }
+                    redirect(request, response, actionResponse);
                 }
             } else {
-                RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext);
+                RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
                 RenderResponse renderResponse = new RenderResponseImpl(request, response);
                 renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
                 renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
@@ -355,6 +337,62 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         //portletManager.destroyPortletWebApplication(portletWebApp);
     }
 
+
+    protected void redirect(HttpServletRequest servletRequest,
+                            HttpServletResponse servletResponse,
+                            ActionResponse actionResponse)
+            throws IOException {
+        String location = null;
+        if (actionResponse instanceof ActionResponseImpl) {
+            ActionResponseImpl aResponse = (ActionResponseImpl)actionResponse;
+            location = aResponse.getRedirectLocation();
+
+            if (location == null) {
+
+                PortletURL redirectUrl = new PortletURLImpl(servletRequest, servletResponse);
+                //TODO: don't send changes in case of exception -> PORTLET:SPEC:17
+
+                // get the changings of this portlet entity that might be set during action handling
+                // change portlet mode
+
+                if (aResponse.getChangedPortletMode() != null)
+                {
+                    try {
+                        redirectUrl.setPortletMode(aResponse.getChangedPortletMode());
+                    } catch (PortletModeException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // change window state
+                if (aResponse.getChangedWindowState() != null)
+                {
+                    try {
+                        redirectUrl.setWindowState(aResponse.getChangedWindowState());
+                    } catch (WindowStateException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // get render parameters
+                Map renderParameter = aResponse.getRenderParameters();
+
+                redirectUrl.setParameters(renderParameter);
+
+                location = servletResponse.encodeRedirectURL(redirectUrl.toString());
+            }
+
+            javax.servlet.http.HttpServletResponse redirectResponse = servletResponse;
+            while (redirectResponse instanceof javax.servlet.http.HttpServletResponseWrapper)
+            {
+                redirectResponse = (javax.servlet.http.HttpServletResponse)
+                        ((javax.servlet.http.HttpServletResponseWrapper)redirectResponse).getResponse();
+            }
+            System.err.println("redirecting to location= "+ location);
+            redirectResponse.sendRedirect(location);
+        }
+
+    }
 
     /**
      * Record the fact that a servlet context attribute was added.
