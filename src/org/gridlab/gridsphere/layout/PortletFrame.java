@@ -171,8 +171,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             }
         }
         // in case portlet mode got reset
-        titleBar.setPortletMode(req.getMode());
-
+        if (titleBar != null) titleBar.setPortletMode(req.getMode());
     }
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
