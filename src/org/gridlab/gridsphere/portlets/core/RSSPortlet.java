@@ -50,7 +50,7 @@ public class RSSPortlet extends AbstractPortlet {
                     System.out.println("ERROR: "+e);
                 }
 
-                req.getSession().setAttribute("rssfeed", (String) (feeds.getSelectedValues().get(0)));
+               // req.getSession().setAttribute("rssfeed", (String) (feeds.getSelectedValues().get(0)));
             }
             if (button.equals("desc")) {
                 req.setMode(Portlet.Mode.EDIT);
