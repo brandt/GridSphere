@@ -12,11 +12,14 @@ import java.io.InputStream;
 /**
  * The <code>SecureDirectoryService</code> manages a temporary secure directory used for the storage of
  * user's persistent data. Resources are accessible by browser using URLs only when user is logged in.
- * Every user works using separate directory based on his userID.
+ * Every user works using separate directory based on his user ID.
  *
  * Parameter "appName" is root of filesystem f.e. "Commander" for CommanderPortlet.
  * More then one portlet can share one root. Number of roots is unlimited.
  * One portlet can use unlimited amount of roots.
+ *
+ * Contributed by Tomasz Kucynski  tomasz.kuczynski@icis.pcz.pl
+ *
  */
 
 public interface SecureDirectoryService extends PortletService {
