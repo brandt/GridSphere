@@ -316,10 +316,7 @@ public class PortletPageFactory implements PortletSessionListener {
             }
 
             // sorting tabs
-
-
             Collections.sort(pane.getPortletTabs(), new PortletTab());
-
 
             // first use default theme
             setPageTheme(newPage, req);

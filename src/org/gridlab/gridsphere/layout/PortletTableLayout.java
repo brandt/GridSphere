@@ -140,11 +140,9 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
     	String markupName=event.getPortletRequest().getClient().getMarkupName();
-    	if (markupName.equals("html")){
+    	if (markupName.equals("html")) {
     		doRenderHTML(event);
-    	}
-    	else
-    	{
+    	} else {
     		doRenderWML(event);
     	}
     }
