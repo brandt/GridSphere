@@ -45,6 +45,10 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
         }
     }
 
+    public boolean hasAction() {
+        return (action == null) ? false : true;
+    }
+
     /**
      * Returns the portlet title bar event action
      *

@@ -558,7 +558,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         User user = req.getUser();
         if (!(user instanceof GuestUser)) {
-
+            if (titleBarEvent.hasAction()) {
             if (titleBarEvent.getAction().getID() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY.getID()) {
                 PortletResponse res = event.getPortletResponse();
                 windowState = titleBarEvent.getState();
@@ -583,6 +583,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 previousMode = portletMode;
                 portletMode = titleBarEvent.getMode();
 
+            }
             }
         }
 

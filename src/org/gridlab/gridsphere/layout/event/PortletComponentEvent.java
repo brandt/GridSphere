@@ -19,6 +19,13 @@ public interface PortletComponentEvent {
     public ComponentAction getAction();
 
     /**
+     * Returns true if this event actually triggered an action
+     *
+     * @return true if this event actually triggered an action
+     */
+    public boolean hasAction();
+
+    /**
      * Returns the PortletComponent that was selected
      *
      * @return the PortletComponent that was selcted
