@@ -99,6 +99,7 @@ Copyright:
         <!-- Make build directories -->
         <mkdir dir="src"/>
         <mkdir dir="lib"/>
+	<mkdir dir="lib/ext"/>
         <mkdir dir="${project.build}"/>
         <mkdir dir="${build.home}"/>
         <mkdir dir="${build.classes}"/>

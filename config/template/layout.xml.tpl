@@ -1,13 +1,11 @@
 <portlet-tabbed-pane>
-    <portlet-tab>
-        <title>@PROJECT_TITLE@</title>
+    <portlet-tab title="@PROJECT_TITLE@">
         <portlet-tabbed-pane style="sub-menu">
-            <portlet-tab>
-                <title>Hello World!</title>
+            <portlet-tab title="Hello World!">
                 <table-layout>
                     <row-layout>
                         <column-layout>
-                            <portlet-frame>
+                            <portlet-frame label="hello">
                                 <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
