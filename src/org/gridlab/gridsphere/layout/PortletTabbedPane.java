@@ -113,7 +113,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      * @return the portlet tab
      */
     public PortletTab getPortletTabAt(int index) {
-        if (index > tabs.size()) return null;
+        if (index >= tabs.size()) return null;
         return (PortletTab) tabs.get(index);
     }
 
@@ -215,7 +215,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
         if (tab == null) {
             tab = this.getPortletTabAt(0);
-            this.setSelectedPortletTab(tab);
+            if (tab != null) this.setSelectedPortletTab(tab);
         }
 
         return list;
