@@ -9,7 +9,7 @@
     $Id$
 -->
 
-<page-layout theme="default" title="GridSphere Error Page">
+<page-layout title="GridSphere Error Page">
 
 <portlet-header>
     <portlet-content include="/html/pagehead.html"/>

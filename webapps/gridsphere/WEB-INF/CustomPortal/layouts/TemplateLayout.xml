@@ -9,7 +9,7 @@ This descriptor defines the template user's portal layout configuration
 $Id$
 -->
 
-<page-layout theme="default" title="GridSphere Portal" keywords="gridsphere">
+<page-layout title="GridSphere Portal" keywords="gridsphere">
 
     <portlet-header>
         <table-layout style="header">
