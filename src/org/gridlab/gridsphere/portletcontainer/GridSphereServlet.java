@@ -14,7 +14,7 @@ import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
-import org.gridlab.gridsphere.services.core.security.password.AuthenticationException;
+import org.gridlab.gridsphere.services.core.security.AuthenticationException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContextEvent;

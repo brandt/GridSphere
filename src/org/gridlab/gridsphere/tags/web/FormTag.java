@@ -11,10 +11,10 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 public class FormTag extends BodyTagSupport {
 
-    private boolean isMultipart = false;
-    private String action = new String();
-    private String method = "POST";
-    private PortletURI someURI;
+    protected boolean isMultipart = false;
+    protected String action = new String();
+    protected String method = "POST";
+    protected PortletURI someURI;
 
     public void setAction(String action) {
         this.action = action;

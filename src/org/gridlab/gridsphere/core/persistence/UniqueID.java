@@ -16,6 +16,5 @@ public class UniqueID {
      */
     public static synchronized String get() {
        return Long.toString(current++);
-
     }
 }

@@ -8,7 +8,7 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.services.user.*;
+import org.gridlab.gridsphere.services.core.user.*;
 import org.gridlab.gridsphere.services.core.security.acl.*;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.AuthenticationModule;

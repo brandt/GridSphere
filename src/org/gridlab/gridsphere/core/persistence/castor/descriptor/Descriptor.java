@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.core.persistence.castor.descriptor;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
@@ -14,7 +15,7 @@ import java.io.IOException;
 
 public abstract class Descriptor {
 
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(Descriptor.class);
+    private static PortletLog log = SportletLog.getInstance(Descriptor.class);
 
     private String layoutPath, layoutMappingPath;
 

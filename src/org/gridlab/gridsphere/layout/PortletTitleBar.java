@@ -172,7 +172,6 @@ public class PortletTitleBar extends BasePortletComponent {
 
     public List init(List list) {
         list = super.init(list);
-        //COMPONENT_ID = list.size();
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);
@@ -226,8 +225,6 @@ public class PortletTitleBar extends BasePortletComponent {
             try {
                 stateLink = new PortletStateLink(winState);
                 // Create portlet link Href
-                //modeAction = new DefaultPortletAction(LayoutProperties.CHANGESTATE);
-                //sportletURI.addAction(modeAction);
                 portletURI.addParameter(GridSphereProperties.PORTLETWINDOW, winState);
                 stateLink.setHref(portletURI.toString());
                 stateLinks.add(stateLink);
@@ -270,11 +267,8 @@ public class PortletTitleBar extends BasePortletComponent {
         PortletModeLink modeLink;
         List portletLinks = new Vector();
         for (i = 0; i < portletModes.length; i++) {
-
             portletURI = res.createURI();
-
             portletURI.addParameter(GridSphereProperties.COMPONENT_ID, this.componentIDStr);
-
             portletURI.addParameter(GridSphereProperties.PORTLETID, portletClass);
             try {
                 modeLink = new PortletModeLink(portletModes[i]);

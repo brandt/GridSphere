@@ -93,4 +93,5 @@ public class PortletRole {
     public int hashCode() {
         return role;
     }
+
 }

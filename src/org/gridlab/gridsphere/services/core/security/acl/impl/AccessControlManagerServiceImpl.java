@@ -17,7 +17,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.core.mail.MailMessage;
-import org.gridlab.gridsphere.services.user.impl.GridSphereUserManager;
+import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.acl.InvalidGroupRequestException;

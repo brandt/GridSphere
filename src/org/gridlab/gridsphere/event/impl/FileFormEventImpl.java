@@ -53,10 +53,8 @@ public class FileFormEventImpl extends FormEventImpl implements FileFormEvent {
             while (iter.hasNext()) {
                 FileItem item = (FileItem) iter.next();
                 if (item.isFormField()) {
-
                     item.write(filePath + item.getName());
                     file = item.getStoreLocation();
-                    System.err.println("file is : " + file.getAbsolutePath());
                 }
             }
             haveFile = true;

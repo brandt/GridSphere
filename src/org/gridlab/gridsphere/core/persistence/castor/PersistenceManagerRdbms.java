@@ -42,7 +42,6 @@ public class PersistenceManagerRdbms {
     // @todo need to check settings for rollback !!
 
     private PersistenceManagerRdbms() {
-        super();
         log.info("Entering PM");
         String DatabaseName = GridSphereConfig.getProperty(GridSphereConfigProperties.PERSISTENCE_DBNAME);
         String ConnectionURL = GridSphereConfig.getProperty(GridSphereConfigProperties.PERSISTENCE_CONFIGFILE);
