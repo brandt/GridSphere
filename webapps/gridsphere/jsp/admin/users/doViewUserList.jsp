@@ -5,6 +5,7 @@
 <portletAPI:init/>
 <p>
 
+<ui:messagebox beanId="msg"/>
 
 <% List userList = (List)request.getAttribute("userList"); %>
 <h3><ui:text key="USER_SHOW_USERS" style="nostyle"/></h3>

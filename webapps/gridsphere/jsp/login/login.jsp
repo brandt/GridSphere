@@ -30,6 +30,8 @@
             </ui:tablerow>
     </ui:table>
 
+    <input type="checkbox" name="remlogin" value="yes"/><ui:text key="LOGIN_REMEMBER_ME"/>
+
     <ui:table>
             <ui:tablerow>
                 <ui:tablecell width="100">
@@ -38,6 +40,8 @@
                 <ui:tablecell/>
             </ui:tablerow>
     </ui:table>
+
+    <p>
 
     <% if (request.getAttribute("canUserCreateAcct") != null)  { %>
     <ui:table>
