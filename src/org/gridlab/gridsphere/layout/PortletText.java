@@ -12,21 +12,46 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 
+/**
+ * PortletText is used to diaplay the contents of an included
+ * text file located in the web application.
+ */
 public class PortletText extends BasePortletComponent {
 
     private String text;
 
+    /**
+     *  Constructs an instance of PortletText
+     */
     public PortletText() {
     }
 
-    public void setInclude(String text) {
-        this.text = text;
+    /**
+     * Sets the text file to be included specified as a path relative to the
+     * webapp root directory e.g. /html/newtext.txt
+     *
+     * @param textFilePath the relative path to load a text file
+     */
+    public void setInclude(String textFilePath) {
+        this.text = textFilePath;
     }
 
+    /**
+     * Returns the text file path of the included file
+     *
+     * @param textFilePath the relative path of the text file
+     */
     public String getInclude() {
         return text;
     }
 
+    /**
+     * Renders the portlet text component
+     *
+     * @param event a gridsphere event
+     * @throws PortletLayoutException if a layout error occurs during rendering
+     * @throws IOException if an I/O error occurs during rendering
+     */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
         PortletContext ctx = event.getPortletContext();

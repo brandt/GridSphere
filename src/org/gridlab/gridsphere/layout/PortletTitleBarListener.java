@@ -4,17 +4,16 @@
  */
 package org.gridlab.gridsphere.layout;
 
-
 /**
- * The WindowListener interface is an addition to the Portlet interface. If an object wishes to receive
- * events from a portlet window, this interface has to be implemented additionally to the Portlet interface.
+ * The PortletTitleBarListener is an interface for an observer to register to
+ * receive notifications of changes to a portlet title bar component.
  */
 public interface PortletTitleBarListener {
 
     /**
-     * Notifies this listener that a portlet window has been maximized.
+     * Gives notification that a portlet title bar event has occured
      *
-     * @param event the window event
+     * @param event the portlet title bar event
      */
     public void handleTitleBarEvent(PortletTitleBarEvent event) throws PortletLayoutException;
 

@@ -15,26 +15,40 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The PortletTabbedPane represents the visual portlet tabbed pane interface
+ * and is a container for {@link PortletTab}.
+ */
 public class PortletTabbedPane extends BasePortletComponent implements PortletTabListener {
 
     private List tabs = new ArrayList();
     private int selectedIndex = 0;
     private String style = "menu";
 
+    /**
+     * Constructs an instance of PortletTabbedPane
+     */
     public PortletTabbedPane() {
     }
 
+    /**
+     * Sets the tabbed pane style. Currently supported styles are "menu"
+     * and "sub-menu"
+     *
+     * @param style the tabbed pane style
+     */
     public void setStyle(String style) {
         this.style = style;
     }
 
+    /**
+     * Returns the tabbed pane style. Currently supported styles are "menu"
+     * and "sub-menu"
+     *
+     * @return the tabbed pane style
+     */
     public String getStyle() {
         return style;
-    }
-
-    public void addTab(String title, PortletComponent comp) {
-        PortletTab tab = new PortletTab(title, comp);
-        tabs.add(tab);
     }
 
     public void setSelectedIndex(int index) {
@@ -81,30 +95,58 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         tabs.add(index, tab);
     }
 
+    /**
+     * Adds a new portlet tab to the tabbed pane
+     *
+     * @param title a tab title
+     * @param tab a portlet tab to add
+     */
+    public void addTab(String title, PortletTab tab) {
+        tabs.add(tab);
+    }
+
+    /**
+     * Removes a portlet tab from the tabbed pane
+     *
+     * @param tab the portlet tab to remove
+     */
     public void removeTab(PortletTab tab) {
         if (tabs.contains(tab)) tabs.remove(tab);
     }
 
+    /**
+     * Removes a portlet tab from the tabbed pane at the specified index
+     *
+     * @param index the index of the tab to remove
+     */
     public void removeTabAt(int index) {
         tabs.remove(index);
     }
 
+    /**
+     * Removes all portlet tabs from the tabbed pane
+     */
     public void removeAll() {
         for (int i = 0; i < tabs.size(); i++) {
             tabs.remove(i);
         }
     }
 
-    public void setTitleAt(int index, String title) {
-        PortletTab tab = (PortletTab) tabs.get(index);
-        tab.setTitle(title);
-    }
-
+    /**
+     * Sets the portlet tabs in the tabbed pane
+     *
+     * @param tabs an ArrayList containing the portlet tabs to add
+     */
     public void setPortletTabs(ArrayList tabs) {
         this.tabs = tabs;
 
     }
 
+    /**
+     * Sets the selected portlet tab in this tabbed pane
+     *
+     * @param tab the selected portlet tab
+     */
     public void setSelectedPortletTab(PortletTab tab) {
         PortletTab portletTab;
 
@@ -119,10 +161,24 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         }
     }
 
+    /**
+     * Returns a list containing the portlet tabs
+     *
+     * @return a list containing the portlet tabs
+     */
     public List getPortletTabs() {
         return tabs;
     }
 
+    /**
+     * Initializes the portlet tabbed pane component. Since the components are isolated
+     * after Castor unmarshalls from XML, the ordering is determined by a
+     * passed in List containing the previous portlet components in the tree.
+     *
+     * @param list a list of component identifiers
+     * @return a list of updated component identifiers
+     * @see ComponentIdentifier
+     */
     public List init(List list) {
         if (selectedIndex < 0) selectedIndex = 0;
         PortletTab tab = null;
@@ -135,6 +191,11 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         return list;
     }
 
+    /**
+     * Gives notification that a portlet tab event has occured
+     *
+     * @param event the portlet tab event
+     */
     public void handlePortletTabEvent(PortletTabEvent event) {
         if (event.getAction() == PortletTabEvent.Action.TAB_SELECTED) {
             PortletTab selectedTab = event.getPortletTab();
@@ -142,20 +203,32 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         }
     }
 
-    public String[] makeTabLinks(GridSphereEvent event) throws IOException {
+    /**
+     * Creates the portlet tab link URIs that are used to send events to
+     * the portlet tabs.
+     *
+     * @param event the gridspher event
+     */
+    protected String[] createTabLinks(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
 
         // Make tab links
         String[] tabLinks = new String[tabs.size()];
         for (int i = 0; i < tabs.size(); i++) {
             PortletTab tab = (PortletTab) tabs.get(i);
-            tabLinks[i] = tab.makeTitleLink(event);
+            tabLinks[i] = tab.createTabTitleLink(event);
         }
-        req.setAttribute(LayoutProperties.TABLINKS, tabLinks);
+        //req.setAttribute(LayoutProperties.TABLINKS, tabLinks);
         return tabLinks;
     }
 
-    public void doRenderMenu(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
+    /**
+     * Performs the rendering of a top-level tabbed pane for the "menu" style
+     *
+     * @param event the gridsphere event
+     * @param links an array of URI links for the tabs
+     */
+    protected void doRenderMenu(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
 
@@ -186,7 +259,13 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
 
     }
 
-    public void doRenderSubMenu(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
+    /**
+     * Performs the rendering of a sub-level tabbed pane for the "sub-menu" style
+     *
+     * @param event the gridsphere event
+     * @param links an array of URI links for the tabs
+     */
+    protected void doRenderSubMenu(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
 
@@ -216,10 +295,17 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
             selectedTab.doRender(event);
     }
 
+    /**
+     * Renders the portlet frame component
+     *
+     * @param event a gridsphere event
+     * @throws PortletLayoutException if a layout error occurs during rendering
+     * @throws IOException if an I/O error occurs during rendering
+     */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
 
-        String[] links = makeTabLinks(event);
+        String[] links = createTabLinks(event);
         if (style.equals("sub-menu")) {
             doRenderSubMenu(event, links);
         } else {

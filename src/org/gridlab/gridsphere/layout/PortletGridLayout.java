@@ -12,32 +12,64 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class PortletGridLayout extends BasePortletLayout {
+/**
+ * The PortletGridLayout is a concrete implementation of the PortletFrameLayout
+ * that organizes portlets into a grid with a provided number of columns.
+ * Portlets are arranged in column-wise order starting from the left most column.
+ */
+public class PortletGridLayout extends PortletFrameLayout {
 
     private int numColumns;
     private int[] colSizes;
     private String columnString;
 
+    /**
+     * Constructs an instance of PortletGridLayout
+     */
     public PortletGridLayout() {
     }
 
+    /*
     public String getClassName() {
         return PortletGridLayout.class.getName();
     }
+     */
 
+    /**
+     * Sets the columns definition string. Normally specified in the layout.xml
+     * as a comma delimted list of numbers that must add to 100.
+     * <p>e.g. 40,30,30
+     *
+     * @param columnString the column definition string
+     */
     public void setColumns(String columnString) {
         this.columnString = columnString;
     }
 
+    /**
+     * Returns the columns definition string. Normally specified in the layout.xml
+     * as a comma delimted list of numbers that must add to 100.
+     * <p>e.g. 40,30,30
+     */
     public String getColumns() {
         return columnString;
     }
 
+    /**
+     * Initializes the portlet grid layout. Since the components are isolated
+     * after Castor unmarshalls from XML, the ordering is determined by a
+     * passed in List containing the previous portlet components in the tree.
+     *
+     * @param list a list of component identifiers
+     * @return a list of updated component identifiers
+     * @see ComponentIdentifier
+     */
     public List init(List list) {
         list = super.init(list);
         if (columnString != null) {
             StringTokenizer st = new StringTokenizer(columnString, ",");
             numColumns = st.countTokens();
+            if (numColumns < 1) numColumns = 1;
             colSizes = new int[numColumns];
             int i = 0;
             while (st.hasMoreTokens()) {
@@ -53,6 +85,13 @@ public class PortletGridLayout extends BasePortletLayout {
         return list;
     }
 
+    /**
+     * Renders the portlet grid layout component
+     *
+     * @param event a gridsphere event
+     * @throws PortletLayoutException if a layout error occurs during rendering
+     * @throws IOException if an I/O error occurs during rendering
+     */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
@@ -94,7 +133,7 @@ public class PortletGridLayout extends BasePortletLayout {
             for (int j = 1; j <= portletsPerColumns; j++) {
                 out.println("<tr><td>");
                 p = (PortletComponent) components.get(portletCount);
-                if (p.isVisible()) {
+                if (p.getVisible()) {
                     p.doRender(event);
                 }
                 out.println("</td></tr>");
@@ -112,7 +151,6 @@ public class PortletGridLayout extends BasePortletLayout {
         }
         out.println("</tr> <!-- end overall one row -->");
         out.println("</table> <!-- end overall gridlayout table -->");
-
     }
 
 }

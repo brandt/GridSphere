@@ -17,13 +17,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The portlet layout engine is responsible for managing user's layouts. It also manages
- * portlet web application default layout configurations that can be potentially added to a user layout
- * via the PortletLayout Service
+ * The portlet layout engine is a singleton that is responsible for managing
+ * user's layouts. It also manages portlet web application default layout
+ * configurations that can be potentially added to a user layout
+ * via the PortletLayout Service.
+ * <p>
+ * The portlet layout engine is a higher level manager of portlet containers
+ * that represent a users customized layout. The portlet layout engine is used
+ * by the {@see GridSphereServlet} and the Portlet Layout Service that will
+ * manage the customization of users' layouts. To be implemented...
+ * Expect the PortletLayoutEngine methods to change possibly....
  */
 public class PortletLayoutEngine {
 
-    private static PortletLog log = SportletLog.getInstance(PortletLayoutEngine.class);
+    protected static PortletLog log = SportletLog.getInstance(PortletLayoutEngine.class);
 
     private static PortletLayoutEngine instance = new PortletLayoutEngine();
 
@@ -44,11 +51,16 @@ public class PortletLayoutEngine {
     // Store application tabs in a hash
     private Map applicationTabs = new HashMap();
 
+    /**
+     * Constructs a concrete instance of the PortletLayoutEngine
+     */
     private PortletLayoutEngine() {
     }
 
     /**
+     * Returns the single instance of the PortletLayoutEngine
      *
+     * @return the PortletLayoutEngine instance
      */
     public static PortletLayoutEngine getInstance() {
         return instance;
@@ -67,6 +79,14 @@ public class PortletLayoutEngine {
         applicationTabs.remove(webAppName);
     }
 
+    /**
+     * Initializes the portlet layout engine by loading in the defined Guest
+     * user layout and new user layout templates specified in
+     * {@link  GridSphereConfigProperties}
+     *
+     * @throws IOException if an I/O error occurs during the template layout loading
+     * @throws DescriptorException if a descriptor parsing error occurs
+     */
     public void init() throws IOException, DescriptorException {
         userLayoutDir = GridSphereConfig.getProperty(GridSphereConfigProperties.USER_LAYOUT_DIR);
         if (userLayoutDir == null) {
@@ -76,7 +96,7 @@ public class PortletLayoutEngine {
         if (!layDir.exists()) {
             layDir.mkdir();
         }
-        String guestLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
+        String guestLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT_XML);
         guestContainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutPath, layoutMappingPath);
         guestContainer.init(new ArrayList());
 
@@ -92,7 +112,7 @@ public class PortletLayoutEngine {
         }
     }
 
-    public PortletContainer getPortletContainer(GridSphereEvent event) throws PortletLayoutException {
+    protected PortletContainer getPortletContainer(GridSphereEvent event) throws PortletLayoutException {
         // if user is guest then use guest template
         PortletContainer pc = null;
 
@@ -120,11 +140,22 @@ public class PortletLayoutEngine {
         return pc;
     }
 
+    /**
+     * Returns a portlet container for the supplied user
+     *
+     * @param user the User
+     */
     public PortletContainer getPortletContainer(User user) {
         if (user instanceof GuestUser) return guestContainer;
         return (PortletContainer) userLayouts.get(user);
     }
 
+    /**
+     * Services a portlet container instance by rendering its presentation
+     *
+     * @param evemt the gridsphere event
+     * @throws IOException if an I/O error occcurs during processing
+     */
     public void service(GridSphereEvent event) throws IOException {
         log.debug("in service()");
         boolean doLayoutAction = false;
@@ -152,18 +183,45 @@ public class PortletLayoutEngine {
 
     }
 
+    /**
+     * Invoked by the GridSphereServlet to perform portlet login of a users layout
+     *
+     * @param event the gridsphere event
+     * @see {@link PortletContainer#loginPortlets}
+     */
     public void loginPortlets(GridSphereEvent event) {
-
+        log.debug("in loginPortlets()");
+        try {
+            PortletContainer pc = getPortletContainer(event);
+        } catch (PortletException e) {
+            log.error("Unable to login portlets", e);
+        }
     }
 
+    /**
+     * Invoked by the GridSphereServlet to perform portlet logout of a users layout
+     * Currently does nothing
+     *
+     * @param event the gridsphere event
+     * @see {@link PortletContainer#logoutPortlets}
+     */
     public void logoutPortlets(GridSphereEvent event) {
-
+        log.debug("in logoutPortlets()");
+        try {
+            PortletContainer pc = getPortletContainer(event);
+            pc.logoutPortlets(event);
+        } catch (PortletException e) {
+            log.error("Unable to logout portlets", e);
+        }
     }
 
-    public PortletContainer getUserLayout(User user) {
-        return (PortletContainer) userLayouts.get(user);
-    }
-
+    /**
+     * Performs an action on the portlet container referenced by the
+     * gridsphere event
+     *
+     * @param event a gridsphere event
+     * @throws IOException if an I/O error occurs during rendering
+     */
     public void actionPerformed(GridSphereEvent event) throws IOException {
         log.debug("in service()");
         PortletContainer pc = null;

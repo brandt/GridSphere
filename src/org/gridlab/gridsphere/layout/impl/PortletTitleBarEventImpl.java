@@ -1,10 +1,6 @@
 /*
- * Created by IntelliJ IDEA.
- * User: novotny
- * Date: Dec 10, 2002
- * Time: 2:17:14 AM
- * To change template for new interface use
- * Code Style | Class Templates options (Tools | IDE Options).
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
  */
 package org.gridlab.gridsphere.layout.impl;
 
@@ -12,10 +8,13 @@ import org.gridlab.gridsphere.layout.PortletTitleBarEvent;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletWindow;
-import org.gridlab.gridsphere.portlet.impl.SportletWindow;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
+/**
+ * A PortletTitleBarEvent is created by a PortletTitleBar when a title
+ * bar event has been triggered.
+ */
 public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
 
     private PortletTitleBarEvent.Action action;
@@ -24,6 +23,13 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
     private PortletWindow.State state;
     private PortletRequest req;
 
+    /**
+     * Constructs an instance of a PortletTitleBarEventImpl from a general
+     * portal event and the portlet title bar component id
+     *
+     * @param event the GridSphereEvent
+     * @param id the portlet title bar component id
+     */
     public PortletTitleBarEventImpl(GridSphereEvent event, int id) {
         this.req = event.getPortletRequest();
         this.id = id;
@@ -36,16 +42,26 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
         }
     }
 
+    /**
+     * Returns the portlet title bar event action
+     *
+     * @return the portlet title bar event action
+     */
     public PortletTitleBarEvent.Action getAction() {
         return action;
     }
 
+    /**
+     * Returns the portlet title bar mode
+     *
+     * @return mode the portlet title bar mode
+     */
     public Portlet.Mode getMode() {
         Portlet.Mode mode = null;
         String pMode = req.getParameter(GridSphereProperties.PORTLETMODE);
         if (pMode != null) {
             try {
-                mode = Portlet.Mode.getInstance(pMode);
+                mode = Portlet.Mode.toMode(pMode);
             } catch (Exception e) {
             }
             return mode;
@@ -53,12 +69,17 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
         return null;
     }
 
+    /**
+     * Returns the portlet title bar window state
+     *
+     * @return the portlet title bar window state
+     */
     public PortletWindow.State getState() {
         PortletWindow.State state = null;
         String s = req.getParameter(GridSphereProperties.PORTLETWINDOW);
         if (s != null) {
             try {
-                state = SportletWindow.State.toPortletWindowState(s);
+                state = PortletWindow.State.toState(s);
             } catch (Exception e) {
             }
             return state;
@@ -66,6 +87,11 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
         return null;
     }
 
+    /**
+     * Returns the portlet title bar component id
+     *
+     * @return the portlet title bar component id
+     */
     public int getID() {
         return id;
     }

@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.layout.impl.PortletFrameEventImpl;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletWindow;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
 
@@ -16,6 +15,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * PortletFrame provides the visual representation of a portlet. A portlet frame
+ * contains a portlet title bar unless visible is set to false.
+ */
 public class PortletFrame extends BasePortletComponent implements PortletTitleBarListener {
 
     // renderPortlet is true in doView and false on minimized
@@ -23,44 +26,105 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
     private String componentIDStr = null;
 
-    private PortletWindow portletWindow = null;
     private String portletClass = null;
     private PortletTitleBar titleBar = null;
     private List listeners = new ArrayList();
     private PortletErrorMessage error = null;
     private boolean transparent = false;
+    private String innerPadding = "";
+    private String outerPadding = "";
+
     private PortletDataManager dataManager = SportletDataManager.getInstance();
 
+    /**
+     * Constructs an instance of PortletFrame
+     */
     public PortletFrame() {
     }
 
+    /**
+     * Sets the portlet class contained by this portlet frame
+     *
+     * @param portletClass the fully qualified portlet classname
+     */
     public void setPortletClass(String portletClass) {
         this.portletClass = portletClass;
     }
 
+    /**
+     * Returns the portlet class contained by this portlet frame
+     *
+     * @return the fully qualified portlet classname
+     */
     public String getPortletClass() {
         return portletClass;
     }
 
+    /**
+     * Sets the inner padding of the portlet frame
+     *
+     * @param innerPadding the inner padding
+     */
+    public void setInnerPadding(String innerPadding) {
+        this.innerPadding = innerPadding;
+    }
+
+    /**
+     * Returns the inner padding of the portlet frame
+     *
+     * @return the inner padding
+     */
+    public String getInnerPadding() {
+        return innerPadding;
+    }
+
+    /**
+     * Sets the outer padding of the portlet frame
+     *
+     * @param outerPadding the outer padding
+     */
+    public void setOuterPadding(String outerPadding) {
+        this.outerPadding = outerPadding;
+    }
+
+    /**
+     * Returns the outer padding of the portlet frame
+     *
+     * @return the outer padding
+     */
+    public String getOuterPadding() {
+        return outerPadding;
+    }
+
+    /**
+     * If set to true the ortlet is rendered transparently without a
+     * defining border and title bar. This is used for example for the LogoutPortlet
+     *
+     * @param transparent if set to true, portlet frame is displayed transparently, false otherwise
+     */
     public void setTransparent(boolean transparent) {
         this.transparent = transparent;
     }
 
+    /**
+     * If set to true the ortlet is rendered transparently without a
+     * defining border and title bar. This is used for example for the LogoutPortlet
+     *
+     * @return true if the portlet frame is displayed transparently, false otherwise
+     */
     public boolean getTransparent() {
         return this.transparent;
     }
 
-    public void setWindowState(String windowState) {
-        try {
-            portletWindow = new SportletWindow(windowState);
-        } catch (Exception e) {
-        }
-    }
-
-    public String getWindowState() {
-        return portletWindow.toString();
-    }
-
+    /**
+     * Initializes the portlet frame component. Since the components are isolated
+     * after Castor unmarshalls from XML, the ordering is determined by a
+     * passed in List containing the previous portlet components in the tree.
+     *
+     * @param list a list of component identifiers
+     * @return a list of updated component identifiers
+     * @see ComponentIdentifier
+     */
     public List init(List list) {
         list = super.init(list);
         ComponentIdentifier compId = new ComponentIdentifier();
@@ -69,6 +133,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         compId.setComponentID(list.size());
         compId.setClassName(this.getClass().getName());
         list.add(compId);
+        // if the portlet frame is transparent then it doesn't get a title bar
         if (transparent == false) titleBar = new PortletTitleBar();
         if (titleBar != null) {
             titleBar.setPortletClass(portletClass);
@@ -78,10 +143,21 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         return list;
     }
 
+    /**
+     * Adds a portlet frame listener to be notified of {@link PortletFrameEvent} events
+     *
+     * @param listener a portlet frame listener
+     */
     public void addFrameListener(PortletFrameListener listener) {
         listeners.add(listener);
     }
 
+    /**
+     * Fires a frame event notification
+     *
+     * @param event a portlet frame event
+     * @throws PortletLayoutException if a layout error occurs
+     */
     protected void fireFrameEvent(PortletFrameEvent event) throws PortletLayoutException {
         Iterator it = listeners.iterator();
         PortletFrameListener l;
@@ -92,13 +168,12 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     }
 
     /**
-     * Notifies this listener that a portlet window has been maximized.
+     * Notifies this listener that a portlet title barw event has occured
      *
-     * @param event the window event
+     * @param event the portolet title bar event
+     * @throws PortletLayoutException if a portlet layout exception occurs during processing
      */
     public void handleTitleBarEvent(PortletTitleBarEvent event) throws PortletLayoutException {
-
-
         if (event.getAction() == PortletTitleBarEvent.Action.WINDOW_MODIFY) {
             PortletWindow.State state = event.getState();
             PortletFrameEvent evt = null;
@@ -107,7 +182,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_MINIMIZED, COMPONENT_ID);
             } else if (state == PortletWindow.State.RESIZING) {
                 renderPortlet = true;
-                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_RESIZED, COMPONENT_ID);
+                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_RESTORED, COMPONENT_ID);
             } else if (state == PortletWindow.State.MAXIMIZED) {
                 renderPortlet = true;
                 evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_MAXIMIZED, COMPONENT_ID);
@@ -116,8 +191,16 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         }
     }
 
+    /**
+     * Performs an action on this portlet frame component
+     *
+     * @param event a gridsphere event
+     * @throws PortletLayoutException if a layout error occurs during rendering
+     * @throws IOException if an I/O error occurs during rendering
+     */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.actionPerformed(event);
+        System.err.println("in action Performde in PortletFrame");
         // process events
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
@@ -127,10 +210,11 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
         String newmode = req.getParameter(GridSphereProperties.PORTLETMODE);
         if (newmode != null) {
-            req.setMode(Portlet.Mode.getInstance(newmode));
+            req.setMode(Portlet.Mode.toMode(newmode));
         } else {
             if (titleBar != null) {
-                req.setMode(titleBar.getPortletMode());
+                String mode = titleBar.getPortletMode();
+                req.setMode(Portlet.Mode.toMode(mode));
             } else {
                 req.setMode(Portlet.Mode.VIEW);
             }
@@ -155,9 +239,16 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             }
         }
         // in case portlet mode got reset
-        if (titleBar != null) titleBar.setPortletMode(req.getMode());
+        if (titleBar != null) titleBar.setPortletMode(req.getMode().toString());
     }
 
+    /**
+     * Renders the portlet frame component
+     *
+     * @param event a gridsphere event
+     * @throws PortletLayoutException if a layout error occurs during rendering
+     * @throws IOException if an I/O error occurs during rendering
+     */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
         PortletRequest req = event.getPortletRequest();
@@ -183,11 +274,9 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         // Render title bar
         if (titleBar != null) titleBar.doRender(event);
 
-
         if (error != null) {
             out.println(error.getMessage());
         } else {
-
             if (renderPortlet) {
                 if (!transparent) {
                     out.println("<tr><td class=\"window-content\">");      // now the portlet content begins
@@ -208,8 +297,6 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 out.println("</td></tr>");
             }
         }
-        //out.println("</div>");
-
         out.println("</table>");
         out.println("<!--- PORTLET ENDS HERE -->");
     }

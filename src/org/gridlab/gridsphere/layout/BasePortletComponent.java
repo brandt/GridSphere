@@ -10,6 +10,10 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import java.io.IOException;
 
+/**
+ * BasePortletComponent represents an abstract portlet component with a particular
+ * size, layout and theme and is subclasses by concrete portlet component instances.
+ */
 public abstract class BasePortletComponent extends BaseComponentLifecycle implements PortletComponent {
 
     protected String width = "";
@@ -18,50 +22,115 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String theme = "xp";
     protected boolean isVisible = true;
 
+    /**
+     * Returns the portlet component name
+     *
+     * @return the portlet component name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the portlet component name
+     *
+     * @param name the portlet component name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the portlet component height
+     *
+     * @return the portlet component height
+     */
     public String getHeight() {
         return height;
     }
 
+    /**
+     * Sets the portlet component height
+     *
+     * @param height the portlet component height
+     */
     public void setHeight(String height) {
         this.height = height;
     }
 
+    /**
+     * Sets the portlet component width
+     *
+     * @param width the portlet component width
+     */
     public void setWidth(String width) {
         this.width = width;
     }
 
+    /**
+     * Returns the portlet component width
+     *
+     * @return the portlet component width
+     */
     public String getWidth() {
         return width;
     }
 
+    /**
+     * When set to true the portlet component is visible and will be rendered
+     *
+     * @param isVisible if true portlet component is rendered, false otherwise
+     */
     public void setVisible(boolean isVisible) {
         this.isVisible = isVisible;
     }
 
-    public boolean isVisible() {
+    /**
+     * Return true if the portlet component visibility is true
+     *
+     * @return the portlet component visibility
+     */
+    public boolean getVisible() {
         return isVisible;
     }
 
+    /**
+     * Sets the theme of this portlet component
+     *
+     * @param theme the theme of this portlet component
+     */
     public void setTheme(String theme) {
         this.theme = theme;
     }
 
+    /**
+     * Return the theme of this portlet component
+     *
+     * @return the theme of this portlet component
+     */
     public String getTheme() {
         return theme;
     }
 
+    /**
+     * Performs an action on this portlet component
+     *
+     * @param event a gridsphere event
+     * @throws PortletLayoutException if a layout error occurs during rendering
+     * @throws IOException if an I/O error occurs during rendering
+     */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+        System.err.println("in action Performde in BasePortltComponent");
         super.actionPerformed(event);
     }
 
+    /**
+     * Renders the portlet component
+     *
+     * @param event a gridsphere event
+     * @throws PortletLayoutException if a layout error occurs during rendering
+     * @throws IOException if an I/O error occurs during rendering
+     */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
         req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);

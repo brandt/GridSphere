@@ -4,26 +4,79 @@
  */
 package org.gridlab.gridsphere.layout;
 
+/**
+ * PortletComponent defines the interfaces provided by a portlet component.
+ */
 public interface PortletComponent extends ComponentLifecycle {
 
-    public boolean isVisible();
-
-    public void setVisible(boolean isVisible);
-
-    public void setTheme(String theme);
-
-    public String getTheme();
-
+    /**
+     * Returns the portlet component name
+     *
+     * @return the portlet component name
+     */
     public String getName();
 
+    /**
+     * Sets the portlet component name
+     *
+     * @param name the portlet component name
+     */
     public void setName(String name);
 
+    /**
+     * Returns the portlet component height
+     *
+     * @return the portlet component height
+     */
     public String getHeight();
 
+    /**
+     * Sets the portlet component height
+     *
+     * @param height the portlet component height
+     */
     public void setHeight(String height);
 
+    /**
+     * Sets the portlet component width
+     *
+     * @param width the portlet component width
+     */
     public void setWidth(String width);
 
+    /**
+     * Returns the portlet component width
+     *
+     * @return the portlet component width
+     */
     public String getWidth();
+
+    /**
+     * When set to true the portlet component is visible and will be rendered
+     *
+     * @param isVisible if true portlet component is rendered, false otherwise
+     */
+    public void setVisible(boolean isVisible);
+
+    /**
+     * When isVisible is true the portlet component is visible and will be rendered
+     *
+     * @return the portlet component visibility
+     */
+    public boolean getVisible();
+
+    /**
+     * Sets the theme of this portlet component
+     *
+     * @param theme the theme of this portlet component
+     */
+    public void setTheme(String theme);
+
+    /**
+     * Return the theme of this portlet component
+     *
+     * @return the theme of this portlet component
+     */
+    public String getTheme();
 
 }

@@ -5,8 +5,8 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 
@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * The PortletContainer is the generic container for a collection of
+ * concrete portlet components and provides lifecycle methods for traversing
+ * the tree of components and handling actions and performing rendering.
+ */
 public class PortletContainer {
 
     protected int COMPONENT_ID = 0;
@@ -32,17 +37,104 @@ public class PortletContainer {
     protected String name = "";
     protected String uiTheme = "xp";
 
+    /**
+     * Constructs an instance of PortletContainer
+     */
     public PortletContainer() {
     }
 
+    /**
+     * Sets the portlet container name
+     *
+     * @param name the portlet container name
+     */
     public void setContainerName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the portlet container name
+     *
+     * @return the portlet container name
+     */
     public String getContainerName() {
         return name;
     }
 
+    /**
+     * Sets the theme of this portlet component
+     *
+     * @param theme the theme of this portlet component
+     */
+    public void setTheme(String theme) {
+        this.uiTheme = theme;
+    }
+
+    /**
+     * Return the theme of this portlet component
+     *
+     * @return the theme of this portlet component
+     */
+    public String getTheme() {
+        return uiTheme;
+    }
+
+    /**
+     * Sets the list of new portlet component to the layout
+     *
+     * @param components an ArrayList of portlet components
+     */
+    public void setPortletComponents(ArrayList components) {
+        this.components = components;
+    }
+
+    /**
+     * Returns a list containing the portlet components in this layout
+     *
+     * @return a list of portlet components
+     */
+    public List getPortletComponents() {
+        return components;
+    }
+
+    /**
+     * Returns the list of portlet component identifiers
+     *
+     * @return the list of portlet component identifiers
+     * @see ComponentIdentifier
+     */
+    public List getComponentIdentifierList() {
+        return componentIdentifiers;
+    }
+
+    /**
+     * Sets the list of portlet component identifiers
+     *
+     * @param componentIdentifiers a list of portlet component identifiers
+     * @see ComponentIdentifier
+     */
+    public void setComponentIdentifierList(List componentIdentifiers) {
+        this.componentIdentifiers = componentIdentifiers;
+    }
+
+    /**
+     * Returns the associated portlet component id
+     *
+     * @return the portlet component id
+     */
+    public int getComponentID() {
+        return COMPONENT_ID;
+    }
+
+    /**
+     * Initializes the portlet component. Since the components are isolated
+     * after Castor unmarshalls from XML, the ordering is determined by a
+     * passed in List containing the previous portlet components in the tree.
+     *
+     * @param list a list of component identifiers
+     * @return a list of updated component identifiers
+     * @see ComponentIdentifier
+     */
     public List init(List list) {
         Iterator it = components.iterator();
         PortletComponent comp;
@@ -61,6 +153,14 @@ public class PortletContainer {
         return componentIdentifiers;
     }
 
+    /**
+     * Performs login {@link org.gridlab.gridsphere.portlet.Portlet#login(PortletRequest)}
+     * on all the portlets conatined by this PortletContainer
+     *
+     * @param event a gridsphere event
+     * @throws PortletException if an error occurs while invoking login on the portlets
+     * @see <a href="org.gridlab.gridsphere.portlet.Portlet#login">Portlet.login(PortletRequest)</a>
+     */
     public void loginPortlets(GridSphereEvent event) throws PortletException {
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid = null;
@@ -73,11 +173,18 @@ public class PortletContainer {
             if (cid.getClassName().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
                 f = (PortletFrame) cid.getPortletComponent();
                 portlets.add(f.getPortletClass());
-                PortletInvoker.login(f.getPortletClass(), req, res);
             }
         }
     }
 
+    /**
+     * Performs logout {@link org.gridlab.gridsphere.portlet.Portlet#logout(PortletSession)}
+     * on all the portlets conatined by this PortletContainer
+     *
+     * @param event a gridsphere event
+     * @throws PortletException if an error occurs while invoking login on the portlets
+     * @see <a href="org.gridlab.gridsphere.portlet.Portlet#logout">Portlet.logout(PortletSession)</a>
+     */
     public void logoutPortlets(GridSphereEvent event) throws PortletException {
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid = null;
@@ -93,6 +200,9 @@ public class PortletContainer {
         }
     }
 
+    /**
+     * Destroys this portlet container
+     */
     public void destroy() {
         Iterator it = components.iterator();
         while (it.hasNext()) {
@@ -101,19 +211,34 @@ public class PortletContainer {
         }
     }
 
+    /**
+     * Performs an action by performing an action on the appropriate portlet component
+     * contained by this PortletContainer
+     *
+     * @param event a gridsphere event
+     * @throws PortletLayoutException if a layout error occurs during rendering
+     * @throws IOException if an I/O error occurs during rendering
+     */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         // if there is a layout action do it!
         if (event.getPortletComponentID() != -1) {
-            // off by one calculations for array indexing (because all component id's are .size() which is
-            // one more than we use to index the components
+            // the component id determines where in the list the portlet component is
             ComponentIdentifier compId = (ComponentIdentifier) componentIdentifiers.get(event.getPortletComponentID());
             PortletComponent comp = compId.getPortletComponent();
+            // perform an action if the component is non null
             if (comp != null) {
                 comp.actionPerformed(event);
             }
         }
     }
 
+    /**
+     * Renders the portlet cotainer by performing doRender on all portlet components
+     *
+     * @param event a gridsphere event
+     * @throws PortletLayoutException if a layout error occurs during rendering
+     * @throws IOException if an I/O error occurs during rendering
+     */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
@@ -133,33 +258,4 @@ public class PortletContainer {
         }
         out.println("</body></html>");
     }
-
-    public void setTheme(String theme) {
-        this.uiTheme = theme;
-    }
-
-    public String getTheme() {
-        return uiTheme;
-    }
-
-    public void setPortletComponents(ArrayList components) {
-        this.components = components;
-    }
-
-    public List getPortletComponents() {
-        return components;
-    }
-
-    public List getComponentIdentifierList() {
-        return componentIdentifiers;
-    }
-
-    public void setComponentIdentifierList(List ComponentIdentifiers) {
-        this.componentIdentifiers = ComponentIdentifiers;
-    }
-
-    public int getComponentID() {
-        return COMPONENT_ID;
-    }
-
 }
