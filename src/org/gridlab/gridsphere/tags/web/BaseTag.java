@@ -25,7 +25,7 @@ public class BaseTag extends TagSupport {
     protected int size = 20;
     protected int maxLength = 20;
     protected TagBean htmlelement = null;
-    protected String bean = new String();
+    protected String tagBean = new String();
     protected int rows = 10;
     protected int cols = 40;
 
@@ -61,6 +61,14 @@ public class BaseTag extends TagSupport {
      * ONSELECT=Script (element text selected)
      * ONCHANGE=Script (element value changed)
      */
+
+    public String getTagBean() {
+        return tagBean;
+    }
+
+    public void setTagBean(String tagBean) {
+        this.tagBean = tagBean;
+    }
 
     public void setType(String type) {
         this.type = type;
@@ -126,14 +134,6 @@ public class BaseTag extends TagSupport {
         return size;
     }
 
-    public String getBean() {
-        return bean;
-    }
-
-    public void setBean(String bean) {
-        this.bean = bean;
-    }
-
     public int getRows() {
         return rows;
     }
@@ -162,8 +162,8 @@ public class BaseTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
-        if (!bean.equals("")) {
-            this.htmlelement = (TagBean) pageContext.getRequest().getAttribute(bean);
+        if (!tagBean.equals("")) {
+            this.htmlelement = (TagBean) pageContext.getRequest().getAttribute(tagBean);
         }
         try {
             JspWriter out = pageContext.getOut();

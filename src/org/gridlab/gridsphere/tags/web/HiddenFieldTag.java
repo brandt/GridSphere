@@ -12,7 +12,7 @@ import javax.servlet.jsp.JspException;
 public class HiddenFieldTag extends BaseTag {
 
     public int doStartTag() throws JspException {
-        if (bean.equals("")) {
+        if (tagBean.equals("")) {
             this.htmlelement = new HiddenFieldBean (name, value);
         }
         return super.doStartTag();

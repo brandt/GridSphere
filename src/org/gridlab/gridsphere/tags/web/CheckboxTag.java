@@ -7,7 +7,7 @@ import javax.servlet.jsp.JspException;
 public class CheckboxTag extends BaseTag {
 
     public int doStartTag() throws JspException {
-        if (bean.equals("")) {
+        if (tagBean.equals("")) {
             this.htmlelement = new CheckBoxBean(name, value, isChecked, isDisabled);
         }
         return super.doStartTag();

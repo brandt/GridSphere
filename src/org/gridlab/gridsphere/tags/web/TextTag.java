@@ -24,7 +24,7 @@ public class TextTag extends BaseTag {
     }
 
     public int doStartTag() throws JspException {
-        if (bean.equals("")) {
+        if (tagBean.equals("")) {
             this.htmlelement = new TextBean(text);
         }
         return super.doStartTag();

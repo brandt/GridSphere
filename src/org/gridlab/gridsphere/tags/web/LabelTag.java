@@ -12,7 +12,7 @@ import javax.servlet.jsp.JspException;
 public class LabelTag extends TextTag {
 
     public int doStartTag() throws JspException {
-        if (bean.equals("")) {
+        if (tagBean.equals("")) {
             this.htmlelement = new LabelBean(text);
         }
         return super.doStartTag();

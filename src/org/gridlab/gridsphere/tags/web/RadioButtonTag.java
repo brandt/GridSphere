@@ -12,7 +12,7 @@ import javax.servlet.jsp.JspException;
 public class RadioButtonTag extends BaseTag {
 
     public int doStartTag() throws JspException {
-        if (bean.equals("")) {
+        if (tagBean.equals("")) {
             this.htmlelement = new RadioButtonBean(name, value, isChecked, isDisabled);
         }
         return super.doStartTag();
