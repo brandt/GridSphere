@@ -73,8 +73,10 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         String loginName = config.getInitParameter("userid", "root").trim();
         log.info("Root user login name = " + loginName);
         /** 2. Create root user account if doesn't exist **/
-        User rootUser = getUserByUserName(loginName);
-        if (rootUser == null) {
+
+        if (getUsers().isEmpty()) {
+        //User rootUser = getUserByUserName(loginName);
+        //if (rootUser == null) {
             /* Retrieve root user properties */
             log.info("Retrieving root user properties");
             String familyName = config.getInitParameter("familyName", "User").trim();
@@ -113,17 +115,19 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
 
             /* Retrieve root user object */
-            rootUser = getUserByUserName(loginName);
+            //rootUser = getUserByUserName(loginName);
             /* Grant super role to root user */
             log.info("Granting super role to root user.");
-            aclManager.grantSuperRole(rootUser);
+            aclManager.grantSuperRole(root);
         } else {
             log.info("Root user exists.");
-            if (!aclManager.hasSuperRole(rootUser)) {
+            /*
+            if (!aclManager.hasSuperRole(root)) {
                 log.info("Root user does not have super role! Granting now...");
-                /* Grant super role to root user */
+               
                 aclManager.grantSuperRole(rootUser);
             }
+             */
         }
 
         log.info("Exiting initRootUser()");

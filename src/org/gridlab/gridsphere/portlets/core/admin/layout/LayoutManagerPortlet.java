@@ -266,8 +266,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
             out.write(newstring);
             out.close();
             try {
-                PortletTabRegistry.reloadGuestLayout();
+                PortletTabRegistry.loadPage(tmpFile);
                 copyFile(new File(tmpFile), new File(guestFile));
+                PortletTabRegistry.reloadGuestLayout();
 
                 createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUTMGR_VALID_LAYOUT"));
             } catch (Exception e) {
@@ -295,9 +296,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         // first validate tab
         try {
-            PortletTabRegistry.reloadTab(groupHF.getValue(), tmpFile);
-            copyFile(new File(tmpFile), new File(groupFile));
+            PortletTabRegistry.loadPage(tmpFile);
 
+            copyFile(new File(tmpFile), new File(groupFile));
+            PortletTabRegistry.reloadTab(groupHF.getValue(), groupFile);
             createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUTMGR_VALID_LAYOUT"));
         } catch (Exception e) {
             // ok use old tab
@@ -308,6 +310,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
             File f = new File(tmpFile);
             f.delete();
         }
+
+
     }
 
     public void editGuestLayout(FormEvent event) throws PortletException, IOException {

@@ -74,6 +74,11 @@ public class PortletTabRegistry {
         guestPage.setLayoutDescriptor(guestLayoutFile);
     }
 
+    public static void loadPage(String file) throws IOException, PersistenceManagerException {
+        guestPage = PortletLayoutDescriptor.loadPortletPage(file, layoutMappingFile);
+    }
+
+
     public static PortletPage getGuestLayoutPage() {
         if (guestPage == null) {
             try {
@@ -110,7 +115,7 @@ public class PortletTabRegistry {
         String portletClass, reqRole;
         PortletTab parentTab = new PortletTab();
         parentTab.setTitle(groupName);
-        parentTab.setLabel(groupName);
+        //parentTab.setLabel(groupName);
 
         PortletTabbedPane childPane = new PortletTabbedPane();
         childPane.setStyle("sub-menu");
