@@ -51,7 +51,7 @@
 %>
                 <ui:tablerow>
                         <ui:tablecell>
-                            <ui:checkbox beanId="groupEntryID" name="<%= groupEntry.getID() %>" value="<%= groupEntry.getID() %>"/>
+                            <ui:checkbox beanId="groupEntryIDCB" name="<%= groupEntry.getID() %>" value="<%= groupEntry.getID() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
                             <ui:actionlink action="doViewViewGroupEntry" value="<%= groupEntry.getUser().getUserName() %>">
