@@ -21,7 +21,6 @@ public class ServiceTest extends TestCase {
 
     protected static SportletServiceFactory factory = null;
     protected static PortletLog log = SportletLog.getInstance(ServiceTest.class);
-    protected PersistenceManagerRdbms persistenceManager = PersistenceManagerRdbms.getInstance();
 
     public ServiceTest(String name) {
         super(name);
@@ -29,13 +28,17 @@ public class ServiceTest extends TestCase {
 
     protected void setUp() {
         PropertyConfigurator.configure("conf/log4j.properties");
+        factory = SportletServiceFactory.getInstance();
+        if (factory == null) fail("Unable to instantiate SportletServiceFactory!");
     }
 
+    /*
     public void testCreateFactory() {
         // create factory
         factory = SportletServiceFactory.getInstance();
         if (factory == null) fail("Unable to instantiate SportletServiceFactory!");
     }
+     */
 
     public static void main(String[] args) throws Exception {
         junit.textui.TestRunner.run(suite());
