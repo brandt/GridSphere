@@ -1,8 +1,11 @@
 <%@ page import="java.util.Iterator, java.util.List,
-                 org.gridlab.gridsphere.services.core.security.acl.GroupEntry"%>
+                 org.gridlab.gridsphere.services.core.security.acl.GroupEntry,
+                 org.gridlab.gridsphere.portlet.PortletRequest"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
+
+<% PortletRequest pReq = (PortletRequest)pageContext.getAttribute("portletRequest"); %>
 
 <% List groupEntryList = (List)request.getAttribute("groupEntryList"); %>
 
@@ -49,7 +52,7 @@
                             <ui:text value="<%= groupEntry.getUser().getFullName() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <ui:actionlink action="doViewEditGroupEntry" value="<%= groupEntry.getRole().toString() %>">
+                            <ui:actionlink action="doViewEditGroupEntry" value="<%= groupEntry.getRole().getText(pReq.getLocale()) %>">
                                 <ui:actionparam name="groupEntryID" value="<%= groupEntry.getID() %>"/>
                             </ui:actionlink>
                         </ui:tablecell>
