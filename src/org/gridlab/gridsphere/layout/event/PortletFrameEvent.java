@@ -24,6 +24,7 @@ public interface PortletFrameEvent extends PortletComponentEvent {
         public static final FrameAction FRAME_MAXIMIZED = new FrameAction(1);
         public static final FrameAction FRAME_RESTORED = new FrameAction(2);
         public static final FrameAction FRAME_MINIMIZED = new FrameAction(3);
+        public static final FrameAction FRAME_CLOSED = new FrameAction(4);
 
         private int action = 0;
 

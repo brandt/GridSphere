@@ -201,6 +201,29 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
     }
 
     /**
+     * Performed when a frame close event has been received
+     *
+     * @param event a portlet frame event
+     */
+    public void handleFrameClosed(PortletFrameEvent event) {
+        List scomponents = Collections.synchronizedList(components);
+        synchronized (scomponents) {
+        Iterator it = scomponents.iterator();
+        PortletComponent p = null;
+        int id = event.getID();
+        while (it.hasNext()) {
+            p = (PortletComponent) it.next();
+            // check for the frame that has been closed
+            if (p.getComponentID() == id) {
+                if (p instanceof PortletFrame) {
+                    this.removePortletComponent(p);
+                    break;
+                }
+            }
+        }
+        }
+    }
+    /**
      * Performed when a frame event has been received
      *
      * @param event a portlet frame event
@@ -213,6 +236,8 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
             handleFrameMinimized(event);
         } else if (event.getAction() == PortletFrameEvent.FrameAction.FRAME_RESTORED) {
             handleFrameRestore(event);
+        } else if (event.getAction() == PortletFrameEvent.FrameAction.FRAME_CLOSED) {
+            handleFrameClosed(event);
         }
     }
 

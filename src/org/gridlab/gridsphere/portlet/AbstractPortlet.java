@@ -70,6 +70,9 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                         case WindowEvent.WINDOW_RESTORED:
                             windowRestored(winEvent);
                             break;
+                        case WindowEvent.WINDOW_CLOSED:
+                            windowClosed(winEvent);
+                            break;
                         default:
                             doError(request, response, "Received invalid WindowEvent : " + winEvent.getEventId());
                             log.error("Received invalid WindowEvent : " + winEvent.getEventId());

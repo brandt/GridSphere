@@ -167,6 +167,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
     public List getAllowedWindowStates() {
         List states = allowsWindowStates.getPortletWindowStates();
         if (states.isEmpty()) {
+            states.add(PortletWindow.State.CLOSED);
             states.add(PortletWindow.State.MAXIMIZED);
             states.add(PortletWindow.State.MINIMIZED);
             states.add(PortletWindow.State.RESIZING);

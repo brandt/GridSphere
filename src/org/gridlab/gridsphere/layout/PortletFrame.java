@@ -57,6 +57,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     //private transient PortletDataManager dataManager = null;
 
     private boolean hasTitleBarEvent = false;
+
+    // switch to determine if the user wishes to close this portlet
+
+    private boolean isClosing = false;
+
     /**
      * Constructs an instance of PortletFrame
      */
@@ -255,6 +260,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         PortletComponentEvent titleBarEvent = event.getLastRenderEvent();
 
+
+
         if ((titleBarEvent != null) && (titleBarEvent instanceof PortletTitleBarEvent)) {
             PortletTitleBarEvent tbEvt = (PortletTitleBarEvent)titleBarEvent;
             if (titleBarEvent.getAction() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY) {
@@ -270,6 +277,25 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 } else if (state == PortletWindow.State.MAXIMIZED) {
                     renderPortlet = true;
                     frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);
+                } else if (state == PortletWindow.State.CLOSED) {
+                    renderPortlet = true;
+
+                    isClosing = true;
+                    // remove cached output
+                    String id = event.getPortletRequest().getPortletSession(true).getId();
+                    cacheService.removeCached(portletClass + id);
+
+                    // check for portlet closing action
+                    if (event.hasAction()) {
+                        if (event.getAction().getName().equals("close")) {
+                            isClosing = false;
+                            frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_CLOSED, COMPONENT_ID);
+
+                        }
+                        if (event.getAction().getName().equals("cancelClose")) {
+                            isClosing = false;
+                        }
+                    }
                 }
 
                 List slisteners = Collections.synchronizedList(listeners);
@@ -297,6 +323,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             PortletResponse res = event.getPortletResponse();
 
+
             req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
             // Override if user is a guest
@@ -312,6 +339,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     req.setMode(Portlet.Mode.VIEW);
                 }
             }
+
+
 
 
             // Set the portlet data
@@ -341,7 +370,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 DefaultPortletAction action = event.getAction();
                 if (action.getName() != "") {
                     try {
-
                         PortletInvoker.actionPerformed(portletClass, action, req, res);
                     } catch (Exception e) {
                         errorFrame.setException(e);
@@ -353,7 +381,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 }
                 // in case portlet mode got reset
             }
-
 
             List slisteners = Collections.synchronizedList(listeners);
             synchronized (slisteners) {
@@ -396,7 +423,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         StringBuffer frame = (StringBuffer)cacheService.getCached(portletClass + id);
         String nocache = (String)req.getAttribute(CacheService.NO_CACHE);
         if ((frame != null) && (nocache == null)) {
-            out = res.getWriter();
             out.println(frame.toString());
             return;
         }
@@ -481,12 +507,36 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 storedWriter = new StringWriter();
                 writer = new PrintWriter(storedWriter);
                 PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
+
+                if (isClosing) {
+
+                    System.err.println("in here!");
+
+                    PortletURI portletURI = res.createURI();
+                    portletURI.addParameter(SportletProperties.COMPONENT_ID, String.valueOf(titleBar.getComponentID()));
+                    portletURI.addParameter(SportletProperties.PORTLET_WINDOW, PortletWindow.State.CLOSED.toString());
+                    postframe.append("<form action=\"" + portletURI.toString() + "\" method=\"POST\"");
+                    postframe.append("<p><b>Do you really wish to unsubscribe from this portlet?</b></p>");
+
+                    portletURI = res.createURI();
+
+                    portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.TRUE.toString());
+
+                    postframe.append("<p><input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=close\" value=\"OK\"");
+                    portletURI = res.createURI();
+
+                    portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.FALSE.toString());
+                    postframe.append("<input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=cancelClose\" value=\"Cancel\"");
+                    postframe.append("</p></form>");
+                }  else {
+
                 try {
                     PortletInvoker.service(portletClass, req, wrappedResponse);
                     postframe.append(storedWriter.toString());
                 } catch (PortletException e) {
                     errorFrame.setError("Unable to invoke service method", e);
                     errorFrame.doRender(event);
+                }
                 }
             }
             postframe.append("</td></tr>");

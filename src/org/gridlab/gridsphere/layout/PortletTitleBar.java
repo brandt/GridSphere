@@ -143,6 +143,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      */
     class PortletStateLink extends Link {
 
+        public static final String closeImage = "images/window_close.gif";
         public static final String minimizeImage = "images/window_minimize.gif";
         public static final String maximizeImage = "images/window_maximize.gif";
         public static final String resizeImage = "images/window_resize.gif";
@@ -164,6 +165,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 imageSrc = maximizeImage;
             } else if (state.equals(PortletWindow.State.RESIZING)) {
                 imageSrc = resizeImage;
+            } else if (state.equals(PortletWindow.State.CLOSED)) {
+                imageSrc = closeImage;
             } else {
                 throw new IllegalArgumentException("No matching PortletWindow.State found for received window mode: " + state);
             }
@@ -424,13 +427,13 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             tmp = (PortletWindow.State)allowedWindowStates.get(i);
             windowStates.add(tmp);
             // remove current state from list
-            if (tmp.equals(windowState)) {
+            if (tmp.equals(windowState) && (!windowState.equals(PortletWindow.State.CLOSED))) {
                 windowStates.remove(i);
             }
         }
 
         // get rid of resized if window state is normal
-        if (windowState.equals(PortletWindow.State.NORMAL)) {
+        if (windowState.equals(PortletWindow.State.NORMAL) || windowState.equals(PortletWindow.State.CLOSED)) {
             windowStates.remove(PortletWindow.State.RESIZING);
         }
 
@@ -554,6 +557,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                     winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_MINIMIZED);
                 } else if (windowState == PortletWindow.State.RESIZING) {
                     winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_RESTORED);
+                } else if (windowState == PortletWindow.State.CLOSED) {
+                    winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_CLOSED);
                 }
                 if (winEvent != null) {
                     try {
