@@ -4,16 +4,15 @@
 */
 package org.gridlab.gridsphere.portlet.impl;
 
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.PortletWindow;
-import org.gridlab.gridsphere.portlet.PortletResponse;
 
-import javax.servlet.ServletResponse;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Locale;
 
 public class SportletResponseImpl implements PortletResponse {

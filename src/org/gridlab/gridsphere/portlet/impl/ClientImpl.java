@@ -8,7 +8,6 @@ import org.gridlab.gridsphere.portlet.Capability;
 import org.gridlab.gridsphere.portlet.Client;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
 
 /**
  * The ClientImpl class represents the client device that the user connects to the portal with.

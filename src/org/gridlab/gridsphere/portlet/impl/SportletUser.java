@@ -6,8 +6,6 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.User;
 
-import java.util.Enumeration;
-
 /**
  * The User interface is an abstract view on the user-specific data.
  * Apart from a set of pre-defined, fixed set of attributes,

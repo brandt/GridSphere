@@ -4,15 +4,14 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
+import org.gridlab.gridsphere.portlet.AccessDeniedException;
 import org.gridlab.gridsphere.portlet.Client;
 import org.gridlab.gridsphere.portlet.PortletSettings;
-import org.gridlab.gridsphere.portlet.AccessDeniedException;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
 
 import java.util.Enumeration;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Hashtable;
+import java.util.Locale;
 
 /**
  * The SportletSettings class provides the portlet with its dynamic configuration.
@@ -36,7 +35,7 @@ public class SportletSettings implements PortletSettings {
      * @return the value of the attribute
      */
     public String getAttribute(String name) {
-        return (String)store.get(name);
+        return (String) store.get(name);
     }
 
     /**

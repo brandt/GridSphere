@@ -4,22 +4,19 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.services.ServletParsingService;
+import org.gridlab.gridsphere.portlet.service.PortletService;
+import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FileInputStream;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
 
 /**
  * The PortletContext interface defines a portlet's view of the portlet container
@@ -192,7 +189,7 @@ public class SportletContext implements PortletContext {
      */
     public PortletService getService(Class service)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
-        return (PortletService)factory.createPortletService(service, props, config, true);
+        return (PortletService) factory.createPortletService(service, props, config, true);
     }
 
     /**

@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.User;
-
 import java.util.Enumeration;
 import java.util.Hashtable;
 

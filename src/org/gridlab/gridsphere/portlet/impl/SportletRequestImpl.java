@@ -6,15 +6,17 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
-import java.io.*;
 
 /**
  * The SportletRequestImpl encapsulates the request sent by the client to the portlet.
@@ -143,7 +145,7 @@ public class SportletRequestImpl implements SportletRequest {
      */
     public User getUser() {
         HttpSession session = req.getSession();
-        User user = (User)session.getAttribute("gridsphere.user");
+        User user = (User) session.getAttribute("gridsphere.user");
         if (user == null) {
             user = new GuestUser();
             setUser(user);
@@ -464,11 +466,11 @@ public class SportletRequestImpl implements SportletRequest {
 
         enum = getHeaderNames();
         while (enum.hasMoreElements()) {
-            name = (String)enum.nextElement();
-            eenum = (Enumeration)getHeaders(name);
+            name = (String) enum.nextElement();
+            eenum = (Enumeration) getHeaders(name);
             headervals = "";
             while (eenum.hasMoreElements()) {
-                headervals += " " + (String)eenum.nextElement();
+                headervals += " " + (String) eenum.nextElement();
             }
             log.debug("\t\tname=" + name + " values=" + headervals);
         }
@@ -481,15 +483,15 @@ public class SportletRequestImpl implements SportletRequest {
         log.debug("\trequest attribute names: ");
         enum = getAttributeNames();
         while (enum.hasMoreElements()) {
-            name = (String)enum.nextElement();
-            attrvalue = (Object)getAttribute(name);
+            name = (String) enum.nextElement();
+            attrvalue = (Object) getAttribute(name);
             log.debug("\t\tname=" + name + " object type=" + attrvalue.getClass
-().getName());
+                    ().getName());
         }
         log.debug("\trequest parameter names: note if a parameter has multiple values, only the first element is displayed ");
         enum = getParameterNames();
         while (enum.hasMoreElements()) {
-            name = (String)enum.nextElement();
+            name = (String) enum.nextElement();
             paramvalue = getParameter(name);
             log.debug("\t\tname=" + name + " value=" + paramvalue);
         }

@@ -9,7 +9,6 @@ import org.gridlab.gridsphere.portlet.*;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import java.util.Enumeration;
-import java.util.Locale;
 
 /**
  * The SortletConfig class provides the portlet with its configuration.

@@ -6,9 +6,9 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.PortletSession;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
-import javax.servlet.ServletContext;
 import java.util.Enumeration;
 
 
@@ -133,7 +133,7 @@ public class SportletSession implements PortletSession {
      *
      */
     public final Object getValue(String name) {
-        return (Object)session.getValue(name);
+        return (Object) session.getValue(name);
     }
 
     /**

@@ -4,11 +4,10 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.*;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
+import org.gridlab.gridsphere.portlet.Portlet;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletSettings;
+import org.gridlab.gridsphere.portlet.PortletWindow;
 
 /**
  * The SportletRequest encapsulates the request sent by the client to the portlet.

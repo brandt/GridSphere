@@ -4,9 +4,9 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
-import org.apache.log4j.Level;
 import org.gridlab.gridsphere.portlet.PortletLog;
 
 import java.util.Hashtable;
@@ -44,7 +44,7 @@ public class SportletLog implements PortletLog {
      * @return the PortletLogImpl
      */
     public static synchronized PortletLog getInstance(Class clazz) {
-        SportletLog log = (SportletLog)logMap.get(clazz);
+        SportletLog log = (SportletLog) logMap.get(clazz);
         if (log != null) return log;
         log = new SportletLog(clazz);
         logMap.put(clazz, new SportletLog(clazz));
