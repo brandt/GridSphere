@@ -25,7 +25,7 @@ public class PortletTitleBar extends BasePortletComponent {
     private String title = "";
     private String portletClass = null;
 
-    private PortletWindow.State portletWindowState = PortletWindow.State.NORMAL;
+    private PortletWindow.State windowState = PortletWindow.State.NORMAL;
 
     private String[] portletModes = {Portlet.Mode.VIEW.toString()};
     private Portlet.Mode portletMode = Portlet.Mode.VIEW;
@@ -37,6 +37,65 @@ public class PortletTitleBar extends BasePortletComponent {
     private List modeList;
     private List allowsWindowStates = new ArrayList();
     private String ErrorMessage = null;
+
+    class PortletModeLink {
+
+        public static final String configImage = "images/window_configure.gif";
+        public static final String editImage = "images/window_edit.gif";
+        public static final String helpImage = "images/window_help.gif";
+
+        public static final String configAlt = "Configure";
+        public static final String editAlt = "Edit";
+        public static final String helpAlt = "Help";
+
+        private String modeHref = "";
+        private String imageSrc = "";
+        private String altTag = "";
+
+        /**
+         * Given a potlet mode, create the necessary URIs to represnt the mode in a portlet border
+         */
+        public PortletModeLink(String mode) throws Exception {
+
+            // Set the image src
+            if (mode.equalsIgnoreCase(Portlet.Mode.CONFIGURE.toString())) {
+                imageSrc = configImage;
+                altTag = configAlt;
+            } else if (mode.equalsIgnoreCase(Portlet.Mode.EDIT.toString())) {
+                imageSrc = editImage;
+                altTag = editAlt;
+            } else if (mode.equalsIgnoreCase(Portlet.Mode.HELP.toString())) {
+                imageSrc = helpImage;
+                altTag = helpAlt;
+            } else {
+                throw new Exception("No matching Portlet.Mode found for received portlet mode: " + mode);
+            }
+        }
+
+        public String getImageSrc() {
+            return imageSrc;
+        }
+
+        public void setModeHref(String modeHref) {
+            this.modeHref = modeHref;
+        }
+
+        public String getModeHref() {
+            return modeHref;
+        }
+
+        public String getAltTag() {
+            return altTag;
+        }
+
+        public String toString() {
+            StringBuffer sb = new StringBuffer("\n");
+            sb.append("image src: " + imageSrc + "\n");
+            sb.append("mode href: " + modeHref + "\n");
+            sb.append("alt tag: " + altTag + "\n");
+            return sb.toString();
+        }
+    }
 
     class PortletStateLink {
 
@@ -117,12 +176,12 @@ public class PortletTitleBar extends BasePortletComponent {
         this.title = title;
     }
 
-    public void setPortletWindowState(PortletWindow.State portletWindow) {
-        this.portletWindowState = portletWindow;
+    public void setPortletWindowState(PortletWindow.State windowState) {
+        this.windowState = windowState;
     }
 
     public PortletWindow.State getPortletWindowState() {
-        return portletWindowState;
+        return windowState;
     }
 
     public void setPortletMode(Portlet.Mode portletMode) {
@@ -174,11 +233,11 @@ public class PortletTitleBar extends BasePortletComponent {
         // subtract current window state
         List windowStates = new ArrayList(allowsWindowStates);
 
-        if (portletWindowState == PortletWindow.State.NORMAL) {
+        if (windowState == PortletWindow.State.NORMAL) {
             windowStates.remove(PortletWindow.State.RESIZING.toString().toLowerCase());
         }
         // remove current state from list
-        windowStates.remove(portletWindowState.toString().toLowerCase());
+        windowStates.remove(windowState.toString().toLowerCase());
 
         // create a URI for each of the window states
         PortletStateLink stateLink;
@@ -237,18 +296,11 @@ public class PortletTitleBar extends BasePortletComponent {
         PortletModeLink modeLink;
         List portletLinks = new Vector();
         for (i = 0; i < portletModes.length; i++) {
-
             portletURI = res.createURI();
-
             portletURI.addParameter(GridSphereProperties.COMPONENT_ID, this.componentIDStr);
-
             portletURI.addParameter(GridSphereProperties.PORTLETID, portletClass);
             try {
                 modeLink = new PortletModeLink(portletModes[i]);
-                // Create portlet link Href
-
-                //modeAction = new DefaultPortletAction(PortletAction.CHANGEMODE);
-                //sportletURI.addAction(modeAction);
                 portletURI.addParameter(GridSphereProperties.PORTLETMODE, portletModes[i]);
                 modeLink.setModeHref(portletURI.toString());
                 portletLinks.add(modeLink);
@@ -260,21 +312,20 @@ public class PortletTitleBar extends BasePortletComponent {
     }
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+        super.actionPerformed(event);
+        System.err.println("I received a TitleBar event!!!!!!!!");
         PortletTitleBarEvent evt = new PortletTitleBarEventImpl(event, COMPONENT_ID);
         PortletRequest req = event.getPortletRequest();
         if (evt.getAction() == PortletTitleBarEvent.Action.WINDOW_MODIFY) {
             PortletResponse res = event.getPortletResponse();
-
-            //PortletInvoker dispatcher = event.getPortletEventDispatcher();
-
-            portletWindowState = evt.getState();
+            windowState = evt.getState();
             WindowEvent winEvent = null;
 
-            if (portletWindowState == PortletWindow.State.MAXIMIZED) {
+            if (windowState == PortletWindow.State.MAXIMIZED) {
                 winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_MAXIMIZED);
-            } else if (portletWindowState == PortletWindow.State.MINIMIZED) {
+            } else if (windowState == PortletWindow.State.MINIMIZED) {
                 winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_MINIMIZED);
-            } else if (portletWindowState == PortletWindow.State.RESIZING) {
+            } else if (windowState == PortletWindow.State.RESIZING) {
                 winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_RESTORED);
             }
             if (winEvent != null) {
@@ -303,7 +354,7 @@ public class PortletTitleBar extends BasePortletComponent {
     }
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-
+        super.doRender(event);
         // title bar: configure, edit, help, title, min, max
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
@@ -312,7 +363,8 @@ public class PortletTitleBar extends BasePortletComponent {
         Client client = req.getClient();
         title = settings.getTitle(req.getLocale(), client);
 
-        List modeLinks = null, windowLinks = null;
+        List modeLinks = null;
+        List windowLinks = null;
         User user = req.getUser();
         if (user instanceof GuestUser) {
         } else {
@@ -335,8 +387,10 @@ public class PortletTitleBar extends BasePortletComponent {
             Iterator modesIt = modeLinks.iterator();
             out.println("<td class=\"window-icon-left\">");
             PortletModeLink mode;
+            System.err.println("printing mode links");
             while (modesIt.hasNext()) {
                 mode = (PortletModeLink) modesIt.next();
+                System.err.println( mode.getModeHref() );
                 out.println("<a href=\"" + mode.getModeHref() + "\"><img border=\"0\" src=\"themes/" + theme + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
             }
             out.println("</td>");
@@ -366,8 +420,10 @@ public class PortletTitleBar extends BasePortletComponent {
             Iterator windowsIt = windowLinks.iterator();
             PortletStateLink state;
             out.println("<td class=\"window-icon-right\">");
+            System.err.println("printing state links");
             while (windowsIt.hasNext()) {
                 state = (PortletStateLink) windowsIt.next();
+                System.err.println( state.getStateHref() );
                 out.println("<a href=\"" + state.getStateHref() + "\"><img border=\"0\" src=\"themes/" + theme + "/" + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\"/></a>");
             }
             out.println("</td>");

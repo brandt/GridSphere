@@ -20,14 +20,12 @@ public class SportletResponse implements PortletResponse {
 
     private HttpServletResponse res = null;
     private HttpServletRequest req = null;
-    private SportletURI sportletURI = null;
 
     public SportletResponse(HttpServletResponse res, PortletRequest req) {
         this.res = res;
         this.req = req;
         String mimeType = req.getClient().getMimeType();
         res.setContentType(mimeType);
-        sportletURI = new SportletURI(res, req.getContextPath());
     }
 
     /**
@@ -84,8 +82,8 @@ public class SportletResponse implements PortletResponse {
      * @return the portletURI
      */
     public PortletURI createReturnURI() {
-        addURIParameters();
-        sportletURI.addParameter(GridSphereProperties.PORTLETMODE, (String)Portlet.Mode.VIEW.toString());
+        SportletURI sportletURI = new SportletURI(res, req.getContextPath());
+        addURIParameters(sportletURI);
         sportletURI.setReturn(true);
         return sportletURI;
     }
@@ -97,9 +95,10 @@ public class SportletResponse implements PortletResponse {
      * @return the portlet URI
      */
     public PortletURI createURI() {
-        addURIParameters();
+        SportletURI sportletURI = new SportletURI(res, req.getContextPath());
+        addURIParameters(sportletURI);
         sportletURI.setReturn(false);
-        return (PortletURI)sportletURI;
+        return sportletURI;
     }
 
     /**
@@ -109,9 +108,10 @@ public class SportletResponse implements PortletResponse {
      * @see addURIParameters
      */
     public PortletURI createURI(PortletWindow.State state) {
-        addURIParameters();
+        SportletURI sportletURI = new SportletURI(res, req.getContextPath());
+        addURIParameters(sportletURI);
         sportletURI.setWindowState(state);
-        return (PortletURI)sportletURI;
+        return sportletURI;
     }
 
     /**
@@ -120,7 +120,7 @@ public class SportletResponse implements PortletResponse {
      * GridSphereProperties.COMPONENT_ID
      * </li></ul>
      */
-    protected void addURIParameters() {
+    protected void addURIParameters(PortletURI sportletURI) {
         sportletURI.addParameter(GridSphereProperties.COMPONENT_ID, (String)req.getAttribute(GridSphereProperties.COMPONENT_ID));
     }
 

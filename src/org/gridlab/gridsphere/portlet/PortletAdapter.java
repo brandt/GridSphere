@@ -123,8 +123,12 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
         // There must be a portlet ID to knwo which portlet to service
         String portletID = (String)request.getAttribute(GridSphereProperties.PORTLETID);
         if (portletID == null) {
-            log.error("in AbstractPortlet: No PortletID found in request attribute");
-            throw new PortletException("PortletID is null");
+            // it may be in the request parameter
+            portletID = (String)request.getParameter(GridSphereProperties.PORTLETID);
+            if (portletID == null) {
+                log.error("in AbstractPortlet: No PortletID found in request attribute");
+                throw new PortletException("PortletID is null");
+            }
         }
 
         portletSettings = (PortletSettings)allPortletSettings.get(portletID);

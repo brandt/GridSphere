@@ -19,7 +19,6 @@ public class SportletServiceDefinition {
     protected String Description = "";
     protected String Interface = "";
     protected String Implementation = "";
-    protected String SecureWrapper = "";
     protected boolean UserRequired = false;
     protected List ConfigParamList = new Vector();
     protected Properties configProps = null;
@@ -54,14 +53,6 @@ public class SportletServiceDefinition {
 
     public void setImplementation(String Implementation) {
         this.Implementation = Implementation;
-    }
-
-    public String getSecureWrapper() {
-        return SecureWrapper;
-    }
-
-    public void setSecureWrapper(String SecureWrapper) {
-        this.SecureWrapper = SecureWrapper;
     }
 
     public void setUserRequired(boolean UserRequired) {

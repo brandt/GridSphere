@@ -144,7 +144,6 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             req.setAttribute(GridSphereProperties.PORTLETDATA, data);
         }
 
-
         // now perform actionPerformed on Portlet if it has an action
         DefaultPortletAction action = event.getAction();
         if (action.getName() != "") {
