@@ -4,7 +4,7 @@
 
     <class name="org.gridlab.gridsphere.layout.PortletContainer">
         <map-to xml="portlet-layout"/>
-        <field name="PortletComponents" type="org.gridlab.gridsphere.layout.PortletComponent" collection="vector">
+        <field name="PortletComponents" type="org.gridlab.gridsphere.layout.PortletComponent" collection="arraylist">
             <bind-xml auto-naming="deriveByClass"/>
         </field>
         <field name="ContainerName" type="string">
@@ -44,7 +44,7 @@
     </class>
 
     <class name="org.gridlab.gridsphere.layout.BaseLayoutManager">
-        <field name="PortletComponents" type="org.gridlab.gridsphere.layout.PortletComponent" collection="vector">
+        <field name="PortletComponents" type="org.gridlab.gridsphere.layout.PortletComponent" collection="arraylist">
             <bind-xml auto-naming="deriveByClass"/>
         </field>
         <field name="PortletInsets" type="org.gridlab.gridsphere.layout.PortletInsets">
@@ -163,7 +163,7 @@
 
     <class name="org.gridlab.gridsphere.layout.PortletTabbedPane" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
         <map-to xml="portlet-tabbed-pane"/>
-        <field name="PortletTabs" type="org.gridlab.gridsphere.layout.PortletTab" collection="vector">
+        <field name="PortletTabs" type="org.gridlab.gridsphere.layout.PortletTab" collection="arraylist">
             <bind-xml name="portlet-tab"/>
         </field>
     </class>
