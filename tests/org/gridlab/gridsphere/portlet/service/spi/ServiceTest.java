@@ -4,23 +4,14 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi;
 
+import junit.framework.Test;
 import junit.framework.TestCase;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import junit.framework.TestSuite;
 import org.apache.log4j.PropertyConfigurator;
-
-import java.util.Properties;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.File;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 
 /**
  * This is the base fixture for service testing. Provides a service factory and the
@@ -37,12 +28,18 @@ public class ServiceTest extends TestCase {
     }
 
     protected void setUp() {
-
         PropertyConfigurator.configure("conf/log4j.properties");
-
         // create factory
         factory = SportletServiceFactory.getInstance();
+        if (factory == null) fail("Unable to instantiate SportletServiceFactory!");
+    }
 
+    public static void main(String[] args) throws Exception {
+        junit.textui.TestRunner.run(suite());
+    }
+
+    public static Test suite() {
+        return new TestSuite(ServiceTest.class);
     }
 
     protected void tearDown() {

@@ -4,13 +4,10 @@
  */
 package org.gridlab.gridsphere.services.user;
 
-import org.gridlab.gridsphere.portlet.service.spi.ServiceTest;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.services.security.AuthenticationException;
-import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 
 public class SetupTestGroupsTest extends SetupRootUserTest {
 

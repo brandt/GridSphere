@@ -4,13 +4,11 @@
  */
 package org.gridlab.gridsphere.services.user;
 
-import org.gridlab.gridsphere.portlet.service.spi.ServiceTest;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.services.security.AuthenticationException;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 
 import java.util.List;
 
