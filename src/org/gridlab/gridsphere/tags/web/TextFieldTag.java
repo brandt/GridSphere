@@ -8,7 +8,7 @@ import javax.servlet.jsp.JspException;
 public class TextFieldTag extends InputTag {
 
     public int doStartTag() throws JspException {
-        if (element.equals(null)) {
+        if (element.equals("")) {
             this.htmlelement = new InputField(name, value, isDisabled,  isReadonly, size, maxLength);
         }
         return super.doStartTag();

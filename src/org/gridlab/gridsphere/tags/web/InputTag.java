@@ -27,7 +27,7 @@ public class InputTag extends TagSupport {
     protected int size = 20;
     protected int maxLength = 20;
     protected Element htmlelement;
-    protected String element;
+    protected String element = new String();
     protected int rows = 10;
     protected int cols = 40;
 
@@ -164,7 +164,7 @@ public class InputTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
-        if (!element.equals(null)) {
+        if (!element.equals("")) {
             this.htmlelement = (Element)pageContext.getRequest().getAttribute(element);
         }
         try {
