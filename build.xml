@@ -59,22 +59,24 @@ Copyright:
 
     <property environment="env"/>
 
+    <!-- Check for catalina.sh in CATALINA_HOME/bin -->
+    <target name="check-catalina">
+        <condition property="catalina.exists">
+            <available file="${env.CATALINA_HOME}/bin/catalina.sh"/>
+        </condition>
+        <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
+    </target>
+
     <!-- =================================================================== -->
     <!-- Functions                                                           -->
     <!-- =================================================================== -->
-    <target name="setenv" description="Check for libraries and print out config information">
+    <target name="setenv" depends="check-catalina" description="Check for libraries and print out config information">
         <mkdir dir="${gridsphere.build}"/>
-        <mkdir dir="${build.lib}"/>
+
         <mkdir dir="${build.classes}"/>
         <mkdir dir="${build.webapps}"/>
         <mkdir dir="${build.docs}"/>
 
-        <!-- Check for catalina.sh in CATALINA_HOME/bin -->
-        <condition property="catalina.exists">
-            <available file="${env.CATALINA_HOME}/bin/catalina.sh"/>
-        </condition>
-
-        <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
 
         <!-- Check for known OGSA libraries -->
         <condition property="grid.exists">
@@ -104,7 +106,7 @@ Copyright:
     <!-- Sets the CLASSPATH                                                  -->
     <!-- =================================================================== -->
     <path id="classpath">
-        <pathelement location="${build.lib}"/>
+
         <pathelement location="${build.classes}"/>
 
         <!-- this is for the servlet JARs in Tomcat 4.1.x -->
@@ -117,8 +119,9 @@ Copyright:
             <include name="*.jar"/>
         </fileset>
 
-        <fileset dir="lib/ext">
+        <fileset dir="lib">
             <include name="*.jar"/>
+            <include name="ext/*.jar"/>
         </fileset>
         <pathelement path="${java.class.path}"/>
     </path>
@@ -164,7 +167,6 @@ Copyright:
         <echo>Compiling Core Framework</echo>
         <javac  srcdir="src"
             destdir="${build.classes}"
-
             excludes="org/gridlab/gridsphere/portlets/**, org/gridlab/gridsphere/services/grid/**"
             classpathref="classpath"
             debug="${debug}"
@@ -287,7 +289,7 @@ Copyright:
         <echo message="Replaced DB implementation with : ${DATABASE_TYPE}"/>
         <echo message="Replaced DB name with : ${DATABASE_NAME}"/>
 
-        <jar jarfile="${build.lib}/gridsphere.jar" basedir="${build.classes}" >
+        <jar jarfile="lib/gridsphere.jar" basedir="${build.classes}" >
             <include name="org/**" />
             <include name="gridsphere/**" />
             <!-- don't include portlet API -->
@@ -304,8 +306,8 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates a Portlet API JAR library archive                           -->
     <!-- =================================================================== -->
-    <target name="portlet-jar" depends="compile-core" description="Create ${build.lib}/portlet.jar">
-        <jar jarfile="${build.lib}/portlet-api.jar" basedir="${build.classes}" >
+    <target name="portlet-jar" depends="compile-core" description="Create lib/portlet.jar">
+        <jar jarfile="lib/portlet-api.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/portlet/**"/>
             <include name="org/gridlab/gridsphere/event/**"/>
             <include name="config/log4j.properties"/>
@@ -315,8 +317,8 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates the Portlet Widgets Tag Library                             -->
     <!-- =================================================================== -->
-    <target name="portlet-widgets-jar" depends="compile-core" description="Create ${build.lib}/portlet-widget-tags.jar">
-        <jar jarfile="${build.lib}/portlet-widget-tags.jar" basedir="${build.classes}" >
+    <target name="portlet-widgets-jar" depends="compile-core" description="Create lib/portlet-widget-tags.jar">
+        <jar jarfile="lib/portlet-widget-tags.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/tags/**" />
             <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
         </jar>
@@ -325,8 +327,8 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates GridSphere manager portlet                                  -->
     <!-- =================================================================== -->
-    <target name="manager-portlet-jar" depends="compile-portlets" description="Create ${build.lib}/gsmanager-portlet.jar">
-        <jar jarfile="${build.lib}/gsmanager-portlet.jar" basedir="${build.classes}" >
+    <target name="manager-portlet-jar" depends="compile-portlets" description="Create lib/gsmanager-portlet.jar">
+        <jar jarfile="lib/gsmanager-portlet.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/portlets/manager/**" />
             <include name="config/properties/log4j.properties"/>
         </jar>
@@ -337,8 +339,8 @@ Copyright:
     <!-- Creates example portlets required by GridSphere                     -->
     <!-- Creates core portlets required by GridSphere                        -->
     <!-- =================================================================== -->
-    <target name="core-portlets-jar" depends="compile-portlets" description="Create ${build.lib}/coreportlets.jar">
-        <jar jarfile="${build.lib}/coreportlets.jar" basedir="${build.classes}" >
+    <target name="core-portlets-jar" depends="compile-portlets" description="Create lib/coreportlets.jar">
+        <jar jarfile="lib/coreportlets.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/portlets/PortletBean.class" />
             <include name="org/gridlab/gridsphere/portlets/core/**" />
             <include name="config/properties/log4j.properties"/>
@@ -348,8 +350,8 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates grid portlets required by GridSphere                        -->
     <!-- =================================================================== -->
-    <target name="grid-portlets-jar" depends="compile-portlets" if="${grid.exists}" description="Create ${build.lib}/gridportlets.jar">
-        <jar jarfile="${build.lib}/gridportlets.jar" basedir="${build.classes}" >
+    <target name="grid-portlets-jar" depends="compile-portlets" if="${grid.exists}" description="Create lib/gridportlets.jar">
+        <jar jarfile="lib/gridportlets.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/portlets/PortletBean.class" />
             <include name="org/gridlab/gridsphere/portlets/grid/**" />
             <include name="config/properties/log4j.properties"/>
@@ -359,8 +361,8 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates example portlets required by GridSphere                        -->
     <!-- =================================================================== -->
-    <target name="example-portlets-jar" depends="compile-portlets" description="Create ${build.lib}/exampleportlets.jar">
-        <jar jarfile="${build.lib}/exampleportlets.jar" basedir="${build.classes}" >
+    <target name="example-portlets-jar" depends="compile-portlets" description="Create lib/exampleportlets.jar">
+        <jar jarfile="lib/exampleportlets.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/portlets/*" />
             <include name="org/gridlab/gridsphere/portlets/examples/**" />
             <include name="config/properties/log4j.properties"/>
@@ -569,7 +571,7 @@ Copyright:
     <target name="core-portlets-war" depends="core-portlets-jar" description="Create coreportlets WAR">
         <war warfile="${build.webapps}/coreportlets.war" update="true"
             webxml="${corewebapp.dir}/WEB-INF/web.xml">
-            <lib dir="${build.lib}">
+            <lib dir="lib">
                 <include name="coreportlets.jar"/>
             </lib>
             <fileset dir="${corewebapp.dir}">
@@ -584,7 +586,7 @@ Copyright:
     <target name="grid-portlets-war" depends="grid-portlets-jar" if="${grid.present}" description="Create gridportlets WAR">
         <war warfile="${build.webapps}/gridportlets.war" update="true"
             webxml="${gridwebapp.dir}/WEB-INF/web.xml">
-            <lib dir="${build.lib}">
+            <lib dir="lib">
                 <include name="gridportlets.jar"/>
             </lib>
             <fileset dir="${gridwebapp.dir}">
@@ -599,7 +601,7 @@ Copyright:
     <target name="example-portlets-war" depends="example-portlets-jar" description="Create exampleportlets WAR">
         <war warfile="${build.webapps}/exampleportlets.war" update="true"
             webxml="${exwebapp.dir}/WEB-INF/web.xml">
-            <lib dir="${build.lib}">
+            <lib dir="lib">
                 <include name="exampleportlets.jar"/>
             </lib>
             <fileset dir="${exwebapp.dir}">
@@ -614,7 +616,7 @@ Copyright:
     <target name="manager-portlet-war" depends="manager-portlet-jar" description="Create gsmanager WAR">
         <war warfile="${build.webapps}/gsmanager-portlet.war" update="true"
             webxml="${manwebapp.dir}/WEB-INF/web.xml">
-            <lib dir="${build.lib}">
+            <lib dir="lib">
                 <include name="gsmanager-portlet.jar"/>
             </lib>
             <fileset dir="${manwebapp.dir}">
@@ -661,7 +663,7 @@ Copyright:
                 <include name="*.jar"/>
                 <exclude name="servlet*.jar"/>
             </fileset>
-            <fileset dir="${build.lib}">
+            <fileset dir="lib">
                 <exclude name="portlet-widget-tags.jar"/>
                 <exclude name="gsmanager-portlet.jar"/>
                 <exclude name="coreportlets.jar"/>
@@ -676,7 +678,7 @@ Copyright:
             <fileset dir="${build.webapps}/gridsphere"/>
         </copy>
 
-        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
+        <copy file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
         <!-- <copy file="config/properties/log4j.properties" tofile="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/log4j.properties" /> -->
 
     </target>
@@ -694,8 +696,8 @@ Copyright:
         <copy todir="${build.webapps}/gsmanager">
             <fileset dir="${manwebapp.dir}"/>
         </copy>
-        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/${manwebapp.dir}/WEB-INF/lib"/>
-        <copy file="${build.lib}/gsmanager-portlet.jar" todir="${env.CATALINA_HOME}/${manwebapp.dir}/WEB-INF/lib"/>
+        <copy file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/${manwebapp.dir}/WEB-INF/lib"/>
+        <copy file="lib/gsmanager-portlet.jar" todir="${env.CATALINA_HOME}/${manwebapp.dir}/WEB-INF/lib"/>
         <copy todir="${env.CATALINA_HOME}/${manwebapp.dir}">
             <fileset dir="${build.webapps}/gsmanager"/>
         </copy>
@@ -711,8 +713,8 @@ Copyright:
         <copy todir="${env.CATALINA_HOME}/webapps/coreportlets">
             <fileset dir="${build.webapps}/coreportlets"/>
         </copy>
-        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
-        <copy file="${build.lib}/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
+        <copy file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
+        <copy file="lib/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
     </target>
 
     <!-- =================================================================== -->
@@ -725,8 +727,8 @@ Copyright:
         <copy todir="${env.CATALINA_HOME}/webapps/exampleportlets">
             <fileset dir="${build.webapps}/exampleportlets"/>
         </copy>
-        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/exampleportlets/WEB-INF/lib"/>
-        <copy file="${build.lib}/exampleportlets.jar" todir="${env.CATALINA_HOME}/webapps/exampleportlets/WEB-INF/lib"/>
+        <copy file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/exampleportlets/WEB-INF/lib"/>
+        <copy file="lib/exampleportlets.jar" todir="${env.CATALINA_HOME}/webapps/exampleportlets/WEB-INF/lib"/>
     </target>
 
     <!-- =================================================================== -->
@@ -739,8 +741,8 @@ Copyright:
         <copy todir="${env.CATALINA_HOME}/webapps/gridportlets">
             <fileset dir="${build.webapps}/gridportlets"/>
         </copy>
-        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridportlets/WEB-INF/lib"/>
-        <copy file="${build.lib}/gridportlets.jar" todir="${env.CATALINA_HOME}/webapps/gridportlets/WEB-INF/lib"/>
+        <copy file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridportlets/WEB-INF/lib"/>
+        <copy file="lib/gridportlets.jar" todir="${env.CATALINA_HOME}/webapps/gridportlets/WEB-INF/lib"/>
     </target>
 
 <!-- +++++++++++++++ END DEPLOY  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
@@ -802,6 +804,13 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
+    <!-- Creates a new portlet project "newproject" in projects directory    -->
+    <!-- =================================================================== -->
+    <target name="new-project" description="Creates a new portlet project in projects directory">
+        <ant antfile="config/build/build-newproject.xml" target="new-project"/>
+    </target>
+
+    <!-- =================================================================== -->
     <!-- Make GridSphere distribution                                        -->
     <!-- =================================================================== -->
     <target name="dist" depends="clean, gridsphere-tomcat-jar, all-non-gridsphere-jars, war-all, docs-all" description="Build GridSphere binary distribution">
@@ -813,7 +822,7 @@ Copyright:
         <copy file="README" todir="${gridsphere.dist}"/>
         <copy file="LICENSE" todir="${gridsphere.dist}"/>
         <copy file="config/build/build.deploy.xml" tofile="${gridsphere.dist}/build.xml"/>
-        <copy file="config/build.properties" tofile="${gridsphere.dist}/build.properties"/>
+        <copy file="build.properties" tofile="${gridsphere.dist}/build.properties"/>
 
         <copy todir="${gridsphere.dist}">
             <fileset dir="${gridsphere.build}">
