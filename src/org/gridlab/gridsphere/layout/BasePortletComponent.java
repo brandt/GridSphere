@@ -10,30 +10,14 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import java.io.IOException;
 import java.util.List;
 
-public abstract class BasePortletComponent implements PortletComponent {
+public abstract class BasePortletComponent extends BasePortletLifecycle implements PortletComponent {
 
-    protected int COMPONENT_ID = -1;
     protected String width;
     protected String height;
     protected String name;
     protected PortletBorder border;
     protected PortletInsets insets;
     protected boolean isVisible = true;
-
-    public  List init(List list) {
-        COMPONENT_ID = list.size();
-        return list;
-    }
-
-    public void login(GridSphereEvent event) {}
-
-    public void logout(GridSphereEvent event) {}
-
-    public void destroy() {}
-
-    public int getComponentID() {
-        return COMPONENT_ID;
-    }
 
     public PortletBorder getPortletBorder() {
         return border;
@@ -84,10 +68,11 @@ public abstract class BasePortletComponent implements PortletComponent {
     }
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
-
+        super.actionPerformed(event);
     }
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        super.doRender(event);
         SportletRequest req = event.getSportletRequest();
         String sid = new Integer(COMPONENT_ID).toString();
         req.setAttribute(LayoutProperties.ID, sid);

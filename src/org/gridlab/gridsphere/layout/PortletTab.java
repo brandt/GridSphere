@@ -4,24 +4,27 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
 
-public class PortletTab {
+public class PortletTab extends BasePortletLifecycle {
 
     private String title;
-    private String background;
-    private String foreground;
-    private PortletPanel panel;
     private boolean selected = false;
-    private PortletTabbedPane parent;
-    private LayoutManager layoutManager;
+    private PortletTabbedPane tabbedPane;
+    private PortletTabBar portletTabBar;
 
     public PortletTab() {}
 
-    public PortletTab(PortletTabbedPane parent, String title, PortletPanel panel) {
-        this.parent = parent;
+    public PortletTab(PortletTabbedPane tabbedPane, String title, PortletTabBar portletTabBar) {
+        this.tabbedPane = tabbedPane;
         this.title = title;
-        this.panel = panel;
+        this.portletTabBar = portletTabBar;
     }
 
     public String getTitle() {
@@ -40,20 +43,27 @@ public class PortletTab {
         return selected;
     }
 
-    public PortletPanel getPortletPanel() {
-        return panel;
+    public void setPortletTabBar(PortletTabBar portletTabBar) {
+        this.portletTabBar = portletTabBar;
     }
 
-    public void setPortletPanel(PortletPanel panel) {
-        this.panel = panel;
+    public PortletTabBar getPortletTabBar() {
+        return portletTabBar;
     }
 
-    public void setLayoutManager(LayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
+    public List init(List list) {
+        return portletTabBar.init(list);
     }
 
-    public LayoutManager getLayoutManager() {
-        return layoutManager;
+    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+        portletTabBar.actionPerformed(event);
+    }
+
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+
+        SportletResponse res = event.getSportletResponse();
+        PrintWriter out = res.getWriter();
+        portletTabBar.doRender(event);
     }
 
 }

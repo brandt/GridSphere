@@ -138,6 +138,10 @@ public class PortletContainer implements PortletLifecycle {
         return ComponentIdentifiers;
     }
 
+    public void setComponentIdentifierList(List ComponentIdentifiers) {
+        this.ComponentIdentifiers = ComponentIdentifiers;
+    }
+
     public int getComponentID() {
         return COMPONENT_ID;
     }

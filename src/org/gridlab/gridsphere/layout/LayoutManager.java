@@ -18,6 +18,10 @@ public interface LayoutManager extends PortletLifecycle {
 
     public List getPortletComponents();
 
+    public void addPortletComponent(PortletComponent component);
+
+    public void removePortletComponent(PortletComponent component);
+
 }
 
 
