@@ -48,9 +48,7 @@ public class PersistenceManagerFactory {
             log.info("Creating new PM for :"+webappname);
             ServletContext ctx = GridSphereConfig.getServletContext();
             //todo init from webappstartup with real fullpath? Did not work after loses...
-            //todo: Is this what do you mean?
-            String path = ctx.getRealPath("/WEB-INF/persistence/");
-            path=path.substring(0,path.lastIndexOf("gridsphere"))+webappname+"/WEB-INF/persistence";
+            String path = ctx.getRealPath("../"+webappname+"/WEB-INF/persistence/");
             PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(path);
             databases.put(webappname, pm);
         }
