@@ -55,13 +55,6 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.layout.PortletPanel">
-        <map-to xml="portlet-panel"/>
-        <field name="Layout" type="org.gridlab.gridsphere.layout.PortletLayout">
-            <bind-xml auto-naming="deriveByClass"/>
-        </field>
-    </class>
-
     <class name="org.gridlab.gridsphere.layout.PortletContainer">
         <field name="PortletComponents" type="org.gridlab.gridsphere.layout.PortletComponent" collection="arraylist">
             <bind-xml auto-naming="deriveByClass"/>

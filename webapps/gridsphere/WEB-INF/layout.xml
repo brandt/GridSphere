@@ -6,29 +6,27 @@
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="home">
                 <title>Home</title>
-                <portlet-panel>
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="30%">
-                                <portlet-frame label="login">
-                                    <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                            <column-layout width="70%">
-                                <portlet-frame label="filemanager">
-                                    <portlet-class>org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                        </row-layout>
-                        <row-layout>
-                            <column-layout>
-                                <portlet-frame label="banner">
-                                    <portlet-class>org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                        </row-layout>
-                    </table-layout>
-                </portlet-panel>
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="30%">
+                            <portlet-frame label="login">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                        <column-layout width="70%">
+                            <portlet-frame label="filemanager">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="banner">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
             </portlet-tab>
             <portlet-tab lable="utilities">
                 <title>Utilities</title>
@@ -53,45 +51,39 @@
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab>
                 <title>Portlets</title>
-                <portlet-panel>
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="80%">
-                                <portlet-frame>
-                                    <portlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                        </row-layout>
-                    </table-layout>
-                </portlet-panel>
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="80%">
+                            <portlet-frame>
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
             </portlet-tab>
             <portlet-tab>
                 <title>Users</title>
-                <portlet-panel>
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="80%">
-                                <portlet-frame>
-                                    <portlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                        </row-layout>
-                    </table-layout>
-                </portlet-panel>
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="80%">
+                            <portlet-frame>
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
             </portlet-tab>
             <portlet-tab>
                 <title>Groups</title>
-                <portlet-panel>
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="80%">
-                                <portlet-frame>
-                                    <portlet-class>org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                        </row-layout>
-                    </table-layout>
-                </portlet-panel>
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="80%">
+                            <portlet-frame>
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
             </portlet-tab>
         </portlet-tabbed-pane>
     </portlet-tab>
