@@ -36,6 +36,10 @@
             <param-name>layout-mapping.xml</param-name>
             <param-value>WEB-INF/conf/layout-mapping.xml</param-value>
         </init-param>
+        <init-param>
+            <param-name>user-layouts</param-name>
+            <param-value>user-layouts</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
