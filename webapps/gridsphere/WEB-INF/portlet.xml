@@ -459,7 +459,7 @@
                 </language>
                 <config-param>
                     <param-name>supported-themes</param-name>
-                    <param-value>xp, swamp</param-value>
+                    <param-value>default, swamp</param-value>
                 </config-param>
             </concrete-portlet>
         </concrete-portlet-app>
