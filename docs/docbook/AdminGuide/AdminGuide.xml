@@ -24,15 +24,11 @@
 	In-line code snippets use <function>
 	Property paths and JavaBeans property names used <varname>
 -->
-<book>
+<article>
+<artheader>
   <title>GridSphere Administrator's Guide</title>
-  <bookinfo>
-    <copyright>
-      <year>2003, 2004</year>
-      <holder>GridLab Project</holder>
-    </copyright>
-  </bookinfo>
-  
+</artheader>
+    
   &chap-intro;
 
-</book>
+</article>

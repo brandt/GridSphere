@@ -8,7 +8,7 @@
     Version:    $Id$
 -->
 
-<chapter id="intro">
+<sect1>
     <title>Introduction</title>
     <para>
     The GridSphere Administrator's Guide describes how to administer the running GridSphere portal.
@@ -16,6 +16,7 @@
     the GridSphere User's Guide and the GridSphere Tutorials. This guide assumes you have succesfully installed
     GridSphere.
     </para>
+</sect1>
 
     <sect1>
         <title>Editing administrator profile</title>
@@ -34,7 +35,7 @@
             From the Users tab as the super user, you can create also create/modify/remove users from the portal.
             By default, when the portal is first initialized, anyone can create a new account for themselves from the
             login screen. If you wish to restrict new account creation to the portal administrator, then go to the
-            Administration=>Portlets tab to teh "Configure Login" portlet. Here you can select to restrict new account
+            Administration=>Portlets tab to the "Configure Login" portlet. Here you can select to restrict new account
             creation if desired.
         </para>
     </sect1>
@@ -76,12 +77,10 @@
     <sect1>
         <title>Layout Administration</title>
         <para>
-            The Administartion=>Layouts tab offers the "Layout Manager Portlet" that allows an administartor to modify the
+            The Administration=>Layouts tab offers the "Layout Manager Portlet" that allows an administartor to modify the
             layout of a particular group. Currently, the layout descriptor must be hand edited in the text area and then saved.
             The changes will take place when a user logs out and logs back in. This offers a simple yet effective way to edity the guest
             user layout or the layouts of defined groups. In addition, the banner of the portal may be edited as well allowing
             an admin to change the portal header including logo and title information.
         </para>
     </sect1>
-
-</chapter>
