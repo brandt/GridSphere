@@ -194,11 +194,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
         if (!aclService.hasSuperRole(user) && !aclService.hasAdminRoleInGroup(user, group)) {
             return;
         }
-
+        
         String groupFile = PortletTabRegistry.getTabDescriptorPath(group.getName());
         System.err.println("saving group layout: " + group.getName());
         Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(groupFile), "UTF-8"));
-        out.write(newText);
+        byte[] text = newText.getBytes("iso-8859-1");
+        String newstring = new String(text, "UTF-8");
+        out.write(newstring);
         out.close();
 
         PortletTabRegistry.reloadTab(groupHF.getValue(), groupFile);
