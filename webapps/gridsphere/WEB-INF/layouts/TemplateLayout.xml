@@ -31,14 +31,5 @@ $Id$
     </portlet-tabbed-pane>
 
     <!-- Footer components (if any) -->
-    <portlet-footer>
-        <table-layout style="footer">
-            <row-layout>
-                <column-layout>
-                    <portlet-content include="/html/pagefooter.html"/>
-                </column-layout>
-            </row-layout>
-        </table-layout>
-    </portlet-footer>
 
 </page-layout>
