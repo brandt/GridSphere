@@ -160,7 +160,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Builds and deploys GridSphere                                       -->
     <!-- =================================================================== -->
-    <target name="install" depends="license, clean, compile, deploy" description="Build and deploy GridSphere">
+    <target name="install" depends="license, clean, compile, docs, deploy" description="Build and deploy GridSphere">
         <antcall target="create-database"/>
     </target>
 
