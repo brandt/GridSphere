@@ -14,24 +14,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ListBoxBean extends BaseComponentBean implements TagBean {
+public class ListBoxBean extends BeanContainer implements TagBean {
 
-    protected List list = new ArrayList();
+    protected String LISTBOX_STYLE = "portlet-frame-input";
+    public static final String NAME = "lb";
 
     protected transient static PortletLog log = SportletLog.getInstance(ListBoxBean.class);
 
-    protected int size = 1;
+    protected int size = 0;
     protected boolean isMultiple = false;
 
     public ListBoxBean() {
-
+        super(NAME);
+        this.cssStyle = LISTBOX_STYLE;
     }
 
     public ListBoxBean(String beanId) {
+        super(NAME);
         this.beanId = beanId;
+        this.cssStyle = LISTBOX_STYLE;
     }
 
     public ListBoxBean(PortletRequest request, String beanId) {
+        super(NAME);
+        this.cssStyle = LISTBOX_STYLE;
         this.request = request;
         this.beanId = beanId;
     }
@@ -52,69 +58,18 @@ public class ListBoxBean extends BaseComponentBean implements TagBean {
         return isMultiple;
     }
 
-    /**
-     * Adds an entry to the dropdownlist.
-     * @param label label of the entry
-     * @param value value of the entry
-     */
-    public void add(String label, String value) {
-        ListBoxItemBean item = new ListBoxItemBean();
-        item.setName(label);
-        item.setValue(value);
-        list.add(item);
-    }
-
-    /**
-     * Adds an entry to the dropdownlist.
-     * @param label label of the entry
-     * @param value value of the entry
-     * @param selected marks if the element should be selected or not
-     */
-    public void add(String label, String value, boolean selected) {
-        ListBoxItemBean item = new ListBoxItemBean();
-        item.setName(label);
-        item.setValue(value);
-        item.setSelected(selected);
-        list.add(item);
-    }
-
-
-    /**
-     * Sets the selected flag on an entry.
-     * @param index index of the element
-     * @param selected true/false representing the selected status
-     */
-    public void setSelected(int index, boolean selected) {
-        ListBoxItemBean item = (ListBoxItemBean)list.get(index);
-        item.setSelected(selected);
-    }
-
-    /**
-     * Adds a selectable item to the list
-     * @param item selectable item to be added
-     */
-    public void add(ListBoxItemBean item) {
-        list.add(item);
-    }
-
-    /**
-     * Clears items in list
-     */
-    public void clear() {
-        list.clear();
-    }
-
     public String toString() {
-        String result = "<select name='"+name+"' size='"+size+"'";
+        String pname = (name == null) ? "" : name;
+        String sname = pname;
+        if (!beanId.equals("")) {
+            sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+        }
+        String result = "<select name='"+sname+"' size='"+size+"'";
         if (isMultiple) {
             result = result + " multiple='multiple'" ;
         }
         result = result +">";
-        Iterator it = list.iterator();
-        while (it.hasNext()) {
-            ListBoxItemBean item = (ListBoxItemBean)it.next();
-            result = result + item.toString();
-        }
+        result += super.toString();
         result = result +"</select>";
         return result;
     }
@@ -123,9 +78,35 @@ public class ListBoxBean extends BaseComponentBean implements TagBean {
      * Returns the selected values of the list.
      * @return selected values of the list
      */
-    public ArrayList getSelectedValues() {
-        ArrayList result = new ArrayList();
-        Iterator it = list.iterator();
+    public String getSelectedValue() {
+        Iterator it = container.iterator();
+        while (it.hasNext()) {
+            ListBoxItemBean item = (ListBoxItemBean)it.next();
+            if (item.isSelected()) {
+                return item.getValue();
+            }
+        }
+        return null;
+    }
+
+    public boolean hasSelectedValue() {
+        Iterator it = container.iterator();
+        while (it.hasNext()) {
+            ListBoxItemBean item = (ListBoxItemBean)it.next();
+            if (item.isSelected()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns the selected values of the list.
+     * @return selected values of the list
+     */
+    public List getSelectedValues() {
+        List result = new ArrayList();
+        Iterator it = container.iterator();
         while (it.hasNext()) {
             ListBoxItemBean item = (ListBoxItemBean)it.next();
             if (item.isSelected()) {
@@ -139,9 +120,9 @@ public class ListBoxBean extends BaseComponentBean implements TagBean {
      * Returns the selected items of the list
      * @return  the selected item of the list
      */
-    public ArrayList getSelectedItems() {
+    public List getSelectedItems() {
         ArrayList result = new ArrayList();
-        Iterator it = list.iterator();
+        Iterator it = container.iterator();
         while (it.hasNext()) {
             ListBoxItemBean item = (ListBoxItemBean)it.next();
             if (item.isSelected()) {

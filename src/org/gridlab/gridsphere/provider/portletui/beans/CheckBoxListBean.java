@@ -5,8 +5,6 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import java.util.Iterator;
-
 public class CheckBoxListBean extends ListBoxBean {
 
     public CheckBoxListBean(String name) {
@@ -29,7 +27,7 @@ public class CheckBoxListBean extends ListBoxBean {
     public void add(String value, String label, boolean selected) {
         CheckBoxBean cbb = new CheckBoxBean();
         cbb.setValue(value);
-        list.add(cbb);
+        //list.add(cbb);
     }
 
     /**
@@ -41,7 +39,7 @@ public class CheckBoxListBean extends ListBoxBean {
     public void add(String value, String label, boolean selected, boolean disabled) {
         CheckBoxBean cbb = new CheckBoxBean();
         //cbb.setLabel(label);
-        list.add(cbb);
+        //list.add(cbb);
     }
 
     public String toString() {

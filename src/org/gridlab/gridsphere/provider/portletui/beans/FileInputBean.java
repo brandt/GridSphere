@@ -19,23 +19,28 @@ public class FileInputBean extends InputBean implements TagBean {
     public static final int MAX_UPLOAD_SIZE = 1024 * 1024;
     public static final String TEMP_DIR = "/tmp";
 
+    public static final String SUBMIT_STYLE = "portlet-frame-text";
+
     public static String NAME = "fi";
+
+    private FileItem savedFileItem;
 
     public FileInputBean() {
         super(NAME);
+        this.cssStyle = SUBMIT_STYLE;
         this.inputtype = "file";
     }
 
-    public FileInputBean(PortletRequest request, String beanId) {
+    public FileInputBean(PortletRequest request, String beanId) throws IOException {
         super(NAME);
+        this.cssStyle = SUBMIT_STYLE;
         this.inputtype = "file";
         this.request = request;
         this.beanId = beanId;
+        createFileUpload(request);
     }
 
-    public String saveFile(String filePath) throws IOException {
-
-        if (!filePath.endsWith("/")) filePath += "/";
+    protected void createFileUpload(PortletRequest req) throws IOException {
 
         // Create a new file upload handler
         FileUpload upload = new FileUpload();
@@ -49,27 +54,50 @@ public class FileInputBean extends InputBean implements TagBean {
         try {
             items = upload.parseRequest(request);
         } catch (FileUploadException e) {
-            throw new IOException("Unable to parse uploaded file: " + e);
+            name = "<b>Unable to parse uploaded file!</b>";
         }
         // Process the uploaded fields
         Iterator iter = items.iterator();
-        File file = new File(filePath);
 
-
-        int i = 0;
         try {
-            if (!file.exists()) file.createNewFile();
             while (iter.hasNext()) {
                 FileItem item = (FileItem) iter.next();
-
                 if (!item.isFormField()) {
-                    System.err.println("fuxxy " + item.getFieldName() + "   " + item.getName() + " " + item.getStoreLocation().getAbsolutePath());
-                    filePath = filePath + item.getName();
-                    item.write(filePath);
-                    //file = item.getStoreLocation();
-                    System.err.println("Writing to location : " + filePath);
+                    savedFileItem = item;
+
                 }
             }
+        } catch (Exception e) {
+            throw new IOException("Unable to save file: " + e);
+        }
+
+        value = savedFileItem.getName();
+        savedFileItem.getStoreLocation();
+
+        System.err.println("saved file :" + value);
+    }
+
+    public File getFile() {
+        return savedFileItem.getStoreLocation();
+    }
+
+    public String getFileName() {
+        return savedFileItem.getName();
+    }
+
+    public long getFileSize() {
+        return savedFileItem.getSize();
+    }
+
+    public String saveFile(String filePath) throws IOException {
+
+        if (!filePath.endsWith("/")) filePath += "/";
+
+        File file = new File(filePath);
+
+        try {
+            if (!file.exists()) file.createNewFile();
+            //savedFileItem.write(filePath);
         } catch (Exception e) {
             throw new IOException("Unable to save file: " + e);
         }

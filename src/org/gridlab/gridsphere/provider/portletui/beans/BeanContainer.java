@@ -14,9 +14,10 @@ public class BeanContainer extends BaseComponentBean {
 
     public List container  = new Vector();
 
-    public BeanContainer() {
-        super();
+    public BeanContainer() {}
 
+    public BeanContainer(String name) {
+        super(name);
     }
 
     public void addBean(BaseComponentBean bean) {
@@ -25,6 +26,10 @@ public class BeanContainer extends BaseComponentBean {
 
     public void removeBean(BaseComponentBean bean) {
         container.remove(bean);
+    }
+
+    public void clear() {
+        container.clear();
     }
 
     public List getBeans() {

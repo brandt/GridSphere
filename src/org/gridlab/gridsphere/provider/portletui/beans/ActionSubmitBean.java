@@ -6,35 +6,39 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletURI;
 
-public class ActionSubmitBean extends BaseComponentBean implements TagBean {
+import java.util.List;
+import java.util.ArrayList;
+
+public class ActionSubmitBean extends ActionBean implements TagBean {
 
     public static final String SUBMIT_STYLE = "portlet-frame-text";
-
-    protected String key = "";
-    protected String action = "";
+    public static final String NAME = "as";
 
     public ActionSubmitBean() {
+        super(NAME);
         this.cssStyle = SUBMIT_STYLE;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
+    public ActionSubmitBean(PortletRequest req, String beanId) {
+        super(NAME);
+        this.cssStyle = SUBMIT_STYLE;
+        this.request = req;
+        this.beanId = beanId;
     }
 
     public String toString() {
-        return "<input type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action +  "\" value=\"" + value + "\">";
+
+        String pname = (name == null) ? "" : name;
+        String sname = pname;
+        System.err.println("pname=" + pname+createSubmitName());
+        if (!beanId.equals("")) {
+            sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+        } else {
+            sname = SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
+        }
+        return "<input type=\"submit\" name=\"" + sname + "\" value=\"" + value + "\">";
     }
 }

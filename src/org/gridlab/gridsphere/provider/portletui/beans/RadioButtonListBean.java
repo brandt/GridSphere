@@ -22,7 +22,7 @@ public class RadioButtonListBean extends CheckBoxListBean {
         RadioButtonBean cbb = new RadioButtonBean();
         cbb.setSelected(selected);
         cbb.setValue(label);
-        list.add(cbb);
+        //list.add(cbb);
     }
 
 }
