@@ -7,8 +7,9 @@ package org.gridlab.gridsphere.portletcontainer;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletConfig;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.services.PortletRegistryService;
-import org.gridlab.gridsphere.services.ServletParsingService;
+import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
+import org.gridlab.gridsphere.services.container.parsing.ServletParsingService;
+
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
