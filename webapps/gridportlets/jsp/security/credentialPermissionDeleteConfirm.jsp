@@ -49,7 +49,7 @@
                    value="List Permissions"
                    onClick="javascript:CredentialPermissionPortlet_listCredentialPermission_onClick()"/>
             &nbsp;&nbsp;<input type="button"
-                   name="<%=CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_DELETE_CANCEL%>"
+                   name="<%=CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT%>"
                    value="New Permission"
                    onClick="javascript:CredentialPermissionPortlet_newCredentialPermission_onClick()"/>
           </td>

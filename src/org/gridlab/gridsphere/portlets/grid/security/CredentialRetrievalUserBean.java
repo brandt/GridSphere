@@ -1,10 +1,6 @@
 /*
- * Created by IntelliJ IDEA.
- * User: russell
- * Date: Feb 14, 2003
- * Time: 6:17:36 AM
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
+ * @author <a href="mailto:michael.russell@aei.mpg.de">Michael Russell</a>
+ * @version $Id$
  */
 package org.gridlab.gridsphere.portlets.grid.security;
 
@@ -76,56 +72,68 @@ public class CredentialRetrievalUserBean extends PortletBean {
 
     public void doListUserActiveCredential()
             throws PortletException {
-        this.log.debug("Entering doListActiveCredential");
+        this.log.debug("Entering doListUserActiveCredential");
         loadUserActiveCredentialMappingList();
         setPage(PAGE_USER_ACTIVE_CREDENTIAL_LIST);
-        this.log.debug("Exiting doListActiveCredential");
+        this.log.debug("Exiting doListUserActiveCredential");
     }
 
     public void doViewUserActiveCredential()
            throws PortletException {
-        this.log.debug("Entering doViewActiveCredential");
-        loadActiveCredentialMapping();
+        this.log.debug("Entering doViewUserActiveCredential");
+        loadUserActiveCredentialMapping();
         setPage(PAGE_USER_ACTIVE_CREDENTIAL_VIEW);
-        this.log.debug("Exiting doViewActiveCredential");
+        this.log.debug("Exiting doViewUserActiveCredential");
     }
 
     public void doRetrieveUserCredential()
             throws PortletException {
-        this.log.debug("Entering doRetrieveCredential");
-        retrieveCredentials();
+        this.log.debug("Entering doRetrieveUserCredential");
+        try {
+            retrieveUserCredentials();
+        } catch (Exception e) {
+            setIsFormInvalid(true);
+            setFormInvalidMessage(e.getMessage());
+        }
+        loadUserActiveCredentialMappingList();
         setPage(PAGE_USER_ACTIVE_CREDENTIAL_LIST);
-        this.log.debug("Exiting doRetrieveCredential");
+        this.log.debug("Exiting doRetrieveUserCredential");
     }
 
     public void doRefreshUserCredential()
             throws PortletException {
-        this.log.debug("Entering doRefreshCredential");
-        refreshCredentials();
+        this.log.debug("Entering doRefreshUserCredential");
+        try {
+            refreshUserCredentials();
+        } catch (PortletException e) {
+            setIsFormInvalid(true);
+            setFormInvalidMessage(e.getMessage());
+        }
+        loadUserActiveCredentialMappingList();
         setPage(PAGE_USER_ACTIVE_CREDENTIAL_LIST);
-        this.log.debug("Exiting doRefreshCredential");
+        this.log.debug("Exiting doRefreshUserCredential");
     }
 
     public void doDestroyUserCredential()
              throws PortletException {
-         this.log.debug("Entering doDestroyCredential");
+         this.log.debug("Entering doDestroyUserCredential");
          setPage(PAGE_USER_CREDENTIAL_DESTROY);
-         this.log.debug("Exiting doDestroyCredential");
+         this.log.debug("Exiting doDestroyUserCredential");
      }
 
     public void doConfirmDestroyUserCredential()
              throws PortletException {
-         this.log.debug("Entering doConfirmDestroyCredential");
-         destroyCredentials();
+         this.log.debug("Entering doConfirmDestroyUserCredential");
+         destroyUserCredentials();
          setPage(PAGE_USER_CREDENTIAL_DESTROY_CONFIRM);
-         this.log.debug("Exiting doConfirmDestroyCredential");
+         this.log.debug("Exiting doConfirmDestroyUserCredential");
      }
 
      public void doCancelDestroyUserCredential()
               throws PortletException {
-          this.log.debug("Entering doCancelDestroyCredential");
+          this.log.debug("Entering doCancelDestroyUserCredential");
           doListUserActiveCredential();
-          this.log.debug("Exiting doCancelDestroyCredential");
+          this.log.debug("Exiting doCancelDestroyUserCredential");
      }
 
     /******************************************
@@ -178,25 +186,25 @@ public class CredentialRetrievalUserBean extends PortletBean {
         return this.credentialUser.getFullName();
     }
 
-    public void loadUserActiveCredentialMappingList()
+    private void loadUserActiveCredentialMappingList()
             throws PortletException {
         this.credentialMappingList = this.credentialManagerService.getActiveCredentialMappings(this.user);
     }
 
-    public void loadActiveCredentialMapping()
+    private void loadUserActiveCredentialMapping()
             throws PortletException {
         // Get id of credential permission
         this.credentialMappingID = getParameter("credentialMappingID");
         // If id blank, init credential permission
         if (credentialMappingID.equals("")) {
-            initCredentialMapping();
+            initUserCredentialMapping();
             return;
         }
         // Get credential permission with id
         this.credentialMapping = this.credentialManagerService.getCredentialMapping(credentialMappingID);
         // If no credential permission with id, init credential permission
         if (credentialMapping == null) {
-            initCredentialMapping();
+            initUserCredentialMapping();
             return;
         }
         // Otherwise set credential mapping properties
@@ -206,24 +214,32 @@ public class CredentialRetrievalUserBean extends PortletBean {
         this.credentialUser = credentialMapping.getUser();
     }
 
-    public void initCredentialMapping()
+    private void initUserCredentialMapping()
             throws PortletException {
         this.credentialSubject = new String();
         this.credentialLabel = new String();
         this.credentialTag = new String();
     }
 
-    public void retrieveCredentials()
+    private void retrieveUserCredentials()
             throws PortletException {
-        String password = getParameter("password");
-        this.credentialManagerService.retrieveCredentials(this.user, password);
+        if (this.credentialManagerService.hasCredentialMappings(this.user)) {
+            String password = getParameter("password");
+            this.credentialManagerService.retrieveCredentials(this.user, password);
+        } else {
+            String message = "There are no credentials mapped to your account. "
+                           + "If you wish to use Grid credentials, "
+                           + "please see the <a href=\"/grid/credential/user\">"
+                           + "credential mapping portlet</a> for more details.";
+            throw new PortletException(message);
+        }
     }
 
-    public void refreshCredentials()
+    private void refreshUserCredentials()
             throws PortletException {
     }
 
-    public void destroyCredentials()
+    private void destroyUserCredentials()
             throws PortletException {
         this.credentialManagerService.destroyCredentials(this.user);
     }

@@ -11,7 +11,7 @@ import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class CredentialManagerAdminPortlet extends AbstractPortlet {
+public class CredentialMappingUserPortlet extends AbstractPortlet {
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -30,9 +30,9 @@ public class CredentialManagerAdminPortlet extends AbstractPortlet {
         PortletRequest request = event.getPortletRequest();
         PortletResponse response = event.getPortletResponse();
         // Get instance of user manager bean
-        CredentialManagerAdminBean credentialManagerAdminBean = getCredentialManagerAdminBean(request, response);
+        CredentialMappingUserBean credentialMappingUserBean = getCredentialMappingUserBean(request, response);
         // Then perform given action
-        credentialManagerAdminBean.doViewAction(action);
+        credentialMappingUserBean.doViewAction(action);
         getPortletLog().debug("Exiting actionPerformed()");
     }
 
@@ -40,13 +40,13 @@ public class CredentialManagerAdminPortlet extends AbstractPortlet {
             throws PortletException, IOException {
         getPortletLog().debug("Entering doView()");
         // Get instance of user manager bean
-        CredentialManagerAdminBean credentialManagerAdminBean = getCredentialManagerAdminBean(request, response);
+        CredentialMappingUserBean credentialMappingUserBean = getCredentialMappingUserBean(request, response);
         // If no action performed, then perform list users
-        if (credentialManagerAdminBean.getActionPerformed() == null) {
-            credentialManagerAdminBean.doDefaultViewAction();
+        if (credentialMappingUserBean.getActionPerformed() == null) {
+            credentialMappingUserBean.doDefaultViewAction();
         }
         // Get next page to display
-        String nextPage = credentialManagerAdminBean.getPage();
+        String nextPage = credentialMappingUserBean.getPage();
         // Include the given page
         getPortletConfig().getContext().include(nextPage, request, response);
         getPortletLog().debug("Exiting doView()");
@@ -64,27 +64,27 @@ public class CredentialManagerAdminPortlet extends AbstractPortlet {
             throws PortletException, IOException {
         getPortletLog().debug("Entering doTitle()");
         // Get instance of user manager bean
-        CredentialManagerAdminBean credentialManagerAdminBean = getCredentialManagerAdminBean(request, response);
+        CredentialMappingUserBean credentialMappingUserBean = getCredentialMappingUserBean(request, response);
         // Get next title to display
-        String title = credentialManagerAdminBean.getTitle();
+        String title = credentialMappingUserBean.getTitle();
         // Print the given title
         response.getWriter().println(title);
         getPortletLog().debug("Exiting doTitle()");
     }
 
-    private CredentialManagerAdminBean getCredentialManagerAdminBean(PortletRequest request,
+    private CredentialMappingUserBean getCredentialMappingUserBean(PortletRequest request,
                                                PortletResponse response)
             throws PortletException {
-        getPortletLog().debug("Entering getCredentialManagerAdminBean()");
-        CredentialManagerAdminBean credentialManagerAdminBean =
-                (CredentialManagerAdminBean)request.getAttribute("credentialManagerAdminBean");
-        if (credentialManagerAdminBean == null) {
-            getPortletLog().debug("Creating instance of CredentialManagerAdminBean");
+        getPortletLog().debug("Entering getCredentialMappingUserBean()");
+        CredentialMappingUserBean credentialMappingUserBean =
+                (CredentialMappingUserBean)request.getAttribute("credentialMappingUserBean");
+        if (credentialMappingUserBean == null) {
+            getPortletLog().debug("Creating instance of CredentialMappingUserBean");
             PortletConfig config = getPortletConfig();
-            credentialManagerAdminBean = new CredentialManagerAdminBean(config, request, response);
-            request.setAttribute("credentialManagerAdminBean", credentialManagerAdminBean);
+            credentialMappingUserBean = new CredentialMappingUserBean(config, request, response);
+            request.setAttribute("credentialMappingUserBean", credentialMappingUserBean);
         }
-        getPortletLog().debug("Exiting getCredentialManagerAdminBean()");
-        return credentialManagerAdminBean;
+        getPortletLog().debug("Exiting getCredentialMappingUserBean()");
+        return credentialMappingUserBean;
     }
 }

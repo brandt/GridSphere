@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface CredentialManagerService extends PortletService {
 
-    /****** CREDENTIAL PERMISSION PERSISTENCE METHODS *******/
+    /****** CREDENTIAL PERMISSION METHODS *******/
 
     public List getCredentialPermissions();
 
@@ -26,29 +26,9 @@ public interface CredentialManagerService extends PortletService {
 
     public boolean existsCredentialPermission(String permission);
 
-    /****** CREDENTIAL PERMISSION MANIPULATION METHODS *******/
-
     public List getPermittedCredentialSubjects();
 
     public boolean isCredentialPermitted(String subject);
-
-    /****** CREDENTIAL MAPPING PERSISTENCE METHODS *******/
-
-    public List getCredentialMappings();
-
-    public CredentialMapping getCredentialMapping(String subject);
-
-    public CredentialMapping createCredentialMapping(String subject, User user)
-            throws CredentialNotPermittedException;
-
-    public CredentialMapping createCredentialMapping(String subject, User user, String tag)
-            throws CredentialNotPermittedException;
-
-    public void deleteCredentialMapping(String subject);
-
-    public List getCredentialMappings(User user);
-
-    public void deleteCredentialMappings(User user);
 
     /****** CREDENTIAL MAPPING REQUEST METHODS *******/
 
@@ -68,7 +48,25 @@ public interface CredentialManagerService extends PortletService {
 
     public void denyCredentialMappingRequest(CredentialMappingRequest mappingRequest);
 
-    /****** CREDENTIAL MAPPING MANIPULATION METHODS *******/
+    /****** CREDENTIAL MAPPING METHODS *******/
+
+    public List getCredentialMappings();
+
+    public CredentialMapping getCredentialMapping(String subject);
+
+    public CredentialMapping createCredentialMapping(String subject, User user)
+            throws CredentialNotPermittedException;
+
+    public CredentialMapping createCredentialMapping(String subject, User user, String tag)
+            throws CredentialNotPermittedException;
+
+    public void deleteCredentialMapping(String subject);
+
+    public List getCredentialMappings(User user);
+
+    public void deleteCredentialMappings(User user);
+
+    public boolean hasCredentialMappings(User user);
 
     public User getCredentialUser(String subject);
 

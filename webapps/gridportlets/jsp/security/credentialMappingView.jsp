@@ -68,6 +68,22 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
        <tr>
+         <td class="portlet-frame-label">
+           User Name
+         </td>
+         <td class="portlet-frame-text">
+           <%=credentialMappingAdminBean.getCredentialUserName()%>
+         </td>
+       </tr>
+       <tr>
+         <td class="portlet-frame-label">
+           Full Name
+         </td>
+         <td class="portlet-frame-text">
+           <%=credentialMappingAdminBean.getCredentialUserFullName()%>
+         </td>
+       </tr>
+       <tr>
          <td class="portlet-frame-label" width="200">
            Credential Subject
          </td>
@@ -89,22 +105,6 @@
          </td>
          <td class="portlet-frame-text">
            <%=credentialMappingAdminBean.getCredentialTag()%>
-         </td>
-       </tr>
-       <tr>
-         <td class="portlet-frame-label">
-           User Name
-         </td>
-         <td class="portlet-frame-text">
-           <%=credentialMappingAdminBean.getCredentialUserName()%>
-         </td>
-       </tr>
-       <tr>
-         <td class="portlet-frame-label">
-           Full Name
-         </td>
-         <td class="portlet-frame-text">
-           <%=credentialMappingAdminBean.getCredentialUserFullName()%>
          </td>
        </tr>
       </table>

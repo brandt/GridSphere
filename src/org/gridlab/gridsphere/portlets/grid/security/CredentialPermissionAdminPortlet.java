@@ -1,10 +1,6 @@
 /*
- * Created by IntelliJ IDEA.
- * User: russell
- * Date: Feb 14, 2003
- * Time: 6:16:50 AM
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
+ * @author <a href="mailto:michael.russell@aei.mpg.de">Michael Russell</a>
+ * @version $Id$
  */
 package org.gridlab.gridsphere.portlets.grid.security;
 

@@ -51,6 +51,19 @@
     }
   </script>
 <table class="portlet-pane" cellspacing="1">
+<% if (credentialRetrievalUserBean.isFormInvalid()) { %>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="500">
+        <tr>
+          <td class="portlet-frame-message-alert">
+            <%=credentialRetrievalUserBean.getFormInvalidMessage()%>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+<% } %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="500">
@@ -81,7 +94,7 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-text-alert">
+          <td class="portlet-frame-text">
               None of your credentials have been activated yet.
           </td>
         </tr>
@@ -105,6 +118,7 @@
                    name="doListUserActiveCredential"
                    value="List Credentials"
                    onClick="javascript:CredentialRetrievalUserPortlet_listUserActiveCredential_onClick()"/>
+<%-- TEMPORARILY COMMENTED OUT (MPR 25/02/03)
             &nbsp;&nbsp;<input type="button"
                    name="doRefreshUserCredential"
                    value="Refresh Credentials"
@@ -113,6 +127,7 @@
                    name="doDestroyUserCredential"
                    value="Destroy Credentials"
                    onClick="javascript:CredentialRetrievalUserPortlet_destroyUserCredential_onClick()"/>
+--%>
           </td>
         </tr>
       </table>
@@ -122,12 +137,14 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="500">
         <tr>
+<%-- TEMPORARILY COMMENTED OUT (MPR 25/02/03)
           <td class="portlet-frame-header-checkbox">
               <input type="checkbox"
                name="credentialMappingID"
                value=""
                onClick="javascript:GridSphere_CheckBoxList_checkAll(document.AccessControllerPortlet.groupEntryUserID)"/>
           </td>
+--%>
          <td class="portlet-frame-header" width="150">
            Label
          </td>
@@ -142,12 +159,14 @@
        CredentialMapping credentialMapping = (CredentialMapping)credentialMappingList.get(ii);
        Credential credential = credentialMapping.getCredential(); %>
         <tr>
+<%-- TEMPORARILY COMMENTED OUT (MPR 25/02/03)
           <td class="portlet-frame-entry-checkbox">
               <input type="checkbox"
                name="credentialMappingID"
                value="<%=credentialMapping.getID()%>"
                onClick="javascript:GridSphere_CheckBoxList_onClick(document.CredentialRetrievalUserPortlet.credentialMappingID,
                                                                    this)"/>
+--%>
           <td class="portlet-frame-text">
             <a href="javascript:CredentialRetrievalUserPortlet_viewUserActiveCredential_onClick('<%=credentialMapping.getID()%>')">
               <%=credentialMapping.getLabel()%>

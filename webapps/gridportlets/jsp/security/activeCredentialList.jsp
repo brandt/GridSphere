@@ -49,7 +49,7 @@
    int numCredentials = activeCredentialList.size();
    if (numCredentials == 0) { %>
         <tr>
-          <td class="portlet-frame-text-alert">
+          <td class="portlet-frame-text">
               There are currently no credentials in use.
           </td>
         </tr>

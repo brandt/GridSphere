@@ -179,6 +179,8 @@
 
 </portlet-app-def>
 
+<!-- CredentialRetrievalUserPortlet -->
+
 <portlet-app-def>
 
 <portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialRetrievalUserPortlet">
@@ -230,6 +232,68 @@
                authorized access to Grid services made available within the portal.
             </description>
             <keywords>credential retrieval user</keywords>
+        </language>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
+
+<!-- CredentialMappingUserPortlet -->
+
+<portlet-app-def>
+
+<portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialMappingUserPortlet">
+    <portlet-name>Credential Mapping</portlet-name>
+    <servlet-name>CredentialMappingUserPortlet</servlet-name>
+    <portlet-config>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </portlet-config>
+    <cache>
+        <expires>120</expires>
+        <shared>false</shared>
+    </cache>
+    <allows>
+        <maximized/>
+        <minimized/>
+        <resizing/>
+    </allows>
+    <supports>
+        <markup name="html">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+        <markup name="wml">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+    </supports>
+</portlet-app>
+
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialMappingUserPortlet.1">
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </context-param>
+    <concrete-portlet>
+        <portlet-name>Credential Mapping</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Credential Mapping</title>
+            <title-short>CredentialMapping</title-short>
+            <description>
+               Enables portal users to request credentials to be mapped to their accounts, thereby
+               allowing users to load credentials into GridSphere or to retrieve credentials from
+               a credential retrieval service.
+            </description>
+            <keywords>credential mapping user</keywords>
         </language>
         <allowed-access visibility="public">
             <role>ANY</role>

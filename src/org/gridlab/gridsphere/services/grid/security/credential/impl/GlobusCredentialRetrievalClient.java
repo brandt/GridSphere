@@ -18,6 +18,7 @@ import org.gridlab.gridsphere.services.grid.security.credential.CredentialRetrie
 import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
 import org.globus.security.GlobusProxy;
+import org.globus.security.GlobusProxyException;
 
 /** JDK imports **/
 import java.util.List;
@@ -139,20 +140,33 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
             _log.debug("Lifetime = " + lifetime);
         }
         // Retrieve Globus proxy from MyProxy
-        GlobusProxy globusProxy = null;
+        GlobusProxy userProxy = null;
         try {
-            globusProxy = this.myProxy.get(username, passphrase, (int)lifetime);
+            GlobusProxy gridProxy = getGridSphereProxy();
+            userProxy = this.myProxy.get(gridProxy, username, passphrase, (int)lifetime);
+        } catch (GlobusProxyException e) {
+            String m = "Error retrieving Globus proxy with MyProxy client";
+            _log.error(m, e);
+            throw new CredentialRetrievalException(m, e);
         } catch (MyProxyException e) {
             String m = "Error retrieving Globus proxy with MyProxy client";
             _log.error(m, e);
             throw new CredentialRetrievalException(m, e);
         }
         // Instantiate and return credential
-        GlobusCredential credential = new GlobusCredential(globusProxy);
+        GlobusCredential credential = new GlobusCredential(userProxy);
         if (_log.isDebugEnabled()) {
             _log.debug("Globus credential = " + credential.toString());
         }
         _log.info("Exiting myProxyGet(username, passphrase, lifetime)");
         return credential;
+    }
+
+    GlobusProxy getGridSphereProxy()
+        throws GlobusProxyException {
+        _log.info("Entering getGridSphereProxy()");
+        GlobusProxy proxy = GlobusProxy.getDefaultUserProxy();
+        _log.debug("GridSphere using proxy [" + proxy.getSubject() + "]");
+        return proxy;
     }
 }

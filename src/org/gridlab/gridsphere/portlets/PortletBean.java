@@ -14,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class PortletBean {
 
-    public static final String PAGE_ERROR_UNDEFINED_ACTION = "/jsp/error/undefinedAction.jsp";
+    public static final String PAGE_ERROR_UNDEFINED_ACTION = "/gridsphere/jsp/error/portletActionUndefined.jsp";
 
     protected PortletConfig config = null;
     protected PortletContext context = null;
@@ -159,18 +159,21 @@ public class PortletBean {
             // Call method specified by action name
             try {
                 if (this.log.isDebugEnabled()) {
-                    this.log.debug("Getting method " + thisClass.getName() + "." + action + "()");
+                    this.log.debug("Getting action method " + thisClass.getName() + "." + action + "()");
                 }
                 Method actionMethod = thisClass.getMethod(actionName, null);
-                this.log.debug("Invoking method");
+                this.log.debug("Invoking action method");
                 actionMethod.invoke(thisObject, null);
             } catch (NoSuchMethodException e) {
+                this.log.error("Error invoking action method", e);
                 // If action is not illegal do error undefined action
                 doErrorUndefinedAction();
             } catch (IllegalAccessException e) {
+                this.log.error("Error invoking action method", e);
                 // If action is not illegal do error undefined action
                 doErrorUndefinedAction();
             } catch (InvocationTargetException e) {
+                this.log.error("Error invoking action method", e);
                 // If action is not illegal do error undefined action
                 doErrorUndefinedAction();
             }

@@ -214,6 +214,117 @@ public final class GlobusCredentialManager
         return answer;
     }
 
+    /****** CREDENTIAL MAPPING REQUEST METHODS *******/
+
+    public List getCredentialMappingRequests() {
+        return selectCredentialMappingRequests("");
+    }
+
+    public List getCredentialMappingRequests(User user) {
+        String criteria = " user=\"" + user.getID() + "\"";
+        return selectCredentialMappingRequests(criteria);
+    }
+
+    private List selectCredentialMappingRequests(String criteria) {
+        try {
+            String query = "select cmr from "
+                         + this.credentialMappingRequestImpl
+                         + " cmr where "
+                         + criteria;
+            _log.debug(query);
+            return this.pm.restoreList(query);
+        } catch (PersistenceManagerException e) {
+            _log.error("Error retrieving credential mapping requests", e);
+            return new Vector();
+        }
+    }
+
+    public CredentialMappingRequest getCredentialMappingRequest(String id) {
+        String criteria = "cmr.ObjectID=\"" + id +"\"";
+        return selectCredentialMappingRequest(criteria);
+    }
+
+    private GlobusCredentialMappingRequest selectCredentialMappingRequest(String criteria) {
+        try {
+            String query = "select cp from "
+                         + this.credentialMappingRequestImpl
+                         + " cmr where "
+                         + criteria;
+            _log.debug(query);
+            return (GlobusCredentialMappingRequest)this.pm.restoreObject(query);
+        } catch (PersistenceManagerException e) {
+            _log.error("Error retrieving credential mapping request ", e);
+            return null;
+        }
+    }
+
+    public CredentialMappingRequest createCredentialMappingRequest() {
+        return new GlobusCredentialMappingRequest();
+    }
+
+    public CredentialMappingRequest createCredentialMappingRequest(CredentialMapping mapping) {
+        GlobusCredentialMappingRequest mappingRequest = new GlobusCredentialMappingRequest();
+        mappingRequest.setUser(mapping.getUser());
+        mappingRequest.setSubject(mapping.getSubject());
+        mappingRequest.setLabel(mapping.getLabel());
+        mappingRequest.setTag(mapping.getTag());
+        mappingRequest.setCredentialMappingAction(CredentialMappingAction.EDIT);
+        return mappingRequest;
+    }
+
+    public void submitCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
+        try {
+            this.pm.create(mappingRequest);
+        } catch (PersistenceManagerException e) {
+            _log.error("Error creating credential mapping request ", e);
+        }
+    }
+
+    public CredentialMapping approveCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
+        CredentialMappingAction mappingAction = mappingRequest.getCredentialMappingAction();
+        GlobusCredentialMapping credentialMapping = null;
+       if (mappingAction.equals(CredentialMappingAction.ADD)) {
+            // Instantiate credential mapping
+            credentialMapping = new GlobusCredentialMapping();
+            credentialMapping.setUser(mappingRequest.getUser());
+            credentialMapping.setSubject(mappingRequest.getSubject());
+            credentialMapping.setLabel(mappingRequest.getLabel());
+            credentialMapping.setTag(mappingRequest.getTag());
+            // Create credential mapping
+            createGlobusCredentialMapping(credentialMapping);
+        } else if (mappingAction.equals(CredentialMappingAction.EDIT)) {
+            // Retrieve associated credential mapping
+            credentialMapping = getGlobusCredentialMapping(mappingRequest.getID());
+            credentialMapping.setSubject(mappingRequest.getSubject());
+            credentialMapping.setLabel(mappingRequest.getLabel());
+            credentialMapping.setTag(mappingRequest.getTag());
+            // Update credential mapping
+            updateCredentialMapping(credentialMapping);
+        } else if (mappingAction.equals(CredentialMappingAction.REMOVE)) {
+            // Retrieve associated credential mapping
+            credentialMapping = getGlobusCredentialMapping(mappingRequest.getID());
+            // Delete credential mapping
+            deleteCredentialMappingRequest(mappingRequest);
+        }
+        // Delete mapping request
+        deleteCredentialMappingRequest(mappingRequest);
+        // Return the original mapping
+        return credentialMapping;
+    }
+
+    public void denyCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
+        // Delete mapping request
+        deleteCredentialMappingRequest(mappingRequest);
+    }
+
+    private void deleteCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
+        try {
+            this.pm.delete(mappingRequest);
+        } catch (PersistenceManagerException e) {
+            _log.error("Error creating credential mapping request ", e);
+        }
+    }
+
     /****** CREDENTIAL MAPPING METHODS *******/
 
     public List getCredentialMappings() {
@@ -354,6 +465,10 @@ public final class GlobusCredentialManager
         }
     }
 
+    public boolean hasCredentialMappings(User user) {
+        return (getCredentialMappings(user).size() > 0);
+    }
+
     public boolean existsCredentialMapping(String subject) {
         _log.debug("Testing if mapping for " + subject + " exists");
         String value = null;
@@ -369,117 +484,6 @@ public final class GlobusCredentialManager
         }
         return (value != null);
     }
-
-    public List getCredentialMappingRequests() {
-        return selectCredentialMappingRequests("");
-    }
-
-    public List getCredentialMappingRequests(User user) {
-        String criteria = " user=\"" + user.getID() + "\"";
-        return selectCredentialMappingRequests(criteria);
-    }
-
-    private List selectCredentialMappingRequests(String criteria) {
-        try {
-            String query = "select cmr from "
-                         + this.credentialMappingRequestImpl
-                         + " cmr where "
-                         + criteria;
-            _log.debug(query);
-            return this.pm.restoreList(query);
-        } catch (PersistenceManagerException e) {
-            _log.error("Error retrieving credential mapping requests", e);
-            return new Vector();
-        }
-    }
-
-    public CredentialMappingRequest getCredentialMappingRequest(String id) {
-        String criteria = "cmr.ObjectID=\"" + id +"\"";
-        return selectCredentialMappingRequest(criteria);
-    }
-
-    private GlobusCredentialMappingRequest selectCredentialMappingRequest(String criteria) {
-        try {
-            String query = "select cp from "
-                         + this.credentialMappingRequestImpl
-                         + " cmr where "
-                         + criteria;
-            _log.debug(query);
-            return (GlobusCredentialMappingRequest)this.pm.restoreObject(query);
-        } catch (PersistenceManagerException e) {
-            _log.error("Error retrieving credential mapping request ", e);
-            return null;
-        }
-    }
-
-    public CredentialMappingRequest createCredentialMappingRequest() {
-        return new GlobusCredentialMappingRequest();
-    }
-
-    public CredentialMappingRequest createCredentialMappingRequest(CredentialMapping mapping) {
-        GlobusCredentialMappingRequest mappingRequest = new GlobusCredentialMappingRequest();
-        mappingRequest.setUser(mapping.getUser());
-        mappingRequest.setSubject(mapping.getSubject());
-        mappingRequest.setLabel(mapping.getLabel());
-        mappingRequest.setTag(mapping.getTag());
-        mappingRequest.setCredentialMappingAction(CredentialMappingAction.EDIT);
-        return mappingRequest;
-    }
-
-    public void submitCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
-        try {
-            this.pm.create(mappingRequest);
-        } catch (PersistenceManagerException e) {
-            _log.error("Error creating credential mapping request ", e);
-        }
-    }
-
-    public CredentialMapping approveCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
-        CredentialMappingAction mappingAction = mappingRequest.getCredentialMappingAction();
-        GlobusCredentialMapping credentialMapping = null;
-       if (mappingAction.equals(CredentialMappingAction.ADD)) {
-            // Instantiate credential mapping
-            credentialMapping = new GlobusCredentialMapping();
-            credentialMapping.setUser(mappingRequest.getUser());
-            credentialMapping.setSubject(mappingRequest.getSubject());
-            credentialMapping.setLabel(mappingRequest.getLabel());
-            credentialMapping.setTag(mappingRequest.getTag());
-            // Create credential mapping
-            createGlobusCredentialMapping(credentialMapping);
-        } else if (mappingAction.equals(CredentialMappingAction.EDIT)) {
-            // Retrieve associated credential mapping
-            credentialMapping = getGlobusCredentialMapping(mappingRequest.getID());
-            credentialMapping.setSubject(mappingRequest.getSubject());
-            credentialMapping.setLabel(mappingRequest.getLabel());
-            credentialMapping.setTag(mappingRequest.getTag());
-            // Update credential mapping
-            updateCredentialMapping(credentialMapping);
-        } else if (mappingAction.equals(CredentialMappingAction.REMOVE)) {
-            // Retrieve associated credential mapping
-            credentialMapping = getGlobusCredentialMapping(mappingRequest.getID());
-            // Delete credential mapping
-            deleteCredentialMappingRequest(mappingRequest);
-        }
-        // Delete mapping request
-        deleteCredentialMappingRequest(mappingRequest);
-        // Return the original mapping
-        return credentialMapping;
-    }
-
-    public void denyCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
-        // Delete mapping request
-        deleteCredentialMappingRequest(mappingRequest);
-    }
-
-    private void deleteCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
-        try {
-            this.pm.delete(mappingRequest);
-        } catch (PersistenceManagerException e) {
-            _log.error("Error creating credential mapping request ", e);
-        }
-    }
-
-    /****** CREDENTIAL MAPPING CONVENIENCE METHODS *******/
 
     public User getCredentialUser(String subject) {
         User user = null;
@@ -676,13 +680,17 @@ public final class GlobusCredentialManager
 
     public List retrieveCredentials(User user, String password)
         throws CredentialRetrievalException {
+        _log.debug("Entering retrieveCredentials");
         List credentials = new Vector();
         StringBuffer msgs = null;
+        _log.debug("Getting credential mappings");
         // Iterate through the credential mappings associated with user
         Iterator iterator = getCredentialMappings(user).iterator();
+        _log.debug("Iterating through credential mappings");
         while (iterator.hasNext()) {
             // For each mapping, check that a retrieval tag exists
             CredentialMapping mapping = (CredentialMapping)iterator.next();
+            _log.debug("Checking if mapping [" + mapping.getSubject() + "] has a tag");
             Credential credential = null;
             String tag = mapping.getTag();
             // If no retrieval tag, try next credential
@@ -692,6 +700,7 @@ public final class GlobusCredentialManager
             // Get subject for this credential
             String subject = mapping.getSubject();
             try {
+                _log.debug("Retrieving credential with [" + tag + "]");
                 // Retrieve credential based on credential tag, subject, and given password
                 credential = this.retrievalClient.retrieveCredential(tag, password, subject);
                 // Store the retrieved credential
@@ -724,6 +733,7 @@ public final class GlobusCredentialManager
             // Provide the error messages from above
             throw new CredentialRetrievalException(msgs.toString());
         }
+        _log.debug("Exiting retrieveCredentials");
         return credentials;
    }
 

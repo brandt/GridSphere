@@ -13,31 +13,20 @@ import org.gridlab.gridsphere.portlets.PortletBean;
 
 import java.util.List;
 
-public class CredentialMappingAdminBean extends PortletBean {
-
-    // Credential mapping actions
-    public static final String ACTION_CREDENTIAL_MAPPING_LIST = "doListCredentialMapping";
-    public static final String ACTION_CREDENTIAL_MAPPING_VIEW = "doViewCredentialMapping";
-    public static final String ACTION_CREDENTIAL_MAPPING_EDIT = "doEditCredentialMapping";
-    public static final String ACTION_CREDENTIAL_MAPPING_EDIT_CONFIRM = "doConfirmEditCredentialMapping";
-    public static final String ACTION_CREDENTIAL_MAPPING_EDIT_CANCEL = "doCancelEditCredentialMapping";
-    public static final String ACTION_CREDENTIAL_MAPPING_DELETE = "doDeleteCredentialMapping";
-    public static final String ACTION_CREDENTIAL_MAPPING_DELETE_CONFIRM = "doConfirmDeleteCredentialMapping";
-    public static final String ACTION_CREDENTIAL_MAPPING_DELETE_CANCEL = "doCancelDeleteCredentialMapping";
+public class CredentialMappingUserBean extends PortletBean {
 
     // Credential mapping pages
-    public static final String PAGE_CREDENTIAL_MAPPING_LIST = "/jsp/security/credentialMappingList.jsp";
-    public static final String PAGE_CREDENTIAL_MAPPING_VIEW = "/jsp/security/credentialMappingView.jsp";
-    public static final String PAGE_CREDENTIAL_MAPPING_EDIT = "/jsp/security/credentialMappingEdit.jsp";
-    public static final String PAGE_CREDENTIAL_MAPPING_DELETE = "/jsp/security/credentialMappingDelete.jsp";
-    public static final String PAGE_CREDENTIAL_MAPPING_DELETE_CONFIRM = "/jsp/security/credentialMappingDeleteConfirm.jsp";
+    public static final String PAGE_USER_CREDENTIAL_MAPPING_LIST = "/jsp/security/userCredentialMappingList.jsp";
+    public static final String PAGE_USER_CREDENTIAL_MAPPING_VIEW = "/jsp/security/userCredentialMappingView.jsp";
+    public static final String PAGE_USER_CREDENTIAL_MAPPING_EDIT = "/jsp/security/userCredentialMappingEdit.jsp";
+    public static final String PAGE_USER_CREDENTIAL_MAPPING_DELETE = "/jsp/security/userCredentialMappingDelete.jsp";
+    public static final String PAGE_USER_CREDENTIAL_MAPPING_DELETE_CONFIRM = "/jsp/security/userCredentialMappingDeleteConfirm.jsp";
 
     // Credential mapping variables
     private List credentialMappingList = null;
     private CredentialMapping credentialMapping = null;
     private String credentialMappingID = null;
     private String credentialSubject = null;
-    private User credentialUser = null;
     private String credentialLabel = null;
     private String credentialTag = null;
 
@@ -51,11 +40,11 @@ public class CredentialMappingAdminBean extends PortletBean {
      * Portlet bean methods
      ******************************************/
 
-    public CredentialMappingAdminBean() {
+    public CredentialMappingUserBean() {
         initView();
     }
 
-    public CredentialMappingAdminBean(PortletConfig config, PortletRequest request, PortletResponse response)
+    public CredentialMappingUserBean(PortletConfig config, PortletRequest request, PortletResponse response)
             throws PortletException {
         init(config, request, response);
         initServices();
@@ -76,11 +65,11 @@ public class CredentialMappingAdminBean extends PortletBean {
 
     public void doDefaultViewAction()
             throws PortletException {
-        doListCredentialMapping();
+        doListUserCredentialMapping();
     }
 
     /******************************************
-     * Uesr manager methods
+     * User manager methods
      ******************************************/
 
     protected void loadUserList()
@@ -96,75 +85,75 @@ public class CredentialMappingAdminBean extends PortletBean {
      * Credential mapping actions
      ******************************************/
 
-    public void doListCredentialMapping()
+    public void doListUserCredentialMapping()
             throws PortletException {
-        this.log.debug("Entering doListCredentialMapping");
-        loadCredentialMappingList();
-        setPage(PAGE_CREDENTIAL_MAPPING_LIST);
-        this.log.debug("Exiting doListCredentialMapping");
+        this.log.debug("Entering doListUserCredentialMapping");
+        loadUserCredentialMappingList();
+        setPage(PAGE_USER_CREDENTIAL_MAPPING_LIST);
+        this.log.debug("Exiting doListUserCredentialMapping");
     }
 
-    public void doViewCredentialMapping()
+    public void doViewUserCredentialMapping()
             throws PortletException {
-        this.log.debug("Entering doViewCredentialMapping");
-        loadCredentialMapping();
-        setPage(PAGE_CREDENTIAL_MAPPING_VIEW);
-        this.log.debug("Exiting doViewCredentialMapping");
+        this.log.debug("Entering doViewUserCredentialMapping");
+        loadUserCredentialMapping();
+        setPage(PAGE_USER_CREDENTIAL_MAPPING_VIEW);
+        this.log.debug("Exiting doViewUserCredentialMapping");
     }
 
-    public void doEditCredentialMapping()
+    public void doEditUserCredentialMapping()
             throws PortletException {
-        this.log.debug("Entering doEditCredentialMapping");
-        loadCredentialMapping();
-        setPage(PAGE_CREDENTIAL_MAPPING_EDIT);
-        this.log.debug("Exiting doEditCredentialMapping");
+        this.log.debug("Entering doEditUserCredentialMapping");
+        loadUserCredentialMapping();
+        setPage(PAGE_USER_CREDENTIAL_MAPPING_EDIT);
+        this.log.debug("Exiting doEditUserCredentialMapping");
     }
 
-    public void doConfirmEditCredentialMapping()
+    public void doConfirmEditUserCredentialMapping()
             throws PortletException {
-        this.log.debug("Entering doConfirmEditCredentialMapping");
-        loadCredentialMapping();
+        this.log.debug("Entering doConfirmEditUserCredentialMapping");
+        loadUserCredentialMapping();
         try {
-            editCredentialMapping();
-            saveCredentialMapping();
-            setPage(PAGE_CREDENTIAL_MAPPING_VIEW);
+            editUserCredentialMapping();
+            saveUserCredentialMapping();
+            setPage(PAGE_USER_CREDENTIAL_MAPPING_VIEW);
         } catch (PortletException e) {
             setIsFormInvalid(true);
             setFormInvalidMessage(e.getMessage());
-            setPage(PAGE_CREDENTIAL_MAPPING_EDIT);
+            setPage(PAGE_USER_CREDENTIAL_MAPPING_EDIT);
         }
-        this.log.debug("Exiting doConfirmEditCredentialMapping");
+        this.log.debug("Exiting doConfirmEditUserCredentialMapping");
     }
 
-    public void doCancelEditCredentialMapping()
+    public void doCancelEditUserCredentialMapping()
             throws PortletException {
-        this.log.debug("Entering doConfirmEditCredentialMapping");
-        doListCredentialMapping();
-        this.log.debug("Exiting doConfirmEditCredentialMapping");
+        this.log.debug("Entering doCancelEditUserCredentialMapping");
+        doListUserCredentialMapping();
+        this.log.debug("Exiting doCancelEditUserCredentialMapping");
     }
 
-    public void doDeleteCredentialMapping()
+    public void doDeleteUserCredentialMapping()
             throws PortletException {
-        this.log.debug("Entering doDeleteCredentialMapping");
-        loadCredentialMapping();
-        setPage(PAGE_CREDENTIAL_MAPPING_DELETE);
-        this.log.debug("Exiting doDeleteCredentialMapping");
+        this.log.debug("Entering doDeleteUserCredentialMapping");
+        loadUserCredentialMapping();
+        setPage(PAGE_USER_CREDENTIAL_MAPPING_DELETE);
+        this.log.debug("Exiting doDeleteUserCredentialMapping");
     }
 
-    public void doConfirmDeleteCredentialMapping()
+    public void doConfirmDeleteUserCredentialMapping()
             throws PortletException {
-        this.log.debug("Entering doConfirmDeleteCredentialMapping");
-        loadCredentialMapping();
-        deleteCredentialMapping();
-        setPage(PAGE_CREDENTIAL_MAPPING_DELETE_CONFIRM);
-        this.log.debug("Exiting doConfirmDeleteCredentialMapping");
+        this.log.debug("Entering doConfirmDeleteUserCredentialMapping");
+        loadUserCredentialMapping();
+        deleteUserCredentialMapping();
+        setPage(PAGE_USER_CREDENTIAL_MAPPING_DELETE_CONFIRM);
+        this.log.debug("Exiting doConfirmDeleteUserCredentialMapping");
     }
 
-    public void doCancelDeleteCredentialMapping()
+    public void doCancelDeleteUserCredentialMapping()
             throws PortletException {
-        this.log.debug("Entering doCancelDeleteCredentialMapping");
-        doListCredentialMapping();
-        this.log.debug("Exiting doCancelDeleteCredentialMapping");
+        this.log.debug("Entering doCancelDeleteUserCredentialMapping");
+        doListUserCredentialMapping();
+        this.log.debug("Exiting doCancelDeleteUserCredentialMapping");
     }
 
     /******************************************
@@ -199,36 +188,18 @@ public class CredentialMappingAdminBean extends PortletBean {
         return this.credentialTag;
     }
 
-    public User getCredentialUser() {
-        return this.credentialUser;
-    }
-
-    public String getCredentialUserName() {
-        if (this.credentialUser == null) {
-            return "";
-        }
-        return this.credentialUser.getUserName();
-    }
-
-    public String getCredentialUserFullName() {
-        if (this.credentialUser == null) {
-            return "";
-        }
-        return this.credentialUser.getFullName();
-    }
-
-    public void loadCredentialMappingList()
+    public void loadUserCredentialMappingList()
             throws PortletException {
-        this.credentialMappingList = this.credentialManagerService.getCredentialMappings();
+        this.credentialMappingList = this.credentialManagerService.getCredentialMappings(this.user);
     }
 
-    public void loadCredentialMapping()
+    public void loadUserCredentialMapping()
             throws PortletException {
         // Get id of credential permission
         this.credentialMappingID = getParameter("credentialMappingID");
         // If id blank, init credential permission
         if (credentialMappingID.equals("")) {
-            initCredentialMapping();
+            initUserCredentialMapping();
             // And if new, load list of users
             loadUserList();
             return;
@@ -237,7 +208,7 @@ public class CredentialMappingAdminBean extends PortletBean {
         this.credentialMapping = this.credentialManagerService.getCredentialMapping(credentialMappingID);
         // If no credential permission with id, init credential permission
         if (credentialMapping == null) {
-            initCredentialMapping();
+            initUserCredentialMapping();
             // And if new, load list of users
             loadUserList();
             return;
@@ -246,28 +217,22 @@ public class CredentialMappingAdminBean extends PortletBean {
         this.credentialSubject = credentialMapping.getSubject();
         this.credentialLabel = credentialMapping.getLabel();
         this.credentialTag = credentialMapping.getTag();
-        this.credentialUser = credentialMapping.getUser();
     }
 
-    public void initCredentialMapping()
+    public void initUserCredentialMapping()
             throws PortletException {
         this.credentialSubject = new String();
         this.credentialLabel = new String();
         this.credentialTag = new String();
     }
 
-    public void editCredentialMapping()
+    public void editUserCredentialMapping()
             throws PortletException {
         if (this.credentialMappingID.equals("")) {
             this.credentialSubject = getParameter("credentialSubject");
             if (credentialSubject.equals("")) {
                 throw new PortletException("You must specify a subject for the given credential");
             }
-            String credentialUserID = getParameter("credentialUserID");
-            if (credentialUserID.equals("")) {
-                throw new PortletException("You must select a user to map to the given credential");
-            }
-            this.credentialUser = this.userManagerService.getUser(credentialUserID);
         }
         this.credentialLabel = getParameter("credentialLabel");
         if (credentialLabel.equals("")) {
@@ -279,7 +244,7 @@ public class CredentialMappingAdminBean extends PortletBean {
         }
     }
 
-    public void saveCredentialMapping()
+    public void saveUserCredentialMapping()
             throws PortletException {
         CredentialMapping credentialMapping = null;
         try {
@@ -287,7 +252,7 @@ public class CredentialMappingAdminBean extends PortletBean {
             if (credentialMappingID.equals("")) {
                 credentialMapping
                     = this.credentialManagerService.createCredentialMapping(this.credentialSubject,
-                                                                            this.credentialUser,
+                                                                            this.user,
                                                                             this.credentialTag);
                 this.credentialManagerService.setCredentialLabel(this.credentialSubject, this.credentialLabel);
                 this.credentialMappingID = credentialSubject;
@@ -303,7 +268,7 @@ public class CredentialMappingAdminBean extends PortletBean {
         }
     }
 
-    public void deleteCredentialMapping()
+    public void deleteUserCredentialMapping()
             throws PortletException {
         this.credentialManagerService.deleteCredentialMapping(this.credentialSubject);
     }

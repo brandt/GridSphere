@@ -59,7 +59,7 @@
 <% int numCredentialPermissions = credentialPermissionList.size();
    if (numCredentialPermissions == 0) { %>
         <tr>
-          <td class="portlet-frame-text-alert">
+          <td class="portlet-frame-text">
               No credentials permitted for use.
           </td>
         </tr>

@@ -60,7 +60,7 @@
         <implementation>org.gridlab.gridsphere.services.grid.security.credential.impl.CredentialManagerServiceImpl</implementation>
         <service-config>
             <param-name>retrievalHost</param-name>
-            <param-value>myproxy.gridlab.org</param-value>
+            <param-value>supergrid.aei.mpg.de</param-value>
         </service-config>
     </service>
 

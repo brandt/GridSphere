@@ -71,7 +71,7 @@
    int numGroups = groupList.size();
    if (numGroups == 0) { %>
         <tr>
-          <td id="portlet-frame-text-alert" colspan="3">
+          <td id="portlet-frame-text" colspan="3">
             No groups have been defined yet.
           </td>
         </tr>

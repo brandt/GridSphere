@@ -1,24 +1,24 @@
 <%@ page import="org.gridlab.gridsphere.services.grid.security.credential.CredentialMapping,
-                 org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminBean,
+                 org.gridlab.gridsphere.portlets.grid.security.CredentialMappingUserBean,
                  java.util.List" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<jsp:useBean id="credentialMappingAdminBean"
-             class="org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminBean"
+<jsp:useBean id="credentialMappingUserBean"
+             class="org.gridlab.gridsphere.portlets.grid.security.CredentialMappingUserBean"
              scope="request"/>
 <form name="CredentialMappingPortlet" method="POST"
-      action="<%=credentialMappingAdminBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_VIEW)%>">
-  <input type="hidden" name="credentialMappingID" value="<%=credentialMappingAdminBean.getCredentialMappingID()%>"/>
+      action="<%=credentialMappingUserBean.getPortletActionURI("doListUserCredentialMapping")%>">
+  <input type="hidden" name="credentialMappingID" value="<%=credentialMappingUserBean.getCredentialMappingID()%>"/>
   <script type="text/javascript">
     function CredentialMappingPortlet_listCredentialMapping_onClick() {
-      document.CredentialMappingPortlet.action="<%=credentialMappingAdminBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_LIST)%>";
+      document.CredentialMappingPortlet.action="<%=credentialMappingUserBean.getPortletActionURI("doListUserCredentialMapping")%>";
       document.CredentialMappingPortlet.submit();
     }
 
     function CredentialMappingPortlet_newCredentialMapping_onClick(credentialMappingID) {
       document.CredentialMappingPortlet.credentialMappingID.value="";
-      document.CredentialMappingPortlet.action="<%=credentialMappingAdminBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_EDIT)%>";
+      document.CredentialMappingPortlet.action="<%=credentialMappingUserBean.getPortletActionURI("doEditUserCredentialMapping")%>";
       document.CredentialMappingPortlet.submit();
     }
   </script>
@@ -39,17 +39,17 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-title">
-              Deleted Credential Mapping [<%=credentialMappingAdminBean.getCredentialSubject()%>]
+              Deleted Credential Mapping [<%=credentialMappingUserBean.getCredentialSubject()%>]
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-actions">
             <input type="button"
-                   name="<%=CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_LIST%>"
+                   name="doListUserCredentialMapping"
                    value="List Mappings"
                    onClick="javascript:CredentialMappingPortlet_listCredentialMapping_onClick()"/>
             &nbsp;&nbsp;<input type="button"
-                   name="<%=CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_EDIT%>"
+                   name="doEditUserCredentialMapping"
                    value="New Mapping"
                    onClick="javascript:CredentialMappingPortlet_newCredentialMapping_onClick()"/>
           </td>
@@ -61,27 +61,11 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
        <tr>
-         <td class="portlet-frame-label">
-           User Name
-         </td>
-         <td class="portlet-frame-text">
-           <%=credentialMappingAdminBean.getCredentialUserName()%>
-         </td>
-       </tr>
-       <tr>
-         <td class="portlet-frame-label">
-           Full Name
-         </td>
-         <td class="portlet-frame-text">
-           <%=credentialMappingAdminBean.getCredentialUserFullName()%>
-         </td>
-       </tr>
-       <tr>
          <td class="portlet-frame-label" width="200">
            Credential Subject
          </td>
          <td class="portlet-frame-text" width="250">
-           <%=credentialMappingAdminBean.getCredentialSubject()%>
+           <%=credentialMappingUserBean.getCredentialSubject()%>
          </td>
        </tr>
        <tr>
@@ -89,7 +73,7 @@
            Credential Label
          </td>
          <td class="portlet-frame-text">
-           <%=credentialMappingAdminBean.getCredentialLabel()%>
+           <%=credentialMappingUserBean.getCredentialLabel()%>
          </td>
        </tr>
        <tr>
@@ -97,7 +81,7 @@
            Credential Tag
          </td>
          <td class="portlet-frame-text">
-           <%=credentialMappingAdminBean.getCredentialTag()%>
+           <%=credentialMappingUserBean.getCredentialTag()%>
          </td>
        </tr>
       </table>

@@ -208,7 +208,7 @@
 <%     }
    } else { %>
         <tr>
-          <td class="portlet-frame-message-alert">
+          <td class="portlet-frame-text">
             There are no users in this group.
           </td>
         </tr>

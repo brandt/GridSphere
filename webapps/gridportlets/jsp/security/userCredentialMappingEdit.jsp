@@ -1,36 +1,36 @@
 <%@ page import="org.gridlab.gridsphere.services.grid.security.credential.CredentialMapping,
-                 org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminBean,
+                 org.gridlab.gridsphere.portlets.grid.security.CredentialMappingUserBean,
                  java.util.List,
                  java.util.Iterator,
                  org.gridlab.gridsphere.portlet.User" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<jsp:useBean id="credentialMappingAdminBean"
-             class="org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminBean"
+<jsp:useBean id="credentialMappingUserBean"
+             class="org.gridlab.gridsphere.portlets.grid.security.CredentialMappingUserBean"
              scope="request"/>
 <form name="CredentialMappingPortlet" method="POST"
-      action="<%=credentialMappingAdminBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_EDIT)%>">
-  <input type="hidden" name="credentialMappingID" value="<%=credentialMappingAdminBean.getCredentialMappingID()%>"/>
+      action="<%=credentialMappingUserBean.getPortletActionURI("doEditUserCredentialMapping")%>">
+  <input type="hidden" name="credentialMappingID" value="<%=credentialMappingUserBean.getCredentialMappingID()%>"/>
   <script type="text/javascript">
     function CredentialMappingPortlet_editConfirmCredentialMapping_onClick() {
-      document.CredentialMappingPortlet.action="<%=credentialMappingAdminBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_EDIT_CONFIRM)%>";
+      document.CredentialMappingPortlet.action="<%=credentialMappingUserBean.getPortletActionURI("doConfirmEditUserCredentialMapping")%>";
       document.CredentialMappingPortlet.submit();
     }
 
     function CredentialMappingPortlet_editCancelCredentialMapping_onClick() {
-      document.CredentialMappingPortlet.action="<%=credentialMappingAdminBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_EDIT_CANCEL)%>";
+      document.CredentialMappingPortlet.action="<%=credentialMappingUserBean.getPortletActionURI("doCancelEditUserCredentialMapping")%>";
       document.CredentialMappingPortlet.submit();
     }
   </script>
 <table class="portlet-pane" cellspacing="1">
-<% if (credentialMappingAdminBean.isFormInvalid()) { %>
+<% if (credentialMappingUserBean.isFormInvalid()) { %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-message-alert">
-            <%=credentialMappingAdminBean.getFormInvalidMessage()%>
+            <%=credentialMappingUserBean.getFormInvalidMessage()%>
           </td>
         </tr>
       </table>
@@ -42,21 +42,21 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-title">
-<% if (credentialMappingAdminBean.isNewCredentialMapping()) { %>
+<% if (credentialMappingUserBean.isNewCredentialMapping()) { %>
               New Credential Mapping
 <% } else { %>
-              Edit Credential Mapping [<%=credentialMappingAdminBean.getCredentialSubject()%>]
+              Edit Credential Mapping [<%=credentialMappingUserBean.getCredentialSubject()%>]
 <% } %>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-actions">
             <input type="button"
-                   name="<%=CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_EDIT_CONFIRM%>"
+                   name="doConfirmEditUserCredentialMapping"
                    value="Save Mapping"
                    onClick="javascript:CredentialMappingPortlet_editConfirmCredentialMapping_onClick()"/>
             &nbsp;&nbsp;<input type="button"
-                   name="<%=CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_EDIT_CANCEL%>"
+                   name="doCancelEditUserCredentialMapping"
                    value="Cancel Edit"
                    onClick="javascript:CredentialMappingPortlet_editCancelCredentialMapping_onClick()"/>
           </td>
@@ -67,22 +67,7 @@
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
-<% if (credentialMappingAdminBean.isNewCredentialMapping()) { %>
-       <tr>
-         <td class="portlet-frame-label" width="200">
-           Credential User
-         </td>
-         <td class="portlet-frame-input" width="250">
-           <select name="credentialUserID" size="1">
-<%     List userList = credentialMappingAdminBean.getUserList();
-       Iterator userIterator = userList.iterator();
-       while (userIterator.hasNext()) {
-           User user = (User)userIterator.next(); %>
-            <option value="<%=user.getID()%>" label="<%=user.getUserName()%>&nbsp;[<%=user.getFullName()%>]"/>
-<%     } %>
-           </select>
-         </td>
-       </tr>
+<% if (credentialMappingUserBean.isNewCredentialMapping()) { %>
        <tr>
          <td class="portlet-frame-label" width="200">
            Credential Subject
@@ -90,24 +75,16 @@
          <td class="portlet-frame-input" width="250">
              <input type="text"
                     name="credentialSubject"
-                    value="<%=credentialMappingAdminBean.getCredentialSubject()%>"/>
+                    value="<%=credentialMappingUserBean.getCredentialSubject()%>"/>
          </td>
        </tr>
 <% } else { %>
        <tr>
          <td class="portlet-frame-label" width="200">
-           Credential User
-         </td>
-         <td class="portlet-frame-text" width="250">
-           <%=credentialMappingAdminBean.getCredentialUserName()%>
-         </td>
-       </tr>
-       <tr>
-         <td class="portlet-frame-label" width="200">
            Credential Subject
          </td>
          <td class="portlet-frame-text" width="250">
-           <%=credentialMappingAdminBean.getCredentialSubject()%>
+           <%=credentialMappingUserBean.getCredentialSubject()%>
          </td>
        </tr>
 <% } %>
@@ -118,7 +95,7 @@
          <td class="portlet-frame-input" width="250">
              <input type="text"
                     name="credentialLabel"
-                    value="<%=credentialMappingAdminBean.getCredentialLabel()%>"/>
+                    value="<%=credentialMappingUserBean.getCredentialLabel()%>"/>
          </td>
        </tr>
        <tr>
@@ -128,7 +105,7 @@
          <td class="portlet-frame-input" width="250">
              <input type="text"
                     name="credentialTag"
-                    value="<%=credentialMappingAdminBean.getCredentialTag()%>"/>
+                    value="<%=credentialMappingUserBean.getCredentialTag()%>"/>
          </td>
        </tr>
       </table>

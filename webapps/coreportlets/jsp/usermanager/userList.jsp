@@ -59,7 +59,7 @@
    int numUsers = userList.size();
    if (numUsers == 0) { %>
         <tr>
-          <td class="portlet-frame-text-alert">
+          <td class="portlet-frame-text">
             There are no user accounts in the database.
           </td>
         </tr>
