@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
 
 /**
  * The <code>ImageTag</code> represents an href img element
@@ -170,8 +171,9 @@ public class ImageTag extends BaseComponentTag {
         urlImageBean.setWidth(width);
         urlImageBean.setHeight(height);
         urlImageBean.setAlign(align);
-        ActionLinkTag actionTag = (ActionLinkTag)getParent();
-        if (actionTag != null) {
+        Tag parent = getParent();
+        if (parent instanceof ActionLinkTag) {
+            ActionLinkTag actionTag = (ActionLinkTag)parent;
             actionTag.setImageBean(urlImageBean);
         } else {
             try {
