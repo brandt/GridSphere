@@ -33,12 +33,12 @@
 <h3>Display existing tabs</h3>
 
 <% if (tabs.size() > 0) { %>
-<ui:table sortable="true" zebra="true">
+<ui:table zebra="true">
     <ui:tablerow header="true">
     <ui:tablecell>
         <ui:text value="Tab name"/>
     </ui:tablecell>
-     <ui:tablecell>
+    <ui:tablecell>
         <ui:text value="Edit tab name"/>
     </ui:tablecell>
      <ui:tablecell>

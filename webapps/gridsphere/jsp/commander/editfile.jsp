@@ -34,7 +34,7 @@
         <ui:tablecell width="100%">
         <textarea cols="120" rows="20" name="fileData"><%
         FileReader fileReader=new FileReader(file);
-        int numRead;
+        int numRead = 0;
         char[] buf = new char[4096];
         while (!((numRead=fileReader.read(buf)) < 0)) {
             out.write(buf,0,numRead);
