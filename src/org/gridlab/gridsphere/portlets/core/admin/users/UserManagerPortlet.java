@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.portlets.core.admin.users;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.provider.ActionPortlet;
+import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.HiddenFieldBean;
 import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;

@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.portlets.core.file;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.provider.ActionPortlet;
+import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 
 import org.gridlab.gridsphere.services.core.file.FileManagerService;
@@ -112,7 +112,7 @@ public class FileManagerPortlet extends ActionPortlet {
         log.debug("in FileManagerPortlet: saveFile");
         User user = event.getPortletRequest().getUser();
         PortletRequest req = event.getPortletRequest();
-        //String fname = event.getAction().getParameter("fileName");
+        //String fname = event.getPortletAction().getParameter("fileName");
 
         HiddenFieldBean hf = event.getHiddenFieldBean("fileName");
         String fileName = hf.getValue();

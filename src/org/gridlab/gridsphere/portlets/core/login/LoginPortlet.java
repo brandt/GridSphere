@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.portlets.core.login;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.provider.ActionPortlet;
+import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 
 import org.gridlab.gridsphere.services.core.user.LoginService;
@@ -73,11 +73,13 @@ public class LoginPortlet extends ActionPortlet {
         log.debug("in LoginPortlet: gs_login");
         PortletRequest req = event.getPortletRequest();
 
-        FrameBean frame = event.getFrameBean("errorFrame");
         String errorKey = (String)req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
+        System.err.println("in gs_login! errorkey=" + errorKey);
         if (errorKey != null) {
-            frame.setKey(errorKey);
-            frame.setStyle(FrameBean.ERROR_TYPE);
+            FrameBean frame = event.getFrameBean("errorFrame");
+            System.err.println("have errorkey= " + errorKey);
+            frame.setKey(LoginPortlet.LOGIN_ERROR_FLAG);
+            frame.setStyle("error");
         }
         setNextState(req, "doViewUser");
     }

@@ -5,7 +5,7 @@ package org.gridlab.gridsphere.portlets.core.admin.groups;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.provider.ActionPortlet;
+import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
