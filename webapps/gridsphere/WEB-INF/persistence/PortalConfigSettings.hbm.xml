@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 1.1//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="org.gridlab.gridsphere.services.core.portal.PortalConfigSettings"
+        table="portalconfigsettings"
+        >
+
+        <id
+            name="oid"
+            column="gsoid"
+            type="java.lang.String"
+            length="32"
+            >
+            <generator class="uuid.hex"/>
+
+        </id>
+
+        <property name="CanUserCreateAccount" type="boolean" column="canusercreateacct"/>
+
+       <!-- <property name="DefaultTheme" type="string" column="defaulttheme"/>
+
+        <set name="DefaultGroups" table="defaultgrouplist" cascade="all">
+            <key column="defaultgroup_oid"/>
+            <one-to-many class="org.gridlab.gridsphere.portlet.impl.SportletGroup"/>
+        </set>  -->
+
+    </class>
+
+
+</hibernate-mapping>
