@@ -7,25 +7,26 @@
 <jsp:useBean id="aclManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.AccessControllerBean"
              scope="request"/>
-<form name="AccessControlManagerPortlet" method="POST"
+<form name="AccessControllerPortlet" method="POST"
       action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_LIST)%>">
   <input type="hidden" name="groupID" value=""/>
   <script language="JAVASCRIPT">
-    function AccessControlManagerPortlet_listGroup_onClick() {
-      document.AccessControlManagerPortlet.action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_LIST)%>";
-      document.AccessControlManagerPortlet.submit();
+
+    function AccessControllerPortlet_listGroup_onClick() {
+      document.AccessControllerPortlet.action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_LIST)%>";
+      document.AccessControllerPortlet.submit();
     }
 
-    function AccessControlManagerPortlet_newGroup_onClick() {
-      document.AccessControlManagerPortlet.groupID.value="";
-      document.AccessControlManagerPortlet.action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT)%>";
-      document.AccessControlManagerPortlet.submit();
+    function AccessControllerPortlet_newGroup_onClick() {
+      document.AccessControllerPortlet.groupID.value="";
+      document.AccessControllerPortlet.action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT)%>";
+      document.AccessControllerPortlet.submit();
     }
 
-    function AccessControlManagerPortlet_viewGroup_onClick(groupID) {
-      document.AccessControlManagerPortlet.groupID.value=groupID;
-      document.AccessControlManagerPortlet.action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_VIEW)%>";
-      document.AccessControlManagerPortlet.submit();
+    function AccessControllerPortlet_viewGroup_onClick(groupID) {
+      document.AccessControllerPortlet.groupID.value=groupID;
+      document.AccessControllerPortlet.action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_VIEW)%>";
+      document.AccessControllerPortlet.submit();
     }
   </script>
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
@@ -44,11 +45,11 @@
             <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
                    value="List Groups"
-                   onClick="javascript:AccessControlManagerPortlet_listGroup_onClick()"/>
+                   onClick="javascript:AccessControllerPortlet_listGroup_onClick()"/>
             &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_EDIT%>"
                    value="New Group"
-                   onClick="javascript:AccessControlManagerPortlet_newGroup_onClick()"/>
+                   onClick="javascript:AccessControllerPortlet_newGroup_onClick()"/>
           </td>
         </tr>
       </table>
@@ -89,7 +90,7 @@
        PortletGroup group = (PortletGroup)groupList.get(ii); %>
         <tr>
           <td bgcolor="WHITE">
-            <a href="javascript:AccessControlManagerPortlet_viewGroup_onClick('<%=group.getID()%>')">
+            <a href="javascript:AccessControllerPortlet_viewGroup_onClick('<%=group.getID()%>')">
               <%=group.getName()%>
             </a>
           </td>

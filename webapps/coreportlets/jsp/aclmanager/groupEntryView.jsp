@@ -17,72 +17,9 @@
   <input type="hidden" name="groupEntryID" value="<%=aclManagerBean.getGroupEntryID()%>"/>
   <script language="JAVASCRIPT">
 
-    function AccessControllerPortlet_listGroup_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_LIST)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
-    }
-
     function AccessControllerPortlet_viewGroup_onClick(groupID) {
       document.AccessControllerPortlet.groupID.value=groupID;
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_VIEW)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
-    }
-
-    function AccessControllerPortlet_newGroup_onClick() {
-      document.AccessControllerPortlet.groupID.value="";
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
-    }
-
-    function AccessControllerPortlet_editGroup_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
-    }
-
-    function AccessContollerPortlet_confirmEditGroup_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT_CONFIRM)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
-    }
-
-    function AccessContollerPortlet_cancelEditGroup_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT_CANCEL)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
-    }
-
-    function AccessControllerPortlet_deleteGroup_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_DELETE)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
-    }
-
-    function AccessContollerPortlet_confirmDeleteGroup_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_DELETE_CONFIRM)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
-    }
-
-    function AccessContollerPortlet_cancelDeleteGroup_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_DELETE_CANCEL)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
-    }
-
-    function AccessControllerPortlet_viewGroupEntry_onClick(groupEntryID) {
-      document.AccessControllerPortlet.groupEntryID.value=groupEntryID;
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_VIEW)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
-    }
-
-    function AccessControllerPortlet_newGroupEntry_onClick() {
-      document.AccessControllerPortlet.groupEntryID.value="";
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_EDIT)%>";
       document.AccessControllerPortlet.action=action;
       document.AccessContollerPortlet.submit();
     }
@@ -93,52 +30,10 @@
       document.AccessContollerPortlet.submit();
     }
 
-    function AccessContollerPortlet_confirmEditGroupEntry_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_EDIT_CONFIRM)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
-    }
-
-    function AccessContollerPortlet_cancelEditGroupEntry_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_EDIT_CANCEL)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessContollerPortlet.submit();
-    }
-
-    function AccessControllerPortlet_addGroupEntry_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_ADD)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
-    }
-             ()
-    function AccessControllerPortlet_confirmAddGroupEntry_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CONFIRM)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
-    }
-
-    function AccessControllerPortlet_cancelAddGroupEntry_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CONFIRM)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
-    }
-
-    function AccessControllerPortlet_removeGroupEntry_onClick(groupID) {
+    function AccessControllerPortlet_removeGroupEntry_onClick() {
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE)%>";
       document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
-    }
-
-    function AccessControllerPortlet_confirmRemoveGroupEntry_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE_CONFIRM)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
-    }
-
-    function AccessControllerPortlet_cancelRemoveGroupEntry_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE_CONFIRM)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
+      document.AccessContollerPortlet.submit();
     }
 
   </script>
@@ -147,30 +42,26 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
-          <td bgcolor="#BLACK">
-            <font color="WHITE" size="+1">
-              Group Entry
-            </font>
+          <td align="center" bgcolor="#6666FF">
+            <font color="WHITE"><strong>
+              Group Entry for User <%=aclManagerBean.getGroupEntryUser().getUserName()%>
+            </strong></font>
           </td>
         </tr>
-      </table>
-    </td>
-    <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
           <td bgcolor="#CCCCCC">
             <input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_EDIT%>"
-                   value="Edit Entry="
-                   onClick="javascript:AccessControllerPortlet_editGroupEntry_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE%>"
-                   value="Delete Entry"
-                   onClick="javascript:AccessControllerPortlet_removeGroupEntry_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_VIEW%>"
                    value="Back To Group"
                    onClick="javascript:AccessControllerPortlet_viewGroup_onClick('<%=aclManagerBean.getGroupID()%>')"/>
+            &nbsp;&nbsp;<input type="button"
+                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_EDIT%>"
+                   value="Edit Group Entry="
+                   onClick="javascript:AccessControllerPortlet_editGroupEntry_onClick()"/>
+            &nbsp;&nbsp;<input type="button"
+                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE%>"
+                   value="Delete Group Entry"
+                   onClick="javascript:AccessControllerPortlet_removeGroupEntry_onClick()"/>
           </td>
         </tr>
       </table>
@@ -180,7 +71,7 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td width="200" bgcolor="#CCCCCC">
              Entry:&nbsp;
           </td>
           <td bgcolor="WHITE">

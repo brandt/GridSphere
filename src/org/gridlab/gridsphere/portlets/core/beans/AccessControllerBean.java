@@ -281,8 +281,10 @@ public class AccessControllerBean extends PortletBean {
             throws PortletException {
         // Load group
         loadGroup();
+        // Add group entries
         addGroupEntries();
-        doViewGroupEntry();
+        // View group
+        doViewGroup();
     }
 
     public void doRemoveGroupEntry()
@@ -299,7 +301,9 @@ public class AccessControllerBean extends PortletBean {
             throws PortletException {
         // Load group
         loadGroup();
+        // Add group entries
         removeGroupEntries();
+        // View group
         doViewGroupEntry();
     }
 
@@ -641,10 +645,38 @@ public class AccessControllerBean extends PortletBean {
 
     private void addGroupEntries()
             throws PortletException {
+        // Get ids of users to add
+        String groupEntryUserIDs[] = getParameterValues("groupEntryUserID");
+        // Get portlet group
+        PortletGroup group = getGroup();
+        // Add first user in list
+        User user = this.userManagerService.getUser(groupEntryUserIDs[0]);
+        System.err.println("Adding user " + groupEntryUserIDs[0]);
+        addGroupEntry(user, group, PortletRole.USER);
+        // If list greater than 1 then iterate through list
+        if (groupEntryUserIDs.length > 1) {
+            // But user could have selected "Add all option"
+            // So we have to be careful to not try to add
+            // the user with the same id as in add all value
+            String firstGroupEntryUserID = groupEntryUserIDs[0];
+            for (int ii = 1; ii < groupEntryUserIDs.length; ++ii) {
+                // Skip if we already added this user
+                if (groupEntryUserIDs[ii].equals(firstGroupEntryUserID)) {
+                    continue;
+                }
+                // Add this user to the group
+                user = this.userManagerService.getUser(groupEntryUserIDs[ii]);
+                System.err.println("Adding user " + groupEntryUserIDs[ii]);
+                addGroupEntry(user, group, PortletRole.USER);
+            }
+        } else {
+        }
     }
 
     private void removeGroupEntries()
             throws PortletException {
+        String groupEntryID = getParameter("groupEntryID");
+        String groupEntryIDs[] = getParameterValues("groupEntryIDs");
     }
 
     private void removeGroupEntry(GroupEntry right)

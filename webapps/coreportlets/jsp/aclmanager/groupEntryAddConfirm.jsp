@@ -110,11 +110,19 @@
       document.AccessControllerPortlet.action=action;
       document.AccessControllerPortlet.submit();
     }
-             ()
+
     function AccessControllerPortlet_confirmAddGroupEntry_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CONFIRM)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
+      var validate = GridSphere_CheckBoxList_validateCheckOneOrMore(document.AccessControllerPortlet.groupEntryUserIDs,
+                                                                    document.AccessControllerPortlet.groupEntryUserID,
+                                                                    document.AccessControllerPortlet.groupEntryUserIDCheckAll);
+      // Validate remove action
+      if (validate == false) {
+        alert("Please select the users you would like to add to this group.");
+      } else {
+        var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CONFIRM)%>";
+        document.AccessControllerPortlet.action=action;
+        document.AccessControllerPortlet.submit();
+      }
     }
 
     function AccessControllerPortlet_cancelAddGroupEntry_onClick() {
@@ -124,15 +132,28 @@
     }
 
     function AccessControllerPortlet_removeGroupEntry_onClick(groupID) {
+      // Go to add confirmed page
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE)%>";
       document.AccessControllerPortlet.action=action;
       document.AccessControllerPortlet.submit();
     }
 
     function AccessControllerPortlet_confirmRemoveGroupEntry_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE_CONFIRM)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
+      var validate = GridSphere_CheckBoxList_validateCheckOneOrMore(document.AccessControllerPortlet.groupEntryIDs,
+                                                                    document.AccessControllerPortlet.groupEntryID,
+                                                                    document.AccessControllerPortlet.groupEntryIDCheckAll);
+      // Validate remove action
+      if (validate == false) {
+        alert("Please select the users you would like to remove from this group.");
+      } else {
+        validate = confirm("Are you sure wish to remove the selected entries from this group?");
+      }
+      // Validate user intention
+      if (validate == true) {
+        var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE_CONFIRM)%>";
+        document.AccessControllerPortlet.action=action;
+        document.AccessControllerPortlet.submit();
+      }
     }
 
     function AccessControllerPortlet_cancelRemoveGroupEntry_onClick() {
