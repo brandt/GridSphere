@@ -11,6 +11,8 @@ import org.gridlab.gridsphere.core.persistence.PersistenceException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
 import javax.servlet.ServletConfig;
 import java.util.Iterator;
@@ -26,6 +28,14 @@ public class PortletLayoutDescriptor {
     private PortletContainer pc = null;
     private String layoutPath, layoutMappingPath;
 
+    public PortletLayoutDescriptor() throws IOException, PortletLayoutDescriptorException {
+        GridSphereConfig gsConfig = GridSphereConfig.getInstance();
+        String layoutPath = gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
+        String layoutMappingPath = gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
+        load(layoutPath, layoutMappingPath);
+    }
+
+    /*
     public PortletLayoutDescriptor(PortletConfig config) throws IOException, PortletLayoutDescriptorException {
         // load in layout.xml file
         String appRoot = config.getServletContext().getRealPath("") + "/";
@@ -41,6 +51,7 @@ public class PortletLayoutDescriptor {
         layoutMappingPath = appRoot + portletMappingFile;
         load(layoutPath, layoutMappingPath);
     }
+    */
 
     /**
      * Constructs a PortletDeploymentDescriptor from a portlet.xml and mapping file

@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.GuestUser;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
 import java.io.*;
 import java.util.Map;
@@ -33,8 +34,8 @@ public class PortletLayoutEngine {
     public PortletLayoutEngine() throws IOException, PortletLayoutDescriptorException {
         gsConfig = GridSphereConfig.getInstance();
 
-        String layoutMappingPath = gsConfig.getProperty("LAYOUT_MAPPING_XML");
-        layoutConfigPath =  gsConfig.getProperty("LAYOUT_XML");
+        String layoutMappingPath = gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
+        layoutConfigPath =  gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
 
         guestLayout = new PortletLayoutDescriptor(layoutConfigPath, layoutMappingPath);
     }
@@ -123,8 +124,8 @@ public class PortletLayoutEngine {
 
     protected PortletLayoutDescriptor loadUserLayout(User user) throws PortletLayoutDescriptorException, IOException {
         // load in layout.xml file
-        String userLayoutDir = gsConfig.getProperty("USER_LAYOUT_DIR");
-        String layoutMappingFile = gsConfig.getProperty("LAYOUT_MAPPING_XML");
+        String userLayoutDir = gsConfig.getProperty(GridSphereConfigProperties.USER_LAYOUT_DIR);
+        String layoutMappingFile = gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
 
         if ((userLayoutDir == null) || (layoutMappingFile == null)) {
             throw new PortletLayoutDescriptorException("Unable to get user layout directory info from web.xml. Please specify user-layouts-dir in web.xml.");
@@ -136,13 +137,14 @@ public class PortletLayoutEngine {
 
         String layoutPath = userLayoutDir + "/" + user.getID();
         File f = new File(layoutPath);
+
         // if no layout file exists for user, make new one from template
         if (!f.exists()) {
             f.createNewFile();
             copyFile(new File(layoutConfigPath), f);
         }
 
-        PortletLayoutDescriptor userLayout = new PortletLayoutDescriptor(layoutPath, layoutMappingPath);
+        PortletLayoutDescriptor userLayout = new PortletLayoutDescriptor(layoutPath, layoutMappingFile);
 
         return userLayout;
     }
