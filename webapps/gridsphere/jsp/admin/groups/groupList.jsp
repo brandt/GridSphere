@@ -36,6 +36,7 @@
                     // Get next user
                     PortletGroup group = (PortletGroup)groupIterator.next();
 %>
+
                 <ui:tablerow>
                         <ui:tablecell>
                             <ui:actionlink action="doCreateNewGroup" value="<%=group.getName() %>">
@@ -43,9 +44,17 @@
                             </ui:actionlink>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <ui:actionlink action="doViewViewGroup" key="GROUP_EDIT_USERS">
-                                <ui:actionparam name="groupID" value="<%= group.getID() %>"/>
-                            </ui:actionlink>
+                            <% if (group.getName().equals(SportletGroup.CORE.getName())) { %>
+                                <ui:hasrole role="super">
+                                    <ui:actionlink action="doViewViewGroup" key="GROUP_EDIT_USERS">
+                                        <ui:actionparam name="groupID" value="<%= group.getID() %>"/>
+                                    </ui:actionlink>
+                                </ui:hasrole>
+                            <% } else { %>
+                                <ui:actionlink action="doViewViewGroup" key="GROUP_EDIT_USERS">
+                                    <ui:actionparam name="groupID" value="<%= group.getID() %>"/>
+                                </ui:actionlink>
+                            <% } %>
                         </ui:tablecell>
                         <ui:tablecell>
                             <ui:text value="<%= group.getDescription() %>"/>
@@ -58,6 +67,7 @@
                         <% } %>
                         </ui:tablecell>
                 </ui:tablerow>
+
 
 <%              } %>
     </ui:frame>

@@ -12,7 +12,7 @@
                     <ui:text key="LOGIN_NAME"/>
                 </ui:tablecell>
                 <ui:tablecell width="60">
-                    <ui:textfield beanId="username" size="20" maxlength="20"/>
+                    <input type="input" name="username" size="20" maxlength="20"/>
                 </ui:tablecell>
                 <ui:tablecell/>
             </ui:tablerow>
@@ -24,7 +24,7 @@
                     <ui:text key="LOGIN_PASS"/>
                 </ui:tablecell>
                 <ui:tablecell width="60">
-                    <ui:password beanId="password" size="20" maxlength="20"/>
+                    <input type="password" name="password" size="20" maxlength="20"/>
                 </ui:tablecell>
                 <ui:tablecell/>
             </ui:tablerow>

@@ -11,6 +11,8 @@
 
 <ui:form>
 
+<ui:hasrole role="super">
+
 <h3><ui:text key="LAYOUTMGR_EDIT_BANNER" style="nostyle"/></h3>
 <ui:text key="LAYOUTMGR_EDIT_MSG"/>
 <p>
@@ -28,6 +30,9 @@
 <h3><ui:text key="LAYOUTMGR_GUEST" style="nostyle"/></h3>
 
 <b><ui:actionlink action="editGuestLayout" key="LAYOUTMGR_EDIT_GUEST"/></b>
+
+</ui:hasrole>
+
 
 <h3><ui:text key="LAYOUTMGR_GROUPS" style="nostyle"/></h3>
 
@@ -47,6 +52,9 @@
     String group = (String)it.next();
     String groupDesc = (String)groupNames.get(group);
 %>
+
+<ui:hasrole role="admin" group="<%= group %>">
+
 <ui:tablerow>
 <ui:tablecell>
 <ui:text value="<%= group %>"/>
@@ -54,10 +62,21 @@
 <ui:tablecell>
     <ui:text value="<%= groupDesc %>"/>
 </ui:tablecell>
+
+
+
 <ui:tablecell>
+<% if (group.equals("gridsphere")) { %>
+<ui:hasrole role="super">
 <ui:actionlink action="editGroupLayout" key="EDIT">
     <ui:actionparam name="group" value="<%= group %>"/>
 </ui:actionlink>
+</ui:hasrole>
+<% } else { %>
+<ui:actionlink action="editGroupLayout" key="EDIT">
+    <ui:actionparam name="group" value="<%= group %>"/>
+</ui:actionlink>
+<% } %>
 </ui:tablecell>
 <ui:tablecell>
 <% if (!group.equals("gridsphere")) { %>
@@ -67,8 +86,10 @@
 <% } %>
 </ui:tablecell>
 </ui:tablerow>
-<% } %>
 
+</ui:hasrole>
+
+<% } %>
 </ui:frame>
 
 </ui:form>

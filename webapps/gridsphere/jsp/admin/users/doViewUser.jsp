@@ -61,7 +61,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="100">
-                <ui:text key="ROLE"/>
+                <ui:text key="USER_ROLE"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text value="<%= role %>" style="plain"/>
