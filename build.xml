@@ -581,10 +581,8 @@ Copyright:
         </copy>
 
     </target>
-
+<!--
     <target name="update" depends="" description="Updates deployed GridSphere distribution">
-
-        <!-- remove old libs -->
 
 
         <antcall target="deploy-install"/>
@@ -596,7 +594,8 @@ Copyright:
         </copy>
 
     </target>
-    
+ -->
+   
     <!-- =================================================================== -->
     <!-- Undeploys GridSphere from Tomcat                                    -->
     <!-- =================================================================== -->
