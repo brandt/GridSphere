@@ -33,4 +33,21 @@ public interface DropDownList extends Updateable {
      */
     public void add(String name, String value);
 
+    /**
+     * Adds an entry to the dropdownlist.
+     * @param label label of the entry
+     * @param value value of the entry
+     * @param selected marks if the element should be selected or not
+     */
+    public void add(String label, String value, boolean selected);
+
+    /**
+     * Sets the selected flag on an entry.
+     * @param index index of the element
+     * @param flag true/false representing the selected status
+     */
+    public void setSelected(int index, boolean flag);
+
+
+
 }

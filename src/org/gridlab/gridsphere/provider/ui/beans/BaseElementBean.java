@@ -6,6 +6,8 @@
 package org.gridlab.gridsphere.provider.ui.beans;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.http.HttpSession;
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpSession;
  * <code>BaseElementBean</code> provides the basic functionality for all ui beans.
  */
 public abstract class BaseElementBean implements TagBean {
+
+    protected transient static PortletLog log = SportletLog.getInstance(BaseElementBean.class);
 
     protected String id = new String();
     protected String color = new String();
@@ -118,7 +122,7 @@ public abstract class BaseElementBean implements TagBean {
     }
 
     private void store(String id, PortletRequest request, Object ob) {
-        System.err.println("Storing bean with [" + id + "][" + ob.getClass().getName());
+        log.debug("Storing bean with [" + id + "][" + ob.getClass().getName());
         this.id = id;
         request.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+id, ob);
         HttpSession session = request.getSession();

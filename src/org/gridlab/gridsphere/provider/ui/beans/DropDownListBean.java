@@ -30,7 +30,7 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
 
     /**
      * Adds an entry to the dropdownlist.
-     * @param name name of the entry
+     * @param label label of the entry
      * @param value value of the entry
      */
     public void add(String label, String value) {
@@ -38,6 +38,30 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
         item.setName(label);
         item.setValue(value);
         list.addElement(item);
+    }
+
+    /**
+     * Adds an entry to the dropdownlist.
+     * @param label label of the entry
+     * @param value value of the entry
+     * @param selected marks if the element should be selected or not
+     */
+    public void add(String label, String value, boolean selected) {
+        ListBoxItemBean item = new ListBoxItemBean();
+        item.setName(label);
+        item.setValue(value);
+        item.setSelected(true);
+        list.addElement(item);
+    }
+
+
+    /**
+     * Sets the selected flag on an entry.
+     * @param index index of the element
+     * @param selected true/false representing the selected status
+     */
+    public void setSelected(int index, boolean selected) {
+        list.setSelected(index, selected);
     }
 
     /**
