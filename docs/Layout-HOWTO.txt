@@ -1,0 +1,90 @@
+/*
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
+ */
+
+Developing New Portal Layouts
+
+1. Portal Layout Framework
+
+The Portal Layout components closely resemble the AWT/Swing components found in the standard Java classes.
+The reason for this is to provide a very close API to create web based visual components easily by anyone
+familiar with Java GUI development under AWT or Swing. Another reason is to follow the "Composite" design
+pattern that composes objects, or portal components, into a tree based structure. This allows for maximal
+flexibility in developing new layouts composed of various changing components.
+
+The following list describes the supported list of portlet componets.
+
+PortletContainer -- this is the super class of all other components
+
+PortletComponent -- an interface describing various portlet component features such as foreground, background color,
+                    width, height, PortletBorder and PortletInsets.
+
+BasePortletComponent -- implements PortletComponent and extends PortletContainer. Provides a base portlet component
+                        that other portlet components inherit from
+
+
+PortletInsets  -- provides a component to create a block of space defined by its height and width
+
+PortletBorder -- provides a border around another portlet component that has a title bar and optionally
+                 support for icons to minimize, maximize, help, etc.
+
+PortletImage --  a simple widget to display images expressed as a file of JPEG, GIF, etc. format
+
+PortletText -- another simple widget to display text that is expressed as the name of a file to include
+
+PortletMinimized -- Shows an icon witha description. This is intended to represnt minimized portlets that are
+                    displayed in the portlet dock
+
+PortletDock -- Displays minimized portlets and any other useful components
+
+PortletPanel -- A panel contains a LayoutManager which is responsible for component layout
+
+PortletFlowLayout -- the flow layout lays components out either top down or left right
+
+PortletGridLayout -- the grid layout lays components in a grid defined by the number of rows and columns
+
+PortletTabbedPane -- a tabbed pane contains PortletTabs similar to Java Swing
+
+PortletTab -- A portlet tab contains a PortletPanel which can contain additional components. This is generally
+              where PortletFrames are placed
+
+PortletFrame -- A Portletframe is a visual represntation of a portlet. It includes a title border and the classname
+                of the portlet to invoke for rendering. (In the implementation, the PortletFrame gets an active portlet
+                instance of the portlet class from the portlet registry service and invokes the service() method)
+
+
+Every portlet component also provides a doRender method with the following signature:
+
+public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res)
+            throws PortletLayoutException, IOException;
+
+During rendering, the PortletContainer which contains all the other components is traversed and the doRender()
+method is invoked for each component. The doRender() method may optionally print HTML to an OutputStream
+or it can include a JSP fragment responsible for the rendering of the component. This is done via the
+PortletContext.include(jsp file, PortletRequest, PortletResponse) method.
+If the rendering fails at any point a PortletLayoutException is thrown.
+
+2. Specifying a Layout
+
+The layout.xml file contains XML entries that describe the components and their properties. For instance a
+PortletBorder can define a color, title and font like so:
+
+<portlet-border>
+    <title-color>#FFFFFF</title-color>
+    <line-color>#336699</line-color>
+    <font>Arial, Helvetica, sans-serif</font>
+    <thickness>2</thickness>
+</portlet-border>
+
+By modifying/adding entries in the XML layout file, a new layout can be specified. To learn more about possible
+attributes and component relationships, look at the layout-mapping.xml file. This defines the relationship between
+the portlet component classes and the XML descriptions. Similary to create new components, create the class and add
+the necessary information the layout.xml and layout-mapping.xml file.
+
+
+
+
+
+
+
