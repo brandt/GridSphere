@@ -420,13 +420,6 @@ public class PortletTitleBar extends BasePortletComponent {
             portletModes[i] = mode.toString();
         }
 
-        // subtract current portlet mode
-        for (i = 0; i < portletModes.length; i++) {
-            if (portletModes[i].equalsIgnoreCase(portletMode.toString())) {
-                portletModes[i] = "";
-            }
-        }
-
         // create a URI for each of the portlet modes
         PortletURI portletURI;
         PortletModeLink modeLink;
