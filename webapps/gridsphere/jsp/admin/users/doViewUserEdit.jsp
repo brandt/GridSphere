@@ -8,8 +8,8 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doConfirmEditUser" value="Save User"/>
-                <ui:actionsubmit action="doCancelEditUser" value="Cancel Edit"/>
+                <ui:actionsubmit action="doConfirmEditUser" key="USER_SAVE"/>
+                <ui:actionsubmit action="doCancelEditUser" key="USER_CANCEL_EDIT"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
@@ -20,7 +20,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="User Name:"/>
+                <ui:text key="USERNAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="userName"/>
@@ -29,7 +29,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Family Name:"/>
+                <ui:text key="FAMILYNAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="familyName"/>
@@ -38,7 +38,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Given Name:"/>
+                <ui:text key="GIVENNAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="givenName"/>
@@ -47,7 +47,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Full Name:"/>
+                <ui:text key="FULLNAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="fullName"/>
@@ -56,7 +56,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Email Address:"/>
+                <ui:text key="EMAILADDRESS"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="emailAddress"/>
@@ -65,7 +65,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Organization:"/>
+                <ui:text key="ORGANIZATION"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="organization"/>
@@ -74,7 +74,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Role In GridSphere:"/>
+                <ui:text key="USER_ROLE"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:listbox beanId="userRole"/>
@@ -83,7 +83,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="New Password:"/>
+                <ui:text key="PASSWORD"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:password beanId="password"/>
@@ -92,7 +92,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Confirm Password:"/>
+                <ui:text key="CONFIRM_PASS"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:password beanId="confirmPassword"/>

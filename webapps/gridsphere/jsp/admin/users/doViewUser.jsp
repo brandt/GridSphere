@@ -4,7 +4,7 @@
 <ui:frame>
         <ui:tablerow>
             <ui:tablecell width="100">
-                <ui:text value="User Name:"/>
+                <ui:text key="USERNAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text value="<%= user.getUserName() %>" style="plain"/>
@@ -13,7 +13,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="100">
-                <ui:text value="Family Name:"/>
+                <ui:text key="FAMILYNAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text value="<%= user.getFamilyName() %>" style="plain"/>
@@ -22,7 +22,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="100">
-                <ui:text value="Given Name:" />
+                <ui:text key="GIVENNAME" />
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text value="<%= user.getGivenName() %>" style="plain"/>
@@ -31,7 +31,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="100">
-                <ui:text value="Full Name:"/>
+                <ui:text key="FULLNAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text value="<%= user.getFullName() %>" style="plain"/>
@@ -40,7 +40,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="100">
-                <ui:text value="Email Address:"/>
+                <ui:text key="EMAILADDRESS"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text value="<%= user.getEmailAddress() %>" style="plain"/>
@@ -49,7 +49,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="100">
-                <ui:text value="Organization:"/>
+                <ui:text key="ORGANIZATION"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text value="<%= user.getOrganization() %>" style="plain"/>
@@ -58,7 +58,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="100">
-                <ui:text value="Role:"/>
+                <ui:text key="ROLE"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text value="<%= role %>" style="plain"/>

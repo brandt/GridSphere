@@ -7,14 +7,8 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doConfirmDeleteUser" value="Confirm Delete"/>
-                <ui:actionsubmit action="doCancelDeleteUser" value="Cancel Delete"/>
-            </ui:tablecell>
-        </ui:tablerow>
-        <ui:tablerow>
-            <ui:tablecell>
-                <ui:text value="Click \"<span style=\"portlet-text-alert\">Confirm Delete</span>\" to delete this user,
-                \"<span style=\"portlet-text-alert\">Cancel Delete</span>\" otherwise."/>
+                <ui:actionsubmit action="doConfirmDeleteUser" key="USER_CONFIRM_DELETE"/>
+                <ui:actionsubmit action="doCancelDeleteUser" key="USER_CANCEL_DELETE"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>

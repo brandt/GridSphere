@@ -18,19 +18,19 @@
     <ui:frame>
     <ui:tablerow header="true">
         <ui:tablecell>
-            <ui:text value="Portlet web application"/>
+            <ui:text key="PORTLET_WEBAPP"/>
         </ui:tablecell>
         <ui:tablecell>
-            <ui:text value="Description"/>
+            <ui:text key="PORTLET_DESC"/>
         </ui:tablecell>
         <ui:tablecell>
-            <ui:text value="Running"/>
+            <ui:text key="PORTLET_RUNNING"/>
         </ui:tablecell>
          <ui:tablecell>
-            <ui:text value="Sessions"/>
+            <ui:text key="PORTLET_SESSIONS"/>
         </ui:tablecell>
         <ui:tablecell>
-            <ui:text value="Actions"/>
+            <ui:text key="PORTLET_ACTIONS"/>
         </ui:tablecell>
     </ui:tablerow>
 
@@ -45,26 +45,26 @@
     <ui:tablecell><ui:text value="<%= description.getSessions() %>"/></ui:tablecell>
     <ui:tablecell>
     <% if (PortletGroupFactory.GRIDSPHERE_GROUP.getName().equalsIgnoreCase(description.getContextPath())) { %>
-        <ui:text value="  GridSphere core portlets cannot be redeployed or removed"/>
+        <ui:text key="PORTLET_GS_MSG"/>
    <% } else { %>
     <% if (description.getRunningState() == TomcatWebAppDescription.STOPPED) { %>
-        <ui:actionlink action="doPortletManager" value="  start  ">
-            <ui:actionparam name="operation" value="  start  "/>
+        &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_START">
+            <ui:actionparam name="operation" value="start"/>
             <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
-        </ui:actionlink>
-        <ui:text value="  stop  "/>
+        </ui:actionlink>&nbsp;&nbsp;
+        &nbsp;&nbsp;<ui:text key="PORTLET_STOP"/>&nbsp;&nbsp;
       <% } else { %>
-        <ui:text value="  start  "/>
-        <ui:actionlink action="doPortletManager" value="  stop  ">
+        &nbsp;&nbsp;<ui:text key="PORTLET_START"/>&nbsp;&nbsp;
+        &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_STOP">
             <ui:actionparam name="operation" value="stop"/>
             <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
-        </ui:actionlink>
+        </ui:actionlink>&nbsp;&nbsp;
       <% } %>
-        <ui:actionlink action="doPortletManager" value="  reload  ">
+        &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_RELOAD">
             <ui:actionparam name="operation" value="reload"/>
             <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
-        </ui:actionlink>
-        <ui:actionlink action="doPortletManager" value="  remove  ">
+        </ui:actionlink>&nbsp;&nbsp;
+        &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_REMOVE">&nbsp;&nbsp;
             <ui:actionparam name="operation" value="remove"/>
             <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
         </ui:actionlink>
@@ -83,27 +83,27 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell width="100">
-                <ui:text value="Deploy new portlet webapp"/>
+                <ui:text key="PORTLET_DEPLOY_MSG"/>
             </ui:tablecell>
         </ui:tablerow>
 
         <ui:tablerow>
             <ui:tablecell width="100">
-                <ui:text value="Enter webapp name: "/>
+                <ui:text key="PORTLET_WEBAPP_MSG"/>&nbsp;
                 <ui:textfield beanId="webappNameTF" size="20" maxlength="20"/>
-                <ui:actionsubmit action="deployWebapp" value="Deploy"/>
+                <ui:actionsubmit action="deployWebapp" key="PORTLET_DEPLOY"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
 </ui:panel>
 </ui:form>
 
-<ui:fileform>
+<ui:fileform action="uploadPortletWAR">
 <ui:panel>
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell width="100">
-                    <ui:text value="File: "/>
+                    <ui:text key="PORTLET_FILE"/>&nbsp;
                 </ui:tablecell>
                 <ui:tablecell width="60">
                     <ui:fileinput beanId="userfile" size="20" maxlength="20"/>
@@ -115,7 +115,7 @@
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell width="100">
-                    <ui:actionsubmit action="uploadPortletWAR" value="Upload Portlet WAR"/>
+                    <ui:actionsubmit action="uploadPortletWAR" key="PORTLET_UPLOAD"/>
                 </ui:tablecell>
                 <ui:tablecell/>
             </ui:tablerow>

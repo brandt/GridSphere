@@ -11,17 +11,17 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doNewUser" value="New User"/>
+                <ui:actionsubmit action="doNewUser" key="USER_NEW_USER"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
 
     <ui:frame>
                 <ui:tablerow header="true">
-                    <ui:tablecell><ui:text value="User Name"/></ui:tablecell>
-                    <ui:tablecell><ui:text value="Full Name"/></ui:tablecell>
-                    <ui:tablecell><ui:text value="Email Address"/></ui:tablecell>
-                    <ui:tablecell><ui:text value="Organization"/></ui:tablecell>
+                    <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
+                    <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
+                    <ui:tablecell><ui:text key="EMAILADDRESS"/></ui:tablecell>
+                    <ui:tablecell><ui:text key="ORGANIZATION"/></ui:tablecell>
                 </ui:tablerow>
 <%
                 Iterator userIterator = userList.iterator();

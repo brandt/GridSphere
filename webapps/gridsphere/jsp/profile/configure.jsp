@@ -11,10 +11,10 @@
 
 <ui:frame beanId="msgFrame"/>
 
-Configure supported locales by entering two letter lower-case ISO language codes in the comma separated list:
+<ui:text key="PROFILE_CONFIG_MSG"/>
 <ui:frame>
     <ui:tablerow>
-        <ui:tablecell><ui:text value="Supported locales: "/><ui:textfield beanId="localesTF"/></ui:tablecell>
+        <ui:tablecell><ui:text key="PROFILE_LOCALES"/>&nbsp;<ui:textfield beanId="localesTF"/></ui:tablecell>
     </ui:tablerow>
 </ui:frame>
 
@@ -22,7 +22,7 @@ Configure supported locales by entering two letter lower-case ISO language codes
 <ui:frame>
     <ui:tablerow>
         <ui:tablecell>
-            <ui:actionsubmit action="doSaveLocales" value="Save Changes"/>
+            <ui:actionsubmit action="doSaveLocales" key="PROFILE_SAVE"/>
         </ui:tablecell>
     </ui:tablerow>
 </ui:frame>

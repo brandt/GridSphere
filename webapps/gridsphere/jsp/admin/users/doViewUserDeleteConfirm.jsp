@@ -13,7 +13,7 @@
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:text style="message" value="The following user was deleted."/>
+                <ui:text style="message" key="USER_DELETE_MSG"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>

@@ -42,15 +42,6 @@ public class PortletApplicationManager extends ActionPortlet {
 
     public void listPortlets(FormEvent event) throws PortletException {
         FrameBean frame = event.getFrameBean("errorFrame");
-        User user = event.getPortletRequest().getUser();
-        PortletManagerService portletManager = null;
-        try {
-            portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
-        } catch (PortletServiceException e) {
-            frame.setValue("PortletRegistry service unavailable! " + e.getMessage());
-            throw new PortletException("PortletRegistry service unavailable! ", e);
-        }
-        //TomcatWebAppResult result = tomcat.getWebAppList();
 
         List result = new ArrayList();
         try {
@@ -60,7 +51,7 @@ public class PortletApplicationManager extends ActionPortlet {
         } catch (TomcatManagerException e) {
             log.error("Unable to retrieve list of portlets. Make sure tomcat-users.xml has been edited according to the UserGuide.");
             event.getPortletRequest().setAttribute("result", result);
-            frame.setValue("Unable to retrieve list of portlets. Make sure tomcat-users.xml has been edited according to the UserGuide.");
+            frame.setKey("PORTLET_ERR_LIST");
             frame.setStyle(FrameBean.ERROR_TYPE);
         }
 
@@ -80,8 +71,8 @@ public class PortletApplicationManager extends ActionPortlet {
         try {
             portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
         } catch (PortletServiceException e) {
-            frame.setValue("PortletRegistry service unavailable! " + e.getMessage());
-            throw new PortletException("PortletRegistry service unavailable! ", e);
+            frame.setKey("PORTLET_ERR_REGISTRY");
+            frame.setStyle("error");
         }
 
         Map params = action.getParameters();
@@ -152,10 +143,12 @@ public class PortletApplicationManager extends ActionPortlet {
             }
         } catch (IOException e) {
             log.error("Caught IOException!", e);
-            frame.setValue("Caught IOException! " + e.getMessage());
+            frame.setKey("PORTLET_ERR_IO");
+            frame.setStyle("error");
         } catch (TomcatManagerException e) {
             log.error("Caught TomcatmanagerException!", e);
-            frame.setValue("Caught TomcatManagerException " + e.getMessage());
+            frame.setKey("PORTLET_ERR_TOMCAT");
+            frame.setStyle("error");
         }
         req.setAttribute("result", result);
         if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
@@ -177,7 +170,7 @@ public class PortletApplicationManager extends ActionPortlet {
                 portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
             } catch (PortletServiceException e) {
                 FrameBean frame = event.getFrameBean("errorFrame");
-                frame.setValue("PortletRegistry service unavailable! " + e.getMessage());
+                frame.setKey("PORTLET_ERR_REGISTRY");
                 throw new PortletException("PortletRegistry service unavailable! ", e);
             }
 
@@ -191,7 +184,7 @@ public class PortletApplicationManager extends ActionPortlet {
             log.debug("fileinputbean value=" + fi.getValue());
         } catch (Exception e) {
             FrameBean errMsg = event.getFrameBean("errorFrame");
-            errMsg.setValue("Unable to store uploaded file " + e.getMessage());
+            errMsg.setKey("PORTLET_ERR_UPLOAD");
             errMsg.setStyle("error");
             log.error("Unable to store uploaded file ", e);
         }
@@ -212,7 +205,7 @@ public class PortletApplicationManager extends ActionPortlet {
                 portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
             } catch (PortletServiceException e) {
                 FrameBean frame = event.getFrameBean("errorFrame");
-                frame.setValue("PortletRegistry service unavailable! " + e.getMessage());
+                frame.setKey("PORTLET_ERR_REGISTRY");
                 throw new PortletException("PortletRegistry service unavailable! ", e);
             }
 
@@ -221,7 +214,7 @@ public class PortletApplicationManager extends ActionPortlet {
 
         } catch (Exception e) {
             FrameBean errMsg = event.getFrameBean("errorFrame");
-            errMsg.setValue("Unable to deploy webapp " + e.getMessage());
+            errMsg.setKey("PORTLET_ERR_DEPLOY");
             errMsg.setStyle("error");
             log.error("Unable to deploy webapp  ", e);
         }

@@ -68,6 +68,13 @@ public class FileManagerPortlet extends ActionPortlet {
             FileInputBean fi = event.getFileInputBean("userfile");
             User user = event.getPortletRequest().getUser();
             String fileName = fi.getFileName();
+            int size = fi.getSize();
+            if (size > FileInputBean.MAX_UPLOAD_SIZE) {
+                FrameBean errMsg = event.getFrameBean("errorFrame");
+	            errMsg.setValue(this.getLocalizedText(event.getPortletRequest(), "FILE_UPLOAD_TOOBIG"));
+	            errMsg.setStyle("error");
+                return;
+            }
             System.err.println("filename = " + fileName);
             if (fileName.equals("")) return;
 

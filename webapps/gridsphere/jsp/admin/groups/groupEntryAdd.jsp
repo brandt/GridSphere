@@ -8,13 +8,13 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doViewConfirmAddGroupEntry" value="Add User"/>
-                <ui:actionsubmit action="doViewCancelAddGroupEntry" value="Cancel Add"/>
+                <ui:actionsubmit action="doViewConfirmAddGroupEntry" key="GROUP_ADD_USER"/>
+                <ui:actionsubmit action="doViewCancelAddGroupEntry" key="GROUP_CANCEL_ADD"/>
             </ui:tablecell>
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:text value="Select the user you would like to add and their role in: "/>
+                <ui:text key="GROUP_ADMIN_SELECT_USER"/>
                 <ui:text beanId="groupLabel"/>
             </ui:tablecell>
         </ui:tablerow>
@@ -25,7 +25,7 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:text value="Portlet Group:"/>
+                <ui:text key="GROUP_PORTLET_GROUP"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text beanId="groupLabel"/>
@@ -33,7 +33,7 @@
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:text value="User To Add:"/>
+                <ui:text key="GROUP_ADD_USER"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:listbox beanId="usersNotInGroupList"/>
@@ -41,7 +41,7 @@
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:text value="Role In Group:"/>
+                <ui:text key="GROUP_ROLEIN_GROUP"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:listbox beanId="groupEntryRole"/>

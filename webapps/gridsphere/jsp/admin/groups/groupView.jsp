@@ -13,11 +13,11 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell cssStyle="portlet-frame-actions">
-                <ui:actionsubmit action="doViewListGroup" value="List Groups"/>
+                <ui:actionsubmit action="doViewListGroup" key="GROUP_LIST_GROUPS"/>
                 &nbsp;&nbsp;
-                <ui:actionsubmit action="doViewAddGroupEntry" value="Add Users"/>
+                <ui:actionsubmit action="doViewAddGroupEntry" key="GROUP_ADD_USERS"/>
                 &nbsp;&nbsp;
-                <ui:actionsubmit action="doViewRemoveGroupEntry" value="Remove Users"/>
+                <ui:actionsubmit action="doViewRemoveGroupEntry" key="GROUP_REMOVE_USERS"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
@@ -25,7 +25,7 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Group Name:"/>
+                <ui:text key="GROUP_NAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text beanId="groupName"/>
@@ -34,7 +34,7 @@
 
         <ui:tablerow>
             <ui:tablecell>
-                <ui:text value="Group Description:"/>
+                <ui:text key="GROUP_DESCRIPTION"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text beanId="groupDescription"/>
@@ -49,13 +49,13 @@
     <ui:frame>
         <ui:tablerow header="true">
             <ui:tablecell>
-            <ui:text value="Login Name"/>
+            <ui:text key="USERNAME"/>
             </ui:tablecell>
             <ui:tablecell>
-            <ui:text value="Full Name"/>
+            <ui:text key="FULLNAME"/>
             </ui:tablecell>
             <ui:tablecell>
-            <ui:text value="Role In Group"/>
+            <ui:text key="GROUP_ROLEIN_GROUP"/>
             </ui:tablecell>
         </ui:tablerow>
 

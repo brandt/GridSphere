@@ -16,13 +16,13 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doViewConfirmRemoveGroupEntry" value="Remove Users"/>
-                <ui:actionsubmit action="doViewCancelRemoveGroupEntry" value="Cancel Remove"/>
+                <ui:actionsubmit action="doViewConfirmRemoveGroupEntry" key="GROUP_REMOVE_USERS"/>
+                <ui:actionsubmit action="doViewCancelRemoveGroupEntry" key="GROUP_CANCEL_REMOVE"/>
             </ui:tablecell>
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:text value="Select the users you would like to remove from "/>
+                <ui:text key="GROUP_REMOVE_MSG"/>&nbsp;
                 <ui:text beanId="groupLabel"/>
             </ui:tablecell>
         </ui:tablerow>
@@ -31,16 +31,16 @@
     <ui:frame>
         <ui:tablerow header="true">
             <ui:tablecell>
-                <ui:text value="Selection"/>
+                <ui:text key="GROUP_SELECTION"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:text value="User Name"/>
+                <ui:text key="USERNAME"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:text value="Full Name"/>
+                <ui:text key="FULLNAME"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:text value="Role In Group"/>
+                <ui:text key="GROUP_ROLEIN_GROUP"/>
             </ui:tablecell>
         </ui:tablerow>
 

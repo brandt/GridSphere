@@ -9,9 +9,9 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                    <ui:actionsubmit action="doViewViewGroup" value="Back To Group"/>
-                    <ui:actionsubmit action="doViewEditGroupEntry" value="Change User Role"/>
-                    <ui:actionsubmit action="doViewConfirmRemoveGroupEntry" value="Remove User From Group"/>
+                    <ui:actionsubmit action="doViewViewGroup" key="GROUP_GO_BACK"/>
+                    <ui:actionsubmit action="doViewEditGroupEntry" key="GROUP_ROLE_CHANGE"/>
+                    <ui:actionsubmit action="doViewConfirmRemoveGroupEntry" key="GROUP_REMOVE_USER"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
@@ -19,7 +19,7 @@
     <ui:frame>
          <ui:tablerow>
                 <ui:tablecell width="200">
-                    <ui:text value="Group Name:"/>
+                    <ui:text key="GROUP_NAME"/>
                 </ui:tablecell>
                 <ui:tablecell>
                     <ui:text beanId="groupName"/>
@@ -28,7 +28,7 @@
 
             <ui:tablerow>
                 <ui:tablecell>
-                    <ui:text value="Group Label:"/>
+                    <ui:text key="GROUP_LABEL"/>
                 </ui:tablecell>
                 <ui:tablecell>
                     <ui:text beanId="groupLabel"/>
@@ -39,13 +39,13 @@
     <ui:frame>
             <ui:tablerow header="true">
                 <ui:tablecell>
-                    <ui:text value="User Name:"/>
+                    <ui:text key="USERNAME"/>
                 </ui:tablecell>
                 <ui:tablecell>
-                    <ui:text value="Full Name:"/>
+                    <ui:text key="FULLNAME"/>
                 </ui:tablecell>
                 <ui:tablecell>
-                    <ui:text value="Role In Group:"/>
+                    <ui:text key="GROUP_ROLEIN_GROUP"/>
                 </ui:tablecell>
             </ui:tablerow>
 

@@ -68,14 +68,11 @@ public class GroupManagerPortlet extends ActionPortlet {
         List groupDescs = new Vector();
         List groupList = getACLService(user).getGroups();
         Iterator it = groupList.iterator();
-        int i = 0;
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup)it.next();
-            //RadioButtonBean groupsRB = evt.getRadioButtonBean("groupsRB" + i);
-
-            System.err.println("group= " + g.getName() + " ispublic=" + g.isPublic());
+            //System.err.println("group= " + g.getName() + " ispublic=" + g.isPublic());
             String desc = getACLService(user).getGroupDescription(g);
-            System.err.println("desc=" + desc);
+            //System.err.println("desc=" + desc);
             groupDescs.add(desc);
         }
         req.setAttribute("groupList", groupList);
@@ -247,9 +244,9 @@ public class GroupManagerPortlet extends ActionPortlet {
         // Load group
         if (!groupID.equals("")) {
             group = getACLService(user).getGroup(groupID);
-            System.err.println("group= " + group.getName());
+            //System.err.println("group= " + group.getName());
             groupDescription = getACLService(user).getGroupDescription(group);
-            System.err.println("desc=" + groupDescription);
+            //System.err.println("desc=" + groupDescription);
         }
 
         if (groupID.equals("")) {

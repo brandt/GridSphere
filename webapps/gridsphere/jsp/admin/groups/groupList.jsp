@@ -13,13 +13,13 @@
     <ui:frame>
         <ui:tablerow header="true">
             <ui:tablecell>
-                <ui:text value="Group Name"/>
+                <ui:text key="GROUP_NAME"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:text value="Group Access"/>
+                <ui:text key="GROUP_ACCESS"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:text value="Group Description"/>
+                <ui:text key="GROUP_DESCRIPTION"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -63,7 +63,7 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="saveGroups" value="Apply Changes"/>
+                <ui:actionsubmit action="saveGroups" key="APPLY"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>

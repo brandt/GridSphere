@@ -5,15 +5,15 @@
 
 <ui:form>
 
-<ui:text style="bold" value="Login configuration options"/>
+<ui:text style="bold" key="LOGIN_CONFIG_MSG"/>
 <p>
 <ui:checkbox beanId="acctCB" value="TRUE"/>
-<ui:text value="Allow users to create new accounts on the portal?"/>
+<ui:text key="LOGIN_CONFIG_ALLOW"/>
 <p>
 <ui:frame>
 <ui:tablerow>
 <ui:tablecell>
-<ui:actionsubmit action="setUserCreateAccount" value="Apply Changes"/>
+<ui:actionsubmit action="setUserCreateAccount" key="APPLY"/>
 </ui:tablecell>
 </ui:tablerow>
 </ui:frame>

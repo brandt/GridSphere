@@ -91,11 +91,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
     public void doConfigureSettings(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
-
         String locales = getPortletSettings().getAttribute("supported-locales");
         TextFieldBean localesTF = event.getTextFieldBean("localesTF");
         localesTF.setValue(locales);
-
         setNextState(req, CONFIGURE_JSP);
     }
 
