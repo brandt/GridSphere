@@ -109,7 +109,7 @@ public class PortletManager implements PortletManagerService {
             String portletsPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/Portlets");
             File f = new File(portletsPath);
             if (f.exists() && f.isDirectory()) {
-                String webappFiles[] = f.list();
+                String[] webappFiles = f.list();
 
                 // sort webapps by priority
                 Arrays.sort(webappFiles, new WebappComparator());
@@ -149,6 +149,7 @@ public class PortletManager implements PortletManagerService {
      */
     public synchronized void addWebApp(PortletWebApplication portletWebApp) {
         log.debug("adding webapp: " + portletWebApp.getWebApplicationName());
+        addPortletFile(portletWebApp.getWebApplicationName());
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
@@ -157,6 +158,24 @@ public class PortletManager implements PortletManagerService {
             registry.addApplicationPortlet(appPortlet);
         }
         webapps.add(portletWebApp);
+    }
+
+    private void addPortletFile(String webappName) {
+        String portletsPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/Portlets");
+        File newfile = new File(portletsPath + File.separator + webappName);
+        try {
+            newfile.createNewFile();
+        } catch (IOException e) {
+            log.error("Unable to create portlet app file: " + newfile.getAbsolutePath());
+        }
+    }
+
+    private void removePortletFile(String webappName) {
+        String portletsPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/Portlets");
+        File newfile = new File(portletsPath + File.separator + webappName);
+        if (newfile.exists()) {
+            newfile.delete();
+        }
     }
 
     /**
@@ -189,7 +208,7 @@ public class PortletManager implements PortletManagerService {
         while (it.hasNext()) {
             webapps.remove(it.next());
         }
-
+        removePortletFile(webApplicationName);
     }
 
     /**
@@ -222,7 +241,7 @@ public class PortletManager implements PortletManagerService {
         while (it.hasNext()) {
             webapps.remove(it.next());
         }
-
+        removePortletFile(webApplication.getWebApplicationName());
     }
 
     /**
