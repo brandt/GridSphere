@@ -747,7 +747,7 @@ Copyright:
 
 <!-- ++++++++++++++ START CRUSECONTROL ++++++++++++++++++++ -->
 
-    <target name="cruisecontrol" depends="clean, docbook, compile, tests" description="target for cruisecontrol">
+    <target name="cruisecontrol" depends="clean, compile, tests" description="target for cruisecontrol">
         <mkdir dir="${gridsphere.build}/reports"/>
         <junit printsummary="yes" fork="yes" haltonfailure="no">
             <classpath>
