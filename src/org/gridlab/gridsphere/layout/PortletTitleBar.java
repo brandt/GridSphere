@@ -314,6 +314,24 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      *
      * @param mode the portlet mode expressed as a string
      */
+    public void setPreviousMode(Portlet.Mode mode) {
+        if (mode != null) this.previousMode = mode;
+    }
+
+    /**
+     * Returns the portlet mode of this title bar
+     *
+     * @return the portlet mode expressed as a string
+     */
+    public Portlet.Mode getPreviousMode() {
+        return previousMode;
+    }
+
+    /**
+     * Sets the portlet mode of this title bar
+     *
+     * @param mode the portlet mode expressed as a string
+     */
     public void setPortletModeAsString(String mode) {
         if (mode == null) return;
         try {

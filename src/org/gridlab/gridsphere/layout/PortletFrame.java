@@ -193,20 +193,20 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         hasTitleBarEvent = false;
         this.originalWidth = width;
 
-        if (titleBar == null) titleBar = new PortletTitleBar();
-        if (titleBar != null) {
-            // if title bar is not assigned a label and we have one then use it
-            if ((!label.equals("")) && (titleBar.getLabel().equals(""))) titleBar.setLabel(label + "TB");
-            titleBar.setPortletClass(portletClass);
-            titleBar.setCanModify(canModify);
-            titleBar.setTheme(theme);
-            list = titleBar.init(req, list);
-            //titleBar.setParentComponent(this);
-            titleBar.addComponentListener(this);
-            titleBar.setAccessControlService(aclService);
+        titleBar = new PortletTitleBar();
 
-        }
-        // invalidate cache 
+        // if title bar is not assigned a label and we have one then use it
+        if ((!label.equals("")) && (titleBar.getLabel().equals(""))) titleBar.setLabel(label + "TB");
+        titleBar.setPortletClass(portletClass);
+        titleBar.setCanModify(canModify);
+        titleBar.setTheme(theme);
+        list = titleBar.init(req, list);
+        //titleBar.setParentComponent(this);
+        titleBar.addComponentListener(this);
+        titleBar.setAccessControlService(aclService);
+
+
+        // invalidate cache
         req.setAttribute(CacheService.NO_CACHE, "true");
         doConfig();
         return list;
@@ -321,7 +321,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         } else {
 
             // now perform actionPerformed on Portlet if it has an action
-            if (titleBar != null) titleBar.actionPerformed(event);
+            titleBar.actionPerformed(event);
 
             // process events
             PortletRequest req = event.getPortletRequest();
@@ -349,7 +349,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 }
             }
 
-            if (titleBar != null) titleBar.setPortletMode(req.getMode());
+            titleBar.setPortletMode(req.getMode());
 
             // remove cached output
             String id = req.getPortletSession(true).getId();
@@ -371,9 +371,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             // see if mode has been set
             Portlet.Mode mymode = (Portlet.Mode)req.getAttribute(SportletProperties.PORTLET_MODE);
             if (mymode != null) {
-                if (titleBar != null) {
-                    titleBar.setPortletMode(mymode);
-                }
+                titleBar.setPortletMode(mymode);
             }
 
             List slisteners = Collections.synchronizedList(listeners);
@@ -454,16 +452,16 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         StringBuffer postframe = new StringBuffer();
 
         // Render title bar
-        if ((titleBar != null) && (!transparent)) {
+        if (!transparent) {
             titleBar.doRender(event);
             /*
             if (titleBar.hasRenderError()) {
                 errorFrame.setMessage(titleBar.getErrorMessage());
             } */
         } else {
-            req.setMode(Portlet.Mode.VIEW);
-            req.setAttribute(SportletProperties.PREVIOUS_MODE, Portlet.Mode.VIEW);
-            req.setAttribute(SportletProperties.PORTLET_WINDOW, PortletWindow.State.NORMAL);
+            req.setMode(titleBar.getPortletMode());
+            req.setAttribute(SportletProperties.PREVIOUS_MODE, titleBar.getPreviousMode());
+            req.setAttribute(SportletProperties.PORTLET_WINDOW, titleBar.getWindowState());
         }
 
         if (req.getAttribute(SportletProperties.RESPONSE_COMMITTED) != null) renderPortlet = false;
