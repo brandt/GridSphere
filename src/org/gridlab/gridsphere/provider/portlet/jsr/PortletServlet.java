@@ -44,7 +44,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionActivationListener;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
@@ -72,9 +71,9 @@ public class PortletServlet extends HttpServlet
     PortletManager manager = PortletManager.getInstance();
 
     protected PortletContext portletContext = null;
-    //protected PortalContext portalContext = null;
 
     protected Map portlets = null;
+    protected Map portletclasses = null;
 
     protected Map portletConfigHash = null;
 
@@ -102,6 +101,7 @@ public class PortletServlet extends HttpServlet
         ServletContext ctx = config.getServletContext();
 
         portlets = new Hashtable();
+        portletclasses = new Hashtable();
         portletConfigHash = new Hashtable();
 
         portletWebApp = new JSRPortletWebApplicationImpl(ctx, "PortletServlet", Thread.currentThread().getContextClassLoader());
@@ -111,11 +111,14 @@ public class PortletServlet extends HttpServlet
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
             JSRApplicationPortletImpl appPortlet = (JSRApplicationPortletImpl) it.next();
-            String portletClass = appPortlet.getPortletClassName();
+            String portletClass = appPortlet.getApplicationPortletClassName();
+            String portletName = appPortlet.getApplicationPortletName();
             try {
                 // instantiate portlet classes
                 Portlet portletInstance = (Portlet) Class.forName(portletClass).newInstance();
-                portlets.put(portletClass, portletInstance);
+                //portlets.put(portletClass, portletInstance);
+                portlets.put(portletName, portletInstance);
+                portletclasses.put(portletClass, portletInstance);
                 log.debug("Creating new portlet instance: " + portletClass);
 
                 // put portlet web app in registry
@@ -158,17 +161,17 @@ public class PortletServlet extends HttpServlet
             Set set = portlets.keySet();
             Iterator it = set.iterator();
             while (it.hasNext()) {
-                String portletClass = (String) it.next();
-                Portlet portlet = (Portlet) portlets.get(portletClass);
-                log.debug("in PortletServlet: service(): Initializing portlet " + portletClass);
-                PortletDefinition portletDef = portletWebApp.getPortletDefinition(portletClass);
+                String portletName = (String) it.next();
+                Portlet portlet = (Portlet) portlets.get(portletName);
+                log.debug("in PortletServlet: service(): Initializing portlet " + portletName);
+                PortletDefinition portletDef = portletWebApp.getPortletDefinition(portletName);
 
                 PortletConfig portletConfig = new PortletConfigImpl(getServletConfig(), portletDef, Thread.currentThread().getContextClassLoader());
                 try {
                     portlet.init(portletConfig);
-                    portletConfigHash.put(portletClass, portletConfig);
+                    portletConfigHash.put(portletName, portletConfig);
                 } catch (Exception e) {
-                    log.error("in PortletServlet: service(): Unable to INIT portlet " + portletClass, e);
+                    log.error("in PortletServlet: service(): Unable to INIT portlet " + portletName, e);
                     // PLT.5.5.2.1 Portlet that fails to initialize must not be placed in active service
                     it.remove();
                 }
@@ -182,9 +185,9 @@ public class PortletServlet extends HttpServlet
         } else if (method.equals(SportletProperties.DESTROY)) {
             Iterator it = portlets.keySet().iterator();
             while (it.hasNext()) {
-                String portletClass = (String) it.next();
-                Portlet portlet = (Portlet) portlets.get(portletClass);
-                log.debug("in PortletServlet: service(): Destroying portlet " + portletClass);
+                String portletName = (String) it.next();
+                Portlet portlet = (Portlet) portlets.get(portletName);
+                log.debug("in PortletServlet: service(): Destroying portlet " + portletName);
                 try {
                     portlet.destroy();
                 } catch (RuntimeException e) {
@@ -199,24 +202,34 @@ public class PortletServlet extends HttpServlet
         }
 
         // There must be a portlet ID to know which portlet to service
-        String portletClassName = (String) request.getAttribute(SportletProperties.PORTLETID);
+        String pid = (String) request.getAttribute(SportletProperties.PORTLETID);
         String compId = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
 
-        if (portletClassName == null) {
+        if (pid == null) {
             // it may be in the request parameter
-            portletClassName = request.getParameter(SportletProperties.PORTLETID);
-            if (portletClassName == null) {
+            pid = request.getParameter(SportletProperties.PORTLETID);
+            if (pid == null) {
                 log.debug("in PortletServlet: service(): No PortletID found in request!");
                 return;
             }
-            request.setAttribute(SportletProperties.PORTLETID, portletClassName);
+            request.setAttribute(SportletProperties.PORTLETID, pid);
         }
 
-        log.debug("have a portlet id " + portletClassName + " component id= " + compId);
-        Portlet portlet = (Portlet) portlets.get(portletClassName);
+        log.debug("have a portlet id " + pid + " component id= " + compId);
+
+        int idx = pid.indexOf("#");
+        Portlet portlet = null;
+        if (idx > 0) {
+        String pname = pid.substring(idx+1);
+        System.err.println("pname= " + pname);
+            portlet = (Portlet) portlets.get(pname);
+        // this hack uses the portletclasses hash that identifies classname to portlet mappings
+        } else {
+            portlet = (Portlet)portletclasses.get(pid);
+        }
 
         JSRApplicationPortletImpl appPortlet =
-                (JSRApplicationPortletImpl) registry.getApplicationPortlet(portletClassName);
+                (JSRApplicationPortletImpl) registry.getApplicationPortlet(pid);
 
         Supports[] supports = appPortlet.getSupports();
 
@@ -263,10 +276,10 @@ public class PortletServlet extends HttpServlet
         PortalContext portalContext = appPortlet.getPortalContext();
         request.setAttribute(SportletProperties.PORTAL_CONTEXT, portalContext);
 
-        request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(portletClassName));
+        request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(pid));
 
         if (portlet == null) {
-            log.error("in PortletServlet: service(): No portlet matching " + portletClassName + " found!");
+            log.error("in PortletServlet: service(): No portlet matching " + pid + " found!");
             return;
         }
 
@@ -279,7 +292,7 @@ public class PortletServlet extends HttpServlet
                     RenderResponse renderResponse = new RenderResponseImpl(request, response, portalContext);
                     renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
                     renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
-                    log.debug("in PortletServlet: do title " + portletClassName);
+                    log.debug("in PortletServlet: do title " + pid);
                     try {
                         doTitle(portlet, renderRequest, renderResponse);
                     } catch (PortletException e) {
@@ -295,17 +308,17 @@ public class PortletServlet extends HttpServlet
                     ActionRequestImpl actionRequest = new ActionRequestImpl(request, portalContext, portletContext, supports);
                     ActionResponse actionResponse = new ActionResponseImpl(request, response, portalContext);
                     //setGroupAndRole(actionRequest, actionResponse);
-                    log.debug("in PortletServlet: action handling portlet " + portletClassName);
+                    log.debug("in PortletServlet: action handling portlet " + pid);
                     try {
                         portlet.processAction(actionRequest, actionResponse);
                         Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
                         String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
-                        actionRequest.setAttribute("renderParams" + "_" + portletClassName + "_" + cid, params);
-                        log.debug("placing render params in attribute: " + "renderParams" + "_" + portletClassName + "_" + cid);
+                        actionRequest.setAttribute("renderParams" + "_" + pid + "_" + cid, params);
+                        log.debug("placing render params in attribute: " + "renderParams" + "_" + pid + "_" + cid);
                         redirect(request, response, actionRequest, actionResponse, portalContext);
                     } catch (Exception e) {
                         log.error("Error during processAction:", e);
-                        request.setAttribute(SportletProperties.PORTLETERROR + portletClassName, new org.gridlab.gridsphere.portlet.PortletException(e));
+                        request.setAttribute(SportletProperties.PORTLETERROR + pid, new org.gridlab.gridsphere.portlet.PortletException(e));
                     }
 
                     //actionRequest.clearParameters();
@@ -322,7 +335,7 @@ public class PortletServlet extends HttpServlet
                 renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
                 renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
                 //setGroupAndRole(renderRequest, renderResponse);
-                log.debug("in PortletServlet: rendering  portlet " + portletClassName);
+                log.debug("in PortletServlet: rendering  portlet " + pid);
                 if (renderRequest.getAttribute(SportletProperties.RESPONSE_COMMITTED) == null) {
                     try {
 
@@ -335,8 +348,8 @@ public class PortletServlet extends HttpServlet
                             log.error("in PortletServlet(): destroy caught unavailable exception: ", d);
                         }
                     } catch (Exception e) {
-                        if (request.getAttribute(SportletProperties.PORTLETERROR + portletClassName) == null) {
-                            request.setAttribute(SportletProperties.PORTLETERROR + portletClassName, e);
+                        if (request.getAttribute(SportletProperties.PORTLETERROR + pid) == null) {
+                            request.setAttribute(SportletProperties.PORTLETERROR + pid, e);
                         }
                         log.error("in PortletServlet(): doRender() caught exception", e);
                         throw new ServletException(e);
@@ -625,7 +638,6 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         //sessionManager.sessionDestroyed(event);
         //loginService.sessionDestroyed(event.getSession());
         log.debug("sessionDestroyed('" + event.getSession().getId() + "')");
-        HttpSession s = event.getSession();
 
         //HttpSession session = event.getSession();
         //User user = (User) session.getAttribute(SportletProperties.PORTLET_USER);
