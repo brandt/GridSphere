@@ -257,7 +257,7 @@
             </callout>
             <callout arearefs="gpdk.baseimpl.def">
             <para>
-            The <varname>implementation</varname> element defines the &ActioPage; implementation to use. A &DefaultActionPage;
+            The <varname>implementation</varname> element defines the &ActionPage; implementation to use. A &DefaultActionPage;
             can be used if no logic is required before displaying the presentation page. This is generally the case
                 when an action is used strictly for navigation. Otherwise, a new &ActionPage; can extend from
                 the &DefaultActionPage; and provide implementations for the interface methods
@@ -266,8 +266,8 @@
             </callout>
            <callout arearefs="gpdk.pres.def">
             <para>
-            The <varname>presentation</varname> element defines the name of the JSP presnetation page used for
-                rendering after the completion of the corresponding &PageAction; object. The JSP page is located
+            The <varname>presentation</varname> element defines the name of the JSP presentation page used for
+                rendering after the completion of the corresponding &ActionPage; object. The JSP page is located
                 relative to the <filename>jsp/</filename> directory in the portlet web application.
             </para>
             </callout>
