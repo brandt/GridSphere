@@ -35,10 +35,12 @@
         <title lang="en">GridSphere</title>
         <portlet-tabbed-pane selected="0" style="sub-menu">
             <portlet-tab label="home">
-                <title lang="en">Home</title>
+               	<title lang="en">Home</title>
                 <title lang="it">Inizio</title>
 		<title lang="pl">Start</title>
-		<title lang="hu">Üdvözöllek</title>
+		<title lang="hu">Otthon</title>
+		<title lang="de">Start</title>
+		<title lang="cs">Výchozí</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="70%">
