@@ -282,6 +282,14 @@ Copyright:
         <copy overwrite="true" file="config/log4j.properties"
             tofile="${build.classes}/gridsphere/log4j.properties"/>
 
+        <copy overwrite="true" file="config/log4j.properties"
+                    tofile="${build.classes}/gridsphere/log4j.properties"/>
+
+        <mkdir dir="${build.classes}/gridsphere/resources"/>
+        <copy overwrite="true" todir="${build.classes}/gridsphere/resources">
+            <fileset dir="config/resources"/>
+        </copy>
+
         <!-- gridsphere.properties location in build dir -->
         <property name="gridsphere.properties"
             value="${build.classes}/gridsphere/gridsphere.properties"/>
