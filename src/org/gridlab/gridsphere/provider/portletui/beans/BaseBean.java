@@ -7,6 +7,9 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 
 /**
  * The abstract <code>BaseBean</code> is an implementation of the <code>TagBean</code> interface.
@@ -70,4 +73,12 @@ public abstract class BaseBean implements TagBean {
         //System.err.println("in BaseBeanImpl: beankey: " + beanId + "_" + compId);
         return beanId + "_" + compId;
     }
+
+    protected String getLocalizedText(String key) {
+        Locale locale = this.request.getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+        return bundle.getString(key);
+    }
+
+
 }

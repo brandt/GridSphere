@@ -4,16 +4,12 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * A <code>FileInputBean</code> provides a file upload element

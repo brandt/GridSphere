@@ -48,7 +48,7 @@ public class ActionSubmitTag extends ActionTag {
         if (actionSubmitBean == null) actionSubmitBean = new ActionSubmitBean();
         paramBeans = new ArrayList();
 
-        actionSubmitBean.setName(createActionURI());
+        actionSubmitBean.setName(createActionURI().toString());
 
         if (!key.equals("")) {
             actionSubmitBean.setKey(key);
@@ -92,7 +92,7 @@ public class ActionSubmitTag extends ActionTag {
             portletAction.addParameter(pbean.getName(), pbean.getValue());
         }
 
-        String actionURI = createActionURI();
+        String actionURI = createActionURI().toString();
 
         actionSubmitBean.setName(actionURI);
 

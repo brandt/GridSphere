@@ -67,7 +67,7 @@ public class ActionFormTag extends ActionTag {
 
             out.print("<form ");
             out.print("action=\"");
-            out.print(createActionURI());
+            out.print(createActionURI().toString());
             out.print("\" method=\"");
             out.print(method);
             out.print("\"");

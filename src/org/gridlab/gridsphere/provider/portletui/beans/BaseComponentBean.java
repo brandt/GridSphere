@@ -18,7 +18,6 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     protected boolean visible = true;
     protected boolean supportsJS = false;
 
-    protected String gsStyle = "";
     protected String cssStyle = null;
     protected String cssClass = null;
 

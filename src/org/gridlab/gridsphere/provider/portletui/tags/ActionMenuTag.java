@@ -1,5 +1,7 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionMenuBean;
 
 import javax.servlet.jsp.JspException;
@@ -18,6 +20,9 @@ public class ActionMenuTag extends ContainerTag {
     protected String align = null;
     protected String title = null;
     protected String menuType = null;
+    protected boolean collapsible = false;
+    protected boolean collapsed = false;
+    protected String key = null;
 
 
     public String getMenuType() {
@@ -26,6 +31,22 @@ public class ActionMenuTag extends ContainerTag {
 
     public void setMenuType(String menuType) {
         this.menuType = menuType;
+    }
+
+    public boolean isCollapsed() {
+        return collapsed;
+    }
+
+    public void setCollapsed(boolean collapsed) {
+        this.collapsed = collapsed;
+    }
+
+    public boolean isCollapsible() {
+        return collapsible;
+    }
+
+    public void setCollapsible(boolean collapsible) {
+        this.collapsible = collapsible;
     }
 
     public String getTitle() {
@@ -44,6 +65,22 @@ public class ActionMenuTag extends ContainerTag {
         this.align = align;
     }
 
+    /**
+     * Returns the key used to identify localized text
+     *
+     * @return the key used to identify localized text
+     */
+    public String getKey() {
+        return key;
+    }
+
+    /**
+     * Sets the key used to identify localized text
+     * @param key the key used to identify localized text
+     */
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public int doStartTag() throws JspException {
 
@@ -62,6 +99,19 @@ public class ActionMenuTag extends ContainerTag {
         if (parent instanceof ActionMenuTag) {
             actionMenuBean.setHasParentMenu(true);
         }
+
+
+        // TODO not working so far
+        actionMenuBean.setCollapsible(this.collapsible);
+        actionMenuBean.setCollapsed(this.collapsed);
+        PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
+        PortletURI uri = res.createURI();
+        actionMenuBean.setPortletURI(uri);
+
+        if (key != null) {
+            actionMenuBean.setValue(getLocalizedText(key));
+        }
+
 
         try {
             JspWriter out = pageContext.getOut();

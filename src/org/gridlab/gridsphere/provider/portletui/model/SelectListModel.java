@@ -23,7 +23,7 @@ public class SelectListModel extends DefaultListModel {
      * @param flag is true if the list item is selected, false otherwise
      */
     public void setSelected(int index, boolean flag) {
-        ((ListBoxItemBean)list.get(index)).setSelected(flag);
+        ((ListBoxItemBean) list.get(index)).setSelected(flag);
     }
 
     /**
@@ -32,7 +32,7 @@ public class SelectListModel extends DefaultListModel {
     public void unselectAll() {
         Iterator it = list.iterator();
         while (it.hasNext()) {
-            ((ListBoxItemBean)it.next()).setSelected(false);
+            ((ListBoxItemBean) it.next()).setSelected(false);
         }
     }
 
@@ -45,7 +45,7 @@ public class SelectListModel extends DefaultListModel {
         Iterator it = list.iterator();
         List selectedList = new ArrayList();
         while (it.hasNext()) {
-            ListBoxItemBean item = (ListBoxItemBean)it.next();
+            ListBoxItemBean item = (ListBoxItemBean) it.next();
             if (item.isSelected()) {
                 selectedList.add(item);
             }

@@ -1,6 +1,7 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletURI;
 
 import java.util.Iterator;
 
@@ -15,10 +16,15 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
     // public final static String TYPE_LINKTREE = "linktree";
     // public final static String TYPE_DROPDOWN = "dropdown";
 
+
+
     protected String align = BaseComponentBean.MENU_HORIZONTAL;
     protected String title = null;
     private boolean hasParentMenu = false;
     protected String menuType = TYPE_ACTIONBAR;
+    protected boolean collapsible = false;
+    protected boolean collapsed = false;
+    protected PortletURI portletURI = null;
 
     public ActionMenuBean() {
         super();
@@ -35,6 +41,29 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
         this.beanId = beanId;
     }
 
+    public PortletURI getPortletURI() {
+        return portletURI;
+    }
+
+    public void setPortletURI(PortletURI portletURI) {
+        this.portletURI = portletURI;
+    }
+
+    public boolean isCollapsible() {
+        return collapsible;
+    }
+
+    public void setCollapsible(boolean collapsible) {
+        this.collapsible = collapsible;
+    }
+
+    public boolean isCollapsed() {
+        return collapsed;
+    }
+
+    public void setCollapsed(boolean collapsed) {
+        this.collapsed = collapsed;
+    }
 
     public String getMenuType() {
         return menuType;
@@ -45,10 +74,14 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
     }
 
     /**
-     *
-     * @param bean
+     * Adds a BaseComponentBean. This can be a bean like a ActionLink, an ActionMenuItemBean wrapper will
+     * be created around it.
+     * @param bean to add
      */
     public void addMenuEntry(BaseComponentBean bean) {
+        ActionMenuItemBean amiBean = new ActionMenuItemBean();
+        amiBean.addBean(bean);
+        this.addBean(amiBean);
 
     }
 
@@ -104,9 +137,9 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
         StringBuffer sb = new StringBuffer();
         if (!hasParentMenu) {
             // need a table for limiting the div just to the size of the longest text
-            sb.append("<table");
+            sb.append("<table class=\"portlet-menu\" ");
             sb.append("><tr><td>");
-            this.cssClass = "portlet-menu";
+            //this.cssClass = "portlet-menu";
         } else {
             this.cssStyle = "margin-top: 5px;";
         }
@@ -122,25 +155,35 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
 //        sb.append(">");
         // try to render title if there is one
         if (title != null) {
-            sb.append("<div class=\"portlet-menu-caption\">" + title + "</div>");
+            sb.append("<div class=\"portlet-menu-caption\">");
+
+            sb.append(title);
+
+            sb.append("</div>");
         }
 
         return sb.toString();
     }
 
     public String toEndString() {
+
         StringBuffer sb = new StringBuffer();
-        Iterator it = container.iterator();
-        while (it.hasNext()) {
-            BaseComponentBean bean = (BaseComponentBean) it.next();
-            if (bean instanceof ActionMenuItemBean) {
-                ActionMenuItemBean itemBean = (ActionMenuItemBean) bean;
-                // if child is actionitem set these values on them, needed for correct rendering
-                itemBean.setAlign(this.align);
-                itemBean.setMenuType(this.menuType);
+
+        if (!this.isCollapsed()) {
+
+
+            Iterator it = container.iterator();
+            while (it.hasNext()) {
+                BaseComponentBean bean = (BaseComponentBean) it.next();
+                if (bean instanceof ActionMenuItemBean) {
+                    ActionMenuItemBean itemBean = (ActionMenuItemBean) bean;
+                    // if child is actionitem set these values on them, needed for correct rendering
+                    itemBean.setAlign(this.align);
+                    itemBean.setMenuType(this.menuType);
+                }
+                sb.append(bean.toStartString());
+                sb.append(bean.toEndString());
             }
-            sb.append(bean.toStartString());
-            sb.append(bean.toEndString());
         }
 
         sb.append("</div>");
@@ -149,5 +192,4 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
         }
         return sb.toString();
     }
-
 }

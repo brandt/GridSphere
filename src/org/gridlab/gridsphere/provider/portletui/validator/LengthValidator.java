@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.provider.portletui.validator;
 
-public class LengthValidator extends BaseValidator  {
+public class LengthValidator extends BaseValidator {
 
     public boolean isValid() {
         return true;

@@ -86,8 +86,7 @@ public abstract class ActionTag extends BaseComponentTag {
         return paramBeans;
     }
 
-    public String createActionURI() {
-
+    public PortletURI createActionURI() {
         // Builds a URI containing the actin and associated params
         PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
 
@@ -112,7 +111,8 @@ public abstract class ActionTag extends BaseComponentTag {
             }
             actionURI.addAction(portletAction);
         }
-        return actionURI.toString();
+        return actionURI;
+
     }
 
 }

@@ -62,7 +62,7 @@ public class ListBoxTag extends ContainerTag {
 
 
     /**
-     * Sets multiple selection
+     * Sets m  ultiple selection
      *
      * @param isMultiple is true if listbox provides multiple selections, false otherwise
      */

@@ -113,7 +113,6 @@ public class ActionLinkTag extends ActionTag {
             ActionMenuTag actionMenuTag = (ActionMenuTag) parent;
             if (!actionMenuTag.getAlign().equals("horizontal")) {
                 actionlink.setCssStyle("display: block");
-                System.out.println("\n\n\n\n\n\n\n SET CSSSTYLE!!!!\n\n\n\n\n\n");
             }
         }
 
@@ -129,7 +128,7 @@ public class ActionLinkTag extends ActionTag {
 
     public int doEndTag() throws JspException {
 
-        actionlink.setAction(createActionURI());
+        actionlink.setPortletURI(createActionURI());
 
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
@@ -140,13 +139,21 @@ public class ActionLinkTag extends ActionTag {
             if (val == null) val = "";
             actionlink.setValue(imageBean.toStartString() + val);
         }
-        try {
-            JspWriter out = pageContext.getOut();
-            out.print(actionlink.toEndString());
-        } catch (Exception e) {
-            throw new JspException(e.getMessage());
-        }
 
+
+        Tag parent = getParent();
+        if (parent instanceof DataGridColumnTag) {
+            DataGridColumnTag dataGridColumnTag = (DataGridColumnTag) parent;
+            dataGridColumnTag.addTagBean(this.actionlink);
+        } else {
+
+            try {
+                JspWriter out = pageContext.getOut();
+                out.print(actionlink.toEndString());
+            } catch (Exception e) {
+                throw new JspException(e.getMessage());
+            }
+        }
         return EVAL_PAGE;
     }
 }

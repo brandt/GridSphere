@@ -22,6 +22,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     protected List paramBeanList = new ArrayList();
     protected String label = null;
 
+
     /**
      * Constructs default action bean
      */

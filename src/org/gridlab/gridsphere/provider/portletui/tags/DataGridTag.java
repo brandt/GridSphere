@@ -1,0 +1,137 @@
+package org.gridlab.gridsphere.provider.portletui.tags;
+
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.provider.portletui.beans.DataGridBean;
+import org.gridlab.gridsphere.provider.portletui.beans.DataGridColumnBean;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
+/*
+ * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @version $Id$
+ */
+
+public class DataGridTag extends ContainerTag {
+
+    private int size = 10;
+    private String header = null;
+    private List objectlist = null;
+    private int startPos = 0;
+    private DataGridBean dataGridBean = null;
+    private String key = null;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public List getList() {
+        return objectlist;
+    }
+
+    public void setList(List list) {
+        this.objectlist = list;
+    }
+
+    public int getStartPos() {
+        return startPos;
+    }
+
+    public void setStartPos(int startPos) {
+        this.startPos = startPos;
+    }
+
+    public int doStartTag() throws JspException {
+
+        PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
+        PortletURI uri = res.createURI();
+        PortletRequest request = (PortletRequest) pageContext.getAttribute("portletRequest");
+
+        list = new Vector();
+
+        if (!beanId.equals("")) {
+            dataGridBean = (DataGridBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            if (dataGridBean == null) {
+                dataGridBean = new DataGridBean(beanId);
+                if (header != null) dataGridBean.setHeader(header);
+                dataGridBean.setSize(size);
+                this.setBaseComponentBean(dataGridBean);
+                dataGridBean.setList(objectlist);
+            } else {
+                this.updateBaseComponentBean(dataGridBean);
+            }
+
+        } else {
+            dataGridBean = new DataGridBean();
+            dataGridBean.setSize(size);
+            if (header != null) dataGridBean.setHeader(header);
+            dataGridBean.setList(objectlist);
+            this.setBaseComponentBean(dataGridBean);
+        }
+
+        dataGridBean.setUri(uri);
+
+        if (key != null) {
+            dataGridBean.setHeader(getLocalizedText(key));
+        }
+
+
+        dataGridBean.setPortletRequest(request);
+
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(dataGridBean.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
+        }
+        return EVAL_BODY_INCLUDE;
+
+
+    }
+
+    public int doEndTag() throws JspException {
+
+        try {
+
+            List beans = getTagBeans();
+            Iterator it = beans.iterator();
+            while (it.hasNext()) {
+                dataGridBean.addBean((DataGridColumnBean) it.next());
+            }
+
+            JspWriter out = pageContext.getOut();
+            out.print(dataGridBean.toEndString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
+        }
+
+        return EVAL_PAGE;
+    }
+
+}

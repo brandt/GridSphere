@@ -19,7 +19,7 @@ public class DefaultTableModel extends BaseBean implements TagBean {
      * Constructs a default table model
      */
     public DefaultTableModel() {
-       dataList = new Vector();
+        dataList = new Vector();
     }
 
     /**
@@ -43,13 +43,13 @@ public class DefaultTableModel extends BaseBean implements TagBean {
         Iterator it = set.iterator();
         while (it.hasNext()) {
             tableRow = new TableRowBean();
-            String key = (String)it.next();
+            String key = (String) it.next();
             Object obj = paramMap.get(key);
             if (obj instanceof List) {
 
             }
             if (obj instanceof String) {
-                String value = (String)paramMap.get(key);
+                String value = (String) paramMap.get(key);
                 TextBean tb1 = new TextBean();
                 tb1.setValue(key);
                 cellbean = new TableCellBean();
@@ -103,7 +103,7 @@ public class DefaultTableModel extends BaseBean implements TagBean {
         StringBuffer sb = new StringBuffer();
         Iterator it = dataList.iterator();
         while (it.hasNext()) {
-            TableRowBean trb = (TableRowBean)it.next();
+            TableRowBean trb = (TableRowBean) it.next();
             sb.append(trb.toStartString());
             sb.append(trb.toEndString());
         }

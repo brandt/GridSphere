@@ -6,6 +6,8 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 
+import java.util.Iterator;
+
 /**
  * An <code>ActionLinkBean</code> is a visual bean that represents a hyperlink containing a portlet action
  */
@@ -58,12 +60,26 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         this.style = style;
     }
 
+
     public String toStartString() {
         return "";
     }
 
     public String toEndString() {
-        String hlink = "<a href=\"" + action + "\"" + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value + "</a>";
+
+        // now if we added some params which should be actions....
+        if (paramBeanList != null) {
+            Iterator it = paramBeanList.iterator();
+            while (it.hasNext()) {
+                ActionParamBean apBean = (ActionParamBean) it.next();
+                this.portletURI.addActionParameter(apBean.getName(), apBean.getValue());
+            }
+        }
+
+        // now do the string rendering
+        action = this.portletURI.toString();
+
+        //String hlink = "<a href=\"" + action + "\"" + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value + "</a>";
         if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
             this.cssClass = TextBean.MSG_ERROR;
         } else if (style.equalsIgnoreCase("status")) {
@@ -75,14 +91,19 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         } else if (style.equalsIgnoreCase("success")) {
             this.cssClass = TextBean.MSG_SUCCESS;
         } else if (style.equalsIgnoreCase(TextBean.MSG_BOLD)) {
-            return "<b>" + hlink + "</b>";
+            this.addCssStyle("font-weight: bold;");
         } else if (style.equalsIgnoreCase(TextBean.MSG_ITALIC)) {
-            return "<i>" + hlink + "</i>";
+            this.addCssStyle("font-weight: italic;");
         } else if (style.equalsIgnoreCase(TextBean.MSG_UNDERLINE)) {
-            return "<u>" + hlink + "</u>";
+            this.addCssStyle("font-weight: underline;");
         }
+        StringBuffer sb = new StringBuffer();
 
-        return "<a href=\"" + action + "\"" + getFormattedCss() + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value + "</a>";
+        sb.append("<a href=\"" + action + "\"" + getFormattedCss() + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value);
+        sb.append("</a>");
+
+
+        return sb.toString();
     }
 
 }

@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
 
 /**
  * A <code>CheckBoxTag</code> provides a checkbox element
@@ -56,14 +57,19 @@ public class CheckboxTag extends BaseComponentTag {
 
         //debug();
 
+        Tag parent = getParent();
+        if (parent instanceof DataGridColumnTag) {
+            DataGridColumnTag dataGridColumnTag = (DataGridColumnTag) parent;
+            dataGridColumnTag.addTagBean(this.checkbox);
+        } else {
 
-        try {
-            JspWriter out = pageContext.getOut();
-            out.print(checkbox.toStartString());
-        } catch (Exception e) {
-            throw new JspException(e.getMessage());
+            try {
+                JspWriter out = pageContext.getOut();
+                out.print(checkbox.toStartString());
+            } catch (Exception e) {
+                throw new JspException(e.getMessage());
+            }
         }
-
         return SKIP_BODY;
     }
 

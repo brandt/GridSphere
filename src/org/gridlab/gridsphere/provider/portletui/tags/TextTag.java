@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
 
 /**
  * A <code>TextTag</code> represents text to be displayed
@@ -117,11 +118,18 @@ public class TextTag extends BaseComponentTag {
             textBean.setValue(bodyContent.getString());
         }
 
-        try {
-            JspWriter out = pageContext.getOut();
-            out.print(textBean.toEndString());
-        } catch (Exception e) {
-            throw new JspException(e.getMessage());
+        Tag parent = getParent();
+        if (parent instanceof DataGridColumnTag) {
+            DataGridColumnTag dataGridColumnTag = (DataGridColumnTag) parent;
+            dataGridColumnTag.addTagBean(this.textBean);
+        } else {
+
+            try {
+                JspWriter out = pageContext.getOut();
+                out.print(textBean.toEndString());
+            } catch (Exception e) {
+                throw new JspException(e.getMessage());
+            }
         }
 
         return EVAL_PAGE;

@@ -56,6 +56,7 @@ public class TextFieldBean extends InputBean implements TagBean {
         this.beanId = beanId;
     }
 
+
     public String toStartString() {
         return super.toStartString();
     }

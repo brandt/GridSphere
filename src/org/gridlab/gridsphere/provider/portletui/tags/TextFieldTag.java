@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
 
 /**
  * A <code>TextFieldTag</code> represents a text field element
@@ -20,6 +21,15 @@ public class TextFieldTag extends BaseComponentTag {
     protected TextFieldBean textFieldBean = null;
     protected int size = 0;
     protected int maxlength = 0;
+    protected String beanIdSource = null;
+
+    public String getBeanidsource() {
+        return beanIdSource;
+    }
+
+    public void setBeanidsource(String beanIdSource) {
+        this.beanIdSource = beanIdSource;
+    }
 
     /**
      * Returns the (html) size of the field
@@ -78,13 +88,20 @@ public class TextFieldTag extends BaseComponentTag {
         }
 
         //debug();
-        try {
-            JspWriter out = pageContext.getOut();
-            out.print(textFieldBean.toStartString());
-        } catch (Exception e) {
-            throw new JspException(e.getMessage());
-        }
+        Tag parent = getParent();
+        if (parent instanceof DataGridColumnTag) {
+            DataGridColumnTag dataGridColumnTag = (DataGridColumnTag) parent;
+            textFieldBean.setBeanIdSource(this.beanIdSource);
+            dataGridColumnTag.addTagBean(this.textFieldBean);
+        } else {
 
+            try {
+                JspWriter out = pageContext.getOut();
+                out.print(textFieldBean.toStartString());
+            } catch (Exception e) {
+                throw new JspException(e.getMessage());
+            }
+        }
         return SKIP_BODY;
     }
 
