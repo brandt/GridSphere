@@ -81,7 +81,7 @@ public class ActionURLTagImpl extends ActionTag {
             actionlink.setValue(getLocalizedText(key));
         }
 
-        return EVAL_BODY_INCLUDE;
+        return EVAL_BODY_BUFFERED;
     }
 
     public int doEndTag() throws JspException {
