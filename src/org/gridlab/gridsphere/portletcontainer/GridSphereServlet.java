@@ -6,13 +6,14 @@ package org.gridlab.gridsphere.portletcontainer;
 
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.hibernate.DatabaseTask;
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 import org.gridlab.gridsphere.layout.PortletPageFactory;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletContext;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
@@ -72,6 +73,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
 
     private static PortletRegistry registry = PortletRegistry.getInstance();
+
     /**
      * Initializes the GridSphere portlet container
      *
@@ -104,7 +106,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      *
      * @param req the <code>HttpServletRequest</code>
      * @param res the <code>HttpServletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      * @throws ServletException if a servlet error occurs
      */
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -116,87 +118,103 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletRequest portletReq = event.getPortletRequest();
         PortletResponse portletRes = event.getPortletResponse();
 
+        boolean database = true;
+
         // If first time being called, instantiate all portlets
         if (firstDoGet.equals(Boolean.TRUE)) {
             synchronized (firstDoGet) {
-                log.debug("Initializing portlets and services");
-                try {
-                    // initailize needed services
-                    initializeServices();
-                    // initialize all portlets
-                    PortletInvoker.initAllPortlets(portletReq, portletRes);
-                } catch (PortletException e) {
-                    req.setAttribute(SportletProperties.ERROR, e);
-                }
-                layoutEngine = PortletLayoutEngine.getInstance();
-                firstDoGet = Boolean.FALSE;
-            }
-        }
+                log.debug("Testing Database");
+                // checking if database setup is correct
+                DatabaseTask dt = new DatabaseTask();
+                database = dt.checkDBSetup(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/persistence/"));
 
-        setUserAndGroups(portletReq);
-
-        // Handle user login and logout
-        if (event.hasAction()) {
-            if (event.getAction().getName().equals(SportletProperties.LOGIN)) {
-                login(event);
-                //event = new GridSphereEventImpl(aclService, context, req, res);
-            }
-            if (event.getAction().getName().equals(SportletProperties.LOGOUT)) {
-                logout(event);
-                // since event is now invalidated, must create new one
-                event = new GridSphereEventImpl(aclService, context, req, res);
-            }
-        }
-
-        layoutEngine.actionPerformed(event);
-
-        // is this a file download operation?
-        downloadFile(event);
-
-        // Handle any outstanding messages
-        // This needs work certainly!!!
-        Map portletMessageLists = messageManager.retrieveAllMessages();
-        if (!portletMessageLists.isEmpty()) {
-            Set keys = portletMessageLists.keySet();
-            Iterator it = keys.iterator();
-            String concPortletID = null;
-            List messages = null;
-            while (it.hasNext()) {
-                concPortletID = (String)it.next();
-                messages = (List)portletMessageLists.get(concPortletID);
-                Iterator newit = messages.iterator();
-                while (newit.hasNext()) {
-                    PortletMessage msg = (PortletMessage)newit.next();
-                    layoutEngine.messageEvent(concPortletID, msg, event);
-                    newit.remove();
+                if (database) {
+                    log.debug("Initializing portlets and services");
+                    try {
+                        // initailize needed services
+                        initializeServices();
+                        // initialize all portlets
+                        PortletInvoker.initAllPortlets(portletReq, portletRes);
+                    } catch (PortletException e) {
+                        req.setAttribute(SportletProperties.ERROR, e);
+                    }
+                    layoutEngine = PortletLayoutEngine.getInstance();
+                    firstDoGet = Boolean.FALSE;
                 }
             }
         }
 
-        setUserAndGroups(portletReq);
+        if (database) {
+            setUserAndGroups(portletReq);
 
-        layoutEngine.service(event);
+            // Handle user login and logout
+            if (event.hasAction()) {
+                if (event.getAction().getName().equals(SportletProperties.LOGIN)) {
+                    login(event);
+                    //event = new GridSphereEventImpl(aclService, context, req, res);
+                }
+                if (event.getAction().getName().equals(SportletProperties.LOGOUT)) {
+                    logout(event);
+                    // since event is now invalidated, must create new one
+                    event = new GridSphereEventImpl(aclService, context, req, res);
+                }
+            }
 
-        log.debug("Session stats");
-        userSessionManager.dumpSessions();
+            layoutEngine.actionPerformed(event);
 
-        log.debug("Portlet service factory stats");
-        factory.logStatistics();
+            // is this a file download operation?
+            downloadFile(event);
 
-        log.debug("Portlet page factory stats");
-        try {
-            PortletPageFactory pageFactory = PortletPageFactory.getInstance();
-            pageFactory.logStatistics();
-        } catch (Exception e) {
-            log.error("Unable to get page factory", e);
+            // Handle any outstanding messages
+            // This needs work certainly!!!
+            Map portletMessageLists = messageManager.retrieveAllMessages();
+            if (!portletMessageLists.isEmpty()) {
+                Set keys = portletMessageLists.keySet();
+                Iterator it = keys.iterator();
+                String concPortletID = null;
+                List messages = null;
+                while (it.hasNext()) {
+                    concPortletID = (String) it.next();
+                    messages = (List) portletMessageLists.get(concPortletID);
+                    Iterator newit = messages.iterator();
+                    while (newit.hasNext()) {
+                        PortletMessage msg = (PortletMessage) newit.next();
+                        layoutEngine.messageEvent(concPortletID, msg, event);
+                        newit.remove();
+                    }
+                }
+            }
+
+            setUserAndGroups(portletReq);
+
+            layoutEngine.service(event);
+
+            log.debug("Session stats");
+            userSessionManager.dumpSessions();
+
+            log.debug("Portlet service factory stats");
+            factory.logStatistics();
+
+            log.debug("Portlet page factory stats");
+            try {
+                PortletPageFactory pageFactory = PortletPageFactory.getInstance();
+                pageFactory.logStatistics();
+            } catch (Exception e) {
+                log.error("Unable to get page factory", e);
+            }
+        } else {
+            RequestDispatcher rd = req.getRequestDispatcher("/jsp/dberror.jsp");
+            req.setAttribute("error", "DB Error! Please contact your GridSphere/Database Administrator!");
+            rd.forward(req, res);
         }
+
     }
 
     public void setUserAndGroups(PortletRequest req) {
         // Retrieve user if there is one
         User user = null;
         if (req.getPortletSession() != null) {
-            String uid = (String)req.getPortletSession().getAttribute(SportletProperties.PORTLET_USER);
+            String uid = (String) req.getPortletSession().getAttribute(SportletProperties.PORTLET_USER);
             if (uid != null) {
                 user = userManagerService.getUser(uid);
             }
@@ -247,7 +265,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             List groups = aclService.getGroups(req.getUser());
             Iterator it = groups.iterator();
             while (it.hasNext()) {
-                PortletGroup g = (PortletGroup)it.next();
+                PortletGroup g = (PortletGroup) it.next();
                 log.debug("groups:" + g.toString());
             }
             PortletRole role = aclService.getRoleInGroup(user, SportletGroup.CORE);
@@ -287,8 +305,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();
         try {
-            String fileName = (String)req.getAttribute("FMP_filename");
-            String path = (String)req.getAttribute("FMP_filepath");
+            String fileName = (String) req.getAttribute("FMP_filename");
+            String path = (String) req.getAttribute("FMP_filepath");
             if ((fileName == null) || (path == null)) return;
             log.debug("in downloadFile");
             log.debug("filename: " + fileName + " filepath= " + path);
@@ -296,17 +314,17 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
             FileDataSource fds = new FileDataSource(f);
             res.setContentType(fds.getContentType());
-            res.setHeader("Content-Disposition","attachment; filename=" + fileName);
+            res.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 
             // you should use a datahandler to write out data from a datasource.
             DataHandler handler = new DataHandler(fds);
             handler.writeTo(res.getOutputStream());
-        } catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             log.error("Unable to find file!", e);
-        } catch(SecurityException e) {
+        } catch (SecurityException e) {
             // this gets thrown if a security policy applies to the file. see java.io.File for details.
             log.error("A security exception occured!", e);
-        } catch(IOException e) {
+        } catch (IOException e) {
             log.error("Caught IOException", e);
             //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER,e.getMessage());
 
