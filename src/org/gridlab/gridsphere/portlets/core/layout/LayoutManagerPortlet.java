@@ -42,7 +42,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     // Portlet services
     private LayoutManagerService layoutMgr = null;
-    private PortletRegistry portletRegistry = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -128,7 +127,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             //item.setName(String.valueOf(i));
             selsubtabsLB.addBean(item);
             TextFieldBean tf = new TextFieldBean();
-            tf.setBeanId("tab" + i);
+            tf.setBeanId("subtab" + i);
             tf.setValue(subtabNames[i]);
             subtabsTC.addBean(tf);
             if (subtabNames[i].equals(subtabName)) item.setSelected(true);
