@@ -14,6 +14,7 @@ import javax.portlet.PortletPreferences;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Enumeration;
 import java.io.IOException;
 
 
@@ -46,21 +47,22 @@ public class PortletPreferencesImpl implements PortletPreferences
     private transient Map defaultPrefsMap = new HashMap();
     private transient PreferencesValidator validator = null;
     private transient PersistenceManagerRdbms pm = null;
-    private String oid = null;
 
-    /**
-     * The unique userid this data belongs to
-     */
-    private String UserID = new String();
+    private String oid = null;
 
     /**
      * The PortletId this data belongs to
      */
-    private String PortletID = new String();
+    private String portletId = new String();
 
-    public PortletPreferencesImpl(PersistenceManagerRdbms pm) {
-        this.pm = pm;
-    }
+     /**
+     * The unique userid this data belongs to
+     */
+    private String userId = new String();
+    // key/value pairs
+    //private Map attributes = new HashMap();
+
+    private PortletPreferencesImpl() {}
 
     public PortletPreferencesImpl(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences portletPrefs, PersistenceManagerRdbms pm, ClassLoader loader) {
         this.pm = pm;
@@ -81,6 +83,7 @@ public class PortletPreferencesImpl implements PortletPreferences
                 }
             }
         }
+
     }
 
     public String getOid() {
@@ -379,8 +382,26 @@ public class PortletPreferencesImpl implements PortletPreferences
      */
     public void store() throws java.io.IOException, ValidatorException {
         if (validator != null) validator.validate(this);
+        // cycle through
+        // get the names
+        /*
+        Enumeration enum = getNames();
+        while (enum.hasMoreElements()) {
+            String key = (String) enum.nextElement();
+            PersistencePreferenceAttribute ppa = new PersistencePreferenceAttribute();
+            ppa.readonly = isReadOnly(key);
+            String[] values = getValues(key, null);
+            for (int i = 0; i < values.length; i++) {
+                ppa.values.add(values[i]);
+            }
+            attributes.put(key, ppa);
+        }*/
         try {
-            pm.update(this);
+            if (this.getOid() != null) {
+                pm.update(this);
+            } else {
+                pm.create(this);
+            }
         } catch (PersistenceManagerException e) {
             throw new IOException(e.getMessage());
         }
@@ -391,17 +412,17 @@ public class PortletPreferencesImpl implements PortletPreferences
      *
      * @return the user id
      */
-    public String getUserID() {
-        return UserID;
+    public String getUserId() {
+        return userId;
     }
 
     /**
      * Sets the user id of this portlet data
      *
-     * @param userID the concrete portlet id
+     * @param userId the concrete portlet id
      */
-    public void setUserID(String userID) {
-        UserID = userID;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     /**
@@ -409,16 +430,25 @@ public class PortletPreferencesImpl implements PortletPreferences
      *
      * @return the concrete portlet id
      */
-    public String getPortletID() {
-        return PortletID;
+    public String getPortletId() {
+        return portletId;
     }
 
     /**
      * Sets the concrete portlet id of this portlet data
      *
-     * @param portletID the concrete portlet id
+     * @param portletId the concrete portlet id
      */
-    public void setPortletID(String portletID) {
-        PortletID = portletID;
+    public void setPortletId(String portletId) {
+        this.portletId = portletId;
     }
+
+    public Map getAttributes() {
+        return prefsMap;
+    }
+
+    public void setAttributes(Map attributes) {
+        this.prefsMap = attributes;
+    }
+
 }

@@ -197,8 +197,6 @@ public class PortletServlet  extends HttpServlet
         JSRApplicationPortletImpl appPortlet =
                 (JSRApplicationPortletImpl)registry.getApplicationPortlet(portletClassName);
 
-        PortletPreferences defaultPrefs = appPortlet.getPortletPreferences();
-
         // perform user conversion from gridsphere to JSR model
         User user = (User)request.getAttribute(SportletProperties.PORTLET_USER);
         Map userInfo = (Map)request.getAttribute(PortletRequest.USER_INFO);
@@ -220,7 +218,7 @@ public class PortletServlet  extends HttpServlet
         request.setAttribute(PortletRequest.USER_INFO, userInfo);
 
         // portlet preferences
-        PortletPreferences prefs = prefsManager.getPortletPreferences(defaultPrefs, user, portletClassName);
+        PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader());
 
         request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
 

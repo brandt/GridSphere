@@ -9,6 +9,9 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
 
 import javax.portlet.PortletPreferences;
 
@@ -18,6 +21,7 @@ import javax.portlet.PortletPreferences;
  */
 public class PortletPreferencesManager {
 
+    private static PortletLog log = SportletLog.getInstance(PortletPreferencesManager.class);
     private static PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
     private static PortletPreferencesManager instance = new PortletPreferencesManager();
 
@@ -39,37 +43,41 @@ public class PortletPreferencesManager {
     /**
      * Returns the users portlet data for the specified portlet
      *
-     * @param defaultPreferences a default portlet preferences obtained from the portlet descriptor
+     * @param appPortlet the JSR application portlet
      * @param user               the <code>User</code>
-     * @param portletID          the concrete portlet id
      * @return the PortletPreferences for this portlet or null if none exists.
      */
-    public PortletPreferences getPortletPreferences(PortletPreferences defaultPreferences, User user, String portletID) {
+    public javax.portlet.PortletPreferences getPortletPreferences(JSRApplicationPortletImpl appPortlet, User user, ClassLoader loader) {
 
         if (user instanceof GuestUser) return null;
 
+        String portletID = appPortlet.getApplicationPortletID();
         String command =
-                "select u from " + PersistencePreference.class.getName() + " u where u.userId='" + user.getID() + "' and u.portletId='" + portletID + "'";
+                "select u from " + PortletPreferencesImpl.class.getName() + " u where u.userId='" + user.getID() + "' and u.portletId='" + portletID + "'";
 
-        // get sportlet data if it exists
-        PersistencePreference prefs = null;
+        // get persistence prefs if it exists
+        PortletPreferencesImpl prefs = null;
         try {
-            prefs = (PersistencePreference) pm.restore(command);
+            prefs = (PortletPreferencesImpl) pm.restore(command);
             if (prefs == null) {
                 // we have no prefs in the xml so create one in the db...
-                prefs = new PersistencePreference(pm, defaultPreferences);
+                log.debug("No prefs exist-- storing prefs for user: " + user.getID() + " portlet: " + portletID);
+                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefDesc = appPortlet.getPortletPreferences();
+                prefs = new PortletPreferencesImpl(prefDesc, pm, loader);
                 prefs.setPortletId(portletID);
                 prefs.setUserId(user.getID());
                 prefs.store();
+            } else {
+                log.debug("Retrieved prefs for user: " + user.getID() + " portlet: " + portletID);
             }
         } catch (Exception e) {
-            return defaultPreferences;
+            log.error("Error attempting to restore persistent preferences: ", e);
         }
         return prefs;
     }
 
-    public void setPortletPreferences(PortletPreferences prefs) {
-
+    public void setPortletPreferences(javax.portlet.PortletPreferences prefs) {
+        // TODO
     }
 
 }
