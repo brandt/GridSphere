@@ -21,6 +21,8 @@ public class PortletDeploymentDescriptor extends Descriptor {
     private PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
     private Vector PortletDef = new Vector();
     private PortletCollection pc = null;
+    private String mappingFilePath = null;
+    private String portletFilePath = null;
 
     /**
      * Constructs a PortletDeploymentDescriptor from a portlet.xml and mapping file
@@ -30,6 +32,7 @@ public class PortletDeploymentDescriptor extends Descriptor {
      * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
      */
     public PortletDeploymentDescriptor(String portletFilePath, String mappingFilePath) throws IOException, DescriptorException  {
+        this.mappingFilePath = mappingFilePath;
         pc = (PortletCollection)load(portletFilePath, mappingFilePath);
     }
 
@@ -131,8 +134,11 @@ public class PortletDeploymentDescriptor extends Descriptor {
     /**
      *
      */
-    public void save(String portletFilePath, String mappingFilePath) throws IOException, DescriptorException {
+    public void save(String portletFilePath) throws IOException, DescriptorException {
         save(portletFilePath, mappingFilePath, pc);
     }
 
+    public void save() throws IOException, DescriptorException {
+        save(portletFilePath, mappingFilePath, pc);
+    }
 }

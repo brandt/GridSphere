@@ -78,7 +78,7 @@ public class SportletServiceDefinition {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer("\n");
         sb.append("service name: " + Name + "\n");
         sb.append("description: " + Description + "\n");
         sb.append("interface: " + Interface + "\n");

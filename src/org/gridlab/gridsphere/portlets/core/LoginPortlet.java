@@ -65,7 +65,8 @@ public class LoginPortlet extends AbstractPortlet {
                     session.setAttribute(GridSphereProperties.USER, (User) user);
 
                     // now login to User Portal Registry service
-                    //userRegistryService.loginPortlets(req);
+                    //userPortletManager.loginPortlets(req);
+                    // req.setAttribute(LOGIN)
                 }
             }
         }
