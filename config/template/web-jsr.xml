@@ -11,14 +11,6 @@
         Provides @PROJECT_TITLE@
     </description>
 
-    <listener>
-        <listener-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</listener-class>
-    </listener>
-
-    <listener>
-        <listener-class>org.apache.log4j.servlet.InitContextListener</listener-class>
-    </listener>
-
     <context-param>
         <!-- preferred repository selector. "preferred" because
         if one is already installed, this choice is ignored. -->
@@ -31,12 +23,13 @@
         <param-value>WEB-INF/classes/log4j.properties</param-value>
     </context-param>
 
-    <env-entry>
-        <description>JNDI logging context for this app</description>
-        <env-entry-name>log4j/logging-context</env-entry-name>
-        <env-entry-value>@PROJECT_NAME@</env-entry-value>
-        <env-entry-type>java.lang.String</env-entry-type>
-    </env-entry>
+    <listener>
+        <listener-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.apache.log4j.servlet.InitContextListener</listener-class>
+    </listener>
 
     <servlet>
         <servlet-name>PortletServlet</servlet-name>
@@ -62,5 +55,12 @@
       <extension>wmls</extension>
       <mime-type>text/vnd.wap.wmlscript</mime-type>
     </mime-mapping>
+
+    <env-entry>
+        <description>JNDI logging context for this app</description>
+        <env-entry-name>log4j/logging-context</env-entry-name>
+        <env-entry-value>@PROJECT_NAME@</env-entry-value>
+        <env-entry-type>java.lang.String</env-entry-type>
+    </env-entry>
 
 </web-app>
