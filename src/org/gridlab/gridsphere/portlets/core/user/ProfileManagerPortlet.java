@@ -261,8 +261,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
             // NAME
             TableCellBean tcServiceName = new TableCellBean();
             // make text
-            TextBean servicename = new TextBean();
-            servicename.setValue(tmfservice.getDescription());
+            TextBean servicename = event.getTextBean("TSERVICENAME"+tmfservice.getMessageType());
+
+            String localeText = this.getLocalizedText(req, tmfservice.getDescription());
+            servicename.setValue(localeText);
             tcServiceName.addBean(servicename);
             trService.addBean(tcServiceName);
 
