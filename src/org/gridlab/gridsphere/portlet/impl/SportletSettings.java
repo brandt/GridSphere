@@ -102,9 +102,14 @@ public class SportletSettings implements PortletSettings {
         String title = defaultTitle;
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo) it.next();
-            if (langInfo.getLocale().equals(locale.getLanguage())) {
+            if (locale.getLanguage().equals(langInfo.getLocale())) {
+                return langInfo.getTitle();
+            }
+            if (locale.getLanguage().startsWith(langInfo.getLocale())) {
                 title = langInfo.getTitle();
-                return title;
+            }
+            if (langInfo.getLocale().startsWith(locale.getLanguage())) {
+                title = langInfo.getTitle();
             }
         }
         return title;
@@ -131,9 +136,14 @@ public class SportletSettings implements PortletSettings {
         Iterator it = langList.iterator();
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo) it.next();
-            title = langInfo.getTitleShort();
-            if (langInfo.getLocale().equals(locale.getLanguage())) {
+            if (locale.getLanguage().equals(langInfo.getLocale())) {
                 return langInfo.getTitleShort();
+            }
+            if (locale.getLanguage().startsWith(langInfo.getLocale())) {
+                title = langInfo.getTitleShort();
+            }
+            if (langInfo.getLocale().startsWith(locale.getLanguage())) {
+                title = langInfo.getTitleShort();
             }
         }
         return title;
@@ -151,9 +161,14 @@ public class SportletSettings implements PortletSettings {
         Iterator it = langList.iterator();
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo)it.next();
-            desc = langInfo.getDescription();
-            if (langInfo.getLocale().equals(locale.getLanguage())) {
+            if (locale.getLanguage().equals(langInfo.getLocale())) {
                 return langInfo.getDescription();
+            }
+            if (locale.getLanguage().startsWith(langInfo.getLocale())) {
+                desc = langInfo.getDescription();
+            }
+            if (langInfo.getLocale().startsWith(locale.getLanguage())) {
+                desc = langInfo.getDescription();
             }
         }
         return desc;
@@ -171,9 +186,14 @@ public class SportletSettings implements PortletSettings {
         Iterator it = langList.iterator();
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo) it.next();
-            words = langInfo.getKeywords();
-            if (langInfo.getLocale().equals(locale.getLanguage())) {
+            if (locale.getLanguage().equals(langInfo.getLocale())) {
                 return langInfo.getKeywords();
+            }
+            if (locale.getLanguage().startsWith(langInfo.getLocale())) {
+                words = langInfo.getKeywords();
+            }
+            if (langInfo.getLocale().startsWith(locale.getLanguage())) {
+                words = langInfo.getKeywords();
             }
         }
         return words;
