@@ -15,7 +15,7 @@ import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
-import org.gridlab.gridsphere.services.core.security.password.PasswordBean;
+import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.impl.DbmsPasswordManagerService;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletGroup;
@@ -349,7 +349,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
 
     private void saveAccountRequestPassword(AccountRequest request) throws InvalidAccountRequestException {
         // Get password editor from account request
-        PasswordBean passwordBean = request.getPassword();
+        PasswordEditor passwordBean = request.getPassword();
         // Check if password wasn't edited
         if (!passwordBean.isDirty()) {
             // Get user id from account request

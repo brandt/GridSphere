@@ -12,7 +12,7 @@ import org.gridlab.gridsphere.portlet.User;
 
 import java.util.Date;
 
-public class PasswordBean implements Password {
+public class PasswordEditor implements Password {
 
     private User user = null;
     private long lifetime = -1;
@@ -26,15 +26,15 @@ public class PasswordBean implements Password {
 
     private transient boolean isDirty = false;
 
-    public PasswordBean() {
+    public PasswordEditor() {
     }
 
-    public PasswordBean(User user) {
+    public PasswordEditor(User user) {
         // Save user
         this.user = user;
     }
 
-    public PasswordBean(Password password) {
+    public PasswordEditor(Password password) {
         // Get password values
         this.user = password.getUser();
         this.hint = password.getHint();

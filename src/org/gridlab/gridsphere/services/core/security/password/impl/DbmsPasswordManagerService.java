@@ -18,7 +18,7 @@ import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.Password;
-import org.gridlab.gridsphere.services.core.security.password.PasswordBean;
+import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
@@ -141,20 +141,20 @@ public class DbmsPasswordManagerService
         return password;
     }
 
-    public PasswordBean editPassword(User user) {
-        PasswordBean editor = null;
+    public PasswordEditor editPassword(User user) {
+        PasswordEditor editor = null;
         Password password = getDbmsUserPassword(user);
         if (password == null) {
             long lifetime = getDefaultPasswordLifetime();
-            editor = new PasswordBean(user);
+            editor = new PasswordEditor(user);
             editor.setLifetime(lifetime);
         } else {
-            editor = new PasswordBean(password);
+            editor = new PasswordEditor(password);
         }
         return editor;
     }
 
-    public void savePassword(PasswordBean editor)
+    public void savePassword(PasswordEditor editor)
             throws InvalidPasswordException {
         // Get password attributes
         User user = editor.getUser();
@@ -240,7 +240,7 @@ public class DbmsPasswordManagerService
             throw new InvalidPasswordException(msg);
         }
         // Save user password
-        PasswordBean passwordBean = new PasswordBean();
+        PasswordEditor passwordBean = new PasswordEditor();
         passwordBean.setUser(user);
         passwordBean.setHint(passwordBean.getHint());
         passwordBean.setValue(requestPassword.getValue());

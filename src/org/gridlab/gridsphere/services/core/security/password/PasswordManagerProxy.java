@@ -68,7 +68,7 @@ public class PasswordManagerProxy
         return this.passwordManager.getPassword(user);
     }
 
-    public PasswordBean editPassword(User user) {
+    public PasswordEditor editPassword(User user) {
         authorizer.authorizeSuperUser();
         return this.passwordManager.editPassword(user);
     }
@@ -84,7 +84,7 @@ public class PasswordManagerProxy
         this.passwordManager.validatePassword(user, password);
     }
 
-    public void savePassword(PasswordBean password)
+    public void savePassword(PasswordEditor password)
             throws InvalidPasswordException {
         // Super or same user can call
         User user = password.getUser();

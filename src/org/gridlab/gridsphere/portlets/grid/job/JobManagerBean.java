@@ -140,6 +140,8 @@ public class JobManagerBean extends ActionEventHandler {
             validateUserJobApplication();
             setPage(PAGE_USER_JOB_RESOURCES_EDIT);
         } catch (Exception e) {
+            setIsFormInvalid(true);
+            this.setFormInvalidMessage(e.getMessage());
             setTitle("Job Manager [Edit Job Application]");
             setPage(PAGE_USER_JOB_APPLICATION_EDIT);
         }
@@ -154,6 +156,8 @@ public class JobManagerBean extends ActionEventHandler {
             setTitle("Job Manager [Verify Job]");
             setPage(PAGE_USER_JOB_EDIT_VERIFY);
         } catch (Exception e) {
+            setIsFormInvalid(true);
+            this.setFormInvalidMessage(e.getMessage());
             setTitle("Job Manager [Edit Job Resources]");
             setPage(PAGE_USER_JOB_RESOURCES_EDIT);
         }
@@ -163,8 +167,15 @@ public class JobManagerBean extends ActionEventHandler {
             throws PortletException {
         loadUserJob();
         editUserJob();
-        submitUserJob();
-        doListUserJob();
+        try {
+            submitUserJob();
+            setTitle("Job Manager [View Job]");
+            setPage(PAGE_USER_JOB_EDIT_VERIFY);
+        } catch (PortletException e) {
+            setIsFormInvalid(true);
+            this.setFormInvalidMessage(e.getMessage());
+            doListUserJob();
+        }
     }
 
     public void doCancelEditUserJob()
@@ -184,9 +195,16 @@ public class JobManagerBean extends ActionEventHandler {
     public void doSubmitMigrateUserJob()
             throws PortletException {
         loadUserJob();
-        migrateUserJob();
-        setTitle("Job Manager [View Job]");
-        setPage(PAGE_USER_JOB_VIEW);
+        try {
+            migrateUserJob();
+            setTitle("Job Manager [View Job]");
+            setPage(PAGE_USER_JOB_VIEW);
+        } catch (PortletException e) {
+            setIsFormInvalid(true);
+            this.setFormInvalidMessage(e.getMessage());
+            setTitle("Job Manager [Migrate Job]");
+            setPage(PAGE_USER_JOB_MIGRATE);
+        }
     }
 
     public void loadUserJobList() {
@@ -260,7 +278,7 @@ public class JobManagerBean extends ActionEventHandler {
         this.log.debug("Entering getJobSpecification");
         GrmsJobSpecification jobSpecification = null;
         String jobSpecificationText = getParameter("jobSpecification");
-        if (jobSpecificationText == null) {
+        if (jobSpecificationText.equals("")) {
             jobSpecification = new GrmsJobSpecification();
             SingleJobDescription jobDescription = buildJobDescription();
             jobSpecification.setJobDescription(jobDescription);

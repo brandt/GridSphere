@@ -16,7 +16,7 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.services.core.security.acl.impl.UserACL;
-import org.gridlab.gridsphere.services.core.security.password.PasswordBean;
+import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 
 import java.util.List;
@@ -79,14 +79,14 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     private  Vector MyproxyUserNamesSV = new Vector();
 
     // Password bean
-    private transient PasswordBean passwordBean = null;
+    private transient PasswordEditor passwordBean = null;
     // New user flag
     private transient boolean isNewUser = false;
 
     public AccountRequestImpl() {
         super();
         this.isNewUser = true;
-        this.passwordBean = new PasswordBean(this);
+        this.passwordBean = new PasswordEditor(this);
     }
 
     public AccountRequestImpl(User user) {
@@ -97,7 +97,7 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
         setGivenName(user.getGivenName());
         setOrganization(user.getOrganization());
         setUserID(user.getUserID());
-        this.passwordBean = new PasswordBean(this);
+        this.passwordBean = new PasswordEditor(this);
     }
 
     /**
@@ -376,11 +376,11 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
         }
     }
 
-    public PasswordBean getPassword() {
+    public PasswordEditor getPassword() {
         return this.passwordBean;
     }
 
-    public void setPassword(PasswordBean passwordBean) {
+    public void setPassword(PasswordEditor passwordBean) {
         this.passwordBean = passwordBean;
     }
 

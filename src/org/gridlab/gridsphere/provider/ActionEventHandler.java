@@ -137,6 +137,12 @@ public class ActionEventHandler {
     }
 
     public String getActionPerformedParameter(String paramName) {
+        System.out.println("Normal getParameter(paramName)" + getParameter(paramName));
+        System.out.println("Normal getParameter(gstag: paramName)" + getParameter("gstag:" + paramName));
+        System.out.println("Normal getParameter(paramName)"
+                + actionEvent.getAction().getParameters().get(paramName));
+        System.out.println("Normal getParameter(gstag: paramName)"
+                + actionEvent.getAction().getParameters().get("gstag:" + paramName));
         if (this.formEvent == null) {
             return getParameter(paramName);
         } else {
@@ -193,6 +199,11 @@ public class ActionEventHandler {
     public PasswordBean getPasswordBean(String beanName) {
         // Then we return the tag bean with form event
         return (PasswordBean)getTagBean(beanName);
+    }
+
+    public DropDownListBean getDropDownListBean(String beanName) {
+        // Then we return the tag bean with form event
+        return (DropDownListBean)getTagBean(beanName);
     }
 
     public TextBean createTextBeanAsActionLink(PortletURI portletURI) {

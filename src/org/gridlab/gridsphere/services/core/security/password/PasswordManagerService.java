@@ -24,7 +24,7 @@ public interface PasswordManagerService {
 
     public Password getPassword(User user);
 
-    public PasswordBean editPassword(User user);
+    public PasswordEditor editPassword(User user);
 
     public void validatePassword(String password)
           throws InvalidPasswordException;
@@ -32,7 +32,7 @@ public interface PasswordManagerService {
     public void validatePassword(User user, String password)
           throws InvalidPasswordException;
 
-    public void savePassword(PasswordBean passwordBean)
+    public void savePassword(PasswordEditor passwordBean)
             throws InvalidPasswordException;
 
     public void deletePassword(User user);

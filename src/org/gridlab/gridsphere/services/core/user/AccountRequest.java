@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
-import org.gridlab.gridsphere.services.core.security.password.PasswordBean;
+import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 
 import java.util.List;
 import java.util.Date;
@@ -18,7 +18,7 @@ public interface AccountRequest extends SportletUser {
 
     /*** Password methods ***/
 
-    public PasswordBean getPassword();
+    public PasswordEditor getPassword();
 
     public String getPasswordValue();
 

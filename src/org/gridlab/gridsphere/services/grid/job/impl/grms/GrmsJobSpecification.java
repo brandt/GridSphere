@@ -14,6 +14,7 @@ import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.Marshaller;
+import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.jdo.JDO;
 
 import org.gridlab.gridsphere.services.grid.job.JobSpecification;
@@ -26,6 +27,8 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 public class GrmsJobSpecification implements JobSpecification {
+
+    private static PortletLog portletLog = SportletLog.getInstance(GrmsJobSpecification.class);
 
     private String id = "appid";
     private JobDescription jobDescription = null;
@@ -236,11 +239,21 @@ public class GrmsJobSpecification implements JobSpecification {
     }
 
     public String toString() {
+        portletLog.debug("Marshaling to a grms job");
+        org.gridlab.resmgmt.Grmsjob grmsjob = buildGrmsjob();
         StringWriter writer = new StringWriter();
+        portletLog.debug("Marshalling to a string writer");
+        try {
+            grmsjob.marshal(writer);
+        } catch (Exception e) {
+            portletLog.error("Error marhsaling job specification!", e);
+        }
+        return writer.toString();
+        /***
         marshal(writer);
-        //return writer.toString();
         String output = writer.toString();
         return postProcess(output);
+        ***/
     }
 
     public void exportXml(String xmlFile)
@@ -341,4 +354,122 @@ public class GrmsJobSpecification implements JobSpecification {
         ***/
     }
 
+    private org.gridlab.resmgmt.Grmsjob buildGrmsjob() {
+        // Grmsjob contains application id and simple job
+        org.gridlab.resmgmt.Grmsjob grmsjob = new org.gridlab.resmgmt.Grmsjob();
+        // Set pplication id
+        String appid = this.getId();
+        grmsjob.setAppid(this.getId());
+        // Set simple job
+        org.gridlab.resmgmt.Simplejob simplejob = buildSimplejob();
+        grmsjob.setSimplejob(simplejob);
+        return grmsjob;
+    }
+
+    private org.gridlab.resmgmt.Simplejob buildSimplejob() {
+        // Simplejob contains application and resource
+        org.gridlab.resmgmt.Simplejob simplejob = new org.gridlab.resmgmt.Simplejob();
+        // Set application
+        org.gridlab.resmgmt.Application application = buildApplication();
+        simplejob.setApplication(application);
+        // Set resource
+        org.gridlab.resmgmt.Resource resource = buildResource();
+        simplejob.setResource(resource);
+        // All done
+        return simplejob;
+    }
+
+    private org.gridlab.resmgmt.Application buildApplication() {
+        // Application contains executable, stdout, stderr and arguments
+        org.gridlab.resmgmt.Application application = new org.gridlab.resmgmt.Application();
+        // Executable
+        org.gridlab.resmgmt.Executable executable = buildExecutable();
+        application.setExecutable(executable);
+        // Arguments
+        org.gridlab.resmgmt.Arguments arguments = buildArguments();
+        application.setArguments(arguments);
+        // Stdout
+        org.gridlab.resmgmt.Stdout stdout = buildStdout();
+        application.setStdout(stdout);
+        // Stderr
+        org.gridlab.resmgmt.Stderr stderr = buildStderr();
+        application.setStderr(stderr);
+        // All done
+        return application;
+    }
+
+    private org.gridlab.resmgmt.Executable buildExecutable() {
+        org.gridlab.resmgmt.Executable executable = new org.gridlab.resmgmt.Executable();
+        // Executable url
+        String executableUrl = getExecutable().getFileUrl();
+        portletLog.debug("Executable url = " + executableUrl);
+        executable.setUrl(executableUrl);
+        // Executable type
+        executable.setType(org.gridlab.resmgmt.types.ExecutableTypeType.SINGLE);
+        // All done
+        return executable;
+    }
+
+    private org.gridlab.resmgmt.Stdout buildStdout() {
+        org.gridlab.resmgmt.Stdout stdout = new org.gridlab.resmgmt.Stdout();
+        String stdoutUrl = getStdout().getFileUrl();
+        portletLog.debug("Stdout url = " + stdoutUrl);
+        stdout.setUrl(stdoutUrl);
+        // All done
+        return stdout;
+    }
+
+    private org.gridlab.resmgmt.Stderr buildStderr() {
+        org.gridlab.resmgmt.Stderr stderr = new org.gridlab.resmgmt.Stderr();
+        String stderrUrl = getStderr().getFileUrl();
+        portletLog.debug("Stderr url = " + stderrUrl);
+        stderr.setUrl(stderrUrl);
+        // All done
+        return stderr;
+    }
+
+    private org.gridlab.resmgmt.Arguments buildArguments() {
+        org.gridlab.resmgmt.Arguments arguments = new org.gridlab.resmgmt.Arguments();
+        List argumentList = this.getArguments().getArgumentList();
+        for (int ii = 0; ii < argumentList.size(); ++ii) {
+            Argument argument = (Argument)argumentList.get(ii);
+            if (argument.getArgumentType() == Argument.FILE) {
+                org.gridlab.resmgmt.File file = new org.gridlab.resmgmt.File();
+                String fileUrl = argument.getFileUrl();
+                portletLog.debug("Argument [" + ii + "] = " + fileUrl);
+                file.setName(argument.getFileName());
+                file.setUrl(argument.getFileUrl());
+                file.setType(convertFileType(argument.getFileType()));
+                arguments.addFile(file);
+            } else {
+                String value = argument.getValue();
+                portletLog.debug("Argument [" + ii + "] = " + value);
+                arguments.addValue(value);
+            }
+        }
+        // All done
+        return arguments;
+    }
+
+    private org.gridlab.resmgmt.types.FileTypeTypeType convertFileType(String value) {
+        org.gridlab.resmgmt.types.FileTypeTypeType fileType = null;
+        try {
+            return org.gridlab.resmgmt.types.FileTypeTypeType.valueOf(value);
+        } catch (Exception e) {
+            portletLog.error("Error converting file type!", e);
+            return  org.gridlab.resmgmt.types.FileTypeTypeType.IN;
+        }
+    }
+
+
+    private org.gridlab.resmgmt.Resource buildResource() {
+        // Resource contains everything else
+        org.gridlab.resmgmt.Resource resource = new org.gridlab.resmgmt.Resource();
+        resource.setHostname(getHost());
+        resource.setLocalrmname(getJobScheduler());
+        resource.setCpucount(String.valueOf(getCpuCount()));
+        resource.setMemory(String.valueOf(getMinimumMemory()));
+        // All done
+        return resource;
+    }
 }

@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.services.grid.job;
 import org.gridlab.gridsphere.services.grid.data.file.FileHandle;
 
 import java.net.MalformedURLException;
+import java.util.List;
 
 public interface JobSpecification {
 
@@ -73,6 +74,18 @@ public interface JobSpecification {
     public long getCpuCount();
 
     public void setCpuCount(long cpucount);
+
+    /***
+    public List getAttributes();
+
+    public Object getAttribute(String name);
+
+    public void setAttribute(String name, Object attribute);
+
+    public void clearAttribute(String name);
+
+    public void clearAttributes();
+    ***/
 
     public String toString();
 }
