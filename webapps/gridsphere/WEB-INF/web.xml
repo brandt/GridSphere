@@ -35,13 +35,13 @@
 
 
     <listener>
-        <listener-class>org.gridlab.gridsphere.portletcontainer.GridSphereServlet</listener-class>
+        <listener-class>org.gridlab.gridsphere.servlets.GridSphereServlet</listener-class>
     </listener>
 
 
     <servlet>
         <servlet-name>gridsphere</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portletcontainer.GridSphereServlet</servlet-class>
+        <servlet-class>org.gridlab.gridsphere.servlets.GridSphereServlet</servlet-class>
         <init-param>
             <param-name>gridsphere_version</param-name>
             <param-value>1.1</param-value>
