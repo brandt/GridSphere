@@ -35,7 +35,7 @@ import java.net.MalformedURLException;
 public class PortletContextImpl implements PortletContext {
     private final static int MAJOR_VERSION = 1;
     private final static int MINOR_VERSION = 0;
-    private final static String SERVER_INFO = "GridSphere/1.0";
+    private final static String SERVER_INFO = "GridSphere/2.0.2";
 
     //private ServletConfig config = null;
     private ServletContext context = null;
