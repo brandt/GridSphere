@@ -27,19 +27,17 @@
       document.UserManagerPortlet.submit();
     }
   </script>
-<table border="0" cellspacing="1" cellpadding="2" width="100%">
+<table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td align="center" bgcolor="#6666FF">
-            <font color="WHITE"><strong>
+          <td class="portlet-frame-title">
               List Users
-            </strong></font>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=UserManagerBean.ACTION_USER_LIST%>"
                    value="Refresh List"
@@ -56,54 +54,44 @@
   <tr>
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
-        <tr>
-          <td width="100" bgcolor="#6666FF">
-            <font color="WHITE">
-              User Name
-            </font>
-          </td>
-          <td width="200" bgcolor="#6666FF">
-            <font color="WHITE">
-              Full Name
-            </font>
-          </td>
-          <td width="200" bgcolor="#6666FF">
-            <font color="WHITE">
-              Email Address
-            </font>
-          </td>
-          <td width="*" bgcolor="#6666FF">
-            <font color="WHITE">
-              Organization
-            </font>
-          </td>
-        </tr>
 <% List userList = userManagerBean.getUserList();
    int numUsers = userList.size();
    if (numUsers == 0) { %>
         <tr>
-          <td bgcolor="WHITE" colspan="4">
-            <font color="DARKRED">
+          <td class="portlet-frame-text-alert">
               No user accounts in database.
-            </font>
           </td>
         </tr>
-<% } else {
-     for (int ii = 0; ii < numUsers; ++ii) {
+<% } else { %>
+       <tr>
+         <td class="portlet-frame-header" width="100">
+             User Name
+         </td>
+         <td class="portlet-frame-header" width="150">
+             Full Name
+         </td>
+         <td class="portlet-frame-header" width="200">
+             Email Address
+         </td>
+         <td class="portlet-frame-header" width="150">
+             Organization
+         </td>
+       </tr>
+<%   for (int ii = 0; ii < numUsers; ++ii) {
        User user = (User)userList.get(ii); %>
         <tr>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <a href="javascript:UserManagerPortlet_viewUser_onClick('<%=user.getID()%>')">
               <%=user.getUserID()%>
             </a>
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <%=user.getFullName()%>
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <%=user.getEmailAddress()%>
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <%=user.getOrganization()%>
           </td>
         </tr>

@@ -71,7 +71,7 @@
    int numGroups = groupList.size();
    if (numGroups == 0) { %>
         <tr>
-          <td id="portlet-frame-alert" colspan="3">
+          <td id="portlet-frame-text-alert" colspan="3">
               No groups in database.
           </td>
         </tr>
@@ -79,15 +79,15 @@
      for (int ii = 0; ii < numGroups; ++ii) {
        PortletGroup group = (PortletGroup)groupList.get(ii); %>
         <tr>
-          <td class="portlet-frame-value">
+          <td class="portlet-frame-text">
               <a href="javascript:AccessControllerPortlet_viewGroup_onClick('<%=group.getID()%>')">
                 <%=group.getName()%>
               </a>
           </td>
-          <td class="portlet-frame-value">
+          <td class="portlet-frame-text">
                <%=group.getName()%>
           </td>
-          <td class="portlet-frame-value">
+          <td class="portlet-frame-text">
               <%=group.getName()%>
           </td>
         </tr>
