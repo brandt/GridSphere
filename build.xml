@@ -171,7 +171,7 @@ Copyright:
     <!-- Builds and deploys GridSphere                                       -->
     <!-- =================================================================== -->
     <target name="install" depends="clean, compile, docs, deploy" description="Build and deploy GridSphere">
-        <antcall target="createdatabase"/>
+        <antcall target="create-database"/>
     </target>
 
     <!-- =================================================================== -->
@@ -373,7 +373,7 @@ Copyright:
 
     </target>
 
-   <target name="createdatabase" depends="setenv, configure-database">
+   <target name="create-database" depends="setenv, configure-database">
        <taskdef name="schemaexport"
             classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
             classpathref="classpath"/>
@@ -391,7 +391,7 @@ Copyright:
         </schemaexport>
      </target>
 
-    <target name="updatedatabase" depends="configure-database">
+    <target name="update-database" depends="configure-database">
         <taskdef name="schemaupdate"
             classname="net.sf.hibernate.tool.hbm2ddl.SchemaUpdateTask"
             classpathref="classpath"/>
@@ -484,7 +484,7 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Creates the GridSphere WAR file                                  -->
+    <!-- Creates the GridSphere WAR file                                     -->
     <!-- =================================================================== -->
     <target name="war" depends="jar, gridsphere-jar" description="Create GridSphere WAR">
 
@@ -500,7 +500,7 @@ Copyright:
 
         <antcall target="configure-database"/>
 
-        <antcall target="force-real-database"/>
+        <antcall target="create-database"/>
 
         <war warfile="${build.webapps}/gridsphere.war" update="true"
             webxml="${build.webapps}/gridsphere/WEB-INF/web.xml">
@@ -511,7 +511,7 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Deploys GridSphere and all project portlets to Tomcat                                        -->
+    <!-- Deploys GridSphere and all project portlets to Tomcat               -->
     <!-- =================================================================== -->
     <target name="deploy-all" depends="deploy" description="Compile all portlet subprojects">
         <foreach target="deploy-project" param="thisEnv">
