@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+    <user>
+        <name>Michael Russell</name>
+        <userid>russell</userid>
+        <service>
+            <messagetype>aim</messagetype>
+            <username>gridsphere</username>
+        </service>
+    </user>
+    <user>
+        <name>Oliver Wehrens</name>
+        <userid>wehrens</userid>
+        <preferred>aim</preferred>
+        <service>
+            <messagetype>aim</messagetype>
+            <username>gridportal</username>
+        </service>
+    </user>
+    <user>
+        <name>Jason Novotny</name>
+        <userid>novotny</userid>
+        <preferred>aim</preferred>
+        <service>
+            <messagetype>aim</messagetype>
+            <username>gridnomad</username>
+        </service>
+    </user>
+</list>

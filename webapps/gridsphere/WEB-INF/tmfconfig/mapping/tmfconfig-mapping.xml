@@ -1,0 +1,115 @@
+<?xml version="1.0" ?>
+
+
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
+<mapping>
+
+    <class name="org.gridlab.gridsphere.tmf.config.TmfConfig">
+        <map-to xml="tmfconfig"/>
+        <field name="User" type="string">
+            <bind-xml name="users"/>
+        </field>
+        <field name="Commands" type="string">
+            <bind-xml name="commands"/>
+        </field>
+        <field name="Services" collection="vector" type="org.gridlab.gridsphere.tmf.config.TmfService"/>
+
+    </class>
+
+    <class name="org.gridlab.gridsphere.tmf.config.TmfService">
+        <map-to xml="service"/>
+        <field name="Enabled" type="boolean">
+            <bind-xml name="enabled" node="attribute"/>
+        </field>
+        <field name="Configfile" type="java.lang.String">
+            <bind-xml name="config"/>
+        </field>
+        <field name="Classname" type="string">
+            <bind-xml name="classname"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.tmf.config.ServiceConfig">
+        <map-to xml="tfmservice"/>
+        <field name="Name" type="string">
+            <bind-xml name="name"/>
+        </field>
+        <field name="Security" type="string">
+            <bind-xml name="security"/>
+        </field>
+        <field name="Messagetype" type="string">
+            <bind-xml name="messagetype"/>
+        </field>
+        <field name="Description" type="string">
+            <bind-xml name="description"/>
+        </field>
+        <field name="Params" collection="arraylist" type="org.gridlab.gridsphere.tmf.config.ConfigParameter">
+            <bind-xml name="params"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.tmf.config.ConfigParameter">
+        <map-to xml="param"/>
+        <field name="Key" type="string">
+            <bind-xml name="key"/>
+        </field>
+        <field name="Value" type="string">
+            <bind-xml name="value"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.tmf.config.Users">
+        <map-to xml="list"/>
+        <field name="Userlist" collection="arraylist" type="org.gridlab.gridsphere.tmf.config.User">
+            <bind-xml name="user"/>
+        </field>
+    </class>
+
+
+    <class name="org.gridlab.gridsphere.tmf.config.User">
+        <map-to xml="user"/>
+        <field name="Name" type="string">
+            <bind-xml name="name"/>
+        </field>
+        <field name="Userid" type="string">
+            <bind-xml name="userid"/>
+        </field>
+        <field name="Preferred" type="string">
+            <bind-xml name="preferred"/>
+        </field>
+        <field name="Messagetype" collection="arraylist" type="org.gridlab.gridsphere.tmf.config.Messagetype">
+            <bind-xml name="service"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.tmf.config.Messagetype">
+        <field name="Messagetype" type="string">
+            <bind-xml name="messagetype"/>
+        </field>
+        <field name="Username" type="string">
+            <bind-xml name="username"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.tmf.config.CommandList">
+        <map-to xml="commands"/>
+        <field name="Commandlist" type="org.gridlab.gridsphere.tmf.config.CommandConfig" collection="arraylist"/>
+    </class>
+
+    <class name="org.gridlab.gridsphere.tmf.config.CommandConfig">
+        <map-to xml="command"/>
+        <field name="Commandline" type="string">
+            <bind-xml name="commandline"/>
+        </field>
+        <field name="classname" type="string">
+            <bind-xml name="classname"/>
+        </field>
+        <field name="access" type="string">
+            <bind-xml name="access"/>
+        </field>
+        <field name="security" type="string">
+            <bind-xml name="security"/>
+        </field>
+    </class>
+
+</mapping>

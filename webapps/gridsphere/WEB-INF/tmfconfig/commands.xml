@@ -1,0 +1,26 @@
+<commands>
+    <command>
+        <commandline>echo</commandline>
+        <classname>org.gridlab.gridsphere.tmf.commands.Echo</classname>
+        <access>all</access>
+        <security>secure</security>
+    </command>
+    <command>
+        <commandline>date</commandline>
+        <classname>org.gridlab.gridsphere.tmf.commands.Date</classname>
+        <access>all</access>
+        <security>insecure</security>
+    </command>
+    <command>
+        <commandline>mbox</commandline>
+        <classname>org.gridlab.gridsphere.tmf.commands.MVault</classname>
+        <access>all</access>
+        <security>insecure</security>
+    </command>
+    <command>
+        <commandline>message</commandline>
+        <classname>org.gridlab.gridsphere.tmf.commands.StoreMessage</classname>
+        <access>all</access>
+        <security>insecure</security>
+    </command>
+</commands>
