@@ -192,7 +192,7 @@ public class PortletPageFactory implements PortletSessionListener {
     public PortletPage createFromGuestLayoutXML(PortletRequest req) {
         PortletSession session = req.getPortletSession(true);
         String id = session.getId();
-        if (guests.containsKey(id)) {
+        if ((id != null) && (guests.containsKey(id))) {
             return (PortletPage)guests.get(id);
         } else {
             PortletPage newcontainer = null;
