@@ -7,7 +7,8 @@
 <jsp:useBean id="userList" class="java.util.List" scope="request"/>
 
 <ui:form>
-<ui:panel>
+<ui:panel cols="50%,50%">
+
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
@@ -16,7 +17,7 @@
         </ui:tablerow>
     </ui:frame>
 
-    <ui:frame sortable="true" zebra="true">
+    <ui:table sortable="true" zebra="true" maxrows="2">
                 <ui:tablerow header="true">
                     <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
                     <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
@@ -48,7 +49,7 @@
 <%
                 }
 %>
-    </ui:frame>
+    </ui:table>
 
 </ui:panel>
 </ui:form>

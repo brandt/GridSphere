@@ -6,7 +6,7 @@
 <jsp:useBean id="GRIDSPHERE_LOGOUT_LABEL" class="java.lang.String" scope="request"/>
 <jsp:useBean id="username" class="java.lang.String" scope="request"/>
 
-<br>
+<br/>
 <table>
 <tr>
 <td align="center">

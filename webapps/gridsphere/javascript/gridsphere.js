@@ -170,6 +170,13 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+/* Modification of sorttable.js
+ * http://www.kryogenix.org/code/browser/sorttable/
+ * Original code by Stuart Langridge, November 2003
+ * Modified by Andy Edmonds, December 2003
+ *  Added alternateRowColors to color alternating rows
+ */
+
 addEvent(window, "load", sortables_init);
 
 var SORT_COLUMN_INDEX;
@@ -185,6 +192,7 @@ function sortables_init() {
             ts_makeSortable(thisTbl);
         }
     }
+		alternateRowColors();
 }
 
 function ts_makeSortable(table) {
@@ -192,7 +200,7 @@ function ts_makeSortable(table) {
         var firstRow = table.rows[0];
     }
     if (!firstRow) return;
-    
+
     // We have a first row: assume it's the header, and make its contents clickable links
     for (var i=0;i<firstRow.cells.length;i++) {
         var cell = firstRow.cells[i];
@@ -206,7 +214,7 @@ function ts_getInnerText(el) {
 	if (typeof el == "undefined") { return el };
 	if (el.innerText) return el.innerText;	//Not needed but it is faster
 	var str = "";
-	
+
 	var cs = el.childNodes;
 	var l = cs.length;
 	for (var i = 0; i < l; i++) {
@@ -232,7 +240,7 @@ function ts_resortTable(lnk) {
     var td = lnk.parentNode;
     var column = td.cellIndex;
     var table = getParent(td,'TABLE');
-    
+
     // Work out a type for the column
     if (table.rows.length <= 1) return;
     var itm = ts_getInnerText(table.rows[1].cells[column]);
@@ -257,13 +265,13 @@ function ts_resortTable(lnk) {
         ARROW = '&nbsp;&nbsp;&darr;';
         span.setAttribute('sortdir','down');
     }
-    
+
     // We appendChild rows that already exist to the tbody, so it moves them rather than creating new ones
     // don't do sortbottom rows
     for (i=0;i<newRows.length;i++) { if (!newRows[i].className || (newRows[i].className && (newRows[i].className.indexOf('sortbottom') == -1))) table.tBodies[0].appendChild(newRows[i]);}
     // do sortbottom rows only
     for (i=0;i<newRows.length;i++) { if (newRows[i].className && (newRows[i].className.indexOf('sortbottom') != -1)) table.tBodies[0].appendChild(newRows[i]);}
-    
+
     // Delete any other arrows there may be showing
     var allspans = document.getElementsByTagName("span");
     for (var ci=0;ci<allspans.length;ci++) {
@@ -273,8 +281,9 @@ function ts_resortTable(lnk) {
             }
         }
     }
-        
+
     span.innerHTML = ARROW;
+		alternateRowColors();
 }
 
 function getParent(el, pTagName) {
@@ -307,16 +316,16 @@ function ts_sort_date(a,b) {
     return 1;
 }
 
-function ts_sort_currency(a,b) { 
+function ts_sort_currency(a,b) {
     aa = ts_getInnerText(a.cells[SORT_COLUMN_INDEX]).replace(/[^0-9.]/g,'');
     bb = ts_getInnerText(b.cells[SORT_COLUMN_INDEX]).replace(/[^0-9.]/g,'');
     return parseFloat(aa) - parseFloat(bb);
 }
 
-function ts_sort_numeric(a,b) { 
+function ts_sort_numeric(a,b) {
     aa = parseFloat(ts_getInnerText(a.cells[SORT_COLUMN_INDEX]));
     if (isNaN(aa)) aa = 0;
-    bb = parseFloat(ts_getInnerText(b.cells[SORT_COLUMN_INDEX])); 
+    bb = parseFloat(ts_getInnerText(b.cells[SORT_COLUMN_INDEX]));
     if (isNaN(bb)) bb = 0;
     return aa-bb;
 }
@@ -352,4 +361,33 @@ function addEvent(elm, evType, fn, useCapture)
   } else {
     alert("Handler could not be removed");
   }
-} 
+}
+
+function alternateRowColors() {
+	var className = 'sortable';
+	var rowcolor = '#dddddd';
+	var defaultrowcolor = '#ffffff';
+	var rows, arow;
+	var tables = document.getElementsByTagName("table");
+	var rowCount = 0;
+	for(var i=0;i<tables.length;i++) {
+		//dump(tables.item(i).className + " " + tables.item(i).nodeName + "\n");
+		if(tables.item(i).className == className) {
+			atable = tables.item(i);
+			rows = atable.getElementsByTagName("tr");
+			for(var j=0;j<rows.length;j++) {
+				arow = rows.item(j);
+				if(arow.nodeName == "TR") {
+					if(rowCount % 2) {
+						arow.style.backgroundColor = rowcolor;
+					} else {
+						// default case
+						arow.style.backgroundColor = defaultrowcolor;
+					}
+					rowCount++;
+				}
+			}
+			rowCount = 0;
+		}
+	}
+}
