@@ -138,6 +138,7 @@ public class UserManagerPortlet extends ActionPortlet {
                 user = saveUser(evt, null);
                 HiddenFieldBean userHF = evt.getHiddenFieldBean("userID");
                 userHF.setValue(user.getID());
+
             } else {
                 validateUser(evt, false);
                 // load in User values
@@ -294,10 +295,10 @@ public class UserManagerPortlet extends ActionPortlet {
             }
 
             if (passwordValue.length() == 0) {
-                message.append("Password is blank.");
+                message.append(this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
             }
             if (passwordValue.length() < 5) {
-                message.append("Password must be longer than 5 characters.");
+                message.append(this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT"));
             }
 
         }
@@ -308,25 +309,35 @@ public class UserManagerPortlet extends ActionPortlet {
         log.debug("Entering saveUser()");
         // Account request
         SportletUser newuser = null;
-
-
-        PasswordEditor editor = passwordManagerService.editPassword(newuser);
-                String password = event.getPasswordBean("password").getValue();
-                editor.setValue(password);
-                passwordManagerService.savePassword(editor);
-
-
+        boolean newuserflag = false;
         // Create edit account request
         if (user == null) {
             newuser = this.userManagerService.createUser();
+            newuserflag = true;
         } else {
             //System.err.println("Creating account request for existing user");
             newuser = this.userManagerService.editUser(user);
             //newuser.setPasswordValidation(false);
         }
 
+        PasswordEditor editor = passwordManagerService.editPassword(newuser);
+        String password = event.getPasswordBean("password").getValue();
+        StringBuffer message = new StringBuffer();
+        boolean isgood = this.isInvalidPassword(event, newuserflag, message);
+        if (isgood) {
+            FrameBean err = event.getFrameBean("errorFrame");
+            err.setValue(message.toString());
+            err.setStyle("alert");
+            setNextState(event.getPortletRequest(), DO_VIEW_USER_EDIT);
+            return newuser;
+        } else {
+            editor.setValue(password);
+            passwordManagerService.savePassword(editor);
+        }
+
         // Edit account attributes
         editAccountRequest(event, newuser);
+
         // Submit changes
         this.userManagerService.saveUser(newuser);
 
@@ -337,9 +348,13 @@ public class UserManagerPortlet extends ActionPortlet {
         return newuser;
     }
 
+
+
+
+
     private void editAccountRequest(FormEvent event, SportletUser accountRequest) {
         log.debug("Entering editAccountRequest()");
-        //accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
+        accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
         //accountRequest.setFamilyName(event.getTextFieldBean("familyName").getValue());
         //accountRequest.setGivenName(event.getTextFieldBean("givenName").getValue());
         accountRequest.setFullName(event.getTextFieldBean("fullName").getValue());
