@@ -1,53 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <portlet-app-collection>
 
-    <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet">
-            <portlet-name>File Manager Portlet</portlet-name>
-            <servlet-name>FileManagerPortlet</servlet-name>
-            <supports>
-                <markup name="html">
-                    <view/>
-                    <help/>
-                </markup>
-            </supports>
-        </portlet-app>
 
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1">
-            <concrete-portlet>
-                <portlet-name>File Manager Portlet</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>File Manager</title>
-                    <description>Provides users with a virtual filesystem</description>
-                </language>
-                <language locale="de">
-                    <title>Datei Manager</title>
-                    <description>Bietet dem Benutzer ein virtuelles Dateisystem</description>
-                </language>
-                <language locale="fr">
-                    <title>Gestionnaire de Ficher</title>
-                    <description>Donne a l'usager un system de ficher virtuel</description>
-                </language>
-                <language locale="it">
-                    <title>Gestione File</title>
-                    <description>Fornisce agli utenti un filesystem virtuale</description>
-                </language>
-                <language locale="hu">
-                    <title>File kezelő</title>
-                    <description>Egy virtuális file rendszer elérését teszi lehetővé.</description>
-                </language>
-                <language locale="cs">
-                    <title>Správce souborů</title>
-                    <description>Poskytuje uživatelům virtuální systém souborů</description>
-                </language>
-                <language locale="pl">
-                    <title>Menadżer plików</title>
-                    <description>Udostępnia użytkownikowi wirtualny system plików</description>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>   
 
     <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.login.LoginPortlet">
