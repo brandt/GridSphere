@@ -202,6 +202,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 guests.put(id, newcontainer);
                 sessionManager.addSessionListener(id, this);
             } catch (Exception e) {
+                log.error("Unable to clone GuestUserLayout!", e);
                 e.printStackTrace();
             }
             return newcontainer;

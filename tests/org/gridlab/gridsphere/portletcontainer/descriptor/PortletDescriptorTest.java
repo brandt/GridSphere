@@ -171,6 +171,8 @@ public class PortletDescriptorTest extends ServletTestCase {
 
 
         assertEquals(ConcretePortletConfig.Scope.PUBLIC, twoPI.getConcretePortletScope());
+        assertTrue(twoPI.getRequiredRole().isUser());
+
         assertEquals(PortletRole.USER, twoPI.getRequiredRole());
 
         configHash = twoPI.getConfigAttributes();
