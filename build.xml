@@ -262,10 +262,6 @@ Copyright:
         <copy file="${gswebapp.dir}/WEB-INF/classes/log4j.properties"
             tofile="${build.classes}/gridsphere/log4j.properties"/>
 
-        <copy todir="${build.classes}/gridsphere/resources">
-            <fileset dir="config/resources"/>
-        </copy>
-
         <echo message="Configuring GridSphere jar settings:"/>
         <echo message="GridSphere Release  ${version.release}"/>
         <echo message="Replaced CATALINA_HOME with : ${env.CATALINA_HOME}"/>
@@ -274,7 +270,7 @@ Copyright:
 
         <jar jarfile="${build.lib}/gridsphere.jar" basedir="${build.classes}" defaultexcludes="yes">
             <include name="org/**"/>
-            <include name="gridsphere/**"/>
+            <include name="gridsphere/log4j.properties"/>
             <!-- don't include portlet API -->
             <exclude name="org/gridlab/gridsphere/portlet/**"/>
             <exclude name="org/gridlab/gridsphere/event/**"/>
@@ -284,7 +280,6 @@ Copyright:
             <exclude name="org/gridlab/gridsphere/portlets/**"/>
         </jar>
     </target>
-
 
     <!-- =================================================================== -->
     <!-- Creates a Portlet API JAR library archive                           -->
@@ -316,6 +311,7 @@ Copyright:
     <!-- =================================================================== -->
     <target name="gridsphere-ui-tags-jar" depends="compile" description="Create lib/gridsphere-ui-tags.jar">
         <jar jarfile="${build.lib}/gridsphere-ui-tags.jar" basedir="${build.classes}">
+            <include name="gridsphere/log4j.properties"/>
             <include name="org/gridlab/gridsphere/provider/portlet/ActionPortlet.class"/>
             <include name="org/gridlab/gridsphere/provider/portlet/jsr/**"/>
             <include name="org/gridlab/gridsphere/provider/portletui/tags/**"/>
@@ -328,12 +324,16 @@ Copyright:
     <!-- Creates the GridSphere test JAR                                     -->
     <!-- =================================================================== -->
     <target name="gridsphere-provider-jar" depends="compile" description="Create lib/gridsphere-provider.jar">
+        <copy todir="${build.classes}/gridsphere/resources">
+            <fileset dir="config/resources"/>
+        </copy>
         <jar jarfile="${build.lib}/gridsphere-provider.jar" basedir="${build.classes}">
             <include name="org/gridlab/gridsphere/provider/event/**"/>
             <include name="org/gridlab/gridsphere/provider/portlet/beans/**"/>
             <include name="org/gridlab/gridsphere/provider/portletui/beans/**"/>
             <include name="org/gridlab/gridsphere/provider/portlet/beans/**"/>
             <include name="org/gridlab/gridsphere/provider/portletui/model/**"/>
+            <include name="gridsphere/**"/>
         </jar>
     </target>
 
