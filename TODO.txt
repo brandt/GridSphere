@@ -1,0 +1,7 @@
+
++ Figure out a way to invoke logout() method of portlets when a users session expires
+
++ Make it easier to create links with action href links in portlets
+
++ Work on layout manager service and tabbed pane layout descriptor file which organizes portlets
+  into categories
