@@ -4,17 +4,13 @@
  */
 package org.gridlab.gridsphere.tags.web;
 
-import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
-import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.tags.web.model.ListBoxModel;
 import org.gridlab.gridsphere.tags.web.model.ListSelectItem;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
-import java.util.Collection;
 import java.util.Iterator;
 
 public class ListBoxTag extends TagSupport {
@@ -42,15 +38,15 @@ public class ListBoxTag extends TagSupport {
         try {
             JspWriter out = pageContext.getOut();
             out.print("<select size=\"");
-            out.print(col.getListboxsize()+"\"");
-            out.print(" name=\"" + col.getName()+"\"");
+            out.print(col.getListBoxSize() + "\"");
+            out.print(" name=\"" + col.getName() + "\"");
             if (col.isMultipleSelection()) {
                 out.print(" multiple");
             }
             out.print(">");
             Iterator it = col.iterator();
             while (it.hasNext()) {
-                ListSelectItem item = (ListSelectItem)it.next();
+                ListSelectItem item = (ListSelectItem) it.next();
                 out.print("<option value=\"");
                 out.print(item.getValue());
                 out.print("\"");

@@ -4,17 +4,14 @@
  */
 package org.gridlab.gridsphere.tags.web;
 
-import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
-import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.tags.web.validator.Validator;
 import org.gridlab.gridsphere.tags.web.validator.NoValidation;
+import org.gridlab.gridsphere.tags.web.validator.Validator;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.ServletRequest;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.TagSupport;
 
 public class InputTag extends TagSupport {
 
@@ -35,32 +32,32 @@ public class InputTag extends TagSupport {
     public static final String FILE = "file";
     public static final String BUTTON = "button";
 
-   /**
-    * Possible attributes of HTML 4.0 <input> tag
-    *
-    * TYPE=[ text | password | checkbox | radio | submit | reset | file | hidden | image | button ] (type of input)
-    * NAME=CDATA (key in submitted form)
-    * VALUE=CDATA (value of input)
-    * CHECKED (check radio button or checkbox)
- 	* SIZE=CDATA (suggested number of characters for text input)
- 	* MAXLENGTH=Number (maximum number of characters for text input)
- 	* SRC=URI (source for image)
- 	* ALT=CDATA (alternate text for image input)
- 	* USEMAP=URI (client-side image map)
- 	* ALIGN=[ top | middle | bottom | left | right ] (alignment of image input)
- 	* DISABLED (disable element)
- 	* READONLY (prevent changes)
- 	* ACCEPT=ContentTypes (media types for file upload)
- 	* ACCESSKEY=Character (shortcut key)
- 	* TABINDEX=Number (position in tabbing order)
- 	* ONFOCUS=Script (element received focus)
- 	* ONBLUR=Script (element lost focus)
- 	* ONSELECT=Script (element text selected)
- 	* ONCHANGE=Script (element value changed)
-    */
+    /**
+     * Possible attributes of HTML 4.0 <input> tag
+     *
+     * TYPE=[ text | password | checkbox | radio | submit | reset | file | hidden | image | button ] (type of input)
+     * NAME=CDATA (key in submitted form)
+     * VALUE=CDATA (value of input)
+     * CHECKED (check radio button or checkbox)
+     * SIZE=CDATA (suggested number of characters for text input)
+     * MAXLENGTH=Number (maximum number of characters for text input)
+     * SRC=URI (source for image)
+     * ALT=CDATA (alternate text for image input)
+     * USEMAP=URI (client-side image map)
+     * ALIGN=[ top | middle | bottom | left | right ] (alignment of image input)
+     * DISABLED (disable element)
+     * READONLY (prevent changes)
+     * ACCEPT=ContentTypes (media types for file upload)
+     * ACCESSKEY=Character (shortcut key)
+     * TABINDEX=Number (position in tabbing order)
+     * ONFOCUS=Script (element received focus)
+     * ONBLUR=Script (element lost focus)
+     * ONSELECT=Script (element text selected)
+     * ONCHANGE=Script (element value changed)
+     */
 
     public void setType(String type) {
-       this.type = type;
+        this.type = type;
     }
 
     public String getType() {
@@ -68,7 +65,7 @@ public class InputTag extends TagSupport {
     }
 
     public void setName(String name) {
-       this.name = name;
+        this.name = name;
     }
 
     public String getName() {
@@ -109,8 +106,9 @@ public class InputTag extends TagSupport {
 
     public void setValidator(String validatorClass) {
         try {
-            validator = (Validator)Class.forName(validatorClass).newInstance();
-        } catch (Exception e) { } // so what? use default novalidator currently or should it return false??
+            validator = (Validator) Class.forName(validatorClass).newInstance();
+        } catch (Exception e) {
+        } // so what? use default novalidator currently or should it return false??
     }
 
     public Validator getValidator() {
@@ -122,11 +120,11 @@ public class InputTag extends TagSupport {
             JspWriter out = pageContext.getOut();
             ServletRequest req = pageContext.getRequest();
             out.print("<input");
-            out.print(" type=\"" + type+"\"");
-            out.print(" name=\"" + name+"\"");
+            out.print(" type=\"" + type + "\"");
+            out.print(" name=\"" + name + "\"");
             if ((type.equals(TEXT)) || (type.equals(PASSWORD))) {
-                out.print(" size=\"" + size+"\"");
-                out.print(" maxlen=\"" + maxLength+"\"");
+                out.print(" size=\"" + size + "\"");
+                out.print(" maxlen=\"" + maxLength + "\"");
             }
             String oldvalue = req.getParameter(name);
             if (oldvalue != null) value = oldvalue;

@@ -66,7 +66,6 @@ public abstract class SelectListModel {
         ListSelectItem item = null;
         for (int i=0;i<elements.size()-1;i++) {
             if (((ListSelectItem)(elements.get(i))).getValue().equals(value)) {
-                i=elements.size();
                 return (ListSelectItem)(elements.get(i));
             }
         }

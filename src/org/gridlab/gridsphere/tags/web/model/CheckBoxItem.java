@@ -36,13 +36,25 @@ public class CheckBoxItem extends ListSelectItem {
     }
 
     /**
-     * Returns if the checkbox is enables/disabled
-     * @return if the checkbox is enabled
+     * Disables/Enables the checkbox
+     * @param flag
+     */
+    public void disable(boolean flag) {
+        this.enabled=!flag;
+    }
+
+    /**
+     * Returns true if the checkbox is disabled
+     * @return if the checkbox is disabled
      */
     public boolean isDisabled() {
         return (enabled==false);
     }
 
+    /**
+     * Returns true if the checkbox is enabled
+     * @return if the checkbox is enabled
+     */
     public boolean isEnabled() {
         return (enabled==true);
     }

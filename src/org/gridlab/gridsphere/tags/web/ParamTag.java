@@ -4,15 +4,11 @@
  */
 package org.gridlab.gridsphere.tags.web;
 
-import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
-import org.gridlab.gridsphere.portlet.PortletResponse;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
-import java.util.Map;
 
 public class ParamTag extends TagSupport {
 
@@ -36,7 +32,7 @@ public class ParamTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
-        DefaultPortletAction action = (DefaultPortletAction)pageContext.getAttribute("_action");
+        DefaultPortletAction action = (DefaultPortletAction) pageContext.getAttribute("_action");
         if (action != null) action.addParameter(name, value);
         return EVAL_BODY_INCLUDE;
     }

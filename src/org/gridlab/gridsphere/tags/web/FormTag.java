@@ -1,13 +1,12 @@
 package org.gridlab.gridsphere.tags.web;
 
-import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletURI;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 public class FormTag extends BodyTagSupport {
@@ -18,7 +17,7 @@ public class FormTag extends BodyTagSupport {
     private PortletURI someURI;
 
     public void setAction(String action) {
-        this.action =action;
+        this.action = action;
     }
 
     public String getAction() {
@@ -42,10 +41,10 @@ public class FormTag extends BodyTagSupport {
     }
 
     public void createActionURI() {
-            PortletResponse res = (PortletResponse)pageContext.getAttribute("portletResponse");
-            someURI = res.createURI();
-            DefaultPortletAction portletAction = new DefaultPortletAction(action);
-            pageContext.setAttribute("_action", portletAction);
+        PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
+        someURI = res.createURI();
+        DefaultPortletAction portletAction = new DefaultPortletAction(action);
+        pageContext.setAttribute("_action", portletAction);
     }
 
     public int doStartTag() throws JspException {
@@ -60,7 +59,7 @@ public class FormTag extends BodyTagSupport {
 
             out.print("<form ");
             out.print("action=\"");
-            DefaultPortletAction action = (DefaultPortletAction)pageContext.getAttribute("_action");
+            DefaultPortletAction action = (DefaultPortletAction) pageContext.getAttribute("_action");
             someURI.addAction(action);
             if (someURI != null) out.print(someURI.toString());
             out.print("\" method=\"");

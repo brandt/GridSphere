@@ -11,7 +11,7 @@ public class SubmitButtonTag extends InputTag {
 
     public int doStartTag() throws JspException {
         type = SUBMIT;
-        name = "submit:"+name;
+        name = "submit:" + name;
         return super.doStartTag();
     }
 }

@@ -1,14 +1,13 @@
 package org.gridlab.gridsphere.tags.web;
 
-import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletURI;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
-import java.util.HashMap;
 
 public class ActionTag extends TagSupport {
 
@@ -33,7 +32,7 @@ public class ActionTag extends TagSupport {
     }
 
     public void createActionURI() {
-        PortletResponse res = (PortletResponse)pageContext.getAttribute("portletResponse");
+        PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
         someURI = res.createURI();
         DefaultPortletAction portletAction = new DefaultPortletAction(action);
         pageContext.setAttribute("_action", portletAction);
@@ -48,7 +47,7 @@ public class ActionTag extends TagSupport {
         try {
             JspWriter out = pageContext.getOut();
             out.print("<a href= \"");
-            DefaultPortletAction action = (DefaultPortletAction)pageContext.getAttribute("_action");
+            DefaultPortletAction action = (DefaultPortletAction) pageContext.getAttribute("_action");
             someURI.addAction(action);
             if (someURI != null) out.print(someURI.toString());
             out.print("\">");
