@@ -183,7 +183,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      *
      * @param tabs an ArrayList containing the portlet tabs to add
      */
-    public void setPortletTabs(Vector tabs) {
+    public void setPortletTabs(List tabs) {
         this.tabs = tabs;
 
     }
