@@ -20,6 +20,10 @@ public class ActionLinkBean extends ActionBean implements TagBean {
     public ActionLinkBean() {
     }
 
+    public ActionLinkBean(HttpServletRequest req) {
+        this.request = req;
+    }
+
     /**
      * Constructs an action link bean from a portlet request and supplied bean identifier
      */

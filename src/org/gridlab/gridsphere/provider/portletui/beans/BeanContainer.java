@@ -69,7 +69,7 @@ public abstract class BeanContainer extends BaseComponentBean {
      * @return the list of visual beans
      */
     public List getBeans() {
-        return container;
+        return Collections.unmodifiableList(container);
     }
 
     /**
