@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
+import org.gridlab.gridsphere.services.core.registry.impl.tomcat.TomcatManagerWrapper;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,6 +40,9 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
         if (!isManagerInited) {
             portletManager.init(config);
             isManagerInited = true;
+            String name = config.getInitParameter("username");
+            String pass = config.getInitParameter("password");
+            TomcatManagerWrapper.setCredentials(name, pass);
         }
     }
 
