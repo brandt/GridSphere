@@ -6,16 +6,17 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletContext;
 
-import java.awt.*;
-import java.io.PrintWriter;
+import java.io.IOException;
 
 public class BasePortletComponent extends PortletContainer implements PortletComponent {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(BasePortletComponent.class);
 
-    protected int width;
-    protected int height;
+    protected String width;
+    protected String height;
     protected String name;
     protected String fgColor;
     protected String bgColor;
@@ -30,11 +31,11 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
         return fgColor;
     }
 
-    public PortletBorder getBorder() {
+    public PortletBorder getPortletBorder() {
         return border;
     }
 
-    public PortletInsets getInsets() {
+    public PortletInsets getPortletInsets() {
         return insets;
     }
 
@@ -42,21 +43,11 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
         return name;
     }
 
-    public void doBeginRender(PrintWriter out) {
-        // XXX: FILL ME IN
-        log.debug("in doBeginRender()");
-    }
-
-    public void doEndRender(PrintWriter out) {
-        // XXX: FILL ME IN
-        log.debug("in doEndRender()");
-    }
-
-    public int getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public int getWidth() {
+    public String getWidth() {
         return width;
     }
 
@@ -68,7 +59,7 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
         this.fgColor = fgColor;
     }
 
-    public void setBorder(PortletBorder border) {
+    public void setPortletBorder(PortletBorder border) {
         this.border = border;
     }
 
@@ -76,4 +67,23 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
         this.name = name;
     }
 
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
+    }
+
+    public void setPortletInsets(PortletInsets insets) {
+        this.insets = insets;
+    }
+
+    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        req.setAttribute("name", name);
+        req.setAttribute("bgcolor", bgColor);
+        req.setAttribute("fgcolor", fgColor);
+        req.setAttribute("height", height);
+        req.setAttribute("width", width);
+    }
 }

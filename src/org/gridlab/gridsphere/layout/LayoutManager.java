@@ -16,13 +16,7 @@ import java.util.List;
  * The LayoutManager is responsible for constructing a layout appropriate
  * to the user's layout preferences.
  */
-public interface LayoutManager {
-
-    public void addLayoutComponent(String name, PortletComponent comp);
-
-    public void layoutContainer(PortletContainer parent);
-
-    public void removeLayoutComponent(PortletComponent comp);
+public interface LayoutManager extends PortletComponent {
 
 }
 
