@@ -23,7 +23,7 @@ http://jakarta.apache.org/proposals/tapestry
 
 <!-- Base name for the XSL distribution. -->
 
-<property name="docbook.xsl.base" value="docbook-xsl-1.62.4"/>
+<property name="docbook.xsl.base" value="docbook-xsl-1.64.0"/>
 
 <property name="docbook.dtd.dir" value="../common/${docbook.dtd.base}"/>
 <property name="docbook.xsl.dir" value="../common/${docbook.xsl.base}"/>
