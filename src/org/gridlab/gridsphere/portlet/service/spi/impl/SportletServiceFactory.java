@@ -15,11 +15,13 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceCollection;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.services.user.impl.GridSphereUserManager;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -37,6 +39,8 @@ public class SportletServiceFactory implements PortletServiceFactory {
     private static PortletLog log = SportletLog.getInstance(SportletServiceFactory.class);
 
     private static SportletServiceFactory instance = new SportletServiceFactory();
+
+    private static GridSphereUserManager userManager = GridSphereUserManager.getInstance();
 
     // Maintain a single copy of each service instantiated
     // as a classname and PortletServiceProvider pair
@@ -63,7 +67,6 @@ public class SportletServiceFactory implements PortletServiceFactory {
 
     private SportletServiceFactory(ServletContext context) {
         String webApplicationName = context.getServletContextName();
-        ;
         // get the servlet context for the coreportlets webapp
         String contextURIPath = "/" + webApplicationName;
         ServletContext ctx = context.getContext(contextURIPath);
@@ -200,6 +203,8 @@ public class SportletServiceFactory implements PortletServiceFactory {
 
         if (!def.getUserRequired()) {
             return createPortletService(service, servletConfig, useCachedService);
+        } else if (user == null) {
+            throw new PortletServiceNotFoundException("Unable to create service: " + serviceName + " user is null");
         }
 
         /* Create the service implementation */
@@ -216,11 +221,14 @@ public class SportletServiceFactory implements PortletServiceFactory {
         PortletServiceConfig portletServiceConfig =
                 new SportletServiceConfig(service, configProperties, servletConfig);
 
+        // Create an authroizer for the secure service
+        PortletServiceAuthorizer auth = new SportletServiceAuthorizer(user, userManager);
+
         // instantiate wrapper with user and impl
         try {
             Class c = Class.forName(serviceImpl);
-            Class[] parameterTypes = new Class[]{User.class};
-            Object[] obj = new Object[]{user};
+            Class[] parameterTypes = new Class[]{PortletServiceAuthorizer.class};
+            Object[] obj = new Object[]{auth};
             Constructor con = c.getConstructor(parameterTypes);
             psp = (PortletServiceProvider) con.newInstance(obj);
         } catch (Exception e) {
