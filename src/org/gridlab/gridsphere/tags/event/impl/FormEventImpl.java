@@ -68,7 +68,6 @@ public class FormEventImpl implements FormEvent {
         return result;
     }
 
-
     private boolean checkParameterName(String name) {
         Enumeration enum = request.getParameterNames();
         while (enum.hasMoreElements()) {
