@@ -33,7 +33,7 @@ Copyright:
   <property name="lib.dir"        value="lib"/>
   <property name="conf.dir"       value="conf"/>
   <property name="webapp.dir"     value="webapps"/>
-  <property name="test.dir"       value="test"/>
+  <property name="test.dir"       value="tests"/>
   <property name="dist.dir"       value="${Name}-${version}" />
   <property name="build.lib"      value="${build.dir}/lib"/>
   <property name="classes.dir"    value="${build.dir}/classes"/>
