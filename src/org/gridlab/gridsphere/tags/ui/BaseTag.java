@@ -168,7 +168,8 @@ public class BaseTag extends TagSupport {
 
     public int doStartTag() throws JspException {
         if (!bean.equals("")) {
-            Object beanElement = pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+bean);
+            Object beanElement = pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);
+            System.out.println("GET: "+GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);;
             try {
                 this.htmlelement = (TagBean) beanElement;
             } catch (Exception e) {
@@ -183,7 +184,7 @@ public class BaseTag extends TagSupport {
            }
         }
         if (this.htmlelement == null) {
-            System.err.println("Html bean beans is null!");
+            System.err.println("Html bean is null!");
         } else {
             try {
                 JspWriter out = pageContext.getOut();

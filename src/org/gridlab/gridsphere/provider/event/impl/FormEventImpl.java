@@ -81,7 +81,7 @@ public class FormEventImpl implements FormEvent {
 
     private Object getBean(String name, PortletRequest request) {
         HttpSession session = request.getSession();
-        NameBean bean = (NameBean) session.getAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+name);
+        NameBean bean = (NameBean) session.getAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name);
         return bean;
     }
 
@@ -96,7 +96,7 @@ public class FormEventImpl implements FormEvent {
         NameBean bean = (NameBean) getBean(name, request);
         //System.out.println("Getting Bean " + name + " from Session");
         //if (checkParameterName("gstag:"+bean.getName())) {
-        System.out.println("Getting Bean '" + GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+name + "' from Session");
+        System.out.println("Getting Bean '" + GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name + "' from Session");
 
         if (bean instanceof TableBean) {
             // has to be that hack since the individal components of a table
@@ -117,19 +117,19 @@ public class FormEventImpl implements FormEvent {
                         if (basebean instanceof NameBean) {
                             bean = (NameBean)basebean;
                             String[] values = request.getParameterValues("gstag:" + bean.getName());
-                            //System.out.println("Updated bean: " + bean.getName());
+                            System.out.println("Updated bean: " + bean.getName());
                             bean.update(values);
                         }
                     }
                 }
             }
-            session.setAttribute(request.getAttribute(GridSphereProperties.PORTLETID)+":"+name, tbean);
+            session.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name, tbean);
             return tbean;
         } else {
             String[] values = request.getParameterValues("gstag:" + bean.getName());
-            //System.out.println("Updated bean: " + bean.getName());
+            System.out.println("Updated bean: " + bean.getName());
             bean.update(values);
-            session.setAttribute(name, bean);
+            session.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name, bean);
             return bean;
         }
     }
@@ -188,8 +188,8 @@ public class FormEventImpl implements FormEvent {
      * @return bean
      */
     public Object getStoredTagBean(String beanname) {
-
-        Object ob = request.getSession().getAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+beanname);
+        System.out.println("GET FROM SESSION FOR STORED TAG : "+GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+beanname);
+        Object ob = request.getSession().getAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+beanname);
         return ob;
     }
 
