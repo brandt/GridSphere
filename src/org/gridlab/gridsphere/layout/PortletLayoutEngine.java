@@ -136,6 +136,10 @@ public class PortletLayoutEngine {
         }
     }
 
+    public void destroy() {
+        pageFactory.destroy();
+    }
+
     /**
      * Performs an action on the portlet container referenced by the
      * gridsphere event
