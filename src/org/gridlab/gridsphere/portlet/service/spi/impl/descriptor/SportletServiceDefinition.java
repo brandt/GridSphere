@@ -61,18 +61,18 @@ public class SportletServiceDefinition {
     }
 
     /**
-     * Sets the portlet service description
+     * Sets the portlet service descriptions
      *
-     * @param serviceDescription the portlet service description
+     * @param serviceDescriptions the list of portlet service descriptions
      */
     public void setServiceDescription(List serviceDescriptions) {
         this.serviceDescriptions = serviceDescriptions;
     }
 
     /**
-     * Returns the portlet service name
+     * Returns the portlet service descriptions
      *
-     * @return the portlet service name
+     * @return the portlet service descriptions
      */
     public List getServiceDescription() {
         return this.serviceDescriptions;

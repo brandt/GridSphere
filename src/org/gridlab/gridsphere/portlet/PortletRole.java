@@ -79,7 +79,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
      * Return the appropriate <code>PortletRole</code> obtained by parsing
      * the <code>int</code> portlet role priority
      *
-     * @param portletRole a portlet role name
+     * @param priority the portlet role priority
      * @throws IllegalArgumentException if the <code>int</code> does
      *                                  not match any of the pre-defined roles
      */
