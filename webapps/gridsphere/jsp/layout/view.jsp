@@ -111,7 +111,7 @@
 <ui:text style="alert" key="LAYOUT_WARNING"/>
 </ui:tablecell>
 <ui:tablecell>
-<ui:actionsubmit action="deleteTab" key="LAYOUT_SUBTAB_DEL"/>
+<ui:actionsubmit action="deleteSubTab" key="LAYOUT_SUBTAB_DEL"/>
 </ui:tablecell>
 </ui:tablerow>
 <ui:tablerow>

@@ -23,7 +23,7 @@
     </ui:tablerow>
     <ui:tablerow>
         <ui:tablecell><ui:text key="EMAILADDRESS"/></ui:tablecell>
-        <ui:tablecell><ui:textfield beanId="email"/></ui:tablecell>
+        <ui:tablecell><ui:textfield beanId="emailAddress"/></ui:tablecell>
     </ui:tablerow>
     <ui:tablerow>
         <ui:tablecell><ui:text key="ORGANIZATION"/></ui:tablecell>
