@@ -139,8 +139,8 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public PortletPage createPortletPage(PortletRequest req) {
 
-        log.info("number of guest layouts: " + guests.size());
-        log.info("number of user layouts: " + userLayouts.size());
+        log.debug("number of guest layouts: " + guests.size());
+        log.debug("number of user layouts: " + userLayouts.size());
 
         String sessionId = req.getSession().getId();
         User user = req.getUser();
