@@ -54,12 +54,13 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
 
     public synchronized void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         String isCachingOnStr = config.getInitParameter("isCachingOn");
-        if (!isCachingOnStr.equals("true") ||
-                !isCachingOnStr.equals("t") ||
-                !isCachingOnStr.equals("yes") ||
+        if (!isCachingOnStr.equals("true") &&
+                !isCachingOnStr.equals("t") &&
+                !isCachingOnStr.equals("yes") &&
                 !isCachingOnStr.equals("y")) {
             isCachingOn = false;
         }
+        
         key2object = new HashMap();
         Timer timer = new Timer(true);
         timer.schedule(new CacheSweeperTask(),  Calendar.getInstance().getTime(), 1000 * 60 ); // 1 minute intervals
