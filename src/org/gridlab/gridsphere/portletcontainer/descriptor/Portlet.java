@@ -1,5 +1,6 @@
 /*
- * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
+ * @author <a href="mailto:wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @team sonicteam
  * @version $Id$
  */
@@ -12,10 +13,10 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 public class Portlet {
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(Portlet.class);
 
-
     private String Href = new String();
     private String Id = new String();
     private String Name = new String();
+    private String Description = new String();
 
     /**
      * gets the href of a Portlet
@@ -29,10 +30,10 @@ public class Portlet {
     /**
      * sets the href of a portlet
      *
-     * @param href href of the portlet
+     * @param Href the Href of the portlet
      */
-    public void setHref(String href) {
-        this.Href = href;
+    public void setHref(String Href) {
+        this.Href = Href;
     }
 
     /**
@@ -49,8 +50,8 @@ public class Portlet {
      *
      * @param id id of the portlet
      */
-    public void setId(String id) {
-        this.Id = id;
+    public void setId(String Id) {
+        this.Id = Id;
     }
 
 
@@ -68,8 +69,26 @@ public class Portlet {
      *
      * @param name name of the portlet
      */
-    public void setName(String name) {
-        this.Name = name;
+    public void setName(String Name) {
+        this.Name = Name;
+    }
+
+    /**
+     * Returns the description of the portlet
+     *
+     * @returns description of the portlet
+     */
+    public String getDescription() {
+        return Description;
+    }
+
+    /**
+     * sets the name of the portlet
+     *
+     * @param description the description of the portlet
+     */
+    public void setDescription(String Description) {
+        this.Description = Description;
     }
 }
 
