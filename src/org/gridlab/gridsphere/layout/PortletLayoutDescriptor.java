@@ -84,12 +84,9 @@ public class PortletLayoutDescriptor {
         // try to get it
         try {
              pc = (PortletContainer)pmx.restoreObject();
-        } catch (RestoreException e) {
-            log.error("RestoreError ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") "+e.getMessage());
-            throw new PortletLayoutDescriptorException("Unable to restore: "+e.getMessage());
-        } catch (ConfigurationException e) {
-            log.error("ConfigurationError ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") "+e);
-            throw new PortletLayoutDescriptorException("Configuration error: "+e.getMessage());
+        } catch (PersistenceException e) {
+            log.error("PersistenceException ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") ", e);
+            throw new PortletLayoutDescriptorException("Unable to load portlet: "+e.getMessage());
         }
     }
 
