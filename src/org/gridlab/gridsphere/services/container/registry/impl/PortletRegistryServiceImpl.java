@@ -6,6 +6,8 @@ package org.gridlab.gridsphere.services.container.registry.impl;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.AbstractPortlet;
+import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
@@ -15,6 +17,8 @@ import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
 import org.gridlab.gridsphere.portletcontainer.impl.RegisteredSportlet;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDefinition;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 
 
@@ -24,7 +28,8 @@ import java.util.*;
 
 /**
  * The PortletRegistryService acts as a repository for portlets and makes them available to the portlet
- * container. The PortletInfo base class is responsible for reading in the associated portlet.xml file and
+ * container, layout manager and any other services that require an active portlet.
+ * The PortletInfo base class is responsible for reading in the associated portlet.xml file and
  * creating a RegisteredPortlet object which represents the portlet. The PortletRegistryService maintains
  * a Set of RegisteredPortlets and provides operations for the registration, unregistration and querying
  * of RegisteredPortlet objects.
@@ -71,15 +76,19 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
         //portletSettings = new SportletSettings(pdd);
 
         //String portletClass = "org.gridlab.gridsphere.portlets.HelloWorld";
-        Iterator portletApps = pdd.getPortletApp().iterator();
-        while (portletApps.hasNext()) {
-            PortletApplication portletApp = (PortletApplication) portletApps.next();
+        Iterator portletDefs = pdd.getPortletDef().iterator();
+        while (portletDefs.hasNext()) {
+            PortletDefinition portletDef = (PortletDefinition) portletDefs.next();
+            PortletApplication portletApp = portletDef.getPortletApp();
+            Iterator concreteIt = portletDef.getConcreteApps().iterator();
+            while (concreteIt.hasNext()) {
             try {
-                RegisteredPortlet registeredPortlet = new RegisteredSportlet(portletApp);
+                RegisteredPortlet registeredPortlet = new RegisteredSportlet(portletApp, (ConcretePortletApplication)concreteIt.next());
                 String portletID = getUniqueID(registeredPortlet);
                 allPortlets.put(portletID, registeredPortlet);
             } catch (Exception e) {
                 throw new PortletServiceUnavailableException("Unable to create registered portlet");
+            }
             }
         }
     }
@@ -111,6 +120,25 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
         return rp.getActivePortlet();
     }
 
+    /**
+     * Return the collection of portlets identified by the allowed Groups
+     *
+     * @param group the PortletGroup
+     * @return the collection of portlets identified by the allowed Groups
+     */
+    public Collection getRegisteredePortletsByGroup(PortletGroup group) {
+        return null;
+    }
+
+    /**
+     * Return the collection of portlets identified by the allowed Roles
+     *
+     * @param role the PortletRole
+     * @return the collection of portlets identified by the allowed Roles
+     */
+    public Collection getRegisteredPortletsbyRole(PortletRole role) {
+        return null;
+    }
 
     /**
      * Return a registered portlet given its identifier

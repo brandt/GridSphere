@@ -10,6 +10,8 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.container.parsing.ServletParsingService;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDefinition;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +45,7 @@ public class ServletParsingServiceImpl implements PortletServiceProvider, Servle
 
     }
 
-    public PortletSettings getPortletSettings(PortletApplication portletApp, List knownGroups, List knownRoles) {
+    public PortletSettings getPortletSettings(ConcretePortletApplication portletApp, List knownGroups, List knownRoles) {
         SportletSettings settings = new SportletSettings(portletApp, knownGroups, knownRoles);
         return settings;
     }
