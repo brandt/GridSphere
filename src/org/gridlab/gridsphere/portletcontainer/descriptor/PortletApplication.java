@@ -12,6 +12,8 @@ public class PortletApplication {
     private String Name = new String();                // Name of the
     private PortletInfo portletInfo = new PortletInfo();            // PortletInfo
 
+    public PortletApplication() {}
+
     /**
      * gets the Uid of a PortletApplication
      *
