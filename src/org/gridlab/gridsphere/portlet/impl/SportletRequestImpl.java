@@ -209,9 +209,18 @@ public class SportletRequestImpl implements SportletRequest {
      */
     public PortletRole getRole(PortletGroup group) {
         Map authMap = (Map) req.getAttribute(GridSphereProperties.GROUPROLES);
-        if ((group == null) || (authMap == null)) return PortletRole.GUEST;
-
-        PortletRole role = (PortletRole)authMap.get(group);
+        if ((group == null) || (authMap == null)) {
+            return PortletRole.GUEST;
+        }
+        Set set = authMap.keySet();
+        Iterator it = set.iterator();
+        PortletRole role = null;
+        while (it.hasNext()) {
+            PortletGroup g = (PortletGroup)it.next();
+            if (g.getName().equals(group.getName())) {
+                role = (PortletRole)authMap.get(g);
+            }
+        }
         return (role == null) ? PortletRole.GUEST : role;
     }
 
@@ -224,7 +233,7 @@ public class SportletRequestImpl implements SportletRequest {
      */
     public void setRole(PortletGroup group, PortletRole role) {
         Map authMap = (Map)req.getAttribute(GridSphereProperties.GROUPROLES);
-        if (authMap == null) authMap =  new HashMap();
+        if (authMap == null) authMap = new HashMap();
         authMap.put(group, role);
         req.setAttribute(GridSphereProperties.GROUPROLES, authMap);
     }

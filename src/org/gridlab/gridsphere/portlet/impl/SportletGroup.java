@@ -21,19 +21,19 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
 public class SportletGroup extends BaseObject implements PortletGroup {
 
     private static final String SUPER_GROUP = "super";
-    private static final String CORE_GROUP = "core";
-
-    /**
-     * The <code>BASE</code> PortletGroup is the group that every portal user
-     * is a member of by default
-     */
-    public static final PortletGroup CORE = new SportletGroup(SportletGroup.CORE_GROUP);
+    private static final String CORE_GROUP = "gridsphere";
 
     /**
      * The <code>SUPER</code> PortletGroup is the group that only super users of
      * the portal belong to
      */
     public static final PortletGroup SUPER = new SportletGroup(SportletGroup.SUPER_GROUP);
+
+    /**
+     * The <code>SUPER</code> PortletGroup is the group that only super users of
+     * the portal belong to
+     */
+    public static final PortletGroup CORE = new SportletGroup(SportletGroup.CORE_GROUP);
 
     /**
      * @sql-size 128
@@ -55,6 +55,7 @@ public class SportletGroup extends BaseObject implements PortletGroup {
      */
     public SportletGroup(String groupName) {
         super();
+        if (groupName == null) Name = "Unknown Group";
         this.Name = groupName;
     }
 
