@@ -9,9 +9,9 @@
 
 <portletAPI:init/>
 
-<ui:panel>
+<ui:messagebox beanId="msg"/>
 
-    <ui:frame beanId="errorFrame"/>
+<ui:panel>
 
     <ui:frame>
     <ui:tablerow header="true">
