@@ -5,4 +5,12 @@
         <config>services/aim.xml</config>
         <classname>org.gridlab.gridsphere.tmf.services.AIM2Service</classname>
     </service>
+    <service enabled="false">
+        <config>services/sms.xml</config>
+        <classname>org.gridlab.gridsphere.tmf.services.SmashSMSService</classname>
+    </service>
+    <service enabled="false">
+        <config>services/fake.xml</config>
+        <classname>org.gridlab.gridsphere.tmf.services.FakeService</classname>
+    </service>
 </tmfconfig>

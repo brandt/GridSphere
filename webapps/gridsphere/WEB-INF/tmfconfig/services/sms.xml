@@ -1,0 +1,14 @@
+<tfmservice>
+    <name>SMS sending Service</name>
+    <security>insecure</security>
+    <messagetype>sms</messagetype>
+    <description>Gateway for sending SMS.</description>
+    <param>
+        <key>Smashhost</key>
+        <value></value>
+    </param>
+    <param>
+        <key>Smashport</key>
+        <value>7077</value>
+    </param>
+</tfmservice>
