@@ -29,6 +29,10 @@
         <ui:tablecell><ui:text key="ORGANIZATION"/></ui:tablecell>
         <ui:tablecell><ui:textfield beanId="organization"/></ui:tablecell>
     </ui:tablerow>
+    <ui:tablerow>
+        <ui:tablecell><ui:text key="TIMEZONE"/></ui:tablecell>
+        <ui:tablecell><ui:listbox beanId="timezones"/></ui:tablecell>
+    </ui:tablerow>
 </ui:frame>
 
 <ui:frame beanId="messagingFrame"/>

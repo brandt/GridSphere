@@ -22,6 +22,7 @@ import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
+import org.gridlab.gridsphere.services.core.utils.DateUtil;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.tmf.config.TmfService;
 import org.gridlab.gridsphere.tmf.config.TmfUser;
@@ -123,9 +124,12 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public DefaultTableModel setUserTable(FormEvent event, boolean disable) {
         PortletRequest req = event.getPortletRequest();
         User user = req.getUser();
+        PortletSession session = event.getPortletRequest().getPortletSession(true);
 
-        String logintime = DateFormat.getDateTimeInstance().format(new Date(user.getLastLoginTime()));
-        req.setAttribute("logintime", logintime);
+        //String logintime = DateFormat.getDateTimeInstance().format(new Date(user.getLastLoginTime()));
+        req.setAttribute("logintime", DateUtil.getLocalizedLongDate(user,
+                (Locale)session.getAttribute(User.LOCALE),
+                user.getLastLoginTime()));
         req.setAttribute("username", user.getUserName());
 
         TextFieldBean userName =  event.getTextFieldBean("userName");
@@ -143,6 +147,32 @@ public class ProfileManagerPortlet extends ActionPortlet {
         TextFieldBean email =  event.getTextFieldBean("emailAddress");
         email.setValue(user.getEmailAddress());
         email.setDisabled(disable);
+
+        ListBoxBean timezoneList = event.getListBoxBean("timezones");
+
+        Locale loc = (Locale)session.getAttribute(User.LOCALE);
+        Map zones = DateUtil.getLocalizedTimeZoneNames(loc);
+        Set keys = zones.keySet();
+        Iterator it2 = keys.iterator();
+        String userTimeZone = (String)user.getAttribute(User.TIMEZONE);
+        if (userTimeZone==null) {
+            userTimeZone = TimeZone.getDefault().getID();
+        }
+
+        while (it2.hasNext()) {
+            String zone = (String)it2.next();
+            ListBoxItemBean item = new ListBoxItemBean();
+            item.setValue((String)zones.get(zone));
+            item.setName(zone);
+            if (userTimeZone.equals(zone)) {
+                item.setSelected(true);
+            }
+            timezoneList.addBean(item);
+        }
+        timezoneList.setSize(10);
+        timezoneList.sortByValue();
+        timezoneList.setDisabled(disable);
+        timezoneList.setMultipleSelection(false);
 
         DefaultTableModel model = new DefaultTableModel();
 
@@ -323,6 +353,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             user = userManagerService.approveAccountRequest(acctReq);
         }
 
+
         CheckBoxBean groupsCB = event.getCheckBoxBean("groupCheckBox");
         List selectedGroups = groupsCB.getSelectedValues();
 
@@ -421,6 +452,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
         StringBuffer message = new StringBuffer();
         boolean isInvalid = false;
 
+        // get timezone
+        String timeZone = event.getListBoxBean("timezones").getSelectedValue();
+
         // Validate user name
         String userName = event.getTextFieldBean("userName").getValue();
         if (userName.equals("")) {
@@ -465,6 +499,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         acctReq.setEmailAddress(eMail);
         acctReq.setUserName(userName);
         acctReq.setFullName(fullName);
+        if (timeZone!=null) acctReq.setAttribute(User.TIMEZONE, timeZone);
         if (organization != null) acctReq.setOrganization(organization);
 
         acctReq.setPasswordValidation(false);

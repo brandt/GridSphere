@@ -41,6 +41,10 @@
         <ui:tablecell><ui:text key="CONFIRM_PASS"/></ui:tablecell>
         <ui:tablecell><ui:password beanId="confirmPassword"/></ui:tablecell>
     </ui:tablerow>
+    <ui:tablerow>
+        <ui:tablecell><ui:text key="TIMEZONE"/></ui:tablecell>
+        <ui:tablecell><ui:listbox beanId="timezones"/></ui:tablecell>
+    </ui:tablerow>
 </ui:frame>
 
 <ui:frame beanId="messagingFrame"/>
