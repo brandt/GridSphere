@@ -30,20 +30,14 @@ public abstract class Descriptor {
     protected static Object load(String descriptorPath, String mappingPath) throws IOException, DescriptorException  {
 
         Object object = null;
-        PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
-
-        // the descriptor xml file
-        pmx.setConnectionURL(descriptorPath);
-
-        // the mapping xml file
-        pmx.setMappingFile(mappingPath);
+        PersistenceManagerXml pmx = PersistenceManagerXml.createPersistenceManager(descriptorPath, mappingPath);
 
         log.info("Using " + descriptorPath + " " +  mappingPath);
         // try to get it
         try {
              object = pmx.restoreObject();
         } catch (PersistenceManagerException e) {
-            log.error("PersistenceManagerException ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") ", e);
+            log.error("PersistenceManagerException ("+pmx.getMappingURL()+", "+pmx.getDescriptorURL()+") ", e);
             throw new DescriptorException("Unable to load descriptor: "+ e.getMessage());
         }
         return object;
@@ -55,20 +49,13 @@ public abstract class Descriptor {
      */
     protected static void save(String descriptorPath, String mappingPath, Object object) throws IOException, DescriptorException {
 
-        PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
-
-        // where is the portlet.xml ?
-        pmx.setConnectionURL(descriptorPath);
-
-        // set the path to the mapping file
-        pmx.setMappingFile(mappingPath);
-
+        PersistenceManagerXml pmx = PersistenceManagerXml.createPersistenceManager(descriptorPath, mappingPath);
 
         // try to get it
         try {
              pmx.update(object);
         } catch (PersistenceManagerException e) {
-            log.error("PersistenceManagerException: ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") ", e);
+            log.error("PersistenceManagerException: ("+pmx.getMappingURL()+", "+pmx.getDescriptorURL()+") ", e);
             throw new DescriptorException("Unable to save: "+e.getMessage());
         }
     }

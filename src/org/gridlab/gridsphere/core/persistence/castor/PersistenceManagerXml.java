@@ -31,75 +31,45 @@ public class PersistenceManagerXml  {
 
     protected final static PortletLog log = SportletLog.getInstance(PersistenceManagerXml.class);
 
-    private static PersistenceManagerXml instance = new PersistenceManagerXml();
-    private String mappingFile = null;
-    private String Url = null;
+    private String mappingURL = null;
+    private String descriptorURL = null;
 
     /**
      * PersistenceManagerXml default constructor
      */
     private PersistenceManagerXml() {}
 
-    public static PersistenceManagerXml getInstance() {
-        return instance;
+    private PersistenceManagerXml(String descriptorURL, String mappingURL) {
+        this.mappingURL = mappingURL;
+        this.descriptorURL = descriptorURL;
+    }
+
+    public static PersistenceManagerXml createPersistenceManager(String descriptorURL, String mappingURL) {
+        return new PersistenceManagerXml(descriptorURL, mappingURL);
     }
 
     /**
-     * Return the connectionURL
+     * Return the mapping URL
      *
-     * @return filename
+     * @return the mapping URL
      */
-    public String getConnectionURL() {
-        return Url;
+    public String getMappingURL() {
+        return mappingURL;
     }
-
-    /**
-     * Sets the connection URL
-     *
-     * @param url
-     *
-     */
-    public void setConnectionURL(String url) {
-        Url = url;
-    }
-
-
-    /**
-     * Sets the mapping file
-     *
-     * @param mappingFile file containing the mapping
-     */
-    public void setMappingFile(String mappingFile) {
-        this.mappingFile = mappingFile;
-    }
-
 
     /**
      * Returns the filename of the mappingfile
      *
      * @return name of the mappingfile
      */
-    public String getMappingFile() {
-        return mappingFile;
-    }
-
-
-    /**
-     * Checks if all setting for marshalling xml data are done
-     *
-     * @throws ConfigurationException if one variable is not set
-     */
-    private void checkSetting() throws ConfigurationException {
-
-        // Mapping can be null
-        if (getConnectionURL().equals(null)) throw new ConfigurationException("Configuration Error");
-
+    public String getDescriptorURL() {
+        return descriptorURL;
     }
 
     /**
      * Updates an object in the xml file (same as create)
      *
-     * @throws UpdateException if the update failed
+     * @throws PersistenceManagerException if the update failed
      * @param object update 'object'
      */
     public void update(Object object) throws IOException, PersistenceManagerException {
@@ -109,27 +79,22 @@ public class PersistenceManagerXml  {
     /**
      * Marshals the given object to an xml file
      *
-     * @throws CreateException if the creation failed
-     * @throws ConfigurationException if the configuration was wrong
      * @param object object to be marshalled
+     * @throws PersistenceManagerException if the configuration was wrong
+     * @throws IOException if an I/O error occurs
      */
     public void create(Object object) throws PersistenceManagerException, IOException {
-
-        checkSetting();
-
         try {
-            FileWriter filewriter = new FileWriter(getConnectionURL());
+            FileWriter filewriter = new FileWriter(descriptorURL);
 
             Marshaller marshal = new Marshaller(filewriter);
-
             Mapping map = new Mapping();
-            map.loadMapping(getMappingFile());
+            map.loadMapping(mappingURL);
             marshal.setMapping(map);
-
             marshal.marshal(object);
             filewriter.close();
             Class cl = object.getClass();
-            log.debug("Wrote object of type " + cl.getName() + " to XMLFile " + getConnectionURL());
+            log.debug("Wrote object of type " + cl.getName() + " to XMLFile " + descriptorURL);
         } catch (ValidationException e) {
             log.error("Unable to marshal object: " + e.getException().toString());
             throw new PersistenceManagerException("Validation Error" + e.getException().toString());
@@ -147,26 +112,24 @@ public class PersistenceManagerXml  {
     /**
      * restores an object from an xml file
      *
-     * @throws RestoreException if restore was not succsessful
-     * @throws ConfigurationException if there was a configurationerror
      * @return object which was unmarshalled
+     * @throws PersistenceManagerException if restore was not succsessful
+     * @throws IOException if there was a configurationerror
      */
     public Object restoreObject() throws  IOException, PersistenceManagerException {
-
-        checkSetting();
 
         Object object = null;
 
         try {
-            log.info("Using getConnectionURL() " + getConnectionURL());
+            log.info("Using getConnectionURL() " + descriptorURL);
             FileReader filereader = null;
 
-            filereader = new FileReader(getConnectionURL());
+            filereader = new FileReader(descriptorURL);
 
             Mapping mapping = new Mapping();
 
-            mapping.loadMapping(getMappingFile());
-            log.info("Using  getMappingFile()" + getMappingFile());
+            mapping.loadMapping(mappingURL);
+            log.info("Using  getMappingFile()" + mappingURL);
 
             Unmarshaller unmarshal = new Unmarshaller(mapping);
             object = unmarshal.unmarshal(filereader);
