@@ -46,6 +46,7 @@ public class LoginPortlet extends ActionPortlet {
     public void doConfigModules(FormEvent event) throws PortletException {
         log.debug("in LoginPortlet: doConfigure");
         PortletRequest request = event.getPortletRequest();
+
         LoginService loginService = (LoginService)getPortletConfig().getContext().getService(LoginService.class, request.getUser());
 
         List supportedModules = loginService.getSupportedAuthModules();
@@ -77,7 +78,7 @@ public class LoginPortlet extends ActionPortlet {
         PortletRequest req = event.getPortletRequest();
 
         String errorKey = (String)req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
-        System.err.println("in gs_login! errorkey=" + errorKey);
+
         if (errorKey != null) {
             FrameBean frame = event.getFrameBean("errorFrame");
             frame.setKey(LoginPortlet.LOGIN_ERROR_FLAG);
