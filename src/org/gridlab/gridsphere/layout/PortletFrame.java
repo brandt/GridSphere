@@ -307,7 +307,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     } catch (PortletException e) {
                         errorFrame.setException(e);
                     }
-                    String message = (String)req.getAttribute(SportletProperties.PORTLETERROR);
+                    String message = (String)req.getAttribute(SportletProperties.PORTLETERROR+portletClass);
                     if (message != null) {
                         errorFrame.setMessage(message);
                     }
