@@ -6,16 +6,16 @@ package org.gridlab.gridsphere.portletcontainer;
 
 import java.util.*;
 
-public class PortletRegistryManager {
+public class PortletRegistry {
 
-    private static PortletRegistryManager instance = new PortletRegistryManager();
+    private static PortletRegistry instance = new PortletRegistry();
 
     private Map allApplicationPortlets = new Hashtable();
 
-    private PortletRegistryManager() {
+    private PortletRegistry() {
     }
 
-    public static PortletRegistryManager getInstance() {
+    public static PortletRegistry getInstance() {
         return instance;
     }
 

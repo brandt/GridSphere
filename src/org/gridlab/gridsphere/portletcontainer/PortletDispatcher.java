@@ -23,7 +23,7 @@ import java.util.List;
 public class PortletDispatcher {
 
     private static PortletLog log = SportletLog.getInstance(PortletDispatcher.class);
-    private static PortletRegistryManager registry = PortletRegistryManager.getInstance();
+    private static PortletRegistry registry = PortletRegistry.getInstance();
 
     public static void portletLogin(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
         log.info("in portletLogin " + concretePortletID);
