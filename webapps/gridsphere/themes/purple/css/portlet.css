@@ -289,8 +289,8 @@ in lighter color
   Table or section header
 **********************************************/
 .portlet-section-header {
-  background-color: #CCCCFF;
-  border: none;
+  background-color: #9966CC;
+  border: 1px solid #580DA6;
   color: #000000;
   font-family: inherit;
   text-align: center;
