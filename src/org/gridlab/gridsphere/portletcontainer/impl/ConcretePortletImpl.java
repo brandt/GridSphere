@@ -55,8 +55,6 @@ class ConcretePortletImpl implements ConcretePortlet {
      * Create a ConcreteSportlet
      */
     public ConcretePortletImpl(PortletDeploymentDescriptor pdd, ApplicationPortletDescriptor appDescriptor, ConcretePortletDescriptor concDescriptor) throws ConcretePortletException {
-
-        log.info("in ConcretePortletImpl construcor");
         this.portletApp = appDescriptor;
         this.concDescriptor = concDescriptor;
         int index;

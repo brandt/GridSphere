@@ -66,10 +66,10 @@ import java.util.Vector;
 public abstract class Portlet extends HttpServlet
         implements PortletSessionListener, Servlet, ServletConfig, Serializable {
 
-    protected transient static PortletLog log = SportletLog.getInstance(Portlet.class);
-
     protected PortletConfig portletConfig = null;
     protected PortletSettings portletSettings = null;
+
+    protected transient static PortletLog log = SportletLog.getInstance(Portlet.class);
 
     public static class Mode implements Serializable {
 
@@ -258,12 +258,10 @@ public abstract class Portlet extends HttpServlet
      * Initializes the PortletConfig using the web.xml file entry for this portlet
      */
     public final void init(ServletConfig config) throws ServletException {
-        log.info("in Portlet: init(ServletConfig)");
         super.init(config);
     }
 
     public final void init() throws ServletException {
-        log.info("in Portlet: init");
         super.init();
     }
 
@@ -296,42 +294,37 @@ public abstract class Portlet extends HttpServlet
     }
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.info("in Portlet: service(HttpServletRequest, HttpServletResponse)");
-
         // create portlet request and response objects
         PortletRequest portletRequest = new SportletRequestImpl(request);
         PortletResponse portletResponse = new SportletResponse(response, portletRequest);
-
         String method = (String)request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
-        log.info("in Portlet: lifecycle method=" + method);
-        try {
-            if (method.equals(SportletProperties.INIT)) {
-                ApplicationPortletDescriptor app = (ApplicationPortletDescriptor)request.getAttribute(SportletProperties.PORTLET_APPLICATION);
-                this.portletConfig = new SportletConfig(getServletConfig(), app);
-                init(this.portletConfig);
-            } else if (method.equals(SportletProperties.SERVICE)) {
-                service(portletRequest, portletResponse);
-            } else if (method.equals(SportletProperties.DESTROY)) {
-                destroy(this.portletConfig);
-            } else if (method.equals(SportletProperties.INIT_CONCRETE)) {
-                PortletSettings settings = (PortletSettings)request.getAttribute(SportletProperties.PORTLET_SETTINGS);
-                initConcrete(settings);
-            } else if (method.equals(SportletProperties.DESTROY_CONCRETE)) {
-                PortletSettings settings = (PortletSettings)request.getAttribute(SportletProperties.PORTLET_SETTINGS);
-                destroyConcrete(settings);
-            } else if (method.equals(SportletProperties.LOGIN)) {
-                login(portletRequest);
-            } else if (method.equals(SportletProperties.LOGOUT)) {
-                PortletSession portletSession = (PortletSession)portletRequest.getPortletSession();
-                logout(portletSession);
-            } else {
-                if (log != null) log.error("Portlet received unsupported lifecycle method: " + method);
+        if (method != null) {
+            try {
+                if (method.equals(SportletProperties.INIT)) {
+                    ApplicationPortletDescriptor app = (ApplicationPortletDescriptor)request.getAttribute(SportletProperties.PORTLET_APPLICATION);
+                    this.portletConfig = new SportletConfig(getServletConfig(), app);
+                    init(this.portletConfig);
+                } else if (method.equals(SportletProperties.SERVICE)) {
+                    service(portletRequest, portletResponse);
+                } else if (method.equals(SportletProperties.DESTROY)) {
+                    destroy(this.portletConfig);
+                } else if (method.equals(SportletProperties.INIT_CONCRETE)) {
+                    PortletSettings settings = (PortletSettings)request.getAttribute(SportletProperties.PORTLET_SETTINGS);
+                    initConcrete(settings);
+                } else if (method.equals(SportletProperties.DESTROY_CONCRETE)) {
+                    PortletSettings settings = (PortletSettings)request.getAttribute(SportletProperties.PORTLET_SETTINGS);
+                    destroyConcrete(settings);
+                } else if (method.equals(SportletProperties.LOGIN)) {
+                    login(portletRequest);
+                } else if (method.equals(SportletProperties.LOGOUT)) {
+                    PortletSession portletSession = (PortletSession)portletRequest.getPortletSession();
+                    logout(portletSession);
+                }
+            } catch (PortletException e) {
+                PrintWriter out = response.getWriter();
+                e.printStackTrace(out);
             }
-        } catch (PortletException e) {
-            PrintWriter out = response.getWriter();
-            e.printStackTrace(out);
         }
-
         request.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }
 
@@ -361,7 +354,6 @@ public abstract class Portlet extends HttpServlet
     }
 
     public final void destroy() {
-        log.info("in Portlet: destroy");
         super.destroy();
     }
 

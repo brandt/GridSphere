@@ -38,9 +38,7 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
     /* keep track of all PortletSettings per concrete portlet (concreteID, PortletSettings) */
     private Map allPortletSettings = new Hashtable();
 
-    public PortletAdapter() {
-        log.info("in PortletAdaptor constructor");
-    }
+    public PortletAdapter() {}
 
     /**
      * Called by the portlet container to indicate to this portlet that it is put into service.
@@ -60,7 +58,6 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      */
     public void init(PortletConfig config) throws UnavailableException {
         this.portletConfig = config;
-        log.info("in init(PortletConfig)");
     }
 
     /**
@@ -75,7 +72,6 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * @param config the portlet configuration
      */
     public void destroy(PortletConfig config) {
-        log.info("in destroy(PortletConfig)");
         this.portletConfig = null;
     }
 
@@ -93,7 +89,6 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * @param settings the portlet settings
      */
     public void initConcrete(PortletSettings settings) throws UnavailableException {
-        log.info("in initConcrete(PortletSettings)");
         allPortletSettings.put(settings.getConcretePortletID(), settings);
     }
 
@@ -109,7 +104,6 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * @param settings the portlet settings
      */
     public void destroyConcrete(PortletSettings settings) {
-        log.info("in destroyConcrete(PortletSettings)");
         allPortletSettings.remove(settings.getConcretePortletID());
     }
 
@@ -126,15 +120,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * @throws IOException if the streaming causes an I/O problem
      */
     public void service(PortletRequest request, PortletResponse response) throws PortletException, IOException {
-        log.info("in PortletAdapter: service(PortletRequest, PortletResponse)");
-
-        // set the proper PortletSettings
+        // There must be a portlet ID to knwo which portlet to service
         String portletID = (String)request.getAttribute(GridSphereProperties.PORTLETID);
-        /*
-        if (portletID == null) {
-            portletID = (String)request.getParameter(GridSphereProperties.PORTLETID);
-        }
-        */
         if (portletID == null) {
             log.error("in AbstractPortlet: No PortletID found in request attribute");
             throw new PortletException("PortletID is null");
@@ -184,8 +171,6 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * @param request the portlet request
      */
     public void login(PortletRequest request) {
-        // Create hash of user object and put in session
-
         // XXX: FILL ME IN
     }
 

@@ -92,7 +92,6 @@ public class PortletWrapper {
      * @param settings the portlet settings
      */
     public void initConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in initConcrete");
         req.setAttribute(SportletProperties.PORTLET_SETTINGS, settings);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.INIT_CONCRETE);
         try {
@@ -257,7 +256,6 @@ public class PortletWrapper {
      * @param event the window event
      */
     public void windowEvent(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: windowEvent");
         req.setAttribute(SportletProperties.WINDOW_EVENT, event);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.WINDOW_EVENT);

@@ -94,7 +94,6 @@ class ApplicationPortletImpl implements ApplicationPortlet {
             log.error("Unable to create a dispatcher for portlet: " + portletName);
             log.error("Make sure the servletName: " + servletName + " is the servlet-name defined in web.xml");
         }
-
         portletWrapper = new PortletWrapper(rd, appDescriptor);
     }
 

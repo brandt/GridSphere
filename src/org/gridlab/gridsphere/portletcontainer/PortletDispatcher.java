@@ -25,47 +25,89 @@ public class PortletDispatcher {
     private static PortletLog log = SportletLog.getInstance(PortletDispatcher.class);
     private static PortletRegistry registry = PortletRegistry.getInstance();
 
-    public static void portletLogin(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
-        log.info("in portletLogin " + concretePortletID);
+    public static final void init(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
+        log.info("in init " + concretePortletID);
+        String appID = getApplicationPortletID(concretePortletID);
+        ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
+        PortletWrapper portletWrapper = appPortlet.getPortletWrapper();
+        ConcretePortlet concPortlet = appPortlet.getConcretePortlet(concretePortletID);
+        PortletSettings settings = concPortlet.getPortletSettings();
+        // init the application portlet
+        portletWrapper.init(req, res);
+    }
+
+    public static final void initConcrete(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
+        log.info("in initConcrete " + concretePortletID);
+        String appID = getApplicationPortletID(concretePortletID);
+        ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
+        PortletWrapper portletWrapper = appPortlet.getPortletWrapper();
+        ConcretePortlet concPortlet = appPortlet.getConcretePortlet(concretePortletID);
+        PortletSettings settings = concPortlet.getPortletSettings();
+        // init the concrete portlet
+        portletWrapper.initConcrete(settings, req, res);
+    }
+
+    public static final void destroy(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
+        log.info("in destroy " + concretePortletID);
+        String appID = getApplicationPortletID(concretePortletID);
+        ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
+        PortletWrapper wrapper = appPortlet.getPortletWrapper();
+        // destroy the application portlet
+        wrapper.destroy(req, res);
+    }
+
+    public static final void destroyConcrete(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
+        log.info("in destroyConcrete " + concretePortletID);
+        String appID = getApplicationPortletID(concretePortletID);
+        ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
+        PortletWrapper wrapper = appPortlet.getPortletWrapper();
+        ConcretePortlet concPortlet = appPortlet.getConcretePortlet(concretePortletID);
+        PortletSettings settings = concPortlet.getPortletSettings();
+        // destroy the concrete portlet
+        wrapper.destroyConcrete(settings, req, res);
+    }
+
+    public static void login(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
+        log.info("in login " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
         wrapper.login(req, res);
     }
 
-    public static final void portletLogout(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
-        log.info("in portletLogout " + concretePortletID);
+    public static final void logout(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
+        log.info("in logout " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
         wrapper.logout(req, res);
     }
 
-    public static final void portletService(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
-        log.info("in portletService " + concretePortletID);
+    public static final void service(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
+        log.info("in service " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
         wrapper.service(req, res);
     }
 
-    public static final void portletAction(String concretePortletID, DefaultPortletAction action, PortletRequest req, PortletResponse res) throws PortletException {
-        log.info("in portletAction " + concretePortletID);
+    public static final void actionPerformed(String concretePortletID, DefaultPortletAction action, PortletRequest req, PortletResponse res) throws PortletException {
+        log.info("in actionPerformed " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
         wrapper.actionPerformed(action, req, res);
     }
 
-    public static final void portletTitle(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
-        log.info("in portletTitle " + concretePortletID);
+    public static final void doTitle(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
+        log.info("in doTitle " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
         wrapper.doTitle(req, res);
     }
 
-    public static final void portletWindowEvent(String concretePortletID, WindowEvent winEvent, PortletRequest req, PortletResponse res) throws PortletException {
+    public static final void windowEvent(String concretePortletID, WindowEvent winEvent, PortletRequest req, PortletResponse res) throws PortletException {
         log.info("in portletWindowEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -73,7 +115,7 @@ public class PortletDispatcher {
         wrapper.windowEvent(winEvent, req, res);
     }
 
-    public static final void portletMessageEvent(String concretePortletID, MessageEvent msgEvent, PortletRequest req, PortletResponse res) throws PortletException {
+    public static final void messageEvent(String concretePortletID, MessageEvent msgEvent, PortletRequest req, PortletResponse res) throws PortletException {
         log.info("in portletMessageEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -81,149 +123,107 @@ public class PortletDispatcher {
         wrapper.messageEvent(msgEvent, req, res);
     }
 
-    public static final void initAllPortlets(PortletRequest req, PortletResponse res) {
-            // Initialize all concrete portlets for each application portlet
-            Collection appPortlets = registry.getAllApplicationPortlets();
-            PortletWrapper portletWrapper = null;
-            try {
-                Iterator it = appPortlets.iterator();
-                while (it.hasNext()) {
-                    ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-                    portletWrapper = appPortlet.getPortletWrapper();
-                    List concPortlets = appPortlet.getConcretePortlets();
-                    Iterator concIt = concPortlets.iterator();
-                    PortletSettings settings = null;
-                    // initialize the application portlet
-                    portletWrapper.init(req, res);
-                    while (concIt.hasNext()) {
-                        ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
-                        settings = concPortlet.getPortletSettings();
-                        // initialize the concrete portlet
-                        portletWrapper.initConcrete(settings, req, res);
-                    }
-                }
-            } catch (Exception e) {
-                //throw new PortletLifecycleException(e);
-            }
-        }
-
-        public static final void initPortlets(String webApplicationName, PortletRequest req, PortletResponse res) {
-            // Initialize all concrete portlets for each application portlet
-            Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
-            PortletWrapper portletWrapper = null;
-            try {
-                Iterator it = appPortlets.iterator();
-                while (it.hasNext()) {
-                    ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-                    portletWrapper = appPortlet.getPortletWrapper();
-                    List concPortlets = appPortlet.getConcretePortlets();
-                    Iterator concIt = concPortlets.iterator();
-                    PortletSettings settings = null;
-                    // initialize the application portlet
-                    portletWrapper.init(req, res);
-                    while (concIt.hasNext()) {
-                        ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
-                        settings = concPortlet.getPortletSettings();
-                        // initialize the concrete portlet
-                        portletWrapper.initConcrete(settings, req, res);
-                    }
-                }
-            } catch (Exception e) {
-                //throw new PortletLifecycleException(e);
-            }
-        }
-
-        public static final void destroyAllPortlets(PortletRequest req, PortletResponse res) {
-
-            // First destroy all concrete portlets for each application portlet
-            Collection appPortlets = registry.getAllApplicationPortlets();
-            PortletWrapper portletWrapper = null;
-            try {
-                Iterator it = appPortlets.iterator();
-                while (it.hasNext()) {
-                    ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-                    portletWrapper = appPortlet.getPortletWrapper();
-                    List concPortlets = appPortlet.getConcretePortlets();
-                    Iterator concIt = concPortlets.iterator();
-                    PortletSettings settings = null;
-
-                    while (concIt.hasNext()) {
-                        ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
-                        settings = concPortlet.getPortletSettings();
-                        // destroy the concrete portlet
-                        portletWrapper.destroyConcrete(settings, req, res);
-                    }
-                }
-                // destroy the application portlet
-                portletWrapper.destroy(req, res);
-            } catch (Exception e) {
-                //throw new PortletLifecycleException(e);
-            }
-        }
-
-        public static final void destroyPortlets(String webApplicationName, PortletRequest req, PortletResponse res) {
-
-            // First destroy all concrete portlets for each application portlet
-            Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
-            PortletWrapper portletWrapper = null;
-            try {
-                Iterator it = appPortlets.iterator();
-                while (it.hasNext()) {
-                    ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-                    portletWrapper = appPortlet.getPortletWrapper();
-                    List concPortlets = appPortlet.getConcretePortlets();
-                    Iterator concIt = concPortlets.iterator();
-                    PortletSettings settings = null;
-                    while (concIt.hasNext()) {
-                        ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
-                        settings = concPortlet.getPortletSettings();
-                        // destroy the concrete portlet
-                        portletWrapper.destroyConcrete(settings, req, res);
-                    }
-                    // destroy the application portlet
-                    portletWrapper.destroy(req, res);
-                }
-            } catch (Exception e) {
-                //throw new PortletLifecycleException(e);
-            }
-        }
-
-        public static final void initPortlet(String concretePortletID, PortletRequest req, PortletResponse res) {
-            String appID = getApplicationPortletID(concretePortletID);
-            ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-            PortletWrapper portletWrapper = appPortlet.getPortletWrapper();
-            ConcretePortlet concPortlet = appPortlet.getConcretePortlet(concretePortletID);
-            PortletSettings settings = concPortlet.getPortletSettings();
-            try {
-                // init the application portlet
-                portletWrapper.init(req, res);
-                // init the concrete portlet
+    public static final void initAllPortlets(PortletRequest req, PortletResponse res) throws PortletException {
+        // Initialize all concrete portlets for each application portlet
+        Collection appPortlets = registry.getAllApplicationPortlets();
+        PortletWrapper portletWrapper = null;
+        Iterator it = appPortlets.iterator();
+        while (it.hasNext()) {
+            ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
+            portletWrapper = appPortlet.getPortletWrapper();
+            List concPortlets = appPortlet.getConcretePortlets();
+            Iterator concIt = concPortlets.iterator();
+            PortletSettings settings = null;
+            // initialize the application portlet
+            log.info("initializing application portlet " + appPortlet.getPortletAppID());
+            portletWrapper.init(req, res);
+            while (concIt.hasNext()) {
+                ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
+                settings = concPortlet.getPortletSettings();
+                // initialize the concrete portlet
+                log.info("initializing concrete portlet " + concPortlet.getConcretePortletAppID());
                 portletWrapper.initConcrete(settings, req, res);
-            } catch (Exception e) {
-                // do something here
             }
         }
+    }
 
-        public static final void destroyPortlet(String concretePortletID, PortletRequest req, PortletResponse res) {
-            String appID = getApplicationPortletID(concretePortletID);
-            ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-            PortletWrapper wrapper = appPortlet.getPortletWrapper();
-            ConcretePortlet concPortlet = appPortlet.getConcretePortlet(concretePortletID);
-            PortletSettings settings = concPortlet.getPortletSettings();
-            try {
+    public static final void initPortletWebApp(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
+        // Initialize all concrete portlets for each application portlet
+        Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
+        PortletWrapper portletWrapper = null;
+        Iterator it = appPortlets.iterator();
+        while (it.hasNext()) {
+            ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
+            portletWrapper = appPortlet.getPortletWrapper();
+            List concPortlets = appPortlet.getConcretePortlets();
+            Iterator concIt = concPortlets.iterator();
+            PortletSettings settings = null;
+            // initialize the application portlet
+            log.info("initializing application portlet " + appPortlet.getPortletAppID());
+            portletWrapper.init(req, res);
+            while (concIt.hasNext()) {
+                ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
+                settings = concPortlet.getPortletSettings();
+                // initialize the concrete portlet
+                log.info("initializing concrete portlet " + concPortlet.getConcretePortletAppID());
+                portletWrapper.initConcrete(settings, req, res);
+            }
+        }
+    }
+
+    public static final void destroyAllPortlets(PortletRequest req, PortletResponse res) throws PortletException {
+        // First destroy all concrete portlets for each application portlet
+        Collection appPortlets = registry.getAllApplicationPortlets();
+        PortletWrapper portletWrapper = null;
+        Iterator it = appPortlets.iterator();
+        while (it.hasNext()) {
+            ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
+            portletWrapper = appPortlet.getPortletWrapper();
+            List concPortlets = appPortlet.getConcretePortlets();
+            Iterator concIt = concPortlets.iterator();
+            PortletSettings settings = null;
+            log.info("destroying application portlet " + appPortlet.getPortletAppID());
+            while (concIt.hasNext()) {
+                ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
+                settings = concPortlet.getPortletSettings();
                 // destroy the concrete portlet
-                wrapper.destroyConcrete(settings, req, res);
-                // destroy the application portlet
-                wrapper.destroy(req, res);
-            } catch (Exception e) {
-                // do something here
+                log.info("destroying concrete portlet " + concPortlet.getConcretePortletAppID());
+                portletWrapper.destroyConcrete(settings, req, res);
             }
         }
+        // destroy the application portlet
+        portletWrapper.destroy(req, res);
+    }
 
-        protected static String getApplicationPortletID(String concretePortletID) {
-            int i = concretePortletID.lastIndexOf(".");
-            if (i < 0) return "";
-            return concretePortletID.substring(0, i);
+    public static final void destroyPortletWebApp(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
+        // First destroy all concrete portlets for each application portlet
+        Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
+        PortletWrapper portletWrapper = null;
+        Iterator it = appPortlets.iterator();
+        while (it.hasNext()) {
+            ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
+            portletWrapper = appPortlet.getPortletWrapper();
+            List concPortlets = appPortlet.getConcretePortlets();
+            Iterator concIt = concPortlets.iterator();
+            PortletSettings settings = null;
+            log.info("destroying application portlet " + appPortlet.getPortletAppID());
+            while (concIt.hasNext()) {
+                ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
+                settings = concPortlet.getPortletSettings();
+                // destroy the concrete portlet
+                log.info("destroying concrete portlet " + concPortlet.getConcretePortletAppID());
+                portletWrapper.destroyConcrete(settings, req, res);
+            }
+            // destroy the application portlet
+            portletWrapper.destroy(req, res);
         }
+
+    }
+
+    protected static String getApplicationPortletID(String concretePortletID) {
+        int i = concretePortletID.lastIndexOf(".");
+        if (i < 0) return "";
+        return concretePortletID.substring(0, i);
+    }
 
 }

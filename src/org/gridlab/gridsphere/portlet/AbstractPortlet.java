@@ -48,12 +48,9 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
     public void service(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
         super.service(request, response);
-
-        log.info("in AbstractPortlet: service(PortletRequest, PortletResponse)");
-
         String method = (String)request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
-        log.info("Received ACTION_METHOD: " + method);
         if (method != null) {
+            log.info("Received ACTION_METHOD: " + method);
             if (method.equals(SportletProperties.DO_TITLE)) {
                 doTitle(request, response);
             } else if (method.equals(SportletProperties.WINDOW_EVENT)) {
