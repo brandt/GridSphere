@@ -528,7 +528,11 @@ public class AccessControlManager implements AccessControlManagerService {
             }
             group.setPortletRoleList(portletRoleList);
             try {
-                pm.create(group);
+                if (group.getOid()==null) {
+                    pm.create(group);
+                } else {
+                    pm.update(group);
+                }
             } catch (PersistenceManagerException e) {
                 String msg = "Error creating portlet group " + groupName;
                 log.error(msg, e);
