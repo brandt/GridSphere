@@ -17,8 +17,8 @@
         <input message="Please enter a Project Title e.g. Cool Portlets" addproperty="project.title"/>
         <input message="Please enter the Project Name e.g. the lowercase directory name e.g. coolportlets" addproperty="project.name"/>
         <property name="newproject.dir" value="projects/${project.name}"/>
-        <echo message="Overwriting ${newproject.dir}/build.xml"/>
-        <copy file="config/build/build.properties" tofile="${newproject.dir}/build.properties" overwrite="true"/>
+        <echo message="Overwriting ${newproject.dir}/build.xml and copying existing ${newproject.dir}/build.xml to ${newproject.dir}/build.xml.bak"/>
+        <copy file="${newproject.dir}/build.xml" tofile="${newproject.dir}/build.xml.bak" overwrite="true"/>
         <copy file="config/build/build.project.xml" tofile="${newproject.dir}/build.xml" overwrite="true"/>
         <replace file="${newproject.dir}/build.xml"
                  token="@PROJECT_TITLE@"
@@ -52,25 +52,20 @@
 
         <copy file="config/build/build.project.xml" tofile="${project.dir}/build.xml"/>
 
-        <replace file="${project.dir}/build.xml"
-                 token="@USE_JSR@"
-                 value="${which}"/>
-
         <copy file="config/build/build.properties" tofile="${project.dir}/build.properties" filtering="true"/>
         <replace file="${project.dir}/build.properties"
                  token="@GRIDSPHERE_HOME@"
                  value="${GRIDSPHERE_HOME}"/>
 
-        <replace file="${project.dir}/build.xml"
+        <replace file="${project.dir}/build.properties"
                  token="@PROJECT_TITLE@"
                  value="${project.title}"/>
-        <replace file="${project.dir}/build.xml"
+        <replace file="${project.dir}/build.properties"
                  token="@PROJECT_NAME@"
                  value="${project.name}"/>
-        <replace file="${project.dir}/build.xml"
-                 token="@GRIDSPHERE_BASE@"
-                 value="${basedir}"/>
-
+        <replace file="${project.dir}/build.properties"
+                 token="@USE_JSR@"
+                 value="${which}"/>
 
         <mkdir dir="${project.dir}/src"/>
         <mkdir dir="${project.dir}/lib"/>

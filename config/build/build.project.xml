@@ -19,37 +19,23 @@ Copyright:
 
 ============================================================================ -->
 
-<project name="@PROJECT_TITLE@" default="help" basedir=".">
+<project default="help" basedir=".">
 
 
     <property file="build.properties"/>
 
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
-            <pathelement location="../../lib/ant-contrib-0.3.jar"/>
+            <pathelement location="${gridsphere.home}/lib/ant-contrib-0.3.jar"/>
         </classpath>
     </taskdef>
-
-    <property name="project.name" value="@PROJECT_NAME@"/>
-    <property name="project.title" value="@PROJECT_TITLE@"/>
 
     <property name="optimize" value="false"/>
     <property name="debug" value="on"/>
     <property name="deprecation" value="true"/>
 
-    <!-- Version properties -->
-    <property name="version" value="1.0"/>
-    <property name="release" value="rc1"/>
-    <property name="version.release" value="${version} ${release}"/>
-
-    <property name="project" value="${project.title} ${version.release}"/>
-    <property name="project.api" value="${project.title} API ${version.release}"/>
-
-    <property name="use.jsr" value="@USE_JSR@"/>
-
-    <!-- GridSphere build and dist directories -->
-    <!-- home of the source code of gridsphere -->
-    <property name="GRIDSPHERE_PROJECT" value="../../"/>
+    <property name="project" value="${project.title} ${project.version}"/>
+    <property name="project.api" value="${project.title} API ${project.version}"/>
 
     <!-- GridSphere build targets -->
     <property name="build.lib" value="${project.build}/lib"/>
@@ -90,7 +76,7 @@ Copyright:
             <exclude name="${project.name}-services.jar"/>
         </fileset>
 
-        <fileset dir="${GRIDSPHERE_PROJECT}/build/lib">
+        <fileset dir="${gridsphere.build}/lib">
             <include name="*.jar"/>
         </fileset>
 
@@ -154,10 +140,10 @@ Copyright:
     <target name="compile-all" depends="compile, compile-tests" description="Compiles all source code in distribution"/>
 
     <!-- =================================================================== -->
-    <!-- Compiles @PROJECT_TITLE@ source code                                -->
+    <!-- Compiles source code                                                -->
     <!-- =================================================================== -->
-    <target name="compile" depends="setenv" description="Compile @PROJECT_TITLE@ source code">
-        <echo>Compiling @PROJECT_TITLE@ source code</echo>
+    <target name="compile" depends="setenv" description="Compile project source code">
+        <echo>Compiling project source code</echo>
         <javac srcdir="src"
             destdir="${build.classes}"
             classpathref="classpath"
@@ -202,15 +188,15 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Creates a @PROJECT_TITLE@ JAR library archive configured for Tomcat -->
+    <!-- Creates a JAR library archive configured for Tomcat                 -->
     <!-- =================================================================== -->
-    <target name="jar" depends="portlets-jar, services-jar" description="Creates @PROJECT_NAME@ JAR"/>
+    <target name="jar" depends="portlets-jar, services-jar" description="Creates project JAR"/>
 
     <!-- =================================================================== -->
-    <!-- Creates a @PROJECT_TITLE@ JAR library archive configured for Tomcat -->
+    <!-- Creates a JAR library archive configured for Tomcat                 -->
     <!-- =================================================================== -->
-    <target name="portlets-jar" depends="compile" description="Creates @PROJECT_NAME@ portlets JAR">
-        <echo>Creating @PROJECT_NAME@ JAR for Tomcat</echo>
+    <target name="portlets-jar" depends="compile" description="Creates portlets JAR">
+        <echo>Creating JAR for Tomcat</echo>
 
         <mkdir dir="${build.classes}/${project.name}"/>
 
@@ -226,8 +212,8 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates a @PROJECT_TITLE@ JAR library archive configured for Tomcat -->
     <!-- =================================================================== -->
-    <target name="services-jar" depends="compile" description="Creates @PROJECT_NAME@ services JAR">
-        <echo>Creating  @PROJECT_NAME@ services JAR for Tomcat</echo>
+    <target name="services-jar" depends="compile" description="Creates services JAR">
+        <echo>Creating services JAR for Tomcat</echo>
 
         <mkdir dir="${build.classes}/${project.name}"/>
 
@@ -250,13 +236,13 @@ Copyright:
         <delete quiet="true" file="lib/${project.name}-services.jar"/>
     </target>
 
-    <target name="docs" depends="javadocs" description="Create @PROJECT_TITLE@ Documentation"/>
+    <target name="docs" depends="javadocs" description="Create project documentation"/>
 
     <!-- =================================================================== -->
-    <!-- Creates all the @PROJECT_TITLE@ API documentation                   -->
+    <!-- Creates all the API documentation                                   -->
     <!-- =================================================================== -->
-    <target name="javadocs" depends="setenv" description="Create @PROJECT_TITLE@ Javadocs">
-        <echo>Creating @PROJECT_NAME@ Javadocs</echo>
+    <target name="javadocs" depends="setenv" description="Create Javadocs">
+        <echo>Creating Javadocs</echo>
         <delete quiet="true" dir="${build.javadoc}"/>
         <mkdir dir="${build.javadoc}"/>
         <javadoc sourcepath="src"
@@ -274,10 +260,10 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Creates the @PROJECT_TITLE@  WAR file                               -->
+    <!-- Creates the WAR file                                                -->
     <!-- =================================================================== -->
-    <target name="war" depends="jar" description="Create @PROJECT_TITLE@ WAR">
-        <echo>Creating @PROJECT_NAME@ web application WAR</echo>
+    <target name="war" depends="jar" description="Create project WAR">
+        <echo>Creating project web application WAR</echo>
         <war warfile="${project.build}/${project.name}.war" update="true"
             webxml="${webapp.dir}/WEB-INF/web.xml">
             <fileset dir="${gswebapp.dir}">
@@ -287,10 +273,10 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Deploys @PROJECT_TITLE@ portlets to a local server                   -->
+    <!-- Deploys portlets to a local server                                  -->
     <!-- =================================================================== -->
-    <target name="deploy" depends="jar" if="catalina.exists" description="Deploys @PROJECT_TITLE@ portlet to a local server">
-        <echo>Deploying @PROJECT_NAME@ to Tomcat</echo>
+    <target name="deploy" depends="jar" if="catalina.exists" description="Deploys portlet to a local server">
+        <echo>Deploying project to Tomcat</echo>
         <!-- Copy the gridsphere web app to build directory -->
         <property name="project.webapp" value="${env.CATALINA_HOME}/webapps/${project.name}"/>
         <copy overwrite="true" todir="${project.webapp}">
@@ -305,7 +291,7 @@ Copyright:
             </fileset>
         </copy>
 
-        <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
+        <copy file="${gridsphere.build}/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
         <touch file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/Portlets/${project.name}"/>
 
