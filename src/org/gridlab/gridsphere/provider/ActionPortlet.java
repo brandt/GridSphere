@@ -21,19 +21,19 @@ import java.util.Map;
 public class ActionPortlet extends AbstractPortlet {
 
     // Default error page
-    protected static String ERROR_PAGE = "error.jsp";
+    protected String ERROR_PAGE = "error.jsp";
 
     // Default VIEW mode
-    protected static String DEFAULT_VIEW_PAGE = "view.jsp";
+    protected String DEFAULT_VIEW_PAGE = "view.jsp";
 
     // Default EDIT mode
-    protected static String DEFAULT_EDIT_PAGE = "edit.jsp";
+    protected String DEFAULT_EDIT_PAGE = "edit.jsp";
 
     // Default HELP mode
-    protected static String DEFAULT_HELP_PAGE = "help.jsp";
+    protected String DEFAULT_HELP_PAGE = "help.jsp";
 
     // Default CONFIGURE mode
-    protected static String DEFAULT_CONFIGURE_PAGE = "configure.jsp";
+    protected String DEFAULT_CONFIGURE_PAGE = "configure.jsp";
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
