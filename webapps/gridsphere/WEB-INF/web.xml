@@ -55,18 +55,6 @@
         <servlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet</servlet-class>
     </servlet>
 
-    <!--
-    <servlet>
-        <servlet-name>Redirect</servlet-name>
-        <jsp-file>/jsp/redirect.jsp</jsp-file>
-    </servlet>
-
-    <servlet>
-        <servlet-name>ServletRedirector</servlet-name>
-        <servlet-class>org.apache.commons.cactus.server.ServletTestRedirector</servlet-class>
-    </servlet>
-    -->
-
     <servlet-mapping>
        <servlet-name>gridsphere</servlet-name>
        <url-pattern>/gridsphere</url-pattern>
@@ -106,18 +94,6 @@
        <servlet-name>Redirect</servlet-name>
        <url-pattern>/servlet/*</url-pattern>
     </servlet-mapping>
-
-    <!--
-    <servlet-mapping>
-        <servlet-name>ServletRedirector</servlet-name>
-        <url-pattern>/ServletRedirector</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>JspRedirector</servlet-name>
-        <url-pattern>/JspRedirector</url-pattern>
-    </servlet-mapping>
-    -->
 
     <mime-mapping>
       <extension>wbmp</extension>
