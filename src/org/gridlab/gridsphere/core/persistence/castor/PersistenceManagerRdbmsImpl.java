@@ -18,6 +18,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
+import org.gridlab.gridsphere.core.persistence.PersistenceSession;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,6 +33,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerRdbmsImpl.class);
     protected JDO jdo = null;
+    private String Name = "noname";
 
     private PersistenceManagerRdbmsImpl() {}
 
@@ -82,6 +84,14 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             }
         }
 
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
     }
 
     /**
@@ -329,4 +339,11 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         }
     }
 
+    public void destroy() throws PersistenceManagerException {
+
+    }
+
+    public PersistenceSession getPersistenceSession() throws PersistenceManagerException {
+        return null;
+    }
 }

@@ -8,7 +8,6 @@
 
 package org.gridlab.gridsphere.core.persistence;
 
-import java.io.IOException;
 
 public class PersistenceManagerException extends Exception {
 
@@ -24,7 +23,7 @@ public class PersistenceManagerException extends Exception {
     /**
      * Constructs a new persistence exception with the given text.
      *
-     * @param text the exception text
+     * @param msg the exception text
      */
     public PersistenceManagerException(String msg) {
         super(msg);

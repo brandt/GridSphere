@@ -6,12 +6,11 @@
 package org.gridlab.gridsphere.core.persistence;
 
 import org.gridlab.gridsphere.core.persistence.*;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbmsImpl;
+import org.gridlab.gridsphere.core.persistence.hibernate.PersistenceManagerRdbmsImpl;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXmlImpl;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
 import javax.servlet.ServletContext;
 import java.util.*;
@@ -29,25 +28,29 @@ public class PersistenceManagerFactory {
     }
 
     public static synchronized PersistenceManagerRdbms createGridSphereRdbms() {
-
-        ServletContext ctx = GridSphereConfig.getServletContext();
-        String databaseConfigFile = ctx.getRealPath("/WEB-INF/database/database.xml");
+        log.info("Trying to get Gridsphere PM!");
         String databaseName = GRIDSPHERE_DATABASE_NAME;
-
         if (!databases.containsKey(databaseName)) {
-            PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(databaseName, databaseConfigFile);
+            PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl();
             databases.put(databaseName, pm);
         }
-        return (PersistenceManagerRdbms)databases.get(databaseName);
+        return (PersistenceManagerRdbms) databases.get(databaseName);
     }
 
-    public static synchronized PersistenceManagerRdbms createPersistenceManagerRdbms(String databaseName, String databaseConfigFile) {
-        if (!databases.containsKey(databaseName)) {
-
-            PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(databaseName, databaseConfigFile);
-            databases.put(databaseName, pm);
+    /**
+     * Creates a new persistencemanager.
+     * @param webappname
+     */
+    public static synchronized PersistenceManagerRdbms createPersistenceManagerRdbms(String webappname) {
+        if (!databases.containsKey(webappname)) {
+            log.info("Creating new PM for :"+webappname);
+            ServletContext ctx = GridSphereConfig.getServletContext();
+            //todo init from webappstartup with real fullpath? Did not work after loses...
+            String path = ctx.getRealPath("../"+webappname+"/WEB-INF/persistence/");
+            PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(path);
+            databases.put(webappname, pm);
         }
-        return (PersistenceManagerRdbms)databases.get(databaseName);
+        return (PersistenceManagerRdbms)databases.get(webappname);
     }
 
     /**
