@@ -25,10 +25,11 @@ public class SportletResponse implements PortletResponse {
     // if user goes to /GridSphere, the actual servlet name then
     // getServletName returns some crazy "org.apache.catalina.INVOKER.GridSphere"
 
-    private String servletName = "gridsphere";
+    private String servletName;
 
-    public SportletResponse(HttpServletResponse res) {
+    public SportletResponse(HttpServletResponse res, String servletName) {
         this.res = res;
+        this.servletName = servletName;
     }
 
     /**
@@ -85,7 +86,7 @@ public class SportletResponse implements PortletResponse {
      * @return the portletURI
      */
     public PortletURI createReturnURI() {
-        return new SportletURI(res, servletName, true);
+        return new SportletURI(res, "", true);
     }
 
 
@@ -95,7 +96,7 @@ public class SportletResponse implements PortletResponse {
      * @return the portlet URI
      */
     public PortletURI createURI() {
-        return new SportletURI(res, servletName, false);
+        return new SportletURI(res, "", false);
     }
 
     /**
@@ -104,7 +105,7 @@ public class SportletResponse implements PortletResponse {
      * @param state the portlet window state
      */
     public PortletURI createURI(PortletWindow.State state) {
-        return new SportletURI(res, servletName, false);
+        return new SportletURI(res, "", false);
     }
 
     /**
