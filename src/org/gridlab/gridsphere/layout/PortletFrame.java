@@ -429,9 +429,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         // Render title bar
         if (titleBar != null) {
             titleBar.doRender(event);
+            /*
             if (titleBar.hasRenderError()) {
                 errorFrame.setMessage(titleBar.getErrorMessage());
-            }
+            } */
         } else {
             req.setMode(Portlet.Mode.VIEW);
             req.setAttribute(SportletProperties.PREVIOUS_MODE, Portlet.Mode.VIEW);

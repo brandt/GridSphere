@@ -131,7 +131,7 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
      * </li></ul>
      */
     protected void addURLParameters(PortletURL portletURL) {
-        portletURL.setParameter(SportletProperties.COMPONENT_ID, (String) req.getAttribute(SportletProperties.COMPONENT_ID));
+        //portletURL.setParameter(SportletProperties.COMPONENT_ID, (String) req.getAttribute(SportletProperties.COMPONENT_ID));
      }
 
 }

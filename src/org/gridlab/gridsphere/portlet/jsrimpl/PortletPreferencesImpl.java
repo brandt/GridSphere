@@ -333,7 +333,6 @@ public class PortletPreferencesImpl implements PortletPreferences
      * @exception  javax.portlet.ReadOnlyException
      *                 if this preference cannot be modified for this request
      */
-
     public void reset(String key) throws ReadOnlyException {
         if (key == null) throw new IllegalArgumentException("key is NULL");
         Preference pref = (Preference)prefsMap.get(key);
@@ -347,7 +346,6 @@ public class PortletPreferencesImpl implements PortletPreferences
             }
         }
     }
-
 
     /**
      * Commits all changes made to the preferences via the
@@ -379,7 +377,6 @@ public class PortletPreferencesImpl implements PortletPreferences
      *
      * @see  javax.portlet.PreferencesValidator
      */
-
     public void store() throws java.io.IOException, ValidatorException {
         if (validator != null) validator.validate(this);
         try {
@@ -389,7 +386,7 @@ public class PortletPreferencesImpl implements PortletPreferences
         }
     }
 
-       /**
+    /**
      * Returns the user id of this portlet data
      *
      * @return the user id

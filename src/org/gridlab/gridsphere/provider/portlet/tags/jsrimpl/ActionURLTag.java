@@ -153,11 +153,9 @@ public class ActionURLTag extends ActionTag {
     }
 
     public int doEndTag() throws JspException {
-
         // set action to non-null
         action = "";
         actionlink.setAction(createActionURI());
-
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
         }

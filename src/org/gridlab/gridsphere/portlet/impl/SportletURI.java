@@ -135,7 +135,6 @@ public class SportletURI implements PortletURI {
             DefaultPortletAction dpa = (DefaultPortletAction) action;
             if (!dpa.getName().equals("")) {
                 store.put(SportletProperties.DEFAULT_PORTLET_ACTION, dpa.getName());
-
                 this.actionParams = dpa.getParameters();
             }
         }

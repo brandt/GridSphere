@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.provider.portlet.tags.jsrimpl;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
-import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -79,7 +78,6 @@ public class ActionParamTag extends TagSupport {
         ActionTag actionTag = (ActionTag) getParent();
         if (actionTag != null) {
             //System.err.println("Setting action param bean: " + name + " " + value);
-
             paramBean = new ActionParamBean(name, value);
             actionTag.addParamBean(paramBean);
         }

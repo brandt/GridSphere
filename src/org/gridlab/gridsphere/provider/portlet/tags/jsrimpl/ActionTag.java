@@ -132,7 +132,6 @@ public abstract class ActionTag extends BaseComponentTag {
         }
 
         if (!paramBeans.isEmpty()) {
-            actionURL.setParameter(SportletProperties.PREFIX, id);
             if (action != null) actionURL.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, action);
             Iterator it = paramBeans.iterator();
             while (it.hasNext()) {
@@ -140,7 +139,6 @@ public abstract class ActionTag extends BaseComponentTag {
                 actionURL.setParameter(pbean.getName(), pbean.getValue());
             }
         }
-
         return actionURL.toString();
     }
 

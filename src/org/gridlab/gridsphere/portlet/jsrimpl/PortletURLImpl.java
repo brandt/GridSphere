@@ -65,6 +65,8 @@ public class PortletURLImpl implements PortletURL {
         this.contextPath = req.getContextPath();
         this.isSecure = req.isSecure();
         this.id = createUniquePrefix(2);
+        store.put(SportletProperties.COMPONENT_ID, (String) req.getAttribute(SportletProperties.COMPONENT_ID));
+        store.put(SportletProperties.PREFIX, id);
     }
 
     /**
@@ -87,7 +89,7 @@ public class PortletURLImpl implements PortletURL {
      *                   to check if the portlet can set a given window state.
      * @see PortletRequest#isWindowStateAllowed
      */
-    public void setWindowState (WindowState windowState)
+    public void setWindowState(WindowState windowState)
             throws WindowStateException {
         store.put(SportletProperties.PORTLET_WINDOW, windowState.toString());
     }
@@ -112,7 +114,7 @@ public class PortletURLImpl implements PortletURL {
      *                   to check if the portlet can set a given portlet mode.
      * @see PortletRequest#isPortletModeAllowed
      */
-    public void setPortletMode (PortletMode portletMode)
+    public void setPortletMode(PortletMode portletMode)
             throws PortletModeException {
         store.put(SportletProperties.PORTLET_MODE, portletMode.toString());
     }
@@ -136,10 +138,10 @@ public class PortletURLImpl implements PortletURL {
      * @exception  IllegalArgumentException
      *                            if name or value are <code>null</code>.
      */
-    public void setParameter (String name, String value) {
+    public void setParameter(String name, String value) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
         if (value == null) throw new IllegalArgumentException("value is NULL");
-        store.put(name, value);
+        store.put(id + "_" + name, value);
     }
 
     /**
@@ -161,11 +163,11 @@ public class PortletURLImpl implements PortletURL {
      * @exception  IllegalArgumentException
      *                            if name or values are <code>null</code>.
      */
-    public void setParameter (String name, String[] values) {
+    public void setParameter(String name, String[] values) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
         if (values == null) throw new IllegalArgumentException("values is NULL");
         if (values.length == 0) throw new IllegalArgumentException("values is NULL");
-        store.put(name, values);
+        store.put(id + "_" + name, values);
     }
 
     /**
@@ -207,9 +209,10 @@ public class PortletURLImpl implements PortletURL {
                 if (!(values instanceof String[]) && (!(values instanceof String))) {
                     throw new IllegalArgumentException("a parameters value element must be a string or string array");
                 }
+                this.setParameter((String)key, (String[])values);
             }
+
         }
-        this.store = new HashMap(parameters);
     }
 
 
