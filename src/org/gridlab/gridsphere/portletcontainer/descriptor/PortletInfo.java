@@ -17,6 +17,9 @@ public class PortletInfo {
     private String Href = new String();
     private String Id = new String();
     private String Name = new String();
+    private CacheInfo cacheInfo = new CacheInfo();
+    private List allowsWindowStates = new Vector();
+    private SupportsModes supportsModes = new SupportsModes();
 
     /**
      * gets the href of a PortletInfo
@@ -73,5 +76,28 @@ public class PortletInfo {
         this.Name = Name;
     }
 
+    public CacheInfo getCacheInfo() {
+        return cacheInfo;
+    }
+
+    public void setCacheInfo(CacheInfo cacheInfo) {
+        this.cacheInfo = cacheInfo;
+    }
+
+    public void setAllowsWindowStates(Vector allowsWindowStates) {
+        this.allowsWindowStates = allowsWindowStates;
+    }
+
+    public List getAllowsWindowStates() {
+        return allowsWindowStates;
+    }
+
+    public void setSupportsModes(SupportsModes supportModes) {
+        this.supportsModes = supportModes;
+    }
+
+    public SupportsModes getSupportsModes() {
+        return supportsModes;
+    }
 }
 

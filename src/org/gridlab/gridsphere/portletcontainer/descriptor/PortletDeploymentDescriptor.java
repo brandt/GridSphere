@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 
 import org.gridlab.gridsphere.core.persistence.ConfigurationException;
 import org.gridlab.gridsphere.core.persistence.RestoreException;
+import org.gridlab.gridsphere.core.persistence.PersistenceException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
 import org.gridlab.gridsphere.portlet.PortletLog;
 
@@ -16,33 +17,36 @@ import java.util.Vector;
 import java.util.List;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class PortletDeploymentDescriptor {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletDeploymentDescriptor.class);
+    private PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
     private Vector PortletDef = new Vector();
+    private PortletCollection pc = null;
 
-    public PortletDeploymentDescriptor(ServletConfig config) throws PortletDeploymentDescriptorException {
-            // load in layout.xml file
-            String appRoot = config.getServletContext().getRealPath("") + "/";
-            String portletConfigFile = config.getInitParameter("portlet.xml");
-            String portletMappingFile = config.getInitParameter("portlet-mapping.xml");
-            if (portletConfigFile == null) {
-                portletConfigFile = "WEB-INF/conf/portlet.xml";
-            }
-            if (portletMappingFile == null) {
-                portletMappingFile = "WEB-INF/conf/portlet-mapping.xml";
-            }
-            String fullPath = appRoot + portletConfigFile;
-            String mappingPath = appRoot + portletMappingFile;
-            try {
-                FileInputStream fistream = new FileInputStream(fullPath);
-            } catch (FileNotFoundException e) {
-                log.error("Can't find file: " + fullPath);
-                throw new PortletDeploymentDescriptorException("Unable to create descriptor from " + fullPath + " using " + mappingPath);
-            }
-            load(fullPath, mappingPath);
+    public PortletDeploymentDescriptor(ServletConfig config) throws IOException, PortletDeploymentDescriptorException {
+        // load in layout.xml file
+        String appRoot = config.getServletContext().getRealPath("") + "/";
+        String portletConfigFile = config.getInitParameter("portlet.xml");
+        String portletMappingFile = config.getInitParameter("portlet-mapping.xml");
+        if (portletConfigFile == null) {
+            portletConfigFile = "WEB-INF/conf/portlet.xml";
         }
+        if (portletMappingFile == null) {
+            portletMappingFile = "WEB-INF/conf/portlet-mapping.xml";
+        }
+        String fullPath = appRoot + portletConfigFile;
+        String mappingPath = appRoot + portletMappingFile;
+        try {
+            FileInputStream fistream = new FileInputStream(fullPath);
+        } catch (FileNotFoundException e) {
+            log.error("Can't find file: " + fullPath);
+            throw new PortletDeploymentDescriptorException("Unable to create descriptor from " + fullPath + " using " + mappingPath);
+        }
+        load(fullPath, mappingPath);
+    }
 
     /**
      * Constructs a PortletDeploymentDescriptor from a portlet.xml and mapping file
@@ -51,7 +55,7 @@ public class PortletDeploymentDescriptor {
      * @param mappingFilePath location of the mapping file
      * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
      */
-    public PortletDeploymentDescriptor(String portletFilePath, String mappingFilePath) throws PortletDeploymentDescriptorException  {
+    public PortletDeploymentDescriptor(String portletFilePath, String mappingFilePath) throws IOException, PortletDeploymentDescriptorException  {
         load(portletFilePath, mappingFilePath);
     }
 
@@ -65,19 +69,47 @@ public class PortletDeploymentDescriptor {
     }
 
     /**
-     * Creates a new PortletApp
+     * Return the portlet application associated with the
      *
-     * @return a new PortletApp
+     * @param concretePortletID the concrete portlet ID
+     * @return the corresponding ConcretePortletApplication or null if none exists
      */
-    public PortletDefinition createPortletDef() {
-        return new PortletDefinition();
+    public ConcretePortletApplication getConcretePortletApplication(String concretePortletID) {
+        Iterator it = PortletDef.iterator();
+        while (it.hasNext()) {
+            PortletDefinition pd = (PortletDefinition)it.next();
+            List apps = pd.getConcreteApps();
+            Iterator appsIt = apps.iterator();
+            while (appsIt.hasNext()) {
+                ConcretePortletApplication capp = (ConcretePortletApplication)appsIt.next();
+                String uid = capp.getUID();
+                if (concretePortletID.equals(uid)) {
+                    return capp;
+                }
+            }
+        }
+        return null;
     }
 
     /**
-     * Add a new portlet app to the descriptor
-     * <b>not implemented yet</b>
+     * Return the portlet application associated with the
+     *
+     * @param concretePortletID the concrete portlet ID
+     * @return the corresponding PortletApplication or null if none exists
      */
-    public void addPortletDef(PortletDefinition portletDef) {}
+    public PortletApplication getPortletApplication(String concretePortletID) {
+        Iterator it = PortletDef.iterator();
+        while (it.hasNext()) {
+            PortletDefinition pd = (PortletDefinition)it.next();
+            PortletApplication app = pd.getPortletApp();
+            String uid = app.getUID();
+            if (concretePortletID.startsWith(uid)) {
+                return app;
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Loads the PortletDeploymentDescriptor from the portlet.xml
@@ -86,8 +118,7 @@ public class PortletDeploymentDescriptor {
      * @param mapping the location of the portlet xml mapping file
      * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
      */
-    public void load(String url, String mapping) throws PortletDeploymentDescriptorException  {
-        PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
+    public void load(String url, String mapping) throws IOException, PortletDeploymentDescriptorException  {
 
         // where is the portlet.xml ?
         pmx.setConnectionURL(url);
@@ -95,17 +126,12 @@ public class PortletDeploymentDescriptor {
         // set the path to the mapping file
         pmx.setMappingFile(mapping);
 
-        PortletCollection pc = null;
-
         // try to get it
         try {
              pc = (PortletCollection)pmx.restoreObject();
-        } catch (RestoreException e) {
-            log.error("RestoreError ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") "+e.getMessage());
-            throw new PortletDeploymentDescriptorException("Unable to restore: "+e.getMessage());
-        } catch (ConfigurationException e) {
-            log.error("ConfigurationError ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") "+e);
-            throw new PortletDeploymentDescriptorException("Configuration error: "+e.getMessage());
+        } catch (PersistenceException e) {
+            log.error("Unable to load portlet.xml: ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") "+e.getMessage());
+            throw new PortletDeploymentDescriptorException("Unable to load portlet.xml: "+e.getMessage());
         }
         this.PortletDef = (Vector)pc.getPortletDefList();
     }
@@ -114,6 +140,8 @@ public class PortletDeploymentDescriptor {
      * Save the portlet deployment descriptor to portlet.xml
      * <b>not implemented yet</b>
      */
-    public void save() {}
+    public void save() throws IOException, PersistenceException {
+        pmx.update(pc);
+    }
 
 }
