@@ -13,4 +13,6 @@ Changes since GridSphere 1.0
 + provider.jar also placed into WEB-INF/lib of webapp and not shared/lib
 + make user account creation configurable via config'ing the LoginPortlet
 + Fixed readonly attributes in input type portlet ui tags
-
++ PortletGroup can be public or private and is supported in GroupManagerPortlet
++ LoginPortlet configure mode can disallow anonymous account registration
++ More localized text in properties files 
