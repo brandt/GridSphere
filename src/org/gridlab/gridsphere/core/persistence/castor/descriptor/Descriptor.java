@@ -28,7 +28,7 @@ public abstract class Descriptor {
      * @return Object the unmarshalled object
      * @throws DescriptorException if the Descriptor cannot be created
      */
-    protected Object load(String descriptorPath, String mappingPath) throws IOException, DescriptorException  {
+    protected static Object load(String descriptorPath, String mappingPath) throws IOException, DescriptorException  {
 
         Object object = null;
         PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
@@ -54,7 +54,7 @@ public abstract class Descriptor {
      * Save the layout deployment descriptor to layout.xml
      * <b>not implemented yet</b>
      */
-    protected void save(String descriptorPath, String mappingPath, Object object) throws IOException, DescriptorException {
+    protected static void save(String descriptorPath, String mappingPath, Object object) throws IOException, DescriptorException {
 
         PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
 
