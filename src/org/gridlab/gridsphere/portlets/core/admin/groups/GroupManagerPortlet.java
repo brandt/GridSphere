@@ -577,7 +577,9 @@ public class GroupManagerPortlet extends ActionPortlet {
         Set defaultGroups = new HashSet();
         PortalConfigSettings configSettings = portalConfigService.getPortalConfigSettings();
         defaultGroups = configSettings.getDefaultGroups();
-        Iterator it = groups.iterator();
+        defaultGroups.clear();
+	defaultGroups.add(aclManagerService.getCoreGroup());
+	Iterator it = groups.iterator();
         while (it.hasNext()) {
             String name = (String) it.next();
             PortletGroup g = aclManagerService.getGroupByName(name);
