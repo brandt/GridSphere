@@ -34,6 +34,18 @@ public class CheckBoxListBean extends DropDownListBean {
         list.addElement(cbb);
     }
 
+    /**
+     * Adds a checkbox to the list.
+     * @param value of the checkbox
+     * @param label label of the checkbox
+     * @param selected selected status of the checkbox
+     */
+    public void add(String value, String label, boolean selected, boolean disabled) {
+        CheckBoxBean cbb = new CheckBoxBean(this.name, value, selected, disabled);
+        cbb.setLabel(label);
+        list.addElement(cbb);
+    }
+
     public String toString() {
         String result = new String();
         if (this.label!=null) {

@@ -208,6 +208,11 @@ public class ActionEventHandler {
         return (CheckBoxBean)getTagBean(beanName);
     }
 
+    public CheckBoxListBean getCheckBoxListBean(String beanName) {
+        // Then we return the tag bean with form event
+        return (CheckBoxListBean)getTagBean(beanName);
+    }
+
     public TextFieldBean getTextFieldBean(String beanName) {
         // Then we return the tag bean with form event
         return (TextFieldBean)getTagBean(beanName);
@@ -231,6 +236,11 @@ public class ActionEventHandler {
     public ListBoxBean getListBoxBean(String beanName) {
         // Then we return the tag bean with form event
         return (ListBoxBean)getTagBean(beanName);
+    }
+
+    public TableBean getTableBean(String beanName) {
+        // Then we return the tag bean with form event
+        return (TableBean)getTagBean(beanName);
     }
 
     public TextBean createTextBeanAsActionLink(PortletURI portletURI) {

@@ -51,7 +51,10 @@ public class TableBean extends NameBean implements Updateable {
         String result = "<"+tablestring+" "+getCSS()+">";
         Iterator it = list.iterator();
         while (it.hasNext()) {
-            result = result + it.next().toString();
+            log.debug("Setting tag bean cid to " + this.cid);
+            TagBean tagBean = (TagBean)it.next();
+            tagBean.setCID(this.cid);
+            result = result + tagBean.toString();
         }
         result = result + "</"+tablestring+">";
         return result;

@@ -130,6 +130,7 @@ public abstract class BaseElementBean implements TagBean {
     private void store(String id, PortletRequest request, Object ob) {
         log.debug("Start: Storing bean with [" + getBeanKey(request, id) + "] objecttype [" + ob.getClass().getName()+" in session and request");
         //this.id = id;
+        setCID(request.getAttribute(GridSphereProperties.COMPONENT_ID).toString());
         request.setAttribute(getBeanKey(request, id), ob);
         HttpSession session = request.getSession();
         session.setAttribute(getBeanKey(request, id), ob);

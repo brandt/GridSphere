@@ -79,6 +79,22 @@ public class SportletGroup extends BaseObject implements PortletGroup {
     }
 
     /**
+     * Returns the portlet group label
+     *
+     * @return the portlet group label
+     */
+    public String getLabel() {
+        String label = null;
+        if (Name.equals("")) {
+            label = "";
+        } else {
+            label = Name.substring(0, 1).toUpperCase()
+                  + Name.substring(1);
+        }
+        return label;
+    }
+
+    /**
      * Returns the group id
      *
      * @return the group id

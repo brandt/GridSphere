@@ -15,6 +15,13 @@ package org.gridlab.gridsphere.portlet;
 public interface PortletGroup extends Cloneable {
 
     /**
+     * Returns the id of this group
+     *
+     * @return the id of this group
+     */
+    public String getID();
+
+    /**
      * Returns the name of this group
      *
      * @return the name of this group
@@ -22,11 +29,11 @@ public interface PortletGroup extends Cloneable {
     public String getName();
 
     /**
-     * Returns the id of this group
+     * Returns the label of this group
      *
-     * @return the id of this group
+     * @return the label of this group
      */
-    public String getID();
+    public String getLabel();
 
     /**
      * Tests to see if this group is equal to a supplied group

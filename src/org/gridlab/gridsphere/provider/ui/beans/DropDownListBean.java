@@ -72,6 +72,13 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
         list.addElement(item);
     }
 
+    /**
+     * Clears items in list
+     */
+    public void clear() {
+        list.clear();
+    }
+
     public String toString() {
         String result = "<select name='"+getTagName()+name+"' size='"+size+"'";
         if (multiple) {

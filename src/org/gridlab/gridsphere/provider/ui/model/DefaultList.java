@@ -46,4 +46,7 @@ public class DefaultList extends AbstractList implements DefaultListModel {
         return list.size();
     }
 
+    public void clear() {
+        list.clear();
+    }
 }
