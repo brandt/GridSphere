@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.PortletResponse;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletOutputStream;
 import java.io.IOException;
@@ -19,6 +17,41 @@ public class StoredPortletResponseImpl extends SportletResponse {
     public StoredPortletResponseImpl(HttpServletResponse response, Writer writer) {
         super(response);
         this.writer = new PrintWriter(writer);
+    }
+
+    /**
+     * Writes an array of bytes
+     *
+     * @param buf the array to be written
+     * @exception IOException if an I/O error occurred
+     */
+    public void write(byte[] buf) throws IOException {
+        char[] tmp = new char[buf.length];
+        for (int i = 0; i < tmp.length; i++)
+            tmp[i] = (char)(buf[i] & 0xff);
+        writer.write(tmp, 0, buf.length);
+    }
+
+    /**
+     * Writes a single byte to the output stream
+     */
+    public void write(int val) throws IOException {
+        writer.write(val);
+    }
+
+    /**
+     * Writes a subarray of bytes
+     *
+     * @param buf the array to be written
+     * @param pOffset the offset into the array
+     * @param length the number of bytes to write
+     * @exception IOException if an I/O error occurred
+     */
+    public void write(byte[] buf, int pOffset, int length) throws IOException {
+        char[] tmp = new char[length];
+        for (int i = 0; i < length; i++)
+            tmp[i] = (char)(buf[i + pOffset] & 0xff);
+        writer.write(tmp, 0, length);
     }
 
     public PrintWriter getWriter() throws IOException {
