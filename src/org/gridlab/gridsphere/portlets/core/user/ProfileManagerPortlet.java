@@ -501,11 +501,13 @@ public class ProfileManagerPortlet extends ActionPortlet {
         String locale = event.getListBoxBean("userlocale").getSelectedValue();
 
         // Validate user name
+        /*
         String userName = event.getTextFieldBean("userName").getValue();
         if (userName.equals("")) {
             message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
             isInvalid = true;
         }
+        */
 
         // Validate full name
         String fullName = event.getTextFieldBean("fullName").getValue();
