@@ -45,12 +45,15 @@ in or out.
 
 Portlet services may be obtained in two ways:
 
-1) If the client is the portlet container
-or another portlet service an instance of the portlet service factory can be
-obtained via the implementing SportletServiceFactory class as shown:
+1) If the client is the portlet container or another portlet service an
+instance of the portlet service factory can be obtained via the implementing
+SportletServiceFactory class as shown:
 
 PortletServiceFactory factory = SportletServiceFactory.getInstance();
-PortletService coolService = factory.createService();
+PortletService coolService = factory.createService(CoolService.class,
+                                                               props,
+                                                               servletConfig,
+                                                               useCached);
 
 2) If the client is another portlet using the service, it can obtain a portlet
 service via the PortletContext as shown:
@@ -113,5 +116,5 @@ C) Add an entry to the PortletServices.properties file:
 D) (Optional) Invoke service from portlet container or portlet as explained in (1)
 
 
-E) TODO: Create a test harness to insure proper operation of service.
+E) TODO: Create a test harness to ensure proper operation of service.
 
