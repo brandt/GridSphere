@@ -30,7 +30,8 @@ public abstract class BaseFormEventImpl {
     protected HttpServletRequest request;
     protected HttpServletResponse response;
     protected Map tagBeans = null;
-    protected FileItem savedFileItem = null;
+    //protected FileItem savedFileItem = null;
+    protected List fileItems = null;
 
     public BaseFormEventImpl(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
@@ -479,11 +480,8 @@ public abstract class BaseFormEventImpl {
             name = vbname.substring(idx + 1);
             System.out.println("name :" + name);
 
-            String[] vals = (String[]) paramsMap.get(uiname); //request.getParameterValues(uiname);
-            /*for (int i = 0; i < vals.length; i++) {
-                System.err.println("vals[" + i +"] = " + vals[i]);
-            }*/
-
+            String[] vals = (String[]) paramsMap.get(uiname);
+            
             String beanKey = getBeanKey(beanId);
             if (vb.equals(TextFieldBean.NAME)) {
                 log.debug("Creating a textfieldbean bean with id:" + beanId);
@@ -498,8 +496,21 @@ public abstract class BaseFormEventImpl {
                 log.debug("Creating a fileinput bean with id:" + beanId);
                 try {
                     FileInputBean bean = null;
-                    if (savedFileItem != null) {
-                        bean = new FileInputBean(req, beanId, savedFileItem);
+                    FileItem fileItem = null;
+                    // check whether the fileItems list contains a bean with this name
+                    if (fileItems != null) {
+                        for (int i = 0; i < fileItems.size(); i++) {
+                            FileItem item = (FileItem) fileItems.get(i);
+                            // if the item is an inputfile item, and the name matches
+                            if (!item.isFormField() && item.getFieldName().equals(uiname)) {
+                                // then create a FileInputBean with this fileItem
+                                fileItem = item;
+                                break;
+                            }
+                        }
+                    }
+                    if (fileItem != null) {
+                        bean = new FileInputBean(req, beanId, fileItem);
                     } else {
                         bean = new FileInputBean(req, beanId);
                     }
@@ -613,10 +624,8 @@ public abstract class BaseFormEventImpl {
             // Set upload parameters
             upload.setSizeMax(FileInputBean.MAX_UPLOAD_SIZE);
             upload.setRepositoryPath(FileInputBean.TEMP_DIR);
-            List fileItems = null;
             try {
                 fileItems = upload.parseRequest(req);
-
             } catch (Exception e) {
                 log.error("Error Parsing multi Part form.Error in workaround!!!", e);
             }
@@ -629,15 +638,11 @@ public abstract class BaseFormEventImpl {
                         tmpstr[0] = item.getString();
                     } else {
                         tmpstr[0] = "fileinput";
-                        /** FileInput attribute is a FileItem*/
-                        savedFileItem = item;
                     }
                     log.debug("Name: " + item.getFieldName() + " Value: " + tmpstr[0]);
                     parameters.put(item.getFieldName(), tmpstr);
                 }
-
             }
-
         }
         return parameters;
     }
