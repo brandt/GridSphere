@@ -19,11 +19,11 @@ http://jakarta.apache.org/proposals/tapestry
 <!-- The base name for the DTD distribution (the directory and tar file
      will match). -->
 
-<property name="docbook.dtd.base" value="docbook-xml-4.2"/>
+<property name="docbook.dtd.base" value="docbook-xml-4.3CR1"/>
 
 <!-- Base name for the XSL distribution. -->
 
-<property name="docbook.xsl.base" value="docbook-xsl-1.60.1"/>
+<property name="docbook.xsl.base" value="docbook-xsl-1.62.4"/>
 
 <property name="docbook.dtd.dir" value="../common/${docbook.dtd.base}"/>
 <property name="docbook.xsl.dir" value="../common/${docbook.xsl.base}"/>
