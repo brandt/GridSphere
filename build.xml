@@ -698,23 +698,6 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
-    <!-- =================================================================== -->
-    <target name="wsdl2java" if="axis.present" description="Converts WSDL files to Java objects">
-        <wsdl2java url="${axis.home}/samples/echo/InteropTest.wsdl"
-               output="${axis.home}/build/work"
-               deployscope="session"
-               serverSide="no"
-               noimports="no"
-               verbose="no"
-               typeMappingVersion="1.1"
-               testcase="no">
-            <mapping namespace="http://soapinterop.org/" package="samples.echo"/>
-            <mapping namespace="http://soapinterop.org/xsd" package="samples.echo"/>
-        </wsdl2java>
-    </target>
-
-    <!-- =================================================================== -->
     <!-- prepares stuff for the junit tests                                  -->
     <!-- =================================================================== -->
 
