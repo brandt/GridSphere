@@ -322,7 +322,26 @@ URI's (Uniform Resource Identifiers) used to construct portlet links.
 
 5. Portlet Packaging
 
-6. Writing a HellWorld Portlet
+Portlets are packaged as web applications following the same guidelines outlined in the Sun Java Servlet specification.
+The following example shows the directory structure of a portlet (web archive format) WAR file.
+
+/
+/images
+/jsp
+/html
+/WEB-INF/
+    web.xml
+    portlet.xml
+/WEB-INF/lib
+/WEB-INF/classes
+/META-INF
+
+Publicly accessible images and web pages can be placed in the images, jsp or html directories, while WEB-INF contains
+configuration information including the web.xml and portlet.xml used to provide the servlet and portlet containers with
+configuration information about the packaged portlets.
+
+6. Writing a HelloWorld Portlet
+
 
 
 7. Other Resources

@@ -18,26 +18,26 @@ portlet services.
 
 The PortletServiceFactory defines the following method:
 
-PortletService createPortletService(Class service,
-                                    Properties serviceProperties,
-                                    ServletConfig servletConfig,
-                                    boolean useCachedService)
-throws PortletServiceUnavailableException, PortletServiceNotFoundException;
+public PortletService createPortletService(Class service,
+                                           ServletConfig servletConfig,
+                                           boolean useCachedService)
+            throws PortletServiceUnavailableException, PortletServiceNotFoundException;
 
 The client is expected to provide the following data:
-service -- the interface defining the service to be instantiated
-serviceProperties -- defines the properties file containing mappings between
-                     service interfaces and the implementing classes
-servletConfig -- the ServletConfig object of the portlet conatiner
-usCachedService -- indicates to the factory of a new instance of the service
+service          -- the interface defining the service to be instantiated
+servletConfig    -- the ServletConfig object of the portlet conatiner
+useCachedService -- indicates to the factory of a new instance of the service
                     should be created or reused if one currently exists
 
 The properties file, located in GridSphere under
-webapps/WEB-INF/conf/PortletServices.properties has entries like the following:
+webapps/WEB-INF/conf/PortletServices.xml has entries like the following:
 
-># User Manager Service
->org.gridlab.gridsphere.services.UserManagerService
->                 = org.gridlab.gridsphere.services.impl.UserManagerServiceImpl
+<service>
+    <name>User Manager Service</name>
+    <description>Provides User Administration Capabilities</description>
+    <interface>org.gridlab.gridsphere.services.user.UserManagerService</interface>
+    <implementation>org.gridlab.gridsphere.services.user.impl.UserManagerServiceImpl</implementation>
+</service>
 
 This simply maps the interface of the service to its concrete implementation.
 In this way, new implementations for a given interface may be easily swapped
@@ -51,9 +51,8 @@ SportletServiceFactory class as shown:
 
 PortletServiceFactory factory = SportletServiceFactory.getInstance();
 PortletService coolService = factory.createService(CoolService.class,
-                                                               props,
-                                                               servletConfig,
-                                                               useCached);
+                                                   servletConfig,
+                                                   useCached);
 
 2) If the client is another portlet using the service, it can obtain a portlet
 service via the PortletContext as shown:
@@ -63,7 +62,6 @@ portletService coolService
 
 In the second case, the portlet context hides the factory from the client and
 uses the default factory settings.
-
 
 2. A Portlet Service Example
 
@@ -112,9 +110,18 @@ C) Add an entry to the PortletServices.properties file:
 >org.myproject.services.CoolService
 >    = org.myproject.services.impl.CoolServiceImpl
 
+<service>
+    <name>Cool Service</name>
+    <description>Solves the world's problems and puts hair on your head</description>
+    <interface>com.getrich.services.CoolService</interface>
+    <implementation>com.getrich.services.impl.CoolServiceImpl</implementation>
+</service>
 
 D) (Optional) Invoke service from portlet container or portlet as explained in (1)
 
 
-E) TODO: Create a test harness to ensure proper operation of service.
+3. Portlet Service Testing
 
+Core services are tested using the JUnit testing framework http://www.junit.org. Check the tests/ directory in
+GridSphere to see how unit tests are created for services. Once a new test is created, it must be added to the
+AllJunitTests.java file.
