@@ -32,7 +32,7 @@
             </supports>
         </portlet-app>
 
-        <concrete-portlet-app id="whose your daddy?">
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.HelloWorld.666.2">
             <context-param>
                 <param-name>buzzle</param-name>
                 <param-value>yea</param-value>
@@ -42,7 +42,7 @@
                 <param-value>yo</param-value>
             </context-param>
             <concrete-portlet>
-                <portlet-name>Hello World</portlet-name>
+                <portlet-name>Hello World 1</portlet-name>
                 <default-locale>en</default-locale>
                 <language locale="en_US">
                     <title>Hello World - Sample Portlet #1</title>
@@ -79,7 +79,7 @@
                 <param-value>secondguy@some.com</param-value>
             </context-param>
             <concrete-portlet>
-                <portlet-name>Hello World</portlet-name>
+                <portlet-name>Hello World 2</portlet-name>
                 <default-locale>en</default-locale>
                 <language locale="en_US">
                     <title>Hello World - Sample Portlet #2</title>
