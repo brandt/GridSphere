@@ -23,10 +23,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 
 import javax.servlet.UnavailableException;
-import java.util.Date;
-import java.util.List;
-import java.util.Vector;
-import java.util.Iterator;
+import java.util.*;
 import java.io.PrintWriter;
 
 public class AccessControllerBean extends PortletBean {
@@ -647,9 +644,9 @@ public class AccessControllerBean extends PortletBean {
         setGroupEntry(groupEntry);
     }
 
-    private void addGroupEntries()
+    private void addGroupEntriesOld()
             throws PortletException {
-        // Create group entry list
+        // Instantiate group entry list
         List entryList = new Vector();
         // Get portlet group
         PortletGroup group = getGroup();
@@ -661,6 +658,39 @@ public class AccessControllerBean extends PortletBean {
             User user = this.userManagerService.getUser(groupEntryUserID);
             // Get role for user ...
             PortletRole role = PortletRole.USER;
+            // Add group entry
+            GroupEntry entry = addGroupEntry(user, group, role);
+            // Put entry in list
+            entryList.add(entry);
+        }
+        // Set group entry list
+        setGroupEntryList(entryList);
+    }
+
+    private void addGroupEntries()
+            throws PortletException {
+        // Instantiate group entry list
+        List entryList = new Vector();
+        // Get portlet group
+        PortletGroup group = getGroup();
+        // Get ids of users to add
+        List entryUserIDList = getParameterCheckBoxList("groupEntryUserID");
+        // Get role names to user mapping
+        Map entryRoleNameMap = getParameterValuesAsMap("groupEntryRoleName");
+        // Iterate through user id list
+        for (int ii = 0; ii < entryUserIDList.size(); ++ii) {
+            String entryUserID = (String)entryUserIDList.get(ii);
+            // Get user to add
+            User user = this.userManagerService.getUser(entryUserID);
+            // Get role mapped to user ...
+            PortletRole role = null;
+            try {
+                String roleName = (String)entryRoleNameMap.get(entryUserID);
+                role = PortletRole.toPortletRole(roleName);
+            } catch (Exception e) {
+                _log.error("Error retrieving role name", e);
+                role = PortletRole.GUEST;
+            }
             // Add group entry
             GroupEntry entry = addGroupEntry(user, group, role);
             // Put entry in list

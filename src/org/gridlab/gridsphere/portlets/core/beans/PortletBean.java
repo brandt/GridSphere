@@ -13,6 +13,8 @@ import org.gridlab.gridsphere.portlet.service.PortletService;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.Map;
+import java.util.HashMap;
 
 public class PortletBean {
 
@@ -400,6 +402,35 @@ public class PortletBean {
             }
             return objs;
         }
+    }
+
+    public List getParameterValuesAsList(String param) {
+        // Create list for values
+        List listValues = new Vector();
+        // Get parameter values
+        String paramValues[] = getParameterValues(param);
+        for (int ii = 0; ii < paramValues.length; ++ii) {
+            listValues.add(paramValues[ii]);
+        }
+        return listValues;
+    }
+
+    public Map getParameterValuesAsMap(String param) {
+        // Create list for values
+        HashMap mapValues = new HashMap();
+        // Get parameter values
+        String paramValues[] = getParameterValues(param);
+        for (int ii = 0; ii < paramValues.length; ++ii) {
+            String paramValue = paramValues[ii];
+            int index = paramValue.indexOf(":");
+            if (index < 0) {
+                continue;
+            }
+            String key = paramValue.substring(0, index);
+            String value = paramValue.substring(index+1,paramValue.length());
+            mapValues.put(key, value);
+        }
+        return mapValues;
     }
 
     public List getParameterCheckBoxList(String param) {

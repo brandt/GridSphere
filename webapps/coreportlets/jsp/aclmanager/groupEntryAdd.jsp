@@ -159,13 +159,13 @@
             <%=user.getFullName()%>
           </td>
           <td bgcolor="WHITE">
-             <select name="groupEntryRoleNames<%=ii%>">
+             <select name="groupEntryRoleName">
                <option label="USER"
-                       value="user"/>
+                       value="<%=user.getID()%>:user"/>
                <option label="ADMIN"
-                       value="admin"=/>
+                       value="<%=user.getID()%>:admin"=/>
                <option label="GUEST"
-                       value="guest"=/>
+                       value="<%=user.getID()%>:guest"=/>
              </select>
           </td>
         </tr>

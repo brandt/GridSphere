@@ -204,9 +204,7 @@
             </font>
           </td>
           <td bgcolor="WHITE">
-            <a href="javascript:AccessControllerPortlet_viewGroupEntry_onClick('<%=groupEntryUser.getID()%>')">
-              <%=groupEntryUser.getUserID()%>
-            </a>
+            <%=groupEntryUser.getUserID()%>
           </td>
           <td bgcolor="WHITE">
             <%=groupEntryUser.getFullName()%>

@@ -87,7 +87,11 @@
         </tr>
 <% } else {
      for (int ii = 0; ii < numGroups; ++ii) {
-       PortletGroup group = (PortletGroup)groupList.get(ii); %>
+       PortletGroup group = (PortletGroup)groupList.get(ii);
+       if (group.getID().equals(PortletGroup.BASE.getID()) ||
+           group.getID().equals(PortletGroup.SUPER.getID())) {
+           continue;
+       } %>
         <tr>
           <td bgcolor="WHITE">
             <a href="javascript:AccessControllerPortlet_viewGroup_onClick('<%=group.getID()%>')">
