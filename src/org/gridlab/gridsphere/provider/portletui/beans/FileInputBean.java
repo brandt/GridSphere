@@ -96,7 +96,8 @@ public class FileInputBean extends InputBean implements TagBean {
      */
     public void saveFile(String filePath) throws IOException {
 
-        if (!filePath.endsWith("/")) filePath += "/";
+        String pathChar = File.separator;
+        if (!filePath.endsWith(pathChar)) filePath += pathChar;
 
         File file = new File(filePath);
 
