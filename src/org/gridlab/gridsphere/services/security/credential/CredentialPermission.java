@@ -32,10 +32,6 @@ public interface CredentialPermission {
 
     /**
      */
-    public void setPermittedSubjects(String pattern);
-
-    /**
-     */
     public String getDescription();
 
     /**

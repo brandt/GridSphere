@@ -93,22 +93,6 @@ public interface UserManagerService extends PortletService {
     public AccountRequest changeAccountRequest(User user);
 
     /**
-     * Login a user
-     *
-     * @param userName the user to login
-     * @param passWord the user's password
-     * @return the retieved Role object
-     */
-    public User loginUser(String userName, String passWord);
-
-    /**
-     * Logoff a user
-     *
-     * @param user the user to logoff
-     */
-    public void logoutUser(User user);
-
-    /**
      * Returns the users portlet data for the specified portlet
      *
      * @param User the user
@@ -162,14 +146,6 @@ public interface UserManagerService extends PortletService {
             throws PermissionDeniedException;
 
     /**
-     * Checks to see if account exists for a user
-     *
-     * @param userID the user login ID
-     * @return true if the user exists, false otherwise
-     */
-    public boolean existsUser(String userName);
-
-    /**
      * Return a list of all portal users
      *
      * @return a list containing all Role objects
@@ -177,10 +153,59 @@ public interface UserManagerService extends PortletService {
     public List getAllUsers();
 
     /**
-     * Return a list of users currently logged in
+     * Retrieves a user object with the given username from this service.
      *
-     * @return a list of Users logged in
+     * @param String The user name or login id of the user in question
+     * @throws PermissionDeniedException If approver is not a super user
      */
-    public List getActiveUsers();
+    public User getUser(String userName);
 
+    /**
+     * Removes a user object with the given username from this service.
+     *
+     * @param String The user name or login id of the user in question
+     * @throws PermissionDeniedException If approver is not a super user
+     */
+    public User createUser(String userName);
+
+    /**
+     * Removes a user object with the given username from this service.
+     *
+     * @param String The user name or login id of the user in question
+     * @throws PermissionDeniedException If approver is not a super user
+     */
+    public void removeUser(String userName);
+
+    /**
+     * Checks to see if account exists for a user
+     *
+     * @param userID the user login ID
+     * @return true if the user exists, false otherwise
+     */
+    public boolean existsUser(String userName);
+
+
+    /**
+     * checks if the user is the root user
+     *
+     * @param user userobject to be examined
+     * @return true is the user is usperuser, false otherwise
+     */
+    public boolean isRootUser(User user);
+
+    /**
+     * checks if the user is super user
+     *
+     * @param user userobject to be examined
+     * @return true is the user is usperuser, false otherwise
+     */
+    public boolean isSuperUser(User user);
+
+    /**
+     * Checks if the user is an admin user in a given group
+     * @param user the user
+     * @param group in that group
+     * @return true/false if he is an admin
+     */
+    public boolean isAdminUser(User user, PortletGroup group);
 }

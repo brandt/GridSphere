@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.util.Properties;
@@ -28,8 +29,8 @@ import java.io.File;
 public class ServiceTest extends TestCase {
 
     protected static SportletServiceFactory factory = null;
-    private static PortletLog log = SportletLog.getInstance(ServiceTest.class);
-
+    protected static PortletLog log = SportletLog.getInstance(ServiceTest.class);
+    protected PersistenceManagerRdbms persistenceManager = PersistenceManagerRdbms.getInstance();
 
     public ServiceTest(String name) {
         super(name);

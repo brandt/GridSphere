@@ -7,17 +7,17 @@
  */
 package org.gridlab.gridsphere.services.security.credential;
 
-public class MappingNotFoundException extends CredentialException {
+public class CredentialMappingNotFoundException extends CredentialException {
 
-    public MappingNotFoundException() {
+    public CredentialMappingNotFoundException() {
         super();
     }
     
-    public MappingNotFoundException(String message) {
+    public CredentialMappingNotFoundException(String message) {
         super(message);
     }
     
-    public MappingNotFoundException(String message, Throwable ex) {
+    public CredentialMappingNotFoundException(String message, Throwable ex) {
         super(message, ex);
     }
 }

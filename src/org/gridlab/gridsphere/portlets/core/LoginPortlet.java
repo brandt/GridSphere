@@ -14,20 +14,26 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.user.UserManagerService;
+import org.gridlab.gridsphere.services.user.LoginService;
+import org.gridlab.gridsphere.services.security.AuthenticationException;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
+import java.util.Iterator;
 
 public class LoginPortlet extends AbstractPortlet {
 
     private UserManagerService userService = null;
+    private LoginService loginService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         PortletContext context = config.getContext();
         try {
             userService = (UserManagerService) context.getService(UserManagerService.class);
+            loginService = (LoginService) context.getService(LoginService.class);
         } catch (PortletServiceUnavailableException e) {
             throw new UnavailableException("Service instance unavailable: " + e.toString());
         } catch (PortletServiceNotFoundException e) {
@@ -49,6 +55,9 @@ public class LoginPortlet extends AbstractPortlet {
                 String password = (String) req.getParameter("password");
                 System.err.println("name = " + username + " password= " + password);
 
+                // Retrieve portlet session from request
+                PortletSession session = req.getPortletSession(true);
+
                 // VERY IMPORTANT USER CHECK
                 // CHECK INPUT FIELDS THOROUGHLY STRING LENGTH, VERIFY CREDENTIALS, ETC
                 if ((username.trim().equals("portal")) && (password.trim().equals("schmortal"))) {
@@ -62,12 +71,19 @@ public class LoginPortlet extends AbstractPortlet {
                     user.setGivenName("Joey");
 
                     System.err.println("Creating new user");
-                    PortletSession session = req.getPortletSession(true);
-                    session.setAttribute(GridSphereProperties.USER, (User) user);
-
-                    // now login to User Portal Registry service
-                    //userPortletManager.loginPortlets(req);
-                    // req.setAttribute(LOGIN)
+                    session.setAttribute(GridSphereProperties.USER, user);
+                    session.setAttribute(GridSphereProperties.LOGINFLAG, new Boolean(true));
+                } else {
+                    try {
+                        // Retrieve login parameters from request
+                        Map parameters = req.getParameterMap();
+                        // Attempt to login portlet user
+                        User user = loginService.login(parameters);
+                        // Attach portlet user to portlet session
+                        session.setAttribute(GridSphereProperties.USER, user);
+                    } catch (AuthenticationException err) {
+                        session.setAttribute(GridSphereProperties.LOGINFLAG, new Boolean(false));
+                    }
                 }
             }
         }

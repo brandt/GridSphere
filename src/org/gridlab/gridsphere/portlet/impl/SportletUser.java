@@ -82,20 +82,6 @@ public interface SportletUser extends User {
     public void setLoginName(String login);
 
     /**
-     * Returns the password required by this user to login.
-     *
-     * @return String the user's password
-     */
-    public String getLoginPassword();
-
-    /**
-     * Sets the password required by this user to login.
-     *
-     * @param String the user's password
-     */
-    public void setLoginPassword(String password);
-
-    /**
      * Sets the point of time that this user was last logged in, or null if this information is not available.
      * The time is returned in number of milliseconds since January 1, 1970 GMT.
      *

@@ -30,31 +30,15 @@ public interface CredentialMapping {
 
     /**
      */
-    public void setTag(String tag);
+    public String getLabel();
 
     /**
      */
-    public String getDescription();
-
-    /**
-     */
-    public void setDescription(String description);
+    public void setLabel(String description);
 
     /**
      */
     public List getHosts();
-
-    /**
-     */
-    public void addHost(String host);
-
-    /**
-     */
-    public void addHosts(List hosts);
-
-    /**
-     */
-    public void removeHost(String host);
 
     /**
      */

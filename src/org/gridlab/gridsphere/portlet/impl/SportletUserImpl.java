@@ -42,14 +42,6 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
     private String UserID = new String();
 
     /**
-     * @sql-size 32
-     * @sql-name password
-     * @get-method getLoginPassword
-     * @set-method setLoginPassword
-     */
-    private String Password = new String();
-
-    /**
      * @sql-size 50
      * @sql-name familyname
      */
@@ -140,24 +132,6 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
      */
     public void setLoginName(String name) {
         this.UserID = name;
-    }
-
-    /**
-     * Returns the password required by this user to login.
-     *
-     * @return String the user's password
-     */
-    public String getLoginPassword() {
-        return this.Password;
-    }
-
-    /**
-     * Sets the password required by this user to login.
-     *
-     * @param String the user's password
-     */
-    public void setLoginPassword(String password) {
-        this.Password = password;
     }
 
     /**

@@ -79,17 +79,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public void destroy() {
         log.info("in destroy()");
-
-        // save structures to DB
-        save();
-    }
-
-    protected void load() {
-
-    }
-
-    protected void save() {
-
     }
 
     /**
@@ -384,28 +373,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     /**
-     * loginUser retrieves a new user
-     *
-     * @param userName
-     * @return the correspodning userobject
-     * @see User
-     */
-    public User loginUser(String userName, String passWord) {
-        // same as getUser, we do add the user somewhere to the active users
-        String command =
-                "select u from "+jdoSUImpl+" u where UserID=\"" + userName + "\"";
-        return selectUser(command);
-    }
-
-    //@todo fill in logoffuser
-    /**
-     * logoffUser release user information and serializes to DB
-     */
-    public void logoutUser(User user) {
-
-    }
-
-    /**
      * Retrieves a user object with the given username from this service.
      * Requires a user with the "super user" privileges, since this
      * by-passes the normal login mechanism of retrieving a user object.
@@ -438,7 +405,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public void saveUser(User approver, User user)
             throws PermissionDeniedException {
         if (isSuperUser(approver)) {
-            saveUser(user);
+            updateUser(user);
         } else {
             throw new PermissionDeniedException("User "
                                                + approver.getGivenName()
@@ -461,6 +428,159 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                                                + approver.getGivenName()
                                                + " wanted to retrieve "
                                                + userName + " (denied)");
+        }
+    }
+
+    /**
+     * Return a list of all portal users
+     * @return  list of user objects
+     */
+    public List getAllUsers() {
+        String command =
+                "select user from "+jdoSUImpl+" user";
+        List result = null;
+        try {
+            result = pm.restoreList(command);
+        } catch (PersistenceManagerException e) {
+            log.error("Exception " + e);
+        }
+        return result;
+    }
+
+    /**
+     * Creates a new SportletUser from an AccountRequestImpl
+     */
+    protected SportletUser makeNewUser(AccountRequestImpl requestImpl) {
+        SportletUserImpl newuser = new SportletUserImpl();
+        modifyExistingUser(requestImpl, newuser);
+        return newuser;
+    }
+
+    /**
+     * Changes a SportletUser to the values of an accountrequest
+     * @param requestImpl
+     * @param user
+     * @return the changes portletuser
+     */
+    protected SportletUser modifyExistingUser(AccountRequestImpl requestImpl, SportletUser user) {
+        user.setEmailAddress(requestImpl.getEmailAddress());
+        user.setFamilyName(requestImpl.getFamilyName());
+        user.setFullName(requestImpl.getFullName());
+        user.setGivenName(requestImpl.getGivenName());
+        user.setID("" + requestImpl.getID());
+        user.setUserID(requestImpl.getUserID());
+        return user;
+    }
+
+    /**
+     * Gets a user by his loginname
+     * @param name loginname
+     * @return requested user object
+     */
+    public User getUser(String name) {
+        String command =
+                "select u from "+jdoSUImpl+" u where UserID=\"" + name + "\"";
+        return selectUser(command);
+
+    }
+
+    /**
+     * Used internally by other methods in this class
+     */
+    private SportletUserImpl getSportletUser(String name) {
+        String command =
+                "select u from "+jdoSUImpl+" u where UserID=\"" + name + "\"";
+        return selectUser(command);
+
+    }
+
+    /**
+     * Gets a user by the unique ID
+     * @param ID unique ID
+     * @return requested user
+     */
+    public User getUserByID(String ID) {
+        String command =
+                "select u from "+jdoSUImpl+" u where ObjectID=\"" + ID + "\"";
+        return selectUser(command);
+    }
+
+    /**
+     * Used internally by other methods in this classs.
+     * Returns a sportlet user with given oql.
+     *
+     * @param command the oql query
+     * @return the requested user
+     */
+    private SportletUserImpl selectUser(String oql) {
+        SportletUserImpl user = null;
+        try {
+            user = (SportletUserImpl) pm.restoreObject(oql);
+        } catch (PersistenceManagerException e) {
+            log.error("PM Exception :" + e.toString());
+        }
+        return user;
+    }
+
+    /**
+     * Create a user in the database
+     * @param String the userobject
+     * @return User the new user
+     */
+    public User createUser(String userName) {
+        SportletUserImpl user = null;
+        if (existsUser(userName)) {
+            user = getSportletUser(userName);
+        } else {
+            user = new SportletUserImpl();
+            user.setUserID(userName);
+            try {
+                pm.create(user);
+            } catch (PersistenceManagerException e) {
+                log.error("Persistence Exception !"+e);
+            }
+        }
+        return user;
+    }
+
+    /**
+     * save the userobjects to the database
+     * @param user the userobject
+     * @todo check/pass up the exception
+     */
+    private void updateUser(User user) {
+        try {
+            pm.update(user);
+        } catch (PersistenceManagerException e) {
+            log.error("Persistence Exception !"+e);
+        }
+    }
+
+    /**
+     * save the userobjects to the database
+     * @param user the userobject
+     * @todo check/pass up the exception
+     */
+    public void removeUser(String userName) {
+        if (existsUser(userName)) {
+            User user = getUser(userName);
+            try {
+                List groups = aclService.getGroups(user);
+                for (int i = 0; i < groups.size(); i++) {
+                    PortletGroup group = (PortletGroup)groups.get(i);
+                    if (group == null) {
+                        log.error("Why in the hell is this group object null?!!!!!!");
+                    }
+                    aclManagerService.removeUserFromGroup(user, group);
+                }
+                pm.delete(user);
+            } catch (PortletServiceException e) {
+                log.error("Could not delete the ACL of the user " + e);
+            } catch (PersistenceManagerException e) {
+                log.error("Could not delete User " + e);
+            }
+        } else {
+            log.debug("User " + userName + " does not exist in database.");
         }
     }
 
@@ -500,55 +620,18 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     /**
-     * Return a list of all portal users
-     * @return  list of user objects
+     * checks if the user is superuser
+     *
+     * @param user userobject to be examined
+     * @return true is the user is usperuser, false otherwise
      */
-    public List getAllUsers() {
-
-        String command =
-                "select user from "+jdoSUImpl+" user";
-        List result = null;
-        try {
-            result = pm.restoreList(command);
-        } catch (PersistenceManagerException e) {
-            log.error("Exception " + e);
+    public boolean isRootUser(User user) {
+        if (user.getID().equals("0")) {
+            return isSuperUser(user);
         }
-        return result;
+        return false;
     }
 
-    //@todo fill in getActiveUser
-    /**
-     * Return a list of users currently logged in
-     */
-    public List getActiveUsers() {
-        return null;
-    }
-
-
-    /**
-     * Creates a new SportletUser from an AccountRequestImpl
-     */
-    protected SportletUser makeNewUser(AccountRequestImpl requestImpl) {
-        SportletUserImpl newuser = new SportletUserImpl();
-        modifyExistingUser(requestImpl, newuser);
-        return newuser;
-    }
-
-    /**
-     * Changes a SportletUser to the values of an accountrequest
-     * @param requestImpl
-     * @param user
-     * @return the changes portletuser
-     */
-    protected SportletUser modifyExistingUser(AccountRequestImpl requestImpl, SportletUser user) {
-        user.setEmailAddress(requestImpl.getEmailAddress());
-        user.setFamilyName(requestImpl.getFamilyName());
-        user.setFullName(requestImpl.getFullName());
-        user.setGivenName(requestImpl.getGivenName());
-        user.setID("" + requestImpl.getID());
-        user.setUserID(requestImpl.getUserID());
-        return user;
-    }
 
     /**
      * checks if the user is superuser
@@ -557,14 +640,12 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @return true is the user is usperuser, false otherwise
      */
     public boolean isSuperUser(User user) {
-
         try {
             return aclService.hasRoleInGroup(user, PortletGroup.SUPER, PortletRole.SUPER);
         } catch (PortletServiceException e) {
             log.error("Exception :" + e);
             return false;
         }
-
     }
 
     /**
@@ -579,86 +660,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         } catch (PortletServiceException e) {
             log.error("Exception :" + e);
             return false;
-        }
-    }
-
-    /**
-     * Gets a user by his loginname
-     * @param name loginname
-     * @return requested user object
-     */
-    public User getUser(String name) {
-        String command =
-                "select u from "+jdoSUImpl+" u where UserID=\"" + name + "\"";
-        return selectUser(command);
-
-    }
-
-    /**
-     * Gets a user by the unique ID
-     * @param ID unique ID
-     * @return requested user
-     */
-    public User getUserByID(String ID) {
-        String command =
-                "select u from "+jdoSUImpl+" u where ObjectID=\"" + ID + "\"";
-        return selectUser(command);
-    }
-
-    /**
-     * Gets a user by a oql query
-     *
-     * @param command the oql query
-     * @return the requested user
-     */
-    public User selectUser(String oql) {
-        SportletUserImpl user = null;
-        try {
-            user = (SportletUserImpl) pm.restoreObject(oql);
-        } catch (PersistenceManagerException e) {
-            log.error("PM Exception :" + e.toString());
-        }
-        return user;
-    }
-
-    /**
-     * save the userobjects to the database
-     * @param user the userobject
-     * @todo check/pass up the exception
-     */
-    public void saveUser(User user) {
-        try {
-            pm.update(user);
-        } catch (PersistenceManagerException e) {
-            log.error("Persistence Exception !"+e);
-        }
-    }
-
-    /**
-     * save the userobjects to the database
-     * @param user the userobject
-     * @todo check/pass up the exception
-     */
-    public void removeUser(String userName) {
-        if (existsUser(userName)) {
-            User user = getUser(userName);
-            try {
-                List groups = aclService.getGroups(user);
-                for (int i = 0; i < groups.size(); i++) {
-                    PortletGroup group = (PortletGroup)groups.get(i);
-                    if (group == null) {
-                        log.error("Why in the hell is this group object null?!!!!!!");
-                    }
-                    aclManagerService.removeUserFromGroup(user, group);
-                }
-                pm.delete(user);
-            } catch (PortletServiceException e) {
-                log.error("Could not delete the ACL of the user " + e);
-            } catch (PersistenceManagerException e) {
-                log.error("Could not delete User " + e);
-            }
-        } else {
-            log.debug("User " + userName + " does not exist in database.");
         }
     }
 }

@@ -22,7 +22,7 @@ import org.gridlab.gridsphere.services.security.credential.Credential;
 import org.gridlab.gridsphere.services.security.credential.CredentialPermission;
 import org.gridlab.gridsphere.services.security.credential.CredentialNotPermittedException;
 import org.gridlab.gridsphere.services.security.credential.CredentialMapping;
-import org.gridlab.gridsphere.services.security.credential.MappingNotFoundException;
+import org.gridlab.gridsphere.services.security.credential.CredentialMappingNotFoundException;
 import org.gridlab.gridsphere.services.security.credential.CredentialRetrievalClient;
 import org.gridlab.gridsphere.services.security.credential.CredentialRetrievalException;
 import org.gridlab.gridsphere.services.security.credential.CredentialManagerService;
@@ -31,8 +31,6 @@ import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredential
 import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialRetrievalClient;
 import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialMapping;
 import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialPermission;
-
-import org.gridlab.gridsphere.services.user.UserManagerService;
 
 import org.globus.security.GlobusProxy;
 import org.globus.security.GlobusProxyException;
@@ -49,7 +47,6 @@ public final class GlobusCredentialManagerService
 
     private static PortletLog _log = SportletLog.getInstance(GlobusCredentialManagerService.class);
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
-    private UserManagerService userManager = null;
     private CredentialRetrievalClient retrievalClient = null;
     private Map credentials = Collections.synchronizedSortedMap(new TreeMap());
     private String credentialPermissionImpl = GlobusCredentialPermission.class.getName();
@@ -67,14 +64,7 @@ public final class GlobusCredentialManagerService
     private void initServices() {
         // Get instance of service factory
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
-        // Get instance of helper services
-        try {
-            this.userManager
-                    = (UserManagerService)factory.createPortletService(UserManagerService.class,
-                                                                       null, true);
-        } catch (Exception e) {
-            _log.error("Unable to initialize services: ", e);
-        }
+        // Instantiate helper services
     }
 
     private void initCredentialRetrievalClient(PortletServiceConfig config) {
@@ -112,7 +102,7 @@ public final class GlobusCredentialManagerService
         destroyCredentials();
     }
 
-    /****** CREDENTIAL PERMISSION PERSISTENCE METHODS *******/
+    /****** CREDENTIAL PERMISSION METHODS *******/
 
     public List getCredentialPermissions() {
         try {
@@ -141,52 +131,29 @@ public final class GlobusCredentialManagerService
     }
 
     public CredentialPermission createCredentialPermission(String pattern) {
-        CredentialPermission permission = null;
-        // Create new permission of proper type
-        try {
-            permission = (CredentialPermission)Class.forName(this.credentialPermissionImpl).newInstance();
-        } catch (Exception e) {
-            _log.error("Error creating instance of credential permission", e);
-        }
-        permission.setPermittedSubjects(pattern);
-        createCredentialPermission(permission);
-        return permission;
+        return createCredentialPermission(pattern, null);
     }
 
     public CredentialPermission createCredentialPermission(String pattern, String description) {
-        CredentialPermission permission = null;
-        // Create new permission of proper type
-        try {
-            permission = (CredentialPermission)Class.forName(this.credentialPermissionImpl).newInstance();
-        } catch (Exception e) {
-            _log.error("Error creating instance of credential permission", e);
-        }
+        GlobusCredentialPermission permission = new GlobusCredentialPermission();
         permission.setPermittedSubjects(pattern);
         permission.setDescription(description);
         createCredentialPermission(permission);
         return permission;
     }
 
-    public void createCredentialPermission(CredentialPermission permission) {
+    private void createCredentialPermission(CredentialPermission permission) {
         String pattern = permission.getPermittedSubjects();
         // Check that no permission (already) exists with given pattern
-        if (!existsCredentialPermission(pattern)) {
+        if (existsCredentialPermission(pattern)) {
+            _log.warn("Credential permission already exists with subject pattern " + pattern);
+        } else {
             _log.debug("Creating credential permission " + pattern);
             try {
                 this.pm.create(permission);
             } catch (PersistenceManagerException e) {
                 _log.error("Error creating credential permission", e);
             }
-        }
-    }
-
-    public void updateCredentialPermission(CredentialPermission permission) {
-        String pattern = permission.getPermittedSubjects();
-        _log.debug("Updating credential permission " + pattern);
-        try {
-            this.pm.update(permission);
-        } catch (PersistenceManagerException e) {
-            _log.error("Error updating credential permission", e);
         }
     }
 
@@ -216,8 +183,6 @@ public final class GlobusCredentialManagerService
         return (value != null);
     }
 
-    /****** CREDENTIAL PERMISSION CONVENIENCE METHODS *******/
-
     public List getPermittedCredentialSubjects() {
         List permittedSubjects = null;
         try {
@@ -246,7 +211,7 @@ public final class GlobusCredentialManagerService
         return answer;
     }
 
-    /****** CREDENTIAL MAPPING PERSISTENCE METHODS *******/
+    /****** CREDENTIAL MAPPING METHODS *******/
 
     public List getCredentialMappings() {
         try {
@@ -262,12 +227,16 @@ public final class GlobusCredentialManagerService
     }
 
     public CredentialMapping getCredentialMapping(String subject) {
+        return getGlobusCredentialMapping(subject);
+    }
+
+    private GlobusCredentialMapping getGlobusCredentialMapping(String subject) {
         try {
             String query = "select cm from "
                          + this.credentialMappingImpl
                          + " cm where cm.subject=\"" + subject + "\"";
             _log.debug(query);
-            return (CredentialMapping)this.pm.restoreObject(query);
+            return (GlobusCredentialMapping)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
             _log.error("Error retrieving credential mapping " + e);
             return null;
@@ -276,17 +245,29 @@ public final class GlobusCredentialManagerService
 
     public CredentialMapping createCredentialMapping(String subject, User user)
             throws CredentialNotPermittedException {
-        GlobusCredentialMapping mapping = null;
-        mapping = new GlobusCredentialMapping();
+        return createCredentialMapping(subject, user, null);
+    }
+
+    public CredentialMapping createCredentialMapping(String subject, User user, String tag)
+            throws CredentialNotPermittedException {
+        // Instantiate mapping and set properties
+        GlobusCredentialMapping mapping = new GlobusCredentialMapping();
         mapping.setSubject(subject);
         mapping.setUser(user);
+        mapping.setTag(tag);
+        // Create record in database
         createCredentialMapping(mapping);
         return mapping;
     }
 
+
     public void createCredentialMapping(CredentialMapping mapping)
             throws CredentialNotPermittedException {
         String subject = mapping.getSubject();
+        // Check that mapping is of right type
+        if (!(mapping instanceof GlobusCredentialMapping))  {
+            throw new CredentialNotPermittedException("Mapping is not a globus credential mapping.");
+        }
         // Check that no mapping already exists for given subject
         if (existsCredentialMapping(subject)) {
             throw new CredentialNotPermittedException("Mapping already exists for given subject");
@@ -305,8 +286,7 @@ public final class GlobusCredentialManagerService
         }
     }
 
-    public void updateCredentialMapping(CredentialMapping mapping)
-            throws CredentialNotPermittedException {
+    private void updateCredentialMapping(CredentialMapping mapping) {
         if (_log.isDebugEnabled()) {
             _log.debug("Updating mapping " + mapping);
         }
@@ -318,13 +298,13 @@ public final class GlobusCredentialManagerService
     }
 
     public void deleteCredentialMapping(String subject) {
-        CredentialMapping mapping = getCredentialMapping(subject);
+        GlobusCredentialMapping mapping = getGlobusCredentialMapping(subject);
         if (mapping != null) {
             deleteCredentialMapping(mapping);
         }
     }
 
-    public void deleteCredentialMapping(CredentialMapping mapping) {
+    private void deleteCredentialMapping(CredentialMapping mapping) {
         try {
             this.pm.delete(mapping);
         } catch (PersistenceManagerException e) {
@@ -415,7 +395,7 @@ public final class GlobusCredentialManagerService
     }
 
     public String getCredentialTag(String subject)
-            throws MappingNotFoundException {
+            throws CredentialMappingNotFoundException {
         String tag = null;
         String query = "select cm.tag from "
                      + this.credentialMappingImpl
@@ -424,28 +404,56 @@ public final class GlobusCredentialManagerService
         try {
             tag = (String)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
-            throw new MappingNotFoundException("No credential mapping exists for " + subject);
+            throw new CredentialMappingNotFoundException("No credential mapping exists for " + subject);
         }
         return tag;
     }
 
     public void setCredentialTag(String subject, String tag)
-            throws MappingNotFoundException {
-        CredentialMapping mapping = getCredentialMapping(subject);
+            throws CredentialMappingNotFoundException {
+        // Retrieve credential mapping
+        GlobusCredentialMapping mapping = getGlobusCredentialMapping(subject);
         if (mapping == null) {
-            throw new MappingNotFoundException("No credential mapping for " + subject);
+            throw new CredentialMappingNotFoundException("No credential mapping for " + subject);
 
         }
+        // Set mapping tag
         mapping.setTag(tag);
+        // Perform update
+        updateCredentialMapping(mapping);
+    }
+
+    public String getCredentialLabel(String subject)
+            throws CredentialMappingNotFoundException {
+        String label = null;
+        String query = "select cm.label from "
+                     + this.credentialMappingImpl
+                     + " cm where cm.subject=\"" + subject + "\"";
+        _log.debug(query);
         try {
-            this.pm.update(mapping);
+            label = (String)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
-            _log.error("Error upating credential mapping for " + subject, e);
+            throw new CredentialMappingNotFoundException("No credential mapping exists for " + subject);
         }
+        return label;
+    }
+
+    public void setCredentialLabel(String subject, String tag)
+            throws CredentialMappingNotFoundException {
+        // Retrieve credential mapping
+        GlobusCredentialMapping mapping = getGlobusCredentialMapping(subject);
+        if (mapping == null) {
+            throw new CredentialMappingNotFoundException("No credential mapping for " + subject);
+
+        }
+        // Set mapping label
+        mapping.setLabel(tag);
+        // Perform update
+        updateCredentialMapping(mapping);
     }
 
     public List getCredentialHosts(String subject)
-            throws MappingNotFoundException {
+            throws CredentialMappingNotFoundException {
         List hosts = null;
         String query = "select cm.hosts from "
                      + this.credentialMappingImpl
@@ -454,27 +462,48 @@ public final class GlobusCredentialManagerService
         try {
             hosts = this.pm.restoreList(query);
         } catch (PersistenceManagerException e) {
-            throw new MappingNotFoundException("No credential mapping exists for " + subject);
+            throw new CredentialMappingNotFoundException("No credential mapping exists for " + subject);
         }
         return hosts;
     }
 
     public void addCredentialHost(String subject, String host)
-            throws MappingNotFoundException {
-        CredentialMapping mapping = getCredentialMapping(subject);
+            throws CredentialMappingNotFoundException {
+        // Retrieve associated mapping
+        GlobusCredentialMapping mapping = getGlobusCredentialMapping(subject);
         if (mapping == null) {
-            throw new MappingNotFoundException("No credential mapping exists for " + subject);
+            throw new CredentialMappingNotFoundException("No credential mapping exists for " + subject);
         }
+        // Add host to mapping
         mapping.addHost(host);
+        // Then perform update
+        updateCredentialMapping(mapping);
+    }
+
+    public void addCredentialHosts(String subject, List hosts)
+            throws CredentialMappingNotFoundException {
+        // Retrieve associated mapping
+        GlobusCredentialMapping mapping = getGlobusCredentialMapping(subject);
+        if (mapping == null) {
+            throw new CredentialMappingNotFoundException("No credential mapping exists for " + subject);
+        }
+        // Add hosts to mapping
+        mapping.addHosts(hosts);
+        // Then perform update
+        updateCredentialMapping(mapping);
     }
 
     public void removeCredentialHost(String subject, String host)
-            throws MappingNotFoundException {
-        CredentialMapping mapping = getCredentialMapping(subject);
+            throws CredentialMappingNotFoundException {
+        // Retrieve associated mapping
+        GlobusCredentialMapping mapping = getGlobusCredentialMapping(subject);
         if (mapping == null) {
-            throw new MappingNotFoundException("No credential mapping exists for " + subject);
+            throw new CredentialMappingNotFoundException("No credential mapping exists for " + subject);
         }
+        // Remove host from mapping
         mapping.removeHost(host);
+        // Then perform update
+        updateCredentialMapping(mapping);
     }
 
     public List getCredentialSubjectsForHost(String host) {

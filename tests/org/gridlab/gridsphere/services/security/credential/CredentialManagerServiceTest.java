@@ -187,21 +187,6 @@ public class CredentialManagerServiceTest extends ServiceTest {
         assertEquals(this.globusSubjects, permission.getPermittedSubjects());
         assertEquals(this.globusDescription, permission.getDescription());
 
-        /*** Test update and retrieve globus permission ***/
-        _log.info("Testing update globus permission.");
-        // Modify the subject and description
-        this.globusSubjects = "/O=Grid/O=Globus*";
-        this.globusDescription = "Permission to use all Globus credentials";
-        permission.setPermittedSubjects(this.globusSubjects);
-        permission.setDescription(this.globusDescription);
-        // Update the permission
-        this.credentialManager.updateCredentialPermission(permission);
-        // Then retrieve it again
-        permission = this.credentialManager.getCredentialPermission(this.globusSubjects);
-        // And check everything is all right
-        assertEquals(this.globusSubjects, permission.getPermittedSubjects());
-        assertEquals(this.globusDescription, permission.getDescription());
-
         /*** Test create ncsa permission ***/
         _log.info("Testing create ncsa permission.");
         permission = this.credentialManager.createCredentialPermission(this.ncsaSubjects,
@@ -349,10 +334,9 @@ public class CredentialManagerServiceTest extends ServiceTest {
 
         /*** Test update mapping tag for guest subject. ***/
         _log.info("Testing update mapping tag for guest subject.");
-        mapping.setTag(this.guestTag);
         try {
-            this.credentialManager.updateCredentialMapping(mapping);
-        } catch (CredentialNotPermittedException e) {
+            this.credentialManager.setCredentialTag(guestSubject, guestTag);
+        } catch (CredentialMappingNotFoundException e) {
             _log.error("This is bad. At this point, globus credentials should be permitted.", e);
         }
         mapping = this.credentialManager.getCredentialMapping(this.guestSubject);
@@ -367,10 +351,9 @@ public class CredentialManagerServiceTest extends ServiceTest {
         hosts = new Vector();
         hosts.add(this.guestHost1);
         hosts.add(this.guestHost2);
-        mapping.addHosts(hosts);
         try {
-            this.credentialManager.updateCredentialMapping(mapping);
-        } catch (CredentialNotPermittedException e) {
+            this.credentialManager.addCredentialHosts(guestSubject, hosts);
+        } catch (CredentialMappingNotFoundException e) {
             _log.error("This is bad. At this point, globus credentials should be permitted.", e);
         }
         _log.info("Asserting number of hosts for guest subject...");

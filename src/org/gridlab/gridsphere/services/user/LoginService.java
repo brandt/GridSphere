@@ -6,21 +6,25 @@
  * To change template for new interface use 
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.services.security.login;
+package org.gridlab.gridsphere.services.user;
 
 import java.util.List;
 import java.util.Map;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.services.security.AuthenticationException;
+import org.gridlab.gridsphere.services.security.AuthenticationModule;
 
 public interface LoginService extends PortletService {
 
+    public List getAuthenticationModules();
+
+    public AuthenticationModule getAuthenticationModule(String name);
+
     public User login(String username, String password)
-            throws LoginException;
+            throws AuthenticationException;
 
     public User login(Map parameters)
-            throws LoginException;
-
-    public void logout(User user);
+            throws AuthenticationException;
 }

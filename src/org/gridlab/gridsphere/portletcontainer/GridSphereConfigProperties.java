@@ -63,5 +63,4 @@ public interface GridSphereConfigProperties {
      *  Configuration for the standard UI Theme
      */
     public static final String UI_THEME = "UI_THEME";
-
 }

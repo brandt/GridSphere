@@ -44,10 +44,10 @@
     </service>
 
     <service>
-        <name>Login Manager Service</name>
+        <name>Login Service</name>
         <description>Provides Login Capabilities</description>
-        <interface>org.gridlab.gridsphere.services.security.login.LoginService</interface>
-        <implementation>org.gridlab.gridsphere.services.security.login.impl.CredentialLoginServiceImpl</implementation>
+        <interface>org.gridlab.gridsphere.services.userLoginService</interface>
+        <implementation>org.gridlab.gridsphere.services.user.impl.LoginServiceImpl</implementation>
     </service>
 
 </portlet-services>

@@ -26,5 +26,5 @@ public class GridSphereProperties {
     public static final String PORTLETNAME = "PortletName";
     public static final String TOKEN = "token";
     public static final String PORTLETTAB = "tab";
-
+    public static final String LOGINFLAG = "loginFlag";
 }

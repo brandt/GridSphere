@@ -21,11 +21,11 @@ public interface CredentialManagerService extends PortletService {
 
     public CredentialPermission createCredentialPermission(String permission, String description);
 
-    public void updateCredentialPermission(CredentialPermission permission);
-
     public void deleteCredentialPermission(String permission);
 
-    /****** CREDENTIAL PERMISSION CONVENIENCE METHODS *******/
+    public boolean existsCredentialPermission(String permission);
+
+    /****** CREDENTIAL PERMISSION MANIPULATION METHODS *******/
 
     public List getPermittedCredentialSubjects();
 
@@ -40,7 +40,7 @@ public interface CredentialManagerService extends PortletService {
     public CredentialMapping createCredentialMapping(String subject, User user)
             throws CredentialNotPermittedException;
 
-    public void updateCredentialMapping(CredentialMapping mapping)
+    public CredentialMapping createCredentialMapping(String subject, User user, String tag)
             throws CredentialNotPermittedException;
 
     public void deleteCredentialMapping(String subject);
@@ -49,7 +49,7 @@ public interface CredentialManagerService extends PortletService {
 
     public void deleteCredentialMappings(User user);
 
-    /****** CREDENTIAL MAPPING CONVENIENCE METHODS *******/
+    /****** CREDENTIAL MAPPING MANIPULATION METHODS *******/
 
     public User getCredentialUser(String subject);
 
@@ -58,19 +58,28 @@ public interface CredentialManagerService extends PortletService {
     public List getCredentialTags(User user);
 
     public String getCredentialTag(String subject)
-            throws MappingNotFoundException;
+            throws CredentialMappingNotFoundException;
 
     public void setCredentialTag(String subject, String tag)
-            throws MappingNotFoundException;
+            throws CredentialMappingNotFoundException;
+
+    public String getCredentialLabel(String subject)
+            throws CredentialMappingNotFoundException;
+
+    public void setCredentialLabel(String subject, String tag)
+            throws CredentialMappingNotFoundException;
 
     public List getCredentialHosts(String subject)
-            throws MappingNotFoundException;
+            throws CredentialMappingNotFoundException;
 
     public void addCredentialHost(String subject, String host)
-            throws MappingNotFoundException;
+            throws CredentialMappingNotFoundException;
+
+    public void addCredentialHosts(String subject, List hosts)
+            throws CredentialMappingNotFoundException;
 
     public void removeCredentialHost(String subject, String host)
-            throws MappingNotFoundException;
+            throws CredentialMappingNotFoundException;
 
     public List getCredentialSubjectsForHost(String host);
 

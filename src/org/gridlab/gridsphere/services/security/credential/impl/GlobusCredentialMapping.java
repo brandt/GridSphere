@@ -29,7 +29,6 @@ public class GlobusCredentialMapping extends BaseObject implements CredentialMap
      * @required
      */
     private String subject = null;
-
     /**
      * @sql-name user
      * @get-method getSportletUser
@@ -37,19 +36,16 @@ public class GlobusCredentialMapping extends BaseObject implements CredentialMap
      * @required
      */
     private SportletUserImpl user = null;
-
     /**
      * @sql-size 15
      * @sql-name tag
      */
     private String tag = null;
-
     /**
-     * @sql-size 256
-     * @sql-name description
+     * @sql-size 32
+     * @sql-name label
      */
-    private String description = null;
-
+    private String label = null;
     /**
      * @field-type GlobusHostMapping
      * @many-key credentialmapping
@@ -111,24 +107,27 @@ public class GlobusCredentialMapping extends BaseObject implements CredentialMap
 
     /**
      */
-    public String getDescription() {
-        return this.description;
+    public String getLabel() {
+        return this.label;
     }
 
     /**
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
+    /**
+     */
     public Vector getHostMappings() {
         return this.hostMappings;
     }
 
+    /**
+     */
     public void setHostMappings(Vector hostMappings) {
         this.hostMappings = hostMappings;
     }
-
 
     /**
      */

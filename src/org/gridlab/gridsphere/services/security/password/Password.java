@@ -1,0 +1,28 @@
+/*
+ * Created by IntelliJ IDEA.
+ * User: russell
+ * Date: Jan 8, 2003
+ * Time: 11:30:04 AM
+ * To change template for new interface use 
+ * Code Style | Class Templates options (Tools | IDE Options).
+ */
+package org.gridlab.gridsphere.services.security.password;
+
+import org.gridlab.gridsphere.portlet.User;
+
+import java.util.Date;
+
+public interface Password {
+
+    public User getUser();
+
+    public String getHint();
+
+    public Date getDateExpires();
+
+    public Date getDateCreated();
+
+    public Date getDateLastModified();
+
+    public boolean equals(String password);
+}
