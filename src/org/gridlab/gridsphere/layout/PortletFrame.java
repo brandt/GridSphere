@@ -500,7 +500,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             req.setAttribute(SportletProperties.PORTLET_WINDOW, titleBar.getWindowState());
         }
 
-        if (req.getAttribute(SportletProperties.RESPONSE_COMMITTED) != null) renderPortlet = false;
+        if (req.getAttribute(SportletProperties.RESPONSE_COMMITTED) != null) {
+	    renderPortlet = false;
+	}
 
         if (renderPortlet) {
             if (!transparent) {
@@ -579,6 +581,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
         postframe.append("</table>");
         postframe.append("<!--- PORTLET ENDS HERE -->");
+
+	renderPortlet = true;
 
         // piece together portlet frame + title depending on whether title was set during doXXX method
         // or not
