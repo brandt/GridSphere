@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.portlets.core;
 
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlets.core.services.TestService;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
