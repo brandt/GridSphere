@@ -6,6 +6,9 @@
 <portletAPI:init/>
 
 <jsp:useBean id="notes" class="java.util.List" scope="request"/>
+<jsp:useBean id="message" class="java.lang.String" scope="request"/>
+
+<ui:text value="<%= message %>"/>
 
 <ui:form>
     <ui:frame>
