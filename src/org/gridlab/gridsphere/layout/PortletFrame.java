@@ -405,8 +405,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-        PrintWriter out = res.getWriter();
-
+     
         User user = req.getUser();
         if (!(user instanceof GuestUser)) {
 
@@ -426,10 +425,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         String id = event.getPortletRequest().getPortletSession(true).getId();
 
         frame = (StringBuffer) cacheService.getCached(portletClass + id);
-
         String nocache = (String) req.getAttribute(CacheService.NO_CACHE);
         if ((frame != null) && (nocache == null)) {
-            out.println(frame.toString());
             return;
         }
         frame = new StringBuffer();
