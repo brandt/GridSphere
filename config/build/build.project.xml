@@ -343,7 +343,7 @@ Copyright:
             </fileset>
         </copy>
 
-        <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
+        <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
         <if>
             <equals arg1="${use.jsr}" arg2="jsr"/>
