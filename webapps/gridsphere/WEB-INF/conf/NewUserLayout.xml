@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id$ -->
+<!--
+
+    New User Layout Descriptor
+
+    This descriptor defines a new user's portal layout configuration
+
+    $Id$
+-->
 
 <portlet-layout>
 

@@ -1,4 +1,12 @@
-<!-- $Id$ -->
+<!--
+
+    Portlet Services XML Descriptor
+
+    Edit this file to add/modify GridSphere Portlet Services
+
+
+    $Id$
+-->
 
 <portlet-services>
 
@@ -10,7 +18,7 @@
         <implementation>org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl</implementation>
         <service-config>
             <param-name>coreContext</param-name>
-            <param-value>gsmanager, coreportlets, gridportlets, exampleportlets</param-value>
+            <param-value>gsmanager, coreportlets, gridportlets</param-value>
         </service-config>
     </service>
 
