@@ -91,10 +91,12 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
         //@todo FIXME NPE
         if (values==null)  {
             // nothing
+            log.debug("Updated values are null?! ("+this.getName()+")");
         } else {
             //if (!multiple) {
                 list.unselectAll();
             //}
+            log.debug("\n\n\n\n\n\nUdating List "+this.getName()+" with "+values.toString());
             for (int i=0;i<values.length;i++) {
                 list.setSelected(values[i], true);
             }

@@ -9,6 +9,7 @@ public class ListBoxBean extends DropDownListBean implements ListBox {
 
     public ListBoxBean(String name) {
         super(name);
+        this.name = name;
         this.size = 10;
     }
 

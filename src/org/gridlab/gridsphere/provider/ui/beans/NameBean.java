@@ -25,7 +25,7 @@ public abstract class NameBean extends BaseElementBean implements Nameable, Upda
      * @return name of the bean
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 
 

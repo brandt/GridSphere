@@ -20,7 +20,7 @@ public abstract class BaseElementBean implements TagBean {
 
     protected transient static PortletLog log = SportletLog.getInstance(BaseElementBean.class);
 
-    protected String id = new String();
+    private String id = new String();
     protected String color = new String();
     protected String backgroundcolor = new String();
     protected String cssStyle = new String();
@@ -123,7 +123,7 @@ public abstract class BaseElementBean implements TagBean {
 
     private void store(String id, PortletRequest request, Object ob) {
         log.debug("Storing bean with [" + id + "][" + ob.getClass().getName());
-        this.id = id;
+        //this.id = id;
         String beanKey = GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+id;
         request.setAttribute(beanKey, ob);
         HttpSession session = request.getSession();

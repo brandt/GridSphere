@@ -18,7 +18,7 @@ public abstract class NameValueDisableBean extends LabelBean implements Disablea
         this.name = name;
         this.value = value;
         this.disabled = disabled;
-        this.id = name;
+        //this.id = name;
     }
 
     /**

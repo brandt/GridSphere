@@ -87,7 +87,14 @@ public class FormEventImpl implements FormEvent {
 
     private Object getBean(String name) {
         HttpSession session = request.getSession();
+        log.debug("Try to get bean "+name+" from session.");
         NameBean bean = (NameBean) session.getAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name);
+        if (bean==null) {
+            log.info("does not exists :"+name);
+        } else{
+            log.info("Check the bean content:"+name+" ->"+bean.toString());
+            log.info("\n\n\n========"+bean.getName());
+        }
         return bean;
     }
 
@@ -101,6 +108,7 @@ public class FormEventImpl implements FormEvent {
         HttpSession session = request.getSession();
         NameBean bean = (NameBean) getBean(name);
         if (bean==null) {
+            log.info("This bean does not exists in the session ("+name+")");
             return null;
         } else {
             //System.out.println("Getting Bean " + name + " from Session");
@@ -127,7 +135,7 @@ public class FormEventImpl implements FormEvent {
                             if (basebean instanceof NameBean) {
                                 bean = (NameBean)basebean;
                                 String[] values = request.getParameterValues("gstag:" + bean.getName());
-                                log.debug("Updating bean: " + bean.getName());
+                                log.debug("Updating table bean: " + bean.getName());
                                 bean.update(values);
                             }
                         }
@@ -136,9 +144,9 @@ public class FormEventImpl implements FormEvent {
                 session.setAttribute(beanKey, tbean);
                 return tbean;
             } else {
-                session.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name, bean);
+               // session.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name, bean);
                 String[] values = request.getParameterValues("gstag:" + bean.getName());
-                log.debug("Updating bean: " + bean.getName());
+                log.debug("Updating bean: " + " name req: "+name+" bean name: "+bean.getName());
                 bean.update(values);
                 session.setAttribute(beanKey, bean);
                 return bean;
