@@ -26,15 +26,9 @@ public abstract class BaseLayoutManager extends BasePortletComponent implements 
         list = super.init(list);
         Iterator it = components.iterator();
         PortletLifecycle p = null;
-        ComponentIdentifier compId;
         while (it.hasNext()) {
-            compId = new ComponentIdentifier();
             p = (PortletLifecycle)it.next();
-            compId.setPortletLifecycle(p);
-            compId.setClassName(p.getClass().getName());
-            compId.setComponentID(list.size());
-            //PortletRender a = (PortletRender)p;
-            list.add(compId);
+
             // invoke init on each component
             list = p.init(list);
             // If the component is a frame we want to be notified

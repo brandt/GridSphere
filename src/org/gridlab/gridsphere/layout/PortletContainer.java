@@ -44,21 +44,17 @@ public class PortletContainer implements PortletLifecycle {
     public List init(List list) {
         Iterator it = components.iterator();
         PortletLifecycle cycle;
-        ComponentIdentifier compId;
         while (it.hasNext()) {
-            compId = new ComponentIdentifier();
             cycle = (PortletLifecycle)it.next();
-            compId.setPortletLifecycle(cycle);
-            compId.setClassName(cycle.getClass().getName());
-            compId.setComponentID(list.size());
-            list.add(compId);
-            ComponentIdentifiers = cycle.init(list);
+            list = cycle.init(list);
         }
-        System.err.println("Made a components list!!!! " + ComponentIdentifiers.size());
-        for (int i = 0; i < ComponentIdentifiers.size(); i++) {
-            ComponentIdentifier c = (ComponentIdentifier)ComponentIdentifiers.get(i);
+        System.err.println("Made a components list!!!! " + list.size());
+        for (int i = 0; i < list.size(); i++) {
+            ComponentIdentifier c = (ComponentIdentifier)list.get(i);
             System.err.println("id: " + c.getComponentID() + " : " + c.getClassName() +  " : " + c.hasPortlet());
+
         }
+        ComponentIdentifiers = list;
         return ComponentIdentifiers;
     }
 
@@ -94,7 +90,8 @@ public class PortletContainer implements PortletLifecycle {
         if (event.hasAction()) {
             // off by one calculations for array indexing (because all component id's are .size() which is
             // one more than we use to index the components
-            ComponentIdentifier compId = (ComponentIdentifier)ComponentIdentifiers.get(event.getPortletComponentID() - 1);
+            ComponentIdentifier compId = (ComponentIdentifier)ComponentIdentifiers.get(event.getPortletComponentID());
+            System.err.println("handlingaction in " + event.getPortletComponentID() + compId.getClassName());
             PortletLifecycle l = compId.getPortletLifecycle();
             if (l != null) {
                 l.actionPerformed(event);

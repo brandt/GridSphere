@@ -13,10 +13,7 @@ public abstract class BasePortletLifecycle implements PortletLifecycle {
 
     protected int COMPONENT_ID = -1;
 
-    public  List init(List list) {
-        COMPONENT_ID = list.size();
-        return list;
-    }
+    public List init(List list) { return list; }
 
     public void login(GridSphereEvent event) {}
 

@@ -62,8 +62,8 @@ public class PortletTitleBar extends BasePortletComponent {
         this.title = title;
     }
 
-    public void setPortletWindowState(PortletWindow portletWindow) {
-        this.portletWindowState = portletWindowState;
+    public void setPortletWindowState(PortletWindow.State portletWindow) {
+        this.portletWindowState = portletWindow;
     }
 
     public PortletWindow.State getPortletWindowState() {
@@ -78,16 +78,19 @@ public class PortletTitleBar extends BasePortletComponent {
         return portletMode;
     }
 
-    public String getClassName() {
-        return PortletTitleBar.class.getName();
-    }
-
     public void addTitleBarListener(PortletTitleBarListener listener) {
         listeners.add(listener);
     }
 
     public List init(List list) {
-        list = super.init(list);
+        COMPONENT_ID = list.size();
+        ComponentIdentifier compId = new ComponentIdentifier();
+        compId.setPortletLifecycle(this);
+        compId.setPortletClass(portletClass);
+        compId.setComponentID(list.size());
+        compId.setClassName(this.getClass().getName());
+        list.add(compId);
+
         PortletRegistryManager registryManager = PortletRegistryManager.getInstance();
         String appID = registryManager.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);

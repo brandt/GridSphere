@@ -10,11 +10,18 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
-public class PortletPanel {
+public class PortletPanel extends BasePortletComponent {
 
     private LayoutManager layoutManager;
 
     public PortletPanel() {}
+
+    public List init(List list) {
+        super.init(list);
+        return layoutManager.init(list);
+    }
+
+    public void destroy() {}
 
     public PortletPanel(LayoutManager layoutManager) {
         this.layoutManager = layoutManager;
@@ -28,4 +35,7 @@ public class PortletPanel {
         return layoutManager;
     }
 
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        layoutManager.doRender(event);
+    }
 }

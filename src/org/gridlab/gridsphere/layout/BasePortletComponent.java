@@ -8,7 +8,6 @@ import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
-import java.util.List;
 
 public abstract class BasePortletComponent extends BasePortletLifecycle implements PortletComponent {
 
