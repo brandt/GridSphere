@@ -16,11 +16,12 @@
 </portlet-text>
 
 <!-- Login -->
+<!--
 <portlet-frame>
     <width>60</width>
     <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.1</portlet-class>
 </portlet-frame>
-
+    -->
 <!-- Portlet Dock -->
 <!--
 <portlet-dock>
@@ -52,12 +53,16 @@
         <selected>true</selected>
         <portlet-tab-bar>
             <portlet-tab-page>
-                <title>Configuration</title>
+                <title>Login</title>
                 <selected>true</selected>
                 <portlet-panel>
                     <grid-layout>
-                        <columns>1</columns>
-                        <rows>3</rows>
+                        <columns>2</columns>
+                        <rows>2</rows>
+                        <portlet-frame>
+                            <width>60</width>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.1</portlet-class>
+                        </portlet-frame>
                         <portlet-frame>
                             <name>HalloWelt</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
@@ -80,6 +85,24 @@
                     <grid-layout>
                         <columns>1</columns>
                         <rows>2</rows>
+                        <portlet-frame>
+                            <name>HelloWorld</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.2</portlet-class>
+                        </portlet-frame>
+                        <portlet-frame>
+                            <name>HelloWorld</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.4</portlet-class>
+                        </portlet-frame>
+                    </grid-layout>
+                </portlet-panel>
+            </portlet-tab-page>
+            <portlet-tab-page>
+                <title>New Stuff</title>
+                <selected>false</selected>
+                <portlet-panel>
+                    <grid-layout>
+                        <columns>2</columns>
+                        <rows>1</rows>
                         <portlet-frame>
                             <name>HelloWorld</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.2</portlet-class>
