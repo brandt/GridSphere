@@ -28,6 +28,7 @@ import java.util.*;
 public class PortletApplicationManager extends ActionPortlet {
 
     public static final String VIEW_JSP = "admin/portlets/view.jsp";
+    public static final String HELP_JSP = "admin/portlets/help.jsp";
 
     private TomcatManagerWrapper tomcat = TomcatManagerWrapper.getInstance();
 
