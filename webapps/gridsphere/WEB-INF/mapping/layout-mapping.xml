@@ -115,6 +115,16 @@
         </field>
     </class>
 
+    <class name="org.gridlab.gridsphere.layout.PortletStaticContent" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
+        <map-to xml="portlet-static-content"/>
+        <field name="Include" type="string">
+            <bind-xml name="include" node="attribute"/>
+        </field>
+        <field name="Encoding" type="string">
+            <bind-xml name="encoding" node="attribute"/>
+        </field>
+    </class>
+
     <class name="org.gridlab.gridsphere.layout.PortletTitle">
         <map-to xml="title"/>
         <field name="Lang" type="string">
