@@ -26,6 +26,14 @@ public interface AccessControlService extends PortletService {
     public List getSuperUsers() throws PortletServiceException ;
 
     /**
+     * Checks if a user has the super role
+     *
+     * @param user the User to query
+     * @return true if the user has the super role, false otherwise
+     */
+    public boolean isSuperUser(User user);
+
+    /**
      * Checks if a user has a particular role in a group
      *
      * @param user the Role object

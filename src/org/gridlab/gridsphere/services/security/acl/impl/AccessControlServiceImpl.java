@@ -49,6 +49,10 @@ public class AccessControlServiceImpl implements PortletServiceProvider, AccessC
         return null;
     }
 
+    public boolean isSuperUser(User user) {
+        return true;
+    }
+
     /**
      * Checks if a user has a particular role in a group
      *
