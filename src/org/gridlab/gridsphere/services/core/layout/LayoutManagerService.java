@@ -8,6 +8,8 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.layout.PortletTab;
 import org.gridlab.gridsphere.layout.PortletPage;
+import org.gridlab.gridsphere.layout.PortletFrameLayout;
+import org.gridlab.gridsphere.layout.PortletTableLayout;
 
 import java.util.List;
 
@@ -21,6 +23,8 @@ public interface LayoutManagerService extends PortletService {
     public void setTheme(PortletRequest req, String theme);
 
     public String getTheme(PortletRequest req);
+
+    public PortletTableLayout getPortletLayout(PortletRequest req, String subtabName);
 
     public PortletPage getPortletPage(PortletRequest req);
 
@@ -44,7 +48,7 @@ public interface LayoutManagerService extends PortletService {
 
     public void setFrameClassNames(PortletRequest req, String subTabName, String[] frameNames);
 
-    public void removeTab(String tabName);
+    public void removeTab(PortletRequest req, String tabName);
 
     public void removeFrame(String frameClassName);
 

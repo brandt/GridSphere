@@ -29,11 +29,6 @@
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
-                        <column-layout>
-                            <portlet-frame label="layout">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet.1</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
                     </row-layout>
                 </table-layout>
             </portlet-tab>
@@ -43,6 +38,17 @@
                         <column-layout>
                             <portlet-frame label="subscription">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+            <portlet-tab label="layouttab" title="Layout">
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="layout">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>

@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.services.core.layout.impl;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
@@ -13,9 +14,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.layout.*;
 
-import java.util.List;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 
 
 /**
@@ -24,7 +23,7 @@ import java.util.Vector;
 public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutManagerService {
 
     private PortletLog log = SportletLog.getInstance(LayoutManagerServiceImpl.class);
-    private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
+
     private PortletPageFactory pageFactory = null;
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
@@ -107,12 +106,11 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
             ComponentIdentifier cid = (ComponentIdentifier) it.next();
             PortletComponent pc = cid.getPortletComponent();
             if (pc instanceof PortletFrame) {
-                PortletFrame f = (PortletFrame) pc;
                 portlets.add(cid.getPortletClass());
 
             }
         }
-        return portlets;
+        return Collections.unmodifiableList(portlets);
     }
 
     public String[] getTabNames(PortletRequest req) {
@@ -124,6 +122,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         for (i = 0; i < tabs.size(); i++) {
             PortletTab tab = (PortletTab)tabs.get(i);
             tabnames[i] = tab.getTitle();
+
         }
         return tabnames;
     }
@@ -142,6 +141,19 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         }
     }
 
+    public PortletTableLayout getPortletLayout(PortletRequest req, String subtabName) {
+        PortletTab tab = findPortletTab(req, subtabName);
+        if (tab != null) {
+            PortletComponent pc = tab.getPortletComponent();
+            System.err.println("found tab with comp" + pc.getClass().getName() + " " + tab.getTitle());
+            if (pc instanceof PortletTableLayout) {
+                return (PortletTableLayout)pc;
+            }
+        }
+        return null;
+    }
+
+
     public String[] getSubTabNames(PortletRequest req, String tabName) {
         PortletTab tab = findPortletTab(req, tabName);
         if (tab != null) {
@@ -150,9 +162,12 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
                 PortletTabbedPane np = (PortletTabbedPane)pc;
                 List subtabs = np.getPortletTabs();
                 String[] newtabs = new String[subtabs.size()];
+
                 for (int j = 0; j < subtabs.size(); j++) {
                     PortletTab t = (PortletTab)subtabs.get(j);
-                    newtabs[j] = t.getTitle();
+
+                        newtabs[j] = t.getTitle();
+
                 }
                 return newtabs;
             }
@@ -193,12 +208,24 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
 
     }
 
-    public void removeTab(String tabName) {
+    public void removeTab(PortletRequest req, String tabName) {
+        PortletPage page = pageFactory.createPortletPage(req);
+        PortletTab tab = findPortletTab(req, tabName);
+        if (tab != null) {
+            System.err.println("found a tab!!!!");
+            PortletTabbedPane pane = (PortletTabbedPane)tab.getParentComponent();
+            System.err.println("trying to remoive tab from pane!!!!");
+            pane.removeTab(tab);
+        }
 
     }
 
     public void removeFrame(String frameClassName) {
 
+    }
+
+    public PortletTab getPortletTab(PortletRequest req, String tabName) {
+        return  findPortletTab(req, tabName);
     }
 
     private PortletTab findPortletTab(PortletRequest req, String tabName) {
@@ -207,6 +234,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         List tabs = pane.getPortletTabs();
         for (int i = 0; i < tabs.size(); i++) {
             PortletTab tab = (PortletTab)tabs.get(i);
+            System.err.println(" tab title= " + tab.getTitle());
             if (tab.getTitle().equals(tabName)) {
                 return tab;
             } else {
@@ -215,7 +243,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
                     PortletTabbedPane np = (PortletTabbedPane)pc;
                     List subtabs = np.getPortletTabs();
                     for (int j = 0; j < subtabs.size(); j++) {
-                        PortletTab t = (PortletTab)subtabs.get(i);
+                        tab = (PortletTab)subtabs.get(j);
                         if (tab.getTitle().equals(tabName)) {
                             return tab;
                         }
