@@ -77,6 +77,7 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <copy overwrite="true" file="${build.lib}/gridsphere-ui-tags.jar" todir="${appserver.home}/webapps/gridsphere/WEB-INF/lib"/>
         <copy overwrite="true" file="${build.lib}/coreportlets.jar" todir="${appserver.home}/webapps/gridsphere/WEB-INF/lib"/>
+        <copy overwrite="true" file="${build.lib}/gridsphere-jsp.jar" todir="${appserver.home}/webapps/gridsphere/WEB-INF/lib"/>
 
     </target>
 
