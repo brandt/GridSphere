@@ -122,16 +122,13 @@ public class DatabaseTask extends Task {
         checkDatabase(false);
     }
 
-    public boolean checkDBSetup(String config) {
+    public void checkDBSetup(String config) throws PersistenceManagerException {
         this.configDir = config;
-        boolean result = true;
         try {
             checkDatabase(true);
         } catch (BuildException e) {
-            System.out.println(e.getMessage());
-            result = false;
+            throw new PersistenceManagerException(e.getMessage(), e);
         }
-        return result;
     }
 
 
