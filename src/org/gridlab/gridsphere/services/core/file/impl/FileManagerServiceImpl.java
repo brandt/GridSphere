@@ -44,6 +44,7 @@ public class FileManagerServiceImpl implements FileManagerService, PortletServic
 
 
     public String getLocationPath(User user, String fileName) {
+        fileName = fileName.substring(fileName.lastIndexOf(File.separator)+1);
         String userLoc = PORTAL_TMP_DIR + File.separator + user.getID() + File.separator + fileName;
         //String fileLoc = userLoc + File.separator + fileName;
         //File userDir = new File(userLoc);
