@@ -124,11 +124,11 @@ public class LoginPortlet extends ActionPortlet {
             //new and valid user and will save it
             User user = saveUser(evt);
             //show the data of this user
-            FrameBean frame = evt.getFrameBean("errorFrame");
+            MessageBoxBean frame = evt.getMessageBoxBean("errorFrame");
             frame.setValue(this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
                     "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN") +
                     " " + user.getUserName());
-            frame.setStyle("success");
+            frame.setMessageType(TextBean.MSG_ERROR);
             setNextState(req, "doViewUser");
         } catch (PortletException e) {
             //invalid user, an exception was thrown
@@ -328,4 +328,5 @@ public class LoginPortlet extends ActionPortlet {
         portalConfigService.savePortalConfigSettings(settings);
         showConfigure(event);
     }
+    
 }
