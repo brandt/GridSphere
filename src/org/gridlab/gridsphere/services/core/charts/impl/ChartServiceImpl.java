@@ -2,7 +2,6 @@ package org.gridlab.gridsphere.services.core.charts.impl;
 
 import org.gridlab.gridsphere.services.core.secdir.SecureDirectoryService;
 import org.gridlab.gridsphere.services.core.secdir.FileLocationID;
-import org.gridlab.gridsphere.services.core.secdir.impl.SecureDirectoryServiceImpl;
 import org.gridlab.gridsphere.services.core.charts.*;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
@@ -31,18 +30,17 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
     private static final String CHART_SERVICE_DIRECTORY = "_chart_service_directory_";
     private Perl5Util util = new Perl5Util();
 
-
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         if (!inited) {
             System.setProperty("java.awt.headless", "true");
-
+            
             PortletServiceFactory factory = SportletServiceFactory.getInstance();
             try {
                 secureDirectoryService = (SecureDirectoryService)factory.createPortletService(SecureDirectoryService.class, config.getServletContext(), true);
             } catch (PortletServiceException e) {
                 throw new PortletServiceUnavailableException("Unable to get instance of SecureDirectoryService!", e);
             }
-            inited = true;
+	    inited = true;
         }
     }
 
@@ -147,7 +145,6 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
         String userID = fileLocationID.getUserID();
         String appName = fileLocationID.getCategory();
         String resource = fileLocationID.getFilePath();
-
         if (appName.equals(CHART_SERVICE_DIRECTORY))
             throw new IOException("AppName collides with internal chart service directory !!!");
         ChartDescriptor chartDescriptor = null;
@@ -218,7 +215,6 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
         String userID = fileLocationID.getUserID();
         String appName = fileLocationID.getCategory();
         String resource = fileLocationID.getFilePath();
-
         ChartDescriptor chartDescriptor = readChartDescriptor(userID, appName, resource);
         chartDescriptor.getChartInfo().setRefresh(true);
         return chartDescriptor;
@@ -234,7 +230,6 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
         String userID = fileLocationID.getUserID();
         String appName = fileLocationID.getCategory();
         String path = fileLocationID.getFilePath();
-
         org.gridlab.gridsphere.services.core.secdir.FileInfo resourceLists[] = secureDirectoryService.getFileList(secureDirectoryService.createFileLocationID(userID, CHART_SERVICE_DIRECTORY, appName + "/" + path));
         int count = 0;
         if (resourceLists == null)
@@ -259,7 +254,6 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
         String userID = fileLocationID.getUserID();
         String appName = fileLocationID.getCategory();
         String resource = fileLocationID.getFilePath();
-
         refreshChart(fileLocationID);
         ChartDescriptor chartDescriptor = readChartDescriptor(userID, appName, resource);
         Image imageInfo = chartDescriptor.getFileInfo().getImage();
@@ -272,7 +266,6 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
         String userID = fileLocationID.getUserID();
         String appName = fileLocationID.getCategory();
         String resource = fileLocationID.getFilePath();
-
         ChartDescriptor chartDescriptor = readChartDescriptor(userID, appName, resource);
         Dataset datasetInfo = chartDescriptor.getFileInfo().getDataset();
         return secureDirectoryService.getFile(secureDirectoryService.createFileLocationID(userID,
@@ -282,14 +275,12 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
 
     public boolean deleteChart(FileLocationID fileLocationID) throws IOException, Exception {
         return deleteChart(fileLocationID, false);
-
     }
 
     public boolean deleteChart(FileLocationID fileLocationID, boolean deleteDataset) throws IOException, Exception {
         String userID = fileLocationID.getUserID();
         String appName = fileLocationID.getCategory();
         String resource = fileLocationID.getFilePath();
-
         ChartDescriptor chartDescriptor = readChartDescriptor(userID, appName, resource);
         Image imageInfo = chartDescriptor.getFileInfo().getImage();
         secureDirectoryService.deleteFile(secureDirectoryService.createFileLocationID(userID,
@@ -312,25 +303,26 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
         return new FileLocationID(userID, category, fileName);
     }
 
+    public boolean chartExists(FileLocationID fileLocationID) {
+        File file = secureDirectoryService.getFile(secureDirectoryService.createFileLocationID(fileLocationID.getUserID(), CHART_SERVICE_DIRECTORY, fileLocationID.getCategory() + "/" + fileLocationID.getFilePath() + ".xml"));
+        return file.exists();
+    }
 
     private boolean refreshChart(FileLocationID fileLocationID) throws IOException, MarshalException, ValidationException, Exception {
         String userID = fileLocationID.getUserID();
         String appName = fileLocationID.getCategory();
         String resource = fileLocationID.getFilePath();
-
         ChartDescriptor chartDescriptor = readChartDescriptor(userID, appName, resource);
         if (chartDescriptor.getChartInfo().getRefresh() == false) {
             Image imageInfo = chartDescriptor.getFileInfo().getImage();
 //            File imageFile = getChartImageFile(userID, appName, resource);
             Dataset datasetInfo = chartDescriptor.getFileInfo().getDataset();
-
             File datasetFile = getChartDataFile(fileLocationID);
-            if ((imageInfo.getTimestamp() > datasetInfo.getTimestamp()) && (imageInfo.getTimestamp() > datasetFile.lastModified()))
+            if ((imageInfo.getTimestamp() > datasetInfo.getTimestamp()) && (imageInfo.getTimestamp() >= datasetFile.lastModified()))
                 return false;
         }
         org.jfree.data.Dataset dataset = readDataset(userID, chartDescriptor.getFileInfo().getDataset().getAppName(), resource, chartDescriptor.getFileInfo().getDataset().getType());
         org.jfree.chart.JFreeChart chart = null;
-
         ChartInfo chartInfo = chartDescriptor.getChartInfo();
         try {
             if (chartInfo.getType().equals("Pie")) {
@@ -559,13 +551,11 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
             }
         } catch (ClassCastException e) {
         }
-
         if (plotInfo.getSettings().getPie() != null)
             try {
                 ((org.jfree.chart.plot.PiePlot) plot).setLabelGenerator(new org.jfree.chart.labels.StandardPieItemLabelGenerator(plotInfo.getSettings().getPie().getLabelGenerator()));
             } catch (ClassCastException e) {
             }
-
         Image image = chartDescriptor.getFileInfo().getImage();
         if (image.getType().equals("JPEG")) {
             File chartFile = secureDirectoryService.getFile(secureDirectoryService.createFileLocationID(userID, image.getAppName(), image.getFilename() + ".jpeg"));
@@ -598,7 +588,6 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
 
     private ChartDescriptor createChartDescriptor(String userID, String appName, String resource, String type, org.jfree.data.Dataset inDataset) throws IOException, Exception {
         writeDataset(userID, appName, resource, inDataset);
-
         Image image = new Image();
         image.setAppName(appName);
         image.setFilename(resource);
@@ -611,9 +600,7 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
         FileInfo fileInfo = new FileInfo();
         fileInfo.setImage(image);
         fileInfo.setDataset(dataset);
-
         NoDataMessage noDataMessage = new NoDataMessage();
-
         Color color = new Color();
         color.setRed(255);
         Paint paint = new Paint();
@@ -623,17 +610,14 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
         Plot plot = new Plot();
         plot.setNoDataMessage(noDataMessage);
         Settings settings = new Settings();
-
         if (type.equals("Pie") || type.equals("Pie3D"))
             settings.setPie(new Pie());
         else
             settings.setCategory(new Category());
         plot.setSettings(settings);
-
         ChartInfo chartInfo = new ChartInfo();
         chartInfo.setType(type);
         chartInfo.setPlot(plot);
-
         Color backgroundColor = new Color();
         backgroundColor.setRed(238);
         backgroundColor.setGreen(238);
@@ -641,7 +625,6 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
         BackgroundPaint backgroundPaint = new BackgroundPaint();
         backgroundPaint.setColor(backgroundColor);
         chartInfo.setBackgroundPaint(backgroundPaint);
-
         ChartDescriptor chartDescriptor = new ChartDescriptor();
         chartDescriptor.setFileInfo(fileInfo);
         chartDescriptor.setChartInfo(chartInfo);
@@ -660,6 +643,7 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
         File file = secureDirectoryService.getFile(secureDirectoryService.createFileLocationID(userID, CHART_SERVICE_DIRECTORY, appName + "/" + resource + ".xml"));
         FileWriter writer = new FileWriter(file);
         chartDescriptor.marshal(writer);
+        writer.flush();
         writer.close();
     }
 

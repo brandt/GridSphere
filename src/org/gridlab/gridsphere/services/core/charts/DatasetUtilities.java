@@ -2,7 +2,6 @@ package org.gridlab.gridsphere.services.core.charts;
 
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
-
 import java.util.List;
 import java.util.Enumeration;
 import java.util.Date;
@@ -18,12 +17,12 @@ import java.io.FileWriter;
  */
 
 public class DatasetUtilities {
+
     public static org.jfree.data.DefaultPieDataset readDefaultPieDataset(File file) throws IOException, MarshalException, ValidationException {
         FileReader reader = new FileReader(file);
         DefaultPieDataset dataset = (DefaultPieDataset) DefaultPieDataset.unmarshal(reader);
         reader.close();
         org.jfree.data.DefaultPieDataset outDataset = new org.jfree.data.DefaultPieDataset();
-
         for (int i = 0; i < dataset.getItemCount(); ++i) {
             Item item = dataset.getItem(i);
             if (item.getValue() != null)
@@ -48,6 +47,7 @@ public class DatasetUtilities {
         }
         FileWriter output = new FileWriter(file);
         dataset.marshal(output);
+        output.flush();
         output.close();
     }
 
@@ -90,6 +90,7 @@ public class DatasetUtilities {
         }
         FileWriter output = new FileWriter(file);
         dataset.marshal(output);
+        output.flush();
         output.close();
     }
 
@@ -150,6 +151,7 @@ public class DatasetUtilities {
         }
         FileWriter output = new FileWriter(file);
         dataset.marshal(output);
+        output.flush();
         output.close();
     }
 
@@ -270,6 +272,7 @@ public class DatasetUtilities {
         }
         FileWriter output = new FileWriter(file);
         dataset.marshal(output);
+        output.flush();
         output.close();
     }
 
@@ -339,6 +342,7 @@ public class DatasetUtilities {
         }
         FileWriter output = new FileWriter(file);
         dataset.marshal(output);
+        output.flush();
         output.close();
     }
 }
