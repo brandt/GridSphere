@@ -21,8 +21,15 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
 import javax.servlet.UnavailableException;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.Vector;
@@ -31,9 +38,9 @@ import java.util.Iterator;
 
 public class RSSPortlet extends AbstractPortlet {
 
-    String _url = "http://diveintomark.org/xml/rss.xml";  // the serverside should be default rss feed
+    String _url = "http://www.xml.com/2002/12/18/examples/rss20.xml.txt";  // the serverside should be default rss feed
     long _lastFetched = 0;
-    int _fetch_interval = 5;        // in minutes
+    int _fetch_interval = 5*6000;        // in millisec
     Document RSSFeed = new Document(new Element("rss"));
 
 
@@ -48,7 +55,7 @@ public class RSSPortlet extends AbstractPortlet {
             SAXBuilder builder = new SAXBuilder(false);
             URL feedurl = new URL(url);
             doc = builder.build(feedurl);
-            _lastFetched = 0;
+            _lastFetched = System.currentTimeMillis();
             log.info("Fetched rss feed from "+url);
         } catch (MalformedURLException e) {
         } catch (JDOMException e) {
@@ -62,37 +69,48 @@ public class RSSPortlet extends AbstractPortlet {
         PortletAction _action = evt.getAction();
 
         DefaultPortletAction action = (DefaultPortletAction) _action;
+        log.info("============================> "+action.getName() );
         PortletRequest req = evt.getPortletRequest();
         _url = (String) req.getParameter("rss_url");
         log.info("=============> got new url "+_url);
-        _lastFetched = System.currentTimeMillis();
+        _lastFetched = 0;
         req.setMode(Portlet.Mode.VIEW);
 
     }
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+
         PrintWriter out = response.getWriter();
-
+        if ((System.currentTimeMillis()-_lastFetched)>_fetch_interval) {
             RSSFeed = getRSSFeed(_url);
-        Element root = RSSFeed.getRootElement();
 
+        } else {
+            out.println("Document was cached.");
+        }
+        Element root = RSSFeed.getRootElement();
         PortletURI loginURI = response.createURI();
-        //out.println("CID: "+loginURI.toString());
         String version = "unknown";
         version = (String)root.getAttributeValue("version");
-        out.println("URL :"+_url);
+        out.println("RSS freed from URL: "+_url);
 
-        List items = root.getChild("channel").getChildren("item");
-        Iterator it = items.iterator();
-        out.println("<ul>");
-        while (it.hasNext()) {
-            Element item = (Element)it.next();
-            String title = item.getChild("title").getText();
-            String link = item.getChild("link").getText();
-            String desc = item.getChild("description").getText();
-            out.println("<li><a target=\"_new\" href=\""+link+"\">"+title+"</a><br/>"+desc+"</li>");
+        try {
+            if (version.equals("2.0")) {
+                List items = root.getChild("channel").getChildren("item");
+                Iterator it = items.iterator();
+                out.println("<ul>");
+                while (it.hasNext()) {
+                    Element item = (Element)it.next();
+                    String title = item.getChild("title").getText();
+                    String link = item.getChild("link").getText();
+                    String desc = item.getChild("description").getText();
+                    out.println("<li><a target=\"_new\" href=\""+link+"\">"+title+"</a><br/>"+desc+"</li>");
+                }
+                out.println("</ul>");
+            }
+        } catch (Exception e) {
+            out.println("Unsupported RSS feed version.");
+            System.out.println("============> "+e);
         }
-        out.println("</ul>");
     }
 
     public void doEdit(PortletRequest request, PortletResponse response) throws PortletException, IOException {
