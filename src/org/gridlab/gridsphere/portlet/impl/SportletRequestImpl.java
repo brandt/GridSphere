@@ -234,7 +234,7 @@ public class SportletRequestImpl implements SportletRequest {
      * Returns the PortletGroup objects representing the users group membership
      *
      * @returns an array of PortletGroup objects. This method is guaranteed to at least
-     * return the PortletGroup.BaseGroup
+     * return the SportletGroup.BASEGroup
      *
      * @see PortletGroup
      */
@@ -250,7 +250,7 @@ public class SportletRequestImpl implements SportletRequest {
      * Returns the PortletGroup objects representing the users group membership
      *
      * @returns an array of PortletGroup objects. This method is guaranteed to at least
-     * return the PortletGroup.BaseGroup
+     * return the SportletGroup.BASEGroup
      *
      * @see PortletGroup
      */
