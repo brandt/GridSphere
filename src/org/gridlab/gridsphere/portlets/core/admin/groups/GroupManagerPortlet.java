@@ -125,6 +125,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doViewEditGroupEntry(FormEvent evt)
             throws PortletException {
         this.log.debug("Entering doViewEditGroupEntry");
+        checkAdminRole(evt);
         PortletRequest req = evt.getPortletRequest();
         loadGroup(evt);
 
@@ -142,6 +143,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doViewConfirmEditGroupEntry(FormEvent evt)
             throws PortletException {
         this.log.debug("Entering doViewConfirmEditGroupEntry");
+        checkAdminRole(evt);
         PortletRequest req = evt.getPortletRequest();
         loadGroup(evt);
         GroupEntry groupEntry = loadGroupEntry(evt);
@@ -154,6 +156,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doViewCancelEditGroupEntry(FormEvent evt)
             throws PortletException {
         this.log.debug("Entering doViewCancelEditGroupEntry");
+        checkAdminRole(evt);
         doViewViewGroup(evt);
         this.log.debug("Exiting doViewCancelEditGroupEntry");
     }
@@ -161,6 +164,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doViewAddGroupEntry(FormEvent evt)
             throws PortletException {
         this.log.debug("Entering doViewAddGroupEntry");
+        checkAdminRole(evt);
         PortletRequest req = evt.getPortletRequest();
         User user = req.getUser();
         PortletGroup group = loadGroup(evt);
@@ -174,6 +178,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doViewConfirmAddGroupEntry(FormEvent evt)
             throws PortletException {
         this.log.debug("Entering doViewConfirmAddGroupEntry");
+        checkAdminRole(evt);
         PortletRequest req = evt.getPortletRequest();
         PortletGroup group = loadGroup(evt);
         User user = req.getUser();
@@ -193,6 +198,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doViewConfirmChangeRole(FormEvent evt)
             throws PortletException {
         this.log.debug("Entering doViewConfirmChangeRole");
+        checkAdminRole(evt);
         PortletRequest req = evt.getPortletRequest();
 
 
@@ -226,6 +232,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doViewCancelAddGroupEntry(FormEvent evt)
             throws PortletException {
         this.log.debug("Entering doViewCancelAddGroupEntry");
+        checkAdminRole(evt);
         doViewViewGroup(evt);
         this.log.debug("Exiting doViewCancelAddGroupEntry");
     }
@@ -233,6 +240,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doViewRemoveGroupEntry(FormEvent evt)
             throws PortletException {
         this.log.debug("Entering doViewRemoveGroupEntry");
+        checkAdminRole(evt);
         PortletRequest req = evt.getPortletRequest();
         PortletGroup group = loadGroup(evt);
         setGroupEntryList(evt, group);
@@ -242,6 +250,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     public void doViewConfirmRemoveGroupEntry(FormEvent evt)
             throws PortletException {
+        checkAdminRole(evt);
         this.log.debug("Entering doViewConfirmRemoveGroupEntry");
         PortletRequest req = evt.getPortletRequest();
         loadGroup(evt);
@@ -252,6 +261,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     public void doViewCancelRemoveGroupEntry(FormEvent evt)
             throws PortletException {
+        checkAdminRole(evt);
         this.log.debug("Entering doViewCancelRemoveGroupEntry");
         doViewViewGroup(evt);
         this.log.debug("Exiting doViewCancelRemoveGroupEntry");
@@ -472,7 +482,8 @@ public class GroupManagerPortlet extends ActionPortlet {
         getACLService(root).approveGroupRequest(groupRequest);
     }
 
-    public void saveGroups(FormEvent event) {
+    public void saveGroups(FormEvent event) throws PortletException {
+        checkAdminRole(event);
         PortletRequest req = event.getPortletRequest();
         User user = req.getUser();
 

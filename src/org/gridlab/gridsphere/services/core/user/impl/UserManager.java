@@ -566,7 +566,7 @@ public class UserManager implements UserManagerService {
         return Boolean.getBoolean(config.getInitParameter("canUserCreateNewAccount"));
     }
 
-    public void setUserCreateNewAccount(boolean canUserCreateNewAccount) {
+    public void setUserCreateNewAccount(boolean canUserCreateNewAccount) {       
         config.setInitParameter("canUserCreateNewAccount", Boolean.toString(canUserCreateNewAccount));
         try {
             config.store();

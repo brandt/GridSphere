@@ -81,6 +81,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
     public void doNewUser(FormEvent evt)
             throws PortletException {
+        checkSuperRole(evt);
         PortletRequest req = evt.getPortletRequest();
 
         // indicate to edit JSP this is a new user
@@ -94,6 +95,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
     public void doEditUser(FormEvent evt)
             throws PortletException {
+        checkSuperRole(evt);
         PortletRequest req = evt.getPortletRequest();
 
         // indicate to edit JSP this is an existing user
@@ -118,6 +120,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
     public void doConfirmEditUser(FormEvent evt)
             throws PortletException {
+        checkSuperRole(evt);
         PortletRequest req = evt.getPortletRequest();
         //User user = loadUser(evt);
         try {
@@ -158,6 +161,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
     public void doDeleteUser(FormEvent evt)
             throws PortletException {
+        checkSuperRole(evt);
         PortletRequest req = evt.getPortletRequest();
         HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
         String userId = hf.getValue();
@@ -170,6 +174,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
     public void doConfirmDeleteUser(FormEvent evt)
             throws PortletException {
+        checkSuperRole(evt);
         PortletRequest req = evt.getPortletRequest();
         HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
         String userId = hf.getValue();

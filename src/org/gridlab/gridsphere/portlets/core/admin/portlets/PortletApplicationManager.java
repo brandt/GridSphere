@@ -62,6 +62,7 @@ public class PortletApplicationManager extends ActionPortlet {
     }
 
     public void doPortletManager(FormEvent event) throws PortletException {
+        checkSuperRole(event);
         log.debug("In doPortletManager");
         DefaultPortletAction action = event.getAction();
         PortletRequest req = event.getPortletRequest();
@@ -126,6 +127,7 @@ public class PortletApplicationManager extends ActionPortlet {
                     portletManager.initPortletWebApplication(appName, req, res);
                 } else if (operation.equals("stop")) {
                     result = tomcat.stopWebApp(req, appName);
+                    //portletManager.destroyPortletWebApplication(appName, req, res);
                 } else if (operation.equals("reload")) {
                     portletManager.destroyPortletWebApplication(appName, req, res);
                     result = tomcat.stopWebApp(req, appName);
@@ -158,6 +160,7 @@ public class PortletApplicationManager extends ActionPortlet {
     }
 
     public void uploadPortletWAR(FormEvent event) throws PortletException {
+        checkSuperRole(event);
         log.debug("in FileManagerPortlet: doUploadFile");
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
@@ -194,6 +197,7 @@ public class PortletApplicationManager extends ActionPortlet {
     }
 
     public void deployWebapp(FormEvent event) throws PortletException {
+        checkSuperRole(event);
         log.debug("in FileManagerPortlet: deployWebapp");
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();

@@ -124,8 +124,7 @@ public class DeployGridSphereTCK extends Task {
             JarOutputStream tempJar = new JarOutputStream(new FileOutputStream("/tmp/" + warFiles[i].toString()));
 
             addGridSphereJSRDescriptor(tempJar);
-            addGridSphereUILibs(tempJar);
-            addGridSphereJSRLibs(tempJar);
+            addGridSphereTagLibs(tempJar);
 
             // loop thru all jars
             Enumeration files = jarFile.entries();
@@ -292,9 +291,9 @@ public class DeployGridSphereTCK extends Task {
         }
     }
 
-    public void addGridSphereJSRLibs(JarOutputStream tempJar) throws IOException {
+    public void addGridSphereTagLibs(JarOutputStream tempJar) throws IOException {
 
-        String fileName = "build/lib/gridsphere-jsr-tags.jar";
+        String fileName = "build/lib/gridsphere-tags.jar";
         byte[] buffer = new byte[1024];
         int bytesRead;
 
@@ -306,38 +305,7 @@ public class DeployGridSphereTCK extends Task {
         try {
 // Create a jar entry and add it to the temp jar.
 
-            JarEntry entry = new JarEntry("WEB-INF/lib/gridsphere-jsr-tags.jar");
-            tempJar.putNextEntry(entry);
-
-// Read the file and write it to the jar.
-
-            while ((bytesRead = file.read(buffer)) != -1) {
-                tempJar.write(buffer, 0, bytesRead);
-            }
-
-            System.out.println(entry.getName() + " added.");
-
-        }
-        finally {
-            file.close();
-        }
-    }
-
-    public void addGridSphereUILibs(JarOutputStream tempJar) throws IOException {
-
-        String fileName = "build/lib/gridsphere-ui-tags.jar";
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-
-
-        // Open the given file.
-
-        FileInputStream file = new FileInputStream(fileName);
-
-        try {
-// Create a jar entry and add it to the temp jar.
-
-            JarEntry entry = new JarEntry("WEB-INF/lib/gridsphere-ui-tags.jar");
+            JarEntry entry = new JarEntry("WEB-INF/lib/gridsphere-tags.jar");
             tempJar.putNextEntry(entry);
 
 // Read the file and write it to the jar.

@@ -66,7 +66,6 @@ public class BannerPortlet extends ActionPortlet {
       * @throws PortletException
       */
      public void doConfigureViewFile(FormEvent event) throws PortletException {
-
          PortletRequest req = event.getPortletRequest();
          checkAdminRole(event);
          TextFieldBean displayTitle = event.getTextFieldBean("displayTitle");

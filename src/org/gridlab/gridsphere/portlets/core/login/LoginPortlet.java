@@ -289,7 +289,8 @@ public class LoginPortlet extends ActionPortlet {
         setNextState(req, DO_CONFIGURE);
     }
 
-    public void setUserCreateAccount(FormEvent event) {
+    public void setUserCreateAccount(FormEvent event) throws PortletException {
+        checkSuperRole(event);
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
         String useracct = acctCB.getSelectedValue();
         if (useracct != null) {
