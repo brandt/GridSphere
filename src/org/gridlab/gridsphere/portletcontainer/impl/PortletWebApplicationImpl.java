@@ -18,6 +18,7 @@ import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeployment
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinition;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 
 import javax.servlet.ServletContext;
 import java.io.File;
@@ -222,6 +223,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     public void destroy() {
         log.debug("removing application tab :" + webApplicationName);
         PortletTabRegistry.removeGroupTab(webApplicationName);
+        PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
     }
 
     /**

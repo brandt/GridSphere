@@ -17,6 +17,7 @@ import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -182,6 +183,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         log.debug("unloading portlet services: ");
         SportletServiceFactory factory = SportletServiceFactory.getInstance();
         factory.shutdownServices(webApplicationName);
+        PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
     }
 
     public String getWebApplicationName() {

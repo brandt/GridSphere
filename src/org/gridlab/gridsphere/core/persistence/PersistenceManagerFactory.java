@@ -56,6 +56,18 @@ public class PersistenceManagerFactory {
         return (PersistenceManagerRdbms) databases.get(webappname);
     }
 
+    public static synchronized void destroyPersistenceManagerRdbms(String webappname) {
+        if (databases.containsKey(webappname)) {
+            try {
+                PersistenceManagerRdbms pm = (PersistenceManagerRdbms)databases.get(webappname);
+                pm.destroy();
+            } catch (PersistenceManagerException e) {
+                log.error("Unable to destroy pm manager for: " + webappname, e);
+            }
+            databases.remove(webappname);       
+        }
+    }
+
     /**
      * Returns an instance of a PersistenceManagerXML from a descriptor and mapping URL
      *
