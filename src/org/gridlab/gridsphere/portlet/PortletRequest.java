@@ -233,6 +233,13 @@ public interface PortletRequest extends HttpServletRequest {
     public Portlet.Mode getMode();
 
     /**
+     * Sets the mode that the portlet is running in.
+     *
+     * @param mode the portlet mode
+     */
+    public void setMode(Portlet.Mode mode);
+
+    /**
      * Returns the value of the parameter with the given name, or null if no such parameter exists.
      *
      * You should only use this method when you are sure the parameter has only one value.

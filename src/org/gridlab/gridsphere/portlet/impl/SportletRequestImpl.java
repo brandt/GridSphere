@@ -356,9 +356,9 @@ public class SportletRequestImpl implements SportletRequest {
     }
 
     /**
-     * Returns the mode that the portlet is running in.
+     * Sets the mode that the portlet is running in.
      *
-     * @return the portlet mode
+     * @param mode the portlet mode
      */
     public void setMode(Portlet.Mode mode) {
         req.setAttribute(GridSphereProperties.PORTLETMODE, mode);
