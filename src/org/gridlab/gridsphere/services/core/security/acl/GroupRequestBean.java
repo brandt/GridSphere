@@ -21,6 +21,7 @@ public class GroupRequestBean
     private PortletGroup group = null;
     private String role = null;
     private GroupAction action = GroupAction.ADD;
+    private String description = null;
 
     public GroupRequestBean() {
     }
@@ -51,6 +52,14 @@ public class GroupRequestBean
 
     public void setGroup(PortletGroup group) {
         this.group = group;
+    }
+
+    public String getGroupDescription() {
+        return this.description;
+    }
+
+    public void setGroupDescription(String description) {
+        this.description = description;
     }
 
     public PortletRole getRole() {

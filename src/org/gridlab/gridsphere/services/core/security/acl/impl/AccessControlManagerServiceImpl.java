@@ -65,12 +65,8 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
         return aclManager.getGroupByName(groupName);
     }
 
-    public PortletGroup createGroup(String groupName) {
-        return aclManager.createGroup(groupName);
-    }
-
-    public void deleteGroup(PortletGroup group) {
-        aclManager.deleteGroup(group);
+    public String getGroupDescription(String groupName) {
+        return aclManager.getGroupDescription(groupName);
     }
 
     /*** GROUP REQUEST METHODS ***/
