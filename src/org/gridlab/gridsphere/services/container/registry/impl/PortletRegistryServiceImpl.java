@@ -41,7 +41,7 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("in init()");
         this.context = config.getServletConfig().getServletContext();
-        String webapp = config.getInitParameter("WEBAPP_NAME");
+        String webapp = "coreportlets";
         addPortletWebApplication(webapp);
     }
 
