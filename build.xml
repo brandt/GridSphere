@@ -245,11 +245,11 @@ Copyright:
         </sql>
     </target>
 
-    <target name="db-postgres">
+    <target name="db-postgresql">
       <sql
           driver="org.postgresql.Driver"
-          url="jdbc:postgresql:testdb"
-          userid="wehrens"
+          url="jdbc:postgresql:gridsphere"
+          userid="portal"
           password=""
           onerror="continue"
           src="conf/dbcreate.sql">
@@ -260,7 +260,7 @@ Copyright:
     <target name="db-hsqldb">
       <sql
           driver="org.hsqldb.jdbcDriver"
-          url="jdbc:hsqldb:testdb"
+          url="jdbc:hsqldb:gridsphere"
           userid="sa"
           password=""
           onerror="continue"
@@ -269,7 +269,17 @@ Copyright:
         </sql>
     </target>
 
-
+    <target name="db-hsqldb-junit">
+      <sql
+          driver="org.hsqldb.jdbcDriver"
+          url="jdbc:hsqldb:junit"
+          userid="sa"
+          password=""
+          onerror="continue"
+          src="conf/dbcreate.sql">
+          <classpath refid="classpath"/>
+        </sql>
+    </target>
 
   <!-- =================================================================== -->
   <!-- Creates the API documentation                                       -->
@@ -402,7 +412,8 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
     <!-- =================================================================== -->
-    <target name="runtests" depends="compiletests, deploy" if="junit.present" description="Runs all JUnit tests">
+    <target name="runtests" depends="compiletests, deploy, mapping, db-hsqldb-junit" if="junit.present" description="Runs all JUnit tests">
+
     <java fork="no" classname="junit.textui.TestRunner"
             taskname="junit" failonerror="true">
         <arg value="org.gridlab.gridsphere.AllJUnitTests"/>
@@ -441,9 +452,8 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Runs performance tests     -->
     <!-- =================================================================== -->
-    <target name="perfusermanager" depends="compileperf" >
+    <target name="perfusermanager" depends="compileperf">
         <java classname="org.gridlab.gridsphere.usermanager.PerfUserManager" classpathref="classpath"/>
     </target>
-
 
 </project>
