@@ -73,7 +73,7 @@ Copyright:
     <!-- Check for catalina.sh in CATALINA_HOME/bin -->
     <target name="check-catalina">
         <condition property="catalina.exists">
-            <available file="${env.CATALINA_HOME}/bin/bootstrap.jar"/>
+            <available file="${env.CATALINA_HOME}/bin/catalina.sh"/>
         </condition>
         <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
     </target>
@@ -229,7 +229,7 @@ Copyright:
         <ant target="make-gridsphere-jar"/>
     </target>
 
-    <target name="make-gridsphere-jar">
+    <target name="make-gridsphere-jar" depends="compile">
         <echo message="DATABASE_NAME is set to = ${DATABASE_NAME}"/>
         <echo message="DATABASE_CONFIG is set to = ${DATABASE_CONFIG}"/>
         <mkdir dir="${build.classes}/gridsphere"/>
@@ -343,7 +343,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="portlet-widget-tags-jar, gridsphere-provider-jar" description="Creates all jars"/>
+    <target name="jar" depends="portlet-widget-tags-jar, gridsphere-provider-jar, portlet-jar" description="Creates all jars"/>
 
     <!-- =================================================================== -->
     <!-- Cleans everything                                                   -->
