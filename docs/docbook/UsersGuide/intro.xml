@@ -21,7 +21,6 @@ Version:    $Id$
     to build the binary distribution. Both source and binaries come packaged
     with all the necessary third party libraries and requires a GridSphere
     compatible servlet container, currently Tomcat 4.1+ and Tomcat 5 are supported
-
     </para>
 </sect1>
 
