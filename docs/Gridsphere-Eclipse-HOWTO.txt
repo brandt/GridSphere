@@ -28,11 +28,12 @@ Questions, Comments, Enhancements Welcome :-)
 - Check out Gridsphere (module gridsphere in CVS) _into_ the project
 	-Setup Java Build Configuration
 		Add source folder gridsphere/src and gridsphere/tests
-		Add the libraries in gridsphere/lib/ext
+		Add the libraries in gridsphere/lib
 		Extend the variable TOMCAT_HOME
 			Add the activation.jar from Tomcat to the project
 			Add the xercesImpl.jar from Tomcat to the project
 			Add the XmlParserAPIs.jar from Tomcat to the project
+			Add the jta.jar from Tomcat to the project
 		Export the libraries and the source folders
 
 - Create an external tool launch configuration for Ant
