@@ -108,9 +108,22 @@
         <title>Database Configuration</title>
             By default, GridSphere is configured (using Hibernate) to use HSQL pure Java database. To configure
             GridSphere to use some other database, please edit the
-            <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/persistence/hibernate.properties</filename>.
+            <filename>webapps/gridsphere/WEB-INF/persistence/hibernate.properties</filename> before deploying.
             file and comment out the HSQL lines and uncomment the lines for the database you wish to use.
             The connection url setting should point to the physical location of your database.
+            The same applies to any 3rd party webapps you whish to use. The configuration file is
+            located in  <filename>webapp/WEB-INF/persistence/hibernate.properties</filename>.
+            The default is as well to use the internal HSQL database.
+    </sect1>
+
+    <sect1>
+        <title>Messaging Configuration</title>
+        To take advantage of GridSphere's buildin messaging system you need to edit  <filename>webapps/WEB-INF/tmfconfig/tmf.xml</filename>.
+        Please enable the services and the configurationfiles for the services you want to use. Currently mail and
+        AOL Aim service is supported. For AIM you need to edit <filename>webapps/WEB-INF/tmfconfig/services/aim.xml</filename>  and
+        fill in the approriate values for the username/password for the aimbot you will use.
+        For Mail modification of <filename>webapps/WEB-INF/tmfconfig/services/mail.xml</filename> with the values of
+        MailServer, Port and Sender is needed.
     </sect1>
 
 </chapter>
