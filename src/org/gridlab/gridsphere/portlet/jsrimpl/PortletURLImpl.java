@@ -5,7 +5,7 @@
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portlet.PortletWindow;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -110,7 +110,7 @@ public class PortletURLImpl implements PortletURL {
                 break;
             }
         }
-
+        if (windowState.equals(WindowState.NORMAL)) windowState = new WindowState(PortletWindow.State.RESIZING.toString());
         if (isSupported) {
             state = windowState;
         } else {
