@@ -43,7 +43,7 @@ public class CheckboxTag extends BaseComponentTag {
         if (!beanId.equals("")) {
             checkbox = (CheckBoxBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (checkbox == null) {
-                checkbox = new CheckBoxBean((HttpServletRequest)pageContext.getRequest(), beanId);
+                checkbox = new CheckBoxBean();
                 checkbox.setSelected(selected);
                 this.setBaseComponentBean(checkbox);
             } else {

@@ -54,7 +54,7 @@ public abstract class BaseBeanTag extends BodyTagSupport {
         if (compId == null) {
             beanKey = beanId + "_" + cid;
         } else {
-            beanKey = compId + "." + beanId + "_" + cid;
+            beanKey = compId + "%" + beanId + "_" + cid;
         }
         //log.debug("getBeanKey(" + beanId + ") = " + beanKey);
         return beanKey;

@@ -83,7 +83,7 @@ public abstract class BaseBean implements TagBean {
         if (compId == null) {
             beanKey = beanId + "_" + cid;
         } else {
-            beanKey = compId + "." + beanId + "_" + cid;
+            beanKey = compId + "_" + beanId + "%" + cid;
         }
         //log.debug("getBeanKey(" + beanId + ") = " + beanKey);
         return beanKey;

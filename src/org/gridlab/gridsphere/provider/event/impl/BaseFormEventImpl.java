@@ -499,7 +499,7 @@ public abstract class BaseFormEventImpl {
             if (idx > 0) {
                 beanId = vbname.substring(0, idx);
                 log.debug("Parsing beanId...");
-                int index = beanId.lastIndexOf(".");
+                int index = beanId.lastIndexOf("%");
                 if (index > -1 && index != beanId.length()) {
                     beanKey = beanId;
                     beanId = beanId.substring(index+1);

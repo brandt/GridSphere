@@ -87,7 +87,6 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
         sb.append("<input " + getFormattedCss() + " ");
         sb.append("type=\"" + inputtype + "\" ");
 
-
         String pname = (name == null) ? "" : name;
         String sname = pname;
         if (!beanId.equals("")) {
@@ -100,7 +99,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
                 if (compId == null) {
                     sname = "ui_" + vbName + "_" + beanId + "_" + pname;
                 } else {
-                    sname = "ui_" + vbName + "_" + compId + "." + beanId + "_" + pname;
+                    sname = "ui_" + vbName + "_" + compId + "%" + beanId + "_" + pname;
                 }
             }
         }

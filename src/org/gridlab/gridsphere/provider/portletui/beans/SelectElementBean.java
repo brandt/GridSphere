@@ -107,7 +107,7 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
                 if (compId == null) {
                     sname = "ui_" + vbName + "_" + beanId + "_" + pname;
                 } else {
-                    sname = "ui_" + vbName + "_" + compId + "." + beanId + "_" + pname;
+                    sname = "ui_" + vbName + "_" + compId + "%" + beanId + "_" + pname;
                 }
             }
         }
