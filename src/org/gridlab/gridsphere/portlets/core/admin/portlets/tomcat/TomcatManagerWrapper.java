@@ -6,13 +6,13 @@ package org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.methods.GetMethod;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -38,37 +38,23 @@ public class TomcatManagerWrapper {
         try {
             String serverName = req.getServerName();
             int serverPort = req.getServerPort();
-            URL u = new URL("http://" + serverName + ":" + serverPort + "/manager" + command);
-            URLConnection con = u.openConnection();
 
-            String up = USERNAME + ":" + PASSWORD;
-            String encoding = null;
-            // check to see if sun's Base64 encoder is available.
-            try {
 
-                sun.misc.BASE64Encoder encoder =
-                        (sun.misc.BASE64Encoder)
-                        Class.forName("sun.misc.BASE64Encoder").newInstance();
-                encoding = encoder.encode(up.getBytes());
-            } catch (Exception ex) { // sun's base64 encoder isn't available
-                throw new TomcatManagerException("No sun.misc.BASE64Encoder availoable in JDK!");
-            }
+            HttpClient client = new HttpClient();
+            client.getState().setCredentials(
+                    null,
+                    serverName,
+                    new UsernamePasswordCredentials(USERNAME, PASSWORD)
+            );
 
-            con.setRequestProperty("Authorization", "Basic " + encoding);
-            con.setDoInput(true);
-            con.setUseCaches(false);
-            con.connect();
+            GetMethod get = new GetMethod("http://" + serverName + ":" + serverPort + "/manager" + command);
 
-            if (con instanceof HttpURLConnection) {
-                HttpURLConnection httpConnection = (HttpURLConnection) con;
-                // test for 401 result (HTTP only)
-                if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                    throw new TomcatManagerException("HTTP Authorization failure!");
-                }
-            }
+            get.setDoAuthentication( true );
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            // execute the GET
+            int status = client.executeMethod( get );
 
+            BufferedReader reader = new BufferedReader(new InputStreamReader(get.getResponseBodyAsStream()));
             // get first line
             // should be something like:
             // OK - some information text
@@ -86,6 +72,10 @@ public class TomcatManagerWrapper {
                 result.addWebAppDescriptor(line);
             }
             reader.close();
+
+            // release any connection resources used by the method
+            get.releaseConnection();
+
 
         } catch (IOException e) {
             throw new TomcatManagerException("Unable to perform command: ", e);
