@@ -81,22 +81,6 @@
 	<orderedlist>
 	<listitem><para>Download Jakarta &Tomcat; 4.1.18+ distribution</para></listitem>
 	<listitem><para>Unzip tomcat into your preferred location and set the CATALINA_HOME environment to point to this location</para></listitem>
-	<listitem><para>GridSphere requires access to the ServletContext objects of other portlet web applications.
-	To allow this, modify $CATALINA_HOME/conf/server.xml and make sure the following line is there:
-	<programlisting><literallayout>
-
-    <![CDATA[<Context path="/gridsphere"
-                      docBase="gridsphere" debug="0"
-                      reloadable="false" crossContext="true">
-                  <Logger className="org.apache.catalina.logger.FileLogger"
-                      prefix="localhost_gridsphere_log."
-                      suffix=".txt" timestamp="true"/>
-	         </Context>]]>
-    </literallayout>
-    <important>Make sure there are no line-breaks between attributes in the
-Context and Logger lines. Cutting and pasting into vi can cause
-problems ;-) and Tomcat may give few warnings</important>
-    </programlisting></para></listitem>
 	<listitem><para>The Portlet Manager Portlet requires the Tomcat manager webapp to be configured to
     allow the gridsphere user to manage web applications. You must modify
         <filename>$CATALINA_HOME/conf/tomcat-users.xml</filename> and make sure the following line is there:
@@ -116,7 +100,7 @@ problems ;-) and Tomcat may give few warnings</important>
                  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
                  allow="127.0.0.1"/>
         </Context>]]>
-    <important>ditto above ;-)</important>
+    <important>Make sure there are no line-breaks between beginning and closing tags!</important>
     </literallayout></programlisting></para></listitem>
 
 	</orderedlist>
