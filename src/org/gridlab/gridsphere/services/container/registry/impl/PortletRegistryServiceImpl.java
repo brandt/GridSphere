@@ -11,9 +11,9 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.portletcontainer.impl.RegisteredSportlet;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
-import org.gridlab.gridsphere.portletcontainer.impl.RegisteredSportletImpl;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 
 
@@ -23,7 +23,7 @@ import java.util.*;
 
 /**
  * The PortletRegistryService acts as a repository for portlets and makes them available to the portlet
- * container. The Portlet base class is responsible for reading in the associated portlet.xml file and
+ * container. The PortletInfo base class is responsible for reading in the associated portlet.xml file and
  * creating a RegisteredPortlet object which represents the portlet. The PortletRegistryService maintains
  * a Set of RegisteredPortlets and provides operations for the registration, unregistration and querying
  * of RegisteredPortlet objects.
@@ -74,7 +74,7 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
         while (portletApps.hasNext()) {
             PortletApplication portletApp = (PortletApplication) portletApps.next();
             try {
-                RegisteredPortlet registeredPortlet = new RegisteredSportletImpl(portletApp);
+                RegisteredPortlet registeredPortlet = new RegisteredSportlet(portletApp);
                 String portletID = getUniqueID(registeredPortlet);
                 allPortlets.put(portletID, registeredPortlet);
             } catch (Exception e) {
