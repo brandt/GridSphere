@@ -40,6 +40,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>Redirect</servlet-name>
+        <jsp-file>/jsp/redirect.jsp</jsp-file>
+    </servlet>
+
+    <servlet>
         <servlet-name>HelloWorld</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.HelloWorld</servlet-class>
 	<load-on-startup>2</load-on-startup>
@@ -56,18 +61,19 @@
        <url-pattern>/HelloWorld</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-       <servlet-name>
-          gridsphere
-       </servlet-name>
-       <url-pattern>
-         /gridsphere
-       </url-pattern>
-    </servlet-mapping>
-
      <servlet-mapping>
        <servlet-name>HalloWelt</servlet-name>
        <url-pattern>/HalloWelt</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>gridsphere</servlet-name>
+       <url-pattern>/gridsphere</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>Redirect</servlet-name>
+       <url-pattern>/servlet/*</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>
@@ -85,10 +91,5 @@
       <mime-type>text/vnd.wap.wmlscript</mime-type>
     </mime-mapping>
 
-    <welcome-file-list>
-      <welcome-file>jsp/index.jsp</welcome-file>
-      <welcome-file>jsp/index.wml</welcome-file>
-      <welcome-file>jsp/index.html</welcome-file>
-    </welcome-file-list>
 
 </web-app>
