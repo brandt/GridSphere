@@ -166,7 +166,7 @@
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1">
             <concrete-portlet>
                 <portlet-name>User Account Manager</portlet-name>
-                <required-role role="SUPER"/>
+                <access-restrictions role="SUPER"/>
                 <default-locale>en</default-locale>
                 <language locale="en">
                     <title>User Account Manager</title>
@@ -197,7 +197,7 @@
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1">
             <concrete-portlet>
                 <portlet-name>Portlet Group Manager</portlet-name>
-                <required-role role="SUPER"/>
+                <access-restrictions role="SUPER"/>
                 <default-locale>en</default-locale>
                 <language locale="en">
                     <title>Portlet Group Manager</title>
