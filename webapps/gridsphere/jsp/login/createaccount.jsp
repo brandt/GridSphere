@@ -28,7 +28,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="GIVENNAME"/>
+                <ui:text key="GIVENNAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="givenName"/>
@@ -73,7 +73,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="CONFIRM_PASS"/>
+                <ui:text key="CONFIRM_PASS"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:password beanId="confirmPassword"/>
