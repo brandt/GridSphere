@@ -129,8 +129,10 @@ public class PortletLayoutEngine {
         if (user instanceof GuestUser) {
             String id = session.getId();
             if (guests.containsKey(id)) {
+                System.err.println("Returning guest conatiner for:" + id);
                 return (PortletContainer)guests.get(id);
             } else {
+                System.err.println("creating new conatiner for:" + id);
                 PortletContainer newcontainer = new PortletContainer(guestContainer);
                 guests.put(id, newcontainer);
                 return newcontainer;
@@ -153,16 +155,6 @@ public class PortletLayoutEngine {
             userLayouts.put(user, pc);
         }
         return pc;
-    }
-
-    /**
-     * Returns a portlet container for the supplied user
-     *
-     * @param user the User
-     */
-    public PortletContainer getPortletContainer(User user) {
-        if (user instanceof GuestUser) return guestContainer;
-        return (PortletContainer) userLayouts.get(user);
     }
 
     /**
