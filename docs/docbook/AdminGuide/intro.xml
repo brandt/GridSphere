@@ -41,6 +41,17 @@
     </sect1>
 
     <sect1>
+        <title>Mail configuration</title>
+        <para>
+            In the event that a user forgets their password, the portal can send the user an email link to create a
+            new password. The administartor shoudl configure the mail settings from Administration=>Configure Login
+            and enter a valid SMTP mail server or leave blank if one is currently running on the portal machine. In
+            addition, a valid email address that will be used to send messages to users should be edited e.g. portal@mycom.com.
+        </para>
+    </sect1>
+
+
+    <sect1>
         <title>Editing group information</title>
         <para>
             The Administration=>Groups tab shows the "Group Manager" portlet that displays all the known portlet groups.
@@ -77,10 +88,10 @@
     <sect1>
         <title>Layout Administration</title>
         <para>
-            The Administration=>Layouts tab offers the "Layout Manager Portlet" that allows an administartor to modify the
+            The Administration=>Layouts tab offers the "Layout Manager Portlet" that allows an administrator to modify the
             layout of a particular group. Currently, the layout descriptor must be hand edited in the text area and then saved.
             The changes will take place when a user logs out and logs back in. This offers a simple yet effective way to edity the guest
-            user layout or the layouts of defined groups. In addition, the banner of the portal may be edited as well allowing
-            an admin to change the portal header including logo and title information.
+            user layout or the layouts of defined groups. In addition, the banner of the portal may be edited allowing
+            an admin to modify the portal header including logo and title information.
         </para>
     </sect1>
