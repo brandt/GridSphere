@@ -81,8 +81,8 @@
             <portlet-tab>
                 <title>Accounts</title>
                 <portlet-panel>
-                    <grid-layout>
-                        <portlet-frame>
+                    <grid-layout columns="50">
+                        <portlet-frame inner-padding="0">
                             <name>UserManagerPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.UserManagerPortlet.1</portlet-class>
                         </portlet-frame>
@@ -93,7 +93,7 @@
                 <title>Access</title>
                 <portlet-panel>
                     <grid-layout>
-                        <portlet-frame>
+                        <portlet-frame inner-padding="0">
                             <name>AccessControlManagerPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet.1</portlet-class>
                         </portlet-frame>
@@ -104,15 +104,15 @@
                 <title>Credentials</title>
                 <portlet-panel>
                     <grid-layout>
-                        <portlet-frame>
+                        <portlet-frame inner-padding="0">
                             <name>CredentialPermissionAdminPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminPortlet.1</portlet-class>
                         </portlet-frame>
-                        <portlet-frame>
+                        <portlet-frame inner-padding="0">
                             <name>CredentialMappingAdminPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminPortlet.1</portlet-class>
                         </portlet-frame>
-                        <portlet-frame>
+                        <portlet-frame inner-padding="0">
                             <name>CredentialManagerAdminPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialManagerAdminPortlet.1</portlet-class>
                         </portlet-frame>
@@ -128,11 +128,11 @@
                 <title>Welcome</title>
                 <portlet-panel>
                     <grid-layout>
-                        <portlet-frame>
+                        <portlet-frame inner-padding="0">
                             <name>CredentialRetrievalUserPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialRetrievalUserPortlet.1</portlet-class>
                         </portlet-frame>
-                        <portlet-frame>
+                        <portlet-frame inner-padding="0">
                             <name>CredentialMappingUserPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialMappingUserPortlet.1</portlet-class>
                         </portlet-frame>
@@ -143,7 +143,7 @@
                 <title>Jobs</title>
                 <portlet-panel>
                     <grid-layout>
-                        <portlet-frame>
+                        <portlet-frame inner-padding="0">
                             <name>JobManagerPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.grid.job.JobManagerPortlet.1</portlet-class>
                         </portlet-frame>
