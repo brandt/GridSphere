@@ -21,7 +21,7 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServic
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
-import org.gridlab.gridsphere.services.user.impl.GridSphereUserManager;
+import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;

@@ -6,7 +6,7 @@
  * To change template for new interface use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.services.user.impl;
+package org.gridlab.gridsphere.services.core.user.impl;
 
 import java.util.List;
 import java.util.Map;
@@ -18,8 +18,8 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.AuthenticationModule;
-import org.gridlab.gridsphere.services.user.impl.GridSphereUserManager;
-import org.gridlab.gridsphere.services.user.LoginService;
+import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
+import org.gridlab.gridsphere.services.core.user.LoginService;
 
 public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 

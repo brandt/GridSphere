@@ -3,7 +3,7 @@
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.services.user.impl;
+package org.gridlab.gridsphere.services.core.user.impl;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
@@ -15,7 +15,7 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.services.core.security.acl.impl.UserACL;
 import org.gridlab.gridsphere.services.security.password.PasswordBean;
-import org.gridlab.gridsphere.services.user.AccountRequest;
+import org.gridlab.gridsphere.services.core.user.AccountRequest;
 
 import java.util.List;
 import java.util.Vector;

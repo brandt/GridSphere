@@ -4,7 +4,7 @@
  * @version $Id$
  */
 
-package org.gridlab.gridsphere.services.user.impl;
+package org.gridlab.gridsphere.services.core.user.impl;
 
 import org.gridlab.gridsphere.core.persistence.castor.StringVector;
 

@@ -4,7 +4,7 @@
  * @version $Id$
  */
 
-package org.gridlab.gridsphere.services.user.impl;
+package org.gridlab.gridsphere.services.core.user.impl;
 
 import org.gridlab.gridsphere.core.persistence.castor.StringVector;
 
@@ -18,7 +18,7 @@ public class AccountRequestImplUserdns extends StringVector {
      *
      * @sql-name reference
      */
-    private org.gridlab.gridsphere.services.user.impl.AccountRequestImpl Reference;
+    private org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl Reference;
 
 
 }

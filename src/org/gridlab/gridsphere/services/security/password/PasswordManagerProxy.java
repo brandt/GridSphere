@@ -14,7 +14,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.services.core.security.AuthorizationUtility;
-import org.gridlab.gridsphere.services.user.AccountRequest;
+import org.gridlab.gridsphere.services.core.user.AccountRequest;
 
 import java.util.Date;
 import java.util.List;

@@ -6,7 +6,7 @@
  * To change template for new class use 
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.services.user;
+package org.gridlab.gridsphere.services.core.user;
 
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 

@@ -8,7 +8,7 @@
  */
 package org.gridlab.gridsphere.services.security.password.impl;
 
-import org.gridlab.gridsphere.services.user.impl.AccountRequestImpl;
+import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
 import org.gridlab.gridsphere.services.security.password.Password;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.portlet.User;

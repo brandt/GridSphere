@@ -2,35 +2,27 @@
  * Created by IntelliJ IDEA.
  * User: russell
  * Date: Jan 31, 2003
- * Time: 3:27:11 AM
+ * Time: 3:26:16 AM
  * To change template for new class use 
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.services.user.impl;
+package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
-import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
-import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 
 /**
- * @table grouprequest
+ *  @table groupentry
  */
-public class GroupRequestImpl
+public class GroupEntryImpl
         extends BaseObject
-        implements GroupRequest {
+        implements GroupEntry {
 
-    /**
-     * @sql-name entry
-     * @get-method getGroupEntry
-     * @set-method setGroupEntry
-     */
-    private GroupEntryImpl entry = null;
     /**
      * @sql-name user
      * @get-method getSportletUser
@@ -48,35 +40,22 @@ public class GroupRequestImpl
     /**
      * @sql-name role
      * @sql-size 256
+     * @required
      * @get-method getRoleName
      * @set-method setRoleName
-     * @required
      */
     private String role = null;
-    /**
-     * @sql-name action
-     * @sql-size 128
-     * @required
-     */
-    private String action = GroupAction.ADD.toString();
-
-    public GroupRequestImpl() {
-    }
-
-    public GroupRequestImpl(GroupEntryImpl entry) {
-        this.entry = entry;
-        this.user = entry.getSportletUser();
-        this.group = entry.getSportletGroup();
-        this.role = entry.getRole().toString();
-        this.action = GroupAction.EDIT.toString();
-    }
 
     public String getID() {
         return getOid();
     }
 
-    public String getEntryID() {
-        return this.entry.getOid();
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = (SportletUserImpl)user;
     }
 
     public PortletGroup getGroup() {
@@ -108,30 +87,6 @@ public class GroupRequestImpl
         this.role = roleName;
     }
 
-    public User getUser() {
-        return this.user;
-    }
-
-    public void setUser(User user) {
-        this.user = (SportletUserImpl)user;
-    }
-
-    public GroupAction getGroupAction() {
-        return GroupAction.toGroupAction(this.action);
-    }
-
-    public void setGroupAction(GroupAction groupAction) {
-        this.action = groupAction.toString();
-    }
-
-    public String getAction() {
-        return this.action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
     /**
      * Castor method for getting user object.
      */
@@ -158,19 +113,5 @@ public class GroupRequestImpl
      */
     public void setSportletGroup(SportletGroup group) {
         this.group = group;
-    }
-
-    /**
-     * Castor method for getting entry object.
-     */
-    public GroupEntryImpl getGroupEntry() {
-        return this.entry;
-    }
-
-    /**
-     * Castor method for setting entry object.
-     */
-    public void setGroupEntry(GroupEntryImpl entry) {
-        this.entry = entry;
     }
 }

@@ -1,102 +1,36 @@
 /*
  * Created by IntelliJ IDEA.
  * User: russell
- * Date: Jan 29, 2003
- * Time: 2:23:19 AM
- * To change template for new class use
+ * Date: Jan 31, 2003
+ * Time: 3:58:16 AM
+ * To change template for new interface use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.services.user.impl;
 
-import org.gridlab.gridsphere.services.user.*;
-import org.gridlab.gridsphere.services.core.security.acl.*;
-import org.gridlab.gridsphere.services.core.security.AuthenticationException;
-import org.gridlab.gridsphere.services.core.security.AuthenticationModule;
-import org.gridlab.gridsphere.services.core.security.impl.PasswordAuthenticationModule;
-import org.gridlab.gridsphere.services.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.security.password.InvalidPasswordException;
-import org.gridlab.gridsphere.services.security.password.PasswordBean;
+import org.gridlab.gridsphere.services.user.impl.GridSphereUserManager;
+import org.gridlab.gridsphere.services.user.UserManagerService;
+import org.gridlab.gridsphere.services.user.AccountRequest;
+import org.gridlab.gridsphere.services.user.InvalidAccountRequestException;
+import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.core.mail.MailMessage;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
-import java.util.Map;
 import java.util.List;
-import java.util.Iterator;
-import java.util.Vector;
 
-public class GridSphereUserManager implements LoginService, UserManagerService, AccessControlManagerService {
+public class UserManagerServiceImpl implements UserManagerService, PortletServiceProvider {
 
-    private static PortletLog log = SportletLog.getInstance(GridSphereUserManager.class);
-    private static GridSphereUserManager instance = new GridSphereUserManager();
+    private GridSphereUserManager userManager = GridSphereUserManager.getInstance();
 
-    private static PortletServiceFactory factory = SportletServiceFactory.getInstance();
+    public UserManagerServiceImpl() {
 
-    private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
-    private PasswordManagerService passwordManagerService = null;
-    private List authenticationModules = new Vector();
-
-    private boolean isInitialized = false;
-
-    private String jdoUser = SportletUserImpl.class.getName();
-    private String jdoAccountRequest = AccountRequestImpl.class.getName();
-    private String jdoGroupRequest = GroupRequestImpl.class.getName();
-    private String jdoGroupEntry = GroupEntryImpl.class.getName();
-    private String jdoPortletGroup = SportletGroup.class.getName();
-
-    private GridSphereUserManager() {}
-
-    public static GridSphereUserManager getInstance() {
-        return instance;
     }
 
-    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        log.info("Entering init()");
-        if (!isInitialized) {
-            initServices(config);
-            initAccessControl(config);
-            initRootUser(config);
-            initAuthenticationModules();
-            log.info("Entering init()");
-        }
-    }
-
-    private void initServices(PortletServiceConfig config)
-            throws PortletServiceUnavailableException {
-        log.info("Entering initServices()");
-        try {
-            passwordManagerService =
-                (PasswordManagerService)
-                    this.factory.createPortletService(PasswordManagerService.class,
-                                                      config.getServletConfig(),
-                                                      true);
-            log.info("in init()");
-        } catch (PortletServiceNotFoundException e) {
-            String msg = "Unable to create portlet service instances";
-            log.error(msg, e);
-            throw new PortletServiceUnavailableException(msg);
-        }
-        log.info("Entering initServices()");
-    }
-
-    private void initAuthenticationModules() {
-        authenticationModules.add(new PasswordAuthenticationModule());
-    }
-
+<<<<<<< UserManagerServiceImpl.java
     private void initAccessControl(PortletServiceConfig config)
             throws PortletServiceUnavailableException {
         log.info("Entering initGroups()");
@@ -174,6 +108,9 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
                 submitAccountRequest(rootRequest);
                 approveAccountRequest(rootRequest);
             } catch (InvalidAccountRequestException e) {
+                log.error("Unable to create account for root user", e);
+                throw new PortletServiceUnavailableException(e.getMessage());
+            } catch (InvalidPasswordException e) {
                 log.error("Unable to create account for root user", e);
                 throw new PortletServiceUnavailableException(e.getMessage());
             }
@@ -262,9 +199,22 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         }
         log.debug("Successfully retrieved user " + loginName);
         return user;
+=======
+    /**
+     * Initializes the portlet service.
+     * The init method is invoked by the portlet container immediately after a portlet service has
+     * been instantiated and before it is passed to the requestor.
+     *
+     * @param config the service configuration
+     * @throws PortletServiceUnavailableException if an error occurs during initialization
+     */
+    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+        userManager.init(config);
+>>>>>>> 1.40
     }
 
-    public List selectAccountRequests(String criteria) {
+<<<<<<< UserManagerServiceImpl.java
+    private List selectAccountRequests(String criteria) {
         String oql = "select accountRequest from "
                    + this.jdoAccountRequest
                    + " accountRequest "
@@ -276,30 +226,58 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             log.error(msg, e);
             return new Vector();
         }
+=======
+    /**
+     * The destroy method is invoked by the portlet container to destroy a portlet service.
+     * This method must free all resources allocated to the portlet service.
+     */
+    public void destroy() {}
+
+    /**
+      * Administrators can retrieve all pending account request
+      *
+      * @return a list of pending account requests
+      */
+    public List selectAccountRequests(String criteria) {
+        return userManager.selectAccountRequests(criteria);
+>>>>>>> 1.40
     }
 
+    /**
+      * Administrators can retrieve all pending account request
+      *
+      * @return a list of pending account requests
+      */
     public List getAccountRequests() {
-        return selectAccountRequests("");
+        return userManager.getAccountRequests();
     }
 
+    /**
+     * Returns the account request for the given user id
+     *
+     * @param user id of account request
+     * @return account request for given user id
+     */
     public AccountRequest getAccountRequest(String oid) {
-        String oql = "select accountRequest from "
-                   + jdoAccountRequest
-                   + " accountRequest where accountRequest.ObjectID=" + oid;
-        try {
-            return (AccountRequest)pm.restoreObject(oql);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving account request";
-            log.error(msg, e);
-            return null;
-        }
+        return userManager.getAccountRequest(oid);
     }
 
+    /**
+      * Create a new account request. An internal ID is assigned the request
+      *
+      * @return a new AccountRequest
+      */
     public AccountRequest createAccountRequest() {
-        return new AccountRequestImpl();
+        return userManager.createAccountRequest();
     }
 
+    /**
+      * Create a change account request. An internal ID is assigned the request
+      *
+      * @return a new AccountRequest
+      */
     public AccountRequest createAccountRequest(User user) {
+<<<<<<< UserManagerServiceImpl.java
         AccountRequestImpl request = new AccountRequestImpl();
         request.setID(user.getID());
         request.setUserName(user.getUserName());
@@ -309,185 +287,109 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         request.setOrganization(user.getOrganization());
         request.setEmailAddress(user.getEmailAddress());
         return request;
+=======
+        return userManager.createAccountRequest(user);
+>>>>>>> 1.40
     }
 
-    public void submitAccountRequest(AccountRequest request)
-            throws InvalidAccountRequestException {
-        submitAccountRequest(request, null);
-    }
-
-    public void submitAccountRequest(AccountRequest request, MailMessage mailMessage)
-            throws InvalidAccountRequestException {
-         if (request instanceof AccountRequestImpl) {
-             // Save account request if not already saved
-             if (!existsAccountRequest(request)) {
-                 // First validate account request
-                 validateAccountRequest(request);
-                 /* Store account request */
-                 try {
-                     pm.create(request);
-                 } catch (PersistenceManagerException e) {
-                     String msg = "Error saving account request";
-                     log.error(msg, e);
-                 }
-                 /* Store passsword for requested account */
-                 saveAccountRequestPassword(request);
-             }
-             // Send message if not null
-         }
-    }
-
+    /**
+     * Validate account request.
+     *
+     * @param request the <code>AccountRequest</code> to submit
+     */
     public void validateAccountRequest(AccountRequest request)
-            throws InvalidAccountRequestException {
-        // Then validate password
-        validatePassword(request);
+            throws InvalidAccountRequestException, InvalidPasswordException {
+        userManager.validateAccountRequest(request);
     }
 
-    private void validatePassword(AccountRequest request) throws InvalidAccountRequestException {
-        // Then validate password if requested
-        User user = getUser(request.getID());
-        if (user == null) {
-            if (request.getPasswordValidation()) {
-                log.info("Validating password for account request");
-                try {
-                    this.passwordManagerService.validatePassword(request.getPasswordValue());
-                } catch (InvalidPasswordException e) {
-                    throw new InvalidAccountRequestException("Unable to validate password: " + e.getExplanation());
-                }
-            } else {
-                log.info("Not validating password for account request");
-            }
-        } else {
-            if (request.getPasswordValidation() && request.getPasswordHasChanged()) {
-                log.info("Validating password for account request");
-                try {
-                    this.passwordManagerService.validatePassword(user, request.getPasswordValue());
-                } catch (InvalidPasswordException e) {
-                    throw new InvalidAccountRequestException("Unable to validate password: " + e.getExplanation());
-                }
-            } else {
-                log.info("Not validating password for account request");
-            }
-        }
+    /**
+     * Submit the account request to the queue for administrative approval
+     *
+     * @param request the <code>AccountRequest</code> to submit
+     */
+    public void submitAccountRequest(AccountRequest request)
+            throws InvalidAccountRequestException, InvalidPasswordException {
+        userManager.submitAccountRequest(request);
     }
 
-    private void saveAccountRequestPassword(AccountRequest request) throws InvalidAccountRequestException {
-        // Get password editor from account request
-        PasswordBean passwordBean = request.getPassword();
-        // Check if password wasn't edited
-        if (!passwordBean.isDirty()) {
-            // Get user id from account request
-            String userID = request.getID();
-            // If user exists for account request
-            if (existsUserWithID(userID)) {
-                // No need to change password
-                log.debug("No changes to user password were made");
-                return;
-            }
-        }
-        // Otherwise attempt to save password edits
-        try {
-            this.passwordManagerService.savePassword(passwordBean);
-        } catch (InvalidPasswordException e) {
-            throw new InvalidAccountRequestException("Unable to validate password: " + e.getExplanation());
-        }
-    }
+     /**
+      * Submit the account request to the queue for administrative approval
+      *
+      * @param request the <code>AccountRequest</code> to submit
+      */
+    public void submitAccountRequest(AccountRequest request, MailMessage mailMessage)
+            throws InvalidAccountRequestException, InvalidPasswordException {
+         userManager.submitAccountRequest(request, mailMessage);
+     }
 
-    private boolean existsAccountRequest(AccountRequest request) {
-        AccountRequestImpl requestImpl = (AccountRequestImpl)request;
-        String oql = "select accountRequest.ObjectID from "
-                   + jdoAccountRequest
-                   + " accountRequest where accountRequest.ObjectID="
-                   + requestImpl.getOid();
-        try {
-            return (pm.restoreObject(oql) != null);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving account request";
-            log.error(msg, e);
-        }
-        return false;
-    }
-
+    /**
+      * Approve a new or modified account request.
+      * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      *
+      * @param request the <code>AccountRequest</code> to approve
+      * @param mailMessage the <code>MailMessage</code> to use for notification
+      */
     public User approveAccountRequest(AccountRequest request) {
-        return approveAccountRequest(request, null);
+        return userManager.approveAccountRequest(request);
     }
 
+    /**
+      * Approve a new or modified account request.
+      * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      *
+      * @param request the <code>AccountRequest</code> to approve
+      * @param mailMessage the <code>MailMessage</code> to use for notification
+      */
     public User approveAccountRequest(AccountRequest request, MailMessage mailMessage) {
-        if (request instanceof AccountRequestImpl) {
-            // Edit user from account request
-            SportletUserImpl user = editSportletUserImpl(request);
-            // Save user from account request
-            saveSportletUserImpl(user);
-            // Activate user password
-            activateAccountRequestPassword(request, user);
-            // Activate user access rights
-            activateAccountRequestGroupEntries(request, user);
-            // Delete account request
-            deleteAccountRequest(request);
-            // Send message if not null
-            return user;
-        }
-        return null;
+        return userManager.approveAccountRequest(request, mailMessage);
     }
 
-    private void activateAccountRequestPassword(AccountRequest request, User user) {
-        // If a new password was submitted with account request
-        if (this.passwordManagerService.hasPassword(request)) {
-            // Activate user password
-            try {
-                this.passwordManagerService.activatePassword(request, user);
-            } catch (InvalidPasswordException e) {
-                log.error("Invalid password during account request approval!!!", e);
-            }
-        }
-    }
-
-    private void activateAccountRequestGroupEntries(AccountRequest request, User user) {
-        // If new user then set initial set acl
-        if (request.isNewUser()) {
-            // Grant user role in base group
-            addGroupEntry(user, PortletGroup.BASE,  PortletRole.USER);
-        }
-    }
-
+    /**
+      * Approve a new or modified account request.
+      * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      *
+      * @param request the <code>AccountRequest</code> to approve
+      * @param mailMessage the <code>MailMessage</code> to use for notification
+      */
     public void denyAccountRequest(AccountRequest request) {
-        denyAccountRequest(request, null);
+        userManager.denyAccountRequest(request);
     }
 
+    /**
+      * Approve a new or modified account request.
+      * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      *
+      * @param request the <code>AccountRequest</code> to approve
+      * @param mailMessage the <code>MailMessage</code> to use for notification
+      */
     public void denyAccountRequest(AccountRequest request, MailMessage mailMessage) {
-        if (request instanceof AccountRequestImpl) {
-            // Delete account request
-            deleteAccountRequest(request);
-            // Send message if not null
-        }
+        userManager.denyAccountRequest(request, mailMessage);
     }
 
-    private void deleteAccountRequest(AccountRequest request) {
-        try {
-            pm.delete(request);
-        } catch(PersistenceManagerException e) {
-            String msg = "Unable to delete account request";
-            log.error(msg, e);
-        }
-    }
-
+    /**
+      * Approve a new or modified account request.
+      * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      *
+      * @param request the <code>AccountRequest</code> to approve
+      * @param mailMessage the <code>MailMessage</code> to use for notification
+      */
     public void deleteAccount(User user) {
-        deleteAccount(user, null);
+        userManager.deleteAccount(user);
     }
 
+    /**
+      * Approve a new or modified account request.
+      * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      *
+      * @param request the <code>AccountRequest</code> to approve
+      * @param mailMessage the <code>MailMessage</code> to use for notification
+      */
     public void deleteAccount(User user, MailMessage mailMessage) {
-        if (user instanceof SportletUserImpl) {
-            // First delete user password
-            this.passwordManagerService.deletePassword(user);
-            // Then delete user acl
-            deleteGroupEntries(user);
-            // Then delete user object
-            deleteSportletUserImpl((SportletUserImpl)user);
-            // Send message if not null
-        }
+        userManager.deleteAccount(user, mailMessage);
     }
 
-    public List selectUsers(String criteria) {
+<<<<<<< UserManagerServiceImpl.java
+    private List selectUsers(String criteria) {
         String oql = "select user from "
                    + this.jdoUser
                    + " user "
@@ -499,16 +401,39 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             log.error(msg, e);
             return new Vector();
         }
+=======
+    /**
+     * Return a list of all portal users
+     *
+     * @return a list containing all Role objects
+     */
+    public List selectUsers(String criteria) {
+        return userManager.selectUsers(criteria);
+>>>>>>> 1.40
     }
 
+    /**
+      * Administrators can retrieve all pending account request
+      *
+      * @return a list of pending account requests
+      */
     public List getUsers() {
-        return selectUsers("");
+        return userManager.getUsers();
     }
 
+    /**
+      * Retrieves a user object with the given username from this service.
+      * Requires a user with the "super user" AccessRights, since this
+      * by-passes the normal login mechanism of retrieving a user object.
+      *
+      * @param User The super user requesting the user object
+      * @param String The user name or login id of the user in question
+      */
     public User getUser(String id) {
-        return getSportletUserImpl(id);
+        return userManager.getUser(id);
     }
 
+<<<<<<< UserManagerServiceImpl.java
     public User getUserByUserName(String loginName) {
         return getSportletUserImplByLoginName(loginName);
     }
@@ -583,8 +508,21 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     public boolean existsUserWithID(String userID) {
         String criteria = "where user.ObjectID=\"" + userID + "\"";
         return existsSportletUserImpl(criteria);
+=======
+    /**
+      * Retrieves a user object with the given username from this service.
+      * Requires a user with the "super user" AccessRights, since this
+      * by-passes the normal login mechanism of retrieving a user object.
+      *
+      * @param User The super user requesting the user object
+      * @param String The user name or login id of the user in question
+      */
+    public User getUserByLoginName(String loginName) {
+        return userManager.getUserByLoginName(loginName);
+>>>>>>> 1.40
     }
 
+<<<<<<< UserManagerServiceImpl.java
     public boolean existsUserName(String loginName) {
         String criteria = "where user.UserID=\"" + loginName + "\"";
         return existsSportletUserImpl(criteria);
@@ -634,7 +572,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         return sumGroupRequests;
     }
 
-    public List selectGroupRequests(String criteria) {
+    private List selectGroupRequests(String criteria) {
         String oql = "select groupRequest from "
                    + jdoGroupRequest
                    + " groupRequest "
@@ -657,7 +595,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         return selectGroupRequestImpl(criteria);
     }
 
-    public GroupRequestImpl selectGroupRequestImpl(String criteria) {
+    private GroupRequestImpl selectGroupRequestImpl(String criteria) {
         String oql = "select groupRequest from "
                    + jdoGroupRequest
                    + " groupRequest "
@@ -707,18 +645,10 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         }
     }
 
-    public GroupRequest createGroupRequest() {
-        GroupRequestImpl request = new GroupRequestImpl();
+    public GroupRequest createGroupRequest(User user) {
+        GroupRequest request = new GroupRequestImpl();
+        request.setUser(user);
         return request;
-    }
-
-    public GroupRequest createGroupRequest(GroupEntry entry) {
-        if (entry instanceof GroupEntryImpl) {
-            GroupEntryImpl entryImpl = (GroupEntryImpl)entry;
-            GroupRequestImpl request = new GroupRequestImpl(entryImpl);
-            return request;
-        }
-        return null;
     }
 
     public void submitGroupRequest(GroupRequest request)
@@ -728,7 +658,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
 
     public void submitGroupRequest(GroupRequest request, MailMessage mailMessage)
             throws InvalidGroupRequestException {
-        if (request instanceof GroupRequestImpl) {
+        if (request instanceof AccountRequestImpl) {
             // First validate accesss request
             validateGroupRequest(request);
             // Then save account request if not already saved
@@ -736,7 +666,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
                 try {
                     pm.create(request);
                 } catch (PersistenceManagerException e) {
-                    String msg = "Error saving group request";
+                    String msg = "Error saving account request";
                     log.error(msg, e);
                 }
             }
@@ -773,31 +703,19 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
 
     public void approveGroupRequest(GroupRequest request, MailMessage mailMessage) {
         if (request instanceof GroupRequestImpl) {
-            GroupRequestImpl requestImpl = (GroupRequestImpl)request;
             // Get request attributes
-            User user = requestImpl.getUser();
-            PortletGroup group = requestImpl.getGroup();
-            GroupAction action = requestImpl.getGroupAction();
-            PortletRole role = request.getRole();
-            // Delete group request
-            deleteGroupRequest(request);
+            User user = request.getUser();
+            PortletGroup group = request.getGroup();
+            String action = request.getAction();
             // Perform requested action
-            if (action.equals(GroupAction.ADD)) {
-                // Add user to group
-                addGroupEntry(user, group, role);
-           } else if (action.equals(GroupAction.EDIT)) {
-                // Get associated entry
-                GroupEntryImpl entryImpl = requestImpl.getGroupEntry();
-                // Edit user role in group
-                entryImpl.setRole(role);
-                // Update associated entry
-                saveGroupEntry(entryImpl);
+            if (action.equals(GroupRequest.ACTION_ADD)) {
+                PortletRole role = request.getRole();
+                addUserToGroup(user, group, role);
             } else {
-               // Get associated entry
-                GroupEntryImpl entryImpl = requestImpl.getGroupEntry();
-                // Delete associated entry
-                deleteGroupEntry(entryImpl);
+                removeUserFromGroup(user, group);
             }
+            // Delete account request
+            deleteGroupRequest(request);
             // Send message if not null
         }
     }
@@ -882,8 +800,8 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         }
     }
 
-   private boolean existsGroupEntry(GroupEntry entry) {
-       GroupEntryImpl rightImpl = (GroupEntryImpl)entry;
+   private boolean existsGroupEntry(GroupEntry right) {
+       GroupEntryImpl rightImpl = (GroupEntryImpl)right;
        String oql = "select groupEntry.ObjectID from "
                   + jdoGroupEntry
                   + " groupEntry where groupEntry.ObjectID="
@@ -897,18 +815,11 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
        return false;
     }
 
-    private void saveGroupEntry(GroupEntry entry) {
+    private void saveGroupEntry(GroupEntry right) {
         // Create or update access right
-        if (existsGroupEntry(entry)) {
+        if (!existsGroupEntry(right)) {
             try {
-                pm.update(entry);
-            } catch (PersistenceManagerException e) {
-                String msg = "Error creating access right";
-                log.error(msg, e);
-            }
-        } else {
-            try {
-                pm.create(entry);
+                pm.create(right);
             } catch (PersistenceManagerException e) {
                 String msg = "Error creating access right";
                 log.error(msg, e);
@@ -916,9 +827,9 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         }
     }
 
-    private void deleteGroupEntry(GroupEntry entry) {
+    private void deleteGroupEntry(GroupEntry right) {
         try {
-            pm.delete(entry);
+            pm.delete(right);
         } catch (PersistenceManagerException e) {
             String msg = "Error deleting access right";
             log.error(msg, e);
@@ -937,25 +848,11 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         return selectGroups("");
     }
 
-    public List selectGroups(String criteria) {
-        // Build object query
-        StringBuffer oqlBuffer = new StringBuffer();
-        oqlBuffer.append("select portletGroup from ");
-        oqlBuffer.append(jdoPortletGroup);
-        oqlBuffer.append(" portletGroup ");
-        // Note, we don't return super groups
-        if (criteria.equals("")) {
-            oqlBuffer.append(" where ");
-        } else {
-            oqlBuffer.append(criteria);
-            oqlBuffer.append(" and ");
-        }
-        oqlBuffer.append("portletGroup.ObjectID !=\"");
-        oqlBuffer.append(PortletGroup.SUPER.getID());
-        oqlBuffer.append("\"");
-        // Generate object query
-        String oql = oqlBuffer.toString();
-        // Execute query
+    private List selectGroups(String criteria) {
+        String oql = "select portletGroup from "
+                   + jdoPortletGroup
+                   + " portletGroup "
+                   + criteria;
         try {
             return pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
@@ -978,14 +875,10 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     private SportletGroup selectSportletGroup(String criteria) {
-        // Build object query
-        StringBuffer oqlBuffer = new StringBuffer();
-        oqlBuffer.append("select portletGroup from ");
-        oqlBuffer.append(jdoPortletGroup);
-        oqlBuffer.append(" portletGroup ");
-        oqlBuffer.append(criteria);
-        // Generate object query
-        String oql = oqlBuffer.toString();
+        String oql = "select portletGroup from "
+                   + jdoPortletGroup
+                   + " portletGroup "
+                   + criteria;
         try {
             return (SportletGroup)pm.restoreObject(oql);
         } catch (PersistenceManagerException e) {
@@ -1079,66 +972,16 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             }
         }
         return groupsNotMemberOf;
+=======
+    /**
+      * Checks to see if account exists for a user
+      *
+      * @param userID the user login ID
+      * @return true if the user exists, false otherwise
+      */
+    public boolean existsUserWithLoginName(String loginName) {
+        return userManager.existsUserWithLoginName(loginName);
+>>>>>>> 1.40
     }
 
-    public PortletRole getRoleInGroup(User user, PortletGroup group) {
-        GroupEntry entry = getGroupEntry(user, group);
-        if (entry == null) {
-            return null;
-        }
-        return entry.getRole();
-    }
-
-    private void addGroupEntry(User user, PortletGroup group, PortletRole role) {
-        GroupEntryImpl right = getGroupEntryImpl(user, group);
-        if (right != null) {
-            deleteGroupEntry(right);
-        }
-        right = new GroupEntryImpl();
-        right.setUser(user);
-        right.setGroup(group);
-        right.setRole(role);
-        saveGroupEntry(right);
-    }
-
-    private void removeGroupEntry(User user, PortletGroup group) {
-        GroupEntry entry = getGroupEntry(user, group);
-        if (entry != null) {
-            log.debug("Deleting group entry " + entry.getID());
-            deleteGroupEntry(entry);
-        }
-    }
-
-    public boolean hasRoleInGroup(User user, PortletGroup group, PortletRole role) {
-        PortletRole test = getRoleInGroup(user, group);
-        return test.equals(role);
-    }
-
-    public boolean hasAdminRoleInGroup(User user, PortletGroup group) {
-        return hasRoleInGroup(user, group, PortletRole.ADMIN);
-    }
-
-    public boolean hasUserRoleInGroup(User user, PortletGroup group) {
-        return hasRoleInGroup(user, group, PortletRole.USER);
-    }
-
-    public boolean hasGuestRoleInGroup(User user, PortletGroup group) {
-        return hasRoleInGroup(user, group, PortletRole.GUEST);
-    }
-
-    public List getUsersWithSuperRole() {
-        return getUsers(PortletGroup.SUPER);
-    }
-
-    public void grantSuperRole(User user) {
-        addGroupEntry(user, PortletGroup.SUPER, PortletRole.SUPER);
-    }
-
-    public void revokeSuperRole(User user) {
-        removeGroupEntry(user, PortletGroup.SUPER);
-    }
-
-    public boolean hasSuperRole(User user) {
-        return isUserInGroup(user, PortletGroup.SUPER);
-    }
 }

@@ -6,13 +6,13 @@
  * To change template for new interface use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.services.user.impl;
+package org.gridlab.gridsphere.services.core.user.impl;
 
 import org.gridlab.gridsphere.services.security.password.InvalidPasswordException;
-import org.gridlab.gridsphere.services.user.impl.GridSphereUserManager;
-import org.gridlab.gridsphere.services.user.UserManagerService;
-import org.gridlab.gridsphere.services.user.AccountRequest;
-import org.gridlab.gridsphere.services.user.InvalidAccountRequestException;
+import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.user.AccountRequest;
+import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
 import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;

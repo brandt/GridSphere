@@ -9,7 +9,7 @@
 package org.gridlab.gridsphere.services.security.password;
 
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.services.user.AccountRequest;
+import org.gridlab.gridsphere.services.core.user.AccountRequest;
 
 import java.util.List;
 import java.util.Date;

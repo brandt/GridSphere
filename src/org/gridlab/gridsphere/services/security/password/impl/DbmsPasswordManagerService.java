@@ -17,9 +17,9 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.services.security.password.*;
-import org.gridlab.gridsphere.services.user.UserManagerService;
-import org.gridlab.gridsphere.services.user.AccountRequest;
-import org.gridlab.gridsphere.services.user.impl.AccountRequestImpl;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.user.AccountRequest;
+import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 

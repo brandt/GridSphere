@@ -8,8 +8,8 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
-import org.gridlab.gridsphere.services.user.AccountRequest;
-import org.gridlab.gridsphere.services.user.impl.AccountRequestImpl;
+import org.gridlab.gridsphere.services.core.user.AccountRequest;
+import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
 
 import java.util.Vector;
 import java.util.Random;

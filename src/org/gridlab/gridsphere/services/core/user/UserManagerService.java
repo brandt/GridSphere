@@ -6,7 +6,7 @@
  * To change template for new interface use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.services.user;
+package org.gridlab.gridsphere.services.core.user;
 
 import org.gridlab.gridsphere.services.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.core.mail.MailMessage;

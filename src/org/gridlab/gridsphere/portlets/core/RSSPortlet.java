@@ -12,7 +12,7 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.services.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.tags.web.element.InputFieldBean;
 import org.jdom.Document;
 import org.jdom.Element;
