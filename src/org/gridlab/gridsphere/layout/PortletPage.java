@@ -177,22 +177,22 @@ public class PortletPage implements Serializable, Cloneable {
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(List list) {
+    public List init(PortletRequest req, List list) {
 
         componentIdentifiers = new Vector();
 
         if (headerContainer != null) {
             headerContainer.setTheme(theme);
-            list = headerContainer.init(list);
+            list = headerContainer.init(req, list);
         }
         if (tabbedPane != null) {
             tabbedPane.setTheme(theme);
-            list = tabbedPane.init(list);
+            list = tabbedPane.init(req, list);
         }
 
         if (footerContainer != null) {
             footerContainer.setTheme(theme);
-            list = footerContainer.init(list);
+            list = footerContainer.init(req, list);
         }
 
         //log.debug("Made a components list!!!! " + list.size());

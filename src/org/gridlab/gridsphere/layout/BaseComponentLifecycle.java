@@ -30,7 +30,7 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(List list) {
+    public List init(PortletRequest req, List list) {
         this.COMPONENT_ID = list.size();
         componentIDStr = String.valueOf(COMPONENT_ID);
         return list;

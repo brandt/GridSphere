@@ -28,7 +28,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String theme = "xp";
     protected boolean isVisible = true;
     protected String roleString = "GUEST";
-    protected PortletRole requiredRole = null;
+    protected PortletRole requiredRole = PortletRole.GUEST;
     protected List listeners = null;
 
     /**
@@ -40,7 +40,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(List list) {
+    public List init(PortletRequest req, List list) {
         listeners = new Vector();
         defaultWidth = width;
          if (roleString != null) {
@@ -51,7 +51,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
             }
         }
         if ((label == null) || label.equals("")) {
-            return super.init(list);
+            return super.init(req, list);
 
         } else {
             this.COMPONENT_ID = list.size();
@@ -225,6 +225,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
         req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
+
     }
 
     public void addComponentListener(PortletComponent component) {

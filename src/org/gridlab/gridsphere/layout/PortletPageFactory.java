@@ -44,7 +44,6 @@ public class PortletPageFactory implements PortletSessionListener {
         String errorLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/ErrorLayout.xml");
 
         errorPage = PortletLayoutDescriptor.loadPortletPage(errorLayoutFile, layoutMappingFile);
-        errorPage.init(new ArrayList());
 
         templatePage = PortletLayoutDescriptor.loadPortletPage(templateLayoutPath, layoutMappingFile);
         errorPage.setLayoutDescriptor(errorLayoutFile);
@@ -71,7 +70,8 @@ public class PortletPageFactory implements PortletSessionListener {
         return instance;
     }
 
-    public PortletPage createErrorPage() {
+    public PortletPage createErrorPage(PortletRequest req) {
+        errorPage.init(req, new ArrayList());
         return errorPage;
     }
 
@@ -106,7 +106,7 @@ public class PortletPageFactory implements PortletSessionListener {
         }
     }
 
-    public PortletPage createFromAllWebApps() {
+    public PortletPage createFromAllWebApps(PortletRequest req) {
 
         PortletPage newPage = null;
         PortletTabbedPane pane = null;
@@ -138,7 +138,7 @@ public class PortletPageFactory implements PortletSessionListener {
             }
 
             //newPage.setPortletTabbedPane(pane);
-            newPage.init(new ArrayList());
+            newPage.init(req, new ArrayList());
 
             newPage.setLayoutDescriptor("/tmp/bob");
             newPage.save();
@@ -152,7 +152,7 @@ public class PortletPageFactory implements PortletSessionListener {
         return newPage;
     }
 
-    public PortletPage createFromGroups(List groups) {
+    public PortletPage createFromGroups(PortletRequest req, List groups) {
 
         PortletPage newPage = null;
         PortletTabbedPane pane = null;
@@ -193,7 +193,7 @@ public class PortletPageFactory implements PortletSessionListener {
             log.error("Unable to make a clone of the templatePage", e);
 
         }
-        newPage.init(new ArrayList());
+        newPage.init(req, new ArrayList());
         return newPage;
     }
             /*
@@ -253,7 +253,7 @@ public class PortletPageFactory implements PortletSessionListener {
             PortletRole role = req.getRole();
             if (role.equals(PortletRole.SUPER)) {
                 try {
-                    page = createFromAllWebApps();
+                    page = createFromAllWebApps(req);
                     userLayouts.put(sessionId, page);
                     sessionManager.addSessionListener(sessionId, this);
                 } catch (Exception e) {
@@ -262,7 +262,7 @@ public class PortletPageFactory implements PortletSessionListener {
             }  else {
                 try {
                     List groups = (List)req.getAttribute(SportletProperties.PORTLETGROUPS);
-                    page = createFromGroups(groups);
+                    page = createFromGroups(req, groups);
                     userLayouts.put(sessionId, page);
                     sessionManager.addSessionListener(sessionId, this);
                 } catch (Exception e) {
@@ -291,7 +291,7 @@ public class PortletPageFactory implements PortletSessionListener {
             try {
                 //newcontainer = (PortletPage)guestPage.clone();
                 newcontainer = (PortletPage)deepCopy(guestPage);
-                newcontainer.init(new ArrayList());
+                newcontainer.init(req, new ArrayList());
                 guests.put(id, newcontainer);
                 sessionManager.addSessionListener(id, this);
             } catch (Exception e) {

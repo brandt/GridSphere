@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,7 +25,7 @@ public interface ComponentLifecycle extends ComponentRender {
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(List list);
+    public List init(PortletRequest req, List list);
 
     /**
      * Performs an action on this portlet component

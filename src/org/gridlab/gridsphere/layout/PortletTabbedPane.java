@@ -210,19 +210,36 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(List list) {
-        list = super.init(list);
+    public List init(PortletRequest req, List list) {
+        list = super.init(req, list);
         if (selectedIndex < 0) selectedIndex = 0;
         PortletTab tab = null;
         List stabs = Collections.synchronizedList(tabs);
+        PortletRole role = req.getRole();
+
         synchronized (stabs) {
-            for (int i = 0; i < getTabCount(); i++) {
-                tab = getPortletTabAt(i);
-                tab.setTheme(theme);
-                if (selectedIndex == i) tab.setSelected(true);
-                list = tab.init(list);
-                tab.addComponentListener(this);
-                tab.setParentComponent(this);
+            List remtabs = new ArrayList();
+            int i = 0;
+            Iterator it = stabs.iterator();
+            while (it.hasNext()) {
+                tab = (PortletTab)it.next();
+                System.err.println(tab.getTitle() + tab.getRequiredRole() + " myrole=" + role);
+                    if (role.compare(role, PortletRole.toPortletRole(tab.getRequiredRoleAsString())) < 0) {
+                        remtabs.add(tab);
+                    } else {
+                    tab.setTheme(theme);
+                    if (selectedIndex == i) tab.setSelected(true);
+
+                    list = tab.init(req, list);
+
+                    tab.addComponentListener(this);
+                    tab.setParentComponent(this);
+                    }
+
+            }
+            it = remtabs.iterator();
+            while (it.hasNext()) {
+                tabs.remove(it.next());
             }
         }
         return list;
@@ -416,6 +433,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         if (event.getPortletComponentID().equals("")) {
             this.setSelectedPortletTab((PortletTab)tabs.get(selectedIndex));
         }
+
 
         super.doRender(event);
 

@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
@@ -82,8 +83,8 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(List list) {
-        list = super.init(list);
+    public List init(PortletRequest req, List list) {
+        list = super.init(req, list);
         if (columnString != null) {
             StringTokenizer st = new StringTokenizer(columnString, ",");
             numColumns = st.countTokens();

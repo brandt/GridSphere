@@ -8,6 +8,7 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -41,8 +42,8 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(List list) {
-        list = super.init(list);
+    public List init(PortletRequest req, List list) {
+        list = super.init(req, list);
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
         Iterator it = scomponents.iterator();
@@ -54,7 +55,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
             // all the components have the same theme
             p.setTheme(theme);
             // invoke init on each component
-            list = p.init(list);
+            list = p.init(req, list);
 
             p.addComponentListener(this);
             /*

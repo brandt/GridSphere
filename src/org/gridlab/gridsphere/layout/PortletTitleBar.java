@@ -345,8 +345,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(List list) {
-        list = super.init(list);
+    public List init(PortletRequest req, List list) {
+        list = super.init(req, list);
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);

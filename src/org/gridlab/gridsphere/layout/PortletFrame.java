@@ -155,8 +155,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @return a <code>List</code> of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(List list) {
-        list = super.init(list);
+    public List init(PortletRequest req, List list) {
+        list = super.init(req, list);
         dataManager = SportletDataManager.getInstance();
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
@@ -173,7 +173,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             // if title bar is not assigned a label and we have one then use it
             if ((!label.equals("")) && (titleBar.getLabel().equals(""))) titleBar.setLabel(label+"TB");
             titleBar.setPortletClass(portletClass);
-            list = titleBar.init(list);
+            list = titleBar.init(req, list);
             titleBar.addComponentListener(this);
         }
         try {

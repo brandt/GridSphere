@@ -31,8 +31,8 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(List list) {
-        return  super.init(list);
+    public List init(PortletRequest req, List list) {
+        return  super.init(req, list);
     }
 
     /**

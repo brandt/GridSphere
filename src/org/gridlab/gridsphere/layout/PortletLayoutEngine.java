@@ -66,7 +66,7 @@ public class PortletLayoutEngine {
         // Check for framework errors
         Exception portletException = (Exception)req.getAttribute(SportletProperties.ERROR);
         if (portletException != null) {
-            return pageFactory.createErrorPage();
+            return pageFactory.createErrorPage(req);
         }
 
         return pageFactory.createPortletPage(req);
@@ -152,7 +152,7 @@ public class PortletLayoutEngine {
         PortletPage page = null;
         try {
             page = getPortletPage(event);
-            int numcomps = page.getComponentIdentifierList().size();
+            //int numcomps = page.getComponentIdentifierList().size();
             /*
             if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
                 event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
