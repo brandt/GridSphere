@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.event.ActionListener;
  */
 public interface PortletAction  {
 
-
+    public static final String LOGIN = "login";
+    public static final String LOGOUT = "logout";
 
 }

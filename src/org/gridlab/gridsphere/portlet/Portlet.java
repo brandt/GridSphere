@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
+import org.gridlab.gridsphere.portlet.impl.SportletConfig;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
@@ -62,19 +63,26 @@ public abstract class Portlet extends HttpServlet
 
     protected transient static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(Portlet.class);
 
-    private PortletConfig portletConfig = null;
-    private PortletSettings portletSettings = null;
-    private PortletRegistryService registryService = null;
-    private String id;
+    protected PortletConfig portletConfig = null;
+    protected PortletSettings portletSettings = null;
 
     public static class Mode implements Serializable {
 
-        public static final int VIEW = 0;
-        public static final int EDIT = 1;
-        public static final int HELP = 2;
-        public static final int CONFIGURE = 3;
+        public static final int VIEW_MODE = 0;
+        public static final int EDIT_MODE = 1;
+        public static final int HELP_MODE = 2;
+        public static final int CONFIGURE_MODE = 3;
 
-        private int mode = VIEW;
+        public static final Mode EDIT = new Mode(EDIT_MODE);
+        public static final Mode VIEW = new Mode(VIEW_MODE);
+        public static final Mode HELP = new Mode(HELP_MODE);
+        public static final Mode CONFIGURE = new Mode(CONFIGURE_MODE);
+
+        private int mode = VIEW_MODE;
+
+        private Mode(int mode) {
+            this.mode = mode;
+        }
 
         public int getMode() {
             return mode;
@@ -87,11 +95,11 @@ public abstract class Portlet extends HttpServlet
 
         public String toString() {
             String tagstring;
-            if (mode == EDIT) {
+            if (mode == EDIT_MODE) {
                 tagstring = "EDIT";
-            } else if (mode == HELP) {
+            } else if (mode == HELP_MODE) {
                 tagstring = "HELP";
-            } else if (mode == CONFIGURE) {
+            } else if (mode == CONFIGURE_MODE) {
                 tagstring = "CONFIGURE";
             } else {
                 tagstring = "VIEW";
@@ -103,11 +111,19 @@ public abstract class Portlet extends HttpServlet
 
     public static class ModeModifier implements Serializable {
 
-        public static final int CURRENT = 0;
-        public static final int PREVIOUS = 1;
-        public static final int REQUESTED = 2;
+        public static final int CURRENT_MODE = 0;
+        public static final int PREVIOUS_MODE = 1;
+        public static final int REQUESTED_MODE = 2;
 
-        private int modifier = CURRENT;
+        public static final ModeModifier CURRENT = new ModeModifier(CURRENT_MODE);
+        public static final ModeModifier PREVIOUS = new ModeModifier(PREVIOUS_MODE);
+        public static final ModeModifier REQUESTED = new ModeModifier(REQUESTED_MODE);
+
+        private int modifier = CURRENT_MODE;
+
+        private ModeModifier(int modifier) {
+            this.modifier = modifier;
+        }
 
         public int getId() {
             return modifier;
@@ -120,9 +136,9 @@ public abstract class Portlet extends HttpServlet
 
         public String toString() {
             String tagstring;
-            if (modifier == PREVIOUS) {
+            if (modifier == PREVIOUS_MODE) {
                 tagstring = "PREVIOUS";
-            } else if (modifier == REQUESTED) {
+            } else if (modifier == REQUESTED_MODE) {
                 tagstring = "REQUESTED";
             } else {
                 tagstring = "CURRENT";
@@ -260,13 +276,22 @@ public abstract class Portlet extends HttpServlet
     }
 
     /**
-     * Initializes the PortletInfo/Servlet using the servlet.xml file and registers the portlet with
-     * the PortletRegistryService
+     * Initializes the PortletConfig using the web.xml file entry for this portlet
      */
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
         log.info("in init(ServletConfig)");
-/*
+
+        /*
+        portletConfig = new SportletConfig(config);
+        PortletContext context = portletConfig.getContext();
+        PortletRegistryService registryService = (PortletRegistryService)context.getService(PortletRegistryService.class);
+        registryService.registerPortletConfig(portletConfig);
+
+        System.err.println(config.getServletName());
+        System.err.println(config.getClass().getName());
+        System.err.println(config.getServletContext().getServletContextName());
+
             This will register the portlet (servlet) with the registry service on startup.
             I took this path initially thinking I could forward to remote third-party
             portlets outside of gridsphere.jar and provide their context to the registry
@@ -346,7 +371,6 @@ public abstract class Portlet extends HttpServlet
 
     public final void destroy() {
         super.destroy();
-        registryService.unregisterPortlet(id);
     }
 
 }

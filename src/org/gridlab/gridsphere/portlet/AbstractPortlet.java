@@ -13,7 +13,7 @@ import org.gridlab.gridsphere.event.WindowEvent;
 /**
  *
  */
-public abstract class AbstractPortlet extends PortletAdapter implements PortletActionCommand, ActionListener, WindowListener {
+public abstract class AbstractPortlet extends PortletAdapter implements ActionListener, WindowListener {
 
     public AbstractPortlet() {
         super();
@@ -27,14 +27,6 @@ public abstract class AbstractPortlet extends PortletAdapter implements PortletA
     public PortletConfig getConfig() {
         return super.getPortletConfig();
     }
-
-    /**
-     *
-     *
-     * @param request the portlet request
-     * @throws PortletException if the portlet has trouble fulfilling the execution request
-     */
-    public abstract void execute(PortletRequest request) throws PortletException;
 
     /**
      * Called by the portlet container to ask this portlet to perform the required operational logic

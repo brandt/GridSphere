@@ -41,6 +41,13 @@ public interface PortletSettings {
     public String getTitle(Locale locale, Client client);
 
     /**
+     * Returns the portlet's default locale.
+     *
+     * @return the portlet's default locale
+     */
+    public Locale getDefaultLocale();
+
+    /**
      * Returns the short title of this window for the provided locale, or null if none exists.
      * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
      *
@@ -72,20 +79,12 @@ public interface PortletSettings {
     public String getKeywords(Locale locale, Client client);
 
     /**
-     * Returns the list of supported groups
-     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
+     * Returns this portlets concrete ID. Used internally in Action tags
+     * to signal the portlet container which portlet needs to be executed
      *
-     * @return the list of supported groups
+     * @return the concrete portlet ID
      */
-    public List getSupportedGroups();
-
-    /**
-     * Returns the list of supported roles
-     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
-     *
-     * @return the list of supported roles
-     */
-    public List getSupportedRoles();
+    public String getConcretePortletID();
 
     /**
      * Removes the attribute with the given name.
@@ -112,5 +111,12 @@ public interface PortletSettings {
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void store() throws AccessDeniedException;
+
+    /**
+     * Returns the portlet application settings
+     *
+     * @return the portlet application settings
+     */
+    public PortletApplicationSettings getApplicationSettings();
 
 }

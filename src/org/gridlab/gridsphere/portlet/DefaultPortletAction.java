@@ -16,18 +16,15 @@ import java.util.Hashtable;
  */
 public final class DefaultPortletAction implements PortletAction {
 
-    private AbstractPortlet portlet;
-    private Map store;
+    private Map store = new Hashtable();
     private String name;
     private String portletID;
 
     /**
      * Constructor creates portlet action from action name
      */
-    public DefaultPortletAction(AbstractPortlet portlet, String name) {
-        this.portlet = portlet;
+    public DefaultPortletAction(String name) {
         this.name = name;
-        store = new Hashtable();
     }
 
     /**
@@ -58,12 +55,8 @@ public final class DefaultPortletAction implements PortletAction {
         return store;
     }
 
-    public void setPortletID(String portletID) {
-        this.portletID = portletID;
-    }
-
     public String getPortletID() {
-        return portletID;
+        return (String)store.get("portletID");
     }
 
 }

@@ -22,7 +22,6 @@ import java.util.Hashtable;
  */
 public abstract class PortletAdapter extends Portlet implements PortletSessionListener {
 
-    protected PortletConfig portletConfig = null;
     protected Hashtable storeVars = new Hashtable();
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletAdapter.class);
@@ -48,8 +47,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * normal initialization
      */
     public void init(PortletConfig config) throws UnavailableException {
-        this.portletConfig = config;
         log.info("in init(PortletConfig)");
+        this.portletConfig = config;
     }
 
     /**
@@ -64,8 +63,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * @param config the portlet configuration
      */
     public void destroy(PortletConfig config) {
-        // XXX: FILL ME IN
         log.info("in destroy(PortletConfig)");
+        this.portletConfig = null;
     }
 
     /**
@@ -82,7 +81,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * @param settings the portlet settings
      */
     public void initConcrete(PortletSettings settings) throws UnavailableException {
-        // XXX: FILL ME IN
+        log.info("in initConcrete(PortletSettings)");
+        this.portletSettings = settings;
     }
 
     /**
@@ -97,7 +97,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * @param settings the portlet settings
      */
     public void destroyConcrete(PortletSettings settings) {
-        // XXX: FILL ME IN
+        log.info("in initConcrete(PortletSettings)");
+        this.portletSettings = null;
     }
 
     /**
@@ -119,16 +120,16 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
         Portlet.Mode mode = (Portlet.Mode) request.getAttribute(GridSphereProperties.PORTLETMODE);
         if (mode != null) {
             switch (mode.getMode()) {
-                case Portlet.Mode.VIEW:
+                case Portlet.Mode.VIEW_MODE:
                     doView(request, response);
                     break;
-                case Portlet.Mode.EDIT:
+                case Portlet.Mode.EDIT_MODE:
                     doEdit(request, response);
                     break;
-                case Portlet.Mode.CONFIGURE:
+                case Portlet.Mode.CONFIGURE_MODE:
                     doConfigure(request, response);
                     break;
-                case Portlet.Mode.HELP:
+                case Portlet.Mode.HELP_MODE:
                     doHelp(request, response);
                     break;
                 default:
