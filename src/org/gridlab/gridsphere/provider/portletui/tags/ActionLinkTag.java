@@ -105,6 +105,15 @@ public class ActionLinkTag extends ActionTag {
                 if (actionlink.getParamBeanList() != null) {
                     paramBeans = actionlink.getParamBeanList();
                 }
+                if (actionlink.getAction() != null) {
+                    action = actionlink.getAction();
+                }
+                if (actionlink.getValue() != null) {
+                    value = actionlink.getValue();
+                }
+                if (actionlink.getKey() != null) {
+                    key = actionlink.getKey();
+                }
             }
         } else {
             actionlink = new ActionLinkBean();
