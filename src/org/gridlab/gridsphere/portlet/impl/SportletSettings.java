@@ -84,12 +84,14 @@ public class SportletSettings implements PortletSettings {
      * @return the title of the portlet
      */
     public String getTitle(Locale locale, Client client) {
+
+        // TODO need to address localization!!!!
         Iterator it = langList.iterator();
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo) it.next();
-            if (langInfo.getLocale().startsWith(locale.toString())) {
+            //if (langInfo.getLocale().startsWith(locale.toString())) {
                 return langInfo.getTitle();
-            }
+            //}
         }
         return null;
     }
