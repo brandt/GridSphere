@@ -177,21 +177,21 @@ public interface FormEvent extends ActionEvent {
     /***
      * Return an existing <code>IncludeBean</code> or create a new one
      * @param beanId
-     * @return
+     * @return an include bean
      */
     public IncludeBean getIncludeBean(String beanId);
 
     /***
      * Return an existing <code>ActionComponentBean</code> or create a new one
      * @param beanId
-     * @return
+     * @return an action component bean
      */
     public ActionComponentBean getActionComponentBean(String beanId);
 
     /***
      * Return an existing <code>MessageBoxBean</code> or create a new one
      * @param beanId
-     * @return
+     * @return a message box bean
      */
     public MessageBoxBean getMessageBoxBean(String beanId);
 
