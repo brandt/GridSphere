@@ -829,51 +829,6 @@
             </example>
         </sect2>
 
-        <sect2 id="imagetag">
-            <title>Image</title>
-            <para>
-                This tag displays an image
-            </para>
-            <table>
-                <title>Attributes to image</title>
-                <tgroup cols="3">
-                    <colspec colwidth="*"/>
-                    <colspec colwidth="*"/>
-                    <colspec colwidth="4*"/>
-                    <thead>
-                        <row>
-                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
-                        </row>
-                    </thead>
-                    <tbody>
-                        <row>
-                            <entry>src</entry><entry>no</entry><entry>string: the image source location</entry>
-                        </row>
-                    </tbody>
-                    <tbody>
-                        <row>
-                            <entry>alt</entry><entry>no</entry><entry>string: a text to display when the image is highlighted</entry>
-                        </row>
-                    </tbody>
-                    <tbody>
-                        <row>
-                            <entry>title</entry><entry>no</entry><entry>string: a title to associate with the image</entry>
-                        </row>
-                    </tbody>
-                </tgroup>
-            </table>
-            <example>
-                <title>Usage of image</title>
-                <screen>
-                    <![CDATA[
-                    <ui:image src="picture.gif" title="My picture" alt="My Picture"/>
-         ]]>
-                </screen>
-                This creates an image link displaying picture.gif with the supplied title and alt text.
-            </example>
-        </sect2>
-
-
         <sect2 id="fileinputtag">
             <title>FileInput</title>
             <para>
