@@ -15,9 +15,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
-import org.gridlab.gridsphere.tags.web.element.TextFieldBean;
-import org.gridlab.gridsphere.tags.web.element.CheckBoxBean;
-import org.gridlab.gridsphere.tags.web.element.TextBean;
+import org.gridlab.gridsphere.tags.web.element.*;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -72,6 +70,17 @@ public class RSSPortlet extends AbstractPortlet {
 
         TextFieldBean fieldBean = (TextFieldBean)form.getElementBean("f");
         System.out.println("\n\n\n\nVALUE 1 :"+fieldBean.getValue());
+
+        CheckBoxBean cbb = (CheckBoxBean)form.getElementBean("cbb");
+        System.out.println("checkbox ");
+        if (cbb.isSelected()) {
+            System.out.println("selected ");
+        } else {
+            System.out.println("not selected ");
+        }
+
+
+
         /*
             PortletData data = req.getData();
             data.setAttribute("myattr","testing");
@@ -169,6 +178,7 @@ public class RSSPortlet extends AbstractPortlet {
         DefaultPortletAction defAction = new DefaultPortletAction("rss_edit");
         returnURI.addAction(defAction);
 
+
         // code prototyping
         TextFieldBean fieldBean = new TextFieldBean("jason", "oliver", false, false, 20, 30);
         fieldBean.setColor("blue");fieldBean.setBackgroundcolor("red");
@@ -181,7 +191,12 @@ public class RSSPortlet extends AbstractPortlet {
         text.store("textid",request);
 
 
+        TextAreaBean tab = new TextAreaBean("tab","",false, false, 20,30);
+        tab.store("tab",request);
+
         CheckBoxBean cbb = new CheckBoxBean("test","test",false, false);
+        cbb.setDisabled(true);
+        cbb.setSelected(true);
         cbb.store("cbb", request);
 
 
