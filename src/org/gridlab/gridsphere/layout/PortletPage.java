@@ -373,7 +373,7 @@ public class PortletPage implements Serializable, Cloneable {
         c.theme = theme;
         c.COMPONENT_ID = this.COMPONENT_ID;
         c.theme = this.theme;
-        List compList = new ArrayList(this.componentIdentifiers.size());
+        List compList = new Vector(this.componentIdentifiers.size());
         for (i = 0; i < this.componentIdentifiers.size(); i++) {
             ComponentIdentifier cid = (ComponentIdentifier)this.componentIdentifiers.get(i);
             compList.add(new ComponentIdentifier(cid));

@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * <code>PortletFrame</code> provides the visual representation of a portlet. A portlet frame
@@ -190,11 +191,14 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @throws PortletLayoutException if a layout error occurs
      */
     protected void fireFrameEvent(PortletFrameEvent event) throws PortletLayoutException {
-        Iterator it = listeners.iterator();
+        List slisteners = Collections.synchronizedList(listeners);
+        synchronized (slisteners) {
+        Iterator it = slisteners.iterator();
         PortletFrameListener l;
         while (it.hasNext()) {
             l = (PortletFrameListener) it.next();
             l.handleFrameEvent(event);
+        }
         }
     }
 
@@ -239,12 +243,15 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);
                 }
 
-                Iterator it = listeners.iterator();
+                List slisteners = Collections.synchronizedList(listeners);
+                synchronized (slisteners) {
+                Iterator it = slisteners.iterator();
                 PortletComponent comp;
                 while (it.hasNext()) {
                     comp = (PortletComponent) it.next();
                     event.addNewRenderEvent(frameEvent);
                     comp.actionPerformed(event);
+                }
                 }
 
             }
@@ -309,12 +316,15 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             }
             if (titleBar != null) titleBar.setPortletMode(req.getMode());
 
-            Iterator it = listeners.iterator();
+            List slisteners = Collections.synchronizedList(listeners);
+            synchronized (slisteners) {
+            Iterator it = slisteners.iterator();
             PortletComponent comp;
             while (it.hasNext()) {
                 comp = (PortletComponent) it.next();
                 event.addNewRenderEvent(titleBarEvent);
                 comp.actionPerformed(event);
+            }
             }
         }
 

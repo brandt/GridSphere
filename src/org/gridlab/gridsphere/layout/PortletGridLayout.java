@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Collections;
 
 /**
  * The <code>PortletGridLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
@@ -125,8 +126,10 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
         int portletCount = 0;
 
         // ok this one is maximized show only this window
+        List scomponents = Collections.synchronizedList(components);
+        synchronized (scomponents) {
         for (int i = 0; i < numComponents; i++) {
-            p = (PortletComponent) components.get(i);
+            p = (PortletComponent) scomponents.get(i);
             if (p.getWidth().equals("100%")) {
                 // make another table around this, just for the padding
                 out.println("<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> ");
@@ -135,6 +138,7 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
                 out.println("</td></tr></table>");
                 return;
             }
+        }
         }
 
         //out.println("<table width=\"" + gwidth + "%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\">");
