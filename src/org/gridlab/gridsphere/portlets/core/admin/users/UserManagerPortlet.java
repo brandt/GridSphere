@@ -131,14 +131,15 @@ public class UserManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
         //User user = loadUser(evt);
         try {
-            validateUser(evt);
             User user = null;
             HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
             String newuser = hf.getValue();
 
             if (newuser.equals("true")) {
                 user = saveUser(evt, null);
+                validateUser(evt, true);
             } else {
+                validateUser(evt, false);
                 // load in User values
                 HiddenFieldBean userHF = evt.getHiddenFieldBean("userID");
                 String userID = userHF.getValue();
@@ -207,7 +208,7 @@ public class UserManagerPortlet extends ActionPortlet {
         event.getPasswordBean("confirmPassword").setValue(pwd.getValue());
     }
 
-    private void validateUser(FormEvent event)
+    private void validateUser(FormEvent event, boolean newuser)
             throws PortletException {
         log.debug("Entering validateUser()");
         StringBuffer message = new StringBuffer();
@@ -217,9 +218,13 @@ public class UserManagerPortlet extends ActionPortlet {
         if (userName.equals("")) {
             message.append("User name cannot be blank<br>");
             isInvalid = true;
-        } else if (this.userManagerService.existsUserName(userName)) {
-            message.append("A user already exists with the same user name, please use a different name.\n");
-            isInvalid = true;
+        }
+
+        if (newuser) {
+            if (this.userManagerService.existsUserName(userName)) {
+                message.append("A user already exists with the same user name, please use a different name.\n");
+                isInvalid = true;
+            }
         }
         // Validate family name
         String familyName = event.getTextFieldBean("familyName").getValue();
