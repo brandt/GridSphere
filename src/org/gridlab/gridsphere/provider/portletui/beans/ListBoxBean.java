@@ -133,7 +133,8 @@ public class ListBoxBean extends BeanContainer implements TagBean {
     }
 
     /**
-     * Returns true if the listbox has a selcted value. Otherwise false.
+     * Returns true if the listbox has a selected value, false otherwise
+     *
      * @return true if an item is selected, otherwise false
      */
     public boolean hasSelectedValue() {

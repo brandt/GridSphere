@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletSession;
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 
 import java.util.Locale;
@@ -185,11 +186,17 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
 
     protected String getLocalizedText(String key) {
         PortletRequest req = (PortletRequest)pageContext.getAttribute("portletRequest");
+
+        PortletSession session = req.getPortletSession(true);
+        String localeStr = (String)session.getAttribute(User.LOCALE);
+
         User user = req.getUser();
         String loc = (String)user.getAttribute(User.LOCALE);
         Locale locale = null;
         if (loc != null) {
             locale = new Locale(loc, "", "");
+        } else if (localeStr != null) {
+            locale = new Locale(localeStr, "", "");
         } else {
             locale = pageContext.getRequest().getLocale();
         }

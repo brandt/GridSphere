@@ -99,16 +99,25 @@ public class ActionPortlet extends AbstractPortlet {
      * Returns the title to display in the portlet
      * Doesn't work since title rendering occurs before title is set!
      *
-     * @deprecated
      * @param request the <code>PortletRequest</code>
      * @return the title to display in the portlet
      */
     public String getNextTitle(PortletRequest request) {
         String id = request.getPortletSettings().getConcretePortletID();
         log.debug("setting in attribute " + id+".title");
-        String title = (String)request.getAttribute(id+".title");
+        String title = (String)request.getSession().getAttribute(id+".title");
         if (title == null) {
-            Locale locale = request.getLocale();
+            String locStr = (String)request.getPortletSession(true).getAttribute(User.LOCALE);
+            User user = request.getUser();
+            String userlocale = (String)user.getAttribute(User.LOCALE);
+            Locale locale = null;
+            if (userlocale != null) {
+                locale = new Locale(userlocale, "", "");
+            } else if (locStr != null) {
+                locale = new Locale(locStr, "", "");
+            } else {
+                locale = getPortletSettings().getDefaultLocale();
+            }
             title = getPortletSettings().getTitle(locale, null);
             log.debug("Printing default title: " + title);
         }
@@ -120,7 +129,6 @@ public class ActionPortlet extends AbstractPortlet {
      * Sets the title to display in the portlet
      * Doesn't work since title rendering occurs before title is set!
      *
-     * @deprecated
      * @param request the <code>PortletRequest</code>
      * @param title the title display in the portlet
      */
@@ -128,7 +136,7 @@ public class ActionPortlet extends AbstractPortlet {
         this.log.debug("Setting title to " + title);
         String id = request.getPortletSettings().getConcretePortletID();
         //System.err.println("in setNextT: in attribute " + id + ".title");
-        request.setAttribute(id + ".title", title);
+        request.getPortletSession(true).setAttribute(id + ".title", title);
     }
 
     /**
@@ -393,11 +401,17 @@ public class ActionPortlet extends AbstractPortlet {
     }
 
     protected String getLocalizedText(PortletRequest req, String key) {
+
+        PortletSession session = req.getPortletSession(true);
+        String localeStr = (String)session.getAttribute(User.LOCALE);
+
         User user = req.getUser();
         String loc = (String)user.getAttribute(User.LOCALE);
         Locale locale = null;
         if (loc != null) {
             locale = new Locale(loc, "", "");
+        } else if (localeStr != null) {
+            locale = new Locale(localeStr, "", "");
         } else {
             locale = req.getLocale();
         }

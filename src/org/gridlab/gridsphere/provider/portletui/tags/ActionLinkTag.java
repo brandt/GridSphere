@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -21,6 +22,7 @@ public class ActionLinkTag extends ActionTag {
     protected ActionLinkBean actionlink = null;
     protected String key = null;
     protected String style = TextBean.MSG_INFO;
+    protected ImageBean imageBean = null;
 
     /**
      * Sets the style of the text: Available styles are
@@ -72,6 +74,24 @@ public class ActionLinkTag extends ActionTag {
         return key;
     }
 
+    /**
+     * Sets the image bean
+     *
+     * @param imageBean the image bean
+     */
+    public void setImageBean(ImageBean imageBean) {
+        this.imageBean = imageBean;
+    }
+
+    /**
+     * Returns the image bean
+     *
+     * @return the image bean
+     */
+    public ImageBean getImageBean() {
+        return imageBean;
+    }
+
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
             actionlink = (ActionLinkBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
@@ -103,6 +123,11 @@ public class ActionLinkTag extends ActionTag {
             actionlink.setValue(bodyContent.getString());
         }
 
+        if (imageBean != null) {
+            String val = actionlink.getValue();
+            if (val == null) val = "";
+            actionlink.setValue(imageBean.toStartString() + val);
+        }
         try {
             JspWriter out = pageContext.getOut();
             out.print(actionlink.toEndString());
