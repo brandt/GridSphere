@@ -282,6 +282,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
 
     public StringBuffer getBufferedOutput(PortletRequest req) {
         StringBuffer sb =  (StringBuffer)req.getAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr);
+        req.removeAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr);
         return ((sb != null) ? sb : new StringBuffer());
     }
 
