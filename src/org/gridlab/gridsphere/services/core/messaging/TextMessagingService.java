@@ -2,6 +2,7 @@ package org.gridlab.gridsphere.services.core.messaging;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.tmf.Message;
+import org.gridlab.gridsphere.tmf.config.User;
 
 import java.util.List;
 
@@ -23,5 +24,9 @@ public interface TextMessagingService  extends PortletService {
     public List getUsers();
 
     public List getServices();
+
+    public User getUser(String userid);
+
+    public void setUser(User user);
 
 }
