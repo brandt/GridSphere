@@ -15,7 +15,6 @@
         Provides Core GridSphere Portlets
     </description>
 
-
     <servlet>
         <servlet-name>HelloWorld</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld</servlet-class>
@@ -29,6 +28,11 @@
     <servlet>
         <servlet-name>LoginPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>LogoutPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.LogoutPortlet</servlet-class>
     </servlet>
 
     <servlet>

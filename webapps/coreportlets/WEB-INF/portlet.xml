@@ -213,6 +213,69 @@
 
 <portlet-app-def>
 
+<portlet-app id="org.gridlab.gridsphere.portlets.core.LogoutPortlet">
+    <portlet-name>Logout</portlet-name>
+    <servlet-name>LogoutPortlet</servlet-name>
+    <portlet-config>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </portlet-config>
+    <cache>
+        <expires>120</expires>
+        <shared>true</shared>
+    </cache>
+    <allows>
+        <maximized/>
+        <minimized/>
+        <resizing/>
+    </allows>
+    <supports>
+        <markup name="html">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+        <markup name="wml">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+    </supports>
+</portlet-app>
+
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.LogoutPortlet.1">
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </context-param>
+    <concrete-portlet>
+        <portlet-name>Logout</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Login</title>
+            <title-short>Login</title-short>
+            <description>Portlet provides logout capabilities</description>
+            <keywords>portlet login</keywords>
+        </language>
+        <owner>
+            <group-name>CACTUS</group-name>
+            <role-name>ADMIN</role-name>
+        </owner>
+        <group>
+            <group-name>ANY</group-name>
+        </group>
+        <role>
+            <role-name>GUEST</role-name>
+        </role>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
+
+<portlet-app-def>
+
 <portlet-app id="org.gridlab.gridsphere.portlets.core.SubscriptionPortlet.231">
     <portlet-name>Subscription</portlet-name>
     <servlet-name>SubscriptionPortlet</servlet-name>
