@@ -111,7 +111,8 @@ public class FrameBean extends TableBean implements TagBean {
         if (cellSpacing != null) sb.append(" cellspacing=\"" + cellSpacing + "\" ");
         if (cellPadding != null) sb.append(" cellpadding=\"" + cellPadding + "\" ");
         if (border != null) sb.append(" border=\"" + border + "\" ");
-        if (width != null) sb.append(" width=\"" + width + "\" >");
+        if (width != null) sb.append(" width=\"" + width + "\" ");
+        sb.append(">");
         if (defaultModel != null) sb.append(defaultModel.toStartString());
         return sb.toString();
     }
