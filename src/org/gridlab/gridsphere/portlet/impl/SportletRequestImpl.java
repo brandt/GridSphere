@@ -33,7 +33,6 @@ public class SportletRequestImpl implements SportletRequest {
 
     // Another proxy class
     private PortletSession portletSession = null;
-    private boolean hasSessionBeenCreated = false;
     private static PortletLog log = SportletLog.getInstance(SportletRequest.class);
 
 
@@ -50,10 +49,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param req the HttpServletRequest
      */
     public SportletRequestImpl(HttpServletRequest req) {
-
-
         this.req = req;
-        portletSession = new SportletSession(this,req.getSession(true));
     }
 
     /**
@@ -135,7 +131,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet session
      */
     public PortletSession getPortletSession() {
-        hasSessionBeenCreated = true;
+        if (portletSession == null) portletSession = new SportletSession(req.getSession(true));
         return portletSession;
     }
 
@@ -149,7 +145,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet session
      */
     public PortletSession getPortletSession(boolean create) {
-        if ((hasSessionBeenCreated == false) && (create == false))
+        if ((portletSession == null) && (create == false))
             return null;
         if (create == true) {
             portletSession = new SportletSession(req.getSession(true));

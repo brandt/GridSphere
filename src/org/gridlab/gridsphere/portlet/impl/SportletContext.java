@@ -220,7 +220,7 @@ public class SportletContext implements PortletContext {
      */
     public PortletService getService(Class service)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
-        return factory.createPortletService(service, config, true);
+        return factory.createPortletService(service, context, true);
     }
 
     /**
@@ -239,7 +239,7 @@ public class SportletContext implements PortletContext {
      */
     public PortletService getService(Class service, User user)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
-        return factory.createUserPortletService(service, user, config, true);
+        return factory.createUserPortletService(service, user, context, true);
     }
 
     /**

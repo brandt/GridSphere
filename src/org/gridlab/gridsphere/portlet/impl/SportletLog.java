@@ -4,15 +4,15 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+
 import org.apache.log4j.PropertyConfigurator;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridlab.gridsphere.portlet.PortletLog;
 
-import java.net.URL;
 import java.util.Hashtable;
 import java.util.Map;
+import java.net.URL;
 
 /**
  * The <code>PortletLog</code> provides the portlet with the ability to log
@@ -31,9 +31,9 @@ import java.util.Map;
  * ...
  * </code>
  * <p>
- * This PortletLogImpl is a proxy for the Log 4J Logger object
  */
 public class SportletLog implements PortletLog {
+
 
     static {
         URL propsURL = SportletLog.class.getResource("/gridsphere/log4j.properties");
@@ -42,13 +42,15 @@ public class SportletLog implements PortletLog {
 
     private static Map logMap = new Hashtable();
     private static String thisClassName = SportletLog.class.getName() + ".";
-    private Logger logger;
+    //private Logger logger;
+
+    private Log logger;
 
     /**
      * Constructor not accessible. Use getDefault instead.
      */
     private SportletLog(Class clazz) {
-        logger = Logger.getLogger(clazz);
+        logger = LogFactory.getLog(clazz);
     }
 
     /**
@@ -79,7 +81,7 @@ public class SportletLog implements PortletLog {
      * @param text the informational text to log
      */
     public void debug(String text) {
-        logger.log(thisClassName, Level.DEBUG, text, null);
+        logger.debug(text);
     }
 
     /**
@@ -97,7 +99,7 @@ public class SportletLog implements PortletLog {
      * @param text the informational text to log
      */
     public void info(String text) {
-        logger.log(thisClassName, Level.INFO, text, null);
+        logger.info(text);
     }
 
     /**
@@ -106,7 +108,7 @@ public class SportletLog implements PortletLog {
      * @return true for the moment
      */
     public boolean isWarnEnabled() {
-        return logger.isEnabledFor(Priority.WARN);
+        return logger.isWarnEnabled();
     }
 
     /**
@@ -115,7 +117,7 @@ public class SportletLog implements PortletLog {
      * @param text the warning text to log
      */
     public void warn(String text) {
-        logger.log(thisClassName, Level.WARN, text, null);
+        logger.warn(text);
     }
 
     /**
@@ -124,7 +126,7 @@ public class SportletLog implements PortletLog {
      * @return true if the log is enabled, false otherwise
      */
     public boolean isErrorEnabled() {
-        return logger.isEnabledFor(Priority.ERROR);
+        return logger.isErrorEnabled();
     }
 
     /**
@@ -133,7 +135,7 @@ public class SportletLog implements PortletLog {
      * @param text the error text to log
      */
     public void error(String text) {
-        logger.log(thisClassName, Level.ERROR, text, null);
+        logger.error(text);
     }
 
     /**
@@ -143,7 +145,7 @@ public class SportletLog implements PortletLog {
      * @param cause the cause for logging
      */
     public void error(String text, Throwable cause) {
-        logger.log(thisClassName, Level.INFO, text, cause);
+        logger.error(text, cause);
     }
 
 }
