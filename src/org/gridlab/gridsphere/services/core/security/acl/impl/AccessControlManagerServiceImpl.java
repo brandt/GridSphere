@@ -38,12 +38,12 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     public static synchronized AccessControlManagerServiceImpl getInstance() {
-        pm = PersistenceManagerFactory.createGridSphereRdbms();
+
         return instance;
     }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-
+        pm = PersistenceManagerFactory.createGridSphereRdbms();
     }
 
     public void destroy() {
@@ -369,7 +369,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         //}
     }
 
-    public boolean hasRequiredRole(PortletRequest req, String portletClass, boolean checkAdmin) {
+    public boolean hasRequiredRole(PortletRequest req, String portletId, boolean checkAdmin) {
         Map userGroups = (Map)req.getAttribute(SportletProperties.PORTLETGROUPS);
 
         boolean found = false;
@@ -384,8 +384,10 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             //System.err.println("group= " + group.getName());
             while (roleIt.hasNext()) {
                 SportletRoleInfo roleInfo = (SportletRoleInfo)roleIt.next();
-                //System.err.println("class= " + roleInfo.getPortletClass());
-                if (roleInfo.getPortletClass().equals(portletClass)) {
+                //System.err.println("class= " + roleInfo.getPortletID());
+                String pid = roleInfo.getPortletClass();
+               
+                if (pid.equals(portletId))  {
                     // check if user has this group
                     found = true;
                     //if (userGroups.containsKey(group)) {
@@ -423,7 +425,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             //System.err.println("group= " + group.getName());
             while (roleIt.hasNext()) {
                 SportletRoleInfo roleInfo = (SportletRoleInfo)roleIt.next();
-                //System.err.println("class= " + roleInfo.getPortletClass());
+                //System.err.println("class= " + roleInfo.getPortletID());
                 if (roleInfo.getPortletClass().equals(portletID)) {
                     // check if user has this group
                     found = true;

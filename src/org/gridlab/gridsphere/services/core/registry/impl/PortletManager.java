@@ -36,6 +36,7 @@ public class PortletManager implements PortletManagerService {
     // A multi-valued hashtable with a webapp key and a List value containing portletAppID's
     private List webapps = new Vector();
 
+    private static String PORTLETS_PATH = "/WEB-INF/CustomPortal/portlets";
     /**
      * Default instantiation disallowed
      */
@@ -107,7 +108,8 @@ public class PortletManager implements PortletManagerService {
             context = config.getServletContext();
             //String webapps = config.getInitParameter(CORE_CONTEXT);
 
-            String portletsPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/Portlets");
+
+            String portletsPath = GridSphereConfig.getServletContext().getRealPath(PORTLETS_PATH);
             File f = new File(portletsPath);
             if (f.exists() && f.isDirectory()) {
                 String[] webappFiles = f.list();
@@ -127,8 +129,12 @@ public class PortletManager implements PortletManagerService {
 
                 if (webappFiles != null) {
                     for (int i = 0; i < webappFiles.length; i++) {
+
                         try {
                             webapp = webappFiles[i];
+
+                            // forget about readme file !
+                            if (webapp.startsWith("README")) continue;
                             PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
                             addWebApp(portletWebApp);
                         } catch (PortletException e) {
@@ -164,7 +170,7 @@ public class PortletManager implements PortletManagerService {
     }
 
     private void addPortletFile(String webappName) throws PortletServiceException {
-        String portletsPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/Portlets");
+        String portletsPath = GridSphereConfig.getServletContext().getRealPath(PORTLETS_PATH);
 
         File f = new File(portletsPath);
         if (f.exists() && f.isDirectory()) {
@@ -183,7 +189,7 @@ public class PortletManager implements PortletManagerService {
     }
 
     private void removePortletFile(String webappName) {
-        String portletsPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/Portlets");
+        String portletsPath = GridSphereConfig.getServletContext().getRealPath(PORTLETS_PATH);
         File f = new File(portletsPath);
         if (f.exists() && f.isDirectory()) {
             String[] webappFiles = f.list();

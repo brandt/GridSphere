@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 
 import java.util.List;
@@ -31,6 +32,8 @@ public interface AccessControlManagerService extends PortletService {
     public PortletGroup getGroup(String groupId);
 
     public PortletGroup getGroupByName(String groupName);
+
+    public PortletGroup createGroup(SportletGroup portletGroup);
 
     /**
      * GROUP ENTRY METHODS **
