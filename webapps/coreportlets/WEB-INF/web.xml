@@ -60,21 +60,6 @@
         <servlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet</servlet-class>
     </servlet>
 
-    <servlet>
-        <servlet-name>CredentialMappingAdminPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>CredentialPermissionAdminPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>CredentialManagerAdminPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialManagerAdminPortlet</servlet-class>
-    </servlet>
-
     <servlet-mapping>
        <servlet-name>HelloWorld</servlet-name>
        <url-pattern>/hello</url-pattern>
@@ -118,21 +103,6 @@
     <servlet-mapping>
        <servlet-name>AccessControllerPortlet</servlet-name>
        <url-pattern>/adminstration/access</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-       <servlet-name>CredentialMappingAdminPortlet</servlet-name>
-       <url-pattern>/adminstration/credential/mapping</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-       <servlet-name>CredentialPermissionAdminPortlet</servlet-name>
-       <url-pattern>/adminstration/credential/permission</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-       <servlet-name>CredentialManagerAdminPortlet</servlet-name>
-       <url-pattern>/adminstration/credential/active`</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>
