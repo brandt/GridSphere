@@ -81,7 +81,7 @@ public class LayoutManagerServiceImpl implements LayoutManagerService, PortletSe
     }
 
     protected List getComponentIdentifierList(User user) {
-        return layoutEngine.getUserLayout(user).getComponentIdentifierList();
+        return layoutEngine.getPortletContainer(user).getComponentIdentifierList();
     }
 
 /*
@@ -128,8 +128,9 @@ public class LayoutManagerServiceImpl implements LayoutManagerService, PortletSe
         PortletGridLayout gridLayout = new PortletGridLayout();
         panel.setLayout(gridLayout);
         PortletTabbedPane tabbedPane = findTabbedPane(user);
+        PortletTab tab = new PortletTab(tabName, panel);
         if (tabbedPane != null) {
-            tabbedPane.addTab(tabName, panel);
+            tabbedPane.addTab(tabName, tab);
         }
     }
 
