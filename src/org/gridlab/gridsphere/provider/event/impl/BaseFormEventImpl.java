@@ -496,7 +496,7 @@ public abstract class BaseFormEventImpl {
             }
 
             vbname = vbname.substring(idx + 1);
-            idx = vbname.indexOf("_");
+            idx = vbname.lastIndexOf("_");
 
             String beanKey = "";
 
