@@ -190,8 +190,11 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         PrintWriter out = res.getWriter();
 
         out.println("<div class=\"window-main\">");
-
+        //out.println("<table class=\"window-main\">");
+        //out.println("<tr><td class=\"window-title\">");
         titleBar.doRender(event);
+        //out.println("</td></tr>");
+        //out.println("<tr class=\"window-content\"><td class=\"window-content\">");
 
         //req.setMode(titleBar.getPortletMode());
 
@@ -211,6 +214,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             }
         }
         out.println("</div>");
+        //out.println("</td></tr></table>");
     }
 
 }
