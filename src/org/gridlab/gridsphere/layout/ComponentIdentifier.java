@@ -61,7 +61,8 @@ public class ComponentIdentifier {
      * If this component encaspulates a portlet class  such as PortletFrame
      * than return true
      *
-     * @return true if this component encaspulates a portlet class, false otherwise
+     * @return <code>true</code> if this component encaspulates a portlet class,
+     * <code>false</code> otherwise
      */
     public boolean hasPortlet() {
         if (portletClass != null) return true;

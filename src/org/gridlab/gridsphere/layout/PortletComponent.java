@@ -54,7 +54,8 @@ public interface PortletComponent extends ComponentLifecycle {
     /**
      * When set to true the portlet component is visible and will be rendered
      *
-     * @param isVisible if true portlet component is rendered, false otherwise
+     * @param isVisible if <code>true</code> portlet component is rendered,
+     * <code>false</code> otherwise
      */
     public void setVisible(boolean isVisible);
 

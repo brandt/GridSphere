@@ -171,7 +171,7 @@ public class PortletLayoutEngine {
         } catch (PortletLayoutException e) {
             error = e.getMessage();
             PortletRequest req = event.getPortletRequest();
-            req.logRequest();
+            //req.logRequest();
             log.error("Caught LayoutException: ", e);
         }
     }
@@ -234,7 +234,7 @@ public class PortletLayoutEngine {
         } catch (PortletLayoutException e) {
             error = e.getMessage();
             PortletRequest req = event.getPortletRequest();
-            req.logRequest();
+            //req.logRequest();
             log.error("Caught LayoutException: ", e);
         }
     }
