@@ -12,7 +12,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.portletcontainer.PortletEventDispatcher;
+import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,14 +26,12 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
     protected int PortletComponentID = -1;
     protected DefaultPortletAction action = null;
-    protected PortletEventDispatcher eventDispatcher = null;
 
     public GridSphereEventImpl(PortletContext ctx, HttpServletRequest req, HttpServletResponse res) {
         portletRequest = new SportletRequestImpl(req);
         portletResponse = new SportletResponse(res, portletRequest);
         portletContext = ctx;
 
-        eventDispatcher = new PortletEventDispatcher(portletRequest, portletResponse);
         String cidStr = req.getParameter(GridSphereProperties.COMPONENT_ID);
         try {
             PortletComponentID = new Integer(cidStr).intValue();
@@ -58,10 +56,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
                 }
             }
         }
-    }
-
-    public PortletEventDispatcher getPortletEventDispatcher() {
-        return eventDispatcher;
     }
 
     public PortletRequest getPortletRequest() {

@@ -15,14 +15,10 @@ public interface GridSphereEvent extends Event {
 
     public PortletResponse getPortletResponse();
 
-    public PortletEventDispatcher getPortletEventDispatcher();
-
     public DefaultPortletAction getAction();
 
     public boolean hasAction();
 
     public int getPortletComponentID();
-
-    //public PortletURI createNewAction(int PortletComponentID, String ActivePortletID);
 
 }

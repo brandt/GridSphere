@@ -27,7 +27,7 @@ import java.util.Vector;
  * the information provided and provides PortletSettings. The ConcretePortlet also maintains an instantiated
  * portlet that is managed by the portlet container.
  */
-public class ConcretePortletImpl implements ConcretePortlet {
+class ConcretePortletImpl implements ConcretePortlet {
 
     private static PortletLog log = SportletLog.getInstance(ConcretePortletImpl.class);
 

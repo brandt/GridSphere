@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portletcontainer.impl;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.portlet.PortletConfig;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.AbstractPortlet;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
@@ -16,6 +17,8 @@ import org.gridlab.gridsphere.portletcontainer.descriptor.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +30,7 @@ import java.util.Vector;
  *
  * @see <code>org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication</code>
  */
-public class ApplicationPortletImpl implements ApplicationPortlet {
+class ApplicationPortletImpl implements ApplicationPortlet {
 
     private PortletLog log = SportletLog.getInstance(ApplicationPortletImpl.class);
 

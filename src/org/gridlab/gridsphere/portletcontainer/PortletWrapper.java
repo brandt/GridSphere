@@ -138,14 +138,13 @@ public class PortletWrapper {
      * @throws PortletException if the portlet has trouble fulfilling the rendering request
      * @throws IOException if the streaming causes an I/O problem
      */
-    public void service(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        req.setAttribute(GridSphereProperties.PORTLETID, concretePortletID);
+    public void service(HttpServletRequest req, HttpServletResponse res) throws PortletException {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         try {
             include(req, res);
         } catch (Exception e) {
-            log.error("Unable to perform service on concrete portlet: " + concretePortletID);
-            throw new PortletException("Unable to perform service on concrete portlet: " + concretePortletID, e);
+            log.error("Unable to perform service");
+            throw new PortletException("Unable to perform service", e);
         }
     }
 
