@@ -244,14 +244,14 @@
     <para>
     Finally, putting the simple portlet together requires that default views are set. The ActionPortlet
     defines the following variables to define the default presentation methods or JSPs:
-    <emphasis>DEFAULT_VIEW</emphasis>, <emphasis>DEFAULT_EDIT</emphasis>,
-    <emphasis>DEFAULT_CONFIGURE</emphasis> and <emphasis>DEFAULT_HELP</emphasis>. All necessary default presentation
+    <emphasis>DEFAULT_VIEW_PAGE</emphasis>, <emphasis>DEFAULT_EDIT_PAGE</emphasis>,
+    <emphasis>DEFAULT_CONFIGURE_PAGE</emphasis> and <emphasis>DEFAULT_HELP_PAGE</emphasis>. All necessary default presentation
     should be configured in the init method of the portlet as shown:
         <programlisting>
             public void init(PortletConfig config) throws UnavailableException {
                 super.init(config);
-                DEFAULT_VIEW = "simple/view.jsp";
-                DEFAULT_CONFIGURE = "simple/config.jsp";
+                DEFAULT_VIEW_PAGE = "simple/view.jsp";
+                DEFAULT_CONFIGURE_PAGE = "simple/config.jsp";
             }
         </programlisting>
     </para>
