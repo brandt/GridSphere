@@ -22,7 +22,8 @@ public class AllJUnitTests extends TestCase {
     }
 
     public static Test suite() {
-        TestSuite suite = new TestSuite(ACLServiceTest.class);
+        TestSuite suite = new TestSuite();
+        suite.addTest(new TestSuite(ACLServiceTest.class));
         suite.addTest(new TestSuite(UserManagerServiceTest.class));
         suite.addTest(new TestSuite(DescriptorTest.class));
         return suite;
