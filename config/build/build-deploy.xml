@@ -138,7 +138,7 @@ Build include file for the GridSphere Portal source code, see build.xml
             </then>
             <else>
                 <echo message="Detected Tomcat 4"/>
-                <copy file="webapps/gridsphere-context.xml" todir="${build.webapps}"/>
+                <copy file="webapps/gridsphere-context.xml" todir="${appserver.home}/webapps"/>
             </else>
         </if>
 
