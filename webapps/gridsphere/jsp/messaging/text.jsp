@@ -3,13 +3,14 @@
 
 <portletAPI:init/>
 
+<ui:frame beanId="errorFrame"/>
 
 <ui:form>
 
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:text value="Send"/>
+                <ui:text key="MESSAGING_SEND"/>
             </ui:tablecell>
             <ui:tablecell>
                  <ui:textfield beanId="message" size="50"/>
@@ -18,7 +19,7 @@
 
         <ui:tablerow>
             <ui:tablecell>
-                <ui:text value=" to "/>
+                <ui:text key="MESSAGING_TO"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:listbox beanId="userlist"/>
@@ -27,7 +28,7 @@
 
         <ui:tablerow>
             <ui:tablecell>
-                <ui:text value="via "/>
+                <ui:text key="MESSAGING_VIA"/>
             </ui:tablecell>
             <ui:tablecell>
                  <ui:listbox beanId="services"/>
@@ -40,7 +41,7 @@
                 <ui:text value="&nbsp;"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:actionsubmit action="sendIM" value="Send it"/>
+                <ui:actionsubmit action="sendIM" key="MESSAGING_SENDIT"/>
             </ui:tablecell>
         </ui:tablerow>
 

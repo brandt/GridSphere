@@ -1,4 +1,4 @@
-<%@ page import="org.gridlab.gridsphere.tmf.config.User"%>
+<%@ page import="org.gridlab.gridsphere.tmf.config.TmfUser"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
@@ -14,7 +14,7 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:text value="Username "/>
+                <ui:text key="MESSAGING_USERNAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="username"/>
@@ -23,9 +23,9 @@
 
     </ui:frame>
 
-<ui:actionsubmit action="saveServiceSettings" value="Save settings"/>
-<ui:actionsubmit action="deleteServiceSettings" value="Delete settings"/>
-<ui:actionsubmit action="cancelEdit" value="Cancel"/>
+<ui:actionsubmit action="saveServiceSettings" key="MESSAGING_SAVESETTINGS"/>
+<ui:actionsubmit action="deleteServiceSettings" key="MESSAGING_DELETESETTINGS"/>
+<ui:actionsubmit action="cancelEdit" key="MESSAGING_CANCEL"/>
 
 
 </ui:form>

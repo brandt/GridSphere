@@ -1,7 +1,7 @@
 <%@ page import="java.util.List,
                  org.gridlab.gridsphere.tmf.config.TmfService,
                  java.util.ArrayList"%>
-<%@ page import="org.gridlab.gridsphere.tmf.config.User"%>
+<%@ page import="org.gridlab.gridsphere.tmf.config.TmfUser"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
@@ -11,10 +11,10 @@
 
 <ui:form>
 
-<ui:text value="Choose Service to edit:"/>
+<ui:text key="MESSAGING_CHOOSESERVICETOEDIT"/>
 <ui:listbox beanId="services"/>
 
-<ui:actionsubmit action="editChoosenService" value="edit settings"/>
+<ui:actionsubmit action="editChoosenService" key="MESSAGING_EDITSETTINGS"/>
 
 
 </ui:form>
