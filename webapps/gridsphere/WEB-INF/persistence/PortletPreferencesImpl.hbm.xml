@@ -23,6 +23,12 @@
         <property name="userId" type="string" column="userid"/>
         <property name="portletId" type="string" column="portletid"/>
 
+        <map name="attributes" table="portletprefattr" cascade="all">
+            <key column="attribute_oid"/>
+            <index column="attribute_ndx" type="string"/>
+            <many-to-many column="attr_oid" class="org.gridlab.gridsphere.portlet.jsrimpl.PersistencePreferenceAttribute"/>
+        </map>
+
     </class>
 
 
