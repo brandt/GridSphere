@@ -645,12 +645,11 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Make GridSphere distribution                                        -->
     <!-- =================================================================== -->
-    <target name="dist" depends="clean, jar, war, docs" description="Build GridSphere binary distribution">
+    <!-- <target name="dist" depends="clean, jar, war, docs" description="Build GridSphere binary distribution">
         <echo message="Building the binary GridSphere distribution"/>
 
         <mkdir dir="${gridsphere.dist}"/>
 
-        <!-- copy dist files -->
         <copy file="README" todir="${gridsphere.dist}"/>
         <copy file="LICENSE" todir="${gridsphere.dist}"/>
         <copy file="config/build/build.deploy.xml" tofile="${gridsphere.dist}/build.xml"/>
@@ -673,7 +672,7 @@ Copyright:
                 <exclude name="build/build.deploy.xml"/>
             </fileset>
         </copy>
-    </target>
+    </target> -->
 
     <!-- =================================================================== -->
     <!-- Run Tomcat tests                                                    -->
