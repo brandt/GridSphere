@@ -9,26 +9,24 @@ import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
-import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
-import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
-import org.gridlab.gridsphere.provider.portletui.beans.MessageBoxBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
+import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
-import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
+import org.gridlab.gridsphere.services.core.request.RequestService;
+import org.gridlab.gridsphere.services.core.request.GenericRequest;
+import org.gridlab.gridsphere.services.core.mail.MailMessage;
+import org.gridlab.gridsphere.services.core.mail.MailService;
 
 import javax.servlet.UnavailableException;
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class LoginPortlet extends ActionPortlet {
 
@@ -36,7 +34,10 @@ public class LoginPortlet extends ActionPortlet {
     public static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
 
     public static final String DO_VIEW_USER_EDIT_LOGIN = "login/createaccount.jsp"; //edit user
-    public static final String DO_CONFIGURE = "login/config.jsp"; //configure login 
+    public static final String DO_FORGOT_PASSWORD = "login/forgotpassword.jsp";
+    public static final String DO_NEW_PASSWORD = "login/newpassword.jsp";
+
+    public static final String DO_CONFIGURE = "login/config.jsp"; //configure login
 
     private boolean canUserCreateAccount = false;
 
@@ -44,6 +45,8 @@ public class LoginPortlet extends ActionPortlet {
     private AccessControlManagerService aclService = null;
     private PasswordManagerService passwordManagerService = null;
     private PortalConfigService portalConfigService = null;
+    private RequestService requestService = null;
+    private MailService mailService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -51,6 +54,8 @@ public class LoginPortlet extends ActionPortlet {
             userManagerService = (UserManagerService)getPortletConfig().getContext().getService(UserManagerService.class);
             aclService = (AccessControlManagerService)getPortletConfig().getContext().getService(AccessControlManagerService.class);
             passwordManagerService = (PasswordManagerService)getPortletConfig().getContext().getService(PasswordManagerService.class);
+            requestService = (RequestService)getPortletConfig().getContext().getService(RequestService.class);
+            mailService = (MailService)getPortletConfig().getContext().getService(MailService.class);
             portalConfigService = (PortalConfigService)getPortletConfig().getContext().getService(PortalConfigService.class);
             canUserCreateAccount = portalConfigService.getPortalConfigSettings().getCanUserCreateAccount();
         } catch (PortletServiceException e) {
@@ -209,12 +214,7 @@ public class LoginPortlet extends ActionPortlet {
         String passwordValue = event.getPasswordBean("password").getValue();
         String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
 
-        // If user already exists and password unchanged, no problem
-        if (passwordValue.length() == 0 ||
-                confirmPasswordValue.length() == 0) {
-            message.append(this.getLocalizedText(req, "USER_PASSWORD_BLANK") + "<br>");
-            return true;
-        }
+
         // Otherwise, password must match confirmation
         if (!passwordValue.equals(confirmPasswordValue)) {
             message.append(this.getLocalizedText(req, "USER_PASSWORD_MISMATCH") + "<br>");
@@ -223,15 +223,15 @@ public class LoginPortlet extends ActionPortlet {
         } else {
             String msg = null;
             if (passwordValue == null) {
-                msg = "Password is not set.";
+                msg = this.getLocalizedText(req, "USER_PASSWORD_NOTSET");
 
             }
             passwordValue = passwordValue.trim();
             if (passwordValue.length() == 0) {
-                msg = "Password is blank.";
+                msg = this.getLocalizedText(req, "USER_PASSWORD_BLANK");
             }
             if (passwordValue.length() < 5) {
-                msg = "Password must be longer than 5 characters.";
+                msg = this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT");
 
             }
             if (msg != null) {
@@ -276,11 +276,7 @@ public class LoginPortlet extends ActionPortlet {
         SportletUser.setFullName(event.getTextFieldBean("fullName").getValue());
         SportletUser.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
         SportletUser.setOrganization(event.getTextFieldBean("organization").getValue());
-        String passwordValue = event.getPasswordBean("password").getValue();
-        // Save password parameters if password was altered
-        //if (passwordValue.length() > 0) {
-        //    SportletUser.setPasswordValue(passwordValue);
-        //}
+
         log.debug("Exiting editSportletUser()");
     }
 
@@ -328,5 +324,150 @@ public class LoginPortlet extends ActionPortlet {
         portalConfigService.savePortalConfigSettings(settings);
         showConfigure(event);
     }
-    
+
+    public void configMailSettings(FormEvent event) throws PortletException {
+        checkSuperRole(event);
+        TextFieldBean mailServerTF = event.getTextFieldBean("mailHostTF");
+        String mailServer = mailServerTF.getValue();
+
+        TextFieldBean mailSenderTF = event.getTextFieldBean("mailFromTF");
+        String mailFrom = mailSenderTF.getValue();
+
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        if (!mailServer.equals("")) settings.setAttribute(MailService.MAIL_SERVER_HOST, mailServer);
+        if (!mailFrom.equals("")) settings.setAttribute(MailService.MAIL_SENDER, mailFrom);
+
+        portalConfigService.savePortalConfigSettings(settings);
+        showConfigure(event);
+    }
+
+    public void displayForgotPassword(FormEvent event) {
+        PortletRequest req = event.getPortletRequest();
+        setNextState(req, DO_FORGOT_PASSWORD);
+    }
+
+    public void notifyUser(FormEvent evt) {
+        PortletRequest req = evt.getPortletRequest();
+        PortletResponse res = evt.getPortletResponse();
+
+        User user = null;
+        TextFieldBean emailTF = evt.getTextFieldBean("emailTF");
+
+        if (emailTF.getValue().equals("")) {
+            createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_NO_EMAIL"));
+            return;
+        } else {
+            user  = userManagerService.getUserByEmail(emailTF.getValue());
+        }
+        if (user == null) {
+            createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_NOEXIST"));
+            return;
+        }
+
+        // create a request
+        GenericRequest request = requestService.createRequest();
+        request.setUserID(user.getID());
+        requestService.saveRequest(request);
+
+        // mail user
+        MailMessage message =  new MailMessage();
+        message.setEmailAddress(emailTF.getValue());
+        message.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
+
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        if (settings.getAttribute(MailService.MAIL_SERVER_HOST) != null) {
+            mailService.setMailServiceHost(settings.getAttribute(MailService.MAIL_SERVER_HOST));
+        }
+        if (settings.getAttribute(MailService.MAIL_SENDER) != null) {
+            message.setSender(settings.getAttribute(MailService.MAIL_SENDER));
+        }
+
+
+        StringBuffer body = new StringBuffer();
+
+        body.append(getLocalizedText(req, "LOGIN_FORGOTMAIL") + "\n\n");
+
+        PortletURI uri = res.createURI();
+        uri.addAction("newpassword");
+        uri.addParameter("reqid", request.getOid());
+
+        body.append(uri.toString());
+        message.setBody(body.toString());
+
+        try {
+            mailService.sendMail(message);
+        } catch (MessagingException e) {
+            log.error("Unable to send mail message!", e);
+        }
+    }
+
+    private void createErrorMessage(FormEvent evt, String text) {
+        MessageBoxBean msg = evt.getMessageBoxBean("msg");
+        msg.setValue(text);
+        msg.setMessageType(TextBean.MSG_ERROR);
+    }
+
+    private void createSuccessMessage(FormEvent evt, String text) {
+        MessageBoxBean msg = evt.getMessageBoxBean("msg");
+        msg.setValue(text);
+        msg.setMessageType(TextBean.MSG_SUCCESS);
+    }
+
+    public void newpassword(FormEvent evt) {
+
+        PortletRequest req = evt.getPortletRequest();
+
+        String id = req.getParameter("reqid");
+
+        GenericRequest request = requestService.getRequest(id);
+        if (request != null) {
+            HiddenFieldBean reqid = evt.getHiddenFieldBean("reqid");
+            reqid.setValue(id);
+            setNextState(req, DO_NEW_PASSWORD);
+        } else {
+            setNextState(req, DEFAULT_VIEW_PAGE);
+        }
+
+    }
+
+
+    public void doSavePass(FormEvent event) {
+
+        PortletRequest req = event.getPortletRequest();
+
+        HiddenFieldBean reqid = event.getHiddenFieldBean("reqid");
+        String id = reqid.getValue();
+        GenericRequest request = requestService.getRequest(id);
+        if (request != null) {
+            String uid = request.getUserID();
+            User user = userManagerService.getUser(uid);
+
+            passwordManagerService.editPassword(user);
+
+            String passwordValue = event.getPasswordBean("password").getValue();
+            String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
+
+            // Otherwise, password must match confirmation
+            if (!passwordValue.equals(confirmPasswordValue)) {
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_MISMATCH"));
+                // If they do match, then validate password with our service
+            } else if (passwordValue == null) {
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
+            } else if (passwordValue.length() == 0) {
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
+            } else if (passwordValue.length() < 5) {
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT"));
+            } else {
+                // save password
+                PasswordEditor editPasswd = passwordManagerService.editPassword(user);
+                editPasswd.setValue(passwordValue);
+                editPasswd.setDateLastModified(Calendar.getInstance().getTime());
+                passwordManagerService.savePassword(editPasswd);
+                createSuccessMessage(event, this.getLocalizedText(req, "USER_PASSWORD_SUCCESS"));
+                requestService.deleteRequest(request);
+            }
+        }
+    }
+
+
 }

@@ -1,16 +1,12 @@
 /*
- * Created by IntelliJ IDEA.
- * User: russell
- * Date: Jan 8, 2003
- * Time: 11:33:22 AM
- * To change template for new interface use
- * Code Style | Class Templates options (Tools | IDE Options).
+ * @version: $Id$
  */
 package org.gridlab.gridsphere.services.core.security.password;
 
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.service.PortletService;
 
-public interface PasswordManagerService {
+public interface PasswordManagerService extends PortletService {
 
     public Password getPassword(User user);
 

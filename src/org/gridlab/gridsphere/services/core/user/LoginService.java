@@ -20,6 +20,8 @@ import java.util.List;
  */
 public interface LoginService extends PortletService {
 
+    public static final String CAN_USER_CREATE_ACCOUNT = "LoginService.CAN_USER_CREATE_ACCOUNT";
+
     public List getSupportedAuthModules();
 
     public void addActiveAuthModule(User user, LoginAuthModule authModule);

@@ -60,6 +60,14 @@ public interface UserManagerService  extends LoginUserModule {
     public User getUserByUserName(String loginName);
 
     /**
+     * Retrieves a user object with the given email from this service.
+     *
+     * @param email the user's email address
+     */
+    public User getUserByEmail(String email);
+
+
+    /**
       * Checks to see if account exists for a user
       *
       * @param loginName the user login ID

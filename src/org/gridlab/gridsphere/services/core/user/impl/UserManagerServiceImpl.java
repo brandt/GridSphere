@@ -229,6 +229,16 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         return getSportletUserImplByLoginName(loginName);
     }
 
+    /**
+     * Retrieves a user object with the given email from this service.
+     *
+     * @param email the user's email address
+     */
+    public User getUserByEmail(String email) {
+        return selectSportletUserImpl("where uzer.EmailAddress='" + email + "'");    
+    }
+
+
     private SportletUserImpl getSportletUserImpl(String id) {
         return selectSportletUserImpl("where uzer.oid='" + id + "'");
     }
