@@ -53,7 +53,7 @@ public class PortletDescriptorTest extends TestCase {
         } catch (DescriptorException e) {
             fail("Unable to unmarshall " + portletFile + " using " + mappingFile + " : " + e.getMessage());
         }
-        Vector defs = pdd.getPortletDef();
+        List defs = pdd.getPortletDef();
 
         // assertEquals(expected, actual)
 
@@ -62,7 +62,7 @@ public class PortletDescriptorTest extends TestCase {
 
         PortletDefinition def = (PortletDefinition)defs.get(0);
         PortletApp portletApp = def.getPortletApp();
-        Vector concreteApps = def.getConcreteApps();
+        List concreteApps = def.getConcreteApps();
 
         // we have two concrete portlet apps
         assertEquals(concreteApps.size(), 2);
