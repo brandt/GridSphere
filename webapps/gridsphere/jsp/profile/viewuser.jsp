@@ -14,10 +14,10 @@
 
 <ui:panel>
 
-<ui:text key="PROFILE_VIEW"/>  <b><%= username %></b>
+<ui:text key="PROFILE_VIEW"/>&nbsp;&nbsp;<b><%= username %></b>
 
 <br>
-<ui:text key="PROFILE_LASTLOGIN"/>  <b><%= logintime %></b>
+<ui:text key="PROFILE_LASTLOGIN"/>&nbsp;&nbsp;<b><%= logintime %></b>
 <ui:panel cols="50%, 50%">
 <ui:frame>
     <ui:tablerow>

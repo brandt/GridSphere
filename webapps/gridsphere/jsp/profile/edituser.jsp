@@ -14,10 +14,10 @@
 <ui:form>
 <ui:panel>
 
-<ui:text key="PROFILE_EDIT"/>  <b> <%= username %></b>
+<ui:text key="PROFILE_EDIT"/>&nbsp;&nbsp;<b><%= username %></b>
 
 <br>
-<ui:text key="PROFILE_LASTLOGIN"/>  <b><%= logintime %></b>
+<ui:text key="PROFILE_LASTLOGIN"/>&nbsp;&nbsp;<b><%= logintime %></b>
 
 <ui:frame beanId="errorFrame"/>
 

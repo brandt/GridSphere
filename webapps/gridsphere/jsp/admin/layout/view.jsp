@@ -9,7 +9,7 @@
 <ui:form>
 
 <h3>Edit Banner</h3>
-<ui:text value="Below you can edit the GridSphere banner HTML"/>
+<ui:text value="Below you can edit the portal banner HTML"/>
 <p>
 <ui:textarea beanId="bannerTA" rows="3" cols="80"/>
 <p>
