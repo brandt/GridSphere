@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
+import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -198,8 +199,8 @@ public class PortletPage implements Serializable, Cloneable {
         //log.debug("Made a components list!!!! " + list.size());
         for (int i = 0; i < list.size(); i++) {
             ComponentIdentifier c = (ComponentIdentifier) list.get(i);
-            System.err.println("id: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
-            if (c.hasPortlet()) System.err.println("portlet= " + c.getPortletClass());
+            //System.err.println("id: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
+            //if (c.hasPortlet()) System.err.println("portlet= " + c.getPortletClass());
         }
         componentIdentifiers = list;
 

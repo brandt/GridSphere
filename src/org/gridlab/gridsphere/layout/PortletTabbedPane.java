@@ -266,7 +266,9 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      * @param event the portlet tab event
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+
         super.actionPerformed(event);
+
         PortletComponentEvent compEvt = event.getLastRenderEvent();
         if ((compEvt != null) && (compEvt instanceof PortletTabEvent)) {
             PortletTabEvent tabEvent = (PortletTabEvent)compEvt;

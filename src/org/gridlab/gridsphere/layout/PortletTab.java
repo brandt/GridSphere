@@ -121,6 +121,11 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         return portletComponent;
     }
 
+
+    public void removePortletComponent() {
+        this.portletComponent = null;
+    }
+
     /**
      * Initializes the portlet tab. Since the components are isolated
      * after Castor unmarshalls from XML, the ordering is determined by a
@@ -140,6 +145,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         list.add(compId);
         list = portletComponent.init(req, list);
         portletComponent.addComponentListener(this);
+        portletComponent.setParentComponent(this);
         return list;
     }
 

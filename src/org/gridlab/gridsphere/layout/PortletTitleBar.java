@@ -28,10 +28,10 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
     private String title = null;
     private String portletClass = null;
-    private PortletWindow.State windowState = PortletWindow.State.NORMAL;
+    private transient PortletWindow.State windowState = PortletWindow.State.NORMAL;
     private List supportedModes = new Vector();
-    private Portlet.Mode portletMode = Portlet.Mode.VIEW;
-    private Portlet.Mode previousMode = null;
+    private transient Portlet.Mode portletMode = Portlet.Mode.VIEW;
+    private transient Portlet.Mode previousMode = null;
     private transient PortletSettings settings = null;
     private List allowedWindowStates = new Vector();
     private String errorMessage = "";
