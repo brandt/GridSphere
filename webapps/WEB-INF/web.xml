@@ -46,7 +46,7 @@
 
     <servlet>
         <servlet-name>HelloWorld</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.HelloWorld</servlet-class>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld</servlet-class>
         <init-param>
             <param-name>foo</param-name>
             <param-value>bar</param-value>
@@ -56,8 +56,18 @@
 
     <servlet>
         <servlet-name>HalloWelt</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.HalloWelt</servlet-class>
-	<load-on-startup>3</load-on-startup>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt</servlet-class>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet</servlet-class>
+        <init-param>
+            <param-name>portletID</param-name>
+            <param-value>org.gridlab.gridsphere.portlets.core.LoginPortlet.129</param-value>
+        </init-param>
+        <load-on-startup>3</load-on-startup>
     </servlet>
 
     <servlet-mapping>
@@ -65,10 +75,16 @@
        <url-pattern>/HelloWorld</url-pattern>
     </servlet-mapping>
 
-     <servlet-mapping>
+    <servlet-mapping>
        <servlet-name>HalloWelt</servlet-name>
        <url-pattern>/HalloWelt</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>Login</servlet-name>
+       <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+
 
     <servlet-mapping>
        <servlet-name>gridsphere</servlet-name>
