@@ -67,12 +67,13 @@ void service(PortletRequest req, PortletResponse res) -- service gets invoked fo
                                                          portlet mode or portlet action, it invokes the appropriate
                                                          actionPerformed, doView, doEdit, etc, method.
 
-void actionPeformed(ActionEvent evt) -- this method is invoked when the portlet receives an action and must be
-                                        implemented by the portlet developer. This method is performed before any
-                                        rendering is done via doView, doEdit, etc.
+void actionPerformed(ActionEvent evt) -- this method is invoked when the portlet receives an action and must be
+                                         implemented by the portlet developer. This method is performed before any
+                                         rendering is done via doView, doEdit, etc.
 
-void do{View,Config,Edit,Help}(PortletRequest req, PortletResponse res) -- renders the portlet  mode and is generally
-                                                                           implemented by the portlet developer.
+void do{View,Config,Edit,Help,Title}(PortletRequest req, PortletResponse res) -- renders the portlet  mode and is
+                                                                                 generally implemented by the portlet
+                                                                                 developer.
 
 void window{Maximized,Minimized,Closed,Resizing,...}(WindowEvent event) -- method is invoked when the portlet window
                                                                            state changes.
@@ -312,9 +313,7 @@ The PortletWindow provides window state information about the currently active p
 Portlet.ModeModifer
 The Portlet.ModeModifier is supposed to
 
-
 PortletResponse
-
 Like the PortletRequest, the PortletResponse is a wrapper for HttpServletResponse and offers all the same methods via
 an actual proxy HttpServletResponse object. In addition, the PortletResponse provides support for creating customized
 URI's (Uniform Resource Identifiers) used to construct portlet links.
@@ -338,10 +337,10 @@ The following example shows the directory structure of a portlet (web archive fo
 
 Publicly accessible images and web pages can be placed in the images, jsp or html directories, while WEB-INF contains
 configuration information including the web.xml and portlet.xml used to provide the servlet and portlet containers with
-configuration information about the packaged portlets.
+configuration information about the packaged portlets. Compiled portlets are placed in the WEB-INF/classes or packaged
+as a JAR in WEB-INF/lib.
 
 6. Writing a HelloWorld Portlet
-
 
 
 7. Other Resources
