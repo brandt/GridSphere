@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
- * @author <a href="mailto:oliver@wehrens.e">Oliver Wehrens</a>
+ * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.portlet;
