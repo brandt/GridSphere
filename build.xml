@@ -560,7 +560,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates the grid portlets WAR file                                  -->
     <!-- =================================================================== -->
-    <target name="grid-portlets-war" depends="grid-portlets-jar" description="Create gridportlets WAR">
+    <target name="grid-portlets-war" depends="grid-portlets-jar" if="${grid.present}" description="Create gridportlets WAR">
         <war warfile="${build.webapps}/gridportlets.war" update="true"
             webxml="${gridwebapp.dir}/WEB-INF/web.xml">
             <lib dir="${build.lib}">
@@ -711,7 +711,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Deploys GS grid portlets to a local server                          -->
     <!-- =================================================================== -->
-    <target name="deploy-grid-portlets" depends="grid-portlets-jar" description="Deploys grid portlets to a local server">
+    <target name="deploy-grid-portlets" depends="grid-portlets-jar" if="${grid.present}" description="Deploys grid portlets to a local server">
         <copy todir="${build.webapps}/gridportlets">
             <fileset dir="${gridwebapp.dir}"/>
         </copy>
