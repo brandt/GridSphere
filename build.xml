@@ -73,8 +73,8 @@ Copyright:
     <property name="build.tests"   value="${gridsphere.build}/tests"/>
 
     <patternset id="all.jars" >
-        <include name="lib/*.jar"/>
-        <include name="lib/ext/*.jar"/>
+       <include name="lib/*.jar"/>
+       <include name="lib/ext/*.jar"/>
     </patternset>
 
     <!-- Check for catalina.sh in CATALINA_HOME/bin -->
@@ -108,8 +108,13 @@ Copyright:
         </fileset>
 
         <fileset dir="lib">
-            <patternset refid="all.jars"/>
+            <include name="*.jar"/>
         </fileset>
+        <fileset dir="lib/ext">
+            <exclude name="*.LICENSE"/>
+            <include name="*.jar"/>
+        </fileset>
+
         <pathelement path="${java.class.path}"/>
     </path>
 
@@ -627,18 +632,8 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Undeploys GridSphere from Tomcat                                    -->
     <!-- =================================================================== -->
-    <target name="undeploy" description="Undeploys GridSphere from a local server">
-        <delete quiet="true" dir="${gridsphere.home}"/>
-        <delete quiet="true" dir="${gridsphere.dist}"/>
-        <!-- remove GS from Tomcat -->
-        <delete dir="${env.CATALINA_HOME}/webapps/gridsphere"/>
+    <target name="undeploy" depends="setenv" description="Undeploys GridSphere from a local server">
 
-        <!-- remove third-party jars -->
-        <delete>
-            <fileset dir="${env.CATALINA_HOME}/shared/lib">
-                <patternset refid="all.jars"/>
-            </fileset>
-        </delete>
     </target>
 
     <target name="remove-gridsphere" depends="undeploy" description="Eliminates GridSphere entirely including database">
@@ -676,7 +671,9 @@ Copyright:
         </copy>
 
         <copy overwrite="true" todir="${env.CATALINA_HOME}/shared/lib">
-            <fileset dir="lib/ext"/>
+            <fileset dir="lib/ext">
+                <exclude name="*.LICENSE"/>
+            </fileset>
             <fileset dir="lib">
                 <exclude name="portlet-widget-tags.jar"/>
                 <exclude name="ext/**"/>
