@@ -150,6 +150,8 @@ public class PortletApplicationManager extends ActionPortlet {
             String fileName = fi.getFileName();
             int fdx = fileName.lastIndexOf(File.separator);
             if (fdx > 0) fileName = fileName.substring(fdx);
+            if (fileName.substring(0,1).equals(File.separator)) fileName = fileName.substring(1);
+            
             log.info("filename = " + fileName);
 
             String webappPath = this.getPortletConfig().getContext().getRealPath("");
