@@ -27,10 +27,24 @@ public interface GridSphereConfigProperties {
     public static final String GRIDSPHERE_HOME = "GRIDSPHERE_HOME";
 
     /**
-     * Portlet deployment descriptor properties
+     * Portlet deployment descriptor mapping file
      */
-    public static final String PORTLET_XML = "PORTLET_XML";
     public static final String PORTLET_MAPPING_XML = "PORTLET_MAPPING_XML";
+
+    /**
+     * Portlet services description file
+     */
+    public static final String PORTLET_SERVICES = "PORTLET_SERVICES";
+
+    /**
+     * Portlet services description file
+     */
+    public static final String PORTLET_SERVICES_XML = "PORTLET_SERVICES_XML";
+
+    /**
+     * Portlet services mapping file
+     */
+    public static final String PORTLET_SERVICES_MAPPING_XML = "PORTLET_SERVICES_MAPPING_XML";
 
     /**
      * LayoutEngine properties
