@@ -5,6 +5,8 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -94,7 +96,17 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
         String pname = (name == null) ? "" : name;
         String sname = pname;
         if (!beanId.equals("")) {
-            sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+            if (request == null) {
+                //log.debug("request is null");
+                sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+            } else {
+                String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+                if (compId == null) {
+                    sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+                } else {
+                    sname = "ui_" + vbName + "_" + compId + "%" + beanId + "_" + pname;
+                }
+            }
         }
 
         sb.append("name=\"" + sname + "\" ");
