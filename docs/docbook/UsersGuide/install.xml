@@ -136,7 +136,96 @@ the GridSphere source directory and then re-deploying.
 </sect1>
 
 <sect1>
+    <title>Running GridSphere with Apache httpd2 and mod_jk</title>
+    <para>
+        If you want to install GridSphere behind Apache httpd2 please read the following section.
+        Download httpd2 from <ulink url="http://httpd.apache.org/download.cgi">http://httpd.apache.org/download.cgi</ulink>.
+        <example>
+            <title>configure apache httpd2</title>
+            <programlisting>
+tar xzvf httpd-2.0.49.tar.gz
+cd httpd-2.0.49
+./configure --prefix=/usr/local/apps/httpd-2.0.49 --enable-ssl --with-ssl=/usr/local/apps/openssl-0.9.7d --enable-so
+make
+make install
+            </programlisting>
+        </example>
+<important>Make sure you have at least openssl 0.9.6e installed it is needed by httpd2.</important>
+    </para>
+    Next step is to compile the tomcat connectors for httpd2.
+    Download these from <ulink url="http://archive.apache.org/dist/jakarta/tomcat-connectors/jk/source/">http://archive.apache.org/dist/jakarta/tomcat-connectors/jk/source/</ulink>.
+    <example>
+        <title>configuring apache/tomcat connectors</title>
+        <programlisting>
+tar xzvf  jakarta-tomcat-connectors-jk-1.2.5-src.tar.gz
+cd  jakarta-tomcat-connectors-jk-1.2.5-src/
+./configure --with-apache=/usr/local/apps/httpd-2.0.49 --with-java=/usr/local/packages/java
+make
+cp apache-2.0/mod_jk.so /usr/local/apps/httpd-2.0.49/modules/
+        </programlisting>
+    </example>
+
+Now you need to create a worker2.properties file to connect tomcat and apache httpd2.
+It can look like this if you use the standard tomcat installation on port 8080.
+    <example>
+        <title>worker2.properties</title>
+        <programlisting>
+worker.list=gridsphere
+
+worker.gridsphere.type=ajp13
+worker.gridsphere.host=localhost
+worker.gridsphere.port=8009
+        </programlisting>
+    </example>
+
+It might be a good idea to run apache httpd with virtual hosts. The configuration should look like this:
+    <example>
+        <title>httpd.conf</title>
+        <programlisting>
+<![CDATA[
+
+LoadModule jk_module modules/mod_jk.so
+<IfModule mod_jk.c>
+        JkWorkersFile /usr/local/apps/httpd-2.0.49/conf/workers2.properties
+</IfModule>
+...
+NameVirtualHost YOURIP:80
+...
+<VirtualHost www.YOURHOST.com:80>
+    ServerAdmin webmaster@YOURHOST.com
+    DocumentRoot /var/html
+    ServerName www.YOURHOST.com
+    ErrorLog /logs/error_log
+    CustomLog /logs/access_log common
+    JkMount /* gridsphere
+</VirtualHost>
+
+<VirtualHost www.YOURHOST.com:443>
+   ServerAdmin webmaster@YOURHOSTS.com
+   DocumentRoot /var/html
+   ServerName www.YOURHOST.com
+   JkMount /* gridsphere
+   SSLEngine on
+   SSLCertificateFile    /etc/ssl/server.crt
+   SSLCertificateKeyFile /etc/ssl/server.pem
+   ErrorLog /logs/error_ssl_log
+   CustomLog /logs/access_ssl_log common
+</VirtualHost>
+
+]]>
+        </programlisting>
+     </example>
+
+    This redirects all incoming requests on port 80 to the running tomcat on port 8080.  The second virtual hosts directive
+    will it make possible to access GridSphere over a secure https connection. You need to have valid ssl certificates for that
+    in the specified locations.
+
+ <important>These are just sample configurations. Please change them to reflect your local installation.</important>
+</sect1>
+
+<sect1>
     <title>Additional Resources</title>
     <para>Please read the GridSphere Administrator's Guide for information on administering and configuring
  the GridSphere portal.</para>
 </sect1>
+
