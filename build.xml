@@ -748,6 +748,10 @@ Copyright:
 <!-- ++++++++++++++ START CRUSECONTROL ++++++++++++++++++++ -->
 
     <target name="cruisecontrol" depends="clean, docbook, compile, tests" description="target for cruisecontrol">
+        <antcall target="clean"/>
+        <antcall target="docbook"/>
+        <antcall target="compile"/>
+        <antcall target="tests"/>
         <mkdir dir="${gridsphere.build}/reports"/>
         <junit printsummary="yes" fork="yes" haltonfailure="no">
             <classpath>
