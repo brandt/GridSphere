@@ -13,7 +13,7 @@ Build Instructions:
    Invoke "ant help"
 
 Copyright:
-  2002,2003
+  2002,2003,2004
 
 - $Id$
 
@@ -415,7 +415,7 @@ Copyright:
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DatabaseTask"
             classpathref="classpath"/>
         <createdb
-            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
+            configdir="${env.CATALINA_HOME}"/>
     </target>
 
     <target name="configure-database" depends="setenv">
