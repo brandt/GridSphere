@@ -28,8 +28,9 @@ Compiling and Deploying
 The Ant build script, build.xml, uses the build.properties file to specify any
 compilation options. Edit build.properties appropriately for your needs.
 
-At this point, simply invoking "ant dist" will create the GridSphere
-distribution.
+At this point, simply invoking "ant deploy" will deploy the GridSphere portlet 
+container to Tomcat. 
+
 
 The build.xml supports the following basic tasks:
 
@@ -38,11 +39,7 @@ clean -- removes the build and dist directories including all the
 
 update -- updates the existing source code from CVS
 
-compile-all -- compiles all the GridSphere source code including
-	       the core framework and all the portlets
-
-dist -- creates a GridSphere distribution in the dist directory
-	defined in build.properties
+compile -- compiles the GridSphere source code 
 
 deploy -- deploys the GridSphere framework and all portlets to a
 	  Tomcat servlet container located at $CATALINA_HOME
@@ -50,8 +47,10 @@ deploy -- deploys the GridSphere framework and all portlets to a
 docs -- compiles all GridSphere docbook documentation and
 	builds the Javadoc documentation from the source code
 
-run-tests -- runs all Junit tests and creates HTML
-	     status reports in the build/reports directory
+run-tests -- runs all Junit tests inside the Tomcat container using
+	     the Jakarta Cactus framework  
+
+test-reports -- creates HTML test reports from the Junit tests
 
 To see all the targets invoke "ant --projecthelp".
 
@@ -63,11 +62,10 @@ Testing GridSphere
 
 Many of the portlet services are unit tested using the Junit testing framework
 http://www.junit.org. Simply invoking "ant compile-tests" will compile all the
-unit tests. Invoking "ant make-test-reports" is a nice way to run all the tests
+unit tests. Invoking "ant test-reports" is a nice way to run all the tests
 and produce a set of HTML reports in the build/reports/html directory. For more
-information on how unit testing is performed, look at the GridSphere design
-document.
-
+information on how unit testing is performed, have a look at the GridSphere 
+design document.
 
 Thanks,
 
