@@ -17,7 +17,7 @@ Version: $Id$
  ***************************************************************************/
 
 .portlet-pane {
-  background-color: #FFFFFF;
+  background-color: inherit;
   border: none;
   padding: 0;
   spacing: 0;
@@ -50,7 +50,7 @@ Version: $Id$
 
 .portlet-frame-message {
   background-color: #FFFFFF;
-  border: none;
+  border: 1px solid #CCCCFF;
   color: #000000;
   font-family: inherit;
 }
