@@ -224,24 +224,11 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates a Portlet API JAR library archive                           -->
     <!-- =================================================================== -->
-    <target name="portlet-api-jar" depends="compile" description="Create ${build.lib}/portlet-api.jar">
+    <target name="portlet-jar" depends="compile" description="Create ${build.lib}/portlet.jar">
         <jar jarfile="${build.lib}/portlet-api.jar" basedir="${classes.dir}" >
             <include name="log4j.properties"/>
-            <include name="org/gridlab/gridsphere/portlet/**" />
-            <include name="org/gridlab/gridsphere/event/**" />
-            <include name="${conf.dir}/log4j.properties"/>
-        </jar>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Creates a Portlet API JAR library archive                           -->
-    <!-- =================================================================== -->
-    <target name="portlet-impl-jar" depends="compile" description="Create ${build.lib}/portletImpl.jar">
-        <jar jarfile="${build.lib}/portletImpl.jar" basedir="${classes.dir}" >
-            <include name="log4j.properties"/>
-            <include name="org/gridlab/gridsphere/portlet/impl/**" />
-            <include name="org/gridlab/gridsphere/portlet/impl/**" />
-            <include name="org/gridlab/gridsphere/event/impl/**" />
+            <include name="org/gridlab/gridsphere/portlet/**"/>
+            <include name="org/gridlab/gridsphere/event/**"/>
             <include name="${conf.dir}/log4j.properties"/>
         </jar>
     </target>
@@ -280,7 +267,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="gridsphere-jar, portlet-api-jar, portlet-widgets-jar, manager-portlet-jar" description="Creates all jars"/>
+    <target name="jar" depends="gridsphere-jar, portlet-jar, portlet-widgets-jar, manager-portlet-jar" description="Creates all jars"/>
 
 
 <!-- +++++++++++++++++ END JARCREATION +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
@@ -421,19 +408,47 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates the API documentation                                       -->
     <!-- =================================================================== -->
-    <target name="docs" depends="setenv" description="Create GridSphere Javadocs">
-        <mkdir dir="${javadoc.dir}"/>
-        <javadoc packagenames="org.*,javax.*"
+    <target name="docs-all" depends="setenv" description="Create GridSphere Javadocs">
+        <delete quiet="true" dir="${javadoc.dir}/portletapi"/>
+        <mkdir dir="${javadoc.dir}/gridsphere"/>
+        <javadoc packagenames="org.*"
                  sourcepath="${src.dir}"
                  classpathref="classpath"
-                 destdir="${javadoc.dir}"
+                 destdir="${javadoc.dir}/gridsphere"
                  author="true"
                  version="true"
                  use="true"
-                 windowtitle="${project} API"
-                 doctitle="${project}"
+                 windowtitle="${project} Portlet API"
+                 doctitle="${project} Portlet API"
                  bottom="Copyright &#169; 2002,2003 GridLab Project. All Rights Reserved."/>
     </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates the Portlet API documentation                                       -->
+    <!-- =================================================================== -->
+    <target name="docs-portlet-api" depends="setenv" description="Create GridSphere Javadocs">
+    <delete quiet="true" dir="${javadoc.dir}/portletapi"/>
+    <mkdir dir="${javadoc.dir}/portletapi"/>
+        <javadoc
+           packagenames="org.gridlab.gridsphere.portlet.*, org.gridlab.gridsphere.event.*"
+           sourcepath="${src.dir}"
+           classpathref="classpath"
+           destdir="${javadoc.dir}/portletapi"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="${project} Portlet API"
+           excludepackagenames="org.gridlab.gridsphere.portlet.impl.*,
+                                org.gridlab.gridsphere.portlet.service.spi.impl.*,
+                                org.gridlab.gridsphere.event.impl.*"
+
+           defaultexcludes="yes"
+           doctitle="${project} Portlet API"
+           bottom="Copyright &#169; 2002,2003 GridLab Project. All Rights Reserved."/>
+    </target>
+
+
+
 
 <!-- +++++++++++++++ END DATABASE STUFF ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
@@ -523,6 +538,7 @@ Copyright:
             </fileset>
             <fileset dir="${build.lib}">
                 <exclude name="portlet-widget-tags.jar"/>
+                <exclude name="gsmanager-portlet.jar"/>
                 <exclude name="coreportlets.jar"/>
             </fileset>
         </copy>
@@ -538,6 +554,8 @@ Copyright:
             <fileset dir="${build.war}/${Name}"/>
         </copy>
 
+        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/${Name}/WEB-INF/lib"/>
+
         <copy file="conf/log4j.properties" tofile="${env.CATALINA_HOME}/webapps/${Name}/WEB-INF/log4j.properties" />
 
     </target>
@@ -549,11 +567,11 @@ Copyright:
         <copy todir="${build.war}/coreportlets">
             <fileset dir="${corewebapp.dir}"/>
         </copy>
-        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
-        <copy file="${build.lib}/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
         <copy todir="${env.CATALINA_HOME}/webapps/coreportlets">
             <fileset dir="${build.war}/coreportlets"/>
         </copy>
+        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
+        <copy file="${build.lib}/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
     </target>
 
     <!-- ================================================================= -->
