@@ -17,40 +17,40 @@ public interface TextMessagingService extends PortletService {
      * Returns an empty message Object.
      * @return  empty message
      */
-    TmfMessage createNewMessage();
+    public TmfMessage createNewMessage();
 
     /**
      * Sends given message object
      * @param message message to be sent
      */
-    void send(TmfMessage message);
+    public void send(TmfMessage message);
 
     /**
      * Returns a list of tmf users objects
      * @return list of tmf users
      */
-    List getUsers();
+    public List getUsers();
 
 
     /**
      * Returns a list of the messaging services available.
      * @return  list of textmessaging services
      */
-    List getServices();
+    public List getServices();
 
     /**
      * Returns the textmessaging userobject for a given userid.
      * @param userid of the user
      * @return textmessaging userobject
      */
-    TmfUser getUser(String userid);
+    public TmfUser getUser(String userid);
 
 
     /**
      * Saves the userinfo for the user
      * @param user userobject to be saved
      */
-    void saveUser(TmfUser user);
+    public void saveUser(TmfUser user);
 
     /**
      * Checks if a userid is on a service
@@ -58,7 +58,7 @@ public interface TextMessagingService extends PortletService {
      * @param messagetype messagetype
      * @return true if the user has subscribed to the service, otherwise false
      */
-    boolean isUserOnService(String userid, String messagetype);
+    public boolean isUserOnService(String userid, String messagetype);
 
     /**
      * Checks if a user is 'online' if the service supports this.
@@ -66,6 +66,6 @@ public interface TextMessagingService extends PortletService {
      * @param messagetype messagetype
      * @return always false for now
      */
-    boolean isUserOnline(String userid, String messagetype);
+    public boolean isUserOnline(String userid, String messagetype);
 
 }

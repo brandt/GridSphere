@@ -47,7 +47,7 @@ public class TextMessagingServiceImpl  implements TextMessagingService, PortletS
 
     /**
      * Returns a list of tmf users objects
-     * @return
+     * @return a list of tmf users
      */
     public List getUsers() {
         TmfConfig config = core.getTmfConfig();

@@ -50,7 +50,7 @@ public class MailServiceImpl implements PortletServiceProvider, MailService {
         Properties props = System.getProperties();
         if (mailServiceHost != null) props.put("mail.smtp.host", mailServiceHost);
         Session session = Session.getDefaultInstance(props, null);
-        //session.setDebug(true);
+        session.setDebug(true);
         Message mimeMessage = new MimeMessage(session);
         InternetAddress from = new InternetAddress(msg.getSender());
         InternetAddress to[] = InternetAddress.parse(msg.getEmailAddress());
