@@ -100,7 +100,7 @@ public class PortletDescriptorTest extends GridSphereServletTest {
         assertEquals(PortletWindow.State.MAXIMIZED, winstatelist.get(0));
         assertEquals(PortletWindow.State.MINIMIZED, winstatelist.get(1));
 
-        List smodes = portletApp.getSupportedModes();
+        List smodes = portletApp.getSupportedModes("html");
         assertEquals(4, smodes.size());
         assertEquals(Portlet.Mode.VIEW, smodes.get(0));
         assertEquals(Portlet.Mode.EDIT, smodes.get(1));

@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.services.core.user;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
@@ -47,36 +48,23 @@ public class SetupTestUsersTest extends SetupRootUserTest {
 
     protected void createUsers() {
 
-        AccountRequest jasonRequest = rootUserService.createAccountRequest();
+        SportletUser jasonRequest = rootUserService.createUser();
+
         jasonRequest.setUserID("jason");
         jasonRequest.setGivenName("Jason");
-        jasonRequest.setPasswordValue("");
-        jasonRequest.setPasswordValidation(false);
 
-        AccountRequest michaelRequest = rootUserService.createAccountRequest();
+        SportletUser michaelRequest = rootUserService.createUser();
         michaelRequest.setUserID("michael");
         michaelRequest.setGivenName("Michael");
-        michaelRequest.setPasswordValue("");
-        michaelRequest.setPasswordValidation(false);
 
-        AccountRequest oliverRequest = rootUserService.createAccountRequest();
+        SportletUser oliverRequest = rootUserService.createUser();
         oliverRequest.setUserID("oliver");
         oliverRequest.setGivenName("Oliver");
-        oliverRequest.setPasswordValue("");
-        oliverRequest.setPasswordValidation(false);
 
-        try {
-            rootUserService.submitAccountRequest(jasonRequest);
-            rootUserService.submitAccountRequest(michaelRequest);
-            rootUserService.submitAccountRequest(oliverRequest);
-            jason = rootUserService.approveAccountRequest(jasonRequest);
-            michael = rootUserService.approveAccountRequest(michaelRequest);
-            oliver = rootUserService.approveAccountRequest(oliverRequest);
-        } catch (PortletServiceException e) {
-            String msg = "Failed to setup users";
-            //log.error(msg, e);
-            fail(msg);
-        }
+        rootUserService.saveUser(jasonRequest);
+        rootUserService.saveUser(michaelRequest);
+        rootUserService.saveUser(oliverRequest);
+
     }
 
     public void testCreateTestUsers() {
@@ -107,12 +95,12 @@ public class SetupTestUsersTest extends SetupRootUserTest {
 
     protected void deleteUsers() {
         // test delete users
-        rootUserService.deleteAccount(jason);
+        rootUserService.deleteUser(jason);
         User jason2 = rootUserService.getUserByUserName(jason.getUserName());
         assertNull(jason2);
 
-        rootUserService.deleteAccount(michael);
-        rootUserService.deleteAccount(oliver);
+        rootUserService.deleteUser(michael);
+        rootUserService.deleteUser(oliver);
 
     }
 
