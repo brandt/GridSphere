@@ -23,8 +23,6 @@ public class PortletGroupFactory {
 
     public static PortletGroup GRIDSPHERE_GROUP = SportletGroup.CORE;
 
-    public List groups = new ArrayList();
-
     public static synchronized PortletGroup createPortletGroup(String groupName) {
         return new SportletGroup(groupName);
     }

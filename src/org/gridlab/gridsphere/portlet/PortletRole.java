@@ -19,23 +19,35 @@ import java.util.Comparator;
  */
 public class PortletRole implements Serializable, Comparator, Cloneable {
 
-    private int role;
+    private String oid = null;
+    private int priority;
+    private String roleName = null;
 
     private static final int GUEST_ROLE = 1;
     private static final int USER_ROLE = 2;
     private static final int ADMIN_ROLE = 3;
     private static final int SUPER_ROLE = 4;
 
-    public static final PortletRole GUEST = new PortletRole(GUEST_ROLE);
-    public static final PortletRole USER = new PortletRole(USER_ROLE);
-    public static final PortletRole ADMIN = new PortletRole(ADMIN_ROLE);
-    public static final PortletRole SUPER = new PortletRole(SUPER_ROLE);
+    private static final String GUEST_ROLE_STRING = "GUEST";
+    private static final String USER_ROLE_STRING = "USER";
+    private static final String ADMIN_ROLE_STRING = "ADMIN";
+    private static final String SUPER_ROLE_STRING = "SUPER";
+
+    public static final PortletRole GUEST = new PortletRole(GUEST_ROLE_STRING, GUEST_ROLE);
+    public static final PortletRole USER = new PortletRole(USER_ROLE_STRING, USER_ROLE);
+    public static final PortletRole ADMIN = new PortletRole(ADMIN_ROLE_STRING, ADMIN_ROLE);
+    public static final PortletRole SUPER = new PortletRole(SUPER_ROLE_STRING, SUPER_ROLE);
+
+    public PortletRole() {
+
+    }
 
     /**
      * Constructs an instance of PortletRole
      */
-    private PortletRole(int role) {
-        this.role = role;
+    public PortletRole(String roleName, int priority) {
+        this.roleName = roleName;
+        this.priority = priority;
     }
 
     /**
@@ -61,12 +73,37 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
         }
     }
 
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
+
     /**
      * Returns a unique id for this role
      * @return a unique id for this role
      */
     public int getID() {
-        return role;
+        return priority;
+    }
+
+    public void setID(int id) {
+        this.priority = id;
+    }
+
+    /**
+     * Returns the role name
+     *
+     * @return the role name
+     */
+    public String getName() {
+        return roleName;
+    }
+
+    public void setName(String roleName) {
+        this.roleName = roleName;
     }
 
     /**
@@ -75,7 +112,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
      * @return <code>true</code> if this role is <code>GUEST</code>, <code>false otherwise</code>
      */
     public boolean isGuest() {
-        if (role == GUEST_ROLE) return true;
+        if (roleName == GUEST_ROLE_STRING) return true;
         return false;
     }
 
@@ -85,7 +122,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
      * @return <code>true</code> if this role is <code>USER</code>, <code>false otherwise</code>
      */
     public boolean isUser() {
-        if (role == USER_ROLE) return true;
+        if (roleName == USER_ROLE_STRING) return true;
         return false;
     }
 
@@ -95,7 +132,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
      * @return <code>true</code> if this role is <code>ADMIN</code>, <code>false otherwise</code>
      */
     public boolean isAdmin() {
-        if (role == ADMIN_ROLE) return true;
+        if (roleName== ADMIN_ROLE_STRING) return true;
         return false;
     }
 
@@ -105,27 +142,18 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
      * @return <code>true</code> if this role is <code>SUPER</code>, <code>false otherwise</code>
      */
     public boolean isSuper() {
-        if (role == SUPER_ROLE) return true;
+        if (roleName == SUPER_ROLE_STRING) return true;
         return false;
     }
 
     public String toString() {
-        String tagstring;
-        if (role == SUPER_ROLE) {
-            tagstring = "SUPER";
-        } else if (role == USER_ROLE) {
-            tagstring = "USER";
-        } else if (role == ADMIN_ROLE) {
-            tagstring = "ADMIN";
-        } else {
-            tagstring = "GUEST";
-        }
-        return tagstring;
+        return roleName;
     }
 
     public Object clone() throws CloneNotSupportedException {
         PortletRole r = (PortletRole)super.clone();
-        r.role = this.role;
+        r.roleName = this.roleName;
+        r.priority = this.priority;
         return r;
     }
 
@@ -142,18 +170,18 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
     public boolean equals(Object object) {
         if (object != null && (object.getClass().equals(this.getClass()))) {
             PortletRole portletRole = (PortletRole) object;
-            return (role == portletRole.getID());
+            return (priority == portletRole.getID());
         }
         return false;
     }
 
     public int hashCode() {
-        return role;
+        return priority;
     }
 
     private Object readResolve() {
         PortletRole r = PortletRole.GUEST;
-        switch (role) {
+        switch (priority) {
             case GUEST_ROLE:
                 r = PortletRole.GUEST;
                 break;

@@ -58,7 +58,6 @@ public abstract class PortletAdapter extends Portlet {
      */
     public void init(PortletConfig config) throws UnavailableException {
         this.portletConfig = config;
-        System.err.println("creating a portletconfig" + config.getName());
         PortletContext ctx = portletConfig.getContext();
         dataManager = SportletDataManager.getInstance();
         try {

@@ -281,7 +281,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         //PortletServiceProvider psp = null;
 
         String serviceName = service.getName();
-        log.debug("Creating a user service: " + serviceName);
+
         SportletServiceDefinition def = (SportletServiceDefinition) allServices.get(serviceName);
         if (def == null) {
             log.error("Unable to find portlet service interface: " + serviceName +
@@ -294,6 +294,10 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             throw new PortletServiceNotFoundException("Unable to create service: " + serviceName + " user is null");
         }
 
+        if ((user instanceof GuestUser) && (initServices.containsKey(serviceName))) {
+            return (PortletService)initServices.get(serviceName);
+        }
+
         if (useCachedService) {
             Map userServiceMap = (Map)userServices.get(user.getID());
             if (userServiceMap != null) {
@@ -301,10 +305,6 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
                     return (PortletService)userServiceMap.get(serviceName);
                 }
             }
-        }
-
-        if ((user instanceof GuestUser) && (initServices.containsKey(serviceName))) {
-            return (PortletService)initServices.get(serviceName);
         }
 
         /* Create the service implementation */
@@ -354,6 +354,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         if (userServiceMap == null) userServiceMap = new HashMap();
 
         userServiceMap.put(serviceName, psp);
+        log.debug("Creating a user service for user: " + user.getID() + " " + serviceName);
         userServices.put(user.getID(), userServiceMap);
 
         List sessions = userSessionManager.getSessions(user);
@@ -362,7 +363,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             while (it.hasNext()) {
                 PortletSession session = (PortletSession)it.next();
                 log.debug("Adding a session listener for session: " + session.getId() + " to portlet session manager");
-                if (session != null) portletSessionManager.addSessionListener(session.getId(), this);
+                if ((session != null) && (session.getId() != null)) portletSessionManager.addSessionListener(session.getId(), this);
             }
         }
         return psp;
@@ -404,6 +405,18 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             log.info("Shutting down service: " + serviceName + " impl: " + psp.getClass().getName());
             psp.destroy();
         }
+        keys = userServices.keys();
+        while (keys.hasMoreElements()) {
+            String userID = (String)keys.nextElement();
+            Map userServiceMap  = (Map)userServices.get(userID);
+            Collection userServColl = userServiceMap.values();
+            Iterator i = userServColl.iterator();
+            while (i.hasNext()) {
+                PortletServiceProvider psp = (PortletServiceProvider)i.next();
+                psp.destroy();
+                i.remove();
+            }
+        }
         initServices = null;
         userServices = null;
         serviceContexts = null;
@@ -424,6 +437,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         Iterator it = services.iterator();
         while (it.hasNext()) {
             String iface = (String)it.next();
+            // Check standard portlet services that belong to this webapp
             Enumeration keys = initServices.keys();
             while (keys.hasMoreElements()) {
                 String serviceName = (String) keys.nextElement();
@@ -436,7 +450,24 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
                     }
                 }
             }
+            // Check user services that contain service name
+            Enumeration ukeys = userServices.keys();
+            while (ukeys.hasMoreElements()) {
+                String userID = (String)keys.nextElement();
+                Map userServiceMap  = (Map)userServices.get(userID);
+                Set s = userServiceMap.keySet();
+                Iterator i = s.iterator();
+                while (i.hasNext()) {
+                    String sname = (String)i.next();
+                    if (sname.equals(iface)) {
+                        PortletServiceProvider psp = (PortletServiceProvider)userServiceMap.get(sname);
+                        psp.destroy();
+                        i.remove();
+                    }
+                }
+            }
         }
+
         it = remServices.iterator();
         while (it.hasNext()) {
             String serviceName = (String)it.next();
@@ -444,7 +475,6 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             allServices.remove(serviceName);
             classLoaders.remove(serviceName);
             serviceContexts.remove(serviceName);
-            userServices.remove(serviceName);
         }
         webappServices.remove(webappName);
     }
