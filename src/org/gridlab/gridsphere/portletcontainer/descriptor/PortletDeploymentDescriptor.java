@@ -17,8 +17,6 @@ import java.util.List;
 public class PortletDeploymentDescriptor {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletDeploymentDescriptor.class);
-
-
     private Vector PortletApp = new Vector();
 
     /**
@@ -40,14 +38,14 @@ public class PortletDeploymentDescriptor {
     /**
      * creates a new PortletApp (which is a vector)
      */
-  /*  public PortletApp createPortletApp() {
+    public PortletApp createPortletApp() {
         return new PortletApp();
     }
-  */
+
     /**
      *  <b>not implemented yet</b>
      */
-    public void addPortletApp() {};
+    public void addPortletApp(PortletApp portletApp) {}
 
 
     public void load(String url, String mapping) throws PortletDeploymentDescriptorException  {
