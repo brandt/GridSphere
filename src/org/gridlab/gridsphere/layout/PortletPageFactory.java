@@ -99,8 +99,8 @@ public class PortletPageFactory implements PortletSessionListener {
         PortletTabbedPane pane = null;
         try {
 
-            newPage = (PortletPage)templatePage.clone();
-            //newPage = (PortletPage)deepCopy(templatePage);
+            //newPage = (PortletPage)templatePage.clone();
+            newPage = (PortletPage)deepCopy(templatePage);
             log.debug("Returning cloned layout from webapps:");
 
             pane = newPage.getPortletTabbedPane();
@@ -113,12 +113,14 @@ public class PortletPageFactory implements PortletSessionListener {
 
                 PortletTabbedPane portletTabs = PortletTabRegistry.getApplicationTabs(name);
 
-                List tabs = portletTabs.getPortletTabs();
+                List tabs = Collections.synchronizedList(portletTabs.getPortletTabs());
+                synchronized(tabs) {
                 for (int j = 0; j < tabs.size(); j++) {
                     PortletTab tab = (PortletTab)tabs.get(j);
 
-                    pane.addTab(name, (PortletTab)tab.clone());
-                    //pane.addTab(name, (PortletTab)deepCopy(tab));
+                    //pane.addTab(name, (PortletTab)tab.clone());
+                    pane.addTab(name, (PortletTab)deepCopy(tab));
+                }
                 }
             }
 
