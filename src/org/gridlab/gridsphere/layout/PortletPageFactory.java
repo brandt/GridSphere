@@ -446,6 +446,26 @@ public class PortletPageFactory implements PortletSessionListener {
         return page;
     }
 
+    public void destroyPortletPage(PortletRequest req) {
+        PortletSession session = req.getPortletSession();
+
+        String userLayout = "";
+        try {
+            userLayout = userLayoutDir + File.separator + req.getUser().getID();
+            File f = new File(userLayout);
+            if (f.exists()) {
+                f.delete();
+            }
+        } catch (Exception e) {
+            log.error("Unable to delete layout: " + userLayout, e);
+        }
+        String id = session.getId();
+        if (userLayouts.containsKey(id)) {
+            userLayouts.remove(id);
+        }
+        log.debug("removed user layout: " + userLayout);
+    }
+
     public PortletPage createFromGuestLayoutXML(PortletRequest req) {
         PortletSession session = req.getPortletSession();
 

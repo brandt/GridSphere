@@ -62,6 +62,10 @@ public class PortletPage implements Serializable, Cloneable {
         this.layoutDescriptor = layoutDescriptor;
     }
 
+    public String getLayoutDescriptor() {
+        return layoutDescriptor;
+    }
+
     /**
      * Sets the portlet container title
      *

@@ -46,6 +46,11 @@ public class LayoutManagerPortlet extends ActionPortlet {
         super.initConcrete(settings);
     }
 
+    public void refreshLayout(FormEvent event) {
+        PortletRequest req = event.getPortletRequest();
+        layoutMgr.refreshPage(req);
+    }
+
     public void doShowLayout(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();

@@ -24,6 +24,19 @@
 <ui:frame>
 <ui:tablerow>
 <ui:tablecell width="15%">
+ <ui:text key="LAYOUT_REFRESH"/>
+</ui:tablecell>
+<ui:tablecell>
+<ui:text style="alert" key="LAYOUT_REFRESH_WARNING"/>&nbsp;<ui:actionsubmit action="refreshLayout" key="LAYOUT_REFRESH"/>
+</ui:tablecell>
+</ui:tablerow>
+</ui:frame>
+</ui:panel>
+
+<ui:panel cellpadding="10">
+<ui:frame>
+<ui:tablerow>
+<ui:tablecell width="15%">
 <ui:text key="LAYOUT_TAB_CONFIG"/>
 </ui:tablecell>
 <ui:tablecell>

@@ -56,6 +56,10 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         }
     }
 
+    public void refreshPage(PortletRequest req) {
+        pageFactory.destroyPortletPage(req);
+    }
+
     public String getTheme(PortletRequest req) {
         PortletPage page = pageFactory.createPortletPage(req);
         return page.getTheme();
