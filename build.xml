@@ -93,6 +93,12 @@ Copyright:
             <include name="servlet.jar"/>
         </fileset>
 
+        <!-- this is for the servlet JARs in Tomcat 5.1.x -->
+        <fileset dir="${env.CATALINA_HOME}/common/lib">
+            <include name="servlet-api.jar"/>
+            <include name="jsp-api.jar"/>
+        </fileset>
+
         <!-- this is for the XML JARs in Tomcat 4.1.x -->
         <fileset dir="${env.CATALINA_HOME}/common/endorsed">
             <include name="*.jar"/>
@@ -329,6 +335,7 @@ Copyright:
     <target name="gridsphere-jsr-tags-jar" depends="compile" description="Create lib/gridsphere-jsr-tags.jar">
         <jar jarfile="${build.lib}/gridsphere-jsr-tags.jar" basedir="${build.classes}">
             <include name="gridsphere/log4j.properties"/>
+            <include name="org/gridlab/gridsphere/provider/portlet/ActionPortlet.class"/>
             <include name="org/gridlab/gridsphere/provider/portlet/jsr/**"/>
             <include name="org/gridlab/gridsphere/provider/portletui/tags/**"/>
             <exclude name="org/gridlab/gridsphere/provider/portletui/tags/gs/**"/>
@@ -641,6 +648,7 @@ Copyright:
             <fileset dir="${build.lib}">
                 <exclude name="gridsphere-test.jar"/>
                 <exclude name="gridsphere-ui-tags.jar"/>
+                <exclude name="gridsphere-jsr-tags.jar"/>
                 <exclude name="gridsphere-provider.jar"/>
                 <exclude name="coreportlets.jar"/>
             </fileset>
