@@ -129,6 +129,8 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         User user = userManager.getUserByUserName(loginName);
         if (user == null) throw new AuthorizationException("User " + loginName + " does not exist");
 
+        Collections.sort(activeModules);
+
         Iterator it = activeModules.iterator();
         log.debug("Active modules are: ");
         while (it.hasNext()) {
