@@ -94,12 +94,7 @@ Copyright:
 
         <!-- this is for the servlet JARs in Tomcat 4.1.x -->
         <fileset dir="${env.CATALINA_HOME}/common/lib">
-            <include name="*.jar"/>
-        </fileset>
-
-        <!-- this is for the servlet JARs in Tomcat 4.1.x -->
-        <fileset dir="${env.CATALINA_HOME}/shared/lib">
-            <include name="*.jar"/>
+            <include name="activation.jar"/>
         </fileset>
 
         <!-- this is for the XML JARs in Tomcat 4.1.x -->
@@ -107,9 +102,6 @@ Copyright:
             <include name="*.jar"/>
         </fileset>
 
-        <fileset dir="lib">
-            <include name="*.jar"/>
-        </fileset>
         <fileset dir="lib/ext">
             <exclude name="*.LICENSE"/>
             <include name="*.jar"/>
