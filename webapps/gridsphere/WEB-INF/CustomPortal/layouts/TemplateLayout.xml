@@ -15,7 +15,7 @@ $Id$
         <table-layout style="header">
             <row-layout>
                 <column-layout width="85%">
-                    <portlet-content include="/html/pagehead.html"/>
+                    <portlet-content include="/WEB-INF/CustomPortal/layouts/html/pagehead.html"/>
                 </column-layout>
                 <column-layout width="15%">
                     <portlet-frame transparent="true" outer-padding="0" label="logout">

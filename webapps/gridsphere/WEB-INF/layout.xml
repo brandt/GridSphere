@@ -65,12 +65,12 @@
                 <title lang="cs">Portlety</title>
                 <table-layout>
                     <row-layout>
-                        <column-layout width="30%">
+                        <column-layout width="40%">
                             <portlet-frame label="loginconfig">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
-                        <column-layout width="70%">
+                        <column-layout width="60%">
                             <portlet-frame label="portletmanager">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
                             </portlet-frame>
@@ -135,7 +135,7 @@
                 </table-layout>
             </portlet-tab>
             <portlet-tab label="messagingservicestab" required-role="ADMIN">
-                <title lang="en">Messagingservices</title>
+                <title lang="en">Messaging</title>
                 <title lang="de">Textnachrichtendienste</title>
                 <table-layout>
                     <row-layout>
