@@ -5,17 +5,27 @@
 package org.gridlab.gridsphere.portlets.manager;
 
 import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.event.FormEvent;
+import org.gridlab.gridsphere.event.FileFormEvent;
+import org.gridlab.gridsphere.event.FileFormException;
+import org.gridlab.gridsphere.event.impl.FormEventImpl;
+import org.gridlab.gridsphere.event.impl.FileFormEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.services.registry.PortletManagerService;
 import org.gridlab.gridsphere.portlets.manager.tomcat.TomcatManagerWrapper;
 import org.gridlab.gridsphere.portlets.manager.tomcat.TomcatWebAppResult;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.FileUpload;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Iterator;
 
 /**
  * The PortletApplicationManager is a wrapper for the Tomcat manager webapp in 4.1.X which allows dynamic
@@ -47,7 +57,15 @@ public class PortletApplicationManager extends AbstractPortlet {
         String operation = (String)params.get("operation");
         String appName = (String)params.get("context");
         TomcatWebAppResult result = null;
-        if ((operation != null) && (appName!= null)) {
+        if (action.getName().equals("install")) {
+            System.err.println("In actionPerformed doing an install");
+            FileFormEvent fileformEvent = new FileFormEventImpl(event);
+            try {
+                fileformEvent.saveFile(PortletManagerService.WEB_APPLICATION_PATH);
+            } catch (FileFormException ffe) {
+                event.getPortletRequest().setAttribute("ERROR", ffe.getMessage());
+            }
+        } else if ((operation != null) && (appName!= null)) {
             if (operation.equals("start")) {
                 result = tomcat.startWebApp(appName);
                 portletManager.installPortletWebApplication(appName, req, res);
@@ -74,7 +92,6 @@ public class PortletApplicationManager extends AbstractPortlet {
         }
         if (result != null) System.err.println("result: " + result.getReturnCode() + " " + result.getDescription());
     }
-
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         List webapps = portletManager.listPortletWebApplications();

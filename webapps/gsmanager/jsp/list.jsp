@@ -8,6 +8,10 @@
 
 <jsp:useBean id="result" class="org.gridlab.gridsphere.portlets.manager.tomcat.TomcatWebAppResult" scope="request"/>
 
+<% String error = (String)request.getAttribute("ERROR"); %>
+<% if (error != null) { %>
+<b><%= error %></b>
+<% } %>
 <table border="1" cellspacing="0" cellpadding="3">
 <tr>
  <td colspan="10">Applications</td>
@@ -49,4 +53,41 @@
 
 <% } %>
 
+</table>
+
+<table border=0 cellpadding=1 cellspacing=0 width="180" bgcolor=6699CC><tr><td><font color=FFFFFF><b>&nbsp;Upload WAR File</b></font></td></tr>
+</table>
+
+<table border=0 cellpadding=0 cellspacing=0 width="178">
+<tr>
+<td width=1 bgcolor=cccccc>
+<spacer type=block width=1></td>
+<td width=1000>
+
+<table border=0 cellpadding=3 cellspacing=0 width="178"><tr><td valign=top>
+
+    <gs:fileform action="install">
+    <table cellspacing=2 cellpadding=2 border=0>
+    <tr>
+    <td align="right">File: </td>
+    <td align="left"><gs:fileinput name="filename" size="8" maxlength="20"/></td>
+    </tr>
+    <tr>
+    <td colspan=5 align="center"><gs:submit name="option" value="Login"/></td>
+    </tr>
+    </table>
+    </gs:fileform>
+
+</td>
+</tr>
+</table>
+
+</td>
+<td width=1 bgcolor=cccccc>
+<spacer type=block width=1>
+</td>
+</tr>
+<tr>
+<td height=1 colspan=3 bgcolor=cccccc>
+<spacer type=block height=1></td></tr>
 </table>
