@@ -590,7 +590,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if (!transparent) {
             String titleStr = (String) req.getAttribute(SportletProperties.PORTLET_TITLE);
             if (titleStr == null) {
-                titleStr = titleBar.getTitle();
+                titleStr = titleBar.getTitle();                
+            } else {
                 req.removeAttribute(SportletProperties.PORTLET_TITLE);
             }
             frame.append(titleBar.getPreBufferedTitle());
