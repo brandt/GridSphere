@@ -15,21 +15,20 @@ import java.util.Set;
  * <code>SportletGroup</code> is the implementation of <code>PortletGroup</code>
  * Portlet API interface to define portal groups.
  * <p/>
- * This implemnetation uses Castor doclets to generate the SQL data bindings
  * 
  * @see org.gridlab.gridsphere.portlet.PortletRole
  */
 public class SportletGroup implements Serializable, Cloneable, PortletGroup {
 
     private String oid = null;
-    private static final String SUPER_GROUP = "super";
+    //private static final String SUPER_GROUP = "super";
     private static final String CORE_GROUP = "gridsphere";
 
     /**
      * The <code>SUPER</code> PortletGroup is the group that only super users of
      * the portal belong to
      */
-    public static final PortletGroup SUPER = new SportletGroup(SportletGroup.SUPER_GROUP);
+    //public static final PortletGroup SUPER = new SportletGroup(SportletGroup.SUPER_GROUP);
 
     /**
      * The <code>SUPER</code> PortletGroup is the group that only super users of
@@ -39,6 +38,7 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
 
     private String Name = new String();
     private boolean isPublic = true;
+    private String description = new String();
     private Set portletRoleList = new HashSet();
 
     /**
@@ -91,6 +91,24 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
      */
     public String getName() {
         return Name;
+    }
+
+    /**
+     * Sets the description of the group
+     *
+     * @param description the group description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Returns the portlet group description
+     *
+     * @return the portlet group description
+     */
+    public String getDescription() {
+        return description;
     }
 
     /**

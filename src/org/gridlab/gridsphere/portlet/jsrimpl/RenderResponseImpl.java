@@ -105,7 +105,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return a portlet render URL
      */
     public PortletURL createRenderURL() {
-        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse(), portalContext, false);
+        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse(), portalContext);
         portletURL.setComponentID((String) req.getAttribute(SportletProperties.COMPONENT_ID));
         return portletURL;
     }
@@ -125,7 +125,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return a portlet action URL
      */
     public PortletURL createActionURL() {
-        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse(), portalContext, true);
+        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse(), portalContext);
         portletURL.setAction("");
         portletURL.setComponentID((String)req.getAttribute(SportletProperties.COMPONENT_ID));
         return portletURL;

@@ -44,7 +44,6 @@ public class PortletURLImpl implements PortletURL {
     private PortalContext context = null;
     private List allowedModes = null;
 
-    private boolean isAction = false;
     private String action = null;
     private String cid = null;
     private PortletMode mode = null;
@@ -56,7 +55,7 @@ public class PortletURLImpl implements PortletURL {
      * @param req the servlet request
      * @param res the servlet response
      */
-    public PortletURLImpl(HttpServletRequest req, HttpServletResponse res, PortalContext context, boolean isAction) {
+    public PortletURLImpl(HttpServletRequest req, HttpServletResponse res, PortalContext context) {
         this.store = new HashMap();
         this.res = res;
         this.req = req;
@@ -64,7 +63,6 @@ public class PortletURLImpl implements PortletURL {
         this.contextPath = "/gridsphere"; //req.getContextPath();
         this.isSecure = req.isSecure();
         allowedModes = (List)req.getAttribute(SportletProperties.ALLOWED_MODES);
-        this.isAction = isAction;
     }
 
     public void setContextPath(String contextPath) {
@@ -148,11 +146,11 @@ public class PortletURLImpl implements PortletURL {
         boolean isSupported = false;
         Enumeration enum = context.getSupportedPortletModes();
         while (enum.hasMoreElements()) {
-            PortletMode supported = (PortletMode)enum.nextElement();
-            if (supported.equals(portletMode)) {
-                isSupported = true;
-                break;
-            }
+        PortletMode supported = (PortletMode)enum.nextElement();
+        if (supported.equals(portletMode)) {
+        isSupported = true;
+        break;
+        }
         }
         */
         if (allowedModes.contains(portletMode.toString())) {
@@ -328,14 +326,14 @@ public class PortletURLImpl implements PortletURL {
         //try {
         while (it.hasNext()) {
             //if (!firstParam)
-                url += "&";
+            url += "&";
             String name = (String)it.next();
 
             String encname = null;
 
             // if its a render url, the parameters must be prefixed
             //if (isAction) {
-                encname = URLEncoder.encode(name);
+            encname = URLEncoder.encode(name);
             //} else {
             //    encname = URLEncoder.encode(SportletProperties.RENDER_PARAM_PREFIX + name);
             //}

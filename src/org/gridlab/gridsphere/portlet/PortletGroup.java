@@ -29,6 +29,13 @@ public interface PortletGroup extends Cloneable {
     public String getName();
 
     /**
+     * Returns the description of this group
+     *
+     * @return the description of this group
+     */
+    public String getDescription();
+
+    /**
      * Returns the label of this group
      *
      * @return the label of this group
