@@ -40,7 +40,7 @@
         <field name="LanguageList" type="org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo" collection="arraylist">
             <bind-xml name="language"/>
         </field>
-        <field name="AllowedAccess" type="org.gridlab.gridsphere.portletcontainer.descriptor.AllowedAccess" collection="arraylist">
+        <field name="AllowedAccess" type="org.gridlab.gridsphere.portletcontainer.descriptor.AllowedAccess">
             <bind-xml name="allowed-access"/>
         </field>
         <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="arraylist">
