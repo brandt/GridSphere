@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ import java.util.List;
  * portlet component. Generally, it is either a {@link PortletPanel} or another
  * tabbed pane if a double level tabbed pane is desired.
  */
-public class PortletTab extends BasePortletComponent implements Cloneable {
+public class PortletTab extends BasePortletComponent implements Serializable, Cloneable {
 
     private String title = "";
     private boolean selected = false;

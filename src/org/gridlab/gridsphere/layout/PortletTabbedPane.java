@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +21,10 @@ import java.util.List;
  * The <code>PortletTabbedPane</code> represents the visual portlet tabbed pane interface
  * and is a container for a {@link PortletTab}.
  */
-public class PortletTabbedPane extends BasePortletComponent implements PortletTabListener, Cloneable {
+public class PortletTabbedPane extends BasePortletComponent implements Serializable, PortletTabListener, Cloneable {
 
     private List tabs = new ArrayList();
+    private int startIndex = 0;
     private int selectedIndex = 0;
     private String style = "menu";
 
@@ -304,6 +306,13 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
      * @throws IOException if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+
+        // This insures that if no portlet component id (cid)
+        // is set, then the selected tab index is the startIndex = 0
+        if (event.getPortletComponentID() < 1) {
+            selectedIndex = startIndex;
+        }
+
         super.doRender(event);
 
         String[] links = createTabLinks(event);

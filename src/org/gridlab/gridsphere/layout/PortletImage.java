@@ -9,13 +9,14 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 
 /**
  * A <code>PortletImage</code> is a wrapper for an image file to be displayed in the portal
  * page. A <code>PortletImage</code> is defined by an "img src" location of the image in the
  * ui application directory
  */
-public class PortletImage extends BasePortletComponent implements Cloneable {
+public class PortletImage extends BasePortletComponent implements Serializable, Cloneable {
 
     private String image;
 

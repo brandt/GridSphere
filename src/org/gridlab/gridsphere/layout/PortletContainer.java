@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
  * concrete portlet components and provides lifecycle methods for traversing
  * the tree of components and handling actions and performing rendering.
  */
-public class PortletContainer implements Cloneable {
+public class PortletContainer implements Serializable, Cloneable {
 
     protected int COMPONENT_ID = 0;
 
@@ -266,14 +267,12 @@ public class PortletContainer implements Cloneable {
     }
 
 
-    public PortletContainer(PortletContainer c) {
+    public Object clone() throws CloneNotSupportedException {
         int i;
-        //PortletContainer c = (PortletContainer)super.clone();
-        //PortletContainer c = new PortletContainer();
+        PortletContainer c = (PortletContainer)super.clone();
         c.theme = theme;
-        //c.COMPONENT_ID = this.COMPONENT_ID;
-        //c.theme = this.theme;
-        //c.setComponentIdentifierList(this.);
+        c.COMPONENT_ID = this.COMPONENT_ID;
+        c.theme = this.theme;
         List compList = new ArrayList(this.componentIdentifiers.size());
         for (i = 0; i < this.componentIdentifiers.size(); i++) {
             ComponentIdentifier cid = (ComponentIdentifier)this.componentIdentifiers.get(i);
@@ -293,6 +292,6 @@ public class PortletContainer implements Cloneable {
 
         }
         c.components = componentsList;
-        //return c;
+        return c;
     }
 }

@@ -102,7 +102,7 @@ Copyright:
         <mkdir dir="${build.docs}"/>
 
         <property name="GRIDSPHERE_HOME" value="${env.CATALINA_HOME}/gridsphere"/>
-        <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test"/>
+        <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/test"/>
 
         <echo message="--- Build environment for ${project} ---" />
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
@@ -171,9 +171,9 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates castor definitions                                          -->
     <!-- =================================================================== -->
-    <target name="configure-database" depends="doclet-mapping" if="use.persistence">
+    <target name="configure-database" depends="setenv, doclet-mapping" if="use.persistence">
         <property name="DATABASE_FILE"
-                  value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db.xml"/>
+                  value="${GRIDSPHERE_HOME}/${project.name}/database/database.xml"/>
         <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
         <replace file="${DATABASE_FILE}"
                  token="@GRIDSPHERE_HOME@"
@@ -183,9 +183,9 @@ Copyright:
                  value="${DATABASE_NAME}"/>
     </target>
 
-    <target name="configure-test-database" depends="doclet-mapping">
+    <target name="configure-test-database" depends="setenv, doclet-mapping" if="use.persistence">
         <property name="DATABASE_FILE"
-            value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db-test.xml"/>
+            value="${GRIDSPHERE_HOME}/database/database-test.xml"/>
         <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
         <replace file="${DATABASE_FILE}"
             token="@GRIDSPHERE_HOME@"
@@ -202,18 +202,19 @@ Copyright:
         <echo message="force mapping: ${var_force_mapping}"/>
         <condition property="var_force_mapping">
             <not>
-                <available file="${GRIDSPHERE_HOME}/mapping/${project.name}mapping.xml"/>
+                <available file="${GRIDSPHERE_HOME}/${project.name}/database/docletmapping.xml"/>
             </not>
         </condition>
     </target>
 
-    <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping">
+    <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping, use.persistence"">
+        <mkdir dir="${GRIDSPHERE_HOME}/${project.name}/database"/>
         <javadoc packagenames="*"
             sourcepath="src"
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
             docletpath="${gridsphere.home}/lib/ext/jdom.jar;${gridsphere.home}/lib/ext/castor-doclet.jar"
-            additionalparam=" -J-DFILE=${GRIDSPHERE_HOME}/database/${project.name}create.sql -J-DDB_TYPE=db2 -J-DLOG=1">
+            additionalparam=" -J-DFILE=${GRIDSPHERE_HOME}/${project.name}/database/create.sql -J-DDB_TYPE=db2 -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
         <javadoc
@@ -221,7 +222,7 @@ Copyright:
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="${gridsphere.home}/lib/ext/jdom.jar;${gridsphere.home}/lib/ext/castor-doclet.jar"
-            additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/mapping/${project.name}mapping.xml -J-DLOG=1">
+            additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/${project.name}/database/docletmapping.xml -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
     </target>
@@ -230,12 +231,12 @@ Copyright:
         <echo message="force database: ${var_force_database}"/>
         <condition property="var_force_database">
             <not>
-                <available file="${GRIDSPHERE_HOME}/database/${project.name}.script"/>
+                <available file="${GRIDSPHERE_HOME}/${project.name}/database/${project.name}.script"/>
             </not>
         </condition>
     </target>
 
-    <target name="check-test-database-exists">
+    <target name="check-test-database-exists" if="use.persistence">
         <echo message="force database: ${var_force_database}"/>
         <condition property="var_force_database">
             <not>
@@ -244,28 +245,28 @@ Copyright:
         </condition>
     </target>
 
-    <target name="create-real-database" depends="configure-database, check-real-database-exists" if="var_force_database">
+    <target name="create-real-database" depends="setenv, configure-database, check-real-database-exists" if="use.persistence, var_force_database">
         <echo message="Creating Database at: ${GRIDSPHERE_HOME}/database/${project.name}"/>
-        <echo message="Using script: ${GRIDSPHERE_HOME}/database/${project.name}create.sql"/>
+        <echo message="Using script: ${GRIDSPHERE_HOME}/${project.name}/database/create.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
-           url="jdbc:hsqldb:${GRIDSPHERE_HOME}/database/${project.name}"
+           url="jdbc:hsqldb:${GRIDSPHERE_HOME}/${project.name}/database/${project.name}"
            userid="sa"
            password=""
            onerror="continue"
-           src="${GRIDSPHERE_HOME}/database/${project.name}create.sql">
+           src="${GRIDSPHERE_HOME}/${project.name}/database/create.sql">
            <classpath refid="classpath"/>
         </sql>
     </target>
 
-    <target name="create-test-database" depends="configure-test-database, check-test-database-exists" if="var_force_database">
+    <target name="create-test-database" depends="configure-test-database, check-test-database-exists" if="use.persistence, var_force_database">
         <echo message="Creating Database at: ${TEST_HOME}/database/${project.name}-test"/>
-        <echo message="Using script: ${GRIDSPHERE_HOME}/database/${project.name}create.sql"/>
+        <echo message="Using script: ${GRIDSPHERE_HOME}/${project.name}/database/create.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
            url="jdbc:hsqldb:${TEST_HOME}/database/${project.name}-test"
            userid="sa"
            password=""
            onerror="continue"
-           src="${GRIDSPHERE_HOME}/database/${project.name}create.sql">
+           src="${GRIDSPHERE_HOME}/${project.name}/database/create.sql">
            <classpath refid="classpath"/>
         </sql>
     </target>
@@ -278,7 +279,7 @@ Copyright:
     <!-- Creates a @PROJECT_TITLE@ JAR library archive configured for Tomcat -->
     <!-- =================================================================== -->
     <target name="portlets-jar" depends="compile" description="Creates @PROJECT_NAME@ portlets JAR">
-        <echo>Creating ${project.name} JAR for Tomcat</echo>
+        <echo>Creating @PROJECT_NAME@ JAR for Tomcat</echo>
 
         <mkdir dir="${build.classes}/${project.name}"/>
 
@@ -287,6 +288,7 @@ Copyright:
 
         <jar jarfile="lib/${project.name}.jar" basedir="${build.classes}" >
             <include name="org/**" />
+            <exclude name="**/services/**"/>
             <include name="${project.name}/**" />
         </jar>
      </target>
@@ -295,7 +297,7 @@ Copyright:
     <!-- Creates a @PROJECT_TITLE@ JAR library archive configured for Tomcat -->
     <!-- =================================================================== -->
     <target name="services-jar" depends="compile" description="Creates @PROJECT_NAME@ services JAR">
-        <echo>Creating ${project.name} JAR for Tomcat</echo>
+        <echo>Creating  @PROJECT_NAME@ services JAR for Tomcat</echo>
 
         <mkdir dir="${build.classes}/${project.name}"/>
 
@@ -303,8 +305,7 @@ Copyright:
                   tofile="${build.classes}/${project.name}/log4j.properties"/>
 
         <jar jarfile="lib/${project.name}-services.jar" basedir="${build.classes}" >
-            <include name="org/**" />
-            <include name="${project.name}/**" />
+            <include name="**/services/**"/>
         </jar>
      </target>
 
@@ -322,6 +323,7 @@ Copyright:
     <!-- Creates all the @PROJECT_TITLE@ API documentation                   -->
     <!-- =================================================================== -->
     <target name="javadocs" depends="setenv" description="Create @PROJECT_TITLE@ Javadocs">
+        <echo>Creating @PROJECT_NAME@ Javadocs</echo>
         <delete quiet="true" dir="${build.javadoc}"/>
         <mkdir dir="${build.javadoc}"/>
         <javadoc sourcepath="src"
@@ -342,6 +344,7 @@ Copyright:
     <!-- Creates the @PROJECT_TITLE@  WAR file                               -->
     <!-- =================================================================== -->
     <target name="war" depends="jar" description="Create @PROJECT_TITLE@ WAR">
+        <echo>Creating @PROJECT_NAME@ web application WAR</echo>
         <war warfile="${project.build}/${project.name}.war" update="true"
             webxml="${webapp.dir}/WEB-INF/web.xml">
             <fileset dir="${gswebapp.dir}">
@@ -353,8 +356,8 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Deploys @PROJECT_TITLE@ portlets to a local server                   -->
     <!-- =================================================================== -->
-    <target name="deploy" depends="jar, configure-database" if="catalina.exists" description="Deploys @PROJECT_TITLE@ portlet to a local server">
-
+    <target name="deploy" depends="jar, create-real-database" if="catalina.exists" description="Deploys @PROJECT_TITLE@ portlet to a local server">
+        <echo>Deploying @PROJECT_NAME@ to Tomcat</echo>
         <!-- Copy the gridsphere web app to build directory -->
         <property name="project.webapp" value="${env.CATALINA_HOME}/webapps/${project.name}"/>
         <copy todir="${project.webapp}">
@@ -363,6 +366,7 @@ Copyright:
 
         <copy file="${gridsphere.home}/lib/portlet-widget-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
         <copy file="lib/${project.name}.jar" todir="${project.webapp}/WEB-INF/lib"/>
+
     </target>
 
 </project>

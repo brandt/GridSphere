@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import java.io.*;
 import java.util.*;
@@ -32,11 +33,11 @@ public class PortletLayoutEngine {
     protected static PortletLog log = SportletLog.getInstance(PortletLayoutEngine.class);
 
     private static PortletLayoutEngine instance = new PortletLayoutEngine();
-
+    private static int MAX_GUEST_CONTAINERS = 50;
     private String layoutMappingFile = null;
 
-    private PortletContainer guestContainer;
-
+    private PortletContainer guestContainer = null;
+    private static int counter = 0;
     private String newuserLayoutPath;
     private PortletContainer newuserContainer;
 
@@ -51,6 +52,7 @@ public class PortletLayoutEngine {
     private Map applicationTabs = new HashMap();
 
     private Map guests = new HashMap();
+
     /**
      * Constructs a concrete instance of the PortletLayoutEngine
      */
@@ -91,22 +93,10 @@ public class PortletLayoutEngine {
      */
     public void init() throws IOException, PersistenceManagerException {
 
-        File layDir = new File(userLayoutDir);
-        if (!layDir.exists()) {
-            layDir.mkdir();
-        }
-
         layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
-
-        String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
-
-        guestContainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
-        //guestContainer.init(new ArrayList());
-
         newuserLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.NEW_USER_LAYOUT);
-
-        newuserContainer = PortletLayoutDescriptor.loadPortletContainer(newuserLayoutPath, layoutMappingFile);
-        newuserContainer.init(new ArrayList());
+        String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
+        guestContainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
     }
 
     public void removeUser(User user) {
@@ -135,17 +125,17 @@ public class PortletLayoutEngine {
                 return (PortletContainer)guests.get(id);
             } else {
                 System.err.println("creating new conatiner for:" + id);
-                String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
+
                 PortletContainer newcontainer = null;
                 try {
-                 newcontainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
-                 //newcontainer = new PortletContainer(guestContainer);
-                 //newcontainer = (PortletContainer)guestContainer.clone();
-
-                 newcontainer.init(new ArrayList());
-                 guests.put(id, newcontainer);
+                    synchronized (new Integer(counter)) {
+                        counter = (counter >= MAX_GUEST_CONTAINERS) ? 0 : counter++;
+                        newcontainer = (PortletContainer)guestContainer.clone();
+                    }
+                    newcontainer.init(new ArrayList());
+                    guests.put(id, newcontainer);
                 } catch (Exception e) {
-
+                    System.err.println("Unable to make deepcopy!!");
                 }
 
 
@@ -158,15 +148,7 @@ public class PortletLayoutEngine {
             pc = (PortletContainer) userLayouts.get(user);
             // If not we try to load it in (creating new one if necessary)
         } else {
-            try {
-                pc = createNewUserLayout(user);
-                pc.init(new ArrayList());
-                pc.loginPortlets(event);
-            } catch (Exception e) {
-                log.error("Unable to loadUserLayout for user: " + user, e);
-                throw new PortletLayoutException("Unable to deserialize user layout from layout descriptor: " + e.getMessage());
-            }
-            userLayouts.put(user, pc);
+
         }
         return pc;
     }
@@ -186,6 +168,10 @@ public class PortletLayoutEngine {
 
         try {
             pc = getPortletContainer(event);
+            int numcomps = pc.getComponentIdentifierList().size();
+            if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
+                event.getPortletRequest().setAttribute(GridSphereProperties.COMPONENT_ID, "0");
+            }
             pc.doRender(event);
         } catch (PortletLayoutException e) {
             log.error("Caught LayoutException: ", e);
@@ -209,12 +195,17 @@ public class PortletLayoutEngine {
      */
     public void loginPortlets(GridSphereEvent event) {
         log.debug("in loginPortlets()");
+        User user = event.getPortletRequest().getUser();
+        PortletContainer pc = null;
         try {
-            PortletContainer pc = getPortletContainer(event);
-            pc.loginPortlets(event);
-        } catch (PortletException e) {
-            log.error("Unable to login portlets", e);
-        }
+                pc = createNewUserLayout(user);
+                pc.init(new ArrayList());
+                pc.loginPortlets(event);
+            } catch (Exception e) {
+                log.error("Unable to loadUserLayout for user: " + user, e);
+                //throw new PortletLayoutException("Unable to deserialize user layout from layout descriptor: " + e.getMessage());
+            }
+            userLayouts.put(user, pc);
     }
 
     /**
@@ -248,6 +239,10 @@ public class PortletLayoutEngine {
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
         try {
             pc = getPortletContainer(event);
+            int numcomps = pc.getComponentIdentifierList().size();
+            if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
+                event.getPortletRequest().setAttribute(GridSphereProperties.COMPONENT_ID, "0");
+            }
             pc.actionPerformed(event);
         } catch (PortletLayoutException e) {
             doRenderError(event.getPortletRequest(), event.getPortletResponse(), e);
@@ -271,7 +266,8 @@ public class PortletLayoutEngine {
         String layoutPath = getUserLayoutPath(user);
 
         File f = new File(layoutPath);
-
+        System.err.println("creating : " + layoutPath);
+        System.err.println("newuser layout: " + newuserLayoutPath);
         // if no layout file exists for user, make new one from template
         if (!f.exists()) {
             f.createNewFile();
@@ -291,12 +287,12 @@ public class PortletLayoutEngine {
     }
 
     protected String getUserLayoutPath(User user) {
-        return userLayoutDir + "/" + user.getID();
+        return userLayoutDir + user.getID();
     }
 
     protected void copyFile(File oldFile, File newFile) throws IOException {
         // Destination and streams
-        log.info("in copyFile(): oldFile: " + oldFile.getAbsolutePath() + " newFile: " + newFile.getCanonicalPath());
+        log.debug("in copyFile(): oldFile: " + oldFile.getAbsolutePath() + " newFile: " + newFile.getCanonicalPath());
         FileInputStream fis = new FileInputStream(oldFile);
         FileOutputStream fos = new FileOutputStream(newFile);
 
@@ -319,6 +315,37 @@ public class PortletLayoutEngine {
         fos.flush();
         fos.close();
         fis.close();
+    }
+
+    private static Object deepCopy(Object oldObj) throws Exception {
+
+        ObjectOutputStream oos = null;
+        ObjectInputStream ois = null;
+        try
+        {
+            ByteArrayOutputStream bos =
+                    new ByteArrayOutputStream();
+            oos = new ObjectOutputStream(bos);
+            // serialize and pass the object
+            oos.writeObject(oldObj);
+            oos.flush();
+            ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
+            ois = new ObjectInputStream(bin);
+            // return the new object
+            return ois.readObject();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Exception in ObjectCloner = " + e);
+            throw(e);
+        }
+        finally
+        {
+            oos.close();
+            ois.close();
+
+
+        }
     }
 
 }

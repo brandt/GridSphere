@@ -4,10 +4,12 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import java.io.Serializable;
+
 /**
  * A <code>ComponentIdentifier</code> contains meta information about a {@link PortletComponent}
  */
-public class ComponentIdentifier implements Cloneable {
+public class ComponentIdentifier implements Serializable, Cloneable {
 
     private int id = -1;
     private String className = null;

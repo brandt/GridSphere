@@ -15,6 +15,7 @@ import org.gridlab.gridsphere.portletcontainer.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -22,7 +23,7 @@ import java.util.*;
  * within a portlet frame and is contained by {@link PortletFrame}.
  * The title bar contains portlet mode and window state as well as a title.
  */
-public class PortletTitleBar extends BasePortletComponent implements Cloneable {
+public class PortletTitleBar extends BasePortletComponent implements Serializable, Cloneable {
 
     private String title = "Portlet Unavailable";
     private String portletClass = null;

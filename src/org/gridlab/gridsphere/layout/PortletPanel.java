@@ -7,13 +7,14 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * A <code>PortletPanel</code> is used to compose a collection of portlet components
  * in a specified layout.
  */
-public class PortletPanel extends BasePortletComponent implements Cloneable {
+public class PortletPanel extends BasePortletComponent implements Serializable, Cloneable {
 
     private PortletLayout layout = null;
 

@@ -11,12 +11,13 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * <code>PortletText</code> is used to display the contents of an included
  * text file located in the ui application.
  */
-public class PortletText extends BasePortletComponent implements Cloneable {
+public class PortletText extends BasePortletComponent implements Serializable, Cloneable {
 
     private String text;
 

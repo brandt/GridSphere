@@ -7,13 +7,9 @@
     <portlet-name>Hello World Portlet Application</portlet-name>
     <servlet-name>HelloWorld</servlet-name>
     <portlet-config>
-        <param-name>Portlet Master</param-name>
-        <param-value>yourid@yourdomain.com</param-value>
+        <param-name>PortletConfig Param</param-name>
+        <param-value>some config param value</param-value>
     </portlet-config>
-    <cache>
-        <expires>120</expires>
-        <shared>true</shared>
-    </cache>
     <allows>
         <maximized/>
         <minimized/>
@@ -29,8 +25,8 @@
 
 <concrete-portlet-app id="org.gridlab.gridsphere.portlets.examples.HelloWorld.1">
     <context-param>
-        <param-name>foobar</param-name>
-        <param-value>a value</param-value>
+        <param-name>A PortletApplicationSettings parameter</param-name>
+        <param-value>the value</param-value>
     </context-param>
     <concrete-portlet>
         <portlet-name>Hello World</portlet-name>
@@ -42,15 +38,15 @@
             <keywords>portlet hello world</keywords>
         </language>
         <config-param>
-            <param-name>Portlet Master</param-name>
-            <param-value>yourid@yourdomain.com</param-value>
+            <param-name>A PortletSettings parameter</param-name>
+            <param-value>the value</param-value>
         </config-param>
     </concrete-portlet>
 </concrete-portlet-app>
 
 <concrete-portlet-app id="org.gridlab.gridsphere.portlets.examples.HelloWorld.2">
     <context-param>
-        <param-name>foobar</param-name>
+        <param-name>Yet another PortletApplicationSettings param</param-name>
         <param-value>another value</param-value>
     </context-param>
     <concrete-portlet>
@@ -63,8 +59,8 @@
             <keywords>portlet hello world</keywords>
         </language>
         <config-param>
-            <param-name>Portlet Master</param-name>
-            <param-value>yourid@yourdomain.com</param-value>
+            <param-name>Yet another PortletSettings param</param-name>
+            <param-value>another value</param-value>
         </config-param>
     </concrete-portlet>
 </concrete-portlet-app>

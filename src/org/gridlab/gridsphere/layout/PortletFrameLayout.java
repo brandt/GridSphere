@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.layout.event.PortletFrameListener;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.List;
  * @see PortletFrameEvent
  */
 public abstract class PortletFrameLayout extends BasePortletComponent implements
-        PortletLayout, PortletFrameListener, Cloneable {
+        Serializable, PortletLayout, PortletFrameListener, Cloneable {
 
     protected List components = new ArrayList();
 

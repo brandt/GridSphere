@@ -132,7 +132,7 @@ Copyright:
         </if>
 
         <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test"/>
-
+        <property name="gridsphere.core" value="${GRIDSPHERE_HOME}/core"/>
 
         <echo message="--- Build environment for ${gridsphere.name} ---" />
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
@@ -239,10 +239,30 @@ Copyright:
 
         <property name="TEST_HOME" value="${GRIDSPHERE_HOME}"/>
 
-        <property name="DATABASE_CONFIG" value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db.xml"/>
+        <property name="DATABASE_CONFIG" value="${gridsphere.core}/database/database.xml"/>
         <property name="DATABASE_NAME" value="gridsphere"/>
 
         <ant target="make-gridsphere-jar"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Internal target to create the GridSphere JAR library archive        -->
+    <!-- =================================================================== -->
+    <target name="gridsphere-test-jar" depends="compile-tests" description="Makes gridsphere test JAR">
+
+        <echo message="Configuring Test Database"/>
+
+        <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test"/>
+
+        <property name="DATABASE_CONFIG" value="${gridsphere.core}/database/database-test.xml"/>
+        <property name="DATABASE_NAME" value="gridsphere-test"/>
+
+        <jar jarfile="lib/gridsphere-test.jar" basedir="${build.classes}" >
+            <include name="**/*Test.class"/>
+        </jar>
+
+        <ant target="make-gridsphere-jar"/>
+
     </target>
 
     <target name="make-gridsphere-jar" depends="compile">
@@ -308,25 +328,7 @@ Copyright:
         </jar>
     </target>
 
-    <!-- =================================================================== -->
-    <!-- Internal target to create the GridSphere JAR library archive        -->
-    <!-- =================================================================== -->
-    <target name="gridsphere-test-jar" depends="compile-tests" description="Makes gridsphere test JAR">
 
-        <echo message="Configuring Test Database"/>
-
-        <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test"/>
-
-        <property name="DATABASE_CONFIG" value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db-test.xml"/>
-        <property name="DATABASE_NAME" value="gridsphere-test"/>
-
-        <jar jarfile="lib/gridsphere-test.jar" basedir="${build.classes}" >
-            <include name="**/*Test.class"/>
-        </jar>
-
-        <ant target="make-gridsphere-jar"/>
-
-     </target>
     <!-- =================================================================== -->
     <!-- Creates a Portlet API JAR library archive                           -->
     <!-- =================================================================== -->
@@ -397,7 +399,7 @@ Copyright:
     <!-- =================================================================== -->
     <target name="configure-database" depends="doclet-mapping">
         <property name="DATABASE_FILE"
-                  value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db.xml"/>
+                  value="${gridsphere.core}/database/database.xml"/>
         <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
         <replace file="${DATABASE_FILE}"
                  token="@GRIDSPHERE_HOME@"
@@ -407,12 +409,12 @@ Copyright:
             value="${DATABASE_NAME}"/>
         <replace file="${DATABASE_FILE}"
             token="@PROJECT_NAME@"
-            value="${gridsphere.project}"/>
+            value="core"/>
     </target>
 
     <target name="configure-test-database" depends="doclet-mapping">
         <property name="DATABASE_FILE"
-            value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db-test.xml"/>
+            value="${gridsphere.core}/database/database-test.xml"/>
         <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
         <replace file="${DATABASE_FILE}"
             token="@GRIDSPHERE_HOME@"
@@ -425,14 +427,14 @@ Copyright:
             value="${DATABASE_NAME}"/>
         <replace file="${DATABASE_FILE}"
             token="@PROJECT_NAME@"
-            value="${gridsphere.project}"/>
+            value="core"/>
     </target>
 
     <target name="check-mapping">
         <echo message="force mapping: ${var_force_mapping}"/>
         <condition property="var_force_mapping">
             <not>
-                <available file="${GRIDSPHERE_HOME}/mapping/${gridsphere.project}mapping.xml"/>
+                <available file="${gridsphere.core}/database/docletmapping.xml"/>
             </not>
         </condition>
     </target>
@@ -443,13 +445,14 @@ Copyright:
     </target>
 
     <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping">
+        <mkdir dir="${gridsphere.core}/database"/>
         <javadoc packagenames="org.gridlab.gridsphere.*"
             excludepackagenames="org.gridlab.gridsphere.services.grid.*"
             sourcepath="src"
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
             docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
-            additionalparam=" -J-DFILE=${GRIDSPHERE_HOME}/database/dbcreate.sql -J-DDB_TYPE=db2 -J-DLOG=1">
+            additionalparam=" -J-DFILE=${gridsphere.core}/database/dbcreate.sql -J-DDB_TYPE=db2 -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
         <javadoc packagenames="org.gridlab.gridsphere.*"
@@ -458,7 +461,7 @@ Copyright:
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
-            additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/mapping/${gridsphere.project}mapping.xml -J-DLOG=1">
+            additionalparam="-J-DFILE=${gridsphere.core}/database/docletmapping.xml -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
     </target>
@@ -467,7 +470,7 @@ Copyright:
         <echo message="force database: ${var_force_database}"/>
         <condition property="var_force_database">
             <not>
-                <available file="${GRIDSPHERE_HOME}/database/${DATABASE_NAME}.script"/>
+                <available file="${gridsphere.core}/database/${DATABASE_NAME}.script"/>
             </not>
         </condition>
     </target>
@@ -482,27 +485,27 @@ Copyright:
     </target>
 
     <target name="create-real-database" depends="configure-database, check-real-database-exists" if="var_force_database">
-        <echo message="Creating Database at: ${GRIDSPHERE_HOME}/database/${DATABASE_NAME}"/>
+        <echo message="Creating Database at: ${gridsphere.core}/database/${DATABASE_NAME}"/>
         <echo message="Using script: ${GRIDSPHERE_HOME}/database/dbcreate.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
-           url="jdbc:hsqldb:${GRIDSPHERE_HOME}/database/${DATABASE_NAME}"
+           url="jdbc:hsqldb:${gridsphere.core}/database/${DATABASE_NAME}"
            userid="sa"
            password=""
            onerror="continue"
-           src="${GRIDSPHERE_HOME}/database/dbcreate.sql">
+           src="${gridsphere.core}/database/dbcreate.sql">
            <classpath refid="classpath"/>
         </sql>
     </target>
 
     <target name="create-test-database" depends="configure-test-database, check-test-database-exists" if="var_force_database">
         <echo message="Creating Database at: ${TEST_HOME}/database/${DATABASE_NAME}"/>
-        <echo message="Using script: ${GRIDSPHERE_HOME}/database/dbcreate.sql"/>
+        <echo message="Using script: ${gridsphere.core}/database/dbcreate.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
            url="jdbc:hsqldb:${TEST_HOME}/database/${DATABASE_NAME}"
            userid="sa"
            password=""
            onerror="continue"
-           src="${GRIDSPHERE_HOME}/database/dbcreate.sql">
+           src="${gridsphere.core}/database/dbcreate.sql">
            <classpath refid="classpath"/>
         </sql>
     </target>
@@ -617,7 +620,10 @@ Copyright:
         <!-- Make core gridsphere directory if necessary -->
         <echo message="Deploying GridSphere to Tomcat servlet container at ${env.CATALINA_HOME}"/>
         <mkdir dir="${GRIDSPHERE_HOME}"/>
-        <mkdir dir="${GRIDSPHERE_HOME}/creds"/>
+        <mkdir dir="${gridsphere.core}/database"/>
+        <copy todir="${gridsphere.core}/database">
+            <fileset dir="config/database"/>
+        </copy>
 
         <!-- Copy the gridsphere web app to build directory -->
         <copy overwrite="true" todir="${build.webapps}/gridsphere">
@@ -628,6 +634,7 @@ Copyright:
         <copy todir="${GRIDSPHERE_HOME}">
             <fileset dir="config">
                 <exclude name="*.properties"/>
+                <exclude name="database/**"/>
                 <exclude name="test/**"/>
                 <exclude name="build/**"/>
                 <exclude name="template/**"/>

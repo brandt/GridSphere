@@ -19,6 +19,7 @@ import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.List;
  * <code>PortletFrame</code> provides the visual representation of a portlet. A portlet frame
  * contains a portlet title bar unless visible is set to false.
  */
-public class PortletFrame extends BasePortletComponent implements PortletTitleBarListener, Cloneable {
+public class PortletFrame extends BasePortletComponent implements Serializable, PortletTitleBarListener, Cloneable {
 
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
@@ -39,10 +40,10 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     private String innerPadding = "";
     private String outerPadding = "";
 
-    private PortletDataManager dataManager = SportletDataManager.getInstance();
+    private transient PortletDataManager dataManager = SportletDataManager.getInstance();
 
     // Playing with the idea of a portlet error frame to abstract error display
-    class PortletErrorMessage {
+    class PortletErrorMessage implements Serializable {
 
         private String id = "";
         private Exception e = null;

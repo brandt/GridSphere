@@ -17,8 +17,8 @@
         <interface>org.gridlab.gridsphere.services.core.registry.PortletManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl</implementation>
         <service-config>
-            <param-name>coreContext</param-name>
-            <param-value>gridsphere</param-value>
+            <param-name>startup-portlet-webapps</param-name>
+            <param-value>gridsphere, examplets</param-value>
         </service-config>
     </service>
 

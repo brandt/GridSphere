@@ -11,12 +11,13 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * <code>BasePortletComponent</code> represents an abstract portlet component with a particular
  * size, layout and theme and is subclasses by concrete portlet component instances.
  */
-public abstract class BasePortletComponent extends BaseComponentLifecycle implements PortletComponent {
+public abstract class BasePortletComponent extends BaseComponentLifecycle implements Serializable, PortletComponent {
 
     protected String width = new String();
     protected String height = new String();
