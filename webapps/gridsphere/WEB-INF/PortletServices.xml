@@ -42,6 +42,10 @@
             <param-name>password</param-name>
             <param-value></param-value>
         </service-config>
+        <service-config>
+            <param-name>canUserCreateNewAccount</param-name>
+            <param-value>false</param-value>
+        </service-config>
     </service>
 
     <service>
