@@ -11,6 +11,8 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +31,8 @@ import java.util.Properties;
  * Test connection to the database and creates needed tables on it.
  */
 public class DatabaseTask extends Task {
+
+    private PortletLog log = SportletLog.getInstance(DatabaseTask.class);
 
     private String configDir = null;
     private String MAPPING_ERROR =
@@ -50,7 +54,7 @@ public class DatabaseTask extends Task {
         this.configDir =
                 configDir + File.separator + "webapps" + File.separator + "gridsphere" + File.separator + "WEB-INF" + File.separator + "persistence";
 
-        System.out.println("Setting configdir to: " + this.configDir);
+        log.info("Setting configdir to: " + this.configDir);
     }
 
 
@@ -59,7 +63,7 @@ public class DatabaseTask extends Task {
         // @todo seetinb the configdir appr. to system (win / unix)
         Properties prop = new Properties();
         String propfilename = configDir + File.separator + "hibernate.properties";
-        System.out.println("create db: " + propfilename);
+        log.info("create db: " + propfilename);
 
         // try to load configfile
         try {
