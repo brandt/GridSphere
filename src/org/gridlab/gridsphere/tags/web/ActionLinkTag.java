@@ -8,27 +8,24 @@ import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.tags.web.element.ActionLinkBean;
-import org.gridlab.gridsphere.tags.web.element.RadioButtonBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
-import java.util.List;
-import java.util.ArrayList;
 
-public class ActionLinkTag extends BaseTag {
+public class ActionTag extends TagSupport {
 
-    private String action = "action";
-    private String label = "label";
-    //private PortletURI someURI;
-    //private ActionLinkBean actionlink = new ActionLinkBean();
+    private String action;
+    private String label;
+    private PortletURI someURI;
+    private ActionLinkBean actionlink = new ActionLinkBean();
 
-    public void setActionName(String action) {
+    public void setAction(String action) {
         this.action = action;
     }
 
-    public String getActionName() {
+    public String getAction() {
         return action;
     }
 
@@ -40,11 +37,37 @@ public class ActionLinkTag extends BaseTag {
         return label;
     }
 
-    public int doStartTag() throws JspException {
+    public ActionLinkBean getActionlink() {
+        return actionlink;
+    }
+
+    public void setActionlink(ActionLinkBean actionlink) {
+        this.actionlink = actionlink;
+    }
+
+    public void createActionURI() {
         PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
-        if (bean.equals("")) {
-            this.htmlelement = new ActionLinkBean(action, label, new ArrayList(), res);
+        someURI = res.createURI();
+        DefaultPortletAction portletAction = new DefaultPortletAction(action);
+        pageContext.setAttribute("_action", portletAction);
+    }
+
+    public int doStartTag() throws JspException {
+        createActionURI();
+        return EVAL_BODY_INCLUDE;
+    }
+
+    public int doEndTag() throws JspTagException {
+        DefaultPortletAction action = (DefaultPortletAction) pageContext.getAttribute("_action");
+        someURI.addAction(action);
+        actionlink.setLink(someURI.toString());
+        actionlink.setText(label);
+        try {
+            JspWriter out = pageContext.getOut();
+            out.println(actionlink);
+        } catch (Exception e) {
+            throw new JspTagException(e.getMessage());
         }
-        return super.doStartTag();
+        return EVAL_PAGE;
     }
 }
