@@ -80,7 +80,7 @@ Copyright:
         </fileset>
 
         <!-- this is for the OGSA JARs in Tomcat 4.1.x -->
-        <fileset dir="${env.OGSA_HOME}/lib">
+        <fileset dir="${env.OGSA_HOME}/impl/java/lib">
             <include name="*.jar"/>
         </fileset>
 
