@@ -55,7 +55,7 @@
                             <%= groupEntry.getUser().getFullName() %>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <%= groupEntry.getRole() %>
+                            <%= groupEntry.getRole().toString() %>
                         </ui:tablecell>
                 </ui:tablerow>
 

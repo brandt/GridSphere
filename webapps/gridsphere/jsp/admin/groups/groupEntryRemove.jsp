@@ -63,7 +63,7 @@
                             <ui:text value="<%= groupEntry.getUser().getFullName() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <ui:text value="<%= groupEntry.getRole() %>"/>
+                            <ui:text value="<%= groupEntry.getRole().toString() %>"/>
                         </ui:tablecell>
                 </ui:tablerow>
 
