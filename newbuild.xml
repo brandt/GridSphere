@@ -105,7 +105,11 @@ Invoke "ant help"
             <then>
                 <echo message="Installing for Tomcat"/>
                 <property name="appserver.home" value="${env.CATALINA_HOME}"/>
-                <property name="servlet-api.file" value="${appserver.home}/common/lib/servlet-api.jar"/>
+<!--                <property name="servlet-api.file" value="${appserver.home}/common/lib/servlet-api.jar"/>-->
+                <path id="servletpath">
+                    <fileset file="${appserver.home}/common/lib/servlet-api.jar"/>
+                    <fileset file="${appserver.home}/common/lib/jsp-api.jar"/>
+                </path>
             </then>
         </if>
         <if>
@@ -113,7 +117,10 @@ Invoke "ant help"
             <then>
                 <echo message="Installing for Jetty"/>
                 <property name="appserver.home" value="${env.APPSERVER_HOME}"/>
-                <property name="servlet-api.file" value="${appserver.home}/lib/javax.servlet.jar"/>
+<!--                <property name="servlet-api.file" value="${appserver.home}/lib/javax.servlet.jar"/>-->
+                <path id="servletpath">
+                    <fileset file="${appserver.home}/lib/javax.servlet.jar"/>
+                </path>
             </then>
         </if>
 
@@ -123,7 +130,8 @@ Invoke "ant help"
                 <exclude name="*.LICENSE"/>
                 <include name="*.jar"/>
             </fileset>
-            <fileset file="${servlet-api.file}"/>
+<!--            <pathelement location="${servlet-api.file}"/>-->
+            <path refid="servletpath"/>
         </path>
 
         <echo message="GridSphere Webserver is ${gridsphere.appserver}"/>

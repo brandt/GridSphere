@@ -146,34 +146,38 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- =================================================================== -->
     <target name="jar" depends="gridsphere-ui-tags-jar, gridsphere-provider-jar, portlet-api-jar, portlet-jar, coreportlets-jar" description="Creates all jars"/>
 
-    <!--
+<!--
+    overall does not work yet, this part works
 
-        not working yet!!
+    <target name="jspc" depends="setenv">
+        <mkdir dir="${gridsphere.build}/jsp/classes"/>
+        <mkdir dir="${gridsphere.build}/jsp/source/jsp"/>
 
-        <target name="jspc" depends="jar">
-            <mkdir dir="${gridsphere.build}/jsp/classes"/>
-            <mkdir dir="${gridsphere.build}/jsp/source"/>
-            <jspc destdir="${gridsphere.build}/jsp/source"
-                verbose="9"
-                srcdir="webapps/gridsphere/jsp"
-                classpathref="classpath">
-                <include name="**/*.jsp"/>
-                <webapp basedir="build/webapps/gridsphere"/>
-            </jspc>
-            <depend
-                srcdir="${gridsphere.build}/jsp/source"
-                destdir="${gridsphere.build}/jsp/classes"
-                cache="${gridsphere.build}/jsp/dependencies"
-                classpath="lib/gridsphere-ui-tags.jar"/>
-            <javac
-                srcdir="${gridsphere.build}/jsp/source"
-                destdir="${gridsphere.build}/jsp/classes"
-                classpath="${build.lib}/gridsphere-ui-tags.jar"
-                classpathhref="classpath"
-                debug="on"/>
+        <jspc destdir="${gridsphere.build}/jsp/source/jsp"
+            verbose="1"
+            srcdir="webapps/gridsphere/jsp"
+            webinc="${gridsphere.build}/jsp/web.inc"
+            classpathref="classpath">
+            <include name="**/*.jsp"/>
+            <webapp basedir="build/webapps/gridsphere"/>
+        </jspc>
+        <depend
+            srcdir="${gridsphere.build}/jsp/source/jsp"
+            destdir="${gridsphere.build}/jsp/classes"
+            cache="${gridsphere.build}/jsp/dependencies"
+            classpath="lib/gridsphere-ui-tags.jar"/>
+        <javac
+            srcdir="${gridsphere.build}/jsp/source"
+            destdir="${gridsphere.build}/jsp/classes"
+            classpath="${build.lib}/gridsphere-ui-tags.jar"
+            classpathref="classpath"
+            debug="on"/>
+        <jar jarfile="${build.lib}/jsp.jar" basedir="${gridsphere.build}/jsp/classes/">
+            <include name="**"/>
+        </jar>
+
+    </target>
+    -->
 
 
-        </target>
-
-        -->
 </project>

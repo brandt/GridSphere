@@ -30,10 +30,37 @@ Build include file for the GridSphere Portal source code, see build.xml
 
 
     <target name="deploy-common">
+
         <!-- Copy the gridsphere web app to build directory -->
         <copy todir="${build.webapps}/gridsphere">
             <fileset dir="${gswebapp.dir}"/>
         </copy>
+
+        <!-- change web.xml if precompiled jsps are available -->
+
+        <if>        <!-- to avoid errormsg when not found -->
+            <available file="${gridsphere.build}/jsp/web.inc"/>
+            <then>
+                <loadfile property="web.inc" srcfile="${gridsphere.build}/jsp/web.inc" failonerror="false"/>
+            </then>
+        </if>
+
+        <condition property="web.inc" value="">
+            <not>
+                <isset property="${web.inc}"/>
+            </not>
+        </condition>
+
+
+        <!-- add the web.inc to web.xml (if avail)-->
+        <copy
+            tofile="${gridsphere.build}/webapps/gridsphere/WEB-INF/web.xml"
+            file="${gridsphere.build}/webapps/gridsphere/WEB-INF/web-xml.tmpl" overwrite="true">
+            <filterset>
+                <filter token="PRECOMPILED-JSP" value="${web.inc}"/>
+            </filterset>
+        </copy>
+
 
         <copy todir="${gridsphere.build}/docs/EclipseGuide">
             <fileset dir="docs/docbook/EclipseGuide"/>
@@ -79,7 +106,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         </copy>
 
         <copy overwrite="true" file="${build.lib}/gridsphere-provider.jar" todir="${appserver.home}/ext/"/>
-        
+
     </target>
 
     <!-- ========================================================= -->
