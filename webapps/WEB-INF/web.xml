@@ -10,7 +10,13 @@
         <servlet-class>org.gridlab.gridsphere.portletcontainer.GridSphere</servlet-class>
         <init-param>
             <param-name>PortletServices.properties</param-name>
-            <param-value>WEB-INF/conf/PortletServices.properties</param-value>
+                <param-value>WEB-INF/conf/PortletServices.properties</param-value>
+            <param-name>log4j.properties</param-name>
+                <param-value>WEB-INF/conf/log4j.properties</param-value>
+            <param-name>portlet.xml</param-name>
+                <param-value>WEB-INF/conf/portlet.xml</param-value>
+            <param-name>portlet-mapping.xml</param-name>
+                <param-value>WEB-INF/conf/portlet-mapping.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -20,6 +26,13 @@
         <servlet-class>org.gridlab.gridsphere.portlets.HelloWorld</servlet-class>
 	<load-on-startup>2</load-on-startup>
     </servlet>
+
+    <servlet>
+        <servlet-name>HalloWelt</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.HalloWelt</servlet-class>
+	<load-on-startup>3</load-on-startup>
+    </servlet>
+
     <servlet-mapping>
        <servlet-name>HelloWorld</servlet-name>
        <url-pattern>/HelloWorld</url-pattern>
@@ -33,21 +46,26 @@
          /gridsphere
        </url-pattern>
     </servlet-mapping>
-    
-    <mime-mapping> 
-      <extension>wbmp</extension> 
-      <mime-type>image/vnd.wap.wbmp</mime-type> 
+
+     <servlet-mapping>
+       <servlet-name>HalloWelt</servlet-name>
+       <url-pattern>/HalloWelt</url-pattern>
+    </servlet-mapping>
+
+    <mime-mapping>
+      <extension>wbmp</extension>
+      <mime-type>image/vnd.wap.wbmp</mime-type>
     </mime-mapping>
-    
-    <mime-mapping> 
-      <extension>wml</extension> 
-      <mime-type>text/vnd.wap.wml</mime-type> 
+
+    <mime-mapping>
+      <extension>wml</extension>
+      <mime-type>text/vnd.wap.wml</mime-type>
     </mime-mapping>
-    
-    <mime-mapping> 
-      <extension>wmls</extension> 
-      <mime-type>text/vnd.wap.wmlscript</mime-type> 
-    </mime-mapping> 
+
+    <mime-mapping>
+      <extension>wmls</extension>
+      <mime-type>text/vnd.wap.wmlscript</mime-type>
+    </mime-mapping>
 
     <welcome-file-list>
       <welcome-file>jsp/index.jsp</welcome-file>
