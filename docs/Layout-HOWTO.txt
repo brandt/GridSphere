@@ -8,30 +8,30 @@ Developing New Portal Layouts
 1. Portal Layout Framework
 
 The Portal Layout components closely resemble the AWT/Swing components found in the standard Java classes.
-The reason for this is to provide a very close API to create web based visual components easily by anyone
-familiar with Java GUI development under AWT or Swing. Another reason is to follow the "Composite" design
-pattern that composes objects, or portal components, into a tree based structure. This allows for maximal
-flexibility in developing new layouts composed of various changing components.
+The reason for this is twofold: One, to provide a very close API to create web based visual components easily by anyone
+familiar with Java GUI development under AWT or Swing. The other reason is to follow the "Composite" design
+pattern which allows for maximal flexibility in developing new layouts composed of various changing components by
+composing objects, or portal components, into a tree based structure .
 
 The following list describes the supported list of portlet componets.
 
-PortletContainer -- this is the super class of all other components
+PortletContainer -- This is the super class of all other components
 
-PortletComponent -- an interface describing various portlet component features such as foreground, background color,
+PortletComponent -- An interface describing various portlet component features such as foreground, background color,
                     width, height, PortletBorder and PortletInsets.
 
-BasePortletComponent -- implements PortletComponent and extends PortletContainer. Provides a base portlet component
+BasePortletComponent -- Implements PortletComponent and extends PortletContainer. Provides a base portlet component
                         that other portlet components inherit from
 
 
-PortletInsets  -- provides a component to create a block of space defined by its height and width
+PortletInsets  -- Provides a component to create a block of space defined by its height and width
 
-PortletBorder -- provides a border around another portlet component that has a title bar and optionally
+PortletBorder -- Provides a border around another portlet component that has a title bar and optionally
                  support for icons to minimize, maximize, help, etc.
 
-PortletImage --  a simple widget to display images expressed as a file of JPEG, GIF, etc. format
+PortletImage --  A simple widget to display images expressed as a file of JPEG, GIF, etc. format
 
-PortletText -- another simple widget to display text that is expressed as the name of a file to include
+PortletText -- Another simple widget to display text that is expressed as the name of a file to include
 
 PortletMinimized -- Shows an icon witha description. This is intended to represnt minimized portlets that are
                     displayed in the portlet dock
@@ -40,11 +40,11 @@ PortletDock -- Displays minimized portlets and any other useful components
 
 PortletPanel -- A panel contains a LayoutManager which is responsible for component layout
 
-PortletFlowLayout -- the flow layout lays components out either top down or left right
+PortletFlowLayout -- The flow layout lays components out either top down or left right
 
-PortletGridLayout -- the grid layout lays components in a grid defined by the number of rows and columns
+PortletGridLayout -- The grid layout lays components in a grid defined by the number of rows and columns
 
-PortletTabbedPane -- a tabbed pane contains PortletTabs similar to Java Swing
+PortletTabbedPane -- A tabbed pane contains PortletTabs similar to Java Swing
 
 PortletTab -- A portlet tab contains a PortletPanel which can contain additional components. This is generally
               where PortletFrames are placed
