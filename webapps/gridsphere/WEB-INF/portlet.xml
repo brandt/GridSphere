@@ -318,5 +318,34 @@
         </concrete-portlet-app>
     </portlet-app-def>
 
+    <portlet-app-def>
+         <portlet-app id="org.gridlab.gridsphere.portlets.core.messaging.TextMessagingPortlet">
+             <portlet-name>TextMessaging Portlet</portlet-name>
+             <servlet-name>TextMessagingPortlet</servlet-name>
+             <supports>
+                 <view/>
+                 <edit/>
+                 <configure/>
+                 <help/>
+             </supports>
+         </portlet-app>
+
+         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.messaging.TextMessagingPortlet.1">
+             <concrete-portlet>
+                 <portlet-name>TextMessaging Portlet</portlet-name>
+                 <default-locale>en</default-locale>
+                 <language locale="en">
+                     <title>TextMessaging</title>
+                     <description>Provides users with a searchable NotePad</description>
+                 </language>
+                 <language locale="de">
+                     <title>Text Nachrichten</title>
+                     <description>Dieses Portlet stellt ein Notizblock zur Verfuegung</description>
+                 </language>
+             </concrete-portlet>
+         </concrete-portlet-app>
+     </portlet-app-def>
+
+
 </portlet-app-collection>
 
