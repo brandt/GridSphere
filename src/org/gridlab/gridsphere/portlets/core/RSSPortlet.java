@@ -40,6 +40,16 @@ public class RSSPortlet extends AbstractPortlet {
             if (button.equals("show")) {
                 req.setMode(Portlet.Mode.VIEW);
                 ListBoxBean feeds = (ListBoxBean) form.getElementBean("rssfeeds");
+
+                PortletData data = req.getData();
+                data.setAttribute("RSSPortletFeedUrl",(String) (feeds.getSelectedValues().get(0)));
+
+                try {
+                    data.store();
+                } catch (IOException e) {
+                    System.out.println("ERROR: "+e);
+                }
+
                 req.getSession().setAttribute("rssfeed", (String) (feeds.getSelectedValues().get(0)));
             }
             if (button.equals("desc")) {
@@ -75,7 +85,13 @@ public class RSSPortlet extends AbstractPortlet {
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
 
         PrintWriter out = response.getWriter();
-        String url = (String) request.getSession().getAttribute("rssfeed");
+        String url = null;
+        if (!(request.getUser() instanceof GuestUser)) {
+            PortletData data = request.getData();
+            url = data.getAttribute("RSSPortletFeedUrl");
+        }
+
+        //String url = (String) request.getSession().getAttribute("rssfeed");
         if (url == null) {
             url = "http://www.xml.com/2002/12/18/examples/rss20.xml.txt";
         }
