@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -154,4 +155,12 @@ public class FileInputBean extends InputBean implements TagBean {
     }
 
 
+   /**
+    * Returns with a InputStream
+    * @return InputStream
+    * @throws IOException
+    */
+    public  InputStream getInputStream() throws IOException{
+        return savedFileItem.getInputStream();
+    }
 }
