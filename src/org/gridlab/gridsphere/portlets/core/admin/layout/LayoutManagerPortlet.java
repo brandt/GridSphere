@@ -133,19 +133,16 @@ public class LayoutManagerPortlet extends ActionPortlet {
         String thisgroup = groupHF.getValue();
         String thisFile = PortletTabRegistry.getTabDescriptorPath(thisgroup);
 
-        String groupFile = PortletTabRegistry.getTabDescriptorPath(val);
-        System.err.println("copying " + groupFile + " to " + thisFile);
-        if (groupFile != null) {
-            BufferedReader reader =  new BufferedReader(new FileReader(groupFile));
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(thisFile), "UTF-8"));
-            String line = null;
-            while (line == reader.readLine()) {
-                out.write(line);
-                out.newLine();
-            }
-            out.close();
-        }
+        //String groupFile = PortletTabRegistry.getTabDescriptorPath(val);
 
+        PortletTabbedPane groupPane = PortletTabRegistry.getGroupTabs(val);
+
+        groupPane.setLayoutDescriptor(thisFile);
+
+        groupPane.save();
+
+        PortletTabRegistry.reloadTab(val, thisFile);
+        
         editGroup(event, thisgroup);
 
     }
