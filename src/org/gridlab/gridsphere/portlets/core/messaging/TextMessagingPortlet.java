@@ -121,7 +121,11 @@ public class TextMessagingPortlet extends ActionPortlet {
             tmfservices.addBean(s);
         }
 
-        setNextState(request, "messaging/edit.jsp");
+        if (services.size()>0) {
+            setNextState(request, "messaging/edit.jsp");
+        } else {
+            setNextState(request, "messaging/noedit.jsp");
+        }
     }
 
     public void editChoosenService(FormEvent event) {
