@@ -17,7 +17,6 @@ import java.io.InputStream;
 public class FileInputBean extends InputBean implements TagBean {
 
     public static final int MAX_UPLOAD_SIZE = 10 * 1024 * 1024;
-    public static final String TEMP_DIR = "/tmp";
 
     public static final String SUBMIT_STYLE = "portlet-form-button";
 
@@ -38,9 +37,8 @@ public class FileInputBean extends InputBean implements TagBean {
      * Constructs a file input bean from a portlet request and bean identifier
      *
      * @param beanId the bean identifier
-     * @throws IOException if an I/O exception occurs
      */
-    public FileInputBean(String beanId) throws IOException {
+    public FileInputBean(String beanId) {
         super(NAME);
         this.cssClass = SUBMIT_STYLE;
         this.inputtype = "file";
@@ -52,9 +50,8 @@ public class FileInputBean extends InputBean implements TagBean {
      *
      * @param request the portlet request
      * @param beanId  the bean identifier
-     * @throws IOException if an I/O exception occurs
      */
-    public FileInputBean(HttpServletRequest request, String beanId) throws IOException {
+    public FileInputBean(HttpServletRequest request, String beanId) {
         super(NAME);
         this.cssClass = SUBMIT_STYLE;
         this.inputtype = "file";
@@ -62,7 +59,7 @@ public class FileInputBean extends InputBean implements TagBean {
         this.beanId = beanId;
     }
 
-    public FileInputBean(HttpServletRequest request, String beanId, FileItem fileItem) throws IOException {
+    public FileInputBean(HttpServletRequest request, String beanId, FileItem fileItem) {
         super(NAME);
         this.cssClass = SUBMIT_STYLE;
         this.inputtype = "file";

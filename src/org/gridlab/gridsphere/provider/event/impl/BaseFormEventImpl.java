@@ -186,7 +186,7 @@ public abstract class BaseFormEventImpl {
      * @param beanId the bean identifier
      * @return a FileInputBean
      */
-    public FileInputBean getFileInputBean(String beanId) throws IOException {
+    public FileInputBean getFileInputBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
             return (FileInputBean) tagBeans.get(beanKey);
@@ -536,7 +536,6 @@ public abstract class BaseFormEventImpl {
             } else if (vb.equals(FileInputBean.NAME)) {
                 logRequestAttributes();
                 //log.debug("Creating a fileinput bean with id:" + beanId);
-                try {
                     FileInputBean bean = null;
                     FileItem fileItem = null;
                     // check whether the fileItems list contains a bean with this name
@@ -558,9 +557,6 @@ public abstract class BaseFormEventImpl {
                     }
                     bean.setName(name);
                     tagBeans.put(beanKey, bean);
-                } catch (IOException ex) {
-                    log.error("Unable to create file input bean: " + ex);
-                }
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
 
             } else if (vb.equals(CheckBoxBean.NAME)) {
@@ -662,7 +658,8 @@ public abstract class BaseFormEventImpl {
             DiskFileUpload upload = new DiskFileUpload();
             // Set upload parameters
             upload.setSizeMax(FileInputBean.MAX_UPLOAD_SIZE);
-            upload.setRepositoryPath(FileInputBean.TEMP_DIR);
+	    String tmpDir = System.getProperty("java.io.tmpdir");
+            upload.setRepositoryPath(tmpDir);
             try {
                 fileItems = upload.parseRequest(req);
             } catch (Exception e) {
