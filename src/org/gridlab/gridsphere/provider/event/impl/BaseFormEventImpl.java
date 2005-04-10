@@ -16,6 +16,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.File;
 import java.util.*;
 
 /*
@@ -536,31 +537,29 @@ public abstract class BaseFormEventImpl {
             } else if (vb.equals(FileInputBean.NAME)) {
                 logRequestAttributes();
                 //log.debug("Creating a fileinput bean with id:" + beanId);
-                try {
-                    FileInputBean bean = null;
-                    FileItem fileItem = null;
-                    // check whether the fileItems list contains a bean with this name
-                    if (fileItems != null) {
-                        for (int i = 0; i < fileItems.size(); i++) {
-                            FileItem item = (FileItem) fileItems.get(i);
-                            // if the item is an inputfile item, and the name matches
-                            if (!item.isFormField() && item.getFieldName().equals(uiname)) {
-                                // then create a FileInputBean with this fileItem
-                                fileItem = item;
-                                break;
-                            }
+
+                FileInputBean bean = null;
+                FileItem fileItem = null;
+                // check whether the fileItems list contains a bean with this name
+                if (fileItems != null) {
+                    for (int i = 0; i < fileItems.size(); i++) {
+                        FileItem item = (FileItem) fileItems.get(i);
+                        // if the item is an inputfile item, and the name matches
+                        if (!item.isFormField() && item.getFieldName().equals(uiname)) {
+                            // then create a FileInputBean with this fileItem
+                            fileItem = item;
+                            break;
                         }
                     }
-                    if (fileItem != null) {
-                        bean = new FileInputBean(req, beanId, fileItem);
-                    } else {
-                        bean = new FileInputBean(req, beanId);
-                    }
-                    bean.setName(name);
-                    tagBeans.put(beanKey, bean);
-                } catch (IOException ex) {
-                    log.error("Unable to create file input bean: " + ex);
                 }
+                if (fileItem != null) {
+                    bean = new FileInputBean(req, beanId, fileItem);
+                } else {
+                    bean = new FileInputBean(req, beanId);
+                }
+                bean.setName(name);
+                tagBeans.put(beanKey, bean);
+
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
 
             } else if (vb.equals(CheckBoxBean.NAME)) {
@@ -662,7 +661,8 @@ public abstract class BaseFormEventImpl {
             DiskFileUpload upload = new DiskFileUpload();
             // Set upload parameters
             upload.setSizeMax(FileInputBean.MAX_UPLOAD_SIZE);
-            upload.setRepositoryPath(FileInputBean.TEMP_DIR);
+            String tmpDir = System.getProperty("java.io.tmpdir");
+            upload.setRepositoryPath(tmpDir);
             try {
                 fileItems = upload.parseRequest(req);
             } catch (Exception e) {
