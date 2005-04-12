@@ -22,7 +22,6 @@ import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
-
 import javax.servlet.ServletContext;
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -372,7 +371,13 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         //PortletServiceProvider psp = (PortletServiceProvider)initServices.get(service);
         //if (psp == null) {
         try {
-            Class c = Class.forName(serviceImpl);
+            ClassLoader loader = (ClassLoader) classLoaders.get(serviceName);
+            Class c = null;
+            if (loader != null) {
+                c = Class.forName(serviceImpl, true, loader);
+            } else {
+                c = Class.forName(serviceImpl);
+            }
             Class[] parameterTypes = new Class[]{PortletServiceAuthorizer.class};
             Object[] obj = new Object[]{auth};
             Constructor con = c.getConstructor(parameterTypes);
