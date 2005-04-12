@@ -22,7 +22,6 @@ import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
-
 import javax.servlet.ServletContext;
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -137,10 +136,14 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             allServices.put(serviceDef.getServiceInterface(), serviceDef);
             log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
+        }
+        it = services.iterator();
+        while (it.hasNext()) {
+            SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
             if (serviceDef.isLoadOnStartup()) {
                 log.debug("loading service : " + serviceDef.getServiceInterface());
                 try {
-                    createPortletService(Class.forName(serviceDef.getServiceImplementation()), ctx, true);
+                    createPortletService(Class.forName(serviceDef.getServiceInterface()), ctx, true);
                 } catch (ClassNotFoundException e) {
                     log.error("Unable to find class : " + serviceDef.getServiceImplementation());
                 }
@@ -177,16 +180,20 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
             classLoaders.put(serviceDef.getServiceInterface(), loader);
             webapplist.add(serviceDef.getServiceInterface());
+        }
+        webappServices.put(webappName, webapplist);
+        it = services.iterator();
+        while (it.hasNext()) {
+            SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
             if (serviceDef.isLoadOnStartup()) {
                 log.debug("loading service : " + serviceDef.getServiceInterface());
                 try {
-                    createPortletService(Class.forName(serviceDef.getServiceImplementation(), true, loader), ctx, true);
+                    createPortletService(Class.forName(serviceDef.getServiceInterface(), true, loader), ctx, true);
                 } catch (ClassNotFoundException e) {
                     log.error("Unable to find class : " + serviceDef.getServiceImplementation());
                 }
             }
         }
-        webappServices.put(webappName, webapplist);
     }
 
     /**
@@ -364,7 +371,13 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         //PortletServiceProvider psp = (PortletServiceProvider)initServices.get(service);
         //if (psp == null) {
         try {
-            Class c = Class.forName(serviceImpl);
+            ClassLoader loader = (ClassLoader) classLoaders.get(serviceName);
+            Class c = null;
+            if (loader != null) {
+                c = Class.forName(serviceImpl, true, loader);
+            } else {
+                c = Class.forName(serviceImpl);
+            }
             Class[] parameterTypes = new Class[]{PortletServiceAuthorizer.class};
             Object[] obj = new Object[]{auth};
             Constructor con = c.getConstructor(parameterTypes);
