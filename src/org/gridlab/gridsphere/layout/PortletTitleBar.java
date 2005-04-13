@@ -177,9 +177,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
          */
         public PortletStateLink(PortletWindow.State state, Locale locale) throws IllegalArgumentException {
             if (state == null) return;
-
-            altTag = state.getText(locale);
-
             // Set the image src
             if (state.equals(PortletWindow.State.MINIMIZED)) {
                 imageSrc = minimizeImage;
@@ -199,6 +196,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             } else {
                 throw new IllegalArgumentException("No matching PortletWindow.State found for received window mode: " + state);
             }
+            altTag = state.getText(locale);
+
         }
     }
 
