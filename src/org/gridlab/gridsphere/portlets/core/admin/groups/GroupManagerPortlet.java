@@ -400,13 +400,20 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doMakeTemplateLayout(FormEvent evt) {
 
         String groupId = evt.getAction().getParameter("groupId");
+        String fileName = evt.getTextFieldBean("layoutFileTF").getValue();
+        if (fileName.equals("")) {
+            this.createErrorMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_INVALID_LAYOUTFILE"));
+            evt.getPortletRequest().setAttribute("groupId", groupId);
+            setNextState(evt.getPortletRequest(), DO_VIEW_GROUP_LAYOUT);
+            return;
+        }
 
         PortletGroup group = aclManagerService.getGroup(groupId);
         if (group != null) {
             Set portletRoles = group.getPortletRoleList();
             try {
                 // now create new group layout
-                PortletTabRegistry.newTemplateGroupTab(group.getName(), portletRoles);
+                PortletTabRegistry.newTemplateGroupTab(fileName, group.getName(), portletRoles);
                 User user = evt.getPortletRequest().getUser();
                 if (aclManagerService.isUserInGroup(user, group)) layoutMgr.refreshPage(evt.getPortletRequest());
             } catch (Exception e) {

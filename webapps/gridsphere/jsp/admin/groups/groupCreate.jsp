@@ -4,6 +4,11 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 
+
+<h2><ui:text key="GROUP_WIZARD_1"/></h2>
+<ui:group>
+
+
 <% PortletGroup.Type gtype = (PortletGroup.Type)request.getAttribute("groupType"); %>
 <% if (gtype == null) gtype = PortletGroup.PUBLIC; %>
 
@@ -42,3 +47,5 @@
 <ui:actionsubmit action="doViewListGroup" key="CANCEL"/>
 
 </ui:form>
+
+</ui:group>
