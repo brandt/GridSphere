@@ -27,6 +27,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.ArrayList;
+import java.net.URLEncoder;
 
 /**
  * The <code>PortletWebApplicationImpl</code> is an implementation of a <code>PortletWebApplication</code> that
@@ -133,11 +135,13 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         String layoutXMLfile = ctx.getRealPath("/WEB-INF/layout.xml");
         File fin = new File(layoutXMLfile);
         if (fin.exists()) {
+            String pgroupName = groupName;
             try {
-                PortletTabRegistry.copyFile(fin, groupName);
-                log.info("Loaded a layout descriptor " + groupName);
+                pgroupName = URLEncoder.encode(groupName, "UTF-8");
+                PortletTabRegistry.copyFile(fin, pgroupName);
+                log.info("Loaded a layout descriptor " + pgroupName);
             } catch (Exception e) {
-                throw new PortletException("Unable to deserialize layout.xml for: " + groupName, e);
+                throw new PortletException("Unable to deserialize layout.xml for: " + pgroupName, e);
             }
         } else {
             log.debug("Did not find layout.xml for: " + ctx.getServletContextName());
@@ -159,6 +163,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
                 SportletGroup group = groupDescriptor.getPortletGroup();
                 PortletGroup g = aclManager.getGroupByName(group.getName());
                 if (g == null) {
+                    System.err.println("Creating group for " + group.getName());
                     aclManager.createGroup(group);
                 }
                 loadLayout(ctx, group.getName());
@@ -209,7 +214,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
     }
 
     public Collection getAllApplicationPortlets() {
-        return appPortlets.values();
+        return ((appPortlets != null ? appPortlets.values() : new ArrayList()));
     }
 
     public String getWebApplicationDescription() {

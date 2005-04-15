@@ -24,10 +24,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 
 import javax.servlet.ServletContext;
 import java.io.File;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The <code>PortletWebApplicationImpl</code> is an implementation of a <code>PortletWebApplication</code> that
@@ -232,6 +229,9 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         //log.debug("removing application tab :" + webApplicationName);
         //PortletTabRegistry.removeGroupTab(webApplicationName);
         PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
+        SportletServiceFactory factory = SportletServiceFactory.getInstance();
+        factory.shutdownServices(webApplicationName);
+        appPortlets = null;
     }
 
 
@@ -259,7 +259,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      * @return the collection of application portlets
      */
     public Collection getAllApplicationPortlets() {
-        return appPortlets.values();
+        return ((appPortlets != null ? appPortlets.values() : new ArrayList()));
     }
 
 }
