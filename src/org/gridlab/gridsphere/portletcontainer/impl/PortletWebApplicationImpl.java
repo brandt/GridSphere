@@ -24,6 +24,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 
 import javax.servlet.ServletContext;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -259,7 +260,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      * @return the collection of application portlets
      */
     public Collection getAllApplicationPortlets() {
-        return appPortlets.values();
+        return ((appPortlets != null ? appPortlets.values() : new ArrayList()));
     }
 
 }
