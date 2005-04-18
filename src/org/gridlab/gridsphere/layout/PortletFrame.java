@@ -362,8 +362,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 renderParams.clear();
                 onlyRender = false;
 
-                System.err.println("clearing render params");
-
                 try {
                     PortletInvoker.actionPerformed((String)request.getAttribute(SportletProperties.PORTLETID), action, request, res);
                 } catch (PortletException e) {
