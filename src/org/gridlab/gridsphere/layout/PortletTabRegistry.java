@@ -110,12 +110,12 @@ public class PortletTabRegistry {
         }
     }
 
-    public static void newTemplateGroupTab(String groupName, Set portletRoleInfo) throws IOException, PersistenceManagerException {
+    public static void newTemplateGroupTab(String fileName, String groupName, Set portletRoleInfo) throws IOException, PersistenceManagerException {
         File f = new File(groupLayoutDir);
         if (!f.exists()) {
             f.mkdir();
         }
-        String groupFile = groupLayoutDir + File.separator + groupName + ".xml";
+        String groupFile = groupLayoutDir + File.separator + fileName + ".xml";
         tabDescriptors.put(groupName, groupFile);
         PortletTabbedPane parentPane = new PortletTabbedPane();
         Iterator it = portletRoleInfo.iterator();
