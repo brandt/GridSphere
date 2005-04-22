@@ -175,6 +175,7 @@ public class ImageBean extends BaseComponentBean implements TagBean {
     }
 
     public String toStartString() {
+        if (src.equals("")) return "";
         StringBuffer sb = new StringBuffer();
         sb.append("<img src=\"" + this.src + "\" border=\"" + border + "\"");
         if (width != null) sb.append(" width=\"" + width + "\"");
