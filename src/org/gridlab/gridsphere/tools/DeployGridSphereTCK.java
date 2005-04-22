@@ -60,7 +60,8 @@ public class DeployGridSphereTCK extends Task {
     }
 
     private void deployPortlets() throws IOException {
-        String portletsDir = catalina + "/webapps/gridsphere/WEB-INF/CustomPortal/portlets/";
+        String portletsDir = catalina + File.separator + "webapps" + File.separator + "gridsphere" + File.separator
+                + "WEB-INF" + File.separator + "CustomPortal" + File.separator + "portlets" + File.separator;
         File tmp = null;
         for (int i = 0; i < portletapps.size(); i++) {
             tmp = new File(portletsDir + portletapps.get(i));
@@ -114,7 +115,7 @@ public class DeployGridSphereTCK extends Task {
             String war = warFiles[i].substring(0, warFiles[i].indexOf(".war"));
             portletapps.add(war);
             JarFile jarFile = new JarFile(warPath + File.separator + warFiles[i]);
-            JarOutputStream tempJar = new JarOutputStream(new FileOutputStream("/tmp/" + warFiles[i].toString()));
+            JarOutputStream tempJar = new JarOutputStream(new FileOutputStream(System.getProperty("java.io.tmpdir") + File.separator + warFiles[i].toString()));
 
             addGridSphereJSRDescriptor(tempJar);
             addGridSphereTagLibs(tempJar);
@@ -156,7 +157,7 @@ public class DeployGridSphereTCK extends Task {
         BufferedReader bis = new BufferedReader(new InputStreamReader(webxmlStream));
         String line = null;
         String war = warname.substring(0, warname.indexOf(".war"));
-        JarEntry entry = new JarEntry("WEB-INF/web.xml");
+        JarEntry entry = new JarEntry("WEB-INF" + File.separator + "web.xml");
         tempJar.putNextEntry(entry);
 
         PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("tmp.xml")));
@@ -230,7 +231,7 @@ public class DeployGridSphereTCK extends Task {
 
     public void addGridSphereJSRDescriptor(JarOutputStream tempJar) throws IOException {
 
-        String fileName = "config/template/gridsphere-portlet-jsr.xml";
+        String fileName = "config" + File.separator + "template" + File.separator + "gridsphere-portlet-jsr.xml";
         byte[] buffer = new byte[1024];
         int bytesRead;
 
@@ -242,7 +243,7 @@ public class DeployGridSphereTCK extends Task {
         try {
 // Create a jar entry and add it to the temp jar.
 
-            JarEntry entry = new JarEntry("WEB-INF/gridsphere-portlet.xml");
+            JarEntry entry = new JarEntry("WEB-INF" + File.separator + "gridsphere-portlet.xml");
             tempJar.putNextEntry(entry);
 
 // Read the file and write it to the jar.
@@ -272,7 +273,7 @@ public class DeployGridSphereTCK extends Task {
         try {
 // Create a jar entry and add it to the temp jar.
 
-            JarEntry entry = new JarEntry("WEB-INF/lib/gridsphere-ui-tags.jar");
+            JarEntry entry = new JarEntry("WEB-INF" + File.separator + "lib" + File.separator + "gridsphere-ui-tags.jar");
             tempJar.putNextEntry(entry);
 
 // Read the file and write it to the jar.
