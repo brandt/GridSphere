@@ -118,15 +118,15 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
             Class cl = object.getClass();
             log.debug("Wrote object of type " + cl.getName() + " to XMLFile " + descriptorPath);
         } catch (ValidationException e) {
-            log.error("Unable to marshal object: " + e.getException().toString());
-            throw new PersistenceManagerException("Validation Error" + e.getException().toString());
+            log.error("Unable to marshal object: ", e);
+            throw new PersistenceManagerException("Validation Error", e);
         } catch (MarshalException e) {
-            log.error("Unable to marshal object: " + e.getException().toString());
-            throw new PersistenceManagerException("Marshal Error: " + e.getException().toString());
+            log.error("Unable to marshal object: ", e);
+            throw new PersistenceManagerException("Marshal Error: ", e);
         } catch (MappingException e) {
-            log.error("Unable to marshal object: " + e.getException().toString());
+            log.error("Unable to marshal object: ", e.getException());
             e.printStackTrace();
-            throw new PersistenceManagerException("Mapping Error" + e.getException().toString());
+            throw new PersistenceManagerException("Mapping Error", e);
         }
     }
 
