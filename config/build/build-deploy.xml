@@ -129,8 +129,26 @@ Build include file for the GridSphere Portal source code, see build.xml
         <if>
             <available file="${appserver.home}/conf/Catalina" type="dir" property="tomcat5"/>
             <then>
-                <echo message="Detected Tomcat 5"/>
                 <copy file="webapps/gridsphere-context.xml" tofile="${appserver.home}/conf/Catalina/localhost/gridsphere.xml"/>
+                <if>
+                    <available classname="org.apache.catalina.valves.FastCommonAccessLogValve">
+                        <classpath>
+                            <fileset dir="${appserver.home}/server/lib/">
+                                <include name="*.jar"/>
+                            </fileset>
+                            <fileset dir="${appserver.home}/bin/">
+                                <include name="*.jar"/>
+                            </fileset>
+                        </classpath>
+                    </available>
+                    <then>
+                        <echo message="Detected Tomcat 5.5"/>
+                        <copy file="${env.ANT_HOME}/lib/ant.jar" tofile="${appserver.home}/shared/lib"/>
+                    </then>
+                    <else>
+                        <echo message="Detected Tomcat 5"/>
+                    </else>
+                </if>
             </then>
             <else>
                 <echo message="Detected Tomcat 4"/>
