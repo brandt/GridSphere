@@ -205,7 +205,6 @@ public abstract class ActionTag extends BaseComponentTag {
 
         if (label != null) {
             res.setProperty("label", label);
-            action = null;
             actionURL.setComponentID(label);
         }
 
