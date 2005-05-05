@@ -248,6 +248,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
         if (cellPadding != null) sb.append(" cellpadding=\"" + cellPadding + "\" ");
         if (border != null) sb.append(" border=\"" + border + "\" ");
         if (width != null) sb.append(" width=\"" + width + "\" ");
+	if (align != null) sb.append(" align=\"" + align + "\" ");
         sb.append(">");
         if (defaultModel != null) sb.append(defaultModel.toStartString());
         return sb.toString();
