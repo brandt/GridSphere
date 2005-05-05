@@ -12,7 +12,8 @@ public class ActionMenuItemBean extends BeanContainer {
 
     protected boolean seperator = false;
     protected String align = ActionMenuBean.MENU_HORIZONTAL;
-    protected String menuType = ActionMenuBean.TYPE_ACTIONBAR;
+    protected String menutype = ActionMenuBean.TYPE_ACTIONBAR;
+    protected boolean isSelected = false;
     //protected String info = null;
 
     public ActionMenuItemBean() {
@@ -31,12 +32,12 @@ public class ActionMenuItemBean extends BeanContainer {
     }
 
 
-    public String getMenuType() {
-        return menuType;
+    public String getMenutype() {
+        return menutype;
     }
 
-    public void setMenuType(String menuType) {
-        this.menuType = menuType;
+    public void setMenutype(String menutype) {
+        this.menutype = menutype;
     }
 
     public String getAlign() {
@@ -61,9 +62,23 @@ public class ActionMenuItemBean extends BeanContainer {
         this.seperator = seperator;
     }
 
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
-        if (menuType.equals(ActionMenuBean.TYPE_ACTIONBAR)) {
+        if (menutype.equals(ActionMenuBean.TYPE_ACTIONTAB)) {
+            if (isSelected()) {
+                sb.append("<div id=\"actiontabselected\">");
+            }
+            sb.append("<li id=\"actiontabmenu\">");
+        } else if (menutype.equals(ActionMenuBean.TYPE_ACTIONBAR)) {
             if (this.align.equals(ActionMenuBean.MENU_VERTICAL)) {
                 sb.append("<div style=\"display: block; margin-top: 5px;\">");
             }
@@ -81,9 +96,18 @@ public class ActionMenuItemBean extends BeanContainer {
             sb.append(itemBean.toStartString());
             sb.append(itemBean.toEndString());
         }
-        if (align.equals(ActionMenuBean.MENU_VERTICAL)) {
-            sb.append("</div>");
+
+        if (menutype.equals(ActionMenuBean.TYPE_ACTIONTAB)) {
+            sb.append("</li>");
+            if (isSelected()) {
+                sb.append("</div>");
+            }
+        } else if (menutype.equals(ActionMenuBean.TYPE_ACTIONBAR)) {
+            if (align.equals(ActionMenuBean.MENU_VERTICAL)) {
+                sb.append("</div>");
+            }
         }
+
         return sb.toString();
     }
 }

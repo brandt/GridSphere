@@ -14,8 +14,17 @@ import javax.servlet.jsp.tagext.Tag;
 
 public class ActionMenuItemTag extends ContainerTag {
 
+    protected boolean isSelected = false;
     protected boolean seperator = false;
     protected ActionMenuItemBean actionMenuItemBean = null;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 
     public boolean isSeperator() {
         return seperator;
@@ -43,13 +52,13 @@ public class ActionMenuItemTag extends ContainerTag {
         if (parent instanceof ActionMenuTag) {
             ActionMenuTag actionMenuTag = (ActionMenuTag) parent;
             if (actionMenuTag.getLayout() != null) actionMenuItemBean.setAlign(actionMenuTag.getLayout());
-            if (actionMenuTag.getMenuType() != null) actionMenuItemBean.setMenuType(actionMenuTag.getMenuType());
+            if (actionMenuTag.getMenutype() != null) actionMenuItemBean.setMenutype(actionMenuTag.getMenutype());
+            actionMenuItemBean.setSelected(isSelected);
         }
-
+        String beanString = actionMenuItemBean.toStartString();
+        // Print the string
         try {
-            JspWriter out = pageContext.getOut();
-
-            out.print(actionMenuItemBean.toStartString());
+            pageContext.getOut().print(beanString);
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }

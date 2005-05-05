@@ -2,12 +2,15 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.jsrimpl.PortletURLImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionMenuBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
+import javax.portlet.*;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
@@ -19,18 +22,21 @@ public class ActionMenuTag extends ContainerTag {
     protected ActionMenuBean actionMenuBean = null;
     protected String layout = null;
     protected String title = null;
-    protected String menuType = null;
+    protected String menutype = null;
     protected boolean collapsible = false;
     protected boolean collapsed = false;
     protected String key = null;
 
-
-    public String getMenuType() {
-        return menuType;
+    public ActionMenuBean getActionMenuBean() {
+        return actionMenuBean;
     }
 
-    public void setMenuType(String menuType) {
-        this.menuType = menuType;
+    public String getMenutype() {
+        return menutype;
+    }
+
+    public void setMenutype(String menutype) {
+        this.menutype = menutype;
     }
 
     public boolean isCollapsed() {
@@ -92,23 +98,51 @@ public class ActionMenuTag extends ContainerTag {
         if (actionMenuBean == null) {
             actionMenuBean = new ActionMenuBean();
         }
-        if (this.layout != null) actionMenuBean.setAlign(layout);
-        if (this.title != null) actionMenuBean.setTitle(title);
-        if (this.menuType != null) actionMenuBean.setMenuType(this.menuType);
-
 
         Tag parent = getParent();
         if (parent instanceof ActionMenuTag) {
             actionMenuBean.setHasParentMenu(true);
+            if (menutype == null) {
+                ActionMenuTag actionMenu = (ActionMenuTag)parent;
+                menutype = actionMenu.getMenutype();
+            }
         }
+
+        if (layout == null) {
+            layout = actionMenuBean.getAlign();
+        } else {
+            actionMenuBean.setAlign(layout);
+        }
+        if (title == null) {
+            title = actionMenuBean.getTitle();
+        } else {
+            actionMenuBean.setTitle(title);
+        }
+        if (menutype == null) {
+            menutype = actionMenuBean.getMenutype();
+        } else {
+            actionMenuBean.setMenutype(menutype);
+        }
+
 
         // TODO not working so far
         actionMenuBean.setCollapsible(this.collapsible);
         actionMenuBean.setCollapsed(this.collapsed);
-        PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
-        PortletURI uri = res.createURI();
-        actionMenuBean.setPortletURI(uri);
+        // if using JSR then create render link
+        RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+        PortletURI uri = null;
+        if (res == null) {
+            PortletResponse gsres = (PortletResponse) pageContext.getAttribute("portletResponse");
+            if (gsres != null) {
+                uri = gsres.createURI();
+            }
+            actionMenuBean.setPortletURI(uri);
 
+        } else {
+//            uri = new PortletJSRURIImpl(createJSRActionURI(res);
+        }
+//        PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
+//        PortletURI uri = res.createURI();
         // locale stuff
         if (key != null) {
             actionMenuBean.setTitle(getLocalizedText(key, "ActionMenu"));
@@ -122,6 +156,39 @@ public class ActionMenuTag extends ContainerTag {
         }
         return EVAL_BODY_INCLUDE;
 
+    }
+
+    protected String createJSRActionURI(RenderResponse res) throws JspException {
+        // action is a required attribute except for FormTag
+        RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
+        String windowState = req.getWindowState().toString();
+        String portletMode = req.getPortletMode().toString();
+        PortletURL url = res.createRenderURL();
+        PortletURLImpl actionURL = (PortletURLImpl) url;
+        if (windowState != null) {
+            WindowState state = new WindowState(windowState);
+            try {
+                //actionURL = res.createRenderURL();
+                System.err.println("set state to:" + state);
+                actionURL.setWindowState(state);
+            } catch (WindowStateException e) {
+                throw new JspException("Unknown window state in renderURL tag: " + windowState);
+            }
+        }
+        if (portletMode != null) {
+            PortletMode mode = new PortletMode(portletMode);
+            try {
+                //actionURL = res.createRenderURL();
+                actionURL.setPortletMode(mode);
+                System.err.println("set mode to:" + mode);
+            } catch (PortletModeException e) {
+                throw new JspException("Unknown portlet mode in renderURL tag: " + portletMode);
+            }
+        }
+
+        System.err.println("printing action  URL = " + actionURL.toString());
+
+        return actionURL.toString();
     }
 
     public int doEndTag() throws JspException {

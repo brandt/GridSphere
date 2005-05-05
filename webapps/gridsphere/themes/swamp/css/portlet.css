@@ -625,3 +625,114 @@ in lighter color
 
 }
 
+/**********************************************
+  Action Tab Pane
+**********************************************/
+
+#actiontabpane {
+  padding: 0;
+  background-color: #eeeeee;
+  border: 1px solid #0053e2;
+  color: #000000;
+  font-family: inherit;
+  text-align: lefft;
+}
+
+/**********************************************
+  Action Tab Menu
+**********************************************/
+
+#actiontabmenu ul {
+  display: block;
+  list-style: none outside;
+  padding: 0;
+  margin: 0 0 0 10px;
+  font-family: Verdana, sans-serif;
+  font-size: x-small;
+}
+
+#actiontabmenu li {
+  padding: 0;
+  margin: 0 4px 0 0;
+  border-top: 1px solid #0053e2;
+  border-right: 1px solid #0053e2;
+  border-left: 1px solid #0053e2;
+  border-bottom: none;
+  background-color: #69a8e7;
+  color: #ffffff;
+  font-weight: bold;
+  /* the next 4 lines are magic */
+  display: block;
+  float: left;
+  position: relative;
+  top: -1.32em;
+}
+
+#actiontabmenu a:link,
+#actiontabmenu a:visited {
+  background-color: #69a8e7;
+  color: #ffffff;
+  text-decoration: none;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+#actiontabmenu a:hover {
+  background-color: #cecbc6;
+  color: #000066;
+}
+
+/**********************************************
+  Action Tab Selected
+**********************************************/
+
+#actiontabselected li {
+  padding: 0;
+  margin: 0 4px 0 0;
+  border-top: 1px solid #0053e2;
+  border-right: 1px solid #0053e2;
+  border-left: 1px solid #0053e2;
+  border-bottom: none;
+  background-color: #eeeeee;
+  color: #000000;
+  font-weight: bold;
+  /* the next 4 lines are magic */
+  display: block;
+  float: left;
+  position: relative;
+  top: -1.32em;
+}
+
+#actiontabselected a:link,
+#actiontabselected a:visited {
+  background-color: #eeeeee;
+  color: #000000;
+  text-decoration: none;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+/**********************************************
+  Action Tab Clear
+**********************************************/
+
+#actiontabclear {
+  display: none;
+}
+html>body #actiontabclear {
+  display: block;
+  clear: both;
+}
+
+/**********************************************
+  Action Body
+**********************************************/
+
+#actionbody {
+  padding: 2px;
+  background-color: #eeeeee;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  text-align: lefft;
+}

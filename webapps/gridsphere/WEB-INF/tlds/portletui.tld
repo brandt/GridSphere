@@ -1193,6 +1193,31 @@
 
 
     <tag>
+        <name>actionpane</name>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionPaneTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+            Creates an action pane
+        </description>
+        <attribute>
+            <name>menutype</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+
+    <tag>
+        <name>actionbody</name>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionBodyTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+            Creates an action body
+        </description>
+    </tag>
+
+
+    <tag>
         <name>actionmenu</name>
         <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionMenuTag</tag-class>
         <body-content>JSP</body-content>
@@ -1246,6 +1271,11 @@
         </description>
         <attribute>
             <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>selected</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
