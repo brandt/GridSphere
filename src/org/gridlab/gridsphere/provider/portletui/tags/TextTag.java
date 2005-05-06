@@ -24,7 +24,6 @@ public class TextTag extends BaseComponentTag {
     protected TextBean textBean = null;
     protected String key = null;
     protected String style = MessageStyle.MSG_INFO;
-    protected String format = null;
 
     /**
      * Sets the style of the text: Available styles are
@@ -59,24 +58,6 @@ public class TextTag extends BaseComponentTag {
      */
     public String getStyle() {
         return style;
-    }
-
-    /**
-     * Sets the format of the text
-     *
-     * @param format
-     */
-    public void setFormat(String format) {
-        this.format = format;
-    }
-
-    /**
-     * Returns the format of the text
-     *
-     * @return the format of the text
-     */
-    public String getFormat() {
-        return format;
     }
 
     /**
