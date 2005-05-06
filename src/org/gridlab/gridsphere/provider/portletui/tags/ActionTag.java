@@ -277,7 +277,6 @@ public abstract class ActionTag extends BaseComponentTag {
     public String createActionURI() throws JspException {
         if (isJSR()) {
             RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-            if (label != null) return createJSRActionURI(res.createRenderURL());
             return createJSRActionURI(res.createActionURL());
         }
         return createGSActionURI();
