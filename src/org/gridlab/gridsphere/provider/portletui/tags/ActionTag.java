@@ -204,7 +204,6 @@ public abstract class ActionTag extends BaseComponentTag {
         }
 
         if (label != null) {
-            //paramPrefixing = false;
             res.setProperty("label", label);
             actionURL.setComponentID(label);
         }
@@ -212,7 +211,6 @@ public abstract class ActionTag extends BaseComponentTag {
         if (windowState != null) {
             WindowState state = new WindowState(windowState);
             try {
-                //actionURL = res.createRenderURL();
                 //System.err.println("set state to:" + state);
                 actionURL.setWindowState(state);
             } catch (WindowStateException e) {
