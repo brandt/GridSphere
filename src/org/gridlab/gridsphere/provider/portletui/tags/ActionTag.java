@@ -204,6 +204,7 @@ public abstract class ActionTag extends BaseComponentTag {
         }
 
         if (label != null) {
+            //paramPrefixing = false;
             res.setProperty("label", label);
             actionURL.setComponentID(label);
         }
@@ -262,7 +263,6 @@ public abstract class ActionTag extends BaseComponentTag {
                 if (paramPrefixing) {
                     actionURL.setParameter(id + "_" + pbean.getName(), pbean.getValue());
                     portletAction.addParameter(id + "_" + pbean.getName(), pbean.getValue());
-                    //actionURL.setParameter(pbean.getName(), pbean.getValue());
                 } else {
                     actionURL.setParameter(pbean.getName(), pbean.getValue());
                     portletAction.addParameter(pbean.getName(), pbean.getValue());
@@ -277,7 +277,6 @@ public abstract class ActionTag extends BaseComponentTag {
     public String createActionURI() throws JspException {
         if (isJSR()) {
             RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-            if (label != null) return createJSRActionURI(res.createRenderURL());
             return createJSRActionURI(res.createActionURL());
         }
         return createGSActionURI();
