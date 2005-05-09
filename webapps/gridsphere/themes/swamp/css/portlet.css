@@ -333,6 +333,8 @@ in lighter color
    text-decoration:none;
 }
 
+9FB086
+
 /**********************************************
   Text in a selected cell range
 **********************************************/
@@ -528,40 +530,10 @@ in lighter color
   color, margins, etc.
 **********************************************/
 .portlet-menu{
-    color:black;
-    border-right: 1px solid white;
-    border-top: 1px solid #848484;
-    border-left: 1px solid #848484;
-    border-bottom: 1px solid white;
-    padding-bottom: 5px;
-    margin: 2px;
-    text-align:center;
+    width:100%;
+    border: 1px solid #9FB086;
+    padding: 5px;
 }
-
-.portlet-menu a{
-    color:black;
-    font:normal 12px verdana, sans-serif;
-    margin:5px 0 5px 0;
-    padding:1px 3px 1px 4px;
-    text-decoration:none;
-    background:#f0f0f0;
-    border-top:1px solid #fafafa;
-    border-right:1px solid #848484;
-    border-bottom:1px solid #848484;
-    border-left:1px solid #fafafa;
-}
-
-
-.portlet-menu a:hover {
-    color:white;
-    background:#526ca4;
-    border-top:1px solid #848484;
-    border-right:1px solid #fafafa;
-    border-bottom:1px solid #fafafa;
-    border-left:1px solid #848484;
-}
-
-
 
 /**********************************************
   Normal, unselected menu item
@@ -569,8 +541,6 @@ in lighter color
 .portlet-menu-item{
 
 }
-
-
 
 /**********************************************
   Selected menu item
@@ -632,7 +602,7 @@ in lighter color
 #actiontabpane {
   padding: 0;
   background-color: #eeeeee;
-  border: 1px solid #0053e2;
+  border: 1px solid #9FB086;
   color: #000000;
   font-family: inherit;
   text-align: lefft;
@@ -654,11 +624,11 @@ in lighter color
 #actiontabmenu li {
   padding: 0;
   margin: 0 4px 0 0;
-  border-top: 1px solid #0053e2;
-  border-right: 1px solid #0053e2;
-  border-left: 1px solid #0053e2;
+  border-top: 1px solid #9FB086;
+  border-right: 1px solid #9FB086;
+  border-left: 1px solid #9FB086;
   border-bottom: none;
-  background-color: #69a8e7;
+  background-color: #CCCCFF;
   color: #ffffff;
   font-weight: bold;
   /* the next 4 lines are magic */
@@ -670,7 +640,7 @@ in lighter color
 
 #actiontabmenu a:link,
 #actiontabmenu a:visited {
-  background-color: #69a8e7;
+  background-color: #CCCCFF;
   color: #ffffff;
   text-decoration: none;
   padding-left: 1em;
@@ -689,9 +659,9 @@ in lighter color
 #actiontabselected li {
   padding: 0;
   margin: 0 4px 0 0;
-  border-top: 1px solid #0053e2;
-  border-right: 1px solid #0053e2;
-  border-left: 1px solid #0053e2;
+  border-top: 1px solid #9FB086;
+  border-right: 1px solid #9FB086;
+  border-left: 1px solid #9FB086;
   border-bottom: none;
   background-color: #eeeeee;
   color: #000000;

@@ -244,7 +244,9 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
             }
 
 //            sb.append("</div>");
-            if (!hasParentMenu) {
+            if (hasParentMenu) {
+                sb.append("<span id=\"actiontabclear\"></span></div>");
+            } else {
                 sb.append("</td></tr></table>");
             }
         }
