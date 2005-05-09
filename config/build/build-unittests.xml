@@ -80,4 +80,24 @@ Build include file for the GridSphere Portal source code, see build.xml
             stopTarget="stop-tomcat"
             testTarget="tests"/>
     </target>
+
+        <!-- =================================================================== -->
+    <!-- Deploys GridSphere to Tomcat                                        -->
+    <!-- =================================================================== -->
+    <target name="deploy-test" depends="jar, gridsphere-test-jar" description="Deploys GridSphere test to a local server">
+
+        <antcall target="deploy-install"/>
+
+        <antcall target="configure-test-database"/>
+
+        <antcall target="create-database"/>
+
+        <copy todir="${env.CATALINA_HOME}/webapps/gridsphere">
+            <fileset dir="${build.webapps}/gridsphere"/>
+        </copy>
+
+        <!-- <copy overwrite="true" file="lib/gridsphere-test.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/> -->
+        <copy overwrite="true" file="${build.lib}/gridsphere-test.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
+
+    </target>
 </project>
