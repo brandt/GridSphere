@@ -61,4 +61,23 @@ Build include file for the GridSphere Portal source code, see build.xml
         </mail>
     </target>
 
+       <!-- =================================================================== -->
+    <!-- Run Tomcat tests                                                    -->
+    <!-- =================================================================== -->
+    <target name="run-tests" depends="deploy-test">
+        <antcall target="run-test"/>
+    </target>
+
+    <target name="run-test" if="catalina.exists" description="Run Junit tests in running Tomcat container">
+
+        <!-- Start the servlet engine, wait for it to be started, run the
+        unit tests, stop the servlet engine, wait for it to be stopped.
+        The servlet engine is stopped if the tests fail for any reason -->
+
+        <runservertests
+            testURL="http://127.0.0.1:8080/gridsphere/ServletRedirector?Cactus_Service=RUN_TEST"
+            startTarget="start-tomcat"
+            stopTarget="stop-tomcat"
+            testTarget="tests"/>
+    </target>
 </project>
