@@ -40,8 +40,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private String errorMessage = "";
     private boolean hasError = false;
     private boolean isActive = false;
-    //private StringBuffer prebufferedTitle = new StringBuffer();
-    //private StringBuffer postbufferedTitle = new StringBuffer();
     private transient AccessControlManagerService aclService = null;
 
 
@@ -652,7 +650,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                             errorMessage += "Failed to invoke window event method of portlet: " + portletClass;
                         }
                     }
-                } else if (titleBarEvent.hasPortletModeAction()) {
+                }
+                if (titleBarEvent.hasPortletModeAction()) {
 
                     if (titleBarEvent.getMode().equals(Portlet.Mode.CONFIGURE)) {
                         boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
