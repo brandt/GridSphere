@@ -18,6 +18,7 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
+import java.io.File;
 import java.util.*;
 import java.net.URLEncoder;
 
@@ -29,6 +30,7 @@ public class UserLayoutPortlet extends ActionPortlet {
     // Portlet services
     private LayoutManagerService layoutMgr = null;
     private UserManagerService userManagerService = null;
+    private String[] themes = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -38,6 +40,13 @@ public class UserLayoutPortlet extends ActionPortlet {
 
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
+        }
+
+        String themesPath = getPortletConfig().getContext().getRealPath("/themes");
+      
+        File f = new File(themesPath);
+        if (f.isDirectory()) {
+            themes = f.list();
         }
 
         DEFAULT_VIEW_PAGE = "doRender";
@@ -150,13 +159,12 @@ public class UserLayoutPortlet extends ActionPortlet {
         PortletPage page = layoutMgr.getPortletPage(req);
         String theme = page.getTheme();
         themeLB.clear();
-        String themes = getPortletSettings().getAttribute("supported-themes");
-        StringTokenizer st = new StringTokenizer(themes, ",");
-        while (st.hasMoreTokens()) {
+
+
+        for (int i = 0; i < themes.length; i++) {
             ListBoxItemBean lb = new ListBoxItemBean();
-            String val = (String) st.nextElement();
-            lb.setValue(val.trim());
-            if (val.trim().equalsIgnoreCase(theme)) lb.setSelected(true);
+            lb.setValue(themes[i].trim());
+            if (themes[i].trim().equalsIgnoreCase(theme)) lb.setSelected(true);
             themeLB.addBean(lb);
         }
 
