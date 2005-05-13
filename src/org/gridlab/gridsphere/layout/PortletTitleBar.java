@@ -645,7 +645,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                             errorMessage += "Failed to invoke window event method of portlet: " + portletClass;
                         }
                     }
-                } else if (titleBarEvent.hasPortletModeAction()) {
+                } 
+		if (titleBarEvent.hasPortletModeAction()) {
 
                     if (titleBarEvent.getMode().equals(Portlet.Mode.CONFIGURE)) {
                         boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
