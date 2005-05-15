@@ -196,13 +196,16 @@ public abstract class ActionTag extends BaseComponentTag {
         this.actionURL = (PortletURLImpl) url;
         RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
         // action is a required attribute except for FormTag
+        /*
         if (windowState == null) {
             windowState = req.getWindowState().toString();
+            System.err.println("windowState " + windowState);
         }
         if (portletMode == null) {
             portletMode = req.getPortletMode().toString();
+            System.err.println("portletMode " + portletMode);
         }
-
+        */
         if (label != null) {
             res.setProperty("label", label);
             actionURL.setComponentID(label);
@@ -242,7 +245,7 @@ public abstract class ActionTag extends BaseComponentTag {
 
         } else {
             if (compId == null) {
-                portletAction = new DefaultPortletAction(action); 
+                portletAction = new DefaultPortletAction(action);
             } else {
                 portletAction = new DefaultPortletAction(compId + "%" + action);
             }
@@ -310,7 +313,7 @@ public abstract class ActionTag extends BaseComponentTag {
 
             if (!paramBeans.isEmpty()) {
                 String id = createUniquePrefix(2);
-   
+
                 portletAction.addParameter(SportletProperties.PREFIX, id);
 
                 while (it.hasNext()) {
