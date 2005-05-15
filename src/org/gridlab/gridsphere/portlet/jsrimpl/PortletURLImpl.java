@@ -144,7 +144,6 @@ public class PortletURLImpl implements PortletURL {
             mode = portletMode;
             // hack to handle config mode
             if (mode.toString().equals("config")) mode = new PortletMode("configure");
-            req.setAttribute(SportletProperties.PORTLET_MODE, mode.toString());
         } else {
             throw new PortletModeException("Illegal portlet mode", portletMode);
         }
