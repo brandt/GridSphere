@@ -111,6 +111,8 @@ public class ActionURLTagImpl extends ActionTag {
         } else {
             pageContext.setAttribute(var, actionURL.toString(), PageContext.PAGE_SCOPE);
         }
+	windowState = null;
+        portletMode = null;
         return EVAL_PAGE;
     }
 
