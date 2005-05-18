@@ -242,9 +242,9 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         if (req != null) {
             locale = req.getLocale();
         } else {
-            RenderRequest renderReq = (RenderRequest) pageContext.getAttribute("renderRequest");
-            locale = renderReq.getLocale();
-        }
+            RenderRequest renderReq = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
+            if (renderReq != null) locale = renderReq.getLocale();
+	}
         return locale;
     }
 
