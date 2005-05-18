@@ -5,11 +5,13 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 
 import javax.portlet.RenderRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -242,8 +244,8 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         if (req != null) {
             locale = req.getLocale();
         } else {
-            RenderRequest renderReq = (RenderRequest) pageContext.getAttribute("renderRequest");
-            locale = renderReq.getLocale();
+            RenderRequest renderReq = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
+            if (renderReq != null) locale = renderReq.getLocale();
         }
         return locale;
     }
