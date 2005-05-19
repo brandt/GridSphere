@@ -74,7 +74,7 @@ public class MessagingServicesPortlet extends ActionPortlet {
                 restartBox.setSelected(config.isConfigChanged());
                 restartBox.setValue(service.getClassname());
                 if (config.isConfigChanged()) {
-                    restart.setValue("<p/>("+getLocalizedText(event.getPortletRequest(),"MESSAGING_SERVICES_CONFIG_CHANGED"+")"));
+                    restart.setValue("<p/>("+getLocalizedText(event.getPortletRequest(),"MESSAGING_SERVICE_CONFIG_CHANGED")+")");
                     restart.addCssStyle("color: red");
                 }
                 tcbDescription.addBean(restartBox);
