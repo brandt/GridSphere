@@ -114,8 +114,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         Iterator it = groups.keySet().iterator();
         Map groupNames = new HashMap();
 
-        User user = req.getUser();
-
         String name;
         PortletGroup group;
         while (it.hasNext()) {
