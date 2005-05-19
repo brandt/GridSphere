@@ -377,10 +377,7 @@
                     <title>Layout Manager</title>
                     <description>Gebruikers kunnen hun eigen layout bepalen</description>
                 </language>
-                <config-param>
-                    <param-name>supported-themes</param-name>
-                    <param-value>default, swamp</param-value>
-                </config-param>
+
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -513,10 +510,6 @@
                     <title>Layout Manager</title>
                     <description>Gebruikers kunnen hun eigen layout bepalen</description>
                 </language>
-                <config-param>
-                    <param-name>supported-themes</param-name>
-                    <param-value>default, swamp, purple</param-value>
-                </config-param>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
