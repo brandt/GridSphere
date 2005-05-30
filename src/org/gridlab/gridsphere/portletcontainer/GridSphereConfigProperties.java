@@ -13,7 +13,7 @@ public interface GridSphereConfigProperties {
     /**
      * Location of GridSphere directory used to store persistent data
      */
-    public static final String GRIDSPHERE_INFO = "GridSphere/2.0.2";
+    public static final String GRIDSPHERE_INFO = "GridSphere/2.0.3";
 
     /**
      * JSR 168 Portlet API version info
