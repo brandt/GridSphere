@@ -6,10 +6,8 @@ package org.gridlab.gridsphere.servlets;
 
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.hibernate.DBTask;
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
-import org.gridlab.gridsphere.layout.PortletPageFactory;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
@@ -195,7 +193,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         checkUserHasCookie(event);
 
         // Used for TCK tests
-        //setTCKUser(portletReq);
+        if (isTCK) setTCKUser(portletReq);
 
         // Handle user login and logout
         if (event.hasAction()) {
@@ -238,7 +236,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         setUserAndGroups(portletReq);
         // Used for TCK tests
-        //setTCKUser(portletReq);
+        if (isTCK) setTCKUser(portletReq);
 
 
         layoutEngine.service(event);
