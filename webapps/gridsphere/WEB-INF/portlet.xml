@@ -2,8 +2,6 @@
 
 <portlet-app-collection>
 
-
-
     <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.login.LoginPortlet">
             <portlet-name>Login</portlet-name>
@@ -16,6 +14,7 @@
                 <minimized/>
                 <maximized/>
                 <resizing/>
+                <floating/>
             </allows>
             <supports>
                 <markup name="html">
@@ -677,7 +676,13 @@
                     <description>Ermöglicht das Konfigurieren der Textnachrichtendienste</description>
                     <keywords>textnachrichtendienst </keywords>
                 </language>
-				<language locale="ar">
+                <language locale="fr">
+                    <title>Configuration des services de la messagerie</title>
+                    <title-short>Configuration services messagerie</title-short>
+                    <description>Ce portlet permet la configuration des services de la messagerie</description>
+                    <keywords>portlet messagerie services</keywords>
+                </language>
+                <language locale="ar">
                     <title>تعديل خدمات التراسل</title>
                     <title-short>خدمات التراسل</title-short>
                     <description>برنامج يساعد على تعديل خدمات التراسل</description>
@@ -756,6 +761,12 @@
                     <title>Session Manager</title>
                     <title-short>Session Manager</title-short>
                     <description>Displays portal sessions</description>
+                    <keywords>portlet session</keywords>
+                </language>
+                <language locale="fr">
+                    <title>Gestionnaire de session</title>
+                    <title-short>Gestionnaire session</title-short>
+                    <description>Affiche les sessions actives du portail</description>
                     <keywords>portlet session</keywords>
                 </language>
 				<language locale="ar">
