@@ -61,6 +61,7 @@ public class LoginPortlet extends ActionPortlet {
     private LoginService loginService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
+      
         super.init(config);
         try {
             userManagerService = (UserManagerService) getPortletConfig().getContext().getService(UserManagerService.class);
@@ -398,7 +399,7 @@ public class LoginPortlet extends ActionPortlet {
         String mailFrom = mailSenderTF.getValue();
 
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        if (!mailServer.equals("")) settings.setAttribute(MailService.MAIL_SERVER_HOST, mailServer);
+        //if (!mailServer.equals("")) settings.setAttribute(MailService.MAIL_SERVER_HOST, mailServer);
         if (!mailFrom.equals("")) settings.setAttribute(MailService.MAIL_SENDER, mailFrom);
 
         portalConfigService.savePortalConfigSettings(settings);
@@ -615,7 +616,7 @@ public class LoginPortlet extends ActionPortlet {
             loginService.saveAuthModule(authMod);
         }
 
-        
+
     }
 
 
