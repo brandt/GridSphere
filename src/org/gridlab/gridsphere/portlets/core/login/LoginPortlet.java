@@ -337,7 +337,7 @@ public class LoginPortlet extends ActionPortlet {
         String mailFrom = mailSenderTF.getValue();
 
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        if (!mailServer.equals("")) settings.setAttribute(MailService.MAIL_SERVER_HOST, mailServer);
+        //if (!mailServer.equals("")) settings.setAttribute(MailService.MAIL_SERVER_HOST, mailServer);
         if (!mailFrom.equals("")) settings.setAttribute(MailService.MAIL_SENDER, mailFrom);
 
         portalConfigService.savePortalConfigSettings(settings);
