@@ -73,14 +73,14 @@
                 <title lang="hu">Portletek</title>
                 <title lang="cs">Portlety</title>
                 <title lang="nl">Portlets</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout width="40%">
+                <table-layout label="portletTL">
+                    <row-layout label="portletLoginRL">
+                        <column-layout width="40%" label="portletLoginCL">
                             <portlet-frame label="loginconfig">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
-                        <column-layout width="60%">
+                        <column-layout width="60%" label="portletMgrCL">
                             <portlet-frame label="portletmanager">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
                             </portlet-frame>
@@ -97,7 +97,7 @@
                 <title lang="it">Utenti</title>
                 <title lang="pl">Użytkownicy</title>
                 <title lang="hu">Felhasználók</title>
-                <title lang="fr">Usagers</title>
+                <title lang="fr">Utilisateurs</title>
                 <title lang="de">Nutzer</title>
                 <title lang="cs">Uživatelé</title>
                 <title lang="nl">Gebruikers</title>
@@ -157,6 +157,7 @@
                 <title lang="zh">信息</title>
                 <title lang="en">Messaging</title>
                 <title lang="de">Textnachrichtendienste</title>
+                <title lang="fr">Messagerie</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
