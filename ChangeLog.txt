@@ -1,3 +1,11 @@
+Changes since GridSphere 2.0.2
+==============================
+
++ Log4J configuration specified in web.xml, uses log4j-sandbox.jar in shared/lib of Tomcat
++ Added floating window state support
++ Added ActionMenu/ActionMenuItem/ActionPane tags
++ Added new "hidden" group type
+
 Changes since GridSphere 2.0
 ============================
 
