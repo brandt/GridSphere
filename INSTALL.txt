@@ -9,11 +9,7 @@ Requirements
 
 1) Building the GridSphere distribution requires JDK 1.4.2 
 (JDK 1.4.1 ships with a broken xalan.jar). You will also need Ant 1.6+ 
-available at http://jakarta.apache.org/ant. In addition, make sure
-the $ANT_HOME/lib directory contains junit.jar used for testing and
-xalan.jar used to construct the documentation from the XSL style sheets.
-You can optionally copy junit.jar from gridsphere/lib/ext into $ANT_HOME/lib
-to run the unit tests.
+available at http://jakarta.apache.org/ant. 
 
 2) You will also need a Tomcat 4.1+ or Tomcat 5.0.25+ servlet container 
 available at http://jakarta.apache.org/tomcat. In addition to providing
@@ -50,12 +46,6 @@ create-database - creates a new, fresh database with original
 
 docs -- builds the Javadoc documentation from the source code
 
-run-tests -- runs all Junit tests inside the Tomcat container using
-	     the Jakarta Cactus framework  
-
-test-reports -- creates HTML test reports from the Junit tests. You first 
-		have to run "run-tests"
-
 To see all the targets invoke "ant --projecthelp".
 
 2) Read the documentation found at  
@@ -64,16 +54,6 @@ for more information on using and developing portlets with  GridSphere.
 
 3) Startup Tomcat and then go to http://127.0.0.1:8080/gridsphere/gridsphere
 to see the portal!
-
-Testing GridSphere
-------------------
-
-Many of the portlet services are unit tested using the Junit testing framework
-http://www.junit.org. Simply invoking "ant compile-tests" will compile all the
-unit tests. Invoking "ant test-reports" is a nice way to run all the tests
-and produce a set of HTML reports in the build/reports/html directory. For more
-information on how unit testing is performed, have a look at the GridSphere 
-design document.
 
 Errors & Troubleshooting
 ------------------------
