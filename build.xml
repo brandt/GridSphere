@@ -198,7 +198,7 @@ Invoke "ant help"
         <gzip src="${gridsphere.project}-${version}-src.tar" zipfile="${gridsphere.project}-${version}-src.tgz"/>
         <delete file="${gridsphere.project}-${version}-src.tar"/>
 
-        <zip destfile="${gridsphere.project}-${version}-src.zip" basedir="../gridsphere">
+        <zip destfile="${gridsphere.project}-${version}-src.zip" basedir="../gridsphere-${version}">
             <exclude name="**/CVS"/>
             <exclude name="*.ipr"/>
             <exclude name="*.iws"/>
