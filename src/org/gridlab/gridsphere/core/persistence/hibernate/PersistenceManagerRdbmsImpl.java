@@ -14,8 +14,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import javax.servlet.ServletContext;
 import java.io.*;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  *
@@ -122,13 +121,18 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             cfg.setProperties(hibernateProperties);
             File mappingdir = new File(mappingPath);
             String[] children = mappingdir.list();
+
             if (children == null) {
                 // Either dir does not exist or is not a directory
             } else {
-                for (int i = 0; i < children.length; i++) {
-                    // Get filename of file or directory
-                    String filename = children[i];
+                // Create list from children array
+                List filenameList = Arrays.asList(children);
+                // Ensure that this list is sorted alphabetically
+                Collections.sort(filenameList);
+                for (Iterator filenames = filenameList.iterator(); filenames.hasNext();) {
+                    String filename = (String) filenames.next();
                     if (filename.endsWith(".hbm.xml")) {
+                        // Get filename of file or directory
                         log.debug("add hbm file :" + mappingPath + File.separator + filename);
                         cfg.addFile(mappingPath + File.separator + filename);
                     }
