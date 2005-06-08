@@ -18,8 +18,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
@@ -190,17 +189,20 @@ public class DBTask extends Task {
             String mappingPath = configDir + File.separator  + "WEB-INF" + File.separator + "persistence";
             File mappingdir = new File(mappingPath);
             String[] children = mappingdir.list();
+
             if (children == null) {
                 // Either dir does not exist or is not a directory
-                // so this means we do not have a db here...
             } else {
-                log.info("Using mapping directory: " + mappingPath);
-                for (int i = 0; i < children.length; i++) {
-                    // Get filename of file or directory
-                    String filename = children[i];
+                // Create list from children array
+                List filenameList = Arrays.asList(children);
+                // Ensure that this list is sorted alphabetically
+                Collections.sort(filenameList);
+                for (Iterator filenames = filenameList.iterator(); filenames.hasNext();) {
+                    String filename = (String) filenames.next();
                     if (filename.endsWith(".hbm.xml")) {
+                        // Get filename of file or directory
+                        log.debug("add hbm file :" + mappingPath + File.separator + filename);
                         cfg.addFile(mappingPath + File.separator + filename);
-                        //log.info("loading "+configDir + File.separator + filename);
                     }
                 }
             }
