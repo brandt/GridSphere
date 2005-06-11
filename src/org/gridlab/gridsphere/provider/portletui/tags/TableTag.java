@@ -28,6 +28,7 @@ public class TableTag extends BaseComponentTag {
     protected String border = null;
     protected String width = null;
     protected String align = null;
+    protected String background = null;
     protected boolean sortable = false;
     protected boolean isZebra = false;
     protected int rowCount = 0;
@@ -144,6 +145,24 @@ public class TableTag extends BaseComponentTag {
     }
 
     /**
+     * Sets the table background
+     *
+     * @param boackground the table background
+     */
+    public void setBackground(String background) {
+        this.background = background;
+    }
+
+    /**
+     * Returns the table background
+     *
+     * @return the tabel background
+     */
+    public String getBackground() {
+        return background;
+    }
+
+    /**
      * Sets the table width
      *
      * @param width the table width
@@ -211,6 +230,7 @@ public class TableTag extends BaseComponentTag {
         border = null;
         width = null;
         align = null;
+        background = null;
         sortable = false;
         isZebra = false;
         rowCount = 0;
@@ -257,6 +277,7 @@ public class TableTag extends BaseComponentTag {
             }
         }
 
+        if (background != null) tableBean.setBackground(background);
         if (align != null) tableBean.setAlign(align);
         if (width != null) tableBean.setWidth(width);
         if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);

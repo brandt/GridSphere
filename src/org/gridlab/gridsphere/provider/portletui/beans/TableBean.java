@@ -22,6 +22,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     protected String cellSpacing = null;
     protected String cellPadding = null;
     protected String border = null;
+    protected String background = null;
     protected String width = null;
     protected String align = null;
     protected int currentPage = 0;
@@ -158,6 +159,24 @@ public class TableBean extends BaseComponentBean implements TagBean {
      */
     public String getCellPadding() {
         return cellPadding;
+    }
+
+    /**
+     * Sets the table background
+     *
+     * @param background the table background
+     */
+    public void setBackground(String background) {
+        this.background = background;
+    }
+    
+    /**
+     * Returns the table background
+     *
+     * @return the table background
+     */
+    public String getBackground() {
+        return background;
     }
 
     /**

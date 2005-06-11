@@ -904,6 +904,11 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>background</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>border</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
