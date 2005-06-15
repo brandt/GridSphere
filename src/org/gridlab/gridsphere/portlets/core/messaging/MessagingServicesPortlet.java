@@ -1,21 +1,23 @@
 package org.gridlab.gridsphere.portlets.core.messaging;
 
-import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
-import org.gridlab.gridsphere.provider.event.FormEvent;
-import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.portlet.PortletConfig;
 import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.provider.event.FormEvent;
+import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
+import org.gridlab.gridsphere.provider.portletui.beans.*;
+import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
-import org.gridlab.gridsphere.tmf.config.TmfService;
-import org.gridlab.gridsphere.tmf.config.TmfServiceConfig;
-import org.gridlab.gridsphere.tmf.config.ConfigParameter;
-import org.gridlab.gridsphere.tmf.TextMessagingException;
+import org.gridsphere.tmf.services.TMService;
+import org.gridsphere.tmf.services.TextMessageServiceConfig;
+import org.gridsphere.tmf.services.config.BaseConfig;
+import org.gridsphere.tmf.TextMessagingException;
 
 import javax.servlet.UnavailableException;
+import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Set;
+import java.io.IOException;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
@@ -33,6 +35,7 @@ public class MessagingServicesPortlet extends ActionPortlet {
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
+        config.getServletContext().getServletContextName();
 
     }
 
@@ -46,44 +49,33 @@ public class MessagingServicesPortlet extends ActionPortlet {
     private DefaultTableModel getMessagingService(FormEvent event) {
         boolean zebra = false;
         DefaultTableModel dtm = new DefaultTableModel();
-        List services = tms.getActiveServices();
+        Set services = tms.getServices();
+        for (Iterator iterator = services.iterator(); iterator.hasNext();) {
+            // get the service
+            TMService service = (TMService) iterator.next();
 
-        for (int i=0;i<services.size();i++) {
-            TmfService service = (TmfService)services.get(i);
-            TableRowBean trb = new TableRowBean();            
+            TableRowBean trb = new TableRowBean();
             TableCellBean tcbDescription = new TableCellBean();
             TableCellBean tcbConfiguration = new TableCellBean();
 
             if (!zebra) {
-                tcbDescription.setCssStyle("background: #BDBBB6");
-                tcbConfiguration.setCssStyle("background: #BDBBB6");
+                trb.setZebra(true);
             }
             zebra = !zebra;
 
             // description
             CheckBoxBean restartBox = new CheckBoxBean();
             restartBox.setBeanId("restartBox");
-            TextBean description = event.getTextBean("description"+service.getClassname());
-            TextBean restart = event.getTextBean("restart"+service.getClassname());
+            TextBean description = event.getTextBean("description"+service.getClass().getName());
 
+            TextMessageServiceConfig config = service.getServiceConfig();
+            description.setValue(config.getProperty(BaseConfig.SERVICE_DESCRIPTION));
 
-            TmfServiceConfig config = service.getConfig();
-            description.setValue(getLocalizedText(event.getPortletRequest(),service.getDescription()));
-
-            if (config.isNeedRestart()) {
-                restartBox.setSelected(config.isConfigChanged());
-                restartBox.setValue(service.getClassname());
-                if (config.isConfigChanged()) {
-                    restart.setValue("<p/>("+getLocalizedText(event.getPortletRequest(),"MESSAGING_SERVICE_CONFIG_CHANGED")+")");
-                    restart.addCssStyle("color: red");
-                }
-                tcbDescription.addBean(restartBox);
-            }
             tcbDescription.addBean(description);
-            tcbDescription.addBean(restart);
+            tcbDescription.setValign("top");
 
             // configuration
-            List params = config.getParams();
+            List params = config.getConfigPropertyKeys();
             DefaultTableModel configTable = new DefaultTableModel();
 
             for (int j=0;j<params.size();j++) {
@@ -92,13 +84,12 @@ public class MessagingServicesPortlet extends ActionPortlet {
                 TableCellBean configDescription = new TableCellBean();
                 TableCellBean configValue = new TableCellBean();
 
-                ConfigParameter param = (ConfigParameter)params.get(j);
-                TextBean paramName = event.getTextBean(service.getClassname()+"paramKey"+param.getKey());
-                paramName.setValue(param.getKey());
+                TextBean paramName = event.getTextBean(service.getClass().getName()+"paramKey"+(String)params.get(j));
+                paramName.setValue((String)params.get(j));
                 configDescription.addBean(paramName);
 
-                TextFieldBean paramValue = event.getTextFieldBean(service.getClassname()+"paramValue"+param.getKey());
-                paramValue.setValue(param.getValue());
+                TextFieldBean paramValue = event.getTextFieldBean(service.getClass().getName()+"paramValue"+(String)params.get(j));
+                paramValue.setValue(config.getProperty((String)params.get(j)));
                 configValue.addBean(paramValue);
 
                 configRow.addBean(configDescription); configDescription.setAlign("top");
@@ -111,6 +102,8 @@ public class MessagingServicesPortlet extends ActionPortlet {
             frameConfig.setTableModel(configTable);
             tcbConfiguration.addBean(frameConfig);
             trb.addBean(tcbDescription);
+
+
             trb.addBean(tcbConfiguration);
 
             dtm.addTableRowBean(trb);
@@ -123,76 +116,65 @@ public class MessagingServicesPortlet extends ActionPortlet {
     public void doView(FormEvent event)  {
         FrameBean serviceFrame = event.getFrameBean("serviceframe");
         serviceFrame.setTableModel(getMessagingService(event));
-        List services = tms.getActiveServices();
+        Set services = tms.getServices();
         event.getPortletRequest().setAttribute("services", new String()+services.size());
         setNextState(event.getPortletRequest(), "admin/messaging/view.jsp");
     }
 
     public void doSaveValues(FormEvent event) {
-        List services = tms.getActiveServices();
-        for (int i=0;i<services.size();i++) {
-            TmfService service = (TmfService)services.get(i);
-            TmfServiceConfig config = service.getConfig();
-            List params = config.getParams();
-            ArrayList newParamList = new ArrayList();
+        Set services = tms.getServices();
+        for (Iterator iterator = services.iterator(); iterator.hasNext();) {
+            // get the service
+            TMService service = (TMService) iterator.next();
+            TextMessageServiceConfig config = service.getServiceConfig();
+
+            List params = config.getConfigPropertyKeys();
+
             boolean isDirty = false;
             for (int j=0;j<params.size();j++) {
-                ConfigParameter param = (ConfigParameter)params.get(j);
-                TextFieldBean value = event.getTextFieldBean(service.getClassname()+"paramValue"+param.getKey());
+                String propKey = (String)params.get(j);
+                String propValue = config.getProperty(propKey);
 
-                System.out.println("\n\n\n "+param.getKey()+" : " +value.getValue()+"("+service.getClassname()+"paramValue"+param.getKey()+")");
-                // if one parameter changed mark the service as changed values
-                if (!value.getValue().equals(param.getValue())) {
-                    param.setValue(value.getValue());
+                TextFieldBean paramValue = event.getTextFieldBean(service.getClass().getName()+"paramValue"+propKey);
+                String propTextBeanValue = paramValue.getValue();
+
+                // if a parameter changed, restart the service....
+                if (!propTextBeanValue.equals(propValue)) {
+                    config.setProperty((String)params.get(j), paramValue.getValue());
                     isDirty = true;
                 }
-                newParamList.add(param);
-
             }
-
-            config.setParams(newParamList);
-            config.setConfigChanged(isDirty);
-            if (isDirty)
+            if (isDirty) {
                 try {
-                    service.save();
+                    config.saveConfig();
+                    service.shutdown();
+                    service.startup();
+                    String msg = this.getLocalizedText(event.getPortletRequest(), "MESSAGING_SERVICE_SERVICERESTARTED");
+                    createSuccessMessage(event, msg + ": "+config.getProperty(TextMessagingService.SERVICE_NAME));
+                } catch (IOException e) {
+                    createErrorMessage(event, this.getLocalizedText(event.getPortletRequest(), "MESSAGING_SERVICE_SAVEFAILURE"));
                 } catch (TextMessagingException e) {
-                    log.error("Problem saving config!");
+                    String msg = this.getLocalizedText(event.getPortletRequest(), "MESSAGING_SERVICE_RESTARTFAILURE");
+                    createErrorMessage(event, msg+" : "+config.getProperty(TextMessagingService.SERVICE_NAME));
                 }
-
-        }
-
-        setNextState(event.getPortletRequest(), "doView");
-    }
-
-    private TmfService getTmfServiceFromClassName(String classname) {
-        List services = tms.getActiveServices();
-        for (int i=0;i<services.size();i++) {
-            TmfService s = (TmfService)services.get(i);
-
-            //System.out.println("\n\n\nCHECKING: "+s.getClassname()+" "+classname);
-            if (s.getClassname().equals(classname)) {
-                return s;
-            }
-        }
-        return null;
-    }
-
-    public void restartServices(FormEvent event) {
-
-        CheckBoxBean restartServices = event.getCheckBoxBean("restartBox");
-        List services = restartServices.getSelectedValues();
-        for (int i=0;i<services.size();i++) {
-            TmfService s = getTmfServiceFromClassName((String)services.get(i));
-            if (s!=null) {
-                s.shutdown();
-                s.startup();
-                s.getConfig().setConfigChanged(false);
             }
         }
 
         setNextState(event.getPortletRequest(), "doView");
-
-
-
     }
+
+    private void createErrorMessage(FormEvent event, String msg) {
+        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
+        msgBox.setMessageType(MessageStyle.MSG_ERROR);
+        msgBox.appendText(msg);
+        msgBox.setDefaultImage(true);
+    }
+
+    private void createSuccessMessage(FormEvent event, String msg) {
+        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
+        msgBox.setMessageType(MessageStyle.MSG_SUCCESS);
+        msgBox.appendText(msg);
+        msgBox.setDefaultImage(true);
+    }
+
 }
