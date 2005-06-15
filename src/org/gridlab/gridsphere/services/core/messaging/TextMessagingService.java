@@ -1,10 +1,13 @@
 package org.gridlab.gridsphere.services.core.messaging;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.tmf.TmfMessage;
-import org.gridlab.gridsphere.tmf.config.TmfUser;
+import org.gridsphere.tmf.message.GenericMessage;
+import org.gridsphere.tmf.message.InstantMessage;
+import org.gridsphere.tmf.message.MailMessage;
+import org.gridsphere.tmf.TextMessagingException;
+import org.gridsphere.tmf.TextMessagingSession;
 
-import java.util.List;
+import java.util.Set;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
@@ -13,68 +16,58 @@ import java.util.List;
 
 public interface TextMessagingService extends PortletService {
 
-    /**
-     * Returns an empty message Object.
-     *
-     * @return empty message
-     */
-    public TmfMessage createNewMessage();
+    final static String SERVICE_ID = "serviceid";
+    final static String SERVICE_DESCRIPTION = "servicedescription";
+    final static String SERVICE_NAME = "servicename";
 
     /**
-     * Sends given message object
-     *
-     * @param message message to be sent
+     * Returns an object to be send through Instant Messaging
+     * @return
      */
-    public void send(TmfMessage message);
+    InstantMessage getInstantMessage();
 
     /**
-     * Returns a list of tmf users objects
-     *
-     * @return list of tmf users
+     * Returns a MailMessageObject.
+     * @return
      */
-    public List getUsers();
-
+    MailMessage getMailMessage();
 
     /**
-     * Returns a list of the messaging services available.
-     *
-     * @see org.gridlab.gridsphere.tmf.config.TmfService
-     * @return list of textmessaging services
+     * Sends a message to the service.
+     * @param message
+     * @throws TextMessagingException
      */
-    public List getActiveServices();
+    void send(GenericMessage message) throws TextMessagingException;
 
     /**
-     * Returns the textmessaging userobject for a given userid.
-     *
-     * @param userid of the user
-     * @return textmessaging userobject
+     * Startup of all the configures services
      */
-    public TmfUser getUser(String userid);
-
+    void startup();
 
     /**
-     * Saves the userinfo for the user
-     *
-     * @param user userobject to be saved
+     * Shutdown of all the configured servies
      */
-    public void saveUser(TmfUser user);
+    void shutdown();
 
     /**
-     * Checks if a userid is on a service
-     *
-     * @param userid      userid of the user
-     * @param messagetype messagetype
-     * @return true if the user has subscribed to the service, otherwise false
+     * Returns a set of TextMessageService objects
+     * @see org.gridsphere.tmf.services.TextMessageService
+     * @return set of services
      */
-    public boolean isUserOnService(String userid, String messagetype);
+    Set getServices();
 
     /**
-     * Checks if a user is 'online' if the service supports this.
-     *
-     * @param userid
-     * @param messagetype messagetype
-     * @return always false for now
+     * Returns the userid for a servcice for a username
+     * @param serviceid id of the service (aim, mail, irc...)
+     * @param username name of the user in the portal
+     * @return configured userid for the given service for the user
      */
-    public boolean isUserOnline(String userid, String messagetype);
+    String getServiceUserID(String serviceid, String username);
+
+    void setServiceUserID(String serviceid, String username, String serviceuserid);
+
+    void addCommands(Set commands);
+
+    public TextMessagingSession getSession(String serviceid, String userid);    
 
 }

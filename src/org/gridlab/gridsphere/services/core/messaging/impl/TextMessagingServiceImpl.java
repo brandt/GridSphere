@@ -6,13 +6,20 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
-import org.gridlab.gridsphere.tmf.TmfConfig;
-import org.gridlab.gridsphere.tmf.TmfCore;
-import org.gridlab.gridsphere.tmf.TmfMessage;
-import org.gridlab.gridsphere.tmf.TextMessagingException;
-import org.gridlab.gridsphere.tmf.config.TmfUser;
+import org.gridlab.gridsphere.services.core.messaging.MessagingID;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridsphere.tmf.TextMessagingException;
+import org.gridsphere.tmf.TMFService;
+import org.gridsphere.tmf.TMFFactory;
+import org.gridsphere.tmf.TextMessagingSession;
+import org.gridsphere.tmf.message.GenericMessage;
+import org.gridsphere.tmf.message.InstantMessage;
+import org.gridsphere.tmf.message.MailMessage;
 
-import java.util.List;
+import java.util.Set;
+import java.io.File;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
@@ -23,75 +30,81 @@ public class TextMessagingServiceImpl implements TextMessagingService, PortletSe
 
     private static PortletLog log = SportletLog.getInstance(TextMessagingServiceImpl.class);
 
-    private TmfCore core = null;
-
-    public TmfMessage createNewMessage() {
-        return core.getNewMessage();
-    }
-
-    public void send(TmfMessage message) {
-        core.send(message);
-    }
+    TMFService tmfService = null;
+    PersistenceManagerRdbms pm = null;
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        String configfile = config.getServletContext().getRealPath("WEB-INF/tmfconfig");
-
+        String configfile = config.getServletContext().getRealPath("WEB-INF"+
+                File.separator+"CustomPortal"+File.separator+"tmf");
+        tmfService = TMFFactory.createTMFService(configfile);
+        pm = PersistenceManagerFactory.createGridSphereRdbms();
         log.info("Starting up TextMessagingService with config " + configfile);
-
-        core = TmfCore.getInstance();
-        try {
-            core.loadConfig(configfile);
-        } catch (TextMessagingException e) {
-           log.info("Could not load configfile."+e);
-        }
-        core.startupServices();
+        tmfService.startup();
     }
 
     public void destroy() {
-        core.shutdown();
+        this.shutdown();
     }
 
-    /**
-     * Returns a list of tmf users objects
-     *
-     * @return a list of tmf users
-     */
-    public List getUsers() {
-        TmfConfig config = core.getTmfConfig();
-        return config.getUserlist().getUserlist();
+    public InstantMessage getInstantMessage() {
+        return tmfService.getInstantMessage();
     }
 
-    public List getActiveServices() {
-        TmfConfig config = core.getTmfConfig();
-        return config.getActiveServices();
+    public MailMessage getMailMessage() {
+        return tmfService.getMailMessage();
     }
 
-    public void saveUser(TmfUser user) {
-        TmfConfig config = core.getTmfConfig();
+    public void send(GenericMessage message) throws TextMessagingException {
+        tmfService.sendMessage(message);
+    }
+
+    public void startup() {
+        tmfService.startup();
+    }
+
+    public void shutdown() {
+        tmfService.shutdown();
+    }
+
+    public Set getServices() {
+        return tmfService.getServices();
+    }
+
+    private MessagingID getMessagingID(String serviceid, String username) {
+        MessagingID mid = new MessagingID();
+        String oql = "select mid from "+MessagingID.class.getName()+" mid where mid.serviceid='"+serviceid+
+                    "' and mid.username='"+username+"'";
         try {
-            config.setUser(user);
-        } catch (TextMessagingException e) {
-            log.error("Error saving users."+e);
+            mid = (MessagingID)pm.restore(oql);
+        } catch (PersistenceManagerException e) {
+            log.error("Error getting the messagingID for "+serviceid+" and "+username);
+        }
+        if (mid==null) mid = new MessagingID();
+        return mid;
+    }
+
+    public String getServiceUserID(String serviceid, String username) {
+        MessagingID mid = getMessagingID(serviceid, username);
+        return mid.getServiceuserid();
+    }
+
+    public void setServiceUserID(String serviceid, String username, String serviceuserid) {
+        MessagingID mid = getMessagingID(serviceid, username);
+        mid.setUsername(username);
+        mid.setServiceid(serviceid);
+        mid.setServiceuserid(serviceuserid);
+        try {
+            pm.saveOrUpdate(mid);
+        } catch (PersistenceManagerException e) {
+            log.error("Could not save MessagingID for "+serviceid+" and "+username);
         }
     }
 
-    public TmfUser getUser(String userid) {
-        TmfConfig config = core.getTmfConfig();
-        return config.getUser(userid);
+    public void addCommands(Set commands) {
+        tmfService.addCommands(commands);
     }
 
-    public boolean isUserOnService(String userid, String messagetype) {
-        TmfConfig config = core.getTmfConfig();
-        TmfUser u = config.getUser(userid);
-        if (u==null) return false;
-        String name = u.getUserNameForMessagetype(messagetype);
-        boolean result = false;
-        if (name!=null && !name.equals("")) result = true; // so the user entered something in there
-        return result;
+    public TextMessagingSession getSession(String serviceid,String userid) {
+        return tmfService.getTextMessagingSession(serviceid, userid);
     }
-
-    public boolean isUserOnline(String userid, String messagetype) {
-        return false;
-    }
-
 }
