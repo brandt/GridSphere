@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 1.1//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="org.gridlab.gridsphere.services.core.messaging.MessagingID"
+        table="gsmessagingid"
+        >
+
+        <id
+            name="oid"
+            column="gsoid"
+            type="java.lang.String"
+            length="32"
+            >
+            <generator class="uuid.hex"/>
+        </id>
+
+        <property name="serviceid" type="string" column="tmserviceid"/>
+        <property name="serviceuserid" type="string" column="tmserviceuserid"/>
+        <property name="username" type="string" column="tmusername"/>
+    </class>
+
+
+</hibernate-mapping>
