@@ -369,6 +369,11 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>valign</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>beanId</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -680,6 +685,11 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+        <attribute>
+            <name>defaultimage</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
     </tag>
 
     <tag>
@@ -895,6 +905,11 @@
         </description>
         <attribute>
             <name>align</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>valign</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
