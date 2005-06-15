@@ -2,14 +2,18 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.PortletRole;
 
+import java.io.Serializable;
+
 /*
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  * The <code>PortletRoleInfo</code> saves the role associated to a concrete portlet.
  */
 
-public class SportletRoleInfo {
+public class SportletRoleInfo implements Serializable {
 
+    private static final long serialVersionUID = 2887296080186064446L;
+    
     private String portletRole = "";
     private String portletClass = "";
     private String oid = null;
