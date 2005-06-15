@@ -28,6 +28,7 @@ public class TableTag extends BaseComponentTag {
     protected String border = null;
     protected String width = null;
     protected String align = null;
+    protected String valign = null;
     protected String background = null;
     protected boolean sortable = false;
     protected boolean isZebra = false;
@@ -91,6 +92,24 @@ public class TableTag extends BaseComponentTag {
     }
 
     /**
+     * Returns the horizontal table alignment e.g. "center" or "bottom"
+     *
+     * @return the table horizontal alignment
+     */
+    public String getValign() {
+        return valign;
+    }
+
+    /**
+     * Returns the horizontal table alignment e.g. "center" or "bottom"
+     *
+     * @param valign alignment of the table
+     */
+    public void setValign(String valign) {
+        this.valign = valign;
+    }
+
+    /**
      * Sets the table cell spacing
      *
      * @param cellSpacing the table cell spacing
@@ -147,7 +166,7 @@ public class TableTag extends BaseComponentTag {
     /**
      * Sets the table background
      *
-     * @param boackground the table background
+     * @param background the table background
      */
     public void setBackground(String background) {
         this.background = background;
@@ -230,6 +249,7 @@ public class TableTag extends BaseComponentTag {
         border = null;
         width = null;
         align = null;
+        valign = null;
         background = null;
         sortable = false;
         isZebra = false;
@@ -279,6 +299,7 @@ public class TableTag extends BaseComponentTag {
 
         if (background != null) tableBean.setBackground(background);
         if (align != null) tableBean.setAlign(align);
+        if (valign != null) tableBean.setValign(valign);
         if (width != null) tableBean.setWidth(width);
         if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);
         if (cellPadding != null) tableBean.setCellPadding(cellPadding);

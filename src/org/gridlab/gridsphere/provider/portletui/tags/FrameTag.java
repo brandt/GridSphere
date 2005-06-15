@@ -121,6 +121,8 @@ public class FrameTag extends TableTag {
             if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);
             if (cellPadding != null) tableBean.setCellPadding(cellPadding);
             if (border != null) tableBean.setBorder(border);
+            if (align!=null) tableBean.setAlign(align);
+            if (align!=null) tableBean.setValign(valign);
             tableBean.setCssClass(cssClass);
             tableBean.setCssStyle(cssStyle);
             if (sortable) {
@@ -150,9 +152,10 @@ public class FrameTag extends TableTag {
             try {
                 JspWriter out = pageContext.getOut();
                 if ((thiscol % numCols) == 0) {
-                    out.println("<tr>");
+                    out.println("<tr valign=\"top\">");
                 }
-                out.println("<td width=\"" + "100%" + "\">");
+
+                out.println("<td width=\"100%\">");
             } catch (Exception e) {
                 throw new JspException(e.getMessage());
             }
