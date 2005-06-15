@@ -25,6 +25,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     protected String background = null;
     protected String width = null;
     protected String align = null;
+    protected String valign = null;
     protected int currentPage = 0;
     protected boolean isSortable = false;
     protected boolean isZebra = false;
@@ -123,6 +124,24 @@ public class TableBean extends BaseComponentBean implements TagBean {
      */
     public String getAlign() {
         return align;
+    }
+
+    /**
+     * Returns the table vertical alignment e.g. 'top', 'bottom'
+     *
+     * @return the table vertical alignment
+     */
+    public String getValign() {
+        return valign;
+    }
+
+    /**
+     * Sets the table horizontal alignment, e.g. 'top', 'bottom'
+     *
+     * @param valign the tables horizontal alignment
+     */
+    public void setValign(String valign) {
+        this.valign = valign;
     }
 
     /**
@@ -269,6 +288,10 @@ public class TableBean extends BaseComponentBean implements TagBean {
         if (border != null) sb.append(" border=\"" + border + "\" ");
         if (width != null) sb.append(" width=\"" + width + "\" ");
         if (align != null) sb.append(" align=\"" + align + "\" ");
+        if (valign != null) {
+            sb.append(" valign=\"" + valign + "\" ");
+        }
+
         sb.append(">");
         if (defaultModel != null) sb.append(defaultModel.toStartString());
         return sb.toString();

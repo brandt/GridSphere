@@ -1,6 +1,9 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
     private String width = null;
     private String height = null;
     private String imageSource = null;
+
 
     public MessageBoxBean() {
         super(NAME);
@@ -51,6 +55,22 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
      */
     public void setImageSource(String imageSource) {
         this.imageSource = imageSource;
+    }
+
+    /**
+     * Enables/disables standard images depending on the style of the messagebox.
+     *
+     * @param images yes or no  if images should be displayed
+     */
+    public void setDefaultImage(boolean images){
+        String gswebapp = GridSphereConfig.PROJECT_NAME;
+        if (images) {
+            this.imageSource =  new StringBuffer().append(File.separator).append(gswebapp).
+                    append(File.separator).append("images").append(File.separator).append("msgicons").
+                    append(File.separator).append(messageType).append(".gif").toString();
+        } else {
+            this.imageSource = null;
+        }
     }
 
     /**

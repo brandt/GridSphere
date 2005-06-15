@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * The <code>TextBean</code> represents text to be displayed
