@@ -18,12 +18,11 @@ import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
-import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import javax.mail.MessagingException;
 import javax.servlet.UnavailableException;
@@ -83,18 +82,12 @@ public class LoginPortlet extends ActionPortlet {
         } catch (PortletServiceException e) {
             throw new UnavailableException("Unable to initialize services");
         }
-        DEFAULT_VIEW_PAGE = "doViewFirstUser";
+        DEFAULT_VIEW_PAGE = "doViewUser";
         DEFAULT_CONFIGURE_PAGE = "showConfigure";
     }
 
     public void initConcrete(PortletSettings settings) throws UnavailableException {
         super.initConcrete(settings);
-    }
-
-    public void doViewFirstUser(FormEvent event) throws PortletException {
-        MessageBoxBean msg = event.getMessageBoxBean("msg");
-        msg.clearMessage();
-        doViewUser(event);
     }
 
     public void doViewUser(FormEvent event) throws PortletException {
@@ -137,9 +130,7 @@ public class LoginPortlet extends ActionPortlet {
         String errorKey = (String) req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
 
         if (errorKey != null) {
-            MessageBoxBean frame = event.getMessageBoxBean("msg");
-            frame.setKey(LoginPortlet.LOGIN_ERROR_FLAG);
-            frame.setMessageType(MessageStyle.MSG_ERROR);
+            createErrorMessage(event,this.getLocalizedText(req, LoginPortlet.LOGIN_ERROR_FLAG));
             req.removeAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
         }
 
@@ -549,12 +540,14 @@ public class LoginPortlet extends ActionPortlet {
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
         msg.setValue(text);
         msg.setMessageType(MessageStyle.MSG_ERROR);
+        msg.setDefaultImage(true);
     }
 
     private void createSuccessMessage(FormEvent evt, String text) {
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
         msg.setValue(text);
         msg.setMessageType(MessageStyle.MSG_SUCCESS);
+        msg.setDefaultImage(true);
     }
 
     public void newpassword(FormEvent evt) {
