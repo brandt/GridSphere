@@ -640,12 +640,15 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         // check if expiration was set in render response
         Map props = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (props != null) {
-            String cacheExpiryStr = (String)props.get(RenderResponseImpl.EXPIRATION_CACHE);
-            if (cacheExpiryStr != null) {
-                try {
-                    cacheExpiration = Integer.valueOf(cacheExpiryStr).intValue();
-                } catch (IllegalArgumentException e) {
-                    // do nothing
+            List vals = (List)props.get(RenderResponseImpl.EXPIRATION_CACHE);
+            if (vals != null) {
+                String cacheExpiryStr = (String)vals.get(0);
+                if (cacheExpiryStr != null) {
+                    try {
+                        cacheExpiration = Integer.valueOf(cacheExpiryStr).intValue();
+                    } catch (IllegalArgumentException e) {
+                        // do nothing
+                    }
                 }
             }
         }
