@@ -22,13 +22,13 @@ public interface TextMessagingService extends PortletService {
 
     /**
      * Returns an object to be send through Instant Messaging
-     * @return
+     * @return an instant message
      */
     InstantMessage getInstantMessage();
 
     /**
-     * Returns a MailMessageObject.
-     * @return
+     * Returns a Mail Message
+     * @return a mail message
      */
     MailMessage getMailMessage();
 
