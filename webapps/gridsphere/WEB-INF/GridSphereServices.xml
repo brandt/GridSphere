@@ -96,6 +96,13 @@
     </service>
 
     <service>
+        <name>Tracker Service</name>
+        <description lang="en">Provides ActionLink/Submit Tracking Capabilities</description>
+        <interface>org.gridlab.gridsphere.services.core.tracker.TrackerService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.tracker.impl.TrackerServiceImpl</implementation>
+    </service>
+
+    <service>
         <name>Layout Manager Service</name>
         <description lang="en">Provides Layout Management Capabilities</description>
         <interface>org.gridlab.gridsphere.services.core.layout.LayoutManagerService</interface>
