@@ -21,6 +21,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     protected List paramBeanList = new ArrayList();
     protected String label = null;
     protected String anchor = null;
+    protected String trackMe = null;
 
     /**
      * Constructs default action bean
@@ -64,6 +65,15 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      */
     public String getLabel() {
         return label;
+    }
+
+    public void setTrackme(String trackMe) {
+        this.trackMe = trackMe;
+    }
+
+
+    public String getTrackme() {
+        return trackMe;
     }
 
     /**

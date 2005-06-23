@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.services.core.tracker.TrackerService;
 
 import javax.portlet.RenderResponse;
 import javax.servlet.jsp.JspException;
@@ -12,6 +13,7 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import java.util.ArrayList;
+import java.net.URLEncoder;
 
 /**
  * The <code>ActionFormTag</code> provides a UI form tag that can also include <code>ActionParam</code> tags
@@ -73,11 +75,16 @@ public class ActionFormTag extends ActionTag {
 
             // if using JSR then create render link
             RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+            String actionStr;
             if (res != null) {
-                out.print(createJSRActionURI(res.createRenderURL()).toString());
+                actionStr = createJSRActionURI(res.createRenderURL()).toString();
             } else {
-                out.print(createActionURI());
+                actionStr = createActionURI();
             }
+
+            out.print(actionStr);
+
+
             out.print("\" method=\"");
             out.print(method);
             out.print("\"");
@@ -94,9 +101,13 @@ public class ActionFormTag extends ActionTag {
             // add JS info
             out.println("<input name=\"JavaScript\" value=\"\" type=\"hidden\">");
 
+
             out.println("<script language=\"JavaScript\">");
             out.println("document." + name + ".JavaScript.value = \"enabled\";");
             out.println("</script>");
+            if (trackMe != null) {
+                out.println("<input name=\"" + TrackerService.TRACK_PARAM + "\" value=\"" + trackMe + "\" type=\"hidden\">"); 
+            }
 
             // write out rest of body
             bodyContent.writeOut(getPreviousOut());

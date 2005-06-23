@@ -5,7 +5,10 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import org.gridlab.gridsphere.services.core.tracker.TrackerService;
+
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLEncoder;
 
 /**
  * An <code>ActionSubmitBean</code> is a visual bean that represents an HTML button and

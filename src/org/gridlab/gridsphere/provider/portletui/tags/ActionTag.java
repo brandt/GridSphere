@@ -40,6 +40,7 @@ public abstract class ActionTag extends BaseComponentTag {
     protected DefaultPortletAction portletAction = null;
     protected List paramBeans = null;
     protected String label = null;
+    protected String trackMe = null;
     protected ImageBean imageBean = null;
     protected boolean paramPrefixing = true;
 
@@ -108,6 +109,16 @@ public abstract class ActionTag extends BaseComponentTag {
      */
     public String getKey() {
         return key;
+    }
+
+
+    public void setTrackme(String trackMe) {
+        this.trackMe = trackMe;
+    }
+
+
+    public String getTrackme() {
+        return trackMe;
     }
 
     /**

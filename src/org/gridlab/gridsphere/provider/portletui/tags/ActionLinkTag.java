@@ -127,6 +127,7 @@ public class ActionLinkTag extends ActionTag {
         if (anchor != null) actionlink.setAnchor(anchor);
         if (action != null) actionlink.setAction(action);
         if (value != null) actionlink.setValue(value);
+        if (trackMe != null) actionlink.setTrackme(trackMe);
 
         Tag parent = getParent();
         if (parent instanceof ActionMenuTag) {
@@ -150,6 +151,7 @@ public class ActionLinkTag extends ActionTag {
         if (!beanId.equals("")) {
             paramBeans = actionlink.getParamBeanList();
             label = actionlink.getLabel();
+            trackMe = actionlink.getTrackme();
             action = actionlink.getAction();
         }
 
@@ -163,7 +165,6 @@ public class ActionLinkTag extends ActionTag {
             if (val == null) val = "";
             actionlink.setValue(imageBean.toStartString() + val);
         }
-
 
         Tag parent = getParent();
         if (parent instanceof DataGridColumnTag) {

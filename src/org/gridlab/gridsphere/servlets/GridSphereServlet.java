@@ -24,6 +24,8 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
+import org.gridlab.gridsphere.services.core.tracker.TrackerService;
+import org.gridlab.gridsphere.services.core.tracker.impl.TrackerServiceImpl;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -59,6 +61,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static UserManagerService userManagerService = null;
 
     private static LoginService loginService = null;
+
+    private static TrackerService trackerService = null;
 
     private PortletMessageManager messageManager = SportletMessageManager.getInstance();
 
@@ -113,6 +117,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         loginService = (LoginService) factory.createPortletService(LoginService.class, getServletConfig().getServletContext(), true);
         log.debug("Creating portlet manager service");
         portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, getServletConfig().getServletContext(), true);
+
+        trackerService = (TrackerService) factory.createPortletService(TrackerService.class, getServletConfig().getServletContext(), true);
+
     }
 
     /**
@@ -189,6 +196,16 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
         setUserAndGroups(portletReq);
+
+        String trackme = req.getParameter(TrackerService.TRACK_PARAM);
+        if (trackme != null) {
+            trackerService.trackURL(trackme, req.getHeader("user-agent"), portletReq.getUser().getID());
+            String url = req.getParameter("url");
+            if (url != null) {
+                System.err.println("redirect: " + url);
+                res.sendRedirect(url);
+            }
+         }
 
         checkUserHasCookie(event);
 

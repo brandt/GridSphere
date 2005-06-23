@@ -89,6 +89,7 @@ public class ActionURLTagImpl extends ActionTag {
         // set action to non-null
         if (action == null) action = "";
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+
         String actionString = createJSRActionURI(res.createActionURL());
         actionlink.setAction(actionString);
 
@@ -101,10 +102,17 @@ public class ActionURLTagImpl extends ActionTag {
             if (val == null) val = "";
             actionlink.setValue(imageBean.toStartString() + val);
         }
+
+        System.err.println("trackMe= " + trackMe);
+
         if (var == null) {
             try {
                 JspWriter out = pageContext.getOut();
-                out.print(actionURL.toString());
+                if (trackMe != null) {
+                    out.println("?trackMe=" + trackMe + "&url=" + actionURL.toString());
+                } else {
+                    out.print(actionURL.toString());
+                }
             } catch (Exception e) {
                 throw new JspException(e.getMessage());
             }

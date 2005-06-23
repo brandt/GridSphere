@@ -4,7 +4,10 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import org.gridlab.gridsphere.services.core.tracker.TrackerService;
+
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLEncoder;
 
 /**
  * An <code>ActionLinkBean</code> is a visual bean that represents a hyperlink containing a portlet action
@@ -112,7 +115,15 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         StringBuffer sb = new StringBuffer();
         sb.append("<a");
         if (name != null) sb.append(" name=\"" + name + "\"");
-        sb.append(" href=\"" + action + "\"" + getFormattedCss() + " onClick=\"this.href='" + action + "&JavaScript=enabled'\">" + value);
+        if (trackMe != null) {
+            try {
+                sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=" + trackMe + "&url=" + URLEncoder.encode(action, "UTF-8") + "\"" + getFormattedCss() + "\">" + value);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            sb.append(" href=\"" + action + "\"" + getFormattedCss() + " onClick=\"this.href='" + action + "&JavaScript=enabled'\">" + value);
+        }
         sb.append("</a>");
         return sb.toString();
     }
