@@ -23,6 +23,7 @@
         <property name="Label" type="string" column="label"/>
         <property name="Date" type="long" column="trackerdate"/>
         <property name="UserAgent" type="string" column="useragent"/>
+        <property name="UserOid" type="string" column="useroid"/>
     </class>
 
 
