@@ -12,17 +12,14 @@ Version: $Id$
 }
 
 .window-title-inactive {
-/*  background-color: #580DA6; */
   background-color: #331457;
   color: #000000;
   width: 100%;
   border-top: 1px solid #331457;
   border-right: 1px solid #331457;
-  border-left: 1px solid #331457;                                                                                         ¤ 
 }
 
 .window-title-active {
-/*  background-color: #580DA6; */
   background-color: #331457;
   color: #000000;
   width: 100%;
@@ -40,7 +37,7 @@ Version: $Id$
 
 .window-icon-right {
    text-align: right;
-   width: 60px;
+   width: 80px;
 }
 
 .window-icon-left {
