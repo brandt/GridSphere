@@ -262,6 +262,10 @@ public class SessionImpl implements Session {
     public Object restore(String query) throws PersistenceManagerException {
         try {
             net.sf.hibernate.Query q = hbSession.createQuery(query);
+            List list = q.list();
+            if (list.size() == 0) {
+                return null;
+            }
             return q.list().get(0);
         } catch (Exception e) {
             log.error("Unable to retrieve object in hibernate session with query " + query, e);

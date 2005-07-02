@@ -157,7 +157,10 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public org.gridlab.gridsphere.core.persistence.Session getSession() throws PersistenceManagerException {
         try {
-            return new SessionImpl(factory.openSession());
+            if (session == null) {
+                session = factory.openSession();
+            }
+            return new SessionImpl(session);
         } catch (Exception e) {
             log.error("Could not open session", e);
             throw new PersistenceManagerException(e);
