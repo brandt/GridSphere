@@ -1,11 +1,10 @@
 $Id$
-test
+
 	Welcome to GridSphere! 
 ========================================
 
 All documentation is located in the docs/ directory. Follow the instructions 
 in the INSTALL file to build the documentation.
-
 
 You can also check the online web site 
 (http://www.gridsphere.org) which contains the most up to date 
