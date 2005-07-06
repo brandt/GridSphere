@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlets.core.user;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
@@ -489,6 +490,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
         if (acctReq != null) {
             log.debug("approve account request for user: " + user.getID());
             userManagerService.saveUser(acctReq);
+            String uid = (String) req.getPortletSession().getAttribute(SportletProperties.PORTLET_USER);
+            user = userManagerService.getUser(uid);
+            req.setAttribute(SportletProperties.PORTLET_USER, user);
             createSuccessMessage(event, this.getLocalizedText(req, "USER_UPDATE_SUCCESS"));
         }
 
