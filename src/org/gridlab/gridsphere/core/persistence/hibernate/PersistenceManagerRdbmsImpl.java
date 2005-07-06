@@ -30,6 +30,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private final static int CMD_UPDATE = 5;
     private final static int CMD_CREATE = 6;
     private final static int CMD_SAVEORUPDATE = 7;
+    private Session session = null;
 
     static Properties prop = new Properties();
 
@@ -156,7 +157,10 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public org.gridlab.gridsphere.core.persistence.Session getSession() throws PersistenceManagerException {
         try {
-            return new SessionImpl(factory.openSession());
+            if (session == null) {
+                session = factory.openSession();
+            }
+            return new SessionImpl(session);
         } catch (Exception e) {
             log.error("Could not open session", e);
             throw new PersistenceManagerException(e);
@@ -231,13 +235,15 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
 
     private Object doTransaction(Object object, String query, int command) throws Exception {
-        Session session = null;
+//        Session session = null;
         Transaction tx = null;
         Object result = null;
         Query q = null;
 
         try {
-            session = factory.openSession();
+            if (session == null) {
+                session = factory.openSession();
+            }
             tx = null;
             tx = session.beginTransaction();
             switch (command) {
@@ -274,13 +280,15 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             e.printStackTrace();
             throw e;
         } finally {
-            session.close();
+//            session.close();
         }
         return result;
     }
 
     public void destroy() throws PersistenceManagerException {
         try {
+            session.close();
+            session = null;
             factory.close();
         } catch (HibernateException e) {
             log.error("Could not close session factory", e);
