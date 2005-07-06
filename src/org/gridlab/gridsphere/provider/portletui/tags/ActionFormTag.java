@@ -62,7 +62,6 @@ public class ActionFormTag extends ActionTag {
 
     public int doStartTag() throws JspException {
         paramBeans = new ArrayList();
-
         return EVAL_BODY_BUFFERED;
     }
 
@@ -106,7 +105,10 @@ public class ActionFormTag extends ActionTag {
             out.println("document." + name + ".JavaScript.value = \"enabled\";");
             out.println("</script>");
             if (trackMe != null) {
-                out.println("<input name=\"" + TrackerService.TRACK_PARAM + "\" value=\"" + trackMe + "\" type=\"hidden\">"); 
+                out.println("<input name=\"" + TrackerService.TRACK_PARAM + "\" value=\"" + trackMe + "\" type=\"hidden\"/>");
+            }
+            if (extUrl != null) {
+                out.println("<input name=\"" + TrackerService.REDIRECT_URL + "\" value=\"" +extUrl + "\" type=\"hidden\"/>");
             }
 
             // write out rest of body

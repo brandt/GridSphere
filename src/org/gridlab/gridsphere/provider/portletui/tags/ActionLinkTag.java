@@ -128,6 +128,7 @@ public class ActionLinkTag extends ActionTag {
         if (action != null) actionlink.setAction(action);
         if (value != null) actionlink.setValue(value);
         if (trackMe != null) actionlink.setTrackme(trackMe);
+        if (extUrl != null) actionlink.setExturl(extUrl);
 
         Tag parent = getParent();
         if (parent instanceof ActionMenuTag) {
@@ -152,6 +153,7 @@ public class ActionLinkTag extends ActionTag {
             paramBeans = actionlink.getParamBeanList();
             label = actionlink.getLabel();
             trackMe = actionlink.getTrackme();
+            extUrl = actionlink.getExturl();
             action = actionlink.getAction();
         }
 

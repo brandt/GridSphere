@@ -117,7 +117,11 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         if (name != null) sb.append(" name=\"" + name + "\"");
         if (trackMe != null) {
             try {
-                sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=" + trackMe + "&url=" + URLEncoder.encode(action, "UTF-8") + "\"" + getFormattedCss() + "\">" + value);
+                if (extUrl != null) {
+                    sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=" + trackMe + "&" + TrackerService.REDIRECT_URL + "=" + URLEncoder.encode(extUrl, "UTF-8") + "\"" + getFormattedCss() + "\">" + value);
+                } else {
+                    sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=" + trackMe + "&" + TrackerService.REDIRECT_URL + "=" + URLEncoder.encode(action, "UTF-8") + "\"" + getFormattedCss() + "\">" + value);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

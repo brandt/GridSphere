@@ -22,6 +22,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     protected String label = null;
     protected String anchor = null;
     protected String trackMe = null;
+    protected String extUrl = null;
 
     /**
      * Constructs default action bean
@@ -67,13 +68,40 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
         return label;
     }
 
+    /**
+     * Sets a label to track this action and persist in the DB
+     *
+     * @param trackMe a label for this action
+     */
     public void setTrackme(String trackMe) {
         this.trackMe = trackMe;
     }
 
-
+    /**
+     * Returns the tracking label for this action
+     *
+     * @return the tracking label
+     */
     public String getTrackme() {
         return trackMe;
+    }
+
+    /**
+     * Returns the external url that this actionlink will redirect to
+     *
+     * @return the external url that this actionlink will redirect to
+     */
+    public String getExturl() {
+        return extUrl;
+    }
+
+    /**
+     * Sets the external url that this actionlink will redirect to
+     *
+     * @param extUrl the external url that this actionlink will redirect to
+     */
+    public void setExturl(String extUrl) {
+        this.extUrl = extUrl;
     }
 
     /**
