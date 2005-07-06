@@ -32,7 +32,7 @@ Invoke "ant help"
     <property name="deprecation" value="false"/>
 
     <!-- Version properties -->
-    <property name="version" value="2.0.3"/>
+    <property name="version" value="2.0.4"/>
     <property name="release" value="b1"/>
     <property name="version.release" value="${version} ${release}"/>
     <property name="gridsphere.project" value="gridsphere"/>
@@ -197,14 +197,15 @@ Invoke "ant help"
         </tar>
         <gzip src="${gridsphere.project}-${version}-src.tar" zipfile="${gridsphere.project}-${version}-src.tgz"/>
         <delete file="${gridsphere.project}-${version}-src.tar"/>
-
-        <zip destfile="${gridsphere.project}-${version}-src.zip" basedir="../gridsphere-${version}">
-            <exclude name="**/CVS"/>
-            <exclude name="*.ipr"/>
-            <exclude name="*.iws"/>
-            <exclude name="projects"/>
-            <exclude name="${gridsphere.project}-${version}-src.zip"/>
-            <exclude name="${gridsphere.project}-${version}-src.tgz"/>
+	<zip destfile="${gridsphere.project}-${version}-src.zip">
+            <zipfileset dir="." prefix="${gridsphere.project}-${version}">
+                <exclude name="**/CVS"/>
+                <exclude name="*.ipr"/>
+                <exclude name="*.iws"/>
+                <exclude name="projects"/>
+                <exclude name="${gridsphere.project}-${version}-src.zip"/>
+                <exclude name="${gridsphere.project}-${version}-src.tgz"/>
+            </zipfileset>
         </zip>
     </target>
 
