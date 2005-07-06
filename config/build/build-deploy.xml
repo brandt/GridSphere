@@ -143,7 +143,7 @@ Build include file for the GridSphere Portal source code, see build.xml
                     </available>
                     <then>
                         <echo message="Detected Tomcat 5.5"/>
-                        <copy file="${env.ANT_HOME}/lib/ant.jar" tofile="${appserver.home}/shared/lib"/>
+                        <copy file="${env.ANT_HOME}/lib/ant.jar" tofile="${appserver.home}/shared/lib/ant.jar"/>
                     </then>
                     <else>
                         <echo message="Detected Tomcat 5"/>

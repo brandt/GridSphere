@@ -14,8 +14,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import javax.servlet.ServletContext;
 import java.io.*;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  *
@@ -31,6 +30,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private final static int CMD_UPDATE = 5;
     private final static int CMD_CREATE = 6;
     private final static int CMD_SAVEORUPDATE = 7;
+    private Session session = null;
 
     static Properties prop = new Properties();
 
@@ -122,13 +122,18 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             cfg.setProperties(hibernateProperties);
             File mappingdir = new File(mappingPath);
             String[] children = mappingdir.list();
+
             if (children == null) {
                 // Either dir does not exist or is not a directory
             } else {
-                for (int i = 0; i < children.length; i++) {
-                    // Get filename of file or directory
-                    String filename = children[i];
+                // Create list from children array
+                List filenameList = Arrays.asList(children);
+                // Ensure that this list is sorted alphabetically
+                Collections.sort(filenameList);
+                for (Iterator filenames = filenameList.iterator(); filenames.hasNext();) {
+                    String filename = (String) filenames.next();
                     if (filename.endsWith(".hbm.xml")) {
+                        // Get filename of file or directory
                         log.debug("add hbm file :" + mappingPath + File.separator + filename);
                         cfg.addFile(mappingPath + File.separator + filename);
                     }
@@ -152,7 +157,10 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public org.gridlab.gridsphere.core.persistence.Session getSession() throws PersistenceManagerException {
         try {
-            return new SessionImpl(factory.openSession());
+            if (session == null) {
+                session = factory.openSession();
+            }
+            return new SessionImpl(session);
         } catch (Exception e) {
             log.error("Could not open session", e);
             throw new PersistenceManagerException(e);
@@ -227,13 +235,15 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
 
     private Object doTransaction(Object object, String query, int command) throws Exception {
-        Session session = null;
+//        Session session = null;
         Transaction tx = null;
         Object result = null;
         Query q = null;
 
         try {
-            session = factory.openSession();
+            if (session == null) {
+                session = factory.openSession();
+            }
             tx = null;
             tx = session.beginTransaction();
             switch (command) {
@@ -270,13 +280,15 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             e.printStackTrace();
             throw e;
         } finally {
-            session.close();
+//            session.close();
         }
         return result;
     }
 
     public void destroy() throws PersistenceManagerException {
         try {
+            session.close();
+            session = null;
             factory.close();
         } catch (HibernateException e) {
             log.error("Could not close session factory", e);
