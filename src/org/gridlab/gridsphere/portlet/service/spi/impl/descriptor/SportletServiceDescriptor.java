@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.net.URL;
 
 /**
  * The <code>SportletServiceDescriptor</code> provides the portlet service
@@ -30,6 +31,11 @@ public class SportletServiceDescriptor {
 
     public SportletServiceDescriptor(String descriptorFile, String mappingFile) throws IOException, PersistenceManagerException {
         pmXML = PersistenceManagerFactory.createPersistenceManagerXml(descriptorFile, mappingFile);
+        services = (SportletServiceCollection) pmXML.load();
+    }
+
+    public SportletServiceDescriptor(String descriptorFile, URL mappingURL) throws IOException, PersistenceManagerException {
+        pmXML = PersistenceManagerFactory.createPersistenceManagerXml(descriptorFile, mappingURL);
         services = (SportletServiceCollection) pmXML.load();
     }
 

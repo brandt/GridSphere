@@ -21,6 +21,7 @@ import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.net.URL;
 
 /**
  * The PersistenceManagerXmlImpl provides easy access to marshal/unmarshal Java objects to XML files
@@ -31,6 +32,7 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
 
     private List mappingPaths = new ArrayList();
     private String descriptorPath = null;
+    private URL mappingURL = null;
 
     /**
      * PersistenceManagerXmlImpl default constructor
@@ -47,6 +49,17 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
     public PersistenceManagerXmlImpl(String descriptorPath, String mappingPath) {
         this.descriptorPath = descriptorPath;
         addMappingPath(mappingPath);
+    }
+
+    /**
+     * Creates an instance of PersistenceManagerXmlImpl from a descriptor and mapping URL
+     *
+     * @param descriptorPath the descriptor location
+     * @param mappingURL    the mapping location expressed as a URL
+     */
+    public PersistenceManagerXmlImpl(String descriptorPath, URL mappingURL) {
+        this.descriptorPath = descriptorPath;
+        this.mappingURL = mappingURL;
     }
 
     public void addMappingPath(String path) {
@@ -141,18 +154,18 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
         Object object = null;
         try {
             log.debug("Using getConnectionURL() " + descriptorPath);
-
             InputSource xmlSource = new InputSource(descriptorPath);
-
             Mapping mapping = new Mapping();
-
-            Iterator iterMappingPaths = mappingPaths.iterator();
-            while (iterMappingPaths.hasNext()) {
-                String mappingPath = (String)iterMappingPaths.next();
-                log.debug("Loading mapping path " + mappingPath);
-                mapping.loadMapping(mappingPath);
+            if (mappingURL != null) {
+                mapping.loadMapping(mappingURL);
+            } else {
+                Iterator iterMappingPaths = mappingPaths.iterator();
+                while (iterMappingPaths.hasNext()) {
+                    String mappingPath = (String)iterMappingPaths.next();
+                    log.debug("Loading mapping path " + mappingPath);
+                    mapping.loadMapping(mappingPath);
+                }
             }
-
             Unmarshaller unmarshal = new Unmarshaller(mapping);
             unmarshal.setValidation(true);
             unmarshal.setIgnoreExtraElements(true);

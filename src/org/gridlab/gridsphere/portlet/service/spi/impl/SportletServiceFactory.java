@@ -25,6 +25,7 @@ import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import javax.servlet.ServletContext;
 import java.lang.reflect.Constructor;
 import java.util.*;
+import java.net.URL;
 
 /**
  * The <code>SportletServiceFactory</code> provides a factory for the creation
@@ -60,7 +61,9 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
     private static Hashtable webappServices = new Hashtable();
 
-    public static String servicesMappingPath = null;
+    //public static String servicesMappingPath = null;
+
+    public static URL servicesMappingStream = null;
 
     //public WebApplicationContext springContext = null;
 
@@ -68,7 +71,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      * Private constructor. Use getDefault() instead.
      */
     private SportletServiceFactory() {
-
+        servicesMappingStream = this.getClass().getResource("/gridsphere/portlet-services-mapping.xml");
     }
 
     public static synchronized SportletServiceFactory getInstance() {
@@ -82,13 +85,10 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         // Reads in the service definitions from the xml file and stores them in allServices
         // organized according to service interface keys and service definition values
         String servicesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/GridSphereServices.xml");
-        servicesMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
+        //servicesMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
         addServices(GridSphereConfig.getServletContext(), servicesPath);
-
         // playing with Spring
         //springContext  = WebApplicationContextUtils.getRequiredWebApplicationContext(GridSphereConfig.getServletContext());
-
-
     }
 
     public void login(PortletRequest req) throws PortletException {
@@ -122,10 +122,10 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
     public synchronized void addServices(ServletContext ctx, String servicesPath) throws PortletServiceException {
         SportletServiceDescriptor descriptor = null;
         try {
-            descriptor = new SportletServiceDescriptor(servicesPath, servicesMappingPath);
+            descriptor = new SportletServiceDescriptor(servicesPath, servicesMappingStream);
         } catch (Exception e) {
-            log.error("error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
-            throw new PortletServiceException("error unmarshalling " + servicesPath + " using " + servicesMappingPath, e);
+            //log.error("error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
+            throw new PortletServiceException("error unmarshalling " + servicesPath, e);
         }
         SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
         List services = serviceCollection.getPortletServicesList();
@@ -163,10 +163,10 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
     public synchronized void addServices(String webappName, ServletContext ctx, String servicesPath, ClassLoader loader) throws PortletServiceException {
         SportletServiceDescriptor descriptor = null;
         try {
-            descriptor = new SportletServiceDescriptor(servicesPath, servicesMappingPath);
+            descriptor = new SportletServiceDescriptor(servicesPath, servicesMappingStream);
         } catch (Exception e) {
-            log.error("Error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
-            throw new PortletServiceException("Error unmarshalling " + servicesPath + " using " + servicesMappingPath, e);
+            log.error("Error unmarshalling " + servicesPath, e);
+            throw new PortletServiceException("Error unmarshalling " + servicesPath, e);
         }
         SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
         List services = serviceCollection.getPortletServicesList();

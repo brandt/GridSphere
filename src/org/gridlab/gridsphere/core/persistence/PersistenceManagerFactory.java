@@ -17,6 +17,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.lang.reflect.Constructor;
+import java.io.InputStream;
+import java.net.URL;
 
 public class PersistenceManagerFactory {
 
@@ -76,6 +78,17 @@ public class PersistenceManagerFactory {
      * @return an instance of PersistenceManagerXmlImpl
      */
     public static PersistenceManagerXml createPersistenceManagerXml(String descriptorURL, String mappingURL) {
+        return new PersistenceManagerXmlImpl(descriptorURL, mappingURL);
+    }
+
+    /**
+     * Returns an instance of a PersistenceManagerXML from a descriptor and mapping URL
+     *
+     * @param descriptorURL the descriptor location
+     * @param mappingURL    the mapping location
+     * @return an instance of PersistenceManagerXmlImpl
+     */
+    public static PersistenceManagerXml createPersistenceManagerXml(String descriptorURL, URL mappingURL) {
         return new PersistenceManagerXmlImpl(descriptorURL, mappingURL);
     }
 
