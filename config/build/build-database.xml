@@ -21,8 +21,7 @@ Build include file for the GridSphere Portal source code, see build.xml
             <classpath id="hib.classpth">
                 <pathelement location="config"/>
             </classpath>
-
-            </taskdef>
+        </taskdef>
         <dbtask
             configdir="${appserver.home}/webapps/gridsphere"
             action="CREATE"/>
@@ -36,7 +35,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         <replace file="${gridsphere.build}/webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties"
             token="@GRIDSPHERE_DB@"
             value="${cathome}/${gswebapp.dir}/WEB-INF/CustomPortal/database/gridsphere"/>
-        <copy overwrite="true" file="${gridsphere.build}/webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties"
+        <copy file="${gridsphere.build}/webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties"
             todir="${appserver.home}/webapps/gridsphere/WEB-INF/CustomPortal/database/"/>
     </target>
 

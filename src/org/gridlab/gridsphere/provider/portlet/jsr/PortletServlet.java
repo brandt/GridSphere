@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
@@ -59,6 +60,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.InputStream;
+import java.io.File;
 import java.util.*;
 
 public class PortletServlet extends HttpServlet
@@ -149,6 +151,12 @@ public class PortletServlet extends HttpServlet
     }
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        // security check
+        // make sure request comes only from gridsphere servlet same ip
+        System.err.println("remote Address: " + request.getRemoteAddr());
+
+
         registry = PortletRegistry.getInstance();
         // If no portlet ID exists, this may be a command to init or shutdown a portlet instance
 
@@ -554,7 +562,9 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         log.debug("contextDestroyed()");
         log.debug("contextName: " + ctx.getServletContextName());
         log.debug("context path: " + ctx.getRealPath(""));
-
+        SportletServiceFactory factory = SportletServiceFactory.getInstance();
+        log.info("Shutting down services");
+        factory.shutdownServices(webAppName);
     }
 
 
@@ -568,6 +578,18 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         ServletContext ctx = event.getServletContext();
         log.debug("contextName: " + ctx.getServletContextName());
         log.debug("context path: " + ctx.getRealPath(""));
+        SportletServiceFactory factory = SportletServiceFactory.getInstance();
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        String realPath = ctx.getRealPath("");
+        int l = realPath.lastIndexOf(File.separator);
+        webAppName = realPath.substring(l + 1);
+        String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");
+        try {
+            log.info("Loading services from " + descriptor);
+            factory.addServices(webAppName, ctx, descriptor, loader);
+        } catch (PortletServiceException e) {
+            log.error("Unable to load services!", e);
+        }
     }
 
     /**

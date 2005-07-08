@@ -87,6 +87,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         <jar jarfile="${build.lib}/portlet-api.jar" basedir="${build.classes}">
             <include name="org/gridlab/gridsphere/portlet/**"/>
             <exclude name="**/jsrimpl/**"/>
+            <exclude name="**/service/**"/>
             <include name="org/gridlab/gridsphere/event/**"/>
             <exclude name="**/*Test.class"/>
             <!--  <include name="gridsphere/log4j.properties"/>  -->
@@ -101,6 +102,18 @@ Build include file for the GridSphere Portal source code, see build.xml
         <jar jarfile="${build.lib}/portlet-jsr-api.jar" basedir="${build.classes}">
             <include name="javax/**"/>
             <include name="**/portlet/jsrimpl/**"/>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates the GridSphere service framework JAR library archive        -->
+    <!-- =================================================================== -->
+    <target name="gridsphere-service-jar" depends="compile" description="Creates GS portlet service framework JAR">
+        <echo>Creating GridSphere service framework JAR</echo>
+        <copy file="webapps/gridsphere/WEB-INF/mapping/portlet-services-mapping.xml" todir="${build.classes}/gridsphere/"/>
+        <jar jarfile="${build.lib}/gridsphere-service-framework.jar" basedir="${build.classes}">
+            <include name="gridsphere/portlet-services-mapping.xml"/>
+            <include name="**/portlet/service/**"/>
         </jar>
     </target>
 
@@ -144,7 +157,7 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="gridsphere-ui-tags-jar, gridsphere-provider-jar, portlet-api-jar, portlet-jar, coreportlets-jar, make-gridsphere-jar, gridsphere-jsp-jar" description="Creates all jars"/>
+    <target name="jar" depends="gridsphere-ui-tags-jar, gridsphere-provider-jar, portlet-api-jar, portlet-jar, gridsphere-service-jar, coreportlets-jar, make-gridsphere-jar, gridsphere-jsp-jar" description="Creates all jars"/>
 
 
     <!-- =================================================================== -->
