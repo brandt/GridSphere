@@ -32,7 +32,7 @@ Invoke "ant help"
     <property name="deprecation" value="false"/>
 
     <!-- Version properties -->
-    <property name="version" value="2.0.3"/>
+    <property name="version" value="2.0.4"/>
     <property name="release" value="RC1"/>
     <property name="version.release" value="${version} ${release}"/>
     <property name="gridsphere.project" value="gridsphere"/>
@@ -188,6 +188,7 @@ Invoke "ant help"
             classpathref="classpath"/>
         <deploytck builddir="${gridsphere.build}" wardir="webapps/tck" server="${appserver.home}"/>
     </target>
+
 
 
     <!-- =================================================================== -->
