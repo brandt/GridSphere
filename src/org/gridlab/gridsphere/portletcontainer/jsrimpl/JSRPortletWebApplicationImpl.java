@@ -69,7 +69,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         //rd = context.getNamedDispatcher(webApplicationName);
 
         // load services xml
-        loadServices(webApplicationName, context, loader);
+        //loadServices(webApplicationName, context, loader);
         
         // load portlet.xml
         loadJSRPortlets(context);
