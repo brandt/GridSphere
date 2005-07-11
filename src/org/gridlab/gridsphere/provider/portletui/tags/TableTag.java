@@ -4,18 +4,20 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.portlet.jsrimpl.PortletURLImpl;
 import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 
+import javax.portlet.PortletModeException;
+import javax.portlet.PortletURL;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.portlet.*;
 
 /**
  * A <code>TableTag</code> represents a table element and is defined by a <code>DefaultTableModel</code>
@@ -333,7 +335,7 @@ public class TableTag extends BaseComponentTag {
         if (isJSR()) {
             RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse");
             RenderRequest req = (RenderRequest) pageContext.getAttribute("renderRequest");
-            PortletURLImpl url = (PortletURLImpl)res.createRenderURL();
+            PortletURL url = res.createRenderURL();
             try {
                 url.setPortletMode(req.getPortletMode());
             } catch (PortletModeException e) {
