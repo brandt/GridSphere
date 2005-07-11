@@ -7,8 +7,9 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.jsrimpl.PortletURLImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+//import org.gridlab.gridsphere.portlet.jsrimpl.PortletURLImpl;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
 
@@ -34,7 +35,7 @@ public abstract class ActionTag extends BaseComponentTag {
     protected String key = null;
     protected boolean isSecure = false;
     protected PortletURI actionURI = null;
-    protected PortletURLImpl actionURL = null;
+    protected PortletURL actionURL = null;
     protected String windowState = null;
     protected String portletMode = null;
     protected DefaultPortletAction portletAction = null;
@@ -232,8 +233,8 @@ public abstract class ActionTag extends BaseComponentTag {
     protected String createJSRActionURI(PortletURL url) throws JspException {
         // Builds a URI containing the actin and associated params
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-        this.actionURL = (PortletURLImpl) url;
-        RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
+        this.actionURL = url;
+        //RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
         // action is a required attribute except for FormTag
         /*
         if (windowState == null) {
@@ -245,9 +246,9 @@ public abstract class ActionTag extends BaseComponentTag {
             System.err.println("portletMode " + portletMode);
         }
         */
-        if (label != null) {
+        if ((label != null)  && (actionURL instanceof PortletURLImpl)) {
             res.setProperty("label", label);
-            actionURL.setComponentID(label);
+            ((PortletURLImpl)actionURL).setComponentID(label);
         }
 
         if (windowState != null) {
@@ -274,12 +275,14 @@ public abstract class ActionTag extends BaseComponentTag {
         String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
 
         if (action != null) {
-            if (compId == null) {
-                actionURL.setAction(action);
-                portletAction = new DefaultPortletAction(action);
-            } else {
-                actionURL.setAction(compId + "%" + action);
-                portletAction = new DefaultPortletAction(compId + "%" + action);
+            if (actionURL instanceof PortletURLImpl) {
+                if (compId == null) {
+                    ((PortletURLImpl)actionURL).setAction(action);
+                    portletAction = new DefaultPortletAction(action);
+                } else {
+                    ((PortletURLImpl)actionURL).setAction(compId + "%" + action);
+                    portletAction = new DefaultPortletAction(compId + "%" + action);
+                }
             }
 
         } else {
