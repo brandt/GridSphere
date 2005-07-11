@@ -2,15 +2,14 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.portlet.jsrimpl.PortletURLImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionMenuBean;
 
+import javax.portlet.*;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
-import javax.portlet.*;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
@@ -163,12 +162,10 @@ public class ActionMenuTag extends ContainerTag {
         RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
         String windowState = req.getWindowState().toString();
         String portletMode = req.getPortletMode().toString();
-        PortletURL url = res.createRenderURL();
-        PortletURLImpl actionURL = (PortletURLImpl) url;
+        PortletURL actionURL = res.createRenderURL();
         if (windowState != null) {
             WindowState state = new WindowState(windowState);
             try {
-                //actionURL = res.createRenderURL();
                 System.err.println("set state to:" + state);
                 actionURL.setWindowState(state);
             } catch (WindowStateException e) {
@@ -178,7 +175,6 @@ public class ActionMenuTag extends ContainerTag {
         if (portletMode != null) {
             PortletMode mode = new PortletMode(portletMode);
             try {
-                //actionURL = res.createRenderURL();
                 actionURL.setPortletMode(mode);
                 System.err.println("set mode to:" + mode);
             } catch (PortletModeException e) {
