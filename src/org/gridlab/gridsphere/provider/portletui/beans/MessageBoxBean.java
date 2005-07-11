@@ -3,6 +3,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
         this.beanId = beanId;
     }
 
-    public MessageBoxBean(HttpServletRequest req, String beanId) {
+    public MessageBoxBean(Object req, String beanId) {
         super(NAME, req);
         this.beanId = beanId;
     }

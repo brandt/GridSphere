@@ -326,6 +326,12 @@ public class PortletServlet extends HttpServlet
                     request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
                     ActionRequestImpl actionRequest = new ActionRequestImpl(request, portalContext, portletContext, supports);
                     ActionResponse actionResponse = new ActionResponseImpl(request, response, portalContext);
+
+                    RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
+                    RenderResponse renderResponse = new RenderResponseImpl(request, response, portalContext);
+                    renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
+                    renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
+                    
                     //setGroupAndRole(actionRequest, actionResponse);
                     log.debug("in PortletServlet: action handling portlet " + pid);
                     try {
@@ -584,11 +590,16 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         int l = realPath.lastIndexOf(File.separator);
         webAppName = realPath.substring(l + 1);
         String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");
+        File f = new File(descriptor);
+        if (f.exists()) {
         try {
             log.info("Loading services from " + descriptor);
             factory.addServices(webAppName, ctx, descriptor, loader);
         } catch (PortletServiceException e) {
             log.error("Unable to load services!", e);
+        }
+        } else {
+            log.info("No PortletServices.xml found");
         }
     }
 

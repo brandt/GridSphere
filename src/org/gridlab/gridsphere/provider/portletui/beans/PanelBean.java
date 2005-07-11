@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 
 /**
  * A <code>PanelBean</code> provides a stylized table that is generally used as a container for
@@ -41,11 +42,17 @@ public class PanelBean extends BeanContainer implements TagBean {
      * @param req    the portlet request
      * @param beanId the bean identifier
      */
-    public PanelBean(HttpServletRequest req, String beanId) {
+    public PanelBean(Object req, String beanId) {
         this.cssClass = PANEL_STYLE;
         this.beanId = beanId;
-        this.request = req;
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
     }
+
 
     /**
      * Sets the panel (table) width

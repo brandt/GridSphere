@@ -8,6 +8,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
      *
      * @param vbName the visual bean type
      */
-    public SelectElementBean(String vbName, HttpServletRequest req) {
+    public SelectElementBean(String vbName, Object req) {
         super(vbName, req);
     }
 

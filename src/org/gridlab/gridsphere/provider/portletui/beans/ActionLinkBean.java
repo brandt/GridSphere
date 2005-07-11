@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 import java.net.URLEncoder;
 
 /**
@@ -22,8 +23,13 @@ public class ActionLinkBean extends ActionBean implements TagBean {
     public ActionLinkBean() {
     }
 
-    public ActionLinkBean(HttpServletRequest req) {
-        this.request = req;
+    public ActionLinkBean(Object req) {
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
     }
 
     /**
@@ -36,10 +42,16 @@ public class ActionLinkBean extends ActionBean implements TagBean {
     /**
      * Constructs an action link bean from a portlet request and supplied bean identifier
      */
-    public ActionLinkBean(HttpServletRequest req, String beanId) {
-        this.request = req;
+    public ActionLinkBean(Object req, String beanId) {
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
         this.beanId = beanId;
     }
+
 
     /**
      * Returns the style of the text: Available styles are

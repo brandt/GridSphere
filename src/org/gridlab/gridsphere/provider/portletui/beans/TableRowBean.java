@@ -6,6 +6,7 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 import java.util.Iterator;
 
 public class TableRowBean extends BeanContainer implements TagBean {
@@ -40,9 +41,14 @@ public class TableRowBean extends BeanContainer implements TagBean {
      * @param req    the portlet request
      * @param beanId the bean identifier
      */
-    public TableRowBean(HttpServletRequest req, String beanId) {
+    public TableRowBean(Object req, String beanId) {
         super();
-        this.request = req;
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
         this.beanId = beanId;
     }
 

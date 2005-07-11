@@ -15,11 +15,12 @@ import org.gridlab.gridsphere.provider.portletui.beans.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.portlet.PortletResponse;
+import javax.portlet.PortletRequest;
 import java.io.IOException;
-import java.io.File;
 import java.util.*;
 
-/*
+/**
  * The <code>FormEventImpl</code> provides methods for creating/retrieving visual beans
  * from the <code>PortletRequest</code>
  */
@@ -30,8 +31,11 @@ public abstract class BaseFormEventImpl {
 
     protected HttpServletRequest request;
     protected HttpServletResponse response;
+
+    protected PortletRequest portletRequest;
+    protected PortletResponse portletResponse;
+
     protected Map tagBeans = null;
-    //protected FileItem savedFileItem = null;
     protected List fileItems = null;
 
     protected BaseFormEventImpl() {
@@ -39,9 +43,13 @@ public abstract class BaseFormEventImpl {
     }
 
     public BaseFormEventImpl(HttpServletRequest request, HttpServletResponse response) {
-        //log.debug("BaseFormEventImpl()");
         this.request = request;
         this.response = response;
+    }
+
+    public BaseFormEventImpl(PortletRequest request, PortletResponse response) {
+        this.portletRequest = request;
+        this.portletResponse = response;
     }
 
     /**
@@ -51,6 +59,12 @@ public abstract class BaseFormEventImpl {
      */
     public Map getTagBeans() {
         return tagBeans;
+    }
+
+    public Object getRequest() {
+        if (request != null) return request;
+        if (portletRequest != null) return portletRequest;
+        return null;
     }
 
     /**
@@ -64,7 +78,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ActionLinkBean) tagBeans.get(beanKey);
         }
-        ActionLinkBean al = new ActionLinkBean(request, beanId);
+        ActionLinkBean al = new ActionLinkBean(getRequest(), beanId);
         tagBeans.put(beanKey, al);
         return al;
     }
@@ -80,7 +94,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ActionParamBean) tagBeans.get(beanKey);
         }
-        ActionParamBean ap = new ActionParamBean(request, beanId);
+        ActionParamBean ap = new ActionParamBean(getRequest(), beanId);
         tagBeans.put(beanKey, ap);
         return ap;
     }
@@ -96,7 +110,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ActionSubmitBean) tagBeans.get(beanKey);
         }
-        ActionSubmitBean as = new ActionSubmitBean(request, beanId);
+        ActionSubmitBean as = new ActionSubmitBean(getRequest(), beanId);
         tagBeans.put(beanKey, as);
         return as;
     }
@@ -112,7 +126,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (CheckBoxBean) tagBeans.get(beanKey);
         }
-        CheckBoxBean cb = new CheckBoxBean(request, beanId);
+        CheckBoxBean cb = new CheckBoxBean(getRequest(), beanId);
         tagBeans.put(beanKey, cb);
         return cb;
     }
@@ -128,7 +142,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (RadioButtonBean) tagBeans.get(beanKey);
         }
-        RadioButtonBean rb = new RadioButtonBean(request, beanId);
+        RadioButtonBean rb = new RadioButtonBean(getRequest(), beanId);
         tagBeans.put(beanKey, rb);
         return rb;
     }
@@ -144,7 +158,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (PanelBean) tagBeans.get(beanKey);
         }
-        PanelBean pb = new PanelBean(request, beanId);
+        PanelBean pb = new PanelBean(getRequest(), beanId);
         tagBeans.put(beanKey, pb);
         return pb;
     }
@@ -160,7 +174,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (TextFieldBean) tagBeans.get(beanKey);
         }
-        TextFieldBean tf = new TextFieldBean(request, beanId);
+        TextFieldBean tf = new TextFieldBean(getRequest(), beanId);
         tagBeans.put(beanKey, tf);
         return tf;
     }
@@ -176,7 +190,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (HiddenFieldBean) tagBeans.get(beanKey);
         }
-        HiddenFieldBean hf = new HiddenFieldBean(request, beanId);
+        HiddenFieldBean hf = new HiddenFieldBean(getRequest(), beanId);
         tagBeans.put(beanKey, hf);
         return hf;
     }
@@ -192,7 +206,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (FileInputBean) tagBeans.get(beanKey);
         }
-        FileInputBean fi = new FileInputBean(request, beanId);
+        FileInputBean fi = new FileInputBean(getRequest(), beanId);
         tagBeans.put(beanKey, fi);
         return fi;
     }
@@ -208,7 +222,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (PasswordBean) tagBeans.get(beanKey);
         }
-        PasswordBean pb = new PasswordBean(request, beanId);
+        PasswordBean pb = new PasswordBean(getRequest(), beanId);
         tagBeans.put(beanKey, pb);
         return pb;
     }
@@ -224,7 +238,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (TextAreaBean) tagBeans.get(beanKey);
         }
-        TextAreaBean ta = new TextAreaBean(request, beanId);
+        TextAreaBean ta = new TextAreaBean(getRequest(), beanId);
         tagBeans.put(beanKey, ta);
         return ta;
     }
@@ -240,7 +254,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (FrameBean) tagBeans.get(beanKey);
         }
-        FrameBean fb = new FrameBean(request, beanId);
+        FrameBean fb = new FrameBean(getRequest(), beanId);
         //System.err.println("Creating new frame bean" + beanId + " bean key= " + beanKey);
         tagBeans.put(beanKey, fb);
         return fb;
@@ -257,7 +271,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (TextBean) tagBeans.get(beanKey);
         }
-        TextBean tb = new TextBean(request, beanId);
+        TextBean tb = new TextBean(getRequest(), beanId);
         tagBeans.put(beanKey, tb);
         return tb;
     }
@@ -273,7 +287,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ImageBean) tagBeans.get(beanKey);
         }
-        ImageBean ib = new ImageBean(request, beanId);
+        ImageBean ib = new ImageBean(getRequest(), beanId);
         tagBeans.put(beanKey, ib);
         return ib;
 
@@ -290,7 +304,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (IncludeBean) tagBeans.get(beanKey);
         }
-        IncludeBean includeBean = new IncludeBean(request, beanId);
+        IncludeBean includeBean = new IncludeBean(getRequest(), beanId);
         tagBeans.put(beanKey, includeBean);
         return includeBean;
     }
@@ -307,7 +321,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ActionComponentBean) tagBeans.get(beanKey);
         }
-        ActionComponentBean bean = new ActionComponentBean(request, beanId);
+        ActionComponentBean bean = new ActionComponentBean(getRequest(), beanId);
         tagBeans.put(beanKey, bean);
         return bean;
     }
@@ -323,7 +337,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (TableBean) tagBeans.get(beanKey);
         }
-        TableBean tb = new TableBean(request, beanId);
+        TableBean tb = new TableBean(getRequest(), beanId);
         tagBeans.put(beanKey, tb);
         return tb;
     }
@@ -339,7 +353,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (TableRowBean) tagBeans.get(beanKey);
         }
-        TableRowBean tr = new TableRowBean(request, beanId);
+        TableRowBean tr = new TableRowBean(getRequest(), beanId);
         tagBeans.put(beanKey, tr);
         return tr;
     }
@@ -355,7 +369,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (TableCellBean) tagBeans.get(beanKey);
         }
-        TableCellBean tc = new TableCellBean(request, beanId);
+        TableCellBean tc = new TableCellBean(getRequest(), beanId);
         tagBeans.put(beanKey, tc);
         return tc;
     }
@@ -371,7 +385,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ListBoxBean) tagBeans.get(beanKey);
         }
-        ListBoxBean lb = new ListBoxBean(request, beanId);
+        ListBoxBean lb = new ListBoxBean(getRequest(), beanId);
         tagBeans.put(beanKey, lb);
         return lb;
     }
@@ -387,7 +401,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ListBoxItemBean) tagBeans.get(beanKey);
         }
-        ListBoxItemBean lb = new ListBoxItemBean(request, beanId);
+        ListBoxItemBean lb = new ListBoxItemBean(getRequest(), beanId);
         tagBeans.put(beanKey, lb);
         return lb;
     }
@@ -403,7 +417,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (MessageBoxBean) tagBeans.get(beanKey);
         }
-        MessageBoxBean messageBoxBean = new MessageBoxBean(request, beanId);
+        MessageBoxBean messageBoxBean = new MessageBoxBean(getRequest(), beanId);
         tagBeans.put(beanKey, messageBoxBean);
         return messageBoxBean;
     }
@@ -414,11 +428,24 @@ public abstract class BaseFormEventImpl {
     public void logRequestParameters() {
         StringBuffer sb = new StringBuffer();
         sb.append("\n\n show request params\n--------------------\n");
-        Enumeration e = request.getParameterNames();
+
+        Enumeration e = null;
+        if (request != null) {
+            e = request.getParameterNames();
+        }
+        if (portletRequest != null) {
+            e = portletRequest.getParameterNames();
+        }
         while (e.hasMoreElements()) {
             String name = (String) e.nextElement();
             sb.append("\t\tname :" + name);
-            String values[] = request.getParameterValues(name);
+            String values[] = null;
+            if (request!= null) {
+                values = request.getParameterValues(name);
+            }
+            if (portletRequest != null) {
+                values = portletRequest.getParameterValues(name);
+            }
             if (values.length == 1) {
                 String pval = values[0];
                 if (pval.length() == 0) {
@@ -442,7 +469,13 @@ public abstract class BaseFormEventImpl {
     public void logRequestAttributes() {
         StringBuffer sb = new StringBuffer();
         sb.append("\n\n show request attributes\n--------------------\n");
-        Enumeration e = request.getAttributeNames();
+        Enumeration e = null;
+        if (request != null) {
+            e = request.getAttributeNames();
+        }
+        if (portletRequest != null) {
+            e = portletRequest.getAttributeNames();
+        }
         while (e.hasMoreElements()) {
             String name = (String) e.nextElement();
             sb.append("name :" + name);
@@ -460,16 +493,28 @@ public abstract class BaseFormEventImpl {
      *
      * @param req the PortletRequest
      */
-    protected void createTagBeans(HttpServletRequest req) {
+    protected void createTagBeans(Object req) {
         //log.debug("in createTagBeans");
         if (tagBeans == null) tagBeans = new HashMap();
         Map paramsMap = new HashMap();
         // check for file upload
-        paramsMap = parseFileUpload(req);
-        Enumeration e = request.getParameterNames();
+        //paramsMap = parseFileUpload(req);
+        Enumeration e = null;
+        if (request != null) {
+            e = request.getParameterNames();
+        }
+        if (portletRequest != null) {
+            e = portletRequest.getParameterNames();
+        }
         while (e.hasMoreElements()) {
             String uiname = (String) e.nextElement();
-            String[] vals = request.getParameterValues(uiname);
+            String[] vals = null;
+            if (request != null) {
+                vals = request.getParameterValues(uiname);
+            }
+            if (portletRequest != null) {
+                vals = portletRequest.getParameterValues(uiname);
+            }
             paramsMap.put(uiname, vals);
         }
 
@@ -528,7 +573,7 @@ public abstract class BaseFormEventImpl {
 
             if (vb.equals(TextFieldBean.NAME)) {
                 //log.debug("Creating a textfieldbean bean with id:" + beanId);
-                TextFieldBean bean = new TextFieldBean(req, beanId);
+                TextFieldBean bean = new TextFieldBean(getRequest(), beanId);
                 bean.setValue(vals[0]);
                 //log.debug("setting new value" + vals[0]);
                 bean.setName(name);
@@ -654,7 +699,8 @@ public abstract class BaseFormEventImpl {
 
     }
 
-    protected Map parseFileUpload(HttpServletRequest req) {
+    /*
+    protected Map parseFileUpload(Object req) {
         Map parameters = new Hashtable();
         if (FileUpload.isMultipartContent(req)) {
             //log.debug("Multipart!");
@@ -685,6 +731,7 @@ public abstract class BaseFormEventImpl {
         }
         return parameters;
     }
+    */
 
     /**
      * Returns a bean key identifier using the component identifier
@@ -693,7 +740,13 @@ public abstract class BaseFormEventImpl {
      * @return the bean key identifier
      */
     protected String getBeanKey(String beanId) {
-        String compId = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
+        String compId = null;
+        if (request != null) {
+            compId = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
+        }
+        if (portletRequest != null) {
+            compId = (String) portletRequest.getAttribute(SportletProperties.COMPONENT_ID);
+        }
         String beanKey = beanId + "_" + compId;
         //log.debug("getBeanKey(" + beanId + ") = " + beanKey);
         return beanKey;
@@ -729,7 +782,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ActionMenuItemBean) tagBeans.get(beanKey);
         }
-        ActionMenuItemBean ami = new ActionMenuItemBean(request, beanId);
+        ActionMenuItemBean ami = new ActionMenuItemBean(getRequest(), beanId);
         tagBeans.put(beanKey, ami);
         return ami;
     }
@@ -739,7 +792,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (DataGridBean) tagBeans.get(beanKey);
         }
-        DataGridBean dgBean = new DataGridBean(request, beanId);
+        DataGridBean dgBean = new DataGridBean(getRequest(), beanId);
         tagBeans.put(beanKey, dgBean);
         return dgBean;
     }
@@ -749,7 +802,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ActionMenuBean) tagBeans.get(beanKey);
         }
-        ActionMenuBean am = new ActionMenuBean(request, beanId);
+        ActionMenuBean am = new ActionMenuBean(getRequest(), beanId);
         tagBeans.put(beanKey, am);
         return am;
     }

@@ -4,6 +4,7 @@ import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 import java.util.List;
 
 /*
@@ -32,9 +33,14 @@ public class DataGridBean extends BeanContainer implements TagBean {
         this.beanId = beanId;
     }
 
-    public DataGridBean(HttpServletRequest req, String beanId) {
+    public DataGridBean(Object req, String beanId) {
         super();
-        this.request = req;
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
         this.beanId = beanId;
     }
 

@@ -4,6 +4,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 
 /*
  * @author <a href="mailto:russell@aei.mpg.de">Michael Russell</a>
@@ -34,8 +35,13 @@ public class ActionComponentBean extends IncludeBean {
     /**
      * Constructs an include bean
      */
-    public ActionComponentBean(HttpServletRequest request, String beanId) {
-        this.request = request;
+    public ActionComponentBean(Object req, String beanId) {
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
         this.beanId = beanId;
     }
 

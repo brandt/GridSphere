@@ -4,6 +4,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspWriter;
+import javax.portlet.PortletRequest;
 
 /*
  * @author <a href="mailto:russell@aei.mpg.de">Michael Russell</a>
@@ -35,10 +36,16 @@ public class IncludeBean extends BaseBean implements TagBean {
     /**
      * Constructs an include bean
      */
-    public IncludeBean(HttpServletRequest request, String beanId) {
-        this.request = request;
+    public IncludeBean(Object req, String beanId) {
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
         this.beanId = beanId;
     }
+
 
     public ServletContext getServletContext() {
         return servletContext;

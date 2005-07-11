@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 
 /**
  * A <code>TableBean</code> provides a table element
@@ -53,9 +54,14 @@ public class TableBean extends BaseComponentBean implements TagBean {
         this.cssClass = cssStyle;
     }
 
-    public TableBean(HttpServletRequest req) {
+    public TableBean(Object req) {
         super();
-        this.request = req;
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
         this.locale = this.request.getLocale();
     }
 
@@ -66,11 +72,17 @@ public class TableBean extends BaseComponentBean implements TagBean {
      * @param req    the portlet request
      * @param beanId the bean identifier
      */
-    public TableBean(HttpServletRequest req, String beanId) {
+    public TableBean(Object req, String beanId) {
         super();
-        this.request = req;
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
         this.beanId = beanId;
     }
+
 
     /**
      * Sets the default table model for this table

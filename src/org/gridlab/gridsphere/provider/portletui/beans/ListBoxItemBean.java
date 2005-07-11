@@ -6,6 +6,7 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 
 /**
  * A <code>ListBoxItemBean</code> defines the elements contained within a <code>ListBoxBean</code>
@@ -37,7 +38,7 @@ public class ListBoxItemBean extends SelectElementBean {
      * @param req    the portlet request
      * @param beanId the bean identifier
      */
-    public ListBoxItemBean(HttpServletRequest req, String beanId) {
+    public ListBoxItemBean(Object req, String beanId) {
         super(NAME, req);
         this.beanId = beanId;
     }

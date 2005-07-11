@@ -6,6 +6,7 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 import java.util.Locale;
 
 /**
@@ -45,7 +46,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
      * @param vbName the supplied visual bean type identifier
      * @param request the HttpServletRequest
      */
-    public BaseComponentBean(String vbName, HttpServletRequest request) {
+    public BaseComponentBean(String vbName, Object request) {
         super(vbName, request);
     }
 

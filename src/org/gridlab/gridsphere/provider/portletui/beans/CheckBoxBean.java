@@ -6,6 +6,7 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 
 /**
  * A <code>CheckBoxBean</code> provides a check box element
@@ -41,7 +42,7 @@ public class CheckBoxBean extends SelectElementBean {
      * @param request the portlet request
      * @param beanId  the bean identifier
      */
-    public CheckBoxBean(HttpServletRequest request, String beanId) {
+    public CheckBoxBean(Object request, String beanId) {
         super(NAME, request);
         this.beanId = beanId;
         this.cssClass = CHECKBOX_STYLE;

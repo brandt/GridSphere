@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 
 /**
  * The <code>TextFieldBean</code> represents a text field element
@@ -49,12 +50,11 @@ public class TextFieldBean extends InputBean implements TagBean {
      * @param req    the portlet request
      * @param beanId the bean identifier
      */
-    public TextFieldBean(HttpServletRequest req, String beanId) {
+    public TextFieldBean(Object req, String beanId) {
         super(NAME, req);
         this.inputtype = "text";
         this.beanId = beanId;
     }
-
 
     public String toStartString() {
         return super.toStartString();

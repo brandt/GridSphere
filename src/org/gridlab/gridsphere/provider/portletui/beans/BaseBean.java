@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -19,10 +20,10 @@ import java.util.ResourceBundle;
  */
 public abstract class BaseBean implements TagBean {
 
-    private transient static PortletLog log = SportletLog.getInstance(BaseBean.class);
     protected String beanId = "";
     protected String vbName = "undefined";
     protected HttpServletRequest request = null;
+    protected PortletRequest portletRequest = null;
     protected Locale locale = null;
 
     /**
@@ -47,13 +48,21 @@ public abstract class BaseBean implements TagBean {
      * @param vbName a name identifying the type of visual bean
      * @param req the HttpServletRequest
      */
-    public BaseBean(String vbName, HttpServletRequest req) {
+    public BaseBean(String vbName, Object req) {
         this(vbName);
-        this.request = req;
-        if (request != null) {
-            Locale locale = (Locale) request.getSession(true).getAttribute(SportletProperties.LOCALE);
-            if (locale == null)
-                locale = request.getLocale();
+        if (req != null) {
+            if (req instanceof HttpServletRequest) {
+                this.request = (HttpServletRequest)req;
+                Locale locale = (Locale) request.getSession(true).getAttribute(SportletProperties.LOCALE);
+                if (locale == null)
+                    locale = request.getLocale();
+            }
+            if (req instanceof PortletRequest) {
+                this.portletRequest = (PortletRequest)req;
+                Locale locale = (Locale) portletRequest.getPortletSession(true).getAttribute(SportletProperties.LOCALE);
+                if (locale == null)
+                    locale = portletRequest.getLocale();
+            }
         }
         if (locale == null) locale = Locale.ENGLISH;
     }
@@ -84,18 +93,34 @@ public abstract class BaseBean implements TagBean {
         this.request = request;
     }
 
+    public void setPortletRequest(PortletRequest portletRequest) {
+        this.portletRequest = portletRequest;
+    }
+
+    public PortletRequest getPortletRequest() {
+        return portletRequest;
+    }
+
     public abstract String toStartString();
 
     public abstract String toEndString();
 
     public void store() {
         //System.err.println("storing bean " + getBeanKey());
+        if (portletRequest != null) portletRequest.setAttribute(getBeanKey(), this);
         if (request != null) request.setAttribute(getBeanKey(), this);
     }
 
     protected String getBeanKey() {
-        String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
-        String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+        String cid, compId;
+        if (portletRequest != null) {
+            cid = (String) portletRequest.getAttribute(SportletProperties.COMPONENT_ID);
+            compId = (String) portletRequest.getAttribute(SportletProperties.GP_COMPONENT_ID);
+        } else {
+            cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
+            compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+        }
+
         String beanKey = null;
         if (compId == null) {
             beanKey = beanId + "_" + cid;

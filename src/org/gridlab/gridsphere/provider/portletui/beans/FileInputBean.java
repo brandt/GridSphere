@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import org.apache.commons.fileupload.FileItem;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,19 +52,29 @@ public class FileInputBean extends InputBean implements TagBean {
      * @param request the portlet request
      * @param beanId  the bean identifier
      */
-    public FileInputBean(HttpServletRequest request, String beanId) {
+    public FileInputBean(Object req, String beanId) {
         super(NAME);
         this.cssClass = SUBMIT_STYLE;
         this.inputtype = "file";
-        this.request = request;
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
         this.beanId = beanId;
     }
 
-    public FileInputBean(HttpServletRequest request, String beanId, FileItem fileItem) {
+    public FileInputBean(Object req, String beanId, FileItem fileItem) {
         super(NAME);
         this.cssClass = SUBMIT_STYLE;
         this.inputtype = "file";
-        this.request = request;
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
         this.beanId = beanId;
         savedFileItem = fileItem;
     }

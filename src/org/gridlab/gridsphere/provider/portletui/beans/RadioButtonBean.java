@@ -6,6 +6,7 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 
 /**
  * A <code>RadioButtonBean</code> represents a radio button element
@@ -41,10 +42,15 @@ public class RadioButtonBean extends SelectElementBean {
      * @param request the portlet request
      * @param id      the bean identifier
      */
-    public RadioButtonBean(HttpServletRequest request, String id) {
+    public RadioButtonBean(Object req, String id) {
         super(NAME);
         this.cssClass = RADIO_STYLE;
-        this.request = request;
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
         this.beanId = id;
     }
 

@@ -8,6 +8,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -49,10 +50,15 @@ public class ListBoxBean extends BeanContainer implements TagBean {
      * @param request the portlet request
      * @param beanId  the bean identifier
      */
-    public ListBoxBean(HttpServletRequest request, String beanId) {
-        super(NAME, request);
+    public ListBoxBean(Object req, String beanId) {
+        super(NAME, req);
         this.cssClass = LISTBOX_STYLE;
-        this.request = request;
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
         this.beanId = beanId;
     }
 

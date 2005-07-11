@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.PortletRequest;
 
 /**
  * A <code>ImageBean</code> represents an image element
@@ -42,10 +43,15 @@ public class ImageBean extends BaseComponentBean implements TagBean {
      * @param req    the portlet request
      * @param beanId the bean identifier
      */
-    public ImageBean(HttpServletRequest req, String beanId) {
+    public ImageBean(Object req, String beanId) {
         super(NAME);
         this.beanId = beanId;
-        this.request = req;
+        if (req instanceof HttpServletRequest) {
+            this.request = (HttpServletRequest)req;
+        }
+        if (req instanceof PortletRequest) {
+            this.portletRequest = (PortletRequest)req;
+        }
     }
 
     /**
