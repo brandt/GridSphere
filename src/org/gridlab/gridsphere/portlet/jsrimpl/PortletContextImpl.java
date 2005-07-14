@@ -52,6 +52,10 @@ public class PortletContextImpl implements PortletContext {
         this.context = context;
     }
 
+    public ServletContext getServletContext() {
+        return context;
+    }
+
     /**
      * Returns the name and version of the portlet container in which the
      * portlet is running.
