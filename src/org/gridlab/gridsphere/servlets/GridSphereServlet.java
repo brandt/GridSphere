@@ -102,6 +102,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         //SportletLog.setConfigureURL(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties"));
         this.context = new SportletContext(config);
         factory = SportletServiceFactory.getInstance();
+        factory.init();
         layoutEngine = PortletLayoutEngine.getInstance();
         log.debug("in init of GridSphereServlet");
     }
@@ -171,8 +172,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
                 log.debug("Initializing portlets and services");
                 try {
-                    // initialize portlet service factory
-                    factory.init();
                     // initialize needed services
                     initializeServices();
                     // create a root user if none available
@@ -606,7 +605,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The servlet context event
      */
     public void contextInitialized(ServletContextEvent event) {
-        log.debug("contextInitialized()");
+        System.err.println("contextInitialized()");
         ServletContext ctx = event.getServletContext();
         GridSphereConfig.setServletContext(ctx);        
         log.debug("contextName: " + ctx.getServletContextName());
