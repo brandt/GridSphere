@@ -25,9 +25,8 @@ import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRPortletWebApplicationImpl;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 
@@ -62,6 +61,7 @@ import java.io.PrintWriter;
 import java.io.InputStream;
 import java.io.File;
 import java.util.*;
+import java.util.ResourceBundle;
 
 public class PortletServlet extends HttpServlet
         implements Servlet, ServletConfig, ServletContextListener,
@@ -85,6 +85,7 @@ public class PortletServlet extends HttpServlet
     private PortletPreferencesManager prefsManager = null;
 
     private Map userKeys = new HashMap();
+    private List securePortlets = new ArrayList();
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -98,6 +99,22 @@ public class PortletServlet extends HttpServlet
         portletclasses = new Hashtable();
         portletConfigHash = new Hashtable();
         portletWebApp = new JSRPortletWebApplicationImpl(ctx, Thread.currentThread().getContextClassLoader());
+
+
+
+     /*
+        Session s = (Session) threadSession.get();
+        // Open a new Session, if this thread has none yet
+        try {
+            if (s == null) {
+                s = sessionFactory.openSession();
+                threadSession.set(s);
+            }
+        } catch (HibernateException ex) {
+            throw new PersistenceManagerException(ex);
+        }
+       */
+
 
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
@@ -132,6 +149,25 @@ public class PortletServlet extends HttpServlet
             }
         }
 
+        SecurityConstraint[] secConstraints = portletWebApp.getSecurityConstraints();
+        if (secConstraints != null) {
+            for (int i = 0; i < secConstraints.length; i++) {
+                PortletCollection portlets = secConstraints[i].getPortletCollection();
+                PortletName[] names = portlets.getPortletName();
+                UserDataConstraint userConstraint = secConstraints[i].getUserDataConstraint();
+                TransportGuaranteeType guaranteeType = userConstraint.getTransportGuarantee();
+                if (guaranteeType.equals(TransportGuaranteeType.NONE)) {
+                    names = null;
+                }
+                if (names != null) {
+                    for (int j = 0; j < names.length; j++) {
+                        securePortlets.add(names[j].getContent());
+                    }
+                }
+            }
+        }
+
+
         // create portlet context
         portletContext = new PortletContextImpl(ctx);
 
@@ -155,6 +191,7 @@ public class PortletServlet extends HttpServlet
         // security check
         // make sure request comes only from gridsphere servlet same ip
         System.err.println("remote Address: " + request.getRemoteAddr());
+        //PersistenceManagerRdbms pm = PersistenceManagerFactory.createPersistenceManagerRdbms(webAppName);
 
 
         registry = PortletRegistry.getInstance();
@@ -209,7 +246,7 @@ public class PortletServlet extends HttpServlet
 
         // There must be a portlet ID to know which portlet to service
         String pid = (String) request.getAttribute(SportletProperties.PORTLETID);
-        String compId = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
+        String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
 
         if (pid == null) {
             // it may be in the request parameter
@@ -221,7 +258,7 @@ public class PortletServlet extends HttpServlet
             request.setAttribute(SportletProperties.PORTLETID, pid);
         }
 
-        log.debug("have a portlet id " + pid + " component id= " + compId);
+        log.debug("have a portlet id " + pid + " component id= " + cid);
 
         int idx = pid.indexOf("#");
         Portlet portlet = null;
@@ -302,6 +339,10 @@ public class PortletServlet extends HttpServlet
             return;
         }
 
+        if (securePortlets.contains(pid)) {
+            request.setAttribute(SportletProperties.SSL_REQUIRED, "true");    
+        }
+
         if (method.equals(SportletProperties.SERVICE)) {
             String action = (String) request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
             if (action != null) {
@@ -327,19 +368,16 @@ public class PortletServlet extends HttpServlet
                     ActionRequestImpl actionRequest = new ActionRequestImpl(request, portalContext, portletContext, supports);
                     ActionResponse actionResponse = new ActionResponseImpl(request, response, portalContext);
 
-                    RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
-                    RenderResponse renderResponse = new RenderResponseImpl(request, response, portalContext);
-                    renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
-                    renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
-                    
-                    //setGroupAndRole(actionRequest, actionResponse);
+                    // one-line hack used here for the struts portlet bridge to work
+                    request.setAttribute(SportletProperties.RENDER_REQUEST, "true");
+
                     log.debug("in PortletServlet: action handling portlet " + pid);
                     try {
                         portlet.processAction(actionRequest, actionResponse);
 
                         Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
 
-                        String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
+
                         actionRequest.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid, params);
                         log.debug("placing render params in attribute: key= " + SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
                         redirect(request, response, actionRequest, actionResponse, portalContext);

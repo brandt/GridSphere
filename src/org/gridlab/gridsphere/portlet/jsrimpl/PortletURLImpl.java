@@ -277,7 +277,7 @@ public class PortletURLImpl implements PortletURL {
      */
     public String toString() {
         StringBuffer s = new StringBuffer();
-        if (req.isSecure() || isSecure) {
+        if (req.isSecure() || isSecure || (req.getAttribute(SportletProperties.SSL_REQUIRED) != null)) {
             s.append("https://");
         } else {
             s.append("http://");

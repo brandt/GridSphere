@@ -223,5 +223,8 @@ public interface SportletProperties {
     public static final String RENDER_OUTPUT = "org.gridlab.gridsphere.layout.RENDER_OUTPUT.";
 
     public static final String FLOAT_STATE = "org.gridlab.gridsphere.portlet.FLOAT_STATE";
+
+    public static final String SSL_REQUIRED = "javax.portlet.SSL_REQUIRED";
+
 }
 
