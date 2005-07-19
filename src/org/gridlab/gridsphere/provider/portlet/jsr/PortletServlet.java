@@ -100,22 +100,6 @@ public class PortletServlet extends HttpServlet
         portletConfigHash = new Hashtable();
         portletWebApp = new JSRPortletWebApplicationImpl(ctx, Thread.currentThread().getContextClassLoader());
 
-
-
-     /*
-        Session s = (Session) threadSession.get();
-        // Open a new Session, if this thread has none yet
-        try {
-            if (s == null) {
-                s = sessionFactory.openSession();
-                threadSession.set(s);
-            }
-        } catch (HibernateException ex) {
-            throw new PersistenceManagerException(ex);
-        }
-       */
-
-
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
@@ -339,6 +323,7 @@ public class PortletServlet extends HttpServlet
             return;
         }
 
+        request.removeAttribute(SportletProperties.SSL_REQUIRED);
         if (securePortlets.contains(pid)) {
             request.setAttribute(SportletProperties.SSL_REQUIRED, "true");    
         }
