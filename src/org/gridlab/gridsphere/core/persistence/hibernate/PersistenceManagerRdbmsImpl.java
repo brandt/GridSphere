@@ -30,9 +30,12 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private final static int CMD_UPDATE = 5;
     private final static int CMD_CREATE = 6;
     private final static int CMD_SAVEORUPDATE = 7;
-    private Session session = null;
 
-    static Properties prop = new Properties();
+    private static Properties prop = new Properties();
+
+    private static final ThreadLocal threadSession = new ThreadLocal();
+    private static final ThreadLocal threadTransaction = new ThreadLocal();
+
 
     public PersistenceManagerRdbmsImpl() {
         ServletContext ctx = GridSphereConfig.getServletContext();
@@ -40,18 +43,14 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         String gsPropsPath = ctx.getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties");
         String mappingPath = ctx.getRealPath("/WEB-INF/persistence");
         File propsFile = new File(gsPropsPath);
-
         try {
             if (!propsFile.exists()) {
                 GridSphereConfig.copyFile(new File(origPropsPath), propsFile);
                 log.info("Copying hibernate properties from " + origPropsPath + " to " + gsPropsPath);
             }
-
             prop.load(ctx.getResourceAsStream("/WEB-INF/CustomPortal/database/hibernate.properties"));
             Configuration cfg = loadConfiguration(mappingPath, prop);
             factory = cfg.buildSessionFactory();
-
-
         } catch (IOException e) {
             log.error("Unable to copy file from " + origPropsPath + " to " + gsPropsPath);
         } catch (HibernateException e) {
@@ -78,7 +77,6 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             e.printStackTrace();
         }
         try {
-
             Configuration cfg = loadConfiguration(mappingPath, prop);
             factory = cfg.buildSessionFactory();
         } catch (HibernateException e) {
@@ -157,17 +155,24 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public org.gridlab.gridsphere.core.persistence.Session getSession() throws PersistenceManagerException {
         try {
-            if (session == null) {
-                session = factory.openSession();
+            org.gridlab.gridsphere.core.persistence.Session s = (org.gridlab.gridsphere.core.persistence.Session)threadSession.get();
+            if (s == null) {
+                Session session = factory.openSession();
+                org.gridlab.gridsphere.core.persistence.Session gsSession = new SessionImpl(session);
+                threadSession.set(gsSession);
             }
-            return new SessionImpl(session);
+            return (org.gridlab.gridsphere.core.persistence.Session)threadSession.get();
         } catch (Exception e) {
             log.error("Could not open session", e);
             throw new PersistenceManagerException(e);
         }
     }
 
-    
+    public void closeSession() throws PersistenceManagerException {
+        org.gridlab.gridsphere.core.persistence.Session s = (org.gridlab.gridsphere.core.persistence.Session) threadSession.get();
+        threadSession.set(null);
+        if (s != null && s.isOpen()) s.close();
+    }
 
     public void create(Object object) throws PersistenceManagerException {
         try {
@@ -233,17 +238,51 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         }
     }
 
+    public void beginTransaction() throws PersistenceManagerException {
+        org.gridlab.gridsphere.core.persistence.Transaction tx = (org.gridlab.gridsphere.core.persistence.Transaction) threadTransaction.get();
+        if (tx == null) {
+            tx = getSession().beginTransaction();
+            threadTransaction.set(tx);
+        }
+    }
+
+    public void commitTransaction() throws PersistenceManagerException {
+        org.gridlab.gridsphere.core.persistence.Transaction tx = (org.gridlab.gridsphere.core.persistence.Transaction) threadTransaction.get();
+        try {
+            if ( tx != null && !tx.wasCommitted()
+                    && !tx.wasRolledBack() )
+                tx.commit();
+            threadTransaction.set(null);
+        } catch (Exception ex) {
+            rollbackTransaction();
+            throw new PersistenceManagerException(ex);
+        }
+    }
+
+    public void rollbackTransaction() throws PersistenceManagerException {
+        org.gridlab.gridsphere.core.persistence.Transaction tx = (org.gridlab.gridsphere.core.persistence.Transaction) threadTransaction.get();
+        try {
+            threadTransaction.set(null);
+            if ( tx != null && !tx.wasCommitted()
+                    && !tx.wasRolledBack() ) {
+                tx.rollback();
+            }
+        } catch (Exception ex) {
+            throw new PersistenceManagerException(ex);
+        } finally {
+            closeSession();
+        }
+    }
 
     private Object doTransaction(Object object, String query, int command) throws Exception {
-//        Session session = null;
+        Session session = null;
         Transaction tx = null;
         Object result = null;
         Query q = null;
 
         try {
-            if (session == null) {
-                session = factory.openSession();
-            }
+            session = factory.openSession();
+            // Open a new Session, if this thread has none yet
             tx = null;
             tx = session.beginTransaction();
             switch (command) {
@@ -280,15 +319,14 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             e.printStackTrace();
             throw e;
         } finally {
-//            session.close();
+            session.close();
         }
         return result;
     }
 
     public void destroy() throws PersistenceManagerException {
         try {
-            session.close();
-            session = null;
+            closeSession();
             factory.close();
         } catch (HibernateException e) {
             log.error("Could not close session factory", e);

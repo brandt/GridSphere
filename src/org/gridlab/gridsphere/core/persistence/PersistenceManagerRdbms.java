@@ -19,6 +19,33 @@ public interface PersistenceManagerRdbms {
      */
     public Session getSession() throws PersistenceManagerException;
 
+    /**
+     * Closes a session
+     *
+     * @throws PersistenceManagerException
+     */
+    public void closeSession() throws PersistenceManagerException;
+
+    /**
+     * Begins a transaction
+     *
+     * @throws PersistenceManagerException
+     */
+    public void beginTransaction() throws PersistenceManagerException;
+
+    /**
+     * Commits a transaction
+     *
+     * @throws PersistenceManagerException
+     */
+    public void commitTransaction() throws PersistenceManagerException;
+
+    /**
+     * Rolls back a transaction
+     *
+     * @throws PersistenceManagerException
+     */
+    public void rollbackTransaction() throws PersistenceManagerException;
 
     /**
      * Creates the given object in the permanent storage.

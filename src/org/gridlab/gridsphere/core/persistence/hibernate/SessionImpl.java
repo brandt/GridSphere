@@ -9,22 +9,16 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import java.util.List;
 import java.util.Iterator;
 
-/**
- * Created by IntelliJ IDEA.
- * User: czhang
- * Date: Aug 26, 2004
- * Time: 5:51:20 PM
- * To change this template use Options | File Templates.
- */
 public class SessionImpl implements Session {
 
     private static PortletLog log = SportletLog.getInstance(SessionImpl.class);
 
     private net.sf.hibernate.Session hbSession = null;
 
-    SessionImpl(net.sf.hibernate.Session hbSession) {
+    public SessionImpl(net.sf.hibernate.Session hbSession) {
         this.hbSession = hbSession;
     }
+
     /**
 	 * Force the <tt>Session</tt> to flush. <tt>Transaction.commit()</tt> will calls
      * this method). <i>Flushing</i> is the process of synchronising the underlying
@@ -239,11 +233,12 @@ public class SessionImpl implements Session {
 	 *
 	 * @return a Transaction instance
 	 * @throws org.gridlab.gridsphere.core.persistence.PersistenceManagerException
-	 * @see org.gridlab.gridsphere.core.persistence.Transaction
-	 */
-	public Transaction beginTransaction() throws PersistenceManagerException {
+     * @see org.gridlab.gridsphere.core.persistence.Transaction
+     */
+    public Transaction beginTransaction() throws PersistenceManagerException {
         try {
-            return new TransactionImpl(this.hbSession.beginTransaction());
+            Transaction tx =  new TransactionImpl(this.hbSession.beginTransaction());
+            return tx;
         } catch (Exception e) {
             log.error("Unable to begin transaction in hibernate session", e);
             throw new PersistenceManagerException(e);
