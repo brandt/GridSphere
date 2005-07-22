@@ -92,6 +92,14 @@ public class PortletPage implements Serializable, Cloneable {
         return title;
     }
 
+    public boolean getUseDiv() {
+        return useDiv;
+    }
+
+    public void setUseDiv(boolean useDiv) {
+        this.useDiv = useDiv;
+    }
+
     public void setTheme(String theme) {
         this.theme = theme;
     }
