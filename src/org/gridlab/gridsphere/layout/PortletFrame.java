@@ -9,10 +9,10 @@ import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
 import org.gridlab.gridsphere.layout.event.PortletFrameListener;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.layout.event.impl.PortletFrameEventImpl;
-import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portlet.jsrimpl.RenderResponseImpl;
-import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -20,7 +20,6 @@ import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
-import javax.portlet.PortletMode;
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -203,7 +202,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         this.originalWidth = width;
 
         titleBar = new PortletTitleBar();
-
+        titleBar.setUseDiv(useDiv);
         // if title bar is not assigned a label and we have one then use it
         if ((!label.equals("")) && (titleBar.getLabel().equals(""))) titleBar.setLabel(label + "TB");
         titleBar.setPortletClass(portletClass);
@@ -214,6 +213,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         titleBar.addComponentListener(this);
         titleBar.setParentComponent(this);
         titleBar.setAccessControlService(aclService);
+        System.err.println("useDiv= " + useDiv);
 
         // invalidate cache
         req.setAttribute(CacheService.NO_CACHE, "true");
@@ -507,20 +507,23 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PrintWriter writer = new PrintWriter(storedWriter);
 
         ///// begin portlet frame
-        writer.println("<!-- PORTLET STARTS HERE -->");
-        //out.println("<div class=\"window-main\">");
-        writer.print("<table  ");
+        if (useDiv) {
+            writer.println("<!-- DIV PORTLET STARTS HERE -->");
 
-        if (getOuterPadding().equals("")) {
-            writer.print(" cellspacing=\"0\" class=\"window-main\"");
+            if (getStyle() != null )
+                writer.println("<div id=\"" + getStyle() + "\">");
+            else
+                writer.println("<div>  ");
         } else {
-            //out.print("border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"");        // this is the main table around one portlet
-            //out.print(" cellspacing=\""+getOuterPadding()+"\" style=\"padding:"+getOuterPadding()+"px\"  class=\"window-main\" ");        // this is the main table around one portlet
-            writer.print(" cellspacing=\"0\" style=\"margin:" + getOuterPadding() + "px\" class=\"window-main\" ");        // this is the main table around one portlet
-            //out.print("cellpadding=\""+getOuterPadding()+"\" class=\"window-main\" ");        // this is the main table around one portlet
+            writer.println("<!-- PORTLET STARTS HERE -->");
+            writer.print("<table  ");
+            if (getOuterPadding().equals("")) {
+                writer.print(" cellspacing=\"0\" class=\"window-main\"");
+            } else {
+                writer.print(" cellspacing=\"0\" style=\"margin:" + getOuterPadding() + "px\" class=\"window-main\" ");        // this is the main table around one portlet
+            }
+            writer.println(">");
         }
-
-        writer.println(">");
 
         String preframe = storedWriter.toString();
         StringBuffer postframe = new StringBuffer();
@@ -540,15 +543,17 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
 
         if (renderPortlet) {
-            if (!transparent) {
-                postframe.append(titleBar.getBufferedOutput(req));
-                postframe.append("<tr><td  ");      // now the portlet content begins
-                if (!getInnerPadding().equals("")) {
-                    writer.print("style=\"padding:" + getInnerPadding() + "px\"");
+            if (!useDiv) {
+                if (!transparent) {
+                    postframe.append(titleBar.getBufferedOutput(req));
+                    postframe.append("<tr><td  ");      // now the portlet content begins
+                    if (!getInnerPadding().equals("")) {
+                        writer.print("style=\"padding:" + getInnerPadding() + "px\"");
+                    }
+                    postframe.append(" class=\"window-content\"> ");
+                } else {
+                    postframe.append("<tr><td >");
                 }
-                postframe.append(" class=\"window-content\"> ");
-            } else {
-                postframe.append("<tr><td >");
             }
 
             // TODO try to cache portlet's rendering---
@@ -609,13 +614,23 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 }
             }
 
-            postframe.append("</td></tr>");
+            if (!useDiv) postframe.append("</td></tr>");
+
         } else {
+            if (!useDiv) {
             postframe.append("<tr><td class=\"window-content-minimize\">");      // now the portlet content begins
             postframe.append("</td></tr>");
+            }
         }
-        postframe.append("</table>");
-        postframe.append("<!--- PORTLET ENDS HERE -->");
+
+        if (useDiv) {
+            postframe.append("</DIV>\n");
+            postframe.append("<!--- DIV PORTLET ENDS HERE -->\n");
+        } else {
+            postframe.append("</table>");
+            postframe.append("<!--- PORTLET ENDS HERE -->");
+        }
+
 
         if (req.getAttribute(SportletProperties.RESPONSE_COMMITTED) != null) {
             renderPortlet = true;

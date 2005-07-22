@@ -65,6 +65,24 @@ public interface PortletComponent extends ComponentLifecycle {
     public String getDefaultWidth();
 
     /**
+     * Returns the layout mechanism
+     * true : use DIVs for the layout
+     * false : default : use TABLEs
+     *
+     * @return the boolean attribute
+     */
+    public boolean getUseDiv();
+
+    /**
+     * Sets the layout mechanism
+     * true : use DIVs for the layout
+     * false : default : use TABLEs
+     *
+     * @param useDiv use DIV tags if true
+     */
+    public void setUseDiv(boolean useDiv);
+
+    /**
      * When set to true the portlet component is visible and will be rendered
      *
      * @param isVisible if <code>true</code> portlet component is rendered,

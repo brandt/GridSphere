@@ -28,12 +28,9 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
     protected static final String PORTLET_ADD_ACTION = "gs_addPortlet";
     protected static final String PORTLET_NO_ACTION = "gs_none";
 
-    /**
-     * css Style of the table
-     */
-    protected String style = null;
-
     //protected StringBuffer table = null;
+
+    protected boolean isHeader = false;
 
     /**
      * Constructs an instance of PortletTableLayout
@@ -43,27 +40,6 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
 
     public List init(PortletRequest req, List list) {
         return super.init(req, list);
-    }
-
-    /**
-     * Returns the CSS style name for the grid-layout.
-     *
-     * @return css style name
-     */
-    public String getStyle() {
-        return style;
-    }
-
-    /**
-     * Sets the CSS style name for the grid-layout.
-     * This needs to be set if you want to have transparent portlets, if there is
-     * no background there can't be a real transparent portlet.
-     * Most likely one sets just the background in that one.
-     *
-     * @param style css style of the that layout
-     */
-    public void setStyle(String style) {
-        this.style = style;
     }
 
     private PortletComponent getMaximizedComponent(List components) {
@@ -246,29 +222,47 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
             }
 
             // starting of the gridtable
-            table.append("<table ");
-            if (this.style != null) {
-                table.append("class=\"" + this.style + "\" ");
+            if (isHeader) {
+                table.append("\n<!-- START OF DIV_GRID -->\n");
+                table.append("<DIV ");
+                if (this.style != null) {
+                    table.append("id=header\">\n");
+                } else {
+                    table.append(">\n");
+                }
+            } else {
+                table.append("<table ");
+                if (this.style != null) {
+                    table.append("class=\"" + this.style + "\" ");
+                }
+                table.append("border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tbody>");
             }
-            table.append("border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tbody>");
 
             for (int i = 0; i < scomponents.size(); i++) {
                 p = (PortletComponent) scomponents.get(i);
                 //out.println("<tr><td valign=\"top\" width=\"100%\">");
-                table.append("<tr><td valign=\"top\" width=\"" + p.getWidth() + "\">");
+                if (!isHeader) table.append("<tr><td valign=\"top\" width=\"" + p.getWidth() + "\">");
                 if (p.getVisible()) {
                     p.doRender(event);
-                    table.append(p.getBufferedOutput(event.getPortletRequest()));
+                    if (!isHeader) table.append(p.getBufferedOutput(event.getPortletRequest()));
                 }
-                table.append("</td> </tr>");
+                if (!isHeader) table.append("</td> </tr>");
             }
+
+
 
             /** setup bottom add portlet listbox */
             if ((canModify) && (!hasFrameMaximized)) {
                 renderUserSelects(event, table);
             }
 
-            table.append("</tbody></table>");
+
+            if (isHeader) {
+                table.append("</DIV>\n");
+                table.append("<!-- END OF DIV_GRID -->\n");
+            } else {
+                table.append("</tbody></table>");
+            }
             event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, table);
         }
     }

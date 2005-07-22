@@ -36,6 +36,11 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected List listeners = null;
     //protected StringBuffer bufferedOutput = new StringBuffer();
     protected boolean canModify = false;
+    protected boolean useDiv = false;
+    /**
+     * css Style of the table
+     */
+    protected String style = null;
 
 
     /**
@@ -143,6 +148,48 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public PortletRole getRequiredRole() {
         return requiredRole;
+    }
+
+    /**
+     * Returns the layout mechanism
+     * true : use DIVs for the layout
+     * false : default : use TABLEs
+     *
+     * @return the boolean attribute
+     */
+    public boolean getUseDiv() {
+        return useDiv;
+    }
+    /**
+     * Sets the layout mechanism
+     * true : use DIVs for the layout
+     * false : default : use TABLEs
+     *
+     * @param useDiv use DIV tags if true
+     */
+    public void setUseDiv(boolean useDiv) {
+        this.useDiv = useDiv;
+    }
+
+    /**
+     * Returns the CSS style name for the grid-layout.
+     *
+     * @return css style name
+     */
+    public String getStyle() {
+        return style;
+    }
+
+    /**
+     * Sets the CSS style name for the grid-layout.
+     * This needs to be set if you want to have transparent portlets, if there is
+     * no background there can't be a real transparent portlet.
+     * Most likely one sets just the background in that one.
+     *
+     * @param style css style of the that layout
+     */
+    public void setStyle(String style) {
+        this.style = style;
     }
 
     /**

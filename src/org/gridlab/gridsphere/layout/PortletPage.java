@@ -58,7 +58,8 @@ public class PortletPage implements Serializable, Cloneable {
     private Hashtable labelsHash = new Hashtable();
     private Hashtable portletHash = new Hashtable();
 
-
+    private boolean useDiv = false;
+                                                 
     /**
      * Constructs an instance of PortletPage
      */
@@ -218,16 +219,19 @@ public class PortletPage implements Serializable, Cloneable {
 
         if (headerContainer != null) {
             headerContainer.setTheme(theme);
+            headerContainer.setUseDiv(useDiv);
             list = headerContainer.init(req, list);
         }
 
         if (tabbedPane != null) {
             tabbedPane.setTheme(theme);
+            tabbedPane.setUseDiv(useDiv);
             list = tabbedPane.init(req, list);
         }
 
         if (footerContainer != null) {
             footerContainer.setTheme(theme);
+            footerContainer.setUseDiv(useDiv);
             list = footerContainer.init(req, list);
         }
 
@@ -362,6 +366,9 @@ public class PortletPage implements Serializable, Cloneable {
                         compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
                     }
                 } catch (NumberFormatException e) {
+                    System.err.println("unable to convert cid=" + cid);
+                    compIntId = -1;
+                } catch (ArrayIndexOutOfBoundsException e) {
                     System.err.println("unable to convert cid=" + cid);
                     compIntId = -1;
                 }
@@ -513,13 +520,17 @@ public class PortletPage implements Serializable, Cloneable {
         }
 
         writer.println("<head>");
-
-        writer.println("  <title>" + title + "</title>");
+        writer.println("<title>" + title + "</title>");
         writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
         writer.println("<meta name=\"keywords\" content=\"" + keywords + "\"/>");
         writer.println("<meta http-equiv=\"Pragma\" content=\"no-cache\"/>");
-        writer.println("  <link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + theme + "/css" +
+        if (useDiv) {
+        writer.println("<link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + theme + "/css" +
+                "/divtheme/css/default.css\" rel=\"stylesheet\"/>");
+    } else {
+            writer.println("<link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + theme + "/css" +
                 "/default.css\" rel=\"stylesheet\"/>");
+    }
         writer.println("<link rel=\"icon\" href=\"images/favicon.ico\" type=\"imge/x-icon\">");
         writer.println("<link rel=\"shortcut icon\" href=\"" + req.getContextPath() + "/images/favicon.ico\" type=\"image/x-icon\">");
         writer.println("<script language=\"JavaScript\" src=\"" + req.getContextPath() + "/javascript/gridsphere.js\"></script>");
@@ -562,6 +573,10 @@ public class PortletPage implements Serializable, Cloneable {
             if (tabbedPane != null) {
                 tabbedPane.doRender(event);
                 writer.println(tabbedPane.getBufferedOutput(req));
+                if (tabbedPane.getUseDiv()) {
+                    writer.println("<!-- END OF CONTENT CONTAINER -->");
+                    writer.println("</div>");
+                }
             }
             //.... the footer ..........
             if (footerContainer != null) {

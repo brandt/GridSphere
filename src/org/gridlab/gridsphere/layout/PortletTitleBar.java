@@ -839,31 +839,45 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
 
         if (isActive) {
-            writer.println("<tr><td class=\"window-title-active\">");
+            if (useDiv) {
+               writer.println("<div id=\"portlet-titlebar\">");
+            } else {
+                writer.println("<tr><td class=\"window-title-active\">");
+            }
         } else {
-            writer.println("<tr><td class=\"window-title-inactive\">");
+            if (useDiv) {
+               writer.println("<div id=\"portlet-titlebar-inactive\">");
+            } else {
+               writer.println("<tr><td class=\"window-title-inactive\">");
+            }
         }
         isActive = false;
-        writer.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>");
-
-        // Output portlet mode icons
-        if (modeLinks != null) {
-            Iterator modesIt = modeLinks.iterator();
-            writer.println("<td class=\"window-icon-left\">");
-            PortletModeLink mode;
-            while (modesIt.hasNext()) {
-                mode = (PortletModeLink) modesIt.next();
-                writer.println("<a href=\"" + mode.getHref() + "\"><img border=\"0\" src=\"themes" + File.separator + theme + File.separator + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
-            }
-            writer.println("</td>");
+        if (useDiv) {
+            writer.println("<div id=\"portlet-titlebar-text\">");
+        } else {
+            writer.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>");
         }
 
-        // Invoke doTitle of portlet whose action was perfomed
-        //String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
-        writer.println("<td class=\"window-title-name\">");
+        if (!useDiv) {
+            // Output portlet mode icons
+            if (modeLinks != null) {
+                Iterator modesIt = modeLinks.iterator();
+                writer.println("<td class=\"window-icon-left\">");
+                PortletModeLink mode;
+                while (modesIt.hasNext()) {
+                    mode = (PortletModeLink) modesIt.next();
+                    writer.println("<a href=\"" + mode.getHref() + "\"><img border=\"0\" src=\"themes" + File.separator + theme + File.separator + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
+                }
+                writer.println("</td>");
+            }
+
+            // Invoke doTitle of portlet whose action was perfomed
+            //String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
+            writer.println("<td class=\"window-title-name\">");
+        }
 
         //prebufferedTitle = storedWriter.getBuffer();
-         req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre", storedWriter.getBuffer().toString());
+        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre", storedWriter.getBuffer().toString());
         storedWriter = new StringWriter();
         writer = new PrintWriter(storedWriter);
         wrappedResponse = new StoredPortletResponseImpl(res, writer);
@@ -886,21 +900,39 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         storedWriter = new StringWriter();
         writer = new PrintWriter(storedWriter);
 
-        writer.println("</td>");
+        if (useDiv) {
+            writer.println("</div>");
+        } else {
+            writer.println("</td>");
+        }
 
         // Output window state icons
         if (windowLinks != null) {
             Iterator windowsIt = windowLinks.iterator();
             PortletStateLink state;
-            writer.println("<td class=\"window-icon-right\">");
+            if (useDiv) {
+                writer.println("<DIV id=\"portlet-titlebar-icon\">");
+            } else {
+                writer.println("<td class=\"window-icon-right\">");
+            }
             while (windowsIt.hasNext()) {
                 state = (PortletStateLink) windowsIt.next();
                 writer.println("<a href=\"" + state.getHref() + "\"><img border=\"0\" src=\"themes/" + theme + File.separator + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\"/></a>");
             }
-            writer.println("</td>");
+            if (useDiv) {
+                writer.println("</DIV>");
+            } else {
+                writer.println("</td>");
+            }
         }
-        writer.println("</tr></table>");
-        writer.println("</td></tr>");
+        if (useDiv) {
+            writer.println("<div class=\"spacer\"></div>"); // SPACER div for IE
+            writer.println("</DIV>");
+            writer.println("<!--DIV END OF PORTLET TITLEBAR -->");
+        } else {
+            writer.println("</tr></table>");
+            writer.println("</td></tr>");
+        }
 
         //postbufferedTitle = storedWriter.getBuffer();
         req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post", storedWriter.getBuffer().toString());
