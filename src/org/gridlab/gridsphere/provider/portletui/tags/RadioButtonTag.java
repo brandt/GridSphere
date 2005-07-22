@@ -45,7 +45,7 @@ public class RadioButtonTag extends BaseComponentTag {
         if (!beanId.equals("")) {
             radiobutton = (RadioButtonBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (radiobutton == null) {
-                radiobutton = new RadioButtonBean((HttpServletRequest) pageContext.getRequest(), beanId);
+                radiobutton = new RadioButtonBean();
                 this.setBaseComponentBean(radiobutton);
             } else {
                 //this.updateBaseComponentBean(radiobutton);
