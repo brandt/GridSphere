@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpServletRequest;
@@ -106,9 +104,13 @@ public abstract class BaseBean implements TagBean {
     public abstract String toEndString();
 
     public void store() {
-        //System.err.println("storing bean " + getBeanKey());
-        if (portletRequest != null) portletRequest.setAttribute(getBeanKey(), this);
-        if (request != null) request.setAttribute(getBeanKey(), this);
+        // if non-GS container stick tag beans in session
+        if (portletRequest != null) {
+            portletRequest.getPortletSession(true).setAttribute(getBeanKey(), this);
+        }
+        if (request != null) {
+            request.setAttribute(getBeanKey(), this);
+        }
     }
 
     protected String getBeanKey() {
@@ -120,7 +122,6 @@ public abstract class BaseBean implements TagBean {
             cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
             compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
         }
-
         String beanKey = null;
         if (compId == null) {
             beanKey = beanId + "_" + cid;

@@ -5,9 +5,12 @@
  */
 package org.gridlab.gridsphere.provider.event.impl;
 
-import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.servlet.ServletRequestContext;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.portlet.PortletFileUpload;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
@@ -17,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletRequest;
+import javax.portlet.ActionRequest;
 import java.io.IOException;
 import java.util.*;
 
@@ -24,7 +28,6 @@ import java.util.*;
  * The <code>FormEventImpl</code> provides methods for creating/retrieving visual beans
  * from the <code>PortletRequest</code>
  */
-
 public abstract class BaseFormEventImpl {
 
     protected transient static PortletLog log = SportletLog.getInstance(BaseFormEventImpl.class);
@@ -498,7 +501,7 @@ public abstract class BaseFormEventImpl {
         if (tagBeans == null) tagBeans = new HashMap();
         Map paramsMap = new HashMap();
         // check for file upload
-        //paramsMap = parseFileUpload(req);
+        paramsMap = parseFileUpload(req);
         Enumeration e = null;
         if (request != null) {
             e = request.getParameterNames();
@@ -572,7 +575,7 @@ public abstract class BaseFormEventImpl {
             //log.debug("Adding bean " + beanId + " with bean key " + beanKey);
 
             if (vb.equals(TextFieldBean.NAME)) {
-                //log.debug("Creating a textfieldbean bean with id:" + beanId);
+                log.debug("Creating a textfieldbean bean with id:" + beanId);
                 TextFieldBean bean = new TextFieldBean(getRequest(), beanId);
                 bean.setValue(vals[0]);
                 //log.debug("setting new value" + vals[0]);
@@ -699,39 +702,48 @@ public abstract class BaseFormEventImpl {
 
     }
 
-    /*
     protected Map parseFileUpload(Object req) {
         Map parameters = new Hashtable();
-        if (FileUpload.isMultipartContent(req)) {
-            //log.debug("Multipart!");
-            DiskFileUpload upload = new DiskFileUpload();
-            // Set upload parameters
-            upload.setSizeMax(FileInputBean.MAX_UPLOAD_SIZE);
-            String tmpDir = System.getProperty("java.io.tmpdir");
-            upload.setRepositoryPath(tmpDir);
-            try {
-                fileItems = upload.parseRequest(req);
-            } catch (Exception e) {
-                log.error("Error Parsing multi Part form.Error in workaround!!!", e);
-            }
-
-            if (fileItems != null) {
-                for (int i = 0; i < fileItems.size(); i++) {
-                    FileItem item = (FileItem) fileItems.get(i);
-                    String[] tmpstr = new String[1];
-                    if (item.isFormField()) {
-                        tmpstr[0] = item.getString();
-                    } else {
-                        tmpstr[0] = "fileinput";
-                    }
-                    //log.debug("Name: " + item.getFieldName() + " Value: " + tmpstr[0]);
-                    parameters.put(item.getFieldName(), tmpstr);
+        DiskFileItemFactory df = new DiskFileItemFactory();
+        df.setSizeThreshold(FileInputBean.MAX_UPLOAD_SIZE);
+        if (req instanceof HttpServletRequest) {
+            HttpServletRequest hReq = (HttpServletRequest)req;
+            ServletRequestContext ctx = new ServletRequestContext(hReq);
+            if (FileUpload.isMultipartContent(ctx)) {
+                ServletFileUpload sfupload = new ServletFileUpload(df);
+                try {
+                    fileItems = sfupload.parseRequest(hReq);
+                } catch (Exception e) {
+                    log.error("Error Parsing multi Part form.Error in workaround!!!", e);
                 }
+            }
+        }
+        if (req instanceof ActionRequest) {
+            ActionRequest areq = (ActionRequest)req;
+            if (PortletFileUpload.isMultipartContent(areq)) {
+                PortletFileUpload pfupload = new PortletFileUpload(df);
+                try {
+                    fileItems = pfupload.parseRequest(areq);
+                } catch (Exception e) {
+                    log.error("Error Parsing multi Part form.Error in workaround!!!", e);
+                }
+            }
+        }
+        if (fileItems != null) {
+            for (int i = 0; i < fileItems.size(); i++) {
+                FileItem item = (FileItem) fileItems.get(i);
+                String[] tmpstr = new String[1];
+                if (item.isFormField()) {
+                    tmpstr[0] = item.getString();
+                } else {
+                    tmpstr[0] = "fileinput";
+                }
+                //log.debug("Name: " + item.getFieldName() + " Value: " + tmpstr[0]);
+                parameters.put(item.getFieldName(), tmpstr);
             }
         }
         return parameters;
     }
-    */
 
     /**
      * Returns a bean key identifier using the component identifier
@@ -745,6 +757,7 @@ public abstract class BaseFormEventImpl {
             compId = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
         }
         if (portletRequest != null) {
+            //JN compId = (String) portletRequest.getAttribute(SportletProperties.COMPONENT_ID);
             compId = (String) portletRequest.getAttribute(SportletProperties.COMPONENT_ID);
         }
         String beanKey = beanId + "_" + compId;

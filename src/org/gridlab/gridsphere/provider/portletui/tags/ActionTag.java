@@ -22,6 +22,7 @@ import javax.servlet.jsp.tagext.TagExtraInfo;
 import javax.servlet.jsp.tagext.VariableInfo;
 import java.util.Iterator;
 import java.util.List;
+import java.net.URLEncoder;
 
 /**
  * The abstract <code>ActionTag</code> is used by other Action tags to contain <code>DefaultPortletAction</code>s
@@ -271,8 +272,7 @@ public abstract class ActionTag extends BaseComponentTag {
             }
         }
 
-        ServletRequest request = pageContext.getRequest();
-        String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+        String compId = (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
 
         if (action != null) {
             if (actionURL instanceof PortletURLImpl) {
@@ -281,6 +281,15 @@ public abstract class ActionTag extends BaseComponentTag {
                     portletAction = new DefaultPortletAction(action);
                 } else {
                     ((PortletURLImpl)actionURL).setAction(compId + "%" + action);
+                    portletAction = new DefaultPortletAction(compId + "%" + action);
+                }
+            } else {
+                // this is code for non-GS containers
+                if (compId == null) {
+                    actionURL.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, action);
+                    portletAction = new DefaultPortletAction(action);
+                } else {
+                    actionURL.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, compId + "%" + action);
                     portletAction = new DefaultPortletAction(compId + "%" + action);
                 }
             }
@@ -342,9 +351,7 @@ public abstract class ActionTag extends BaseComponentTag {
             actionURI = res.createURI(isSecure);
         }
         if (action != null) {
-
-            ServletRequest request = pageContext.getRequest();
-            String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+            String compId = (String) pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
             if (compId == null) {
                 portletAction = new DefaultPortletAction(action);
             } else {

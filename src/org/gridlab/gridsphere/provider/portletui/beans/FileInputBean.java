@@ -24,6 +24,7 @@ public class FileInputBean extends InputBean implements TagBean {
     public static final String NAME = "fi";
 
     private FileItem savedFileItem = null;
+    private int maxUploadSize = MAX_UPLOAD_SIZE;
 
     /**
      * Constructs a default file input bean
@@ -85,6 +86,14 @@ public class FileInputBean extends InputBean implements TagBean {
 
     public void setFileItem(FileItem item) {
         savedFileItem = item;
+    }
+
+    public int getMaxUploadSize() {
+        return maxUploadSize;
+    }
+
+    public void setMaxUploadSize(int maxUploadSize) {
+        this.maxUploadSize = maxUploadSize;
     }
 
     /**
@@ -155,5 +164,9 @@ public class FileInputBean extends InputBean implements TagBean {
      */
     public InputStream getInputStream() throws IOException {
         return (savedFileItem != null) ? savedFileItem.getInputStream() : null;
+    }
+
+    public String toEndString() {
+        return "<input type=\"hidden\" name=\"maxfilesize\" value=\"" + maxUploadSize + "\"/>";
     }
 }

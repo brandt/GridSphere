@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.ActionComponentBean;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.http.HttpServletResponse;
 
 /*
@@ -38,18 +39,18 @@ public class ActionComponentTag extends IncludeTag {
         ServletRequest request = pageContext.getRequest();
         ServletResponse response = pageContext.getResponse();
 
-        String baseCompId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+        String baseCompId = (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
 
         if (includeBean != null) {
             //log.debug("Using active component id ");
             activeCompId = ((ActionComponentBean) includeBean).getActiveComponentId();
         } else {
             //log.debug("Using request component id ");
-            activeCompId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+            activeCompId = (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
         }
 
         //log.debug("Changing component id from " + baseCompId + " to " + activeCompId);
-        request.setAttribute(SportletProperties.GP_COMPONENT_ID, activeCompId);
+        pageContext.setAttribute(SportletProperties.GP_COMPONENT_ID, activeCompId, PageContext.REQUEST_SCOPE);
 
         // Include message box tag automagically
         MessageBoxTag messageBoxTag = new MessageBoxTag();
@@ -73,6 +74,6 @@ public class ActionComponentTag extends IncludeTag {
             log.error("Unable to include page ", e);
         }
         //log.debug("Resetting component id to " + baseCompId);
-        request.setAttribute(SportletProperties.GP_COMPONENT_ID, baseCompId);
+        pageContext.setAttribute(SportletProperties.GP_COMPONENT_ID, baseCompId, PageContext.REQUEST_SCOPE);
     }
 }

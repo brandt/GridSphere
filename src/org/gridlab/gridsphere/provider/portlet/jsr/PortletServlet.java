@@ -616,7 +616,7 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         File f = new File(descriptor);
         if (f.exists()) {
         try {
-            log.info("Loading services from " + descriptor);
+            System.err.println("Loading services from " + descriptor);
             factory.addServices(webAppName, ctx, descriptor, loader);
         } catch (PortletServiceException e) {
             log.error("Unable to load services!", e);

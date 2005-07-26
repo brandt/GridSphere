@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.provider.portlet.jsr;
 
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.jsrimpl.ActionRequestImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletService;
@@ -16,6 +17,7 @@ import org.gridlab.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridlab.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridlab.gridsphere.provider.event.jsr.impl.ActionFormEventImpl;
 import org.gridlab.gridsphere.provider.event.jsr.impl.RenderFormEventImpl;
+import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 
 import javax.portlet.*;
 import java.io.IOException;
@@ -51,8 +53,12 @@ public class ActionPortlet extends GenericPortlet {
     }
 
     protected void setFileDownloadEvent(PortletRequest req, String fileName, String path) {
+        /* JN
         req.setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, fileName);
         req.setAttribute(SportletProperties.FILE_DOWNLOAD_PATH, path);
+        */
+        req.getPortletSession(true).setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, fileName);
+        req.getPortletSession(true).setAttribute(SportletProperties.FILE_DOWNLOAD_PATH, path);
     }
 
     /**
@@ -64,7 +70,8 @@ public class ActionPortlet extends GenericPortlet {
      */
     protected void setNextState(PortletRequest request, String state) {
         String id = getUniqueId();
-        request.setAttribute(id + ".state", state);
+        // JN request.setAttribute(id + ".state", state);
+        request.getPortletSession(true).setAttribute(id + ".state", state);
         log.debug("in ActionPortlet in setNextState: setting state to " + state);
     }
 
@@ -77,8 +84,15 @@ public class ActionPortlet extends GenericPortlet {
      */
     protected String getNextState(PortletRequest request) {
         String id = getUniqueId();
-        String state = (String)request.getAttribute(id+".state");
+        // JN String state = (String)request.getAttribute(id+".state");
+        String state = (String)request.getPortletSession(true).getAttribute(id+".state");
         return state;
+    }
+
+    protected void removeNextState(PortletRequest request) {
+        String id = getUniqueId();
+        // JN String state = (String)request.getAttribute(id+".state");
+        request.getPortletSession(true).removeAttribute(id+".state");
     }
 
     /**
@@ -91,7 +105,8 @@ public class ActionPortlet extends GenericPortlet {
     public String getNextTitle(PortletRequest request) {
         String id = getUniqueId();
         log.debug("ActionPortlet in getNextTitle: setting title attribute " + id + ".title");
-        String title = (String) request.getAttribute(id + ".title");
+        // JN String title = (String) request.getAttribute(id + ".title");
+        String title = (String) request.getPortletSession(true).getAttribute(id + ".title");
         if (title == null) {
             Locale locale = request.getLocale();
             ResourceBundle rb = this.getPortletConfig().getResourceBundle(locale);
@@ -116,6 +131,11 @@ public class ActionPortlet extends GenericPortlet {
         request.setAttribute(id + ".title", title);
     }
 
+    public void removeNextTitle(PortletRequest request) {
+        String id = getUniqueId();
+        request.removeAttribute(id + ".title");
+    }
+
     /**
      * Sets the tag beans obtained from the FormEvent. Used internally and should not
      * normally need to be invoked by portlet developers.
@@ -125,8 +145,18 @@ public class ActionPortlet extends GenericPortlet {
      */
     protected void setTagBeans(PortletRequest request, Map tagBeans) {
         String id = getUniqueId();
-        request.setAttribute(id + ".form", tagBeans);
+        // JN request.setAttribute(id + ".form", tagBeans);
+        log.debug("saving tag beans in session");
+        request.getPortletSession(true).setAttribute(id + ".form", tagBeans);
     }
+
+    protected void removeTagBeans(PortletRequest request) {
+        String id = getUniqueId();
+        // JN request.setAttribute(id + ".form", tagBeans);
+        log.debug("removing tag beans from session");
+        request.getPortletSession(true).removeAttribute(id + ".form");
+    }
+
 
     /**
      * Returns the tag beans obtained from the FormEvent. Used internally and should not
@@ -137,7 +167,8 @@ public class ActionPortlet extends GenericPortlet {
      */
     protected Map getTagBeans(PortletRequest request) {
         String id = getUniqueId();
-        Map tagBeans = (Map) request.getAttribute(id + ".form");
+        //JN Map tagBeans = (Map) request.getAttribute(id + ".form");
+        Map tagBeans = (Map) request.getPortletSession(true).getAttribute(id + ".form");
         return tagBeans;
     }
 
@@ -151,7 +182,17 @@ public class ActionPortlet extends GenericPortlet {
      */
     public void processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortletException {
         log.debug("in ActionPortlet: processAction\t\t\t");
+
+        // if cid is null (true in non-GS portlet container) then use the portlet name
+        String cid = (String)actionRequest.getAttribute(SportletProperties.COMPONENT_ID);
+        if (cid == null) actionRequest.setAttribute(SportletProperties.COMPONENT_ID, getUniqueId());
+
         DefaultPortletAction action = (DefaultPortletAction) actionRequest.getAttribute(SportletProperties.ACTION_EVENT);
+        // In non-GS container this will need to be created
+        if (!(actionRequest instanceof ActionRequestImpl))  {
+            action = GridSphereEventImpl.createAction(actionRequest);
+            System.err.println("action name" + action.getName());
+        }
         ActionFormEvent formEvent = new ActionFormEventImpl(action, actionRequest, actionResponse);
 
         Class[] parameterTypes = new Class[]{ActionFormEvent.class};
@@ -161,17 +202,10 @@ public class ActionPortlet extends GenericPortlet {
 
         log.debug("method name to invoke: " + methodName);
 
-       // try {
-            doAction(actionRequest, actionResponse, methodName, parameterTypes, arguments);
-            formEvent.store();
-            setTagBeans(actionRequest, formEvent.getTagBeans());
-       // } catch (PortletException e) {
-        //    throw e;
-            /*
-            if (hasError(actionRequest)) {
-                setNextState(actionRequest, ERROR_PAGE);
-            }*/
-       // }
+        doAction(actionRequest, actionResponse, methodName, parameterTypes, arguments);
+        formEvent.store();
+
+        setTagBeans(actionRequest, formEvent.getTagBeans());
     }
 
     /**
@@ -191,7 +225,8 @@ public class ActionPortlet extends GenericPortlet {
 
         // reset next state
         String id = getUniqueId();
-        request.removeAttribute(id + ".state");
+        // JN request.removeAttribute(id + ".state");
+        request.getPortletSession(true).removeAttribute(id + ".state");
 
         // Get object and class references
         Object thisObject = (Object) this;
@@ -222,7 +257,10 @@ public class ActionPortlet extends GenericPortlet {
         } catch (InvocationTargetException e) {
             String error = "Error invoking action method: " + methodName;
             log.error(error, e);
-            request.setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e.getTargetException());
+
+            // JN request.setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e.getTargetException());
+            request.getPortletSession(true).setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e.getTargetException());
+
             // If action is not illegal do error undefined action
             //doErrorInvalidAction(request, error);
             throw new PortletException(e.getTargetException());
@@ -247,7 +285,9 @@ public class ActionPortlet extends GenericPortlet {
                 getPortletConfig().getPortletContext().getRequestDispatcher("/jsp/" + jsp).include(request, response);
             }
         } catch (Exception e) {
-            request.setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e);
+            // JN request.setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e);
+            request.getPortletSession(true).setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e);
+
             //log.error("Unable to include resource : " + e.getMessage());
             //setNextError(request, "Unable to include resource " + jsp);
             throw new PortletException(e);
@@ -299,10 +339,18 @@ public class ActionPortlet extends GenericPortlet {
                 */
             }
         }
+        removeTagBeans(request);
+        removeNextTitle(request);
+        removeNextState(request);
     }
+
     protected void doDispatch(RenderRequest request,
                               RenderResponse response) throws PortletException, java.io.IOException {
-        WindowState state = request.getWindowState();      
+
+        String cid = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
+        if (cid == null) request.setAttribute(SportletProperties.COMPONENT_ID, getUniqueId());
+
+        WindowState state = request.getWindowState();
         try {
             super.doDispatch(request, response);
         } catch (PortletException e) {
@@ -708,6 +756,7 @@ public class ActionPortlet extends GenericPortlet {
     }
 
     private String getUniqueId() {
+        //log.debug("setting unique cid: " + this.getPortletConfig().getPortletName());
         return this.getPortletConfig().getPortletName();
     }
 

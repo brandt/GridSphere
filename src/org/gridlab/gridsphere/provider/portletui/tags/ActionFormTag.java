@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.jsrimpl.RenderResponseImpl;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
 
 import javax.portlet.RenderResponse;
@@ -76,7 +77,12 @@ public class ActionFormTag extends ActionTag {
             RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
             String actionStr;
             if (res != null) {
-                actionStr = createJSRActionURI(res.createRenderURL()).toString();
+                if (res instanceof RenderResponseImpl) {
+                    actionStr = createJSRActionURI(res.createRenderURL()).toString();
+                } else {
+                    // if non-GS container this will have to be an ActionURL
+                    actionStr = createJSRActionURI(res.createActionURL()).toString();
+                }
             } else {
                 actionStr = createActionURI();
             }
@@ -110,6 +116,7 @@ public class ActionFormTag extends ActionTag {
             if (extUrl != null) {
                 out.println("<input name=\"" + TrackerService.REDIRECT_URL + "\" value=\"" +extUrl + "\" type=\"hidden\"/>");
             }
+
 
             // write out rest of body
             bodyContent.writeOut(getPreviousOut());
