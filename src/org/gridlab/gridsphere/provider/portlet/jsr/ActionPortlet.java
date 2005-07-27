@@ -224,9 +224,7 @@ public class ActionPortlet extends GenericPortlet {
                             Object[] arguments) throws PortletException {
 
         // reset next state
-        String id = getUniqueId();
-        // JN request.removeAttribute(id + ".state");
-        request.getPortletSession(true).removeAttribute(id + ".state");
+        removeNextState(request);
 
         // Get object and class references
         Object thisObject = (Object) this;
@@ -315,6 +313,7 @@ public class ActionPortlet extends GenericPortlet {
     protected void doMode(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         String next = getNextState(request);
         log.debug("in ActionPortlet: portlet id= " + getUniqueId() + " doView next page is= " + next);
+        request.setAttribute(SportletProperties.COMPONENT_ID, this.getPortletConfig().getPortletName());
         if (next.endsWith(".jsp")) {
             doViewJSP(request, response, next);
         } else {
@@ -349,7 +348,6 @@ public class ActionPortlet extends GenericPortlet {
 
         String cid = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
         if (cid == null) request.setAttribute(SportletProperties.COMPONENT_ID, getUniqueId());
-
         WindowState state = request.getWindowState();
         try {
             super.doDispatch(request, response);
