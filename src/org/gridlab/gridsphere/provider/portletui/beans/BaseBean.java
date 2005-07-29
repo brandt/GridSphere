@@ -103,15 +103,16 @@ public abstract class BaseBean implements TagBean {
 
     public abstract String toEndString();
 
+
     public void store() {
-        // if non-GS container stick tag beans in session
         if (portletRequest != null) {
-            portletRequest.getPortletSession(true).setAttribute(getBeanKey(), this);
+            portletRequest.setAttribute(getBeanKey(), this);
         }
         if (request != null) {
             request.setAttribute(getBeanKey(), this);
         }
     }
+
 
     protected String getBeanKey() {
         String cid, compId;
@@ -128,7 +129,7 @@ public abstract class BaseBean implements TagBean {
         } else {
             beanKey = compId + "%" + beanId + "_" + cid;
         }
-        //log.debug("getBeanKey(" + beanId + ") = " + beanKey);
+        //System.err.println("getBeanKey(" + beanId + ") = " + beanKey);
         return beanKey;
     }
 
