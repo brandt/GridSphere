@@ -157,7 +157,6 @@ public class ActionPortlet extends GenericPortlet {
         request.getPortletSession(true).removeAttribute(id + ".form");
     }
 
-
     /**
      * Returns the tag beans obtained from the FormEvent. Used internally and should not
      * normally need to be invoked by portlet developers.
@@ -203,8 +202,8 @@ public class ActionPortlet extends GenericPortlet {
         log.debug("method name to invoke: " + methodName);
 
         doAction(actionRequest, actionResponse, methodName, parameterTypes, arguments);
-        formEvent.store();
 
+        formEvent.store();
         setTagBeans(actionRequest, formEvent.getTagBeans());
     }
 
@@ -313,7 +312,11 @@ public class ActionPortlet extends GenericPortlet {
     protected void doMode(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         String next = getNextState(request);
         log.debug("in ActionPortlet: portlet id= " + getUniqueId() + " doView next page is= " + next);
-        request.setAttribute(SportletProperties.COMPONENT_ID, this.getPortletConfig().getPortletName());
+
+        // if cid is null (true in non-GS portlet container) then use the portlet name
+        String cid = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
+        if (cid == null) request.setAttribute(SportletProperties.COMPONENT_ID, getUniqueId());
+
         if (next.endsWith(".jsp")) {
             doViewJSP(request, response, next);
         } else {
@@ -346,8 +349,10 @@ public class ActionPortlet extends GenericPortlet {
     protected void doDispatch(RenderRequest request,
                               RenderResponse response) throws PortletException, java.io.IOException {
 
+        // if cid is null (true in non-GS portlet container) then use the portlet name
         String cid = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
         if (cid == null) request.setAttribute(SportletProperties.COMPONENT_ID, getUniqueId());
+
         WindowState state = request.getWindowState();
         try {
             super.doDispatch(request, response);
