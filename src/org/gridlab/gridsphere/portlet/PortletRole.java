@@ -120,14 +120,19 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
     }
 
     /**
-     * Returns a unique id for this role
+     * Returns the priority id for this role
      *
-     * @return a unique id for this role
+     * @return the priority id for this role
      */
     public int getID() {
         return priority;
     }
 
+    /**
+     * Sets the priority of this role
+     *
+     * @param id the priority
+     */
     public void setID(int id) {
         this.priority = id;
     }
@@ -141,6 +146,11 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
         return roleName;
     }
 
+    /**
+     * Sets the role name
+     *
+     * @param roleName
+     */
     public void setName(String roleName) {
         this.roleName = roleName;
     }
