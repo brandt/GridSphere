@@ -179,11 +179,6 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>trackme</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
             <name>anchor</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
