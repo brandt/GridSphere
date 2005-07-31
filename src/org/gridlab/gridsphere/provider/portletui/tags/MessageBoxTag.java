@@ -113,7 +113,7 @@ public class MessageBoxTag extends BaseComponentTag {
 
     public int doEndTag() throws JspException {
         if (!beanId.equals("")) {
-            messageBoxBean = (MessageBoxBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            messageBoxBean = (MessageBoxBean) getTagBean();
             if (messageBoxBean == null) {
                 messageBoxBean = new MessageBoxBean();
                 this.setBaseComponentBean(messageBoxBean);

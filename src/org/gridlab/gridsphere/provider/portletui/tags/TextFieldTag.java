@@ -74,7 +74,7 @@ public class TextFieldTag extends BaseComponentTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            textFieldBean = (TextFieldBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            textFieldBean = (TextFieldBean) getTagBean();
             if (textFieldBean == null) {
                 //log.debug("Creating new text field bean");
                 textFieldBean = new TextFieldBean();

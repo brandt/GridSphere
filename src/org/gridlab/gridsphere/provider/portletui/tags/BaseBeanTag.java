@@ -5,11 +5,14 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.portlet.RenderRequest;
 import java.util.Enumeration;
+import java.util.Map;
 
 /**
  * The abstract <code>BaseBeanTag</code> is a base class used by all UI tags that provides support for
@@ -37,6 +40,11 @@ public abstract class BaseBeanTag extends BodyTagSupport {
         this.beanId = beanId;
     }
 
+    public TagBean getTagBean() {
+        System.err.println("looking for bean: "  + getBeanKey());
+        return (TagBean) pageContext.findAttribute(getBeanKey());
+    }
+
     /**
      * Returns the unique bean key
      *
@@ -51,7 +59,7 @@ public abstract class BaseBeanTag extends BodyTagSupport {
         } else {
             beanKey = compId + "%" + beanId + "_" + cid;
         }
-        //System.err.println("getBeanKey(" + beanId + ") = " + beanKey);
+        //System.err.println("in BaseBeanTag: getBeanKey(" + beanId + ") = " + beanKey);
         return beanKey;
     }
 

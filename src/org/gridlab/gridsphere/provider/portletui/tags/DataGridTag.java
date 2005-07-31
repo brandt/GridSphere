@@ -85,7 +85,7 @@ public class DataGridTag extends ContainerTag {
         list = new Vector();
 
         if (!beanId.equals("")) {
-            dataGridBean = (DataGridBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            dataGridBean = (DataGridBean) getTagBean();
             if (dataGridBean == null) {
                 dataGridBean = new DataGridBean(beanId);
                 if (header != null) dataGridBean.setHeader(header);

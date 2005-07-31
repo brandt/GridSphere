@@ -92,7 +92,7 @@ public class ListBoxTag extends ContainerTag {
         list = new Vector();
 
         if (!beanId.equals("")) {
-            listbox = (ListBoxBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            listbox = (ListBoxBean) getTagBean();
             if (listbox == null) {
                 listbox = new ListBoxBean();
                 listbox.setSize(size);

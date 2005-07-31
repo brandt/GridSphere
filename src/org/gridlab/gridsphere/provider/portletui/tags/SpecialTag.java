@@ -21,7 +21,7 @@ public class SpecialTag extends BaseComponentTag {
 
     public int doEndTag() throws JspException {
         if (!beanId.equals("")) {
-            specialBean = (SpecialBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            specialBean = (SpecialBean) getTagBean();
             if (specialBean == null) {
                 specialBean = new SpecialBean();
                 specialBean.setBeanId(beanId);

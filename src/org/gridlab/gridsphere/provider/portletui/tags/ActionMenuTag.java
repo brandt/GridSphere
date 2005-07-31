@@ -92,7 +92,7 @@ public class ActionMenuTag extends ContainerTag {
 
         // get the bean and the values
         if (!beanId.equals("")) {
-            actionMenuBean = (ActionMenuBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            actionMenuBean = (ActionMenuBean) getTagBean();
         }
         if (actionMenuBean == null) {
             actionMenuBean = new ActionMenuBean();

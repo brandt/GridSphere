@@ -101,7 +101,7 @@ public class FrameTag extends TableTag {
             }
         }
         if (!beanId.equals("")) {
-            tableBean = (FrameBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            tableBean = (FrameBean) getTagBean();
             if (tableBean == null) {
                 tableBean = new FrameBean(beanId);
                 this.setBaseComponentBean(tableBean);
@@ -176,7 +176,7 @@ public class FrameTag extends TableTag {
     public int doEndTag() throws JspException {
         tableBean.setRowCount(rowCount);
         if (!beanId.equals("")) {
-            tableBean = (FrameBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            tableBean = (FrameBean) getTagBean();
             if (tableBean == null) {
                 return EVAL_PAGE;
             }

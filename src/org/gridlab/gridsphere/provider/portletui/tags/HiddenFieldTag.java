@@ -21,7 +21,7 @@ public class HiddenFieldTag extends BaseComponentTag {
     public int doStartTag() throws JspException {
 
         if (!beanId.equals("")) {
-            hidden = (HiddenFieldBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            hidden = (HiddenFieldBean) getTagBean();
             if (hidden == null) {
                 hidden = new HiddenFieldBean(beanId);
 

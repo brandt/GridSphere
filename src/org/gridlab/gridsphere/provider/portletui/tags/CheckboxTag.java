@@ -40,7 +40,7 @@ public class CheckboxTag extends BaseComponentTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            checkbox = (CheckBoxBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            checkbox = (CheckBoxBean) getTagBean();
             if (checkbox == null) {
                 checkbox = new CheckBoxBean();
                 checkbox.setSelected(selected);

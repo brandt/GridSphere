@@ -53,7 +53,7 @@ public class IncludeTag extends BaseBeanTag {
             }
         } else {
             // Else get bean with bean id
-            includeBean = (IncludeBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            includeBean = (IncludeBean) getTagBean();
             if (includeBean == null) {
                 // If no bean with given id, exit early
                 return SKIP_BODY;

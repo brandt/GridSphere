@@ -271,7 +271,7 @@ public class TableTag extends BaseComponentTag {
 
 
         if (!beanId.equals("")) {
-            tableBean = (TableBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            tableBean = (TableBean) getTagBean();
             if (tableBean == null) {
                 tableBean = new TableBean();
             } else {

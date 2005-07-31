@@ -56,7 +56,7 @@ public class TabTag extends BaseComponentTag {
 
             // need to determine which rows to display
             if (!beanId.equals("")) {
-                tabBean = (TabBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+                tabBean = (TabBean) getTagBean();
                 if (tabBean == null) tabBean = new TabBean();
             } else {
                 tabBean = new TabBean();

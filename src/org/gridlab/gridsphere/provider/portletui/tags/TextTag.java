@@ -108,7 +108,7 @@ public class TextTag extends BaseComponentTag {
 
     public int doEndTag() throws JspException {
         if (!beanId.equals("")) {
-            textBean = (TextBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            textBean = (TextBean)getTagBean();
             if (textBean == null) {
                 textBean = new TextBean();
                 this.setBaseComponentBean(textBean);

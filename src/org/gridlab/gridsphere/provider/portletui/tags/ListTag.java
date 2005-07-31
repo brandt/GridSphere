@@ -28,7 +28,7 @@ public class ListTag extends BaseComponentTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            listBean = (ListBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            listBean = (ListBean) getTagBean();
         }
         return SKIP_BODY;
     }

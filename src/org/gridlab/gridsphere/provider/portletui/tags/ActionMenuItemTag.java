@@ -37,7 +37,7 @@ public class ActionMenuItemTag extends ContainerTag {
     public int doStartTag() throws JspException {
 
         if (!beanId.equals("")) {
-            actionMenuItemBean = (ActionMenuItemBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            actionMenuItemBean = (ActionMenuItemBean) getTagBean();
             if (actionMenuItemBean == null) {
                 actionMenuItemBean = new ActionMenuItemBean();
             }

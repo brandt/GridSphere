@@ -74,7 +74,7 @@ public class TabbedPaneTag extends BaseComponentTag {
         super.doStartTag();
         System.err.println("panetag in doStartTag");
         if (!beanId.equals("")) {
-            tabbedPaneBean = (TabbedPaneBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            tabbedPaneBean = (TabbedPaneBean) getTagBean();
             if (tabbedPaneBean == null) {
                 tabbedPaneBean = new TabbedPaneBean();
             } else {

@@ -96,7 +96,7 @@ public class ActionLinkTag extends ActionTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            actionlink = (ActionLinkBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            actionlink = (ActionLinkBean) getTagBean();
             if (actionlink == null) {
                 actionlink = new ActionLinkBean(beanId);
                 actionlink.setStyle(style);

@@ -63,7 +63,7 @@ public class ActionSubmitTag extends ActionTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            actionSubmitBean = (ActionSubmitBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            actionSubmitBean = (ActionSubmitBean) getTagBean();
             if (actionSubmitBean == null) {
                 actionSubmitBean = new ActionSubmitBean(beanId);
                 paramBeans = new ArrayList();

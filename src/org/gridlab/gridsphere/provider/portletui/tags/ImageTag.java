@@ -164,7 +164,7 @@ public class ImageTag extends BaseComponentTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            urlImageBean = (ImageBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            urlImageBean = (ImageBean) getTagBean();
             if (urlImageBean == null) {
                 urlImageBean = new ImageBean();
                 setImageBean(urlImageBean);

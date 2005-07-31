@@ -168,7 +168,7 @@ public class PanelTag extends BaseComponentTag {
 
         counter = 0;
         if (!beanId.equals("")) {
-            panelBean = (PanelBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            panelBean = (PanelBean) getTagBean();
             if (panelBean == null) {
                 panelBean = new PanelBean();
                 this.setBaseComponentBean(panelBean);
