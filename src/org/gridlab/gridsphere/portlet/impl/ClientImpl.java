@@ -8,13 +8,14 @@ import org.gridlab.gridsphere.portlet.Capability;
 import org.gridlab.gridsphere.portlet.Client;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 
 /**
  * The <code>ClientImpl</code> class represents the client device that the user
  * connects to the portal with. It defines methods to obtain information about
  * clients, e.g. browsers running on PCs, WAP phones, PDAs etc.
  */
-public class ClientImpl implements Client {
+public class ClientImpl implements Client, Serializable {
 
     public static final String[] MIME_TYPES = {"text/html", "text/vnd.wap.wml"};
     public static final String[] MARKUP_TYPES = {"html", "wml", "chtml"};
