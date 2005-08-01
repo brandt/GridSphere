@@ -26,18 +26,6 @@ public class ActionMenuItemBean extends BeanContainer {
         this.beanId = beanId;
     }
 
-    public ActionMenuItemBean(Object req, String beanId) {
-        super();
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-        this.beanId = beanId;
-    }
-
-
     public String getMenutype() {
         return menutype;
     }

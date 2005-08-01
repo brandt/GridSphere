@@ -36,23 +36,10 @@ public class PanelBean extends BeanContainer implements TagBean {
         this.cssClass = PANEL_STYLE;
     }
 
-    /**
-     * Constructs a panel bean from a supplied portlet request and bean identifier
-     *
-     * @param req    the portlet request
-     * @param beanId the bean identifier
-     */
-    public PanelBean(Object req, String beanId) {
+    public PanelBean(String beanId) {
         this.cssClass = PANEL_STYLE;
         this.beanId = beanId;
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
     }
-
 
     /**
      * Sets the panel (table) width

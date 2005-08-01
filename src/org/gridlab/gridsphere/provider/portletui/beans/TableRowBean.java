@@ -41,14 +41,8 @@ public class TableRowBean extends BeanContainer implements TagBean {
      * @param req    the portlet request
      * @param beanId the bean identifier
      */
-    public TableRowBean(Object req, String beanId) {
+    public TableRowBean(String beanId) {
         super();
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
         this.beanId = beanId;
     }
 

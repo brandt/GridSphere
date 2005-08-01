@@ -32,16 +32,6 @@ public abstract class BeanContainer extends BaseComponentBean {
     }
 
     /**
-     * Constructs a bean container with the supplied name
-     *
-     * @param name the bean container name
-     * @param req the HttpServletRequest
-     */
-    public BeanContainer(String name, Object req) {
-        super(name, req);
-    }
-
-    /**
      * Adds a visual bean to the bean container
      *
      * @param bean a base component bean

@@ -45,24 +45,6 @@ public class ListBoxBean extends BeanContainer implements TagBean {
     }
 
     /**
-     * Constructs a list box bean with a supplied portlet request and bean identifier
-     *
-     * @param request the portlet request
-     * @param beanId  the bean identifier
-     */
-    public ListBoxBean(Object req, String beanId) {
-        super(NAME, req);
-        this.cssClass = LISTBOX_STYLE;
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-        this.beanId = beanId;
-    }
-
-    /**
      * Returns the size of the list box
      *
      * @return the size of the list box
@@ -107,16 +89,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         String pname = (name == null) ? "" : name;
         String sname = pname;
         if (!beanId.equals("")) {
-            if (request == null) {
-                sname = "ui_" + vbName + "_" + beanId + "_" + pname;
-            } else {
-                String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
-                if (compId == null) {
-                    sname = "ui_" + vbName + "_" + beanId + "_" + pname;
-                } else {
-                    sname = "ui_" + vbName + "_" + compId + "%" + beanId + "_" + pname;
-                }
-            }
+            sname = createTagName(pname);
         }
         sb.append("<select name='" + sname + "' size='" + size + "'");
         if (isMultiple) {

@@ -23,35 +23,12 @@ public class ActionLinkBean extends ActionBean implements TagBean {
     public ActionLinkBean() {
     }
 
-    public ActionLinkBean(Object req) {
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-    }
-
     /**
      * Constructs an action link bean from a portlet request and supplied bean identifier
      */
     public ActionLinkBean(String beanId) {
         this.beanId = beanId;
     }
-
-    /**
-     * Constructs an action link bean from a portlet request and supplied bean identifier
-     */
-    public ActionLinkBean(Object req, String beanId) {
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        this.beanId = beanId;
-    }
-
 
     /**
      * Returns the style of the text: Available styles are

@@ -23,6 +23,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
     // holds the controlelemenet
     private StringBuffer control = null;
     private String width = null;
+    private HttpServletRequest request;
 
     public DataGridBean() {
         super();
@@ -30,17 +31,6 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
     public DataGridBean(String beanId) {
         super();
-        this.beanId = beanId;
-    }
-
-    public DataGridBean(Object req, String beanId) {
-        super();
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
         this.beanId = beanId;
     }
 

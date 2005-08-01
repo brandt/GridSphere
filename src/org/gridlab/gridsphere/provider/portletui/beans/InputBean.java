@@ -29,6 +29,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
      * Constructs a default input bean
      */
     public InputBean() {
+        super();
         this.cssClass = INPUT_STYLE;
     }
 
@@ -39,17 +40,6 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
      */
     public InputBean(String name) {
         super(name);
-        this.cssClass = INPUT_STYLE;
-    }
-
-    /**
-     * Constructs an input bean with a supplied name
-     *
-     * @param name the bean name
-     * @param req the HttpServletRequest
-     */
-    public InputBean(String name, Object req) {
-        super(name, req);
         this.cssClass = INPUT_STYLE;
     }
 
@@ -105,18 +95,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
         String pname = (name == null) ? "" : name;
         String sname = pname;
         if (!beanId.equals("")) {
-            if (request == null) {
-                //log.debug("request is null");
-                sname = "ui_" + vbName + "_" + beanId + "_" + pname;
-            } else {
-                //log.debug("request not null");
-                String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
-                if (compId == null) {
-                    sname = "ui_" + vbName + "_" + beanId + "_" + pname;
-                } else {
-                    sname = "ui_" + vbName + "_" + compId + "%" + beanId + "_" + pname;
-                }
-            }
+            sname = createTagName(pname);
         }
 
         sb.append("name=\"" + sname + "\" ");

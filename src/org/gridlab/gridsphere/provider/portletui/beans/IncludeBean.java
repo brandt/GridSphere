@@ -33,20 +33,6 @@ public class IncludeBean extends BaseBean implements TagBean {
         super(beanId);
     }
 
-    /**
-     * Constructs an include bean
-     */
-    public IncludeBean(Object req, String beanId) {
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-        this.beanId = beanId;
-    }
-
-
     public ServletContext getServletContext() {
         return servletContext;
     }
@@ -77,11 +63,6 @@ public class IncludeBean extends BaseBean implements TagBean {
 
     public String toEndString() {
         return "";
-    }
-
-    public void store(HttpServletRequest request) {
-        this.request = request;
-        super.store();
     }
 
 }

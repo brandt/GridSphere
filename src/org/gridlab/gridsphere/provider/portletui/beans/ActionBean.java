@@ -41,22 +41,6 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     }
 
     /**
-     * Constructs action bean with the supplied portlet request and bean identifier
-     *
-     * @param req    the portlet request
-     * @param beanId the bean identifier
-     */
-    public ActionBean(Object req, String beanId) {
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-        this.beanId = beanId;
-    }
-
-    /**
      * Sets the label identified with the portlet component to link to
      *
      * @param label the action link key

@@ -46,17 +46,6 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
         this.beanId = beanId;
     }
 
-    public ActionMenuBean(Object req, String beanId) {
-        super();
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-        this.beanId = beanId;
-    }
-
     public PortletURI getPortletURI() {
         return portletURI;
     }

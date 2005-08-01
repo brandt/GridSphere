@@ -42,22 +42,6 @@ public class ActionParamBean extends BaseBean {
     }
 
     /**
-     * Constructs an action param bean from a supplied portlet request and bean identifier
-     *
-     * @param req    the portlet request
-     * @param beanId the bean identifier
-     */
-    public ActionParamBean(Object req, String beanId) {
-        this.beanId = beanId;
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-    }
-
-    /**
      * Sets the action parameter name
      *
      * @param name the action parameter name

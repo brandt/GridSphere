@@ -5,6 +5,8 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import java.util.Locale;
+
 /**
  * The <code>TagBean</code> interface describes the base methods provided by all visual ui beans
  */
@@ -17,12 +19,18 @@ public interface TagBean {
      */
     public String getBeanId();
 
+    public void addParam(String name, String value);
+
+    public void removeParam(String name);
+
     /**
      * Sets the bean identifier
      *
      * @param beanId the bean identifier
      */
     public void setBeanId(String beanId);
+
+    public void setLocale(Locale locale);
 
     /**
      * Returns the HTML representation of the bean
@@ -41,6 +49,6 @@ public interface TagBean {
     /**
      * Stores this bean in the portlet request
      */
-    public void store();
+    //public void store();
 
 }

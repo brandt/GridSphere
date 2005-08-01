@@ -43,14 +43,8 @@ public class TableCellBean extends BeanContainer implements TagBean {
      * @param req    the portlet request
      * @param beanId the bean identifier
      */
-    public TableCellBean(Object req, String beanId) {
+    public TableCellBean(String beanId) {
         super();
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
         this.beanId = beanId;
         this.cssClass = TABLE_CELL_STYLE;
     }

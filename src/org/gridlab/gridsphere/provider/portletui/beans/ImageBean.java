@@ -38,23 +38,6 @@ public class ImageBean extends BaseComponentBean implements TagBean {
     }
 
     /**
-     * Constructs a URL image bean from a supplied portlet request and bean identifier
-     *
-     * @param req    the portlet request
-     * @param beanId the bean identifier
-     */
-    public ImageBean(Object req, String beanId) {
-        super(NAME);
-        this.beanId = beanId;
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-    }
-
-    /**
      * Returns the image source
      *
      * @return the image source

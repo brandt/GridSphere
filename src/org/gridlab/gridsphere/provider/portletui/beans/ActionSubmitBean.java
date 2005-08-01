@@ -39,24 +39,6 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     }
 
     /**
-     * Constructs an action submit bean from a supplied portlet request and bean identifier
-     *
-     * @param req    the portlet request
-     * @param beanId the bean identifier
-     */
-    public ActionSubmitBean(Object req, String beanId) {
-        super(NAME);
-        this.cssClass = SUBMIT_STYLE;
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-        this.beanId = beanId;
-    }
-
-    /**
      * Returns the onClick JavaScript function
      *
      * @return onClick JavaScript function

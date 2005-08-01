@@ -5,8 +5,6 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import javax.servlet.http.HttpServletRequest;
-
 public class TabBean extends BeanContainer {
 
     protected String jspPage;
@@ -26,18 +24,6 @@ public class TabBean extends BeanContainer {
     public TabBean(BaseComponentBean compBean) {
         super();
         this.addBean(compBean);
-    }
-
-    /**
-     * Constructs a table row bean from a supplied portlet request and bean identifier
-     *
-     * @param req    the portlet request
-     * @param beanId the bean identifier
-     */
-    public TabBean(HttpServletRequest req, String beanId) {
-        super();
-        this.request = req;
-        this.beanId = beanId;
     }
 
     public void setActive(boolean isActive) {

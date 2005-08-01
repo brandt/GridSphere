@@ -36,18 +36,6 @@ public class CheckBoxBean extends SelectElementBean {
         this.cssClass = CHECKBOX_STYLE;
     }
 
-    /**
-     * Constructs a check box bean with a supplied portlet request and bean identifier
-     *
-     * @param request the portlet request
-     * @param beanId  the bean identifier
-     */
-    public CheckBoxBean(Object request, String beanId) {
-        super(NAME, request);
-        this.beanId = beanId;
-        this.cssClass = CHECKBOX_STYLE;
-    }
-
     public String toStartString() {
         return super.toStartString("checkbox");
     }

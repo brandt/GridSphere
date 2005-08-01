@@ -35,11 +35,6 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
         this.beanId = beanId;
     }
 
-    public MessageBoxBean(Object req, String beanId) {
-        super(NAME, req);
-        this.beanId = beanId;
-    }
-
     /**
      * Gets the source of the image which should be displayed.
      *

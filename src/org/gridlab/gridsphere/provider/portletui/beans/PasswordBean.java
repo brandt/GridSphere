@@ -31,22 +31,6 @@ public class PasswordBean extends TextFieldBean {
         super(NAME, beanId);
     }
 
-    /**
-     * Constructs a password bean using a supplied portlet request and bean identifier
-     *
-     * @param req    the portlet request
-     * @param beanId the bean identifier
-     */
-    public PasswordBean(Object req, String beanId) {
-        super(NAME, beanId);
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-    }
-
     public String toStartString() {
         this.inputtype = "password";
         return super.toStartString();

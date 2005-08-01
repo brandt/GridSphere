@@ -54,36 +54,6 @@ public class TableBean extends BaseComponentBean implements TagBean {
         this.cssClass = cssStyle;
     }
 
-    public TableBean(Object req) {
-        super();
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-        this.locale = this.request.getLocale();
-    }
-
-
-    /**
-     * Constructs a table bean from a supplied portlet request and bean identifier
-     *
-     * @param req    the portlet request
-     * @param beanId the bean identifier
-     */
-    public TableBean(Object req, String beanId) {
-        super();
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-        this.beanId = beanId;
-    }
-
-
     /**
      * Sets the default table model for this table
      *

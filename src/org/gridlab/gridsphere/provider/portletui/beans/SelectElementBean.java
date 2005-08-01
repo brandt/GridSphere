@@ -38,15 +38,6 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
     }
 
     /**
-     * Constructs a select element bean from a supplied visual bean type
-     *
-     * @param vbName the visual bean type
-     */
-    public SelectElementBean(String vbName, Object req) {
-        super(vbName, req);
-    }
-
-    /**
      * Returns a String used in the final markup indicating if this bean is selected or not
      *
      * @param select the selected String
@@ -128,20 +119,11 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
         results.clear();
     }
 
-     public String toStartString(String type) {
+    public String toStartString(String type) {
         String pname = (name == null) ? "" : name;
         String sname = pname;
         if (!beanId.equals("")) {
-            if (request == null) {
-                sname = "ui_" + vbName + "_" + beanId + "_" + pname;
-            } else {
-                String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
-                if (compId == null) {
-                    sname = "ui_" + vbName + "_" + beanId + "_" + pname;
-                } else {
-                    sname = "ui_" + vbName + "_" + compId + "%" + beanId + "_" + pname;
-                }
-            }
+            sname = createTagName(pname);
         }
         return "<input " + getFormattedCss() + " type='"
                 + type

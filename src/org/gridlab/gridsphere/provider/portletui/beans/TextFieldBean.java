@@ -27,8 +27,9 @@ public class TextFieldBean extends InputBean implements TagBean {
      *
      * @param name the bean name
      */
-    public TextFieldBean(String name) {
-        super(name);
+    public TextFieldBean(String beanId) {
+        super(NAME);
+        this.beanId = beanId;
         this.inputtype = "text";
     }
 
@@ -38,20 +39,8 @@ public class TextFieldBean extends InputBean implements TagBean {
      * @param name   the bean name
      * @param beanId the bean identifier
      */
-    public TextFieldBean(String name, String beanId) {
-        super(name);
-        this.inputtype = "text";
-        this.beanId = beanId;
-    }
-
-    /**
-     * Constructs a text field bean from a supplied portlet request and bean identifier
-     *
-     * @param req    the portlet request
-     * @param beanId the bean identifier
-     */
-    public TextFieldBean(Object req, String beanId) {
-        super(NAME, req);
+    public TextFieldBean(String vbName, String beanId) {
+        super(vbName);
         this.inputtype = "text";
         this.beanId = beanId;
     }

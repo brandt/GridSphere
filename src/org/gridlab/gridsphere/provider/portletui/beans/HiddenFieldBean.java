@@ -31,23 +31,6 @@ public class HiddenFieldBean extends TextFieldBean {
         this.beanId = beanId;
     }
 
-    /**
-     * Constructs a hidden field bean with the supplied portlet request and bean identifier
-     *
-     * @param req    the portlet request
-     * @param beanId the bean identifier
-     */
-    public HiddenFieldBean(Object req, String beanId) {
-        super(NAME);
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-        this.beanId = beanId;
-    }
-
     public String toStartString() {
         this.inputtype = "hidden";
         return super.toStartString();

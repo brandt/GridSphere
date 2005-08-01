@@ -32,19 +32,6 @@ public class ActionComponentBean extends IncludeBean {
         super(beanId);
     }
 
-    /**
-     * Constructs an include bean
-     */
-    public ActionComponentBean(Object req, String beanId) {
-        if (req instanceof HttpServletRequest) {
-            this.request = (HttpServletRequest)req;
-        }
-        if (req instanceof PortletRequest) {
-            this.portletRequest = (PortletRequest)req;
-        }
-        this.beanId = beanId;
-    }
-
     public String getActiveComponentId() {
         return activeCompId;
     }
@@ -55,6 +42,6 @@ public class ActionComponentBean extends IncludeBean {
 
     public void store() {
         log.debug("Storing action component bean " + getBeanKey());
-        super.store();
+        //super.store();
     }
 }

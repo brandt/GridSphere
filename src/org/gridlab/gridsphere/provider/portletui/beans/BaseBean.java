@@ -6,10 +6,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 /**
@@ -20,9 +17,10 @@ public abstract class BaseBean implements TagBean {
 
     protected String beanId = "";
     protected String vbName = "undefined";
-    protected HttpServletRequest request = null;
-    protected PortletRequest portletRequest = null;
+    //protected HttpServletRequest request = null;
+    //protected PortletRequest portletRequest = null;
     protected Locale locale = null;
+    protected Map params = new HashMap();
 
     /**
      * Constructs default base bean
@@ -40,29 +38,28 @@ public abstract class BaseBean implements TagBean {
         this.vbName = vbName;
     }
 
-    /**
-     * Constructs a base bean for the supplied visual bean type
-     *
-     * @param vbName a name identifying the type of visual bean
-     * @param req the HttpServletRequest
-     */
-    public BaseBean(String vbName, Object req) {
-        this(vbName);
-        if (req != null) {
-            if (req instanceof HttpServletRequest) {
-                this.request = (HttpServletRequest)req;
-                Locale locale = (Locale) request.getSession(true).getAttribute(SportletProperties.LOCALE);
-                if (locale == null)
-                    locale = request.getLocale();
-            }
-            if (req instanceof PortletRequest) {
-                this.portletRequest = (PortletRequest)req;
-                Locale locale = (Locale) portletRequest.getPortletSession(true).getAttribute(SportletProperties.LOCALE);
-                if (locale == null)
-                    locale = portletRequest.getLocale();
-            }
+    public void addParam(String name, String value) {
+        params.put(name, value);
+    }
+
+    public void removeParam(String name) {
+        params.remove(name);
+    }
+
+    protected String createTagName(String pname) {
+        String sname = "";
+        String cid = (String)params.get(SportletProperties.COMPONENT_ID);
+        String compId = (String)params.get(SportletProperties.GP_COMPONENT_ID);
+        if (compId == null) {
+            sname = "ui_" + vbName + "_" + beanId + "_" + pname + cid;
+        } else {
+            sname = "ui_" + vbName + "_" + compId + "%" + beanId + "_" + pname + cid;
         }
-        if (locale == null) locale = Locale.ENGLISH;
+        return sname;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 
     /**
@@ -83,53 +80,22 @@ public abstract class BaseBean implements TagBean {
         this.beanId = beanId;
     }
 
-    public HttpServletRequest getRequest() {
-        return request;
-    }
-
-    public void setRequest(HttpServletRequest request) {
-        this.request = request;
-    }
-
-    public void setPortletRequest(PortletRequest portletRequest) {
-        this.portletRequest = portletRequest;
-    }
-
-    public PortletRequest getPortletRequest() {
-        return portletRequest;
-    }
 
     public abstract String toStartString();
 
     public abstract String toEndString();
 
-
-    public void store() {
-        if (portletRequest != null) {
-            portletRequest.setAttribute(getBeanKey(), this);
-        }
-        if (request != null) {
-            request.setAttribute(getBeanKey(), this);
-        }
-    }
-
-
     protected String getBeanKey() {
-        String cid, compId;
-        if (portletRequest != null) {
-            cid = (String) portletRequest.getAttribute(SportletProperties.COMPONENT_ID);
-            compId = (String) portletRequest.getAttribute(SportletProperties.GP_COMPONENT_ID);
-        } else {
-            cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
-            compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
-        }
+        String cid = (String)params.get(SportletProperties.COMPONENT_ID);
+        String compId = (String)params.get(SportletProperties.GP_COMPONENT_ID);
+
         String beanKey = null;
         if (compId == null) {
             beanKey = beanId + "_" + cid;
         } else {
             beanKey = compId + "%" + beanId + "_" + cid;
         }
-        //System.err.println("getBeanKey(" + beanId + ") = " + beanKey);
+        System.err.println("getBeanKey(" + beanId + ") = " + beanKey);
         return beanKey;
     }
 

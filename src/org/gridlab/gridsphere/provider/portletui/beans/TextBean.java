@@ -49,18 +49,6 @@ public class TextBean extends BaseComponentBean implements TagBean {
     }
 
     /**
-     * Constructs a text bean from a supplied portlet request and bean identifier
-     *
-     * @param req    the portlet request
-     * @param beanId the bean identifier
-     */
-    public TextBean(Object req, String beanId) {
-        super(NAME, req);
-        this.beanId = beanId;
-        this.cssClass = MessageStyle.MSG_INFO;
-    }
-
-    /**
      * Returns the style of the text: Available styles are
      * <ul>
      * <li>nostyle - plain text</li>

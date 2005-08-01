@@ -41,18 +41,6 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
     }
 
     /**
-     * Constructs a text area bean from a supplied portlet request and bean identifier
-     *
-     * @param req    the portlet request
-     * @param beanId the bean identifier
-     */
-    public TextAreaBean(Object req, String beanId) {
-        super(NAME, req);
-        this.cssClass = MessageStyle.MSG_INFO;
-        this.beanId = beanId;
-    }
-
-    /**
      * Gets the number of columns of the TextArea.
      *
      * @return number of columns
@@ -96,17 +84,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
         String pname = (name == null) ? "" : name;
         String sname = pname;
         if (!beanId.equals("")) {
-            if (request == null) {
-                //log.debug("request is null");
-                sname = "ui_" + vbName + "_" + beanId + "_" + pname;
-            } else {
-                String compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
-                if (compId == null) {
-                    sname = "ui_" + vbName + "_" + beanId + "_" + pname;
-                } else {
-                    sname = "ui_" + vbName + "_" + compId + "%" + beanId + "_" + pname;
-                }
-            }
+            sname = createTagName(pname);
         }
 
         sb.append("name=\"" + sname + "\" ");

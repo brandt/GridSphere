@@ -32,17 +32,6 @@ public class ListBoxItemBean extends SelectElementBean {
         this.beanId = beanId;
     }
 
-    /**
-     * Constructs a listbox item bean with a supplied portlet request and bean identifier
-     *
-     * @param req    the portlet request
-     * @param beanId the bean identifier
-     */
-    public ListBoxItemBean(Object req, String beanId) {
-        super(NAME, req);
-        this.beanId = beanId;
-    }
-
     public String toStartString() {
         String pval = (value == null) ? "" : value;
         pval = (name == null) ? pval : name;
