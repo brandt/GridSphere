@@ -805,16 +805,13 @@ public abstract class BaseFormEventImpl {
      * @return the bean key identifier
      */
     protected String getBeanKey(String beanId) {
-        String compId = null;
-        if (request != null) {
-            compId = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
+        String beanKey = null;
+        if (compId == null) {
+            beanKey = beanId + '_' + cid;
+        } else {
+            beanKey = compId + '%' + beanId + '_' + cid;
         }
-        if (portletRequest != null) {
-            //JN compId = (String) portletRequest.getAttribute(SportletProperties.COMPONENT_ID);
-            compId = (String) portletRequest.getAttribute(SportletProperties.COMPONENT_ID);
-        }
-        String beanKey = beanId + "_" + compId;
-        //log.debug("getBeanKey(" + beanId + ") = " + beanKey);
+        log.debug("BaseFormEventImpl.getBeanKey(" + beanId + ") = " + beanKey);
         return beanKey;
     }
 

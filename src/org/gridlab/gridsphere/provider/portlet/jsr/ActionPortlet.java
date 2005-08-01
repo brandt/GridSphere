@@ -765,7 +765,7 @@ public class ActionPortlet extends GenericPortlet {
         return mapValues;
     }
 
-    private String getUniqueId() {
+    protected String getUniqueId() {
         //log.debug("setting unique cid: " + this.getPortletConfig().getPortletName());
         return this.getPortletConfig().getPortletName();
     }

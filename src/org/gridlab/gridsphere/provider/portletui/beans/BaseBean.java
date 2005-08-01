@@ -85,7 +85,7 @@ public abstract class BaseBean implements TagBean {
 
     public abstract String toEndString();
 
-    protected String getBeanKey() {
+    public String getBeanKey() {
         String cid = (String)params.get(SportletProperties.COMPONENT_ID);
         String compId = (String)params.get(SportletProperties.GP_COMPONENT_ID);
 
