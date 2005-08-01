@@ -72,7 +72,7 @@ public class ActionPortlet extends GenericPortlet {
         String id = getUniqueId();
         // JN request.setAttribute(id + ".state", state);
         request.getPortletSession(true).setAttribute(id + ".state", state);
-        log.debug("in ActionPortlet in setNextState: setting state to " + state);
+        //log.debug("in ActionPortlet in setNextState: setting state to " + state);
     }
 
     /**
@@ -104,7 +104,7 @@ public class ActionPortlet extends GenericPortlet {
      */
     public String getNextTitle(PortletRequest request) {
         String id = getUniqueId();
-        log.debug("ActionPortlet in getNextTitle: setting title attribute " + id + ".title");
+        //log.debug("ActionPortlet in getNextTitle: setting title attribute " + id + ".title");
         // JN String title = (String) request.getAttribute(id + ".title");
         String title = (String) request.getPortletSession(true).getAttribute(id + ".title");
         if (title == null) {
@@ -146,15 +146,15 @@ public class ActionPortlet extends GenericPortlet {
     protected void setTagBeans(PortletRequest request, Map tagBeans) {
         String id = getUniqueId();
         // JN request.setAttribute(id + ".form", tagBeans);
-        log.debug("saving tag beans in session");
-        request.getPortletSession(true).setAttribute(id + ".form", tagBeans);
+        log.debug("saving tag beans in session " + id + ".beans");
+        request.getPortletSession(true).setAttribute(id + ".beans", tagBeans);
     }
 
     protected void removeTagBeans(PortletRequest request) {
         String id = getUniqueId();
         // JN request.setAttribute(id + ".form", tagBeans);
-        log.debug("removing tag beans from session");
-        request.getPortletSession(true).removeAttribute(id + ".form");
+        log.debug("removing tag beans from session " + id + ".beans");
+        request.getPortletSession(true).removeAttribute(id + ".beans");
     }
 
     /**
@@ -167,7 +167,8 @@ public class ActionPortlet extends GenericPortlet {
     protected Map getTagBeans(PortletRequest request) {
         String id = getUniqueId();
         //JN Map tagBeans = (Map) request.getAttribute(id + ".form");
-        Map tagBeans = (Map) request.getPortletSession(true).getAttribute(id + ".form");
+        log.debug("getting tag beans from session " + id + ".beans");
+        Map tagBeans = (Map) request.getPortletSession(true).getAttribute(id + ".beans");
         return tagBeans;
     }
 
@@ -190,7 +191,7 @@ public class ActionPortlet extends GenericPortlet {
         // In non-GS container this will need to be created
         if (!(actionRequest instanceof ActionRequestImpl))  {
             action = GridSphereEventImpl.createAction(actionRequest);
-            System.err.println("action name" + action.getName());
+            //System.err.println("action name" + action.getName());
         }
         ActionFormEvent formEvent = new ActionFormEventImpl(action, actionRequest, actionResponse);
 
@@ -202,8 +203,8 @@ public class ActionPortlet extends GenericPortlet {
         log.debug("method name to invoke: " + methodName);
 
         doAction(actionRequest, actionResponse, methodName, parameterTypes, arguments);
+        //System.err.println("in processAction: befoire store cid=" + actionRequest.getAttribute(SportletProperties.COMPONENT_ID));
 
-        formEvent.store();
         setTagBeans(actionRequest, formEvent.getTagBeans());
     }
 
@@ -318,6 +319,10 @@ public class ActionPortlet extends GenericPortlet {
         if (cid == null) request.setAttribute(SportletProperties.COMPONENT_ID, getUniqueId());
 
         if (next.endsWith(".jsp")) {
+            // this is necessary in case beans were modified in action method and set next state is a JSP to render which needs the beans
+            Map tagBeans = getTagBeans(request);
+            RenderFormEvent formEvent = new RenderFormEventImpl(request, response, tagBeans);
+            formEvent.store();
             doViewJSP(request, response, next);
         } else {
             Map tagBeans = getTagBeans(request);
@@ -326,6 +331,8 @@ public class ActionPortlet extends GenericPortlet {
             Object[] arguments = new Object[]{formEvent};
 
             doAction(request, response, next, paramTypes, arguments);
+
+            //System.err.println("in doMode: befoire store cid=" + request.getAttribute(SportletProperties.COMPONENT_ID));
             formEvent.store();
             next = getNextState(request);
             if (next != null) {
