@@ -274,12 +274,14 @@ public class TableTag extends BaseComponentTag {
             tableBean = (TableBean) getTagBean();
             if (tableBean == null) {
                 tableBean = new TableBean();
+                setBaseComponentBean(tableBean);
             } else {
                 includeBody = false;
             }
 
         } else {
-            tableBean = new TableBean((HttpServletRequest) pageContext.getRequest());
+            tableBean = new TableBean();
+            this.setBaseComponentBean(tableBean);
         }
 
         if (maxRows > 0) {
@@ -356,7 +358,7 @@ public class TableTag extends BaseComponentTag {
             out.print(tableBean.toEndString());
             rowCount = 0;
         } catch (Exception e) {
-            throw new JspException(e.getMessage());
+            throw new JspException(e);
         }
 
         super.doEndTag();

@@ -60,7 +60,6 @@ public class TextAreaTag extends BaseComponentTag {
             textAreaBean = (TextAreaBean) getTagBean();
             if (textAreaBean == null) {
                 textAreaBean = new TextAreaBean();
-                textAreaBean.setBeanId(beanId);
                 textAreaBean.setRows(rows);
                 textAreaBean.setCols(cols);
                 this.setBaseComponentBean(textAreaBean);

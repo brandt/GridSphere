@@ -153,6 +153,7 @@ public class ImageTag extends BaseComponentTag {
     }
 
     private void setImageBean(ImageBean urlImageBean) {
+        this.setBaseComponentBean(urlImageBean);
         if (alt != null) urlImageBean.setAlt(alt);
         if (title != null) urlImageBean.setTitle(title);
         if (src != null) urlImageBean.setSrc(src);
@@ -167,13 +168,11 @@ public class ImageTag extends BaseComponentTag {
             urlImageBean = (ImageBean) getTagBean();
             if (urlImageBean == null) {
                 urlImageBean = new ImageBean();
-                setImageBean(urlImageBean);
             }
-            setImageBean(urlImageBean);
         } else {
             urlImageBean = new ImageBean();
-            setImageBean(urlImageBean);
         }
+        setImageBean(urlImageBean);
 
         Tag parent = getParent();
         if (parent instanceof ActionLinkTag) {

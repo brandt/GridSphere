@@ -174,6 +174,9 @@ public abstract class BaseComponentTag extends BaseBeanTag {
      */
     protected void setBaseComponentBean(BaseComponentBean componentBean) {
         componentBean.setBeanId(beanId);
+        componentBean.setLocale(getLocale());
+        componentBean.addParam(SportletProperties.COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.COMPONENT_ID));
+        componentBean.addParam(SportletProperties.GP_COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID));
         if (cssStyle != null) componentBean.setCssClass(cssStyle);
         componentBean.setDisabled(disabled);
         componentBean.setReadOnly(readonly);
@@ -194,6 +197,9 @@ public abstract class BaseComponentTag extends BaseBeanTag {
      * @param componentBean a ui bean
      */
     protected void updateBaseComponentBean(BaseComponentBean componentBean) {
+        componentBean.setLocale(getLocale());
+        componentBean.addParam(SportletProperties.COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.COMPONENT_ID));
+        componentBean.addParam(SportletProperties.GP_COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID));
         if ((cssClass != null) && componentBean.getCssClass() == null) {
             componentBean.setCssClass(cssClass);
         }

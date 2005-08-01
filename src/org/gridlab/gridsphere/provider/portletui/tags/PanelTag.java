@@ -177,6 +177,7 @@ public class PanelTag extends BaseComponentTag {
             }
         } else {
             panelBean = new PanelBean();
+            this.setBaseComponentBean(panelBean);
             panelBean.setWidth(width);
 
             StringTokenizer st = new StringTokenizer(cols, ",");
