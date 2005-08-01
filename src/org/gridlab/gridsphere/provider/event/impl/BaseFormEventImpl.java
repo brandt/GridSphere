@@ -37,9 +37,13 @@ public abstract class BaseFormEventImpl {
 
     protected PortletRequest portletRequest;
     protected PortletResponse portletResponse;
+    protected Locale locale = null;
 
     protected Map tagBeans = null;
     protected List fileItems = null;
+
+    protected String cid = null;
+    protected String compId = null;
 
     protected BaseFormEventImpl() {
 
@@ -48,11 +52,21 @@ public abstract class BaseFormEventImpl {
     public BaseFormEventImpl(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
+        locale = (Locale) request.getSession(true).getAttribute(SportletProperties.LOCALE);
+        if (locale == null) locale = request.getLocale();
+        if (locale == null) locale = Locale.ENGLISH;
+        cid = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
+        compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
     }
 
     public BaseFormEventImpl(PortletRequest request, PortletResponse response) {
         this.portletRequest = request;
         this.portletResponse = response;
+        locale = (Locale) portletRequest.getPortletSession(true).getAttribute(SportletProperties.LOCALE);
+        if (locale == null) locale = portletRequest.getLocale();
+        if (locale == null) locale = Locale.ENGLISH;
+        cid = (String)portletRequest.getAttribute(SportletProperties.COMPONENT_ID);
+        compId = (String)portletRequest.getAttribute(SportletProperties.GP_COMPONENT_ID);
     }
 
     /**
@@ -70,6 +84,12 @@ public abstract class BaseFormEventImpl {
         return null;
     }
 
+    protected void configureBean(TagBean tagBean) {
+        tagBean.setLocale(locale);
+        if (cid != null) tagBean.addParam(SportletProperties.COMPONENT_ID, cid);
+        if (compId != null) tagBean.addParam(SportletProperties.GP_COMPONENT_ID, compId);
+    }
+
     /**
      * Return an existing <code>ActionLinkBean</code> or create a new one
      *
@@ -81,7 +101,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ActionLinkBean) tagBeans.get(beanKey);
         }
-        ActionLinkBean al = new ActionLinkBean(getRequest(), beanId);
+        ActionLinkBean al = new ActionLinkBean(beanId);
+        configureBean(al);
         tagBeans.put(beanKey, al);
         return al;
     }
@@ -97,7 +118,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ActionParamBean) tagBeans.get(beanKey);
         }
-        ActionParamBean ap = new ActionParamBean(getRequest(), beanId);
+        ActionParamBean ap = new ActionParamBean(beanId);
+        configureBean(ap);
         tagBeans.put(beanKey, ap);
         return ap;
     }
@@ -113,7 +135,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ActionSubmitBean) tagBeans.get(beanKey);
         }
-        ActionSubmitBean as = new ActionSubmitBean(getRequest(), beanId);
+        ActionSubmitBean as = new ActionSubmitBean(beanId);
+        configureBean(as);
         tagBeans.put(beanKey, as);
         return as;
     }
@@ -129,7 +152,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (CheckBoxBean) tagBeans.get(beanKey);
         }
-        CheckBoxBean cb = new CheckBoxBean(getRequest(), beanId);
+        CheckBoxBean cb = new CheckBoxBean(beanId);
+        configureBean(cb);
         tagBeans.put(beanKey, cb);
         return cb;
     }
@@ -145,7 +169,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (RadioButtonBean) tagBeans.get(beanKey);
         }
-        RadioButtonBean rb = new RadioButtonBean(getRequest(), beanId);
+        RadioButtonBean rb = new RadioButtonBean(beanId);
+        configureBean(rb);
         tagBeans.put(beanKey, rb);
         return rb;
     }
@@ -161,7 +186,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (PanelBean) tagBeans.get(beanKey);
         }
-        PanelBean pb = new PanelBean(getRequest(), beanId);
+        PanelBean pb = new PanelBean(beanId);
+        configureBean(pb);
         tagBeans.put(beanKey, pb);
         return pb;
     }
@@ -174,10 +200,12 @@ public abstract class BaseFormEventImpl {
      */
     public TextFieldBean getTextFieldBean(String beanId) {
         String beanKey = getBeanKey(beanId);
+        //log.debug("Checking for textfieldbean with bean key=" + beanKey);
         if (tagBeans.containsKey(beanKey)) {
             return (TextFieldBean) tagBeans.get(beanKey);
         }
-        TextFieldBean tf = new TextFieldBean(getRequest(), beanId);
+        TextFieldBean tf = new TextFieldBean(beanId);
+        configureBean(tf);
         tagBeans.put(beanKey, tf);
         return tf;
     }
@@ -193,7 +221,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (HiddenFieldBean) tagBeans.get(beanKey);
         }
-        HiddenFieldBean hf = new HiddenFieldBean(getRequest(), beanId);
+        HiddenFieldBean hf = new HiddenFieldBean(beanId);
+        configureBean(hf);
         tagBeans.put(beanKey, hf);
         return hf;
     }
@@ -209,7 +238,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (FileInputBean) tagBeans.get(beanKey);
         }
-        FileInputBean fi = new FileInputBean(getRequest(), beanId);
+        FileInputBean fi = new FileInputBean(beanId);
+        configureBean(fi);
         tagBeans.put(beanKey, fi);
         return fi;
     }
@@ -225,7 +255,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (PasswordBean) tagBeans.get(beanKey);
         }
-        PasswordBean pb = new PasswordBean(getRequest(), beanId);
+        PasswordBean pb = new PasswordBean(beanId);
+        configureBean(pb);
         tagBeans.put(beanKey, pb);
         return pb;
     }
@@ -241,7 +272,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (TextAreaBean) tagBeans.get(beanKey);
         }
-        TextAreaBean ta = new TextAreaBean(getRequest(), beanId);
+        TextAreaBean ta = new TextAreaBean(beanId);
+        configureBean(ta);
         tagBeans.put(beanKey, ta);
         return ta;
     }
@@ -257,7 +289,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (FrameBean) tagBeans.get(beanKey);
         }
-        FrameBean fb = new FrameBean(getRequest(), beanId);
+        FrameBean fb = new FrameBean(beanId);
+        configureBean(fb);
         //System.err.println("Creating new frame bean" + beanId + " bean key= " + beanKey);
         tagBeans.put(beanKey, fb);
         return fb;
@@ -271,10 +304,14 @@ public abstract class BaseFormEventImpl {
      */
     public TextBean getTextBean(String beanId) {
         String beanKey = getBeanKey(beanId);
+        //log.debug("Checking for textbean with bean key=" + beanKey);
         if (tagBeans.containsKey(beanKey)) {
+            log.debug("Eureka!");
             return (TextBean) tagBeans.get(beanKey);
         }
-        TextBean tb = new TextBean(getRequest(), beanId);
+        log.debug("Did not find one");
+        TextBean tb = new TextBean(beanId);
+        configureBean(tb);
         tagBeans.put(beanKey, tb);
         return tb;
     }
@@ -290,7 +327,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ImageBean) tagBeans.get(beanKey);
         }
-        ImageBean ib = new ImageBean(getRequest(), beanId);
+        ImageBean ib = new ImageBean(beanId);
+        configureBean(ib);
         tagBeans.put(beanKey, ib);
         return ib;
 
@@ -307,7 +345,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (IncludeBean) tagBeans.get(beanKey);
         }
-        IncludeBean includeBean = new IncludeBean(getRequest(), beanId);
+        IncludeBean includeBean = new IncludeBean(beanId);
+        configureBean(includeBean);
         tagBeans.put(beanKey, includeBean);
         return includeBean;
     }
@@ -324,7 +363,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ActionComponentBean) tagBeans.get(beanKey);
         }
-        ActionComponentBean bean = new ActionComponentBean(getRequest(), beanId);
+        ActionComponentBean bean = new ActionComponentBean(beanId);
+        configureBean(bean);
         tagBeans.put(beanKey, bean);
         return bean;
     }
@@ -340,7 +380,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (TableBean) tagBeans.get(beanKey);
         }
-        TableBean tb = new TableBean(getRequest(), beanId);
+        TableBean tb = new TableBean(beanId);
+        configureBean(tb);
         tagBeans.put(beanKey, tb);
         return tb;
     }
@@ -356,7 +397,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (TableRowBean) tagBeans.get(beanKey);
         }
-        TableRowBean tr = new TableRowBean(getRequest(), beanId);
+        TableRowBean tr = new TableRowBean(beanId);
+        configureBean(tr);
         tagBeans.put(beanKey, tr);
         return tr;
     }
@@ -372,7 +414,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (TableCellBean) tagBeans.get(beanKey);
         }
-        TableCellBean tc = new TableCellBean(getRequest(), beanId);
+        TableCellBean tc = new TableCellBean(beanId);
+        configureBean(tc);
         tagBeans.put(beanKey, tc);
         return tc;
     }
@@ -388,7 +431,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ListBoxBean) tagBeans.get(beanKey);
         }
-        ListBoxBean lb = new ListBoxBean(getRequest(), beanId);
+        ListBoxBean lb = new ListBoxBean(beanId);
+        configureBean(lb);
         tagBeans.put(beanKey, lb);
         return lb;
     }
@@ -404,7 +448,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ListBoxItemBean) tagBeans.get(beanKey);
         }
-        ListBoxItemBean lb = new ListBoxItemBean(getRequest(), beanId);
+        ListBoxItemBean lb = new ListBoxItemBean(beanId);
+        configureBean(lb);
         tagBeans.put(beanKey, lb);
         return lb;
     }
@@ -420,7 +465,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (MessageBoxBean) tagBeans.get(beanKey);
         }
-        MessageBoxBean messageBoxBean = new MessageBoxBean(getRequest(), beanId);
+        MessageBoxBean messageBoxBean = new MessageBoxBean(beanId);
+        configureBean(messageBoxBean);
         tagBeans.put(beanKey, messageBoxBean);
         return messageBoxBean;
     }
@@ -497,7 +543,7 @@ public abstract class BaseFormEventImpl {
      * @param req the PortletRequest
      */
     protected void createTagBeans(Object req) {
-        //log.debug("in createTagBeans");
+        log.debug("in createTagBeans");
         if (tagBeans == null) tagBeans = new HashMap();
         Map paramsMap = new HashMap();
         // check for file upload
@@ -575,12 +621,13 @@ public abstract class BaseFormEventImpl {
             //log.debug("Adding bean " + beanId + " with bean key " + beanKey);
 
             if (vb.equals(TextFieldBean.NAME)) {
-                log.debug("Creating a textfieldbean bean with id:" + beanId);
-                TextFieldBean bean = new TextFieldBean(getRequest(), beanId);
+                //log.debug("Creating a textfieldbean bean with id:" + beanId);
+                TextFieldBean bean = new TextFieldBean(beanId);
                 bean.setValue(vals[0]);
                 //log.debug("setting new value" + vals[0]);
                 bean.setName(name);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
+                configureBean(bean);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(FileInputBean.NAME)) {
                 logRequestAttributes();
@@ -601,11 +648,12 @@ public abstract class BaseFormEventImpl {
                     }
                 }
                 if (fileItem != null) {
-                    bean = new FileInputBean(req, beanId, fileItem);
+                    bean = new FileInputBean(beanId, fileItem);
                 } else {
-                    bean = new FileInputBean(req, beanId);
+                    bean = new FileInputBean(beanId);
                 }
                 bean.setName(name);
+                configureBean(bean);
                 tagBeans.put(beanKey, bean);
 
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
@@ -614,7 +662,7 @@ public abstract class BaseFormEventImpl {
                 CheckBoxBean bean = (CheckBoxBean) tagBeans.get(beanKey);
                 if (bean == null) {
                     //log.debug("Creating a checkbox bean with id:" + beanId);
-                    bean = new CheckBoxBean(req, beanId);
+                    bean = new CheckBoxBean(beanId);
                     bean.setValue(vals[0]);
                     for (int i = 0; i < vals.length; i++) {
                         String val = vals[i];
@@ -625,12 +673,12 @@ public abstract class BaseFormEventImpl {
                     bean.addSelectedValue(vals[0]);
                 }
                 bean.setSelected(true);
-
+                configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(ListBoxBean.NAME)) {
                 //log.debug("Creating a listbox bean with id:" + beanId);
-                ListBoxBean bean = new ListBoxBean(req, beanId);
+                ListBoxBean bean = new ListBoxBean(beanId);
                 bean.setName(name);
                 for (int i = 0; i < vals.length; i++) {
                     ListBoxItemBean item = new ListBoxItemBean();
@@ -641,12 +689,13 @@ public abstract class BaseFormEventImpl {
                     bean.addBean(item);
                 }
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
+                configureBean(bean);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(RadioButtonBean.NAME)) {
                 RadioButtonBean bean = (RadioButtonBean) tagBeans.get(beanKey);
                 if (bean == null) {
                     //log.debug("Creating a new radiobutton bean with id:" + beanId);
-                    bean = new RadioButtonBean(req, beanId);
+                    bean = new RadioButtonBean(beanId);
                     bean.setValue(vals[0]);
                     bean.addSelectedValue(vals[0]);
                     bean.setName(name);
@@ -655,27 +704,31 @@ public abstract class BaseFormEventImpl {
                     bean.addSelectedValue(vals[0]);
                 }
                 bean.setSelected(true);
+                configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(PasswordBean.NAME)) {
                 //log.debug("Creating a passwordbean bean with id:" + beanId);
-                PasswordBean bean = new PasswordBean(req, beanId);
+                PasswordBean bean = new PasswordBean(beanId);
                 bean.setValue(vals[0]);
                 bean.setName(name);
+                configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(TextAreaBean.NAME)) {
                 //log.debug("Creating a textareabean bean with id:" + beanId);
-                TextAreaBean bean = new TextAreaBean(req, beanId);
+                TextAreaBean bean = new TextAreaBean(beanId);
                 bean.setValue(vals[0]);
                 bean.setName(name);
+                configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(HiddenFieldBean.NAME)) {
                 //log.debug("Creating a hidden bean bean with id:" + beanId);
-                HiddenFieldBean bean = new HiddenFieldBean(req, beanId);
+                HiddenFieldBean bean = new HiddenFieldBean(beanId);
                 bean.setValue(vals[0]);
                 bean.setName(name);
+                configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else {
@@ -768,12 +821,16 @@ public abstract class BaseFormEventImpl {
     /**
      * Stores any created beans into the request
      */
+
     public void store() {
-        Iterator it = tagBeans.values().iterator();
+        Iterator it = tagBeans.keySet().iterator();
+        TagBean tagBean = null;
         while (it.hasNext()) {
-            TagBean tagBean = (TagBean) it.next();
-            //log.debug("storing bean id: " + tagBean.getBeanId());
-            tagBean.store();
+            String beanKey = (String)it.next();
+            tagBean = (TagBean)tagBeans.get(beanKey);
+            //log.debug("storing bean in attribute: " + beanKey);
+            if (request != null) request.setAttribute(beanKey, tagBean);
+            if (portletRequest != null) portletRequest.setAttribute(beanKey, tagBean);
         }
         //logRequestAttributes();
     }
@@ -795,7 +852,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ActionMenuItemBean) tagBeans.get(beanKey);
         }
-        ActionMenuItemBean ami = new ActionMenuItemBean(getRequest(), beanId);
+        ActionMenuItemBean ami = new ActionMenuItemBean(beanId);
+        configureBean(ami);
         tagBeans.put(beanKey, ami);
         return ami;
     }
@@ -805,7 +863,9 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (DataGridBean) tagBeans.get(beanKey);
         }
-        DataGridBean dgBean = new DataGridBean(getRequest(), beanId);
+        DataGridBean dgBean = new DataGridBean(beanId);
+        dgBean.setHttpServletRequest(request);
+        configureBean(dgBean);
         tagBeans.put(beanKey, dgBean);
         return dgBean;
     }
@@ -815,7 +875,8 @@ public abstract class BaseFormEventImpl {
         if (tagBeans.containsKey(beanKey)) {
             return (ActionMenuBean) tagBeans.get(beanKey);
         }
-        ActionMenuBean am = new ActionMenuBean(getRequest(), beanId);
+        ActionMenuBean am = new ActionMenuBean(beanId);
+        configureBean(am);
         tagBeans.put(beanKey, am);
         return am;
     }
