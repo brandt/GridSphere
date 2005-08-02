@@ -4,48 +4,32 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.layout.PortletTabRegistry;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinition;
-import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 
 import javax.servlet.ServletContext;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * The <code>PortletWebApplicationImpl</code> is an implementation of a <code>PortletWebApplication</code> that
  * represents a collection of portlets contained in a packaged WAR file. Currently
  * under development is the notion of dynamically managing portlet web applications.
  */
-public class PortletWebApplicationImpl implements PortletWebApplication {
+public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl implements PortletWebApplication {
 
     private PortletLog log = SportletLog.getInstance(PortletWebApplicationImpl.class);
     private PortletDeploymentDescriptor pdd = null;
-    protected String webApplicationName = null;
-    protected Map appPortlets = new Hashtable();
-    protected String webAppDescription;
-    private boolean isJSR = false;
-    protected AccessControlManagerService aclManager = null;
-
-    /**
-     * Default instantiation is disallowed
-     */
-    private PortletWebApplicationImpl() {
-    }
 
     /**
      * Constructs an instance of a PortletWebApplicationImpl from a supplied ui application name and corresponding
@@ -55,6 +39,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      * @param context            the <code>ServletContext</code>
      */
     public PortletWebApplicationImpl(String webApplicationName, ServletContext context) throws PortletException {
+        super(context);
         this.webApplicationName = webApplicationName;
         // get the servlet context for the coreportlets webapp
         String contextURIPath = null;
@@ -63,13 +48,6 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
             this.webApplicationName = webApplicationName.substring(1);
         } else {
             contextURIPath = "/" + webApplicationName;
-        }
-
-        PortletServiceFactory factory = SportletServiceFactory.getInstance();
-        try {
-            aclManager = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, context, true);
-        } catch (PortletServiceException e) {
-            throw new PortletException("Unable to get instance of AccessControlManagerService!", e);
         }
 
         // Get the cross context servlet context
@@ -93,13 +71,15 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         }
         log.debug("context path: " + ctx.getRealPath(""));
         this.webAppDescription = ctx.getServletContextName();
-        // load services xml
-        loadServices(ctx);
+
         // load portlet.xml
         loadPortlets(ctx);
-
+        // load services xml
+        if (!isJSR) loadServices(ctx);
+        // load roles.xml
+        //if (!isJSR)loadRoles(ctx);
         // load group.xml (and if found load layout.xml)
-        loadGroup(ctx);
+        if (!isJSR) loadGroup(ctx);
     }
 
     /**
@@ -145,76 +125,6 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
             ApplicationPortlet portletApp = new ApplicationPortletImpl(pdd, portletDef, webApplicationName, ctx);
             String portletAppID = portletApp.getApplicationPortletID();
             appPortlets.put(portletAppID, portletApp);
-        }
-    }
-
-    /**
-     * Loads in a layout descriptor file from the associated servlet context
-     *
-     * @param ctx the <code>ServletContext</code>
-     */
-    protected void loadLayout(ServletContext ctx, String groupName) throws PortletException {
-        // load in the portlet.xml file
-        if (isJSR) return;
-        String layoutXMLfile = ctx.getRealPath("/WEB-INF/layout.xml");
-        File fin = new File(layoutXMLfile);
-
-        if (fin.exists()) {
-            try {
-                PortletTabRegistry.copyFile(fin, groupName);
-                log.info("Loaded a layout descriptor " + groupName);
-            } catch (Exception e) {
-                throw new PortletException("Unable to deserialize layout.xml for: " + groupName + "!", e);
-            }
-        } else {
-            log.debug("Did not find layout.xml for: " + ctx.getServletContextName());
-        }
-    }
-
-    /**
-     * Loads in a group descriptor file from the associated servlet context
-     *
-     * @param ctx the <code>ServletContext</code>
-     */
-    protected void loadGroup(ServletContext ctx) throws PortletException {
-        // load in the portlet.xml file
-        if (isJSR) return;
-        String groupXMLfile = ctx.getRealPath("/WEB-INF/group.xml");
-        File f = new File(groupXMLfile);
-        if (f.exists()) {
-            try {
-                PortletGroupDescriptor groupDescriptor = new PortletGroupDescriptor(groupXMLfile);
-                SportletGroup group = groupDescriptor.getPortletGroup();
-                PortletGroup g = aclManager.getGroupByName(group.getName());
-                if (g == null) {
-                    aclManager.createGroup(group);
-                }
-                log.info("Loaded a group descriptor " + group.getName());
-                // now load layout
-                loadLayout(ctx, group.getName());
-            } catch (Exception e) {
-                throw new PortletException("Unable to deserialize group.xml for: " + webApplicationName, e);
-            }
-        } else {
-            log.debug("Did not find group.xml for: " + ctx.getServletContextName());
-        }
-    }
-
-    /**
-     * Loads in a layout descriptor file from the associated servlet context
-     *
-     * @param ctx the <code>ServletContext</code>
-     */
-    protected void loadServices(ServletContext ctx) throws PortletException {
-        // load in the portlet.xml file
-        if (isJSR) return;
-        String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");
-        File f = new File(descriptor);
-        if (f.exists()) {
-            SportletServiceFactory factory = SportletServiceFactory.getInstance();
-            factory.addServices(ctx, descriptor);
-        } else {
-            log.debug("Did not find PortletServices.xml for: " + ctx.getServletContextName());
         }
     }
 
