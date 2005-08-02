@@ -213,7 +213,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         titleBar.addComponentListener(this);
         titleBar.setParentComponent(this);
         titleBar.setAccessControlService(aclService);
-        System.err.println("useDiv= " + useDiv);
+        //System.err.println("useDiv= " + useDiv);
 
         // invalidate cache
         req.setAttribute(CacheService.NO_CACHE, "true");
