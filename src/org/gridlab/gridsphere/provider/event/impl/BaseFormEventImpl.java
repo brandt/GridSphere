@@ -306,10 +306,8 @@ public abstract class BaseFormEventImpl {
         String beanKey = getBeanKey(beanId);
         //log.debug("Checking for textbean with bean key=" + beanKey);
         if (tagBeans.containsKey(beanKey)) {
-            log.debug("Eureka!");
             return (TextBean) tagBeans.get(beanKey);
         }
-        log.debug("Did not find one");
         TextBean tb = new TextBean(beanId);
         configureBean(tb);
         tagBeans.put(beanKey, tb);
@@ -543,7 +541,6 @@ public abstract class BaseFormEventImpl {
      * @param req the PortletRequest
      */
     protected void createTagBeans(Object req) {
-        log.debug("in createTagBeans");
         if (tagBeans == null) tagBeans = new HashMap();
         Map paramsMap = new HashMap();
         // check for file upload
@@ -811,7 +808,7 @@ public abstract class BaseFormEventImpl {
         } else {
             beanKey = compId + '%' + beanId + '_' + cid;
         }
-        log.debug("BaseFormEventImpl.getBeanKey(" + beanId + ") = " + beanKey);
+        //log.debug("BaseFormEventImpl.getBeanKey(" + beanId + ") = " + beanKey);
         return beanKey;
     }
 

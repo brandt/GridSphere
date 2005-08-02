@@ -41,7 +41,7 @@ public abstract class BaseBeanTag extends BodyTagSupport {
     }
 
     public TagBean getTagBean() {
-        System.err.println("looking for bean: "  + getBeanKey());
+        //System.err.println("looking for bean: "  + getBeanKey());
         return (TagBean) pageContext.findAttribute(getBeanKey());
     }
 
