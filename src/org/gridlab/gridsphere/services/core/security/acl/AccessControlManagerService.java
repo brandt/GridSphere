@@ -36,6 +36,21 @@ public interface AccessControlManagerService extends PortletService {
     public PortletGroup createGroup(SportletGroup portletGroup);
 
     /**
+     * PORTLET ROLE METHODS
+     */
+    public List getRoles();
+
+    public void deleteRole(PortletRole role);
+
+    public PortletRole getRole(String roleId);
+
+    public PortletRole getRoleByName(String roleName);
+
+    public void createRole(String roleName, int priority);
+
+    public void saveRole(PortletRole role);
+
+    /**
      * GROUP ENTRY METHODS **
      */
 
@@ -60,7 +75,6 @@ public interface AccessControlManagerService extends PortletService {
     public void deleteGroupEntries(User user);
 
     public void saveGroupEntry(GroupEntry groupEntry);
-
 
     /**
      * ACCESS CONTROL LOGIC METHODS **

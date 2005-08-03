@@ -484,4 +484,65 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         return hasRoleInGroup(user, getCoreGroup(), PortletRole.SUPER);
         //isUserInGroup(user, SportletGroup.SUPER);
     }
+
+    /**
+     * PORTLET ROLE METHODS
+     */
+    public List getRoles() {
+        List roles = null;
+        try {
+            roles = pm.restoreList("select prole from " + PortletRole.class.getName() + " prole");
+        } catch (PersistenceManagerException e) {
+            log.error("Error deleting role", e);
+        }
+        return roles;
+    }
+
+    public void deleteRole(PortletRole role) {
+        try {
+            pm.delete(role);
+        } catch (PersistenceManagerException e) {
+            log.error("Error deleting role", e);
+        }
+    }
+
+    public PortletRole getRole(String roleId) {
+        PortletRole role = null;
+        try {
+            role = (PortletRole)pm.restore("select prole from " + PortletRole.class.getName() + " prole where prole.oid='" + roleId + "'");
+        } catch (PersistenceManagerException e) {
+            log.error("Error retrieving role " + roleId, e);
+        }
+        return role;
+    }
+
+    public PortletRole getRoleByName(String roleName) {
+        PortletRole role = null;
+        try {
+            role = (PortletRole)pm.restore("select prole from " + PortletRole.class.getName() + " prole where prole.Name='" + roleName + "'");
+        } catch (PersistenceManagerException e) {
+            log.error("Error retrieving role " + roleName, e);
+        }
+        return role;
+    }
+
+    public void saveRole(PortletRole role) {
+        try {
+            pm.saveOrUpdate(role);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error saving portlet role: ";
+            log.error(msg, e);
+        }
+    }
+
+    public void createRole(String roleName, int priority) {
+        PortletRole role = new PortletRole(roleName, priority);
+        try {
+            pm.saveOrUpdate(role);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error creating portlet role: " + roleName;
+            log.error(msg, e);
+        }
+    }
+
 }
