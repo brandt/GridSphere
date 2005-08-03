@@ -19,7 +19,8 @@ public class PasswordBean extends TextFieldBean {
      * Constructs a default password bean
      */
     public PasswordBean() {
-        super(NAME);
+        this.vbName = NAME;
+        this.inputtype = "password";
     }
 
     /**
@@ -29,10 +30,10 @@ public class PasswordBean extends TextFieldBean {
      */
     public PasswordBean(String beanId) {
         super(NAME, beanId);
+        this.inputtype = "password";
     }
 
     public String toStartString() {
-        this.inputtype = "password";
         return super.toStartString();
     }
 }
