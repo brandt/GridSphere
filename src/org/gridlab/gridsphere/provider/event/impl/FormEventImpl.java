@@ -47,13 +47,13 @@ public class FormEventImpl extends BaseFormEventImpl implements FormEvent {
         this.portletResponse = response;
         this.tagBeans = tagBeans;
         // Unless tagBeans is null, don't recreate them
-        if (tagBeans == null) {
-            tagBeans = new HashMap();
+        if (this.tagBeans == null) {
+            this.tagBeans = new HashMap();
             createTagBeans(request);
         }
-        logRequestParameters();
+        //logRequestParameters();
 
-        logTagBeans();
+        //logTagBeans();
     }
 
     /**
@@ -70,9 +70,9 @@ public class FormEventImpl extends BaseFormEventImpl implements FormEvent {
         // Only create tag beans from request when initialized with action event
         createTagBeans(evt.getPortletRequest());
 
-        logRequestParameters();
+        //logRequestParameters();
 
-        logTagBeans();
+        //logTagBeans();
     }
 
     /**

@@ -523,9 +523,11 @@ public abstract class BaseFormEventImpl {
         if (portletRequest != null) {
             e = portletRequest.getAttributeNames();
         }
-        while (e.hasMoreElements()) {
-            String name = (String) e.nextElement();
-            sb.append("name :" + name);
+        if (e != null) {
+            while (e.hasMoreElements()) {
+                String name = (String) e.nextElement();
+                sb.append("name :" + name);
+            }
         }
         sb.append("--------------------\n");
         log.debug(sb.toString());
@@ -542,7 +544,7 @@ public abstract class BaseFormEventImpl {
      */
     protected void createTagBeans(Object req) {
         if (tagBeans == null) tagBeans = new HashMap();
-        Map paramsMap = new HashMap();
+        Map paramsMap;
         // check for file upload
         paramsMap = parseFileUpload(req);
         Enumeration e = null;
@@ -552,18 +554,19 @@ public abstract class BaseFormEventImpl {
         if (portletRequest != null) {
             e = portletRequest.getParameterNames();
         }
-        while (e.hasMoreElements()) {
-            String uiname = (String) e.nextElement();
-            String[] vals = null;
-            if (request != null) {
-                vals = request.getParameterValues(uiname);
+        if (e != null) {
+            while (e.hasMoreElements()) {
+                String uiname = (String) e.nextElement();
+                String[] vals = null;
+                if (request != null) {
+                    vals = request.getParameterValues(uiname);
+                }
+                if (portletRequest != null) {
+                    vals = portletRequest.getParameterValues(uiname);
+                }
+                paramsMap.put(uiname, vals);
             }
-            if (portletRequest != null) {
-                vals = portletRequest.getParameterValues(uiname);
-            }
-            paramsMap.put(uiname, vals);
         }
-
         //Enumeration enum = request.getParameterNames();
 
         Iterator it = paramsMap.keySet().iterator();
@@ -572,7 +575,7 @@ public abstract class BaseFormEventImpl {
 
             String uiname = (String) it.next();
             String vb = "";
-            String name = "";
+            String name;
             String beanId = "";
 
             if (!uiname.startsWith("ui")) continue;
@@ -590,7 +593,7 @@ public abstract class BaseFormEventImpl {
             vbname = vbname.substring(idx + 1);
             idx = vbname.lastIndexOf("_");
 
-            String beanKey = "";
+            String beanKey;
 
             if (idx > 0) {
                 beanId = vbname.substring(0, idx);
@@ -630,7 +633,7 @@ public abstract class BaseFormEventImpl {
                 logRequestAttributes();
                 //log.debug("Creating a fileinput bean with id:" + beanId);
 
-                FileInputBean bean = null;
+                FileInputBean bean;
                 FileItem fileItem = null;
                 // check whether the fileItems list contains a bean with this name
                 if (fileItems != null) {
@@ -802,7 +805,7 @@ public abstract class BaseFormEventImpl {
      * @return the bean key identifier
      */
     protected String getBeanKey(String beanId) {
-        String beanKey = null;
+        String beanKey;
         if (compId == null) {
             beanKey = beanId + '_' + cid;
         } else {
@@ -818,7 +821,7 @@ public abstract class BaseFormEventImpl {
 
     public void store() {
         Iterator it = tagBeans.keySet().iterator();
-        TagBean tagBean = null;
+        TagBean tagBean;
         while (it.hasNext()) {
             String beanKey = (String)it.next();
             tagBean = (TagBean)tagBeans.get(beanKey);
