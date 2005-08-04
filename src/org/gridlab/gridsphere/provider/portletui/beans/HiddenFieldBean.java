@@ -18,7 +18,7 @@ public class HiddenFieldBean extends TextFieldBean {
      * Constructs a default hidden field bean
      */
     public HiddenFieldBean() {
-        super(NAME);
+        this.vbName = NAME;
     }
 
     /**
@@ -27,8 +27,7 @@ public class HiddenFieldBean extends TextFieldBean {
      * @param beanId the bean identifier
      */
     public HiddenFieldBean(String beanId) {
-        super(NAME);
-        this.beanId = beanId;
+        super(NAME, beanId);
     }
 
     public String toStartString() {
