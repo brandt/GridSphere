@@ -40,7 +40,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
     public static final PortletRole ADMIN = new PortletRole(ADMIN_ROLE_STRING, ADMIN_ROLE);
     public static final PortletRole SUPER = new PortletRole(SUPER_ROLE_STRING, SUPER_ROLE);
 
-    private PortletRole() {}
+    public PortletRole() {}
 
     /**
      * Constructs an instance of PortletRole
