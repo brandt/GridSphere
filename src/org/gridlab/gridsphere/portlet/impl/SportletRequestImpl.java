@@ -35,6 +35,7 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
      */
     public SportletRequestImpl(HttpServletRequest req) {
         super(req);
+        //logRequest();
     }
 
     /**
