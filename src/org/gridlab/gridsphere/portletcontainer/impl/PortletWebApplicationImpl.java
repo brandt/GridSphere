@@ -77,7 +77,7 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
         // load services xml
         if (!isJSR) loadServices(ctx);
         // load roles.xml
-        //if (!isJSR)loadRoles(ctx);
+        if (!isJSR)loadRoles(ctx);
         // load group.xml (and if found load layout.xml)
         if (!isJSR) loadGroup(ctx);
     }

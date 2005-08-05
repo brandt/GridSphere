@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.layout.PortletTabRegistry;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
@@ -16,14 +17,12 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
+import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletRoleDescriptor;
 
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The <code>PortletWebApplicationImpl</code> is an implementation of a <code>PortletWebApplication</code> that
@@ -33,7 +32,6 @@ import java.util.Map;
 public abstract class BasePortletWebApplicationImpl implements PortletWebApplication {
 
     private PortletLog log = SportletLog.getInstance(BasePortletWebApplicationImpl.class);
-
 
     protected Map appPortlets = new Hashtable();
 
@@ -83,9 +81,8 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
         File fin = new File(layoutXMLfile);
 
         if (fin.exists()) {
-            String pgroupName = groupName;
             try {
-                pgroupName = URLEncoder.encode(groupName, "UTF-8");
+                String pgroupName = URLEncoder.encode(groupName, "UTF-8");
                 PortletTabRegistry.copyFile(fin, pgroupName);
                 log.info("Loaded a layout descriptor " + groupName);
             } catch (Exception e) {
@@ -129,7 +126,6 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
      *
      * @param ctx the <code>ServletContext</code>
      */
-    /*
     protected void loadRoles(ServletContext ctx) throws PortletException {
         String roleXMLfile = ctx.getRealPath("/WEB-INF/roles.xml");
         File f = new File(roleXMLfile);
@@ -140,7 +136,7 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
                 Iterator it = portletRoles.iterator();
                 while (it.hasNext()) {
                     PortletRole role = (PortletRole)it.next();
-                    aclManager.saveRole(role);
+                    if (aclManager.getRoleByName(role.getName()) == null) aclManager.saveRole(role);
                 }
                 log.info("Loaded a role descriptor");
             } catch (Exception e) {
@@ -150,7 +146,6 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
             log.debug("Did not find role.xml for: " + ctx.getServletContextName());
         }
     }
-    */
 
     /**
      * Loads in a service descriptor file from the associated servlet context
