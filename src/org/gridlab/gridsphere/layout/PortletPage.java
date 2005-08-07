@@ -274,8 +274,8 @@ public class PortletPage implements Serializable, Cloneable {
      */
     public void loginPortlets(GridSphereEvent event) throws PortletException, IOException {
         Iterator it = componentIdentifiers.iterator();
-        ComponentIdentifier cid = null;
-        PortletFrame f = null;
+        ComponentIdentifier cid;
+        PortletFrame f;
         String id = event.getPortletRequest().getPortletSession(true).getId();
         while (it.hasNext()) {
             cid = (ComponentIdentifier) it.next();
@@ -302,8 +302,8 @@ public class PortletPage implements Serializable, Cloneable {
      */
     public void logoutPortlets(GridSphereEvent event) throws IOException, PortletException {
         Iterator it = componentIdentifiers.iterator();
-        ComponentIdentifier cid = null;
-        PortletFrame f = null;
+        ComponentIdentifier cid;
+        PortletFrame f;
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         String id = req.getPortletSession(true).getId();
@@ -358,7 +358,7 @@ public class PortletPage implements Serializable, Cloneable {
             // first check the hash
             ComponentIdentifier compId = null;
 
-            int compIntId = -1;
+            int compIntId;
             if (labelsHash.containsKey(cid)) {
                 Integer cint = (Integer) labelsHash.get(cid);
                 compIntId = cint.intValue();
@@ -368,17 +368,13 @@ public class PortletPage implements Serializable, Cloneable {
                 try {
                     compIntId = Integer.parseInt(cid);
                     // number can't exceed available components
-                    if (compIntId > componentIdentifiers.size()) {
-                        compIntId = -1;
-                    } else {
+                    if (compIntId < componentIdentifiers.size()) {
                         compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
                     }
                 } catch (NumberFormatException e) {
                     System.err.println("unable to convert cid=" + cid);
-                    compIntId = -1;
                 } catch (ArrayIndexOutOfBoundsException e) {
                     System.err.println("unable to convert cid=" + cid);
-                    compIntId = -1;
                 }
             }
 
@@ -396,12 +392,7 @@ public class PortletPage implements Serializable, Cloneable {
                             if (!(user instanceof GuestUser)) {
                                 String portletClass = ((PortletFrame)comp).getPortletClass();
 
-                                boolean hasrole = false;
-
-                                hasrole = aclService.hasRequiredRole(req, portletClass, false);
-
-
-                                //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
+                                boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
                                 if (!hasrole) {
                                     System.err.println("User " + user + " does not have required role!");
                                     return null;
@@ -412,11 +403,7 @@ public class PortletPage implements Serializable, Cloneable {
                             if (!(user instanceof GuestUser)) {
                                 String portletClass = ((PortletTitleBar)comp).getPortletClass();
 
-                                boolean hasrole = false;
-
-                                hasrole = aclService.hasRequiredRole(req, portletClass, false);
-
-                                //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
+                                boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
                                 //System.err.println("hasRole = " + hasrole);
                                 if (!hasrole) {
                                     System.err.println("User " + user + " does not have required role!");
@@ -446,10 +433,6 @@ public class PortletPage implements Serializable, Cloneable {
      * @throws IOException            if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-
-        PortletRequest req = event.getPortletRequest();
-        Client client = req.getClient();
-
         // handle any client logic to determin which markup to display
     	String markupName = event.getPortletRequest().getClient().getMarkupName();
     	if (markupName.equals("html")) {
@@ -464,7 +447,7 @@ public class PortletPage implements Serializable, Cloneable {
         PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();
         
-        PrintWriter out = null;
+        PrintWriter out;
 
         // set content to UTF-8 for il8n
         //res.setContentType("text/vnd.wap.xhtml");
@@ -533,12 +516,21 @@ public class PortletPage implements Serializable, Cloneable {
         writer.println("<meta name=\"keywords\" content=\"" + keywords + "\"/>");
         writer.println("<meta http-equiv=\"Pragma\" content=\"no-cache\"/>");
         if (useDiv) {
-        writer.println("<link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + theme + "/css" +
-                "/divtheme/css/default.css\" rel=\"stylesheet\"/>");
-    } else {
             writer.println("<link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + theme + "/css" +
-                "/default.css\" rel=\"stylesheet\"/>");
-    }
+                    "/divtheme/css/default.css\" rel=\"stylesheet\"/>");
+        } else {
+            writer.println("<link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + theme + "/css" +
+                    "/default.css\" rel=\"stylesheet\"/>");
+        }
+
+        // Add portlet defined stylesheet if defined
+        Map props = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        if (props != null) {
+            String cssHref = (String)props.get("CSS_HREF");
+            if (cssHref != null) {
+                writer.println("<link type=\"text/css\" href=\"" + cssHref + " rel=\"stylesheet\"/>");
+            }
+        }
         writer.println("<link rel=\"icon\" href=\"images/favicon.ico\" type=\"imge/x-icon\">");
         writer.println("<link rel=\"shortcut icon\" href=\"" + req.getContextPath() + "/images/favicon.ico\" type=\"image/x-icon\">");
         writer.println("<script language=\"JavaScript\" src=\"" + req.getContextPath() + "/javascript/gridsphere.js\"></script>");
@@ -596,7 +588,7 @@ public class PortletPage implements Serializable, Cloneable {
         writer.println("</body></html>");
         //out.flush();
 
-        PrintWriter out = null;
+        PrintWriter out;
         // set content to UTF-8 for il8n
         //res.setContentType("text/html; charset=utf-8");
         try {
@@ -687,9 +679,9 @@ public class PortletPage implements Serializable, Cloneable {
 
         // the component id determines where in the list the portlet component is
         // first check the hash
-        ComponentIdentifier compId = null;
+        ComponentIdentifier compId;
 
-        int compIntId = -1;
+        int compIntId;
         if (portletHash.containsKey(concPortletID)) {
             Integer cint = (Integer) portletHash.get(concPortletID);
             compIntId = cint.intValue();
