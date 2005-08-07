@@ -68,4 +68,13 @@
             </ui:tablecell>
         </ui:tablerow>
 
+        <ui:tablerow>
+            <ui:tablecell width="100">
+                <ui:text key="USER_ACCOUNT_STATUS"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:checkbox beanId="accountCB"/>
+            </ui:tablecell>
+        </ui:tablerow>
+
 </ui:frame>

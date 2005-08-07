@@ -23,6 +23,8 @@ public interface User {
 
     public static final String THEME = "gridsphere.user.theme";
 
+    public static final String DISABLED = "gridsphere.user.disabled";
+    
     /**
      * Returns the value of the attribute with the given name,
      * or null if no attribute with the given name exists.

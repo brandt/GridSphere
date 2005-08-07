@@ -127,7 +127,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             /*
             if (!aclManager.hasSuperRole(root)) {
                 log.info("Root user does not have super role! Granting now...");
-               
+
                 aclManager.grantSuperRole(rootUser);
             }
             */
@@ -226,7 +226,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             } else {
                 user.setLastLoginTime(now);
             }
-            user.setAttribute("lastlogin", new Long(now).toString());
+            user.setAttribute("lastlogin", Long.toString(now));
             saveSportletUserImpl(user);
         }
         return user;
@@ -263,9 +263,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 + criteria;
         log.debug("Retrieving user with OQL: " + oql);
         try {
-            SportletUserImpl sui = (SportletUserImpl) pm.restore(oql);
             //log.debug("Retrieved user with OQL: "+oql);
-            return sui;
+            return (SportletUserImpl) pm.restore(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving user with criteria " + criteria;
             log.error(msg, e);

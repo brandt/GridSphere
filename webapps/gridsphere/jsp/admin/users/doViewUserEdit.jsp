@@ -61,6 +61,15 @@
             </ui:tablecell>
         </ui:tablerow>
 
+        <ui:tablerow>
+            <ui:tablecell width="200">
+                <ui:text key="USER_ACCOUNT_STATUS"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:checkbox beanId="accountCB"/>
+            </ui:tablecell>
+        </ui:tablerow>
+
         </ui:frame>
 
    <% if (request.getAttribute("savePass") != null)  { %>

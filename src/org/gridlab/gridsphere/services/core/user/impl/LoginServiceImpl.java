@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletConfig;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
@@ -45,7 +46,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     private static boolean inited = false;
     private static Map authModules = new HashMap();
     private static Map activeAuthModules = new HashMap();
-
+    private PortletConfig config = null;
     private static LoginUserModule activeLoginModule = null;
 
     private PersistenceManagerRdbms pm = null;
@@ -93,7 +94,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         } catch (PersistenceManagerException e) {
             e.printStackTrace();
         }
-        return (authMod != null) ? true : false;
+        return (authMod != null);
     }
 
     public void removeActiveAuthModule(User user, String moduleClassName) {
@@ -195,7 +196,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
     public void loadAuthModules(String authModsPath, ClassLoader classloader) {
 
-        AuthModulesDescriptor desc = null;
+        AuthModulesDescriptor desc;
         try {
             desc = new AuthModulesDescriptor(authModsPath, authMappingPath);
 
@@ -301,6 +302,10 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         User user = activeLoginModule.getLoggedInUser(loginName);
 
         if (user == null) throw new AuthorizationException("User " + loginName + " does not exist");
+
+        String accountStatus = (String)user.getAttribute(User.DISABLED);
+        if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
+            throw new AuthorizationException("User " + loginName + " has been disabled");
 
         // second invoke the appropriate auth module
 

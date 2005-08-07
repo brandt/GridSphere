@@ -81,6 +81,12 @@ public class UserManagerPortlet extends ActionPortlet {
             PortletGroup coreGroup = aclManagerService.getCoreGroup();
             PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
             req.setAttribute("role", role.getText(req.getLocale()));
+            CheckBoxBean accountCB = evt.getCheckBoxBean("accountCB");
+            String disabled = (String)user.getAttribute(User.DISABLED);
+            if ((disabled != null) && ("TRUE".equalsIgnoreCase(disabled))) {
+                accountCB.setSelected(true);
+            }
+            accountCB.setDisabled(true);
             setNextState(req, DO_VIEW_USER_VIEW);
         } else {
             setNextState(req, DEFAULT_VIEW_PAGE);
@@ -342,10 +348,6 @@ public class UserManagerPortlet extends ActionPortlet {
         return newuser;
     }
 
-
-
-
-
     private void editAccountRequest(FormEvent event, SportletUser accountRequest) {
         log.debug("Entering editAccountRequest()");
         accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
@@ -354,6 +356,11 @@ public class UserManagerPortlet extends ActionPortlet {
         accountRequest.setFullName(event.getTextFieldBean("fullName").getValue());
         accountRequest.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
         accountRequest.setOrganization(event.getTextFieldBean("organization").getValue());
+        if (event.getCheckBoxBean("accountCB").isSelected()) {
+            accountRequest.setAttribute(User.DISABLED, "true");
+        } else {
+            accountRequest.setAttribute(User.DISABLED, "false");
+        }
     }
 
     private void saveUserRole(FormEvent event, User user) {
