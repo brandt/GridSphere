@@ -11,7 +11,7 @@ import java.util.*;
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-public abstract class BaseAuthModule implements Comparable {
+public abstract class BaseAuthModule implements LoginAuthModule, Comparable {
 
     protected Map attributes = new HashMap();
     protected AuthModuleDefinition moduleDef = null;
@@ -40,6 +40,22 @@ public abstract class BaseAuthModule implements Comparable {
 
     public String getModuleName() {
         return moduleDef.getModuleName();
+    }
+
+    public String getModuleError(String key, Locale locale) {
+        List modErrs = moduleDef.getModuleErrors();
+        if (locale == null) throw new IllegalArgumentException("locale is NULL");
+        Iterator it = modErrs.iterator();
+        String defTitle = null;
+        while (it.hasNext()) {
+            Description t = (Description) it.next();
+            if (t.getKey().equals(key)) {
+                if (t.getLang() == null) t.setLang(Locale.ENGLISH.getLanguage());
+                if (locale.getLanguage().equals(new Locale(t.getLang(), "", "").getLanguage())) return t.getText();
+                if (t.getLang().equals(Locale.ENGLISH.getLanguage())) defTitle = t.getText();
+            }
+        }
+        return defTitle;
     }
 
     public String getModuleDescription(Locale locale) {

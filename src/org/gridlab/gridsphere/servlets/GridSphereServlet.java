@@ -420,15 +420,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         log.debug("in login of GridSphere Servlet");
 
         String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
-         PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getPortletRequest();
 
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
 
         try {
-            User user = loginService.login(username, password);
-            // null out passwd
-            password = null;
+            User user = loginService.login(req);
+
             setUserSettings(event, user);
 
             String remme = req.getParameter("remlogin");

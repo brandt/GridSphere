@@ -40,25 +40,18 @@ public class PasswordAuthModule extends BaseAuthModule implements LoginAuthModul
     }
 
     public void checkAuthentication(User user, String password) throws AuthenticationException {
-
         log.debug("Entering authenticate");
         // Check that password is not null
         if (password == null) {
-            String msg = "Password is not provided.";
-            log.debug(msg);
-            AuthenticationException ex = new AuthenticationException(msg);
-            ex.putInvalidParameter("password", msg);
-            throw ex;
+            log.debug("Password is not provided.");
+            throw new AuthenticationException("key1");
         }
         // Check that password maps to the given user
         try {
             this.passwordManager.validateSuppliedPassword(user, password);
         } catch (InvalidPasswordException e) {
-            String msg = "Incorrect password provided.";
-            log.debug(msg);
-            AuthenticationException ex = new AuthenticationException(msg);
-            ex.putInvalidParameter("password", msg);
-            throw ex;
+            log.debug("Incorrect password provided.");
+            throw new AuthenticationException("key2");
         }
     }
 

@@ -13,8 +13,6 @@ import java.util.TreeMap;
 
 public class AuthenticationException extends RuntimeException {
 
-    public Map invalidParameters = new TreeMap();
-
     public AuthenticationException() {
         super();
     }
@@ -23,11 +21,4 @@ public class AuthenticationException extends RuntimeException {
         super(msg);
     }
 
-    public Map getInvalidParameters() {
-        return this.invalidParameters;
-    }
-
-    public void putInvalidParameter(String name, String explanation) {
-        this.invalidParameters.put(name, explanation);
-    }
 }

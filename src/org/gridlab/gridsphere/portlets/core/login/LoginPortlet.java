@@ -127,10 +127,10 @@ public class LoginPortlet extends ActionPortlet {
         log.debug("in LoginPortlet: gs_login");
         PortletRequest req = event.getPortletRequest();
 
-        String errorKey = (String) req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
+        String errorMsg = (String) req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
 
-        if (errorKey != null) {
-            createErrorMessage(event,this.getLocalizedText(req, LoginPortlet.LOGIN_ERROR_FLAG));
+        if (errorMsg != null) {
+            createErrorMessage(event, errorMsg);
             req.removeAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
         }
 

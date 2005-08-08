@@ -30,6 +30,8 @@ public interface LoginAuthModule extends Comparable {
 
     public void setModuleActive(boolean isActive);
 
+    public String getModuleError(String key, Locale locale);
+
     public void checkAuthentication(User user, String password) throws AuthenticationException;
 
 }

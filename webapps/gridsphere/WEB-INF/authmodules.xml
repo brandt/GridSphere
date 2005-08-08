@@ -20,6 +20,8 @@
             <param-name>aname</param-name>
             <param-value>avalue</param-value>
         </auth-config>
+        <error key="key1" lang="en">Password is not provided</error>
+        <error key="key2" lang="en">Incorrect password provided</error>
     </auth-module>
 
 </auth-modules>

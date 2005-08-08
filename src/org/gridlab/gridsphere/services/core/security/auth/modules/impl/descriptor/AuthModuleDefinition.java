@@ -20,6 +20,7 @@ public class AuthModuleDefinition {
     private String oid = null;
     protected String moduleName = "";
     private List moduleDescriptions = new Vector();
+    private List moduleErrors = new Vector();
 
     protected int priority = 100;
     protected String moduleImplementation = "";
@@ -89,6 +90,24 @@ public class AuthModuleDefinition {
      */
     public List getModuleDescriptions() {
         return this.moduleDescriptions;
+    }
+
+    /**
+     * Sets the list of module errors
+     *
+     * @param moduleErrors the list of module errors
+     */
+    public void setModuleErrors(List moduleErrors) {
+        this.moduleErrors = moduleErrors;
+    }
+
+    /**
+     * Returns the module errors
+     *
+     * @return the module errors
+     */
+    public List getModuleErrors() {
+        return this.moduleErrors;
     }
 
     /**
@@ -228,6 +247,7 @@ public class AuthModuleDefinition {
         StringBuffer sb = new StringBuffer("\n");
         sb.append("auth module name: " + this.moduleName + "\n");
         sb.append("auth module description: " + this.moduleDescriptions.get(0) + "\n");
+        sb.append("auth module error: " + this.moduleErrors.get(0) + "\n");
         sb.append("auth module implementation: " + this.moduleImplementation + "\n");
         sb.append("auth module priority: " + this.priority + "\n");
         sb.append("config properties: ");

@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletConfig;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
@@ -281,31 +282,23 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     public void destroy() {
     }
 
-    /**
-     * Login a user with the given login name and password.
-     * Returns the associated user if login succeeds.
-     * Throws an AuthenticationException if user cannot authenticate fails.
-     * Throws an AuthorizationException if user is not authroized, no account exists, etc.
-     *
-     * @param loginName     the login name
-     * @param loginPassword The login password.
-     * @return User The associated user.
-     * @throws AuthorizationException if login unsuccessful
-     */
-    public User login(String loginName, String loginPassword)
+    public User login(PortletRequest req)
             throws AuthenticationException, AuthorizationException {
+        String loginName = req.getParameter("username");
+        String loginPassword = req.getParameter("password");
+
         if ((loginName == null) || (loginPassword == null)) {
-            throw new AuthorizationException("Username or password is blank");
+            throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_BLANK"));
         }
 
         // first get user
         User user = activeLoginModule.getLoggedInUser(loginName);
 
-        if (user == null) throw new AuthorizationException("User " + loginName + " does not exist");
+        if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
 
         String accountStatus = (String)user.getAttribute(User.DISABLED);
         if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
-            throw new AuthorizationException("User " + loginName + " has been disabled");
+            throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
 
         // second invoke the appropriate auth module
 
@@ -325,7 +318,12 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
                 mod.checkAuthentication(user, loginPassword);
                 success = true;
             } catch (AuthenticationException e) {
-                authEx = e;
+                String errMsg = mod.getModuleError(e.getMessage(), req.getLocale());
+                if (errMsg != null) {
+                    authEx = new AuthenticationException(errMsg);
+                } else {
+                    authEx = e;
+                }
             }
             if (success) break;
         }
@@ -334,5 +332,10 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         return user;
     }
 
+    protected String getLocalizedText(PortletRequest req, String key) {
+        Locale locale = req.getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+        return bundle.getString(key);
+    }
 
 }
