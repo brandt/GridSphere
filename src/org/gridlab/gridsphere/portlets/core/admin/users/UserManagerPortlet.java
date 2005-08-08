@@ -147,7 +147,7 @@ public class UserManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
         //User user = loadUser(evt);
         try {
-            User user = null;
+            User user;
             HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
             String newuser = hf.getValue();
             log.debug("in doConfirmEditUser: " + newuser);
@@ -293,7 +293,7 @@ public class UserManagerPortlet extends ActionPortlet {
             return true;
             // If they do match, then validate password with our service
         } else {
-            if ((passwordValue == null) || (passwordValue.length() == 0)) {
+            if (passwordValue.length() == 0) {
                 createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
                 return true;
             }
@@ -308,7 +308,7 @@ public class UserManagerPortlet extends ActionPortlet {
     private User saveUser(FormEvent event, User user) {
         log.debug("Entering saveUser()");
         // Account request
-        SportletUser newuser = null;
+        SportletUser newuser;
         boolean newuserflag = false;
         // Create edit account request
         if (user == null) {
@@ -380,7 +380,7 @@ public class UserManagerPortlet extends ActionPortlet {
             // Create appropriate access request
             Set groups = portalConfigService.getPortalConfigSettings().getDefaultGroups();
             Iterator it = groups.iterator();
-            GroupRequest groupRequest = null;
+            GroupRequest groupRequest;
             while (it.hasNext()) {
                 PortletGroup group = (PortletGroup) it.next();
                 GroupEntry ge = aclManagerService.getGroupEntry(user, group);
