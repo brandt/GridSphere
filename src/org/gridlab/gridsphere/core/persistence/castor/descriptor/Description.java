@@ -14,6 +14,7 @@ public class Description implements Serializable, Cloneable {
 
     private String lang = Locale.ENGLISH.getLanguage();
     private String text = "";
+    private String key = "";
 
     /**
      * Constructs an instance of a Description
@@ -37,6 +38,24 @@ public class Description implements Serializable, Cloneable {
      */
     public String getLang() {
         return lang;
+    }
+
+    /**
+     * Sets the key of this text
+     *
+     * @param key the key of this text
+     */
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    /**
+     * Returns the key of this text
+     *
+     * @return the key of this text
+     */
+    public String getKey() {
+        return key;
     }
 
     /**
@@ -65,6 +84,7 @@ public class Description implements Serializable, Cloneable {
         Description t = (Description) super.clone();
         t.lang = this.lang;
         t.text = this.text;
+        t.key = this.key;
         return t;
     }
 
