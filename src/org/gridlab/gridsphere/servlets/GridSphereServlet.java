@@ -25,7 +25,6 @@ import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
-import org.gridlab.gridsphere.services.core.tracker.impl.TrackerServiceImpl;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -489,6 +488,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         try {
             String fileName = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
             String path = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
+            Boolean deleteFile = (Boolean)req.getAttribute(SportletProperties.FILE_DELETE);
             if ((fileName == null) || (path == null)) return;
             log.debug("in downloadFile");
             log.debug("filename: " + fileName + " filepath= " + path);
@@ -500,6 +500,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             res.setHeader("Content-Length", String.valueOf(f.length()));
             DataHandler handler = new DataHandler(fds);
             handler.writeTo(res.getOutputStream());
+            if (deleteFile.booleanValue()) {
+                f.delete();
+            }
         } catch (FileNotFoundException e) {
             log.error("Unable to find file!", e);
         } catch (SecurityException e) {
