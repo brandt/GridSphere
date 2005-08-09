@@ -2,6 +2,8 @@ package org.gridlab.gridsphere.services.core.tracker;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
 
+import java.util.List;
+
 public interface TrackerService extends PortletService {
 
     public static final String TRACK_PARAM = "gs.trackme";
@@ -12,9 +14,31 @@ public interface TrackerService extends PortletService {
      *
      * @param label a label used in identifying the action invoked
      * @param userAgent the user agent string provided by the web browser
-     * @param userOid the user oid
+     * @param userName the user name
      */ 
-    public void trackURL(String label, String userAgent, String userOid);
+    public void trackURL(String label, String userAgent, String userName);
 
+    /**
+     * Return a list of the available labels
+     *
+     * @return a list of the available labels
+     */
+    public List getTrackingLabels();
+
+    /**
+     * Return a list of TrackerInfo objects for the provided label
+     *
+     * @param label the label to retrieve tacking info on
+     * @return a list of TrackerInfo objects for the provided label
+     */
+    public List getTrackingInfoByLabel(String label);
+
+    public List getTrackingActions();
+
+    public void removeTrackingAction(String action);
+
+    public void clearTrackingActions();
+
+    public void addTrackingAction(String action);
 
 }

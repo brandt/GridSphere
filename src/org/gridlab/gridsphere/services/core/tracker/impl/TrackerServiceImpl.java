@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class TrackerServiceImpl implements TrackerService, PortletServiceProvider {
 
@@ -31,14 +32,14 @@ public class TrackerServiceImpl implements TrackerService, PortletServiceProvide
      *
      * @param label a label used in identifying the action invoked
      * @param userAgent the user agent string provided by the web browser
-     * @param userOid the user oid
+     * @param userName the user name
      */
-    public void trackURL(String label, String userAgent, String userOid) {
+    public void trackURL(String label, String userAgent, String userName) {
         TrackerInfo info = new TrackerInfo();
         info.setLabel(label);
         info.setDate(Calendar.getInstance().getTime().getTime());
         info.setUserAgent(userAgent);
-        info.setUserOid(userOid);
+        info.setUserName(userName);
         try {
             pm.saveOrUpdate(info);
         } catch (PersistenceManagerException e) {
@@ -46,5 +47,76 @@ public class TrackerServiceImpl implements TrackerService, PortletServiceProvide
         }
     }
 
+    public List getTrackingActions() {
+        List actions = null;
+        try {
+            actions = pm.restoreList("from " + TrackerAction.class.getName() + "as trackeraction");
+        } catch (PersistenceManagerException e) {
+            log.error("Unable to retrieve tracker actions");
+        }
+        return actions;
+    }
 
+    public void addTrackingAction(String action) {
+        TrackerAction ta = new TrackerAction();
+        ta.setAction(action);
+        try {
+            pm.saveOrUpdate(ta);
+        } catch (PersistenceManagerException e) {
+            log.error("Unable to save new tracker action: " + action);
+        }
+    }
+
+    public void removeTrackingAction(String action) {
+        try {
+            pm.deleteList("from " + TrackerAction.class.getName() + " as trackeraction where trackeraction.action=\'" + action + "'");
+        } catch (PersistenceManagerException e) {
+            log.error("Unable to delete tracker action: " + action);
+        }
+    }
+
+    public void clearTrackingActions() {
+        try {
+            pm.deleteList("from " + TrackerAction.class.getName() + " as trackeraction ");
+        } catch (PersistenceManagerException e) {
+            log.error("Unable to clear tracker actions");
+        }
+    }
+
+    /**
+     * Return a list of the available labels
+     *
+     * @return a list of the available labels
+     */
+    public List getTrackingLabels() {
+        List result = null;
+        try {
+            result = pm.restoreList("select tracker.Label from " +  TrackerInfo.class.getName() + " as tracker");
+        } catch (PersistenceManagerException e) {
+         log.error("Could not retrieve labels :"+e);
+        }
+        return result;
+    }
+
+    /**
+     * Return a list of TrackerInfo objects for the provided label
+     *
+     * @return a list of TrackerInfo objects for the provided label
+     */
+    public List getTrackingInfoByLabel(String label) {
+        return queryDB("where tracker.Label='" + label + "'");
+    }
+
+    private List queryDB(String condition) {
+        List result = null;
+        try {
+            // try to get the address
+            result = pm.restoreList("from " + TrackerInfo.class.getName() + " as tracker " + condition);
+        } catch (PersistenceManagerException e) {
+            log.error("Could not retrieve info :"+e);
+        }
+
+        return result;
+
+    }
 }

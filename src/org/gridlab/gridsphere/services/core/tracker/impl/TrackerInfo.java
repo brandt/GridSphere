@@ -4,10 +4,9 @@ package org.gridlab.gridsphere.services.core.tracker.impl;
 public class TrackerInfo {
 
     private String oid;
-
     private String label;
     private String userAgent;
-    private String userOid;
+    private String userName;
     private long date;
 
     public TrackerInfo() {}
@@ -36,12 +35,12 @@ public class TrackerInfo {
         this.userAgent = userAgent;
     }
 
-    public String getUserOid() {
-        return userOid;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserOid(String userOid) {
-        this.userOid = userOid;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public long getDate() {
