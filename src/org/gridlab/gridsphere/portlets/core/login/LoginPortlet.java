@@ -241,6 +241,10 @@ public class LoginPortlet extends ActionPortlet {
         String passwordValue = event.getPasswordBean("password").getValue();
         String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
 
+        if (passwordValue == null) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
+            return true;
+        }
 
         // Otherwise, password must match confirmation
         if (!passwordValue.equals(confirmPasswordValue)) {
@@ -248,10 +252,7 @@ public class LoginPortlet extends ActionPortlet {
             return true;
             // If they do match, then validate password with our service
         } else {
-            if (passwordValue == null) {
-                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
-                return true;
-            }
+
             passwordValue = passwordValue.trim();
             if (passwordValue.length() == 0) {
                 createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
@@ -347,22 +348,14 @@ public class LoginPortlet extends ActionPortlet {
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
         String useracct = acctCB.getSelectedValue();
-        if (useracct != null) {
-            canUserCreateAccount = true;
-        } else {
-            canUserCreateAccount = false;
-        }
+
+        canUserCreateAccount = (useracct != null);
 
         settings.setCanUserCreateAccount(canUserCreateAccount);
 
         CheckBoxBean notifyCB = event.getCheckBoxBean("notifyCB");
         String notify = notifyCB.getSelectedValue();
-        boolean sendForget;
-        if (notify != null) {
-            sendForget = true;
-        } else {
-            sendForget = false;
-        }
+        boolean sendForget = (notify != null);
 
         CheckBoxBean savepassCB = event.getCheckBoxBean("savepassCB");
         String savepass = savepassCB.getSelectedValue();
@@ -390,7 +383,7 @@ public class LoginPortlet extends ActionPortlet {
         String mailFrom = mailSenderTF.getValue();
 
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        //if (!mailServer.equals("")) settings.setAttribute(MailService.MAIL_SERVER_HOST, mailServer);
+        settings.setAttribute(MailService.MAIL_SERVER_HOST, mailServer);
         if (!mailFrom.equals("")) settings.setAttribute(MailService.MAIL_SENDER, mailFrom);
 
         portalConfigService.savePortalConfigSettings(settings);
@@ -410,7 +403,7 @@ public class LoginPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
         PortletResponse res = evt.getPortletResponse();
 
-        User user = null;
+        User user;
         TextFieldBean emailTF = evt.getTextFieldBean("emailTF");
 
         if (emailTF.getValue().equals("")) {
@@ -630,25 +623,25 @@ public class LoginPortlet extends ActionPortlet {
             String passwordValue = event.getPasswordBean("password").getValue();
             String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
 
+            if (passwordValue == null) {
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
+                setNextState(req, DO_NEW_PASSWORD);
+                return;
+            }
+
             // Otherwise, password must match confirmation
             if (!passwordValue.equals(confirmPasswordValue)) {
                 createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_MISMATCH"));
                 setNextState(req, DO_NEW_PASSWORD);
                 // If they do match, then validate password with our service
             } else {
-                if (passwordValue == null) {
-                    createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
-                    setNextState(req, DO_NEW_PASSWORD);
-                    return;
-                } else if (passwordValue.length() == 0) {
+                if (passwordValue.length() == 0) {
                     createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
                     setNextState(req, DO_NEW_PASSWORD);
-                    return;
                 } else if (passwordValue.length() < 5) {
                     System.err.println("length < 5 password= " + passwordValue);
                     createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT"));
                     setNextState(req, DO_NEW_PASSWORD);
-                    return;
                 } else {
                     // save password
                     //System.err.println("saving password= " + passwordValue);
