@@ -51,8 +51,13 @@ public class ActionPortlet extends AbstractPortlet {
     }
 
     protected void setFileDownloadEvent(PortletRequest req, String fileName, String path) {
+        setFileDownloadEvent(req, fileName, path, false);
+    }
+
+    protected void setFileDownloadEvent(PortletRequest req, String fileName, String path, boolean deleteFile) {
         req.setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, fileName);
         req.setAttribute(SportletProperties.FILE_DOWNLOAD_PATH, path);
+        req.setAttribute(SportletProperties.FILE_DELETE, Boolean.valueOf(deleteFile));
     }
 
     /**
