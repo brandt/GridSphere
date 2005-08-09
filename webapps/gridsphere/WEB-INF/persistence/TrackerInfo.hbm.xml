@@ -23,8 +23,24 @@
         <property name="Label" type="string" column="label"/>
         <property name="Date" type="long" column="trackerdate"/>
         <property name="UserAgent" type="string" column="useragent"/>
-        <property name="UserOid" type="string" column="useroid"/>
+        <property name="UserName" type="string" column="username"/>
     </class>
 
+    <class
+        name="org.gridlab.gridsphere.services.core.tracker.impl.TrackerAction"
+        table="tracker_action"
+        >
 
+        <id
+            name="oid"
+            column="gsoid"
+            type="java.lang.String"
+            length="32"
+            >
+            <generator class="uuid.hex"/>
+
+        </id>
+
+        <property name="Action" type="string" column="action"/>
+    </class>
 </hibernate-mapping>
