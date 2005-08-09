@@ -486,9 +486,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();
         try {
-            String fileName = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
-            String path = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
-            Boolean deleteFile = (Boolean)req.getAttribute(SportletProperties.FILE_DELETE);
+            String fileName = (String) req.getPortletSession(true).getAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
+            String path = (String) req.getPortletSession(true).getAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
+            Boolean deleteFile = (Boolean)req.getPortletSession(true).getAttribute(SportletProperties.FILE_DELETE);
             if ((fileName == null) || (path == null)) return;
             log.debug("in downloadFile");
             log.debug("filename: " + fileName + " filepath= " + path);
@@ -513,6 +513,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         } catch (IOException e) {
             log.error("Caught IOException", e);
             //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER,e.getMessage());
+        } finally {
+            req.getPortletSession(true).removeAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
+            req.getPortletSession(true).removeAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
+            req.getPortletSession(true).removeAttribute(SportletProperties.FILE_DELETE);
         }
     }
 

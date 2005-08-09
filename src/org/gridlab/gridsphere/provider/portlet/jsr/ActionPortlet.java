@@ -4,8 +4,7 @@
  */
 package org.gridlab.gridsphere.provider.portlet.jsr;
 
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
-import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.jsrimpl.ActionRequestImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
@@ -20,6 +19,10 @@ import org.gridlab.gridsphere.provider.event.jsr.impl.RenderFormEventImpl;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 
 import javax.portlet.*;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -53,12 +56,13 @@ public class ActionPortlet extends GenericPortlet {
     }
 
     protected void setFileDownloadEvent(PortletRequest req, String fileName, String path) {
-        /* JN
-        req.setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, fileName);
-        req.setAttribute(SportletProperties.FILE_DOWNLOAD_PATH, path);
-        */
+        setFileDownloadEvent(req, fileName, path, false);
+    }
+
+    protected void setFileDownloadEvent(PortletRequest req, String fileName, String path, boolean deleteFile) {
         req.getPortletSession(true).setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, fileName);
         req.getPortletSession(true).setAttribute(SportletProperties.FILE_DOWNLOAD_PATH, path);
+        req.getPortletSession(true).setAttribute(SportletProperties.FILE_DELETE, Boolean.valueOf(deleteFile));
     }
 
     /**
@@ -84,9 +88,7 @@ public class ActionPortlet extends GenericPortlet {
      */
     protected String getNextState(PortletRequest request) {
         String id = getUniqueId();
-        // JN String state = (String)request.getAttribute(id+".state");
-        String state = (String)request.getPortletSession(true).getAttribute(id+".state");
-        return state;
+        return (String)request.getPortletSession(true).getAttribute(id+".state");
     }
 
     protected void removeNextState(PortletRequest request) {
@@ -168,8 +170,7 @@ public class ActionPortlet extends GenericPortlet {
         String id = getUniqueId();
         //JN Map tagBeans = (Map) request.getAttribute(id + ".form");
         log.debug("getting tag beans from session " + id + ".beans");
-        Map tagBeans = (Map) request.getPortletSession(true).getAttribute(id + ".beans");
-        return tagBeans;
+        return (Map) request.getPortletSession(true).getAttribute(id + ".beans");
     }
 
     /**
@@ -227,7 +228,6 @@ public class ActionPortlet extends GenericPortlet {
         removeNextState(request);
 
         // Get object and class references
-        Object thisObject = (Object) this;
         Class thisClass = this.getClass();
         // Call method specified by action name
         try {
@@ -238,7 +238,7 @@ public class ActionPortlet extends GenericPortlet {
             Method method = thisClass.getMethod(methodName, parameterTypes);
             log.debug("Invoking action method: " + methodName);
 
-            method.invoke(thisObject, arguments);
+            method.invoke(this, arguments);
 
         } catch (NoSuchMethodException e) {
             String error = "No such method: " + methodName + "\n" + e.getMessage();
