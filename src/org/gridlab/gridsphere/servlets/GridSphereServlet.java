@@ -198,7 +198,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         String trackme = req.getParameter(TrackerService.TRACK_PARAM);
         if (trackme != null) {
-            trackerService.trackURL(trackme, req.getHeader("user-agent"), portletReq.getUser().getID());
+            trackerService.trackURL(trackme, req.getHeader("user-agent"), portletReq.getUser().getUserName());
             String url = req.getParameter(TrackerService.REDIRECT_URL);
             if (url != null) {
                 System.err.println("redirect: " + url);
