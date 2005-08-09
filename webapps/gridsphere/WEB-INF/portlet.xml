@@ -249,6 +249,38 @@
     </portlet-app-def>
 
     <portlet-app-def>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.roles.RoleManagerPortlet">
+            <portlet-name>Role Manager</portlet-name>
+            <servlet-name>RoleManagerPortlet</servlet-name>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
+            <supports>
+                <markup name="html">
+                    <view/>
+                    <help/>
+                </markup>
+            </supports>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.roles.RoleManagerPortlet.1">
+            <concrete-portlet>
+                <portlet-name>Role Manager</portlet-name>
+                <access-restrictions role="SUPER"/>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>Role Manager</title>
+                    <title-short>Role Manager</title-short>
+                    <description>Enables portal administrators to administer security roles</description>
+                    <keywords>role administration</keywords>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
+
+    <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet">
             <portlet-name>Portlet Group Manager</portlet-name>
             <servlet-name>GroupManagerPortlet</servlet-name>
@@ -508,6 +540,38 @@
                 <language locale="nl">
                     <title>Layout Manager</title>
                     <description>Gebruikers kunnen hun eigen layout bepalen</description>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
+
+    <portlet-app-def>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet">
+            <portlet-name>Tracker Statistics</portlet-name>
+            <servlet-name>TrackerStatisticsPortlet</servlet-name>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
+            <supports>
+                <markup name="html">
+                    <view/>
+                    <help/>
+                </markup>
+            </supports>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet.1">
+            <concrete-portlet>
+                <portlet-name>Tracker Statistics</portlet-name>
+                <access-restrictions role="SUPER"/>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>Tracker Statistics</title>
+                    <title-short>Tracker Statistics</title-short>
+                    <description>Displays portal tracking statistics</description>
+                    <keywords>tracking statistics</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>

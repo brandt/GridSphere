@@ -93,6 +93,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>RoleManagerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.roles.RoleManagerPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>LayoutManagerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet</servlet-class>
     </servlet>
@@ -110,6 +115,11 @@
     <servlet>
         <servlet-name>SessionManagerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>TrackerStatisticsPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -182,6 +192,11 @@
     </servlet-mapping>
 
     <servlet-mapping>
+        <servlet-name>RoleManagerPortlet</servlet-name>
+        <url-pattern>/admin/roles</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>SessionManagerPortlet</servlet-name>
         <url-pattern>/admin/session</url-pattern>
     </servlet-mapping>
@@ -197,8 +212,8 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>PortletApplicationManager</servlet-name>
-        <url-pattern>/admin/gridsphere</url-pattern>
+        <servlet-name>TrackerStatisticsPortlet</servlet-name>
+        <url-pattern>/admin/tracker</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

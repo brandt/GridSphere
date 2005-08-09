@@ -87,6 +87,9 @@
                             <portlet-frame label="sessionmanager">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet.1</portlet-class>
                             </portlet-frame>
+                            <portlet-frame label="trackingstats">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet.1</portlet-class>
+                            </portlet-frame>
                         </column-layout>
                     </row-layout>
                 </table-layout>
@@ -130,6 +133,19 @@
                             </portlet-frame>
                         </column-layout>
                         <column-layout width="30%"/>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+            <portlet-tab label="roles" required-role="SUPER">
+                <title lang="en">Roles</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="50%">
+                            <portlet-frame label="rolemanager">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.roles.RoleManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                        <column-layout width="50%"/>
                     </row-layout>
                 </table-layout>
             </portlet-tab>
