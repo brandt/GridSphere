@@ -16,10 +16,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-
 import org.gridlab.gridsphere.portlet.impl.ClientImpl;
-
-import org.gridlab.gridsphere.portlet.jsrimpl.*;
 
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
@@ -53,8 +50,6 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import javax.portlet.UnavailableException;
-import javax.servlet.*;
-import javax.servlet.http.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -353,9 +348,6 @@ public class PortletServlet extends HttpServlet
                     ActionRequestImpl actionRequest = new ActionRequestImpl(request, portalContext, portletContext, supports);
                     ActionResponse actionResponse = new ActionResponseImpl(request, response, portalContext);
 
-                    // one-line hack used here for the struts portlet bridge to work
-                    request.setAttribute(SportletProperties.RENDER_REQUEST, "true");
-
                     log.debug("in PortletServlet: action handling portlet " + pid);
                     try {
                         portlet.processAction(actionRequest, actionResponse);
@@ -372,7 +364,6 @@ public class PortletServlet extends HttpServlet
                     }
 
                     //actionRequest.clearParameters();
-
                 }
             } else {
                 PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), true);
