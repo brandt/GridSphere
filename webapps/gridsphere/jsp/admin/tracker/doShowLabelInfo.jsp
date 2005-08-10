@@ -9,7 +9,7 @@
 <jsp:useBean id="label" class="java.lang.String" scope="request"/>
 <jsp:useBean id="trackInfoList" class="java.util.ArrayList" scope="request"/>
 
-<h2><ui:text key="TRACKING_STATS" style="nostyle"/>&nbsp;:&nbsp;<%= label %> </h2>
+<h3><ui:text key="TRACKING_STATS" style="nostyle"/>&nbsp;:&nbsp;<%= label %> </h3>
 
 <p>
 <ui:text key="TRACKING_NUMACTIONS"/>&nbsp;&nbsp;<%= trackInfoList.size() %>
@@ -24,7 +24,6 @@
 <%
                 Iterator it = trackInfoList.iterator();
                 while (it.hasNext()) {
-                    // Get next user
                     TrackerInfo info = (TrackerInfo)it.next();
 %>
                     <ui:tablerow>

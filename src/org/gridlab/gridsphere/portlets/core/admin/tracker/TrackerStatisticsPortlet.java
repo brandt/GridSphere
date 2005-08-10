@@ -8,17 +8,17 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
+import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
+import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
 import org.gridlab.gridsphere.services.core.tracker.impl.TrackerInfo;
+import org.gridlab.gridsphere.services.core.tracker.impl.TrackerAction;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 
 import javax.servlet.UnavailableException;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Date;
+import java.util.*;
 import java.io.FileOutputStream;
 import java.io.File;
 import java.text.DateFormat;
@@ -28,6 +28,7 @@ public class TrackerStatisticsPortlet extends ActionPortlet {
     // JSP pages used by this portlet
     public static final String DO_VIEW_LABELS = "admin/tracker/doViewLabels.jsp";
     public static final String DO_DISPLAY_LABEL = "admin/tracker/doShowLabelInfo.jsp";
+    public static final String DO_DISPLAY_ACTIONS = "admin/tracker/doShowActions.jsp";
 
     // Portlet services
     private TrackerService trackerService = null;
@@ -64,6 +65,53 @@ public class TrackerStatisticsPortlet extends ActionPortlet {
         setNextState(req, DO_DISPLAY_LABEL);
     }
 
+    public void doEditActions(FormEvent evt) {
+        PortletRequest req = evt.getPortletRequest();
+        List trackerActionList = trackerService.getTrackingActions();
+        req.setAttribute("trackerActionList", trackerActionList);
+        setNextState(req, DO_DISPLAY_ACTIONS);
+    }
+
+    public void doSaveAction(FormEvent evt) {
+        PortletRequest req = evt.getPortletRequest();
+        TextFieldBean tf = evt.getTextFieldBean("createActionTF");
+        String action = tf.getValue();
+        if (!action.equals("")) {
+            TrackerAction ta = trackerService.getTrackingAction(action);
+            if (ta == null) {
+                TrackerAction newaction = new TrackerAction();
+                newaction.setAction(action);
+                newaction.setEnabled(true);
+                trackerService.addTrackingAction(newaction);
+            }
+        }
+        setNextState(req, "doEditActions");
+    }
+
+    public void doModifyAction(FormEvent evt) {
+        PortletRequest req = evt.getPortletRequest();
+        CheckBoxBean cb = evt.getCheckBoxBean("enabledCB");
+        List vals = cb.getSelectedValues();
+        List trackerActionList = trackerService.getTrackingActions();
+        Iterator it = trackerActionList.iterator();
+        while (it.hasNext()) {
+            TrackerAction ta  = (TrackerAction)it.next();
+            if (vals.contains(ta.getAction())) {
+                ta.setEnabled(true);
+            } else {
+                ta.setEnabled(false);
+            }
+            trackerService.addTrackingAction(ta);
+        }
+        setNextState(req, "doEditActions");
+    }
+
+    public void doDeleteAction(FormEvent evt) {
+        PortletRequest req = evt.getPortletRequest();
+        String action = evt.getAction().getParameter("actionName");
+        trackerService.removeTrackingAction(action);
+        setNextState(req, "doEditActions");
+    }
 
     public void doDownload(FormEvent evt) {
         PortletRequest req = evt.getPortletRequest();

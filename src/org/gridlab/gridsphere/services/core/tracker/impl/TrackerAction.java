@@ -5,6 +5,7 @@ public class TrackerAction {
 
     private String oid;
     private String action;
+    private boolean isEnabled;
 
     public TrackerAction() {}
 
@@ -24,4 +25,11 @@ public class TrackerAction {
         this.action = action;
     }
 
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
 }

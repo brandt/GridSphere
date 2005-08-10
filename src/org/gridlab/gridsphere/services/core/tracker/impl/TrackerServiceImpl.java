@@ -50,18 +50,26 @@ public class TrackerServiceImpl implements TrackerService, PortletServiceProvide
     public List getTrackingActions() {
         List actions = null;
         try {
-            actions = pm.restoreList("from " + TrackerAction.class.getName() + "as trackeraction");
+            actions = pm.restoreList("from " + TrackerAction.class.getName() + " as trackeraction");
         } catch (PersistenceManagerException e) {
             log.error("Unable to retrieve tracker actions");
         }
         return actions;
     }
 
-    public void addTrackingAction(String action) {
-        TrackerAction ta = new TrackerAction();
-        ta.setAction(action);
+    public TrackerAction getTrackingAction(String actionName) {
+        TrackerAction action = null;
         try {
-            pm.saveOrUpdate(ta);
+            action = (TrackerAction)pm.restore("from " + TrackerAction.class.getName() + " as trackeraction where trackeraction.Action=\'" + actionName + "'");
+        } catch (PersistenceManagerException e) {
+            log.error("Unable to retrieve tracker actions");
+        }
+        return action;
+    }
+
+    public void addTrackingAction(TrackerAction action) {
+        try {
+            pm.saveOrUpdate(action);
         } catch (PersistenceManagerException e) {
             log.error("Unable to save new tracker action: " + action);
         }
@@ -69,7 +77,8 @@ public class TrackerServiceImpl implements TrackerService, PortletServiceProvide
 
     public void removeTrackingAction(String action) {
         try {
-            pm.deleteList("from " + TrackerAction.class.getName() + " as trackeraction where trackeraction.action=\'" + action + "'");
+            TrackerAction trackerAction = getTrackingAction(action);
+            if (trackerAction != null) pm.delete(trackerAction);
         } catch (PersistenceManagerException e) {
             log.error("Unable to delete tracker action: " + action);
         }

@@ -1,6 +1,7 @@
 package org.gridlab.gridsphere.services.core.tracker;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
+import org.gridlab.gridsphere.services.core.tracker.impl.TrackerAction;
 
 import java.util.List;
 
@@ -35,10 +36,12 @@ public interface TrackerService extends PortletService {
 
     public List getTrackingActions();
 
+    public TrackerAction getTrackingAction(String actionName);
+
     public void removeTrackingAction(String action);
 
     public void clearTrackingActions();
 
-    public void addTrackingAction(String action);
+    public void addTrackingAction(TrackerAction action);
 
 }

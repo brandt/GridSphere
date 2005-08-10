@@ -40,7 +40,7 @@
             <generator class="uuid.hex"/>
 
         </id>
-
+        <property name="Enabled" type="boolean" column="enabled"/>
         <property name="Action" type="string" column="action"/>
     </class>
 </hibernate-mapping>
