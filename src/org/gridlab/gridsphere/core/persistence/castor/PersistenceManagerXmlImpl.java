@@ -151,7 +151,7 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
      * @throws IOException                 if there was a configurationerror
      */
     public Object load() throws IOException, PersistenceManagerException {
-        Object object = null;
+        Object object;
         try {
             log.debug("Using getConnectionURL() " + descriptorPath);
             InputSource xmlSource = new InputSource(descriptorPath);

@@ -1,11 +1,9 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
 import java.util.Iterator;
 
 /*

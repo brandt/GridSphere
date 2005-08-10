@@ -3,9 +3,6 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
-
 /*
  * @author <a href="mailto:russell@aei.mpg.de">Michael Russell</a>
  * @version $Id$

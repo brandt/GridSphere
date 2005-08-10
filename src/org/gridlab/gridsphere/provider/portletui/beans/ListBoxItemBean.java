@@ -5,9 +5,6 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
-
 /**
  * A <code>ListBoxItemBean</code> defines the elements contained within a <code>ListBoxBean</code>
  */

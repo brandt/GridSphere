@@ -133,7 +133,7 @@ public class PortletTabRegistry {
             SportletRoleInfo info = (SportletRoleInfo) it.next();
             portletClass = info.getPortletClass();
 
-            System.err.println("portletclass = " + portletClass);
+            //System.err.println("portletclass = " + portletClass);
             reqRole = info.getRole();
             pTab = new PortletTab();
             PortletRegistry registry = PortletRegistry.getInstance();

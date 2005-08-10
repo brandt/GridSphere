@@ -53,14 +53,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private long cacheExpiration = 0;
 
-    //private PortletRole requiredRole = PortletRole.GUEST;
-
     // keep track of the original width
     private String originalWidth = "";
-
-    //private transient PortletDataManager dataManager = null;
-
-    private boolean hasTitleBarEvent = false;
 
     // switch to determine if the user wishes to close this portlet
 
@@ -198,7 +192,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
-        hasTitleBarEvent = false;
         this.originalWidth = width;
 
         titleBar = new PortletTitleBar();
@@ -223,9 +216,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     protected void doConfig() {
         PortletRegistry registryManager = PortletRegistry.getInstance();
-        String appID = "";
-
-        appID = PortletRegistry.getApplicationPortletID(portletClass);
+        String appID = PortletRegistry.getApplicationPortletID(portletClass);
 
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -278,8 +269,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         // remove cached output
         cacheService.removeCached(this.getComponentID() + portletClass + id);
         //frame = null;
-
-        hasTitleBarEvent = false;
 
         PortletComponentEvent titleBarEvent = event.getLastRenderEvent();
 
@@ -443,12 +432,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 }
             }
         }
-        Map tmpParams = (Map)req.getParameterMap();
+        Map tmpParams = req.getParameterMap();
             if (tmpParams != null) {
                 it = tmpParams.keySet().iterator();
                 while (it.hasNext()) {
                     String key = (String)it.next();
-                    String[] paramValues = req.getParameterValues( key );
+                    ///String[] paramValues = req.getParameterValues( key );
                     if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
                         //System.err.println("replacing render param " + key);
                         renderParams.put(key, tmpParams.get(key));
@@ -480,8 +469,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         User user = req.getUser();
         if (!(user instanceof GuestUser)) {
-            boolean hasrole = false;
-            hasrole = aclService.hasRequiredRole(req, portletClass, false);
+            boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
             //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
             //System.err.println("hasRole = " + hasrole + " portletclass= " + portletClass);
             if (!hasrole) {
@@ -679,7 +667,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     }
 
     public boolean hasError(PortletRequest req) {
-        return (((Exception)req.getAttribute(SportletProperties.PORTLETERROR + portletClass) != null) ? true : false);
+        return (req.getAttribute(SportletProperties.PORTLETERROR + portletClass) != null);
     }
 
     public void doRenderError(StringBuffer postframe, PortletRequest req, PortletResponse res) {
@@ -719,7 +707,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         f.roleString = this.roleString;
         f.requiredRole = (PortletRole) this.requiredRole.clone();
         f.renderPortlet = this.renderPortlet;
-        f.hasTitleBarEvent = false;
         return f;
     }
 

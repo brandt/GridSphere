@@ -483,26 +483,27 @@ public abstract class BaseFormEventImpl {
         if (portletRequest != null) {
             e = portletRequest.getParameterNames();
         }
-        while (e.hasMoreElements()) {
-            String name = (String) e.nextElement();
-            sb.append("\t\tname :" + name);
-            String values[] = null;
-            if (request!= null) {
-                values = request.getParameterValues(name);
-            }
-            if (portletRequest != null) {
-                values = portletRequest.getParameterValues(name);
-            }
-            if (values.length == 1) {
-                String pval = values[0];
-                if (pval.length() == 0) {
-                    pval = "no value";
+        if (e != null) {
+            while (e.hasMoreElements()) {
+                String name = (String) e.nextElement();
+                sb.append("\t\tname :" + name);
+                String values[] = null;
+                if (request!= null) {
+                    values = request.getParameterValues(name);
                 }
-                if (!name.startsWith("ui_pb")) sb.append("\t\t value : " + pval);
-            } else {
-                sb.append("\t\t value :");
-                for (int i = 0; i < values.length; i++) {
-                    sb.append("\t\t  - " + values[i]);
+                if (portletRequest != null) {
+                    values = portletRequest.getParameterValues(name);
+                }
+                if (values != null) {
+                    if (values.length == 1) {
+                        String pval = values[0];
+                        if (!name.startsWith("ui_pb")) sb.append("\t\t value : " + pval);
+                    } else {
+                        sb.append("\t\t value :");
+                        for (int i = 0; i < values.length; i++) {
+                            sb.append("\t\t  - " + values[i]);
+                        }
+                    }
                 }
             }
         }

@@ -4,9 +4,6 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import javax.servlet.http.HttpServletRequest;
-
-
 /**
  * A <code>TableBean</code> provides a table element
  */

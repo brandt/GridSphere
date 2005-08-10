@@ -12,7 +12,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.File;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Locale;
@@ -376,6 +375,8 @@ public abstract class Portlet extends HttpServlet
         // create portlet request and response objects
         PortletRequest portletRequest = new SportletRequestImpl(request);
         PortletResponse portletResponse = new SportletResponse(response, portletRequest);
+
+        
         String method = (String) request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         if (method != null) {
 
@@ -532,8 +533,6 @@ public abstract class Portlet extends HttpServlet
         sessionManager.sessionDestroyed(event);
         //loginService.sessionDestroyed(event.getSession());
         log.debug("in Portlet: sessionDestroyed('" + event.getSession().getId() + "')");
-        HttpSession s = event.getSession();
-
         //HttpSession session = event.getSession();
         //User user = (User) session.getAttribute(SportletProperties.PORTLET_USER);
         //System.err.println("user : " + user.getUserID() + " expired!");

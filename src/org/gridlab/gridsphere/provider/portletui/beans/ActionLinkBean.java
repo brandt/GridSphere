@@ -6,8 +6,6 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
 import java.net.URLEncoder;
 
 /**

@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
 import java.util.ArrayList;
 import java.util.List;
 

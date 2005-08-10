@@ -5,10 +5,6 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

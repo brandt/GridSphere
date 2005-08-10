@@ -34,11 +34,8 @@ public class DateUtil {
      * @see DateFormat
      */
     public static String getLocalizedDate(PortletRequest request, long milisec) {
-
         Locale locale = request.getLocale();
-
         TimeZone tz = getTimeZone(request);
-
         return getLocalizedDate(locale, tz, milisec, DateFormat.MEDIUM, DateFormat.MEDIUM);
     }
 
@@ -52,11 +49,8 @@ public class DateUtil {
      * @see DateFormat
      */
     public static String getLocalizedDate(PortletRequest request, long milisec, int dateFormat, int timeFormat) {
-
         Locale locale = request.getLocale();
-
         TimeZone tz = getTimeZone(request);
-
         return getLocalizedDate(locale, tz, milisec, dateFormat, timeFormat);
     }
 
@@ -69,11 +63,8 @@ public class DateUtil {
      * @see DateFormat
      */
     public static String getLocalizedDate(HttpServletRequest request, long milisec) {
-
         Locale locale = request.getLocale();
-
         TimeZone tz = getTimeZone(request);
-
         return getLocalizedDate(locale, tz, milisec, DateFormat.MEDIUM, DateFormat.MEDIUM);
     }
 
@@ -87,11 +78,8 @@ public class DateUtil {
      * @see DateFormat
      */
     public static String getLocalizedDate(HttpServletRequest request, long milisec, int dateFormat, int timeFormat) {
-
         Locale locale = request.getLocale();
-
         TimeZone tz = getTimeZone(request);
-
         return getLocalizedDate(locale, tz, milisec, dateFormat, timeFormat);
     }
 
@@ -121,25 +109,19 @@ public class DateUtil {
      * @see DateFormat
      */
     public static String getLocalizedDate(Locale locale, TimeZone tz, long milisec, int dateFormat, int timeFormat) {
-
         if (milisec == 0) {
             return "";
         }
-
         if (locale == null) {
             locale = Locale.getDefault();
         }
-
         if (tz == null) {
             tz = TimeZone.getDefault();
         }
-
         Calendar cal = Calendar.getInstance(tz, locale);
         cal.setTimeInMillis(milisec);
-
         DateFormat uformatter = DateFormat.getDateTimeInstance(timeFormat, dateFormat, locale);
         uformatter.setCalendar(cal);
-
         return uformatter.format(cal.getTime());
     }
 
@@ -149,18 +131,14 @@ public class DateUtil {
      * @return The time zone
      */
     public static TimeZone getTimeZone(PortletRequest request) {
-
         Map userInfo = (Map) request.getAttribute(PortletRequest.USER_INFO);
         String tzStr = (String) userInfo.get(User.TIMEZONE);
-
-        TimeZone tz = null;
-
+        TimeZone tz;
         if (tzStr == null) {
             tz = TimeZone.getDefault();
         } else {
             tz = TimeZone.getTimeZone(tzStr);
         }
-
         return tz;
     }
 
@@ -170,18 +148,14 @@ public class DateUtil {
      * @return The time zone
      */
     public static TimeZone getTimeZone(HttpServletRequest request) {
-
         Map userInfo = (Map) request.getAttribute(PortletRequest.USER_INFO);
         String tzStr = (String) userInfo.get(User.TIMEZONE);
-
-        TimeZone tz = null;
-
+        TimeZone tz;
         if (tzStr == null) {
             tz = TimeZone.getDefault();
         } else {
             tz = TimeZone.getTimeZone(tzStr);
         }
-
         return tz;
     }
 
@@ -196,15 +170,13 @@ public class DateUtil {
      * @return localized time string with timezones offset
      */
     public static String getLocalizedDate(User user, Locale locale, long milisec, int dateFormat, int timeFormat) {
-
-        TimeZone tz = null;
+        TimeZone tz;
         String tzStr = (String) user.getAttribute(User.TIMEZONE);
         if (tzStr == null) {
             tz = TimeZone.getDefault();
         } else {
             tz = TimeZone.getTimeZone(tzStr);
         }
-
         return getLocalizedDate(locale, tz, milisec, dateFormat, timeFormat);
     }
 
@@ -213,20 +185,16 @@ public class DateUtil {
      * Returns a map of localized nice TimeZonesNames.
      * Does not return localized names yet.
      *
-     * @param locale localized to that locale
      * @return Map containing TimeZoneIDs as Key and localized names as values
      */
-    public static Map getLocalizedTimeZoneNames(Locale locale) {
-
+    public static Map getLocalizedTimeZoneNames() {
         Map result = new HashMap();
-
         String availableTZ[] = TimeZone.getAvailableIDs();
         for (int i = 0; i < availableTZ.length; i++) {
             if ((availableTZ[i].indexOf("/") > 1) && (!availableTZ[i].startsWith("System"))) {
                 result.put(availableTZ[i], availableTZ[i]);
             }
         }
-
         return result;
     }
 }

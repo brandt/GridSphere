@@ -6,10 +6,6 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
 
 /**
  * An abstract <code>InputBean</code> provides a generic input HTML element

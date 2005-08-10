@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
@@ -31,7 +30,7 @@ public class PortletLayoutEngine {
     private static PortletLayoutEngine instance = new PortletLayoutEngine();
 
     private PortletPageFactory pageFactory = PortletPageFactory.getInstance();
-    private String error = "";
+    //private String error = "";
 
     /**
      * Constructs a concrete instance of the PortletLayoutEngine
@@ -43,7 +42,7 @@ public class PortletLayoutEngine {
         try {
             pageFactory.init();
         } catch (Exception e) {
-            error = "Unable to initialize PortletPageFactory!";
+            String error = "Unable to initialize PortletPageFactory!";
             log.error(error, e);
             throw new PortletException(error, e);
         }
@@ -79,11 +78,11 @@ public class PortletLayoutEngine {
      */
     public void service(GridSphereEvent event) throws IOException {
         log.debug("in service()");
-        PortletPage page = null;
+        PortletPage page;
 
         try {
             page = getPortletPage(event);
-            int numcomps = page.getComponentIdentifierList().size();
+            //int numcomps = page.getComponentIdentifierList().size();
             /*
             if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
             event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
@@ -147,7 +146,7 @@ public class PortletLayoutEngine {
      */
     public void actionPerformed(GridSphereEvent event) throws IOException {
         log.debug("in actionPerformed()");
-        PortletPage page = null;
+        PortletPage page;
         try {
             page = getPortletPage(event);
             //int numcomps = page.getComponentIdentifierList().size();
@@ -209,7 +208,7 @@ public class PortletLayoutEngine {
      */
     public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) throws PortletException {
         log.debug("in messageEvent()");
-        PortletPage page = null;
+        PortletPage page;
         try {
             page = getPortletPage(event);
             page.messageEvent(concPortletID, msg, event);

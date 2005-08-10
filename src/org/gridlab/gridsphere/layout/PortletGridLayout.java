@@ -91,11 +91,9 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable, 
             StringTokenizer st = new StringTokenizer(columnString, ",");
             numColumns = st.countTokens();
             if (numColumns < 1) numColumns = 1;
-            int i = 0;
             while (st.hasMoreTokens()) {
                 String col = st.nextToken();
                 colSizes.add(col);
-                i++;
             }
         } else {
             numColumns = 1;
@@ -124,7 +122,7 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable, 
         }
 
         int numComponents = components.size();
-        PortletComponent p = null;
+        PortletComponent p;
 
         int portletsPerColumns = numComponents / numColumns;
         int portletCount = 0;

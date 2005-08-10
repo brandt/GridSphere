@@ -145,7 +145,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         req.setAttribute(CacheService.NO_CACHE, CacheService.NO_CACHE);
 
         ListBoxBean timezoneList = event.getListBoxBean("timezones");
-        Map zones = DateUtil.getLocalizedTimeZoneNames(locale);
+        Map zones = DateUtil.getLocalizedTimeZoneNames();
         Set keys = zones.keySet();
         Iterator it2 = keys.iterator();
         String userTimeZone = (String) user.getAttribute(User.TIMEZONE);
@@ -200,10 +200,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         List groups = aclManagerService.getGroups();
         Iterator it = groups.iterator();
-        TableRowBean groupsTR = null;
-        TableCellBean groupsTC = null;
-        TableCellBean groupsDescTC = null;
-        TableCellBean roleTC = null;
+        TableRowBean groupsTR;
+        TableCellBean groupsTC;
+        TableCellBean groupsDescTC;
+        TableCellBean roleTC;
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup) it.next();
             if ((g.getType().equals(PortletGroup.HIDDEN)) && (req.getRole().compare(req.getRole(), PortletRole.ADMIN) < 0)) continue;
@@ -239,7 +239,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 TextBean priv = event.getTextBean("privateTB");
                 priv.setValue("<br>" + this.getLocalizedText(req, "GROUP_NOTIFY"));
                 List admins = aclManagerService.getUsers(g, PortletRole.ADMIN);
-                String emailAddress = "";
+                String emailAddress;
                 if (admins.isEmpty()) {
                     List supers = aclManagerService.getUsersWithSuperRole();
                     User root = (User) supers.get(0);
@@ -382,13 +382,13 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         String passwordValue = event.getPasswordBean("password").getValue();
         String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
-
+        if (passwordValue == null) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
+        } else
         // Otherwise, password must match confirmation
         if (!passwordValue.equals(confirmPasswordValue)) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_MISMATCH"));
             // If they do match, then validate password with our service
-        } else if (passwordValue == null) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
         } else if (passwordValue.length() == 0) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
         } else if (passwordValue.length() < 5) {
@@ -577,7 +577,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
     private ListBoxItemBean makeLocaleBean(String language, String name, Locale locale) {
         ListBoxItemBean bean = new ListBoxItemBean();
-        String display = language;
+        String display;
         display = language.substring(0, 1).toUpperCase() + language.substring(1);
 
         bean.setValue(display);

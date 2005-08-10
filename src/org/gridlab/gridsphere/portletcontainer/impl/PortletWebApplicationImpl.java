@@ -42,7 +42,7 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
         super(context);
         this.webApplicationName = webApplicationName;
         // get the servlet context for the coreportlets webapp
-        String contextURIPath = null;
+        String contextURIPath;
         if (webApplicationName.startsWith("/")) {
             contextURIPath = webApplicationName;
             this.webApplicationName = webApplicationName.substring(1);

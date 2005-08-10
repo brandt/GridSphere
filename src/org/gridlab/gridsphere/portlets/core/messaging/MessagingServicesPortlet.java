@@ -84,11 +84,11 @@ public class MessagingServicesPortlet extends ActionPortlet {
                 TableCellBean configDescription = new TableCellBean();
                 TableCellBean configValue = new TableCellBean();
 
-                TextBean paramName = event.getTextBean(service.getClass().getName()+"paramKey"+(String)params.get(j));
+                TextBean paramName = event.getTextBean(service.getClass().getName()+"paramKey"+params.get(j));
                 paramName.setValue((String)params.get(j));
                 configDescription.addBean(paramName);
 
-                TextFieldBean paramValue = event.getTextFieldBean(service.getClass().getName()+"paramValue"+(String)params.get(j));
+                TextFieldBean paramValue = event.getTextFieldBean(service.getClass().getName()+"paramValue"+params.get(j));
                 paramValue.setValue(config.getProperty((String)params.get(j)));
                 configValue.addBean(paramValue);
 
@@ -117,7 +117,7 @@ public class MessagingServicesPortlet extends ActionPortlet {
         FrameBean serviceFrame = event.getFrameBean("serviceframe");
         serviceFrame.setTableModel(getMessagingService(event));
         Set services = tms.getServices();
-        event.getPortletRequest().setAttribute("services", new String()+services.size());
+        event.getPortletRequest().setAttribute("services", ""+services.size());
         setNextState(event.getPortletRequest(), "admin/messaging/view.jsp");
     }
 

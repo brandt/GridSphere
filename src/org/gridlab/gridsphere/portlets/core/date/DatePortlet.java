@@ -16,8 +16,8 @@ public class DatePortlet extends AbstractPortlet {
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
 
-            Locale locale = null;
-            TimeZone tz = null;
+            Locale locale;
+            TimeZone tz;
             User user = request.getUser();
             String tzStr = (String)user.getAttribute(User.TIMEZONE);
             locale = request.getLocale();

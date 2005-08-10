@@ -119,7 +119,7 @@ public class PortletManager implements PortletManagerService {
 
                 // get rid of any priority numbers
                 String webapp = "";
-                int idx = 0;
+                int idx;
                 for (int i = 0; i < webappFiles.length; i++) {
                     webapp = webappFiles[i];
                     if ((idx = webapp.lastIndexOf(".")) > 0) {
@@ -127,25 +127,24 @@ public class PortletManager implements PortletManagerService {
                     }
                 }
 
-                if (webappFiles != null) {
-                    for (int i = 0; i < webappFiles.length; i++) {
+                for (int i = 0; i < webappFiles.length; i++) {
 
-                        try {
-                            webapp = webappFiles[i];
+                    try {
+                        webapp = webappFiles[i];
 
-                            // forget about readme file !
-                            if (webapp.startsWith("README")) continue;
-                            PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
-                            addWebApp(portletWebApp);
-                        } catch (PortletException e) {
-                            log.error("Unable to create portlet web application: " + webapp);
-                            throw new PortletServiceUnavailableException("Unable to create portlet web application: " + webapp, e);
-                        }
+                        // forget about readme file !
+                        if (webapp.startsWith("README")) continue;
+                        PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
+                        addWebApp(portletWebApp);
+                    } catch (PortletException e) {
+                        log.error("Unable to create portlet web application: " + webapp);
+                        throw new PortletServiceUnavailableException("Unable to create portlet web application: " + webapp, e);
                     }
                 }
+
             } else {
                 log.error("Portlet application " + portletsPath + " does not exist!");
-                throw new PortletServiceUnavailableException("Portlet application " + portletsPath + " does not exist!");                        
+                throw new PortletServiceUnavailableException("Portlet application " + portletsPath + " does not exist!");
             }
             isInitialized = true;
         }

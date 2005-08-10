@@ -48,7 +48,7 @@ public class PortletContainer extends BasePortletComponent implements
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             Iterator it = scomponents.iterator();
-            PortletComponent p = null;
+            PortletComponent p;
             while (it.hasNext()) {
                 p = (PortletComponent) it.next();
                 // all the components have the same theme
@@ -91,7 +91,7 @@ public class PortletContainer extends BasePortletComponent implements
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             Iterator it = scomponents.iterator();
-            PortletComponent comp = null;
+            PortletComponent comp;
             while (it.hasNext()) {
                 comp = (PortletComponent) it.next();
                 comp.doRender(event);

@@ -5,14 +5,12 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +34,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
         //System.err.println("\t\tin render RowLayout");
-        PortletComponent p = null;
+        PortletComponent p;
 
         out.println("<p/>");
         List scomponents = Collections.synchronizedList(components);
@@ -53,10 +51,8 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
     }
 
     public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
-        PortletResponse res = event.getPortletResponse();
-
         //System.err.println("\t\tin render RowLayout");
-        PortletComponent p = null;
+        PortletComponent p;
 
         StringBuffer row = new StringBuffer();
         // starting of the gridtable
@@ -82,8 +78,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
 
 
     public Object clone() throws CloneNotSupportedException {
-        PortletRowLayout g = (PortletRowLayout) super.clone();
-        return g;
+        return (PortletRowLayout) super.clone();
     }
 }
  

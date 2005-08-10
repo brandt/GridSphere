@@ -59,7 +59,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         synchronized (scomponents) {
             Iterator it = scomponents.iterator();
             PortletRole userRole = req.getRole();
-            PortletComponent p = null;
+            PortletComponent p;
 
             while (it.hasNext()) {
                 p = (PortletComponent) it.next();
@@ -137,7 +137,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             Iterator it = scomponents.iterator();
-            PortletComponent p = null;
+            PortletComponent p;
             int id = event.getID();
             while (it.hasNext()) {
                 p = (PortletComponent) it.next();
@@ -162,7 +162,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             Iterator it = scomponents.iterator();
-            PortletComponent p = null;
+            PortletComponent p;
             int id = event.getID();
             while (it.hasNext()) {
                 p = (PortletComponent) it.next();
@@ -186,7 +186,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             Iterator it = scomponents.iterator();
-            PortletComponent p = null;
+            PortletComponent p;
             int id = event.getID();
             while (it.hasNext()) {
                 p = (PortletComponent) it.next();
@@ -215,7 +215,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             Iterator it = scomponents.iterator();
-            PortletComponent p = null;
+            PortletComponent p;
             int id = event.getID();
             while (it.hasNext()) {
                 p = (PortletComponent) it.next();

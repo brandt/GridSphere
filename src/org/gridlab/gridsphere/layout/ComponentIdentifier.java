@@ -134,7 +134,7 @@ public class ComponentIdentifier implements Serializable, Cloneable {
         c.component = (this.component == null) ? null : (PortletComponent) this.component.clone();
         c.className = (this.className == null) ? null : this.className;
         c.id = this.id;
-        c.label = (this.label == label) ? null : this.label;
+        c.label = (this.label.equals(label)) ? null : this.label;
         c.portletClass = (this.portletClass == null) ? null : this.portletClass;
         return c;
     }

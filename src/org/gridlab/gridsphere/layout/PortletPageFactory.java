@@ -204,9 +204,7 @@ public class PortletPageFactory implements PortletSessionListener {
             Iterator sit = s.iterator();
             while (sit.hasNext()) {
                 SportletRoleInfo roleInfo = (SportletRoleInfo) sit.next();
-
-                    allowedPortlets.add(roleInfo.getPortletClass());
-
+                allowedPortlets.add(roleInfo.getPortletClass());
             }
         }
 
@@ -222,7 +220,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
             // when deleting must reinit everytime
             int i = 0;
-            boolean found = false;
+            boolean found;
             while (i < tmpPage.getComponentIdentifierList().size()) {
                 found = false;
                 it = tmpPage.getComponentIdentifierList().iterator();
@@ -241,7 +239,6 @@ public class PortletPageFactory implements PortletSessionListener {
                 }
                 i++;
             }
-            allowedPortlets = null;
             tmpPane.save();
             return tmpPane;
         } catch (Exception e) {
@@ -256,7 +253,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
         Map groups = (Map) req.getAttribute(SportletProperties.PORTLETGROUPS);
         PortletPage newPage = null;
-        PortletTabbedPane pane = null;
+        PortletTabbedPane pane;
 
         try {
 
@@ -440,12 +437,11 @@ public class PortletPageFactory implements PortletSessionListener {
         page.setLayoutDescriptor("/tmp/test.xml");
         try {
             page.save();
+            this.setPageTheme(page, req);
+            page.init(req, new ArrayList());
         } catch (IOException e) {
-
+            log.error("Unale to save TCK page to /tmp/test.xml", e);
         }
-        this.setPageTheme(page, req);
-        page.init(req, new ArrayList());
-
         return page;
     }
 
@@ -477,7 +473,7 @@ public class PortletPageFactory implements PortletSessionListener {
             return createFromGuestLayoutXML(req);
         }
 
-        PortletPage page = null;
+        PortletPage page;
 
         // Need to provide one guest container per users session
         if (userLayouts.containsKey(sessionId)) {
@@ -597,14 +593,13 @@ public class PortletPageFactory implements PortletSessionListener {
                     new ByteArrayInputStream(bos.toByteArray()); // E
             ois = new ObjectInputStream(bin);                  // F
             // return the new object
-            Object ro = ois.readObject(); // G
-            return ro;
+            return ois.readObject(); // G
         } catch (Exception e) {
             System.out.println("Exception in ObjectCloner = " + e);
             throw(e);
         } finally {
-            oos.close();
-            ois.close();
+            if (oos != null) oos.close();
+            if (ois != null) ois.close();
         }
     }
 

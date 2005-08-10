@@ -9,7 +9,6 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletConfig;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
@@ -47,7 +46,6 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     private static boolean inited = false;
     private static Map authModules = new HashMap();
     private static Map activeAuthModules = new HashMap();
-    private PortletConfig config = null;
     private static LoginUserModule activeLoginModule = null;
 
     private PersistenceManagerRdbms pm = null;

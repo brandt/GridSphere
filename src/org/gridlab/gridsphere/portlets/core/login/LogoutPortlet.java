@@ -14,7 +14,7 @@ public class LogoutPortlet extends AbstractPortlet {
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         Client client = request.getClient();
-        String title = "";
+        String title;
         Locale locale = request.getLocale();
         title = getPortletSettings().getTitle(locale, client);
         request.setAttribute("GRIDSPHERE_LOGOUT_LABEL", title);

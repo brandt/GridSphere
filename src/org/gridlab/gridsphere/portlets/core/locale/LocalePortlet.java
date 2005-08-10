@@ -34,7 +34,7 @@ public class LocalePortlet extends ActionPortlet {
 
     private ListBoxItemBean makeLocaleBean(String language, String name, Locale locale) {
         ListBoxItemBean bean = new ListBoxItemBean();
-        String display = language;
+        String display;
         display = language.substring(0, 1).toUpperCase() + language.substring(1);
 
         bean.setValue(display);

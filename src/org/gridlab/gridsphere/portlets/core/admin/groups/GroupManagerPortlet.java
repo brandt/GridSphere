@@ -556,7 +556,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup) it.next();
             tr = new TableRowBean();
-            tc = new TableCellBean();
+
             CheckBoxBean cb = new CheckBoxBean();
             cb.setBeanId("groupCB");
             cb.setValue(g.getName());
@@ -566,7 +566,6 @@ public class GroupManagerPortlet extends ActionPortlet {
             if (existingDefaults.contains(g)) {
                 cb.setSelected(true);
             }
-            //tc.addBean(cb);
 
             tc = new TableCellBean();
             tc.addBean(cb);
@@ -594,7 +593,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
 
         List groups = cb.getSelectedValues();
-        Set defaultGroups = new HashSet();
+        Set defaultGroups;
         PortalConfigSettings configSettings = portalConfigService.getPortalConfigSettings();
         defaultGroups = configSettings.getDefaultGroups();
         defaultGroups.clear();

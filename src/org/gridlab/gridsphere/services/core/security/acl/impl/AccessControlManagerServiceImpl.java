@@ -57,8 +57,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     public GroupRequest editGroupEntry(GroupEntry groupEntry) {
-        GroupRequest request = (GroupRequest) this.getGroupEntry(groupEntry.getID());
-        return request;
+        return (GroupRequest) this.getGroupEntry(groupEntry.getID());
     }
 
     public List getGroupEntries() {
@@ -303,7 +302,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     public List getGroups(User user) {
-        List groups = null;
+        List groups;
         // If user has super role
         //if (hasSuperRole(user)) {
         //    groups = getGroups();
@@ -391,7 +390,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
                 }
             }
         }
-        return (found == true) ? false : true;
+        return (!found);
     }
 
     public boolean hasRequiredRole(User user, String portletID, boolean checkAdmin) {
@@ -430,7 +429,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
                 }
             }
         }
-        return (found == true) ? false : true;
+        return (!found);
     }
 
     public void addGroupEntry(User user, PortletGroup group, PortletRole role) {

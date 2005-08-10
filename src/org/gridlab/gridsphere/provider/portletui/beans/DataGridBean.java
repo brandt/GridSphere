@@ -4,7 +4,6 @@ import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
 import java.util.List;
 
 /*

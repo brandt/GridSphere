@@ -14,7 +14,6 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import java.util.ArrayList;
-import java.net.URLEncoder;
 
 /**
  * The <code>ActionFormTag</code> provides a UI form tag that can also include <code>ActionParam</code> tags
@@ -78,10 +77,10 @@ public class ActionFormTag extends ActionTag {
             String actionStr;
             if (res != null) {
                 if (res instanceof RenderResponseImpl) {
-                    actionStr = createJSRActionURI(res.createRenderURL()).toString();
+                    actionStr = createJSRActionURI(res.createRenderURL());
                 } else {
                     // if non-GS container this will have to be an ActionURL
-                    actionStr = createJSRActionURI(res.createActionURL()).toString();
+                    actionStr = createJSRActionURI(res.createActionURL());
                 }
             } else {
                 actionStr = createActionURI();

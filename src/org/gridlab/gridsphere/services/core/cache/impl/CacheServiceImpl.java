@@ -8,8 +8,6 @@ package org.gridlab.gridsphere.services.core.cache.impl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
 
 import java.util.*;
@@ -19,7 +17,6 @@ import java.util.*;
  */
 public class CacheServiceImpl implements PortletServiceProvider, CacheService {
 
-    private PortletLog log = SportletLog.getInstance(CacheServiceImpl.class);
     private Map key2object = null;
     private boolean isCachingOn = true;
 

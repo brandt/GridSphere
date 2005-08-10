@@ -736,7 +736,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // TODO try to cache portlet's rendering---
         StringWriter storedWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(storedWriter);
-        PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
+        PortletResponse wrappedResponse;
 
         if (isActive) {
             writer.println("<tr><td class=\"window-title-active\">");
@@ -836,7 +836,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // TODO try to cache portlet's rendering---
         StringWriter storedWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(storedWriter);
-        PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
+        PortletResponse wrappedResponse;
 
         if (isActive) {
             if (useDiv) {

@@ -43,7 +43,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
     }
 
     private PortletComponent getMaximizedComponent(List components) {
-        PortletComponent p = null;
+        PortletComponent p;
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             for (int i = 0; i < scomponents.size(); i++) {
@@ -130,7 +130,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
 
-        PortletComponent p = null;
+        PortletComponent p;
 
         // check if one window is maximized
         /*
@@ -188,11 +188,8 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
     public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
 
-        PortletResponse res = event.getPortletResponse();
-        //PrintWriter out = res.getWriter();
-
         StringBuffer table = new StringBuffer();
-        PortletComponent p = null;
+        PortletComponent p;
 
         // check if one window is maximized
         /*
@@ -326,7 +323,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup) it.next();
             //System.err.println("group= " + g.getName());
-            if (g.equals((PortletGroup)req.getAttribute(SportletProperties.PORTLET_GROUP))) continue;
+            if (g.equals(req.getAttribute(SportletProperties.PORTLET_GROUP))) continue;
             Iterator sit = g.getPortletRoleList().iterator();
             PortletRole role = (PortletRole) groups.get(g);
             while (sit.hasNext()) {

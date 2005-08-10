@@ -11,8 +11,6 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.Password;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
@@ -55,7 +53,7 @@ public class PasswordManagerServiceImpl
                 + this.userPasswordImpl
                 + " pw where pw.sportletUser.oid='" + user.getID() + "'";
         try {
-            password = (PasswordImpl) this.pm.restore(query);
+            password = (PasswordImpl)pm.restore(query);
         } catch (PersistenceManagerException e) {
             _log.error("Unable to retrieve password for user", e);
         }
@@ -146,7 +144,7 @@ public class PasswordManagerServiceImpl
 
     private void deletePassword(Password password) {
         try {
-            this.pm.delete(password);
+            pm.delete(password);
         } catch (PersistenceManagerException e) {
             _log.error("Unable to delete password", e);
         }

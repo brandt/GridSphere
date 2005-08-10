@@ -15,7 +15,6 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 
-import java.util.Vector;
 import java.util.ArrayList;
 
 /**

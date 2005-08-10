@@ -2,9 +2,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspWriter;
-import javax.portlet.PortletRequest;
 
 /*
  * @author <a href="mailto:russell@aei.mpg.de">Michael Russell</a>

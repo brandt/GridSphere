@@ -66,7 +66,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         String filename = this.getPortletConfig().getContext().getRealPath("/WEB-INF/CustomPortal/layouts/html/pagehead.html");
         BufferedReader reader = new BufferedReader(new FileReader(filename));
-        String line = null;
+        String line;
         StringBuffer sb = new StringBuffer();
         while ((line = reader.readLine()) != null) {
             sb.append(line);
@@ -79,7 +79,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         filename = this.getPortletConfig().getContext().getRealPath("/WEB-INF/CustomPortal/layouts/html/pagefooter.html");
         reader = new BufferedReader(new FileReader(filename));
-        line = null;
+
         sb = new StringBuffer();
         while ((line = reader.readLine()) != null) {
             sb.append(line);
@@ -248,7 +248,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(layoutPath), "UTF8"));
 
-        String line = null;
+        String line;
         StringBuffer sb = new StringBuffer();
         while ((line = reader.readLine()) != null) {
             sb.append(line);
@@ -342,7 +342,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         String guestLayoutPath = PortletTabRegistry.getGuestLayoutFile();
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(guestLayoutPath), "UTF-8"));
 
-        String line = null;
+        String line;
         StringBuffer sb = new StringBuffer();
         while ((line = reader.readLine()) != null) {
             sb.append(line);

@@ -37,7 +37,7 @@ public class PortletFrameEventImpl implements PortletFrameEvent {
     }
 
     public boolean hasAction() {
-        return (action == null) ? false : true;
+        return (action != null);
     }
 
     public PortletRequest getRequest() {

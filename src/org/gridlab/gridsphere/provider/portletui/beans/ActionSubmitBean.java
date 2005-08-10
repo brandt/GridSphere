@@ -5,9 +5,6 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
-
 /**
  * An <code>ActionSubmitBean</code> is a visual bean that represents an HTML button and
  * has an associated <code>DefaultPortletAction</code>

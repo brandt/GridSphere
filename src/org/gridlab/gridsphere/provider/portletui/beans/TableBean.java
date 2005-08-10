@@ -7,9 +7,6 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
-
 /**
  * A <code>TableBean</code> provides a table element
  */

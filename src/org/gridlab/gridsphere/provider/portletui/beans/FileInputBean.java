@@ -6,8 +6,6 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.apache.commons.fileupload.FileItem;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

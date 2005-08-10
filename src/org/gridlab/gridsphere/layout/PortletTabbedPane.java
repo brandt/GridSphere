@@ -214,7 +214,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      */
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
-        PortletTab tab = null;
+        PortletTab tab;
 
         List stabs = Collections.synchronizedList(tabs);
 
@@ -349,7 +349,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 String lang = req.getLocale().getLanguage();
                 String title = tab.getTitle(lang);
 
-                String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
+                //String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
                 if (tab.isSelected()) {
                     out.println("<td class=\"tabCell\">");
                     out.println( replaceBlanks(title));
@@ -396,8 +396,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
         PortletRole userRole = req.getRole();
-
-        String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
 
         // Render tabs titles get always the same componenttheme as the upper menu
         out.println("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\"><tr>");

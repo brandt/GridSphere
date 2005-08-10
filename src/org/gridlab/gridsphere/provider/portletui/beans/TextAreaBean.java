@@ -5,12 +5,6 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
-
-
 /**
  * The <code>TextAreaBean</code> represents a text area element
  */

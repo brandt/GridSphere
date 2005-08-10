@@ -5,9 +5,6 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
-
 /**
  * A <code>RadioButtonBean</code> represents a radio button element
  */

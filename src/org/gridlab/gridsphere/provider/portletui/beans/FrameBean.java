@@ -6,9 +6,6 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
-
 /**
  * The <code>FrameBean</code> extends <code>TableBean</code> to provide a stylized table that can also
  * be used to render text messages.

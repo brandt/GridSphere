@@ -57,7 +57,7 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
     }
 
     public boolean hasAction() {
-        return (action == null) ? false : true;
+        return (action != null);
     }
 
     /**
@@ -75,15 +75,15 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      * @return mode the portlet title bar mode
      */
     public Portlet.Mode getMode() {
-        Portlet.Mode mode = null;
+        Portlet.Mode mode;
         String pMode = req.getParameter(SportletProperties.PORTLET_MODE);
         if (pMode != null) {
             try {
                 mode = Portlet.Mode.toMode(pMode);
             } catch (Exception e) {
-
+                mode = Portlet.Mode.VIEW;
             }
-            PortletRole role = req.getRole();
+            //PortletRole role = req.getRole();
             /*
             if (mode.equals(Portlet.Mode.CONFIGURE)) {
                 if (role.compare(role, PortletRole.ADMIN) <  0) {
@@ -103,12 +103,13 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      * @return the portlet title bar window state
      */
     public PortletWindow.State getState() {
-        PortletWindow.State state = null;
+        PortletWindow.State state;
         String s = req.getParameter(SportletProperties.PORTLET_WINDOW);
         if (s != null) {
             try {
                 state = PortletWindow.State.toState(s);
             } catch (Exception e) {
+                state = PortletWindow.State.NORMAL;
             }
             return state;
         }

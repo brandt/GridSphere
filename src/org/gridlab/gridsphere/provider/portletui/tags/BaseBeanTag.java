@@ -53,7 +53,7 @@ public abstract class BaseBeanTag extends BodyTagSupport {
     protected String getBeanKey() {
         String cid = (String) pageContext.findAttribute(SportletProperties.COMPONENT_ID);
         String compId = (String) pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
-        String beanKey = null;
+        String beanKey;
         if (compId == null) {
             beanKey = beanId + "_" + cid;
         } else {
@@ -73,7 +73,7 @@ public abstract class BaseBeanTag extends BodyTagSupport {
         String isEnabled = pageContext.getRequest().getParameter("JavaScript");
         //String isEnabled = (String)pageContext.getAttribute("JavaScript", PageContext.REQUEST_SCOPE);
         if (isEnabled != null) {
-            return ((isEnabled.equals("enabled")) ? true : false);
+            return (isEnabled.equals("enabled"));
         } else {
             return false;
         }
@@ -109,7 +109,7 @@ public abstract class BaseBeanTag extends BodyTagSupport {
         String uniqueId = (String) pageContext.getAttribute(varName, PageContext.REQUEST_SCOPE);
 
         // use a counter to continually increase form number to provide unique form name
-        int ctr = 0;
+        int ctr;
         if (uniqueId == null) {
             ctr = 1;
         } else {
@@ -124,6 +124,6 @@ public abstract class BaseBeanTag extends BodyTagSupport {
         // simply check for existence of jsr portlet objects
         //Object o = pageContext.getRequest().getAttribute(SportletProperties.RENDER_REQUEST);
         Object o = pageContext.getAttribute("renderRequest");
-        return (o == null) ? false : true;
+        return (o != null);
     }
 }

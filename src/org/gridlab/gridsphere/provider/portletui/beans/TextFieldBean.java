@@ -4,9 +4,6 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.portlet.PortletRequest;
-
 /**
  * The <code>TextFieldBean</code> represents a text field element
  */

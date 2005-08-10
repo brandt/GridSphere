@@ -234,8 +234,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         if (!portletMessageLists.isEmpty()) {
             Set keys = portletMessageLists.keySet();
             Iterator it = keys.iterator();
-            String concPortletID = null;
-            List messages = null;
+            String concPortletID;
+            List messages;
             while (it.hasNext()) {
                 concPortletID = (String) it.next();
                 messages = (List) portletMessageLists.get(concPortletID);
@@ -304,7 +304,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
         HashMap groups = new HashMap();
 
-        PortletRole role = PortletRole.GUEST;
+        PortletRole role;
         if (user == null) {
             user = GuestUser.getInstance();
             groups = new HashMap();
