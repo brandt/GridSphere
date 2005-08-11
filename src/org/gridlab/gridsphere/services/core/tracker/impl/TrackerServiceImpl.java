@@ -126,6 +126,10 @@ public class TrackerServiceImpl implements TrackerService, PortletServiceProvide
         }
 
         return result;
+    }
 
+    public boolean hasTrackingAction(String actionName) {
+        TrackerAction ta = getTrackingAction(actionName);
+        return ((ta != null) && (ta.isEnabled()));
     }
 }

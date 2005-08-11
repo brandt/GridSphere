@@ -151,46 +151,43 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         // If first time being called, instantiate all portlets
         if (firstDoGet.equals(Boolean.TRUE)) {
-
-            synchronized (firstDoGet) {
-                firstDoGet = Boolean.FALSE;
-                log.debug("Testing Database");
-                // checking if database setup is correct
-                DBTask dt = new DBTask();
-                dt.setAction(DBTask.ACTION_CHECKDB);
-                dt.setConfigDir(GridSphereConfig.getServletContext().getRealPath(""));
-                try {
-                    dt.execute();
-                } catch (Exception e) {
-                    RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/database_error.jsp");
-                    log.error("Check DB failed: ", e);
-                    req.setAttribute("error", "DB Error! Please contact your GridSphere/Database Administrator!");
-                    rd.forward(req, res);
-                    return;
-                }
-
-                log.debug("Initializing portlets and services");
-                try {
-                    // initialize needed services
-                    initializeServices();
-                    // create a root user if none available
-                    userManagerService.initRootUser();
-                    // initialize all portlets
-
-                    PortletResponse portletRes = event.getPortletResponse();
-                    PortletInvoker.initAllPortlets(portletReq, portletRes);
-
-                    // deep inside a service is used which is why this must follow the factory.init
-                    layoutEngine.init();
-                } catch (Exception e) {
-                    log.error("GridSphere initialization failed!", e);
-                    RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/init_error.jsp");
-                    req.setAttribute("error", e);
-                    rd.forward(req, res);
-                    return;
-                }
-                coreGroup = aclService.getCoreGroup();
+            firstDoGet = Boolean.FALSE;
+            log.debug("Testing Database");
+            // checking if database setup is correct
+            DBTask dt = new DBTask();
+            dt.setAction(DBTask.ACTION_CHECKDB);
+            dt.setConfigDir(GridSphereConfig.getServletContext().getRealPath(""));
+            try {
+                dt.execute();
+            } catch (Exception e) {
+                RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/database_error.jsp");
+                log.error("Check DB failed: ", e);
+                req.setAttribute("error", "DB Error! Please contact your GridSphere/Database Administrator!");
+                rd.forward(req, res);
+                return;
             }
+
+            log.debug("Initializing portlets and services");
+            try {
+                // initialize needed services
+                initializeServices();
+                // create a root user if none available
+                userManagerService.initRootUser();
+                // initialize all portlets
+
+                PortletResponse portletRes = event.getPortletResponse();
+                PortletInvoker.initAllPortlets(portletReq, portletRes);
+
+                // deep inside a service is used which is why this must follow the factory.init
+                layoutEngine.init();
+            } catch (Exception e) {
+                log.error("GridSphere initialization failed!", e);
+                RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/init_error.jsp");
+                req.setAttribute("error", e);
+                rd.forward(req, res);
+                return;
+            }
+            coreGroup = aclService.getCoreGroup();
         }
 
         setUserAndGroups(portletReq);
@@ -212,14 +209,18 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         // Handle user login and logout
         if (event.hasAction()) {
-            if (event.getAction().getName().equals(SportletProperties.LOGIN)) {
+            String actionName = event.getAction().getName();
+            if (actionName.equals(SportletProperties.LOGIN)) {
                 login(event);
                 //event = new GridSphereEventImpl(aclService, context, req, res);
             }
-            if (event.getAction().getName().equals(SportletProperties.LOGOUT)) {
+            if (actionName.equals(SportletProperties.LOGOUT)) {
                 logout(event);
                 // since event is now invalidated, must create new one
                 event = new GridSphereEventImpl(context, req, res);
+            }
+            if (trackerService.hasTrackingAction(actionName)) {
+                trackerService.trackURL(actionName, req.getHeader("user-agent"), portletReq.getUser().getUserName());
             }
         }
 

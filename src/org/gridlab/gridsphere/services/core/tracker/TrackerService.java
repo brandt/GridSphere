@@ -26,6 +26,8 @@ public interface TrackerService extends PortletService {
      */
     public List getTrackingLabels();
 
+    public boolean hasTrackingAction(String actionName);
+
     /**
      * Return a list of TrackerInfo objects for the provided label
      *
