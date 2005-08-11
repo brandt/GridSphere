@@ -22,6 +22,7 @@ import javax.portlet.PortletResponse;
 import javax.portlet.PortletRequest;
 import javax.portlet.ActionRequest;
 import java.io.IOException;
+import java.io.File;
 import java.util.*;
 
 /**
@@ -760,6 +761,8 @@ public abstract class BaseFormEventImpl {
         Map parameters = new Hashtable();
         DiskFileItemFactory df = new DiskFileItemFactory();
         df.setSizeThreshold(FileInputBean.MAX_UPLOAD_SIZE);
+        String tmpDir = System.getProperty("java.io.tmpdir");
+        df.setRepository(new File(tmpDir));
         if (req instanceof HttpServletRequest) {
             HttpServletRequest hReq = (HttpServletRequest)req;
             ServletRequestContext ctx = new ServletRequestContext(hReq);
