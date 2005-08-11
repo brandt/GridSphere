@@ -5,12 +5,10 @@
  */
 package org.gridlab.gridsphere.provider.event.impl;
 
+import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.servlet.ServletRequestContext;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.portlet.PortletFileUpload;
+
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
@@ -20,9 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletRequest;
-import javax.portlet.ActionRequest;
 import java.io.IOException;
-import java.io.File;
 import java.util.*;
 
 /**
@@ -758,49 +754,93 @@ public abstract class BaseFormEventImpl {
     }
 
     protected Map parseFileUpload(Object req) {
+        //log.debug("parseFileUpload");
         Map parameters = new Hashtable();
-        DiskFileItemFactory df = new DiskFileItemFactory();
-        df.setSizeThreshold(FileInputBean.MAX_UPLOAD_SIZE);
-        String tmpDir = System.getProperty("java.io.tmpdir");
-        df.setRepository(new File(tmpDir));
         if (req instanceof HttpServletRequest) {
-            HttpServletRequest hReq = (HttpServletRequest)req;
-            ServletRequestContext ctx = new ServletRequestContext(hReq);
-            if (FileUpload.isMultipartContent(ctx)) {
-                ServletFileUpload sfupload = new ServletFileUpload(df);
+            HttpServletRequest hreq = (HttpServletRequest)req;
+            //logRequestParameters();
+            //logRequestAttributes();
+            if (FileUpload.isMultipartContent(hreq)) {
+                //log.debug("File upload event");
+                DiskFileUpload upload = new DiskFileUpload();
+                // Set upload parameters
+                upload.setSizeMax(FileInputBean.MAX_UPLOAD_SIZE);
+                String tmpDir = System.getProperty("java.io.tmpdir");
+                upload.setRepositoryPath(tmpDir);
                 try {
-                    fileItems = sfupload.parseRequest(hReq);
+                    fileItems = upload.parseRequest(hreq);
                 } catch (Exception e) {
                     log.error("Error Parsing multi Part form.Error in workaround!!!", e);
                 }
-            }
-        }
-        if (req instanceof ActionRequest) {
-            ActionRequest areq = (ActionRequest)req;
-            if (PortletFileUpload.isMultipartContent(areq)) {
-                PortletFileUpload pfupload = new PortletFileUpload(df);
-                try {
-                    fileItems = pfupload.parseRequest(areq);
-                } catch (Exception e) {
-                    log.error("Error Parsing multi Part form.Error in workaround!!!", e);
+                if (fileItems != null) {
+                    //log.debug("File items has size " + fileItems.size());
+                    for (int i = 0; i < fileItems.size(); i++) {
+                        FileItem item = (FileItem) fileItems.get(i);
+                        String[] tmpstr = new String[1];
+                        if (item.isFormField()) {
+                            tmpstr[0] = item.getString();
+                        } else {
+                            tmpstr[0] = "fileinput";
+                        }
+                        //log.debug("File item " + item.getFieldName() + "->" + tmpstr[0]);
+                        parameters.put(item.getFieldName(), tmpstr);
+                    }
                 }
-            }
-        }
-        if (fileItems != null) {
-            for (int i = 0; i < fileItems.size(); i++) {
-                FileItem item = (FileItem) fileItems.get(i);
-                String[] tmpstr = new String[1];
-                if (item.isFormField()) {
-                    tmpstr[0] = item.getString();
-                } else {
-                    tmpstr[0] = "fileinput";
-                }
-                //log.debug("Name: " + item.getFieldName() + " Value: " + tmpstr[0]);
-                parameters.put(item.getFieldName(), tmpstr);
             }
         }
         return parameters;
     }
+
+//    protected Map parseFileUpload(Object req) {
+//        log.debug("parseFileUpload");
+//        Map parameters = new Hashtable();
+//        DiskFileItemFactory df = new DiskFileItemFactory();
+//        df.setSizeThreshold(FileInputBean.MAX_UPLOAD_SIZE);
+//        String tmpDir = System.getProperty("java.io.tmpdir");
+//        df.setRepository(new File(tmpDir));
+//        if (req instanceof HttpServletRequest) {
+//            log.debug("Checking http servlet request for file items");
+//            HttpServletRequest hReq = (HttpServletRequest)req;
+//            ServletRequestContext ctx = new ServletRequestContext(hReq);
+//            if (FileUpload.isMultipartContent(ctx)) {
+//                log.debug("File upload event occured");
+//                ServletFileUpload sfupload = new ServletFileUpload(df);
+//                try {
+//                    fileItems = sfupload.parseRequest(hReq);
+//                } catch (Exception e) {
+//                    log.error("Error Parsing multi Part form.Error in workaround!!!", e);
+//                }
+//            }
+//        }
+//        if (req instanceof ActionRequest) {
+//            log.debug("Checking action request for file items");
+//            ActionRequest areq = (ActionRequest)req;
+//            if (PortletFileUpload.isMultipartContent(areq)) {
+//                log.debug("File upload event occured");
+//                PortletFileUpload pfupload = new PortletFileUpload(df);
+//                try {
+//                    fileItems = pfupload.parseRequest(areq);
+//                } catch (Exception e) {
+//                    log.error("Error Parsing multi Part form.Error in workaround!!!", e);
+//                }
+//            }
+//        }
+//        if (fileItems != null) {
+//            log.debug("Number of file items " + fileItems.size());
+//            for (int i = 0; i < fileItems.size(); i++) {
+//                FileItem item = (FileItem) fileItems.get(i);
+//                String[] tmpstr = new String[1];
+//                if (item.isFormField()) {
+//                    tmpstr[0] = item.getString();
+//                } else {
+//                    tmpstr[0] = "fileinput";
+//                }
+//                log.debug("Name: " + item.getFieldName() + " Value: " + tmpstr[0]);
+//                parameters.put(item.getFieldName(), tmpstr);
+//            }
+//        }
+//        return parameters;
+//    }
 
     /**
      * Returns a bean key identifier using the component identifier
