@@ -24,4 +24,19 @@
         <error key="key2" lang="en">Incorrect password provided</error>
     </auth-module>
 
+    <auth-module>
+        <name>GridSphere JAAS</name>
+        <description lang="en">Use the Java Authentication and Authorization Framework</description>
+        <implementation>org.gridlab.gridsphere.services.core.security.auth.modules.impl.JaasAuthModule</implementation>
+        <active>false</active>
+        <priority>40</priority>
+        <auth-config>
+            <param-name>aname</param-name>
+            <param-value>avalue</param-value>
+        </auth-config>
+        <error key="key1" lang="en">Account Expired</error>
+        <error key="key2" lang="en">Credentials Expired</error>
+        <error key="key3" lang="en">Unexpected Error</error>
+    </auth-module>
+
 </auth-modules>
