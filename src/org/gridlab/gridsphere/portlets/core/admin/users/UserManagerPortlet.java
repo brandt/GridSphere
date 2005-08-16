@@ -80,7 +80,7 @@ public class UserManagerPortlet extends ActionPortlet {
             hf.setValue(user.getID());
             PortletGroup coreGroup = aclManagerService.getCoreGroup();
             PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
-            req.setAttribute("role", role.getText(req.getLocale()));
+            req.setAttribute("role", role.getName());
             CheckBoxBean accountCB = evt.getCheckBoxBean("accountCB");
             String disabled = (String)user.getAttribute(User.DISABLED);
             if ((disabled != null) && ("TRUE".equalsIgnoreCase(disabled))) {
@@ -170,7 +170,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
             PortletGroup coreGroup = aclManagerService.getCoreGroup();
             PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
-            req.setAttribute("role", role.getText(req.getLocale()));
+            req.setAttribute("role", role.getName());
 
             setNextState(req, "doListUsers");
         } catch (PortletException e) {
@@ -194,7 +194,7 @@ public class UserManagerPortlet extends ActionPortlet {
             req.setAttribute("user", user);
             PortletGroup coreGroup = aclManagerService.getCoreGroup();
             PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
-            req.setAttribute("role", role.getText(req.getLocale()));
+            req.setAttribute("role", role.getName());
             this.userManagerService.deleteUser(user);
             createSuccessMessage(evt, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
         }
@@ -404,15 +404,33 @@ public class UserManagerPortlet extends ActionPortlet {
         PortletRequest req = event.getPortletRequest();
         ListBoxBean roleListBean = event.getListBoxBean("userRole");
         roleListBean.clear();
+        /*
         ListBoxItemBean userRole = new ListBoxItemBean();
         ListBoxItemBean adminRole = new ListBoxItemBean();
         ListBoxItemBean superRole = new ListBoxItemBean();
+        */
+        ListBoxItemBean roleItemBean;
+        /*
         userRole.setValue(PortletRole.USER.getText(req.getLocale()));
         userRole.setName(PortletRole.USER.getName());
         adminRole.setValue(PortletRole.ADMIN.getText(req.getLocale()));
         adminRole.setName(PortletRole.ADMIN.getName());
         superRole.setValue(PortletRole.SUPER.getText(req.getLocale()));
         superRole.setName(PortletRole.SUPER.getName());
+        */
+        List roles = aclManagerService.getRoles();
+        Iterator it = roles.iterator();
+        while (it.hasNext()) {
+            PortletRole r = (PortletRole)it.next();
+            roleItemBean = new ListBoxItemBean();
+            roleItemBean.setValue(r.getName());
+            roleItemBean.setName(r.getName());
+            if (role.getName().equalsIgnoreCase(r.getName())) {
+                roleItemBean.setSelected(true);
+            }
+            roleListBean.addBean(roleItemBean);
+        }
+        /*
         if (role.equals(PortletRole.USER)) {
             userRole.setSelected(true);
         } else if (role.equals(PortletRole.ADMIN)) {
@@ -423,6 +441,7 @@ public class UserManagerPortlet extends ActionPortlet {
         roleListBean.addBean(userRole);
         roleListBean.addBean(adminRole);
         roleListBean.addBean(superRole);
+        */
     }
 
     private PortletRole getSelectedUserRole(FormEvent event) {
@@ -437,7 +456,8 @@ public class UserManagerPortlet extends ActionPortlet {
             // Otherwise, return the first selected value
             String userRoleItem = (String) userRoleList.get(0);
             log.debug("Selected role was " + userRoleItem);
-            return PortletRole.toPortletRole(userRoleItem);
+            return aclManagerService.getRoleByName(userRoleItem);
+            //return PortletRole.toPortletRole(userRoleItem);
         }
     }
 

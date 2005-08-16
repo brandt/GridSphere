@@ -260,7 +260,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 TextBean roletext = new TextBean();
                 if (r.equals(PortletRole.GUEST)) r = PortletRole.USER;
                 if (req.getRole().equals(PortletRole.SUPER)) r = PortletRole.ADMIN;
-                roletext.setValue(r.getText(req.getLocale()));
+                roletext.setValue(r.getName());
                 roleTC.addBean(roletext);
 
                 groupsTR.addBean(groupsTC);

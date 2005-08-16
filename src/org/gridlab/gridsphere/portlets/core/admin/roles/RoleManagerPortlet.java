@@ -97,7 +97,7 @@ public class RoleManagerPortlet extends ActionPortlet {
         PortletRole role = aclManagerService.getRole(roleOid);
         if (roleOid != null) {
             aclManagerService.deleteRole(role);
-            createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_DELETE_MSG") + role.getName());
+            createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_DELETE_MSG") + ": " + role.getName());
         }
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
@@ -122,7 +122,7 @@ public class RoleManagerPortlet extends ActionPortlet {
             role = new PortletRole(roleNameTF.getValue(), priority);
         }
         aclManagerService.saveRole(role);
-        createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG") + role.getName());
+        createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG") + ": " + role.getName());
     }
 
     public void doNewRole(FormEvent evt) {
@@ -155,7 +155,7 @@ public class RoleManagerPortlet extends ActionPortlet {
             return;
         }
         aclManagerService.createRole(roleNameTF.getValue(), rp);
-        createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG" + roleNameTF.getValue()));
+        createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG") + ": " + roleNameTF.getValue());
     }
 
     private void createErrorMessage(FormEvent event, String msg) {
