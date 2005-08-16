@@ -20,7 +20,9 @@ public class GroupRequestImpl implements GroupRequest {
     private String oid = null;
     private SportletUserImpl user = null;
     private SportletGroup sgroup = null;
+    // deprecated
     private String role = "";
+    private PortletRole portletRole;
 
     public GroupRequestImpl() {
     }
@@ -52,16 +54,11 @@ public class GroupRequestImpl implements GroupRequest {
     }
 
     public PortletRole getRole() {
-        try {
-            return PortletRole.toPortletRole(this.role);
-        } catch (Exception e) {
-            log.error("Error converting role to string", e);
-            return PortletRole.GUEST;
-        }
+        return portletRole;
     }
 
     public void setRole(PortletRole role) {
-        this.role = role.toString();
+        this.portletRole = role;
     }
 
     public String getRoleName() {

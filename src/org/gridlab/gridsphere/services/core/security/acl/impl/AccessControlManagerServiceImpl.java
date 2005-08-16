@@ -38,12 +38,23 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     public static synchronized AccessControlManagerServiceImpl getInstance() {
-
         return instance;
     }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         pm = PersistenceManagerFactory.createGridSphereRdbms();
+        // update group entries
+        List groupEntries = selectGroupEntries("");
+        Iterator it = groupEntries.iterator();
+        while (it.hasNext()) {
+            GroupRequestImpl ge = (GroupRequestImpl)it.next();
+            String roleName = ge.getRoleName();
+            if (!roleName.equals("")) {
+                ge.setRole(this.getRoleByName(roleName));
+                ge.setRoleName("");
+                saveGroupEntry(ge);
+            }
+        }
     }
 
     public void destroy() {
@@ -85,7 +96,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving access right";
             log.error(msg, e);
-            return new Vector();
+            return new ArrayList();
         }
     }
 
@@ -450,15 +461,15 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     public boolean hasAdminRoleInGroup(User user, PortletGroup group) {
-        return hasRoleInGroup(user, group, PortletRole.ADMIN);
+        return hasRoleInGroup(user, group, getAdminRole());
     }
 
     public boolean hasUserRoleInGroup(User user, PortletGroup group) {
-        return hasRoleInGroup(user, group, PortletRole.USER);
+        return hasRoleInGroup(user, group, getUserRole());
     }
 
     public boolean hasGuestRoleInGroup(User user, PortletGroup group) {
-        return hasRoleInGroup(user, group, PortletRole.GUEST);
+        return hasRoleInGroup(user, group, getGuestRole());
     }
 
     public List getUsersWithSuperRole() {
@@ -467,7 +478,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         Iterator it = users.iterator();
         while (it.hasNext()) {
             User u = (User) it.next();
-            if (this.hasRoleInGroup(u, getCoreGroup(), PortletRole.SUPER)) {
+            if (this.hasRoleInGroup(u, getCoreGroup(), getSuperRole())) {
                 supers.add(u);
             }
         }
@@ -476,11 +487,27 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
     public void grantSuperRole(User user) {
         //addGroupEntry(user, SportletGroup.SUPER, PortletRole.SUPER);
-        addGroupEntry(user, getCoreGroup(), PortletRole.SUPER);
+        addGroupEntry(user, getCoreGroup(), getSuperRole());
+    }
+
+    public PortletRole getSuperRole() {
+        return getRoleByName(PortletRole.SUPER.getName());
+    }
+
+    public PortletRole getAdminRole() {
+        return getRoleByName(PortletRole.ADMIN.getName());
+    }
+
+    public PortletRole getUserRole() {
+        return getRoleByName(PortletRole.USER.getName());
+    }
+
+    public PortletRole getGuestRole() {
+        return getRoleByName(PortletRole.GUEST.getName());
     }
 
     public boolean hasSuperRole(User user) {
-        return hasRoleInGroup(user, getCoreGroup(), PortletRole.SUPER);
+        return hasRoleInGroup(user, getCoreGroup(), getSuperRole());
         //isUserInGroup(user, SportletGroup.SUPER);
     }
 
