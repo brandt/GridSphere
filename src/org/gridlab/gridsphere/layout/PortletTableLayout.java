@@ -12,9 +12,12 @@ import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
+import org.gridlab.gridsphere.layout.view.TableLayoutView;
+import org.gridlab.gridsphere.layout.view.classic.TableLayout;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -22,15 +25,13 @@ import java.util.*;
  * that organizes portlets into a grid with a provided number of columns.
  * Portlets are arranged in column-wise order starting from the left most column.
  */
-public class PortletTableLayout extends PortletFrameLayout implements Cloneable {
+public class PortletTableLayout extends PortletFrameLayout implements Serializable, Cloneable {
 
-    protected static final String PORTLET_COL = "gs_col";
-    protected static final String PORTLET_ADD_ACTION = "gs_addPortlet";
-    protected static final String PORTLET_NO_ACTION = "gs_none";
+    public static final String PORTLET_COL = "gs_col";
+    public static final String PORTLET_ADD_ACTION = "gs_addPortlet";
+    public static final String PORTLET_NO_ACTION = "gs_none";
 
-    //protected StringBuffer table = null;
-
-    protected boolean isHeader = false;
+    protected transient TableLayoutView tableView = null;
 
     /**
      * Constructs an instance of PortletTableLayout
@@ -39,6 +40,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
     }
 
     public List init(PortletRequest req, List list) {
+        tableView = new TableLayout();
         return super.init(req, list);
     }
 
@@ -107,214 +109,12 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         }
     }
 
-    /**
-     * Renders the portlet grid layout component
-     *
-     * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
-     */
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-    	String markupName=event.getPortletRequest().getClient().getMarkupName();
-    	if (markupName.equals("html")) {
-    		doRenderHTML(event);
-    	} else {
-    		doRenderWML(event);
-    	}
-    }
-
-    public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
-
-        super.doRender(event);
-
-        PortletResponse res = event.getPortletResponse();
-        PrintWriter out = res.getWriter();
-
-        PortletComponent p;
-
-        // check if one window is maximized
-        /*
-        StringBuffer frame = new StringBuffer();
-        StringWriter storedWriter = new StringWriter();
-        PrintWriter writer = new PrintWriter(storedWriter);
-        PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
-        */
-        List scomponents = Collections.synchronizedList(components);
-        synchronized (scomponents) {
-            for (int i = 0; i < scomponents.size(); i++) {
-                p = (PortletComponent) scomponents.get(i);
-                if (p instanceof PortletLayout) {
-                    PortletComponent maxi = getMaximizedComponent(scomponents);
-                    if (maxi != null) {
-                        //out.println("<table border=\"0\" width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"><tbody><tr><td>");
-                        maxi.doRender(event);
-                        out.println("<p />");
-                        //out.println("</td></tr></tbody></table>");
-                        if ((canModify) && (!hasFrameMaximized)) {
-                            renderUserSelects(event, new StringBuffer());
-                        }
-                        return;
-                    }
-                }
-            }
-
-            // starting of the gridtable
-            //out.println("<table ");
-            if (this.style != null) {
-                // out.print("class=\"" + this.style + "\" ");
-            }
-            //out.println("border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tbody>");
-
-            for (int i = 0; i < scomponents.size(); i++) {
-                p = (PortletComponent) scomponents.get(i);
-
-                //out.println("<tr><td valign=\"top\" width=\"" + p.getWidth() + "\">");
-                if (p.getVisible()) {
-                    p.doRender(event);
-                    //out.println("grid comp: "+i);
-                }
-                out.println ("<p />");
-                //out.println("</td> </tr>");
-            }
-
-            /** setup bottom add portlet listbox */
-            if ((canModify) && (!hasFrameMaximized)) {
-                renderUserSelects(event, new StringBuffer());
-            }
-
-            //out.println("</tbody></table>");
-    }
-}
-    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
-        super.doRender(event);
-
-        StringBuffer table = new StringBuffer();
-        PortletComponent p;
-
-        // check if one window is maximized
-        /*
-        StringBuffer frame = new StringBuffer();
-        StringWriter storedWriter = new StringWriter();
-        PrintWriter writer = new PrintWriter(storedWriter);
-        PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
-        */
-        List scomponents = Collections.synchronizedList(components);
-        synchronized (scomponents) {
-            for (int i = 0; i < scomponents.size(); i++) {
-                p = (PortletComponent) scomponents.get(i);
-                if (p instanceof PortletLayout) {
-                    PortletComponent maxi = getMaximizedComponent(scomponents);
-                    if (maxi != null) {
-                        table.append("<table border=\"0\" width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"><tbody><tr><td>");
-                        maxi.doRender(event);
-                        table.append(maxi.getBufferedOutput(event.getPortletRequest()));
-                        table.append("</td></tr></tbody></table>");
-                        if ((canModify) && (!hasFrameMaximized)) {
-                            renderUserSelects(event, table);
-                        }
-                        event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, table);
-                        return;
-                    }
-                }
-            }
-
-            // starting of the gridtable
-            if (isHeader) {
-                table.append("\n<!-- START OF DIV_GRID -->\n");
-                table.append("<DIV ");
-                if (this.style != null) {
-                    table.append("id=header\">\n");
-                } else {
-                    table.append(">\n");
-                }
-            } else {
-                table.append("<table ");
-                if (this.style != null) {
-                    table.append("class=\"" + this.style + "\" ");
-                }
-                table.append("border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tbody>");
-            }
-
-            for (int i = 0; i < scomponents.size(); i++) {
-                p = (PortletComponent) scomponents.get(i);
-                //out.println("<tr><td valign=\"top\" width=\"100%\">");
-                if (!isHeader) table.append("<tr><td valign=\"top\" width=\"" + p.getWidth() + "\">");
-                if (p.getVisible()) {
-                    p.doRender(event);
-                    if (!isHeader) table.append(p.getBufferedOutput(event.getPortletRequest()));
-                }
-                if (!isHeader) table.append("</td> </tr>");
-            }
-
-
-
-            /** setup bottom add portlet listbox */
-            if ((canModify) && (!hasFrameMaximized)) {
-                renderUserSelects(event, table);
-            }
-
-
-            if (isHeader) {
-                table.append("</DIV>\n");
-                table.append("<!-- END OF DIV_GRID -->\n");
-            } else {
-                table.append("</tbody></table>");
-            }
-            event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, table);
-        }
-    }
-
-
-    public void renderUserSelects(GridSphereEvent event, StringBuffer table) throws IOException {
-        //PrintWriter out = event.getPortletResponse().getWriter();
-
-        table.append("<tr><td valign=\"top\" width=\"100%\">");
-        //out.println("<tr>");
-        if (!components.isEmpty()) {
-            Object o = components.get(0);
-            if (o instanceof PortletFrameLayout) {
-                PortletFrameLayout layout = (PortletRowLayout) o;
-                table.append(" <!-- START ROW --> ");
-                table.append("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">");
-                table.append("<tbody><tr>");
-                List cols = layout.getPortletComponents();
-
-                for (int j = 0; j < cols.size(); j++) {
-                    o = cols.get(j);
-                    if (o instanceof PortletFrameLayout) {
-                        PortletFrameLayout col = (PortletFrameLayout) o;
-                        table.append("<td valign=\"top\" width=\"" + col.getWidth() + "\">");
-                        table.append("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
-
-                        table.append("<tbody><tr><td>");
-
-                        // render add portlets listbox
-                        renderAddPortlets(event, j, table);
-
-                        table.append("</td></tr></tbody>");
-                        table.append("</table> <!-- END COLUMN -->");
-                    }
-
-                    table.append("</td>");
-                }
-
-                table.append("</tr></tbody></table>");
-                table.append("<!-- END ROW -->");
-            }
-        }
-        table.append("</td> </tr>");
-    }
-
-    public void renderAddPortlets(GridSphereEvent event, int col, StringBuffer table) throws IOException {
+    public Map getAvailablePortletsToAdd(GridSphereEvent event) {
+        PortletRegistry registry = PortletRegistry.getInstance();
         PortletRequest req = event.getPortletRequest();
         Locale locale = req.getLocale();
-        PortletRegistry registry = PortletRegistry.getInstance();
-        req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
-        PortletResponse res = event.getPortletResponse();
         //PrintWriter out = res.getWriter();
-        PortletURI uri = res.createURI();
-        uri.addAction(PORTLET_ADD_ACTION);
 
         Map groups = (Map) req.getAttribute(SportletProperties.PORTLETGROUPS);
 
@@ -355,33 +155,57 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                 }
             }
         }
-
-        table.append("<form action=\"" + uri.toString() + "\"  method=\"POST\" name=\"addform\">"); //WAP 2.0 changes: method instead of + method
-        table.append("<input type=\"hidden\" name=\"" + PORTLET_COL + "\" value=\"" + col + "\"/>");
-
-        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
-        String addLabel = bundle.getString("ADDPORTLETS");
-        String addButton = bundle.getString("ADD");
-        String noPortletsMsg = bundle.getString("NOPORTLETS");
-
-        table.append("<b>" + addLabel + "</b>&nbsp;&nbsp;&nbsp;");
-        table.append("<select name=\"" + PORTLET_ADD_ACTION + "\">");
-
-        if (availPortlets.isEmpty()) {
-            table.append("<option value=\"" + PORTLET_NO_ACTION + "\">" + noPortletsMsg + "</option>");
-        }
-        it = availPortlets.keySet().iterator();
-        while (it.hasNext()) {
-            String pid = (String) it.next();
-            String dispName = (String) availPortlets.get(pid);
-            table.append("<option value=\"" + pid + "\">" + dispName + "</option>");
-        }
-
-        table.append("</select>");
-        table.append("&nbsp;&nbsp;<input type=\"submit\" name=\"gs_action=addportlet\" value=\"" + addButton + "\">");//WAP 2.0 changes:added a closing >
-        table.append("</form>");
+        return availPortlets;
     }
 
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        super.doRender(event);
+
+        StringBuffer table = new StringBuffer();
+        PortletComponent p;
+
+        // check if one window is maximized
+
+        for (int i = 0; i < components.size(); i++) {
+            p = (PortletComponent) components.get(i);
+            if (p instanceof PortletLayout) {
+                PortletComponent maxi = getMaximizedComponent(components);
+                if (maxi != null) {
+                    table.append(tableView.doStartMaximizedComponent(event, this));
+                    maxi.doRender(event);
+                    table.append(maxi.getBufferedOutput(event.getPortletRequest()));
+                    table.append(tableView.doEndMaximizedComponent(event, this));
+                    if ((canModify) && (!hasFrameMaximized)) {
+                        table.append(tableView.doRenderUserSelects(event, this));
+                    }
+                    event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, table);
+                    return;
+                }
+            }
+        }
+
+        table.append(tableView.doStart(event, this));
+
+        for (int i = 0; i < components.size(); i++) {
+            p = (PortletComponent)components.get(i);
+            table.append(tableView.doStartBorder(event, p));
+            if (p.getVisible()) {
+                p.doRender(event);
+                table.append(p.getBufferedOutput(event.getPortletRequest()));
+            }
+            table.append(tableView.doEndBorder(event, this));
+        }
+
+        /** setup bottom add portlet listbox */
+        if ((canModify) && (!hasFrameMaximized)) {
+            table.append(tableView.doRenderUserSelects(event, this));
+        }
+
+        table.append(tableView.doEnd(event, this));
+
+        event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, table);
+
+    }
 
     public Object clone() throws CloneNotSupportedException {
         PortletTableLayout g = (PortletTableLayout) super.clone();

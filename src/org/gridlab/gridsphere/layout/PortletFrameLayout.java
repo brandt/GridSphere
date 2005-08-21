@@ -36,6 +36,10 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
 
     protected boolean hasFrameMaximized = false;
 
+    public boolean hasFrameMaximized() {
+        return hasFrameMaximized;
+    }
+
     /**
      * Initializes the portlet component. Since the components are isolated
      * after Castor unmarshalls from XML, the ordering is determined by a
@@ -69,7 +73,6 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                 } else {
                     // all the components have the same theme
                     p.setTheme(theme);
-                    p.setUseDiv(useDiv);
                     p.setCanModify(canModify);
                     // invoke init on each component
                     list = p.init(req, list);
@@ -197,7 +200,6 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                     } else {
                         p.setWidth(p.getDefaultWidth());
                     }
-                    //p.setWidth("");
                 } else {
                     p.setVisible(true);
                 }

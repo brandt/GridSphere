@@ -5,8 +5,11 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.layout.view.classic.RowLayout;
+import org.gridlab.gridsphere.layout.view.Render;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,60 +22,29 @@ import java.util.List;
  */
 public class PortletRowLayout extends PortletFrameLayout implements Cloneable, Serializable {
 
-    //protected StringBuffer row = null;
+    private transient Render rowView = null;
 
-	public void doRender(GridSphereEvent event) throws PortletLayoutException,IOException {
-    	String markupName=event.getPortletRequest().getClient().getMarkupName();
-    	if (markupName.equals("html")){
-    		doRenderHTML(event);
-    	} else {
-    		doRenderWML(event);
-    	}
-	}
-
-    public void doRenderWML(GridSphereEvent event) throws PortletLayoutException,IOException {
-        PortletResponse res = event.getPortletResponse();
-        PrintWriter out = res.getWriter();
-        //System.err.println("\t\tin render RowLayout");
-        PortletComponent p;
-
-        out.println("<p/>");
-        List scomponents = Collections.synchronizedList(components);
-        synchronized (scomponents) {
-            for (int i = 0; i < scomponents.size(); i++) {
-                p = (PortletComponent) scomponents.get(i);
-                out.println("<p/>");
-                if (p.getVisible()) {
-                    p.doRender(event);
-                }
-            }
-            out.println("<p/>");
-        }
+    public List init(PortletRequest req, List list) {
+        list = super.init(req, list);
+        rowView = new RowLayout();
+        return list;
     }
 
-    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
-        //System.err.println("\t\tin render RowLayout");
-        PortletComponent p;
-
+    public void doRender(GridSphereEvent event) throws PortletLayoutException,IOException {
         StringBuffer row = new StringBuffer();
-        // starting of the gridtable
-        row.append(" <!-- START ROW --> ");
-        row.append("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">");
-        row.append("<tbody><tr>");
-        List scomponents = Collections.synchronizedList(components);
-        synchronized (scomponents) {
-            for (int i = 0; i < scomponents.size(); i++) {
-                p = (PortletComponent) scomponents.get(i);
-                row.append("<td valign=\"top\" width=\"" + p.getWidth() + "\">");
+        PortletComponent p;
+        row.append(rowView.doStart(event, this));
+        for (int i = 0; i < components.size(); i++) {
+                p = (PortletComponent) components.get(i);
+                row.append(rowView.doStartBorder(event, p));
                 if (p.getVisible()) {
                     p.doRender(event);
                     row.append(p.getBufferedOutput(event.getPortletRequest()));
                 }
-                row.append("</td>");
+                row.append(rowView.doEndBorder(event, this));
             }
-            row.append("</tr></tbody></table>");
-            row.append("<!-- END ROW -->");
-        }
+        row.append(rowView.doEnd(event, this));
+
         event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, row);
     }
 

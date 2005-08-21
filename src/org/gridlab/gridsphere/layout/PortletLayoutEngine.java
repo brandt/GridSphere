@@ -206,16 +206,10 @@ public class PortletLayoutEngine {
      * @param msg           The message to deliver
      * @param event         The event associated with the delivery
      */
-    public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) throws PortletException {
+    public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
         log.debug("in messageEvent()");
-        PortletPage page;
-        try {
-            page = getPortletPage(event);
-            page.messageEvent(concPortletID, msg, event);
-        } catch (PortletLayoutException e) {
-            doRenderError(event.getPortletRequest(), event.getPortletResponse(), e);
-            log.error("Caught LayoutException: ", e);
-        }
+        PortletPage page = getPortletPage(event);
+        page.messageEvent(concPortletID, msg, event);
         log.debug("Exiting messageEvent()");
 
     }

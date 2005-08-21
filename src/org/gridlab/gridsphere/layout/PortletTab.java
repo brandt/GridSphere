@@ -136,9 +136,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      * @param event the gridsphere event
      */
     public String createTabTitleLink(GridSphereEvent event) {
-        //PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-        //req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
         PortletURI portletURI = res.createURI();
         portletURI.addParameter(SportletProperties.COMPONENT_ID, componentIDStr);
         return portletURI.toString();
@@ -204,7 +202,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         compId.setClassName(this.getClass().getName());
         list.add(compId);
         portletComponent.setTheme(theme);
-        portletComponent.setUseDiv(useDiv);
         list = portletComponent.init(req, list);
         portletComponent.addComponentListener(this);
         portletComponent.setParentComponent(this);

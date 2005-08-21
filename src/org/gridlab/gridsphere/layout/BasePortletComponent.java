@@ -13,7 +13,6 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
-
 /**
  * <code>BasePortletComponent</code> represents an abstract portlet component with a particular
  * size, layout and theme and is subclasses by concrete portlet component instances.
@@ -31,14 +30,12 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String roleString = PortletRole.GUEST.toString();
     protected PortletRole requiredRole = PortletRole.GUEST;
     protected List listeners = null;
-    //protected StringBuffer bufferedOutput = new StringBuffer();
     protected boolean canModify = false;
-    protected boolean useDiv = false;
+
     /**
      * css Style of the table
      */
-    protected String style = null;
-
+    protected String style = "";
 
     /**
      * Initializes the portlet component. Since the components are isolated
@@ -59,6 +56,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
                 requiredRole = PortletRole.GUEST;
             }
         }
+
         if (parent != null) {
         if (parent.getRequiredRole().compare(parent.getRequiredRole(), requiredRole) > 0) {
             requiredRole = parent.getRequiredRole();
@@ -145,27 +143,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public PortletRole getRequiredRole() {
         return requiredRole;
-    }
-
-    /**
-     * Returns the layout mechanism
-     * true : use DIVs for the layout
-     * false : default : use TABLEs
-     *
-     * @return the boolean attribute
-     */
-    public boolean getUseDiv() {
-        return useDiv;
-    }
-    /**
-     * Sets the layout mechanism
-     * true : use DIVs for the layout
-     * false : default : use TABLEs
-     *
-     * @param useDiv use DIV tags if true
-     */
-    public void setUseDiv(boolean useDiv) {
-        this.useDiv = useDiv;
     }
 
     /**
@@ -313,14 +290,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         PortletRequest req = event.getPortletRequest();
         req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
         //isVisible = false;
-    }
-
-    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
-
-    }
-
-    public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
-
     }
 
     public StringBuffer getBufferedOutput(PortletRequest req) {

@@ -4,15 +4,14 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.layout.view.Render;
+import org.gridlab.gridsphere.layout.view.classic.ColumnLayout;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,9 +20,15 @@ import java.util.List;
  */
 public class PortletColumnLayout extends PortletFrameLayout implements Cloneable, Serializable {
 
-    //protected StringBuffer col = null;
+    private transient Render colView = null;
 
     public PortletColumnLayout() {
+    }
+
+    public List init(PortletRequest req, List list) {
+        list = super.init(req, list);
+        colView = new ColumnLayout();
+        return list;
     }
 
     public void remove(PortletComponent pc, PortletRequest req) {
@@ -33,66 +38,25 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
         }
     }
 
-
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-    	String markupName=event.getPortletRequest().getClient().getMarkupName();
-    	if (markupName.equals("html")){
-    		doRenderHTML(event);
-    	} else {
-    		doRenderWML(event);
-    	}
-    }
-
-    public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
-        //System.err.println("\t\tin render ColumnLayout");
-        PortletResponse res = event.getPortletResponse();
-        PortletRequest req = event.getPortletRequest();
-        PrintWriter out = res.getWriter();
-
-        PortletComponent p = null;
-
-        // starting of the gridtable
-
-        if (!components.isEmpty()) {
-            out.println("<p/>");
-            List scomponents = Collections.synchronizedList(components);
-            synchronized (scomponents) {
-                for (int i = 0; i < scomponents.size(); i++) {
-                    p = (PortletComponent) scomponents.get(i);
-                    out.print("<p/>");
-                    if (p.getVisible()) {
-                        p.doRender(event);
-                    }
-                }
-            }
-            out.println("<p/>");
-        }
-    }
-
-    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
         //System.err.println("\t\tin render ColumnLayout");
         StringBuffer col = new StringBuffer();
-        PortletComponent p = null;
-
         // starting of the gridtable
         if (!components.isEmpty()) {
-            col.append(" <!-- START COLUMN --><table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\">");
-            col.append("<tbody>");
-            List scomponents = Collections.synchronizedList(components);
-            synchronized (scomponents) {
-                for (int i = 0; i < scomponents.size(); i++) {
-                    p = (PortletComponent) scomponents.get(i);
-                    col.append("<tr><td valign=\"top\" width=\"100%\">");
-                    if (p.getVisible()) {
-                        p.doRender(event);
-                        col.append(p.getBufferedOutput(event.getPortletRequest()));
-                    }
-                    col.append("</td></tr>");
+            col.append(colView.doStart(event, this));
+            PortletComponent p;
+            for (int i = 0; i < components.size(); i++) {
+                p = (PortletComponent) components.get(i);
+                col.append(colView.doStartBorder(event,this));
+                if (p.getVisible()) {
+                    p.doRender(event);
+                    col.append(p.getBufferedOutput(event.getPortletRequest()));
                 }
+                col.append(colView.doEndBorder(event, this));
             }
-            col.append("</tbody></table> <!-- END COLUMN -->");
-            event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, col);
+            col.append(colView.doEnd(event, this));
         }
+        event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, col);
     }
 
     public Object clone() throws CloneNotSupportedException {

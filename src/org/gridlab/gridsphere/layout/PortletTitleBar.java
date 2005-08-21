@@ -10,6 +10,8 @@ import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarListener;
 import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
+import org.gridlab.gridsphere.layout.view.classic.TitleBar;
+import org.gridlab.gridsphere.layout.view.Render;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
@@ -42,6 +44,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private boolean isActive = false;
     private transient AccessControlManagerService aclService = null;
 
+    private List modeLinks = null, windowLinks = null;
+
+    private transient Render titleView = null;
 
     /**
      * Link is an abstract representation of a hyperlink with an href, image and
@@ -110,7 +115,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * PortletModeLink is a concrete instance of a Link used for creating
      * portlet mode hyperlinks
      */
-    class PortletModeLink extends Link {
+    public class PortletModeLink extends Link {
 
         public static final String configImage = "images/window_configure.gif";
         public static final String configSymbol = "c";//WAP 2.0 Extention
@@ -154,7 +159,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * PortletStateLink is a concrete instance of a Link used for creating
      * portlet window state hyperlinks
      */
-    class PortletStateLink extends Link {
+    public class PortletStateLink extends Link {
 
         public static final String closeImage = "images/window_close.gif";
         public static final String minimizeImage = "images/window_minimize.gif";
@@ -394,6 +399,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      */
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
+        titleView = new TitleBar();
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);
@@ -464,7 +470,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * @param event the gridsphere event
      * @return a list of window state hyperlinks
      */
-    protected List createWindowLinks(GridSphereEvent event) {
+    public List createWindowLinks(GridSphereEvent event) {
         PortletURI portletURI;
         PortletResponse res = event.getPortletResponse();
         PortletWindow.State tmp;
@@ -693,120 +699,15 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         }
     }
 
-    /**
-     * Renders the portlet title bar component
-     *
-     * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
-     */
+    public List getModeLinks() {
+        return modeLinks;
+    }
+
+    public List getWindowLinks() {
+        return windowLinks;
+    }
+
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-    	String markupName=event.getPortletRequest().getClient().getMarkupName();
-    	if (markupName.equals("html")) {
-    		doRenderHTML(event);
-    	} else {
-    		doRenderWML(event);
-    	}
-    }
-
-    public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
-
-        hasError = false;
-
-        // title bar: configure, edit, help, title, min, max
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
-
-        // get the appropriate title for this client
-        Locale locale = req.getLocale();
-
-        List modeLinks = null, windowLinks = null;
-        User user = req.getUser();
-        if (!(user instanceof GuestUser)) {
-            if (portletClass != null) {
-                modeLinks = createModeLinks(event);
-                windowLinks = createWindowLinks(event);
-            }
-        }
-
-        req.setMode(portletMode);
-        req.setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
-        req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
-
-        // TODO try to cache portlet's rendering---
-        StringWriter storedWriter = new StringWriter();
-        PrintWriter writer = new PrintWriter(storedWriter);
-        PortletResponse wrappedResponse;
-
-        if (isActive) {
-            writer.println("<tr><td class=\"window-title-active\">");
-        } else {
-            writer.println("<tr><td class=\"window-title-inactive\">");
-        }
-        isActive = false;
-        writer.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" bgcolor=\"#EEEEEE\" width=\"100%\"><tr>"); //WAP 2.0 width removed, bgcolor added
-
-        // Output portlet mode icons
-        if (modeLinks != null) {
-            Iterator modesIt = modeLinks.iterator();
-            writer.println("<td width=\"3%\" class=\"windowItems\">");//WAP 2.0:5% added
-            PortletModeLink mode;
-            while (modesIt.hasNext()) {
-                mode = (PortletModeLink) modesIt.next();
-                writer.println("<a href=\"" + mode.getHref() + "\">"+ mode.getSymbol() + "</a>");//WAP 2.0:replaced image with normal string                 
-            }
-            writer.println("</td>");
-        }
-
-        // Invoke doTitle of portlet whose action was perfomed
-        //String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
-        writer.println("<td class=\"windowTitle\"><nobr>");//WAP 2.0 <nobr> added 
-
-        //prebufferedTitle = storedWriter.getBuffer();
-        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre", storedWriter.getBuffer().toString());
-        storedWriter = new StringWriter();
-        writer = new PrintWriter(storedWriter);
-        wrappedResponse = new StoredPortletResponseImpl(res, writer);
-
-        try {
-            //System.err.println("invoking  doTitle:" + title);
-            PortletInvoker.doTitle((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
-            //out.println(" (" + portletMode.toString() + ") ");
-            title = storedWriter.toString();
-        } catch (PortletException e) {
-
-            ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
-            String value = bundle.getString("PORTLET_UNAVAILABLE");
-            title = portletClass + value + "\n";
-            hasError = true;
-            errorMessage = "PortletException:" + e.getMessage();
-            log.error(portletClass + " is currently unavailable:", e);
-        }
-
-        storedWriter = new StringWriter();
-        writer = new PrintWriter(storedWriter);
-
-        writer.println("</nobr></td>");//WAP 2.0:</nobr> added
-
-        // Output window state icons
-        if (windowLinks != null) {
-            Iterator windowsIt = windowLinks.iterator();
-            PortletStateLink state;
-            writer.println("<td width=\"10%\" class=\"windowItems\">"); //WAP 2.0:10% added
-            while (windowsIt.hasNext()) {
-                state = (PortletStateLink) windowsIt.next();
-                writer.println("<a href=\"" + state.getHref() + "\">"+state.getSymbol() +"</a>");//WAP 2.0:replaced image with normal string
-            }
-            writer.println("</td>");
-        }
-        writer.println("</tr></table>");
-        writer.println("</td></tr>");
-
-        //postbufferedTitle = storedWriter.getBuffer();
-        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post", storedWriter.getBuffer().toString());
-    }
-
-    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
 
         hasError = false;
 
@@ -818,7 +719,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         Locale locale = req.getLocale();
 
-        List modeLinks = null, windowLinks = null;
+
         User user = req.getUser();
         if (!(user instanceof GuestUser)) {
             if (portletClass != null) {
@@ -833,54 +734,15 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         req.setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
         req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
 
-        // TODO try to cache portlet's rendering---
+        StringBuffer preTitle = titleView.doStart(event, this);
+        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre", preTitle.toString());
+
+        StringBuffer postTitle = titleView.doEnd(event, this);
+        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post", postTitle.toString());
+
         StringWriter storedWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(storedWriter);
-        PortletResponse wrappedResponse;
-
-        if (isActive) {
-            if (useDiv) {
-               writer.println("<div id=\"portlet-titlebar\">");
-            } else {
-                writer.println("<tr><td class=\"window-title-active\">");
-            }
-        } else {
-            if (useDiv) {
-               writer.println("<div id=\"portlet-titlebar-inactive\">");
-            } else {
-               writer.println("<tr><td class=\"window-title-inactive\">");
-            }
-        }
-        isActive = false;
-        if (useDiv) {
-            writer.println("<div id=\"portlet-titlebar-text\">");
-        } else {
-            writer.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>");
-        }
-
-        if (!useDiv) {
-            // Output portlet mode icons
-            if (modeLinks != null) {
-                Iterator modesIt = modeLinks.iterator();
-                writer.println("<td class=\"window-icon-left\">");
-                PortletModeLink mode;
-                while (modesIt.hasNext()) {
-                    mode = (PortletModeLink) modesIt.next();
-                    writer.println("<a href=\"" + mode.getHref() + "\"><img border=\"0\" src=\"themes" + File.separator + theme + File.separator + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
-                }
-                writer.println("</td>");
-            }
-
-            // Invoke doTitle of portlet whose action was perfomed
-            //String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
-            writer.println("<td class=\"window-title-name\">");
-        }
-
-        //prebufferedTitle = storedWriter.getBuffer();
-        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre", storedWriter.getBuffer().toString());
-        storedWriter = new StringWriter();
-        writer = new PrintWriter(storedWriter);
-        wrappedResponse = new StoredPortletResponseImpl(res, writer);
+        PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
 
         try {
             //System.err.println("invoking  doTitle:" + title);
@@ -888,7 +750,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             //out.println(" (" + portletMode.toString() + ") ");
             title = storedWriter.toString();
         } catch (PortletException e) {
-
             ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
             String value = bundle.getString("PORTLET_UNAVAILABLE");
             title = portletClass + value + "\n";
@@ -896,46 +757,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             errorMessage = "PortletException:" + e.getMessage();
             log.error(portletClass + " is currently unavailable:", e);
         }
-
-        storedWriter = new StringWriter();
-        writer = new PrintWriter(storedWriter);
-
-        if (useDiv) {
-            writer.println("</div>");
-        } else {
-            writer.println("</td>");
-        }
-
-        // Output window state icons
-        if (windowLinks != null) {
-            Iterator windowsIt = windowLinks.iterator();
-            PortletStateLink state;
-            if (useDiv) {
-                writer.println("<DIV id=\"portlet-titlebar-icon\">");
-            } else {
-                writer.println("<td class=\"window-icon-right\">");
-            }
-            while (windowsIt.hasNext()) {
-                state = (PortletStateLink) windowsIt.next();
-                writer.println("<a href=\"" + state.getHref() + "\"><img border=\"0\" src=\"themes/" + theme + File.separator + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\"/></a>");
-            }
-            if (useDiv) {
-                writer.println("</DIV>");
-            } else {
-                writer.println("</td>");
-            }
-        }
-        if (useDiv) {
-            writer.println("<div class=\"spacer\"></div>"); // SPACER div for IE
-            writer.println("</DIV>");
-            writer.println("<!--DIV END OF PORTLET TITLEBAR -->");
-        } else {
-            writer.println("</tr></table>");
-            writer.println("</td></tr>");
-        }
-
-        //postbufferedTitle = storedWriter.getBuffer();
-        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post", storedWriter.getBuffer().toString());
     }
 
     public String getPreBufferedTitle(PortletRequest req) {
@@ -945,6 +766,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     public String getPostBufferedTitle(PortletRequest req) {
         return (String)req.getAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post");
     }
+
 
     public Object clone() throws CloneNotSupportedException {
         PortletTitleBar t = (PortletTitleBar) super.clone();

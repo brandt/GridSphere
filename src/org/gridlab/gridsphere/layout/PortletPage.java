@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -15,6 +16,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.layout.view.Render;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,16 +24,15 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.*;
 import java.util.List;
-import java.awt.*;
 
 /**
  * The <code>PortletPage</code> is the generic container for a collection of
  * concrete portlet components and provides lifecycle methods for traversing
  * the tree of components and handling actions and performing rendering.
  */
-public class PortletPage implements Serializable, Cloneable {
+public class PortletPage extends BasePortletComponent implements Serializable, Cloneable {
 
-    //private PortletLog log = SportletLog.getInstance(PortletPage.class);
+    private transient PortletLog log = SportletLog.getInstance(PortletPage.class);
 
     protected int COMPONENT_ID = -1;
 
@@ -58,8 +59,8 @@ public class PortletPage implements Serializable, Cloneable {
     private Hashtable labelsHash = new Hashtable();
     private Hashtable portletHash = new Hashtable();
 
-    private boolean useDiv = false;
-                                                 
+    private transient Render pageView = null;
+
     /**
      * Constructs an instance of PortletPage
      */
@@ -90,14 +91,6 @@ public class PortletPage implements Serializable, Cloneable {
      */
     public String getTitle() {
         return title;
-    }
-
-    public boolean getUseDiv() {
-        return useDiv;
-    }
-
-    public void setUseDiv(boolean useDiv) {
-        this.useDiv = useDiv;
     }
 
     public void setTheme(String theme) {
@@ -225,21 +218,25 @@ public class PortletPage implements Serializable, Cloneable {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
 
+        try {
+            pageView = (Render)Class.forName("org.gridlab.gridsphere.layout.view.classic.Page").newInstance();
+        } catch (Exception e)  {
+            e.printStackTrace();
+        }
+
+
         if (headerContainer != null) {
             headerContainer.setTheme(theme);
-            headerContainer.setUseDiv(useDiv);
             list = headerContainer.init(req, list);
         }
 
         if (tabbedPane != null) {
             tabbedPane.setTheme(theme);
-            tabbedPane.setUseDiv(useDiv);
             list = tabbedPane.init(req, list);
         }
 
         if (footerContainer != null) {
             footerContainer.setTheme(theme);
-            footerContainer.setUseDiv(useDiv);
             list = footerContainer.init(req, list);
         }
 
@@ -338,9 +335,7 @@ public class PortletPage implements Serializable, Cloneable {
      * @throws IOException            if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
-
         // if there is a layout action do it!
-
         PortletComponent comp = getActiveComponent(event);
         if (comp != null) {
             System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
@@ -434,19 +429,19 @@ public class PortletPage implements Serializable, Cloneable {
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         // handle any client logic to determin which markup to display
-    	String markupName = event.getPortletRequest().getClient().getMarkupName();
-    	if (markupName.equals("html")) {
-    		doRenderHTML(event);
-    	} else {
-    		doRenderWML(event);
-    	}
+        String markupName = event.getPortletRequest().getClient().getMarkupName();
+        if (markupName.equals("html")) {
+            doRenderHTML(event);
+        } else {
+            doRenderWML(event);
+        }
     }
 
     public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
 
         PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();
-        
+
         PrintWriter out;
 
         // set content to UTF-8 for il8n
@@ -497,45 +492,7 @@ public class PortletPage implements Serializable, Cloneable {
         StringWriter sout = new StringWriter();
         PrintWriter writer = new PrintWriter(sout);
 
-
-        // page header
-        //out.println("<?xml version=\"1.0\"?>");
-        //out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"" );
-        //out.println("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-        Locale locale = req.getLocale();
-        ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
-        if (orientation.isLeftToRight()) {
-            writer.println("<html>");
-        } else {
-            writer.println("<html dir=\"rtl\">");
-        }
-
-        writer.println("<head>");
-        writer.println("<title>" + title + "</title>");
-        writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
-        writer.println("<meta name=\"keywords\" content=\"" + keywords + "\"/>");
-        writer.println("<meta http-equiv=\"Pragma\" content=\"no-cache\"/>");
-        if (useDiv) {
-            writer.println("<link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + theme + "/css" +
-                    "/divtheme/css/default.css\" rel=\"stylesheet\"/>");
-        } else {
-            writer.println("<link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + theme + "/css" +
-                    "/default.css\" rel=\"stylesheet\"/>");
-        }
-
-        // Add portlet defined stylesheet if defined
-        Map props = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
-        if (props != null) {
-            String cssHref = (String)props.get("CSS_HREF");
-            if (cssHref != null) {
-                writer.println("<link type=\"text/css\" href=\"" + cssHref + " rel=\"stylesheet\"/>");
-            }
-        }
-        writer.println("<link rel=\"icon\" href=\"images/favicon.ico\" type=\"imge/x-icon\">");
-        writer.println("<link rel=\"shortcut icon\" href=\"" + req.getContextPath() + "/images/favicon.ico\" type=\"image/x-icon\">");
-        writer.println("<script language=\"JavaScript\" src=\"" + req.getContextPath() + "/javascript/gridsphere.js\"></script>");
-        writer.println("</head><body>");
-
+        writer.print(pageView.doStart(event, this));
 
         // In case the "floating" portlet state has been selected:
         String wstate = event.getPortletRequest().getParameter(SportletProperties.PORTLET_WINDOW);
@@ -557,7 +514,6 @@ public class PortletPage implements Serializable, Cloneable {
                 req.setAttribute(SportletProperties.FLOAT_STATE, "true");
                 f.doRender(event);
                 f.setTransparent(false);
-
                 writer.println(f.getBufferedOutput(req));
             }
         } else {
@@ -573,10 +529,6 @@ public class PortletPage implements Serializable, Cloneable {
             if (tabbedPane != null) {
                 tabbedPane.doRender(event);
                 writer.println(tabbedPane.getBufferedOutput(req));
-                if (tabbedPane.getUseDiv()) {
-                    writer.println("<!-- END OF CONTENT CONTAINER -->");
-                    writer.println("</div>");
-                }
             }
             //.... the footer ..........
             if (footerContainer != null) {
@@ -585,8 +537,8 @@ public class PortletPage implements Serializable, Cloneable {
             }
 
         }
-        writer.println("</body></html>");
-        //out.flush();
+
+        writer.print(pageView.doEnd(event, this));
 
         PrintWriter out;
         // set content to UTF-8 for il8n
@@ -649,7 +601,7 @@ public class PortletPage implements Serializable, Cloneable {
      * @param msg           The message to deliver
      * @param event         The GridsphereEvent associated with the message delivery
      */
-    public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) throws PortletException {
+    public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
 
         // support for broadcast messages
         if (concPortletID.equals("*")) {
@@ -679,7 +631,7 @@ public class PortletPage implements Serializable, Cloneable {
 
         // the component id determines where in the list the portlet component is
         // first check the hash
-        ComponentIdentifier compId;
+        ComponentIdentifier compId= null;
 
         int compIntId;
         if (portletHash.containsKey(concPortletID)) {
@@ -687,7 +639,7 @@ public class PortletPage implements Serializable, Cloneable {
             compIntId = cint.intValue();
             compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
         } else {
-            throw new PortletException("Delivery of the message " + msg.toString() + " failed: " + concPortletID + " not found");
+            log.debug("Delivery of the message " + msg.toString() + " failed: " + concPortletID + " not found");
         }
 
         if (compId != null) {
