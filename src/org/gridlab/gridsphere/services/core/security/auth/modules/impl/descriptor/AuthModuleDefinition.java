@@ -247,7 +247,7 @@ public class AuthModuleDefinition {
         StringBuffer sb = new StringBuffer("\n");
         sb.append("auth module name: " + this.moduleName + "\n");
         sb.append("auth module description: " + this.moduleDescriptions.get(0) + "\n");
-        sb.append("auth module error: " + this.moduleErrors.get(0) + "\n");
+        //sb.append("auth module error: " + this.moduleErrors.get(0) + "\n");
         sb.append("auth module implementation: " + this.moduleImplementation + "\n");
         sb.append("auth module priority: " + this.priority + "\n");
         sb.append("config properties: ");
