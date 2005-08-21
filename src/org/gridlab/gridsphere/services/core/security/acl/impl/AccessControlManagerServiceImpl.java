@@ -386,11 +386,11 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
                         //System.err.println("group= " + group.getName());
                         PortletRole usersRole = (PortletRole)userGroups.get(group);
                         //System.err.println("usersRole= " + usersRole);
-                        PortletRole reqRole = PortletRole.toPortletRole(roleInfo.getRole());
+                        PortletRole reqRole = getRoleByName(roleInfo.getRole());
                         //System.err.println("reqRole= " + reqRole);
                         if (usersRole.compare(usersRole, reqRole) >= 0) {
                             if (checkAdmin) {
-                                if (usersRole.compare(usersRole, PortletRole.ADMIN) >= 0) {
+                                if (usersRole.compare(usersRole, getAdminRole()) >= 0) {
                                     return true;
                                 }
                             } else {
@@ -425,11 +425,11 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
                         //System.err.println("group= " + group.getName());
                         PortletRole usersRole = this.getRoleInGroup(user, group);
                         //System.err.println("usersRole= " + usersRole);
-                        PortletRole reqRole = PortletRole.toPortletRole(roleInfo.getRole());
+                        PortletRole reqRole = getRoleByName(roleInfo.getRole());
                         //System.err.println("reqRole= " + reqRole);
                         if (usersRole.compare(usersRole, reqRole) >= 0) {
                             if (checkAdmin) {
-                                if (usersRole.compare(usersRole, PortletRole.ADMIN) >= 0) {
+                                if (usersRole.compare(usersRole, getAdminRole()) >= 0) {
                                     return true;
                                 }
                             } else {
@@ -486,7 +486,6 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     public void grantSuperRole(User user) {
-        //addGroupEntry(user, SportletGroup.SUPER, PortletRole.SUPER);
         addGroupEntry(user, getCoreGroup(), getSuperRole());
     }
 
@@ -508,7 +507,6 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
     public boolean hasSuperRole(User user) {
         return hasRoleInGroup(user, getCoreGroup(), getSuperRole());
-        //isUserInGroup(user, SportletGroup.SUPER);
     }
 
     /**
