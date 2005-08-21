@@ -53,7 +53,7 @@ public class PortletContainer extends BasePortletComponent implements
                 p = (PortletComponent) it.next();
                 // all the components have the same theme
                 p.setTheme(theme);
-
+                p.setRenderKit(renderKit);
                 // invoke init on each component
                 list = p.init(req, list);
                 p.setParentComponent(this);

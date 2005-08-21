@@ -1,7 +1,7 @@
 package org.gridlab.gridsphere.layout.view;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.layout.PortletComponent;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 public class BaseRender implements Render {
 
@@ -20,7 +20,7 @@ public class BaseRender implements Render {
     }
 
     public StringBuffer doEnd(GridSphereEvent event, PortletComponent comp) {
-        return BLANK;    
+        return BLANK;
     }
 
 }

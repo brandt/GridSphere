@@ -4,17 +4,13 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.layout.view.Render;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.layout.view.classic.RowLayout;
-import org.gridlab.gridsphere.layout.view.Render;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,7 +22,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
 
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
-        rowView = new RowLayout();
+        rowView = (Render)getRenderClass("RowLayout");
         return list;
     }
 

@@ -9,7 +9,6 @@ import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
 import org.gridlab.gridsphere.layout.event.PortletFrameListener;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.layout.event.impl.PortletFrameEventImpl;
-import org.gridlab.gridsphere.layout.view.classic.Frame;
 import org.gridlab.gridsphere.layout.view.FrameView;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
@@ -185,7 +184,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
         list = super.init(req, list);
 
-        frameView = new Frame();
+        frameView = (FrameView)getRenderClass("Frame");
 
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
@@ -206,6 +205,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         titleBar.setCanModify(canModify);
         titleBar.setTheme(theme);
+        titleBar.setRenderKit(renderKit);
         list = titleBar.init(req, list);
         titleBar.addComponentListener(this);
         titleBar.setParentComponent(this);

@@ -4,16 +4,17 @@
  */
 package org.gridlab.gridsphere.layout.view.classic;
 
-import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.layout.PortletComponent;
+import org.gridlab.gridsphere.layout.PortletPage;
+import org.gridlab.gridsphere.layout.view.BaseRender;
+import org.gridlab.gridsphere.layout.view.Render;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.layout.PortletPage;
-import org.gridlab.gridsphere.layout.PortletComponent;
-import org.gridlab.gridsphere.layout.view.Render;
-import org.gridlab.gridsphere.layout.view.BaseRender;
 
-import java.util.*;
 import java.awt.*;
+import java.util.Locale;
+import java.util.Map;
 
 public class Page extends BaseRender implements Render {
 

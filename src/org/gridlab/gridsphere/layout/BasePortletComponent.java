@@ -12,7 +12,9 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 /**
  * <code>BasePortletComponent</code> represents an abstract portlet component with a particular
  * size, layout and theme and is subclasses by concrete portlet component instances.
@@ -31,6 +33,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected PortletRole requiredRole = PortletRole.GUEST;
     protected List listeners = null;
     protected boolean canModify = false;
+    protected String renderKit = "classic";
 
     /**
      * css Style of the table
@@ -143,6 +146,24 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public PortletRole getRequiredRole() {
         return requiredRole;
+    }
+
+    /**
+     * Returns the renderkit family identifier of render classes to use for markup, default is "classic"
+     *
+     * @return the renderkit family identifier
+     */
+    public String getRenderKit() {
+        return renderKit;
+    }
+
+    /**
+     * Sets the renderkit family identifier of render classes to use for markup, default is "classic"
+     *
+     * @param renderKit the renderkit family identifier
+     */
+    public void setRenderKit(String renderKit) {
+        this.renderKit = renderKit;
     }
 
     /**
@@ -325,6 +346,16 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
             comp.messageEvent(concPortletID, msg, event);
         }
 
+    }
+
+    protected Object getRenderClass(String renderClassName) {
+        Object render= null;
+        try {
+            render = Class.forName("org.gridlab.gridsphere.layout.view." + renderKit + "." + renderClassName).newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return render;
     }
 
 }

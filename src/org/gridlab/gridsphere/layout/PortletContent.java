@@ -7,12 +7,12 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import javax.servlet.ServletContext;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;

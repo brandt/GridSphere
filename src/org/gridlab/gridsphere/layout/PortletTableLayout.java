@@ -5,18 +5,18 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.layout.view.TableLayoutView;
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
-import org.gridlab.gridsphere.layout.view.TableLayoutView;
-import org.gridlab.gridsphere.layout.view.classic.TableLayout;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.*;
 
@@ -40,7 +40,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
     }
 
     public List init(PortletRequest req, List list) {
-        tableView = new TableLayout();
+        tableView = (TableLayoutView)getRenderClass("TableLayout");
         return super.init(req, list);
     }
 

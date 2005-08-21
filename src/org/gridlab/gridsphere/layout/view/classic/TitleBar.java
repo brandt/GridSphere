@@ -4,10 +4,10 @@
  */
 package org.gridlab.gridsphere.layout.view.classic;
 
-import org.gridlab.gridsphere.layout.PortletTitleBar;
 import org.gridlab.gridsphere.layout.PortletComponent;
-import org.gridlab.gridsphere.layout.view.Render;
+import org.gridlab.gridsphere.layout.PortletTitleBar;
 import org.gridlab.gridsphere.layout.view.BaseRender;
+import org.gridlab.gridsphere.layout.view.Render;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.File;

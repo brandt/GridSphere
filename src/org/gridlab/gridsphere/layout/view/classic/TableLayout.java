@@ -5,13 +5,16 @@
  */
 package org.gridlab.gridsphere.layout.view.classic;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.layout.*;
-import org.gridlab.gridsphere.layout.view.TableLayoutView;
+import org.gridlab.gridsphere.layout.PortletComponent;
+import org.gridlab.gridsphere.layout.PortletFrameLayout;
+import org.gridlab.gridsphere.layout.PortletRowLayout;
+import org.gridlab.gridsphere.layout.PortletTableLayout;
 import org.gridlab.gridsphere.layout.view.BaseRender;
+import org.gridlab.gridsphere.layout.view.TableLayoutView;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.util.*;
 

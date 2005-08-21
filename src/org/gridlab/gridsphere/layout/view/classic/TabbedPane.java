@@ -6,11 +6,11 @@
 
 package org.gridlab.gridsphere.layout.view.classic;
 
+import org.gridlab.gridsphere.layout.PortletComponent;
 import org.gridlab.gridsphere.layout.PortletTab;
 import org.gridlab.gridsphere.layout.PortletTabbedPane;
-import org.gridlab.gridsphere.layout.PortletComponent;
-import org.gridlab.gridsphere.layout.view.TabbedPaneView;
 import org.gridlab.gridsphere.layout.view.BaseRender;
+import org.gridlab.gridsphere.layout.view.TabbedPaneView;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.File;

@@ -10,7 +10,6 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabListener;
-import org.gridlab.gridsphere.layout.view.classic.TabbedPane;
 import org.gridlab.gridsphere.layout.view.TabbedPaneView;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletRole;
@@ -20,7 +19,10 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * The <code>PortletTabbedPane</code> represents the visual portlet tabbed pane interface
@@ -216,12 +218,13 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         list = super.init(req, list);
         PortletTab tab;
 
-        tabbedPaneView = new TabbedPane();
+        tabbedPaneView = (TabbedPaneView)getRenderClass("TabbedPane");
         Iterator it = tabs.iterator();
 
         while (it.hasNext()) {
             tab = (PortletTab) it.next();
             tab.setTheme(theme);
+            tab.setRenderKit(renderKit);
             list = tab.init(req, list);
             tab.addComponentListener(this);
             tab.setParentComponent(this);

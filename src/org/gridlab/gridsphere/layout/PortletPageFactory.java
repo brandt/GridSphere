@@ -1,9 +1,9 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -12,8 +12,8 @@ import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 
 import java.io.*;
-import java.util.*;
 import java.net.URLEncoder;
+import java.util.*;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>

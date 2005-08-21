@@ -4,13 +4,16 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.Description;
 import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 import org.gridlab.gridsphere.layout.event.impl.PortletTabEventImpl;
-import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.Description;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -202,6 +205,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         compId.setClassName(this.getClass().getName());
         list.add(compId);
         portletComponent.setTheme(theme);
+        portletComponent.setRenderKit(renderKit);
         list = portletComponent.init(req, list);
         portletComponent.addComponentListener(this);
         portletComponent.setParentComponent(this);

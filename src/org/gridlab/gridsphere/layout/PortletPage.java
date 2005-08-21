@@ -5,9 +5,10 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.layout.view.Render;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -16,14 +17,12 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.layout.view.Render;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.*;
-import java.util.List;
 
 /**
  * The <code>PortletPage</code> is the generic container for a collection of
@@ -58,6 +57,9 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
     private Hashtable labelsHash = new Hashtable();
     private Hashtable portletHash = new Hashtable();
+
+    // defines the renderkit family of render classes to use for markup
+    private String renderKit = "classic";
 
     private transient Render pageView = null;
 
@@ -218,25 +220,23 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
 
-        try {
-            pageView = (Render)Class.forName("org.gridlab.gridsphere.layout.view.classic.Page").newInstance();
-        } catch (Exception e)  {
-            e.printStackTrace();
-        }
-
+        pageView = (Render)getRenderClass("Page");
 
         if (headerContainer != null) {
             headerContainer.setTheme(theme);
+            headerContainer.setRenderKit(renderKit);
             list = headerContainer.init(req, list);
         }
 
         if (tabbedPane != null) {
             tabbedPane.setTheme(theme);
+            tabbedPane.setRenderKit(renderKit);
             list = tabbedPane.init(req, list);
         }
 
         if (footerContainer != null) {
             footerContainer.setTheme(theme);
+            footerContainer.setRenderKit(renderKit);
             list = footerContainer.init(req, list);
         }
 

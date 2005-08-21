@@ -10,7 +10,6 @@ import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarListener;
 import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
-import org.gridlab.gridsphere.layout.view.classic.TitleBar;
 import org.gridlab.gridsphere.layout.view.Render;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -19,7 +18,10 @@ import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.*;
 
 /**
@@ -399,7 +401,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      */
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
-        titleView = new TitleBar();
+        titleView = (Render)getRenderClass("TitleBar");
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);

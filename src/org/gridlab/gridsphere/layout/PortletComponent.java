@@ -94,6 +94,20 @@ public interface PortletComponent extends ComponentLifecycle {
     public String getTheme();
 
     /**
+     * Returns the renderkit family identifier of render classes to use for markup, default is "classic"
+     *
+     * @return the renderkit family identifier
+     */
+    public String getRenderKit();
+
+    /**
+     * Sets the renderkit family identifier of render classes to use for markup, default is "classic"
+     *
+     * @param renderKit the renderkit family identifier
+     */
+    public void setRenderKit(String renderKit);
+
+    /**
      * Allows a required role to be associated with viewing this portlet
      *
      * @param requiredRole the required portlet role expresses as a <code>String</code>

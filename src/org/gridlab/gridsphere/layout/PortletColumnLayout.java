@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.layout.view.Render;
-import org.gridlab.gridsphere.layout.view.classic.ColumnLayout;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
@@ -27,7 +26,7 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
 
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
-        colView = new ColumnLayout();
+        colView = (Render)getRenderClass("ColumnLayout");
         return list;
     }
 

@@ -1,8 +1,7 @@
 package org.gridlab.gridsphere.layout.view;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.layout.PortletComponent;
 import org.gridlab.gridsphere.layout.PortletFrame;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 public interface FrameView extends Render {
 

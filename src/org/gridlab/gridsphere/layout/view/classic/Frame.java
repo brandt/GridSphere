@@ -4,10 +4,10 @@
  */
 package org.gridlab.gridsphere.layout.view.classic;
 
-import org.gridlab.gridsphere.layout.PortletFrame;
 import org.gridlab.gridsphere.layout.PortletComponent;
-import org.gridlab.gridsphere.layout.view.FrameView;
+import org.gridlab.gridsphere.layout.PortletFrame;
 import org.gridlab.gridsphere.layout.view.BaseRender;
+import org.gridlab.gridsphere.layout.view.FrameView;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
