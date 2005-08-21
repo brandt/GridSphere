@@ -101,8 +101,6 @@ public interface AccessControlManagerService extends PortletService {
     public PortletRole getRoleInGroup(User user, PortletGroup group);
 
     public boolean hasRequiredRole(PortletRequest req, String portletClass, boolean checkAdmin);
-    
-    public boolean hasRequiredRole(User user, String portletClass, boolean isAdmin);
 
     public boolean hasRoleInGroup(User user, PortletGroup group, PortletRole role);
 
