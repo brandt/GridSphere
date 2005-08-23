@@ -439,9 +439,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 groupRequest.setGroup(selectedGroup);
 
                 if (aclManagerService.hasSuperRole(req.getUser())) {
-                    groupRequest.setRole(PortletRole.ADMIN);
+                    groupRequest.setRole(aclManagerService.getRoleByName(PortletRole.ADMIN.getName()));
                 } else {
-                    groupRequest.setRole(PortletRole.USER);
+                    groupRequest.setRole(aclManagerService.getRoleByName(PortletRole.USER.getName()));
                 }
 
                 this.aclManagerService.saveGroupEntry(groupRequest);
