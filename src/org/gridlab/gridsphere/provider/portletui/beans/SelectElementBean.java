@@ -116,11 +116,8 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
     }
 
     public String toStartString(String type) {
-        String pname = (name == null) ? "" : name;
-        String sname = pname;
-        if (!beanId.equals("")) {
-            sname = createTagName(pname);
-        }
+
+        String sname = createTagName(name);
         return "<input " + getFormattedCss() + " type='"
                 + type
                 + "' name='"

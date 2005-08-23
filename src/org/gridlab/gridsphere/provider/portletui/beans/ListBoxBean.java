@@ -82,11 +82,9 @@ public class ListBoxBean extends BeanContainer implements TagBean {
 
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
-        String pname = (name == null) ? "" : name;
-        String sname = pname;
-        if (!beanId.equals("")) {
-            sname = createTagName(pname);
-        }
+
+        String sname = createTagName(name);
+        
         sb.append("<select name='" + sname + "' size='" + size + "'");
         if (isMultiple) {
             sb.append(" multiple='multiple'");

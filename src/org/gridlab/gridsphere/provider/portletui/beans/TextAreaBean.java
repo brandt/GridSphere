@@ -75,11 +75,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
         sb.append("<textarea ");
         sb.append(getFormattedCss());
 
-        String pname = (name == null) ? "" : name;
-        String sname = pname;
-        if (!beanId.equals("")) {
-            sname = createTagName(pname);
-        }
+        String sname = createTagName(name);
 
         sb.append("name=\"" + sname + "\" ");
         if (cols != 0) sb.append(" cols=\"" + cols + "\" ");

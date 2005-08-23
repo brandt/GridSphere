@@ -49,13 +49,15 @@ public abstract class BaseBean implements TagBean {
         params.remove(name);
     }
 
-    protected String createTagName(String pname) {
+    protected String createTagName(String name) {
         String sname = "";
-        String cid = (String)params.get(SportletProperties.COMPONENT_ID);
+        String pname = (name == null) ? "" : name;
         String compId = (String)params.get(SportletProperties.GP_COMPONENT_ID);
+        if (beanId.equals("")) return pname;
         if (compId == null) {
-            sname = "ui_" + vbName + "_" + beanId + "_" + pname + cid;
+            sname = "ui_" + vbName + "_" + beanId + "_" + pname;
         } else {
+            String cid = (String)params.get(SportletProperties.COMPONENT_ID);
             sname = "ui_" + vbName + "_" + compId + "%" + beanId + "_" + pname + cid;
         }
         return sname;
