@@ -14,7 +14,6 @@
                 <minimized/>
                 <maximized/>
                 <resizing/>
-                <floating/>
             </allows>
             <supports>
                 <markup name="html">
