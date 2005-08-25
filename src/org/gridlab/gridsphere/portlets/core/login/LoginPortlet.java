@@ -311,7 +311,7 @@ public class LoginPortlet extends ActionPortlet {
             GroupRequest groupRequest = this.aclService.createGroupEntry();
             groupRequest.setUser(user);
             groupRequest.setGroup(group);
-            groupRequest.setRole(PortletRole.USER);
+            groupRequest.setRole(this.aclService.getRoleByName(PortletRole.USER.getName()));
 
             // Submit changes
             this.aclService.saveGroupEntry(groupRequest);
@@ -320,6 +320,9 @@ public class LoginPortlet extends ActionPortlet {
     }
 
     public void showConfigure(FormEvent event) {
+
+        //CheckBoxBean cb = event.getCheckBoxBean("authModCB");
+        //cb.clearSelectedValues();
 
         PortletRequest req = event.getPortletRequest();
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
@@ -586,6 +589,10 @@ public class LoginPortlet extends ActionPortlet {
         CheckBoxBean cb = event.getCheckBoxBean("authModCB");
 
         List activeAuthMods = cb.getSelectedValues();
+        for (int i = 0; i < activeAuthMods.size(); i++) {
+            System.err.println("active auth mod: " + (String)activeAuthMods.get(i));
+        }
+
 
         List authModules = loginService.getAuthModules();
         Iterator it = authModules.iterator();
@@ -602,7 +609,7 @@ public class LoginPortlet extends ActionPortlet {
             loginService.saveAuthModule(authMod);
         }
 
-
+        showConfigure(event);
     }
 
 

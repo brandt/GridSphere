@@ -497,7 +497,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         ListBoxBean groupEntryRoleListBox = evt.getListBoxBean("groupEntryRoleLB");
         String selectedGroupRole = groupEntryRoleListBox.getSelectedName();
-        PortletRole role = PortletRole.toPortletRole(selectedGroupRole);
+        PortletRole role = aclManagerService.getRoleByName(selectedGroupRole);
 
         // Create add to group request
         GroupRequest groupRequest = aclManagerService.editGroupEntry(entry);

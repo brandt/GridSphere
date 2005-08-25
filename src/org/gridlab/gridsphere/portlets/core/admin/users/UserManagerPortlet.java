@@ -451,7 +451,7 @@ public class UserManagerPortlet extends ActionPortlet {
         if (userRoleList.size() == 0) {
             log.debug("No role was selected, setting to user");
             // Impossible, but if not selected return user role
-            return PortletRole.USER;
+            return aclManagerService.getRoleByName(PortletRole.USER.getName());
         } else {
             // Otherwise, return the first selected value
             String userRoleItem = (String) userRoleList.get(0);
