@@ -31,7 +31,8 @@ public class ImageBean extends BaseComponentBean implements TagBean {
      * @param beanId the bean identifier
      */
     public ImageBean(String beanId) {
-        super(beanId);
+        super(NAME);
+        this.beanId = beanId;
     }
 
     /**
