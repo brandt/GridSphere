@@ -711,7 +711,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         ListBoxBean groupEntryRoleListBox = evt.getListBoxBean("groupEntryRoleLB");
         String selectedGroupRole = groupEntryRoleListBox.getSelectedName();
         if (selectedGroupRole != null) {
-        PortletRole groupEntryRole = PortletRole.toPortletRole(selectedGroupRole);
+        PortletRole groupEntryRole = this.aclManagerService.getRoleByName(selectedGroupRole);
 
             // Users to add...
             ListBoxBean userList = evt.getListBoxBean("usersNotInGroupList");
@@ -741,10 +741,6 @@ public class GroupManagerPortlet extends ActionPortlet {
         groupRequest.setUser(user);
         groupRequest.setGroup(group);
         groupRequest.setRole(role);
-
-        // Create access right
-        //getACLService(root).submitGroupRequest(groupRequest);
-        //getACLService(root).approveGroupRequest(groupRequest);
 
         aclManagerService.saveGroupEntry(groupRequest);
 
