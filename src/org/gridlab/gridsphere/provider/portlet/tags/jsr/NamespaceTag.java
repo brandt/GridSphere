@@ -26,7 +26,6 @@ public class NamespaceTag extends TagSupport {
         JspWriter writer = pageContext.getOut();
         try {
             writer.print(namespace);
-            writer.flush();
         } catch (IOException e) {
             throw new JspException("namespace Tag Exception: cannot write to the output writer.", e);
         }
