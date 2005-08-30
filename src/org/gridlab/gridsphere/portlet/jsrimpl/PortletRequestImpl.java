@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 
@@ -411,7 +412,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * if the user login is not known.
      */
     public String getRemoteUser() {
-        return this.getHttpServletRequest().getRemoteUser();
+        UserPrincipal userPrincipal = (UserPrincipal)getAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
+        return (userPrincipal != null) ? userPrincipal.getName() : this.getHttpServletRequest().getRemoteUser();
     }
 
     /**
@@ -424,7 +426,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * authenticated.
      */
     public java.security.Principal getUserPrincipal() {
-        return this.getHttpServletRequest().getUserPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal)getAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
+        return (userPrincipal != null) ? userPrincipal : this.getHttpServletRequest().getUserPrincipal();
     }
 
     /**
@@ -441,7 +444,10 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * authenticated.
      */
     public boolean isUserInRole(String role) {
-        return this.getHttpServletRequest().isUserInRole(role);
+        // TODO
+        // As specified in PLT-20-3, the <security-role-ref> mapping in portlet.xml must be used.
+        PortletRole prole = (PortletRole)getAttribute(SportletProperties.PORTLET_ROLE);
+        return (prole != null) ? (prole.getName().equalsIgnoreCase(role)) : this.getHttpServletRequest().isUserInRole(role);
     }
 
     /**
