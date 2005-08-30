@@ -295,6 +295,10 @@ public class PortletServlet extends HttpServlet
             //userInfo.put("user.name.given", user.getGivenName());
             //userInfo.put("user.name.family", user.getFamilyName());
             request.setAttribute(PortletRequest.USER_INFO, userInfo);
+
+            // create user principal
+            UserPrincipal userPrincipal = new UserPrincipal(user.getUserName());
+            request.setAttribute(SportletProperties.PORTLET_USER_PRINCIPAL, userPrincipal);
         }
 
         /*
