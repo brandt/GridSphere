@@ -228,5 +228,7 @@ public interface SportletProperties {
 
     public static final String SSL_REQUIRED = "javax.portlet.SSL_REQUIRED";
 
+    public static final String PORTLET_USER_PRINCIPAL = "org.gridlab.gridsphere.portlet.UserPrincipal";
+
 }
 
