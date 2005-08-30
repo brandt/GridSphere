@@ -35,6 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.net.SocketException;
+import java.security.Principal;
 
 
 /**
@@ -62,6 +63,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static LoginService loginService = null;
 
     private static TrackerService trackerService = null;
+    //private static TrackerDaoImpl trackerService = null;
 
     private PortletMessageManager messageManager = SportletMessageManager.getInstance();
 
@@ -119,6 +121,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, getServletConfig().getServletContext(), true);
 
         trackerService = (TrackerService) factory.createPortletService(TrackerService.class, getServletConfig().getServletContext(), true);
+
+        //trackerService = (TrackerDaoImpl)factory.getSpringService("trackerDao");
 
     }
 
@@ -189,6 +193,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
             coreGroup = aclService.getCoreGroup();
         }
+
+        // check to see if user has been authorized by means of container managed authorization
+        checkWebContainerAuthorization(event);
 
         setUserAndGroups(portletReq);
 
@@ -330,6 +337,25 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         req.setAttribute(SportletProperties.PORTLET_ROLE, role);
     }
 
+    // Dmitry Gavrilov (2005-03-17)
+    // FIX for web container authorization
+    private void checkWebContainerAuthorization(GridSphereEvent event) {
+        PortletSession session = event.getPortletRequest().getPortletSession(true);
+        if (session.getAttribute(SportletProperties.PORTLET_USER) != null) return;
+        if(!(event.hasAction() && event.getAction().getName().equals(SportletProperties.LOGOUT))) {
+            PortletRequest portletRequest = event.getPortletRequest();
+            Principal principal = portletRequest.getUserPrincipal();
+            if(principal != null) {
+                // fix for OC4J. it must work in Tomcat also
+                int indeDelimeter = principal.getName().lastIndexOf('/');
+                indeDelimeter = (indeDelimeter > 0) ? (indeDelimeter + 1) : 0;
+                String login = principal.getName().substring(indeDelimeter);
+                User user = userManagerService.getLoggedInUser(login);
+                setUserSettings(event, user);
+            }
+        }
+    }
+
     protected void checkUserHasCookie(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
         User user = req.getUser();
@@ -363,7 +389,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                                     }
                                 }
                             }
-                        } 
+                        }
                     }
                 }
             }
@@ -510,7 +536,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             // this gets thrown if a security policy applies to the file. see java.io.File for details.
             log.error("A security exception occured!", e);
         } catch (SocketException e) {
-            log.error("Caught SocketException: " + e.getMessage());    
+            log.error("Caught SocketException: " + e.getMessage());
         } catch (IOException e) {
             log.error("Caught IOException", e);
             //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER,e.getMessage());
@@ -612,7 +638,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void contextInitialized(ServletContextEvent event) {
         System.err.println("contextInitialized()");
         ServletContext ctx = event.getServletContext();
-        GridSphereConfig.setServletContext(ctx);        
+        GridSphereConfig.setServletContext(ctx);
         log.debug("contextName: " + ctx.getServletContextName());
         log.debug("context path: " + ctx.getRealPath(""));
 
