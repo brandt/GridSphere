@@ -21,6 +21,7 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
 
     private PersistenceManagerRdbms pm = null;
     private static PortletLog log = SportletLog.getInstance(RequestServiceImpl.class);
+    private Timer timer = null;
 
     private class RequestSweeperTask extends TimerTask {
 
@@ -31,11 +32,13 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
 
     public void init(PortletServiceConfig config) {
         if (pm == null) pm = PersistenceManagerFactory.createGridSphereRdbms();
-        Timer timer = new Timer(true);
+        timer = new Timer(true);
         timer.schedule(new RequestSweeperTask(),  Calendar.getInstance().getTime(), REQUEST_SWEEP_FREQUENCY );
     }
 
     public void destroy() {
+        timer.cancel();
+        timer = null;
     }
 
     public GenericRequest getRequest(String requestId, String label) {

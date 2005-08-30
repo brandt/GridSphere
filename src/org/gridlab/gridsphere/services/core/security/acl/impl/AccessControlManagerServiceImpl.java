@@ -43,18 +43,6 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         pm = PersistenceManagerFactory.createGridSphereRdbms();
-        // update group entries
-        List groupEntries = selectGroupEntries("");
-        Iterator it = groupEntries.iterator();
-        while (it.hasNext()) {
-            GroupRequestImpl ge = (GroupRequestImpl)it.next();
-            String roleName = ge.getRoleName();
-            if (!roleName.equals("")) {
-                ge.setRole(this.getRoleByName(roleName));
-                ge.setRoleName("");
-                saveGroupEntry(ge);
-            }
-        }
     }
 
     public void destroy() {
@@ -146,21 +134,12 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
     public void saveGroupEntry(GroupEntry entry) {
         // Create or update access right
-        if (existsGroupEntry(entry)) {
             try {
-                pm.update(entry);
+                pm.saveOrUpdate(entry);
             } catch (PersistenceManagerException e) {
                 String msg = "Error creating access right";
                 log.error(msg, e);
             }
-        } else {
-            try {
-                pm.create(entry);
-            } catch (PersistenceManagerException e) {
-                String msg = "Error creating access right";
-                log.error(msg, e);
-            }
-        }
     }
 
     public void deleteGroupEntry(GroupEntry entry) {
