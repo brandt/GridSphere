@@ -23,7 +23,7 @@ gridsphere-dev -- Mail list used for the discussion of GridSphere framework deve
 
 gridsphere-cvs -- Mail list used to receive CVS notifications
 
-To report bugs, please use the bugtracker at bugs.gridsphere.org
+To report bugs, please use the bugtracker at http://bugs.gridsphere.org
 
  Thank you.
 
