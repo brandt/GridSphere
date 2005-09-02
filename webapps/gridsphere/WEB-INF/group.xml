@@ -32,6 +32,18 @@
         <required-role>ADMIN</required-role>
     </portlet-role-info>
     <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.admin.roles.RoleManagerPortlet.1</portlet-class>
+        <required-role>ADMIN</required-role>
+    </portlet-role-info>
+    <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet.1</portlet-class>
+        <required-role>ADMIN</required-role>
+    </portlet-role-info>
+    <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet.1</portlet-class>
+        <required-role>ADMIN</required-role>
+    </portlet-role-info>
+    <portlet-role-info>
         <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
         <required-role>GUEST</required-role>
     </portlet-role-info>
