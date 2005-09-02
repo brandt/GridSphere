@@ -160,23 +160,9 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     public List getGroups() {
-        return selectGroups("");
-    }
-
-
-    public List selectGroups(String criteria) {
-        // Build object query
-        StringBuffer oqlBuffer = new StringBuffer();
-        oqlBuffer.append("select grp from ");
-        oqlBuffer.append(jdoPortletGroup);
-        oqlBuffer.append(" grp ");
-        oqlBuffer.append(criteria);
-        oqlBuffer.append("'");
-        // Generate object query
-        String oql = oqlBuffer.toString();
         // Execute query
         try {
-            return pm.restoreList(oql);
+            return pm.restoreList("select grp from " + jdoPortletGroup + " grp ");
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving portlet groups";
             log.error(msg, e);
