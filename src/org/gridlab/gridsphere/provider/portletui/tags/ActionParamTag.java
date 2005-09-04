@@ -20,6 +20,25 @@ public class ActionParamTag extends TagSupport {
     protected String name = "";
     protected String value = "";
     protected ActionParamBean paramBean = null;
+    protected String beanId = "";
+
+    /**
+     * Returns the bean identifier
+     *
+     * @return the bean identifier
+     */
+    public String getBeanId() {
+        return beanId;
+    }
+
+    /**
+     * Sets the bean identifier
+     *
+     * @param beanId the bean identifier
+     */
+    public void setBeanId(String beanId) {
+        this.beanId = beanId;
+    }
 
     /**
      * Sets the action parameter name
