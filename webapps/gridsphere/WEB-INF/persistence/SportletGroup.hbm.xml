@@ -3,7 +3,7 @@
 <!DOCTYPE hibernate-mapping
     PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-        
+
 <hibernate-mapping>
     <class
         name="org.gridlab.gridsphere.portlet.impl.SportletGroup"
@@ -24,7 +24,7 @@
         <property name="Public" type="boolean" column="ispublic"/>
         <property name="Core" type="boolean" column="iscore"/>
         <property name="GroupType" type="integer" column="grouptype"/>
-        <set name="PortletRoleList" table="portletrolelist" cascade="all">
+        <set name="PortletRoleList" table="portletrolelist" cascade="all" lazy="false">
             <key column="role_oid"/>
             <one-to-many class="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo"/>
         </set>

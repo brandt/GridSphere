@@ -14,7 +14,7 @@
         <property name="ModuleClassName" column="moduleclassname"  type="string"/>
         <property name="UserId"          column="userid"           type="string"/>
 
-        <map name="attributes"       table="authmoduleattributes">
+        <map name="attributes"       table="authmoduleattributes" lazy="false">
             <key column="gsoid"/>
             <index column="attribute" type="string"/>
             <element column="value" type="string"/>

@@ -3,7 +3,7 @@
 <!DOCTYPE hibernate-mapping
     PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-        
+
 <hibernate-mapping>
     <class
         name="org.gridlab.gridsphere.portlet.jsrimpl.PortletPreferencesImpl"
@@ -23,7 +23,7 @@
         <property name="userId" type="string" column="userid"/>
         <property name="portletId" type="string" column="portletid"/>
         
-        <map name="attributes" table="portletprefattr" cascade="all">
+        <map name="attributes" table="portletprefattr" cascade="all" lazy="false">
             <key column="attribute_oid"/>
             <index column="attribute_ndx" type="string"/>
             <many-to-many column="attr_oid" class="org.gridlab.gridsphere.portlet.jsrimpl.PersistencePreferenceAttribute"/>

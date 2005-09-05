@@ -24,7 +24,7 @@
 
         <property name="readOnly" type="boolean" column="readonly"/>
 
-        <list name="values" table="portletprefattrvalues">
+        <list name="values" table="portletprefattrvalues" lazy="false">
             <key column="value_oid"/>
             <index/>
             <element column="value" type="string"/>
