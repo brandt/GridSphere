@@ -154,13 +154,19 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
      */
     protected void loadServices(ServletContext ctx) throws PortletException {
         // load in the portlet-services.xml file
+        SportletServiceFactory factory = SportletServiceFactory.getInstance();
         String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");
         File f = new File(descriptor);
         if (f.exists()) {
-            SportletServiceFactory factory = SportletServiceFactory.getInstance();
             factory.addServices(ctx, descriptor);
         } else {
             log.debug("Did not find PortletServices.xml for: " + ctx.getServletContextName());
+        }
+        // add Spring Services if any are defined
+        String springDescriptor = ctx.getRealPath("/WEB-INF/applicationContext.xml");
+        f = new File(springDescriptor);
+        if (f.exists()) {
+            factory.addSpringServices(ctx);
         }
     }
 
