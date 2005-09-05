@@ -81,6 +81,7 @@ public class DBTask extends Task {
             new SchemaExport(cfg).create(false, true);
             log.info("Successfully created DB");
         } catch (HibernateException e) {
+            log.error("DB Error: " + CREATION_ERROR + " " + NOT_INSTALLED + " !", e);
             throw new BuildException("DB Error: " + CREATION_ERROR + " " + NOT_INSTALLED + " !");
         }
     }
@@ -89,6 +90,7 @@ public class DBTask extends Task {
         try {
             new SchemaUpdate(cfg).execute(false, true);
         } catch (HibernateException e) {
+            log.error("DB Error: " + UPDATE_ERROR + " " + NOT_INSTALLED + " !", e);
             throw new BuildException("DB Error: " + UPDATE_ERROR + " " + NOT_INSTALLED + " !");
         }
     }
@@ -252,7 +254,7 @@ public class DBTask extends Task {
             }
 
         } catch (BuildException e) {
-            log.info("Database not correctly installed.\n" + e);
+            log.info("Database not correctly installed.\n");
             throw new BuildException("The database is not correctly installed!");
         }
     }
