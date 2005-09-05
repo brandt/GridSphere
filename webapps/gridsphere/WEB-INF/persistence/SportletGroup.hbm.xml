@@ -7,7 +7,7 @@
 <hibernate-mapping>
     <class
         name="org.gridlab.gridsphere.portlet.impl.SportletGroup"
-        table="sportletgroup"
+        table="sportletgroup" lazy="false"
         >
 
         <id
