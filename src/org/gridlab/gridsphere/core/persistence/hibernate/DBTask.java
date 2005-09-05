@@ -1,11 +1,5 @@
 package org.gridlab.gridsphere.core.persistence.hibernate;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.MappingException;
-import net.sf.hibernate.cfg.Configuration;
-import net.sf.hibernate.connection.DriverManagerConnectionProvider;
-import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
-import net.sf.hibernate.tool.hbm2ddl.SchemaUpdate;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
@@ -13,7 +7,12 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.tool.hbm2ddl.SchemaUpdate;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.HibernateException;
+import org.hibernate.MappingException;
+import org.hibernate.connection.DriverManagerConnectionProvider;
 
 import java.io.*;
 import java.sql.Connection;
@@ -36,23 +35,23 @@ public class DBTask extends Task {
     public final static String ACTION_UPDATE = "UPDATE";
     public final static String ACTION_CHECKDB = "CHECKDB";
 
-    private String MAPPING_ERROR =
+    private final static String MAPPING_ERROR =
             "FATAL: Could not create database! Please check above errormessages! ";
-    private String CONFIGFILE_ERROR =
+    private final static String CONFIGFILE_ERROR =
             "FATAL: No database configfile found! ";
-    private String CHECK_PROPS =
+    private final static String CHECK_PROPS =
             "Please check the hibernate.properties file! ";
-    private String DATABASE_CONNECTION_NOT_VALID =
+    private final static String DATABASE_CONNECTION_NOT_VALID =
             "FATAL: Database conenction is not valid! ";
-    private String CONNECTION_ERROR =
+    private final static String CONNECTION_ERROR =
             "FATAL: Could not connect to database! ";
-    private String NOT_INSTALLED =
+    private final static String NOT_INSTALLED =
             "Gridsphere is NOT correctly installed! ";
-    private String NO_CORE_TABLES =
+    private final static String NO_CORE_TABLES =
             "Some core tables could not be found!";
-    private String CREATION_ERROR =
+    private final static String CREATION_ERROR =
             "Could not create database!";
-    private String UPDATE_ERROR =
+    private final static String UPDATE_ERROR =
             "Could not update database!";
 
 
@@ -98,7 +97,7 @@ public class DBTask extends Task {
         try {
             PersistenceManagerRdbms rdbms = PersistenceManagerFactory.createGridSphereRdbms();
             // check if there is the user table, should be enough
-            List r = rdbms.restoreList("select uzer from " + SportletUserImpl.class.getName() + " uzer");
+            rdbms.restoreList("select uzer from " + SportletUserImpl.class.getName() + " uzer");
         } catch (Exception e) {
             throw new BuildException("DB Error: " + NO_CORE_TABLES + " " + NOT_INSTALLED);
         }

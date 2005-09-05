@@ -13,9 +13,9 @@ public class SessionImpl implements Session {
 
     private static PortletLog log = SportletLog.getInstance(SessionImpl.class);
 
-    private net.sf.hibernate.Session hbSession = null;
+    private org.hibernate.Session hbSession = null;
 
-    public SessionImpl(net.sf.hibernate.Session hbSession) {
+    public SessionImpl(org.hibernate.Session hbSession) {
         this.hbSession = hbSession;
     }
 
@@ -156,26 +156,6 @@ public class SessionImpl implements Session {
     }
 
 	/**
-	 * Copy the state of the given object onto the persistent object with the same
-	 * identifier. If there is no persistent instance currently associated with
-	 * the session, it will be loaded. Return the persistent instance. If the
-	 * given instance is unsaved or does not exist in the database, save it and
-	 * return it as a newly persistent instance. Otherwise, the given instance
-	 * does not become associated with the session.
-	 *
-	 * @param object a transient instance with state to be copied
-	 * @return an updated persistent instance
-	 */
-	public Object createOrUpdateCopy(Object object) throws PersistenceManagerException {
-        try {
-            return this.hbSession.saveOrUpdateCopy(object);
-        } catch (Exception e) {
-            log.error("Unable to save or update object in hibernate session", e);
-            throw new PersistenceManagerException(e);
-        }
-    }
-
-	/**
 	 * Remove a persistent instance from the datastore. The argument may be
 	 * an instance associated with the receiving <tt>Session</tt> or a transient
 	 * instance with an identifier associated with existing persistent state.
@@ -194,15 +174,14 @@ public class SessionImpl implements Session {
 
 
 	/**
-	 * Delete all objects returned by the query. Return the number of objects deleted.
+	 * Delete all objects returned by the query. 
 	 *
 	 * @param query the query string
-	 * @return the number of instances deleted
 	 * @throws org.gridlab.gridsphere.core.persistence.PersistenceManagerException
 	 */
-	public int delete(String query) throws PersistenceManagerException {
+	public void delete(String query) throws PersistenceManagerException {
         try {
-            return this.hbSession.delete(query);
+            this.hbSession.delete(query);
         } catch (Exception e) {
             log.error("Unable to delete object in hibernate session", e);
             throw new PersistenceManagerException(e);
@@ -256,7 +235,7 @@ public class SessionImpl implements Session {
 
     public Object restore(String query) throws PersistenceManagerException {
         try {
-            net.sf.hibernate.Query q = hbSession.createQuery(query);
+            org.hibernate.Query q = hbSession.createQuery(query);
             List list = q.list();
             if (list.size() == 0) {
                 return null;
@@ -277,31 +256,10 @@ public class SessionImpl implements Session {
       */
     public List restoreList(String query) throws PersistenceManagerException {
         try {
-            net.sf.hibernate.Query q = hbSession.createQuery(query);
+            org.hibernate.Query q = hbSession.createQuery(query);
             return q.list();
         } catch (Exception e) {
             log.error("Unable to retrieve list in hibernate session with query " + query, e);
-            throw new PersistenceManagerException(e);
-        }
-    }
-
-    /**
-	 * Execute a query and return the results in an iterator. If the query has multiple
-	 * return values, values will be returned in an array of type <tt>Object[].</tt><br>
-	 * <br>
-	 * Entities returned as results are initialized on demand. The first SQL query returns
-	 * identifiers only. So <tt>iterate()</tt> is usually a less efficient way to retrieve
-	 * objects.
-	 *
-	 * @param query the query string
-	 * @return an iterator
-	 * @throws org.gridlab.gridsphere.core.persistence.PersistenceManagerException
-	 */
-	public Iterator iterate(String query) throws PersistenceManagerException {
-         try {
-            return this.hbSession.iterate(query);
-        } catch (Exception e) {
-             log.error("Unable to iterate objects in hibernate session with query " + query, e);
             throw new PersistenceManagerException(e);
         }
     }
