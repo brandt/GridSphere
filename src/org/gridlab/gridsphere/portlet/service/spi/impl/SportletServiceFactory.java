@@ -21,6 +21,8 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletContext;
 import java.lang.reflect.Constructor;
@@ -65,7 +67,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
     public static URL servicesMappingStream = null;
 
-    //public WebApplicationContext springContext = null;
+    public static Hashtable springBeans = new Hashtable();
 
     /**
      * Private constructor. Use getDefault() instead.
@@ -88,7 +90,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         //servicesMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
         addServices(GridSphereConfig.getServletContext(), servicesPath);
         // playing with Spring
-        //springContext  = WebApplicationContextUtils.getRequiredWebApplicationContext(GridSphereConfig.getServletContext());
+        //addSpringServices(GridSphereConfig.getServletContext());
     }
 
     public void login(PortletRequest req) throws PortletException {
@@ -109,6 +111,20 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
                 psp = null;
             }
             userServices.remove(userid);
+        }
+    }
+
+    /**
+     * Adds spring beans defined in a portlet application's aaplicationContext.xml to the springbeans HashMap
+     * to be access using the createSpringService method
+     *
+     * @param ctx the Servlet Context
+     */
+    public synchronized void addSpringServices(ServletContext ctx) {
+        WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(ctx);
+        String[] beanDefs = context.getBeanDefinitionNames();
+        for (int i = 0; i < beanDefs.length; i++) {
+            springBeans.put(beanDefs[i], context);
         }
     }
 
@@ -194,6 +210,18 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
                 }
             }
         }
+    }
+
+    /**
+     * Returns a Spring (www.springframework.org) service defined in applicationContext.xml by its
+     * bean name
+     *
+     * @param beanName the bean name identifying the spring service
+     * @return the Spring service defined in applicationContext.xml or null if none exists
+     */
+    public Object createSpringService(String beanName) {
+        WebApplicationContext ctx = (WebApplicationContext)springBeans.get(beanName);
+        return (ctx != null) ? ctx.getBean(beanName) : null;
     }
 
     /**

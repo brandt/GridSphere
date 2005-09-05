@@ -18,6 +18,15 @@ import javax.servlet.ServletContext;
 public interface PortletServiceFactory {
 
     /**
+     * Returns a Spring (www.springframework.org) service defined in applicationContext.xml by its
+     * bean name
+     *
+     * @param beanName the bean name identifying the spring service
+     * @return the Spring service defined in applicationContext.xml or null if none exists
+     */
+    public Object createSpringService(String beanName);
+    
+    /**
      * Creates a portlet service and initializes it
      *
      * @param service          the class of the service
