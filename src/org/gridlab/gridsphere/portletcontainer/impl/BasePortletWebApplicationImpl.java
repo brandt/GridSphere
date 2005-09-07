@@ -160,7 +160,13 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
         if (f.exists()) {
             factory.addServices(ctx, descriptor);
         } else {
-            log.debug("Did not find PortletServices.xml for: " + ctx.getServletContextName());
+            descriptor = ctx.getRealPath("/WEB-INF/portlet-services");
+            f = new File(descriptor);
+            if (f.exists()) {
+                factory.addServices(ctx, descriptor);
+            } else {
+                log.debug("Did not find PortletServices.xml or portlet-services directory for: " + ctx.getServletContextName());
+            }
         }
         // add Spring Services if any are defined
         String springDescriptor = ctx.getRealPath("/WEB-INF/applicationContext.xml");
