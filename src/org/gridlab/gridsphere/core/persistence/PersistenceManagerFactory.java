@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.lang.reflect.Constructor;
-import java.io.InputStream;
 import java.net.URL;
 
 public class PersistenceManagerFactory {
