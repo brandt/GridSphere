@@ -122,10 +122,14 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      * @param ctx the Servlet Context
      */
     public synchronized void addSpringServices(ServletContext ctx) {
+        try {
         WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(ctx);
         String[] beanDefs = context.getBeanDefinitionNames();
         for (int i = 0; i < beanDefs.length; i++) {
             springBeans.put(beanDefs[i], context);
+        }
+        } catch (IllegalStateException e) {
+            log.error("No applicationContext.xml found for: " + ctx.getServletContextName(), e);
         }
     }
 
@@ -142,6 +146,9 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         String[] servicePaths = null;
         if (f.isDirectory()) {
             servicePaths = f.list();
+            for (int i = 0; i < servicePaths.length; i++) {
+                servicePaths[i] = servicesPath + File.separator + servicePaths[i];
+            }
         } else {
             servicePaths = new String[1];
             servicePaths[0] = servicesPath;
@@ -149,7 +156,8 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         for (int i = 0; i < servicePaths.length; i++) {
             SportletServiceDescriptor descriptor = null;
             try {
-                descriptor = new SportletServiceDescriptor(servicesPath, servicesMappingStream);
+                System.err.println("loading from: " + servicePaths[i]);
+                descriptor = new SportletServiceDescriptor(servicePaths[i], servicesMappingStream);
             } catch (Exception e) {
                 //log.error("error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
                 throw new PortletServiceException("error unmarshalling " + servicesPath, e);
@@ -190,35 +198,50 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      */
     public synchronized void addServices(String webappName, ServletContext ctx, String servicesPath, ClassLoader loader) throws PortletServiceException {
         SportletServiceDescriptor descriptor = null;
-        try {
-            descriptor = new SportletServiceDescriptor(servicesPath, servicesMappingStream);
-        } catch (Exception e) {
-            log.error("Error unmarshalling " + servicesPath, e);
-            throw new PortletServiceException("Error unmarshalling " + servicesPath, e);
+        File f = new File(servicesPath);
+        String[] servicePaths = null;
+        if (f.isDirectory()) {
+            servicePaths = f.list();
+            for (int i = 0; i < servicePaths.length; i++) {
+                servicePaths[i] = servicesPath + File.separator + servicePaths[i];
+            }
+
+        } else {
+            servicePaths = new String[1];
+            servicePaths[0] = servicesPath;
         }
-        SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
-        List services = serviceCollection.getPortletServicesList();
-        List webapplist = new ArrayList();
-        Iterator it = services.iterator();
-        while (it.hasNext()) {
-            SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
-            serviceDef.setServiceDescriptor(descriptor);
-            allServices.put(serviceDef.getServiceInterface(), serviceDef);
-            log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
-            serviceContexts.put(serviceDef.getServiceInterface(), ctx);
-            classLoaders.put(serviceDef.getServiceInterface(), loader);
-            webapplist.add(serviceDef.getServiceInterface());
-        }
-        webappServices.put(webappName, webapplist);
-        it = services.iterator();
-        while (it.hasNext()) {
-            SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
-            if (serviceDef.isLoadOnStartup()) {
-                log.debug("loading service : " + serviceDef.getServiceInterface());
-                try {
-                    createPortletService(Class.forName(serviceDef.getServiceInterface(), true, loader), ctx, true);
-                } catch (ClassNotFoundException e) {
-                    log.error("Unable to find class : " + serviceDef.getServiceImplementation());
+        for (int i = 0; i < servicePaths.length; i++) {
+            try {
+                System.err.println("loading from: " + servicePaths[i]);
+                descriptor = new SportletServiceDescriptor(servicePaths[i], servicesMappingStream);
+            } catch (Exception e) {
+                log.error("Error unmarshalling " + servicesPath, e);
+                throw new PortletServiceException("Error unmarshalling " + servicesPath, e);
+            }
+            SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
+            List services = serviceCollection.getPortletServicesList();
+            List webapplist = new ArrayList();
+            Iterator it = services.iterator();
+            while (it.hasNext()) {
+                SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
+                serviceDef.setServiceDescriptor(descriptor);
+                allServices.put(serviceDef.getServiceInterface(), serviceDef);
+                log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
+                serviceContexts.put(serviceDef.getServiceInterface(), ctx);
+                classLoaders.put(serviceDef.getServiceInterface(), loader);
+                webapplist.add(serviceDef.getServiceInterface());
+            }
+            webappServices.put(webappName, webapplist);
+            it = services.iterator();
+            while (it.hasNext()) {
+                SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
+                if (serviceDef.isLoadOnStartup()) {
+                    log.debug("loading service : " + serviceDef.getServiceInterface());
+                    try {
+                        createPortletService(Class.forName(serviceDef.getServiceInterface(), true, loader), ctx, true);
+                    } catch (ClassNotFoundException e) {
+                        log.error("Unable to find class : " + serviceDef.getServiceImplementation());
+                    }
                 }
             }
         }

@@ -609,15 +609,22 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         webAppName = realPath.substring(l + 1);
         String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");
         File f = new File(descriptor);
-        if (f.exists()) {
-        try {
-            System.err.println("Loading services from " + descriptor);
-            factory.addServices(webAppName, ctx, descriptor, loader);
-        } catch (PortletServiceException e) {
-            log.error("Unable to load services!", e);
+        if (!f.exists()) {
+            descriptor = ctx.getRealPath("/WEB-INF/portlet-services");
+            f = new File(descriptor);
+            if (!f.exists()) {
+                descriptor = null;
+            }
         }
+        if (descriptor != null) {
+            try {
+                System.err.println("Loading services from " + descriptor);
+                factory.addServices(webAppName, ctx, descriptor, loader);
+            } catch (PortletServiceException e) {
+                log.error("Unable to load services!", e);
+            }
         } else {
-            log.info("No PortletServices.xml found");
+            log.info("No PortletServices.xml or portlet-services directory found");
         }
     }
 
