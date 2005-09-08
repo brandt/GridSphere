@@ -90,10 +90,12 @@ public class ListBoxBean extends BeanContainer implements TagBean {
             sb.append(" multiple='multiple'");
         }
         if (disabled) {
-            sb.append(" disabled ");
+            // 'disabled' replaced by 'disabled="disabled"' for XHTML 1.0 Strict compliance
+            sb.append(" disabled=\"disabled\" ");
         }
         if (onChange != null) {
-            sb.append(" onChange='" + onChange + "'");
+            // 'onChange' replaced by 'onchange' for XHTML 1.0 Strict compliance
+            sb.append(" onchange='" + onChange + "'");
         }
         sb.append(">");
         return sb.toString();

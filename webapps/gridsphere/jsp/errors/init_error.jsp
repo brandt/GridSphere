@@ -5,9 +5,8 @@
 
 <h2>GridSphere portal failed to initialize!</h2>
 <p>
-<br>
+<br/>
 	<%= error.getMessage() %>
-<p></p>
-	<b>Stack Trace:</b><br>
+	<b>Stack Trace:</b><br/>
         <% error.printStackTrace(new java.io.PrintWriter(out)); %>
-
+</p>

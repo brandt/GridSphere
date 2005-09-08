@@ -517,7 +517,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 portletURI.addParameter(SportletProperties.PORTLET_WINDOW, tmp.toString());
                 stateLink.setHref(portletURI.toString());
                 if (tmp.equals(PortletWindow.State.FLOATING)) {
-                    stateLink.setHref(portletURI.toString() + "\" onClick=\"return GridSphere_popup(this, 'notes')\"");
+                    stateLink.setHref(portletURI.toString() + "\" onclick=\"return GridSphere_popup(this, 'notes')\"");
                 }
                 stateLinks.add(stateLink);
             } catch (IllegalArgumentException e) {

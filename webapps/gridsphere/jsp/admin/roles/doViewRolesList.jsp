@@ -4,7 +4,6 @@
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<p>
 
 <% PortletRequest pReq = (PortletRequest)pageContext.getAttribute("portletRequest"); %>
 

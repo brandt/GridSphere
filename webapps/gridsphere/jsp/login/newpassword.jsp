@@ -8,7 +8,9 @@
 <ui:form>
 
 <h3><ui:text value="Update password" style="nostyle"/></h3>
+<p>
 <ui:hiddenfield beanId="reqid"/>
+</p>
 <ui:group>
 <ui:frame width="50%">
     <ui:tablerow>
@@ -22,6 +24,7 @@
 </ui:frame>
 <p>
 <ui:actionsubmit action="doSavePass" key="SAVE"/>
+</p>
 </ui:group>
 
 </ui:form>

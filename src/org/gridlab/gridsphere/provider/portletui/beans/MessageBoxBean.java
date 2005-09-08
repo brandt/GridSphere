@@ -252,7 +252,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
         if (message != null) {
             sb.append("<div" + getFormattedCss() + ">");
             if (imageSource!=null) {
-                sb.append("<table><tr><td valign=\"top\"><img src=\""+imageSource+"\"></td><td>");
+                sb.append("<table><tr><td valign=\"top\"><img src=\""+imageSource+"\" /></td><td>");
                 sb.append(message);
                 sb.append("</td></tr></table>");
             } else {

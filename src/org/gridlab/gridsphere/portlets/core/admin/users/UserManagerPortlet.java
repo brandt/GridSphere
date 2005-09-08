@@ -221,11 +221,11 @@ public class UserManagerPortlet extends ActionPortlet {
         // Validate user name
         String userName = event.getTextFieldBean("userName").getValue();
         if (userName.equals("")) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_NAME_BLANK") + "<br />");
             isInvalid = true;
         } else if (newuser) {
             if (this.userManagerService.existsUserName(userName)) {
-                createErrorMessage(event, this.getLocalizedText(req, "USER_EXISTS") + "<br>");
+                createErrorMessage(event, this.getLocalizedText(req, "USER_EXISTS") + "<br />");
                 isInvalid = true;
             }
         }
@@ -234,7 +234,7 @@ public class UserManagerPortlet extends ActionPortlet {
         /*
         String familyName = event.getTextFieldBean("familyName").getValue();
         if (familyName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br>");
+            message.append(this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br />");
             isInvalid = true;
         }
         */
@@ -242,20 +242,20 @@ public class UserManagerPortlet extends ActionPortlet {
         String givenName = event.getTextFieldBean("fullName").getValue();
 
         if (givenName.equals("")) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br />");
             isInvalid = true;
         }
 
         // Validate e-mail
         String eMail = event.getTextFieldBean("emailAddress").getValue();
         if (eMail.equals("")) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
             isInvalid = true;
         } else if ((eMail.indexOf("@") < 0)) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
             isInvalid = true;
         } else if ((eMail.indexOf(".") < 0)) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
             isInvalid = true;
         }
 
@@ -282,14 +282,14 @@ public class UserManagerPortlet extends ActionPortlet {
         if (passwordValue.length() == 0 &&
                 confirmPasswordValue.length() == 0) {
             if (newuser) {
-                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK") + "<br>");
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK") + "<br />");
                 return true;
             }
             return false;
         }
         // Otherwise, password must match confirmation
         if (!passwordValue.equals(confirmPasswordValue)) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_MISMATCH") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_MISMATCH") + "<br />");
             return true;
             // If they do match, then validate password with our service
         } else {

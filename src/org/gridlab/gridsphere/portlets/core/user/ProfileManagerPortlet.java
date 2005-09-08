@@ -237,7 +237,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             groupsDescTC.addBean(groupDescTB);
             if (g.getType().equals(PortletGroup.PRIVATE)) {
                 TextBean priv = event.getTextBean("privateTB");
-                priv.setValue("<br>" + this.getLocalizedText(req, "GROUP_NOTIFY"));
+                priv.setValue("<br />" + this.getLocalizedText(req, "GROUP_NOTIFY"));
                 List admins = aclManagerService.getUsers(g, PortletRole.ADMIN);
                 String emailAddress;
                 if (admins.isEmpty()) {
@@ -524,7 +524,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         if (req.getRole().equals(PortletRole.SUPER)) {
             userName = event.getTextFieldBean("userNameTF").getValue();
             if (userName.equals("")) {
-                message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
+                message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br />");
                 isInvalid = true;
             }
         }
@@ -532,7 +532,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         // Validate full name
         String fullName = event.getTextFieldBean("fullName").getValue();
         if (fullName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br>");
+            message.append(this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br />");
             isInvalid = true;
         }
         // Validate given name
@@ -541,13 +541,13 @@ public class ProfileManagerPortlet extends ActionPortlet {
         // Validate e-mail
         String eMail = event.getTextFieldBean("TFSERVICENAMEmail").getValue();
         if (eMail.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
             isInvalid = true;
         } else if ((eMail.indexOf("@") < 0)) {
-            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
             isInvalid = true;
         } else if ((eMail.indexOf(".") < 0)) {
-            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
             isInvalid = true;
         }
 

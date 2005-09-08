@@ -198,7 +198,7 @@ public class SportletURI implements PortletURI {
             it = set.iterator();
             while (it.hasNext()) {
                 if (!firstParam)
-                    url += "&";
+                    url += "&amp;"; // special character replaced with its corresponding entity for XHTML 1.0 Strict compliance
                 String name = (String) it.next();
 
                 String encname = URLEncoder.encode(name, "UTF-8");

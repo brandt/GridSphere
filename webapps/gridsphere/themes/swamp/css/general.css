@@ -64,3 +64,8 @@ input, select, textarea {
   font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;
 }
 
+/* Added */
+img {
+border-style: none;
+}
+

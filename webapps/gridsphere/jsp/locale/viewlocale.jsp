@@ -6,9 +6,8 @@
 
 <% Locale locale = (Locale)request.getAttribute("locale"); %>
 
-<br>
+<ui:form action="selectLang"> <!-- removed 'name="localeform"' for XHTML 1.0 Strict compliance -->
 
-<ui:form name="localeform" action="selectLang">
     <% String flag = "/gridsphere/images/flags/"+locale.getLanguage() +".gif"; %>
     <table>
     <tr>
@@ -18,11 +17,13 @@
     <td>
     <ui:listbox beanId="localeLB"/>
     </td>
-<noscript>
     <td>
-    <ui:actionsubmit action="selectLang" value="ok"/>
+        <noscript>
+            <p>
+            <ui:actionsubmit action="selectLang" value="ok" />
+            </p>
+        </noscript>
     </td>
-</noscript>
     </tr>
     </table>
 </ui:form>

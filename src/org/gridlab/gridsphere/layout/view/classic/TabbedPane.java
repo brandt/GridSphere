@@ -67,7 +67,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         PortletTabbedPane pane = (PortletTabbedPane)comp;
         if (pane.getStyle().equalsIgnoreCase("sub-menu")) {
            StringBuffer sb = new StringBuffer();
-            sb.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"tab-sub-pane" + pane.getTheme() + "\" width=\"100%\"><tr><td>");
+            sb.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"tab-sub-pane" /*+ pane.getTheme()*/ + "\" width=\"100%\"><tr><td>"); ///
             sb.append("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
             return sb;
         } else {
@@ -78,7 +78,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
     public StringBuffer doRenderTab(GridSphereEvent event, PortletTabbedPane tabPane, PortletTab tab) {
         // this really creates the individual tabs
         StringBuffer pane = new StringBuffer();
-        String path = event.getPortletRequest().getContextPath() + "/themes" + File.separator + tabPane.getTheme() + File.separator + "images" + File.separator;
+        String path = event.getPortletRequest().getContextPath() + "/themes/" + tabPane.getTheme() + "/images/"; /// Removed File.separator(s)
         String link = tab.createTabTitleLink(event);
         String lang = event.getPortletRequest().getLocale().getLanguage();
         String title = tab.getTitle(lang);
@@ -86,24 +86,24 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             pane.append("\n<!-- START SUB MENU TAB --><td nowrap=\"nowrap\" background=\"" + path + "subtab-middle.gif\" height=\"24\">");
             if (tab.isSelected()) {
                 pane.append("<span class=\"tab-sub-active\">");
-                pane.append("<a class=\"tab-sub-menu-active\" href=\"" + link + "\"" + " onClick=\"this.href='" + link + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a></span>");
+                pane.append("<a class=\"tab-sub-menu-active\" href=\"" + link + "\"" + " onClick=\"this.href='" + link + "&amp;JavaScript=enabled'\">" + replaceBlanks(title) + "</a></span>");
             } else {
                 pane.append("<span class=\"tab-sub-inactive\">");
-                pane.append("<a class=\"tab-sub-menu\" href=\"" + link + "\"" + " onClick=\"this.href='" + link + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
+                pane.append("<a class=\"tab-sub-menu\" href=\"" + link + "\"" + " onClick=\"this.href='" + link + "&amp;JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
                 pane.append("</span>");
             }
             pane.append("</td>\n");
         } else {
             if (tab.isSelected()) {
-                pane.append("\n<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-active-left.gif\"></td>");
+                pane.append("\n<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-active-left.gif\" alt=\"tab active left border\" /></td>");
                 pane.append("<td height=\"24\" nowrap=\"nowrap\" background=\"" + path + "tab-active-middle.gif\">");
                 pane.append("<span class=\"tab-active\">" + replaceBlanks(title) + "</span>");
-                pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-active-right.gif\"></td>");
+                pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-active-right.gif\" alt=\"tab active right border\" /></td>");
             } else {
-                pane.append("\n<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-inactive-left.gif\"></td>");
+                pane.append("\n<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-inactive-left.gif\"  alt=\"tab inactive left border\" /></td>");
                 pane.append("<td height=\"24\" nowrap=\"nowrap\" background=\"" + path + "tab-inactive-middle.gif\">");
-                pane.append("<a class=\"tab-menu\" href=\"" + link + "\"" + " onClick=\"this.href='" + link + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
-                pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-inactive-right.gif\"></td>");
+                pane.append("<a class=\"tab-menu\" href=\"" + link + "\"" + " onClick=\"this.href='" + link + "&amp;JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
+                pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-inactive-right.gif\" alt=\"tab inactive right border\" /></td>");
             }
         }
         return pane;
@@ -114,7 +114,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         PortletTabbedPane tabPane = (PortletTabbedPane)component;
         StringBuffer pane = new StringBuffer();
         if (tabPane.getStyle().equals("sub-menu")) {
-            String path = event.getPortletRequest().getContextPath() + "/themes" + File.separator + tabPane.getTheme() + File.separator + "images" + File.separator;
+            String path = event.getPortletRequest().getContextPath() + "/themes/" + tabPane.getTheme() + "/images/"; /// Removed File.separator(s)
             pane.append("</tr></table>");
             pane.append("<td background=\"" + path + "subtab-middle.gif\" style=\"width:100%\">&nbsp;</td>");
             pane.append("</tr></table><!-- end SUB MENU tabbed pane -->\n");

@@ -5,15 +5,16 @@
 <ui:messagebox beanId="msg"/>
 
 <h3><ui:text key="USER_EDIT_USER_MSG" style="nostyle"/></h3>
-
+<p>
 <% if (request.getAttribute("savePass") != null)  { %>
 <ui:text style="alert" key="USER_PASS_BLANK_MSG"/>
 <% } %>
-
+</p>
 <ui:form>
+<p>
 <ui:hiddenfield beanId="userID"/>
 <ui:hiddenfield beanId="newuser"/>
-
+</p>
     <ui:frame>
 
         <ui:tablerow>

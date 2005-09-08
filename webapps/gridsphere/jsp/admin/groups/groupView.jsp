@@ -15,8 +15,9 @@
 
 <% if (groupEntryList.size() > 0) { %>
 <h3><ui:text key="GROUP_MODIFY_USERS" style="nostyle"/></h3>
-<ui:group>
 <ui:form>
+<ui:group>
+
 <ui:hiddenfield beanId="groupID"/>
 
 <ui:frame>
@@ -26,13 +27,13 @@
                 <ui:text key="DELETE"/>
             </ui:tablecell>
             <ui:tablecell>
-            <ui:text key="USERNAME"/>
+                <ui:text key="USERNAME"/>
             </ui:tablecell>
             <ui:tablecell>
-            <ui:text key="FULLNAME"/>
+                <ui:text key="FULLNAME"/>
             </ui:tablecell>
             <ui:tablecell>
-            <ui:text key="GROUP_ROLEIN_GROUP"/>
+                <ui:text key="GROUP_ROLEIN_GROUP"/>
             </ui:tablecell>
 
         </ui:tablerow>
@@ -46,7 +47,7 @@
                             <ui:checkbox beanId="groupEntryIDCB" name="<%= groupEntry.getID() %>" value="<%= groupEntry.getID() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
-                                <ui:text value="<%= groupEntry.getUser().getUserName() %>"/>
+                            <ui:text value="<%= groupEntry.getUser().getUserName() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
                             <ui:text value="<%= groupEntry.getUser().getFullName() %>"/>
@@ -69,18 +70,19 @@
                     </ui:tablecell>
                 </ui:tablerow>
             </ui:frame>
-            </ui:form>
             </ui:group>
+            </ui:form>
 
      <%              } %>
 
 
     <h3><ui:text key="GROUP_ADD_USERS" style="nostyle"/></h3>
-
-    <ui:group>
+    
     <ui:form>
+    <ui:group>
+    <p>
     <ui:hiddenfield beanId="groupID"/>
-
+    </p>
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
@@ -114,16 +116,16 @@
                 </ui:tablecell>
             </ui:tablerow>
         </ui:frame>
-        </ui:form>
-     </ui:group>
+    </ui:group>
+    </ui:form>
+     
 
 <ui:form>
-<ui:frame>
+    <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
                 <ui:actionsubmit action="doViewListGroup" key="GROUP_LIST_GROUPS"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
-
 </ui:form>

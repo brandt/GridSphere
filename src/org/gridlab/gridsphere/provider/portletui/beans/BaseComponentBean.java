@@ -117,7 +117,8 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
      */
     protected String checkDisabled() {
         if (disabled) {
-            return " disabled ";
+            // 'disabled' replaced by 'disabled="disabled"' for XHTML 1.0 Strict compliance
+            return " disabled=\"disabled\" ";
         } else {
             return "";
         }

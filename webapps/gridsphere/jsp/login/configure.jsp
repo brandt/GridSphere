@@ -5,9 +5,9 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
 <%-- This is an ugly logic JSP page that iterates over the authorization modules --%>
-
+<p>
 <ui:text key="LOGIN_CONF_AUTH_MODULES"/>
-
+</p>
 <% List supportedModules = (List)request.getAttribute("supportedModules"); %>
 <% List activeModules = (List)request.getAttribute("activeModules"); %>
 

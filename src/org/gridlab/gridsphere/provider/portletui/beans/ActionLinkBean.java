@@ -81,7 +81,7 @@ public class ActionLinkBean extends ActionBean implements TagBean {
 
         if (anchor != null) action += "#" + anchor;
 
-        //String hlink = "<a href=\"" + action + "\"" + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value + "</a>";
+        //String hlink = "<a href=\"" + action + "\"" + " onClick=\"this.href='" + action + "&amp;JavaScript=enabled'\"/>" + value + "</a>";
         if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
             this.cssClass = MessageStyle.MSG_ERROR;
         } else if (style.equalsIgnoreCase("status")) {
@@ -105,15 +105,15 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         if (trackMe != null) {
             try {
                 if (extUrl != null) {
-                    sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=" + trackMe + "&" + TrackerService.REDIRECT_URL + "=" + URLEncoder.encode(extUrl, "UTF-8") + "\"" + getFormattedCss() + "\">" + value);
+                    sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=" + trackMe + "&amp;" + TrackerService.REDIRECT_URL + "=" + URLEncoder.encode(extUrl, "UTF-8") + "\"" + getFormattedCss() + "\">" + value);
                 } else {
-                    sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=" + trackMe + "&" + TrackerService.REDIRECT_URL + "=" + URLEncoder.encode(action, "UTF-8") + "\"" + getFormattedCss() + "\">" + value);
+                    sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=" + trackMe + "&amp;" + TrackerService.REDIRECT_URL + "=" + URLEncoder.encode(action, "UTF-8") + "\"" + getFormattedCss() + "\">" + value);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            sb.append(" href=\"" + action + "\"" + getFormattedCss() + " onClick=\"this.href='" + action + "&JavaScript=enabled'\">" + value);
+        sb.append(" href=\"" + action + "\"" + getFormattedCss() + " onclick=\"this.href='" + action + "&amp;JavaScript=enabled'\">" + value);
         }
         sb.append("</a>");
         return sb.toString();

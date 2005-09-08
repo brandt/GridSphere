@@ -13,21 +13,23 @@
 
 <ui:form>
 <ui:group>
-<ui:text style="bold" key="LOGIN_CONFIG_MSG"/>
 <p>
+<ui:text style="bold" key="LOGIN_CONFIG_MSG"/>
 <ui:checkbox beanId="acctCB" value="TRUE"/>
 <ui:text key="LOGIN_CONFIG_ALLOW"/>
+</p>
 <p>
 <ui:checkbox beanId="notifyCB" value="TRUE"/>
 <ui:text key="LOGIN_CONFIG_NOTIFY"/>
+</p>
 <p>
 <ui:checkbox beanId="savepassCB" value="TRUE"/>
 <ui:text key="LOGIN_CONFIG_PASSWD"/>
-<br>
+<br/>
 <ui:text style="alert" key="LOGIN_CONFIG_PASSWD1"/>
-<br>
+<br/>
 <ui:text style="alert" key="LOGIN_CONFIG_PASSWD2"/>
-<p>
+</p>
 <ui:frame>
 <ui:tablerow>
 <ui:tablecell>
@@ -41,16 +43,19 @@
 
 <ui:form>
 <ui:group>
-<ui:text style="bold" key="MAIL_CONFIG_MSG"/>
 <p>
+<ui:text style="bold" key="MAIL_CONFIG_MSG"/>
 <ui:text key="MAIL_SERVER_MSG"/>
+</p>
 <p>
 <ui:textfield beanId="mailHostTF"/>
+</p>
 <p>
 <ui:text key="MAIL_FROM_MSG"/>
+</p>
 <p>
 <ui:textfield beanId="mailFromTF"/>
-
+</p>
 
 <ui:frame>
 <ui:tablerow>
@@ -64,9 +69,9 @@
 
 <ui:form>
 <ui:group>
-<ui:text style="bold" key="LOGIN_AUTHMODULES_MSG"/>
 <p>
-
+<ui:text style="bold" key="LOGIN_AUTHMODULES_MSG"/>
+</p>
 <% if (authModules.size() == 1) { %>
     <ui:messagebox key="LOGIN_AUTHMODULES_ONEREQ"/>
 <% } %>

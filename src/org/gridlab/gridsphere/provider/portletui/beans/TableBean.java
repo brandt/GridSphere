@@ -267,10 +267,12 @@ public class TableBean extends BaseComponentBean implements TagBean {
         if (border != null) sb.append(" border=\"" + border + "\" ");
         if (width != null) sb.append(" width=\"" + width + "\" ");
         if (align != null) sb.append(" align=\"" + align + "\" ");
+        /// Removed for XHTML 1.0 Strict compliance
+        /*
         if (valign != null) {
             sb.append(" valign=\"" + valign + "\" ");
         }
-
+        */
         sb.append(">");
         if (defaultModel != null) sb.append(defaultModel.toStartString());
         return sb.toString();
@@ -282,12 +284,15 @@ public class TableBean extends BaseComponentBean implements TagBean {
         String uri = "";
         if (showall) {
             uri = uriString;
-            sb.append("<a href=\"" + uri + "&" + TableBean.SHOW_PAGES + "\">" + this.getLocalizedText("SHOW_PAGES") + "</a>");
+            sb.append("<p>"); // added for XHTML 1.0 Strict compliance
+            sb.append("<a href=\"" + uri + "&amp;" + TableBean.SHOW_PAGES + "\">" + this.getLocalizedText("SHOW_PAGES") + "</a>");
+            sb.append("</p>"); // added for XHTML 1.0 Strict compliance
         }
         if (maxRows > 0) {
             int numpages = (rowCount + 1) / maxRows + 1;
             int dispPage = currentPage + 1;
             int c = 0;
+            sb.append("<p>"); // added for XHTML 1.0 Strict compliance  
             sb.append(this.getLocalizedText("PAGE") + dispPage + this.getLocalizedText("OUT_OF_PAGES") + numpages);
 
             for (int i = 0; i < numpages; i++) {
@@ -298,14 +303,15 @@ public class TableBean extends BaseComponentBean implements TagBean {
                     // create an actionlink
                     uris = uriString;
                     //System.err.println("uri = " + uris);
-                    uri = uris + "&" + TableBean.CURRENT_PAGE + "=" + i;
+                    uri = uris + "&amp;" + TableBean.CURRENT_PAGE + "=" + i;
 
                     sb.append(" | " + "<a href=\"" + uri + "\">" + c + "</a>");
                 }
             }
             uri = uriString;
             sb.append(" | ");
-            sb.append("<a href=\"" + uri + "&" + TableBean.SHOW_ALL + "\">" + this.getLocalizedText("SHOW_ALL") + "</a>");
+            sb.append("<a href=\"" + uri + "&amp;" + TableBean.SHOW_ALL + "\">" + this.getLocalizedText("SHOW_ALL") + "</a>");
+            sb.append("</p>"); // added for XHTML 1.0 Strict compliance
             rowCount = 0;
         }
 

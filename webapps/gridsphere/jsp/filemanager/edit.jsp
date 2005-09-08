@@ -4,7 +4,9 @@
 <portletAPI:init/>
 
 <ui:form>
+    <p>
     <ui:hiddenfield beanId="fileName"/>
+    </p>
     <ui:panel>
 
         <ui:frame beanId="editError"/>

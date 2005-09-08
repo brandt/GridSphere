@@ -13,10 +13,9 @@
 <p>
 <ui:text key="TRACKING_SELECT_MSG"/>
 </p>
-<p>
-
-<ul>
 <% Iterator it = labelSet.iterator(); %>
+<% if (it.hasNext()) { %>
+<ul>
 <% while (it.hasNext()) { %>
     <% String label = (String)it.next(); %>
 <li><ui:actionlink action="showLabel" value="<%= label %>">
@@ -25,5 +24,4 @@
 </li>
 <% } %>
 </ul>
-
-</p>
+<% } %>

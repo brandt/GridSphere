@@ -27,25 +27,29 @@ programming all the presentation logic in the appropriate doView, doEdit, etc. m
 including a JSP page responsible for the presentation via the following call: <p>
 
 <code>
-    public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {<br>
-    ...<br>
-        getPortletConfig().getContext().include("/jsp/any.jsp", request, response);<br>
-    }<br>
+    public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {<br/>
+    ...<br/>
+        getPortletConfig().getContext().include("/jsp/any.jsp", request, response);<br/>
+    }<br/>
 </code>
+</p>
 <p>
 In the "any.jsp" file, the following JSP would be included to load in the tag library:
+</p>
 <p>
 <code>
-&lt;%@ taglib uri="/portletWidgets" prefix="gs" %&gt;<br>
-&lt;%@ taglib uri="/portletAPI" prefix="portletAPI" %&gt;<br>
-<br>
-&lt;portletAPI:init/&gt;<br>
+&lt;%@ taglib uri="/portletWidgets" prefix="gs" %&gt;<br/>
+&lt;%@ taglib uri="/portletAPI" prefix="portletAPI" %&gt;<br/>
+<br/>
+&lt;portletAPI:init/&gt;<br/>
 </code>
+</p>
 
 <p>
 Lines 1 and 2 indicate that the portletWidgets and portletAPI tag libraries are to be used and line 3
 must be called to make the necessary portlet objects i.e. PortletRequest available to the JSP.
-<br>
+</p>
+<br/>
 The prefix is used to reference the tag library later on e.g. to use the portletWidgets form tag:
 <p>
 <code>&lt;gs:form ... &gt;
@@ -53,16 +57,19 @@ The prefix is used to reference the tag library later on e.g. to use the portlet
       &lt;/gs:form&gt;
 
 </code>
+</p>
 <p>
-
+</p>
 <h3>Creating Actions</h3>
 
 <h4>Action Links</h4>
 The simplest tag is the <b>actionlink</b> tag:
 <p>
 <code>&lt;gs:actionlink <b>action</b>="actionlink" <b>label</b>="a link"&gt;&lt;/gs:actionlink&gt;</code>
+</p>
 <p>
 Parameters:
+</p>
 <ul>
 <li><b>action</b> -- the action is a name given that can later be referenced as the event.getAction().getName() in
 the <code>actionPerformed(ActionEvent event)</code> portlet method.
@@ -72,6 +79,7 @@ the <code>actionPerformed(ActionEvent event)</code> portlet method.
 Example:
 <p>
 <gs:actionlink action="actionlink" label="a link"/>
+</p>
 
 <h4>Forms</h4>
 
@@ -82,8 +90,10 @@ The <b>form</b> tag is a lightweight replacement for the HTML form tag:
   ...
 &lt;/gs:form&gt;
 </code>
+</p>
 <p>
 Parameters:
+</p>
 <ul>
 <li><b>action</b> -- the action is a name given that can later be referenced as the event.getAction().getName() in
 the <code>actionPerformed(ActionEvent event)</code> portlet method.
@@ -115,7 +125,7 @@ end tags.
 <code>
 &lt;gs:actionparam <b>name</b>="aparamname" <b>value</b>="aparamvalue"/&gt;
 </code>
-
+</p>
 Parameters:
 <ul>
 <li><b>name</b> -- the name of the parameter
@@ -124,8 +134,9 @@ Parameters:
 
 <p>
 Example:
+</p>
 <p>
-
+</p>
 <gs:form action="myform">
 <gs:actionparam name="aparamname" value="aparamvalue"/>
     <table cellspacing=2 cellpadding=2 border=0>

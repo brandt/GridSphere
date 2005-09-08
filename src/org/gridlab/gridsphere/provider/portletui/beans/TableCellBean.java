@@ -159,7 +159,8 @@ public class TableCellBean extends BeanContainer implements TagBean {
         StringBuffer sb = new StringBuffer();
         sb.append("<td ");
         sb.append(getFormattedCss());
-        if (width != null) sb.append(" width=\"" + width + "\"");
+        // Attribute 'width' replaced by 'style="width:"' for XHTML 1.0 Strict compliance                            
+        if (width != null) sb.append(" style=\"width:" + width + "\"");
         if (height != null) sb.append(" height=\"" + height + "\"");
         if (align != null) sb.append(" align=\"" + align + "\"");
         if (valign != null)  {

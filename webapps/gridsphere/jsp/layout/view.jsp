@@ -13,27 +13,28 @@
 
 
 <h3><ui:text key="LAYOUT_THEME" style="nostyle"/></h3>
-<ui:group>
 <ui:form>
+<ui:group>
+<p>
 <ui:text key="LAYOUT_SELECT_THEME"/>&nbsp;<ui:listbox beanId="themeLB"/> <ui:actionsubmit action="saveTheme" key="SAVE"/>
-</ui:form>
+</p>
 </ui:group>
+</ui:form>
 
 <h3><ui:text key="LAYOUT_NEW_TAB" style="nostyle"/></h3>
-<ui:group>
 <ui:form>
-<ui:text key="LAYOUT_TAB_NAME"/>&nbsp;&nbsp;<ui:textfield beanId="userTabTF"/>
+<ui:group>
 <p>
+<ui:text key="LAYOUT_TAB_NAME"/>&nbsp;&nbsp;<ui:textfield beanId="userTabTF"/>
 
 <ui:radiobutton beanId="colsRB" value="1"/><ui:text key="LAYOUT_ONE_COL"/>
 <ui:radiobutton beanId="colsRB" value="2" selected="true"/><ui:text key="LAYOUT_TWO_COL"/>
 <ui:radiobutton beanId="colsRB" value="3"/><ui:text key="LAYOUT_THREE_COL"/>
 
-<p>
-
 <ui:actionsubmit action="createNewTab" key="CREATE"/>
-</ui:form>
+</p>
 </ui:group>
+</ui:form>
 
 <% if (tabs.size() > 0) { %>
 <h3><ui:text key="LAYOUT_DISP_TABS" style="nostyle"/></h3>

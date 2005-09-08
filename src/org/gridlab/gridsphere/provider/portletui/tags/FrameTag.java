@@ -154,8 +154,8 @@ public class FrameTag extends TableTag {
                 if ((thiscol % numCols) == 0) {
                     out.println("<tr valign=\"top\">");
                 }
-
-                out.println("<td width=\"100%\">");
+                // Attribute 'width' replaced by 'style="width:"' for XHTML 1.0 Strict compliance                
+                out.println("<td style=\"width:" + "100%" + "\">");
             } catch (Exception e) {
                 throw new JspException(e.getMessage());
             }

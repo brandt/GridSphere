@@ -2,8 +2,10 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 <ui:form>
+<p>
 <ui:hiddenfield beanId="groupID"/>
 <ui:hiddenfield beanId="groupEntryID"/>
+</p>
 <ui:panel>
 
     <ui:frame>

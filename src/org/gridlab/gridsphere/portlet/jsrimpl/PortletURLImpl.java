@@ -299,31 +299,31 @@ public class PortletURLImpl implements PortletURL {
         }
 
         if (mode != null) {
-            url += "&" + SportletProperties.PORTLET_MODE + "=" + mode.toString();
+            url += "&amp;" + SportletProperties.PORTLET_MODE + "=" + mode.toString();
         }
 
         // if underlying window state is floating then set it in the URI
         if (req.getAttribute(SportletProperties.FLOAT_STATE) != null) state = new WindowState(PortletWindow.State.FLOATING.toString());
 
         if (state != null) {
-            url += "&" + SportletProperties.PORTLET_WINDOW + "=" + state.toString();
+            url += "&amp;" + SportletProperties.PORTLET_WINDOW + "=" + state.toString();
         }
         if (action != null) {
             try {
                 //System.out.println("Encoding action " + action);
                 String enaction = URLEncoder.encode(action, "UTF-8");
                 //System.out.println("Encoded action = " + enaction);
-                url += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + enaction;
+                url += "&amp;" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + enaction;
             } catch (UnsupportedEncodingException e) {
                 System.err.println("Unable to support UTF-8 encoding!");
-                url += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
+                url += "&amp;" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
             }
         }
 
         Iterator it = set.iterator();
         try {
             while (it.hasNext()) {
-                url += "&";
+                url += "&amp;";
                 String name = (String) it.next();
 
                 String encname = null;
@@ -334,7 +334,7 @@ public class PortletURLImpl implements PortletURL {
                     String[] vals = (String[]) val;
                     for (int j = 0; j < vals.length - 1; j++) {
                         String encvalue = URLEncoder.encode(vals[j], "UTF-8");
-                        url += encname + "=" + encvalue + "&";
+                        url += encname + "=" + encvalue + "&amp;";
                     }
                     String encvalue = URLEncoder.encode(vals[vals.length - 1], "UTF-8");
                     url += encname + "=" + encvalue;

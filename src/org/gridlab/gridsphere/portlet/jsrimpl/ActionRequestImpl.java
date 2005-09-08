@@ -55,7 +55,8 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      */
     public java.io.InputStream getPortletInputStream() throws IOException, IllegalStateException {
         HttpServletRequest req = (HttpServletRequest) super.getRequest();
-        if (req.getMethod().equals("POST")) {
+        // 'POST' replaced by 'post' for XHTML 1.0 Strict compliance
+        if (req.getMethod().equals("post")) {
             String contentType = req.getContentType();
             if (contentType == null || contentType.equals("application/x-www-form-urlencoded")) {
                 throw new IllegalStateException("User request HTTP POST data is of type application/x-www-form-urlencoded. This data has been already processed by the portal/portlet-container and is available as request parameters.");

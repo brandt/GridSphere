@@ -126,7 +126,7 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
                 + value + "' "
                 + checkDisabled()
                 + " "
-                + checkSelected("checked")
+                + checkSelected("checked=\"checked\"") // 'checked' replaced by 'checked="checked"' for XHTML 1.0 Strict compliance
                 + "/>";
     }
 

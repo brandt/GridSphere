@@ -7,19 +7,20 @@
 <ui:messagebox beanId="msg"/>
 
 <h2><ui:text key="GROUP_WIZARD_2"/></h2>
-<ui:group>
+<p>
 
 <ui:text key="GROUP_LAYOUT_MSG"/>
 <ui:text key="GROUP_TEMPLATE_MSG"/>
 
-<p>
    <ui:form>
+   <ui:group>
+   <p>
    <ui:text key="GROUP_LAYOUT_FILE"/>&nbsp;&nbsp;<ui:textfield beanId="layoutFileTF"/>
-    <ui:actionsubmit action="doMakeTemplateLayout" key="GROUP_CREATE_TEMPLATE">
-        <ui:actionparam name="groupId" value="<%= groupId %>"/>
-    </ui:actionsubmit>
-    </ui:form>
+   <ui:actionsubmit action="doMakeTemplateLayout" key="GROUP_CREATE_TEMPLATE">
+       <ui:actionparam name="groupId" value="<%= groupId %>"/>
+   </ui:actionsubmit>
+   </p>
+   </ui:group>
+   </ui:form>
 
 </p>
-
-</ui:group>

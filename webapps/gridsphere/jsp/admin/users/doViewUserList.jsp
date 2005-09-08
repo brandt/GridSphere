@@ -3,7 +3,6 @@
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<p>
 
 <ui:messagebox beanId="msg"/>
 

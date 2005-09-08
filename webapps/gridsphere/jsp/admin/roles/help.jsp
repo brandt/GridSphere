@@ -1,6 +1,7 @@
 
 <p>
 <b>Using the Role Manager portlet</b>
+</p>
 <p>
 The Role Manager portlet is used for managing roles in the portal. Roles can be added, modified and deleted except for
     the core GridSphere roles, <i>GUEST</i>, <i>USER</i>, <i>ADMIN</i> and <i>SUPER</i> that also match the core

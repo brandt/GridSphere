@@ -13,7 +13,7 @@
                     <ui:text key="LOGIN_NAME"/>
                 </ui:tablecell>
                 <ui:tablecell width="60">
-                    <input type="input" name="username" size="20" maxlength="50"/>
+                    <input type="text" name="username" size="20" maxlength="50"/>
                 </ui:tablecell>
                 <ui:tablecell/>
             </ui:tablerow>
@@ -30,9 +30,9 @@
                 <ui:tablecell/>
             </ui:tablerow>
     </ui:table>
-
+    <p>
     <input type="checkbox" name="remlogin" value="yes"/><ui:text key="LOGIN_REMEMBER_ME"/>
-
+    </p>
     <ui:table>
             <ui:tablerow>
                 <ui:tablecell width="100">
@@ -46,11 +46,13 @@
 
     <% if (request.getAttribute("canUserCreateAcct") != null)  { %>
                     <ui:actionlink action="doNewUser" key="LOGIN_SIGNUP"/>
+    </p>
         <p>
         <% } %>
 
 <% if (request.getAttribute("dispPass") != null)  { %>
     <ui:actionlink action="displayForgotPassword" key="LOGIN_FORGOT_PASSWORD"/>
+    </p>
 <% } %>
 
 </ui:form>

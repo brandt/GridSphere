@@ -99,7 +99,7 @@ public final class DefaultPortletAction implements PortletAction, Serializable {
             Object o = store.get(parameterName);
             if (o instanceof String) {
                 String parameterValue = (String) o;
-                buffer.append("&");
+                buffer.append("&amp;"); // special character replaced with its corresponding entity for XHTML 1.0 Strict compliance
                 buffer.append(parameterName);
                 buffer.append("=");
                 buffer.append(parameterValue);

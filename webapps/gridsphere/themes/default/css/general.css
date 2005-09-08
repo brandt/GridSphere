@@ -61,3 +61,8 @@ input, select, textarea {
   font-size: inherit;
 }
 
+/* Added */
+img {
+border-style: none;
+}
+

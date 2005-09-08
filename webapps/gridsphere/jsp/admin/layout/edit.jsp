@@ -12,26 +12,26 @@
 
 <ui:form>
 <h3><ui:text key="LAYOUTMGR_GROUP_EDIT" style="nostyle"/>&nbsp; <%= name %></h3>
+<p>
 <ui:hiddenfield beanId="layoutHF"/>
 <ui:hiddenfield beanId="typeHF"/>
-
+</p>
 
 <% if (allowImport.booleanValue()) { %>
-
+<p>
 <ui:text key="LAYOUTMGR_IMPORT"/>
 
 <ui:listbox beanId="appsLB"/>
 
 <ui:actionsubmit action="importLayout" key="APPLY"/>
-
+</p>
 <p>
 
 
 <% } %>
 
 <ui:textarea beanId="layoutFile" rows="30" cols="80"/>
-
-<p>
+</p>
 
 <ui:table>
 

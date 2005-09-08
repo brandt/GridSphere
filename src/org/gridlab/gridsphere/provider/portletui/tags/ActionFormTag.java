@@ -22,7 +22,8 @@ import java.util.ArrayList;
 public class ActionFormTag extends ActionTag {
 
     protected boolean isMultipart = false;
-    protected String method = "POST";
+    // 'POST' replaced by 'post' for XHTML 1.0 Strict compliance
+    protected String method = "post";
 
     /**
      * Sets the form method attribute e.g. POST
@@ -99,15 +100,19 @@ public class ActionFormTag extends ActionTag {
                 name = "form" + this.getUniqueId("gs_formNumber");
             }
 
-            out.print(" name=\"" + name + "\"");
+            // 'name' attribute replaced by 'id' for XHTML 1.0 Strict compliance     
+            out.print(" id=\"" + name + "\"");
 
             out.println(">");
             // add JS info
-            out.println("<input name=\"JavaScript\" value=\"\" type=\"hidden\">");
-
-
-            out.println("<script language=\"JavaScript\">");
-            out.println("document." + name + ".JavaScript.value = \"enabled\";");
+            out.println("<p>"); // added for XHTML 1.0 Strict compliance
+            // added the closing slash of tag for XHTML 1.0 Strict compliance
+            out.println("<input name=\"JavaScript\" value=\"\" type=\"hidden\" />");
+            out.println("</p>"); // added for XHTML 1.0 Strict compliance
+            // 'language="JavaScript"' replaced by 'type="text/javascript"' for XHTML 1.0 Strict compliance
+            out.println("<script type=\"text/javascript\">");
+            // elements accessed by 'getElementById' method instead of 'name' attribute for XHTML 1.0 Strict compliance
+            out.println("document.getElementById(\"" + name + "\").JavaScript.value = \"enabled\";");
             out.println("</script>");
             if (trackMe != null) {
                 out.println("<input name=\"" + TrackerService.TRACK_PARAM + "\" value=\"" + trackMe + "\" type=\"hidden\"/>");

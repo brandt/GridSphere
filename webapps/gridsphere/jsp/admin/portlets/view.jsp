@@ -135,8 +135,9 @@
 
 </ui:frame>
 </ui:group>
-
-<table><tr><td height="10px"></td></tr></table>
+<!-- Table commented out
+<table><tr><td height="10px"></td></tr></table> 
+-->
 
 <ui:group key="PORTLET_DEPLOY_MSG">
 
@@ -155,7 +156,9 @@
 
 <%-- uploading portlet WAR files TBD --%>
 
+<!-- Table commented out
 <table><tr><td height="10px"></td></tr></table>
+-->
 
 
 <ui:group key="PORTLET_UPLOAD">

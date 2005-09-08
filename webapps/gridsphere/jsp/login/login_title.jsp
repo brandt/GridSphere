@@ -3,7 +3,7 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
 <portletAPI:init/>
-
+<p>
 <ui:text key="LOGIN_SUCCESS" style="nostyle"/>
-
+</p>
 

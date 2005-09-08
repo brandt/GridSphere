@@ -157,7 +157,8 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable, 
         out.println("<tr> <!-- overall one row -->");
         for (int i = 0; i < numColumns; i++) {
             // new column
-            out.println("<td width=\"" + colSizes.get(i) + "%\" valign=\"top\"> <!-- this is a row -->");
+            // Attribute 'width' replaced by 'style="width:"' for XHTML 1.0 Strict compliance
+            out.println("<td style=\"width:" + colSizes.get(i) + "%\" valign=\"top\"> <!-- this is a row -->");
             // construct a table inside this column
             out.print("<table ");
             out.println("border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> <!-- this is table inside row (" + i + ")-->");

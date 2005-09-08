@@ -50,8 +50,8 @@
 
 <h3><ui:text key="TRACKING_CREATE_ACTION" style="nostyle"/></h3>
 <ui:form>
-<ui:text key="TRACKING_CREATE_MSG"/>&nbsp;&nbsp;<ui:textfield beanId="createActionTF"/>
 <p>
+<ui:text key="TRACKING_CREATE_MSG"/>&nbsp;&nbsp;<ui:textfield beanId="createActionTF"/>
 <ui:actionsubmit action="doSaveAction" key="SAVE"/>
 </p>
 </ui:form>

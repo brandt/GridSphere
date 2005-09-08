@@ -164,13 +164,15 @@ public class ImageBean extends BaseComponentBean implements TagBean {
     public String toStartString() {
         if (src.equals("")) return "";
         StringBuffer sb = new StringBuffer();
-        sb.append("<img src=\"" + this.src + "\" border=\"" + border + "\"");
+        // the 'border' attribute has been removed for XHTML 1.0 Strict compliance
+        sb.append("<img src=\"" + this.src + "\"");
         if (width != null) sb.append(" width=\"" + width + "\"");
         if (height != null) sb.append(" height=\"" + height + "\"");
         if (align != null) sb.append(" align=\"" + align + "\"");
-        if (alt != null) sb.append(" alt=\"" + alt + "\"");
+        // the else case should NEVER be reached, the 'alt' attribute should ALWAYS be specified!
+        if (alt != null) sb.append(" alt=\"" + alt + "\""); else sb.append(" alt=\"image\"");
         if (title != null) sb.append(" title=\"" + title + "\"");
-        sb.append("/>");
+        sb.append(" />");
         return sb.toString();
     }
 

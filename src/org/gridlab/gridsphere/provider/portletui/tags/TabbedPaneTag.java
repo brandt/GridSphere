@@ -124,7 +124,8 @@ public class TabbedPaneTag extends BaseComponentTag {
                 }
             }
 
-            w.print("<input type=\"hidden\" name=\"" + paneId + " value=\"" + currentTab + "\">");
+            // added the closing slash of tag for XHTML 1.0 Strict compliance
+            w.print("<input type=\"hidden\" name=\"" + paneId + " value=\"" + currentTab + "\" />");
             w.print("<table width=\"" + width + "\">");
             // first create tabs
             w.print("<tr>");
@@ -137,7 +138,8 @@ public class TabbedPaneTag extends BaseComponentTag {
 
             int tabwidth = twidth / tabBeans.size();
             for (int i = 0; i < tabBeans.size(); i++) {
-                w.print("<td width=\"" + tabwidth + "%\">");
+                // Attribute 'width' replaced by 'style="width:"' for XHTML 1.0 Strict compliance                                
+                w.print("<td style=\"width:" + tabwidth + "%\">");
                 TabBean tabBean = (TabBean) tabBeans.get(i);
                 String target = paneId + i;
                 if (tabBean.getActive()) {

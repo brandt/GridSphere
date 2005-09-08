@@ -20,10 +20,10 @@
 <td valign="top">
 
 <ui:form>
-
     <ui:group key="PROFILE_EDIT">
+    <p>
     <ui:text key="PROFILE_LASTLOGIN"/>&nbsp;&nbsp;<b><%= logintime %></b>
-
+    </p>
     <ui:frame beanId="errorFrame"/>
 
     
@@ -98,6 +98,7 @@
                 </ui:frame>
                 <p>
                 <ui:actionsubmit action="doSavePass" key="SAVE"/>
+                </p>
                 </ui:group>
 
                 <% } %>
@@ -110,6 +111,7 @@
                 <ui:frame beanId="groupsFrame"/>
                 <p>
                 <ui:actionsubmit action="doSaveGroups" key="SAVE"/>
+                </p>
                 </ui:group>
 
 
