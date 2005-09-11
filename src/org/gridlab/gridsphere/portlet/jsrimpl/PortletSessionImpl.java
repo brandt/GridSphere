@@ -278,7 +278,7 @@ public class PortletSessionImpl implements PortletSession, HttpSession {
         if (scope == PortletSession.APPLICATION_SCOPE) {
             session.setAttribute(name, value);
         } else {
-            session.setAttribute("javax.portlet.p." + request.getAttribute(SportletProperties.COMPONENT_ID) + "?" + name, value);
+            session.setAttribute("javax.portlet.p." + request.getAttribute(SportletProperties.PORTLETID) + "?" + name, value);
         }
     }
 
@@ -300,7 +300,7 @@ public class PortletSessionImpl implements PortletSession, HttpSession {
         if (scope == PortletSession.APPLICATION_SCOPE) {
             return session.getAttribute(name);
         } else {
-            Object attribute = session.getAttribute("javax.portlet.p." + (String) request.getAttribute(SportletProperties.COMPONENT_ID) + "?" + name);
+            Object attribute = session.getAttribute("javax.portlet.p." + (String) request.getAttribute(SportletProperties.PORTLETID) + "?" + name);
             if (attribute == null) {
                 // not sure, if this should be done for all attributes or only javax.servlet.
                 attribute = session.getAttribute(name);
@@ -334,14 +334,14 @@ public class PortletSessionImpl implements PortletSession, HttpSession {
 
             /* Fix that ONLY attributes of PORTLET_SCOPE are returned. */
             int prefix_length = "javax.portlet.p.".length();
-            String compId = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
+            String pId = (String) request.getAttribute(SportletProperties.PORTLETID);
 
             while (attributes.hasMoreElements()) {
                 String attribute = (String) attributes.nextElement();
 
                 int attributeScope = PortletSessionUtil.decodeScope(attribute);
 
-                if (attributeScope == PortletSession.PORTLET_SCOPE && attribute.startsWith(compId, prefix_length)) {
+                if (attributeScope == PortletSession.PORTLET_SCOPE && attribute.startsWith(pId, prefix_length)) {
                     String portletAttribute = PortletSessionUtil.decodeAttributeName(attribute);
 
                     if (portletAttribute != null) { // it is in the portlet's namespace
@@ -373,7 +373,7 @@ public class PortletSessionImpl implements PortletSession, HttpSession {
         if (scope == PortletSession.APPLICATION_SCOPE) {
             session.removeAttribute(name);
         } else {
-            session.removeAttribute("javax.portlet.p." + (String) request.getAttribute(SportletProperties.COMPONENT_ID) + "?" + name);
+            session.removeAttribute("javax.portlet.p." + (String) request.getAttribute(SportletProperties.PORTLETID) + "?" + name);
         }
     }
 

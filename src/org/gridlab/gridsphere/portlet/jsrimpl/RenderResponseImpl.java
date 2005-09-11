@@ -135,7 +135,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return the namespace
      */
     public String getNamespace() {
-        return "gridsphere_" + req.getAttribute(SportletProperties.COMPONENT_ID);
+        return "gridsphere_" + req.getAttribute(SportletProperties.PORTLETID);
     }
 
     /**
