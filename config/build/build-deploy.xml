@@ -32,9 +32,12 @@ Build include file for the GridSphere Portal source code, see build.xml
 
     <target name="deploy-common">
 
-
         <!-- Copy the gridsphere web app to build directory -->
-        <copy todir="${build.webapps}/gridsphere">
+        <pathconvert targetos="windows" dirsep="/" property="cathome">
+            <path location="${appserver.home}"/>
+        </pathconvert>
+        <filter token="GRIDSPHERE_DB" value="${cathome}/${gswebapp.dir}/WEB-INF/CustomPortal/database/gridsphere"/>
+        <copy todir="${build.webapps}/gridsphere" filtering="true">
             <fileset dir="${gswebapp.dir}"/>
         </copy>
 
