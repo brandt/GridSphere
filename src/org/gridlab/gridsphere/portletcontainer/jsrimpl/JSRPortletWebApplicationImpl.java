@@ -53,7 +53,7 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
         loadPortlets(context);
 
         // load services.xml
-        loadServices(context);
+        loadJSRServices(context, loader);
 
         //load roles.xml
         loadRoles(context);
