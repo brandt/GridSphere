@@ -55,12 +55,8 @@ public class GroupManagerPortlet extends ActionPortlet {
         this.userManagerService = (UserManagerService) config.getContext().getSpringService("UserManagerService");
         this.aclManagerService = (AccessControlManagerService) this.getConfig().getContext().getSpringService("AccessControlManagerService");
         this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getSpringService("PortalConfigService");
+        this.layoutMgr = (LayoutManagerService) config.getContext().getSpringService("LayoutManagerService");
 
-        try {
-            this.layoutMgr = (LayoutManagerService) config.getContext().getService(LayoutManagerService.class);
-        } catch (PortletServiceException e) {
-            log.error("Unable to initialize services!", e);
-        }
         portletRegistry = PortletRegistry.getInstance();
         portletMgr = PortletManager.getInstance();
 
