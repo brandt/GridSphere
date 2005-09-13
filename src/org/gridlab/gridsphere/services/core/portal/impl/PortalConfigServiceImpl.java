@@ -5,52 +5,32 @@
  */
 package org.gridlab.gridsphere.services.core.portal.impl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
 /**
  * Portal configuration service is used to manage portal administrative settings
  */
-public class PortalConfigServiceImpl implements PortletServiceProvider, PortalConfigService {
+public class PortalConfigServiceImpl extends HibernateDaoSupport implements PortalConfigService {
 
-    private PortletLog log = SportletLog.getInstance(PortalConfigServiceImpl.class);
+    private AccessControlManagerService accessControlManagerService = null;
 
-    private PersistenceManagerRdbms pm = null;
-
-    public synchronized void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        if (pm == null) pm = PersistenceManagerFactory.createGridSphereRdbms();
+    public void init() {
         PortalConfigSettings configSettings = this.getPortalConfigSettings();
         if (configSettings == null) {
             configSettings = new PortalConfigSettings();
-            boolean canCreate = Boolean.getBoolean(config.getInitParameter("canUserCreateNewAccount"));
-            configSettings.setCanUserCreateAccount(canCreate);
+            configSettings.setCanUserCreateAccount(false);
             // set gridsphere as a default group
             Set defaultGroups = new HashSet();
 
-            PortletServiceFactory factory = SportletServiceFactory.getInstance();
-            try {
-                AccessControlManagerService aclService =
-                        (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, null, true); 
-                defaultGroups.add(aclService.getCoreGroup());
-            } catch (PortletServiceNotFoundException e) {
-                log.error("No core group found!!");
-            }
+            defaultGroups.add(accessControlManagerService.getCoreGroup());
+
             configSettings.setDefaultGroups(defaultGroups);
             // set default theme
             //configSettings.setDefaultTheme(config.getInitParameter("defaultTheme"));
@@ -60,30 +40,25 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
 
     }
 
-    public synchronized void destroy() {
+    public void setAccessControlManagerService(AccessControlManagerService accessControlManagerService) {
+        this.accessControlManagerService = accessControlManagerService;
+    }
 
+    public AccessControlManagerService getAccessControlManagerService() {
+        return accessControlManagerService;
     }
 
     public void savePortalConfigSettings(PortalConfigSettings configSettings) {
-        try {
-            if (configSettings.getOid() == null) {
-                pm.create(configSettings);
-            } else {
-                pm.update(configSettings);
-            }
-        } catch (PersistenceManagerException e) {
-            log.error("Unable to save or update config settings!", e);
-        }
+        System.err.println("saving config settings!!");
+        this.getHibernateTemplate().saveOrUpdate(configSettings);
     }
 
     public PortalConfigSettings getPortalConfigSettings() {
-        PortalConfigSettings settings = null;
-        try {
-            settings = (PortalConfigSettings) pm.restore("select c from " + PortalConfigSettings.class.getName() + " c");
-        } catch (PersistenceManagerException e) {
-            log.error("Unable to retrieve config settings!", e);
+        List list = this.getHibernateTemplate().find("select c from " + PortalConfigSettings.class.getName() + " c");
+        if ((list != null) && (!list.isEmpty())) {
+            return (PortalConfigSettings)list.get(0);
         }
-        return settings;
+        return null;
     }
 
 }

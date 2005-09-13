@@ -1,11 +1,10 @@
 package org.gridlab.gridsphere.services.core.tracker;
 
-import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.services.core.tracker.impl.TrackerAction;
 
 import java.util.List;
 
-public interface TrackerService extends PortletService {
+public interface TrackerService {
 
     public static final String TRACK_PARAM = "gs.trackme";
     public static final String REDIRECT_URL = "gs.url";

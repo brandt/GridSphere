@@ -4,115 +4,74 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Vector;
 
-public class UserManagerServiceImpl implements PortletServiceProvider, UserManagerService {
+public class UserManagerServiceImpl extends HibernateDaoSupport implements UserManagerService {
 
     private static PortletLog log = SportletLog.getInstance(UserManagerServiceImpl.class);
-    private static UserManagerServiceImpl instance = new UserManagerServiceImpl();
 
-    private static PersistenceManagerRdbms pm = null;
     private PasswordManagerService passwordManagerService = null;
     private AccessControlManagerService aclManager = null;
-
-    private static boolean isInitialized = false;
 
     private String jdoUser = SportletUserImpl.class.getName();
     private PortletServiceConfig config = null;
 
     public UserManagerServiceImpl() {
+
     }
 
-    public static UserManagerServiceImpl getInstance() {
-        pm = PersistenceManagerFactory.createGridSphereRdbms();
-        return instance;
+    public void setAccessControlManagerService(AccessControlManagerService accessControlManagerService) {
+        this.aclManager = accessControlManagerService;
     }
 
-    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        log.info("Entering init()");
-        this.config = config;
-        if (!isInitialized) {
-
-            PortletServiceFactory factory = SportletServiceFactory.getInstance();
-            try {
-                passwordManagerService = (PasswordManagerService) factory.createPortletService(PasswordManagerService.class, config.getServletContext(), true);
-                aclManager = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, config.getServletContext(), true);
-            } catch (PortletServiceUnavailableException e) {
-                throw new PortletServiceUnavailableException("Cannot initialize usermanager service", e);
-            } catch (PortletServiceNotFoundException e) {
-                throw new PortletServiceUnavailableException("Cannot initialize usermanager service", e);
-            }
-            //initRootUser(config);
-            log.info("Entering init()");
-            isInitialized = true;
-        }
+    public AccessControlManagerService getAccessControlManagerService() {
+        return aclManager;
     }
 
+    public void setPasswordManagerService(PasswordManagerService passwordManagerService) {
+        this.passwordManagerService = passwordManagerService;
+    }
+
+    public PasswordManagerService getPasswordManagerService() {
+        return passwordManagerService;
+    }
+
+    
     public void initRootUser() {
         log.info("Entering initRootUser()");
         /** 1. Retrieve root user properties **/
-        // Login name
-        String loginName = config.getInitParameter("userid", "root").trim();
-        log.info("Root user login name = " + loginName);
-        /** 2. Create root user account if doesn't exist **/
 
         if (getUsers().isEmpty()) {
-        //User rootUser = getUserByUserName(loginName);
-        //if (rootUser == null) {
-            /* Retrieve root user properties */
-            log.info("Retrieving root user properties");
-            String familyName = config.getInitParameter("familyName", "User").trim();
-            log.info("Root user family name = " + familyName);
-            String givenName = config.getInitParameter("givenName", "Root").trim();
-            log.info("Root user given name = " + givenName);
-            String fullName = config.getInitParameter("fullName", "Root User").trim();
-            log.info("Root user full name = " + givenName);
-            String organization = config.getInitParameter("organization", "GridSphere").trim();
-            log.info("Root user organization = " + organization);
-            String emailAddress = config.getInitParameter("emailAddress", "root@localhost.localdomain").trim();
-            log.info("Root user email address = " + emailAddress);
-            String password = config.getInitParameter("password", "").trim();
-            if (password.equals("")) {
-                log.warn("Root user password is blank. Please create a password as soon as possible!");
-            }
             /* Set root user profile */
 
             /* Create root user account */
             log.info("Creating root user account.");
             SportletUser root = this.createUser();
 
-            root.setUserID(loginName);
-            root.setFamilyName(familyName);
-            root.setGivenName(givenName);
-            root.setFullName(fullName);
-            root.setOrganization(organization);
-            root.setEmailAddress(emailAddress);
+            root.setUserID("root");
+            root.setFamilyName("User");
+            root.setGivenName("Root");
+            root.setFullName("Root User");
+            root.setOrganization("GridSphere");
+            root.setEmailAddress("root@localhost.localdomain");
             this.saveUser(root);
 
             /* Set root user password */
             PasswordEditor editor = passwordManagerService.editPassword(root);
-            editor.setValue(password);
+            editor.setValue("");
             editor.setDateExpires(null);
             passwordManagerService.savePassword(editor);
 
@@ -198,13 +157,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 + this.jdoUser
                 + " uzer "
                 + criteria;
-        try {
-            return pm.restoreList(oql);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving users with criteria " + criteria;
-            log.error(msg, e);
-            return new Vector();
-        }
+        return this.getHibernateTemplate().find(oql);
     }
 
     public List getUsers() {
@@ -262,44 +215,21 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 + " uzer "
                 + criteria;
         log.debug("Retrieving user with OQL: " + oql);
-        try {
-            //log.debug("Retrieved user with OQL: "+oql);
-            return (SportletUserImpl) pm.restore(oql);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving user with criteria " + criteria;
-            log.error(msg, e);
-            return null;
+
+        List users = this.getHibernateTemplate().find(oql);
+        if ((users != null) && (!users.isEmpty())) {
+            return (SportletUserImpl)users.get(0);
         }
+        return null;
     }
 
     private void saveSportletUserImpl(SportletUserImpl user) {
         // Create or update user
-        if (user.getOid() != null) {
-            log.debug("Updating user record for " + user.getUserName());
-            try {
-                pm.update(user);
-            } catch (PersistenceManagerException e) {
-                String msg = "Error updating user";
-                log.error(msg, e);
-            }
-        } else {
-            log.debug("Creating user record for " + user.getUserName());
-            try {
-                pm.create(user);
-            } catch (PersistenceManagerException e) {
-                String msg = "Error creating user";
-                log.error(msg, e);
-            }
-        }
+        this.getHibernateTemplate().saveOrUpdate(user);
     }
 
     private void deleteSportletUserImpl(SportletUserImpl user) {
-        try {
-            pm.delete(user);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error deleting user";
-            log.error(msg, e);
-        }
+        this.getHibernateTemplate().delete(user);
     }
 
     public boolean existsUserWithID(String userID) {
@@ -317,17 +247,10 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 + jdoUser
                 + " uzer "
                 + criteria;
-        try {
-            SportletUserImpl sui = (SportletUserImpl) pm.restore(oql);
-            if (sui == null) {
-                log.debug("User does not exist!");
-            }
-            return (sui != null);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving account request";
-            log.error(msg, e);
-        }
-        return false;
+
+        List users = this.getHibernateTemplate().find(oql);
+        return ((users != null) && (!users.isEmpty()));
+
     }
 
 }

@@ -21,22 +21,10 @@ import java.util.Map;
 
 public class PasswordAuthModule extends BaseAuthModule implements LoginAuthModule {
 
-    private PasswordManagerService passwordManager = null;
-
     private PortletLog log = SportletLog.getInstance(PasswordAuthModule.class);
 
     public PasswordAuthModule(AuthModuleDefinition moduleDef) {
-
         super(moduleDef);
-
-        // Get instance of service factory
-        PortletServiceFactory factory = SportletServiceFactory.getInstance();
-        // Get instance of password manager service
-        try {
-            this.passwordManager = (PasswordManagerService) factory.createPortletService(PasswordManagerService.class, null, true);
-        } catch (Exception e) {
-            log.error("Unable to get instance of password manager service!", e);
-        }
     }
 
     public void checkAuthentication(User user, String password) throws AuthenticationException {
@@ -47,8 +35,12 @@ public class PasswordAuthModule extends BaseAuthModule implements LoginAuthModul
             throw new AuthenticationException("key1");
         }
         // Check that password maps to the given user
+        // Get instance of service factory
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        // Get instance of password manager service
+        PasswordManagerService passwordManager = (PasswordManagerService) factory.createSpringService("PasswordManagerService");
         try {
-            this.passwordManager.validateSuppliedPassword(user, password);
+            passwordManager.validateSuppliedPassword(user, password);
         } catch (InvalidPasswordException e) {
             log.debug("Incorrect password provided.");
             throw new AuthenticationException("key2");

@@ -3,7 +3,6 @@
 package org.gridlab.gridsphere.portlets.core.admin.portlets;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
@@ -27,12 +26,9 @@ public class SessionManagerPortlet extends ActionPortlet {
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        try {
-            userManager = (UserManagerService)getConfig().getContext().getService(UserManagerService.class);
-        } catch (PortletServiceException e) {
-            log.error("Unable to get portlet manager instance", e);
-        }
-        userSessionMgr = UserSessionManager.getInstance();
+
+        this.userManager = (UserManagerService) config.getContext().getSpringService("UserManagerService");
+        this.userSessionMgr = (UserSessionManager) config.getContext().getSpringService("UserSessionManager");
         portletSessionMgr = PortletSessionManager.getInstance();
         DEFAULT_VIEW_PAGE = "showSessions";
     }

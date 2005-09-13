@@ -611,7 +611,7 @@ public abstract class BaseFormEventImpl {
             }
 
             name = vbname.substring(idx + 1);
-            //log.debug("vbname: " + name);
+            log.debug("in BaseFormeventImpl name: " + name);
 
             String[] vals = (String[]) paramsMap.get(uiname);
             

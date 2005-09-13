@@ -52,14 +52,16 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
+
+        userManagerService = (UserManagerService) getPortletConfig().getContext().getSpringService("UserManagerService");
+        aclManagerService = (AccessControlManagerService) getPortletConfig().getContext().getSpringService("AccessControlManagerService");
+        passwordManagerService = (PasswordManagerService) getPortletConfig().getContext().getSpringService("PasswordManagerService");
+        portalConfigService = (PortalConfigService) getPortletConfig().getContext().getSpringService("PortalConfigService");
+
         try {
-            this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
-            this.aclManagerService = (AccessControlManagerService) config.getContext().getService(AccessControlManagerService.class);
-            this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
             this.localeService = (LocaleService) config.getContext().getService(LocaleService.class);
             this.layoutMgr = (LayoutManagerService) config.getContext().getService(LayoutManagerService.class);
             this.tms = (TextMessagingService) config.getContext().getService(TextMessagingService.class);
-            this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }

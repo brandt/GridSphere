@@ -30,15 +30,10 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
 
     private PortletLog log = SportletLog.getInstance(JSRPortletWebApplicationImpl.class);
     private PortletApp portletWebApp = null;
-
-    protected Map portletDefinitions = new Hashtable();
-    protected RequestDispatcher rd = null;
-
-    // PortletLayout engine handles layout.xml
-    //private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
+    private Map portletDefinitions = new Hashtable();
 
     public JSRPortletWebApplicationImpl(ServletContext context, ClassLoader loader) throws PortletException {
-        super(context);
+        super();
         String realPath = context.getRealPath("");
         int l = realPath.lastIndexOf(File.separator);
         String appName = realPath.substring(l + 1);
@@ -53,7 +48,7 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
         loadPortlets(context);
 
         // load services.xml
-        loadJSRServices(context, loader);
+        loadServices(context, loader);
 
         //load roles.xml
         loadRoles(context);
@@ -118,7 +113,6 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
         portletWebApp = null;
         appPortlets = null;
         portletDefinitions = null;
-        rd = null;
     }
 
     public CustomPortletMode[] getCustomPortletModes() {

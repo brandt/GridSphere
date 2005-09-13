@@ -113,6 +113,38 @@ public class SportletContext implements PortletContext {
         if (path == null) throw new PortletException("The provided resource path is null");
         RequestDispatcher rd = null;
 
+        Locale loc = request.getLocale();
+        Client client = request.getClient();
+
+        int lastComponentIndex = path.lastIndexOf("/");
+        String pathPrefix = path.substring(0, lastComponentIndex + 1);
+        String lastComponent = path.substring(lastComponentIndex);
+
+        StringBuffer pathBuffer = new StringBuffer();
+        pathBuffer.append(pathPrefix);
+
+        if (client != null) {
+            String markupName = client.getMarkupName();
+            pathBuffer.append(markupName);
+            int clientIndex = pathBuffer.length();
+            if (loc != null) {
+                String language = loc.getLanguage();
+                String country = loc.getCountry();
+                pathBuffer.append("/");
+                pathBuffer.append(language);
+                int langIndex = pathBuffer.length();
+                if (!country.equals("")) {
+                    pathBuffer.append("_");
+                    pathBuffer.append(country);
+                    pathBuffer.append(lastComponent);
+                } else {
+                    pathBuffer.replace(langIndex, pathBuffer.length(), lastComponent);
+                }
+            } else {
+                pathBuffer.replace(clientIndex, pathBuffer.length(), lastComponent);
+            }
+        }
+
         rd = context.getRequestDispatcher(path);
         try {
             if (rd != null) {
@@ -275,6 +307,18 @@ public class SportletContext implements PortletContext {
     public PortletService getService(Class service, User user)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
         return factory.createUserPortletService(service, user, context, true);
+    }
+
+    /**
+     * This function looks up a Spring framework service with the given bean name.
+     * Using this method a portlet is able to get additional functionality like a
+     * service to get external content over a firewall or to include a servlet.
+     *
+     * @param service the bean name of the service to load
+     * @return the spring service
+     */
+    public Object getSpringService(String beanName) {
+        return factory.createSpringService(beanName);
     }
 
     /**

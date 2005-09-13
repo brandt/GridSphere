@@ -153,6 +153,16 @@ public interface PortletContext extends ServletContext {
             throws PortletServiceUnavailableException, PortletServiceNotFoundException;
 
     /**
+     * This function looks up a Spring framework service with the given bean name.
+     * Using this method a portlet is able to get additional functionality like a
+     * service to get external content over a firewall or to include a servlet.
+     *
+     * @param service the bean name of the service to load
+     * @return the spring service
+     */
+    public Object getSpringService(String beanName);
+
+    /**
      * This function looks up a portlet service with the given classname.
      * The returned service is a service wrapper that contains the User object
      * which can be used for method level access control. An implementation of the

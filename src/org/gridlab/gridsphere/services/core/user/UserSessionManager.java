@@ -14,12 +14,13 @@ import java.util.*;
 public class UserSessionManager implements PortletSessionListener {
 
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
+
     private static UserSessionManager instance = new UserSessionManager();
+
     private PortletLog log = SportletLog.getInstance(UserSessionManager.class);
     private Map userSessions = new Hashtable();
 
-    private UserSessionManager() {
-    }
+    private UserSessionManager() {}
 
     public static UserSessionManager getInstance() {
         return instance;

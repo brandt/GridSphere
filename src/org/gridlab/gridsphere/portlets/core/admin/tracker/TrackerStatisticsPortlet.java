@@ -5,7 +5,8 @@
 package org.gridlab.gridsphere.portlets.core.admin.tracker;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
@@ -16,6 +17,7 @@ import org.gridlab.gridsphere.services.core.tracker.impl.TrackerAction;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.UnavailableException;
 import java.util.*;
@@ -32,14 +34,12 @@ public class TrackerStatisticsPortlet extends ActionPortlet {
 
     // Portlet services
     private TrackerService trackerService = null;
+    public WebApplicationContext springContext = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        try {
-            this.trackerService = (TrackerService) config.getContext().getService(TrackerService.class);
-        } catch (PortletServiceException e) {
-            log.error("Unable to initialize services!", e);
-        }
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        trackerService = (TrackerService)factory.createSpringService("TrackerService");
         log.debug("Exiting initServices()");
         DEFAULT_VIEW_PAGE = "doViewLabels";
     }
