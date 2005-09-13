@@ -53,7 +53,8 @@ public class SetupUsersRolesTest extends SetupTestUsersTest {
 
         GroupRequest req = rootACLService.createGroupEntry();
         req.setUser(jason);
-        req.setRole(PortletRole.ADMIN);
+        PortletRole admin = rootACLService.getRoleByName(PortletRole.ADMIN.getName());
+        req.setRole(admin);
         req.setGroup(coreGroup);
 
 
