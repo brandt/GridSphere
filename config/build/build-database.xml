@@ -18,16 +18,13 @@ Build include file for the GridSphere Portal source code, see build.xml
         <taskdef name="dbtask"
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath">
-            <classpath id="hib.classpth">
-                <pathelement location="config"/>
-            </classpath>
         </taskdef>
         <dbtask
             configdir="${appserver.home}/webapps/gridsphere"
             action="CREATE"/>
     </target>
 
-    <target name="update-database">
+    <target name="update-database" depends="setenv">
         <taskdef name="dbtask"
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
