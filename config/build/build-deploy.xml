@@ -161,6 +161,7 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <copy overwrite="true" todir="${appserver.home}/shared/lib">
             <fileset dir="lib">
+                <exclude name="hsql*.jar"/>
                 <exclude name="*.LICENSE"/>
                 <exclude name="*.txt"/>
             </fileset>
@@ -170,6 +171,12 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <exclude name="gridsphere-provider.jar"/>
                 <exclude name="coreportlets.jar"/>
                 <exclude name="gridsphere-jsp.jar"/>
+            </fileset>
+        </copy>
+
+        <copy overwrite="true" todir="${appserver.home}/common/lib">
+            <fileset dir="lib" defaultexcludes="true">
+                <include name="*hsql*.jar"/>
             </fileset>
         </copy>
 
