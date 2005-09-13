@@ -249,14 +249,22 @@ public class LoginServiceImpl extends HibernateDaoSupport implements LoginServic
 
         Iterator it = modules.iterator();
         log.debug("in login: Active modules are: ");
+
+        // loop thru all modules, if an auth module fails then break loop with auth failure
+        // if auth module is required then it must be executed
         boolean success = false;
         while (it.hasNext()) {
-            success = false;
             LoginAuthModule mod = (LoginAuthModule) it.next();
             log.debug(mod.getModuleName());
             try {
-                mod.checkAuthentication(user, loginPassword);
-                success = true;
+                if (success) {
+                    if (mod.isModuleRequired()) {
+                        mod.checkAuthentication(user, loginPassword);
+                    }                   
+                } else {
+                    mod.checkAuthentication(user, loginPassword);
+                    success = true;
+                }
             } catch (AuthenticationException e) {
                 String errMsg = mod.getModuleError(e.getMessage(), req.getLocale());
                 if (errMsg != null) {
@@ -265,7 +273,6 @@ public class LoginServiceImpl extends HibernateDaoSupport implements LoginServic
                     authEx = e;
                 }
             }
-            if (success) break;
         }
         if (!success) throw authEx;
 
