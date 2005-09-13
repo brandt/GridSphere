@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+  - Application context definition for GridSphere.
+	-->
+<beans>
+
+    <!-- Configures properties files used for variable substitution -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>WEB-INF/CustomPortal/database/hibernate.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Configures Hibernate data source -->
+    <bean id="dataSource"
+          class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+		<property name="driverClassName"><value>${hibernate.connection.driver_class}</value></property>
+		<property name="url"><value>${hibernate.connection.url}</value></property>
+		<property name="username"><value>${hibernate.connection.username}</value></property>
+		<property name="password"><value>${hibernate.connection.password}</value></property>
+	</bean>
+
+	<!-- Hibernate SessionFactory -->
+	<bean id="sessionFactory"
+          class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource"><ref local="dataSource"/></property>
+
+		<!-- References Hibernate OR mapping files. -->
+		<property name="mappingDirectoryLocations">
+			<list>
+		        <value>WEB-INF/persistence</value>
+			</list>
+		</property>
+
+		<!-- Set the type of database; changing this one property will port this to Oracle,
+			 MS SQL etc. -->
+		<property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.c3p0.max_size">${hibernate.c3p0.max_size}</prop>
+                <prop key="hibernate.c3p0.min_size">${hibernate.c3p0.min_size}</prop>
+                <prop key="hibernate.c3p0.timeout">${hibernate.c3p0.timeout}</prop>
+                <prop key="hibernate.c3p0.max_statements">${hibernate.c3p0.max_statements}</prop>
+                <prop key="hibernate.c3p0.idle_test_period">${hibernate.c3p0.idle_test_period}</prop>
+                <prop key="hibernate.c3p0.acquire_increment">${hibernate.c3p0.acquire_increment}</prop>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
+            </props>
+		</property>
+	</bean>
+
+    <bean id="PortletPageFactory"
+          class="org.gridlab.gridsphere.layout.PortletPageFactory"
+          singleton="true">
+        <property name="portalConfigService" ref="PortalConfigService"/>
+    </bean>
+
+    <bean id="PortletLayoutEngine"
+          class="org.gridlab.gridsphere.layout.PortletLayoutEngine"
+          singleton="true">
+         <property name="portletPageFactory" ref="PortletPageFactory"/>
+    </bean>
+
+    <!-- Pass the session factory to our UserDAO -->
+	<bean id="TrackerService"
+          class="org.gridlab.gridsphere.services.core.tracker.impl.TrackerServiceImpl"
+          singleton="true">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="RequestService"
+          class="org.gridlab.gridsphere.services.core.request.impl.RequestServiceImpl"
+          singleton="true"
+          init-method="init"
+          destroy-method="destroy">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="PasswordManagerService"
+          class="org.gridlab.gridsphere.services.core.security.password.impl.PasswordManagerServiceImpl"
+          singleton="true">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="AccessControlManagerService"
+          class="org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl"
+          singleton="true">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="PortalConfigService"
+          class="org.gridlab.gridsphere.services.core.portal.impl.PortalConfigServiceImpl"
+          singleton="true"
+          init-method="init">
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="accessControlManagerService" ref="AccessControlManagerService"/>
+    </bean>
+
+    <bean id="LoginService" class="org.gridlab.gridsphere.services.core.user.impl.LoginServiceImpl"
+          singleton="true"
+          init-method="init">
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="userManagerService" ref="UserManagerService"/>
+    </bean>
+
+    <bean id="UserManagerService"
+          class="org.gridlab.gridsphere.services.core.user.impl.UserManagerServiceImpl"
+          singleton="true">
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="accessControlManagerService" ref="AccessControlManagerService"/>
+        <property name="passwordManagerService" ref="PasswordManagerService"/>
+    </bean>
+
+    <bean id="LayoutManagerService"
+          class="org.gridlab.gridsphere.services.core.layout.impl.LayoutManagerServiceImpl"
+          singleton="true">
+        <property name="portletPageFactory" ref="PortletPageFactory"/>
+    </bean>
+
+    <bean id="transactionManager"
+              class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+              singleton="true">
+           <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+
+</beans>
