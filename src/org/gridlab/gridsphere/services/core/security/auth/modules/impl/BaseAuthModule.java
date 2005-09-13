@@ -84,6 +84,10 @@ public abstract class BaseAuthModule implements LoginAuthModule, Comparable {
         return moduleDef.getModuleActive();
     }
 
+    public boolean isModuleRequired() {
+        return moduleDef.getModuleRequired();
+    }
+
     public void setModuleActive(boolean active) {
         moduleDef.setModuleActive(active);
     }
