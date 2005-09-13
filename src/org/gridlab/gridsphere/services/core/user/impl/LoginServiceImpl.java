@@ -253,30 +253,42 @@ public class LoginServiceImpl extends HibernateDaoSupport implements LoginServic
         // loop thru all modules
         // if auth module is required then it must be executed
         boolean success = false;
+        int priority = -1;
         while (it.hasNext()) {
+            success = false;
             LoginAuthModule mod = (LoginAuthModule) it.next();
             log.debug(mod.getModuleName());
             try {
-                if (success) {
-                    if (mod.isModuleRequired()) {
-                        success = false;
-                        mod.checkAuthentication(user, loginPassword);
-                    }
-                } else {
+                if (!mod.isModuleRequired()) {
+                    log.debug("performing auth module: " + mod.getModuleName());
+                    priority = mod.getModulePriority();
                     mod.checkAuthentication(user, loginPassword);
+                    success = true;
                 }
-                success = true;
             } catch (AuthenticationException e) {
-                String errMsg = mod.getModuleError(e.getMessage(), req.getLocale());
-                if (errMsg != null) {
-                    authEx = new AuthenticationException(errMsg);
-                } else {
-                    authEx = e;
-                }
+                authEx = e;
             }
+            it.remove();
+            if (success) break;
         }
         if (!success) throw authEx;
 
+        // now do modules that are required
+        while (it.hasNext()) {
+            LoginAuthModule mod = (LoginAuthModule) it.next();
+            if (mod.isModuleRequired()) {
+                if (mod.getModulePriority() > priority) {
+                    log.debug("performing filter: " + mod.getModuleName());
+                    try {
+                        mod.checkAuthentication(user, loginPassword);
+                    } catch (AuthenticationException e) {
+                        authEx = e;
+                    }
+                }
+            } else {
+                break;
+            }
+        }
         return user;
     }
 
