@@ -25,7 +25,6 @@ public class AuthModuleDefinition {
     protected int priority = 100;
     protected String moduleImplementation = "";
     protected boolean moduleActive = false;
-    protected boolean moduleRequired = false;
 
     protected List configParamList = new Vector();
     protected Map attributes = new HashMap();
@@ -163,24 +162,6 @@ public class AuthModuleDefinition {
      */
     public void setModuleActive(boolean moduleActive) {
         this.moduleActive = moduleActive;
-    }
-
-    /**
-     * Returns true if this module is forced to execute n addition to any other active modules
-     *
-     * @return true if this module is required
-     */
-    public boolean getModuleRequired() {
-        return moduleRequired;
-    }
-
-    /**
-     * If true, this module will be forced to execute in addition to any other active modules
-     *
-     * @param moduleRequired
-     */
-    public void setModuleRequired(boolean moduleRequired) {
-        this.moduleRequired = moduleRequired;
     }
 
     /**

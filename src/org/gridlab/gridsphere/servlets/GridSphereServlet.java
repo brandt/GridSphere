@@ -25,7 +25,6 @@ import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -64,8 +63,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static LoginService loginService = null;
 
     private static TrackerService trackerService = null;
-
-    private static PortalConfigService portalConfigService = null;
+    //private static TrackerDaoImpl trackerService = null;
 
     private PortletMessageManager messageManager = SportletMessageManager.getInstance();
 
@@ -105,26 +103,26 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         //SportletLog.setConfigureURL(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties"));
         this.context = new SportletContext(config);
         factory = SportletServiceFactory.getInstance();
-        factory.init(config);
+        factory.init();
+        layoutEngine = PortletLayoutEngine.getInstance();
         log.debug("in init of GridSphereServlet");
     }
 
     public synchronized void initializeServices() throws PortletServiceException {
-
-        layoutEngine = (PortletLayoutEngine)factory.createSpringService("PortletLayoutEngine");
-
-        requestService = (RequestService) factory.createSpringService("RequestService");
+        requestService = (RequestService) factory.createPortletService(RequestService.class, getServletConfig().getServletContext(), true);
         log.debug("Creating access control manager service");
-        aclService = (AccessControlManagerService) factory.createSpringService("AccessControlManagerService");
+        aclService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, getServletConfig().getServletContext(), true);
         // create root user in default group if necessary
         log.debug("Creating user manager service");
-        userManagerService = (UserManagerService) factory.createSpringService("UserManagerService");
+        userManagerService = (UserManagerService) factory.createPortletService(UserManagerService.class, getServletConfig().getServletContext(), true);
 
-        loginService = (LoginService) factory.createSpringService("LoginService");
+        loginService = (LoginService) factory.createPortletService(LoginService.class, getServletConfig().getServletContext(), true);
         log.debug("Creating portlet manager service");
         portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, getServletConfig().getServletContext(), true);
-        portalConfigService = (PortalConfigService) factory.createSpringService("PortalConfigService");
-        trackerService = (TrackerService)factory.createSpringService("TrackerService");
+
+        trackerService = (TrackerService) factory.createPortletService(TrackerService.class, getServletConfig().getServletContext(), true);
+
+        //trackerService = (TrackerDaoImpl)factory.getSpringService("trackerDao");
 
     }
 
@@ -179,8 +177,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 initializeServices();
                 // create a root user if none available
                 userManagerService.initRootUser();
-
-                portalConfigService.configureSettings();
                 // initialize all portlets
 
                 PortletResponse portletRes = event.getPortletResponse();

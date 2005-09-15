@@ -8,7 +8,6 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletData;
-import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -28,7 +27,7 @@ import java.util.Map;
  */
 public class SportletData implements PortletData {
 
-    private PortletDataManager dataManager = null;
+    private PersistenceManagerRdbms pm = null;
     private String oid = null;
 
     /**
@@ -52,8 +51,8 @@ public class SportletData implements PortletData {
     public SportletData() {
     }
 
-    public void setPortletDataManager(PortletDataManager dataManager) {
-        this.dataManager = dataManager;
+    public void setPersistenceManager(PersistenceManagerRdbms pm) {
+        this.pm = pm;
     }
 
     public String getOid() {
@@ -109,7 +108,11 @@ public class SportletData implements PortletData {
      * @throws IOException store fails
      */
     public void store() throws IOException {
-        dataManager.store(this);
+        try {
+            pm.update(this);
+        } catch (PersistenceManagerException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
     public Map getAttributes() {

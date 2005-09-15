@@ -54,9 +54,17 @@
         <listener-class>org.apache.log4j.servlet.InitContextListener</listener-class>
     </listener>
 
+
+    <!--
+    <context-param>
+         <param-name>contextConfigLocation</param-name>
+         <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
+
     <listener>
          <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+    -->
 
     <servlet>
         <servlet-name>gridsphere</servlet-name>

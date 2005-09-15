@@ -41,11 +41,16 @@ public class UserManagerPortlet extends ActionPortlet {
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        this.passwordManagerService = (PasswordManagerService)config.getContext().getSpringService("PasswordManagerService");
-        this.userManagerService = (UserManagerService) config.getContext().getSpringService("UserManagerService");
-        this.aclManagerService = (AccessControlManagerService) this.getConfig().getContext().getSpringService("AccessControlManagerService");
-        this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getSpringService("PortalConfigService");
-
+        log.debug("Entering initServices()");
+        try {
+            this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
+            this.aclManagerService = (AccessControlManagerService) config.getContext().getService(AccessControlManagerService.class);
+            this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
+            this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
+        } catch (PortletServiceException e) {
+            log.error("Unable to initialize services!", e);
+        }
+        log.debug("Exiting initServices()");
         DEFAULT_HELP_PAGE = "admin/users/help.jsp";
         DEFAULT_VIEW_PAGE = "doListUsers";
     }

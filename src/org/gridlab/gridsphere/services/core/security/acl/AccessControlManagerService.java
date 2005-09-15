@@ -94,6 +94,8 @@ public interface AccessControlManagerService extends PortletService {
 
     public List getUsers(PortletGroup group, PortletRole role);
 
+    public List getUsersNotInGroup(PortletGroup group);
+
     public boolean isUserInGroup(User user, PortletGroup group);
 
     public PortletRole getRoleInGroup(User user, PortletGroup group);

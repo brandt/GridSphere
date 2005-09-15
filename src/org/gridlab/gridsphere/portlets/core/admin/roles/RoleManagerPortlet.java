@@ -27,9 +27,13 @@ public class RoleManagerPortlet extends ActionPortlet {
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-
-        this.aclManagerService = (AccessControlManagerService) this.getConfig().getContext().getSpringService("AccessControlManagerService");
-                
+        log.debug("Entering initServices()");
+        try {
+            this.aclManagerService = (AccessControlManagerService) config.getContext().getService(AccessControlManagerService.class);
+        } catch (PortletServiceException e) {
+            log.error("Unable to initialize services!", e);
+        }
+        log.debug("Exiting initServices()");
         DEFAULT_HELP_PAGE = "admin/roles/help.jsp";
         DEFAULT_VIEW_PAGE = "doListRoles";
     }

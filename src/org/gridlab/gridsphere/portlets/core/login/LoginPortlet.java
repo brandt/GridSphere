@@ -62,16 +62,14 @@ public class LoginPortlet extends ActionPortlet {
     public void init(PortletConfig config) throws UnavailableException {
       
         super.init(config);
-        userManagerService = (UserManagerService) getPortletConfig().getContext().getSpringService("UserManagerService");
-        aclService = (AccessControlManagerService) getPortletConfig().getContext().getSpringService("AccessControlManagerService");
-        passwordManagerService = (PasswordManagerService) getPortletConfig().getContext().getSpringService("PasswordManagerService");
-        requestService = (RequestService) getPortletConfig().getContext().getSpringService("RequestService");
-        portalConfigService = (PortalConfigService) getPortletConfig().getContext().getSpringService("PortalConfigService");
-        canUserCreateAccount = portalConfigService.getPortalConfigSettings().getCanUserCreateAccount();
-        loginService = (LoginService)getPortletConfig().getContext().getSpringService("LoginService");
         try {
+            userManagerService = (UserManagerService) getPortletConfig().getContext().getService(UserManagerService.class);
+            aclService = (AccessControlManagerService) getPortletConfig().getContext().getService(AccessControlManagerService.class);
+            passwordManagerService = (PasswordManagerService) getPortletConfig().getContext().getService(PasswordManagerService.class);
+            requestService = (RequestService) getPortletConfig().getContext().getService(RequestService.class);
             mailService = (MailService) getPortletConfig().getContext().getService(MailService.class);
-
+            portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
+            canUserCreateAccount = portalConfigService.getPortalConfigSettings().getCanUserCreateAccount();
             PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
             if (settings.getAttribute(SEND_USER_FORGET_PASSWORD) == null) {
                 settings.setAttribute(SEND_USER_FORGET_PASSWORD, Boolean.TRUE.toString());
@@ -80,7 +78,7 @@ public class LoginPortlet extends ActionPortlet {
                 settings.setAttribute(SAVE_PASSWORDS, Boolean.TRUE.toString());
             }
             portalConfigService.savePortalConfigSettings(settings);
-
+            loginService = (LoginService)getPortletConfig().getContext().getService(LoginService.class);
         } catch (PortletServiceException e) {
             throw new UnavailableException("Unable to initialize services");
         }

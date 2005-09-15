@@ -4,27 +4,38 @@
 package org.gridlab.gridsphere.services.core.security.password.impl;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.Password;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
-import java.util.List;
 
-public class PasswordManagerServiceImpl extends HibernateDaoSupport implements PasswordManagerService {
+public class PasswordManagerServiceImpl
+        implements PortletServiceProvider, PasswordManagerService {
 
     private static PortletLog _log = SportletLog.getInstance(PasswordManagerServiceImpl.class);
+    private static PersistenceManagerRdbms pm = null;
     private String userPasswordImpl = PasswordImpl.class.getName();
 
     public PasswordManagerServiceImpl() {
 
+    }
+
+    public void init(PortletServiceConfig config) {
+        pm = PersistenceManagerFactory.createGridSphereRdbms();
+    }
+
+    public void destroy() {
     }
 
     public Password getPassword(User user) {
@@ -41,9 +52,10 @@ public class PasswordManagerServiceImpl extends HibernateDaoSupport implements P
         String query = "select pw from "
                 + this.userPasswordImpl
                 + " pw where pw.sportletUser.oid='" + user.getID() + "'";
-        List passes = this.getHibernateTemplate().find(query);
-        if ((passes != null) && (!passes.isEmpty())) {
-            password = (PasswordImpl)passes.get(0);
+        try {
+            password = (PasswordImpl)pm.restore(query);
+        } catch (PersistenceManagerException e) {
+            _log.error("Unable to retrieve password for user", e);
         }
         return password;
     }
@@ -85,7 +97,11 @@ public class PasswordManagerServiceImpl extends HibernateDaoSupport implements P
                 } catch (NoSuchAlgorithmException e) {
                     throw new PersistenceManagerException("Can't get MD5 algorithm! " + e.getMessage());
                 }
-                this.getHibernateTemplate().saveOrUpdate(pass);
+                if (pass.getOid() != null) {
+                    pm.update(pass);
+                } else {
+                    pm.create(pass);
+                }
 
             }
         } catch (PersistenceManagerException e) {
@@ -99,18 +115,24 @@ public class PasswordManagerServiceImpl extends HibernateDaoSupport implements P
             md5.update(pass.getBytes());
             return toHex(md5.digest());
         } catch (NoSuchAlgorithmException e) {
-            _log.error("NoSuchAlgorithm MD5!", e);
+            _log.error("NoSuchAlgorithm MD5!", e);    
         }
         return null;
     }
 
     public void saveHashedPassword(Password editor) {
-
-        if (editor instanceof PasswordImpl) {
-            PasswordImpl pass = (PasswordImpl) editor;
-            this.getHibernateTemplate().saveOrUpdate(pass);
+        try {
+            if (editor instanceof PasswordImpl) {
+                PasswordImpl pass = (PasswordImpl) editor;
+                if (pass.getOid() != null) {
+                    pm.update(pass);
+                } else {
+                    pm.create(pass);
+                }
+            }
+        } catch (PersistenceManagerException e) {
+            _log.error("Unable to create or update password for user", e);
         }
-
     }
 
     public void deletePassword(User user) {
@@ -121,7 +143,11 @@ public class PasswordManagerServiceImpl extends HibernateDaoSupport implements P
     }
 
     private void deletePassword(Password password) {
-        this.getHibernateTemplate().delete(password);
+        try {
+            pm.delete(password);
+        } catch (PersistenceManagerException e) {
+            _log.error("Unable to delete password", e);
+        }
     }
 
     public boolean hasPassword(User user) {

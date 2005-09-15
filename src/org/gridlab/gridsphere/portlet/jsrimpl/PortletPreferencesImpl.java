@@ -4,6 +4,8 @@
  */
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value;
 
@@ -11,6 +13,7 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.PreferencesValidator;
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -42,7 +45,7 @@ public class PortletPreferencesImpl implements PortletPreferences {
 
     private transient Map defaultPrefsMap = new HashMap();
     private transient PreferencesValidator validator = null;
-    private transient PortletPreferencesManager prefsManager = null;
+    private transient PersistenceManagerRdbms pm = null;
 
     private String oid = null;
 
@@ -66,7 +69,7 @@ public class PortletPreferencesImpl implements PortletPreferences {
     }
 
     public void init(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences portletPrefs) {
-        //Map prefsMap = new HashMap();
+        Map prefsMap = new HashMap();
         if (portletPrefs != null) {
             Preference[] prefs = portletPrefs.getPreference();
             for (int i = 0; i < prefs.length; i++) {
@@ -78,7 +81,7 @@ public class PortletPreferencesImpl implements PortletPreferences {
                 for (int i = 0; i < prefs.length; i++) {
                     String name = prefs[i].getName().getContent();
                     PersistencePreferenceAttribute ppa = new PersistencePreferenceAttribute();
-                    //prefsMap.put(prefs[i].getName().getContent(), prefs[i]);
+                    prefsMap.put(prefs[i].getName().getContent(), prefs[i]);
                     ppa.setName(name);
                     String[] vals = new String[prefs[i].getValueCount()];
                     Value[] prefVals = prefs[i].getValue();
@@ -93,8 +96,8 @@ public class PortletPreferencesImpl implements PortletPreferences {
         }
     }
 
-    public void setPreferencesManager(PortletPreferencesManager prefsManager) {
-        this.prefsManager = prefsManager;
+    public void setPersistenceManager(PersistenceManagerRdbms pm) {
+        this.pm = pm;
     }
 
     public String getOid() {
@@ -374,7 +377,15 @@ public class PortletPreferencesImpl implements PortletPreferences {
     public void store() throws java.io.IOException, ValidatorException {
         if (isRender) throw new IllegalStateException("Cannot persist PortletPreferences in render method!");
         if (validator != null) validator.validate(this);
-        prefsManager.store(this);
+        try {
+            if (this.getOid() != null) {
+                pm.update(this);
+            } else {
+                pm.create(this);
+            }
+        } catch (PersistenceManagerException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
     /**

@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.layout.PortletPage;
 import org.gridlab.gridsphere.layout.PortletTabRegistry;
 import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
@@ -34,10 +35,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         log.debug("Entering initServices()");
-        this.aclManagerService = (AccessControlManagerService) this.getConfig().getContext().getSpringService("AccessControlManagerService");
-        this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getSpringService("PortalConfigService");        
-        this.layoutMgr = (LayoutManagerService) config.getContext().getSpringService("LayoutManagerService");
-
+        try {
+            this.layoutMgr = (LayoutManagerService) config.getContext().getService(LayoutManagerService.class);
+            this.portalConfigService = (PortalConfigService) config.getContext().getService(PortalConfigService.class);
+            aclManagerService = (AccessControlManagerService) this.getConfig().getContext().getService(AccessControlManagerService.class);
+        } catch (PortletServiceException e) {
+            log.error("Unable to initialize services!", e);
+        }
         log.debug("Exiting initServices()");
         //portletMgr = PortletManager.getInstance();
 

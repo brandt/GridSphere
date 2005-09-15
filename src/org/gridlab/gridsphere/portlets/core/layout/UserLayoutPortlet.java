@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.layout.PortletTab;
 import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
@@ -33,11 +34,16 @@ public class UserLayoutPortlet extends ActionPortlet {
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
+        try {
+            this.layoutMgr = (LayoutManagerService) config.getContext().getService(LayoutManagerService.class);
+            this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
 
-        this.userManagerService = (UserManagerService) config.getContext().getSpringService("UserManagerService");
-        this.layoutMgr = (LayoutManagerService) config.getContext().getSpringService("LayoutManagerService");
+        } catch (PortletServiceException e) {
+            log.error("Unable to initialize services!", e);
+        }
 
         String themesPath = getPortletConfig().getContext().getRealPath("/themes");
+      
         File f = new File(themesPath);
         if (f.isDirectory()) {
             themes = f.list();

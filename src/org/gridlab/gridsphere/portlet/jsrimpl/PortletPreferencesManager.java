@@ -5,28 +5,44 @@
  */
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import javax.portlet.PreferencesValidator;
-import javax.portlet.PortletPreferences;
-import java.util.List;
 
 /**
  * The <code>PortletPreferencesManager</code> provides a a singleton implementation of the <code>PortletDataManager</code>
  * used for loading and storing <code>PortletData</code>.
  */
-public class PortletPreferencesManager extends HibernateDaoSupport {
+public class PortletPreferencesManager {
 
     private static PortletLog log = SportletLog.getInstance(PortletPreferencesManager.class);
+    private static PersistenceManagerRdbms pm = null;
+    private static PortletPreferencesManager instance = null;
 
     /**
      * Default instantiation is disallowed
      */
-    public PortletPreferencesManager() {}
+    private PortletPreferencesManager() {
+        pm = PersistenceManagerFactory.createGridSphereRdbms();    
+    }
+
+    /**
+     * Returns an instance of a <code>PortletDataManager</code>
+     *
+     * @return an instance of a <code>PortletDataManager</code>
+     */
+    public static synchronized PortletPreferencesManager getInstance() {
+        if (instance == null) {
+            instance = new PortletPreferencesManager();
+        }
+        return instance;
+    }
 
     /**
      * Returns the users portlet data for the specified portlet
@@ -47,10 +63,7 @@ public class PortletPreferencesManager extends HibernateDaoSupport {
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefDesc = appPortlet.getPortletPreferences();
 
         try {
-            List prefsList = this.getHibernateTemplate().find(command);
-            if ((prefsList != null) && (!prefsList.isEmpty())) {
-                prefs = (PortletPreferencesImpl)prefsList.get(0);
-            } 
+            prefs = (PortletPreferencesImpl) pm.restore(command);
             if (prefs == null) {
                 // we have no prefs in the db so create one from the xml...
                 log.debug("No prefs exist-- storing prefs for user: " + user.getID() + " portlet: " + portletID);
@@ -60,7 +73,7 @@ public class PortletPreferencesManager extends HibernateDaoSupport {
             } else {
                 log.debug("Retrieved prefs for user: " + user.getID() + " portlet: " + portletID);
             }
-            prefs.setPreferencesManager(this);
+            prefs.setPersistenceManager(pm);
             prefs.init(prefDesc);
             if (prefDesc != null) {
                 org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator v = prefDesc.getPreferencesValidator();
@@ -76,6 +89,9 @@ public class PortletPreferencesManager extends HibernateDaoSupport {
                     }
                 }
             }
+
+            //prefs.store();
+
             prefs.setRender(isRender);
         } catch (Exception e) {
             log.error("Error attempting to restore persistent preferences: ", e);
@@ -83,7 +99,4 @@ public class PortletPreferencesManager extends HibernateDaoSupport {
         return prefs;
     }
 
-    public void store(PortletPreferences prefs) {
-        this.getHibernateTemplate().saveOrUpdate(prefs);
-    }
 }

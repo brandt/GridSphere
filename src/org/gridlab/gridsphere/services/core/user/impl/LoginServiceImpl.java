@@ -4,10 +4,19 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
@@ -16,10 +25,9 @@ import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descripto
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleCollection;
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
 import org.gridlab.gridsphere.services.core.user.LoginService;
+import org.gridlab.gridsphere.services.core.user.LoginUserModule;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -31,33 +39,21 @@ import java.util.*;
  * selected which uses the GridSphere database to store passwords. Other authorization modules
  * can use external directory servers such as LDAP, etc
  */
-public class LoginServiceImpl extends HibernateDaoSupport implements LoginService {
+public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
-
+    private UserSessionManager userSessionManager = UserSessionManager.getInstance();
     private PortletLog log = SportletLog.getInstance(LoginServiceImpl.class);
+    private static boolean inited = false;
     private static Map authModules = new HashMap();
     private static Map activeAuthModules = new HashMap();
-    private UserManagerService userManagerService = null;
-    private UserSessionManager userSessionManager = null;
+    private static LoginUserModule activeLoginModule = null;
+
+    private PersistenceManagerRdbms pm = null;
 
     private String authMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/auth-modules-mapping.xml");
     private String authModulesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
 
     public LoginServiceImpl() {
-
-    }
-
-    public void init() {
-        System.err.println("in init of loaginserviceimpl");
-        loadAuthModules(authModulesPath, Thread.currentThread().getContextClassLoader());
-    }
-
-    public void setUserSessionManager(UserSessionManager userSessionManager) {
-        this.userSessionManager = userSessionManager;
-    }
-
-    public void setUserManagerService(UserManagerService userManagerService) {
-        this.userManagerService = userManagerService;
     }
 
     public void addActiveAuthModule(User user, LoginAuthModule authModule) {
@@ -66,7 +62,11 @@ public class LoginServiceImpl extends HibernateDaoSupport implements LoginServic
             entry.setUserId(user.getID());
             entry.setModuleClassName(authModule.getClass().getName());
             entry.setAttributes(authModule.getAttributes());
-            this.getHibernateTemplate().saveOrUpdate(entry);
+            try {
+                pm.create(entry);
+            } catch (PersistenceManagerException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -82,35 +82,41 @@ public class LoginServiceImpl extends HibernateDaoSupport implements LoginServic
         }
         return vals;
     }
-
     public boolean hasActiveAuthModule(User user, String moduleClassName) {
         AuthModuleEntry authMod = null;
-        String oql = "from " + AuthModuleEntry.class.getName() +
-                " as authentry where authentry.UserId='" + user.getID() + "'" +
-                " and authentry.ModuleClassName='" + moduleClassName + "'";
-        log.debug("Query with " + oql);
-        List mods = this.getHibernateTemplate().find(oql);
-        if ((mods != null) && (!mods.isEmpty())) {
-            authMod = (AuthModuleEntry)mods.get(0);
+        try {
+            String oql = "from " + AuthModuleEntry.class.getName() +
+                    " as authentry where authentry.UserId='" + user.getID() + "'" +
+                    " and authentry.ModuleClassName='" + moduleClassName + "'";
+            log.debug("Query with " + oql);
+            authMod = (AuthModuleEntry) pm.restore(oql);
+        } catch (PersistenceManagerException e) {
+            e.printStackTrace();
         }
         return (authMod != null);
     }
 
     public void removeActiveAuthModule(User user, String moduleClassName) {
-        String oql = "from " + AuthModuleEntry.class.getName() +
-                " as authentry where authentry.UserId='" + user.getID() + "'" +
-                " and authentry.ModuleClassName='" + moduleClassName + "'";
-        log.debug("Query with " + oql);
-        this.getHibernateTemplate().delete(oql);
+        try {
+            String oql = "from " + AuthModuleEntry.class.getName() +
+                    " as authentry where authentry.UserId='" + user.getID() + "'" +
+                    " and authentry.ModuleClassName='" + moduleClassName + "'";
+            log.debug("Query with " + oql);
+            pm.deleteList(oql);
+        } catch (PersistenceManagerException e) {
+            e.printStackTrace();
+        }
     }
 
     public List getActiveAuthModules(User user) {
         List result = null;
-
-        String oql = "from " + AuthModuleEntry.class.getName() + " as authentry where authentry.UserId='" + user.getID() + "'";
-        log.debug("Query with " + oql);
-        result = this.getHibernateTemplate().find(oql);
-
+        try {
+            String oql = "from " + AuthModuleEntry.class.getName() + " as authentry where authentry.UserId='" + user.getID() + "'";
+            log.debug("Query with " + oql);
+            result = pm.restoreList(oql);
+        } catch (PersistenceManagerException e) {
+            e.printStackTrace();
+        }
         // now convert AuthModuleEntry into the LoginAuthModule concrete class
         List mods = new Vector();
         if (result != null) {
@@ -125,7 +131,7 @@ public class LoginServiceImpl extends HibernateDaoSupport implements LoginServic
         if (mods.isEmpty()) {
             Iterator it = activeAuthModules.values().iterator();
             while (it.hasNext()) {
-                LoginAuthModule module = (LoginAuthModule)it.next();
+                LoginAuthModule module = (LoginAuthModule)it.next();                
                 //System.err.println("found nothing-- adding " + module.getModuleName());
                 this.addActiveAuthModule(user, module);
                 mods.add(module);
@@ -143,8 +149,48 @@ public class LoginServiceImpl extends HibernateDaoSupport implements LoginServic
         return mods;
     }
 
+    public LoginUserModule getActiveLoginModule() {
+        return activeLoginModule;
+    }
+
+    public void setActiveLoginModule(LoginUserModule loginModule) {
+        activeLoginModule = loginModule;
+    }
+
     public List getActiveUserIds() {
         return userSessionManager.getUserIds();
+    }
+
+    /**
+     * Initializes the portlet service.
+     * The init method is invoked by the portlet container immediately after a portlet service has
+     * been instantiated and before it is passed to the requestor.
+     *
+     * @param config the service configuration
+     * @throws PortletServiceUnavailableException
+     *          if an error occurs during initialization
+     */
+    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+        log.debug("in login service init");
+        if (!inited) {
+            pm = PersistenceManagerFactory.createGridSphereRdbms();
+
+            String loginClassName = config.getInitParameter("LOGIN_MODULE");
+            try {
+                PortletServiceFactory factory = SportletServiceFactory.getInstance();
+                Class loginModClass = Class.forName(loginClassName);
+                activeLoginModule = (LoginUserModule) factory.createPortletService(loginModClass, config.getServletContext(), true);
+            } catch (ClassNotFoundException e) {
+                log.error("Unable to create class from class name: " + loginClassName, e);
+            } catch (PortletServiceNotFoundException e) {
+                log.error("Unable to get service from portlet service factory: " + loginClassName, e);
+            }
+            log.debug("Created a login module service: " + loginClassName);
+
+            loadAuthModules(authModulesPath, Thread.currentThread().getContextClassLoader());
+
+            inited = true;
+        }
     }
 
     public void loadAuthModules(String authModsPath, ClassLoader classloader) {
@@ -161,13 +207,14 @@ public class LoginServiceImpl extends HibernateDaoSupport implements LoginServic
                 AuthModuleDefinition def = (AuthModuleDefinition)it.next();
                 log.info(def.toString());
                 String modClassName = def.getModuleImplementation();
+
                 // before initializing check if we know about this mod in the db
                 AuthModuleDefinition am = getAuthModuleDefinition(def.getModuleName());
                 if (am != null) {
                     def.setModulePriority(am.getModulePriority());
                     def.setModuleActive(am.getModuleActive());
                 } else {
-                    this.getHibernateTemplate().saveOrUpdate(def);
+                    pm.saveOrUpdate(def);
                 }
                 Class c = Class.forName(modClassName, true, classloader);
                 Class[] parameterTypes = new Class[]{AuthModuleDefinition.class};
@@ -190,7 +237,7 @@ public class LoginServiceImpl extends HibernateDaoSupport implements LoginServic
             if (am != null) {
                 am.setModulePriority(authModule.getModulePriority());
                 am.setModuleActive(authModule.isModuleActive());
-                this.getHibernateTemplate().update(am);
+                pm.update(am);
                 authModules.put(am.getModuleImplementation(), authModule);
                 // in case old auth module was active and new one is not remove it first then reinsert if active
                 activeAuthModules.remove(am.getModuleImplementation());
@@ -203,23 +250,34 @@ public class LoginServiceImpl extends HibernateDaoSupport implements LoginServic
 
     private AuthModuleDefinition getAuthModuleDefinition(String moduleName) {
         AuthModuleDefinition am = null;
-        List mods = this.getHibernateTemplate().find("select authmodule from " + AuthModuleDefinition.class.getName() +
+        try {
+            am = (AuthModuleDefinition)pm.restore("select authmodule from " + AuthModuleDefinition.class.getName() +
                 " authmodule where authmodule.ModuleName='" +
                 moduleName + "'");
-        if ((mods != null) && (!mods.isEmpty())) {
-            am = (AuthModuleDefinition)mods.get(0);
+        } catch (PersistenceManagerException e) {
+            e.printStackTrace();
         }
         return am;
     }
 
     public List getAuthModuleDefinitions() {
         List mods = null;
-
-        mods = this.getHibernateTemplate().find("select authmod from "
+        try {
+            mods = pm.restoreList("select authmod from "
                 + AuthModuleDefinition.class.getName()
                 + " authmod ");
-
+        } catch (PersistenceManagerException e) {
+            e.printStackTrace();
+        }
         return mods;
+    }
+
+
+    /**
+     * The destroy method is invoked by the portlet container to destroy a portlet service.
+     * This method must free all resources allocated to the portlet service.
+     */
+    public void destroy() {
     }
 
     public User login(PortletRequest req)
@@ -232,7 +290,7 @@ public class LoginServiceImpl extends HibernateDaoSupport implements LoginServic
         }
 
         // first get user
-        User user = userManagerService.getLoggedInUser(loginName);
+        User user = activeLoginModule.getLoggedInUser(loginName);
 
         if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
 
@@ -249,46 +307,26 @@ public class LoginServiceImpl extends HibernateDaoSupport implements LoginServic
 
         Iterator it = modules.iterator();
         log.debug("in login: Active modules are: ");
-
-        // loop thru all modules
-        // if auth module is required then it must be executed
         boolean success = false;
-        int priority = -1;
         while (it.hasNext()) {
             success = false;
             LoginAuthModule mod = (LoginAuthModule) it.next();
             log.debug(mod.getModuleName());
             try {
-                if (!mod.isModuleRequired()) {
-                    log.debug("performing auth module: " + mod.getModuleName());
-                    priority = mod.getModulePriority();
-                    mod.checkAuthentication(user, loginPassword);
-                    success = true;
-                }
+                mod.checkAuthentication(user, loginPassword);
+                success = true;
             } catch (AuthenticationException e) {
-                authEx = e;
+                String errMsg = mod.getModuleError(e.getMessage(), req.getLocale());
+                if (errMsg != null) {
+                    authEx = new AuthenticationException(errMsg);
+                } else {
+                    authEx = e;
+                }
             }
-            it.remove();
             if (success) break;
         }
         if (!success) throw authEx;
 
-        // now do modules that are required
-        while (it.hasNext()) {
-            LoginAuthModule mod = (LoginAuthModule) it.next();
-            if (mod.isModuleRequired()) {
-                if (mod.getModulePriority() > priority) {
-                    log.debug("performing filter: " + mod.getModuleName());
-                    try {
-                        mod.checkAuthentication(user, loginPassword);
-                    } catch (AuthenticationException e) {
-                        authEx = e;
-                    }
-                }
-            } else {
-                break;
-            }
-        }
         return user;
     }
 

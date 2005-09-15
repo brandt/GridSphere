@@ -19,13 +19,12 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServic
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletConfig;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.net.URL;
@@ -41,7 +40,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
     private static PortletLog log = SportletLog.getInstance(SportletServiceFactory.class);
     private static SportletServiceFactory instance = null;
-    private static AccessControlManagerService aclManager = null;
+    private static AccessControlManagerServiceImpl aclManager = AccessControlManagerServiceImpl.getInstance();
     private static PortletSessionManager portletSessionManager = PortletSessionManager.getInstance();
     private static UserSessionManager userSessionManager = UserSessionManager.getInstance();
 
@@ -65,6 +64,8 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
     private static Hashtable webappServices = new Hashtable();
 
+    //public static String servicesMappingPath = null;
+
     public static URL servicesMappingStream = null;
 
     public static Hashtable springBeans = new Hashtable();
@@ -83,15 +84,14 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         return instance;
     }
 
-    public void init(ServletConfig config) throws PortletServiceException {
+    public void init() throws PortletServiceException {
         // Reads in the service definitions from the xml file and stores them in allServices
         // organized according to service interface keys and service definition values
-        String servicesPath = config.getServletContext().getRealPath("/WEB-INF/GridSphereServices.xml");
+        String servicesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/GridSphereServices.xml");
         //servicesMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
-        addServices(config.getServletContext(), servicesPath);
+        addServices(GridSphereConfig.getServletContext(), servicesPath);
         // playing with Spring
-        addSpringServices(GridSphereConfig.getServletContext());
-        aclManager = (AccessControlManagerService)springBeans.get("AccessControlManager");
+        //addSpringServices(GridSphereConfig.getServletContext());
     }
 
     public void login(PortletRequest req) throws PortletException {
@@ -280,6 +280,17 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
 
         PortletServiceProvider psp = null;
+        /*
+        try {
+        psp = (PortletServiceProvider)springContext.getBean(service.getName());
+        if (psp != null) {
+            System.err.println("Actually found " + service.getName() + " from spring!");
+            return psp;
+        }
+        } catch (BeansException e) {
+            log.info("Unable to find bean :" + service.getName());
+        }
+        */
 
         // see if we already have an instance of this service
         if (service == null) {

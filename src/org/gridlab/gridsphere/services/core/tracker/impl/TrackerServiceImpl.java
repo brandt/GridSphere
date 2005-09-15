@@ -1,16 +1,31 @@
 package org.gridlab.gridsphere.services.core.tracker.impl;
 
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.util.Calendar;
 import java.util.List;
 
-public class TrackerServiceImpl extends HibernateDaoSupport implements TrackerService {
+public class TrackerServiceImpl implements TrackerService, PortletServiceProvider {
+
+    private PersistenceManagerRdbms pm = null;
 
     private PortletLog log = SportletLog.getInstance(TrackerServiceImpl.class);
+
+    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+        pm = PersistenceManagerFactory.createGridSphereRdbms();
+    }
+
+    public void destroy() {
+
+    }
 
     /**
      * Persists a tracking label to the GridSphere database
@@ -25,32 +40,56 @@ public class TrackerServiceImpl extends HibernateDaoSupport implements TrackerSe
         info.setDate(Calendar.getInstance().getTime().getTime());
         info.setUserAgent(userAgent);
         info.setUserName(userName);
-
-        this.getHibernateTemplate().saveOrUpdate(info);
+        try {
+            pm.saveOrUpdate(info);
+        } catch (PersistenceManagerException e) {
+            log.error("Unable to save tracker info", e);
+        }
     }
 
     public List getTrackingActions() {
-        return this.getHibernateTemplate().find("from " + TrackerAction.class.getName() + " as trackeraction");
+        List actions = null;
+        try {
+            actions = pm.restoreList("from " + TrackerAction.class.getName() + " as trackeraction");
+        } catch (PersistenceManagerException e) {
+            log.error("Unable to retrieve tracker actions");
+        }
+        return actions;
     }
 
     public TrackerAction getTrackingAction(String actionName) {
-        List actions = this.getHibernateTemplate().find("from " + TrackerAction.class.getName() + " as trackeraction where trackeraction.Action=\'" + actionName + "'");
-        if ((actions != null) && (!actions.isEmpty())) {
-            return (TrackerAction)actions.get(0);
+        TrackerAction action = null;
+        try {
+            action = (TrackerAction)pm.restore("from " + TrackerAction.class.getName() + " as trackeraction where trackeraction.Action=\'" + actionName + "'");
+        } catch (PersistenceManagerException e) {
+            log.error("Unable to retrieve tracker actions");
         }
-        return null;
+        return action;
     }
 
     public void addTrackingAction(TrackerAction action) {
-        this.getHibernateTemplate().saveOrUpdate(action);
+        try {
+            pm.saveOrUpdate(action);
+        } catch (PersistenceManagerException e) {
+            log.error("Unable to save new tracker action: " + action);
+        }
     }
 
     public void removeTrackingAction(String action) {
-        this.getHibernateTemplate().delete(action);
+        try {
+            TrackerAction trackerAction = getTrackingAction(action);
+            if (trackerAction != null) pm.delete(trackerAction);
+        } catch (PersistenceManagerException e) {
+            log.error("Unable to delete tracker action: " + action);
+        }
     }
 
     public void clearTrackingActions() {
-        this.getHibernateTemplate().delete("from " + TrackerAction.class.getName() + " as trackeraction ");
+        try {
+            pm.deleteList("from " + TrackerAction.class.getName() + " as trackeraction ");
+        } catch (PersistenceManagerException e) {
+            log.error("Unable to clear tracker actions");
+        }
     }
 
     /**
@@ -59,7 +98,13 @@ public class TrackerServiceImpl extends HibernateDaoSupport implements TrackerSe
      * @return a list of the available labels
      */
     public List getTrackingLabels() {
-        return this.getHibernateTemplate().find("select tracker.Label from " +  TrackerInfo.class.getName() + " as tracker");
+        List result = null;
+        try {
+            result = pm.restoreList("select tracker.Label from " +  TrackerInfo.class.getName() + " as tracker");
+        } catch (PersistenceManagerException e) {
+         log.error("Could not retrieve labels :"+e);
+        }
+        return result;
     }
 
     /**
@@ -68,9 +113,20 @@ public class TrackerServiceImpl extends HibernateDaoSupport implements TrackerSe
      * @return a list of TrackerInfo objects for the provided label
      */
     public List getTrackingInfoByLabel(String label) {
-        return this.getHibernateTemplate().find("from " + TrackerInfo.class.getName() + " as tracker where tracker.Label='" + label + "'");
+        return queryDB("where tracker.Label='" + label + "'");
     }
 
+    private List queryDB(String condition) {
+        List result = null;
+        try {
+            // try to get the address
+            result = pm.restoreList("from " + TrackerInfo.class.getName() + " as tracker " + condition);
+        } catch (PersistenceManagerException e) {
+            log.error("Could not retrieve info :"+e);
+        }
+
+        return result;
+    }
 
     public boolean hasTrackingAction(String actionName) {
         TrackerAction ta = getTrackingAction(actionName);

@@ -30,10 +30,15 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
 
     private PortletLog log = SportletLog.getInstance(JSRPortletWebApplicationImpl.class);
     private PortletApp portletWebApp = null;
-    private Map portletDefinitions = new Hashtable();
+
+    protected Map portletDefinitions = new Hashtable();
+    protected RequestDispatcher rd = null;
+
+    // PortletLayout engine handles layout.xml
+    //private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
 
     public JSRPortletWebApplicationImpl(ServletContext context, ClassLoader loader) throws PortletException {
-        super();
+        super(context);
         String realPath = context.getRealPath("");
         int l = realPath.lastIndexOf(File.separator);
         String appName = realPath.substring(l + 1);
@@ -48,7 +53,7 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
         loadPortlets(context);
 
         // load services.xml
-        loadServices(context, loader);
+        loadJSRServices(context, loader);
 
         //load roles.xml
         loadRoles(context);
@@ -109,10 +114,11 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
         log.debug("unloading portlet services: ");
         SportletServiceFactory factory = SportletServiceFactory.getInstance();
         factory.shutdownServices(webApplicationName);
-        //PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
+        PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
         portletWebApp = null;
         appPortlets = null;
         portletDefinitions = null;
+        rd = null;
     }
 
     public CustomPortletMode[] getCustomPortletModes() {

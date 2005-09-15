@@ -8,7 +8,6 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.Description;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.servlets.GridSphereServletTest;
 import org.gridlab.gridsphere.servlets.GridSphereServletTest;
@@ -59,7 +58,7 @@ public class ServiceDescriptorTest extends GridSphereServletTest {
 
         SportletServiceDefinition serviceDef = (SportletServiceDefinition) list.get(0);
         assertEquals("Test Portlet Service", serviceDef.getServiceName());
-        assertEquals("This is a Test Portlet Service", ((Description)serviceDef.getServiceDescription().get(0)).getText());
+        assertEquals("This is a Test Portlet Service", serviceDef.getServiceDescription());
         assertEquals("org.gridlab.gridsphere.services.test.PortletTestService", serviceDef.getServiceInterface());
         assertEquals("org.gridlab.gridsphere.services.test.PortletTestServiceImpl", serviceDef.getServiceImplementation());
         assertEquals(false, serviceDef.getUserRequired());
@@ -72,7 +71,7 @@ public class ServiceDescriptorTest extends GridSphereServletTest {
 
         serviceDef = (SportletServiceDefinition) list.get(1);
         assertEquals("User Test Portlet Service", serviceDef.getServiceName());
-        assertEquals("This is a User Test Portlet Service", ((Description)(serviceDef.getServiceDescription().get(0))).getText());
+        assertEquals("This is a User Test Portlet Service", serviceDef.getServiceDescription());
         assertEquals("org.gridlab.gridsphere.services.test.PortletTestService", serviceDef.getServiceInterface());
         assertEquals("org.gridlab.gridsphere.services.test.PortletTestServiceImpl", serviceDef.getServiceImplementation());
         assertEquals(true, serviceDef.getUserRequired());

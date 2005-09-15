@@ -4,6 +4,9 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
@@ -22,8 +25,9 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private static String DEFAULT_THEME = "default";
 
-    private PortletSessionManager sessionManager = PortletSessionManager.getInstance();
-    protected PortalConfigService portalConfigService = null;
+    private static PortletPageFactory instance = null;
+    private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
+    protected static PortalConfigService portalConfigService = null;
 
     private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
@@ -45,14 +49,9 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private static Map guests = new Hashtable();
 
-    public PortletPageFactory() {}
 
-    public void setPortalConfigService(PortalConfigService portalConfigService) {
-        this.portalConfigService = portalConfigService;
-    }
+    private PortletPageFactory() {
 
-    public PortalConfigService getPortalConfigService() {
-        return portalConfigService;
     }
 
     public void init() throws PortletException {
@@ -64,11 +63,24 @@ public class PortletPageFactory implements PortletSessionListener {
         } catch (Exception e) {
             throw new PortletException("Error unmarshalling layout file", e);
         }
-
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        try {
+            portalConfigService = (PortalConfigService) factory.createPortletService(PortalConfigService.class, null, true);
+        } catch (PortletServiceException e) {
+            log.error("Unable to init portal config service! ", e);
+            throw new PortletException("Unable to init portal config service! ", e);
+        }
         File userdir = new File(newuserLayoutPath);
         if (!userdir.exists()) {
             userdir.mkdir();
         }
+    }
+
+    public static synchronized PortletPageFactory getInstance() {
+        if (instance == null) {
+            instance = new PortletPageFactory();
+        }
+        return instance;
     }
 
     public PortletPage createErrorPage(PortletRequest req) {

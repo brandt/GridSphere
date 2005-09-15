@@ -22,8 +22,6 @@ public interface PortletDataManager {
      * @return the PortletData for this portlet or null if none exists
      * @throws PersistenceManagerException if a persistence error occurs
      */
-    public PortletData getPortletData(User user, String portletID) throws PersistenceManagerException;
-
-    public void store(PortletData data);
+    PortletData getPortletData(User user, String portletID) throws PersistenceManagerException;
 
 }

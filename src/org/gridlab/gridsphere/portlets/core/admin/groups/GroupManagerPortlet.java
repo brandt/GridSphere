@@ -38,6 +38,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public static final String DO_VIEW_GROUP_CREATE = "admin/groups/groupCreate.jsp";
     public static final String DO_VIEW_GROUP_LAYOUT = "admin/groups/groupLayout.jsp";
 
+
     // Portlet services
     private UserManagerService userManagerService = null;
     private AccessControlManagerService aclManagerService = null;
@@ -50,12 +51,14 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         log.debug("Entering initServices()");
-
-        this.userManagerService = (UserManagerService) config.getContext().getSpringService("UserManagerService");
-        this.aclManagerService = (AccessControlManagerService) this.getConfig().getContext().getSpringService("AccessControlManagerService");
-        this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getSpringService("PortalConfigService");
-        this.layoutMgr = (LayoutManagerService) config.getContext().getSpringService("LayoutManagerService");
-
+        try {
+            this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
+            this.aclManagerService = (AccessControlManagerService) this.getConfig().getContext().getService(AccessControlManagerService.class);
+            this.layoutMgr = (LayoutManagerService) config.getContext().getService(LayoutManagerService.class);
+            this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
+        } catch (PortletServiceException e) {
+            log.error("Unable to initialize services!", e);
+        }
         portletRegistry = PortletRegistry.getInstance();
         portletMgr = PortletManager.getInstance();
 
@@ -475,17 +478,9 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletGroup group = loadGroup(evt);
 
         addGroupEntries(evt, group);
+        List usersNotInGroupList = aclManagerService.getUsersNotInGroup(group);
 
-        List usersNotInGroup = new Vector();
-        Iterator allUsers = userManagerService.getUsers().iterator();
-        while (allUsers.hasNext()) {
-            User user = (User) allUsers.next();
-            if (!aclManagerService.isUserInGroup(user, group)) {
-                usersNotInGroup.add(user);
-            }
-        }
-
-        viewUsersNotInGroupList(evt, usersNotInGroup);
+        viewUsersNotInGroupList(evt, usersNotInGroupList);
 
         setNextState(req, DO_VIEW_GROUP_VIEW);
         log.debug("Exiting doViewAddGroupEntry");

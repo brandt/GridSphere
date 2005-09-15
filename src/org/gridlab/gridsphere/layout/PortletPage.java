@@ -212,9 +212,10 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     public List init(PortletRequest req, List list) {
 
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
-        aclService = (AccessControlManagerService)factory.createSpringService("AccessControlManagerService");
         try {
+
             cacheService = (CacheService) factory.createPortletService(CacheService.class, null, true);
+            aclService = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, null, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }

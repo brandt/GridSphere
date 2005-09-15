@@ -10,6 +10,9 @@ import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 
 import java.util.ArrayList;
@@ -17,22 +20,26 @@ import java.util.ArrayList;
 /**
  * The <code>LayoutManagerService</code> manages users layouts
  */
-public class LayoutManagerServiceImpl implements LayoutManagerService {
+public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutManagerService {
 
     private PortletLog log = SportletLog.getInstance(LayoutManagerServiceImpl.class);
 
     private PortletPageFactory pageFactory = null;
 
-    public PortletPageFactory getPortletPageFactory() {
-        return pageFactory;
+    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+        try {
+            pageFactory = PortletPageFactory.getInstance();
+        } catch (Exception e) {
+            log.error("Unable to get PortletPageFactory instance!", e);
+        }
     }
 
-    public void setPortletPageFactory(PortletPageFactory pageFactory) {
-        this.pageFactory = pageFactory;
+    public void destroy() {
     }
 
     public void reloadPage(PortletRequest req) {
         PortletPage page = pageFactory.createPortletPage(req);
+
         page.init(req, new ArrayList());
     }
 

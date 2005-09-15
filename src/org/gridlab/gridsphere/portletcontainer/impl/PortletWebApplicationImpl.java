@@ -29,7 +29,8 @@ import java.util.Iterator;
 public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl implements PortletWebApplication {
 
     private PortletLog log = SportletLog.getInstance(PortletWebApplicationImpl.class);
-    
+    private PortletDeploymentDescriptor pdd = null;
+
     /**
      * Constructs an instance of a PortletWebApplicationImpl from a supplied ui application name and corresponding
      * <code>ServletContext</code>
@@ -38,7 +39,7 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
      * @param context            the <code>ServletContext</code>
      */
     public PortletWebApplicationImpl(String webApplicationName, ServletContext context) throws PortletException {
-        super();
+        super(context);
         this.webApplicationName = webApplicationName;
         // get the servlet context for the coreportlets webapp
         String contextURIPath;
@@ -74,7 +75,7 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
         // load portlet.xml
         loadPortlets(ctx);
         // load services xml
-        if (!isJSR) loadServices(ctx, null);
+        if (!isJSR) loadServices(ctx);
         // load roles.xml
         if (!isJSR)loadRoles(ctx);
         // load group.xml (and if found load layout.xml)
@@ -108,7 +109,7 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
         //String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
 
         String portletMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-mapping.xml");
-        PortletDeploymentDescriptor pdd = null;
+        pdd = null;
         try {
             pdd = new PortletDeploymentDescriptor(gsportletXMLfile, portletMappingFile);
         } catch (Exception e) {
@@ -137,7 +138,7 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
     public void destroy() {
         //log.debug("removing application tab :" + webApplicationName);
         //PortletTabRegistry.removeGroupTab(webApplicationName);
-        //PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
+        PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
         SportletServiceFactory factory = SportletServiceFactory.getInstance();
         factory.shutdownServices(webApplicationName);
         appPortlets = null;

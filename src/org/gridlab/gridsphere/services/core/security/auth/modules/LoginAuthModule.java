@@ -26,8 +26,6 @@ public interface LoginAuthModule extends Comparable {
 
     public boolean isModuleActive();
 
-    public boolean isModuleRequired();
-
     public void setModulePriority(int priority);
 
     public void setModuleActive(boolean isActive);

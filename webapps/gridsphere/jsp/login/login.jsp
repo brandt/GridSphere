@@ -6,6 +6,7 @@
 
 <ui:form>
     <ui:messagebox beanId="msg"/>
+
     <ui:table>
             <ui:tablerow>
                 <ui:tablecell width="100">

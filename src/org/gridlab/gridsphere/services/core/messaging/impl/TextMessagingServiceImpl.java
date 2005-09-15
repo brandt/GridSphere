@@ -2,8 +2,14 @@ package org.gridlab.gridsphere.services.core.messaging.impl;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.services.core.messaging.MessagingID;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridsphere.tmf.TextMessagingException;
 import org.gridsphere.tmf.TMFService;
 import org.gridsphere.tmf.TMFFactory;
@@ -11,12 +17,8 @@ import org.gridsphere.tmf.TextMessagingSession;
 import org.gridsphere.tmf.message.GenericMessage;
 import org.gridsphere.tmf.message.InstantMessage;
 import org.gridsphere.tmf.message.MailMessage;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.springframework.web.context.ServletContextAware;
 
-import javax.servlet.ServletContext;
 import java.util.Set;
-import java.util.List;
 import java.io.File;
 
 /*
@@ -24,26 +26,20 @@ import java.io.File;
  * @version $Id$
  */
 
-public class TextMessagingServiceImpl extends HibernateDaoSupport implements ServletContextAware, TextMessagingService {
+public class TextMessagingServiceImpl implements TextMessagingService, PortletServiceProvider {
 
     private static PortletLog log = SportletLog.getInstance(TextMessagingServiceImpl.class);
 
-    private TMFService tmfService = null;
+    TMFService tmfService = null;
+    PersistenceManagerRdbms pm = null;
 
-    private ServletContext servletContext = null;
-
-    public TextMessagingServiceImpl() {}
-
-    public void init() {
-        String configfile = servletContext.getRealPath("WEB-INF"+
+    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+        String configfile = config.getServletContext().getRealPath("WEB-INF"+
                 File.separator+"CustomPortal"+File.separator+"tmf");
         tmfService = TMFFactory.createTMFService(configfile);
+        pm = PersistenceManagerFactory.createGridSphereRdbms();
         log.info("Starting up TextMessagingService with config " + configfile);
         tmfService.startup();
-    }
-
-    public void setServletContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
     }
 
     public void destroy() {
@@ -78,9 +74,10 @@ public class TextMessagingServiceImpl extends HibernateDaoSupport implements Ser
         MessagingID mid = new MessagingID();
         String oql = "select mid from "+MessagingID.class.getName()+" mid where mid.serviceid='"+serviceid+
                     "' and mid.username='"+username+"'";
-        List midList = this.getHibernateTemplate().find(oql);
-        if ((midList != null) && (!midList.isEmpty())) {
-            mid = (MessagingID)midList.get(0);
+        try {
+            mid = (MessagingID)pm.restore(oql);
+        } catch (PersistenceManagerException e) {
+            log.error("Error getting the messagingID for "+serviceid+" and "+username);
         }
         if (mid==null) mid = new MessagingID();
         return mid;
@@ -96,7 +93,11 @@ public class TextMessagingServiceImpl extends HibernateDaoSupport implements Ser
         mid.setUsername(username);
         mid.setServiceid(serviceid);
         mid.setServiceuserid(serviceuserid);
-        this.getHibernateTemplate().saveOrUpdate(mid);
+        try {
+            pm.saveOrUpdate(mid);
+        } catch (PersistenceManagerException e) {
+            log.error("Could not save MessagingID for "+serviceid+" and "+username);
+        }
     }
 
     public void addCommands(Set commands) {

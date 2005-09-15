@@ -27,21 +27,15 @@ import java.util.Vector;
 public class PortletLayoutEngine {
 
     protected static PortletLog log = SportletLog.getInstance(PortletLayoutEngine.class);
+    private static PortletLayoutEngine instance = new PortletLayoutEngine();
 
-    private PortletPageFactory pageFactory = null;
+    private PortletPageFactory pageFactory = PortletPageFactory.getInstance();
+    //private String error = "";
 
     /**
      * Constructs a concrete instance of the PortletLayoutEngine
      */
     private PortletLayoutEngine() {
-    }
-
-    public void setPortletPageFactory(PortletPageFactory pageFactory) {
-        this.pageFactory = pageFactory;
-    }
-
-    public PortletPageFactory getPortletPageFactory() {
-        return pageFactory;
     }
 
     public void init() throws PortletException {
@@ -52,6 +46,15 @@ public class PortletLayoutEngine {
             log.error(error, e);
             throw new PortletException(error, e);
         }
+    }
+
+    /**
+     * Returns the single instance of the PortletLayoutEngine
+     *
+     * @return the PortletLayoutEngine instance
+     */
+    public static PortletLayoutEngine getInstance() {
+        return instance;
     }
 
     protected PortletPage getPortletPage(GridSphereEvent event) {

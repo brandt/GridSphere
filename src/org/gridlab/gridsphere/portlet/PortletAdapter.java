@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
 
@@ -53,8 +52,7 @@ public abstract class PortletAdapter extends Portlet {
      */
     public void init(PortletConfig config) throws UnavailableException {
         this.portletConfig = config;
-        SportletServiceFactory factory = SportletServiceFactory.getInstance();
-        dataManager = (PortletDataManager)factory.createSpringService("PortletDataManager");
+        dataManager = SportletDataManager.getInstance();
     }
 
     /**

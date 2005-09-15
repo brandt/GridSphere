@@ -15,7 +15,6 @@
         <description lang="en">Hashed password based authentication using GridSphere database</description>
         <implementation>org.gridlab.gridsphere.services.core.security.auth.modules.impl.PasswordAuthModule</implementation>
         <active>true</active>
-        <required>false</required>
         <priority>100</priority>
         <auth-config>
             <param-name>aname</param-name>
@@ -30,7 +29,6 @@
         <description lang="en">Use the Java Authentication and Authorization Framework</description>
         <implementation>org.gridlab.gridsphere.services.core.security.auth.modules.impl.JaasAuthModule</implementation>
         <active>false</active>
-        <required>false</required>
         <priority>40</priority>
         <auth-config>
             <param-name>aname</param-name>

@@ -19,19 +19,34 @@ import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerSer
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.user.impl.UserManagerServiceImpl;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import java.util.*;
 
-public class AccessControlManagerServiceImpl extends HibernateDaoSupport implements AccessControlManagerService {
+public class AccessControlManagerServiceImpl implements PortletServiceProvider, AccessControlManagerService {
 
     private static PortletLog log = SportletLog.getInstance(AccessControlManagerServiceImpl.class);
+    private static AccessControlManagerServiceImpl instance = new AccessControlManagerServiceImpl();
+    private static UserManagerServiceImpl userManager = UserManagerServiceImpl.getInstance();
+
+    private static PersistenceManagerRdbms pm = null;
 
     private String jdoGroupRequest = GroupRequestImpl.class.getName();
     private String jdoPortletGroup = SportletGroup.class.getName();
 
     public AccessControlManagerServiceImpl() {
 
+    }
+
+    public static synchronized AccessControlManagerServiceImpl getInstance() {
+        return instance;
+    }
+
+    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+        pm = PersistenceManagerFactory.createGridSphereRdbms();
+    }
+
+    public void destroy() {
+        log.info("Calling destroy()");
     }
 
     public GroupRequest createGroupEntry() {
@@ -64,9 +79,13 @@ public class AccessControlManagerServiceImpl extends HibernateDaoSupport impleme
                 + jdoGroupRequest
                 + " groupRequest "
                 + criteria;
-
-        return this.getHibernateTemplate().find(oql);
-
+        try {
+            return pm.restoreList(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving access right";
+            log.error(msg, e);
+            return new ArrayList();
+        }
     }
 
     public GroupEntry getGroupEntry(String id) {
@@ -89,20 +108,47 @@ public class AccessControlManagerServiceImpl extends HibernateDaoSupport impleme
                 + jdoGroupRequest
                 + " groupRequest "
                 + criteria;
-       List groups = this.getHibernateTemplate().find(oql);
-       if ((groups != null) && (!groups.isEmpty())) {
-            return (GroupRequestImpl)groups.get(0);
+        try {
+            return (GroupRequestImpl) pm.restore(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving access right";
+            log.error(msg, e);
+            return null;
         }
-        return null;
+    }
+
+    private boolean existsGroupEntry(GroupEntry entry) {
+        GroupRequestImpl rightImpl = (GroupRequestImpl) entry;
+        String oql = "select groupRequest.oid from "
+                + jdoGroupRequest
+                + " groupRequest where groupRequest.oid='"
+                + rightImpl.getOid() + "'";
+        try {
+            return (pm.restore(oql) != null);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving access right";
+            log.error(msg, e);
+        }
+        return false;
     }
 
     public void saveGroupEntry(GroupEntry entry) {
         // Create or update access right
-        this.getHibernateTemplate().saveOrUpdate(entry);
+            try {
+                pm.saveOrUpdate(entry);
+            } catch (PersistenceManagerException e) {
+                String msg = "Error creating access right";
+                log.error(msg, e);
+            }
     }
 
     public void deleteGroupEntry(GroupEntry entry) {
-       this.getHibernateTemplate().delete(entry);
+        try {
+            pm.delete(entry);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error deleting access right";
+            log.error(msg, e);
+        }
     }
 
     public void deleteGroupEntries(User user) {
@@ -115,7 +161,13 @@ public class AccessControlManagerServiceImpl extends HibernateDaoSupport impleme
 
     public List getGroups() {
         // Execute query
-        return this.getHibernateTemplate().find("select grp from " + jdoPortletGroup + " grp ");
+        try {
+            return pm.restoreList("select grp from " + jdoPortletGroup + " grp ");
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving portlet groups";
+            log.error(msg, e);
+            return new Vector();
+        }
     }
 
     public PortletGroup getGroupByName(String name) {
@@ -140,11 +192,13 @@ public class AccessControlManagerServiceImpl extends HibernateDaoSupport impleme
         // Generate object query
         String oql = oqlBuffer.toString();
         log.debug(oql);
-        List groups = this.getHibernateTemplate().find(oql);
-        if ((groups != null) && (!groups.isEmpty())) {
-            return (SportletGroup)groups.get(0);
+        try {
+            return (SportletGroup) pm.restore(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving portlet group";
+            log.error(msg, e);
+            return null;
         }
-        return null;
     }
 
     public boolean existsGroupWithName(String groupName) {
@@ -152,13 +206,23 @@ public class AccessControlManagerServiceImpl extends HibernateDaoSupport impleme
     }
 
     public PortletGroup createGroup(SportletGroup portletGroup) {
-        this.getHibernateTemplate().saveOrUpdate(portletGroup);
+        try {
+            pm.saveOrUpdate(portletGroup);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error creating portlet group " + portletGroup.getName();
+            log.error(msg, e);
+        }
         return portletGroup;
     }
 
 
     public void deleteGroup(PortletGroup group) {
-        this.getHibernateTemplate().delete(group);
+        try {
+            pm.delete(group);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error deleting portlet group";
+            log.error(msg, e);
+        }
     }
 
     public List getUsers(PortletGroup group) {
@@ -167,7 +231,13 @@ public class AccessControlManagerServiceImpl extends HibernateDaoSupport impleme
                 + " groupRequest where groupRequest.sportletGroup.oid='"
                 + group.getID()
                 + "'";
-        return this.getHibernateTemplate().find(oql);
+        try {
+            return pm.restoreList(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving access right";
+            log.error(msg, e);
+            return new Vector();
+        }
     }
 
     public List getUsers(PortletGroup group, PortletRole role) {
@@ -185,11 +255,30 @@ public class AccessControlManagerServiceImpl extends HibernateDaoSupport impleme
         return l;
     }
 
+
+    public List getUsersNotInGroup(PortletGroup group) {
+        List usersNotInGroup = new Vector();
+        Iterator allUsers = userManager.getUsers().iterator();
+        while (allUsers.hasNext()) {
+            User user = (User) allUsers.next();
+            // If user has super role, don't include
+            //   if (hasSuperRole(user)) {
+            //     continue;
+            //  }
+            // Else, if user not in group, then include
+            if (!isUserInGroup(user, group)) {
+                usersNotInGroup.add(user);
+            }
+        }
+        return usersNotInGroup;
+    }
+
     public boolean isUserInGroup(User user, PortletGroup group) {
         return (getGroupEntry(user, group) != null);
     }
 
     public List getGroups(User user) {
+        List groups;
         // If user has super role
         //if (hasSuperRole(user)) {
         //    groups = getGroups();
@@ -200,7 +289,15 @@ public class AccessControlManagerServiceImpl extends HibernateDaoSupport impleme
                 + " groupRequest where groupRequest.sportletUser.oid='"
                 + user.getID()
                 + "'";
-        return this.getHibernateTemplate().find(oql);
+        try {
+            groups = pm.restoreList(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving access right";
+            log.error(msg, e);
+            return new Vector();
+        }
+        // }
+        return groups;
     }
 
     public List getGroupsNotMemberOf(User user) {
@@ -381,36 +478,60 @@ public class AccessControlManagerServiceImpl extends HibernateDaoSupport impleme
      * PORTLET ROLE METHODS
      */
     public List getRoles() {
-            return this.getHibernateTemplate().find("select prole from " + PortletRole.class.getName() + " prole");
+        List roles = null;
+        try {
+            roles = pm.restoreList("select prole from " + PortletRole.class.getName() + " prole");
+        } catch (PersistenceManagerException e) {
+            log.error("Error deleting role", e);
+        }
+        return roles;
     }
 
     public void deleteRole(PortletRole role) {
-        this.getHibernateTemplate().delete(role);
+        try {
+            pm.delete(role);
+        } catch (PersistenceManagerException e) {
+            log.error("Error deleting role", e);
+        }
     }
 
     public PortletRole getRole(String roleId) {
-        List roles = this.getHibernateTemplate().find("select prole from " + PortletRole.class.getName() + " prole where prole.oid='" + roleId + "'");
-        if ((roles != null) && (!roles.isEmpty())) {
-            return (PortletRole)roles.get(0);
+        PortletRole role = null;
+        try {
+            role = (PortletRole)pm.restore("select prole from " + PortletRole.class.getName() + " prole where prole.oid='" + roleId + "'");
+        } catch (PersistenceManagerException e) {
+            log.error("Error retrieving role " + roleId, e);
         }
-        return null;
+        return role;
     }
 
     public PortletRole getRoleByName(String roleName) {
-        List roles = this.getHibernateTemplate().find("select prole from " + PortletRole.class.getName() + " prole where prole.Name='" + roleName + "'");
-        if ((roles != null) && (!roles.isEmpty())) {
-            return (PortletRole)roles.get(0);
+        PortletRole role = null;
+        try {
+            role = (PortletRole)pm.restore("select prole from " + PortletRole.class.getName() + " prole where prole.Name='" + roleName + "'");
+        } catch (PersistenceManagerException e) {
+            log.error("Error retrieving role " + roleName, e);
         }
-        return null;
+        return role;
     }
 
     public void saveRole(PortletRole role) {
-        this.getHibernateTemplate().saveOrUpdate(role);
+        try {
+            pm.saveOrUpdate(role);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error saving portlet role: ";
+            log.error(msg, e);
+        }
     }
 
     public void createRole(String roleName, int priority) {
         PortletRole role = new PortletRole(roleName, priority);
-        this.getHibernateTemplate().saveOrUpdate(role);
+        try {
+            pm.saveOrUpdate(role);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error creating portlet role: " + roleName;
+            log.error(msg, e);
+        }
     }
 
 }

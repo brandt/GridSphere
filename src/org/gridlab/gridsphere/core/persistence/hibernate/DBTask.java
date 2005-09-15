@@ -5,7 +5,6 @@ import org.apache.tools.ant.Task;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.hibernate.cfg.Configuration;
@@ -98,9 +97,7 @@ public class DBTask extends Task {
 
     private void checkDatabase() throws BuildException {
         try {
-            SportletServiceFactory factory = SportletServiceFactory.getInstance();
-            PersistenceManagerRdbms rdbms = (PersistenceManagerRdbms)factory.createSpringService("PersistenceManagerRdbms");
-            //PersistenceManagerRdbms rdbms = PersistenceManagerFactory.createGridSphereRdbms();
+            PersistenceManagerRdbms rdbms = PersistenceManagerFactory.createGridSphereRdbms();
             // check if there is the user table, should be enough
             rdbms.restoreList("select uzer from " + SportletUserImpl.class.getName() + " uzer");
         } catch (Exception e) {
@@ -257,7 +254,7 @@ public class DBTask extends Task {
             }
 
         } catch (BuildException e) {
-            log.error("Database not correctly installed.\n", e);
+            log.info("Database not correctly installed.\n");
             throw new BuildException("The database is not correctly installed!");
         }
     }

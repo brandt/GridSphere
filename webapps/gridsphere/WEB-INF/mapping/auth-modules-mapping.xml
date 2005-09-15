@@ -32,9 +32,6 @@
         <field name="ModuleActive" type="boolean">
             <bind-xml name="active"/>
         </field>
-        <field name="ModuleRequired" type="boolean">
-            <bind-xml name="required"/>
-        </field>
         <field name="ModuleImplementation" type="string">
             <bind-xml name="implementation"/>
         </field>
