@@ -165,6 +165,9 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <exclude name="*.LICENSE"/>
                 <exclude name="*.txt"/>
             </fileset>
+            <globmapper from="*" to="gridsphere-*"/>
+        </copy>
+        <copy overwrite="true" todir="${appserver.home}/shared/lib">
             <fileset dir="${build.lib}">
                 <exclude name="gridsphere-test.jar"/>
                 <exclude name="gridsphere-ui-tags.jar"/>
@@ -178,6 +181,7 @@ Build include file for the GridSphere Portal source code, see build.xml
             <fileset dir="lib" defaultexcludes="true">
                 <include name="hsql*.jar"/>
             </fileset>
+            <globmapper from="*" to="gridsphere-*"/>
         </copy>
 
         <copy file="webapps/log4j.xml" todir="${appserver.home}/common/classes"/>

@@ -58,10 +58,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
         passwordManagerService = (PasswordManagerService) getPortletConfig().getContext().getSpringService("PasswordManagerService");
         portalConfigService = (PortalConfigService) getPortletConfig().getContext().getSpringService("PortalConfigService");
         layoutMgr = (LayoutManagerService) config.getContext().getSpringService("LayoutManagerService");
-
+        this.tms = (TextMessagingService) config.getContext().getSpringService("TextMessagingService");
         try {
             this.localeService = (LocaleService) config.getContext().getService(LocaleService.class);
-            this.tms = (TextMessagingService) config.getContext().getService(TextMessagingService.class);
+
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }

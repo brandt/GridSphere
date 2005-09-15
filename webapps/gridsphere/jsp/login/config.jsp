@@ -15,6 +15,8 @@
 <ui:group>
 <p>
 <ui:text style="bold" key="LOGIN_CONFIG_MSG"/>
+</p>
+<p>
 <ui:checkbox beanId="acctCB" value="TRUE"/>
 <ui:text key="LOGIN_CONFIG_ALLOW"/>
 </p>

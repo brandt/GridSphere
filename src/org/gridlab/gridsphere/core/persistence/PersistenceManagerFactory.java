@@ -31,6 +31,7 @@ public class PersistenceManagerFactory {
         log.debug("Entering PersistenceManagerFactory");
     }
 
+    /*
     public static synchronized PersistenceManagerRdbms createGridSphereRdbms() {
         log.info("Trying to get Gridsphere PM!");
         String databaseName = GRIDSPHERE_DATABASE_NAME;
@@ -40,12 +41,14 @@ public class PersistenceManagerFactory {
         }
         return (PersistenceManagerRdbms) databases.get(databaseName);
     }
-
+    */
+    
     /**
      * Creates a new persistencemanager.
      *
      * @param webappname
      */
+    /*
     public static synchronized PersistenceManagerRdbms createPersistenceManagerRdbms(String webappname) {
         if (!databases.containsKey(webappname)) {
             log.info("Creating new PM for :" + webappname);
@@ -56,7 +59,10 @@ public class PersistenceManagerFactory {
         }
         return (PersistenceManagerRdbms) databases.get(webappname);
     }
+    */
 
+
+    /*
     public static synchronized void destroyPersistenceManagerRdbms(String webappname) {
         if (databases.containsKey(webappname)) {
             try {
@@ -68,6 +74,7 @@ public class PersistenceManagerFactory {
             databases.remove(webappname);       
         }
     }
+    */
 
     /**
      * Returns an instance of a PersistenceManagerXML from a descriptor and mapping URL
@@ -120,11 +127,13 @@ public class PersistenceManagerFactory {
             String pmname = (String) it.next();
             PersistenceManagerRdbms pm = (PersistenceManagerRdbms) databases.get(pmname);
             log.info("  shutdown persistencemanager for " + pmname);
+            /*
             try {
                 pm.destroy();
             } catch (PersistenceManagerException e) {
                 log.debug("Could not shutdown PersistenceManager " + pmname);
             }
+            */
         }
     }
 

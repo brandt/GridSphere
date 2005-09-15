@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PersistenceManagerRdbms {
 
-    public void resetDatabase(String connURL);
+    //public void resetDatabase(String connURL);
     
     /**
      * Creates a session to conduct operations on database
@@ -17,35 +17,35 @@ public interface PersistenceManagerRdbms {
      * @return session  Session to conduction operations on database
      * @throws PersistenceManagerException
      */
-    public Session getSession() throws PersistenceManagerException;
+    //public Session getSession() throws PersistenceManagerException;
 
     /**
      * Closes a session
      *
      * @throws PersistenceManagerException
      */
-    public void closeSession() throws PersistenceManagerException;
+    //public void closeSession() throws PersistenceManagerException;
 
     /**
      * Begins a transaction
      *
      * @throws PersistenceManagerException
      */
-    public void beginTransaction() throws PersistenceManagerException;
+    //public void beginTransaction() throws PersistenceManagerException;
 
     /**
      * Commits a transaction
      *
      * @throws PersistenceManagerException
      */
-    public void commitTransaction() throws PersistenceManagerException;
+    //public void commitTransaction() throws PersistenceManagerException;
 
     /**
      * Rolls back a transaction
      *
      * @throws PersistenceManagerException
      */
-    public void rollbackTransaction() throws PersistenceManagerException;
+    //public void rollbackTransaction() throws PersistenceManagerException;
 
     /**
      * Creates the given object in the permanent storage.
@@ -112,5 +112,5 @@ public interface PersistenceManagerRdbms {
      *
      * @throws PersistenceManagerException
      */
-    public void destroy() throws PersistenceManagerException;
+    //public void destroy() throws PersistenceManagerException;
 }

@@ -13,34 +13,20 @@ import org.gridlab.gridsphere.portlet.PortletData;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletData;
 import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import java.util.List;
 
 /**
  * The <code>SportletDataManager</code> provides a a singleton implementation of the <code>PortletDataManager</code>
  * used for loading and storing <code>PortletData</code>.
  */
-public class SportletDataManager implements PortletDataManager {
-
-    private static PersistenceManagerRdbms pm = null;
-    private static PortletDataManager instance = null;
+public class SportletDataManager extends HibernateDaoSupport implements PortletDataManager {
 
     /**
      * Default instantiation is disallowed
      */
-    private SportletDataManager() {
-        pm = PersistenceManagerFactory.createGridSphereRdbms();    
-    }
-
-    /**
-     * Returns an instance of a <code>PortletDataManager</code>
-     *
-     * @return an instance of a <code>PortletDataManager</code>
-     */
-    public static synchronized PortletDataManager getInstance() {
-        if (instance == null) {
-            instance = new SportletDataManager();
-        }
-        return instance;
-    }
+    public SportletDataManager() {}
 
     /**
      * Returns the users portlet data for the specified portlet
@@ -57,18 +43,26 @@ public class SportletDataManager implements PortletDataManager {
                 "select u from " + SportletData.class.getName() + " u where u.UserID='" + user.getID() + "' and u.PortletID='" + portletID + "'";
 
         // get sportlet data if it exists
-        SportletData data = (SportletData) pm.restore(command);
+        SportletData data = null;
+        List dataList = this.getHibernateTemplate().find(command);
+        if ((dataList != null) && (!dataList.isEmpty())) {
+            data = (SportletData)dataList.get(0);
+        }
         // or create one
         if (data == null) {
             data = new SportletData();
             data.setPortletID(portletID);
             data.setUserID(user.getID());
-            data.setPersistenceManager(pm);
-            pm.create(data);
+            data.setPortletDataManager(this);
+            this.getHibernateTemplate().saveOrUpdate(data);
         } else {
-            data.setPersistenceManager(pm);
+            data.setPortletDataManager(this);
         }
         return data;
+    }
+
+    public void store(PortletData data) {
+        this.getHibernateTemplate().saveOrUpdate(data);     
     }
 
 }

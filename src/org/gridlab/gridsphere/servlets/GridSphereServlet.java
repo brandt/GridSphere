@@ -25,6 +25,7 @@ import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -63,6 +64,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static LoginService loginService = null;
 
     private static TrackerService trackerService = null;
+
+    private static PortalConfigService portalConfigService = null;
 
     private PortletMessageManager messageManager = SportletMessageManager.getInstance();
 
@@ -120,7 +123,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         loginService = (LoginService) factory.createSpringService("LoginService");
         log.debug("Creating portlet manager service");
         portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, getServletConfig().getServletContext(), true);
-
+        portalConfigService = (PortalConfigService) factory.createSpringService("PortalConfigService");
         trackerService = (TrackerService)factory.createSpringService("TrackerService");
 
     }
@@ -176,6 +179,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 initializeServices();
                 // create a root user if none available
                 userManagerService.initRootUser();
+
+                portalConfigService.configureSettings();
                 // initialize all portlets
 
                 PortletResponse portletRes = event.getPortletResponse();

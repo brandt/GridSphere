@@ -53,6 +53,24 @@
 		</property>
 	</bean>
 
+    <bean id="PersistenceManagerRdbms"
+              class="org.gridlab.gridsphere.core.persistence.hibernate.PersistenceManagerRdbmsImpl"
+              singleton="true">
+            <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="PortletPreferencesManager"
+              class="org.gridlab.gridsphere.portlet.jsrimpl.PortletPreferencesManager"
+              singleton="true">
+            <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="PortletDataManager"
+              class="org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager"
+              singleton="true">
+            <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <bean id="PortletPageFactory"
           class="org.gridlab.gridsphere.layout.PortletPageFactory"
           singleton="true">
@@ -69,6 +87,14 @@
 	<bean id="TrackerService"
           class="org.gridlab.gridsphere.services.core.tracker.impl.TrackerServiceImpl"
           singleton="true">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="TextMessagingService"
+          class="org.gridlab.gridsphere.services.core.messaging.impl.TextMessagingServiceImpl"
+          singleton="true"
+          init-method="init"
+          destroy-method="destroy">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
@@ -94,8 +120,7 @@
 
     <bean id="PortalConfigService"
           class="org.gridlab.gridsphere.services.core.portal.impl.PortalConfigServiceImpl"
-          singleton="true"
-          init-method="init">
+          singleton="true">
         <property name="sessionFactory" ref="sessionFactory"/>
         <property name="accessControlManagerService" ref="AccessControlManagerService"/>
     </bean>

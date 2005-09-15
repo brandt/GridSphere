@@ -109,7 +109,7 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
         log.debug("unloading portlet services: ");
         SportletServiceFactory factory = SportletServiceFactory.getInstance();
         factory.shutdownServices(webApplicationName);
-        PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
+        //PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
         portletWebApp = null;
         appPortlets = null;
         portletDefinitions = null;

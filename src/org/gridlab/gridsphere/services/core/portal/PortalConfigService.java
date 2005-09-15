@@ -12,6 +12,8 @@ package org.gridlab.gridsphere.services.core.portal;
  */
 public interface PortalConfigService {
 
+    public void configureSettings();
+    
     public void savePortalConfigSettings(PortalConfigSettings configSettings);
 
     public PortalConfigSettings getPortalConfigSettings();

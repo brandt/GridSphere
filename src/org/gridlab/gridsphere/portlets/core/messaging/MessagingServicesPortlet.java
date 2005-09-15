@@ -30,11 +30,7 @@ public class MessagingServicesPortlet extends ActionPortlet {
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        try {
-            this.tms = (TextMessagingService) config.getContext().getService(TextMessagingService.class);
-        } catch (PortletServiceException e) {
-            log.error("Unable to initialize services!", e);
-        }
+        this.tms = (TextMessagingService) config.getContext().getSpringService("TextMessagingService");
         config.getServletContext().getServletContextName();
 
     }

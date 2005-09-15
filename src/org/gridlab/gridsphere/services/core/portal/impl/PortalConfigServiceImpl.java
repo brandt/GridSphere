@@ -21,7 +21,9 @@ public class PortalConfigServiceImpl extends HibernateDaoSupport implements Port
 
     private AccessControlManagerService accessControlManagerService = null;
 
-    public void init() {
+    public PortalConfigServiceImpl() {}
+
+    public void configureSettings() {
         PortalConfigSettings configSettings = this.getPortalConfigSettings();
         if (configSettings == null) {
             configSettings = new PortalConfigSettings();
@@ -30,7 +32,7 @@ public class PortalConfigServiceImpl extends HibernateDaoSupport implements Port
             Set defaultGroups = new HashSet();
 
             defaultGroups.add(accessControlManagerService.getCoreGroup());
-
+            System.err.println(accessControlManagerService.getCoreGroup());
             configSettings.setDefaultGroups(defaultGroups);
             // set default theme
             //configSettings.setDefaultTheme(config.getInitParameter("defaultTheme"));

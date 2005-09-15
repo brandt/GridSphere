@@ -150,10 +150,9 @@ public class PortletServlet extends HttpServlet
         // create portlet context
         portletContext = new PortletContextImpl(ctx);
 
-        prefsManager = PortletPreferencesManager.getInstance();
-
         // load in any authentication modules if found-- this is a GridSphere extension
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        prefsManager = (PortletPreferencesManager)factory.createSpringService("PortletPreferencesManager");
         LoginService loginService = (LoginService)factory.createSpringService("LoginService");
         InputStream is = config.getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
         if (is != null) {
@@ -170,8 +169,6 @@ public class PortletServlet extends HttpServlet
         // security check
         // make sure request comes only from gridsphere servlet same ip
         System.err.println("remote Address: " + request.getRemoteAddr());
-        //PersistenceManagerRdbms pm = PersistenceManagerFactory.createPersistenceManagerRdbms(webAppName);
-
 
         registry = PortletRegistry.getInstance();
         // If no portlet ID exists, this may be a command to init or shutdown a portlet instance

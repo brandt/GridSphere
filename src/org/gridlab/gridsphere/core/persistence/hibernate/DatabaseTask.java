@@ -6,6 +6,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.hibernate.connection.DriverManagerConnectionProvider;
@@ -114,7 +115,10 @@ public class DatabaseTask extends Task {
                     new SchemaExport(cfg).create(false, true);
                 } else {
                     // check if actual tables really exist in the db
-                    PersistenceManagerRdbms rdbms = PersistenceManagerFactory.createGridSphereRdbms();
+                    SportletServiceFactory factory = SportletServiceFactory.getInstance();
+                    PersistenceManagerRdbms rdbms = (PersistenceManagerRdbms)factory.createSpringService("PersistenceManagerRdbms");
+
+                    //PersistenceManagerRdbms rdbms = PersistenceManagerFactory.createGridSphereRdbms();
                     try {
                         // check if there is the user table, should be enough
                         rdbms.restoreList("select uzer from " + SportletUserImpl.class.getName() + " uzer");

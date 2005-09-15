@@ -98,7 +98,7 @@ public class AccessControlManagerServiceImpl extends HibernateDaoSupport impleme
 
     public void saveGroupEntry(GroupEntry entry) {
         // Create or update access right
-           this.getHibernateTemplate().saveOrUpdate(entry);
+        this.getHibernateTemplate().saveOrUpdate(entry);
     }
 
     public void deleteGroupEntry(GroupEntry entry) {

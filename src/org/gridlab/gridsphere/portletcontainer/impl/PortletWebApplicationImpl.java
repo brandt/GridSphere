@@ -137,7 +137,7 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
     public void destroy() {
         //log.debug("removing application tab :" + webApplicationName);
         //PortletTabRegistry.removeGroupTab(webApplicationName);
-        PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
+        //PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
         SportletServiceFactory factory = SportletServiceFactory.getInstance();
         factory.shutdownServices(webApplicationName);
         appPortlets = null;

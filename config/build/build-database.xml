@@ -33,5 +33,14 @@ Build include file for the GridSphere Portal source code, see build.xml
             action="UPDATE"/>
     </target>
 
+    <target name="hsql" depends="setenv">
+        <echo message="Starting HSQLDB"/>
+        <java dir="." classname="org.hsqldb.Server" classpathref="classpath">
+<!--            <arg value="-database.0"/>
+            <arg value="/Users/novotny/Jakarta/jakarta-tomcat-5.0.28/webapps/gridsphere/WEB-INF/CustomPortal/database/gridsphere"/>
+            <arg value="-dbname.0"/>
+            <arg value="gridsphere"/> -->
+        </java>
+    </target>
 
 </project>

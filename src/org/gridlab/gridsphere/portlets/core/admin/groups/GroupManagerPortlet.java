@@ -38,7 +38,6 @@ public class GroupManagerPortlet extends ActionPortlet {
     public static final String DO_VIEW_GROUP_CREATE = "admin/groups/groupCreate.jsp";
     public static final String DO_VIEW_GROUP_LAYOUT = "admin/groups/groupLayout.jsp";
 
-
     // Portlet services
     private UserManagerService userManagerService = null;
     private AccessControlManagerService aclManagerService = null;

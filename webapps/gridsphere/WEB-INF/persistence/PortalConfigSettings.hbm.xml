@@ -7,7 +7,7 @@
 <hibernate-mapping>
     <class
         name="org.gridlab.gridsphere.services.core.portal.PortalConfigSettings"
-        table="portalconfigsettings">
+        table="portalconfigsettings" lazy="false">
 
         <id
             name="oid"
@@ -29,7 +29,7 @@
         </set>
 
         <map name="attributes" lazy="false" table="portalconfigattributes">
-            <key column="gsoid"/>
+            <key column="attrs_oid"/>
             <index column="attribute" type="string"/>
             <element column="value" type="string"/>
         </map>
