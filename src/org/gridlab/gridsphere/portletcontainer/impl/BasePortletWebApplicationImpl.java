@@ -147,46 +147,31 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
         }
     }
 
-    protected void loadJSRServices(ServletContext ctx, ClassLoader loader) throws PortletException {
-        SportletServiceFactory factory = SportletServiceFactory.getInstance();
-        String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");
-        File f = new File(descriptor);
-        if (!f.exists()) {
-            descriptor = ctx.getRealPath("/WEB-INF/portlet-services");
-            f = new File(descriptor);
-            if (!f.exists()) {
-                descriptor = null;
-            }
-        }
-        if (descriptor != null) {
-            try {
-                System.err.println("Loading services from " + descriptor);
-                factory.addServices(webApplicationName, ctx, descriptor, loader);
-            } catch (PortletServiceException e) {
-                log.error("Unable to load services!", e);
-            }
-        } else {
-            log.info("No PortletServices.xml or portlet-services directory found");
-        }
-    }
-
     /**
      * Loads in a service descriptor file from the associated servlet context
      *
      * @param ctx the <code>ServletContext</code>
      */
-    protected void loadServices(ServletContext ctx) throws PortletException {
+    protected void loadServices(ServletContext ctx, ClassLoader loader) throws PortletException {
         // load in the portlet-services.xml file
         SportletServiceFactory factory = SportletServiceFactory.getInstance();
         String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");
         File f = new File(descriptor);
         if (f.exists()) {
-            factory.addServices(ctx, descriptor);
+            if (loader != null) {
+                factory.addServices(webApplicationName, ctx, descriptor, loader);
+            } else {
+                factory.addServices(ctx, descriptor);
+            }
         } else {
             descriptor = ctx.getRealPath("/WEB-INF/portlet-services");
             f = new File(descriptor);
             if (f.exists()) {
-                factory.addServices(ctx, descriptor);
+                if (loader != null) {
+                    factory.addServices(webApplicationName, ctx, descriptor, loader);
+                } else {
+                    factory.addServices(ctx, descriptor);
+                }
             } else {
                 log.debug("Did not find PortletServices.xml or portlet-services directory for: " + ctx.getServletContextName());
             }
