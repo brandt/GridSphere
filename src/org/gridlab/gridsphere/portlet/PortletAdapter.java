@@ -132,7 +132,7 @@ public abstract class PortletAdapter extends Portlet {
                 data = dataManager.getPortletData(user, portletID);
                 request.setAttribute(SportletProperties.PORTLET_DATA, data);
             } catch (PersistenceManagerException e) {
-                log.error("in PortletAdapter: Unable to obtain PortletData for user");
+                log.error("in PortletAdapter: Unable to obtain PortletData for user", e);
             }
         }
 
