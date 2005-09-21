@@ -4,10 +4,10 @@
     PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
         
-<hibernate-mapping>
+<hibernate-mapping default-lazy="false">
     <class
         name="org.gridlab.gridsphere.portlet.PortletRole"
-        table="portletrole" lazy="false"
+        table="portletrole"
         >
 
         <id

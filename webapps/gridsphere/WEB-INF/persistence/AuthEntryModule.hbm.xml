@@ -4,7 +4,7 @@
     PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
         
-<hibernate-mapping>
+<hibernate-mapping default-lazy="false">
 
     <class name="org.gridlab.gridsphere.services.core.security.auth.modules.impl.AuthModuleEntry" table="authentry">
 
@@ -14,7 +14,7 @@
         <property name="ModuleClassName" column="moduleclassname"  type="string"/>
         <property name="UserId"          column="userid"           type="string"/>
 
-        <map name="attributes"       table="authmoduleattributes" lazy="false">
+        <map name="attributes"       table="authmoduleattributes">
             <key column="gsoid"/>
             <index column="attribute" type="string"/>
             <element column="value" type="string"/>

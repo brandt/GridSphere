@@ -4,10 +4,10 @@
     PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping default-lazy="false">
     <class
         name="org.gridlab.gridsphere.portlet.impl.SportletGroup"
-        table="sportletgroup" lazy="false"
+        table="sportletgroup"
         >
 
         <id
@@ -24,7 +24,7 @@
         <property name="Public" type="boolean" column="ispublic"/>
         <property name="Core" type="boolean" column="iscore"/>
         <property name="GroupType" type="integer" column="grouptype"/>
-        <set name="PortletRoleList" table="portletrolelist" cascade="all" lazy="false">
+        <set name="PortletRoleList" table="portletrolelist" cascade="all">
             <key column="role_oid"/>
             <one-to-many class="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo"/>
         </set>

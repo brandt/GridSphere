@@ -4,7 +4,7 @@
     PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping default-lazy="false">
     <class
         name="org.gridlab.gridsphere.portlet.impl.SportletData"
         table="sportletdata"
@@ -22,7 +22,7 @@
 
         <property name="UserID" type="string" column="userid"/>
         <property name="PortletID" type="string" column="portletid"/>
-        <map name="Attributes" table="sportletdataattributes" lazy="false">
+        <map name="Attributes" table="sportletdataattributes">
             <key column="gsoid"/>
             <index column="attribute" type="string"/>
             <element column="value" type="string"/>
