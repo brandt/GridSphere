@@ -129,7 +129,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             springBeans.put(beanDefs[i], context);
         }
         } catch (IllegalStateException e) {
-            log.error("No applicationContext.xml found for: " + ctx.getServletContextName(), e);
+            log.error("No applicationContext.xml found for: " + ctx.getServletContextName());
         }
     }
 
