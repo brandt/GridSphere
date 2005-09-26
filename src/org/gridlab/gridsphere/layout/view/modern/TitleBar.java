@@ -39,9 +39,11 @@ public class TitleBar extends BaseRender implements Render {
             Iterator modesIt = modeLinks.iterator();
             titleBuffer.append("<div class=\"window-icon-left\">");
             PortletTitleBar.PortletModeLink mode;
+            if (!modesIt.hasNext())
+            	{ titleBuffer.append("&nbsp;"); }
             while (modesIt.hasNext()) {
-                mode = (PortletTitleBar.PortletModeLink) modesIt.next();
-                titleBuffer.append("<a href=\"" + mode.getHref() + "\"><img src=\"themes/" + titleBar.getTheme() + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\" alt=\"" + mode.getAltTag() + "\" /></a>"); /// Removed File.separator(s)
+                 mode = (PortletTitleBar.PortletModeLink) modesIt.next();
+                 titleBuffer.append("<a href=\"" + mode.getHref() + "\"><img src=\"themes/" + titleBar.getTheme() + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\" alt=\"" + mode.getAltTag() + "\" /></a>"); /// Removed File.separator(s)
             }
             titleBuffer.append("</div>");
         }

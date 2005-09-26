@@ -190,7 +190,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         try {
         while (it.hasNext()) {
             if (!firstParam) {
-                extraInfo += "&amp;";
+                extraInfo += "&";
             } else {
                 extraInfo += "?";
             }
@@ -208,7 +208,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
                 String[] vals = (String[]) val;
                 for (int j = 0; j < vals.length - 1; j++) {
                     String encvalue = URLEncoder.encode(vals[j], "UTF-8");
-                    extraInfo += encname + "=" + encvalue + "&amp;";
+                    extraInfo += encname + "=" + encvalue + "&";
                 }
                 String encvalue = URLEncoder.encode(vals[vals.length - 1], "UTF-8");
                 extraInfo += encname + "=" + encvalue;

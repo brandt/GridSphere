@@ -23,7 +23,7 @@ public class Frame extends BaseRender implements FrameView {
 
     protected static StringBuffer END_FRAME_BORDER = new StringBuffer("</div>\n");
     protected static StringBuffer END_FRAME = new StringBuffer("</div><!--- PORTLET ENDS HERE -->\n");
-    protected static StringBuffer MINIMIZE_FRAME = new StringBuffer("\n\t<div class=\"window-content-minimize\" />");
+    protected static StringBuffer MINIMIZE_FRAME = new StringBuffer("\n\t<div class=\"window-content-minimize\">&nbsp;</div>");
 
     /**
      * Constructs an instance of PortletFrame
