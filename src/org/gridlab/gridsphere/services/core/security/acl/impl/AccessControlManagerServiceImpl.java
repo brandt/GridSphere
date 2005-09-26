@@ -134,12 +134,12 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
     public void saveGroupEntry(GroupEntry entry) {
         // Create or update access right
-            try {
-                pm.saveOrUpdate(entry);
-            } catch (PersistenceManagerException e) {
-                String msg = "Error creating access right";
-                log.error(msg, e);
-            }
+        try {
+            pm.saveOrUpdate(entry);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error creating access right";
+            log.error(msg, e);
+        }
     }
 
     public void deleteGroupEntry(GroupEntry entry) {
@@ -320,7 +320,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         //} else {
         GroupEntry entry = getGroupEntry(user, group);
         if (entry == null) {
-            return PortletRole.GUEST;
+            return this.getRoleByName(PortletRole.GUEST.getName());
         }
         return entry.getRole();
         //}
@@ -450,6 +450,24 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         return supers;
     }
 
+    public List getUsers(PortletRole role) {
+        List myusers = new ArrayList();
+        List groups = getGroups();
+        Iterator it = groups.iterator();
+        while (it.hasNext()) {
+            PortletGroup group = (PortletGroup)it.next();
+            List users = getUsers(group);
+            Iterator usersIt = users.iterator();
+            while (usersIt.hasNext()) {
+                User u = (User) usersIt.next();
+                if (this.hasRoleInGroup(u, group, role)) {
+                    myusers.add(u);
+                }
+            }
+        }
+        return myusers;
+    }
+
     public void grantSuperRole(User user) {
         addGroupEntry(user, getCoreGroup(), getSuperRole());
     }
@@ -513,6 +531,11 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             log.error("Error retrieving role " + roleName, e);
         }
         return role;
+    }
+
+    public PortletRole getRoleByPriority(int priority) {
+        PortletRole role = PortletRole.toPortletRole(priority);
+        return getRoleByName(role.getName());
     }
 
     public void saveRole(PortletRole role) {

@@ -46,6 +46,8 @@ public interface AccessControlManagerService extends PortletService {
 
     public PortletRole getRoleByName(String roleName);
 
+    public PortletRole getRoleByPriority(int priority);
+
     public void createRole(String roleName, int priority);
 
     public void saveRole(PortletRole role);
@@ -93,6 +95,8 @@ public interface AccessControlManagerService extends PortletService {
     public List getUsers(PortletGroup group);
 
     public List getUsers(PortletGroup group, PortletRole role);
+
+    public List getUsers(PortletRole role);
 
     public List getUsersNotInGroup(PortletGroup group);
 
