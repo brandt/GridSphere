@@ -10,10 +10,13 @@ import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
+import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 
 import javax.servlet.UnavailableException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
 public class RoleManagerPortlet extends ActionPortlet {
 
@@ -96,8 +99,29 @@ public class RoleManagerPortlet extends ActionPortlet {
         String roleOid = evt.getAction().getParameter("roleOID");
         PortletRole role = aclManagerService.getRole(roleOid);
         if (roleOid != null) {
+            // check if users with this role exists before deleting it
+            // if so then chanege the role to be the predefined GS role with the same priority
+            List users = aclManagerService.getUsers(role);
+            if (!users.isEmpty()) {
+                Iterator it = users.iterator();
+                while (it.hasNext()) {
+                    User u = (User)it.next();
+                    List groupEntries = aclManagerService.getGroupEntries(u);
+                    Iterator geIt = groupEntries.iterator();
+                    while (geIt.hasNext()) {
+                        GroupEntry ge = (GroupEntry)geIt.next();
+                        if (ge.getRole().getName().equalsIgnoreCase(role.getName())) {
+                            GroupRequest groupReq = aclManagerService.editGroupEntry(ge);
+                            PortletRole baseRole = aclManagerService.getRoleByPriority(role.getPriority());
+                            groupReq.setRole(baseRole);
+                            aclManagerService.saveGroupEntry(groupReq);
+                        }
+                    }
+                }
+            }
             aclManagerService.deleteRole(role);
             createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_DELETE_MSG") + ": " + role.getName());
+
         }
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
