@@ -331,11 +331,17 @@ public class PortletPageFactory implements PortletSessionListener {
 
     protected void setPageTheme(PortletPage page, PortletRequest req) {
         String defaultTheme = portalConfigService.getPortalConfigSettings().getDefaultTheme();
-        if (defaultTheme != null) page.setTheme(defaultTheme);
+        if (defaultTheme != null) {
+            page.setTheme(defaultTheme);
+        }
         User user = req.getUser();
         String theme = (String) user.getAttribute(User.THEME);
-        if (theme != null) page.setTheme(theme);
-        if ((page.getTheme() == null) || (page.getTheme().equals(""))) page.setTheme(DEFAULT_THEME);
+        if (theme != null) {
+            page.setTheme(theme);
+        }
+        if ((page.getTheme() == null) || (page.getTheme().equals(""))) {
+            page.setTheme(DEFAULT_THEME);
+        }
     }
 
     public PortletTabbedPane createNewUserPane(PortletRequest req, int cols, String tabName) {

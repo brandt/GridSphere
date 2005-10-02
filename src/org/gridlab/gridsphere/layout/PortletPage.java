@@ -50,16 +50,12 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
     protected String keywords = "";
     protected String title = "";
-    protected String theme = "";
 
     //private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
     private String layoutDescriptor = null;
 
     private Hashtable labelsHash = new Hashtable();
     private Hashtable portletHash = new Hashtable();
-
-    // defines the renderkit family of render classes to use for markup
-    private String renderKit = "classic";
 
     private transient Render pageView = null;
 
@@ -95,18 +91,6 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         return title;
     }
 
-    public void setTheme(String theme) {
-        this.theme = theme;
-    }
-
-    /**
-     * Return the theme of this portlet component
-     *
-     * @return the theme of this portlet component
-     */
-    public String getTheme() {
-        return theme;
-    }
 
     /**
      * Returns the keywords used in rendering output
@@ -219,7 +203,6 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
-
         pageView = (Render)getRenderClass("Page");
 
         if (headerContainer != null) {

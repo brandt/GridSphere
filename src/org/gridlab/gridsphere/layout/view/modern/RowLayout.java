@@ -12,11 +12,11 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 public class RowLayout extends BaseRender implements Render {
 
     protected static final StringBuffer TOP_ROW =
-            new StringBuffer("\n<!-- START ROW --><div class=\"row\" >");
+            new StringBuffer("\n<!-- START MODERN ROW --><div class=\"row\" >");
 
     protected static final StringBuffer BOTTOM_ROW_BORDER = new StringBuffer("</div>\n");
 
-    protected static final StringBuffer BOTTOM_ROW = new StringBuffer("</div><!-- END ROW -->\n");
+    protected static final StringBuffer BOTTOM_ROW = new StringBuffer("</div><!-- END MODERN ROW -->\n");
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
         return TOP_ROW;

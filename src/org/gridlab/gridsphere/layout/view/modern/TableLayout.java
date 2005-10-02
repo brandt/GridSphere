@@ -21,14 +21,14 @@ import java.util.*;
 public class TableLayout extends BaseRender implements TableLayoutView {
 
     protected static final StringBuffer START_MAXIMIZED =
-            new StringBuffer("\n<!-- START MAXIMIZED TABLE COMP --><div>");
+            new StringBuffer("\n<!-- START MAXIMIZED MODERN TABLE COMP --><div>");
 
     protected static final StringBuffer END_MAXIMIZED =
-            new StringBuffer("\n</div><!-- END MAXIMIZED TABLE COMP -->\n");
+            new StringBuffer("\n</div><!-- END MAXIMIZED MODERN TABLE COMP -->\n");
 
-    protected static final StringBuffer END_BORDER = new StringBuffer("</div><!-- END TABLE BORDER -->\n");
+    protected static final StringBuffer END_BORDER = new StringBuffer("</div><!-- END MODERN TABLE BORDER -->\n");
 
-    protected static final StringBuffer END_TABLE = new StringBuffer("</div><!-- END TABLE -->\n");
+    protected static final StringBuffer END_TABLE = new StringBuffer("</div><!-- END MODERN TABLE -->\n");
 
     /**
      * Constructs an instance of PortletTableLayout
@@ -40,7 +40,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
         // starting of the gridtable
         PortletTableLayout tableLayout = (PortletTableLayout)comp;
         StringBuffer table = new StringBuffer();
-        table.append("\n<!-- START TABLE --><div ");
+        table.append("\n<!-- START MODERN TABLE --><div ");
         if (!tableLayout.getStyle().equals("")) {
             table.append("class=\"" + tableLayout.getStyle() + "\" ");
         }
@@ -55,7 +55,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
 
     public StringBuffer doStartBorder(GridSphereEvent event, PortletComponent comp) {
         StringBuffer table = new StringBuffer();
-        table.append("\n<!-- START TABLE BORDER --><div class=\"table\"");
+        table.append("\n<!-- START MODERN TABLE BORDER --><div class=\"table\"");
         if (!comp.getWidth().equals("")) {
            table.append(" style=\"width: " + comp.getWidth() + "\""); 
         }  
@@ -109,7 +109,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
                 }
 
                 table.append("</div>");
-                table.append("<!-- END ROW -->");
+                table.append("<!-- END MODERN ROW -->");
             }
         }
         table.append("</div>");

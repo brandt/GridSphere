@@ -20,10 +20,10 @@ import java.util.StringTokenizer;
 public class TabbedPane extends BaseRender implements TabbedPaneView {
 
     protected static final StringBuffer TAB_START =
-            new StringBuffer("\n<!-- START TABBED PANE --><div class=\"tab-pane\" ><ul>");
+            new StringBuffer("\n<!-- START MODERN TABBED PANE --><div class=\"tab-pane\" ><ul>");
 
     protected static final StringBuffer TAB_END =
-            new StringBuffer("</ul><div class=\"tab-fillup\">&nbsp;</div></div><!-- END TABBED PANE -->\n");
+            new StringBuffer("</ul><div class=\"tab-fillup\">&nbsp;</div></div><!-- END MODERN TABBED PANE -->\n");
     /**
      * Constructs an instance of PortletTabbedPane
      */
