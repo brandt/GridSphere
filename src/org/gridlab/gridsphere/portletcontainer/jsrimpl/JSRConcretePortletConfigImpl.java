@@ -46,10 +46,11 @@ public class JSRConcretePortletConfigImpl implements ConcretePortletConfig {
         // portlet name
         portletName = portletDef.getPortletName().getContent();
 
+        // get required role
         SecurityRoleRef[] secRoleRef = portletDef.getSecurityRoleRef();
         for (int i = 0; i < secRoleRef.length; i++) {
             String roleStr = secRoleRef[i].getRoleName().getContent();
-            requiredRole = PortletRole.toPortletRole(roleStr);
+            requiredRole = new PortletRole(roleStr, PortletRole.USER.getPriority());
         }
 
 
