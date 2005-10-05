@@ -49,6 +49,7 @@
                 <prop key="hibernate.c3p0.acquire_increment">${hibernate.c3p0.acquire_increment}</prop>
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>
                 <prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
+		<prop key="hibernate.connection.shutdown">${hibernate.connection.shutdown}</prop>
             </props>
 		</property>
 	</bean>
