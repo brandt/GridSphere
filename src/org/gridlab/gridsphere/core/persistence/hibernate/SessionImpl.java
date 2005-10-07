@@ -13,9 +13,9 @@ public class SessionImpl implements Session {
 
     private static PortletLog log = SportletLog.getInstance(SessionImpl.class);
 
-    private org.hibernate.Session hbSession = null;
+    private net.sf.hibernate.Session hbSession = null;
 
-    public SessionImpl(org.hibernate.Session hbSession) {
+    public SessionImpl(net.sf.hibernate.Session hbSession) {
         this.hbSession = hbSession;
     }
 
@@ -235,7 +235,7 @@ public class SessionImpl implements Session {
 
     public Object restore(String query) throws PersistenceManagerException {
         try {
-            org.hibernate.Query q = hbSession.createQuery(query);
+            net.sf.hibernate.Query q = hbSession.createQuery(query);
             List list = q.list();
             if (list.size() == 0) {
                 return null;
@@ -256,7 +256,7 @@ public class SessionImpl implements Session {
       */
     public List restoreList(String query) throws PersistenceManagerException {
         try {
-            org.hibernate.Query q = hbSession.createQuery(query);
+            net.sf.hibernate.Query q = hbSession.createQuery(query);
             return q.list();
         } catch (Exception e) {
             log.error("Unable to retrieve list in hibernate session with query " + query, e);

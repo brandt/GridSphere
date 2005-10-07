@@ -7,12 +7,12 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2ddl.SchemaUpdate;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
-import org.hibernate.HibernateException;
-import org.hibernate.MappingException;
-import org.hibernate.connection.DriverManagerConnectionProvider;
+import net.sf.hibernate.cfg.Configuration;
+import net.sf.hibernate.tool.hbm2ddl.SchemaUpdate;
+import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.MappingException;
+import net.sf.hibernate.connection.DriverManagerConnectionProvider;
 
 import java.io.*;
 import java.sql.Connection;

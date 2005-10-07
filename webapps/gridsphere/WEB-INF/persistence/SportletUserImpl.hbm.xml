@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE hibernate-mapping
-    PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 1.1//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 
-<hibernate-mapping default-lazy="false">
+<hibernate-mapping>
     <class
         name="org.gridlab.gridsphere.portlet.impl.SportletUserImpl"
         table="sportletuserimpl"

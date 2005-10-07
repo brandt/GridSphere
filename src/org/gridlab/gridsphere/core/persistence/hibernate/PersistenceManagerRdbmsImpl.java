@@ -9,8 +9,8 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.hibernate.*;
-import org.hibernate.cfg.Configuration;
+import net.sf.hibernate.*;
+import net.sf.hibernate.cfg.Configuration;
 
 import javax.servlet.ServletContext;
 import java.io.*;

@@ -9,9 +9,9 @@ public class TransactionImpl implements Transaction {
 
     private static PortletLog log = SportletLog.getInstance(TransactionImpl.class);
 
-    private org.hibernate.Transaction hbTransaction = null;
+    private net.sf.hibernate.Transaction hbTransaction = null;
 
-    public TransactionImpl(org.hibernate.Transaction hbTransaction) {
+    public TransactionImpl(net.sf.hibernate.Transaction hbTransaction) {
         this.hbTransaction = hbTransaction;
     }
 
