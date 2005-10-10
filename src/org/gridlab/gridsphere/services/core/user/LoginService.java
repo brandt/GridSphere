@@ -10,8 +10,6 @@ import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
-import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
-
 import java.util.List;
 
 /**
@@ -29,17 +27,19 @@ public interface LoginService extends PortletService {
 
     public void loadAuthModules(String authModsPath, ClassLoader classloader);
 
-    public void addActiveAuthModule(User user, LoginAuthModule authModule);
+    //public void addActiveAuthModule(User user, LoginAuthModule authModule);
 
-    public void removeActiveAuthModule(User user, String moduleClassName);
+    //public void removeActiveAuthModule(User user, String moduleClassName);
 
-    public List getActiveAuthModules(User user);
+    //public List getActiveAuthModules(User user);
 
-    public boolean hasActiveAuthModule(User user, String moduleClassName);
+    public List getActiveAuthModules();
+
+    //public boolean hasActiveAuthModule(User user, String moduleClassName);
 
     public List getAuthModules();
 
-    public LoginAuthModule getAuthModule(String moduleClassName);
+    //public LoginAuthModule getAuthModule(String moduleClassName);
     
     public LoginUserModule getActiveLoginModule();
 

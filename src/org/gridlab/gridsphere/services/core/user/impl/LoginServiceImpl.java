@@ -20,7 +20,6 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
-import org.gridlab.gridsphere.services.core.security.auth.modules.impl.AuthModuleEntry;
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModulesDescriptor;
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleCollection;
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
@@ -44,8 +43,8 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     private UserSessionManager userSessionManager = UserSessionManager.getInstance();
     private PortletLog log = SportletLog.getInstance(LoginServiceImpl.class);
     private static boolean inited = false;
-    private static Map authModules = new HashMap();
-    private static Map activeAuthModules = new HashMap();
+    private static List authModules = new ArrayList();
+    private static List activeAuthModules = new ArrayList();
     private static LoginUserModule activeLoginModule = null;
 
     private PersistenceManagerRdbms pm = null;
@@ -56,6 +55,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     public LoginServiceImpl() {
     }
 
+    /*
     public void addActiveAuthModule(User user, LoginAuthModule authModule) {
         if (!hasActiveAuthModule(user, authModule.getClass().getName())) {
             AuthModuleEntry entry = new AuthModuleEntry();
@@ -69,19 +69,19 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             }
         }
     }
+    */
 
+    /*
     public LoginAuthModule getAuthModule(String moduleClassName) {
         return (LoginAuthModule)authModules.get(moduleClassName);
     }
+     */
 
     public List getAuthModules() {
-        List vals = new ArrayList();
-        Iterator it = authModules.values().iterator();
-        while (it.hasNext()) {
-            vals.add(it.next());
-        }
-        return vals;
+        return authModules;
     }
+
+    /*
     public boolean hasActiveAuthModule(User user, String moduleClassName) {
         AuthModuleEntry authMod = null;
         try {
@@ -107,7 +107,13 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             e.printStackTrace();
         }
     }
+    */
 
+    public List getActiveAuthModules() {
+        return activeAuthModules;
+    }
+
+    /*
     public List getActiveAuthModules(User user) {
         List result = null;
         try {
@@ -139,14 +145,10 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         }
         return mods;
     }
+    */
 
     public List getSupportedAuthModules() {
-        List mods = new ArrayList(authModules.size());
-        Iterator it = authModules.values().iterator();
-        while (it.hasNext()) {
-            mods.add(it.next());
-        }
-        return mods;
+        return authModules;
     }
 
     public LoginUserModule getActiveLoginModule() {
@@ -221,8 +223,8 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
                 Object[] obj = new Object[]{def};
                 Constructor con = c.getConstructor(parameterTypes);
                 LoginAuthModule authModule = (LoginAuthModule) con.newInstance(obj);
-                authModules.put(modClassName, authModule);
-                if (authModule.isModuleActive()) activeAuthModules.put(modClassName, authModule);
+                authModules.add(authModule);
+                if (authModule.isModuleActive()) activeAuthModules.add(authModule);
             }
         } catch (Exception e) {
             log.error("Error loading auth module!", e);
@@ -238,10 +240,10 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
                 am.setModulePriority(authModule.getModulePriority());
                 am.setModuleActive(authModule.isModuleActive());
                 pm.update(am);
-                authModules.put(am.getModuleImplementation(), authModule);
+                authModules.add(authModule);
                 // in case old auth module was active and new one is not remove it first then reinsert if active
                 activeAuthModules.remove(am.getModuleImplementation());
-                if (authModule.isModuleActive()) activeAuthModules.put(am.getModuleImplementation(), authModule);
+                if (authModule.isModuleActive()) activeAuthModules.add(authModule);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -300,7 +302,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
         // second invoke the appropriate auth module
 
-        List modules = this.getActiveAuthModules(user);
+        List modules = this.getActiveAuthModules();
 
         Collections.sort(modules);
         AuthenticationException authEx = null;
