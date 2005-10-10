@@ -28,7 +28,8 @@
 <p>
 <ui:text key="GROUP_VISIBILITY_DESC"/>
 <ui:text key="GROUP_VISIBILITY_MOREDESC"/>
-
+</p>
+<p>
 <ui:radiobutton beanId="groupVisibility" value="PUBLIC" selected="<%= (gtype.equals(PortletGroup.PUBLIC)) ? true : false %>"/>
     <ui:text key="GROUP_PUBLIC"/>
     <ui:radiobutton beanId="groupVisibility" value="PRIVATE" selected="<%= (gtype.equals(PortletGroup.PRIVATE)) ? true : false %>"/>
