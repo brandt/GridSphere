@@ -37,10 +37,12 @@ Build include file for the GridSphere Portal source code, see build.xml
             <path location="${appserver.home}"/>
         </pathconvert>
         <filter token="GRIDSPHERE_DB" value="${cathome}/${gswebapp.dir}/WEB-INF/CustomPortal/database/gridsphere"/>
-        <copy todir="${build.webapps}/gridsphere" filtering="true">
+        <copy tofile="${build.webapps}/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties"
+              file="${gswebapp.dir}/WEB-INF/CustomPortal/database/hibernate.properties"
+              filtering="true"/>
+        <copy todir="${build.webapps}/gridsphere">
             <fileset dir="${gswebapp.dir}"/>
         </copy>
-
         <antcall target="modify-webxml"/>
 
         <!-- copy webappsdir to deployed location -->
