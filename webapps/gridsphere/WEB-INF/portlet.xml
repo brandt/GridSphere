@@ -97,6 +97,12 @@
                     <description>Portlet ostvaruje funkcionalnosti ulaza korisnika u portal</description>
                     <keywords>portlet ulaz</keywords>
                 </language>
+                <language locale="ja">
+                    <title>ログイン</title>
+                    <title-short>ログイン</title-short>
+                    <description>Portletはログイン機能を提供します</description>
+                    <keywords>portlet ログイン</keywords>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -182,6 +188,12 @@
                     <title-short>Izlaz</title-short>
                     <description>Portlet ostvaruje funkcionalnost izlaza korisnika iz portala</description>
                     <keywords>portlet izlaz</keywords>
+                </language>
+                <language locale="ja">
+                    <title>ログアウト</title>
+                    <title-short>ログアウト</title-short>
+                    <description>Portletログアウト機能を提供します</description>
+                    <keywords>portlet ログアウト</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -299,6 +311,12 @@
                     <description>Portlet omogućava administriranje uloga</description>
                     <keywords>administriranje uloga</keywords>
                 </language>
+                <language locale="ja">
+                    <title>役割(Role)管理</title>
+                    <title-short>役割(Role)管理</title-short>
+                    <description>ポータル管理者にセキュリティ権限管理機能を提供します</description>
+                    <keywords>役割 管理</keywords>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -370,6 +388,10 @@
                     <title-short>Upravitelj grupa</title-short>
                     <description>Portlet omogućava administriranje grupa</description>
                     <keywords>administriranje grupa</keywords>
+                </language>
+                <language locale="ja">
+                    <title>Portletグループ管理</title>
+                    <description>portletグループの管理機能をポータル管理者に提供します</description>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -443,6 +465,10 @@
                     <description>Portlet omogućava administriranje izgleda</description>
                     <keywords>administriranje izgleda</keywords>
                 </language>
+                <language locale="ja">
+                    <title>レイアウト管理</title>
+                    <description>管理上のレイアウトカスタマイズ</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -514,6 +540,10 @@
                     <title-short>Upravitelj portleta</title-short>
                     <description>Portlet omogućava administriranje portleta</description>
                     <keywords>administriranje portleta</keywords>
+                </language>
+                <language locale="ja">
+                    <title>Portletアプリケーション管理</title>
+                    <description>ポータル管理者にportletの管理機能を提供する</description>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -587,6 +617,10 @@
                     <description>Portlet omogućava administriranje izgleda</description>
                     <keywords>administriranje izgleda</keywords>
                 </language>
+                <language locale="ja">
+                    <title>レイアウト管理</title>
+                    <description>ユーザーにレイアウトカスタマイズ機能を提供します</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -624,6 +658,12 @@
                     <title-short>Upravitelj praćenja statistika</title-short>
                     <description>Portlet omogućava definiranje statistika koje se žele pratiti</description>
                     <keywords>administriranje statistike</keywords>
+                </language>
+                <language locale="ja">
+                    <title>トラッカー統計</title>
+                    <title-short>トラッカー統計</title-short>
+                    <description>ポータルのトラッキング統計を表示します</description>
+                    <keywords>トラッキング 統計</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -696,6 +736,10 @@
                     <description>Portlet omogućava administriranje profila</description>
                     <keywords>administriranje profila</keywords>
                 </language>
+                <language locale="ja">
+                    <title>プロファイル管理</title>
+                    <description>ユーザープロファイルをカスタマイズ</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -760,6 +804,10 @@
                     <title-short>Upravitelj jezika</title-short>
                     <description>Portlet omogućava administriranje jezika</description>
                     <keywords>administriranje jezika</keywords>
+                </language>
+                <language locale="ja">
+                    <title>言語</title>
+                    <description>言語を選択して下さい</description>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -828,6 +876,12 @@
                     <description>Portlet omogućava definiranje postavki usluge razmjene poruka</description>
                     <keywords>postavke razmjena poruka</keywords>
                 </language>
+                <language locale="ja">
+                    <title>伝言(Messaging)サービスの設定</title>
+                    <title-short>伝言(Messaging)サービス</title-short>
+                    <description>Portletは伝言(messaging)サービスの設定機能を提供します</description>
+                    <keywords>portlet 伝言 サービス</keywords>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -866,6 +920,12 @@
                     <title-short>Datum</title-short>
                     <description>Portlet ostvaruje funkcionalnost dohvata datuma</description>
                     <keywords>datum</keywords>
+                </language>
+                <language locale="ja">
+                    <title>日時</title>
+                    <title-short>日時</title-short>
+                    <description>Portletは日時機能を提供します</description>
+                    <keywords>portlet 日時</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -926,6 +986,12 @@
                     <title-short>Upravitelj sjednica</title-short>
                     <description>Portlet omogućava administriranje sjednicama</description>
                     <keywords>administriranje sjednica</keywords>
+                </language>
+                <language locale="ja">
+                    <title>セッション管理</title>
+                    <title-short>セッション管理</title-short>
+                    <description>ポータルのセッションを表示します</description>
+                    <keywords>portlet セッション</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>

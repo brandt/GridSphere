@@ -12,6 +12,7 @@
         <title lang="cs">Vítejte</title>
         <title lang="nl">Welkom</title>
         <title lang="hr">Dobrodošli</title>
+        <title lang="ja">ようこそ</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="settings">
             	<title lang="zh">配置</title>
@@ -24,6 +25,7 @@
                 <title lang="cs">Nastavení</title>
                 <title lang="nl">Eigenschappen</title>
                 <title lang="hr">Postavke</title>
+                <title lang="ja">設定</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -45,6 +47,7 @@
                 <title lang="cs">Umísťování</title>
                 <title lang="nl">Layout</title>
                 <title lang="hr">Izgled</title>
+            	<title lang="ja">レイアウト</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -69,6 +72,7 @@
         <title lang="cs">Administrace</title>
         <title lang="nl">Administratie</title>
         <title lang="hr">Administriranje</title>
+        <title lang="ja">管理</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="portlets" required-role="SUPER">
                 <title lang="zh">门件</title>
@@ -110,6 +114,7 @@
                 <title lang="cs">Uživatelé</title>
                 <title lang="nl">Gebruikers</title>
                 <title lang="hr">Korisnici</title>
+                <title lang="ja">ユーザー</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -132,6 +137,7 @@
                 <title lang="cs">Skupiny</title>
                 <title lang="nl">Groepen</title>
                 <title lang="hr">Grupe</title>
+                <title lang="en">グループ</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="70%">
@@ -146,6 +152,7 @@
             <portlet-tab label="roles" required-role="SUPER">
                 <title lang="en">Roles</title>
                 <title lang="hr">Uloge</title>
+                <title lang="ja">役割</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -168,6 +175,7 @@
                 <title lang="cs">Umísťování</title>
                 <title lang="nl">Layouts</title>
                 <title lang="hr">Izgledi</title>
+                <title lang="ja">レイアウト</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -184,6 +192,7 @@
                 <title lang="de">Textnachrichtendienste</title>
                 <title lang="fr">Messagerie</title>
                 <title lang="hr">Razmjena poruka</title>
+                <title lang="ja">伝言</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
