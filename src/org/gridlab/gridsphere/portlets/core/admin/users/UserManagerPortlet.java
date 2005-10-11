@@ -137,6 +137,11 @@ public class UserManagerPortlet extends ActionPortlet {
         if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
         }
+        CheckBoxBean accountCB = evt.getCheckBoxBean("accountCB");
+        String disabled = (String)user.getAttribute(User.DISABLED);
+        if ((disabled != null) && ("TRUE".equalsIgnoreCase(disabled))) {
+            accountCB.setSelected(true);
+        }
 
         setNextState(req, DO_VIEW_USER_EDIT);
     }
