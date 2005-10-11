@@ -45,6 +45,8 @@
 <ui:group>
 <p>
 <ui:text style="bold" key="MAIL_CONFIG_MSG"/>
+</p>
+<p>
 <ui:text key="MAIL_SERVER_MSG"/>
 </p>
 <p>
@@ -61,6 +63,27 @@
 <ui:tablerow>
 <ui:tablecell>
 <ui:actionsubmit action="configMailSettings" key="APPLY"/>
+</ui:tablecell>
+</ui:tablerow>
+</ui:frame>
+</ui:group>
+</ui:form>
+
+<ui:form>
+    <ui:group>
+<p>
+<ui:text style="bold" key="LOGIN_TRIES_CONFIG_MSG"/>
+</p>
+<p>
+<ui:text key="LOGIN_TRIES_MSG"/>
+</p>
+<p>
+<ui:textfield beanId="numTriesTF"/>
+</p>
+<ui:frame>
+<ui:tablerow>
+<ui:tablecell>
+<ui:actionsubmit action="configAccountSettings" key="APPLY"/>
 </ui:tablecell>
 </ui:tablerow>
 </ui:frame>

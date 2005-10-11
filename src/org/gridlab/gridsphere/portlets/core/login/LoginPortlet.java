@@ -34,7 +34,8 @@ public class LoginPortlet extends ActionPortlet {
 
     private static String FORGOT_PASSWORD_LABEL ="forgotpassword";
     private static String ACTIVATE_ACCOUNT_LABEL ="activateaccount";
-
+    private static String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
+    private static String LOGIN_NAME = "LOGIN_NAME";
     public static String SAVE_PASSWORDS = "SAVE_PASSWORDS";
     public static String SEND_USER_FORGET_PASSWORD = "SEND_USER_FORGET_PASSWD";
 
@@ -50,6 +51,7 @@ public class LoginPortlet extends ActionPortlet {
     public static final String DO_CONFIGURE = "login/config.jsp"; //configure login
 
     private boolean canUserCreateAccount = false;
+    private int defaultNumTries = 0;
 
     private UserManagerService userManagerService = null;
     private AccessControlManagerService aclService = null;
@@ -76,6 +78,14 @@ public class LoginPortlet extends ActionPortlet {
             }
             if (settings.getAttribute(SAVE_PASSWORDS) == null) {
                 settings.setAttribute(SAVE_PASSWORDS, Boolean.TRUE.toString());
+            }
+            String numTries = settings.getAttribute(LOGIN_NUMTRIES);
+
+            if (numTries == null) {
+                settings.setAttribute(LOGIN_NUMTRIES, "-1");
+                defaultNumTries = -1;
+            } else {
+                defaultNumTries = Integer.valueOf(numTries).intValue();
             }
             portalConfigService.savePortalConfigSettings(settings);
             loginService = (LoginService)getPortletConfig().getContext().getService(LoginService.class);
@@ -130,11 +140,77 @@ public class LoginPortlet extends ActionPortlet {
         String errorMsg = (String) req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
 
         if (errorMsg != null) {
+            Integer numTries = (Integer)req.getSession(true).getAttribute(LoginPortlet.LOGIN_NUMTRIES);
+            String loginname = (String)req.getSession(true).getAttribute(LoginPortlet.LOGIN_NAME);
+            int i = 1;
+            if (numTries != null) {
+                i = numTries.intValue();
+                i++;
+            }
+            numTries = new Integer(i);
+            req.getSession(true).setAttribute(LoginPortlet.LOGIN_NUMTRIES, numTries);
+            req.getSession(true).setAttribute(LoginPortlet.LOGIN_NAME, req.getParameter("username"));
+            System.err.println("num tries = " + i);
+            // tried one to many times using same name
+            if (req.getParameter("username").equals(loginname)) {
+                if ((i >= defaultNumTries) && (defaultNumTries != -1)) {
+                    disableAccount(event);
+                    errorMsg = this.getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS");
+                    req.getSession(true).removeAttribute(LoginPortlet.LOGIN_NUMTRIES);
+                    req.getSession(true).removeAttribute(LoginPortlet.LOGIN_NAME);
+                }
+            }
             createErrorMessage(event, errorMsg);
             req.removeAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
         }
 
         setNextState(req, "doViewUser");
+    }
+
+    public void disableAccount(FormEvent event) {
+        PortletRequest req = event.getPortletRequest();
+        String loginName = req.getParameter("username");
+        User user = userManagerService.getUserByUserName(loginName);
+        if (user != null) {
+            System.err.println("user= " + user);
+            SportletUser suser = userManagerService.editUser(user);
+            suser.setAttribute(User.DISABLED, "true");
+            userManagerService.saveUser(suser);
+
+            // mail user
+            MailMessage message = new MailMessage();
+            message.setEmailAddress(user.getEmailAddress());
+            message.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT"));
+
+            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+            if (settings.getAttribute(MailService.MAIL_SERVER_HOST) != null) {
+                mailService.setMailServiceHost(settings.getAttribute(MailService.MAIL_SERVER_HOST));
+            }
+            String sender = settings.getAttribute(MailService.MAIL_SENDER);
+            if (sender != null) {
+                message.setSender(sender);
+            }
+
+            StringBuffer body = new StringBuffer();
+
+            body.append(getLocalizedText(req, "LOGIN_DISABLED_MSG1") + " " + sender +  " " + getLocalizedText(req, "LOGIN_DISABLED_MSG2") + "\n\n");
+
+            StringBuffer body2 = new StringBuffer();
+            body2.append(getLocalizedText(req, "LOGIN_DISABLED_ADMIN_MSG") + " " + user.getUserName());
+
+            message.setBody(body.toString());
+
+            try {
+                mailService.sendMail(message);
+                message.setEmailAddress(sender);
+                message.setBody(body2.toString());
+                mailService.sendMail(message);
+            } catch (MessagingException e) {
+                log.error("Unable to send mail message!", e);
+                createErrorMessage(event, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
+                return;
+            }
+        }
     }
 
     public void doNewUser(FormEvent evt)
@@ -320,10 +396,6 @@ public class LoginPortlet extends ActionPortlet {
     }
 
     public void showConfigure(FormEvent event) {
-
-        //CheckBoxBean cb = event.getCheckBoxBean("authModCB");
-        //cb.clearSelectedValues();
-
         PortletRequest req = event.getPortletRequest();
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
         acctCB.setSelected(canUserCreateAccount);
@@ -339,6 +411,13 @@ public class LoginPortlet extends ActionPortlet {
         mailServerTF.setValue(settings.getAttribute(MailService.MAIL_SERVER_HOST));
         TextFieldBean mailSenderTF = event.getTextFieldBean("mailFromTF");
         mailSenderTF.setValue(settings.getAttribute(MailService.MAIL_SENDER));
+
+        String numTries = settings.getAttribute(LOGIN_NUMTRIES);
+        TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
+        if (numTries == null) {
+            numTries = "-1";
+        }
+        numTriesTF.setValue(numTries);
 
         List authModules = loginService.getAuthModules();
         req.setAttribute("authModules", authModules);
@@ -389,6 +468,25 @@ public class LoginPortlet extends ActionPortlet {
         settings.setAttribute(MailService.MAIL_SERVER_HOST, mailServer);
         if (!mailFrom.equals("")) settings.setAttribute(MailService.MAIL_SENDER, mailFrom);
 
+        portalConfigService.savePortalConfigSettings(settings);
+        showConfigure(event);
+    }
+
+    public void configAccountSettings(FormEvent event) throws PortletException {
+        PortletRequest req = event.getPortletRequest();
+        if (req.getRole().compare(req.getRole(), PortletRole.ADMIN) < 0) return;
+        TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
+        String numTries = numTriesTF.getValue();
+        int numtries = -1;
+        try {
+            numtries = Integer.valueOf(numTries).intValue();
+        } catch (NumberFormatException e) {
+            // do nothing
+        }
+
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        settings.setAttribute(LOGIN_NUMTRIES, numTries);
+        defaultNumTries = numtries;
         portalConfigService.savePortalConfigSettings(settings);
         showConfigure(event);
     }
