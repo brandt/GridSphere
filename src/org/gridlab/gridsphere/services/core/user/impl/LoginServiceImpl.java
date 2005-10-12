@@ -43,8 +43,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     private UserSessionManager userSessionManager = UserSessionManager.getInstance();
     private PortletLog log = SportletLog.getInstance(LoginServiceImpl.class);
     private static boolean inited = false;
-    private static List authModules = new ArrayList();
-    private static List activeAuthModules = new ArrayList();
+    private List authModules = new ArrayList();
     private static LoginUserModule activeLoginModule = null;
 
     private PersistenceManagerRdbms pm = null;
@@ -55,97 +54,19 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     public LoginServiceImpl() {
     }
 
-    /*
-    public void addActiveAuthModule(User user, LoginAuthModule authModule) {
-        if (!hasActiveAuthModule(user, authModule.getClass().getName())) {
-            AuthModuleEntry entry = new AuthModuleEntry();
-            entry.setUserId(user.getID());
-            entry.setModuleClassName(authModule.getClass().getName());
-            entry.setAttributes(authModule.getAttributes());
-            try {
-                pm.create(entry);
-            } catch (PersistenceManagerException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    */
-
-    /*
-    public LoginAuthModule getAuthModule(String moduleClassName) {
-        return (LoginAuthModule)authModules.get(moduleClassName);
-    }
-     */
-
     public List getAuthModules() {
         return authModules;
     }
 
-    /*
-    public boolean hasActiveAuthModule(User user, String moduleClassName) {
-        AuthModuleEntry authMod = null;
-        try {
-            String oql = "from " + AuthModuleEntry.class.getName() +
-                    " as authentry where authentry.UserId='" + user.getID() + "'" +
-                    " and authentry.ModuleClassName='" + moduleClassName + "'";
-            log.debug("Query with " + oql);
-            authMod = (AuthModuleEntry) pm.restore(oql);
-        } catch (PersistenceManagerException e) {
-            e.printStackTrace();
-        }
-        return (authMod != null);
-    }
-
-    public void removeActiveAuthModule(User user, String moduleClassName) {
-        try {
-            String oql = "from " + AuthModuleEntry.class.getName() +
-                    " as authentry where authentry.UserId='" + user.getID() + "'" +
-                    " and authentry.ModuleClassName='" + moduleClassName + "'";
-            log.debug("Query with " + oql);
-            pm.deleteList(oql);
-        } catch (PersistenceManagerException e) {
-            e.printStackTrace();
-        }
-    }
-    */
-
     public List getActiveAuthModules() {
-        return activeAuthModules;
+        List activeMods = new ArrayList();
+        Iterator it = authModules.iterator();
+        while (it.hasNext()) {
+            LoginAuthModule authModule = (LoginAuthModule)it.next();
+            if (authModule.isModuleActive()) activeMods.add(authModule);
+        }
+        return activeMods;
     }
-
-    /*
-    public List getActiveAuthModules(User user) {
-        List result = null;
-        try {
-            String oql = "from " + AuthModuleEntry.class.getName() + " as authentry where authentry.UserId='" + user.getID() + "'";
-            log.debug("Query with " + oql);
-            result = pm.restoreList(oql);
-        } catch (PersistenceManagerException e) {
-            e.printStackTrace();
-        }
-        // now convert AuthModuleEntry into the LoginAuthModule concrete class
-        List mods = new Vector();
-        if (result != null) {
-            Iterator it = result.iterator();
-            while (it.hasNext()) {
-                AuthModuleEntry entry = (AuthModuleEntry) it.next();
-                String className = entry.getModuleClassName();
-                //System.err.println("found a class=" + className);
-                if (activeAuthModules.containsKey(className)) mods.add(activeAuthModules.get(className));
-            }
-        }
-        if (mods.isEmpty()) {
-            Iterator it = activeAuthModules.values().iterator();
-            while (it.hasNext()) {
-                LoginAuthModule module = (LoginAuthModule)it.next();                
-                //System.err.println("found nothing-- adding " + module.getModuleName());
-                this.addActiveAuthModule(user, module);
-                mods.add(module);
-            }
-        }
-        return mods;
-    }
-    */
 
     public List getSupportedAuthModules() {
         return authModules;
@@ -224,7 +145,6 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
                 Constructor con = c.getConstructor(parameterTypes);
                 LoginAuthModule authModule = (LoginAuthModule) con.newInstance(obj);
                 authModules.add(authModule);
-                if (authModule.isModuleActive()) activeAuthModules.add(authModule);
             }
         } catch (Exception e) {
             log.error("Error loading auth module!", e);
@@ -240,10 +160,6 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
                 am.setModulePriority(authModule.getModulePriority());
                 am.setModuleActive(authModule.isModuleActive());
                 pm.update(am);
-                authModules.add(authModule);
-                // in case old auth module was active and new one is not remove it first then reinsert if active
-                activeAuthModules.remove(am.getModuleImplementation());
-                if (authModule.isModuleActive()) activeAuthModules.add(authModule);
             }
         } catch (Exception e) {
             e.printStackTrace();
