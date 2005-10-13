@@ -22,7 +22,7 @@ public class TextFieldBean extends InputBean implements TagBean {
     /**
      * Constructs a text field bean using the supplied bean name
      *
-     * @param name the bean name
+     * @param beanId the bean identifier
      */
     public TextFieldBean(String beanId) {
         super(NAME);
@@ -33,7 +33,7 @@ public class TextFieldBean extends InputBean implements TagBean {
     /**
      * Constructs a text field bean using the supplied bean name and identifier
      *
-     * @param name   the bean name
+     * @param vbName   the visual bean name, a 2 character identifier
      * @param beanId the bean identifier
      */
     public TextFieldBean(String vbName, String beanId) {

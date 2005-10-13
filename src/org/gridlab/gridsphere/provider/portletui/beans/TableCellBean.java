@@ -38,7 +38,6 @@ public class TableCellBean extends BeanContainer implements TagBean {
     /**
      * Constructs a table cell bean from a supplied portlet request and bean identifier
      *
-     * @param req    the portlet request
      * @param beanId the bean identifier
      */
     public TableCellBean(String beanId) {
