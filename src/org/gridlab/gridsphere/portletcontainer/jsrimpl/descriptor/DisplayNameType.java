@@ -25,7 +25,7 @@ import org.exolab.castor.xml.Unmarshaller;
  * It has an optional attribute xml:lang to indicate
  * which language is used in the description according to
  * RFC 1766 (http://www.ietf.org/rfc/rfc1766.txt). The default
- * value of this attribute is English(“en”).
+ * value of this attribute is English (en).
  *
  * @version $Revision$ $Date$
  */
