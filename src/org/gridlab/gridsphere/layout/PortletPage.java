@@ -45,11 +45,9 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     // The component ID's of each of the layout components
     protected List componentIdentifiers = new Vector();
 
-    // The list of portlets a user has-- generally contained within a PortletFrame/PortletTitleBar combo
-    //protected List portlets = new ArrayList();
-
     protected String keywords = "";
     protected String title = "";
+    protected String icon = "images/favicon.ico";
 
     //private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
     private String layoutDescriptor = null;
@@ -91,6 +89,23 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         return title;
     }
 
+    /**
+     * Returns the favicon for the page
+     *
+     * @return the favicon for the page
+     */
+    public String getIcon() {
+        return icon;
+    }
+
+    /**
+     * Sets the favicon for the page
+     *
+     * @param icon the favicon for the page
+     */
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 
     /**
      * Returns the keywords used in rendering output

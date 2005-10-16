@@ -32,6 +32,9 @@
         <field name="Keywords" type="string">
             <bind-xml name="keywords" node="attribute"/>
         </field>
+        <field name="Icon" type="string">
+            <bind-xml name="icon" node="attribute"/>
+        </field>
         <field name="RenderKit" type="string">
             <bind-xml name="renderkit" node="attribute"/>
         </field>
