@@ -172,11 +172,10 @@ public class PortletServlet extends HttpServlet
         System.err.println("remote Address: " + request.getRemoteAddr());
         //PersistenceManagerRdbms pm = PersistenceManagerFactory.createPersistenceManagerRdbms(webAppName);
 
-
         registry = PortletRegistry.getInstance();
         // If no portlet ID exists, this may be a command to init or shutdown a portlet instance
 
-        // currently either all portlets are initailized or shutdown, not one individually...
+        // currently either all portlets are initialized or shutdown, not one individually...
         String method = (String) request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
 
         if (method.equals(SportletProperties.INIT)) {
@@ -187,7 +186,6 @@ public class PortletServlet extends HttpServlet
                 Portlet portlet = (Portlet) portlets.get(portletName);
                 log.debug("in PortletServlet: service(): Initializing portlet " + portletName);
                 PortletDefinition portletDef = portletWebApp.getPortletDefinition(portletName);
-
                 PortletConfig portletConfig = new PortletConfigImpl(getServletConfig(), portletDef, Thread.currentThread().getContextClassLoader());
                 try {
                     portlet.init(portletConfig);
@@ -198,7 +196,6 @@ public class PortletServlet extends HttpServlet
                     it.remove();
                 }
             }
-
             manager.addWebApp(portletWebApp);
             return;
         } else if (method.equals(SportletProperties.INIT_CONCRETE)) {
@@ -508,9 +505,13 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
     }
 
     public void destroy() {
+        Iterator it = portlets.values().iterator();
+        while (it.hasNext()) {
+            Portlet portlet = (Portlet)it.next();
+            portlet.destroy();
+        }
         portletWebApp.destroy();
         super.destroy();
-        //portletManager.destroyPortletWebApplication(portletWebApp);
     }
 
 
