@@ -508,9 +508,22 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         Iterator it = portlets.values().iterator();
         while (it.hasNext()) {
             Portlet portlet = (Portlet)it.next();
-            portlet.destroy();
+            try {
+                portlet.destroy();
+            } catch (RuntimeException e) {
+                // PLT 5.2.5 ignore it
+            }
+            it.remove();
         }
         portletWebApp.destroy();
+        portletWebApp = null;
+        portletContext = null;
+        portlets = null;
+        portletclasses = null;
+        portletConfigHash = null;
+        prefsManager = null;
+        userKeys = null;
+        securePortlets = null;
         super.destroy();
     }
 
