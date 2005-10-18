@@ -10,8 +10,6 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.services.core.mail.MailMessage;
-import org.gridlab.gridsphere.services.core.mail.MailService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
@@ -23,8 +21,9 @@ import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
+import org.gridsphere.tmf.TextMessagingException;
 
-import javax.mail.MessagingException;
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -58,8 +57,9 @@ public class LoginPortlet extends ActionPortlet {
     private PasswordManagerService passwordManagerService = null;
     private PortalConfigService portalConfigService = null;
     private RequestService requestService = null;
-    private MailService mailService = null;
+    //private MailService mailService = null;
     private LoginService loginService = null;
+    private TextMessagingService tms = null;
 
     public void init(PortletConfig config) throws UnavailableException {
       
@@ -69,7 +69,8 @@ public class LoginPortlet extends ActionPortlet {
             aclService = (AccessControlManagerService) getPortletConfig().getContext().getService(AccessControlManagerService.class);
             passwordManagerService = (PasswordManagerService) getPortletConfig().getContext().getService(PasswordManagerService.class);
             requestService = (RequestService) getPortletConfig().getContext().getService(RequestService.class);
-            mailService = (MailService) getPortletConfig().getContext().getService(MailService.class);
+            tms = (TextMessagingService) getPortletConfig().getContext().getService(TextMessagingService.class);
+           // mailService = (MailService) getPortletConfig().getContext().getService(MailService.class);
             portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
             canUserCreateAccount = portalConfigService.getPortalConfigSettings().getCanUserCreateAccount();
             PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
@@ -177,35 +178,27 @@ public class LoginPortlet extends ActionPortlet {
             suser.setAttribute(User.DISABLED, "true");
             userManagerService.saveUser(suser);
 
-            // mail user
-            MailMessage message = new MailMessage();
-            message.setEmailAddress(user.getEmailAddress());
-            message.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT"));
-
-            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-            if (settings.getAttribute(MailService.MAIL_SERVER_HOST) != null) {
-                mailService.setMailServiceHost(settings.getAttribute(MailService.MAIL_SERVER_HOST));
-            }
-            String sender = settings.getAttribute(MailService.MAIL_SENDER);
-            if (sender != null) {
-                message.setSender(sender);
-            }
-
+            org.gridsphere.tmf.message.MailMessage mailToUser = tms.getMailMessage();
             StringBuffer body = new StringBuffer();
+            body.append(getLocalizedText(req, "LOGIN_DISABLED_MSG1") + " " + getLocalizedText(req, "LOGIN_DISABLED_MSG2") + "\n\n");
+            mailToUser.setBody(body.toString());
+            mailToUser.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT"));
+            mailToUser.setTo(user.getEmailAddress());
+            mailToUser.setServiceid("mail");
 
-            body.append(getLocalizedText(req, "LOGIN_DISABLED_MSG1") + " " + sender +  " " + getLocalizedText(req, "LOGIN_DISABLED_MSG2") + "\n\n");
-
+            org.gridsphere.tmf.message.MailMessage mailToAdmin = tms.getMailMessage();
             StringBuffer body2 = new StringBuffer();
             body2.append(getLocalizedText(req, "LOGIN_DISABLED_ADMIN_MSG") + " " + user.getUserName());
+            mailToAdmin.setBody(body2.toString());
+            mailToAdmin.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT") + " " + user.getUserName());
+            mailToAdmin.setTo(tms.getServiceUserID("mail", "root"));
+            mailToUser.setServiceid("mail");
 
-            message.setBody(body.toString());
 
             try {
-                mailService.sendMail(message);
-                message.setEmailAddress(sender);
-                message.setBody(body2.toString());
-                mailService.sendMail(message);
-            } catch (MessagingException e) {
+                tms.send(mailToUser);
+                tms.send(mailToAdmin);
+            } catch (TextMessagingException e) {
                 log.error("Unable to send mail message!", e);
                 createErrorMessage(event, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
                 return;
@@ -407,11 +400,6 @@ public class LoginPortlet extends ActionPortlet {
         CheckBoxBean savepassCB = event.getCheckBoxBean("savepassCB");
         savepassCB.setSelected(Boolean.valueOf(settings.getAttribute(SAVE_PASSWORDS)).booleanValue());
 
-        TextFieldBean mailServerTF = event.getTextFieldBean("mailHostTF");
-        mailServerTF.setValue(settings.getAttribute(MailService.MAIL_SERVER_HOST));
-        TextFieldBean mailSenderTF = event.getTextFieldBean("mailFromTF");
-        mailSenderTF.setValue(settings.getAttribute(MailService.MAIL_SENDER));
-
         String numTries = settings.getAttribute(LOGIN_NUMTRIES);
         TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
         if (numTries == null) {
@@ -451,23 +439,6 @@ public class LoginPortlet extends ActionPortlet {
         }
         settings.setAttribute(SAVE_PASSWORDS, Boolean.toString(savePasswords));
         settings.setAttribute(SEND_USER_FORGET_PASSWORD, Boolean.toString(sendForget));
-        portalConfigService.savePortalConfigSettings(settings);
-        showConfigure(event);
-    }
-
-    public void configMailSettings(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-        if (req.getRole().compare(req.getRole(), PortletRole.ADMIN) < 0) return;
-        TextFieldBean mailServerTF = event.getTextFieldBean("mailHostTF");
-        String mailServer = mailServerTF.getValue();
-
-        TextFieldBean mailSenderTF = event.getTextFieldBean("mailFromTF");
-        String mailFrom = mailSenderTF.getValue();
-
-        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        settings.setAttribute(MailService.MAIL_SERVER_HOST, mailServer);
-        if (!mailFrom.equals("")) settings.setAttribute(MailService.MAIL_SENDER, mailFrom);
-
         portalConfigService.savePortalConfigSettings(settings);
         showConfigure(event);
     }
@@ -526,33 +497,25 @@ public class LoginPortlet extends ActionPortlet {
         request.setUserID(user.getID());
         requestService.saveRequest(request);
 
-        // mail user
-        MailMessage message = new MailMessage();
-        message.setEmailAddress(emailTF.getValue());
-        message.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
-
-        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        if (settings.getAttribute(MailService.MAIL_SERVER_HOST) != null) {
-            mailService.setMailServiceHost(settings.getAttribute(MailService.MAIL_SERVER_HOST));
-        }
-        if (settings.getAttribute(MailService.MAIL_SENDER) != null) {
-            message.setSender(settings.getAttribute(MailService.MAIL_SENDER));
-        }
-
+        org.gridsphere.tmf.message.MailMessage mailToUser = tms.getMailMessage();
+        mailToUser.setTo(emailTF.getValue());
+        mailToUser.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
         StringBuffer body = new StringBuffer();
 
         body.append(getLocalizedText(req, "LOGIN_FORGOT_MAIL") + "\n\n");
 
         PortletURI uri = res.createURI();
+
         uri.addAction("newpassword");
         uri.addParameter("reqid", request.getOid());
 
         body.append(uri.toString());
-        message.setBody(body.toString());
+        mailToUser.setBody(body.toString());
+        mailToUser.setServiceid("mail");
 
         try {
-            mailService.sendMail(message);
-        } catch (MessagingException e) {
+            tms.send(mailToUser);
+        } catch (TextMessagingException e) {
             log.error("Unable to send mail message!", e);
             createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
             return;
@@ -596,18 +559,9 @@ public class LoginPortlet extends ActionPortlet {
 
         requestService.saveRequest(request);
 
-        // mail user
-        MailMessage message = new MailMessage();
-        message.setEmailAddress(emailTF.getValue());
-        message.setSubject(getLocalizedText(req, "MAIL_ACCT_HEADER"));
-
-        if (settings.getAttribute(MailService.MAIL_SERVER_HOST) != null) {
-            mailService.setMailServiceHost(settings.getAttribute(MailService.MAIL_SERVER_HOST));
-        }
-        if (settings.getAttribute(MailService.MAIL_SENDER) != null) {
-            message.setSender(settings.getAttribute(MailService.MAIL_SENDER));
-        }
-
+        org.gridsphere.tmf.message.MailMessage mailToUser = tms.getMailMessage();
+        mailToUser.setTo(emailTF.getValue());
+        mailToUser.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
         StringBuffer body = new StringBuffer();
 
         body.append(getLocalizedText(req, "LOGIN_ACTIVATE_MAIL") + "\n\n");
@@ -617,11 +571,12 @@ public class LoginPortlet extends ActionPortlet {
         uri.addParameter("reqid", request.getOid());
 
         body.append(uri.toString());
-        message.setBody(body.toString());
+        mailToUser.setBody(body.toString());
+        mailToUser.setServiceid("mail");
 
         try {
-            mailService.sendMail(message);
-        } catch (MessagingException e) {
+            tms.send(mailToUser);
+        } catch (TextMessagingException e) {
             log.error("Unable to send mail message!", e);
             createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
             return;
@@ -691,7 +646,6 @@ public class LoginPortlet extends ActionPortlet {
             System.err.println("active auth mod: " + (String)activeAuthMods.get(i));
         }
 
-
         List authModules = loginService.getAuthModules();
         Iterator it = authModules.iterator();
         while (it.hasNext()) {
@@ -758,9 +712,6 @@ public class LoginPortlet extends ActionPortlet {
                     requestService.deleteRequest(request);
                 }
             }
-
         }
     }
-
-
 }

@@ -41,33 +41,6 @@
 </ui:group>
 </ui:form>
 
-<ui:form>
-<ui:group>
-<p>
-<ui:text style="bold" key="MAIL_CONFIG_MSG"/>
-</p>
-<p>
-<ui:text key="MAIL_SERVER_MSG"/>
-</p>
-<p>
-<ui:textfield beanId="mailHostTF"/>
-</p>
-<p>
-<ui:text key="MAIL_FROM_MSG"/>
-</p>
-<p>
-<ui:textfield beanId="mailFromTF"/>
-</p>
-
-<ui:frame>
-<ui:tablerow>
-<ui:tablecell>
-<ui:actionsubmit action="configMailSettings" key="APPLY"/>
-</ui:tablecell>
-</ui:tablerow>
-</ui:frame>
-</ui:group>
-</ui:form>
 
 <ui:form>
     <ui:group>

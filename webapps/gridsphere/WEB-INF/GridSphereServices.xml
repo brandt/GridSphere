@@ -89,13 +89,6 @@
     </service>
 
     <service>
-        <name>Mail Service</name>
-        <description lang="en">Provides Mail Capabilities</description>
-        <interface>org.gridlab.gridsphere.services.core.mail.MailService</interface>
-        <implementation>org.gridlab.gridsphere.services.core.mail.impl.MailServiceImpl</implementation>
-    </service>
-
-    <service>
         <name>Tracker Service</name>
         <description lang="en">Provides ActionLink/Form Tracking Capabilities</description>
         <interface>org.gridlab.gridsphere.services.core.tracker.TrackerService</interface>
