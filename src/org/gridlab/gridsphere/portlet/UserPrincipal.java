@@ -1,7 +1,7 @@
 /*
  * Created by Dmitry Gavrilov 05.04.2005
  */
-package org.gridlab.gridsphere.portlet.jsrimpl;
+package org.gridlab.gridsphere.portlet;
 
 import java.io.Serializable;
 import java.security.Principal;
