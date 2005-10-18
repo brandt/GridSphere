@@ -283,6 +283,45 @@ public class PortletInvoker {
      * @throws IOException      if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
+    public final static synchronized void initPortlet(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+        // Initialize all concrete portlets for each application portlet
+        ApplicationPortlet appPortlet = registry.getApplicationPortlet(concretePortletID);
+        PortletDispatcher portletDispatcher = null;
+
+        log.debug("init app portlet" + appPortlet.getApplicationPortletID());
+        portletDispatcher = appPortlet.getPortletDispatcher(req, res);
+        if (portletDispatcher == null) {
+            throw new PortletException("Unable to get a dispatcher for application portlet: " + appPortlet);
+        }
+        List concPortlets = appPortlet.getConcretePortlets();
+        Iterator concIt = concPortlets.iterator();
+        PortletSettings settings = null;
+        // initialize the application portlet
+        log.info("initializing application portlet " + appPortlet.getApplicationPortletID());
+        portletDispatcher.init(req, res);
+        while (concIt.hasNext()) {
+            ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
+            settings = concPortlet.getPortletSettings();
+            // initialize the concrete portlet
+            log.info("initializing concrete portlet " + concPortlet.getConcretePortletID());
+            if (settings != null) {
+                portletDispatcher.initConcrete(settings, req, res);
+            } else {
+                log.info("not invoking initConcrete on portlet " + concPortlet.getConcretePortletID());
+            }
+        }
+
+        if (log.isDebugEnabled()) registry.logRegistry();
+    }
+
+    /**
+     * Initializes all application portlets
+     *
+     * @param req the <code>PortletRequest</code>
+     * @param res the <code>PortletResponse</code>
+     * @throws IOException      if an I/O error occurs
+     * @throws PortletException if a portlet/servlet error occurs
+     */
     public final static synchronized void initAllPortlets(PortletRequest req, PortletResponse res) throws IOException, PortletException {
         // Initialize all concrete portlets for each application portlet
         Collection appPortlets = registry.getAllApplicationPortlets();
