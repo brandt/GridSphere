@@ -4,13 +4,13 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.UserPrincipal;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Locale;
 import java.io.UnsupportedEncodingException;
 
@@ -171,7 +171,53 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
         return role;
     }
 
+    /**
+     * Returns the login of the user making this request, if the user
+     * has been authenticated, or null if the user has not been authenticated.
+     *
+     * @return		a <code>String</code> specifying the login
+     * of the user making this request, or <code>null</code>
+     * if the user login is not known.
+     */
+    public String getRemoteUser() {
+        UserPrincipal userPrincipal = (UserPrincipal)getAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
+        return (userPrincipal != null) ? userPrincipal.getName() : this.getHttpServletRequest().getRemoteUser();
+    }
 
+    /**
+     * Returns a java.security.Principal object containing the name of the
+     * current authenticated user.
+     *
+     * @return		a <code>java.security.Principal</code> containing
+     * the name of the user making this request, or
+     * <code>null</code> if the user has not been
+     * authenticated.
+     */
+    public java.security.Principal getUserPrincipal() {
+        UserPrincipal userPrincipal = (UserPrincipal)getAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
+        return (userPrincipal != null) ? userPrincipal : this.getHttpServletRequest().getUserPrincipal();
+    }
+
+    /**
+     * Returns a boolean indicating whether the authenticated user is
+     * included in the specified logical "role".  Roles and role membership can be
+     * defined using deployment descriptors.  If the user has not been
+     * authenticated, the method returns <code>false</code>.
+     *
+     * @param role a <code>String</code> specifying the name
+     *             of the role
+     * @return		a <code>boolean</code> indicating whether
+     * the user making this request belongs to a given role;
+     * <code>false</code> if the user has not been
+     * authenticated.
+     */
+    public boolean isUserInRole(String role) {
+        // TODO
+        // As specified in PLT-20-3, the <security-role-ref> mapping in portlet.xml must be used.
+        PortletRole prole = (PortletRole)getAttribute(SportletProperties.PORTLET_ROLE);
+        return (prole != null) ? (prole.getName().equalsIgnoreCase(role)) : this.getHttpServletRequest().isUserInRole(role);
+    }
+    
     public void setRole(PortletRole role) {
         this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_ROLE, role);
     }

@@ -4,14 +4,16 @@
  */
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.Portlet;
-import org.gridlab.gridsphere.portlet.PortletWindow;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 
 import javax.portlet.*;
+import javax.portlet.PortletContext;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
+import javax.portlet.PortletSession;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
