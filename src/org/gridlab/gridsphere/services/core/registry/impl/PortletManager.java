@@ -287,7 +287,7 @@ public class PortletManager implements PortletManagerService {
      * @throws PortletException if a portlet exception occurs
      */
     public synchronized void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        log.debug("initing web app" + webApplicationName);
+        log.debug("initing web app " + webApplicationName);
         PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webApplicationName, context);
         addWebApp(portletWebApp);
         PortletInvoker.initPortletWebApp(webApplicationName, req, res);
