@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.hibernate.DBTask;
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.UserPrincipal;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -105,7 +106,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         factory = SportletServiceFactory.getInstance();
         factory.init();
         layoutEngine = PortletLayoutEngine.getInstance();
-        log.debug("in init of GridSphereServlet");
+        System.err.println("in init of GridSphereServlet");
     }
 
     public synchronized void initializeServices() throws PortletServiceException {
@@ -123,7 +124,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         trackerService = (TrackerService) factory.createPortletService(TrackerService.class, getServletConfig().getServletContext(), true);
 
         //trackerService = (TrackerDaoImpl)factory.getSpringService("trackerDao");
-
     }
 
     /**
@@ -166,7 +166,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             } catch (Exception e) {
                 RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/database_error.jsp");
                 log.error("Check DB failed: ", e);
-                req.setAttribute("error", "DB Error! Please contact your GridSphere/Database Administrator!");
+                req.setAttribute("error", "<h3>Database Error!</h3> Please verify that the <b>" + GridSphereConfig.getServletContext().getRealPath("") + "/WEB-INF/CustomPortal/hibernate.properties</b> file is properly configured and that the tables have been created in your database using the <b>ant create-database</b> command (which normally gets called when using <b>ant install</b>)!");
                 rd.forward(req, res);
                 return;
             }
@@ -180,7 +180,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 // initialize all portlets
 
                 PortletResponse portletRes = event.getPortletResponse();
-                PortletInvoker.initAllPortlets(portletReq, portletRes);
+                
+                portletManager.initAllPortletWebApplications(portletReq, portletRes);
 
                 // deep inside a service is used which is why this must follow the factory.init
                 layoutEngine.init();
@@ -258,9 +259,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
         setUserAndGroups(portletReq);
+
         // Used for TCK tests
         if (isTCK) setTCKUser(portletReq);
-
 
         layoutEngine.service(event);
 
@@ -318,6 +319,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             groups = new HashMap();
             groups.put(coreGroup, PortletRole.GUEST);
         } else {
+            UserPrincipal userPrincipal = new UserPrincipal(user.getUserName());
+            req.setAttribute(SportletProperties.PORTLET_USER_PRINCIPAL, userPrincipal);
             List mygroups = aclService.getGroups(user);
             Iterator it = mygroups.iterator();
             while (it.hasNext()) {
@@ -351,7 +354,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 indeDelimeter = (indeDelimeter > 0) ? (indeDelimeter + 1) : 0;
                 String login = principal.getName().substring(indeDelimeter);
                 User user = userManagerService.getLoggedInUser(login);
-                setUserSettings(event, user);
+                if (user != null) setUserSettings(event, user);
             }
         }
     }
@@ -636,7 +639,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The servlet context event
      */
     public void contextInitialized(ServletContextEvent event) {
-        System.err.println("contextInitialized()");
+        System.err.println("in contextInitialized of GridSphereServlet");
         ServletContext ctx = event.getServletContext();
         GridSphereConfig.setServletContext(ctx);
         log.debug("contextName: " + ctx.getServletContextName());
