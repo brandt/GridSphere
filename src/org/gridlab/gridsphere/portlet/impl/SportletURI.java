@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -198,7 +197,8 @@ public class SportletURI implements PortletURI {
             it = set.iterator();
             while (it.hasNext()) {
                 if (!firstParam)
-                    url += "&amp;"; // special character replaced with its corresponding entity for XHTML 1.0 Strict compliance
+//                    url += "&amp;"; // special character replaced with its corresponding entity for XHTML 1.0 Strict compliance
+                    url += "&";
                 String name = (String) it.next();
 
                 String encname = URLEncoder.encode(name, "UTF-8");
