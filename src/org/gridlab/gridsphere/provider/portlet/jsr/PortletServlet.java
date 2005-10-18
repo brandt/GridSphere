@@ -7,7 +7,6 @@ package org.gridlab.gridsphere.provider.portlet.jsr;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.jsrimpl.*;
 
-import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -57,6 +56,7 @@ import java.io.InputStream;
 import java.io.File;
 import java.util.*;
 import java.util.ResourceBundle;
+import java.security.Principal;
 
 public class PortletServlet extends HttpServlet
         implements Servlet, ServletConfig, ServletContextListener,
@@ -84,11 +84,11 @@ public class PortletServlet extends HttpServlet
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-       
-        // load descriptor files
         log.debug("in init of PortletServlet");
+    }
 
-        ServletContext ctx = config.getServletContext();
+    public void initJSRPortletWebapp() throws ServletException {
+        ServletContext ctx = this.getServletContext();
 
         portlets = new Hashtable();
         portletclasses = new Hashtable();
@@ -155,9 +155,9 @@ public class PortletServlet extends HttpServlet
         // load in any authentication modules if found-- this is a GridSphere extension
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         LoginService loginService = (LoginService)factory.createPortletService(LoginService.class, ctx, true);
-        InputStream is = config.getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
+        InputStream is = this.getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
         if (is != null) {
-            String authModulePath = config.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
+            String authModulePath = this.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
             loginService.loadAuthModules(authModulePath, Thread.currentThread().getContextClassLoader());
             log.info("loading authentication modules from: " + authModulePath);
         } else {
@@ -170,7 +170,6 @@ public class PortletServlet extends HttpServlet
         // security check
         // make sure request comes only from gridsphere servlet same ip
         System.err.println("remote Address: " + request.getRemoteAddr());
-        //PersistenceManagerRdbms pm = PersistenceManagerFactory.createPersistenceManagerRdbms(webAppName);
 
         registry = PortletRegistry.getInstance();
         // If no portlet ID exists, this may be a command to init or shutdown a portlet instance
@@ -179,6 +178,7 @@ public class PortletServlet extends HttpServlet
         String method = (String) request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
 
         if (method.equals(SportletProperties.INIT)) {
+            initJSRPortletWebapp();
             Set set = portlets.keySet();
             Iterator it = set.iterator();
             while (it.hasNext()) {
@@ -274,7 +274,9 @@ public class PortletServlet extends HttpServlet
         User user = (User) request.getAttribute(SportletProperties.PORTLET_USER);
         Map userInfo;
 
-        if (user instanceof GuestUser) {
+        //if (user instanceof GuestUser) {
+        Principal principal = request.getUserPrincipal();
+        if (principal == null) {
             userInfo = null;
         } else {
             userInfo = new HashMap();
@@ -323,7 +325,7 @@ public class PortletServlet extends HttpServlet
 
         request.removeAttribute(SportletProperties.SSL_REQUIRED);
         if (securePortlets.contains(pid)) {
-            request.setAttribute(SportletProperties.SSL_REQUIRED, "true");    
+            request.setAttribute(SportletProperties.SSL_REQUIRED, "true");
         }
 
         if (method.equals(SportletProperties.SERVICE)) {
@@ -400,7 +402,7 @@ public class PortletServlet extends HttpServlet
                         throw new ServletException(e);
                     } finally {
                         //request.removeAttribute(SportletProperties.PORTLET_MODE_JSR);
-                    }                   
+                    }
                 }
             }
             request.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
