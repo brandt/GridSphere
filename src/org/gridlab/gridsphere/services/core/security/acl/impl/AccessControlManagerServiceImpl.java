@@ -331,7 +331,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
         boolean found = false;
 
-        //Iterator it = aclService.getGroups().iterator();
+        if (userGroups == null) return false;
 
         Iterator it = userGroups.keySet().iterator();
         while (it.hasNext()) {
