@@ -36,6 +36,9 @@ public class PortletManager implements PortletManagerService {
     // A multi-valued hashtable with a webapp key and a List value containing portletAppID's
     private List webapps = new Vector();
 
+    // An ordered list of known portlet webapps
+    private String[] webappFiles = null;
+
     private static String PORTLETS_PATH = "/WEB-INF/CustomPortal/portlets";
     /**
      * Default instantiation disallowed
@@ -112,7 +115,7 @@ public class PortletManager implements PortletManagerService {
             String portletsPath = GridSphereConfig.getServletContext().getRealPath(PORTLETS_PATH);
             File f = new File(portletsPath);
             if (f.exists() && f.isDirectory()) {
-                String[] webappFiles = f.list();
+                webappFiles = f.list();
 
                 // sort webapps by priority
                 Arrays.sort(webappFiles, new WebappComparator());
@@ -134,6 +137,7 @@ public class PortletManager implements PortletManagerService {
 
                         // forget about readme file !
                         if (webapp.startsWith("README")) continue;
+                        System.err.println("Creating webapp for " + webapp);
                         PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
                         addWebApp(portletWebApp);
                     } catch (PortletException e) {
@@ -254,9 +258,24 @@ public class PortletManager implements PortletManagerService {
                 it.remove();
             }
         }
-
         removePortletFile(webApplication.getWebApplicationName());
     }
+
+    /**
+     * Initializes all known portlet web applications in order
+     *
+     * @param req                the portlet request
+     * @param res                the portlet response
+     * @throws IOException      if an I/O error occurs
+     * @throws PortletException if a portlet exception occurs
+     */
+    public synchronized void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException {
+        for (int i = 0; i < webappFiles.length; i++) {
+            if (webappFiles[i].startsWith("README")) continue;
+            initPortletWebApplication(webappFiles[i], req, res);
+        }
+    }
+
 
     /**
      * Initializes the portlet application
@@ -271,26 +290,7 @@ public class PortletManager implements PortletManagerService {
         log.debug("initing web app" + webApplicationName);
         PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webApplicationName, context);
         addWebApp(portletWebApp);
-        log.debug("initing web app " + webApplicationName);
         PortletInvoker.initPortletWebApp(webApplicationName, req, res);
-    }
-
-    /**
-     * Initializes the portlet application
-     *
-     * @param portletWebApplication the portlet web application
-     * @param req                   the portlet request
-     * @param res                   the portlet response
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet exception occurs
-     */
-    public synchronized void initPortletWebApplication(PortletWebApplication portletWebApplication, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        String webapp = portletWebApplication.getWebApplicationName();
-        log.debug("initing web app" + webapp);
-        PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
-        addWebApp(portletWebApp);
-        log.debug("initing web app " + webapp);
-        PortletInvoker.initPortletWebApp(webapp, req, res);
     }
 
     /**
@@ -306,22 +306,6 @@ public class PortletManager implements PortletManagerService {
         log.debug("in destroyPortletWebApplication: " + webApplicationName);
         PortletInvoker.destroyPortletWebApp(webApplicationName, req, res);
         removePortletWebApplication(webApplicationName);
-    }
-
-    /**
-     * Shuts down the portlet application
-     *
-     * @param portletWebApplication the portlet web application
-     * @param req                   the portlet request
-     * @param res                   the portlet response
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet exception occurs
-     */
-    public synchronized void destroyPortletWebApplication(PortletWebApplication portletWebApplication, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        String webapp = portletWebApplication.getWebApplicationName();
-        log.debug("in destroyPortletWebApplication: " + webapp);
-        PortletInvoker.destroyPortletWebApp(webapp, req, res);
-        removePortletWebApplication(webapp);
     }
 
     /**

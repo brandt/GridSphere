@@ -51,6 +51,18 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     }
 
     /**
+     * Initializes all known portlet web applications in order
+     *
+     * @param req                the portlet request
+     * @param res                the portlet response
+     * @throws IOException      if an I/O error occurs
+     * @throws PortletException if a portlet exception occurs
+     */
+    public void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException {
+        portletManager.initAllPortletWebApplications(req, res);    
+    }
+
+    /**
      * Initializes a portlet web application
      *
      * @param webApplicationName the name of the portlet web application
