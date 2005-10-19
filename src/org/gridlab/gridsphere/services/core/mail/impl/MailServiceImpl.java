@@ -20,6 +20,7 @@ import java.util.Properties;
 
 /**
  * <code>MailServiceImpl</code> is a mail utility used to send {@link org.gridlab.gridsphere.services.core.mail.MailMessage}s.
+ * @deprecated
  */
 public class MailServiceImpl implements PortletServiceProvider, MailService {
 
@@ -61,6 +62,4 @@ public class MailServiceImpl implements PortletServiceProvider, MailService {
         mimeMessage.setText(msg.getBody());
         Transport.send(mimeMessage);
     }
-
-
 }

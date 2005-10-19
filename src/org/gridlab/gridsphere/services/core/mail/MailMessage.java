@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.services.core.mail;
 
 /**
  * The <code>MailMessage</code> utility class represents a mail message.
+ * @deprecated
  */
 public class MailMessage {
 
