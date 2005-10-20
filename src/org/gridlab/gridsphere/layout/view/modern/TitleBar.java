@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.layout.PortletTitleBar;
 import org.gridlab.gridsphere.layout.view.BaseRender;
 import org.gridlab.gridsphere.layout.view.Render;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 
 import java.io.File;
 import java.util.Iterator;
@@ -24,6 +25,7 @@ public class TitleBar extends BaseRender implements Render {
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
         PortletTitleBar titleBar = (PortletTitleBar)comp;
+        PortletRequest req = event.getPortletRequest();
         StringBuffer titleBuffer = new StringBuffer();
         if (titleBar.isActive()) {
             titleBuffer.append("<div class=\"window-title-active\">");
@@ -43,7 +45,7 @@ public class TitleBar extends BaseRender implements Render {
             	{ titleBuffer.append("&nbsp;"); }
             while (modesIt.hasNext()) {
                  mode = (PortletTitleBar.PortletModeLink) modesIt.next();
-                 titleBuffer.append("<a href=\"" + mode.getHref() + "\"><img src=\"themes/" + titleBar.getTheme() + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\" alt=\"" + mode.getAltTag() + "\" /></a>"); /// Removed File.separator(s)
+                 titleBuffer.append("<a href=\"" + mode.getHref() + "\"><img src=\"" + req.getContextPath() +"/themes/" + titleBar.getTheme() + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\" alt=\"" + mode.getAltTag() + "\" /></a>"); /// Removed File.separator(s)
             }
             titleBuffer.append("</div>");
         }
@@ -53,6 +55,7 @@ public class TitleBar extends BaseRender implements Render {
 
     public StringBuffer doEnd(GridSphereEvent event, PortletComponent comp) {
         PortletTitleBar titleBar = (PortletTitleBar)comp;
+        PortletRequest req = event.getPortletRequest();
         StringBuffer titleBuffer = new StringBuffer();
         titleBuffer.append("</div>");
         // Output window state icons
@@ -64,7 +67,7 @@ public class TitleBar extends BaseRender implements Render {
             titleBuffer.append("<div class=\"window-icon-right\">");
             while (windowsIt.hasNext()) {
                 state = (PortletTitleBar.PortletStateLink) windowsIt.next();
-                titleBuffer.append("<a href=\"" + state.getHref() + "\"><img src=\"themes/" + titleBar.getTheme() + "/" + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\" alt=\"" + state.getAltTag() + "\" /></a>");
+                titleBuffer.append("<a href=\"" + state.getHref() + "\"><img src=\"" + req.getContextPath() +"/themes/" + titleBar.getTheme() + "/" + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\" alt=\"" + state.getAltTag() + "\" /></a>");
             }
             titleBuffer.append("</div>");
         }
