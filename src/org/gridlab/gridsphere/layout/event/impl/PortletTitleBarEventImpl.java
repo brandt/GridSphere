@@ -21,7 +21,6 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
 
     private ComponentAction action = null;
     private int id;
-    private PortletRequest req;
     private PortletTitleBar titleBar = null;
     private PortletRequest request;
     private boolean hasStateAction = false;
@@ -36,20 +35,19 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      */
     public PortletTitleBarEventImpl(PortletTitleBar titleBar, GridSphereEvent event, int id) {
         this.titleBar = titleBar;
-        this.req = event.getPortletRequest();
-        User user = req.getUser();
+        this.request = event.getPortletRequest();
+        User user = request.getUser();
         if (!(user instanceof GuestUser)) {
             this.id = id;
-            if (req.getParameter(SportletProperties.PORTLET_MODE) != null) {
+            if (request.getParameter(SportletProperties.PORTLET_MODE) != null) {
                 action = PortletTitleBarEvent.TitleBarAction.MODE_MODIFY;
                 hasModeAction = true;
             }
-            if (req.getParameter(SportletProperties.PORTLET_WINDOW) != null) {
+            if (request.getParameter(SportletProperties.PORTLET_WINDOW) != null) {
                 action = PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY;
                 hasStateAction = true;
             }
         }
-        this.request = event.getPortletRequest();
     }
 
     public PortletRequest getRequest() {
@@ -76,7 +74,7 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      */
     public Portlet.Mode getMode() {
         Portlet.Mode mode;
-        String pMode = req.getParameter(SportletProperties.PORTLET_MODE);
+        String pMode = request.getParameter(SportletProperties.PORTLET_MODE);
         if (pMode != null) {
             try {
                 mode = Portlet.Mode.toMode(pMode);
@@ -104,7 +102,7 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      */
     public PortletWindow.State getState() {
         PortletWindow.State state;
-        String s = req.getParameter(SportletProperties.PORTLET_WINDOW);
+        String s = request.getParameter(SportletProperties.PORTLET_WINDOW);
         if (s != null) {
             try {
                 state = PortletWindow.State.toState(s);
