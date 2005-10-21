@@ -2,7 +2,5 @@
 
 <%@ include file="/WEB-INF/CustomPortal/layouts/html/pagehead.html" %>
 
-<h1>Error:</h1>
-
 <%= error %>
 
