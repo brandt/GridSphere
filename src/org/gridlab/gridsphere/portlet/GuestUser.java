@@ -32,8 +32,8 @@ public class GuestUser implements User {
      * Constructor creates a private instance of GuestUser
      */
     private GuestUser() {
-        FamilyName = "Role";
-        FullName = "Guest Role";
+        FamilyName = "User";
+        FullName = "Guest User";
         GivenName = "Guest";
         EmailAddress = "no email";
         Id = "500";
