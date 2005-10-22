@@ -58,8 +58,8 @@ public class Page extends BaseRender implements Render {
                 page.append("\n\t<link type=\"text/css\" href=\"" + cssHref + " rel=\"stylesheet\"/>");
             }
         }
-        page.append("\n\t<link rel=\"icon\" href=\"" + portletPage.getIcon() + "\" type=\"imge/x-icon\"/>");
-        page.append("\n\t<link rel=\"shortcut icon\" href=\"" + req.getContextPath() + "/images/favicon.ico\" type=\"image/x-icon\"/>");
+        page.append("\n\t<link rel=\"icon\" href=\"" + req.getContextPath() + "/" + portletPage.getIcon() + "\" type=\"imge/x-icon\"/>");
+        page.append("\n\t<link rel=\"shortcut icon\" href=\"" + req.getContextPath() + "/" + portletPage.getIcon() + "\" type=\"image/x-icon\"/>");
         page.append("\n\t<script language=\"JavaScript\" src=\"" + req.getContextPath() + "/javascript/gridsphere.js\"></script>");
         page.append("\n\t</head>\n\t<body>\n");
         return page;
