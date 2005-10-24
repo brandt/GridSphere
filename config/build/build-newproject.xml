@@ -20,6 +20,8 @@
         <echo message="Overwriting ${newproject.dir}/build.xml and copying existing ${newproject.dir}/build.xml to ${newproject.dir}/build.xml.bak"/>
         <copy file="${newproject.dir}/build.xml" tofile="${newproject.dir}/build.xml.bak" overwrite="true"/>
         <copy file="config/build/build.project.xml" tofile="${newproject.dir}/build.xml" overwrite="true"/>
+        <copy file="${newproject.dir}/build.properties" tofile="${newproject.dir}/build.properties.bak" overwrite="true"/>
+        <copy file="config/build/build.properties.xml" tofile="${newproject.dir}/build.properties" overwrite="true"/>
         <replace file="${newproject.dir}/build.xml"
             token="@PROJECT_TITLE@"
             value="${project.title}"/>
