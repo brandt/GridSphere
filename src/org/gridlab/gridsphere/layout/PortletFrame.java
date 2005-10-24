@@ -27,6 +27,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.*;
+import java.security.Principal;
 
 /**
  * <code>PortletFrame</code> provides the visual representation of a portlet. A portlet frame
@@ -143,6 +144,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      */
     public String getOuterPadding() {
         return outerPadding;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
+        if (titleBar != null) titleBar.setTheme(theme);
     }
 
     /**
@@ -266,7 +272,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         super.actionPerformed(event);
 
-        User user = event.getPortletRequest().getUser();
         PortletRequest request = event.getPortletRequest();
         String id = request.getPortletSession(true).getId();
 
@@ -328,16 +333,13 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             request.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
-            //PortletRole role = req.getRole();
-            //if (role.compare(role, requiredRole) < 0) return;
-
             PortletResponse res = event.getPortletResponse();
 
             request.setAttribute(SportletProperties.PORTLETID, portletClass);
 
             // Override if user is a guest
-            //Uuser = req.getUser();
-            if (user instanceof GuestUser) {
+            Principal principal = request.getUserPrincipal();
+            if (principal == null) {
                 request.setMode(Portlet.Mode.VIEW);
             } else {
                 Portlet.Mode mode = titleBar.getPortletMode();
@@ -470,15 +472,17 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             }
         }
         onlyRender = true;
-
         User user = req.getUser();
-        if (!(user instanceof GuestUser)) {
-            boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
-            //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
-            //System.err.println("hasRole = " + hasrole + " portletclass= " + portletClass);
-            if (!hasrole) {
-                System.err.println("User " + user + " has no permissions to access portlet: " + portletClass + "!");
-                return;
+        if (!roleString.equals("")) {
+            Principal principal = req.getUserPrincipal();
+            if (principal != null) {
+                boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
+                //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
+                //System.err.println("hasRole = " + hasrole + " portletclass= " + portletClass);
+                if ((!hasrole) && (!req.isUserInRole(roleString))) {
+                    System.err.println("User " + user + " has no permissions to access portlet: " + portletClass + "!");
+                    return;
+                }
             }
         }
 
@@ -516,11 +520,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         StringWriter storedWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(storedWriter);
         if (renderPortlet) {
-                if (!transparent) {
-                    postframe.append(titleBar.getBufferedOutput(req));
-                }
+            if (!transparent) {
+                postframe.append(titleBar.getBufferedOutput(req));
+            }
 
-                postframe.append(frameView.doStartBorder(event, this));
+            postframe.append(frameView.doStartBorder(event, this));
 
             // TODO try to cache portlet's rendering---
             storedWriter = new StringWriter();
@@ -530,7 +534,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             if (isClosing) {
                 postframe.append(frameView.doRenderCloseFrame(event, this));
             } else {
-
                 //System.err.println("in portlet frame render: class= " + portletClass + " setting prev mode= " + req.getPreviousMode() + " cur mode= " + req.getMode());
                 if (hasError(req)) {
                     doRenderCustomError(postframe, req, wrappedResponse);
@@ -538,15 +541,15 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                         doRenderError(postframe, req, wrappedResponse);
                     }
                     postframe.append(storedWriter.toString());
+                } else if ((titleBar != null) && (titleBar.hasRenderError())) {
+                     postframe.append(titleBar.getErrorMessage());
                 } else {
                     try {
-
                         if (!renderParams.isEmpty()) {
                             //System.err.println("PortletFrame: in " + portletClass + " sending render params");
                             System.err.println("in render " + portletClass + " there are render params in the frame setting in request! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
                             req.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr, renderParams);
                         }
-
                         PortletInvoker.service((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
                         postframe.append(storedWriter.toString());
                     } catch (PortletException e) {
@@ -558,17 +561,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     }
                 }
             }
-
             postframe.append(frameView.doEndBorder(event, this));
 
         } else {
             postframe.append(frameView.doRenderMinimizeFrame(event, this));
         }
-
-
         postframe.append(frameView.doEnd(event, this));
-
-
 
         if (req.getAttribute(SportletProperties.RESPONSE_COMMITTED) != null) {
             renderPortlet = true;
@@ -681,8 +679,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
 
             // Override if user is a guest
-            User user = req.getUser();
-            if (user instanceof GuestUser) {
+            Principal principal = req.getUserPrincipal();
+            if (principal == null) {
+            //User user = req.getUser();
+            //if (user instanceof GuestUser) {
                 req.setMode(Portlet.Mode.VIEW);
             } else {
                 if (titleBar != null) {

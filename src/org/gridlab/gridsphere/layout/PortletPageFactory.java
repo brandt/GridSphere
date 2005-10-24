@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
+import java.security.Principal;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -111,7 +112,7 @@ public class PortletPageFactory implements PortletSessionListener {
         guests.clear();
         userLayouts.clear();
     }
-    
+
     public void addPortletGroupTab(PortletRequest req, String groupName) {
         PortletPage page = createPortletPage(req);
         PortletTabbedPane pagePane = page.getPortletTabbedPane();
@@ -127,7 +128,7 @@ public class PortletPageFactory implements PortletSessionListener {
             } catch (Exception e) {
                 log.error("Unable to copy application tabs for webapp: " + groupName);
             }
-        
+
             page.setPortletTabbedPane(pagePane);
             page.init(req, new ArrayList());
         }
@@ -475,7 +476,9 @@ public class PortletPageFactory implements PortletSessionListener {
             }
         }
 
-        if (user instanceof GuestUser) {
+        Principal principal = req.getUserPrincipal();
+        if (principal == null) {
+        //if (user instanceof GuestUser) {
             return createFromGuestLayoutXML(req);
         }
 

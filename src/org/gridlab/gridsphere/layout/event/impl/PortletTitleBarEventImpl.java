@@ -12,6 +12,8 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
+import java.security.Principal;
+
 
 /**
  * A <code>PortletTitleBarEventImpl</code> is the concrete implementation of
@@ -36,8 +38,10 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
     public PortletTitleBarEventImpl(PortletTitleBar titleBar, GridSphereEvent event, int id) {
         this.titleBar = titleBar;
         this.request = event.getPortletRequest();
-        User user = request.getUser();
-        if (!(user instanceof GuestUser)) {
+        //User user = request.getUser();
+        //if (!(user instanceof GuestUser)) {
+        Principal principal = request.getUserPrincipal();
+        if (principal != null) {
             this.id = id;
             if (request.getParameter(SportletProperties.PORTLET_MODE) != null) {
                 action = PortletTitleBarEvent.TitleBarAction.MODE_MODIFY;
