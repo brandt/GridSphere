@@ -329,7 +329,7 @@ Copyright:
 
         <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="${gridsphere.build}/lib/">
-                <include name="gridsphere-ui-tags*.jar"/>
+                <include name="gridsphere-ui-tags-{gridsphere.version}.jar"/>
             </fileset>
         </copy>
 
