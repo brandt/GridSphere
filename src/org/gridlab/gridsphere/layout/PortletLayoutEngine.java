@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Vector;
+import java.security.Principal;
 
 /**
  * The <code>PortletLayoutEngine</code> is a singleton that is responsible for managing
@@ -30,7 +31,9 @@ public class PortletLayoutEngine {
     private static PortletLayoutEngine instance = new PortletLayoutEngine();
 
     private PortletPageFactory pageFactory = PortletPageFactory.getInstance();
-    //private String error = "";
+
+    private PortletFrameRegistry registry = PortletFrameRegistry.getInstance();
+
 
     /**
      * Constructs a concrete instance of the PortletLayoutEngine
@@ -128,6 +131,7 @@ public class PortletLayoutEngine {
         try {
             PortletPage page = getPortletPage(event);
             page.logoutPortlets(event);
+            registry.removeAllPortletFrames(event);
         } catch (Exception e) {
             log.error("Unable to logout portlets", e);
         }
@@ -136,6 +140,20 @@ public class PortletLayoutEngine {
     public void destroy() {
         pageFactory.destroy();
     }
+
+    public void doAction(GridSphereEvent event) {
+         String cid = event.getPortletComponentID();
+         if (!cid.equals("")) {
+             PortletFrame frame = registry.getPortletFrame(cid, null, event);
+             if (frame != null)  {
+                 try {
+                     frame.actionPerformed(event);
+                 } catch (Exception e) {
+                     e.printStackTrace();
+                 }
+             }
+         }
+     }
 
     /**
      * Performs an action on the portlet container referenced by the
