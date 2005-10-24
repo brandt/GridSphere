@@ -177,12 +177,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 initializeServices();
                 // create a root user if none available
                 userManagerService.initRootUser();
-                // initialize all portlets
-
-                PortletResponse portletRes = event.getPortletResponse();
-                
-                portletManager.initAllPortletWebApplications(portletReq, portletRes);
-
                 // deep inside a service is used which is why this must follow the factory.init
                 layoutEngine.init();
             } catch (Exception e) {
@@ -367,9 +361,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             if (cookies != null) {
                 for (int i = 0; i < cookies.length; i++) {
                     Cookie c = cookies[i];
-                    System.err.println("found a cookie:");
-                    System.err.println("name=" + c.getName());
-                    System.err.println("value=" + c.getValue());
+                    //System.err.println("found a cookie:");
+                    //System.err.println("name=" + c.getName());
+                    //System.err.println("value=" + c.getValue());
                     if (c.getName().equals("gsuid")) {
 
                         String cookieVal = c.getValue();
@@ -377,10 +371,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                         if (hashidx > 0) {
                             String uid = cookieVal.substring(0, hashidx);
 
-                            System.err.println("uid = " + uid);
+                            //System.err.println("uid = " + uid);
 
                             String reqid = cookieVal.substring(hashidx+1);
-                            System.err.println("reqid = " + reqid);
+                            //System.err.println("reqid = " + reqid);
 
                             GenericRequest genreq = requestService.getRequest(reqid, COOKIE_REQUEST);
                             if (genreq != null) {
@@ -414,7 +408,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         // COOKIE_EXPIRATION_TIME is specified in secs
         cookie.setMaxAge(COOKIE_EXPIRATION_TIME);
         res.addCookie(cookie);
-        System.err.println("adding a  cookie");
+        //System.err.println("adding a  cookie");
     }
 
     protected void removeUserCookie(GridSphereEvent event) {
@@ -428,7 +422,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     int idx = c.getValue().indexOf("#");
                     if (idx > 0) {
                         String reqid = c.getValue().substring(idx+1);
-                        System.err.println("reqid= " + reqid);
+                        //System.err.println("reqid= " + reqid);
                         GenericRequest request = requestService.getRequest(reqid, COOKIE_REQUEST);
                         if (request != null) requestService.deleteRequest(request);
                     }
@@ -499,6 +493,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     protected void logout(GridSphereEvent event) {
         log.debug("in logout of GridSphere Servlet");
         PortletRequest req = event.getPortletRequest();
+        req.removeAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
         removeUserCookie(event);
         PortletSession session = req.getPortletSession();
         session.removeAttribute(SportletProperties.PORTLET_USER);
@@ -563,7 +558,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @return a string with the servlet information.
      */
     public final String getServletInfo() {
-        return "GridSphere Servlet 2.0.1";
+        return "GridSphere Servlet 2.1";
     }
 
     /**
