@@ -274,9 +274,9 @@ public class PortletServlet extends HttpServlet
         User user = (User) request.getAttribute(SportletProperties.PORTLET_USER);
         Map userInfo;
 
-        //if (user instanceof GuestUser) {
-        Principal principal = request.getUserPrincipal();
-        if (principal == null) {
+        if (user == null) {
+            user = GuestUser.getInstance();
+        } else if (user instanceof GuestUser) {
             userInfo = null;
         } else {
             userInfo = new HashMap();
@@ -292,7 +292,6 @@ public class PortletServlet extends HttpServlet
             if (userInfo.containsKey("user.theme")) userInfo.put("user.theme", user.getAttribute(User.THEME));
             if (userInfo.containsKey("user.role")) userInfo.put("user.role", ((PortletRole)request.getAttribute(SportletProperties.PORTLET_ROLE)).getName());
             if (userInfo.containsKey("user.login.id")) userInfo.put("user.login.id", user.getUserName());
-
             //userInfo.put("user.name.given", user.getGivenName());
             //userInfo.put("user.name.family", user.getFamilyName());
             request.setAttribute(PortletRequest.USER_INFO, userInfo);
@@ -301,6 +300,7 @@ public class PortletServlet extends HttpServlet
             UserPrincipal userPrincipal = new UserPrincipal(user.getUserName());
             request.setAttribute(SportletProperties.PORTLET_USER_PRINCIPAL, userPrincipal);
         }
+
 
         /*
         UserAttribute[] userAttrs = portletWebApp.getUserAttributes();
@@ -313,11 +313,8 @@ public class PortletServlet extends HttpServlet
         */
 
         // portlet preferences
-
         PortalContext portalContext = appPortlet.getPortalContext();
         request.setAttribute(SportletProperties.PORTAL_CONTEXT, portalContext);
-
-
         if (portlet == null) {
             log.error("in PortletServlet: service(): No portlet matching " + pid + " found!");
             return;
