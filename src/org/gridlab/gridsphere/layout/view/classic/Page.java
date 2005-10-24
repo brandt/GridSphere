@@ -45,7 +45,7 @@ public class Page extends BaseRender implements Render {
         page.append("\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
         page.append("\n\t<meta name=\"keywords\" content=\"" + portletPage.getKeywords() + "\"/>");
         page.append("\n\t<meta http-equiv=\"Pragma\" content=\"no-cache\"/>");
-
+        if (portletPage.getRefresh() > 0) page.append("\n\t<meta http-equiv=\"refresh\" content=\"" + portletPage.getRefresh() + "\"/>");
         page.append("\n\t<link type=\"text/css\" href=\"" +
                 req.getContextPath() + "/themes/" + portletPage.getTheme() + "/css" +
                     "/default.css\" rel=\"stylesheet\"/>");

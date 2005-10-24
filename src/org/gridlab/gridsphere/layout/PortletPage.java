@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.*;
+import java.security.Principal;
 
 /**
  * The <code>PortletPage</code> is the generic container for a collection of
@@ -48,6 +49,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     protected String keywords = "";
     protected String title = "";
     protected String icon = "images/favicon.ico";
+    protected int refresh = 0;
 
     //private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
     private String layoutDescriptor = null;
@@ -105,6 +107,24 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      */
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    /**
+     * Returns the page refresh rate
+     *
+     * @return the page refresh rate
+     */
+    public int getRefresh() {
+        return refresh;
+    }
+
+    /**
+     * Sets the page refresh rate
+     *
+     * @param refresh the page refresh rate
+     */
+    public void setRefresh(int refresh) {
+        this.refresh = refresh;
     }
 
     /**
@@ -378,13 +398,13 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
                 if (userRole.compare(userRole, comp.getRequiredRole()) >= 0) {
                     if (comp != null) {
                         PortletRequest req = event.getPortletRequest();
+                        Principal principal = req.getUserPrincipal();
                         User user = req.getUser();
                         if (comp instanceof PortletFrame) {
-
                             // do role checking if user is logged in
-                            if (!(user instanceof GuestUser)) {
+                            if (principal != null) {
+                            //if (!(user instanceof GuestUser)) {
                                 String portletClass = ((PortletFrame)comp).getPortletClass();
-
                                 boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
                                 if (!hasrole) {
                                     System.err.println("User " + user + " does not have required role!");
@@ -393,9 +413,9 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
                             }
                         } else if (comp instanceof PortletTitleBar) {
-                            if (!(user instanceof GuestUser)) {
+                            if (principal == null) {
+                            //if (!(user instanceof GuestUser)) {
                                 String portletClass = ((PortletTitleBar)comp).getPortletClass();
-
                                 boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
                                 //System.err.println("hasRole = " + hasrole);
                                 if (!hasrole) {

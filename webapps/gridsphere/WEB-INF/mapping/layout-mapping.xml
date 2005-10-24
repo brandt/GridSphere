@@ -35,6 +35,9 @@
         <field name="Icon" type="string">
             <bind-xml name="icon" node="attribute"/>
         </field>
+        <field name="Refresh" type="int">
+            <bind-xml name="refresh" node="attribute"/>
+        </field>
         <field name="RenderKit" type="string">
             <bind-xml name="renderkit" node="attribute"/>
         </field>
