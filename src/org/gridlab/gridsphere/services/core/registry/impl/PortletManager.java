@@ -46,7 +46,6 @@ public class PortletManager implements PortletManagerService {
     private PortletManager() {
     }
 
-
     private static class WebappComparator implements Comparator {
 
         public int compare(Object webapp1, Object webapp2) {
@@ -99,6 +98,50 @@ public class PortletManager implements PortletManagerService {
         return instance;
     }
 
+    public synchronized void init() throws PortletServiceUnavailableException {
+        context = GridSphereConfig.getServletContext();
+
+        String portletsPath = context.getRealPath(PORTLETS_PATH);
+        File f = new File(portletsPath);
+        if (f.exists() && f.isDirectory()) {
+            webappFiles = f.list();
+
+            // sort webapps by priority
+            Arrays.sort(webappFiles, new WebappComparator());
+
+            // get rid of any priority numbers
+            String webapp = "";
+            int idx;
+            for (int i = 0; i < webappFiles.length; i++) {
+                webapp = webappFiles[i];
+                if ((idx = webapp.lastIndexOf(".")) > 0) {
+                    webappFiles[i] = webapp.substring(0, idx);
+                }
+            }
+
+            for (int i = 0; i < webappFiles.length; i++) {
+
+                try {
+                    webapp = webappFiles[i];
+
+                    // forget about readme file !
+                    if (webapp.startsWith("README")) continue;
+                    System.err.println("Creating webapp for " + webapp);
+                    PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
+                    addWebApp(portletWebApp);
+                } catch (PortletException e) {
+                    log.error("Unable to create portlet web application: " + webapp);
+                    throw new PortletServiceUnavailableException("Unable to create portlet web application: " + webapp, e);
+                }
+            }
+
+        } else {
+            log.error("Portlet application " + portletsPath + " does not exist!");
+            throw new PortletServiceUnavailableException("Portlet application " + portletsPath + " does not exist!");
+        }
+        isInitialized = true;
+    }
+
     /**
      * Initializes portlet web applications that are defined by the <code>PortletManagerService</code>
      *
@@ -108,49 +151,7 @@ public class PortletManager implements PortletManagerService {
         log.debug("in init()");
 
         if (!isInitialized) {
-            context = config.getServletContext();
-            //String webapps = config.getInitParameter(CORE_CONTEXT);
-
-
-            String portletsPath = GridSphereConfig.getServletContext().getRealPath(PORTLETS_PATH);
-            File f = new File(portletsPath);
-            if (f.exists() && f.isDirectory()) {
-                webappFiles = f.list();
-
-                // sort webapps by priority
-                Arrays.sort(webappFiles, new WebappComparator());
-
-                // get rid of any priority numbers
-                String webapp = "";
-                int idx;
-                for (int i = 0; i < webappFiles.length; i++) {
-                    webapp = webappFiles[i];
-                    if ((idx = webapp.lastIndexOf(".")) > 0) {
-                        webappFiles[i] = webapp.substring(0, idx);
-                    }
-                }
-
-                for (int i = 0; i < webappFiles.length; i++) {
-
-                    try {
-                        webapp = webappFiles[i];
-
-                        // forget about readme file !
-                        if (webapp.startsWith("README")) continue;
-                        System.err.println("Creating webapp for " + webapp);
-                        PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
-                        addWebApp(portletWebApp);
-                    } catch (PortletException e) {
-                        log.error("Unable to create portlet web application: " + webapp);
-                        throw new PortletServiceUnavailableException("Unable to create portlet web application: " + webapp, e);
-                    }
-                }
-
-            } else {
-                log.error("Portlet application " + portletsPath + " does not exist!");
-                throw new PortletServiceUnavailableException("Portlet application " + portletsPath + " does not exist!");
-            }
-            isInitialized = true;
+            init();
         }
     }
 
@@ -275,7 +276,6 @@ public class PortletManager implements PortletManagerService {
             initPortletWebApplication(webappFiles[i], req, res);
         }
     }
-
 
     /**
      * Initializes the portlet application
