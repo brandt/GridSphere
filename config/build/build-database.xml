@@ -27,7 +27,7 @@ Build include file for the GridSphere Portal source code, see build.xml
             action="CREATE"/>
     </target>
 
-    <target name="update-database">
+    <target name="update-database" depends="setenv">
         <taskdef name="dbtask"
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
@@ -36,5 +36,15 @@ Build include file for the GridSphere Portal source code, see build.xml
             action="UPDATE"/>
     </target>
 
+    <target name="hsql" depends="setenv">
+        <echo message="Starting HSQLDB"/>
+        <java dir="." fork="true" classname="org.hsqldb.Server" classpathref="classpath">
+            <arg line="-database ${appserver.home}/webapps/gridsphere/WEB-INF/CustomPortal/database/gridsphere"/>
+ <!--           <arg value="/Users/novotny/Jakarta/jakarta-tomcat-5.0.28/webapps/g
+ridsphere/WEB-INF/CustomPortal/database/gridsphere"/>
+            <arg value="-dbname.0"/>
+            <arg value="gridsphere"/> -->
+        </java>
+    </target>
 
 </project>

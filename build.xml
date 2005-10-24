@@ -32,9 +32,7 @@ Invoke "ant help"
     <property name="deprecation" value="false"/>
 
     <!-- Version properties -->
-    <property name="version" value="2.0.4"/>
-    <property name="release" value="RC1"/>
-    <property name="version.release" value="${version} ${release}"/>
+    <property name="version.release" value="${gridsphere.version}${gridsphere.release}"/>
     <property name="gridsphere.project" value="gridsphere"/>
     <property name="gridsphere.name" value="GridSphere ${version.release}"/>
     <property name="gridsphere.api" value="GridSphere Portal Framework API ${version.release}"/>
@@ -132,6 +130,9 @@ Invoke "ant help"
             <pathelement location="${build.classes}"/>
             <fileset dir="lib">
                 <exclude name="*.LICENSE"/>
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${env.ANT_HOME}">
                 <include name="*.jar"/>
             </fileset>
             <path refid="servletpath"/>
