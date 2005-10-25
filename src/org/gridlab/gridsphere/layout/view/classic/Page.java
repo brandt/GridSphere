@@ -12,9 +12,11 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import java.awt.*;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Iterator;
+import java.util.List;
+import java.awt.ComponentOrientation;
 
 public class Page extends BaseRender implements Render {
 
@@ -53,9 +55,16 @@ public class Page extends BaseRender implements Render {
         // Add portlet defined stylesheet if defined
         Map props = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (props != null) {
-            String cssHref = (String)props.get("CSS_HREF");
-            if (cssHref != null) {
-                page.append("\n\t<link type=\"text/css\" href=\"" + cssHref + " rel=\"stylesheet\"/>");
+            Object cssHrefObj = props.get("CSS_HREF");
+            if (cssHrefObj instanceof List) {
+                List cssHref = (List)cssHrefObj;
+                Iterator it = cssHref.iterator();
+                while (it.hasNext()) {
+                    String cssLink = (String)it.next();
+                    if (cssLink != null) {
+                        page.append("\n\t<link type=\"text/css\" href=\"" + cssLink + " rel=\"stylesheet\"/>");
+                    }
+                }
             }
         }
         page.append("\n\t<link rel=\"icon\" href=\"" + req.getContextPath() + "/" + portletPage.getIcon() + "\" type=\"imge/x-icon\"/>");

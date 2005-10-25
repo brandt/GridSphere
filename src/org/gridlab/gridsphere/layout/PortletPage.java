@@ -510,14 +510,14 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         StringWriter sout = new StringWriter();
         PrintWriter writer = new PrintWriter(sout);
 
-        writer.print(pageView.doStart(event, this));
-
+        //writer.print(pageView.doStart(event, this));
+        boolean floating = false;
+        PortletFrame f = null;
         // In case the "floating" portlet state has been selected:
         String wstate = event.getPortletRequest().getParameter(SportletProperties.PORTLET_WINDOW);
         if ((wstate != null) && (wstate.equalsIgnoreCase(PortletWindow.State.FLOATING.toString()))) {
             PortletComponent comp = getActiveComponent(event);
             PortletComponent pc = comp.getParentComponent();
-            PortletFrame f = null;
             if (comp instanceof PortletFrame) {
                 f = (PortletFrame)comp;
             } else if (pc != null) {
@@ -532,7 +532,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
                 req.setAttribute(SportletProperties.FLOAT_STATE, "true");
                 f.doRender(event);
                 f.setTransparent(false);
-                writer.println(f.getBufferedOutput(req));
+                floating = true;
+                //writer.println(f.getBufferedOutput(req));
             }
         } else {
 
@@ -540,22 +541,27 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             //  -------- header ---------
             if (headerContainer != null) {
                 headerContainer.doRender(event);
-                writer.println(headerContainer.getBufferedOutput(req));
+                //writer.println(headerContainer.getBufferedOutput(req));
             }
 
             // ..| tabs | here |....
             if (tabbedPane != null) {
                 tabbedPane.doRender(event);
-                writer.println(tabbedPane.getBufferedOutput(req));
+                //writer.println(tabbedPane.getBufferedOutput(req));
             }
             //.... the footer ..........
             if (footerContainer != null) {
                 footerContainer.doRender(event);
-                writer.println(footerContainer.getBufferedOutput(req));
+                //writer.println(footerContainer.getBufferedOutput(req));
             }
 
         }
 
+        writer.print(pageView.doStart(event, this));
+        if (floating) writer.println(f.getBufferedOutput(req));
+        if (headerContainer != null) writer.println(headerContainer.getBufferedOutput(req));
+        if (tabbedPane != null) writer.println(tabbedPane.getBufferedOutput(req));
+        if (footerContainer != null) writer.println(footerContainer.getBufferedOutput(req));
         writer.print(pageView.doEnd(event, this));
 
         PrintWriter out;

@@ -13,8 +13,8 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.awt.*;
-import java.util.Locale;
-import java.util.Map;
+import java.awt.List;
+import java.util.*;
 
 public class Page extends BaseRender implements Render {
 
@@ -35,7 +35,7 @@ public class Page extends BaseRender implements Render {
         Locale locale = req.getLocale();
         ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
         page.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-        page.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" " );        
+        page.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" " );
         page.append("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
         if (orientation.isLeftToRight()) {
             page.append("<html");
@@ -43,7 +43,7 @@ public class Page extends BaseRender implements Render {
             page.append("<html dir=\"rtl\"");
         }
         page.append(" xmlns=\"http://www.w3.org/1999/xhtml\">");
-        
+
         page.append("\n\t<head>");
         page.append("\n\t<title>" + portletPage.getTitle() + "</title>");
         ///page.append("\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
@@ -57,9 +57,16 @@ public class Page extends BaseRender implements Render {
         // Add portlet defined stylesheet if defined
         Map props = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (props != null) {
-            String cssHref = (String)props.get("CSS_HREF");
-            if (cssHref != null) {
-                page.append("\n\t<link type=\"text/css\" href=\"" + cssHref + " rel=\"stylesheet\"/>");
+            Object cssHrefObj = props.get("CSS_HREF");
+            if (cssHrefObj instanceof java.util.List) {
+                java.util.List cssHref = (java.util.List)cssHrefObj;
+                Iterator it = cssHref.iterator();
+                while (it.hasNext()) {
+                    String cssLink = (String)it.next();
+                    if (cssLink != null) {
+                        page.append("\n\t<link type=\"text/css\" href=\"" + cssLink + " rel=\"stylesheet\"/>");
+                    }
+                }
             }
         }
         page.append("\n\t<link rel=\"icon\" href=\"" + portletPage.getIcon() + "\" type=\"imge/x-icon\"/>");
