@@ -1,3 +1,31 @@
+ChangeLog.txt
+=============
+
+Release Notes - GridSphere Portal Framework - Version 2.1
+
+** Bug
+    * [GPF-80] - Problems with Internet Explorer
+    * [GPF-154] - org.gridlab.gridsphere.portlet.Client must extends java.io.Serializable
+    * [GPF-161] - PortletSession.SESSION_SCOPE is not unique
+
+** New Feature
+    * [GPF-155] - Allow user accounts to be disabled
+    * [GPF-160] - load in multiple service descriptors
+    * [GPF-164] - configurable page refresh frequency
+    * [GPF-166] - Add arbitrary roles
+    * [GPF-167] - track user operations in the portal
+    * [GPF-169] - Support for Apache Portals Bridges
+    * [GPF-171] - Create a PortletTag so legacy JSP in existing portals could include a portlet
+
+
+** Improvement
+    * [GPF-156] - allow developers to easily import their own stylesheets
+    * [GPF-157] - localization of error strings in authmodules
+    * [GPF-163] - Japanese localize
+    * [GPF-165] - Croatian localization
+    * [GPF-168] - Support for different rendered outpu
+    * [GPF-170] - Support for OC4J
+
 Changes since GridSphere 2.0.2
 ==============================
 
