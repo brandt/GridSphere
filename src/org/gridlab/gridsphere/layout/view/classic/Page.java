@@ -62,7 +62,7 @@ public class Page extends BaseRender implements Render {
                 while (it.hasNext()) {
                     String cssLink = (String)it.next();
                     if (cssLink != null) {
-                        page.append("\n\t<link type=\"text/css\" href=\"" + cssLink + " rel=\"stylesheet\"/>");
+                        page.append("\n\t<link type=\"text/css\" href=\"" + cssLink + "\" rel=\"stylesheet\"/>");
                     }
                 }
             }
