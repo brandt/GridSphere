@@ -10,28 +10,28 @@ Build include file for the GridSphere Portal source code, see build.xml
 <!-- =================================================================== -->
 <project name="GridSphere Distribution">
 
-<target name="dist" depends="clean">
-    <tar destfile="${gridsphere.project}-${version}-src.tar" longfile="gnu">
-        <tarfileset dir="." prefix="${gridsphere.project}-${version}">
+<target name="dist" depends="clean" description="Create GridSphere source zip/tarball distributions">
+    <tar destfile="${gridsphere.project}-${gridsphere.version}-src.tar" longfile="gnu">
+        <tarfileset dir="." prefix="${gridsphere.project}-${gridsphere.version}">
             <exclude name="**/CVS"/>
             <exclude name="*.ipr"/>
             <exclude name="*.iws"/>
             <exclude name="projects"/>
-            <exclude name="${gridsphere.project}-${version}-src.tgz"/>
-            <exclude name="${gridsphere.project}-${version}-src.zip"/>
+            <exclude name="${gridsphere.project}-${gridsphere.version}-src.tgz"/>
+            <exclude name="${gridsphere.project}-${gridsphere.version}-src.zip"/>
         </tarfileset>
     </tar>
-    <gzip src="${gridsphere.project}-${version}-src.tar" zipfile="${gridsphere.project}-${version}-src.tgz"/>
-    <delete file="${gridsphere.project}-${version}-src.tar"/>
+    <gzip src="${gridsphere.project}-${gridsphere.version}-src.tar" zipfile="${gridsphere.project}-${gridsphere.version}-src.tgz"/>
+    <delete file="${gridsphere.project}-${gridsphere.version}-src.tar"/>
 
-    <zip destfile="${gridsphere.project}-${version}-src.zip">
-        <zipfileset dir="." prefix="${gridsphere.project}-${version}">
+    <zip destfile="${gridsphere.project}-${gridsphere.version}-src.zip">
+        <zipfileset dir="." prefix="${gridsphere.project}-${gridsphere.version}">
             <exclude name="**/CVS"/>
             <exclude name="*.ipr"/>
             <exclude name="*.iws"/>
             <exclude name="projects"/>
-            <exclude name="${gridsphere.project}-${version}-src.zip"/>
-            <exclude name="${gridsphere.project}-${version}-src.tgz"/>
+            <exclude name="${gridsphere.project}-${gridsphere.version}-src.zip"/>
+            <exclude name="${gridsphere.project}-${gridsphere.version}-src.tgz"/>
         </zipfileset>
     </zip>
 </target>
