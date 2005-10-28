@@ -175,6 +175,21 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             try {
                 // initialize needed services
                 initializeServices();
+
+		// update group entries from 2.0.4 to 2.1
+                System.err.println("updating group data");
+                List groupEntries = aclService.getGroupEntries();
+                Iterator it = groupEntries.iterator();
+                while (it.hasNext()) {
+                    GroupRequestImpl ge = (GroupRequestImpl)it.next();
+                    String roleName = ge.getRoleName();
+                    if (!roleName.equals("")) {
+                        ge.setRole(aclService.getRoleByName(roleName));
+                        ge.setRoleName("");
+                        aclService.saveGroupEntry(ge);
+                    }
+                }
+
                 // create a root user if none available
                 userManagerService.initRootUser();
                 // deep inside a service is used which is why this must follow the factory.init
