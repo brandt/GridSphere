@@ -271,6 +271,18 @@
         <mime-type>text/vnd.wap.wmlscript</mime-type>
     </mime-mapping>
 
+    <!-- the 404 page -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/jsp/errors/notfound.jsp</location>
+    </error-page>
+
+    <!-- for internal errors -->
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/jsp/error.jsp</location>
+    </error-page>
+
     <taglib>
       <taglib-uri>/portletUI</taglib-uri>
       <taglib-location>/WEB-INF/tlds/portletui.tld</taglib-location>
