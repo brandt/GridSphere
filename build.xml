@@ -132,7 +132,7 @@ Invoke "ant help"
                 <exclude name="*.LICENSE"/>
                 <include name="*.jar"/>
             </fileset>
-            <fileset dir="${env.ANT_HOME}">
+            <fileset dir="${env.ANT_HOME}/lib">
                 <include name="*.jar"/>
             </fileset>
             <path refid="servletpath"/>
