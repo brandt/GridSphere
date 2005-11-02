@@ -277,6 +277,12 @@
         <location>/jsp/errors/notfound.jsp</location>
     </error-page>
 
+    <!-- the 404 page -->
+    <error-page>
+        <error-code>401</error-code>
+        <location>/jsp/errors/unauthorized.jsp</location>
+    </error-page>
+
     <!-- for internal errors -->
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
