@@ -1,6 +1,5 @@
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
-
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.InitParam;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo;
@@ -26,16 +25,13 @@ import java.util.*;
  * @see Portlet
  */
 public class PortletConfigImpl implements PortletConfig {
-    private ServletConfig servletConfig = null;
+
     private PortletContext context = null;
     private ClassLoader classLoader = null;
-    private PortletDefinition portletDefinition = null;
     private String portletName = null;
     private ResourceBundle infoBundle = null;
     private String resources = null;
     private Hashtable initParams = new Hashtable();
-
-    private Locale[] supportedLocales = null;
 
     private static class DefaultResourceBundle extends ListResourceBundle {
         private Object[][] resources;
@@ -61,15 +57,13 @@ public class PortletConfigImpl implements PortletConfig {
 
         public ResourceBundleImpl(ResourceBundle bundle, ResourceBundle defaults) {
             data = new HashMap();
-
             importData(defaults);
             importData(bundle);
         }
 
         private void importData(ResourceBundle bundle) {
             if (bundle != null) {
-                for (Enumeration e = bundle.getKeys(); e.hasMoreElements
-                        ();) {
+                for (Enumeration e = bundle.getKeys(); e.hasMoreElements();) {
                     String key = (String) e.nextElement();
                     Object value = bundle.getObject(key);
                     data.put(key, value);
@@ -94,12 +88,11 @@ public class PortletConfigImpl implements PortletConfig {
      * @param definition    a <code>PortletDefinition</code>
      */
     public PortletConfigImpl(ServletConfig servletConfig, PortletDefinition definition, ClassLoader classLoader) {
-        this.portletDefinition = definition;
-        this.servletConfig = servletConfig;
+
         this.classLoader = classLoader;
 
         // create init params
-        InitParam[] params = portletDefinition.getInitParam();
+        InitParam[] params = definition.getInitParam();
         if (params != null) {
             for (int i = 0; i < params.length; i++) {
                 InitParam iparam = params[i];
@@ -118,7 +111,7 @@ public class PortletConfigImpl implements PortletConfig {
         portletName = definition.getPortletName().getContent();
 
         SupportedLocale[] locales = definition.getSupportedLocale();
-        supportedLocales = new Locale[locales.length];
+        Locale[] supportedLocales = new Locale[locales.length];
         for (int i = 0; i < locales.length; i++) {
             supportedLocales[i] = new Locale(locales[i].getContent());
         }
