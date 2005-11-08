@@ -3,6 +3,7 @@ package org.gridlab.gridsphere.services.core.security.auth.modules;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Locale;
 
@@ -11,6 +12,8 @@ import java.util.Locale;
  * @version $Id$
  */
 public interface LoginAuthModule extends Comparable {
+
+    public void setHttpServletRequest(HttpServletRequest request);
 
     public void setAttributes(Map attributes);
 
@@ -32,6 +35,6 @@ public interface LoginAuthModule extends Comparable {
 
     public String getModuleError(String key, Locale locale);
 
-    public void checkAuthentication(User user, String password) throws AuthenticationException;
+    public abstract void checkAuthentication(User user, String password) throws AuthenticationException;
 
 }

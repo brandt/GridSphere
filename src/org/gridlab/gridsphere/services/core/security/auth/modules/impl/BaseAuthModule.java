@@ -5,6 +5,7 @@ import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descripto
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.Description;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -15,6 +16,7 @@ public abstract class BaseAuthModule implements LoginAuthModule, Comparable {
 
     protected Map attributes = new HashMap();
     protected AuthModuleDefinition moduleDef = null;
+    protected HttpServletRequest request = null;
 
     public BaseAuthModule(AuthModuleDefinition moduleDef) {
         this.moduleDef = moduleDef;
@@ -24,6 +26,10 @@ public abstract class BaseAuthModule implements LoginAuthModule, Comparable {
             ConfigParam param = (ConfigParam)it.next();
             attributes.put(param.getParamName(), param.getParamValue());
         }        
+    }
+
+    public void setHttpServletRequest(HttpServletRequest request) {
+        this.request = request;
     }
 
     public String getAttribute(String name) {
