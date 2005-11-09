@@ -129,6 +129,7 @@ public class ActionLinkTag extends ActionTag {
         if (value != null) actionlink.setValue(value);
         if (trackMe != null) actionlink.setTrackme(trackMe);
         if (extUrl != null) actionlink.setExturl(extUrl);
+        if (onClick != null) actionlink.setOnClick(onClick);
 
         Tag parent = getParent();
         if (parent instanceof ActionMenuTag) {

@@ -35,24 +35,6 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
         this.beanId = beanId;
     }
 
-    /**
-     * Returns the onClick JavaScript function
-     *
-     * @return onClick JavaScript function
-     */
-    public String getOnClick() {
-        return onClick;
-    }
-
-    /**
-     * Sets the onClick JavaScript function
-     *
-     * @param onClick the onClick JavaScript function
-     */
-    public void setOnClick(String onClick) {
-        this.onClick = onClick;
-    }
-
     public String toStartString() {
         return "<input " + getFormattedCss() + " type=\"submit\" " + checkDisabled();
     }

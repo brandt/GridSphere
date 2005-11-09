@@ -71,6 +71,7 @@ public class ActionFormTag extends ActionTag {
             JspWriter out = pageContext.getOut();
 
             out.print("<form ");
+            if (onSubmit != null) out.print(" onsubmit=\"" + onSubmit + "\" ");
             out.print("action=\"");
 
             // if using JSR then create render link

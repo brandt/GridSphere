@@ -30,6 +30,8 @@ public abstract class ActionTag extends BaseComponentTag {
     protected String action = null;
     protected String anchor = null;
     protected String var = null;
+    protected String onClick = null;
+    protected String onSubmit = null;
     protected String key = null;
     protected boolean isSecure = false;
     protected PortletURI actionURI = null;
@@ -111,7 +113,42 @@ public abstract class ActionTag extends BaseComponentTag {
         return key;
     }
 
+    /**
+     * Returns the action specified by the onClick attribute
+     *
+     * @return the action specified by the onClick attribute
+     */
+    public String getOnClick() {
+        return onClick;
+    }
 
+    /**
+     * Sets the action specified by the onClick attribute
+     *
+     * @param onClick the javascript action to perform
+     */
+    public void setOnClick(String onClick) {
+        this.onClick = onClick;
+    }
+
+    /**
+     * Returns the action specified by the onSubmit attribute
+     *
+     * @return the action specified by the onSubmit attribute
+     */
+    public String getOnSubmit() {
+        return onSubmit;
+    }
+
+    /**
+     * Sets the action specified by the onSubmit attribute
+     *
+     * @param onSubmit the javascript action to perform
+     */
+    public void setOnSubmit(String onSubmit) {
+        this.onSubmit = onSubmit;
+    }
+    
     /**
      * Sets a label to track this action and persist in the DB
      *

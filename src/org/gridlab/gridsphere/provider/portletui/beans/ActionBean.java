@@ -22,6 +22,8 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     protected String anchor = null;
     protected String trackMe = null;
     protected String extUrl = null;
+    protected String onClick = null;
+    protected String onSubmit = null;
 
     /**
      * Constructs default action bean
@@ -37,6 +39,43 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     public ActionBean(String name) {
         super(name);
     }
+
+    /**
+     * Returns the action specified by the onClick attribute
+     *
+     * @return the action specified by the onClick attribute
+     */
+    public String getOnClick() {
+        return onClick;
+    }
+
+    /**
+     * Sets the action specified by the onClick attribute
+     *
+     * @param onClick the javascript action to perform
+     */
+    public void setOnClick(String onClick) {
+        this.onClick = onClick;
+    }
+
+    /**
+     * Returns the action specified by the onSubmit attribute
+     *
+     * @return the action specified by the onSubmit attribute
+     */
+    public String getOnSubmit() {
+        return onSubmit;
+    }
+
+    /**
+     * Sets the action specified by the onSubmit attribute
+     *
+     * @param onSubmit the javascript action to perform
+     */
+    public void setOnSubmit(String onSubmit) {
+        this.onSubmit = onSubmit;
+    }
+
 
     /**
      * Sets the label identified with the portlet component to link to

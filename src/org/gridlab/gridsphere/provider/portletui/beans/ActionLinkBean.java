@@ -66,16 +66,8 @@ public class ActionLinkBean extends ActionBean implements TagBean {
 
     public String toEndString() {
 
-        // now if we added some params which should be actions....
-        /*
-        if (paramBeanList != null) {
-            Iterator it = paramBeanList.iterator();
-            while (it.hasNext()) {
-                ActionParamBean apBean = (ActionParamBean) it.next();
-                this.portletURI.addParameter(apBean.getName(), apBean.getValue());
-            }
-        }
-        */
+        String onClickString = null;
+
         // now do the string rendering
         action = this.portletURI.toString();
 
@@ -113,7 +105,12 @@ public class ActionLinkBean extends ActionBean implements TagBean {
                 e.printStackTrace();
             }
         } else {
-        sb.append(" href=\"" + action + "\"" + getFormattedCss() + " onclick=\"this.href='" + action + "&amp;JavaScript=enabled'\">" + value);
+            if (onClick == null) {
+                onClickString = "this.href='" + action + "&amp;JavaScript=enabled'";
+            } else {
+                onClickString = onClick;
+            }
+            sb.append(" href=\"" + action + "\"" + getFormattedCss() + " onclick=\"" + onClickString + "\">" + value);
         }
         sb.append("</a>");
         return sb.toString();
