@@ -23,9 +23,11 @@
         <param-value>WEB-INF/classes/log4j.properties</param-value>
     </context-param>
 
+    <!-- uncomment only if using in non-GridSphere container
     <listener>
         <listener-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</listener-class>
     </listener>
+    -->
 
     <listener>
         <listener-class>org.apache.log4j.servlet.InitContextListener</listener-class>
