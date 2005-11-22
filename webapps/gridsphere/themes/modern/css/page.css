@@ -13,6 +13,11 @@ Version: $Id$
       - footer (class footer)
 
 */
+#page {
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+}
 
 /*-------------------------------------------------
  PAGE HEADER
