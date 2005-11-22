@@ -6,6 +6,8 @@
 
 <h3><ui:text key="SETUP_MSG" style="nostyle"/></h3>
 
+<ui:text key="SETUP_MSG2"/>
+
 <ui:form>
 <p>
 <ui:hiddenfield beanId="userID"/>
