@@ -549,6 +549,36 @@
         </concrete-portlet-app>
     </portlet-app-def>
 
+    <portlet-app-def>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.setup.GridSphereSetupPortlet">
+            <portlet-name>Setup</portlet-name>
+            <servlet-name>SetupPortlet</servlet-name>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
+            <supports>
+                <markup name="html">
+                    <view/>
+                    <help/>
+                </markup>
+            </supports>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.setup.GridSphereSetupPortlet.1">
+            <concrete-portlet>
+                <portlet-name>Setup</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>GridSphere Setup</title>
+                    <title-short>Setup</title-short>
+                    <description>GridSphere setup</description>
+                    <keywords>portlet gridsphere setup</keywords>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
 
     <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet">

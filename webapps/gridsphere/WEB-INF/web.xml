@@ -93,6 +93,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>SetupPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.setup.GridSphereSetupPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>UserManagerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet</servlet-class>
     </servlet>
@@ -191,6 +196,11 @@
         <url-pattern>/layout</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>SetupPortlet</servlet-name>
+        <url-pattern>/admin/setup</url-pattern>
+    </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>UserManagerPortlet</servlet-name>
         <url-pattern>/admin/users</url-pattern>
