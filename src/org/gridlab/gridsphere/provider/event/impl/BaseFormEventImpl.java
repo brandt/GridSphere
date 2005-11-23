@@ -505,7 +505,7 @@ public abstract class BaseFormEventImpl {
             }
         }
         sb.append("--------------------\n");
-        log.debug(sb.toString());
+        //log.debug(sb.toString());
     }
 
     /**
@@ -528,7 +528,7 @@ public abstract class BaseFormEventImpl {
             }
         }
         sb.append("--------------------\n");
-        log.debug(sb.toString());
+        //log.debug(sb.toString());
     }
 
     /**
@@ -577,7 +577,7 @@ public abstract class BaseFormEventImpl {
             String beanId = "";
 
             if (!uiname.startsWith("ui")) continue;
-            log.debug("found a tag bean: " + uiname);
+            //log.debug("found a tag bean: " + uiname);
 
             String vbname = uiname.substring(3);
 
@@ -595,7 +595,7 @@ public abstract class BaseFormEventImpl {
 
             if (idx > 0) {
                 beanId = vbname.substring(0, idx);
-                log.debug("Parsing beanId...");
+                //log.debug("Parsing beanId...");
                 int index = beanId.lastIndexOf("%");
                 if (index > -1 && index != beanId.length()) {
                     beanKey = beanId;
