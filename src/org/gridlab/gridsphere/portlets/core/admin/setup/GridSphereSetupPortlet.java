@@ -20,6 +20,7 @@ import org.gridlab.gridsphere.services.core.security.password.PasswordManagerSer
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.portlets.core.login.LoginPortlet;
+import org.gridlab.gridsphere.layout.PortletPageFactory;
 
 import javax.servlet.UnavailableException;
 
@@ -116,8 +117,8 @@ public class GridSphereSetupPortlet extends ActionPortlet {
         accountRequest.setOrganization(event.getTextFieldBean("organization").getValue());
         PasswordEditor editor = passwordManagerService.editPassword(accountRequest);
         String password = event.getPasswordBean("password").getValue();
-        boolean isgood = this.isInvalidPassword(event, true);
-        if (isgood) {
+        boolean isbad = this.isInvalidPassword(event, true);
+        if (isbad) {
             return;
         } else {
             if (!password.equals("")) {
@@ -129,6 +130,7 @@ public class GridSphereSetupPortlet extends ActionPortlet {
 
         log.info("Granting super role to root user.");
         aclManagerService.grantSuperRole(accountRequest);
+        event.getPortletRequest().removeAttribute(PortletPageFactory.PAGE);
     }
 
     private boolean isInvalidPassword(FormEvent event, boolean newuser) {
