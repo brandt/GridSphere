@@ -8,6 +8,7 @@ package org.gridlab.gridsphere.servlets;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.hibernate.DBTask;
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
+import org.gridlab.gridsphere.layout.PortletPageFactory;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.UserPrincipal;
 import org.gridlab.gridsphere.portlet.impl.*;
@@ -191,8 +192,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     }
                 }
 
-                // create a root user if none available
-                userManagerService.initRootUser();
                 // deep inside a service is used which is why this must follow the factory.init
                 layoutEngine.init();
             } catch (Exception e) {
@@ -203,6 +202,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 return;
             }
             coreGroup = aclService.getCoreGroup();
+        }
+
+        if ((userManagerService.getUsers().isEmpty() || (aclService.getUsersWithSuperRole() == null))) {
+            req.setAttribute(PortletPageFactory.PAGE, PortletPageFactory.SETUP_PAGE);
         }
 
         // check to see if user has been authorized by means of container managed authorization
@@ -597,10 +600,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session attribute event
      */
     public void attributeAdded(HttpSessionBindingEvent event) {
-
-        log.debug("attributeAdded('" + event.getSession().getId() + "', '" +
+        if (event.getSession() != null) {
+            log.debug("attributeAdded('" + event.getSession().getId() + "', '" +
                 event.getName() + "', '" + event.getValue() + "')");
-
+        }
     }
 
 
@@ -610,9 +613,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session attribute event
      */
     public void attributeRemoved(HttpSessionBindingEvent event) {
-
-        log.debug("attributeRemoved('" + event.getSession().getId() + "', '" +
+        if (event.getSession() != null) {
+            log.debug("attributeRemoved('" + event.getSession().getId() + "', '" +
                 event.getName() + "', '" + event.getValue() + "')");
+        }
 
     }
 
@@ -623,9 +627,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session attribute event
      */
     public void attributeReplaced(HttpSessionBindingEvent event) {
-
-        log.debug("attributeReplaced('" + event.getSession().getId() + "', '" +
+        if (event.getSession() != null) {
+            log.debug("attributeReplaced('" + event.getSession().getId() + "', '" +
                 event.getName() + "', '" + event.getValue() + "')");
+        }
 
     }
 
