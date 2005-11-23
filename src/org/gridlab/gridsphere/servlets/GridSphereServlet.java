@@ -600,9 +600,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session attribute event
      */
     public void attributeAdded(HttpSessionBindingEvent event) {
-        if (event.getSession() != null) {
+        try {
             log.debug("attributeAdded('" + event.getSession().getId() + "', '" +
                 event.getName() + "', '" + event.getValue() + "')");
+        } catch (IllegalStateException e) {
+            // do nothing
         }
     }
 
@@ -613,9 +615,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session attribute event
      */
     public void attributeRemoved(HttpSessionBindingEvent event) {
-        if (event.getSession() != null) {
+        try {
             log.debug("attributeRemoved('" + event.getSession().getId() + "', '" +
                 event.getName() + "', '" + event.getValue() + "')");
+        } catch (IllegalStateException e) {
+            // do nothing
         }
 
     }
@@ -627,9 +631,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session attribute event
      */
     public void attributeReplaced(HttpSessionBindingEvent event) {
-        if (event.getSession() != null) {
+        try {
             log.debug("attributeReplaced('" + event.getSession().getId() + "', '" +
                 event.getName() + "', '" + event.getValue() + "')");
+        } catch (IllegalStateException e) {
+            // do nothing
         }
 
     }
