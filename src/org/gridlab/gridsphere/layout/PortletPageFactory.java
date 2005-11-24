@@ -24,6 +24,9 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private String userLayoutDir = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/users");
 
+    public static String PAGE = "org.gridsphere.layout.page";
+    public static String SETUP_PAGE = "SetupLayout.xml";
+
     private static String DEFAULT_THEME = "default";
 
     private static PortletPageFactory instance = null;
@@ -35,6 +38,7 @@ public class PortletPageFactory implements PortletSessionListener {
     private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
 
     private PortletPage templatePage = null;
+    private PortletPage setupPage = null;
 
     //private PortletPage newuserPage = null;
     private PortletPage errorPage = null;
@@ -42,6 +46,8 @@ public class PortletPageFactory implements PortletSessionListener {
     private String templateLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/TemplateLayout.xml");
 
     private String newuserLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/users/");
+
+    private String setupLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/SetupLayout.xml");
 
     // Store user layouts in a hash
     private static Map userLayouts = new Hashtable();
@@ -61,6 +67,8 @@ public class PortletPageFactory implements PortletSessionListener {
             errorPage = PortletLayoutDescriptor.loadPortletPage(errorLayoutFile, layoutMappingFile);
             templatePage = PortletLayoutDescriptor.loadPortletPage(templateLayoutPath, layoutMappingFile);
             errorPage.setLayoutDescriptor(errorLayoutFile);
+            setupPage = PortletLayoutDescriptor.loadPortletPage(setupLayoutFile, layoutMappingFile);
+            setupPage.setLayoutDescriptor(setupLayoutFile);
         } catch (Exception e) {
             throw new PortletException("Error unmarshalling layout file", e);
         }
@@ -88,6 +96,13 @@ public class PortletPageFactory implements PortletSessionListener {
         errorPage.init(req, new ArrayList());
         return errorPage;
     }
+
+    public PortletPage createSetupPage(PortletRequest req) {
+        setupPage.init(req, new ArrayList());
+        setupPage.setTheme("default");
+        return setupPage;
+    }
+
 
     public void login(PortletRequest request) {
 
@@ -476,9 +491,14 @@ public class PortletPageFactory implements PortletSessionListener {
             }
         }
 
+        String pageLayout = (String)req.getAttribute(PAGE);
+        if (pageLayout != null) {
+            return this.createSetupPage(req);
+        }
+
         Principal principal = req.getUserPrincipal();
         if (principal == null) {
-        //if (user instanceof GuestUser) {
+            //if (user instanceof GuestUser) {
             return createFromGuestLayoutXML(req);
         }
 
