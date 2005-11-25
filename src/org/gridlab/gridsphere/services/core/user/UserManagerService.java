@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface UserManagerService extends LoginUserModule {
 
-    public void initRootUser();
-
     /**
      * Creates a new user
      *

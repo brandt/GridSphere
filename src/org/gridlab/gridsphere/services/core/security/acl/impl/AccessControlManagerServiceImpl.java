@@ -26,7 +26,6 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
     private static PortletLog log = SportletLog.getInstance(AccessControlManagerServiceImpl.class);
     private static AccessControlManagerServiceImpl instance = new AccessControlManagerServiceImpl();
-    private static UserManagerServiceImpl userManager = UserManagerServiceImpl.getInstance();
 
     private static PersistenceManagerRdbms pm = null;
 
@@ -253,24 +252,6 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             }
         }
         return l;
-    }
-
-
-    public List getUsersNotInGroup(PortletGroup group) {
-        List usersNotInGroup = new Vector();
-        Iterator allUsers = userManager.getUsers().iterator();
-        while (allUsers.hasNext()) {
-            User user = (User) allUsers.next();
-            // If user has super role, don't include
-            //   if (hasSuperRole(user)) {
-            //     continue;
-            //  }
-            // Else, if user not in group, then include
-            if (!isUserInGroup(user, group)) {
-                usersNotInGroup.add(user);
-            }
-        }
-        return usersNotInGroup;
     }
 
     public boolean isUserInGroup(User user, PortletGroup group) {
