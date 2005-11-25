@@ -34,9 +34,8 @@ public class SetupRootUserTest extends GridSphereServletTest {
 
         // create a root user if none available
         UserManagerService userManagerService = (UserManagerService)factory.createPortletService(UserManagerService.class, context, true);
-        userManagerService.initRootUser();
         LoginService loginService = (LoginService) factory.createPortletService(LoginService.class, context, true);
-        
+
     }
 
     protected void tearDown() {
