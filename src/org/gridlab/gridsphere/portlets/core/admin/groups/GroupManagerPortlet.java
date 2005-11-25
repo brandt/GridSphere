@@ -478,9 +478,15 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletGroup group = loadGroup(evt);
 
         addGroupEntries(evt, group);
-        List usersNotInGroupList = aclManagerService.getUsersNotInGroup(group);
-
-        viewUsersNotInGroupList(evt, usersNotInGroupList);
+        List usersNotInGroup = new Vector();
+        Iterator allUsers = userManagerService.getUsers().iterator();
+        while (allUsers.hasNext()) {
+            User user = (User) allUsers.next();
+            if (!aclManagerService.isUserInGroup(user, group)) {
+                usersNotInGroup.add(user);
+            }
+        }
+        viewUsersNotInGroupList(evt, usersNotInGroup);
 
         setNextState(req, DO_VIEW_GROUP_VIEW);
         log.debug("Exiting doViewAddGroupEntry");

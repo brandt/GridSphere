@@ -201,6 +201,8 @@ public class UserManagerPortlet extends ActionPortlet {
             PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
             req.setAttribute("role", role.getName());
             this.userManagerService.deleteUser(user);
+            this.passwordManagerService.deletePassword(user);
+            this.aclManagerService.deleteGroupEntries(user);
             createSuccessMessage(evt, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
         }
         setNextState(req, "doListUsers");
@@ -406,23 +408,10 @@ public class UserManagerPortlet extends ActionPortlet {
     }
 
     private void setSelectedUserRole(FormEvent event, PortletRole role) {
-        PortletRequest req = event.getPortletRequest();
         ListBoxBean roleListBean = event.getListBoxBean("userRole");
         roleListBean.clear();
-        /*
-        ListBoxItemBean userRole = new ListBoxItemBean();
-        ListBoxItemBean adminRole = new ListBoxItemBean();
-        ListBoxItemBean superRole = new ListBoxItemBean();
-        */
+
         ListBoxItemBean roleItemBean;
-        /*
-        userRole.setValue(PortletRole.USER.getText(req.getLocale()));
-        userRole.setName(PortletRole.USER.getName());
-        adminRole.setValue(PortletRole.ADMIN.getText(req.getLocale()));
-        adminRole.setName(PortletRole.ADMIN.getName());
-        superRole.setValue(PortletRole.SUPER.getText(req.getLocale()));
-        superRole.setName(PortletRole.SUPER.getName());
-        */
         List roles = aclManagerService.getRoles();
         Iterator it = roles.iterator();
         while (it.hasNext()) {
@@ -435,18 +424,6 @@ public class UserManagerPortlet extends ActionPortlet {
             }
             roleListBean.addBean(roleItemBean);
         }
-        /*
-        if (role.equals(PortletRole.USER)) {
-            userRole.setSelected(true);
-        } else if (role.equals(PortletRole.ADMIN)) {
-            adminRole.setSelected(true);
-        } else if (role.equals(PortletRole.SUPER)) {
-            superRole.setSelected(true);
-        }
-        roleListBean.addBean(userRole);
-        roleListBean.addBean(adminRole);
-        roleListBean.addBean(superRole);
-        */
     }
 
     private PortletRole getSelectedUserRole(FormEvent event) {
