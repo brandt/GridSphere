@@ -35,8 +35,6 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
     public SportletResponse(HttpServletResponse res, PortletRequest req) {
         super(res);
         this.req = req;
-        //String mimeType = req.getClient().getMimeType();
-        //res.setContentType(mimeType);
     }
 
     /**
