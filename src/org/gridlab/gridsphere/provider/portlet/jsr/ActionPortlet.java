@@ -24,6 +24,7 @@ import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import java.io.IOException;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -60,9 +61,14 @@ public class ActionPortlet extends GenericPortlet {
     }
 
     protected void setFileDownloadEvent(PortletRequest req, String fileName, String path, boolean deleteFile) {
-        req.getPortletSession(true).setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, fileName);
-        req.getPortletSession(true).setAttribute(SportletProperties.FILE_DOWNLOAD_PATH, path);
-        req.getPortletSession(true).setAttribute(SportletProperties.FILE_DELETE, Boolean.valueOf(deleteFile));
+        req.setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, fileName);
+        req.setAttribute(SportletProperties.FILE_DOWNLOAD_PATH, path);
+        req.setAttribute(SportletProperties.FILE_DELETE, Boolean.valueOf(deleteFile));
+    }
+
+    protected void setFileDownloadEvent(PortletRequest req, String fileName, File file) {
+        req.setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, fileName);
+        req.setAttribute(SportletProperties.FILE_DOWNLOAD_BINARY, file);
     }
 
     /**

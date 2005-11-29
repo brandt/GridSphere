@@ -49,14 +49,9 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import javax.portlet.UnavailableException;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.InputStream;
-import java.io.File;
+import java.io.*;
 import java.util.*;
 import java.util.ResourceBundle;
-import java.security.Principal;
 
 public class PortletServlet extends HttpServlet
         implements Servlet, ServletConfig, ServletContextListener,
@@ -532,10 +527,9 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
                             ActionRequest actionRequest,
                             ActionResponse actionResponse, PortalContext portalContext)
             throws IOException {
-        String location = null;
         if (actionResponse instanceof ActionResponseImpl) {
             ActionResponseImpl aResponse = (ActionResponseImpl) actionResponse;
-            location = aResponse.getRedirectLocation();
+            String location = aResponse.getRedirectLocation();
 
             if (location != null) {
                 javax.servlet.http.HttpServletResponse redirectResponse = servletResponse;

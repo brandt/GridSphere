@@ -124,7 +124,7 @@ public class FileInputBean extends InputBean implements TagBean {
             if (!file.exists()) file.createNewFile();
             if (savedFileItem != null) savedFileItem.write(file);
         } catch (Exception e) {
-            throw new IOException("Unable to save file: " + e);
+            throw new IOException("Unable to save file: " + e.getMessage());
         }
     }
 
