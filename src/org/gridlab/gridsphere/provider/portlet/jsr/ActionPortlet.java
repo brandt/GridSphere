@@ -66,8 +66,8 @@ public class ActionPortlet extends GenericPortlet {
         req.setAttribute(SportletProperties.FILE_DELETE, Boolean.valueOf(deleteFile));
     }
 
-    protected void setFileDownloadEvent(PortletRequest req, String fileName, File file) {
-        req.setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, fileName);
+    protected void setFileDownloadEvent(PortletRequest req, File file) {
+        req.setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, file.getName());
         req.setAttribute(SportletProperties.FILE_DOWNLOAD_BINARY, file);
     }
 
