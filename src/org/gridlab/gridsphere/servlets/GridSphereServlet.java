@@ -300,7 +300,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             String fileName = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
             String path = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
             Boolean deleteFile = (Boolean)req.getAttribute(SportletProperties.FILE_DELETE);
-            if ((fileName == null) || (path == null)) return;
+            if (deleteFile == null) deleteFile = Boolean.FALSE;
+            if (fileName == null) return;
             log.debug("in downloadFile");
             log.debug("filename: " + fileName + " filepath= " + path);
             File file = (File) req.getAttribute(SportletProperties.FILE_DOWNLOAD_BINARY);
@@ -331,6 +332,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             req.removeAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
             req.removeAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
             req.removeAttribute(SportletProperties.FILE_DELETE);
+            req.removeAttribute(SportletProperties.FILE_DOWNLOAD_BINARY);
         }
     }
     public void setTCKUser(PortletRequest req) {
