@@ -452,7 +452,6 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
         try {
             psp.init(portletServiceConfig);
-            //initServices.put(service, psp);
         } catch (PortletServiceUnavailableException e) {
             log.error("Unable to initialize portlet service: " + serviceImpl, e);
             throw new PortletServiceNotFoundException("The SportletServiceFactory was unable to initialize the portlet service: " + serviceImpl, e);
