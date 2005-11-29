@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Vector;
@@ -73,6 +74,14 @@ public class PortletLayoutEngine {
         return pageFactory.createPortletPage(req);
     }
 
+    public void setHeaders(HttpServletResponse res) {
+        res.setContentType("text/html; charset=utf-8"); // Necessary to display UTF-8 encoded characters
+        res.setHeader("Cache-Control","no-cache"); //Forces caches to obtain a new copy of the page from the origin server
+        res.setHeader("Cache-Control","no-store"); //Directs caches not to store the page under any circumstance
+        res.setDateHeader("Expires", 0); //Causes the proxy cache to see the page as "stale"
+        res.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
+    }
+
     /**
      * Services a portlet container instance by rendering its presentation
      *
@@ -85,6 +94,8 @@ public class PortletLayoutEngine {
 
         try {
             page = getPortletPage(event);
+
+            setHeaders(event.getPortletResponse());
             //int numcomps = page.getComponentIdentifierList().size();
             /*
             if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {

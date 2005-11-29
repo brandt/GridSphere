@@ -29,16 +29,16 @@ import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
 
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import javax.activation.FileDataSource;
+import javax.activation.DataHandler;
+import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.*;
-import java.net.SocketException;
 import java.security.Principal;
+import java.net.SocketException;
 
 
 /**
@@ -140,17 +140,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         processRequest(req, res);
     }
 
-    public void setHeaders(HttpServletResponse res) {
-        res.setContentType("text/html; charset=utf-8"); // Necessary to display UTF-8 encoded characters
-        res.setHeader("Cache-Control","no-cache"); //Forces caches to obtain a new copy of the page from the origin server
-        res.setHeader("Cache-Control","no-store"); //Directs caches not to store the page under any circumstance
-        res.setDateHeader("Expires", 0); //Causes the proxy cache to see the page as "stale"
-        res.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
-    }
-
     public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-
-        setHeaders(res);
 
         GridSphereEvent event = new GridSphereEventImpl(context, req, res);
         PortletRequest portletReq = event.getPortletRequest();
@@ -245,10 +235,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
         }
 
+
         layoutEngine.actionPerformed(event);
 
         // is this a file download operation?
-        downloadFile(event);
+        downloadFile(req, res);
 
         // Handle any outstanding messages
         // This needs work certainly!!!
@@ -296,6 +287,52 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     }
 
+    /**
+     * Method to set the response headers to perform file downloads to a browser
+     *
+     * @param req the HttpServletRequest
+     * @param res the HttpServletResponse
+     * @throws org.gridlab.gridsphere.portlet.PortletException
+     */
+    public void downloadFile(HttpServletRequest req, HttpServletResponse res) throws org.gridlab.gridsphere.portlet.PortletException {
+
+        try {
+            String fileName = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
+            String path = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
+            Boolean deleteFile = (Boolean)req.getAttribute(SportletProperties.FILE_DELETE);
+            if ((fileName == null) || (path == null)) return;
+            log.debug("in downloadFile");
+            log.debug("filename: " + fileName + " filepath= " + path);
+            File file = (File) req.getAttribute(SportletProperties.FILE_DOWNLOAD_BINARY);
+            if (file == null) {
+                file = new File(path + fileName);
+            }
+            FileDataSource fds = new FileDataSource(file);
+            log.debug("filename: " + fileName + " filepath= " + path + " content type=" + fds.getContentType());
+            res.setContentType(fds.getContentType());
+            res.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+            res.setHeader("Content-Length", String.valueOf(file.length()));
+            DataHandler handler = new DataHandler(fds);
+            handler.writeTo(res.getOutputStream());
+            if (deleteFile.booleanValue()) {
+                file.delete();
+            }
+        } catch (FileNotFoundException e) {
+            log.error("Unable to find file!", e);
+        } catch (SecurityException e) {
+            // this gets thrown if a security policy applies to the file. see java.io.File for details.
+            log.error("A security exception occured!", e);
+        } catch (SocketException e) {
+            log.error("Caught SocketException: " + e.getMessage());
+        } catch (IOException e) {
+            log.error("Caught IOException", e);
+            //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER,e.getMessage());
+        } finally {
+            req.removeAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
+            req.removeAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
+            req.removeAttribute(SportletProperties.FILE_DELETE);
+        }
+    }
     public void setTCKUser(PortletRequest req) {
         //String tck = (String)req.getPortletSession(true).getAttribute("tck");
         String[] portletNames = req.getParameterValues("portletName");
@@ -518,50 +555,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         session.removeAttribute(SportletProperties.PORTLET_USER);
         userSessionManager.removeSessions(req.getUser());
         layoutEngine.logoutPortlets(event);
-    }
-
-    /**
-     * Method to set the response headers to perform file downloads to a browser
-     *
-     * @param event the gridsphere event
-     * @throws PortletException
-     */
-    public void downloadFile(GridSphereEvent event) throws PortletException {
-        PortletResponse res = event.getPortletResponse();
-        PortletRequest req = event.getPortletRequest();
-        try {
-            String fileName = (String) req.getPortletSession(true).getAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
-            String path = (String) req.getPortletSession(true).getAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
-            Boolean deleteFile = (Boolean)req.getPortletSession(true).getAttribute(SportletProperties.FILE_DELETE);
-            if ((fileName == null) || (path == null)) return;
-            log.debug("in downloadFile");
-            log.debug("filename: " + fileName + " filepath= " + path);
-            File f = new File(path);
-
-            FileDataSource fds = new FileDataSource(f);
-            res.setContentType(fds.getContentType());
-            res.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-            res.setHeader("Content-Length", String.valueOf(f.length()));
-            DataHandler handler = new DataHandler(fds);
-            handler.writeTo(res.getOutputStream());
-            if (deleteFile.booleanValue()) {
-                f.delete();
-            }
-        } catch (FileNotFoundException e) {
-            log.error("Unable to find file!", e);
-        } catch (SecurityException e) {
-            // this gets thrown if a security policy applies to the file. see java.io.File for details.
-            log.error("A security exception occured!", e);
-        } catch (SocketException e) {
-            log.error("Caught SocketException: " + e.getMessage());
-        } catch (IOException e) {
-            log.error("Caught IOException", e);
-            //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER,e.getMessage());
-        } finally {
-            req.getPortletSession(true).removeAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
-            req.getPortletSession(true).removeAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
-            req.getPortletSession(true).removeAttribute(SportletProperties.FILE_DELETE);
-        }
     }
 
     /**
