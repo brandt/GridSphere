@@ -258,7 +258,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         if (isSortable) {
-            sb.append("<table class=\"sortable\" id=\" " + sortableId + "\" ");
+            sb.append("<table class=\"sortable\" id=\"" + sortableId + "\" ");            
         } else {
             sb.append("<table" + getFormattedCss());
         }

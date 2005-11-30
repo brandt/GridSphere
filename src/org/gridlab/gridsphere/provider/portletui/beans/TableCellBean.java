@@ -19,20 +19,20 @@ public class TableCellBean extends BeanContainer implements TagBean {
     protected String colspan = null;
     protected String rowspan = null;
 
-    protected String TABLE_CELL_STYLE = "portlet-section-body";
+    //protected String TABLE_CELL_STYLE = "portlet-section-body";
 
     /**
      * Constructs a default table cell bean
      */
     public TableCellBean() {
         super();
-        this.cssClass = TABLE_CELL_STYLE;
+        //this.cssClass = TABLE_CELL_STYLE;
     }
 
     public TableCellBean(BaseComponentBean compBean) {
         super();
         this.addBean(compBean);
-        this.cssClass = TABLE_CELL_STYLE;
+        //this.cssClass = TABLE_CELL_STYLE;
     }
 
     /**
@@ -43,7 +43,7 @@ public class TableCellBean extends BeanContainer implements TagBean {
     public TableCellBean(String beanId) {
         super();
         this.beanId = beanId;
-        this.cssClass = TABLE_CELL_STYLE;
+        //this.cssClass = TABLE_CELL_STYLE;
     }
 
     /**

@@ -119,16 +119,21 @@ public class TableRowBean extends BeanContainer implements TagBean {
         if (align != null) sb.append(" layout=\"" + align + "\"");
         if (valign != null) sb.append(" valign=\"" + valign + "\"");
 
-        sb.append(">");
+        //sb.append(">");
         if (isHeader) {
-            setBeanStyles(TABLE_HEADER_STYLE);
+            sb.append(" class=\"" + TABLE_HEADER_STYLE + "\"");
+            //setBeanStyles(TABLE_HEADER_STYLE);
         } else {
             if (isZebra) {
-                setBeanStyles(TABLE_ALTERNATE_STYLE);
+                sb.append(" class=\"" + TABLE_ALTERNATE_STYLE + "\"");
+                //setBeanStyles(TABLE_ALTERNATE_STYLE);
             } else {
-                setBeanStyles(TABLE_NORMAL_STYLE);
+                sb.append(" class=\"" + TABLE_NORMAL_STYLE + "\"");
+                //setBeanStyles(TABLE_NORMAL_STYLE);
             }
         }
+
+        sb.append(">");
 
         Iterator it = container.iterator();
         while (it.hasNext()) {
