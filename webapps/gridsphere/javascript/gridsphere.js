@@ -203,7 +203,7 @@ function sortables_init() {
             ts_makeSortable(thisTbl);
         }
     }
-		alternateRowColors();
+    alternateRowColors();
 }
 
 function ts_makeSortable(table) {
@@ -374,7 +374,7 @@ function addEvent(elm, evType, fn, useCapture)
   }
 }
 
-function alternateRowColors() {
+function origalternateRowColors() {
 	var className = 'sortable';
 	var rowcolor = '#dddddd';
 	var defaultrowcolor = '#ffffff';
@@ -402,3 +402,33 @@ function alternateRowColors() {
 		}
 	}
 }
+
+
+  function alternateRowColors() {
+      var className = 'sortable';
+      var rows, arow;
+      var tables = document.getElementsByTagName("table");
+      var rowCount = 0;
+      for(var i=0;i<tables.length;i++) {
+          //dump(tables.item(i).className + " " + tables.item(i).nodeName + "\n");
+          if(tables.item(i).className == className) {
+              atable = tables.item(i);
+              rows = atable.getElementsByTagName("tr");
+              for(var j=1;j<rows.length;j++) {
+                  arow = rows.item(j);
+                  if(arow.nodeName == "TR") {
+                      if(rowCount % 2) {
+                          arow.setAttribute('class', 'portlet-section-alternate');
+
+                      } else {
+                          // default case
+                          arow.setAttribute('class', 'portlet-section-body');
+                      }
+                      rowCount++;
+                  }
+              }
+              rowCount = 0;
+          }
+      }
+  }
+
