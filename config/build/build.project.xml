@@ -110,8 +110,6 @@ Copyright:
 
         </path>
 
-        <property name="TEST_HOME" value="${appserver.home}/webapps/${project.name}/WEB-INF/test"/>
-
         <echo message="--- Build environment for ${project} ---"/>
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
         <echo message="           then the component is not present)"/>
@@ -119,7 +117,6 @@ Copyright:
 
         <echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
         <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}"/>
-
 
         <echo message="GridSphere Webserver is ${gridsphere.appserver}"/>
         <echo message="This project will be deployed to ${appserver.home}/webapps"/>
