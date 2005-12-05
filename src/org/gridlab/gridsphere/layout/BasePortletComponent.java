@@ -7,7 +7,9 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portlet.PortletMessage;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
@@ -34,6 +36,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected List listeners = null;
     protected boolean canModify = false;
     protected String renderKit = "classic";
+    private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
     /**
      * css Style of the table
@@ -353,7 +356,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         try {
             render = Class.forName("org.gridlab.gridsphere.layout.view." + renderKit + "." + renderClassName).newInstance();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Problems using files for renderkit: '"+renderKit+"' renderclass: "+renderClassName+" Reason: "+e.getMessage());
         }
         return render;
     }
