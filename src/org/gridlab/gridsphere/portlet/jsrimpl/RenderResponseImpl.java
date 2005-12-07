@@ -57,18 +57,6 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     }
 
     /**
-     * Property to set the expiration time in seconds for this
-     * response using the <code>setProperty</code> method.
-     * <P>
-     * If the expiration value is set to 0, caching is disabled
-     * for this portlet; if the value is set to -1,
-     * the cache does not expire.
-     * <p/>
-     * The value is <code>"portlet.expiration-cache"</code>.
-     */
-    public static final String EXPIRATION_CACHE = "portlet.expiration-cache";
-
-    /**
      * Returns the MIME type that can be used to contribute
      * markup to the render response.
      * <p/>
