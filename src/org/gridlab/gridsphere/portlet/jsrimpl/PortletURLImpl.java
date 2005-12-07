@@ -56,6 +56,8 @@ public class PortletURLImpl implements PortletURL {
 
     private boolean isRender = false;
 
+    private PortletURLImpl() {}
+    
     /**
      * Constructs a PortletURL from a servlet request and response
      *
