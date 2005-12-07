@@ -56,8 +56,10 @@ public class PortletURLImpl implements PortletURL {
 
     private boolean isRender = false;
 
-    private PortletURLImpl() {}
-    
+    private PortletURLImpl() {
+        this.store = new HashMap();
+    }
+
     /**
      * Constructs a PortletURL from a servlet request and response
      *
@@ -65,7 +67,7 @@ public class PortletURLImpl implements PortletURL {
      * @param res the servlet response
      */
     public PortletURLImpl(HttpServletRequest req, HttpServletResponse res, PortalContext context, boolean isRender) {
-        this.store = new HashMap();
+        this();
         this.res = res;
         this.req = req;
         this.context = context;
