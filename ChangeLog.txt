@@ -1,6 +1,23 @@
 ChangeLog.txt
 =============
 
+
+Changes since GridSphere 2.1.0
+==============================
+
+Release Notes - GridSphere Portal Framework - Version 2.1.2
+
+** Bug
+    * [GPF-177] - setFileDownloadEvent in ActionPortlet broken
+    * [GPF-178] - TableTag sorting and zebra not working
+    * [GPF-181] - NPE when removing a portlet web application
+
+** Improvement
+    * [GPF-180] - Create a GS setup portlet where an admin name and password gets created
+
+Changes since GridSphere 2.0.4
+==============================
+
 Release Notes - GridSphere Portal Framework - Version 2.1
 
 ** Bug
