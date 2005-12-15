@@ -22,6 +22,7 @@ import org.gridlab.gridsphere.services.core.cache.CacheService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import javax.servlet.RequestDispatcher;
+import javax.portlet.RenderResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -591,7 +592,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         // check if expiration was set in render response
         Map props = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (props != null) {
-            List vals = (List)props.get(RenderResponseImpl.EXPIRATION_CACHE);
+            List vals = (List)props.get(RenderResponse.EXPIRATION_CACHE);
             if (vals != null) {
                 String cacheExpiryStr = (String)vals.get(0);
                 if (cacheExpiryStr != null) {
