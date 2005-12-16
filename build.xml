@@ -226,7 +226,6 @@ Invoke "ant help"
         <echo message=" "/>
         <echo message="+--------------------------------------------------------------------------+"/>
         <echo message="| Please start up your webserver and go to http://server:port/gridsphere/  |"/>
-        <echo message="| Login as root with empty password                                        |"/>
         <echo message="+--------------------------------------------------------------------------+"/>
     </target>
 
