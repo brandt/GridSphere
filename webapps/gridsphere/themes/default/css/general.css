@@ -45,7 +45,8 @@ body {
 /* table tag                                    */
 table {
     empty-cells: show;
-    font-size: inherit;           /* important belive it or not */
+/*    font-size: inherit;            important belive it or not */
+    font-size: 12px;
 }
 
 
@@ -65,4 +66,3 @@ input, select, textarea {
 img {
 border-style: none;
 }
-

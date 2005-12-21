@@ -45,7 +45,8 @@ a.image, a img, a.image:hover {
 
 table {
   empty-cells: show;
-  font-size: inherit;           
+/*    font-size: inherit;            important belive it or not */
+  font-size: 12px;
 }
 
 tbody, td, tr, th {

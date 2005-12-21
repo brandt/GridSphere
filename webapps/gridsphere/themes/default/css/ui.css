@@ -54,7 +54,6 @@ a.ui-datagrid-controls-element-active:link {
 }
 
 .ui-datagrid-content {
-
     border: 1px solid black;
     width: 100%;
 }
@@ -84,8 +83,6 @@ table.sortable a.sortheader {
     background-color:inherit;
     vertical-align: middle;
     color:#FFFFFF;
-    font-weight
-    text-decoration: none;
     display: block;
 }
 table.sortable span.sortarrow {
