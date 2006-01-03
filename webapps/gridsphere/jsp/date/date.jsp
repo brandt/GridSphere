@@ -5,7 +5,6 @@
 <jsp:useBean id="date" class="java.lang.String" scope="request"/>
 
 
-<br/>
 <table>
 <tr><td align="center">
 <ui:text value="<%= date %>"/>
