@@ -1,0 +1,202 @@
+/* Stylesheet */
+/*
+Part of the Gridsphere modern theme
+Author: Roberto Ranon (ranon@dimi.uniud.it)
+Version: $Id$
+*/
+
+/* this file contains global and general css rules for HTML elements */
+
+/*-------------------------------------------------
+PAGE BODY
+-------------------------------------------------*/
+
+body {
+    background-color: #fff;
+    color: #000;
+    font-family: lucida, verdana, "Lucida Grande", helvetica, arial, sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    margin: 0 auto;
+    min-width: 800px;
+    padding: 0;
+    text-align: left;
+}
+
+/*-------------------------------------------------
+GLOBAL & GENERAL RULES
+-------------------------------------------------*/
+
+a {font-weight: normal; padding: 1px; text-decoration: none; }
+a:link { color: #0D70C6; }
+a:visited { color: #0D70C6; }
+a:hover, a:active { color: blue; }
+
+a.image, a img, a.image:hover {
+    background: none;
+    border: none;
+    color: white;
+    padding: 0;
+    text-decoration: none;
+}
+
+
+blockquote {
+    font-size: 11px;
+    color: #666;
+    margin: 20px;
+}
+
+
+<<<<<<< general.css
+code, pre {
+    background: inherit;
+    color: #333;
+    font-family: "Bitstream Vera Sans Mono", monaco, "Courier New", courier, monospace;
+    font-size: 80%
+=======
+table {
+  empty-cells: show;
+/*    font-size: inherit;            important belive it or not */
+  font-size: 12px;
+>>>>>>> 1.2
+}
+
+
+div { 
+    border-width: 0px;
+    font-size: inherit; 
+    margin: 0px;
+    padding: 0px;        
+}
+
+
+form {
+    margin: 0;
+    padding: 0;
+}
+
+/*
+h1 {
+    border-bottom: 0;
+    color: #000;
+    margin: 0;
+    padding: 0;
+    font-family: "Lucida Grande", arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+h2 {
+    color: #333;
+    margin: 20px 0 5px 0px;
+    padding: 0;
+    font-family: "Lucida Grande", arial, sans-serif;
+    font-size: 15px;
+}
+
+h3 {
+    color: #666;
+    margin: 20px 0 0 0;
+    padding: 0;
+    font-family: "Lucida Grande", arial, sans-serif;
+    font-size: 14px;
+}
+*/
+
+
+input[type=submit] {
+  margin-top: 2px;
+}
+
+input, select, textarea {
+  font-size: inherit;
+}
+
+
+p {
+    font-size: 12px;
+    line-height: 16px;
+}
+
+
+small {
+    font-size: 10px;
+    line-height: 13px;
+}
+
+
+table {
+    empty-cells: show;
+    font-size: inherit;           
+}
+
+tbody, td, tr, th {
+    font-size: inherit;
+}
+
+
+x-small {
+    font-size: 9px;
+    line-height: 11px;
+}
+
+
+.bigger {
+    font-size: 13px;
+}
+
+.highlight {
+    background-color: #ffc;
+}
+
+.light {
+    font-weight: normal;
+}
+
+.lightgray {
+    font-weight: normal;
+    color: #999;
+}
+
+.lightgray a:link, .lightgray a:visited {
+    color: #999;
+    background: inherit;
+    text-decoration: underline;
+}
+
+.lightgray a:hover {
+    color: #fff;
+    background: #000;
+}
+
+.blue {
+    color: #06c;
+}
+
+.green {
+    color: #390;
+}
+
+.red {
+    color: #c00;
+}
+
+.smallnote {
+    font-size: 10px;
+    color: #999;
+    font-weight: normal;
+}
+
+
+
+
+#page {
+    min-width: 800px;
+}
+* html code {
+    font-size : 105%;
+}
+* html #page {
+    width:expression(document.body.clientWidth < 905 ? "900px" : "auto" );
+}

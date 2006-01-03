@@ -1,0 +1,136 @@
+/* Stylesheet */
+/*
+Part of the Gridsphere modern theme.
+Author: Roberto Ranon (ranon@dimi.uniud.it)
+Version: $Id$
+*/
+
+/*-------------------------------------------------
+1st LEVEL TAB MENU
+-------------------------------------------------*/
+
+.tab-pane
+{
+	padding: 0px;
+	margin: 0px;
+	border: none;
+	clear: both;
+	overflow: hidden;
+}
+
+.tab-pane ul
+{
+	height: 100%;
+	padding: 10px 5px 6px 20px;
+	margin: 0px;
+	clear: both;
+}
+
+.tab-pane li
+{
+	margin: 0;
+	padding: 0;
+	display: inline;
+	list-style-type: none;
+	border-right: 1px white;
+}
+
+.tab-pane a/*span*/
+{
+	color: #039;
+	background: #ddd;
+	font-size: 13px;
+	font-weight: normal;
+	padding: 5px 6px 3px 6px;
+	margin: 2px 3px 0px 0px;
+	border: 1px solid #ddd;
+	text-decoration: none;
+}
+
+.tab-active {
+	color: #039;
+	font-size: 13px;
+}
+
+.tab-pane/*span*/ a:hover {
+    color: #000;
+    background-color: #ddd;
+}
+
+.tab-pane .tab-active span
+{
+	padding: 5px 6px;
+	margin: 2px 3px 0px 0px;
+	background-color: #eaeac7;
+	color: black;
+	border: 1px solid #eaeac7;
+        font-weight: bold;
+}
+
+/*a*/span.tab-menu
+{
+	background-color: inherit;
+	text-decoration: none;
+	font-weight: normal;
+}
+
+/*-------------------------------------------------
+2nd LEVEL TAB MENU
+-------------------------------------------------*/
+
+.tab-sub-pane
+{
+	padding: 0px;
+	margin: 0px;
+	border: none;
+}
+
+.tab-sub-pane ul
+{
+	height: 100%;
+	margin: 0px;
+	padding: 5px 6px;
+	padding-left: 20px;
+	background: #eaeac7;
+}
+
+.tab-sub-pane li
+{
+	margin: 0;
+	padding: 0;
+	display: inline;
+	list-style-type: none;
+	border: none;
+}
+
+.tab-sub-pane a/*span*/
+{
+	background: #eaeac7;
+	font-size: 12px;
+	font-weight: normal;
+	padding: 5px 6px;
+	margin: 0 -1px 0 0;
+	border-top: none;
+}
+
+.tab-sub-active span/*a*/, .tab-sub-active:hover
+{
+	background-color: #eaeac7;
+	color: black;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.tab-sub-inactive span/*a*/ 
+{ 
+	background-color: #eaeac7;
+ 	text-decoration: none; 
+ 	font-weight: normal;
+}
+
+.tab-sub-inactive:hover /*a:hover*/
+{
+	background-color: #eaeac7;
+	color: #000;
+}
+

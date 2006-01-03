@@ -1,0 +1,134 @@
+/* Stylesheet */
+/*
+Part of the Gridsphere modern theme.
+Author: Roberto Ranon (ranon@dimi.uniud.it)
+Version: $Id$
+*/
+
+/*-------------------------------------------------
+1st LEVEL TAB MENU
+-------------------------------------------------*/
+
+.tab-pane ul a {
+    background: url("/gridsphere/themes/css/default/images/tab-inactive-left.gif") left top no-repeat;
+    color: #000;
+    font-size: 11px;
+    font-weight: normal;
+    padding: 0px 0px 0px 6px;
+    text-decoration: none;
+}
+
+.tab-pane ul a span {
+    background: url("/gridsphere/themes/css/default/images/tab-inactive-right.gif") right top no-repeat;
+    padding: 4px 6px 5px 0px;
+}
+
+.tab-pane ul a, .tab-pane ul a span {
+    display: block;
+    float: left;
+}
+
+/* Commented backslash hack hides rule from IE5-Mac \*/
+.tab-pane ul a, .tab-pane ul a span {
+    float: none;
+}
+/* End IE5-Mac hack */
+
+.tab-pane ul a:hover {
+    color: #000;
+}
+
+.tab-pane {
+    background: #D6D6D6 url("/gridsphere/themes/css/default/images/spacer.gif") repeat-x bottom;	
+    float: left;
+    font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;
+    font-weight: normal;
+    line-height: normal;
+    width: 100%;
+}
+
+.tab-pane ul {
+    list-style: none;
+    margin: 0;
+    padding: 2px 10px 0px 2px;
+}
+
+.tab-pane ul li {
+    float: left;
+    margin: 0;
+    padding-right: 2px;
+    padding-bottom: 0px;
+}
+
+.tab-pane ul li .tab-active {
+    background: url("/gridsphere/themes/css/default/images/tab-active-left.gif") left top no-repeat;
+    color: #000;
+    float: left;
+    font-size: 11px;
+    font-weight: bold;
+    padding-left: 6px;
+    text-decoration: none;
+}
+
+.tab-pane ul li .tab-active span {
+    background: url("/gridsphere/themes/css/default/images/tab-active-right.gif") right top no-repeat;
+    display: block;
+    float: left;
+    padding: 4px 6px 6px 0px;
+}
+
+
+/*-------------------------------------------------
+2nd LEVEL TAB MENU
+-------------------------------------------------*/
+
+.tab-sub-pane {
+    background: url("/gridsphere/themes/css/default/images/sub-tab.gif") repeat-x;
+    border: none;
+    clear: both;
+    margin: 0px;
+    padding: 0px;
+}
+
+.tab-sub-pane ul {
+    height: 100%;
+    margin: 0px;
+    padding: 5px 0px;
+    padding-left: 8px;
+}
+
+.tab-sub-pane li {
+    border: none;
+    display: inline;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tab-sub-pane a {
+    border-top: none;
+    color: black;
+    font-size: 11px;
+    font-weight: normal;
+    margin: 0 -1px 0 0;
+    padding: 5px 0px;
+    text-decoration: none;
+}
+
+.tab-sub-active span, .tab-sub-active:hover {
+    font-weight: bold;
+}
+
+.tab-sub-active:hover {
+    color: black;
+}
+
+.tab-sub-inactive span { 
+    font-weight: normal;
+    text-decoration: none; 
+}
+
+.tab-sub-inactive:hover {
+    color: blue;
+}
+

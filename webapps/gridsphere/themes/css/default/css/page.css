@@ -1,0 +1,58 @@
+/* Stylesheet */
+/*
+Part of the Gridsphere modern theme
+Author: Roberto Ranon (ranon@dimi.uniud.it)
+Version: $Id$
+*/
+
+/* the body is tipically divided into the following elements (depending on the
+    layout xml descriptors):
+      - a div with id=page containing: 
+          - a header div(class header, contains logo (whose style is inlined in 
+            the header.html code), locale)
+          - a tabs menu div (class tab-pane) --> see tab.css
+          - a sub-tabs menu div (class tab-sub-pane) --> see tab.css
+          - table layout content div (class table) --> see layout.css
+          - a footer div (class footer)
+
+*/
+
+#page {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+
+#page-logo {
+    background: #d6d6d6;
+    color: #0079b8;
+    font-size: 36px;
+    font-weight: normal;
+    padding-top: 3px;
+    padding-right: 5px;
+    padding-bottom: 1px;
+    padding-left: 8px;
+}
+
+/*-------------------------------------------------
+ PAGE HEADER
+-------------------------------------------------*/
+
+.header {
+    background-color: #D6D6D6;
+    margin: 0px;
+    overflow: hidden;
+    padding: 0px;
+}
+
+
+/*-------------------------------------------------
+    PAGE FOOTER
+-------------------------------------------------*/
+
+.footer	{
+    clear: both;
+    padding: 15px;
+    text-align: center
+}
+
