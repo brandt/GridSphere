@@ -89,6 +89,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
         ta.setValue(sb.toString());
 
         String themesPath = getPortletConfig().getContext().getRealPath("/themes");
+        
+        /// retrieve the current renderkit
+        PortletPage page = layoutMgr.getPortletPage(req);
+        themesPath += "/" + page.getRenderKit();
 
         System.err.println("themes path=" + themesPath);
 

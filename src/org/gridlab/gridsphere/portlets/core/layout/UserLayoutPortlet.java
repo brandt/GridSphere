@@ -41,14 +41,14 @@ public class UserLayoutPortlet extends ActionPortlet {
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
-
+/* moved to doRender
         String themesPath = getPortletConfig().getContext().getRealPath("/themes");
       
         File f = new File(themesPath);
         if (f.isDirectory()) {
             themes = f.list();
         }
-
+*/
         DEFAULT_VIEW_PAGE = "doRender";
         DEFAULT_HELP_PAGE = "layout/help.jsp";
 
@@ -154,12 +154,20 @@ public class UserLayoutPortlet extends ActionPortlet {
         PortletRequest req = event.getPortletRequest();
       
         req.setAttribute("lang", req.getLocale().getLanguage());
-
+        
         ListBoxBean themeLB = event.getListBoxBean("themeLB");
         PortletPage page = layoutMgr.getPortletPage(req);
         String theme = page.getTheme();
         themeLB.clear();
-
+        
+        String themesPath = getPortletConfig().getContext().getRealPath("/themes");       
+        /// retrieve the current renderkit
+        themesPath += "/" + page.getRenderKit();
+      
+        File f = new File(themesPath);
+        if (f.isDirectory()) {
+            themes = f.list();
+        }
 
         for (int i = 0; i < themes.length; i++) {
             ListBoxItemBean lb = new ListBoxItemBean();
