@@ -12,7 +12,6 @@ import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabListener;
 import org.gridlab.gridsphere.layout.view.TabbedPaneView;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
@@ -298,7 +297,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         StringBuffer pane = new StringBuffer();
         PortletRequest req = event.getPortletRequest();
 
-        PortletRole userRole = req.getRole();
+        List userRoles = req.getRoles();
 
         pane.append(tabbedPaneView.doStart(event, this));
 
@@ -306,8 +305,8 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         List tabs = getPortletTabs();
         for (int i = 0; i < tabs.size(); i++) {
             tab = (PortletTab) tabs.get(i);
-            PortletRole tabRole = tab.getRequiredRole();
-            if (userRole.compare(userRole, tabRole) >= 0) {
+            String tabRole = tab.getRequiredRole();
+            if (tabRole.equals("") || (userRoles.contains(tabRole))) {
                 pane.append(tabbedPaneView.doRenderTab(event, this, tab));
             } else {
                 // if role is < required role we try selecting the next possible tab

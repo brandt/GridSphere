@@ -2,6 +2,7 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
@@ -119,7 +120,8 @@ public class PortletTabRegistry {
         tabDescriptors.put(groupName, groupFile);
         PortletTabbedPane parentPane = new PortletTabbedPane();
         Iterator it = portletRoleInfo.iterator();
-        String portletClass, reqRole;
+        String portletClass;
+        PortletRole reqRole = null;
         PortletTab parentTab = new PortletTab();
         parentTab.setTitle(groupName);
         //parentTab.setLabel(groupName);
@@ -134,7 +136,7 @@ public class PortletTabRegistry {
             portletClass = info.getPortletClass();
 
             //System.err.println("portletclass = " + portletClass);
-            reqRole = info.getRole();
+            reqRole = info.getSportletRole();
             pTab = new PortletTab();
             PortletRegistry registry = PortletRegistry.getInstance();
 
@@ -145,7 +147,7 @@ public class PortletTabRegistry {
 
             String tabName = conc.getDisplayName(Locale.ENGLISH);
             pTab.setTitle("en", tabName);
-            pTab.setRequiredRoleAsString(reqRole);
+            if (reqRole != null) pTab.setRequiredRole(reqRole.getName());
             PortletTableLayout table = new PortletTableLayout();
             PortletRowLayout row = new PortletRowLayout();
             PortletColumnLayout col = new PortletColumnLayout();

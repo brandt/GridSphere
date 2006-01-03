@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletMessage;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -31,8 +30,8 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String name = "";
     protected String theme = "";
     protected boolean isVisible = true;
-    protected String roleString = PortletRole.GUEST.toString();
-    protected PortletRole requiredRole = PortletRole.GUEST;
+    protected String roleString = "";
+    protected String groupString = "";
     protected List listeners = null;
     protected boolean canModify = false;
     protected String renderKit = "classic";
@@ -55,18 +54,15 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     public List init(PortletRequest req, List list) {
         listeners = new Vector();
         defaultWidth = width;
-        if (roleString != null) {
-            try {
-                requiredRole = PortletRole.toPortletRole(roleString);
-            } catch (IllegalArgumentException e) {
-                requiredRole = PortletRole.GUEST;
-            }
-        }
+
 
         if (parent != null) {
+
+        /*
         if (parent.getRequiredRole().compare(parent.getRequiredRole(), requiredRole) > 0) {
             requiredRole = parent.getRequiredRole();
         }
+        */
         }
         if ((label == null) || label.equals("")) {
             return super.init(req, list);
@@ -118,37 +114,37 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     /**
      * Allows a required role to be associated with viewing this portlet
      *
-     * @param roleString the required portlet role expresses as a <code>String</code>
+     * @param roleString the required portlet role expressed as a <code>String</code>
      */
-    public void setRequiredRoleAsString(String roleString) {
+    public void setRequiredRole(String roleString) {
         this.roleString = roleString;
     }
 
     /**
      * Allows a required role to be associated with viewing this portlet
      *
-     * @return the required portlet role expresses as a <code>String</code>
+     * @return the required portlet role expressed as a <code>String</code>
      */
-    public String getRequiredRoleAsString() {
+    public String getRequiredRole() {
         return roleString;
     }
 
     /**
-     * Allows a required role to be associated with viewing this portlet
+     * Allows a group to be associated with viewing this portlet
      *
-     * @param requiredRole the required portlet role expresses as a <code>String</code>
+     * @param group the required group expressed as a <code>String</code>
      */
-    public void setRequiredRole(PortletRole requiredRole) {
-        this.requiredRole = requiredRole;
+    public void setGroup(String groupString) {
+        this.groupString = roleString;
     }
 
     /**
-     * Allows a required role to be associated with viewing this portlet
+     * Allows a required group to be associated with viewing this portlet
      *
-     * @return the required portlet role expresses as a <code>PortletRole</code>
+     * @return the required group expressed as a <code>String</code>
      */
-    public PortletRole getRequiredRole() {
-        return requiredRole;
+    public String getGroup() {
+        return groupString;
     }
 
     /**
@@ -334,7 +330,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         b.theme = this.theme;
         b.label = this.label;
         b.roleString = this.roleString;
-        b.requiredRole = ((this.requiredRole != null) ? (PortletRole) this.requiredRole.clone() : null);
+        b.groupString = this.groupString;
         return b;
     }
 

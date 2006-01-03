@@ -13,13 +13,12 @@ import org.gridlab.gridsphere.layout.view.FrameView;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
-import org.gridlab.gridsphere.portlet.jsrimpl.RenderResponseImpl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 
 import javax.servlet.RequestDispatcher;
 import javax.portlet.RenderResponse;
@@ -42,7 +41,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private transient CacheService cacheService = null;
 
-    private transient AccessControlManagerService aclService = null;
+    private transient RoleManagerService roleService = null;
 
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
@@ -185,7 +184,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
             cacheService = (CacheService) factory.createPortletService(CacheService.class, null, true);
-            aclService = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, null, true);
+            roleService = (RoleManagerService)factory.createPortletService(RoleManagerService.class, null, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
@@ -216,7 +215,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         list = titleBar.init(req, list);
         titleBar.addComponentListener(this);
         titleBar.setParentComponent(this);
-        titleBar.setAccessControlService(aclService);
+        titleBar.setRoleService(roleService);
         //System.err.println("useDiv= " + useDiv);
 
         // invalidate cache
@@ -477,10 +476,15 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if (!roleString.equals("")) {
             Principal principal = req.getUserPrincipal();
             if (principal != null) {
-                boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
-                //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
-                //System.err.println("hasRole = " + hasrole + " portletclass= " + portletClass);
-                if ((!hasrole) && (!req.isUserInRole(roleString))) {
+                List roles = req.getRoles();
+                if (!groupString.equals("")) {
+                    List groups = req.getGroups();
+                    if (groups.contains(groupString)) {
+                        System.err.println("User " + user + " has no permissions to access portlet: " + portletClass + "!");
+                        return;
+                    }
+                }
+                if (roles.contains(roleString)) {
                     System.err.println("User " + user + " has no permissions to access portlet: " + portletClass + "!");
                     return;
                 }
@@ -653,8 +657,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         f.transparent = this.transparent;
         f.innerPadding = this.innerPadding;
         f.portletClass = this.portletClass;
-        f.roleString = this.roleString;
-        f.requiredRole = (PortletRole) this.requiredRole.clone();
         f.renderPortlet = this.renderPortlet;
         return f;
     }
@@ -670,8 +672,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
-            PortletRole role = req.getRole();
-            if (role.compare(role, requiredRole) < 0) return;
+            List roles = req.getRoles();
+            if (!roleString.equals("") && (!roles.contains(roleString))) return;
 
             PortletResponse res = event.getPortletResponse();
 

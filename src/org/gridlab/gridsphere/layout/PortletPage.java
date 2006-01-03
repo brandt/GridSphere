@@ -16,7 +16,6 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -37,8 +36,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     protected int COMPONENT_ID = -1;
 
     protected transient CacheService cacheService = null;
-    private transient AccessControlManagerService aclService = null;
-
+    
     protected PortletContainer footerContainer = null;
     protected PortletContainer headerContainer = null;
     protected PortletTabbedPane tabbedPane = null;
@@ -234,7 +232,6 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         try {
 
             cacheService = (CacheService) factory.createPortletService(CacheService.class, null, true);
-            aclService = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, null, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
@@ -394,12 +391,12 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             if (compId != null) {
                 PortletComponent comp = compId.getPortletComponent();
                 // perform an action if the component is non null
-                PortletRole userRole = event.getPortletRequest().getRole();
-                if (userRole.compare(userRole, comp.getRequiredRole()) >= 0) {
-                    if (comp != null) {
+                List userRoles = event.getPortletRequest().getRoles();
+                if (comp.getRequiredRole().equals("") || userRoles.contains(comp.getRequiredRole())) {
                         PortletRequest req = event.getPortletRequest();
                         Principal principal = req.getUserPrincipal();
                         User user = req.getUser();
+                        /*
                         if (comp instanceof PortletFrame) {
                             // do role checking if user is logged in
                             if (principal != null) {
@@ -424,13 +421,12 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
                                 }
                             }
                         }
-
+                       */
                         if (comp instanceof PortletFrame) {
                             PortletFrame f = (PortletFrame)comp;
                             System.err.println(" in portlet: " + f.getPortletClass());
                         }
                         return comp;
-                    }
                 }
             }
         }

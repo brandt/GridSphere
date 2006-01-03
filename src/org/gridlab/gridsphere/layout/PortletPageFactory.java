@@ -211,9 +211,10 @@ public class PortletPageFactory implements PortletSessionListener {
         }
 
         // check for portlets no longer in groups and remove if necessary
-        Map groups = (Map) req.getAttribute(SportletProperties.PORTLETGROUPS);
+        /* @TODO CHECK PORTLETS TO REMOVE IF ROLES/GROUPS CHANGE
+        List groups = (List) req.getGroups();
         List allowedPortlets = new ArrayList();
-        Iterator it = groups.keySet().iterator();
+        Iterator it = groups.iterator();
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup) it.next();
             Set s = g.getPortletRoleList();
@@ -223,6 +224,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 allowedPortlets.add(roleInfo.getPortletClass());
             }
         }
+        */
 
         // create tmp page
         PortletPage tmpPage = new PortletPage();
@@ -235,6 +237,7 @@ public class PortletPageFactory implements PortletSessionListener {
             tmpPage.init(req, new ArrayList());
 
             // when deleting must reinit everytime
+            /* @TODO CHECK PORTLETS TO REMOVE IF ROLES/GROUPS CHANGE
             int i = 0;
             boolean found;
             while (i < tmpPage.getComponentIdentifierList().size()) {
@@ -255,6 +258,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 }
                 i++;
             }
+            */
             tmpPane.save();
             return tmpPane;
         } catch (Exception e) {
@@ -267,7 +271,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public PortletPage createFromGroups(PortletRequest req) {
 
-        Map groups = (Map) req.getAttribute(SportletProperties.PORTLETGROUPS);
+        List groups = (List) req.getGroups();
         PortletPage newPage = null;
         PortletTabbedPane pane;
 
@@ -281,7 +285,7 @@ public class PortletPageFactory implements PortletSessionListener {
             pane = newPage.getPortletTabbedPane();
 
 
-            PortletTabbedPane gsTab = PortletTabRegistry.getGroupTabs(((PortletGroup)req.getAttribute(SportletProperties.PORTLET_GROUP)).getName());
+            PortletTabbedPane gsTab = PortletTabRegistry.getGroupTabs(req.getGroup().getName());
             List tabs = gsTab.getPortletTabs();
             for (int j = 0; j < tabs.size(); j++) {
                 PortletTab tab = (PortletTab) tabs.get(j);
@@ -289,14 +293,14 @@ public class PortletPageFactory implements PortletSessionListener {
                 pane.addTab((PortletTab) deepCopy(tab));
             }
 
-            Iterator it = groups.keySet().iterator();
+            Iterator it = groups.iterator();
             while (it.hasNext()) {
-                PortletGroup g = (PortletGroup) it.next();
+                String groupName = (String)it.next();
 
-                if (g.getName().equals(((PortletGroup)req.getAttribute(SportletProperties.PORTLET_GROUP)).getName())) continue;
+                if (groupName.equals(((PortletGroup)req.getGroup()).getName())) continue;
 
-                log.debug("adding group layout: " + g.getName());
-                PortletTabbedPane portletTabs = PortletTabRegistry.getGroupTabs(g.getName());
+                log.debug("adding group layout: " + groupName);
+                PortletTabbedPane portletTabs = PortletTabRegistry.getGroupTabs(groupName);
                 if (portletTabs != null) {
                     tabs = portletTabs.getPortletTabs();
 

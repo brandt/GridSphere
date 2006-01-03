@@ -129,12 +129,11 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable, 
 
         // ok this one is maximized show only this window
         List scomponents = Collections.synchronizedList(components);
-        PortletRole userRole = req.getRole();
+        List userRoles = req.getRoles();
         synchronized (scomponents) {
             for (int i = 0; i < numComponents; i++) {
                 p = (PortletComponent) scomponents.get(i);
-                PortletRole reqRole = PortletRole.toPortletRole(p.getRequiredRoleAsString());
-                if (userRole.compare(userRole, reqRole) >= 0) {
+                if (!userRoles.contains(roleString)) {
                     if (p.getWidth().equals("100%")) {
                         // make another table around this, just for the padding
                         out.println("<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> ");

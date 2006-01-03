@@ -8,7 +8,6 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
@@ -62,13 +61,12 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             Iterator it = scomponents.iterator();
-            PortletRole userRole = req.getRole();
+            List userRoles = req.getRoles();
             PortletComponent p;
 
             while (it.hasNext()) {
                 p = (PortletComponent) it.next();
-                PortletRole reqRole = PortletRole.toPortletRole(p.getRequiredRoleAsString());
-                if (userRole.compare(userRole, reqRole) < 0) {
+                if (!p.getRequiredRole().equals("") && (!userRoles.contains(p.getRequiredRole()))) {
                     it.remove();
                 } else {
                     // all the components have the same theme

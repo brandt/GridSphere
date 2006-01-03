@@ -253,9 +253,9 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
      
-        PortletRole userRole = event.getPortletRequest().getRole();
+        List userRoles = event.getPortletRequest().getRoles();
         StringBuffer tab = new StringBuffer();
-        if (userRole.compare(userRole, requiredRole) >= 0) {
+        if (roleString.equals("") || (userRoles.contains(roleString))) {
             portletComponent.doRender(event);
             tab.append(portletComponent.getBufferedOutput(event.getPortletRequest()));
         }

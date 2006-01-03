@@ -9,12 +9,16 @@ import org.gridlab.gridsphere.layout.view.TableLayoutView;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
+import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -32,6 +36,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
     public static final String PORTLET_NO_ACTION = "gs_none";
 
     protected transient TableLayoutView tableView = null;
+    private transient GroupManagerService groupService = null;
 
     /**
      * Constructs an instance of PortletTableLayout
@@ -41,6 +46,12 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
 
     public List init(PortletRequest req, List list) {
         tableView = (TableLayoutView)getRenderClass("TableLayout");
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        try {
+            groupService = (GroupManagerService)factory.createPortletService(GroupManagerService.class, null, true);
+        } catch (PortletServiceException e) {
+            System.err.println("Unable to init Cache service! " + e.getMessage());
+        }
         return super.init(req, list);
     }
 
@@ -116,27 +127,27 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
 
         //PrintWriter out = res.getWriter();
 
-        Map groups = (Map) req.getAttribute(SportletProperties.PORTLETGROUPS);
+        List groups = (List) req.getGroups();
 
         Map availPortlets = new HashMap();
-        Iterator it = groups.keySet().iterator();
+        Iterator it = groups.iterator();
         while (it.hasNext()) {
-            PortletGroup g = (PortletGroup) it.next();
+            String group = (String) it.next();
+            PortletGroup g = groupService.getGroupByName(group);
             //System.err.println("group= " + g.getName());
             if (g.equals(req.getAttribute(SportletProperties.PORTLET_GROUP))) continue;
             Iterator sit = g.getPortletRoleList().iterator();
-            PortletRole role = (PortletRole) groups.get(g);
+            //PortletRole role = (PortletRole) groups.get(g);
             while (sit.hasNext()) {
                 SportletRoleInfo info = (SportletRoleInfo) sit.next();
-
                 String appID = PortletRegistry.getApplicationPortletID(info.getPortletClass());
 
                 //System.err.println("info class= " + info.getPortletClass());
 
-                PortletRole reqRole = info.getPortletRole();
-                //System.err.println("role= " + info.getPortletRole());
+                PortletRole reqRole = info.getSportletRole();
 
-                if (role.compare(role, reqRole) >= 0) {
+                //System.err.println("role= " + info.getSportletRole());
+                if (req.getRoles().contains(reqRole))
                     if (!availPortlets.containsKey(appID)) {
                         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
                         if (appPortlet != null) {
@@ -152,7 +163,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
                             //System.err.println("app portlet was null for " + appID);
                         }
                     }
-                }
+
             }
         }
         return availPortlets;

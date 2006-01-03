@@ -110,23 +110,9 @@ public interface PortletComponent extends ComponentLifecycle {
     /**
      * Allows a required role to be associated with viewing this portlet
      *
-     * @param requiredRole the required portlet role expresses as a <code>String</code>
-     */
-    public void setRequiredRole(PortletRole requiredRole);
-
-    /**
-     * Allows a required role to be associated with viewing this portlet
-     *
      * @return the required portlet role expresses as a <code>PortletRole</code>
      */
-    public PortletRole getRequiredRole();
-
-    /**
-     * Allows a required role to be associated with viewing this portlet
-     *
-     * @return the required portlet role expresses as a <code>PortletRole</code>
-     */
-    public String getRequiredRoleAsString();
+    public String getRequiredRole();
 
     public void setCanModify(boolean canModify);
 

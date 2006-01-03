@@ -16,7 +16,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portletcontainer.*;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -45,7 +45,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private String errorMessage = "";
     private boolean hasError = false;
     private boolean isActive = false;
-    private transient AccessControlManagerService aclService = null;
+    private transient RoleManagerService roleService = null;
 
     private List modeLinks = null, windowLinks = null;
 
@@ -213,8 +213,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     public PortletTitleBar() {
     }
 
-    public void setAccessControlService(AccessControlManagerService aclService) {
-        this.aclService = aclService;
+    public void setRoleService(RoleManagerService roleService) {
+        this.roleService = roleService;
     }
 
     /**
@@ -558,10 +558,12 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         }
 
         // Unless user is admin they should not see configure mode
-        boolean hasConfigurePermission = false;
-
+        /*
         boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
-        if (hasrole) hasConfigurePermission = true;
+
+        */
+        User user = req.getUser();
+        boolean hasConfigurePermission = ((roleService.isUserInRole(user, PortletRole.ADMIN)) || (roleService.isUserInRole(user, PortletRole.SUPER)));
 
         List smodes = new ArrayList();
         Portlet.Mode mode;
@@ -662,8 +664,11 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 if (titleBarEvent.hasPortletModeAction()) {
 
                     if (titleBarEvent.getMode().equals(Portlet.Mode.CONFIGURE)) {
+                        //@TODO fix me
+                        /*
                         boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
                         if (!hasrole) return;
+                        */
                     }
                     previousMode = portletMode;
                     portletMode = titleBarEvent.getMode();
