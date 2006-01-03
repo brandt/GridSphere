@@ -21,12 +21,13 @@ import java.util.*;
 public class TableLayout extends BaseRender implements TableLayoutView {
 
     protected static final StringBuffer START_MAXIMIZED =
-            new StringBuffer("\n<!-- START MAXIMIZED MODERN TABLE COMP --><div>");
+            // class "window-maximized" added
+            new StringBuffer("\n<!-- START MAXIMIZED MODERN TABLE COMP --><div class=\"window-maximized\">");
 
     protected static final StringBuffer END_MAXIMIZED =
             new StringBuffer("\n</div><!-- END MAXIMIZED MODERN TABLE COMP -->\n");
-
-    protected static final StringBuffer END_BORDER = new StringBuffer("</div><!-- END MODERN TABLE BORDER -->\n");
+    
+    protected static final StringBuffer END_BORDER = new StringBuffer("\n");// unuseful end-border DIV removed
 
     protected static final StringBuffer END_TABLE = new StringBuffer("</div><!-- END MODERN TABLE -->\n");
 
@@ -55,11 +56,12 @@ public class TableLayout extends BaseRender implements TableLayoutView {
 
     public StringBuffer doStartBorder(GridSphereEvent event, PortletComponent comp) {
         StringBuffer table = new StringBuffer();
-        table.append("\n<!-- START MODERN TABLE BORDER --><div class=\"table\"");
-        if (!comp.getWidth().equals("")) {
-           table.append(" style=\"width: " + comp.getWidth() + "\""); 
-        }  
-        table.append(">");
+// unuseful start-border DIV commented out        
+//        table.append("\n<!-- START MODERN TABLE BORDER --><div class=\"table\"");
+//        if (!comp.getWidth().equals("")) {
+//           table.append(" style=\"width: " + comp.getWidth() + "\""); 
+//        }  
+//        table.append(">");
         return table;
     }
 

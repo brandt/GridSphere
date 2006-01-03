@@ -476,7 +476,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         out.println("<!DOCTYPE html PUBLIC \"-//WAPFORUM//DTD XHTML Mobile 1.0//EN\" \"http://www.wapforum.org/DTD/xhtml-mobile10.dtd\">");
         out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
-        out.println("  <link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + theme + "/css/defaultwap.css\" rel=\"stylesheet\"/>");
+        out.println("  <link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + this.getRenderKit() + "/" + theme + "/css/defaultwap.css\" rel=\"stylesheet\"/>");
         //out.println("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
         //out.println("<wml>");
         out.println("<head>");

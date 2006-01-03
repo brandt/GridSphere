@@ -12,10 +12,11 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 public class ColumnLayout extends BaseRender implements Render {
 
-    protected static final StringBuffer TOP_COLUMN = new StringBuffer("\n<!-- START COLUMN --><div>");
-    protected static final StringBuffer TOP_COLUMN_BORDER = new StringBuffer("\n<div>");
-    protected static final StringBuffer BOTTOM_COLUMN_BORDER = new StringBuffer("</div>\n");
-    protected static final StringBuffer BOTTOM_COLUMN = new StringBuffer("</div> <!-- END COLUMN -->\n");
+    // unuseful start and end DIVs removed
+    protected static final StringBuffer TOP_COLUMN = new StringBuffer("\n<!-- START COLUMN -->");
+    protected static final StringBuffer TOP_COLUMN_BORDER = new StringBuffer("\n");
+    protected static final StringBuffer BOTTOM_COLUMN_BORDER = new StringBuffer("\n");
+    protected static final StringBuffer BOTTOM_COLUMN = new StringBuffer("<!-- END COLUMN -->\n");
 
     public ColumnLayout() {
     }

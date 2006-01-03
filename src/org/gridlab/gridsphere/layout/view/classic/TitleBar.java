@@ -43,7 +43,7 @@ public class TitleBar extends BaseRender implements Render {
             PortletTitleBar.PortletModeLink mode;
             while (modesIt.hasNext()) {
                 mode = (PortletTitleBar.PortletModeLink) modesIt.next();
-                titleBuffer.append("<a href=\"" + mode.getHref() + "\"><img border=\"0\" src=\"" + req.getContextPath() + "/themes/" + titleBar.getTheme() + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\" alt=\"" + mode.getAltTag() + "\" /></a>"); /// Removed File.separator(s)
+                titleBuffer.append("<a href=\"" + mode.getHref() + "\"><img border=\"0\" src=\"" + req.getContextPath() + "/themes/" + titleBar.getRenderKit() + "/" + titleBar.getTheme() + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\" alt=\"" + mode.getAltTag() + "\" /></a>"); /// Removed File.separator(s)
             }
             titleBuffer.append("</td>");
         }
@@ -65,7 +65,7 @@ public class TitleBar extends BaseRender implements Render {
             titleBuffer.append("<td class=\"window-icon-right\">");
             while (windowsIt.hasNext()) {
                 state = (PortletTitleBar.PortletStateLink) windowsIt.next();
-                titleBuffer.append("<a href=\"" + state.getHref() + "\"><img border=\"0\" src=\"" + req.getContextPath() + "/themes/" + titleBar.getTheme() + "/" + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\" alt=\"" + state.getAltTag() + "\" /></a>"); /// Removed File.separator(s)
+                titleBuffer.append("<a href=\"" + state.getHref() + "\"><img border=\"0\" src=\"" + req.getContextPath() + "/themes/" + titleBar.getRenderKit() + "/" + titleBar.getTheme() + "/" + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\" alt=\"" + state.getAltTag() + "\" /></a>"); /// Removed File.separator(s)
             }
             titleBuffer.append("</td>");
         }

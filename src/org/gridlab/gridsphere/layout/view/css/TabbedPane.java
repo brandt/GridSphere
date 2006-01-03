@@ -22,7 +22,8 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             new StringBuffer("\n<!-- START MODERN TABBED PANE --><div class=\"tab-pane\" ><ul>");
 
     protected static final StringBuffer TAB_END =
-            new StringBuffer("</ul><div class=\"tab-fillup\">&nbsp;</div></div><!-- END MODERN TABBED PANE -->\n");
+            // unuseful fillup DIV removed
+            new StringBuffer("</ul></div><!-- END MODERN TABBED PANE -->\n");    
     /**
      * Constructs an instance of PortletTabbedPane
      */
@@ -77,30 +78,29 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
     public StringBuffer doRenderTab(GridSphereEvent event, PortletTabbedPane tabPane, PortletTab tab) {
         // this really creates the individual tabs
         StringBuffer pane = new StringBuffer();
-        String path = event.getPortletRequest().getContextPath() + "/themes/" + tabPane.getTheme() + "/images/"; /// Removed File.separator(s)
+        String path = event.getPortletRequest().getContextPath() + "/themes/" + tabPane.getRenderKit() + "/" + tabPane.getTheme() + "/images/"; /// Removed File.separator(s)
         String link = tab.createTabTitleLink(event);
         String lang = event.getPortletRequest().getLocale().getLanguage();
         String title = tab.getTitle(lang);
         if (tabPane.getStyle().equals("sub-menu")) {
             pane.append("\n<!-- START SUB MENU TAB --><li>");
             if (tab.isSelected()) {
-                pane.append("<span class=\"tab-sub-active\">");
-                pane.append("<a class=\"tab-sub-menu-active\" href=\"" + link + "\"" + " onclick=\"this.href='" + link + "&amp;JavaScript=enabled'\">" + replaceBlanks(title) + "</a></span>");                
+                pane.append("<a class=\"tab-sub-active\" href=\"" + link + "\"" + " onclick=\"this.href='" + link + "&amp;JavaScript=enabled'\">");                
+                pane.append("<span class=\"tab-sub-menu-active\">" + replaceBlanks(title) + "</span></a>");            
             } else {
-                pane.append("<span class=\"tab-sub-inactive\">");
-                pane.append("<a class=\"tab-sub-menu\" href=\"" + link + "\"" + " onclick=\"this.href='" + link + "&amp;JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
-                pane.append("</span>");
+                pane.append("<a class=\"tab-sub-inactive\" href=\"" + link + "\"" + " onclick=\"this.href='" + link + "&amp;JavaScript=enabled'\">");
+                pane.append("<span class=\"tab-sub-menu\">" + replaceBlanks(title) + "</span></a>");
             }
             pane.append("</li>\n");
         } else {
             if (tab.isSelected()) {
                 pane.append("\n<li>");
-                pane.append("<span class=\"tab-active\">" + replaceBlanks(title) + "</span>");
+                pane.append("<div class=\"tab-active\"><span>" + replaceBlanks(title) + "</span></div>");
                 pane.append("</li>");
             } else {
                 pane.append("\n<li>");
-                pane.append("<span>");
-                pane.append("<a class=\"tab-menu\" href=\"" + link + "\"" + " onclick=\"this.href='" + link + "&amp;JavaScript=enabled'\">" + replaceBlanks(title) + "</a></span>");
+                pane.append("<a href=\"" + link + "\"" + " onclick=\"this.href='" + link + "&amp;JavaScript=enabled'\">");
+                pane.append("<span class=\"tab-menu\">" + replaceBlanks(title) + "</span></a>");
                 pane.append("</li>");
             }
         }
@@ -112,10 +112,10 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         PortletTabbedPane tabPane = (PortletTabbedPane)component;
         StringBuffer pane = new StringBuffer();
         if (tabPane.getStyle().equals("sub-menu")) {
-            String path = event.getPortletRequest().getContextPath() + "/themes/" + tabPane.getTheme() + "/images/"; /// Removed File.separator(s)
-            ///pane.append("<li style=\"background-image: url('" + path + "subtab-middle.gif')\"><span style=\"width: 100%\">&nbsp;</span></li>");
+            String path = event.getPortletRequest().getContextPath() + "/themes/" + tabPane.getRenderKit() + "/" + tabPane.getTheme() + "/images/"; /// Removed File.separator(s)
             pane.append("</ul>");
-            pane.append("<div class=\"tab-empty\">&nbsp;</div>");            
+            // unuseful empty DIV commented out
+            //pane.append("<div class=\"tab-empty\">&nbsp;</div>");            
             pane.append("</div><!-- END SUB MENU TABBED PANE -->\n");
             return pane;
         } else {

@@ -40,7 +40,7 @@ public class Frame extends BaseRender implements FrameView {
         if (frame.getOuterPadding().equals("")) {
             frameBuffer.append(" class=\"window-main\"");
         } else {
-            frameBuffer.append(" style=\"margin:" + frame.getOuterPadding() + "px\" class=\"window-main\" "); // this is the main div around one portlet
+            frameBuffer.append(" style=\"padding:" + frame.getOuterPadding() + "px\" class=\"window-main\" "); // this is the main div around one portlet
         }
         frameBuffer.append(">");
         return frameBuffer;
