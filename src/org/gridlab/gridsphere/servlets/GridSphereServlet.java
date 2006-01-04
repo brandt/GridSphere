@@ -705,7 +705,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             UserGroup ge = (UserGroup)it.next();
             String roleName = ge.getRoleName();
             System.err.println(ge.getUser() + " " + ge.getGroup() + ge.getRole());
-            if (!roleName.equals("")) {
+            if ((roleName != null) && !roleName.equals("")) {
                 if (ge.getUser() != null) {
                     System.err.println("user= " + ge.getUser() + " role=" + roleName);
                     roleService.addUserToRole(ge.getUser(), roleService.getRoleByName(roleName));
