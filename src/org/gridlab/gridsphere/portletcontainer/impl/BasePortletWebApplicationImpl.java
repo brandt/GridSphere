@@ -15,9 +15,10 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
-import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletRoleDescriptor;
+import org.gridlab.gridsphere.services.core.security.group.impl.descriptor.PortletGroupDescriptor;
+import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
+import org.gridlab.gridsphere.services.core.security.role.impl.descriptor.PortletRoleDescriptor;
+import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 
 import javax.servlet.ServletContext;
 import java.io.File;
@@ -39,7 +40,8 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
 
     protected String webApplicationName = "Unknown portlet web application";
     protected String webAppDescription = "Unknown portlet web application description";
-    protected AccessControlManagerService aclManager = null;
+    protected RoleManagerService roleManager = null;
+    protected GroupManagerService groupManager = null;
 
     /**
      * Constructs an instance of a BasePortletWebApplicationImpl from a supplied
@@ -50,7 +52,8 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
     public BasePortletWebApplicationImpl(ServletContext context) throws PortletException {
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
-            aclManager = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, context, true);
+            roleManager = (RoleManagerService)factory.createPortletService(RoleManagerService.class, context, true);
+            groupManager = (GroupManagerService)factory.createPortletService(GroupManagerService.class, context, true);
         } catch (PortletServiceException e) {
             throw new PortletException("Unable to get instance of AccessControlManagerService!", e);
         }
@@ -106,9 +109,10 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
             try {
                 PortletGroupDescriptor groupDescriptor = new PortletGroupDescriptor(groupXMLfile);
                 SportletGroup group = groupDescriptor.getPortletGroup();
-                PortletGroup g = aclManager.getGroupByName(group.getName());
+                PortletGroup g = groupManager.getGroupByName(group.getName());
                 if (g == null) {
-                    aclManager.createGroup(group);
+                    log.info("Saving group: " + group.getName());
+                    groupManager.createGroup(group);
                 }
                 log.info("Loaded a group descriptor " + group.getName());
                 // now load layout
@@ -136,7 +140,7 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
                 Iterator it = portletRoles.iterator();
                 while (it.hasNext()) {
                     PortletRole role = (PortletRole)it.next();
-                    if (aclManager.getRoleByName(role.getName()) == null) aclManager.saveRole(role);
+                    if (roleManager.getRoleByName(role.getName()) == null) roleManager.saveRole(role);
                 }
                 log.info("Loaded a role descriptor");
             } catch (Exception e) {

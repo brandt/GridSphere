@@ -142,7 +142,7 @@ public class PortletApplicationManager extends ActionPortlet {
         log.debug("in FileManagerPortlet: doUploadFile");
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-        if (req.getRole().compare(req.getRole(), PortletRole.SUPER) < 0) return;
+        if (!req.getRoles().contains(PortletRole.SUPER.getName())) return;
 
         try {
             FileInputBean fi = event.getFileInputBean("userfile");
@@ -192,7 +192,7 @@ public class PortletApplicationManager extends ActionPortlet {
         log.debug("in FileManagerPortlet: deployWebapp");
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-        if (req.getRole().compare(req.getRole(), PortletRole.SUPER) < 0) return;
+        if (!req.getRoles().contains(PortletRole.SUPER)) return;
         try {
             TextFieldBean tf = event.getTextFieldBean("webappNameTF");
 

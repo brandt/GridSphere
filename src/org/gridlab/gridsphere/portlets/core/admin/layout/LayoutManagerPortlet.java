@@ -15,7 +15,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 
 import javax.servlet.UnavailableException;
 import java.io.*;
@@ -30,7 +30,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     // Portlet services
     private LayoutManagerService layoutMgr = null;
     private PortalConfigService portalConfigService = null;
-    private AccessControlManagerService aclManagerService = null;
+    private GroupManagerService groupManagerService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -38,7 +38,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         try {
             this.layoutMgr = (LayoutManagerService) config.getContext().getService(LayoutManagerService.class);
             this.portalConfigService = (PortalConfigService) config.getContext().getService(PortalConfigService.class);
-            aclManagerService = (AccessControlManagerService) this.getConfig().getContext().getService(AccessControlManagerService.class);
+            groupManagerService = (GroupManagerService) this.getConfig().getContext().getService(GroupManagerService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -122,13 +122,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletGroup group;
         while (it.hasNext()) {
             name = (String) it.next();
-            group = aclManagerService.getGroupByName(name);
+            group = groupManagerService.getGroupByName(name);
             if (group != null) {
                 groupNames.put(name, group.getDescription());
             }
         }
         req.setAttribute("groupNames", groupNames);
-        PortletGroup coreGroup = aclManagerService.getCoreGroup();
+        PortletGroup coreGroup = groupManagerService.getCoreGroup();
         req.setAttribute("coreGroup", coreGroup.getName());
         setNextState(req, VIEW_JSP);
     }
@@ -269,15 +269,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
     }
 
     public void saveLayout(FormEvent event) throws PortletException, IOException {
-        //this.checkSuperRole(event);
-
-        User user = event.getPortletRequest().getUser();
         HiddenFieldBean groupHF = event.getHiddenFieldBean("layoutHF");
         TextAreaBean ta = event.getTextAreaBean("layoutFile");
         String newText = ta.getValue();
         PortletRequest req = event.getPortletRequest();
         if (groupHF.getValue().equals("guest")) {
-            if (req.getRole().compare(req.getRole(), PortletRole.SUPER) < 0) return;
+            if (req.getRoles().contains(PortletRole.SUPER.getName())) return;
             String guestFile = PortletTabRegistry.getGuestLayoutFile();
             String tmpFile = guestFile + "-tmp";
             Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpFile), "UTF-8"));
@@ -300,11 +297,14 @@ public class LayoutManagerPortlet extends ActionPortlet {
             return;
         }
 
-        PortletGroup group = aclManagerService.getGroupByName(groupHF.getValue());
-        if (!aclManagerService.hasSuperRole(user) && !aclManagerService.hasAdminRoleInGroup(user, group)) {
+        PortletGroup group = groupManagerService.getGroupByName(groupHF.getValue());
+
+        /*
+        if (!groupManagerService.hasSuperRole(user) && !groupManagerService.hasAdminRoleInGroup(user, group)) {
             return;
         }
-
+        */
+        
         String groupFile = PortletTabRegistry.getTabDescriptorPath(group.getName());
         log.info("saving group layout: " + group.getName());
         String tmpFile = groupFile + "-tmp";

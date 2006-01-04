@@ -4,22 +4,18 @@
  */
 package org.gridlab.gridsphere.portlets.core.admin.setup;
 
-import org.gridlab.gridsphere.portlet.PortletConfig;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletSettings;
-import org.gridlab.gridsphere.portlet.PortletException;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.MessageBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.MessageStyle;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
-import org.gridlab.gridsphere.portlets.core.login.LoginPortlet;
 import org.gridlab.gridsphere.layout.PortletPageFactory;
 
 import javax.servlet.UnavailableException;
@@ -29,14 +25,16 @@ public class GridSphereSetupPortlet extends ActionPortlet {
     // Portlet services
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
-    private AccessControlManagerService aclManagerService = null;
+    private RoleManagerService roleManagerService = null;
+    private GroupManagerService groupManagerService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         log.debug("Entering initServices()");
         try {
             this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
-            this.aclManagerService = (AccessControlManagerService) config.getContext().getService(AccessControlManagerService.class);
+            this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
+            this.groupManagerService = (GroupManagerService) config.getContext().getService(GroupManagerService.class);
             this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to get service instance!", e);
@@ -129,7 +127,10 @@ public class GridSphereSetupPortlet extends ActionPortlet {
         userManagerService.saveUser(accountRequest);
 
         log.info("Granting super role to root user.");
-        aclManagerService.grantSuperRole(accountRequest);
+        roleManagerService.addUserToRole(accountRequest, PortletRole.SUPER);
+        roleManagerService.addUserToRole(accountRequest, PortletRole.ADMIN);
+        roleManagerService.addUserToRole(accountRequest, PortletRole.USER);
+        groupManagerService.addUserToGroup(accountRequest, groupManagerService.getCoreGroup());
         event.getPortletRequest().removeAttribute(PortletPageFactory.PAGE);
     }
 

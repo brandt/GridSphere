@@ -14,11 +14,12 @@ import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.request.RequestService;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
+import org.gridlab.gridsphere.services.core.security.group.impl.UserGroup;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
@@ -53,7 +54,8 @@ public class LoginPortlet extends ActionPortlet {
     private int defaultNumTries = 0;
 
     private UserManagerService userManagerService = null;
-    private AccessControlManagerService aclService = null;
+    private GroupManagerService groupService = null;
+    private RoleManagerService roleService = null;
     private PasswordManagerService passwordManagerService = null;
     private PortalConfigService portalConfigService = null;
     private RequestService requestService = null;
@@ -66,7 +68,8 @@ public class LoginPortlet extends ActionPortlet {
         super.init(config);
         try {
             userManagerService = (UserManagerService) getPortletConfig().getContext().getService(UserManagerService.class);
-            aclService = (AccessControlManagerService) getPortletConfig().getContext().getService(AccessControlManagerService.class);
+            groupService = (GroupManagerService) getPortletConfig().getContext().getService(GroupManagerService.class);
+            roleService = (RoleManagerService) getPortletConfig().getContext().getService(RoleManagerService.class);
             passwordManagerService = (PasswordManagerService) getPortletConfig().getContext().getService(PasswordManagerService.class);
             requestService = (RequestService) getPortletConfig().getContext().getService(RequestService.class);
             tms = (TextMessagingService) getPortletConfig().getContext().getService(TextMessagingService.class);
@@ -369,23 +372,17 @@ public class LoginPortlet extends ActionPortlet {
 
     private void saveUserRole(User user) {
         log.debug("Entering saveUserRole()");
-
-        // Revoke super role (in case they had it)
-        //this.aclService.revokeSuperRole(user);
-        // Create appropriate access request
         Set groups = portalConfigService.getPortalConfigSettings().getDefaultGroups();
         Iterator it = groups.iterator();
         while (it.hasNext()) {
             PortletGroup group = (PortletGroup) it.next();
-            GroupRequest groupRequest = this.aclService.createGroupEntry();
+            UserGroup groupRequest = this.groupService.createGroupEntry();
             groupRequest.setUser(user);
             groupRequest.setGroup(group);
-            groupRequest.setRole(this.aclService.getRoleByName(PortletRole.USER.getName()));
-
             // Submit changes
-            this.aclService.saveGroupEntry(groupRequest);
+            this.groupService.saveGroupEntry(groupRequest);
         }
-
+        roleService.addUserToRole(user, PortletRole.USER);
     }
 
     public void showConfigure(FormEvent event) {
@@ -414,7 +411,7 @@ public class LoginPortlet extends ActionPortlet {
 
     public void setLoginSettings(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
-        if (req.getRole().compare(req.getRole(), PortletRole.ADMIN) < 0) return;
+        if (!req.getRoles().contains(PortletRole.ADMIN.getName())) return;
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
         String useracct = acctCB.getSelectedValue();
@@ -445,7 +442,7 @@ public class LoginPortlet extends ActionPortlet {
 
     public void configAccountSettings(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
-        if (req.getRole().compare(req.getRole(), PortletRole.ADMIN) < 0) return;
+        if (!req.getRoles().contains(PortletRole.ADMIN.getName())) return;
         TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
         String numTries = numTriesTF.getValue();
         int numtries = -1;
@@ -522,6 +519,10 @@ public class LoginPortlet extends ActionPortlet {
         }
         createSuccessMessage(evt, this.getLocalizedText(req, "LOGIN_SUCCESS_MAIL"));
 
+    }
+
+    public void doSomething(FormEvent evt) {
+        System.err.println("in doSomething!!!!!");    
     }
 
     public void notifyNewUser(FormEvent evt) {

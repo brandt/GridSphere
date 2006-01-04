@@ -17,7 +17,7 @@ public class JSRConcretePortletConfigImpl implements ConcretePortletConfig {
     private Locale[] supportedLocales = null;
     private Map descsMap = null;
     private Map dispsMap = null;
-    private PortletRole requiredRole = PortletRole.GUEST;
+    private String requiredRole = "";
     private String portletName = "Unknown portlet";
 
     public JSRConcretePortletConfigImpl(PortletDefinition portletDef) {
@@ -50,7 +50,7 @@ public class JSRConcretePortletConfigImpl implements ConcretePortletConfig {
         SecurityRoleRef[] secRoleRef = portletDef.getSecurityRoleRef();
         for (int i = 0; i < secRoleRef.length; i++) {
             String roleStr = secRoleRef[i].getRoleName().getContent();
-            requiredRole = new PortletRole(roleStr, PortletRole.USER.getPriority());
+            requiredRole = roleStr;
         }
 
 
@@ -90,7 +90,7 @@ public class JSRConcretePortletConfigImpl implements ConcretePortletConfig {
      *
      * @return the required portlet role necessary to access this portlet
      */
-    public PortletRole getRequiredRole() {
+    public String getRequiredRole() {
         return requiredRole;
     }
 
@@ -99,7 +99,7 @@ public class JSRConcretePortletConfigImpl implements ConcretePortletConfig {
      *
      * @param role the required portlet role necessary to access this portlet
      */
-    public void setRequiredRole(PortletRole role) {
+    public void setRequiredRole(String role) {
         this.requiredRole = role;
     }
 

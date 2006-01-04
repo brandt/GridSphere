@@ -9,9 +9,9 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
-import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
+import org.gridlab.gridsphere.services.core.security.group.impl.UserGroup;
+import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 
 import javax.servlet.UnavailableException;
 import java.util.ArrayList;
@@ -26,13 +26,15 @@ public class RoleManagerPortlet extends ActionPortlet {
     public static final String ROLES_CREATE = "admin/roles/doCreateRole.jsp";
 
     // Portlet services
-    private AccessControlManagerService aclManagerService = null;
+    private RoleManagerService roleManagerService = null;
+    private GroupManagerService groupManagerService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         log.debug("Entering initServices()");
         try {
-            this.aclManagerService = (AccessControlManagerService) config.getContext().getService(AccessControlManagerService.class);
+            this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
+            this.groupManagerService = (GroupManagerService) config.getContext().getService(GroupManagerService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -48,10 +50,9 @@ public class RoleManagerPortlet extends ActionPortlet {
     public void doListRoles(FormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
-        List roleList = this.aclManagerService.getRoles();
+        List roleList = this.roleManagerService.getRoles();
         req.setAttribute("roleList", roleList);
         List coreRolesList = new ArrayList();
-        coreRolesList.add(PortletRole.GUEST.getName());
         coreRolesList.add(PortletRole.USER.getName());
         coreRolesList.add(PortletRole.ADMIN.getName());
         coreRolesList.add(PortletRole.SUPER.getName());
@@ -64,62 +65,41 @@ public class RoleManagerPortlet extends ActionPortlet {
         String roleOid = evt.getAction().getParameter("roleOID");
         PortletRole role = null;
         if (roleOid != null) {
-            role = aclManagerService.getRole(roleOid);
+            role = roleManagerService.getRole(roleOid);
             HiddenFieldBean roidHF = evt.getHiddenFieldBean("roidHF");
             roidHF.setValue(roleOid);
             TextFieldBean roleNameTF = evt.getTextFieldBean("roleNameTF");
             roleNameTF.setValue(role.getName());
+            TextFieldBean roleDescTF = evt.getTextFieldBean("roleDescTF");
+            roleDescTF.setValue(role.getDescription());
         }
-
-        ListBoxBean roleListLB = evt.getListBoxBean("roleListLB");
-        ListBoxItemBean guest = new ListBoxItemBean();
-        guest.setValue(PortletRole.GUEST.getName());
-        ListBoxItemBean user = new ListBoxItemBean();
-        user.setValue(PortletRole.USER.getName());
-        ListBoxItemBean admin = new ListBoxItemBean();
-        admin.setValue(PortletRole.ADMIN.getName());
-        ListBoxItemBean sup = new ListBoxItemBean();
-        sup.setValue(PortletRole.SUPER.getName());
-        if (role != null) {
-            if (role.getPriority() == PortletRole.GUEST.getPriority()) guest.setSelected(true);
-            if (role.getPriority() == PortletRole.USER.getPriority()) user.setSelected(true);
-            if (role.getPriority() == PortletRole.ADMIN.getPriority()) admin.setSelected(true);
-            if (role.getPriority() == PortletRole.SUPER.getPriority()) sup.setSelected(true);
-        }
-        roleListLB.addBean(guest);
-        roleListLB.addBean(user);
-        roleListLB.addBean(admin);
-        roleListLB.addBean(sup);
-
         setNextState(req, ROLES_EDIT);
     }
 
     public void doDeleteRole(FormEvent evt) {
         PortletRequest req = evt.getPortletRequest();
         String roleOid = evt.getAction().getParameter("roleOID");
-        PortletRole role = aclManagerService.getRole(roleOid);
+        PortletRole role = roleManagerService.getRole(roleOid);
         if (roleOid != null) {
             // check if users with this role exists before deleting it
             // if so then chanege the role to be the predefined GS role with the same priority
-            List users = aclManagerService.getUsers(role);
+            List users = roleManagerService.getUsersInRole(role);
             if (!users.isEmpty()) {
                 Iterator it = users.iterator();
                 while (it.hasNext()) {
                     User u = (User)it.next();
-                    List groupEntries = aclManagerService.getGroupEntries(u);
+                    List groupEntries = groupManagerService.getGroupEntries(u);
                     Iterator geIt = groupEntries.iterator();
                     while (geIt.hasNext()) {
-                        GroupEntry ge = (GroupEntry)geIt.next();
+                        UserGroup ge = (UserGroup)geIt.next();
                         if (ge.getRole().getName().equalsIgnoreCase(role.getName())) {
-                            GroupRequest groupReq = aclManagerService.editGroupEntry(ge);
-                            PortletRole baseRole = aclManagerService.getRoleByPriority(role.getPriority());
-                            groupReq.setRole(baseRole);
-                            aclManagerService.saveGroupEntry(groupReq);
+                            UserGroup groupReq = groupManagerService.editGroupEntry(ge);
+                            groupManagerService.saveGroupEntry(groupReq);
                         }
                     }
                 }
             }
-            aclManagerService.deleteRole(role);
+            roleManagerService.deleteRole(role);
             createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_DELETE_MSG") + ": " + role.getName());
 
         }
@@ -130,55 +110,36 @@ public class RoleManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
         TextFieldBean roleNameTF = evt.getTextFieldBean("roleNameTF");
         // check if role name is already taken
-        if (aclManagerService.getRoleByName(roleNameTF.getValue()) != null) {
+        if (roleManagerService.getRoleByName(roleNameTF.getValue()) != null) {
             createErrorMessage(evt, this.getLocalizedText(req, "ROLE_EXISTS_MSG"));
             return;
         }
+        TextFieldBean roleDescTF = evt.getTextFieldBean("roleDescTF");
 
-        ListBoxBean priorityLB = evt.getListBoxBean("roleListLB");
-        String priority = priorityLB.getSelectedValue();
         HiddenFieldBean roidHF = evt.getHiddenFieldBean("roidHF");
-        PortletRole role = aclManagerService.getRole(roidHF.getValue());
+        PortletRole role = roleManagerService.getRole(roidHF.getValue());
         if (role != null) {
             role.setName(roleNameTF.getValue());
-            role.setID(PortletRole.toPortletRole(priority).getPriority());
+            role.setDescription(roleDescTF.getValue());
         } else {
-            role = new PortletRole(roleNameTF.getValue(), priority);
+            role = new PortletRole(roleNameTF.getValue());
+            role.setDescription(roleDescTF.getValue());
         }
-        aclManagerService.saveRole(role);
+        roleManagerService.saveRole(role);
         createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG") + ": " + role.getName());
-    }
-
-    public void doNewRole(FormEvent evt) {
-        PortletRequest req = evt.getPortletRequest();
-        ListBoxBean priorityLB = evt.getListBoxBean("priorityLB");
-        ListBoxItemBean guestLB = new ListBoxItemBean();
-        guestLB.setValue(PortletRole.GUEST.getText(req.getLocale()));
-        ListBoxItemBean userLB = new ListBoxItemBean();
-        userLB.setValue(PortletRole.USER.getText(req.getLocale()));
-        ListBoxItemBean adminLB = new ListBoxItemBean();
-        adminLB.setValue(PortletRole.ADMIN.getText(req.getLocale()));
-        ListBoxItemBean superLB = new ListBoxItemBean();
-        superLB.setValue(PortletRole.SUPER.getText(req.getLocale()));
-        priorityLB.addBean(guestLB);
-        priorityLB.addBean(userLB);
-        priorityLB.addBean(adminLB);
-        priorityLB.addBean(superLB);
-        setNextState(req, ROLES_CREATE);
     }
 
     public void doSaveNewRole(FormEvent evt) {
         PortletRequest req = evt.getPortletRequest();
         TextFieldBean roleNameTF = evt.getTextFieldBean("roleNameTF");
-        ListBoxBean priorityLB = evt.getListBoxBean("priorityLB");
-        String priority = priorityLB.getSelectedValue();
-        int rp = Integer.valueOf(priority).intValue();
+
         // check if role name is already taken
-        if (aclManagerService.getRoleByName(roleNameTF.getValue()) != null) {
+        if (roleManagerService.getRoleByName(roleNameTF.getValue()) != null) {
             createErrorMessage(evt, this.getLocalizedText(req, "ROLE_EXISTS_MSG"));
             return;
         }
-        aclManagerService.createRole(roleNameTF.getValue(), rp);
+        PortletRole role = new PortletRole(roleNameTF.getValue());
+        roleManagerService.saveRole(role);
         createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG") + ": " + roleNameTF.getValue());
     }
 

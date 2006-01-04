@@ -20,7 +20,7 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
  */
 public class AccessRestrictions {
 
-    private String role = PortletRole.GUEST.toString();
+    private String roleName = "";
     private String visibility = ConcretePortletConfig.Scope.PUBLIC.toString();
 
     /**
@@ -85,46 +85,26 @@ public class AccessRestrictions {
 
     /**
      * Internal method intended for use by Castor. Clients should use
-     * #setPortletRole instead
+     * #setSportletRole instead
      * <p/>
-     * Sets the portlet role required to have access to this portlet
+     * Sets the role required to have access to this portlet
      *
-     * @param role a <code>String</role> representation of a
-     *             <code>PortletRole</code>
+     * @param roleName a role name
      */
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     /**
      * Internal method intended for use by Castor. Clients should use
-     * #getPortletRole instead
+     * #getSportletRole instead
      * <p/>
      * Returns the portlet role required to have access to this portlet
      *
-     * @return role a <code>String</role> representation of a
-     *         <code>PortletRole</code>
+     * @return the required role name
      */
-    public String getRole() {
-        return role;
-    }
-
-    /**
-     * Sets the portlet role required to have access to this portlet
-     *
-     * @param role a <code>PortletRole</code>
-     */
-    public void setPortletRole(PortletRole role) {
-        this.role = role.toString();
-    }
-
-    /**
-     * Returns the portlet role required to have access to this portlet
-     *
-     * @return the portlet role
-     */
-    public PortletRole getPortletRole() {
-        return PortletRole.toPortletRole(role);
+    public String getRoleName() {
+        return roleName;
     }
 
 }

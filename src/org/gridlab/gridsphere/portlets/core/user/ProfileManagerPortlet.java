@@ -16,12 +16,12 @@ import org.gridlab.gridsphere.services.core.cache.CacheService;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.locale.LocaleService;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
-import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
+import org.gridlab.gridsphere.services.core.security.group.impl.UserGroup;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.utils.DateUtil;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
@@ -44,7 +44,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
     // Portlet services
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
-    private AccessControlManagerService aclManagerService = null;
+    private RoleManagerService roleManagerService = null;
+    private GroupManagerService groupManagerService = null;
     private LocaleService localeService = null;
     private LayoutManagerService layoutMgr = null;
     private TextMessagingService tms = null;
@@ -54,7 +55,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
         super.init(config);
         try {
             this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
-            this.aclManagerService = (AccessControlManagerService) config.getContext().getService(AccessControlManagerService.class);
+            this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
+            this.groupManagerService = (GroupManagerService) config.getContext().getService(GroupManagerService.class);
             this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
             this.localeService = (LocaleService) config.getContext().getService(LocaleService.class);
             this.layoutMgr = (LayoutManagerService) config.getContext().getService(LayoutManagerService.class);
@@ -108,7 +110,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 user.getLastLoginTime(), DateFormat.FULL, DateFormat.FULL));
         req.setAttribute("username", user.getUserName());
 
-        if (req.getRole().equals(PortletRole.SUPER)) {
+        if (req.getRoles().contains(PortletRole.SUPER.getName())) {
             TextFieldBean userName = event.getTextFieldBean("userNameTF");
             userName.setValue(user.getUserName());
         }   else {
@@ -125,6 +127,14 @@ public class ProfileManagerPortlet extends ActionPortlet {
         organization.setValue(user.getOrganization());
         organization.setDisabled(disable);
 
+        TextBean userRolesTB = event.getTextBean("userRoles");
+        List userRoles = roleManagerService.getRolesForUser(user);
+        Iterator it = userRoles.iterator();
+        String userRole = "";
+        while (it.hasNext()) {
+            userRole += ((PortletRole)it.next()).getName() + ", ";
+        }
+        userRolesTB.setValue(userRole.substring(0, userRole.length()-2));
 
         Locale locale = req.getLocale();
 
@@ -187,40 +197,43 @@ public class ProfileManagerPortlet extends ActionPortlet {
         TableCellBean tcGroupsDesc = new TableCellBean();
         tcGroupsDesc.addBean(tbGroupsDesc);
 
+        /*
         TextBean tbRole = new TextBean();
         String role = this.getLocalizedText(req, "PROFILE_ROLE_DESC");
         tbRole.setValue(role);
         TableCellBean tcRole = new TableCellBean();
         tcRole.addBean(tbRole);
+        */
 
         tr.addBean(tcGroups);
         tr.addBean(tcGroupsDesc);
-        tr.addBean(tcRole);
+        //tr.addBean(tcRole);
         model.addTableRowBean(tr);
 
-        List groups = aclManagerService.getGroups();
-        Iterator it = groups.iterator();
+        List groups = groupManagerService.getGroups();
+        it = groups.iterator();
         TableRowBean groupsTR;
         TableCellBean groupsTC;
         TableCellBean groupsDescTC;
-        TableCellBean roleTC;
+        //TableCellBean roleTC;
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup) it.next();
-            if ((g.getType().equals(PortletGroup.HIDDEN)) && (req.getRole().compare(req.getRole(), PortletRole.ADMIN) < 0)) continue;
+            //if ((g.getType().equals(PortletGroup.HIDDEN)) && (req.getRole().compare(req.getRole(), PortletRole.ADMIN) < 0)) continue;
+            if (!g.getType().equals(PortletGroup.HIDDEN)) continue;
             groupsTR = new TableRowBean();
             groupsTC = new TableCellBean();
             groupsDescTC = new TableCellBean();
-            roleTC = new TableCellBean();
+            //roleTC = new TableCellBean();
 
             String groupDesc = g.getDescription();
 
             CheckBoxBean cb = new CheckBoxBean();
             cb.setBeanId("groupCheckBox");
-            if (aclManagerService.isUserInGroup(user, g)) cb.setSelected(true);
+            if (groupManagerService.isUserInGroup(user, g)) cb.setSelected(true);
             cb.setValue(g.getName());
             cb.setDisabled(disable);
             // make sure user cannot deselect core gridsphere group
-            PortletGroup coreGroup = aclManagerService.getCoreGroup();
+            PortletGroup coreGroup = groupManagerService.getCoreGroup();
             if (g.equals(coreGroup)) cb.setDisabled(true);
 
             //System.err.println("g= " + g.getName() + " gridsphere group= " + PortletGroupFactory.GRIDSPHERE_GROUP.getName());
@@ -237,11 +250,12 @@ public class ProfileManagerPortlet extends ActionPortlet {
             groupsDescTC.addBean(groupDescTB);
             if (g.getType().equals(PortletGroup.PRIVATE)) {
                 TextBean priv = event.getTextBean("privateTB");
-                priv.setValue("<br />" + this.getLocalizedText(req, "GROUP_NOTIFY"));
-                List admins = aclManagerService.getUsers(g, PortletRole.ADMIN);
+                priv.setValue("<br/>" + this.getLocalizedText(req, "GROUP_NOTIFY"));
+                List admins = roleManagerService.getUsersInRole(PortletRole.ADMIN);
+                //List admins = aclManagerService.getUsers(g, PortletRole.ADMIN);
                 String emailAddress;
                 if (admins.isEmpty()) {
-                    List supers = aclManagerService.getUsersWithSuperRole();
+                    List supers = roleManagerService.getUsersInRole(PortletRole.SUPER);
                     User root = (User) supers.get(0);
                     emailAddress = root.getEmailAddress();
                 } else {
@@ -256,17 +270,17 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 groupsTR.addBean(groupsTC);
                 groupsTR.addBean(groupsDescTC);
             }  else {               
-                PortletRole r = aclManagerService.getRoleInGroup(user, g);
-                TextBean roletext = new TextBean();
-                if (r.equals(PortletRole.GUEST)) r = PortletRole.USER;
-                if (req.getRole().equals(PortletRole.SUPER)) r = PortletRole.ADMIN;
-                roletext.setValue(r.getName());
-                roleTC.addBean(roletext);
+                //PortletRole r = aclManagerService.getRoleInGroup(user, g);
+                //TextBean roletext = new TextBean();
+                //if (r.equals(PortletRole.GUEST)) r = PortletRole.USER;
+                //if (req.getRole().equals(PortletRole.SUPER)) r = PortletRole.ADMIN;
+                //roletext.setValue(r.getName());
+                //roleTC.addBean(roletext);
 
                 groupsTR.addBean(groupsTC);
                 groupsTR.addBean(groupsDescTC);
 
-                groupsTR.addBean(roleTC);
+                //groupsTR.addBean(roleTC);
             }
             model.addTableRowBean(groupsTR);
         }
@@ -413,12 +427,12 @@ public class ProfileManagerPortlet extends ActionPortlet {
         List selectedGroups = groupsCB.getSelectedValues();
 
         // first get groups user is already in
-        List groupEntries = aclManagerService.getGroupEntries(user);
-        PortletGroup coreGroup = aclManagerService.getCoreGroup();
+        List groupEntries = groupManagerService.getGroupEntries(user);
+        PortletGroup coreGroup = groupManagerService.getCoreGroup();
         Iterator geIt = groupEntries.iterator();
         List usergroups = new ArrayList();
         while (geIt.hasNext()) {
-            GroupEntry ge = (GroupEntry) geIt.next();
+            UserGroup ge = (UserGroup) geIt.next();
             if (!ge.getGroup().equals(coreGroup)) {
                 log.debug("user is in group: " + ge.getGroup());
                 //aclManagerService.deleteGroupEntry(ge);
@@ -431,20 +445,14 @@ public class ProfileManagerPortlet extends ActionPortlet {
         while (it.hasNext()) {
             String groupStr = (String) it.next();
             log.debug("Selected group: " + groupStr);
-            PortletGroup selectedGroup = this.aclManagerService.getGroupByName(groupStr);
+            PortletGroup selectedGroup = this.groupManagerService.getGroupByName(groupStr);
             if (!usergroups.contains(selectedGroup.getName())) {
                 log.debug("does not have group: " + selectedGroup.getName());
-                GroupRequest groupRequest = this.aclManagerService.createGroupEntry();
+                UserGroup groupRequest = this.groupManagerService.createGroupEntry();
                 groupRequest.setUser(user);
                 groupRequest.setGroup(selectedGroup);
 
-                if (aclManagerService.hasSuperRole(req.getUser())) {
-                    groupRequest.setRole(aclManagerService.getRoleByName(PortletRole.ADMIN.getName()));
-                } else {
-                    groupRequest.setRole(aclManagerService.getRoleByName(PortletRole.USER.getName()));
-                }
-
-                this.aclManagerService.saveGroupEntry(groupRequest);
+                this.groupManagerService.saveGroupEntry(groupRequest);
 
                 log.debug("adding tab " + selectedGroup.getName());
 
@@ -459,10 +467,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
         while (it.hasNext()) {
             String groupStr = (String) it.next();
             log.debug("Removing group :" + groupStr);
-            PortletGroup g = this.aclManagerService.getGroupByName(groupStr);
-            GroupEntry entry = this.aclManagerService.getGroupEntry(user, g);
-            GroupRequest groupRequest = this.aclManagerService.editGroupEntry(entry);
-            this.aclManagerService.deleteGroupEntry(groupRequest);
+            PortletGroup g = this.groupManagerService.getGroupByName(groupStr);
+            UserGroup entry = this.groupManagerService.getGroupEntry(user, g);
+            UserGroup groupRequest = this.groupManagerService.editGroupEntry(entry);
+            this.groupManagerService.deleteGroupEntry(groupRequest);
             createSuccessMessage(event, this.getLocalizedText(req, "USER_GROUPS_SUCCESS"));
 
             this.layoutMgr.refreshPage(req);
@@ -521,7 +529,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         // Validate user name
         String userName = "";
-        if (req.getRole().equals(PortletRole.SUPER)) {
+        if (req.getRoles().contains(PortletRole.SUPER.getName())) {
             userName = event.getTextFieldBean("userNameTF").getValue();
             if (userName.equals("")) {
                 message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br />");

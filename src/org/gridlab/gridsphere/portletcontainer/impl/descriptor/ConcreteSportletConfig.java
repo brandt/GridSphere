@@ -181,19 +181,19 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
     /**
      * Returns the required portlet role necessary to access this portlet
      *
-     * @return the required portlet role necessary to access this portlet
+     * @return the required role necessary to access this portlet
      */
-    public PortletRole getRequiredRole() {
-        return accessRestrictions.getPortletRole();
+    public String getRequiredRole() {
+        return accessRestrictions.getRoleName();
     }
 
     /**
      * Sets the required portlet role necessary to access this portlet
      *
-     * @param role the required portlet role necessary to access this portlet
+     * @param roleName the required role necessary to access this portlet
      */
-    public void setRequiredRole(PortletRole role) {
-        accessRestrictions.setPortletRole(role);
+    public void setRequiredRole(String roleName) {
+        accessRestrictions.setRoleName(roleName);
     }
 
 }

@@ -103,13 +103,13 @@ public interface ConcretePortletConfig {
      *
      * @return the required portlet role necessary to access this portlet
      */
-    public PortletRole getRequiredRole();
+    public String getRequiredRole();
 
     /**
      * Sets the required portlet role necessary to access this portlet
      *
      * @param role the required portlet role necessary to access this portlet
      */
-    public void setRequiredRole(PortletRole role);
+    public void setRequiredRole(String role);
 
 }

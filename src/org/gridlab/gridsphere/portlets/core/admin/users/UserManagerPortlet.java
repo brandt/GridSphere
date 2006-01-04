@@ -10,20 +10,19 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
+import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
-import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.portlets.core.login.LoginPortlet;
 
 import javax.servlet.UnavailableException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 public class UserManagerPortlet extends ActionPortlet {
 
@@ -35,7 +34,8 @@ public class UserManagerPortlet extends ActionPortlet {
     // Portlet services
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
-    private AccessControlManagerService aclManagerService = null;
+    private GroupManagerService groupManagerService = null;
+    private RoleManagerService roleManagerService = null;
     private PortalConfigService portalConfigService = null;
 
 
@@ -44,7 +44,8 @@ public class UserManagerPortlet extends ActionPortlet {
         log.debug("Entering initServices()");
         try {
             this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
-            this.aclManagerService = (AccessControlManagerService) config.getContext().getService(AccessControlManagerService.class);
+            this.groupManagerService = (GroupManagerService) config.getContext().getService(GroupManagerService.class);
+            this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
             this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
             this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
         } catch (PortletServiceException e) {
@@ -78,9 +79,16 @@ public class UserManagerPortlet extends ActionPortlet {
             req.setAttribute("user", user);
             HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
             hf.setValue(user.getID());
-            PortletGroup coreGroup = aclManagerService.getCoreGroup();
-            PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
-            req.setAttribute("role", role.getName());
+            //PortletGroup coreGroup = groupManagerService.getCoreGroup();
+            //PortletRole role = groupManagerService.getRoleInGroup(user, coreGroup);
+            //req.setAttribute("role", role.getName());
+            List userRoles = roleManagerService.getRolesForUser(user);
+            Iterator it = userRoles.iterator();
+            String userRole = "";
+            while (it.hasNext()) {
+                userRole += ((PortletRole)it.next()).getName() + ", ";
+            }
+            req.setAttribute("role", userRole.substring(0, userRole.length() - 2));
             CheckBoxBean accountCB = evt.getCheckBoxBean("accountCB");
             String disabled = (String)user.getAttribute(User.DISABLED);
             if ((disabled != null) && ("TRUE".equalsIgnoreCase(disabled))) {
@@ -107,7 +115,46 @@ public class UserManagerPortlet extends ActionPortlet {
             req.setAttribute("savePass", "true");
         }
 
-        setSelectedUserRole(evt, PortletRole.USER);
+        //setSelectedUserRole(evt, PortletRole.USER);
+        FrameBean roleFrame = evt.getFrameBean("roleFrame");
+
+        DefaultTableModel model = new DefaultTableModel();
+
+        TableRowBean tr = new TableRowBean();
+        tr.setHeader(true);
+        TableCellBean tc = new TableCellBean();
+        TextBean text = new TextBean();
+        text.setValue("Select Roles");
+        tc.addBean(text);
+        tr.addBean(tc);
+        tc = new TableCellBean();
+        text = new TextBean();
+        text.setValue("Role name");
+        tc.addBean(text);
+        tr.addBean(tc);
+
+        model.addTableRowBean(tr);
+
+        List roles = roleManagerService.getRoles();
+        Iterator it = roles.iterator();
+        while (it.hasNext()) {
+            PortletRole role = (PortletRole)it.next();
+            tr = new TableRowBean();
+            tc = new TableCellBean();
+            CheckBoxBean cb = new CheckBoxBean();
+            cb.setBeanId(role.getName() + "CB");
+            tc.addBean(cb);
+            tr.addBean(tc);
+            tc = new TableCellBean();
+            text = new TextBean();
+            text.setValue(role.getName());
+            tc.addBean(text);
+            tr.addBean(tc);
+            model.addTableRowBean(tr);
+        }
+
+        roleFrame.setTableModel(model);
+
         setNextState(req, DO_VIEW_USER_EDIT);
         log.debug("in doViewNewUser");
     }
@@ -128,9 +175,54 @@ public class UserManagerPortlet extends ActionPortlet {
         // get user
         User user = this.userManagerService.getUser(userID);
         if (user == null) doNewUser(evt);
-        PortletGroup coreGroup = aclManagerService.getCoreGroup();
-        PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
-        setSelectedUserRole(evt, role);
+
+        FrameBean roleFrame = evt.getFrameBean("roleFrame");
+
+                DefaultTableModel model = new DefaultTableModel();
+
+                TableRowBean tr = new TableRowBean();
+                tr.setHeader(true);
+                TableCellBean tc = new TableCellBean();
+                TextBean text = new TextBean();
+                text.setValue("Select Roles");
+                tc.addBean(text);
+                tr.addBean(tc);
+                tc = new TableCellBean();
+                text = new TextBean();
+                text.setValue("Role name");
+                tc.addBean(text);
+                tr.addBean(tc);
+
+                model.addTableRowBean(tr);
+
+                List roles = roleManagerService.getRoles();
+                List myroles = roleManagerService.getRolesForUser(user);
+                Iterator it = roles.iterator();
+                while (it.hasNext()) {
+                    PortletRole role = (PortletRole)it.next();
+                    tr = new TableRowBean();
+                    tc = new TableCellBean();
+                    CheckBoxBean cb = new CheckBoxBean();
+                    if (myroles.contains(role)) {
+                        cb.setSelected(true);
+                    }
+                    cb.setBeanId(role.getName() + "CB");
+                    tc.addBean(cb);
+                    tr.addBean(tc);
+                    tc = new TableCellBean();
+                    text = new TextBean();
+                    text.setValue(role.getName());
+                    tc.addBean(text);
+                    tr.addBean(tc);
+                    model.addTableRowBean(tr);
+                }
+
+                roleFrame.setTableModel(model);
+
+
+        //PortletGroup coreGroup = groupManagerService.getCoreGroup();
+        //PortletRole role = groupManagerService.getRoleInGroup(user, coreGroup);
+        //setSelectedUserRole(evt, role);
 
         setUserValues(evt, user);
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
@@ -173,9 +265,9 @@ public class UserManagerPortlet extends ActionPortlet {
             }
             req.setAttribute("user", user);
 
-            PortletGroup coreGroup = aclManagerService.getCoreGroup();
-            PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
-            req.setAttribute("role", role.getName());
+            //PortletGroup coreGroup = groupManagerService.getCoreGroup();
+            //PortletRole role = groupManagerService.getRoleInGroup(user, coreGroup);
+            //req.setAttribute("role", role.getName());
 
             setNextState(req, "doListUsers");
         } catch (PortletException e) {
@@ -190,19 +282,19 @@ public class UserManagerPortlet extends ActionPortlet {
 
     public void doDeleteUser(FormEvent evt)
             throws PortletException {
- 
+
         PortletRequest req = evt.getPortletRequest();
         HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
         String userId = hf.getValue();
         User user = this.userManagerService.getUser(userId);
         if (user != null) {
             req.setAttribute("user", user);
-            PortletGroup coreGroup = aclManagerService.getCoreGroup();
-            PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
-            req.setAttribute("role", role.getName());
+            //PortletGroup coreGroup = groupManagerService.getCoreGroup();
+            //PortletRole role = groupManagerService.getRoleInGroup(user, coreGroup);
+            //req.setAttribute("role", role.getName());
             this.userManagerService.deleteUser(user);
             this.passwordManagerService.deletePassword(user);
-            this.aclManagerService.deleteGroupEntries(user);
+            this.groupManagerService.deleteGroupEntries(user);
             createSuccessMessage(evt, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
         }
         setNextState(req, "doListUsers");
@@ -372,75 +464,18 @@ public class UserManagerPortlet extends ActionPortlet {
 
     private void saveUserRole(FormEvent event, User user) {
         log.debug("Entering saveUserRole()");
-        PortletRequest req = event.getPortletRequest();
-        // Get selected role
-        PortletRole selectedRole = getSelectedUserRole(event);
-        req.setAttribute("role", selectedRole);
-        // If super role was chosen
-        if (selectedRole.equals(PortletRole.SUPER)) {
-            log.debug("Granting super role");
-            // Grant super role
-            this.aclManagerService.grantSuperRole(user);
-        } else {
-            // Revoke super role (in case they had it)
-            //this.aclManagerService.revokeSuperRole(user);
-            // Create appropriate access request
-            Set groups = portalConfigService.getPortalConfigSettings().getDefaultGroups();
-            Iterator it = groups.iterator();
-            GroupRequest groupRequest;
-            while (it.hasNext()) {
-                PortletGroup group = (PortletGroup) it.next();
-                GroupEntry ge = aclManagerService.getGroupEntry(user, group);
-                if (ge != null) {
-                    groupRequest = this.aclManagerService.editGroupEntry(ge);
-                }  else {
-                    groupRequest = this.aclManagerService.createGroupEntry();
-                }
-                groupRequest.setUser(user);
-                groupRequest.setRole(selectedRole);
-                groupRequest.setGroup(group);
-                log.debug("Granting " + selectedRole + " role in gridsphere");
-                // Submit changes
-                this.aclManagerService.saveGroupEntry(groupRequest);
-            }
-        }
-        log.debug("Exiting saveUserRole()");
-    }
 
-    private void setSelectedUserRole(FormEvent event, PortletRole role) {
-        ListBoxBean roleListBean = event.getListBoxBean("userRole");
-        roleListBean.clear();
-
-        ListBoxItemBean roleItemBean;
-        List roles = aclManagerService.getRoles();
+        List roles = roleManagerService.getRoles();
         Iterator it = roles.iterator();
         while (it.hasNext()) {
-            PortletRole r = (PortletRole)it.next();
-            roleItemBean = new ListBoxItemBean();
-            roleItemBean.setValue(r.getName());
-            roleItemBean.setName(r.getName());
-            if (role.getName().equalsIgnoreCase(r.getName())) {
-                roleItemBean.setSelected(true);
-            }
-            roleListBean.addBean(roleItemBean);
+            PortletRole role = (PortletRole)it.next();
+            CheckBoxBean cb = event.getCheckBoxBean(role.getName() + "CB");
+            if (cb.isSelected()) roleManagerService.addUserToRole(user, role);
         }
-    }
+        groupManagerService.addUserToGroup(user, groupManagerService.getCoreGroup());
 
-    private PortletRole getSelectedUserRole(FormEvent event) {
-        // Iterate through list, return selected value
-        ListBoxBean roleListBean = event.getListBoxBean("userRole");
-        List userRoleList = roleListBean.getSelectedNames();
-        if (userRoleList.size() == 0) {
-            log.debug("No role was selected, setting to user");
-            // Impossible, but if not selected return user role
-            return aclManagerService.getRoleByName(PortletRole.USER.getName());
-        } else {
-            // Otherwise, return the first selected value
-            String userRoleItem = (String) userRoleList.get(0);
-            log.debug("Selected role was " + userRoleItem);
-            return aclManagerService.getRoleByName(userRoleItem);
-            //return PortletRole.toPortletRole(userRoleItem);
-        }
+
+        log.debug("Exiting saveUserRole()");
     }
 
     private void createErrorMessage(FormEvent event, String msg) {
