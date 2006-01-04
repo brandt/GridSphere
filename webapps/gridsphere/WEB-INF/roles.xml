@@ -2,19 +2,15 @@
 <portlet-roles>
     <portlet-role>
         <role-name>GUEST</role-name>
-        <role-priority>GUEST</role-priority>
     </portlet-role>
     <portlet-role>
         <role-name>USER</role-name>
-        <role-priority>USER</role-priority>
     </portlet-role>
     <portlet-role>
         <role-name>ADMIN</role-name>
-        <role-priority>ADMIN</role-priority>
     </portlet-role>
     <portlet-role>
         <role-name>SUPER</role-name>
-        <role-priority>SUPER</role-priority>
     </portlet-role>
 </portlet-roles>
 

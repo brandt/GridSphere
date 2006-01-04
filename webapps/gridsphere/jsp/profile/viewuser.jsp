@@ -32,7 +32,7 @@
             <ui:tablerow>
                 <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
                 <ui:tablecell>
-                    <% if (req.getRole().equals(PortletRole.SUPER)) { %>
+                    <% if (req.getRoles().contains(PortletRole.SUPER.getName())) { %>
                         <ui:textfield beanId="userNameTF"/>
                     <% } else { %>
                         <ui:text beanId="userName"/>
@@ -46,6 +46,10 @@
             <ui:tablerow>
                 <ui:tablecell><ui:text key="ORGANIZATION"/></ui:tablecell>
                 <ui:tablecell><ui:textfield beanId="organization"/></ui:tablecell>
+            </ui:tablerow>
+            <ui:tablerow>
+                <ui:tablecell><ui:text key="USER_ROLES"/></ui:tablecell>
+                <ui:tablecell><ui:text beanId="userRoles"/></ui:tablecell>
             </ui:tablerow>
         </ui:frame>
         <ui:frame beanId="messagingFrame" valign="top"/>

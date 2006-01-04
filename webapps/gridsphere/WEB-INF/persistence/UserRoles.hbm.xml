@@ -6,8 +6,8 @@
 
 <hibernate-mapping>
     <class
-        name="org.gridlab.gridsphere.portlet.PortletRole"
-        table="portletrole"
+        name="org.gridlab.gridsphere.services.core.security.role.impl.UserRole"
+        table="userroles"
         >
 
         <id
@@ -20,8 +20,16 @@
 
         </id>
 
-        <property name="Name" type="string" column="rolename"/>
-        <property name="Description" type="string" column="description"/>
+        <many-to-one
+            name="user"
+            class="org.gridlab.gridsphere.portlet.impl.SportletUserImpl">
+        </many-to-one>
+        <many-to-one
+            name="role"
+            class="org.gridlab.gridsphere.portlet.PortletRole">
+        </many-to-one>
 
     </class>
+
+
 </hibernate-mapping>

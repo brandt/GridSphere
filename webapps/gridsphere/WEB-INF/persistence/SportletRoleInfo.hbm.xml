@@ -22,6 +22,10 @@
 
         <property name="PortletClass" type="string" column="portletclass"/>
         <property name="Role" type="string" column="portletrole"/>
+        <many-to-one
+            name="sportletRole"
+            class="org.gridlab.gridsphere.portlet.PortletRole">
+        </many-to-one>
 
     </class>
 </hibernate-mapping>

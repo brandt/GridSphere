@@ -53,14 +53,6 @@
             </ui:tablecell>
         </ui:tablerow>
 
-        <ui:tablerow>
-            <ui:tablecell width="200">
-                <ui:text key="USER_ROLE"/>
-            </ui:tablecell>
-            <ui:tablecell>
-                <ui:listbox beanId="userRole"/>
-            </ui:tablecell>
-        </ui:tablerow>
 
         <ui:tablerow>
             <ui:tablecell width="200">
@@ -72,6 +64,23 @@
         </ui:tablerow>
 
         </ui:frame>
+
+<ui:frame beanId="roleFrame"/>
+
+<%--
+<ui:frame>
+    <ui:tablerow>
+
+        <ui:tablecell width="200">
+            <ui:text key="USER_ROLE"/>
+        </ui:tablecell>
+        <ui:tablecell>
+            <ui:listbox beanId="userRole"/>
+        </ui:tablecell>
+
+    </ui:tablerow>
+</ui:frame>
+--%>
 
    <% if (request.getAttribute("savePass") != null)  { %>
         <ui:frame>

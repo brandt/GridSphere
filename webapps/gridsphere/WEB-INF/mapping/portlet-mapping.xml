@@ -79,7 +79,7 @@
         <field name="Visibility" type="string">
             <bind-xml name="visibility" node="attribute"/>
         </field>
-        <field name="Role" type="string">
+        <field name="RoleName" type="string">
             <bind-xml name="role" node="attribute"/>
         </field>
     </class>

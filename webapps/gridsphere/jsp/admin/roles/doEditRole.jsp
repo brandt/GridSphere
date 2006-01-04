@@ -21,16 +21,16 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text key="ROLEPRIORITY"/>
+                <ui:text key="ROLEDESC"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:listbox beanId="roleListLB"/>
+                <ui:textfield beanId="roleDescTF"/>
             </ui:tablecell>
         </ui:tablerow>
 
-        </ui:frame>
+    </ui:frame>
 
-<ui:frame>
+    <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
                 <ui:actionsubmit action="doSaveRole" key="ROLE_SAVE"/>

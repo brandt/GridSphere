@@ -53,10 +53,17 @@
     </service>
 
     <service>
-        <name>Access Control Manager Service</name>
-        <description lang="en">Provides Authorization Capabilities to Portal Users</description>
-        <interface>org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService</interface>
-        <implementation>org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl</implementation>
+        <name>Role Manager Service</name>
+        <description lang="en">Provides Role Capabilities to Portal Users</description>
+        <interface>org.gridlab.gridsphere.services.core.security.role.RoleManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.security.role.impl.RoleManagerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Group Manager Service</name>
+        <description lang="en">Provides Group Capabilities to Portal Users</description>
+        <interface>org.gridlab.gridsphere.services.core.security.group.GroupManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.security.group.impl.GroupManagerServiceImpl</implementation>
     </service>
 
     <service>

@@ -26,14 +26,6 @@
                 <ui:text beanId="groupLabel"/>
             </ui:tablecell>
         </ui:tablerow>
-        <ui:tablerow>
-            <ui:tablecell>
-                <ui:text key="GROUP_ROLEIN_GROUP"/>
-            </ui:tablecell>
-            <ui:tablecell>
-                <ui:listbox beanId="groupEntryRoleLB"/>
-            </ui:tablecell>
-        </ui:tablerow>
     </ui:frame>
 
     <ui:frame>

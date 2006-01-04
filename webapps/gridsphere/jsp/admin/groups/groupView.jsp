@@ -1,6 +1,6 @@
 <%@ page import="java.util.Iterator, java.util.List,
-                 org.gridlab.gridsphere.services.core.security.acl.GroupEntry,
                  org.gridlab.gridsphere.portlet.PortletRequest"%>
+<%@ page import="org.gridlab.gridsphere.services.core.security.group.impl.UserGroup"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
@@ -32,15 +32,12 @@
             <ui:tablecell>
                 <ui:text key="FULLNAME"/>
             </ui:tablecell>
-            <ui:tablecell>
-                <ui:text key="GROUP_ROLEIN_GROUP"/>
-            </ui:tablecell>
 
         </ui:tablerow>
 
 <%  Iterator groupIterator = groupEntryList.iterator();
     while (groupIterator.hasNext()) {
-        GroupEntry groupEntry = (GroupEntry)groupIterator.next();
+        UserGroup groupEntry = (UserGroup)groupIterator.next();
 %>
                 <ui:tablerow>
                         <ui:tablecell>
@@ -51,11 +48,6 @@
                         </ui:tablecell>
                         <ui:tablecell>
                             <ui:text value="<%= groupEntry.getUser().getFullName() %>"/>
-                        </ui:tablecell>
-                        <ui:tablecell>
-                            <ui:actionlink action="doViewEditGroupEntry" value="<%= groupEntry.getRole().getText(pReq.getLocale()) %>">
-                                <ui:actionparam name="groupEntryID" value="<%= groupEntry.getID() %>"/>
-                            </ui:actionlink>
                         </ui:tablecell>
                 </ui:tablerow>
 
