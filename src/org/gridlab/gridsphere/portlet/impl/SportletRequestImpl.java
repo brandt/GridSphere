@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.List;
 import java.io.UnsupportedEncodingException;
 
 
@@ -163,12 +164,8 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
         return user;
     }
 
-    public PortletRole getRole() {
-        PortletRole role = (PortletRole) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_ROLE);
-        if (role == null) {
-            return PortletRole.GUEST;
-        }
-        return role;
+    public List getRoles() {
+        return (List)this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_ROLE);
     }
 
     /**
@@ -218,8 +215,8 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
         return (prole != null) ? (prole.getName().equalsIgnoreCase(role)) : this.getHttpServletRequest().isUserInRole(role);
     }
     
-    public void setRole(PortletRole role) {
-        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_ROLE, role);
+    public void setRoles(List roles) {
+        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_ROLE, roles);
     }
 
     /**
@@ -230,6 +227,18 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
      */
     public void setGroup(PortletGroup group) {
         this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_GROUP, group);
+    }
+
+    public PortletGroup getGroup() {
+        return (PortletGroup)this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_GROUP);
+    }
+
+    public List getGroups() {
+        return (List)this.getHttpServletRequest().getAttribute(SportletProperties.PORTLETGROUPS);
+    }
+
+    public void setGroups(List roles) {
+        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLETGROUPS, roles);
     }
 
     /**

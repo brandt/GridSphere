@@ -6,6 +6,8 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 
+import java.util.List;
+
 /**
  * A <code>SportletRequest</code> turns the immutable <code>PortletRequest</code>
  * into a stateful mutable object with all the additional set methods not defined
@@ -30,11 +32,25 @@ public interface SportletRequest extends PortletRequest {
     public void setData(PortletData data);
 
     /**
-     * Sets the roles this user has in the associated portlet
+     * Sets the roles this user has 
      *
-     * @param role the user's <code>PortletRole</code>
+     * @param roles a list containing the user's <code>PortletRole</code>'s
      */
-    public void setRole(PortletRole role);
+    public void setRoles(List roles);
+
+    /**
+     * Sets the list of groups this user is subscribed to
+     *
+     * @param groups the list of groups this user is subscribed to
+     */
+    public void setGroups(List groups);
+
+    /**
+     * Sets the core gridsphere group
+     *
+     * @param group the core gridsphere group
+     */
+    public void setGroup(PortletGroup group);
 
     /**
      * Sets the PortletSettings object of the concrete portlet.

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
+import java.util.List;
 
 /**
  * The <code>PortletRequest</code> encapsulates the portlet request sent by the client
@@ -118,11 +119,25 @@ public interface PortletRequest extends HttpServletRequest {
     public User getUser();
 
     /**
-     * Returns the portlet role associated with this portlet
+     * Returns the portlet roles associated with this user
      *
-     * @return the portlet role associated with this portlet
+     * @return the portlet roles associated with this user
      */
-    public PortletRole getRole();
+    public List getRoles();
+
+    /**
+     * Returns the portlet groups associated with this user
+     *
+     * @return the portlet groups associated with this user
+     */
+    public List getGroups();
+
+    /**
+     * Returns the core portlet group
+     *
+     * @return the core portlet groups
+     */
+    public PortletGroup getGroup();
 
     /**
      * Returns the PortletSettings object of the concrete portlet.

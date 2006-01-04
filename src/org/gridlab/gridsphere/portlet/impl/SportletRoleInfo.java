@@ -13,8 +13,11 @@ import java.io.Serializable;
 public class SportletRoleInfo implements Serializable {
 
     private static final long serialVersionUID = 2887296080186064446L;
-    
-    private String portletRole = "";
+
+    // deprecated
+    private String role = "";
+
+    private PortletRole portletRole = null;
     private String portletClass = "";
     private String oid = null;
 
@@ -26,20 +29,28 @@ public class SportletRoleInfo implements Serializable {
         this.oid = oid;
     }
 
-    public PortletRole getPortletRole() {
-        return PortletRole.toPortletRole(portletRole);
-    }
-
-    public void setPortletRole(PortletRole portletRole) {
-        this.portletRole = portletRole.toString();
-    }
-
+    /**
+     * @deprecated
+     * @return
+     */
     public String getRole() {
+        return role;
+    }
+
+    /**
+     * @deprecated
+     * @param role
+     */
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public PortletRole getSportletRole() {
         return portletRole;
     }
 
-    public void setRole(String role) {
-        portletRole = role;
+    public void setSportletRole(PortletRole portletRole) {
+        this.portletRole = portletRole;
     }
 
     /**

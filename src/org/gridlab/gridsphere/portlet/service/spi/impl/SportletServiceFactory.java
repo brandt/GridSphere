@@ -19,7 +19,6 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServic
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
-import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -40,7 +39,6 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
     private static PortletLog log = SportletLog.getInstance(SportletServiceFactory.class);
     private static SportletServiceFactory instance = null;
-    private static AccessControlManagerServiceImpl aclManager = AccessControlManagerServiceImpl.getInstance();
     private static PortletSessionManager portletSessionManager = PortletSessionManager.getInstance();
     private static UserSessionManager userSessionManager = UserSessionManager.getInstance();
 
@@ -427,7 +425,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
                 new SportletServiceConfig(def, ctx);
 
         // Create an authroizer for the secure service
-        PortletServiceAuthorizer auth = new SportletServiceAuthorizer(user, aclManager);
+        //PortletServiceAuthorizer auth = new SportletServiceAuthorizer(user, aclManager);
 
         // instantiate wrapper with user and impl
         PortletServiceProvider psp = null;
@@ -442,7 +440,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
                 c = Class.forName(serviceImpl);
             }
             Class[] parameterTypes = new Class[]{PortletServiceAuthorizer.class};
-            Object[] obj = new Object[]{auth};
+            Object[] obj = new Object[]{};
             Constructor con = c.getConstructor(parameterTypes);
             psp = (PortletServiceProvider) con.newInstance(obj);
         } catch (Exception e) {

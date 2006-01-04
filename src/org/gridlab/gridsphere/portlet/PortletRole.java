@@ -6,7 +6,6 @@
 package org.gridlab.gridsphere.portlet;
 
 import java.io.Serializable;
-import java.util.Comparator;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -19,98 +18,30 @@ import java.util.ResourceBundle;
  *
  * @see org.gridlab.gridsphere.portlet.PortletGroup
  */
-public class PortletRole implements Serializable, Comparator, Cloneable {
+public class PortletRole implements Serializable, Cloneable {
 
     private String oid = null;
-    private int priority;
-    private String roleName = null;
 
-    private static final int GUEST_ROLE = 1;
-    private static final int USER_ROLE = 2;
-    private static final int ADMIN_ROLE = 3;
-    private static final int SUPER_ROLE = 4;
+    private String roleName = null;
+    private String description = "";
 
     private static final String GUEST_ROLE_STRING = "GUEST";
     private static final String USER_ROLE_STRING = "USER";
     private static final String ADMIN_ROLE_STRING = "ADMIN";
     private static final String SUPER_ROLE_STRING = "SUPER";
 
-    public static final PortletRole GUEST = new PortletRole(GUEST_ROLE_STRING, GUEST_ROLE);
-    public static final PortletRole USER = new PortletRole(USER_ROLE_STRING, USER_ROLE);
-    public static final PortletRole ADMIN = new PortletRole(ADMIN_ROLE_STRING, ADMIN_ROLE);
-    public static final PortletRole SUPER = new PortletRole(SUPER_ROLE_STRING, SUPER_ROLE);
+    public static final PortletRole GUEST = new PortletRole(GUEST_ROLE_STRING);
+    public static final PortletRole USER = new PortletRole(USER_ROLE_STRING);
+    public static final PortletRole ADMIN = new PortletRole(ADMIN_ROLE_STRING);
+    public static final PortletRole SUPER = new PortletRole(SUPER_ROLE_STRING);
 
     public PortletRole() {}
 
     /**
      * Constructs an instance of PortletRole
      */
-    public PortletRole(String roleName, int priority) {
+    public PortletRole(String roleName) {
         this.roleName = roleName;
-        this.setPriority(priority);
-    }
-
-    public PortletRole(String roleName, String priorityAsString) {
-        this.roleName = roleName;
-        this.setPriorityAsString(priorityAsString);
-    }
-
-    /**
-     * Return the appropriate <code>PortletRole</code> obtained by parsing
-     * the <code>String</code> portlet role name
-     *
-     * @param portletRole a portlet role name
-     * @throws IllegalArgumentException if the <code>String</code> does
-     *                                  not match any of the pre-defined roles
-     */
-    public static PortletRole toPortletRole(String portletRole)
-            throws IllegalArgumentException {
-        if (portletRole.equalsIgnoreCase("GUEST")) {
-            return GUEST;
-        } else if (portletRole.equalsIgnoreCase("USER")) {
-            return USER;
-        } else if (portletRole.equalsIgnoreCase("ADMIN")) {
-            return ADMIN;
-        } else if (portletRole.equalsIgnoreCase("SUPER")) {
-            return SUPER;
-        } else {
-            throw new IllegalArgumentException("Unable to create PortletRole corresponding to: " + portletRole);
-        }
-    }
-
-    /**
-     * Return the appropriate <code>PortletRole</code> obtained by parsing
-     * the <code>int</code> portlet role priority
-     *
-     * @param priority the portlet role priority
-     * @throws IllegalArgumentException if the <code>int</code> does
-     *                                  not match any of the pre-defined roles
-     */
-    public static PortletRole toPortletRole(int priority)
-            throws IllegalArgumentException {
-        if (priority == GUEST_ROLE) {
-            return GUEST;
-        } else if (priority == USER_ROLE) {
-            return USER;
-        } else if (priority == ADMIN_ROLE) {
-            return ADMIN;
-        } else if (priority == SUPER_ROLE) {
-            return SUPER;
-        } else {
-            throw new IllegalArgumentException("Unable to create PortletRole corresponding to: " + priority);
-        }
-    }
-
-    /**
-     * Returns a locale-specific <code>String</code> representation of
-     * the portlet role
-     *
-     * @return the locale-specific role expressed as a <code>String</code>
-     */
-    public String getText(Locale locale) {
-        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
-        String key = toString();
-        return bundle.getString(key);
     }
 
     public String getOid() {
@@ -122,64 +53,20 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
     }
 
     /**
-     * Returns the priority id for this role
-     *
-     * @return the priority id for this role
-     */
-    public int getID() {
-        return priority;
-    }
-
-    /**
-     * Sets the priority of this role
-     *
-     * @param id the priority
-     */
-    public void setID(int id) {
-        this.priority = id;
-    }
-
-    /**
-     * Returns the priority id for this role
-     *
-     * @return the priority id for this role
-     */
-    public int getPriority() {
-        return priority;
-    }
-
-    /**
-     * Sets the priority of this role
-     *
-     * @param priority the priority
-     */
-    public void setPriority(int priority) throws IllegalArgumentException {
-        if ((priority < GUEST_ROLE) || (priority > SUPER_ROLE)) throw new IllegalArgumentException("Unknown role priority!");
-        this.priority = priority;
-    }
-
-    public void setPriorityAsString(String priority) throws IllegalArgumentException {
-        if (PortletRole.GUEST.toString().equalsIgnoreCase(priority)) {
-            this.priority = GUEST_ROLE;
-        } else if (PortletRole.USER.toString().equalsIgnoreCase(priority)) {
-            this.priority = USER_ROLE;
-        } else if (PortletRole.ADMIN.toString().equalsIgnoreCase(priority)) {
-            this.priority = ADMIN_ROLE;
-        } else if (PortletRole.SUPER.toString().equalsIgnoreCase(priority)) {
-            this.priority = SUPER_ROLE;
-        } else {
-            throw new IllegalArgumentException("Unknown role priority!");
-        }
-    }
-
-
-    /**
      * Returns the role name
      *
      * @return the role name
      */
     public String getName() {
         return roleName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**
@@ -191,42 +78,6 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
         this.roleName = roleName;
     }
 
-    /**
-     * Returns <code>true</code> if this role is <code>GUEST</code>, <code>false otherwise</code>
-     *
-     * @return <code>true</code> if this role is <code>GUEST</code>, <code>false otherwise</code>
-     */
-    public boolean isGuest() {
-        return (priority == GUEST_ROLE);
-    }
-
-    /**
-     * Returns <code>true</code> if this role is <code>USER</code>, <code>false otherwise</code>
-     *
-     * @return <code>true</code> if this role is <code>USER</code>, <code>false otherwise</code>
-     */
-    public boolean isUser() {
-        return (priority == USER_ROLE);
-    }
-
-    /**
-     * Returns <code>true</code> if this role is <code>ADMIN</code>, <code>false otherwise</code>
-     *
-     * @return <code>true</code> if this role is <code>ADMIN</code>, <code>false otherwise</code>
-     */
-    public boolean isAdmin() {
-        return (priority == ADMIN_ROLE);
-    }
-
-    /**
-     * Returns <code>true</code> if this role is <code>SUPER</code>, <code>false otherwise</code>
-     *
-     * @return <code>true</code> if this role is <code>SUPER</code>, <code>false otherwise</code>
-     */
-    public boolean isSuper() {
-        return (priority == SUPER_ROLE);
-    }
-
     public String toString() {
         return roleName;
     }
@@ -234,53 +85,19 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
     public Object clone() throws CloneNotSupportedException {
         PortletRole r = (PortletRole) super.clone();
         r.roleName = this.roleName;
-        r.priority = this.priority;
         return r;
-    }
-
-    public int compare(Object left, Object right) {
-        int leftID = ((PortletRole) left).getID();
-        int rightID = ((PortletRole) right).getID();
-        int result;
-        if (leftID < rightID) {
-            result = -1;
-        } else if (leftID > rightID) {
-            result = 1;
-        } else {
-            result = 0;
-        }
-        return result;
     }
 
     public boolean equals(Object object) {
         if (object != null && (object.getClass().equals(this.getClass()))) {
             PortletRole portletRole = (PortletRole) object;
-            return (priority == portletRole.getID());
+            return (roleName.equals(portletRole.getName()));
         }
         return false;
     }
 
     public int hashCode() {
-        return priority;
-    }
-
-    private Object readResolve() {
-        PortletRole r = PortletRole.GUEST;
-        switch (priority) {
-            case GUEST_ROLE:
-                r = PortletRole.GUEST;
-                break;
-            case USER_ROLE:
-                r = PortletRole.USER;
-                break;
-            case ADMIN_ROLE:
-                r = PortletRole.ADMIN;
-                break;
-            case SUPER_ROLE:
-                r = PortletRole.SUPER;
-                break;
-        }
-        return r;
+        return roleName.hashCode();
     }
 
 }
