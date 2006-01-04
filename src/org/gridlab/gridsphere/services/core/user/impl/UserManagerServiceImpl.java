@@ -17,7 +17,6 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.impl.descriptor.UserAccountDescriptor;
-import org.gridlab.gridsphere.services.core.user.impl.descriptor.UserAttribute;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import java.util.*;
