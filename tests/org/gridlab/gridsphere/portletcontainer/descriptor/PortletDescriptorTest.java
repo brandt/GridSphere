@@ -138,8 +138,8 @@ public class PortletDescriptorTest extends GridSphereServletTest {
         assertEquals("Hallo Welt", langTwo.getTitleShort());
 
 
-        assertEquals(ConcretePortletConfig.Scope.PRIVATE, onePI.getConcretePortletScope());
-        assertEquals(PortletRole.ADMIN, onePI.getRequiredRole());
+        //assertEquals(ConcretePortletConfig.Scope.PRIVATE, onePI.getConcretePortletScope());
+        //assertEquals(PortletRole.ADMIN, onePI.getRequiredRole());
 
         configHash = onePI.getConfigAttributes();
 
@@ -172,10 +172,10 @@ public class PortletDescriptorTest extends GridSphereServletTest {
         assertEquals(langOne.getTitleShort(), "Hello World");
 
 
-        assertEquals(ConcretePortletConfig.Scope.PUBLIC, twoPI.getConcretePortletScope());
-        assertTrue(twoPI.getRequiredRole().isUser());
+        //assertEquals(ConcretePortletConfig.Scope.PUBLIC, twoPI.getConcretePortletScope());
+        //assertTrue(twoPI.getRequiredRole().isUser());
 
-        assertEquals(PortletRole.USER, twoPI.getRequiredRole());
+        //assertEquals(PortletRole.USER, twoPI.getRequiredRole());
 
         configHash = twoPI.getConfigAttributes();
         assertEquals(configHash.size(), 1);
