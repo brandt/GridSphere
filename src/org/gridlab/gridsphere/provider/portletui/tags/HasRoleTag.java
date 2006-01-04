@@ -14,15 +14,15 @@ import javax.servlet.jsp.tagext.TagSupport;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * The <code>HasRoleTag</code> can be used to selectively display presentation based upon a user's role
  */
 public class HasRoleTag extends TagSupport {
 
-    protected PortletRole role = PortletRole.GUEST;
-    protected boolean exclusive = false;
-    protected String group = null;
+    protected String role = "";
+    protected String group = "";
 
     /**
      * Sets the user's role
@@ -30,12 +30,6 @@ public class HasRoleTag extends TagSupport {
      * @param role the user's role
      */
     public void setRole(String role) {
-        try {
-            this.role = PortletRole.toPortletRole(role);
-        } catch (IllegalArgumentException e) {
-            // do nothing
-            this.role = PortletRole.GUEST;
-        }
     }
 
     /**
@@ -65,52 +59,27 @@ public class HasRoleTag extends TagSupport {
         return group;
     }
 
-    /**
-     * If exclusive is set to true then presentation will be displayed ONLY if the user has this exact role
-     *
-     * @param exclusive is true if presentation will be displayed ONLY if the user has this exact role
-     */
-    public void setExclusive(boolean exclusive) {
-        this.exclusive = exclusive;
-    }
-
-    /**
-     * If exclusive is set to true then presentation will be displayed ONLY if the user has this exact role
-     *
-     * @return true if presentation will be displayed ONLY if the user has this exact role
-     */
-    public boolean getExclusive() {
-        return exclusive;
-    }
-
     public int doStartTag() throws JspException {
         PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
-        PortletRole userRole = req.getRole();
+        List userRoles = req.getRoles();
 
-        Map groups = (Map)req.getAttribute(SportletProperties.PORTLETGROUPS);
-        if (userRole != null) {
-            if (userRole.isSuper()) {
-                return EVAL_BODY_INCLUDE;    
+        List groups = (List)req.getGroups();
+        if (userRoles != null) {
+            if (userRoles.contains(PortletRole.SUPER.getName())) {
+                return EVAL_BODY_INCLUDE;
             }
             if (group != null) {
-                Iterator it = groups.keySet().iterator();
+                Iterator it = groups.iterator();
                 while (it.hasNext()) {
-                    PortletGroup g = (PortletGroup)it.next();
-                    if (g.getName().equals(group)) {
-                        userRole = (PortletRole)groups.get(g);
+                    String g = (String)it.next();
+                    if (g.equalsIgnoreCase(group)) {
                         //System.err.println("my role is " + userRole + " group is " + group);
                         break;
                     }
                 }
             }
-            if (exclusive) {
-                if (userRole.getName().equals(role.getName())) {
-                    return EVAL_BODY_INCLUDE;
-                }
-            } else {
-                if ((userRole.getID()) >= role.getID()) {
-                    return EVAL_BODY_INCLUDE;
-                }
+            if ((userRoles.contains(role))) {
+                return EVAL_BODY_INCLUDE;
             }
         }
         return SKIP_BODY;

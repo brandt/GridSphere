@@ -18,10 +18,11 @@ import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.core.security.acl.impl.GroupRequestImpl;
+import org.gridlab.gridsphere.services.core.security.group.impl.UserGroup;
+import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
+import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
@@ -59,14 +60,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static PortletManagerService portletManager = null;
 
     /* GridSphere Access Control Service */
-    private static AccessControlManagerService aclService = null;
+    private static RoleManagerService roleService = null;
+    private static GroupManagerService groupService = null;
 
     private static UserManagerService userManagerService = null;
 
     private static LoginService loginService = null;
 
     private static TrackerService trackerService = null;
-    //private static TrackerDaoImpl trackerService = null;
 
     private PortletMessageManager messageManager = SportletMessageManager.getInstance();
 
@@ -100,10 +101,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
-
         GridSphereConfig.setServletConfig(config);
-
-        //SportletLog.setConfigureURL(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties"));
         this.context = new SportletContext(config);
         factory = SportletServiceFactory.getInstance();
         factory.init();
@@ -114,7 +112,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public synchronized void initializeServices() throws PortletServiceException {
         requestService = (RequestService) factory.createPortletService(RequestService.class, getServletConfig().getServletContext(), true);
         log.debug("Creating access control manager service");
-        aclService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, getServletConfig().getServletContext(), true);
+        roleService = (RoleManagerService) factory.createPortletService(RoleManagerService.class, getServletConfig().getServletContext(), true);
+        groupService = (GroupManagerService) factory.createPortletService(GroupManagerService.class, getServletConfig().getServletContext(), true);
+
         // create root user in default group if necessary
         log.debug("Creating user manager service");
         userManagerService = (UserManagerService) factory.createPortletService(UserManagerService.class, getServletConfig().getServletContext(), true);
@@ -124,8 +124,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, getServletConfig().getServletContext(), true);
 
         trackerService = (TrackerService) factory.createPortletService(TrackerService.class, getServletConfig().getServletContext(), true);
-
-        //trackerService = (TrackerDaoImpl)factory.getSpringService("trackerDao");
     }
 
     /**
@@ -153,34 +151,22 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             DBTask dt = new DBTask();
             dt.setAction(DBTask.ACTION_CHECKDB);
             dt.setConfigDir(GridSphereConfig.getServletContext().getRealPath(""));
+            /*
             try {
                 dt.execute();
             } catch (Exception e) {
                 RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/database_error.jsp");
                 log.error("Check DB failed: ", e);
-                req.setAttribute("error", "<h3>Database Error!</h3> Please verify that the <b>" + GridSphereConfig.getServletContext().getRealPath("") + "/WEB-INF/CustomPortal/hibernate.properties</b> file is properly configured and that the tables have been created in your database using the <b>ant create-database</b> command (which normally gets called when using <b>ant install</b>)!");
+                req.setAttribute("error", "<h3>Database Error!</h3> Please verify that the <b>" + GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties") + "</b> file is properly configured and that the tables have been created in your database using the <b>ant create-database</b> command (which normally gets called when using <b>ant install</b>)!");
                 rd.forward(req, res);
                 return;
             }
-
+            */
             log.debug("Initializing portlets and services");
             try {
                 // initialize needed services
                 initializeServices();
-
-                // update group entries from 2.0.4 to 2.1
-                System.err.println("updating group data");
-                List groupEntries = aclService.getGroupEntries();
-                Iterator it = groupEntries.iterator();
-                while (it.hasNext()) {
-                    GroupRequestImpl ge = (GroupRequestImpl)it.next();
-                    String roleName = ge.getRoleName();
-                    if (!roleName.equals("")) {
-                        ge.setRole(aclService.getRoleByName(roleName));
-                        ge.setRoleName("");
-                        aclService.saveGroupEntry(ge);
-                    }
-                }
+                updateDatabase();
 
                 // deep inside a service is used which is why this must follow the factory.init
                 layoutEngine.init();
@@ -191,10 +177,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 rd.forward(req, res);
                 return;
             }
-            coreGroup = aclService.getCoreGroup();
+            coreGroup = groupService.getCoreGroup();
         }
 
-        if ((userManagerService.getUsers().isEmpty() || (aclService.getUsersWithSuperRole() == null))) {
+        if ((userManagerService.getUsers().isEmpty() || (roleService.getUsersInRole(PortletRole.SUPER)) == null)) {
             req.setAttribute(PortletPageFactory.PAGE, PortletPageFactory.SETUP_PAGE);
         }
 
@@ -223,7 +209,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             String actionName = event.getAction().getName();
             if (actionName.equals(SportletProperties.LOGIN)) {
                 login(event);
-                //event = new GridSphereEventImpl(aclService, context, req, res);
+                //event = new GridSphereEventImpl(roleService, context, req, res);
             }
             if (actionName.equals(SportletProperties.LOGOUT)) {
                 logout(event);
@@ -363,33 +349,39 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
 
         }
-        HashMap groups = new HashMap();
-
-        PortletRole role;
+        //HashMap groups = new HashMap();
+        List groups = new ArrayList();
+        //PortletRole role;
         if (user == null) {
             user = GuestUser.getInstance();
-            groups = new HashMap();
-            groups.put(coreGroup, PortletRole.GUEST);
+            //groups = new HashMap();
+            groups.add(coreGroup.getName());
         } else {
             UserPrincipal userPrincipal = new UserPrincipal(user.getUserName());
             req.setAttribute(SportletProperties.PORTLET_USER_PRINCIPAL, userPrincipal);
-            List mygroups = aclService.getGroups(user);
+            List mygroups = groupService.getGroups(user);
             Iterator it = mygroups.iterator();
             while (it.hasNext()) {
                 PortletGroup g = (PortletGroup) it.next();
-                role = aclService.getRoleInGroup(user, g);
-                groups.put(g, role);
+                //role = roleService.getRoleInGroup(user, g);
+                //groups.put(g, role);
+                groups.add(g.getName());
             }
         }
 
-        // req.getPortletRole returns the role user has in core gridsphere group
-        role = aclService.getRoleInGroup(user, coreGroup);
-
+        // req.getSportletRole returns the role user has in core gridsphere group
+        //role = roleService.getRoleInGroup(user, coreGroup);
+        List proles = roleService.getRolesForUser(user);
+        List roles = new ArrayList();
+        Iterator it = proles.iterator();
+        while (it.hasNext()) {
+            roles.add(((PortletRole)it.next()).getName());
+        }
         // set user, role and groups in request
         req.setAttribute(SportletProperties.PORTLET_GROUP, coreGroup);
         req.setAttribute(SportletProperties.PORTLET_USER, user);
         req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
-        req.setAttribute(SportletProperties.PORTLET_ROLE, role);
+        req.setAttribute(SportletProperties.PORTLET_ROLE, roles);
     }
 
     // Dmitry Gavrilov (2005-03-17)
@@ -503,7 +495,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
         PortletRequest req = event.getPortletRequest();
 
-
         try {
             User user = loginService.login(req);
 
@@ -534,7 +525,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         if (user.getAttribute(User.LOCALE) != null) {
             session.setAttribute(User.LOCALE, new Locale((String)user.getAttribute(User.LOCALE), "", ""));
         }
-        if (aclService.hasSuperRole(user)) {
+        if (roleService.isUserInRole(user, PortletRole.SUPER)) {
             log.debug("User: " + user.getUserName() + " logged in as SUPER");
         }
         setUserAndGroups(req);
@@ -646,7 +637,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         log.debug("contextDestroyed()");
         log.debug("contextName: " + ctx.getServletContextName());
         log.debug("context path: " + ctx.getRealPath(""));
-
     }
 
 
@@ -706,4 +696,66 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         log.debug("sessionWillPassivate('" + event.getSession().getId() + "')");
     }
 
+    public void updateDatabase() {
+// update group entries from 2.0.4 to 2.1
+        System.err.println("updating group data");
+        List groupEntries = groupService.getGroupEntries();
+        Iterator it = groupEntries.iterator();
+        while (it.hasNext()) {
+            UserGroup ge = (UserGroup)it.next();
+            String roleName = ge.getRoleName();
+            System.err.println(ge.getUser() + " " + ge.getGroup() + ge.getRole());
+            if (!roleName.equals("")) {
+                if (ge.getUser() != null) {
+                    System.err.println("user= " + ge.getUser() + " role=" + roleName);
+                    roleService.addUserToRole(ge.getUser(), roleService.getRoleByName(roleName));
+
+                    if (roleName.equalsIgnoreCase("SUPER")) {
+                        roleService.addUserToRole(ge.getUser(), PortletRole.ADMIN);
+                        roleService.addUserToRole(ge.getUser(), PortletRole.USER);
+                    }
+                    if (roleName.equalsIgnoreCase("ADMIN")) {
+                        roleService.addUserToRole(ge.getUser(), PortletRole.USER);
+                    }
+                    ge.setRoleName("");
+                    groupService.saveGroupEntry(ge);
+                }
+            }
+            PortletRole role = ge.getRole();
+            if (role != null) {
+                if (ge.getUser() != null) {
+                    System.err.println("user1= " + ge.getUser() + " role=" + roleName);
+                    roleService.addUserToRole(ge.getUser(), role);
+                    if (role.equals(PortletRole.SUPER)) {
+                        roleService.addUserToRole(ge.getUser(), PortletRole.ADMIN);
+                        roleService.addUserToRole(ge.getUser(), PortletRole.USER);
+                    }
+                    if (role.equals(PortletRole.ADMIN)) {
+                        roleService.addUserToRole(ge.getUser(), PortletRole.USER);
+                    }
+
+                    ge.setRole(null);
+                    groupService.saveGroupEntry(ge);
+                }
+            }
+        }
+        List groups = groupService.getGroups();
+        it = groups.iterator();
+        while (it.hasNext()) {
+            SportletGroup group = (SportletGroup)it.next();
+            Set portletSet = group.getPortletRoleList();
+            Iterator portletSetIt = portletSet.iterator();
+            while (portletSetIt.hasNext()) {
+                SportletRoleInfo roleInfo = (SportletRoleInfo)portletSetIt.next();
+                String roleName = roleInfo.getRole();
+                PortletRole portletRole = roleService.getRoleByName(roleName);
+                if (portletRole != null) {
+                    roleInfo.setSportletRole(portletRole);
+                    roleInfo.setRole("");
+                }
+            }
+            groupService.createGroup(group);
+        }
+
+    }
 }

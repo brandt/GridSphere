@@ -217,7 +217,6 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
 
         // second invoke the appropriate auth module
-
         List modules = this.getActiveAuthModules();
 
         Collections.sort(modules);

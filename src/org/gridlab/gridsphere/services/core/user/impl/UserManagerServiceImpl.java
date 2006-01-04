@@ -16,10 +16,11 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.user.impl.descriptor.UserAccountDescriptor;
+import org.gridlab.gridsphere.services.core.user.impl.descriptor.UserAttribute;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 public class UserManagerServiceImpl implements PortletServiceProvider, UserManagerService {
 
@@ -29,11 +30,20 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     private String jdoUser = SportletUserImpl.class.getName();
 
+    private String accountMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/account-mapping.xml");
+    private String accountDescPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/account.xml");
+    private UserAccountDescriptor userAccount = null;
+
     public UserManagerServiceImpl() {
     }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         pm = PersistenceManagerFactory.createGridSphereRdbms();
+        /*try {
+            userAccount = new UserAccountDescriptor(accountDescPath, accountMappingPath);
+        } catch (Exception e) {
+            throw new PortletServiceUnavailableException("Unable to load account.xml from " + accountDescPath);
+        }*/
     }
 
     public void destroy() {
@@ -50,6 +60,11 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         saveSportletUserImpl(user);
         return user;
     }
+
+    public Set getUserAttributeSet() {
+        return userAccount.getUserAccount().getUserAttributeSet();
+    }
+
 
     /**
      * Creates a new user

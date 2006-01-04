@@ -15,8 +15,6 @@ import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -134,7 +132,7 @@ public class PortletTag extends BodyTagSupport {
         frame.setTransparent(transparent);
         frame.setTheme(theme);
         frame.setRenderKit(renderKit);
-        frame.setRequiredRoleAsString(role);
+        frame.setRequiredRole(role);
         JspWriter out;
         try {
             //if (event.hasAction())
