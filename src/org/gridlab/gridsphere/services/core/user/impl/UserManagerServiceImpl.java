@@ -16,7 +16,6 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.user.impl.descriptor.UserAccountDescriptor;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import java.util.*;
@@ -31,7 +30,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     private String accountMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/account-mapping.xml");
     private String accountDescPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/account.xml");
-    private UserAccountDescriptor userAccount = null;
 
     public UserManagerServiceImpl() {
     }
@@ -58,10 +56,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         SportletUserImpl user = new SportletUserImpl();
         saveSportletUserImpl(user);
         return user;
-    }
-
-    public Set getUserAttributeSet() {
-        return userAccount.getUserAccount().getUserAttributeSet();
     }
 
 
