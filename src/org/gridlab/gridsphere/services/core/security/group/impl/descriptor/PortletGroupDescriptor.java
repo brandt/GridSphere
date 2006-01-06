@@ -7,11 +7,8 @@ package org.gridlab.gridsphere.services.core.security.group.impl.descriptor;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.services.core.security.group.impl.descriptor.PortletGroupDescription;
-
 import java.io.IOException;
 
 public class PortletGroupDescriptor {
@@ -40,21 +37,16 @@ public class PortletGroupDescriptor {
         return groupDescription;
     }
 
-    public SportletGroup getPortletGroup() {
-        SportletGroup group = new SportletGroup();
+    public PortletGroup getPortletGroup() {
+        PortletGroup group = new PortletGroup();
         group.setName(groupDescription.getGroupName().toLowerCase());
         group.setDescription(groupDescription.getGroupDescription());
         //boolean ispublic = true;
         String visibility = groupDescription.getGroupVisibility();
-        if ("PRIVATE".equalsIgnoreCase(visibility)) {
-            group.setGroupType(PortletGroup.PRIVATE.getType());
-        }
-        if ("PUBLIC".equalsIgnoreCase(visibility)) {
-            group.setGroupType(PortletGroup.PUBLIC.getType());
-        }
-        if ("HIDDEN".equalsIgnoreCase(visibility)) {
-            group.setGroupType(PortletGroup.HIDDEN.getType());
-        }
+
+        PortletGroup.Type groupType = PortletGroup.Type.getType(visibility);
+        group.setType(groupType);
+
         boolean iscore = false;
         String core = groupDescription.getCore();
         if ("yes".equalsIgnoreCase(core) || "true".equalsIgnoreCase(core)) {

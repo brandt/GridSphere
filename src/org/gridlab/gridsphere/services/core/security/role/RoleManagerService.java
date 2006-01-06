@@ -20,9 +20,7 @@ public interface RoleManagerService extends PortletService {
 
     public void deleteRole(PortletRole role);
 
-    public PortletRole getRole(String roleId);
-
-    public PortletRole getRoleByName(String roleName);
+    public PortletRole getRole(String roleName);
 
     public void saveRole(PortletRole role);
 

@@ -7,7 +7,6 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 
@@ -17,7 +16,7 @@ public class UserGroup {
 
     private String oid = null;
     private SportletUserImpl user = null;
-    private SportletGroup sgroup = null;
+    private PortletGroup sgroup = null;
     // deprecated
     private String role = "";
     private PortletRole portletRole;
@@ -42,7 +41,7 @@ public class UserGroup {
     }
 
     public void setGroup(PortletGroup group) {
-        this.sgroup = (SportletGroup) group;
+        this.sgroup = (PortletGroup) group;
     }
 
     /**

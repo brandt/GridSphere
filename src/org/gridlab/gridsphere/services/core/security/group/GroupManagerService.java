@@ -9,9 +9,7 @@
 package org.gridlab.gridsphere.services.core.security.group;
 
 import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.services.core.security.group.impl.UserGroup;
 
@@ -25,42 +23,36 @@ public interface GroupManagerService extends PortletService {
 
     public void deleteGroup(PortletGroup group);
 
-    public PortletGroup getGroup(String groupId);
+    public PortletGroup getGroup(String groupName);
 
-    public PortletGroup getGroupByName(String groupName);
-
-    public PortletGroup createGroup(SportletGroup portletGroup);
-
-    public UserGroup createGroupEntry();
-
-    public UserGroup editGroupEntry(UserGroup entry);
-
-    public List getGroupEntries();
-
-    public List getGroupEntries(User user);
-
-    public List getGroupEntries(PortletGroup group);
-
-    public UserGroup getGroupEntry(String id);
-
-    public UserGroup getGroupEntry(User user, PortletGroup group);
-
-    public void addGroupEntry(User user, PortletGroup group, PortletRole role);
+    public void saveGroup(PortletGroup portletGroup);
 
     public void addUserToGroup(User user, PortletGroup group);
 
-    public void deleteGroupEntry(UserGroup entry);
+    public void deleteUserInGroup(User user, PortletGroup group);
 
-    public void deleteGroupEntries(User user);
+    public void deleteUserGroup(UserGroup userGroup);
 
-    public void saveGroupEntry(UserGroup groupEntry);
+    public UserGroup getUserGroup(User user, PortletGroup group);
 
     public List getGroups(User user);
-
-    public List getGroupsNotMemberOf(User user);
 
     public List getUsersInGroup(PortletGroup group);
 
     public boolean isUserInGroup(User user, PortletGroup group);
+
+
+    // these methods should not be used publicly anymore
+    /**
+     * @deprecated
+     * @return
+     */
+    public List getUserGroups();
+
+    /**
+     * @deprecated
+     * @param groupEntry
+     */
+    public void saveUserGroup(UserGroup groupEntry);
 
 }

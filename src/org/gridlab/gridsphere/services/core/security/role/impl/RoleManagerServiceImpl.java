@@ -77,14 +77,16 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
         if (user == null) throw new IllegalArgumentException("user cannot be null!");
         if (role == null) throw new IllegalArgumentException("role cannot be null!");
         UserRole userRole = new UserRole();
-        if (role.getOid() == null) role = getRoleByName(role.getName());
-        userRole.setRole(role);
-        userRole.setUser(user);
-        try {
-            pm.saveOrUpdate(userRole);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error saving user role";
-            log.error(msg, e);
+        if (role.getOid() == null) role = getRole(role.getName());
+        if (!isUserInRole(user, role)) {
+            userRole.setRole(role);
+            userRole.setUser(user);
+            try {
+                pm.saveOrUpdate(userRole);
+            } catch (PersistenceManagerException e) {
+                String msg = "Error saving user role";
+                log.error(msg, e);
+            }
         }
     }
 
@@ -134,18 +136,7 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
         }
     }
 
-    public PortletRole getRole(String roleId) {
-        if (roleId == null) throw new IllegalArgumentException("role id cannot be null!");
-        PortletRole role = null;
-        try {
-            role = (PortletRole)pm.restore("select prole from " + PortletRole.class.getName() + " prole where prole.oid='" + roleId + "'");
-        } catch (PersistenceManagerException e) {
-            log.error("Error retrieving role " + roleId, e);
-        }
-        return role;
-    }
-
-    public PortletRole getRoleByName(String roleName) {
+    public PortletRole getRole(String roleName) {
         if (roleName == null) throw new IllegalArgumentException("role name cannot be null!");
         PortletRole role = null;
         try {

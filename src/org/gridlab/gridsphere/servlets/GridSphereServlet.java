@@ -697,10 +697,29 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
     public void updateDatabase() {
-// update group entries from 2.0.4 to 2.1
+        // update group entries from 2.0.4 to 2.1
         System.err.println("updating group data");
-        List groupEntries = groupService.getGroupEntries();
-        Iterator it = groupEntries.iterator();
+        List groups = groupService.getGroups();
+        Iterator it = groups.iterator();
+        while (it.hasNext()) {
+            PortletGroup g = (PortletGroup)it.next();
+            System.err.println("group type= " + g.getType());
+            if (g.getType() == null) {
+                switch (g.getGroupType()) {
+                   case 1 : g.setType(PortletGroup.Type.PUBLIC);
+                       break;
+                   case 2: g.setType(PortletGroup.Type.PRIVATE);
+                       break;
+                   case 3: g.setType(PortletGroup.Type.HIDDEN);
+                       break;
+                }
+                g.setGroupType(-1);
+                groupService.saveGroup(g);
+            }
+        }
+
+        List groupEntries = groupService.getUserGroups();
+        it = groupEntries.iterator();
         while (it.hasNext()) {
             UserGroup ge = (UserGroup)it.next();
             String roleName = ge.getRoleName();
@@ -708,7 +727,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             if ((roleName != null) && !roleName.equals("")) {
                 if (ge.getUser() != null) {
                     System.err.println("user= " + ge.getUser() + " role=" + roleName);
-                    roleService.addUserToRole(ge.getUser(), roleService.getRoleByName(roleName));
+                    roleService.addUserToRole(ge.getUser(), roleService.getRole(roleName));
 
                     if (roleName.equalsIgnoreCase("SUPER")) {
                         roleService.addUserToRole(ge.getUser(), PortletRole.ADMIN);
@@ -718,7 +737,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                         roleService.addUserToRole(ge.getUser(), PortletRole.USER);
                     }
                     ge.setRoleName("");
-                    groupService.saveGroupEntry(ge);
+                    groupService.saveUserGroup(ge);
                 }
             }
             PortletRole role = ge.getRole();
@@ -735,26 +754,26 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     }
 
                     ge.setRole(null);
-                    groupService.saveGroupEntry(ge);
+                    groupService.saveUserGroup(ge);
                 }
             }
         }
-        List groups = groupService.getGroups();
+        groups = groupService.getGroups();
         it = groups.iterator();
         while (it.hasNext()) {
-            SportletGroup group = (SportletGroup)it.next();
+            PortletGroup group = (PortletGroup)it.next();
             Set portletSet = group.getPortletRoleList();
             Iterator portletSetIt = portletSet.iterator();
             while (portletSetIt.hasNext()) {
                 SportletRoleInfo roleInfo = (SportletRoleInfo)portletSetIt.next();
                 String roleName = roleInfo.getRole();
-                PortletRole portletRole = roleService.getRoleByName(roleName);
+                PortletRole portletRole = roleService.getRole(roleName);
                 if (portletRole != null) {
                     roleInfo.setSportletRole(portletRole);
                     roleInfo.setRole("");
                 }
             }
-            groupService.createGroup(group);
+            groupService.saveGroup(group);
         }
 
     }
