@@ -30,7 +30,7 @@
                         <ui:tablecell>
                            <% if (!coreRoles.contains(role.getName().toUpperCase())) { %>
                             <ui:actionlink action="doEditRole" value="<%= role.getName() %>">
-                                <ui:actionparam name="roleOID" value="<%= role.getOid() %>"/>
+                                <ui:actionparam name="roleName" value="<%= role.getName() %>"/>
                             </ui:actionlink>
                             <% } else { %>
                                 <ui:text value="<%= role.getName() %>"/>
@@ -39,7 +39,7 @@
                         <ui:tablecell>
                             <% if (!coreRoles.contains(role.getName().toUpperCase())) { %>
                             <ui:actionsubmit action="doDeleteRole" key="DELETE">
-                                <ui:actionparam name="roleOID" value="<%= role.getOid() %>"/>
+                                <ui:actionparam name="roleName" value="<%= role.getName() %>"/>
                             </ui:actionsubmit>
                             <% } %>
                         </ui:tablecell>

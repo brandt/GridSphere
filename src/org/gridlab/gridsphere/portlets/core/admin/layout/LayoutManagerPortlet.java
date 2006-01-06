@@ -122,7 +122,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletGroup group;
         while (it.hasNext()) {
             name = (String) it.next();
-            group = groupManagerService.getGroupByName(name);
+            group = groupManagerService.getGroup(name);
             if (group != null) {
                 groupNames.put(name, group.getDescription());
             }
@@ -297,7 +297,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             return;
         }
 
-        PortletGroup group = groupManagerService.getGroupByName(groupHF.getValue());
+        PortletGroup group = groupManagerService.getGroup(groupHF.getValue());
 
         /*
         if (!groupManagerService.hasSuperRole(user) && !groupManagerService.hasAdminRoleInGroup(user, group)) {

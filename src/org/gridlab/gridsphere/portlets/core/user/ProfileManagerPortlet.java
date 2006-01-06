@@ -218,8 +218,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
         //TableCellBean roleTC;
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup) it.next();
-            //if ((g.getType().equals(PortletGroup.HIDDEN)) && (req.getRole().compare(req.getRole(), PortletRole.ADMIN) < 0)) continue;
-            if (!g.getType().equals(PortletGroup.HIDDEN)) continue;
+            System.err.println("group= " + g);
+            if (g.getType().equals(PortletGroup.Type.HIDDEN)) continue;
             groupsTR = new TableRowBean();
             groupsTC = new TableCellBean();
             groupsDescTC = new TableCellBean();
@@ -232,15 +232,14 @@ public class ProfileManagerPortlet extends ActionPortlet {
             if (groupManagerService.isUserInGroup(user, g)) cb.setSelected(true);
             cb.setValue(g.getName());
             cb.setDisabled(disable);
-            // make sure user cannot deselect core gridsphere group
-            PortletGroup coreGroup = groupManagerService.getCoreGroup();
-            if (g.equals(coreGroup)) cb.setDisabled(true);
-
-            //System.err.println("g= " + g.getName() + " gridsphere group= " + PortletGroupFactory.GRIDSPHERE_GROUP.getName());
+            // make sure user cannot deselect core gridsphere group -- not necessary since
+            // we made core group HIDDEN
+            //PortletGroup coreGroup = groupManagerService.getCoreGroup();
+            //if (g.equals(coreGroup)) cb.setDisabled(true);
 
             TextBean groupTB = new TextBean();
             groupTB.setValue(g.getName());
-            if (g.getType().equals(PortletGroup.PRIVATE) && (!cb.isSelected())) {
+            if (g.getType().equals(PortletGroup.Type.PRIVATE) && (!cb.isSelected())) {
                 cb.setDisabled(true);
             }
             groupsTC.addBean(cb);
@@ -248,7 +247,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             TextBean groupDescTB = new TextBean();
             groupDescTB.setValue(groupDesc);
             groupsDescTC.addBean(groupDescTB);
-            if (g.getType().equals(PortletGroup.PRIVATE)) {
+            if (g.getType().equals(PortletGroup.Type.PRIVATE)) {
                 TextBean priv = event.getTextBean("privateTB");
                 priv.setValue("<br/>" + this.getLocalizedText(req, "GROUP_NOTIFY"));
                 List admins = roleManagerService.getUsersInRole(PortletRole.ADMIN);
@@ -269,18 +268,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 groupsDescTC.addBean(mailTB);
                 groupsTR.addBean(groupsTC);
                 groupsTR.addBean(groupsDescTC);
-            }  else {               
-                //PortletRole r = aclManagerService.getRoleInGroup(user, g);
-                //TextBean roletext = new TextBean();
-                //if (r.equals(PortletRole.GUEST)) r = PortletRole.USER;
-                //if (req.getRole().equals(PortletRole.SUPER)) r = PortletRole.ADMIN;
-                //roletext.setValue(r.getName());
-                //roleTC.addBean(roletext);
-
+            }  else {
                 groupsTR.addBean(groupsTC);
                 groupsTR.addBean(groupsDescTC);
-
-                //groupsTR.addBean(roleTC);
             }
             model.addTableRowBean(groupsTR);
         }
@@ -427,16 +417,16 @@ public class ProfileManagerPortlet extends ActionPortlet {
         List selectedGroups = groupsCB.getSelectedValues();
 
         // first get groups user is already in
-        List groupEntries = groupManagerService.getGroupEntries(user);
+        List groups = groupManagerService.getGroups(user);
         PortletGroup coreGroup = groupManagerService.getCoreGroup();
-        Iterator geIt = groupEntries.iterator();
+        Iterator groupsIt = groups.iterator();
         List usergroups = new ArrayList();
-        while (geIt.hasNext()) {
-            UserGroup ge = (UserGroup) geIt.next();
-            if (!ge.getGroup().equals(coreGroup)) {
-                log.debug("user is in group: " + ge.getGroup());
-                //aclManagerService.deleteGroupEntry(ge);
-                usergroups.add(ge.getGroup().getName());
+        while (groupsIt.hasNext()) {
+            PortletGroup group = (PortletGroup) groupsIt.next();
+            if (!group.equals(coreGroup)) {
+                log.debug("user is in group: " + group.getName());
+                //aclManagerService.deleteUserGroup(ge);
+                usergroups.add(group.getName());
             }
         }
 
@@ -445,17 +435,11 @@ public class ProfileManagerPortlet extends ActionPortlet {
         while (it.hasNext()) {
             String groupStr = (String) it.next();
             log.debug("Selected group: " + groupStr);
-            PortletGroup selectedGroup = this.groupManagerService.getGroupByName(groupStr);
+            PortletGroup selectedGroup = this.groupManagerService.getGroup(groupStr);
             if (!usergroups.contains(selectedGroup.getName())) {
                 log.debug("does not have group: " + selectedGroup.getName());
-                UserGroup groupRequest = this.groupManagerService.createGroupEntry();
-                groupRequest.setUser(user);
-                groupRequest.setGroup(selectedGroup);
-
-                this.groupManagerService.saveGroupEntry(groupRequest);
-
+                this.groupManagerService.addUserToGroup(user, selectedGroup);
                 log.debug("adding tab " + selectedGroup.getName());
-
                 this.layoutMgr.addGroupTab(req, selectedGroup.getName());
                 this.layoutMgr.reloadPage(req);
             }
@@ -467,24 +451,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
         while (it.hasNext()) {
             String groupStr = (String) it.next();
             log.debug("Removing group :" + groupStr);
-            PortletGroup g = this.groupManagerService.getGroupByName(groupStr);
-            UserGroup entry = this.groupManagerService.getGroupEntry(user, g);
-            UserGroup groupRequest = this.groupManagerService.editGroupEntry(entry);
-            this.groupManagerService.deleteGroupEntry(groupRequest);
+            PortletGroup group = this.groupManagerService.getGroup(groupStr);
+            this.groupManagerService.deleteUserInGroup(user, group);
             createSuccessMessage(event, this.getLocalizedText(req, "USER_GROUPS_SUCCESS"));
-
             this.layoutMgr.refreshPage(req);
-            /*
-            List portletIds =  null;
-            // Very nasty JSR 168 hack since JSR webapp names are stored internally with a ".1" extension
-
-            portletIds = portletRegistry.getAllConcretePortletIDs(req.getRole(), g.getName() + ".1");
-            if (portletIds.isEmpty()) {
-            portletIds =  portletRegistry.getAllConcretePortletIDs(req.getRole(), g.getName());
-            }
-            this.layoutMgr.removePortlets(req, portletIds);
-            this.layoutMgr.reloadPage(req);
-            */
         }
     }
 

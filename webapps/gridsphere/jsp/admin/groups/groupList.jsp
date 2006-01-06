@@ -1,6 +1,5 @@
 <%@ page import="java.util.Iterator,
                  org.gridlab.gridsphere.portlet.PortletGroup,
-                 org.gridlab.gridsphere.portlet.impl.SportletGroup,
                  java.util.List"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
@@ -47,19 +46,19 @@
                         </ui:tablecell>
                         <ui:tablecell>
                             <ui:actionlink action="doCreateNewGroup" key="GROUP_EDIT_PORTLETS">
-                                <ui:actionparam name="groupID" value="<%= group.getID() %>"/>
+                                <ui:actionparam name="groupName" value="<%= group.getName() %>"/>
                             </ui:actionlink>
                         </ui:tablecell>
                         <ui:tablecell>
                             <% if (group.getName().equals(coreGroup.getName())) { %>
                                 <ui:hasrole role="super">
                                     <ui:actionlink action="doViewViewGroup" key="GROUP_EDIT_USERS">
-                                        <ui:actionparam name="groupID" value="<%= group.getID() %>"/>
+                                        <ui:actionparam name="groupName" value="<%= group.getName() %>"/>
                                     </ui:actionlink>
                                 </ui:hasrole>
                             <% } else { %>
                                 <ui:actionlink action="doViewViewGroup" key="GROUP_EDIT_USERS">
-                                    <ui:actionparam name="groupID" value="<%= group.getID() %>"/>
+                                    <ui:actionparam name="groupName" value="<%= group.getName() %>"/>
                                 </ui:actionlink>
                             <% } %>
                         </ui:tablecell>
@@ -69,7 +68,7 @@
                         <ui:tablecell>
                         <% if (!group.getName().equals(coreGroup.getName())) { %>
                             <ui:actionsubmit action="deleteGroup" key="DELETE">
-                                <ui:actionparam name="groupID" value="<%= group.getID() %>"/>
+                                <ui:actionparam name="groupName" value="<%= group.getName() %>"/>
                             </ui:actionsubmit>
                         <% } %>
                         </ui:tablecell>

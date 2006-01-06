@@ -9,8 +9,6 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
-import org.gridlab.gridsphere.services.core.security.group.impl.UserGroup;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 
 import javax.servlet.UnavailableException;
@@ -27,14 +25,12 @@ public class RoleManagerPortlet extends ActionPortlet {
 
     // Portlet services
     private RoleManagerService roleManagerService = null;
-    private GroupManagerService groupManagerService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         log.debug("Entering initServices()");
         try {
             this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
-            this.groupManagerService = (GroupManagerService) config.getContext().getService(GroupManagerService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -53,6 +49,7 @@ public class RoleManagerPortlet extends ActionPortlet {
         List roleList = this.roleManagerService.getRoles();
         req.setAttribute("roleList", roleList);
         List coreRolesList = new ArrayList();
+        coreRolesList.add(PortletRole.GUEST.getName());
         coreRolesList.add(PortletRole.USER.getName());
         coreRolesList.add(PortletRole.ADMIN.getName());
         coreRolesList.add(PortletRole.SUPER.getName());
@@ -62,12 +59,12 @@ public class RoleManagerPortlet extends ActionPortlet {
 
     public void doEditRole(FormEvent evt) {
         PortletRequest req = evt.getPortletRequest();
-        String roleOid = evt.getAction().getParameter("roleOID");
+        String roleName = evt.getAction().getParameter("roleName");
         PortletRole role = null;
-        if (roleOid != null) {
-            role = roleManagerService.getRole(roleOid);
-            HiddenFieldBean roidHF = evt.getHiddenFieldBean("roidHF");
-            roidHF.setValue(roleOid);
+        if (roleName != null) {
+            role = roleManagerService.getRole(roleName);
+            HiddenFieldBean roleHF = evt.getHiddenFieldBean("roleHF");
+            roleHF.setValue(roleName);
             TextFieldBean roleNameTF = evt.getTextFieldBean("roleNameTF");
             roleNameTF.setValue(role.getName());
             TextFieldBean roleDescTF = evt.getTextFieldBean("roleDescTF");
@@ -78,25 +75,16 @@ public class RoleManagerPortlet extends ActionPortlet {
 
     public void doDeleteRole(FormEvent evt) {
         PortletRequest req = evt.getPortletRequest();
-        String roleOid = evt.getAction().getParameter("roleOID");
-        PortletRole role = roleManagerService.getRole(roleOid);
-        if (roleOid != null) {
-            // check if users with this role exists before deleting it
-            // if so then chanege the role to be the predefined GS role with the same priority
+        String roleName = evt.getAction().getParameter("roleName");
+        PortletRole role = roleManagerService.getRole(roleName);
+        if (roleName != null) {
+            // remove users in role first
             List users = roleManagerService.getUsersInRole(role);
             if (!users.isEmpty()) {
                 Iterator it = users.iterator();
                 while (it.hasNext()) {
-                    User u = (User)it.next();
-                    List groupEntries = groupManagerService.getGroupEntries(u);
-                    Iterator geIt = groupEntries.iterator();
-                    while (geIt.hasNext()) {
-                        UserGroup ge = (UserGroup)geIt.next();
-                        if (ge.getRole().getName().equalsIgnoreCase(role.getName())) {
-                            UserGroup groupReq = groupManagerService.editGroupEntry(ge);
-                            groupManagerService.saveGroupEntry(groupReq);
-                        }
-                    }
+                    User user = (User)it.next();
+                    roleManagerService.deleteUserInRole(user, role);
                 }
             }
             roleManagerService.deleteRole(role);
@@ -110,14 +98,14 @@ public class RoleManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
         TextFieldBean roleNameTF = evt.getTextFieldBean("roleNameTF");
         // check if role name is already taken
-        if (roleManagerService.getRoleByName(roleNameTF.getValue()) != null) {
+        if (roleManagerService.getRole(roleNameTF.getValue()) != null) {
             createErrorMessage(evt, this.getLocalizedText(req, "ROLE_EXISTS_MSG"));
             return;
         }
         TextFieldBean roleDescTF = evt.getTextFieldBean("roleDescTF");
 
-        HiddenFieldBean roidHF = evt.getHiddenFieldBean("roidHF");
-        PortletRole role = roleManagerService.getRole(roidHF.getValue());
+        HiddenFieldBean roleHF = evt.getHiddenFieldBean("roleHF");
+        PortletRole role = roleManagerService.getRole(roleHF.getValue());
         if (role != null) {
             role.setName(roleNameTF.getValue());
             role.setDescription(roleDescTF.getValue());
@@ -134,7 +122,7 @@ public class RoleManagerPortlet extends ActionPortlet {
         TextFieldBean roleNameTF = evt.getTextFieldBean("roleNameTF");
 
         // check if role name is already taken
-        if (roleManagerService.getRoleByName(roleNameTF.getValue()) != null) {
+        if (roleManagerService.getRole(roleNameTF.getValue()) != null) {
             createErrorMessage(evt, this.getLocalizedText(req, "ROLE_EXISTS_MSG"));
             return;
         }

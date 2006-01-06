@@ -5,7 +5,6 @@ package org.gridlab.gridsphere.portlets.core.admin.groups;
 
 import org.gridlab.gridsphere.layout.PortletTabRegistry;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
@@ -104,9 +103,9 @@ public class GroupManagerPortlet extends ActionPortlet {
         Set portletRoleList = null;
         DefaultPortletAction action = event.getAction();
         if (action != null) {
-            String groupId = action.getParameter("groupID");
-            if (groupId != null) {
-                group = groupManagerService.getGroup(groupId);
+            String groupName = action.getParameter("groupName");
+            if (groupName != null) {
+                group = groupManagerService.getGroup(groupName);
                 TextFieldBean groupNameTF = event.getTextFieldBean("groupNameTF");
                 groupNameTF.setValue(group.getName());
                 TextFieldBean groupDescTF = event.getTextFieldBean("groupDescTF");
@@ -115,8 +114,8 @@ public class GroupManagerPortlet extends ActionPortlet {
                 req.setAttribute("groupType", group.getType());
 
                 portletRoleList = group.getPortletRoleList();
-                HiddenFieldBean gid = event.getHiddenFieldBean("groupId");
-                gid.setValue(groupId);
+                HiddenFieldBean gid = event.getHiddenFieldBean("groupName");
+                gid.setValue(groupName);
             }
         }
 
@@ -181,132 +180,84 @@ public class GroupManagerPortlet extends ActionPortlet {
                     // we don't want to list PortletServlet loader!
                     if (concID.startsWith(PortletServlet.class.getName())) continue;
 
-                    //String reqrole = conc.getConcretePortletConfig().getRequiredRole();
-                    //log.debug("subscribed to portlet: " + concID + " " + reqrole);
-                    //if (role.compare(role, reqrole) >= 0) {
-                        // build an interface
-                        CheckBoxBean cb = new CheckBoxBean();
-                        cb.setBeanId(concID + "CB");
-                        cb.setValue(concID);
+                    CheckBoxBean cb = new CheckBoxBean();
+                    cb.setBeanId(concID + "CB");
+                    cb.setValue(concID);
 
-                        cb.setSelected(false);
+                    cb.setSelected(false);
 
-                        // set 4th column to required role listbox
-                        ListBoxBean lb = new ListBoxBean();
-                        lb.setBeanId(concID + "LB");
+                    // set 4th column to required role listbox
+                    ListBoxBean lb = new ListBoxBean();
+                    lb.setBeanId(concID + "LB");
 
-                        if (portletRoleList != null) {
-                            Iterator pit = portletRoleList.iterator();
-                            while (pit.hasNext() && (!found)) {
+                    if (portletRoleList != null) {
+                        Iterator pit = portletRoleList.iterator();
+                        while (pit.hasNext() && (!found)) {
 
-                                SportletRoleInfo info = (SportletRoleInfo) pit.next();
-                                if (info.getPortletClass().equals(concID)) {
-                                    cb.setSelected(true);
-                                    PortletRole reqRole = info.getSportletRole();
-                                    List availroles = roleManagerService.getRoles();
-                                    for (int i = 0; i < availroles.size(); i++) {
-                                        PortletRole thisrole = (PortletRole)availroles.get(i);
-                                        ListBoxItemBean roleItem = new ListBoxItemBean();
-                                        roleItem.setName(thisrole.getName());
-                                        roleItem.setValue(thisrole.getName());
-                                        if (thisrole.getName().equalsIgnoreCase(reqRole.getName())) roleItem.setSelected(true);
-                                        lb.addBean(roleItem);
-                                    }
-
-
-
-                                    /*
-                                    PortletRole reqRole = info.getSportletRole();
-                                    ListBoxItemBean item = new ListBoxItemBean();
-                                    item.setValue(PortletRole.USER.getText(req.getLocale()));
-                                    item.setName(PortletRole.USER.getName());
-                                    if (reqRole.isUser()) item.setSelected(true);
-                                    lb.addBean(item);
-                                    item = new ListBoxItemBean();
-                                    item.setValue(PortletRole.GUEST.getText(req.getLocale()));
-                                    item.setName(PortletRole.GUEST.getName());
-                                    if (reqRole.isGuest()) item.setSelected(true);
-                                    lb.addBean(item);
-                                    item = new ListBoxItemBean();
-                                    item.setValue(PortletRole.ADMIN.getText(req.getLocale()));
-                                    item.setName(PortletRole.ADMIN.getName());
-                                    if (reqRole.isAdmin()) item.setSelected(true);
-                                    lb.addBean(item);
-                                    item = new ListBoxItemBean();
-                                    item.setValue(PortletRole.SUPER.getText(req.getLocale()));
-                                    item.setName(PortletRole.SUPER.getName());
-                                    if (reqRole.isSuper()) item.setSelected(true);
-                                    lb.addBean(item);
-                                    */
-                                    found = true;
+                            SportletRoleInfo info = (SportletRoleInfo) pit.next();
+                            if (info.getPortletClass().equals(concID)) {
+                                cb.setSelected(true);
+                                PortletRole reqRole = info.getSportletRole();
+                                List availroles = roleManagerService.getRoles();
+                                for (int i = 0; i < availroles.size(); i++) {
+                                    PortletRole thisrole = (PortletRole) availroles.get(i);
+                                    ListBoxItemBean roleItem = new ListBoxItemBean();
+                                    roleItem.setName(thisrole.getName());
+                                    roleItem.setValue(thisrole.getName());
+                                    if (thisrole.getName().equalsIgnoreCase(reqRole.getName()))
+                                        roleItem.setSelected(true);
+                                    lb.addBean(roleItem);
                                 }
-
+                                found = true;
                             }
 
                         }
 
-                        // don't allow core portlets to be changed
-
-                        TableRowBean newtr = new TableRowBean();
-                        TableCellBean newtc = new TableCellBean();
-                        newtc.addBean(cb);
-                        newtr.addBean(newtc);
-
-                        TableCellBean newtc2 = new TableCellBean();
-                        TextBean tb = new TextBean();
-
-                        // set 2nd column to portlet display name from concrete portlet
-                        Locale loc = req.getLocale();
-
-                        String dispName = conc.getDisplayName(loc);
-                        tb.setValue(dispName);
-                        newtc2.addBean(tb);
-                        newtr.addBean(newtc2);
-                        newtc = new TableCellBean();
-                        TextBean tb2 = new TextBean();
-
-                        // set 3rd column to portlet description from concrete portlet
-
-                        //tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
-                        tb2.setValue(conc.getDescription(loc));
-                        newtc.addBean(tb2);
-                        newtr.addBean(newtc);
-
-                        // if there was no existing group than add the list box here
-                        if (!found) {
-                            List availroles = roleManagerService.getRoles();
-                            for (int i = 0; i < availroles.size(); i++) {
-                                PortletRole thisrole = (PortletRole)availroles.get(i);
-                                ListBoxItemBean roleItem = new ListBoxItemBean();
-                                roleItem.setName(thisrole.getName());
-                                roleItem.setValue(thisrole.getName());
-                                lb.addBean(roleItem);
-                            }
-                            /*
-                            ListBoxItemBean item = new ListBoxItemBean();
-                            item.setValue(PortletRole.USER.getText(req.getLocale()));
-                            item.setName(PortletRole.USER.getName());
-                            lb.addBean(item);
-                            item = new ListBoxItemBean();
-                            item.setValue(PortletRole.GUEST.getText(req.getLocale()));
-                            item.setName(PortletRole.GUEST.getName());
-                            lb.addBean(item);
-                            item = new ListBoxItemBean();
-                            item.setValue(PortletRole.ADMIN.getText(req.getLocale()));
-                            item.setName(PortletRole.ADMIN.getName());
-                            lb.addBean(item);
-                            item = new ListBoxItemBean();
-                            item.setValue(PortletRole.SUPER.getText(req.getLocale()));
-                            item.setName(PortletRole.SUPER.getName());
-                            lb.addBean(item);
-                            */
-                        }
-                        newtc = new TableCellBean();
-                        newtc.addBean(lb);
-                        newtr.addBean(newtc);
-                        model.addTableRowBean(newtr);
                     }
-                //}
+
+                    // don't allow core portlets to be changed
+
+                    TableRowBean newtr = new TableRowBean();
+                    TableCellBean newtc = new TableCellBean();
+                    newtc.addBean(cb);
+                    newtr.addBean(newtc);
+
+                    TableCellBean newtc2 = new TableCellBean();
+                    TextBean tb = new TextBean();
+
+                    // set 2nd column to portlet display name from concrete portlet
+                    Locale loc = req.getLocale();
+
+                    String dispName = conc.getDisplayName(loc);
+                    tb.setValue(dispName);
+                    newtc2.addBean(tb);
+                    newtr.addBean(newtc2);
+                    newtc = new TableCellBean();
+                    TextBean tb2 = new TextBean();
+
+                    // set 3rd column to portlet description from concrete portlet
+
+                    //tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
+                    tb2.setValue(conc.getDescription(loc));
+                    newtc.addBean(tb2);
+                    newtr.addBean(newtc);
+
+                    // if there was no existing group than add the list box here
+                    if (!found) {
+                        List availroles = roleManagerService.getRoles();
+                        for (int i = 0; i < availroles.size(); i++) {
+                            PortletRole thisrole = (PortletRole) availroles.get(i);
+                            ListBoxItemBean roleItem = new ListBoxItemBean();
+                            roleItem.setName(thisrole.getName());
+                            roleItem.setValue(thisrole.getName());
+                            lb.addBean(roleItem);
+                        }
+                    }
+                    newtc = new TableCellBean();
+                    newtc.addBean(lb);
+                    newtr.addBean(newtc);
+                    model.addTableRowBean(newtr);
+                }
             }
         }
 
@@ -325,11 +276,11 @@ public class GroupManagerPortlet extends ActionPortlet {
         Set portletRoles = new HashSet();
 
         PortletGroup coreGroup = groupManagerService.getCoreGroup();
-        HiddenFieldBean gid = evt.getHiddenFieldBean("groupId");
+        HiddenFieldBean groupNameHF = evt.getHiddenFieldBean("groupName");
         while (it.hasNext()) {
             String g = (String) it.next();
 
-            if (g.equals(coreGroup.getName()) && (!gid.getValue().equals(coreGroup.getID()))) {
+            if (g.equals(coreGroup.getName()) && (!groupNameHF.getValue().equals(coreGroup.getID()))) {
                 continue;
             }
 
@@ -349,7 +300,7 @@ public class GroupManagerPortlet extends ActionPortlet {
                         String reqRole = lb.getSelectedName();
                         SportletRoleInfo portletRoleInfo = new SportletRoleInfo();
                         portletRoleInfo.setPortletClass(concID);
-                        portletRoleInfo.setSportletRole(roleManagerService.getRoleByName(reqRole));
+                        portletRoleInfo.setSportletRole(roleManagerService.getRole(reqRole));
                         portletRoles.add(portletRoleInfo);
                     }
                 }
@@ -361,11 +312,11 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         RadioButtonBean groupVisibility = evt.getRadioButtonBean("groupVisibility");
 
-        SportletGroup newgroup = new SportletGroup();
-        if (!gid.getValue().equals("")) {
-            newgroup.setOid(gid.getValue());
+        PortletGroup newgroup = new PortletGroup();
+        if (!groupNameHF.getValue().equals("")) {
+            newgroup.setOid(groupNameHF.getValue());
 
-            PortletGroup oldgroup = groupManagerService.getGroup(gid.getValue());
+            PortletGroup oldgroup = groupManagerService.getGroup(groupNameHF.getValue());
             newgroup.setCore(oldgroup.isCore());
             // if group name has been modified update group tab
             if (!oldgroup.getName().equals(groupTF.getValue())) {
@@ -400,21 +351,14 @@ public class GroupManagerPortlet extends ActionPortlet {
             newgroup.setName(groupTF.getValue());
             newgroup.setDescription(groupDescTF.getValue());
             newgroup.setPortletRoleList(portletRoles);
-            if (groupVisibility.getSelectedValue().equals("PUBLIC")) {
-                newgroup.setGroupType(PortletGroup.PUBLIC.getType());
-            }
-            if (groupVisibility.getSelectedValue().equals("PRIVATE")) {
-                newgroup.setGroupType(PortletGroup.PRIVATE.getType());
-            }
-            if (groupVisibility.getSelectedValue().equals("HIDDEN")) {
-                newgroup.setGroupType(PortletGroup.HIDDEN.getType());
-            }
 
-            groupManagerService.createGroup(newgroup);
+            PortletGroup.Type groupType = PortletGroup.Type.getType(groupVisibility.getSelectedValue());
+            newgroup.setType(groupType);
+            groupManagerService.saveGroup(newgroup);
 
-            req.setAttribute("groupId", newgroup.getID());
+            req.setAttribute("groupName", newgroup.getID());
             createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_NEWGROUP_SUCCESS"));
-            if (newgroup.getGroupType() == PortletGroup.PRIVATE.getType()) {
+            if (newgroup.getType().equals(PortletGroup.Type.PRIVATE)) {
                 createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_VISIBILITY_MOREDESC"));
             }
             PortletTabRegistry.newEmptyGroupTab(groupTF.getValue());
@@ -426,16 +370,16 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     public void doMakeTemplateLayout(FormEvent evt) {
 
-        String groupId = evt.getAction().getParameter("groupId");
+        String groupName = evt.getAction().getParameter("groupName");
         String fileName = evt.getTextFieldBean("layoutFileTF").getValue();
         if (fileName.equals("")) {
             this.createErrorMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_INVALID_LAYOUTFILE"));
-            evt.getPortletRequest().setAttribute("groupId", groupId);
+            evt.getPortletRequest().setAttribute("groupName", groupName);
             setNextState(evt.getPortletRequest(), DO_VIEW_GROUP_LAYOUT);
             return;
         }
 
-        PortletGroup group = groupManagerService.getGroup(groupId);
+        PortletGroup group = groupManagerService.getGroup(groupName);
         if (group != null) {
             Set portletRoles = group.getPortletRoleList();
             try {
@@ -447,7 +391,7 @@ public class GroupManagerPortlet extends ActionPortlet {
                 log.error("Unable to save new group layout: ", e);
             }
         } else {
-            log.debug("No group exists for group id: " + groupId);
+            log.debug("No group exists for group id: " + groupName);
         }
     }
 
@@ -456,20 +400,22 @@ public class GroupManagerPortlet extends ActionPortlet {
         log.debug("Entering doViewViewGroup");
         PortletRequest req = evt.getPortletRequest();
 
-        HiddenFieldBean groupIDBean = evt.getHiddenFieldBean("groupID");
-        String groupId = groupIDBean.getValue();
-        if (groupId == null) {
-            groupId = evt.getAction().getParameter("groupID");
+        HiddenFieldBean groupNameBean = evt.getHiddenFieldBean("groupName");
+        String groupName = groupNameBean.getValue();
+        if (groupName == null) {
+            groupName = evt.getAction().getParameter("groupName");
         }
 
-        PortletGroup group = loadGroup(evt, groupId);
+        PortletGroup group = loadGroup(evt, groupName);
 
         doViewRemoveGroupEntry(evt);
         doViewAddGroupEntry(evt);
 
-        List groupEntries = groupManagerService.getGroupEntries(group);
+        //List groupEntries = groupManagerService.getUserGroups(group);
 
-        req.setAttribute("groupEntryList", groupEntries);
+        List usersInGroup = groupManagerService.getUsersInGroup(group);
+
+        req.setAttribute("usersInGroup", usersInGroup);
         setNextState(req, DO_VIEW_GROUP_VIEW);
         log.debug("Exiting doViewViewGroup");
     }
@@ -480,13 +426,12 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
         loadGroup(evt);
 
-        HiddenFieldBean groupEntryIDBean = evt.getHiddenFieldBean("groupEntryID");
-        String groupEntryId = evt.getAction().getParameter("groupEntryID");
+        HiddenFieldBean userNameHF = evt.getHiddenFieldBean("userName");
+        String userName = evt.getAction().getParameter("userName");
 
-        groupEntryIDBean.setValue(groupEntryId);
-        UserGroup entry = groupManagerService.getGroupEntry(groupEntryId);
+        userNameHF.setValue(userName);
 
-        evt.getTextBean("userName").setValue(entry.getUser().getUserName());
+        evt.getTextBean("userName").setValue(userName);
 
         setNextState(req, DO_VIEW_GROUP_ENTRY_EDIT);
         log.debug("Exiting doViewEditGroupEntry");
@@ -523,19 +468,13 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         PortletRequest req = evt.getPortletRequest();
 
-        HiddenFieldBean groupEntryIDBean = evt.getHiddenFieldBean("groupEntryID");
-        UserGroup entry = groupManagerService.getGroupEntry(groupEntryIDBean.getValue());
-
-        ListBoxBean groupEntryRoleListBox = evt.getListBoxBean("groupEntryRoleLB");
-        String selectedGroupRole = groupEntryRoleListBox.getSelectedName();
-        PortletRole role = roleManagerService.getRoleByName(selectedGroupRole);
-
-        // Create add to group request
-        UserGroup groupRequest = groupManagerService.editGroupEntry(entry);
-
+        HiddenFieldBean userNameHF = evt.getHiddenFieldBean("userName");
+        HiddenFieldBean groupNameHF = evt.getHiddenFieldBean("groupName");
 
         // Create access right
-        groupManagerService.saveGroupEntry(groupRequest);
+        User user = userManagerService.getUser(userNameHF.getValue());
+        PortletGroup group = groupManagerService.getGroup(groupNameHF.getValue());
+        groupManagerService.addUserToGroup(user, group);
 
         setNextState(req, "doViewViewGroup");
     }
@@ -549,8 +488,8 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         removeGroupEntry(evt);
 
-        List groupEntries = groupManagerService.getGroupEntries(group);
-        req.setAttribute("groupEntryList", groupEntries);
+        List usersInGroup = groupManagerService.getUsersInGroup(group);
+        req.setAttribute("usersInGroup", usersInGroup);
     }
 
     public void doEditDefaultGroups(FormEvent evt) {
@@ -632,7 +571,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         while (it.hasNext()) {
             String name = (String) it.next();
-            PortletGroup g = groupManagerService.getGroupByName(name);
+            PortletGroup g = groupManagerService.getGroup(name);
             if (g != null) defaultGroups.add(g);
         }
 
@@ -644,37 +583,35 @@ public class GroupManagerPortlet extends ActionPortlet {
     }
 
     private PortletGroup loadGroup(FormEvent evt) {
-        HiddenFieldBean groupIDBean = evt.getHiddenFieldBean("groupID");
-        String groupId = groupIDBean.getValue();
-        if (groupId == null) {
-            String groupEntryId = evt.getAction().getParameter("groupEntryID");
-            UserGroup entry = groupManagerService.getGroupEntry(groupEntryId);
-            groupId = entry.getGroup().getID();
+        HiddenFieldBean groupNameBean = evt.getHiddenFieldBean("groupName");
+        String groupName = groupNameBean.getValue();
+        if (groupName == null) {
+            groupName = evt.getAction().getParameter("groupName");
         }
-        return loadGroup(evt, groupId);
+        return loadGroup(evt, groupName);
     }
 
-    private PortletGroup loadGroup(FormEvent evt, String groupID) {
+    private PortletGroup loadGroup(FormEvent evt, String groupName) {
         // Get group id
         PortletGroup group = null;
-        TextBean groupNameBean = evt.getTextBean("groupName");
+        TextBean groupNameBean = evt.getTextBean("groupNameText");
         TextBean groupLabelBean = evt.getTextBean("groupLabel");
         TextBean groupDescBean = evt.getTextBean("groupDescription");
-        HiddenFieldBean groupIDBean = evt.getHiddenFieldBean("groupID");
-        groupIDBean.setValue(groupID);
+        HiddenFieldBean groupNameHF = evt.getHiddenFieldBean("groupName");
+        groupNameHF.setValue(groupName);
 
         String groupDescription = "";
 
         // Load group
-        if (!groupID.equals("")) {
-            group = groupManagerService.getGroup(groupID);
+        if (!groupName.equals("")) {
+            group = groupManagerService.getGroup(groupName);
             //System.err.println("group= " + group.getName());
             groupDescription = group.getDescription();
             //groupDescription = getACLService(user).getGroupDescription(group);
             //System.err.println("desc=" + groupDescription);
         }
 
-        if (groupID.equals("")) {
+        if (groupName.equals("")) {
             // Clear group attributes
             groupNameBean.setValue("");
             groupLabelBean.setValue("");
@@ -706,7 +643,6 @@ public class GroupManagerPortlet extends ActionPortlet {
             while (userIterator.hasNext()) {
                 // Get next user
                 User user = (User) userIterator.next();
-                //String userID = user.getID();
                 String fullName = user.getFullName();
 
                 ListBoxItemBean item = new ListBoxItemBean();
@@ -718,70 +654,63 @@ public class GroupManagerPortlet extends ActionPortlet {
     }
 
     private void addGroupEntries(FormEvent evt, PortletGroup group) {
-            // Users to add...
-            ListBoxBean userList = evt.getListBoxBean("usersNotInGroupList");
-            String groupEntryUserID = userList.getSelectedValue();
-            if (groupEntryUserID != null) {
-                User groupEntryUser = this.userManagerService.getUserByUserName(groupEntryUserID);
-                if (groupEntryUser != null) {
-                    User user = evt.getPortletRequest().getUser();
-                    addGroupEntry(groupEntryUser, group);
-                    if (groupEntryUser.getID().equals(user.getID())) {
-                        layoutMgr.addGroupTab(evt.getPortletRequest(), group.getName());
-                    }
-                    createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_ADD_USER_SUCCESS") + " " + group.getName());
-                    //layoutMgr.addGroupTab(groupEntryUser, group.getName());
-                    //layoutMgr.reloadPage(evt.getPortletRequest());
-                } else {
-                    log.debug("Unable to get user: " + groupEntryUserID);
+        // Users to add...
+        ListBoxBean userList = evt.getListBoxBean("usersNotInGroupList");
+        String userVal = userList.getSelectedValue();
+        if (userVal != null) {
+            User groupEntryUser = this.userManagerService.getUserByUserName(userVal);
+            if (groupEntryUser != null) {
+                User user = evt.getPortletRequest().getUser();
+                addGroupEntry(groupEntryUser, group);
+                if (groupEntryUser.getID().equals(user.getID())) {
+                    layoutMgr.addGroupTab(evt.getPortletRequest(), group.getName());
                 }
+                createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_ADD_USER_SUCCESS") + " " + group.getName());
+                //layoutMgr.addGroupTab(groupEntryUser, group.getName());
+                //layoutMgr.reloadPage(evt.getPortletRequest());
+            } else {
+                log.debug("Unable to get user: " + userVal);
             }
+        }
     }
 
     private UserGroup addGroupEntry(User user, PortletGroup group) {
-        // Create add to group request
-        UserGroup groupRequest = groupManagerService.createGroupEntry();
-        groupRequest.setUser(user);
-        groupRequest.setGroup(group);
-
-        groupManagerService.saveGroupEntry(groupRequest);
+        groupManagerService.addUserToGroup(user, group);
 
         // Return the new group
-        return groupManagerService.getGroupEntry(user, group);
+        return groupManagerService.getUserGroup(user, group);
     }
 
     private void removeGroupEntry(FormEvent event) {
         // Create remove from group request
-        CheckBoxBean cb = event.getCheckBoxBean("groupEntryIDCB");
+        CheckBoxBean cb = event.getCheckBoxBean("userCB");
+        String groupName = event.getHiddenFieldBean("groupName").getValue();
+        PortletGroup group = groupManagerService.getGroup(groupName);
         List l = cb.getSelectedValues();
         Iterator it = l.iterator();
         if (!l.isEmpty()) {
             while (it.hasNext()) {
-                String geid = (String)it.next();
+                String userCB = (String) it.next();
                 //System.err.println("geid= " + geid);
-                UserGroup entry = groupManagerService.getGroupEntry(geid);
-                if (entry != null) {
-                    UserGroup groupRequest = groupManagerService.editGroupEntry(entry);
-                    if (groupRequest != null) {
-                        User user = event.getPortletRequest().getUser();
-                        if (groupRequest.getUser().getID().equals(user.getID())) {
-                            layoutMgr.removeGroupTab(event.getPortletRequest(), entry.getGroup().getName());
-                        }
-                        groupManagerService.deleteGroupEntry(groupRequest);
-                        createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "GROUP_REMOVE_USER_SUCCESS"));
-                    }
-                }
-            }
+                User user = userManagerService.getUserByUserName(userCB);
 
+                groupManagerService.deleteUserInGroup(user, group);
+
+                if (event.getPortletRequest().getUser().getID().equals(user.getID())) {
+                    layoutMgr.removeGroupTab(event.getPortletRequest(), groupName);
+                }
+
+                createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "GROUP_REMOVE_USER_SUCCESS"));
+            }
         }
     }
 
 
     public void deleteGroup(FormEvent event) throws PortletException {
-       
-        String groupId = event.getAction().getParameter("groupID");
 
-        PortletGroup group = groupManagerService.getGroup(groupId);
+        String groupName = event.getAction().getParameter("groupName");
+
+        PortletGroup group = groupManagerService.getGroup(groupName);
         PortletGroup coreGroup = groupManagerService.getCoreGroup();
         List users = groupManagerService.getUsersInGroup(group);
         if (!users.isEmpty()) {
@@ -790,7 +719,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         } else {
 
             // delete group from acl service
-            if (!group.equals(coreGroup))  {
+            if (!group.equals(coreGroup)) {
                 groupManagerService.deleteGroup(group);
 
                 // delete group from layout registry

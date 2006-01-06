@@ -7,7 +7,7 @@
 <h3><ui:text key="ROLE_EDIT_MSG" style="nostyle"/></h3>
 
 <ui:form>
-    <ui:hiddenfield beanId="roidHF"/>
+    <ui:hiddenfield beanId="roleHF"/>
     <ui:frame>
 
         <ui:tablerow>

@@ -3,8 +3,8 @@
 <portletAPI:init/>
 <ui:form>
 <p>
-<ui:hiddenfield beanId="groupID"/>
-<ui:hiddenfield beanId="groupEntryID"/>
+<ui:hiddenfield beanId="groupName"/>
+<ui:hiddenfield beanId="userName"/>
 </p>
 <ui:panel>
 

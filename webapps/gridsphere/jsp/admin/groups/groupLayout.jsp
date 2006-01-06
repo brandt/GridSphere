@@ -2,7 +2,7 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 
-<jsp:useBean id="groupId" class="java.lang.String" scope="request"/>
+<jsp:useBean id="groupName" class="java.lang.String" scope="request"/>
 
 <ui:messagebox beanId="msg"/>
 
@@ -17,7 +17,7 @@
    <p>
    <ui:text key="GROUP_LAYOUT_FILE"/>&nbsp;&nbsp;<ui:textfield beanId="layoutFileTF"/>
    <ui:actionsubmit action="doMakeTemplateLayout" key="GROUP_CREATE_TEMPLATE">
-       <ui:actionparam name="groupId" value="<%= groupId %>"/>
+       <ui:actionparam name="groupName" value="<%= groupName %>"/>
    </ui:actionsubmit>
    </p>
    </ui:group>

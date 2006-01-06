@@ -376,11 +376,7 @@ public class LoginPortlet extends ActionPortlet {
         Iterator it = groups.iterator();
         while (it.hasNext()) {
             PortletGroup group = (PortletGroup) it.next();
-            UserGroup groupRequest = this.groupService.createGroupEntry();
-            groupRequest.setUser(user);
-            groupRequest.setGroup(group);
-            // Submit changes
-            this.groupService.saveGroupEntry(groupRequest);
+            this.groupService.addUserToGroup(user, group);
         }
         roleService.addUserToRole(user, PortletRole.USER);
     }

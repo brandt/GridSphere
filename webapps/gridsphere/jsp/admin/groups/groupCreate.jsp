@@ -1,5 +1,4 @@
-<%@ page import="java.util.Iterator,
-                 org.gridlab.gridsphere.portlet.PortletGroup"%>
+<%@ page import="org.gridlab.gridsphere.portlet.PortletGroup"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
@@ -11,11 +10,11 @@
 <ui:group>
 
 <% PortletGroup.Type gtype = (PortletGroup.Type)request.getAttribute("groupType"); %>
-<% if (gtype == null) gtype = PortletGroup.PUBLIC; %>
+<% if (gtype == null) gtype = PortletGroup.Type.PUBLIC; %>
 
 <ui:messagebox beanId="msg"/>
 <p>
-<ui:hiddenfield beanId="groupId"/>
+<ui:hiddenfield beanId="groupName"/>
 </p>
 <h3><ui:text key="GROUP_INFO" style="nostyle"/></h3>
 <p>
@@ -30,11 +29,11 @@
 <ui:text key="GROUP_VISIBILITY_MOREDESC"/>
 </p>
 <p>
-<ui:radiobutton beanId="groupVisibility" value="PUBLIC" selected="<%= (gtype.equals(PortletGroup.PUBLIC)) ? true : false %>"/>
+<ui:radiobutton beanId="groupVisibility" value="PUBLIC" selected="<%= (gtype.equals(PortletGroup.Type.PUBLIC)) %>"/>
     <ui:text key="GROUP_PUBLIC"/>
-    <ui:radiobutton beanId="groupVisibility" value="PRIVATE" selected="<%= (gtype.equals(PortletGroup.PRIVATE)) ? true : false %>"/>
+    <ui:radiobutton beanId="groupVisibility" value="PRIVATE" selected="<%= (gtype.equals(PortletGroup.Type.PRIVATE)) %>"/>
     <ui:text key="GROUP_PRIVATE"/>
-    <ui:radiobutton beanId="groupVisibility" value="HIDDEN" selected="<%= (gtype.equals(PortletGroup.HIDDEN)) ? true : false %>"/>
+    <ui:radiobutton beanId="groupVisibility" value="HIDDEN" selected="<%= (gtype.equals(PortletGroup.Type.HIDDEN)) %>"/>
     <ui:text key="GROUP_HIDDEN"/>
 </p>
 <h3><ui:text key="GROUP_SELECT_PORTLETS" style="nostyle"/></h3>

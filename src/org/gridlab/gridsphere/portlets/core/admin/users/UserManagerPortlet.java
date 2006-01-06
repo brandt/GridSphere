@@ -294,7 +294,12 @@ public class UserManagerPortlet extends ActionPortlet {
             //req.setAttribute("role", role.getName());
             this.userManagerService.deleteUser(user);
             this.passwordManagerService.deletePassword(user);
-            this.groupManagerService.deleteGroupEntries(user);
+            List groups = this.groupManagerService.getGroups(user);
+            Iterator it = groups.iterator();
+            while (it.hasNext()) {
+                PortletGroup group = (PortletGroup)it.next();
+                this.groupManagerService.deleteUserInGroup(user, group);
+            }
             createSuccessMessage(evt, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
         }
         setNextState(req, "doListUsers");

@@ -1,24 +1,20 @@
-<%@ page import="java.util.Iterator, java.util.List,
-                 org.gridlab.gridsphere.portlet.PortletRequest"%>
-<%@ page import="org.gridlab.gridsphere.services.core.security.group.impl.UserGroup"%>
+<%@ page import="java.util.Iterator, java.util.List, org.gridlab.gridsphere.portlet.User"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 
-<% PortletRequest pReq = (PortletRequest)pageContext.getAttribute("portletRequest"); %>
-
-<% List groupEntryList = (List)request.getAttribute("groupEntryList"); %>
+<% List usersInGroup = (List)request.getAttribute("usersInGroup"); %>
 
 <ui:messagebox beanId="msg"/>
 
-<h3><ui:text key="GROUP_MANAGE_MSG" style="nostyle"/>&nbsp; <ui:text beanId="groupName" style="nostyle"/></h3>
+<h3><ui:text key="GROUP_MANAGE_MSG" style="nostyle"/>&nbsp; <ui:text beanId="groupNameText" style="nostyle"/></h3>
 
-<% if (groupEntryList.size() > 0) { %>
+<% if (usersInGroup.size() > 0) { %>
 <h3><ui:text key="GROUP_MODIFY_USERS" style="nostyle"/></h3>
 <ui:form>
 <ui:group>
 
-<ui:hiddenfield beanId="groupID"/>
+<ui:hiddenfield beanId="groupName"/>
 
 <ui:frame>
 
@@ -35,19 +31,19 @@
 
         </ui:tablerow>
 
-<%  Iterator groupIterator = groupEntryList.iterator();
-    while (groupIterator.hasNext()) {
-        UserGroup groupEntry = (UserGroup)groupIterator.next();
+<%  Iterator usersIterator = usersInGroup.iterator();
+    while (usersIterator.hasNext()) {
+        User user = (User)usersIterator.next();
 %>
                 <ui:tablerow>
                         <ui:tablecell>
-                            <ui:checkbox beanId="groupEntryIDCB" name="<%= groupEntry.getID() %>" value="<%= groupEntry.getID() %>"/>
+                            <ui:checkbox beanId="userCB" name="<%= user.getUserName() %>" value="<%= user.getUserName() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <ui:text value="<%= groupEntry.getUser().getUserName() %>"/>
+                            <ui:text value="<%= user.getUserName() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <ui:text value="<%= groupEntry.getUser().getFullName() %>"/>
+                            <ui:text value="<%= user.getFullName() %>"/>
                         </ui:tablecell>
                 </ui:tablerow>
 
@@ -73,7 +69,7 @@
     <ui:form>
     <ui:group>
     <p>
-    <ui:hiddenfield beanId="groupID"/>
+    <ui:hiddenfield beanId="groupName"/>
     </p>
     <ui:frame>
         <ui:tablerow>
@@ -90,14 +86,6 @@
             </ui:tablecell>
             <ui:tablecell>
                 <ui:listbox beanId="usersNotInGroupList"/>
-            </ui:tablecell>
-        </ui:tablerow>
-        <ui:tablerow>
-            <ui:tablecell>
-                <ui:text key="GROUP_ROLEIN_GROUP"/>
-            </ui:tablecell>
-            <ui:tablecell>
-                <ui:listbox beanId="groupEntryRoleLB"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
