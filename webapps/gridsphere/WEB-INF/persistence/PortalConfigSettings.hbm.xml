@@ -25,7 +25,7 @@
 
         <set name="DefaultGroups" cascade="all">
             <key column="defaultgroup_oid"/>
-            <one-to-many class="org.gridlab.gridsphere.portlet.impl.SportletGroup"/>
+            <one-to-many class="org.gridlab.gridsphere.portlet.PortletGroup"/>
         </set>
 
         <map name="attributes" table="portalconfigattributes">
