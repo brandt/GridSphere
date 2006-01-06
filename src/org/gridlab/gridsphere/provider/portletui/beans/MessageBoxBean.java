@@ -59,9 +59,8 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
     public void setDefaultImage(boolean images){
         String gswebapp = GridSphereConfig.PROJECT_NAME;
         if (images) {
-            this.imageSource =  new StringBuffer().append(File.separator).append(gswebapp).
-                    append(File.separator).append("images").append(File.separator).append("msgicons").
-                    append(File.separator).append(messageType).append(".gif").toString();
+            this.imageSource =  new StringBuffer("/").append(gswebapp).append("/images/").
+                    append("msgicons/").append(messageType).append(".gif").toString();
         } else {
             this.imageSource = null;
         }
