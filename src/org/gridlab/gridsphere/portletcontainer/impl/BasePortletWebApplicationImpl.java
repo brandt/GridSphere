@@ -9,7 +9,6 @@ import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
@@ -108,11 +107,11 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
         if (f.exists()) {
             try {
                 PortletGroupDescriptor groupDescriptor = new PortletGroupDescriptor(groupXMLfile);
-                SportletGroup group = groupDescriptor.getPortletGroup();
-                PortletGroup g = groupManager.getGroupByName(group.getName());
+                PortletGroup group = groupDescriptor.getPortletGroup();
+                PortletGroup g = groupManager.getGroup(group.getName());
                 if (g == null) {
                     log.info("Saving group: " + group.getName());
-                    groupManager.createGroup(group);
+                    groupManager.saveGroup(group);
                 }
                 log.info("Loaded a group descriptor " + group.getName());
                 // now load layout
@@ -140,7 +139,7 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
                 Iterator it = portletRoles.iterator();
                 while (it.hasNext()) {
                     PortletRole role = (PortletRole)it.next();
-                    if (roleManager.getRoleByName(role.getName()) == null) roleManager.saveRole(role);
+                    if (roleManager.getRole(role.getName()) == null) roleManager.saveRole(role);
                 }
                 log.info("Loaded a role descriptor");
             } catch (Exception e) {
