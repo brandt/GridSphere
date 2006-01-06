@@ -410,7 +410,7 @@ String ctxPath = this.getServletContext().getRealPath("");
 int i = ctxPath.lastIndexOf(File.separator);
 String groupName = ctxPath.substring(i+1);
 
-PortletGroup group = aclService.getGroupByName(groupName);
+PortletGroup group = aclService.getGroup(groupName);
 if (group == null)
 group = PortletGroupFactory.createPortletGroup(groupName);
 
