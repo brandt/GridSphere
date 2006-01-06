@@ -6,6 +6,8 @@
 package org.gridlab.gridsphere.portlet;
 
 import java.util.Set;
+import java.util.HashSet;
+import java.io.Serializable;
 
 
 /**
@@ -14,92 +16,294 @@ import java.util.Set;
  *
  * @see org.gridlab.gridsphere.portlet.PortletRole
  */
-public interface PortletGroup extends Cloneable {
+public class PortletGroup implements Serializable, Cloneable {
 
-    public final Type PUBLIC = new Type(1);
-    public final Type PRIVATE = new Type(2);
-    public final Type HIDDEN = new Type(3);
+    private String oid = null;
+    private String name = "";
+    private boolean isPublic = true;
+    private String description = "";
+    private boolean isCore = false;
 
-    public class Type {
+    // deprecated
+    private int type = 1;
+
+    private Type groupType = Type.PUBLIC;
+
+    private Set portletRoleList = new HashSet();
+
+    public static class Type implements Serializable, Cloneable {
+
+        public static final Type PUBLIC = new Type(1);
+        public static final Type PRIVATE = new Type(2);
+        public static final Type HIDDEN = new Type(3);
+
+        private String oid = null;
 
         private int type = 1;
 
         public Type() {}
 
+        public static Type getType(String groupType) {
+            if (groupType.toUpperCase().equals("PUBLIC")) return PUBLIC;
+            if (groupType.toUpperCase().equals("PRIVATE")) return PRIVATE;
+            if (groupType.toUpperCase().equals("HIDDEN")) return HIDDEN;
+            throw new IllegalArgumentException("Unknown group type specified: " + groupType);
+        }
+
         private Type(int type) {
             this.type = type;
         }
 
-        public static Type getType(int type) {
-            if (type == 3) return HIDDEN;
-            if (type == 2) return PRIVATE;
-            if (type == 1) return PUBLIC;
-            throw new IllegalArgumentException("Specified group type: " + type + " doesn't exist!");
+        public String getOid() {
+            return oid;
         }
 
-        public boolean equals(Object object) {
-            if (object != null && (object.getClass().equals(this.getClass()))) {
-                Type gtype = (Type) object;
-                return type == gtype.getType();
-            }
-            return false;
+        public void setOid(String oid) {
+            this.oid = oid;
         }
 
+        public void setType(int type) {
+            this.type = type;
+        }
 
         public int getType() {
             return type;
         }
+
+        public Object clone() throws CloneNotSupportedException {
+            Type m = (Type) super.clone();
+            m.type = this.type;
+            return m;
+        }
+
+        public boolean equals(Object o) {
+            if ((o != null) && (o instanceof Type)) {
+                return (this.type == ((Type) o).getType() ? true : false);
+            }
+            return false;
+        }
+
+        public int hashCode() {
+            return type;
+        }
+
+        public String toString() {
+            return "" + type;
+        }
+        
+        private Object readResolve() {
+            Type m = Type.PUBLIC;
+            switch (type) {
+                case 1:
+                    m = Type.PUBLIC;
+                    break;
+                case 2:
+                    m = Type.PRIVATE;
+                    break;
+                case 3:
+                    m = Type.HIDDEN;
+                    break;
+            }
+            return m;
+        }
+
     }
 
     /**
-     * Returns the id of this group
-     *
-     * @return the id of this group
+     * Constructs an instance of SportletGroup
      */
-    public String getID();
+    public PortletGroup() {}
 
     /**
-     * Returns the name of this group
+     * Constructs an instance of SportletGroup with a chosen name
      *
-     * @return the name of this group
+     * @param groupName the name of the group
      */
-    public String getName();
+    public PortletGroup(String groupName) {
+        super();
+        if (groupName == null) name = "Unknown Group";
+        this.name = groupName;
+    }
+
+    public PortletGroup(String groupName, String groupDescription) {
+        super();
+        if (groupName == null) name = "Unknown Group";
+        this.name = groupName;
+        this.description = groupDescription;
+    }
+
+    public Set getPortletRoleList() {
+        return portletRoleList;
+    }
+
+    public void setPortletRoleList(Set portletRoleList) {
+        this.portletRoleList = portletRoleList;
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
 
     /**
-     * Returns the description of this group
+     * Sets the name of the group
      *
-     * @return the description of this group
+     * @param name the group name
      */
-    public String getDescription();
+    public void setName(String name) {
+        this.name = name;
+    }
 
     /**
-     * Returns the label of this group
+     * Returns the portlet group name
      *
-     * @return the label of this group
+     * @return the portlet group name
      */
-    public String getLabel();
+    public String getName() {
+        return name;
+    }
 
-    public PortletGroup.Type getType();
+    public boolean isCore() {
+        return isCore;
+    }
 
-    public Set getPortletRoleList();
+    public void setCore(boolean core) {
+        isCore = core;
+    }
+
+    public boolean getCore() {
+        return isCore;
+    }
 
     /**
-     * Tests to see if this group is equal to a supplied group
+     * Sets the description of the group
      *
-     * @param object a <code>PortletGroup</code> object
-     * @return <code>true</code> if groups are equal, <code>false</code>
+     * @param description the group description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Returns the portlet group description
+     *
+     * @return the portlet group description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Returns the portlet group label
+     *
+     * @return the portlet group label
+     */
+    public String getLabel() {
+        String label = null;
+        if (name.equals("")) {
+            label = "";
+        } else {
+            label = name.substring(0, 1).toUpperCase()
+                    + name.substring(1);
+        }
+        return label;
+    }
+
+    /**
+     * Returns the group id
+     *
+     * @return the group id
+     */
+    public String getID() {
+        return getOid();
+    }
+
+    /**
+     * Sets the group id
+     *
+     * @param id the group id
+     */
+    public void setID(String id) {
+        setOid(id);
+    }
+
+    /**
+     * Tests the equality of two groups
+     *
+     * @param object the <code>PortletGroup</code> to be tested
+     * @return <code>true</code> if the groups are equal, <code>false</code>
      *         otherwise
      */
-    public boolean equals(Object object);
+    public boolean equals(Object object) {
+        if (object != null && (object.getClass().equals(this.getClass()))) {
+            PortletGroup portletGroup = (PortletGroup) object;
+            return name.equals(portletGroup.getName());
+        }
+        return false;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        PortletGroup s = (PortletGroup) super.clone();
+        s.name = this.name;
+        return s;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    public boolean getPublic() {
+        return isPublic;
+    }
+
+    public void setType(Type type) {
+        this.groupType = type;
+    }
+
+    public Type getType() {
+        return groupType;
+    }
 
     /**
-     * Returns a String representation of this group
+     * @deprecated
      *
-     * @return a <code>String</code> representation of this group
+     * @param type
      */
-    public String toString();
+    public void setGroupType(int type) {
+        this.type = type;
+    }
 
-    public boolean isPublic();
+    /**
+     * @deprecated
+     *
+     * @return
+     */
+    public int getGroupType() {
+        return type;
+    }
 
-    public boolean isCore();
+    /**
+     * Returns a unique hashcode
+     *
+     * @return a unique hash code
+     */
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    /**
+     * Returns the group name
+     *
+     * @return the group name
+     */
+    public String toString() {
+        return name;
+    }
 }
