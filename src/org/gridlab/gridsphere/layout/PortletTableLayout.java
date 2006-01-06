@@ -133,7 +133,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         Iterator it = groups.iterator();
         while (it.hasNext()) {
             String group = (String) it.next();
-            PortletGroup g = groupService.getGroupByName(group);
+            PortletGroup g = groupService.getGroup(group);
             //System.err.println("group= " + g.getName());
             if (g.equals(req.getAttribute(SportletProperties.PORTLET_GROUP))) continue;
             Iterator sit = g.getPortletRoleList().iterator();
