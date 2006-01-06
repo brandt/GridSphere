@@ -55,6 +55,12 @@
                     <description>Anmelden Portlet ermöglicht das Anmelden</description>
                     <keywords>anmelden logout</keywords>
                 </language>
+                <language locale="es">
+                    <title>Cuenta</title>
+                    <title-short>Entrar</title-short>
+                    <description>Portlet proporciona capacidades de conexión</description>
+                    <keywords>conexión de portlet</keywords>
+                </language>
                 <language locale="fr">
                     <title>Login</title>
                     <title-short>Login</title-short>
@@ -146,6 +152,12 @@
                     <title-short>Abmelden</title-short>
                     <description>Abmelden Portlet ermöglicht das Ausloggen</description>
                     <keywords>portlet abmelden</keywords>
+                </language>
+                <language locale="es">
+                    <title>Salir</title>
+                    <title-short>Salir</title-short>
+                    <description>Portlet proporciona capacidades de Desconección</description>
+                    <keywords>Desconección de portlet</keywords>
                 </language>
                 <language locale="fr">
                     <title>Logout</title>
@@ -243,6 +255,12 @@
                     <description>Ermöglicht das Administrieren von Nutzerkonten</description>
                     <keywords>nutzer konten administrieren</keywords>
                 </language>
+                <language locale="es">
+                    <title>Administrador de Cuentas de Usuario</title>
+                    <title-short>Administrador de Cuenta de Usuario</title-short>
+                    <description>Permite a administradores del portal, administrar cuentas de usuario</description>
+                    <keywords>Administración de cuenta de usuario</keywords>
+                </language>
                 <language locale="fr">
                     <title>Gestionnaire de compte usager</title>
                     <description>Permet à l'administrateur du portail d'aministrer les comptes usagers</description>
@@ -305,6 +323,12 @@
                     <description>Enables portal administrators to administer security roles</description>
                     <keywords>role administration</keywords>
                 </language>
+                <language locale="es">
+                    <title>Administrador de Roles</title>
+                    <title-short>Administrador de Roles</title-short>
+                    <description> Les permite a administradores del portal que administren los Roles de seguridad </description>
+                    <keywords>Administracion de roles</keywords>
+                </language>
                 <language locale="hr">
                     <title>Upravitelj uloga</title>
                     <title-short>Upravitelj uloga</title-short>
@@ -351,6 +375,10 @@
                     <title>Portlet Group Manager</title>
                     <description>Enables portal administrators to administer portlet groups</description>
                 </language>
+                <language locale="es">
+                    <title>Administrador de Grupos de Portlet</title>
+                    <description>Les permite a administradores del portal que administren los grupos de portlet</description>
+                </language>
                 <language locale="cs">
                     <title>Správa skupin portletů</title>
                     <description>Umožňuje správcům portálu spravovat skupiny portletů.</description>
@@ -358,6 +386,10 @@
                 <language locale="de">
                     <title>Portlet Gruppen Verwaltung</title>
                     <description>Ermöglicht Portal-Administratoren Portlet Gruppen zu verwalten</description>
+                </language>
+                <language locale="es">
+                    <title>Administrador de Grupos de Portlet</title>
+                    <description>Les permite a administradores del portal que administren los grupos de portlet</description>
                 </language>
                 <language locale="fr">
                     <title>Gestionnaire de groupe</title>
@@ -426,6 +458,10 @@
                 <language locale="en">
                     <title>Layout Manager</title>
                     <description>Provides administrative layout customization</description>
+                </language>
+                <language locale="es">
+                    <title>Administrador de Layout</title>
+                    <description>Proporciona la personalizacion del esquema administrativo</description>
                 </language>
                 <language locale="de">
                     <title>Layout Managieren</title>
@@ -506,6 +542,10 @@
                 <language locale="de">
                     <title>Portlet Anwendungsverwaltung</title>
                     <description>Ermöglicht Portal-Administratoren Portlets zu verwalten</description>
+                </language>
+                <language locale="es">
+                    <title>Portlet Application Manager</title>
+                    <description>Les permite a administradores del portal que administren el portlets</description>
                 </language>
                 <language locale="fr">
                     <title>Gestionnaire d'application</title>
@@ -683,6 +723,12 @@
                     <description>Displays portal tracking statistics</description>
                     <keywords>tracking statistics</keywords>
                 </language>
+                <language locale="es">
+                    <title>Rastreador de Estadísticas</title>
+                    <title-short>Rastreador de Estadísticas</title-short>
+                    <description>Muestra portal Rastreador de Estadísticas</description>
+                    <keywords>Rastreador de Estadísticas</keywords>
+                </language>
                 <language locale="hr">
                     <title>Upravitelj praćenja statistika</title>
                     <title-short>Upravitelj praćenja statistika</title-short>
@@ -727,6 +773,10 @@
                 <language locale="en">
                     <title>Profile Manager</title>
                     <description>Customizes users profile</description>
+                </language>
+                <language locale="es">
+                    <title>Administrador de Perfiles</title>
+                    <description>Personalizacion de Perfiles de Usuarios</description>
                 </language>
                 <language locale="de">
                     <title>Benutzerprofil Verwaltung</title>
@@ -796,6 +846,10 @@
                 <language locale="en">
                     <title>Locale</title>
                     <description>Selects a locale</description>
+                </language>
+                <language locale="es">
+                    <title>Lugar</title>
+                    <description>Seleccione un lugar</description>
                 </language>
                 <language locale="de">
                     <title>Spracheinstellungen</title>
@@ -876,6 +930,12 @@
                     <description>Portlet provides configuration of messaging services capabilities</description>
                     <keywords>portlet messaging services</keywords>
                 </language>
+                <language locale="es">
+                    <title>Configure los Servicios de Mensajería</title>
+                    <title-short>Los Servicios de mensajería</title-short>
+                    <description>Portlet proporciona configuración de capacidades de servicios de mensajería</description>
+                    <keywords>los servicios de mensajería de portlet</keywords>
+                </language>
                 <language locale="de">
                     <title>Textnachrichtendienste konfigurieren</title>
                     <title-short>Textnachrichtendienste</title-short>
@@ -933,7 +993,13 @@
                     <description>Portlet provides date capabilities</description>
                     <keywords>portlet date</keywords>
                 </language>
-				<language locale="ar">
+                <language locale="es">
+                    <title>Fecha</title>
+                    <title-short>Fecha</title-short>
+                    <description>Portlet proporciona las capacidades de la fecha</description>
+                    <keywords>portlet Fecha</keywords>
+                </language>
+                <language locale="ar">
                     <title>التاريخ</title>
                     <title-short>التاريخ</title-short>
                     <description>برنامج يزود خدمة التاريخ</description>
@@ -992,6 +1058,12 @@
                     <title-short>Session Manager</title-short>
                     <description>Displays portal sessions</description>
                     <keywords>portlet session</keywords>
+                </language>
+                <language locale="es">
+                    <title>Administrador de Sessiones</title>
+                    <title-short>Administrador de Sessiones</title-short>
+                    <description>Despliega Administrador de Sessiones</description>
+                    <keywords>Administrador de Sessiones</keywords>
                 </language>
                 <language locale="fr">
                     <title>Gestionnaire de session</title>

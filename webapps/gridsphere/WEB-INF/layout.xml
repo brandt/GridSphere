@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <portlet-tabbed-pane>
     <portlet-tab label="welcome">
-        <title lang="zh">欢迎</title>
         <title lang="en">Welcome</title>
+        <title lang="es">Bienvenido</title>
         <title lang="de">Willkommen</title>
         <title lang="it">Benvenuto</title>
         <title lang="pl">Witamy</title>
@@ -13,10 +13,11 @@
         <title lang="nl">Welkom</title>
         <title lang="hr">Dobrodošli</title>
         <title lang="ja">ようこそ</title>
+        <title lang="zh">欢迎</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="settings">
-            	<title lang="zh">配置</title>
                 <title lang="en">Settings</title>
+                <title lang="es">Seteos</title>
                 <title lang="it">Preferenze</title>
                 <title lang="pl">Ustawienia</title>
                 <title lang="hu">Beállítások</title>
@@ -26,6 +27,7 @@
                 <title lang="nl">Eigenschappen</title>
                 <title lang="hr">Postavke</title>
                 <title lang="ja">設定</title>
+                <title lang="zh">配置</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -37,8 +39,8 @@
                 </table-layout>
             </portlet-tab>
             <portlet-tab label="layouttab">
-                <title lang="zh">版面</title>
             	<title lang="en">Layout</title>
+                <title lang="es">Layout</title>
                 <title lang="it">Layout</title>
                 <title lang="pl">Układ graficzny</title>
                 <title lang="hu">Kinézet</title>
@@ -48,6 +50,7 @@
                 <title lang="nl">Layout</title>
                 <title lang="hr">Izgled</title>
             	<title lang="ja">レイアウト</title>
+                <title lang="zh">版面</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -62,8 +65,8 @@
         </portlet-tabbed-pane>
     </portlet-tab>
     <portlet-tab label="admin" required-role="ADMIN">
-        <title lang="zh">管理者</title>
         <title lang="en">Administration</title>
+        <title lang="es">Administración</title>
         <title lang="it">Amministrazione</title>
         <title lang="pl">Administracja</title>
         <title lang="hu">Adminisztráció</title>
@@ -73,15 +76,17 @@
         <title lang="nl">Administratie</title>
         <title lang="hr">Administriranje</title>
         <title lang="ja">管理</title>
+        <title lang="zh">管理者</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="portlets" required-role="SUPER">
-                <title lang="zh">门件</title>
                 <title lang="en">Portlets</title>
+                <title lang="es">Portlets</title>
                 <title lang="pl">Portlety</title>
                 <title lang="hu">Portletek</title>
                 <title lang="cs">Portlety</title>
                 <title lang="nl">Portlets</title>
                 <title lang="hr">Portleti</title>
+                <title lang="zh">门件</title>
                 <table-layout label="portletTL">
                     <row-layout label="portletLoginRL">
                         <column-layout width="40%" label="portletLoginCL">
@@ -104,8 +109,8 @@
                 </table-layout>
             </portlet-tab>
             <portlet-tab label="users" required-role="SUPER">
-                <title lang="zh">用户</title>
                 <title lang="en">Users</title>
+                <title lang="es">Usuarios</title>
                 <title lang="it">Utenti</title>
                 <title lang="pl">Użytkownicy</title>
                 <title lang="hu">Felhasználók</title>
@@ -115,6 +120,7 @@
                 <title lang="nl">Gebruikers</title>
                 <title lang="hr">Korisnici</title>
                 <title lang="ja">ユーザー</title>
+                <title lang="zh">用户</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -127,8 +133,8 @@
                 </table-layout>
             </portlet-tab>
             <portlet-tab label="groups" required-role="ADMIN">
-                <title lang="zh">用户组</title>
                 <title lang="en">Groups</title>
+                <title lang="es">Grupos</title>
                 <title lang="it">Gruppi</title>
                 <title lang="pl">Grupy</title>
                 <title lang="hu">Csoportok</title>
@@ -137,7 +143,8 @@
                 <title lang="cs">Skupiny</title>
                 <title lang="nl">Groepen</title>
                 <title lang="hr">Grupe</title>
-                <title lang="en">グループ</title>
+                <title lang="ja">グループ</title>
+                <title lang="zh">用户组</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="70%">
@@ -151,6 +158,7 @@
             </portlet-tab>
             <portlet-tab label="roles" required-role="SUPER">
                 <title lang="en">Roles</title>
+                <title lang="es">Roles</title>
                 <title lang="hr">Uloge</title>
                 <title lang="ja">役割</title>
                 <table-layout>
@@ -165,8 +173,8 @@
                 </table-layout>
             </portlet-tab>
             <portlet-tab label="adminlayouttab" required-role="ADMIN">
-                <title lang="zh">版面组</title>
                 <title lang="en">Layouts</title>
+                <title lang="es">Layouts</title>
                 <title lang="it">Layouts</title>
                 <title lang="pl">Graficzny</title>
                 <title lang="hu">Kinézetok</title>
@@ -176,6 +184,7 @@
                 <title lang="nl">Layouts</title>
                 <title lang="hr">Izgledi</title>
                 <title lang="ja">レイアウト</title>
+                <title lang="zh">版面组</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -187,12 +196,13 @@
                 </table-layout>
             </portlet-tab>
             <portlet-tab label="messagingservicestab" required-role="ADMIN">
-                <title lang="zh">信息</title>
                 <title lang="en">Messaging</title>
+                <title lang="es">Mensajería</title>
                 <title lang="de">Textnachrichtendienste</title>
                 <title lang="fr">Messagerie</title>
                 <title lang="hr">Razmjena poruka</title>
                 <title lang="ja">伝言</title>
+                <title lang="zh">信息</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>

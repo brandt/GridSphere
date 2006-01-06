@@ -25,6 +25,8 @@
         <error key="key2" lang="en">Incorrect password provided</error>
         <error key="key1" lang="ja">パスワードが入力されていません</error>
         <error key="key2" lang="ja">間違ったパスワードが入力されました</error>
+        <error key="key1" lang="es">No fué proporcionada la Contraseña</error>
+        <error key="key2" lang="es">La contraseña proporcionada, es incorrecta</error>
     </auth-module>
 
     <auth-module>
@@ -44,6 +46,9 @@
         <error key="key1" lang="ja">アカウント失効</error>
         <error key="key2" lang="ja">信用証明書失効</error>
         <error key="key3" lang="ja">予期せぬエラー</error>
+        <error key="key1" lang="es">La cuenta ha expiradi</error>
+        <error key="key2" lang="es">Credenciales expiradas</error>
+        <error key="key3" lang="es">Error Inesperado</error>
     </auth-module>
 
 </auth-modules>
