@@ -433,6 +433,11 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+	<attribute>
+            <name>title</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>zebra</name>
             <required>false</required>
@@ -975,6 +980,11 @@
         </attribute>
         <attribute>
             <name>sortable</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+	<attribute>
+            <name>title</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

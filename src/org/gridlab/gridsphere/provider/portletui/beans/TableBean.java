@@ -34,6 +34,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     protected PortletResponse res = null;
     protected String uris = "";
     protected String uriString = "";
+    protected String title = null;
 
     /**
      * Constructs a default table bean
@@ -243,6 +244,14 @@ public class TableBean extends BaseComponentBean implements TagBean {
         return maxRows;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public boolean isShowall() {
         return showall;
     }
@@ -274,6 +283,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
         }
         */
         sb.append(">");
+        if (title != null) sb.append("<caption>" + title + "</caption>");
         if (defaultModel != null) sb.append(defaultModel.toStartString());
         return sb.toString();
     }

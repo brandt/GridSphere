@@ -25,6 +25,7 @@ import javax.servlet.jsp.PageContext;
 public class TableTag extends BaseComponentTag {
 
     protected TableBean tableBean = null;
+    protected String title = null;
     protected String cellSpacing = null;
     protected String cellPadding = null;
     protected String border = null;
@@ -209,6 +210,14 @@ public class TableTag extends BaseComponentTag {
         return sortable;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public void setZebra(boolean isZebra) {
         this.isZebra = isZebra;
     }
@@ -248,6 +257,7 @@ public class TableTag extends BaseComponentTag {
         tableBean = null;
         cellSpacing = null;
         cellPadding = null;
+        title = null;
         border = null;
         width = null;
         align = null;
@@ -312,6 +322,7 @@ public class TableTag extends BaseComponentTag {
             tableBean.setSortable(sortable);
             tableBean.setSortableID("td" + this.getUniqueId("gs_tableNum"));
         }
+        if (title != null) tableBean.setTitle(title);
         tableBean.setMaxRows(maxRows);
         tableBean.setZebra(isZebra);
 
