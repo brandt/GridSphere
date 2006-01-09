@@ -277,6 +277,14 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         PortletGroup coreGroup = groupManagerService.getCoreGroup();
         HiddenFieldBean groupNameHF = evt.getHiddenFieldBean("groupName");
+
+        PortletGroup group = null;
+        if (groupNameHF.getValue().equals("")) {
+            group = new PortletGroup();
+        } else {
+            group = groupManagerService.getGroup(groupNameHF.getValue());
+        }
+
         while (it.hasNext()) {
             String g = (String) it.next();
 
@@ -312,24 +320,18 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         RadioButtonBean groupVisibility = evt.getRadioButtonBean("groupVisibility");
 
-        PortletGroup newgroup = new PortletGroup();
-        if (!groupNameHF.getValue().equals("")) {
-            newgroup.setOid(groupNameHF.getValue());
 
-            PortletGroup oldgroup = groupManagerService.getGroup(groupNameHF.getValue());
-            newgroup.setCore(oldgroup.isCore());
-            // if group name has been modified update group tab
-            if (!oldgroup.getName().equals(groupTF.getValue())) {
-
-                String tabfile = PortletTabRegistry.getTabDescriptorPath(oldgroup.getName());
-                PortletTabRegistry.removeGroupTab(oldgroup.getName());
-                try {
-                    PortletTabRegistry.addGroupTab(groupTF.getValue(), tabfile);
-                } catch (Exception e) {
-                    log.error("unable to save group tab: " + groupTF.getValue(), e);
-                }
+        // if group name has been modified update group tab
+        if ((!group.getName().equals(groupTF.getValue())) && (!group.getName().equals(""))) {
+            String tabfile = PortletTabRegistry.getTabDescriptorPath(group.getName());
+            PortletTabRegistry.removeGroupTab(group.getName());
+            try {
+                PortletTabRegistry.addGroupTab(groupTF.getValue(), tabfile);
+            } catch (Exception e) {
+                log.error("unable to save group tab: " + groupTF.getValue(), e);
             }
         }
+
 
         try {
             if (groupTF.getValue().equals("")) {
@@ -348,17 +350,17 @@ public class GroupManagerPortlet extends ActionPortlet {
                 return;
             }
 
-            newgroup.setName(groupTF.getValue());
-            newgroup.setDescription(groupDescTF.getValue());
-            newgroup.setPortletRoleList(portletRoles);
+            group.setName(groupTF.getValue());
+            group.setDescription(groupDescTF.getValue());
+            group.setPortletRoleList(portletRoles);
 
             PortletGroup.Type groupType = PortletGroup.Type.getType(groupVisibility.getSelectedValue());
-            newgroup.setType(groupType);
-            groupManagerService.saveGroup(newgroup);
+            group.setType(groupType);
+            groupManagerService.saveGroup(group);
 
-            req.setAttribute("groupName", newgroup.getID());
+            req.setAttribute("groupName", group.getName());
             createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_NEWGROUP_SUCCESS"));
-            if (newgroup.getType().equals(PortletGroup.Type.PRIVATE)) {
+            if (group.getType().equals(PortletGroup.Type.PRIVATE)) {
                 createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_VISIBILITY_MOREDESC"));
             }
             PortletTabRegistry.newEmptyGroupTab(groupTF.getValue());

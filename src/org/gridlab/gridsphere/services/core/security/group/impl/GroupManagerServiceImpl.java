@@ -24,6 +24,7 @@ public class GroupManagerServiceImpl implements PortletServiceProvider, GroupMan
 
     private String jdoGroupRequest = UserGroup.class.getName();
     private String jdoPortletGroup = PortletGroup.class.getName();
+    private String jdoPortletGroupType = PortletGroup.Type.class.getName();
 
     public GroupManagerServiceImpl() {
 
@@ -149,10 +150,6 @@ public class GroupManagerServiceImpl implements PortletServiceProvider, GroupMan
     public void saveGroup(PortletGroup portletGroup) {
         if (portletGroup == null) throw new IllegalArgumentException("group cannot be null!");
         try {
-            PortletGroup.Type type = portletGroup.getType();
-            if (type.getOid() == null) {
-                pm.saveOrUpdate(type);
-            }
             pm.saveOrUpdate(portletGroup);
         } catch (PersistenceManagerException e) {
             String msg = "Error saving/updating portlet group " + portletGroup.getName();

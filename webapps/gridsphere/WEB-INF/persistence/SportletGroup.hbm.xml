@@ -27,30 +27,10 @@
         <!-- deprecated -->
         <property name="GroupType" type="integer" column="grouptype"/>
 
-        <many-to-one name="Type" column="grouptype_id" class="org.gridlab.gridsphere.portlet.PortletGroup$Type"/>
-
         <set name="PortletRoleList" table="portletrolelist" cascade="all">
             <key column="role_oid"/>
             <one-to-many class="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo"/>
         </set>
-
-    </class>
-
-    <class
-        name="org.gridlab.gridsphere.portlet.PortletGroup$Type"
-        table="portletgrouptype"
-        >
-
-        <id
-            name="oid"
-            column="gsoid"
-            type="java.lang.String"
-            length="32"
-            >
-            <generator class="uuid.hex"/>
-        </id>
-
-        <property name="Type" type="integer" column="grouptype"/>
 
     </class>
 

@@ -698,28 +698,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public void updateDatabase() {
         // update group entries from 2.0.4 to 2.1
-        System.err.println("updating group data");
-        List groups = groupService.getGroups();
-        Iterator it = groups.iterator();
-        while (it.hasNext()) {
-            PortletGroup g = (PortletGroup)it.next();
-            System.err.println("group type= " + g.getType());
-            if (g.getType() == null) {
-                switch (g.getGroupType()) {
-                   case 1 : g.setType(PortletGroup.Type.PUBLIC);
-                       break;
-                   case 2: g.setType(PortletGroup.Type.PRIVATE);
-                       break;
-                   case 3: g.setType(PortletGroup.Type.HIDDEN);
-                       break;
-                }
-                g.setGroupType(-1);
-                groupService.saveGroup(g);
-            }
-        }
-
         List groupEntries = groupService.getUserGroups();
-        it = groupEntries.iterator();
+        Iterator it = groupEntries.iterator();
         while (it.hasNext()) {
             UserGroup ge = (UserGroup)it.next();
             String roleName = ge.getRoleName();
@@ -758,7 +738,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 }
             }
         }
-        groups = groupService.getGroups();
+        List groups = groupService.getGroups();
         it = groups.iterator();
         while (it.hasNext()) {
             PortletGroup group = (PortletGroup)it.next();

@@ -24,10 +24,7 @@ public class PortletGroup implements Serializable, Cloneable {
     private String description = "";
     private boolean isCore = false;
 
-    // deprecated
-    private int type = 1;
-
-    private Type groupType = Type.PUBLIC;
+    private int type = Type.PUBLIC.getType();
 
     private Set portletRoleList = new HashSet();
 
@@ -47,6 +44,13 @@ public class PortletGroup implements Serializable, Cloneable {
             if (groupType.toUpperCase().equals("PUBLIC")) return PUBLIC;
             if (groupType.toUpperCase().equals("PRIVATE")) return PRIVATE;
             if (groupType.toUpperCase().equals("HIDDEN")) return HIDDEN;
+            throw new IllegalArgumentException("Unknown group type specified: " + groupType);
+        }
+
+        public static Type getType(int groupType) {
+            if (groupType == 1) return PUBLIC;
+            if (groupType == 2) return PRIVATE;
+            if (groupType == 3) return HIDDEN;
             throw new IllegalArgumentException("Unknown group type specified: " + groupType);
         }
 
@@ -90,7 +94,7 @@ public class PortletGroup implements Serializable, Cloneable {
         public String toString() {
             return "" + type;
         }
-        
+
         private Object readResolve() {
             Type m = Type.PUBLIC;
             switch (type) {
@@ -264,11 +268,11 @@ public class PortletGroup implements Serializable, Cloneable {
     }
 
     public void setType(Type type) {
-        this.groupType = type;
+        this.type = type.getType();
     }
 
     public Type getType() {
-        return groupType;
+        return Type.getType(type);
     }
 
     /**

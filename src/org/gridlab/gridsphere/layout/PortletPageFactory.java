@@ -367,9 +367,7 @@ public class PortletPageFactory implements PortletSessionListener {
     public PortletTabbedPane createNewUserPane(PortletRequest req, int cols, String tabName) {
 
         PortletTabbedPane pane = null;
-
         try {
-
             pane = getUserTabbedPane(req);
             int tabNum = PortletTab.DEFAULT_USERTAB_ORDER;
             if (pane == null) {

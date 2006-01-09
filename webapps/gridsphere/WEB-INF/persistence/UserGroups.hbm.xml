@@ -30,10 +30,12 @@
             column="sportletgroup"
             class="org.gridlab.gridsphere.portlet.PortletGroup">
         </many-to-one>
+        <!-- deprecated -->
         <many-to-one
             name="role"
             class="org.gridlab.gridsphere.portlet.PortletRole">
         </many-to-one>
+        <!-- deprecated -->
         <property name="roleName" type="string" column="roleName"/>
 
     </class>

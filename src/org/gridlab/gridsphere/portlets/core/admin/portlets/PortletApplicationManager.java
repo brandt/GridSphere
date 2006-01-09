@@ -189,7 +189,7 @@ public class PortletApplicationManager extends ActionPortlet {
 
     public void deployWebapp(FormEvent event) throws PortletException {
 
-        log.debug("in FileManagerPortlet: deployWebapp");
+        log.debug("in PortletApplicationManager: deployWebapp");
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         if (!req.getRoles().contains(PortletRole.SUPER)) return;
@@ -204,7 +204,7 @@ public class PortletApplicationManager extends ActionPortlet {
             tomcat.installWebApp(req, webappName);
 
             File pfile = new File(webappPath + webappName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
-            //System.err.println(webappPath + webappName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
+            System.err.println(webappPath + webappName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
             if (pfile.exists()) {
                 portletManager.initPortletWebApplication(webappName, req, res);
             }
