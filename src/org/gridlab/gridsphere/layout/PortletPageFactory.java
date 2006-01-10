@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -32,6 +33,7 @@ public class PortletPageFactory implements PortletSessionListener {
     private static PortletPageFactory instance = null;
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
     protected static PortalConfigService portalConfigService = null;
+    protected static GroupManagerService groupManagerService = null;
 
     private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
@@ -75,6 +77,7 @@ public class PortletPageFactory implements PortletSessionListener {
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
             portalConfigService = (PortalConfigService) factory.createPortletService(PortalConfigService.class, null, true);
+            groupManagerService = (GroupManagerService) factory.createPortletService(GroupManagerService.class, null, true);
         } catch (PortletServiceException e) {
             log.error("Unable to init portal config service! ", e);
             throw new PortletException("Unable to init portal config service! ", e);
@@ -211,20 +214,20 @@ public class PortletPageFactory implements PortletSessionListener {
         }
 
         // check for portlets no longer in groups and remove if necessary
-        /* @TODO CHECK PORTLETS TO REMOVE IF ROLES/GROUPS CHANGE
         List groups = (List) req.getGroups();
         List allowedPortlets = new ArrayList();
         Iterator it = groups.iterator();
         while (it.hasNext()) {
-            PortletGroup g = (PortletGroup) it.next();
-            Set s = g.getPortletRoleList();
+            String groupName = (String) it.next();
+            PortletGroup group = groupManagerService.getGroup(groupName);
+            Set s = group.getPortletRoleList();
             Iterator sit = s.iterator();
             while (sit.hasNext()) {
                 SportletRoleInfo roleInfo = (SportletRoleInfo) sit.next();
                 allowedPortlets.add(roleInfo.getPortletClass());
             }
         }
-        */
+
 
         // create tmp page
         PortletPage tmpPage = new PortletPage();
@@ -237,7 +240,6 @@ public class PortletPageFactory implements PortletSessionListener {
             tmpPage.init(req, new ArrayList());
 
             // when deleting must reinit everytime
-            /* @TODO CHECK PORTLETS TO REMOVE IF ROLES/GROUPS CHANGE
             int i = 0;
             boolean found;
             while (i < tmpPage.getComponentIdentifierList().size()) {
@@ -258,7 +260,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 }
                 i++;
             }
-            */
+
             tmpPane.save();
             return tmpPane;
         } catch (Exception e) {

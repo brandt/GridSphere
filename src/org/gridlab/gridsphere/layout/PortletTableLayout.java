@@ -121,7 +121,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
     }
 
     public Map getAvailablePortletsToAdd(GridSphereEvent event) {
-        System.err.println("in getAvailablePortlteToAdd");
+        //System.err.println("in getAvailablePortlteToAdd");
         PortletRegistry registry = PortletRegistry.getInstance();
         PortletRequest req = event.getPortletRequest();
         Locale locale = req.getLocale();
