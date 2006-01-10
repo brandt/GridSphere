@@ -41,7 +41,10 @@ Build include file for the GridSphere Portal source code, see build.xml
               file="${gswebapp.dir}/WEB-INF/CustomPortal/database/hibernate.properties"
               filtering="true"/>
         <copy todir="${build.webapps}/gridsphere">
-            <fileset dir="${gswebapp.dir}"/>
+            <fileset dir="${gswebapp.dir}">
+                <exclude name="**/tlds/**"/>
+                <exclude name="**/test/**"/>
+            </fileset>
         </copy>
         <antcall target="modify-webxml"/>
 
