@@ -352,7 +352,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         try {
             render = Class.forName("org.gridlab.gridsphere.layout.view." + renderKit + "." + renderClassName).newInstance();
         } catch (Exception e) {
-            log.error("Problems using files for renderkit: '"+renderKit+"' renderclass: "+renderClassName+" Reason: "+e.getMessage());
+            log.error("Problems using files for renderkit: '"+renderKit+"' renderclass: "+renderClassName+" Reason: ", e);
         }
         return render;
     }
