@@ -121,14 +121,11 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
     }
 
     public Map getAvailablePortletsToAdd(GridSphereEvent event) {
+        System.err.println("in getAvailablePortlteToAdd");
         PortletRegistry registry = PortletRegistry.getInstance();
         PortletRequest req = event.getPortletRequest();
         Locale locale = req.getLocale();
-
-        //PrintWriter out = res.getWriter();
-
         List groups = (List) req.getGroups();
-
         Map availPortlets = new HashMap();
         Iterator it = groups.iterator();
         while (it.hasNext()) {
@@ -141,13 +138,10 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
             while (sit.hasNext()) {
                 SportletRoleInfo info = (SportletRoleInfo) sit.next();
                 String appID = PortletRegistry.getApplicationPortletID(info.getPortletClass());
-
                 //System.err.println("info class= " + info.getPortletClass());
-
                 PortletRole reqRole = info.getSportletRole();
-
                 //System.err.println("role= " + info.getSportletRole());
-                if (req.getRoles().contains(reqRole))
+                if (req.getRoles().contains(reqRole.getName()))
                     if (!availPortlets.containsKey(appID)) {
                         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
                         if (appPortlet != null) {
@@ -155,7 +149,6 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
                             ConcretePortlet concPortlet = appPortlet.getConcretePortlet(appID);
                             if (concPortlet != null) {
                                 String dispName = concPortlet.getDisplayName(locale);
-
                                 //System.err.println("show portlet = " + dispName);
                                 availPortlets.put(appID, dispName);
                             }
