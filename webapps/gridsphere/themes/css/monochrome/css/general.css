@@ -123,7 +123,7 @@ SORTABLE TABLES
 
 table.sortable a.sortheader {
     background-color: inherit;
-    color: #FFFFFF;
+    color: #666;
     display: block;
     font-weight: bold;
     text-decoration: none;
@@ -131,7 +131,7 @@ table.sortable a.sortheader {
 }
 
 table.sortable span.sortarrow {
-    color: white;
+    color: black;
     text-decoration: none;
 }
 
@@ -150,45 +150,39 @@ input, select, textarea {
 /* settings for the WHOLE 1st level tab menu */
 .tab-pane {
     /* image for the background behind 1st level tabs*/
-    background: url("/gridsphere/themes/css/default/images/spacer.gif") repeat-x bottom;	
+    background: url("/gridsphere/themes/css/monochrome/images/spacer.gif") repeat-x bottom;	
     font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;
     font-size: 11px;
     font-weight: normal;
 }
 /* sets the left space of the 1st tab of 1st level tab menu */
 .tab-pane ul {
-    padding-left: 2px;
+    padding-left: 0px;
 }
 /* sets the space between 1st level tabs */
 .tab-pane ul li {
-    padding-right: 2px;
+    padding-right: 0px;
 }
 /* settings for the ACTIVE tab in 1st level tab menu */
 .tab-pane ul li .tab-active {
     /* left border image for the active 1st level tab */
-    background: url("/gridsphere/themes/css/default/images/tab-active-left.gif") left top no-repeat;
-    font-weight: bold;
-    color: black;
+    background: url("/gridsphere/themes/css/monochrome/images/tab-active-left.gif") left top no-repeat;
+    font-weight: normal;
+    color: white;
 }
 .tab-pane ul li .tab-active span {
     /* right border image for the active 1st level tab */
-    background: url("/gridsphere/themes/css/default/images/tab-active-right.gif") right top no-repeat;
+    background: url("/gridsphere/themes/css/monochrome/images/tab-active-right.gif") right top no-repeat;
 }
 
 /* settings for INACTIVE tabs in 1st level tab menu */
 .tab-pane ul a {
     /* left border image for inactive 1st level tabs */
-    background: url("/gridsphere/themes/css/default/images/tab-inactive-left.gif") left top no-repeat;
-    text-decoration: none;
-    color: #000;
-}
-.tab-pane ul a:hover {
-    /* hover color for inactive 1st level tabs */
-    color: #000;
+    background: url("/gridsphere/themes/css/monochrome/images/tab-inactive-left.gif") left top no-repeat;
 }
 .tab-pane ul a span {
     /* right border image for inactive 1st level tabs */
-    background: url("/gridsphere/themes/css/default/images/tab-inactive-right.gif") right top no-repeat;
+    background: url("/gridsphere/themes/css/monochrome/images/tab-inactive-right.gif") right top no-repeat;
     color: #000;
 }
 
@@ -199,7 +193,7 @@ input, select, textarea {
 /* settings for the WHOLE 2nd level tab menu */
 .tab-sub-pane {
     /* image for the background of the 2nd level tabs */
-    background: url("/gridsphere/themes/css/default/images/sub-tab.gif") repeat-x;
+    background: url("/gridsphere/themes/css/monochrome/images/sub-tab.gif") repeat-x;
     font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;
     font-size: 11px;
     font-weight: normal;
@@ -216,8 +210,8 @@ a.tab-sub-active:hover {
     color: blue;
 }
 a.tab-sub-active {
-    color: black;
-    font-weight: bold;
+    color: white;
+    font-weight: normal;
 }
 
 /* settings for INACTIVE tabs in 2nd level tab menu */
@@ -239,14 +233,14 @@ PORTLET WINDOWS
 
 /* settings for the INACTIVE portlet window TITLE colors */
 .window-title-inactive {
-    background-color: #6699CC; 
-    border-color: #0053e2;
+    background-color: #b6b6b6; 
+    border-color: #000000;
 }
 
 /* settings for the ACTIVE portlet window TITLE colors */
 .window-title-active {
-    background-color: #6699CC; 
-    border-color: #0053e2;
+    background-color: #b6b6b6; 
+    border-color: #000000;
 }
 
 /* settings for the portlet window TITLE NAME font and colors */
@@ -260,7 +254,7 @@ PORTLET WINDOWS
 /* settings for the portlet window CONTENT colors*/
 .window-content {
     background-color: #eeeeee;
-    border-color: #0053e2;
+    border-color: #000000;
 }
 
 /*-------------------------------------------------
@@ -268,47 +262,47 @@ PORTLET ELEMENTS
 -------------------------------------------------*/
 
 .portlet-frame-actions {
-  border-color: #CCCCFF;
+  border-color: #000;
   color: #000000;
 }
 
 .portlet-frame-info {
-  border-color: #CCCCFF;
+  border-color: #000;
   color: #000000;
 }
 
 .portlet-frame-alert {
-  border-color: #CCCCFF;
+  border-color: #000;
   color: darkorange;
 }
 
 .portlet-frame-error {
-  border-color: #CCCCFF;
+  border-color: #000;
   color: darkred;
 }
 
 .portlet-frame-title {
-  background-color: #CCCCFF;
+  background-color: #d6d6d6d;
   color: #000000;
 }
 
 .portlet-frame-header {
-  background-color: #CCCCFF;
+  background-color: #d6d6d6d;
   color: #000000;
 }
 
 .portlet-frame-header-checkbox {
-  background-color: #CCCCFF;
+  background-color: #d6d6d6d;
   color: #FFFFFF;
 }
 
 .portlet-frame-label {
-  background-color: #CCCCFF;
+  background-color: #d6d6d6d;
   color: #000000;
 }
 
 .portlet-frame-label-alert {
-  background-color: #CCCCFF;
+  background-color: #d6d6d6d;
   color: darkred;
 }
 
@@ -343,7 +337,7 @@ PORTLET ELEMENTS
 }
 
 .portlet-frame-entry-checkbox {
-  background-color: #CCCCFF;
+  background-color: #FFFFFF;
   color: #000000;
 }
 
@@ -397,8 +391,8 @@ PORTLET ELEMENTS
   Table or section header
 ********************************************* */
 .portlet-section-header {
-  background-color: #69a8e7;
-  border-color: #0053e2;
+  background-color: #b6b6b6;
+  border-color: #000;
   color: #000000;
 }
 
@@ -406,7 +400,7 @@ PORTLET ELEMENTS
   Normal text in a table cell
 ********************************************* */
 .portlet-section-body {
-  background-color: eee;
+  background-color: inherit;
   color: inherit;
 }
 
@@ -414,7 +408,7 @@ PORTLET ELEMENTS
   Text in every other row in the table
 ********************************************* */
 .portlet-section-alternate {
-   background-color: #ddd;
+   background-color: #e0e0e0;
    color: inherit;
 }
 
@@ -427,7 +421,7 @@ PORTLET ELEMENTS
   color, margins, etc.
 ********************************************* */
 .portlet-menu{
-    border-color: #0053e2;
+    border-color: #000;
 }
 
 /* *********************************************
@@ -444,7 +438,7 @@ PORTLET ELEMENTS
 
 #actiontabpane {
   background-color: #eeeeee;
-  border-color: #0035e2;
+  border-color: #000;
   color: #000000;
 }
 
@@ -453,15 +447,15 @@ PORTLET ELEMENTS
 ********************************************* */
 
 #actiontabmenu li {
-  background-color: #69a8e7;
-  border-color: #0053e2;
+  background-color: #b6b6b6;
+  border-color: #000;
   color: #ffffff;
   font-weight: bold;
 }
 
 #actiontabmenu a:link,
 #actiontabmenu a:visited {
-  background-color: #69a8e7;
+  background-color: #b6b6b6;
   color: #ffffff;
 }
 
@@ -476,7 +470,7 @@ PORTLET ELEMENTS
 
 #actiontabselected li {
   background-color: #eeeeee;
-  border-color: #0053e2;
+  border-color: #000;
   color: #000000;
   font-weight: bold;
 }
@@ -515,12 +509,12 @@ html>body #actiontabclear {
 PAGE HEADER AND LOGO
 -------------------------------------------------*/
 .header {
-    background-color: #D6D6D6;
+    background-color: #FFFFFF;
 }
 
 #page-logo {
-    background: #d6d6d6;
-    color: #0079b8;
+    background: #FFFFFF;
+    color: #7B7B7B;
     font-size: 36px;
     font-weight: normal;
     padding-top: 3px;
