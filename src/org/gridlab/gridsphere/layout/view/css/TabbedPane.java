@@ -78,11 +78,12 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
     public StringBuffer doRenderTab(GridSphereEvent event, PortletTabbedPane tabPane, PortletTab tab) {
         // this really creates the individual tabs
         StringBuffer pane = new StringBuffer();
+        String path = event.getPortletRequest().getContextPath() + "/themes/" + tabPane.getRenderKit() + "/" + tabPane.getTheme() + "/images/"; /// Removed File.separator(s)
         String link = tab.createTabTitleLink(event);
         String lang = event.getPortletRequest().getLocale().getLanguage();
         String title = tab.getTitle(lang);
         if (tabPane.getStyle().equals("sub-menu")) {
-            pane.append("\n<!-- START SUB MENU TAB --><li>");
+            pane.append("\n<li>");
             if (tab.isSelected()) {
                 pane.append("<a class=\"tab-sub-active\" href=\"" + link + "\"" + " onclick=\"this.href='" + link + "&amp;JavaScript=enabled'\">");                
                 pane.append("<span class=\"tab-sub-menu-active\">" + replaceBlanks(title) + "</span></a>");            
@@ -111,6 +112,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         PortletTabbedPane tabPane = (PortletTabbedPane)component;
         StringBuffer pane = new StringBuffer();
         if (tabPane.getStyle().equals("sub-menu")) {
+            String path = event.getPortletRequest().getContextPath() + "/themes/" + tabPane.getRenderKit() + "/" + tabPane.getTheme() + "/images/"; /// Removed File.separator(s)
             pane.append("</ul>");
             // unuseful empty DIV commented out
             //pane.append("<div class=\"tab-empty\">&nbsp;</div>");            

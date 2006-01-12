@@ -51,23 +51,21 @@
             <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
         </ui:actionlink>&nbsp;&nbsp;
         &nbsp;&nbsp;<ui:text key="PORTLET_STOP"/>&nbsp;&nbsp;
-        &nbsp;&nbsp;<ui:text key="PORTLET_REMOVE"/>&nbsp;&nbsp;
-        &nbsp;&nbsp;<ui:text key="PORTLET_RELOAD"/>&nbsp;&nbsp;
       <% } else { %>
         &nbsp;&nbsp;<ui:text key="PORTLET_START"/>&nbsp;&nbsp;
         &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_STOP">
             <ui:actionparam name="operation" value="stop"/>
             <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
         </ui:actionlink>&nbsp;&nbsp;
-        &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_REMOVE">&nbsp;&nbsp;
-            <ui:actionparam name="operation" value="remove"/>
-            <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
-        </ui:actionlink>
+      <% } %>
         &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_RELOAD">
             <ui:actionparam name="operation" value="reload"/>
             <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
         </ui:actionlink>&nbsp;&nbsp;
-      <% } %>
+        &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_REMOVE">&nbsp;&nbsp;
+            <ui:actionparam name="operation" value="remove"/>
+            <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
+        </ui:actionlink>
     <% } %>
     </ui:tablecell>
     </ui:tablerow>
@@ -146,7 +144,7 @@
 <ui:form>
     <ui:frame>
         <ui:tablerow>
-            <ui:tablecell width="100">
+            <ui:tablecell width="100%">
                 <ui:text key="PORTLET_WEBAPP_MSG"/>&nbsp;
                 <ui:textfield beanId="webappNameTF" size="20" maxlength="20"/>
                 <ui:actionsubmit action="deployWebapp" key="PORTLET_DEPLOY"/>
