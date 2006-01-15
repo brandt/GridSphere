@@ -24,7 +24,7 @@ public interface User {
     public static final String THEME = "gridsphere.user.theme";
 
     public static final String DISABLED = "gridsphere.user.disabled";
-    
+
     /**
      * Returns the value of the attribute with the given name,
      * or null if no attribute with the given name exists.
@@ -33,6 +33,14 @@ public interface User {
      * @return the attribute value
      */
     public Object getAttribute(String name);
+
+    /**
+     * Sets the value of the attribute with the given name,
+     *
+     * @param name  the attribute name
+     * @param value the attribute value
+     */
+    public void setAttribute(String name, String value);
 
     /**
      * Returns an enumeration of names of all attributes available to this
@@ -51,6 +59,14 @@ public interface User {
     public String getFamilyName();
 
     /**
+     * Sets the family (aka last) name of the user.
+     *
+     * @param familyName the family name
+     */
+    public void setFamilyName(String familyName);
+
+
+    /**
      * Returns the full name of the user, or null if the full name is not
      * available. The full name contains given names, family names and possibly
      * a title or suffix. Therefore, the full name may be different from the
@@ -61,6 +77,15 @@ public interface User {
     public String getFullName();
 
     /**
+     * Sets the full name of the user, or null if the full name is not available.
+     * The full name contains given names, family names and possibly a title or suffix.
+     * Therefore, the full name may be different from the concatenation of given and family name.
+     *
+     * @param fullName the full name
+     */
+    public void setFullName(String fullName);
+
+    /**
      * Returns the given (aka first) name of the user, or null if the given
      * name is not available.
      *
@@ -69,11 +94,27 @@ public interface User {
     public String getGivenName();
 
     /**
+     * Sets the given (aka first) name of the user, or  if the given name is not available.
+     *
+     * @param givenName the given name
+     */
+    public void setGivenName(String givenName);
+
+
+    /**
      * Returns the organization affiliation association of the user
      *
      * @return the organization name
      */
     public String getOrganization();
+
+    /**
+     * Sets the organization the user belongs to
+     *
+     * @param organization the organization name
+     */
+    public void setOrganization(String organization);
+
 
     /**
      * Returns the given e-mail of the user or <code>null</code> if none
@@ -84,11 +125,27 @@ public interface User {
     public String getEmailAddress();
 
     /**
+     * Sets the given e-mail of the user.
+     *
+     * @param emailAddress the email address
+     */
+    public void setEmailAddress(String emailAddress);
+
+
+    /**
      * Returns the internal unique user id.
      *
      * @return the internal unique user id
      */
     public String getID();
+
+    /**
+     * Sets the internal unique user id.
+     *
+     * @param id the internal unique id
+     */
+    public void setID(String id);
+
 
     /**
      * Returns the user id of the user, or <code>null</code> if the user id
@@ -100,6 +157,13 @@ public interface User {
     public String getUserID();
 
     /**
+     * Sets the user id of the user, or null if the user id is not available.
+     *
+     * @param userID the user id
+     */
+    public void setUserID(String userID);
+
+    /**
      * This is an alias for the getUserID method, which for all intensive
      * purposes represents the name required for this user to login.
      *
@@ -107,6 +171,15 @@ public interface User {
      * @see #getUserID
      */
     public String getUserName();
+
+
+    /**
+     * This is an alias for the setUserID method, which for all intensive
+     * purposes represents the name required for this user to login.
+     *
+     * @param userName the user name
+     */
+    public void setUserName(String userName);
 
     /**
      * Returns the point of time that this user was last logged in, or
@@ -116,6 +189,16 @@ public interface User {
      * @return the last login time
      */
     public long getLastLoginTime();
+
+    /**
+     * Sets the point of time that this user was last logged in, or null if this
+     * information is not available. The time is returned in number of milliseconds
+     * since January 1, 1970 GMT.
+     *
+     * @param lastLoginTime the last login time
+     */
+    public void setLastLoginTime(long lastLoginTime);
+
 
     /**
      * Returns a <code>String</code> representation of the User

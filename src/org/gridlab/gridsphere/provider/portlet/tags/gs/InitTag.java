@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portlet.PortletContext;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletContext;
-import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 
 import javax.servlet.ServletRequest;
@@ -29,7 +29,7 @@ public class InitTag extends TagSupport {
         PortletRequest portletRequest = null;
         if (req instanceof HttpServletRequest) {
             HttpServletRequest hReq = (HttpServletRequest) req;
-            portletRequest = new SportletRequestImpl(hReq);
+            portletRequest = new SportletRequest(hReq);
             pageContext.setAttribute("portletRequest", portletRequest);
         }
         ServletResponse res = pageContext.getResponse();

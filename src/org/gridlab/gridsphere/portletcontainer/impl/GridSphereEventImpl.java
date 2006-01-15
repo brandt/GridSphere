@@ -36,7 +36,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
     public GridSphereEventImpl(PortletContext ctx, HttpServletRequest req, HttpServletResponse res) {
 
-        portletRequest = new SportletRequestImpl(req);
+        portletRequest = new SportletRequest(req);
         portletResponse = new SportletResponse(res, portletRequest);
         portletContext = ctx;
 

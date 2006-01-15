@@ -54,15 +54,7 @@ public class PortletSessionManager implements HttpSessionListener {
      * @param event The session event
      */
     public void sessionDestroyed(HttpSessionEvent event) {
-        //loginService.sessionDestroyed(event.getSession());
         log.debug("sessionDestroyed('" + event.getSession().getId() + "')");
-        //HttpSession session = event.getSession();
-        //User user = (User) session.getAttribute(SportletProperties.PORTLET_USER);
-        //System.err.println("user : " + user.getUserID() + " expired!");
-        //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();
-        //engine.removeUser(user);
-        //engine.logoutPortlets(event);
-        //synchronized (sessions) {
         String id = event.getSession().getId();
         if (id != null) {
             List sessionListeners = (List) sessions.get(id);
@@ -86,38 +78,18 @@ public class PortletSessionManager implements HttpSessionListener {
         } else {
             log.info("Not sure why sessionDestroyed listener provides null session id!");
         }
-
         //dumpSessions();
     }
 
     public void addSessionListener(String sessionId, PortletSessionListener sessionListener) {
         log.debug("adding session listener for : " + sessionId + " " + sessionListener.getClass());
-
         List sessionListeners = (List) sessions.get(sessionId);
-
-        if (sessionListeners == null) {
-            //log.debug("session listeners null for id " + sessionId);
-            sessionListeners = new ArrayList();
-        }
-
+        if (sessionListeners == null) sessionListeners = new ArrayList();
         sessionListeners.add(sessionListener);
-
         sessions.put(sessionId, sessionListeners);
         //dumpSessions();
     }
 
-    /*
-    public void removeSessionListener(String sessionId, PortletSessionListener sessionListener) {
-        log.debug("removing session listener for : " + sessionId + " " + sessionListener.getClass());
-
-        List sessionListeners = (List)sessions.get(sessionId);
-        if (sessionListeners != null) {
-            sessionListeners.remove(sessionListener);
-        }
-        sessions.put(sessionId, sessionListeners);
-        dumpSessions();
-    }
-    */
     public synchronized void dumpSessions() {
         log.debug("PortletSessionManager Session information:");
         log.debug("# current sessions: " + sessions.size());

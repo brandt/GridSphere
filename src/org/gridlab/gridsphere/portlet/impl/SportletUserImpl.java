@@ -9,6 +9,7 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.portlet.User;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
@@ -26,7 +27,7 @@ import java.util.Map;
  * This implementation of <code>SportletUserImpl</code> uses Castor for Java to SQL
  * bindings
  */
-public class SportletUserImpl implements SportletUser, HttpSessionBindingListener {
+public class SportletUserImpl implements User, HttpSessionBindingListener {
 
 
     private String oid = null;

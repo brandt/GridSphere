@@ -311,7 +311,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
         // if user is required then pass in Guest user privileges
         if (def.getUserRequired()) {
-            return createUserPortletService(service, GuestUser.getInstance(), servletContext, useCachedService);
+            return createUserPortletService(service, null, servletContext, useCachedService);
         }
 
         /* Create the service implementation */
@@ -399,7 +399,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             throw new PortletServiceNotFoundException("Unable to create service: " + serviceName + " user is null");
         }
 
-        if ((user instanceof GuestUser) && (initServices.containsKey(serviceName))) {
+        if ((user == null) && (initServices.containsKey(serviceName))) {
             return (PortletService) initServices.get(serviceName);
         }
 
@@ -455,7 +455,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             throw new PortletServiceNotFoundException("The SportletServiceFactory was unable to initialize the portlet service: " + serviceImpl, e);
         }
 
-        if (user instanceof GuestUser) {
+        if (user == null) {
             initServices.put(serviceName, psp);
             return psp;
         }

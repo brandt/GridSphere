@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlets.core.login;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.event.ActionEvent;
 
 import java.io.IOException;
 import java.util.Locale;

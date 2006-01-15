@@ -127,7 +127,7 @@ public abstract class PortletAdapter extends Portlet {
 
         PortletData data = null;
         User user = request.getUser();
-        if (!(user instanceof GuestUser)) {
+        if (user != null) {
             try {
                 data = dataManager.getPortletData(user, portletID);
                 request.setAttribute(SportletProperties.PORTLET_DATA, data);

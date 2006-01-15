@@ -25,12 +25,12 @@ public class PortletRole implements Serializable, Cloneable {
     private String roleName = null;
     private String description = "";
 
-    private static final String GUEST_ROLE_STRING = "GUEST";
+    //private static final String GUEST_ROLE_STRING = "GUEST";
     private static final String USER_ROLE_STRING = "USER";
     private static final String ADMIN_ROLE_STRING = "ADMIN";
     private static final String SUPER_ROLE_STRING = "SUPER";
 
-    public static final PortletRole GUEST = new PortletRole(GUEST_ROLE_STRING);
+    //public static final PortletRole GUEST = new PortletRole(GUEST_ROLE_STRING);
     public static final PortletRole USER = new PortletRole(USER_ROLE_STRING);
     public static final PortletRole ADMIN = new PortletRole(ADMIN_ROLE_STRING);
     public static final PortletRole SUPER = new PortletRole(SUPER_ROLE_STRING);

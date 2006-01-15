@@ -10,7 +10,6 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
@@ -52,25 +51,10 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      *
      * @return a blank user
      */
-    public SportletUser createUser() {
+    public User createUser() {
         SportletUserImpl user = new SportletUserImpl();
         saveSportletUserImpl(user);
         return user;
-    }
-
-
-    /**
-     * Creates a new user
-     *
-     * @return a blank user
-     */
-    public SportletUser editUser(User user) {
-        SportletUserImpl newuser = null;
-        if (user instanceof SportletUserImpl) {
-            SportletUserImpl u = (SportletUserImpl) user;
-            newuser = this.getSportletUserImpl(u.getOid());
-        }
-        return newuser;
     }
 
     /**

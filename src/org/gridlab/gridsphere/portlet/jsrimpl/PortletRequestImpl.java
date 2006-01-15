@@ -264,7 +264,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             create = true;
         }
 
-        if (create && portletSession == null) {
+        if (create && (portletSession == null)) {
             httpSession = this.getHttpServletRequest().getSession(create);
             if (httpSession != null) {
                 portletSession = new PortletSessionImpl(this.getHttpServletRequest(), httpSession, portletContext);
@@ -754,13 +754,6 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the prefered Locale in which the portal will accept content.
      */
     public java.util.Locale getLocale() {
-        /*
-        Locale locale = (Locale) this.getPortletSession(true).getAttribute(SportletProperties.LOCALE);
-        if (locale != null) return locale;
-        locale = this.getHttpServletRequest().getLocale();
-        if (locale != null) return locale;
-        return Locale.ENGLISH;
-        */
         Locale locale = (Locale) this.getPortletSession(true).getAttribute(User.LOCALE);
         if (locale != null) return locale;
         User user = (User) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_USER);

@@ -8,7 +8,6 @@ package org.gridlab.gridsphere.portletcontainer.impl;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.PortletData;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletData;
@@ -51,7 +50,7 @@ public class SportletDataManager implements PortletDataManager {
      */
     public PortletData getPortletData(User user, String portletID) throws PersistenceManagerException {
 
-        if (user instanceof GuestUser) return null;
+        if (user == null) return null;
 
         String command =
                 "select u from " + SportletData.class.getName() + " u where u.UserID='" + user.getID() + "' and u.PortletID='" + portletID + "'";

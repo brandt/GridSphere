@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.portlets.core.admin.setup;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.MessageBoxBean;
@@ -108,7 +107,7 @@ public class GridSphereSetupPortlet extends ActionPortlet {
         } catch (PortletException e) {
             return;
         }
-        SportletUser  accountRequest = this.userManagerService.createUser();
+        User  accountRequest = this.userManagerService.createUser();
         accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
         accountRequest.setFullName(event.getTextFieldBean("fullName").getValue());
         accountRequest.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());

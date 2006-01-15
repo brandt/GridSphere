@@ -8,7 +8,6 @@ import org.gridlab.gridsphere.layout.PortletPage;
 import org.gridlab.gridsphere.layout.PortletTab;
 import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
@@ -193,10 +192,9 @@ public class UserLayoutPortlet extends ActionPortlet {
         String theme = themeLB.getSelectedValue();
 
         User user = req.getUser();
-        SportletUser acctReq = userManagerService.editUser(user);
         if (user != null) {
-            acctReq.setAttribute(User.THEME, theme);
-            userManagerService.saveUser(acctReq);
+            user.setAttribute(User.THEME, theme);
+            userManagerService.saveUser(user);
         }
 
         PortletPage page = layoutMgr.getPortletPage(req);

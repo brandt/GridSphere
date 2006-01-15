@@ -269,11 +269,7 @@ public class PortletServlet extends HttpServlet
         User user = (User) request.getAttribute(SportletProperties.PORTLET_USER);
         Map userInfo;
 
-        if (user == null) {
-            user = GuestUser.getInstance();
-        } else if (user instanceof GuestUser) {
-            userInfo = null;
-        } else {
+        if (user != null) {
             userInfo = new HashMap();
             userInfo.putAll(userKeys);
             if (userInfo.containsKey("user.name")) userInfo.put("user.name", user.getUserName());

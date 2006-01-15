@@ -99,47 +99,51 @@ public class PortletManager implements PortletManagerService {
     }
 
     public synchronized void init() throws PortletServiceUnavailableException {
-        context = GridSphereConfig.getServletContext();
+        if (!isInitialized) {
+            log.debug("in init of PM");
+            context = GridSphereConfig.getServletContext();
 
-        String portletsPath = context.getRealPath(PORTLETS_PATH);
-        File f = new File(portletsPath);
-        if (f.exists() && f.isDirectory()) {
-            webappFiles = f.list();
+            String portletsPath = context.getRealPath(PORTLETS_PATH);
+            File f = new File(portletsPath);
+            if (f.exists() && f.isDirectory()) {
+                webappFiles = f.list();
 
-            // sort webapps by priority
-            Arrays.sort(webappFiles, new WebappComparator());
+                // sort webapps by priority
+                Arrays.sort(webappFiles, new WebappComparator());
 
-            // get rid of any priority numbers
-            String webapp = "";
-            int idx;
-            for (int i = 0; i < webappFiles.length; i++) {
-                webapp = webappFiles[i];
-                if ((idx = webapp.lastIndexOf(".")) > 0) {
-                    webappFiles[i] = webapp.substring(0, idx);
-                }
-            }
-
-            for (int i = 0; i < webappFiles.length; i++) {
-
-                try {
+                // get rid of any priority numbers
+                String webapp = "";
+                int idx;
+                for (int i = 0; i < webappFiles.length; i++) {
                     webapp = webappFiles[i];
-
-                    // forget about readme file !
-                    if (webapp.startsWith("README")) continue;
-                    System.err.println("Creating webapp for " + webapp);
-                    PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
-                    addWebApp(portletWebApp);
-                } catch (PortletException e) {
-                    log.error("Unable to create portlet web application: " + webapp);
-                    throw new PortletServiceUnavailableException("Unable to create portlet web application: " + webapp, e);
+                    if ((idx = webapp.lastIndexOf(".")) > 0) {
+                        webappFiles[i] = webapp.substring(0, idx);
+                    }
                 }
-            }
+                /*
+                for (int i = 0; i < webappFiles.length; i++) {
 
-        } else {
-            log.error("Portlet application " + portletsPath + " does not exist!");
-            throw new PortletServiceUnavailableException("Portlet application " + portletsPath + " does not exist!");
+                    try {
+                        webapp = webappFiles[i];
+
+                        // forget about readme file !
+                        if (webapp.startsWith("README")) continue;
+                        System.err.println("Creating webapp for " + webapp);
+                        PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
+                        addWebApp(portletWebApp);
+                        System.err.println("END Creating webapp for " + webapp);
+                    } catch (PortletException e) {
+                        log.error("Unable to create portlet web application: " + webapp);
+                        throw new PortletServiceUnavailableException("Unable to create portlet web application: " + webapp, e);
+                    }
+                }
+                 */
+            } else {
+                log.error("Portlet application " + portletsPath + " does not exist!");
+                throw new PortletServiceUnavailableException("Portlet application " + portletsPath + " does not exist!");
+            }
+            isInitialized = true;
         }
-        isInitialized = true;
     }
 
     /**
@@ -148,11 +152,7 @@ public class PortletManager implements PortletManagerService {
      * @param config the <code>PortletServiceConfig</code>
      */
     public synchronized void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        log.debug("in init()");
-
-        if (!isInitialized) {
-            init();
-        }
+        init();
     }
 
     /**

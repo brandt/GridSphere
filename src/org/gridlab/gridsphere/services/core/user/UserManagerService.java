@@ -4,7 +4,6 @@
 package org.gridlab.gridsphere.services.core.user;
 
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
 
 import java.util.List;
 
@@ -15,14 +14,7 @@ public interface UserManagerService extends LoginUserModule {
      *
      * @return a blank user
      */
-    public SportletUser createUser();
-
-    /**
-     * Edits an exising user
-     *
-     * @return existing user
-     */
-    public SportletUser editUser(User user);
+    public User createUser();
 
     /**
      * Adds a user

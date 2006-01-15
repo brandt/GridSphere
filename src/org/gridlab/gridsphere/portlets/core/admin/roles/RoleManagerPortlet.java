@@ -49,7 +49,7 @@ public class RoleManagerPortlet extends ActionPortlet {
         List roleList = this.roleManagerService.getRoles();
         req.setAttribute("roleList", roleList);
         List coreRolesList = new ArrayList();
-        coreRolesList.add(PortletRole.GUEST.getName());
+        //coreRolesList.add(PortletRole.GUEST.getName());
         coreRolesList.add(PortletRole.USER.getName());
         coreRolesList.add(PortletRole.ADMIN.getName());
         coreRolesList.add(PortletRole.SUPER.getName());

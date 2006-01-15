@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlets.core.admin.users;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
@@ -289,9 +288,6 @@ public class UserManagerPortlet extends ActionPortlet {
         User user = this.userManagerService.getUser(userId);
         if (user != null) {
             req.setAttribute("user", user);
-            //PortletGroup coreGroup = groupManagerService.getCoreGroup();
-            //PortletRole role = groupManagerService.getRoleInGroup(user, coreGroup);
-            //req.setAttribute("role", role.getName());
             this.userManagerService.deleteUser(user);
             this.passwordManagerService.deletePassword(user);
             List groups = this.groupManagerService.getGroups(user);
@@ -412,25 +408,22 @@ public class UserManagerPortlet extends ActionPortlet {
     private User saveUser(FormEvent event, User user) {
         log.debug("Entering saveUser()");
         // Account request
-        SportletUser newuser;
+
         boolean newuserflag = false;
         // Create edit account request
         if (user == null) {
-            newuser = this.userManagerService.createUser();
+            user = this.userManagerService.createUser();
             newuserflag = true;
-        } else {
-            //System.err.println("Creating account request for existing user");
-            newuser = this.userManagerService.editUser(user);
         }
 
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
         if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
-            PasswordEditor editor = passwordManagerService.editPassword(newuser);
+            PasswordEditor editor = passwordManagerService.editPassword(user);
             String password = event.getPasswordBean("password").getValue();
             boolean isgood = this.isInvalidPassword(event, newuserflag);
             if (isgood) {
                 setNextState(event.getPortletRequest(), DO_VIEW_USER_EDIT);
-                return newuser;
+                return user;
             } else {
                 if (!password.equals("")) {
                     editor.setValue(password);
@@ -440,19 +433,19 @@ public class UserManagerPortlet extends ActionPortlet {
         }
 
         // Edit account attributes
-        editAccountRequest(event, newuser);
+        editAccountRequest(event, user);
 
         // Submit changes
-        this.userManagerService.saveUser(newuser);
+        this.userManagerService.saveUser(user);
 
 
         // Save user role
-        saveUserRole(event, newuser);
+        saveUserRole(event, user);
         log.debug("Exiting saveUser()");
-        return newuser;
+        return user;
     }
 
-    private void editAccountRequest(FormEvent event, SportletUser accountRequest) {
+    private void editAccountRequest(FormEvent event, User accountRequest) {
         log.debug("Entering editAccountRequest()");
         accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
         //accountRequest.setFamilyName(event.getTextFieldBean("familyName").getValue());

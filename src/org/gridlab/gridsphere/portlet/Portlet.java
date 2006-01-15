@@ -373,7 +373,7 @@ public abstract class Portlet extends HttpServlet
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // create portlet request and response objects
-        PortletRequest portletRequest = new SportletRequestImpl(request);
+        PortletRequest portletRequest = new SportletRequest(request);
         PortletResponse portletResponse = new SportletResponse(response, portletRequest);
 
         

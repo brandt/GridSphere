@@ -26,31 +26,11 @@ public class UserSessionManager implements PortletSessionListener {
     }
 
     public void destroy() {
-        log.debug("Destroying all user sessions");
-        Set keys = userSessions.keySet();
-        Iterator it = keys.iterator();
-        while (it.hasNext()) {
-            String uid = (String) it.next();
-            List sessions = (List) userSessions.get(uid);
-            Iterator sit = sessions.iterator();
-            while (sit.hasNext()) {
-                PortletSession s = (PortletSession) sit.next();
-                try {
-                    s.invalidate();
-                } catch (IllegalStateException e) {
-                    log.debug("Session already invalidated");
-                }
-            }
-            userSessions.remove(uid);
-        }
+        userSessions.clear();
     }
 
     public List getSessions(User user) {
         return (List) userSessions.get(user.getID());
-    }
-
-    public List getSessions(String userid) {
-        return (List) userSessions.get(userid);
     }
 
     public void addSession(User user, PortletSession session) {
@@ -96,7 +76,6 @@ public class UserSessionManager implements PortletSessionListener {
     }
 
     public void logout(PortletSession session) {
-        log.debug("in logout");
         Set s = userSessions.keySet();
         Iterator it = s.iterator();
         while (it.hasNext()) {
@@ -105,56 +84,10 @@ public class UserSessionManager implements PortletSessionListener {
             log.debug("checking if user " + uid + " has session" + session.getId());
             if (sessions.contains(session)) {
                 log.debug("Logging out user: " + uid + " session: " + session.getId());
-                session.removeAttribute(SportletProperties.PORTLET_USER);
                 sessions.remove(session);
-                try {
-                    session.invalidate();
-                } catch (IllegalStateException e) {
-                    log.debug("Session already invalidated");
-                }
             }
         }
         //dumpSessions();
-    }
-
-    public void removeSessions(User user) {
-        log.debug("Removing session for user " + user.getID());
-        //List userSessions = (List)userSessions.get(user.getID());
-        List s = getSessions(user);
-        if (s != null) {
-            Iterator it = s.iterator();
-            while (it.hasNext()) {
-                PortletSession session = (PortletSession) it.next();
-                if (session != null) {
-                    try {
-                        session.invalidate();
-                    } catch (IllegalStateException e) {
-                        log.debug("session " + session.getId() + " for user " + user.getID() + " has already been invalidated!");
-                    }
-                }
-            }
-            userSessions.remove(user.getID());
-        }
-    }
-
-    public void removeSessions(String userid) {
-        log.debug("Removing session for user " + userid);
-        //List userSessions = (List)userSessions.get(user.getID());
-        List s = getSessions(userid);
-        if (s != null) {
-            Iterator it = s.iterator();
-            while (it.hasNext()) {
-                PortletSession session = (PortletSession) it.next();
-                if (session != null) {
-                    try {
-                        session.invalidate();
-                    } catch (IllegalStateException e) {
-                        log.debug("session " + session.getId() + " for user " + userid + " has already been invalidated!");
-                    }
-                }
-            }
-            userSessions.remove(userid);
-        }
     }
 
     public synchronized void dumpSessions() {

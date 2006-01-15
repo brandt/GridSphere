@@ -27,7 +27,7 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 
@@ -62,7 +62,7 @@ public class GridSphereFilter implements Filter {
                 portletManager.init();
                 // initialize all portlets
                 if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
-                    PortletRequest portletRequest = new SportletRequestImpl((HttpServletRequest)request);
+                    PortletRequest portletRequest = new SportletRequest((HttpServletRequest)request);
                     PortletResponse portletResponse = new SportletResponse((HttpServletResponse)response, portletRequest);
                     portletManager.initAllPortletWebApplications(portletRequest, portletResponse);
                 }

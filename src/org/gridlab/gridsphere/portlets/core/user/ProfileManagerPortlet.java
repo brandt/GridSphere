@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlets.core.user;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
@@ -464,7 +463,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         User user = req.getUser();
 
         // validate user entries to create an account request
-        SportletUser acctReq = validateUser(event);
+        User acctReq = validateUser(event);
         if (acctReq != null) {
             log.debug("approve account request for user: " + user.getID());
             userManagerService.saveUser(acctReq);
@@ -484,7 +483,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
     }
 
 
-    private SportletUser validateUser(FormEvent event) {
+    private User validateUser(FormEvent event) {
         log.debug("Entering validateUser()");
         PortletRequest req = event.getPortletRequest();
         User user = req.getUser();
@@ -536,21 +535,20 @@ public class ProfileManagerPortlet extends ActionPortlet {
         }
 
         log.debug("creating account request for user: " + user.getID());
-        SportletUser acctReq = userManagerService.editUser(user);
-        acctReq.setEmailAddress(eMail);
-        if (!userName.equals("")) acctReq.setUserName(userName);
-        acctReq.setFullName(fullName);
+        user.setEmailAddress(eMail);
+        if (!userName.equals("")) user.setUserName(userName);
+        user.setFullName(fullName);
         if (locale != null) {
             Locale loc = new Locale(locale, "", "");
-            acctReq.setAttribute(User.LOCALE, locale);
+            user.setAttribute(User.LOCALE, locale);
             req.getPortletSession(true).setAttribute(User.LOCALE, loc);
         }
 
-        if (timeZone != null) acctReq.setAttribute(User.TIMEZONE, timeZone);
-        if (organization != null) acctReq.setOrganization(organization);
+        if (timeZone != null) user.setAttribute(User.TIMEZONE, timeZone);
+        if (organization != null) user.setOrganization(organization);
 
         log.debug("Exiting validateUser()");
-        return acctReq;
+        return user;
     }
 
     private ListBoxItemBean makeLocaleBean(String language, String name, Locale locale) {

@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlets.core.login;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
@@ -15,7 +14,6 @@ import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
-import org.gridlab.gridsphere.services.core.security.group.impl.UserGroup;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
@@ -114,7 +112,7 @@ public class LoginPortlet extends ActionPortlet {
 
         //CheckBoxBean cb = event.getCheckBoxBean("remloginCB");
 
-        if (user instanceof GuestUser) {
+        if (user == null) {
             if (canUserCreateAccount) request.setAttribute("canUserCreateAcct", "true");
             PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
             boolean dispUser = Boolean.valueOf(settings.getAttribute(SEND_USER_FORGET_PASSWORD)).booleanValue();
@@ -130,7 +128,7 @@ public class LoginPortlet extends ActionPortlet {
         User user = request.getUser();
         PrintWriter out = response.getWriter();
 
-        if (user instanceof GuestUser) {
+        if (user == null) {
             out.println(getNextTitle(request));
         } else {
             out.println(getLocalizedText(request, "LOGIN_CONFIGURE"));
@@ -177,9 +175,8 @@ public class LoginPortlet extends ActionPortlet {
         User user = userManagerService.getUserByUserName(loginName);
         if (user != null) {
             System.err.println("user= " + user);
-            SportletUser suser = userManagerService.editUser(user);
-            suser.setAttribute(User.DISABLED, "true");
-            userManagerService.saveUser(suser);
+            user.setAttribute(User.DISABLED, "true");
+            userManagerService.saveUser(user);
 
             org.gridsphere.tmf.message.MailMessage mailToUser = tms.getMailMessage();
             StringBuffer body = new StringBuffer();
@@ -344,7 +341,7 @@ public class LoginPortlet extends ActionPortlet {
 
         // Create edit account request
 
-        SportletUser newuser = this.userManagerService.createUser();
+        User newuser = this.userManagerService.createUser();
 
         // Edit account attributes
         newuser.setUserName(request.getAttribute("userName"));
