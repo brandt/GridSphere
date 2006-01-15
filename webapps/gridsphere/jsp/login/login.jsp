@@ -30,6 +30,7 @@
                 <ui:tablecell/>
             </ui:tablerow>
     </ui:table>
+
     <p>
     <input type="checkbox" name="remlogin" value="yes"/><ui:text key="LOGIN_REMEMBER_ME"/>
     </p>

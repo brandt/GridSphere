@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.portlet;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.servlets.GridSphereServletTest;
 
 /**
@@ -32,7 +32,7 @@ public class PortletRequestTest extends GridSphereServletTest {
     }
 
     public void testCreatePortletRequest() {
-        SportletRequestImpl req = new SportletRequestImpl(request);
+        SportletRequest req = new SportletRequest(request);
         assertNotNull(req);
     }
 

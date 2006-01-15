@@ -1,6 +1,5 @@
 <%@ page import="java.util.List,
                  java.util.Iterator,
-                 org.gridlab.gridsphere.services.core.registry.impl.tomcat.TomcatWebAppResult,
                  org.gridlab.gridsphere.services.core.registry.impl.tomcat.TomcatWebAppDescription" %>
 
 <%@ taglib uri="/portletUI" prefix="ui" %>
