@@ -78,7 +78,7 @@ public class PortletLayoutEngine {
         res.setContentType("text/html; charset=utf-8"); // Necessary to display UTF-8 encoded characters
         res.setHeader("Cache-Control","no-cache"); //Forces caches to obtain a new copy of the page from the origin server
         res.setHeader("Cache-Control","no-store"); //Directs caches not to store the page under any circumstance
-        res.setDateHeader("Expires", 0); //Causes the proxy cache to see the page as "stale"
+        res.setHeader("Expires", "0"); //Causes the proxy cache to see the page as "stale"
         res.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
     }
 
@@ -132,7 +132,6 @@ public class PortletLayoutEngine {
 
     /**
      * Invoked by the GridSphereServlet to perform portlet logout of a users layout
-     * Currently does nothing
      *
      * @param event the gridsphere event
      * @see PortletPage#logoutPortlets
@@ -143,6 +142,7 @@ public class PortletLayoutEngine {
             PortletPage page = getPortletPage(event);
             page.logoutPortlets(event);
             registry.removeAllPortletFrames(event);
+            pageFactory.logStatistics();
         } catch (Exception e) {
             log.error("Unable to logout portlets", e);
         }

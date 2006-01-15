@@ -232,7 +232,6 @@ public class PortletPageFactory implements PortletSessionListener {
         // create tmp page
         PortletPage tmpPage = new PortletPage();
         try {
-
             //tmpPage.setLayoutDescriptor(userLayout + ".tmp");
             PortletTabbedPane tmpPane = (PortletTabbedPane) deepCopy(pane);
             tmpPage.setPortletTabbedPane(tmpPane);
@@ -357,9 +356,11 @@ public class PortletPageFactory implements PortletSessionListener {
             page.setTheme(defaultTheme);
         }
         User user = req.getUser();
-        String theme = (String) user.getAttribute(User.THEME);
-        if (theme != null) {
-            page.setTheme(theme);
+        if (user != null) {
+            String theme = (String) user.getAttribute(User.THEME);
+            if (theme != null) {
+                page.setTheme(theme);
+            }
         }
         if ((page.getTheme() == null) || (page.getTheme().equals(""))) {
             page.setTheme(DEFAULT_THEME);
@@ -476,8 +477,6 @@ public class PortletPageFactory implements PortletSessionListener {
         String sessionId = req.getPortletSession().getId();
         User user = req.getUser();
 
-        log.debug("User requesting layout: " + user.getUserName());
-
         String[] portletNames = req.getParameterValues("portletName");
 
         // Sun TCK test uses Jakarta Commons-HttpClient/2.0beta1
@@ -502,9 +501,9 @@ public class PortletPageFactory implements PortletSessionListener {
 
         Principal principal = req.getUserPrincipal();
         if (principal == null) {
-            //if (user instanceof GuestUser) {
+            log.debug("Creating a guest layout!!");
             return createFromGuestLayoutXML(req);
-        }
+        } 
 
         PortletPage page;
 
@@ -513,7 +512,6 @@ public class PortletPageFactory implements PortletSessionListener {
             page = (PortletPage) userLayouts.get(sessionId);
             log.debug("Returning existing layout for:" + sessionId + " for user=" + user.getUserName());
         } else {
-
             // Now the user is user so remove guest layout
             if (guests.containsKey(sessionId)) {
                 log.debug("Removing guest container for:" + sessionId);
@@ -521,10 +519,8 @@ public class PortletPageFactory implements PortletSessionListener {
             }
 
             page = createFromGroups(req);
-
             userLayouts.put(sessionId, page);
             sessionManager.addSessionListener(sessionId, this);
-
         }
         return page;
     }
@@ -638,7 +634,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public void logStatistics() {
 
-        log.debug("number of guest layouts: " + guests.size());
+        log.debug("\n\nnumber of guest layouts: " + guests.size());
         Iterator it = guests.keySet().iterator();
         while (it.hasNext()) {
             String id = (String) it.next();
