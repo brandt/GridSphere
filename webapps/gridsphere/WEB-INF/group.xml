@@ -8,10 +8,6 @@
         <required-role>USER</required-role>
     </portlet-role-info>
     <portlet-role-info>
-        <portlet-class>org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet.1</portlet-class>
-        <required-role>USER</required-role>
-    </portlet-role-info>
-    <portlet-role-info>
         <portlet-class>org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet.1</portlet-class>
         <required-role>USER</required-role>
     </portlet-role-info>
@@ -42,18 +38,6 @@
     <portlet-role-info>
         <portlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet.1</portlet-class>
         <required-role>ADMIN</required-role>
-    </portlet-role-info>
-    <portlet-role-info>
-        <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
-        <required-role>GUEST</required-role>
-    </portlet-role-info>
-    <portlet-role-info>
-        <portlet-class>org.gridlab.gridsphere.portlets.core.login.LogoutPortlet.1</portlet-class>
-        <required-role>USER</required-role>
-    </portlet-role-info>
-    <portlet-role-info>
-        <portlet-class>org.gridlab.gridsphere.portlets.core.locale.LocalePortlet.1</portlet-class>
-        <required-role>GUEST</required-role>
     </portlet-role-info>
     <portlet-role-info>
         <portlet-class>org.gridlab.gridsphere.portlets.core.messaging.MessagingServicesPortlet.1</portlet-class>

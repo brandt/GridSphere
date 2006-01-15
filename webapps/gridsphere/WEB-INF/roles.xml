@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <portlet-roles>
     <portlet-role>
-        <role-name>GUEST</role-name>
-    </portlet-role>
-    <portlet-role>
         <role-name>USER</role-name>
     </portlet-role>
     <portlet-role>
