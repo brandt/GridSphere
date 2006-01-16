@@ -182,7 +182,6 @@ public class SportletRequest extends HttpServletRequestWrapper implements Portle
      */
     public java.security.Principal getUserPrincipal() {
         UserPrincipal userPrincipal = (UserPrincipal)getAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
-        if (userPrincipal != null) System.err.println("getRemoteUSer" + userPrincipal.getName());
         return (userPrincipal != null) ? userPrincipal : this.getHttpServletRequest().getUserPrincipal();
     }
 
