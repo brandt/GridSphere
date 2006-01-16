@@ -24,7 +24,6 @@ public class GroupManagerServiceImpl implements PortletServiceProvider, GroupMan
 
     private String jdoGroupRequest = UserGroup.class.getName();
     private String jdoPortletGroup = PortletGroup.class.getName();
-    private String jdoPortletGroupType = PortletGroup.Type.class.getName();
 
     public GroupManagerServiceImpl() {
 
