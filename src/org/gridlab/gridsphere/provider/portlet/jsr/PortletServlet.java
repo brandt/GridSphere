@@ -592,7 +592,7 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         log.debug("contextName: " + ctx.getServletContextName());
         log.debug("context path: " + ctx.getRealPath(""));
         SportletServiceFactory factory = SportletServiceFactory.getInstance();
-        log.info("Shutting down services");
+        log.info("Shutting down services for webapp: " + webAppName);
         factory.shutdownServices(webAppName);
     }
 

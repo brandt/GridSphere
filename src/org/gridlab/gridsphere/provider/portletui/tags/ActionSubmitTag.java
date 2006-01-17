@@ -121,7 +121,6 @@ public class ActionSubmitTag extends ActionTag {
         if (parentTag instanceof ContainerTag) {
             ContainerTag containerTag = (ContainerTag) parentTag;
             containerTag.addTagBean(actionSubmitBean);
-
         }
         try {
             JspWriter out = pageContext.getOut();
