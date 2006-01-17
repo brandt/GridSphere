@@ -73,6 +73,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
     }
 
     public StringBuffer doRenderUserSelects(GridSphereEvent event, PortletTableLayout tableLayout) {
+	event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, tableLayout.getLabel());
         StringBuffer table = new StringBuffer();
         table.append("<tr><td valign=\"top\" width=\"100%\">");
         List components = tableLayout.getPortletComponents();
