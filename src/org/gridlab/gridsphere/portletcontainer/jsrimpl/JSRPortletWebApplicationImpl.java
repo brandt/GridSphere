@@ -111,7 +111,7 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
     public void destroy() {
         //log.debug("removing application tab :" + webApplicationName);
         //PortletTabRegistry.removeGroupTab(webApplicationName);
-        log.debug("unloading portlet services: ");
+        log.debug("unloading portlet services for : " + webApplicationName);
         SportletServiceFactory factory = SportletServiceFactory.getInstance();
         factory.shutdownServices(webApplicationName);
         PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);

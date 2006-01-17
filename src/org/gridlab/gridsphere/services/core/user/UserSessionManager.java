@@ -2,7 +2,6 @@ package org.gridlab.gridsphere.services.core.user;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 
 import java.util.*;

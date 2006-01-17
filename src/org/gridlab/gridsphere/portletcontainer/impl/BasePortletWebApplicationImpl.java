@@ -46,7 +46,7 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
      * Constructs an instance of a BasePortletWebApplicationImpl from a supplied
      * <code>ServletContext</code>
      *
-     * @param context            the <code>ServletContext</code>
+     * @param context the <code>ServletContext</code>
      */
     public BasePortletWebApplicationImpl(ServletContext context) throws PortletException {
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
@@ -54,7 +54,7 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
             roleManager = (RoleManagerService)factory.createPortletService(RoleManagerService.class, context, true);
             groupManager = (GroupManagerService)factory.createPortletService(GroupManagerService.class, context, true);
         } catch (PortletServiceException e) {
-            throw new PortletException("Unable to get instance of AccessControlManagerService!", e);
+            throw new PortletException("Unable to get instance of GroupManagerService and/or RoleManagerService", e);
         }
     }
 
@@ -161,20 +161,20 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
         String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");
         File f = new File(descriptor);
         if (f.exists()) {
-            if (loader != null) {
+            //if (loader != null) {
                 factory.addServices(webApplicationName, ctx, descriptor, loader);
-            } else {
-                factory.addServices(ctx, descriptor);
-            }
+            //} else {
+            //    factory.addServices(ctx, descriptor);
+            //}
         } else {
             descriptor = ctx.getRealPath("/WEB-INF/portlet-services");
             f = new File(descriptor);
             if (f.exists()) {
-                if (loader != null) {
+                //if (loader != null) {
                     factory.addServices(webApplicationName, ctx, descriptor, loader);
-                } else {
-                    factory.addServices(ctx, descriptor);
-                }
+                //} else {
+                //    factory.addServices(ctx, descriptor);
+                //}
             } else {
                 log.debug("Did not find PortletServices.xml or portlet-services directory for: " + ctx.getServletContextName());
             }

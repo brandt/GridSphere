@@ -10,6 +10,8 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletData;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.SportletData;
 import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
 
@@ -26,7 +28,7 @@ public class SportletDataManager implements PortletDataManager {
      * Default instantiation is disallowed
      */
     private SportletDataManager() {
-        pm = PersistenceManagerFactory.createGridSphereRdbms();    
+        pm = PersistenceManagerFactory.createGridSphereRdbms();
     }
 
     /**

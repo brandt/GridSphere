@@ -258,26 +258,6 @@ public class SportletContext implements PortletContext {
     }
 
     /**
-     * This function looks up a portlet service with the given classname.
-     * The returned service is a service wrapper that contains the User object
-     * which can be used for method level access control using the
-     * <code>PortletServiceAuthorizer</code>.
-     *
-     * @param service the classname of the service to load
-     * @param user    the user requesting a service instance
-     * @return the portlet service
-     * @throws PortletServiceUnavailableException
-     *          if an exception has occurrred
-     *          that interferes with the portlet service's normal initialization
-     * @throws PortletServiceNotFoundException
-     *          if the PortletService is not found
-     */
-    public PortletService getService(Class service, User user)
-            throws PortletServiceUnavailableException, PortletServiceNotFoundException {
-        return factory.createUserPortletService(service, user, context, true);
-    }
-
-    /**
      * Returns the major version of the PortletInfo API that this portlet
      * container supports.
      *

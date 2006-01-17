@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi;
 
-import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
@@ -38,28 +37,29 @@ public interface PortletServiceFactory {
      *          if the portlet service is unavailable
      * @throws PortletServiceNotFoundException
      *          if the PortletService is not found
+     *
+     * @deprecated Use createPortletService(Class service, boolean useCachedService) instead
      */
     public PortletService createPortletService(Class service,
                                                ServletContext servletContext,
                                                boolean useCachedService)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException;
-
+    
     /**
-     * Creates a user portlet service and initializes it
+     * Creates a portlet service and initializes it
      *
      * @param service          the class of the service
-     * @param servletContext   the servlet configuration
-     * @param useCachedService boolean reuse a previous initialized service if <code>true</code>,
+     * @param useCachedService reuse a previous initialized service if <code>true</code>,
      *                         otherwise create a new service instance if <code>false</code>
      * @return the instantiated portlet service
      * @throws PortletServiceUnavailableException
      *          if the portlet service is unavailable
      * @throws PortletServiceNotFoundException
      *          if the PortletService is not found
+     *
      */
-    public PortletService createUserPortletService(Class service, User user,
-                                                   ServletContext servletContext,
-                                                   boolean useCachedService)
+    public PortletService createPortletService(Class service,
+                                               boolean useCachedService)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException;
 
 }

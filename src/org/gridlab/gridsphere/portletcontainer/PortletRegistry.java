@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import java.util.*;
