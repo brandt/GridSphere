@@ -183,8 +183,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     public List init(PortletRequest req, List list) {
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
-            cacheService = (CacheService) factory.createPortletService(CacheService.class, null, true);
-            roleService = (RoleManagerService)factory.createPortletService(RoleManagerService.class, null, true);
+            cacheService = (CacheService) factory.createPortletService(CacheService.class, true);
+            roleService = (RoleManagerService)factory.createPortletService(RoleManagerService.class, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }

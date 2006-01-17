@@ -76,8 +76,8 @@ public class PortletPageFactory implements PortletSessionListener {
         }
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
-            portalConfigService = (PortalConfigService) factory.createPortletService(PortalConfigService.class, null, true);
-            groupManagerService = (GroupManagerService) factory.createPortletService(GroupManagerService.class, null, true);
+            portalConfigService = (PortalConfigService) factory.createPortletService(PortalConfigService.class, true);
+            groupManagerService = (GroupManagerService) factory.createPortletService(GroupManagerService.class, true);
         } catch (PortletServiceException e) {
             log.error("Unable to init portal config service! ", e);
             throw new PortletException("Unable to init portal config service! ", e);

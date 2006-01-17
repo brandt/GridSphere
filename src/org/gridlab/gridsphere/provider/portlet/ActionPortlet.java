@@ -82,28 +82,8 @@ public class ActionPortlet extends AbstractPortlet {
     protected String getNextState(PortletRequest request) {
         String id = request.getPortletSettings().getConcretePortletID();
         String state = (String) request.getAttribute(id + ".state");
-        if (state == null) {
-            state = DEFAULT_VIEW_PAGE;
-            /*
-            log.debug("no state was set!!");
-            Portlet.Mode m = request.getMode();
-            System.err.println("in getNEXTSTATE id=" + id + " mode=" + m);
-            if (m.equals(Portlet.Mode.VIEW)) {
-                state = DEFAULT_VIEW_PAGE;
-            } else if (m.equals(Portlet.Mode.HELP)) {
-                state = DEFAULT_HELP_PAGE;
-            }  else if (m.equals(Portlet.Mode.CONFIGURE)) {
-                state = DEFAULT_CONFIGURE_PAGE;
-            } else if (m.equals(Portlet.Mode.EDIT)) {
-                state = DEFAULT_EDIT_PAGE;
-            } else {
-                state = DEFAULT_VIEW_PAGE;
-                log.error("in ActionPortlet: couldn't get portlet mode in getNextState()");
-            }
-            */
-        } else {
-            log.debug("in ActionPortlet: in getNextState: a page has been set to:" + state);
-        }
+        if (state == null) state = DEFAULT_VIEW_PAGE;
+        log.debug("in ActionPortlet: in getNextState: a page has been set to:" + state);
         return state;
     }
 

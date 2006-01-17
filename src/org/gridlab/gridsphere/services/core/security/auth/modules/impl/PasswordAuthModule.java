@@ -33,7 +33,7 @@ public class PasswordAuthModule extends BaseAuthModule implements LoginAuthModul
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         // Get instance of password manager service
         try {
-            this.passwordManager = (PasswordManagerService) factory.createPortletService(PasswordManagerService.class, null, true);
+            this.passwordManager = (PasswordManagerService) factory.createPortletService(PasswordManagerService.class, true);
         } catch (Exception e) {
             log.error("Unable to get instance of password manager service!", e);
         }

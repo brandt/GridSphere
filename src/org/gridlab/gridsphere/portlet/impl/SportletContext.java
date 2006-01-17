@@ -254,7 +254,7 @@ public class SportletContext implements PortletContext {
      */
     public PortletService getService(Class service)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
-        return factory.createPortletService(service, context, true);
+        return factory.createPortletService(service, true);
     }
 
     /**

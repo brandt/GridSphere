@@ -102,7 +102,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             try {
                 PortletServiceFactory factory = SportletServiceFactory.getInstance();
                 Class loginModClass = Class.forName(loginClassName);
-                activeLoginModule = (LoginUserModule) factory.createPortletService(loginModClass, config.getServletContext(), true);
+                activeLoginModule = (LoginUserModule) factory.createPortletService(loginModClass, true);
             } catch (ClassNotFoundException e) {
                 log.error("Unable to create class from class name: " + loginClassName, e);
             } catch (PortletServiceNotFoundException e) {

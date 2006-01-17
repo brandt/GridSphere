@@ -309,7 +309,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
         req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
-        //isVisible = false;
     }
 
     public StringBuffer getBufferedOutput(PortletRequest req) {

@@ -51,8 +51,8 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
     public BasePortletWebApplicationImpl(ServletContext context) throws PortletException {
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
-            roleManager = (RoleManagerService)factory.createPortletService(RoleManagerService.class, context, true);
-            groupManager = (GroupManagerService)factory.createPortletService(GroupManagerService.class, context, true);
+            roleManager = (RoleManagerService)factory.createPortletService(RoleManagerService.class, true);
+            groupManager = (GroupManagerService)factory.createPortletService(GroupManagerService.class, true);
         } catch (PortletServiceException e) {
             throw new PortletException("Unable to get instance of GroupManagerService and/or RoleManagerService", e);
         }

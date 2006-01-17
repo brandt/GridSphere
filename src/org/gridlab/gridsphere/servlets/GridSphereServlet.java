@@ -110,20 +110,20 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
     public synchronized void initializeServices() throws PortletServiceException {
-        requestService = (RequestService) factory.createPortletService(RequestService.class, getServletConfig().getServletContext(), true);
+        requestService = (RequestService) factory.createPortletService(RequestService.class, true);
         log.debug("Creating access control manager service");
-        roleService = (RoleManagerService) factory.createPortletService(RoleManagerService.class, getServletConfig().getServletContext(), true);
-        groupService = (GroupManagerService) factory.createPortletService(GroupManagerService.class, getServletConfig().getServletContext(), true);
+        roleService = (RoleManagerService) factory.createPortletService(RoleManagerService.class, true);
+        groupService = (GroupManagerService) factory.createPortletService(GroupManagerService.class, true);
 
         // create root user in default group if necessary
         log.debug("Creating user manager service");
-        userManagerService = (UserManagerService) factory.createPortletService(UserManagerService.class, getServletConfig().getServletContext(), true);
+        userManagerService = (UserManagerService) factory.createPortletService(UserManagerService.class, true);
 
-        loginService = (LoginService) factory.createPortletService(LoginService.class, getServletConfig().getServletContext(), true);
+        loginService = (LoginService) factory.createPortletService(LoginService.class, true);
         log.debug("Creating portlet manager service");
-        portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, getServletConfig().getServletContext(), true);
+        portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, true);
 
-        trackerService = (TrackerService) factory.createPortletService(TrackerService.class, getServletConfig().getServletContext(), true);
+        trackerService = (TrackerService) factory.createPortletService(TrackerService.class, true);
     }
 
     /**

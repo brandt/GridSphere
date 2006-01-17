@@ -149,7 +149,7 @@ public class PortletServlet extends HttpServlet
 
         // load in any authentication modules if found-- this is a GridSphere extension
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
-        LoginService loginService = (LoginService)factory.createPortletService(LoginService.class, ctx, true);
+        LoginService loginService = (LoginService)factory.createPortletService(LoginService.class, true);
         InputStream is = this.getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
         if (is != null) {
             String authModulePath = this.getServletContext().getRealPath("/WEB-INF/authmodules.xml");

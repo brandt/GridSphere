@@ -778,7 +778,7 @@ public class ActionPortlet extends GenericPortlet {
 
     public PortletService createPortletService(Class serviceClass) throws PortletServiceException {
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
-        return factory.createPortletService(serviceClass, null, true);
+        return factory.createPortletService(serviceClass, true);
     }
 
 }

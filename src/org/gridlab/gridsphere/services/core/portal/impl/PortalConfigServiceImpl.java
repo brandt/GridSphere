@@ -45,7 +45,7 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
             PortletServiceFactory factory = SportletServiceFactory.getInstance();
             try {
                 GroupManagerService aclService =
-                        (GroupManagerService)factory.createPortletService(GroupManagerService.class, null, true);
+                        (GroupManagerService)factory.createPortletService(GroupManagerService.class, true);
                 defaultGroups.add(aclService.getCoreGroup());
             } catch (PortletServiceNotFoundException e) {
                 log.error("No core group found!!");

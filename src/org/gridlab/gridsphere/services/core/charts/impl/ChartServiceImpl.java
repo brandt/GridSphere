@@ -36,7 +36,7 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
             
             PortletServiceFactory factory = SportletServiceFactory.getInstance();
             try {
-                secureDirectoryService = (SecureDirectoryService)factory.createPortletService(SecureDirectoryService.class, config.getServletContext(), true);
+                secureDirectoryService = (SecureDirectoryService)factory.createPortletService(SecureDirectoryService.class, true);
             } catch (PortletServiceException e) {
                 throw new PortletServiceUnavailableException("Unable to get instance of SecureDirectoryService!", e);
             }

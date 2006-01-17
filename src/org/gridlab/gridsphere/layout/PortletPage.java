@@ -231,7 +231,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
 
-            cacheService = (CacheService) factory.createPortletService(CacheService.class, null, true);
+            cacheService = (CacheService) factory.createPortletService(CacheService.class, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }

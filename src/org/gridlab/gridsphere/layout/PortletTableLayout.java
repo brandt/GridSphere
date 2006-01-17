@@ -48,7 +48,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         tableView = (TableLayoutView)getRenderClass("TableLayout");
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
-            groupService = (GroupManagerService)factory.createPortletService(GroupManagerService.class, null, true);
+            groupService = (GroupManagerService)factory.createPortletService(GroupManagerService.class, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
