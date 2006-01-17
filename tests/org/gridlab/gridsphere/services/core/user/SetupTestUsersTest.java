@@ -8,16 +8,14 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import java.util.List;
 
 public class SetupTestUsersTest extends SetupRootUserTest {
 
     protected UserManagerService rootUserService = null;
-    protected AccessControlManagerService rootACLService = null;
+    //protected AccessControlManagerService rootACLService = null;
 
     protected User jason = null;
     protected PortletGroup coreGroup = null;
@@ -39,7 +37,7 @@ public class SetupTestUsersTest extends SetupRootUserTest {
         try {
             super.testLoginRootUser();
             rootUserService = (UserManagerService) factory.createPortletService(UserManagerService.class, context, true);
-            rootACLService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, context, true);
+            //rootACLService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, context, true);
         } catch (PortletServiceException e) {
             fail("Unable to initialize user services");
         }
@@ -47,7 +45,7 @@ public class SetupTestUsersTest extends SetupRootUserTest {
     }
 
     protected void createUsers() {
-
+        /*
         coreGroup = rootACLService.getCoreGroup();
         assertNotNull(coreGroup);
 
@@ -69,6 +67,7 @@ public class SetupTestUsersTest extends SetupRootUserTest {
         rootUserService.saveUser(oliverRequest);
 
         jason = rootUserService.getUserByUserName("jason");
+        */
     }
 
     public void testCreateTestUsers() {

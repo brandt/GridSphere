@@ -36,7 +36,6 @@ public class GridSphereTest extends ServletTestCase {
         TestSuite suite = new TestSuite();
 
         suite.addTest(new GridSphereServletTest("testInitGridSphere"));
-//        suite.addTest(new PortletDescriptorTest("testPortletDescriptor"));
         suite.addTest(new ServiceDescriptorTest("testServiceDescriptor"));
         suite.addTest(new SetupRootUserTest("testLoginRootUser"));
         suite.addTest(new SetupTestUsersTest("testCreateTestUsers"));
