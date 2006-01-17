@@ -79,6 +79,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
     }
 
     public StringBuffer doRenderUserSelects(GridSphereEvent event, PortletTableLayout tableLayout) {
+	event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, tableLayout.getLabel());
         StringBuffer table = new StringBuffer();
         table.append("<div class=\"table\">");
         List components = tableLayout.getPortletComponents();
