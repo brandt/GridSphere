@@ -275,7 +275,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
 
         // see if we already have an instance of this service
         if (service == null) {
-            throw new PortletServiceUnavailableException("Received null service class");
+            throw new IllegalArgumentException("Received null service class");
         }
 
         String serviceName = service.getName();
@@ -313,28 +313,28 @@ public class SportletServiceFactory implements PortletServiceFactory {
         } catch (InstantiationException e) {
             // InstantiationException - if this Class represents an abstract class, an interface, an array class, a primitive type, or void; or if the class has no nullary constructor; or if the instantiation fails for some other reason. 
             log.error("Unable to create portlet service: " + serviceImpl, e);
-            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl + " Class represents an abstract class, an interface, an array class, a primitive type, or void; or if the class has no nullary constructor; or if the instantiation fails for some other reason.", e);
+            throw new PortletServiceUnavailableException("Unable to create portlet service: " + serviceImpl + " Class represents an abstract class, an interface, an array class, a primitive type, or void; or if the class has no nullary constructor; or if the instantiation fails for some other reason.", e);
         } catch (IllegalAccessException e) {
             // IllegalAccessException - if the class or its nullary constructor is not accessible. 
             log.error("Unable to create portlet service: " + serviceImpl, e);
-            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl + " class or its nullary constructor is not accessible.", e);
+            throw new PortletServiceUnavailableException("Unable to create portlet service: " + serviceImpl + " class or its nullary constructor is not accessible.", e);
         } catch (ClassNotFoundException e) {
             log.error("Unable to create portlet service: " + serviceImpl, e);
-            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl + " Class not found.", e);
+            throw new PortletServiceUnavailableException("Unable to create portlet service: " + serviceImpl + " Class not found.", e);
         } catch (ExceptionInInitializerError e) {
             // the initialization provoked by this method fails.
             log.error("Unable to create portlet service: " + serviceImpl, e);
-            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl + " the initialization provoked by this method fails.", e);
+            throw new PortletServiceUnavailableException("Unable to create portlet service: " + serviceImpl + " the initialization provoked by this method fails.", e);
         } catch (Exception e) {
             log.error("Unable to create portlet service: " + serviceImpl, e);
-            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl, e);
+            throw new PortletServiceUnavailableException("Unable to create portlet service: " + serviceImpl, e);
         }
 
         try {
             psp.init(portletServiceConfig);
         } catch (PortletServiceUnavailableException e) {
             log.error("Unable to initialize portlet service: " + serviceImpl, e);
-            throw new PortletServiceNotFoundException("Unable to initialize portlet service: " + serviceImpl, e);
+            throw new PortletServiceUnavailableException("Unable to initialize portlet service: " + serviceImpl, e);
         }
 
         initServices.put(serviceName, psp);
