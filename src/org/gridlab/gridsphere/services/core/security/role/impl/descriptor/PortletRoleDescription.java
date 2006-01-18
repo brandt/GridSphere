@@ -8,6 +8,7 @@ import java.util.Set;
 public class PortletRoleDescription {
 
     private String roleName = "";
+    private String roleDescription = "";
 
     public PortletRoleDescription() {
     }
@@ -20,4 +21,11 @@ public class PortletRoleDescription {
         return roleName;
     }
 
+    public String getRoleDescription() {
+        return roleDescription;
+    }
+
+    public void setRoleDescription(String roleDescription) {
+        this.roleDescription = roleDescription;
+    }
 }

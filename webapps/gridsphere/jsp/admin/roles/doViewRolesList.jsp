@@ -18,6 +18,7 @@
     <ui:table sortable="true" zebra="true" maxrows="25">
                 <ui:tablerow header="true">
                     <ui:tablecell><ui:text key="ROLENAME"/></ui:tablecell>
+                    <ui:tablecell><ui:text key="ROLEDESC"/></ui:tablecell>
                     <ui:tablecell><ui:text key="ROLEDEL"/></ui:tablecell>
                 </ui:tablerow>
 <%
@@ -35,6 +36,9 @@
                             <% } else { %>
                                 <ui:text value="<%= role.getName() %>"/>
                             <% } %>
+                        </ui:tablecell>
+                        <ui:tablecell>
+                            <ui:text value="<%= role.getDescription() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
                             <% if (!coreRoles.contains(role.getName().toUpperCase())) { %>

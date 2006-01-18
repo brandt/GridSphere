@@ -21,6 +21,9 @@
         <field name="RoleName" type="string">
             <bind-xml name="role-name"/>
         </field>
+        <field name="RoleDescription" type="string">
+            <bind-xml name="role-description"/>
+        </field>
     </class>
 
 </mapping>

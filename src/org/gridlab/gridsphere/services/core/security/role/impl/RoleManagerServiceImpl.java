@@ -24,9 +24,7 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
 
     private String jdoUserRoles = UserRole.class.getName();
 
-    public RoleManagerServiceImpl() {
-
-    }
+    public RoleManagerServiceImpl() {}
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         pm = PersistenceManagerFactory.createGridSphereRdbms();

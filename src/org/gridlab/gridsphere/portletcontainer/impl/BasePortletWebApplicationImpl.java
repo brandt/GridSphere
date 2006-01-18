@@ -139,7 +139,13 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
                 Iterator it = portletRoles.iterator();
                 while (it.hasNext()) {
                     PortletRole role = (PortletRole)it.next();
-                    if (roleManager.getRole(role.getName()) == null) roleManager.saveRole(role);
+                    PortletRole existingRole = roleManager.getRole(role.getName());
+                    if (existingRole != null) {
+                        existingRole.setDescription(role.getDescription());
+                        roleManager.saveRole(existingRole);
+                    } else {
+                        roleManager.saveRole(role);
+                    }
                 }
                 log.info("Loaded a role descriptor");
             } catch (Exception e) {

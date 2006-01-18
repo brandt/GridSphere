@@ -9,8 +9,6 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.services.core.security.role.impl.descriptor.PortletRoleCollection;
-import org.gridlab.gridsphere.services.core.security.role.impl.descriptor.PortletRoleDescription;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +18,6 @@ import java.util.Iterator;
 public class PortletRoleDescriptor {
 
     private PortletRoleCollection roleCollection = null;
-    private PersistenceManagerXml pmXML = null;
     private static String roleMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/role-mapping.xml");
     private List portletRoles;
 
@@ -31,7 +28,7 @@ public class PortletRoleDescriptor {
     }
 
     public PortletRoleDescriptor(String descriptorFile) throws IOException, PersistenceManagerException {
-        pmXML = PersistenceManagerFactory.createPersistenceManagerXml(descriptorFile, roleMappingFile);
+        PersistenceManagerXml pmXML = PersistenceManagerFactory.createPersistenceManagerXml(descriptorFile, roleMappingFile);
         roleCollection = (PortletRoleCollection) pmXML.load();
         portletRoles = new ArrayList();
         List roles = roleCollection.getPortletRolesList();
@@ -40,6 +37,7 @@ public class PortletRoleDescriptor {
             PortletRoleDescription roleDesc = (PortletRoleDescription)it.next();
             String roleName = roleDesc.getRoleName();
             PortletRole role = new PortletRole(roleName);
+            role.setDescription(roleDesc.getRoleDescription());
             portletRoles.add(role);
         }
     }
