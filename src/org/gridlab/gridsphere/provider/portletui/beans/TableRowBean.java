@@ -116,9 +116,8 @@ public class TableRowBean extends BeanContainer implements TagBean {
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<tr");
-        if (align != null) sb.append(" layout=\"" + align + "\"");
+        if (align != null) sb.append(" align=\"").append(align).append("\"");   // todo check usage of 'layout' instead of 'align' ??
         if (valign != null) sb.append(" valign=\"" + valign + "\"");
-
         //sb.append(">");
         if (isHeader) {
             sb.append(" class=\"" + TABLE_HEADER_STYLE + "\"");
@@ -132,6 +131,8 @@ public class TableRowBean extends BeanContainer implements TagBean {
                 //setBeanStyles(TABLE_NORMAL_STYLE);
             }
         }
+        sb.append(getFormattedCss());
+
 
         sb.append(">");
 
