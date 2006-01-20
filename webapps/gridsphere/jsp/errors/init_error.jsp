@@ -4,9 +4,10 @@
 <%@ include file="/WEB-INF/CustomPortal/layouts/html/pagehead.html" %>
 
 <h2>GridSphere portal failed to initialize!</h2>
+
 <p>
-<br/>
-	<%= error.getMessage() %>
-	<b>Stack Trace:</b><br/>
-        <% error.printStackTrace(new java.io.PrintWriter(out)); %>
+    <br/>
+    <%= error.getMessage() %>
+    <b>Stack Trace:</b><br/>
+    <% error.printStackTrace(new java.io.PrintWriter(out)); %>
 </p>

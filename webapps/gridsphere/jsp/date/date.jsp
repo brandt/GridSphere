@@ -6,7 +6,7 @@
 
 
 <table>
-<tr><td align="center">
-<ui:text value="<%= date %>"/>
-</td></tr>
+    <tr><td align="center">
+        <ui:text value="<%= date %>"/>
+    </td></tr>
 </table>

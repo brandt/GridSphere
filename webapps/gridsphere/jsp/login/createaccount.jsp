@@ -62,8 +62,8 @@
                 <ui:textfield beanId="organization"/>
             </ui:tablecell>
         </ui:tablerow>
-        
-<% if (request.getAttribute("savePass") != null)  { %>
+
+        <% if (request.getAttribute("savePass") != null) { %>
 
         <ui:tablerow>
             <ui:tablecell width="200">
@@ -82,7 +82,7 @@
                 <ui:password beanId="confirmPassword"/>
             </ui:tablecell>
         </ui:tablerow>
- <% } %>
+        <% } %>
 
     </ui:frame>
 

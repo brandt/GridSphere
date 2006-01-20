@@ -1,4 +1,3 @@
-
 <%@ taglib uri="/portletUI" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
@@ -12,8 +11,6 @@
 
 
 <body>
-
-
 
 
 </body>

@@ -1,13 +1,13 @@
-<%@ page import="java.util.Locale"%>
+<%@ page import="java.util.Locale" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
 <portletAPI:init/>
 
-    <ui:panel>
-        <ui:frame beanId="errorFrame"/>
+<ui:panel>
+    <ui:frame beanId="errorFrame"/>
 
-        <ui:fileform action="uploadFile">
+    <ui:fileform action="uploadFile">
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell width="100">
@@ -28,9 +28,9 @@
                 <ui:tablecell/>
             </ui:tablerow>
         </ui:frame>
-        </ui:fileform>
+    </ui:fileform>
 
-        <ui:form>
+    <ui:form>
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell width="300">
@@ -55,5 +55,5 @@
                 <ui:tablecell/>
             </ui:tablerow>
         </ui:frame>
-        </ui:form>
-    </ui:panel>
+    </ui:form>
+</ui:panel>

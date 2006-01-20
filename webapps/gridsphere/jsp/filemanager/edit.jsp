@@ -5,19 +5,19 @@
 
 <ui:form>
     <p>
-    <ui:hiddenfield beanId="fileName"/>
+        <ui:hiddenfield beanId="fileName"/>
     </p>
     <ui:panel>
 
         <ui:frame beanId="editError"/>
 
         <ui:frame>
-        <ui:tablerow>
-            <ui:tablecell width="50%">
-                <ui:text beanId="msg"/>
-            </ui:tablecell>
-            <ui:tablecell/>
-        </ui:tablerow>
+            <ui:tablerow>
+                <ui:tablecell width="50%">
+                    <ui:text beanId="msg"/>
+                </ui:tablecell>
+                <ui:tablecell/>
+            </ui:tablerow>
         </ui:frame>
 
         <ui:frame>

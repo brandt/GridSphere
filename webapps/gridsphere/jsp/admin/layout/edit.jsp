@@ -4,45 +4,47 @@
 
 <jsp:useBean id="name" class="java.lang.String" scope="request"/>
 
-<% Boolean allowImport = (Boolean)request.getAttribute("allowImport"); %>
+<% Boolean allowImport = (Boolean) request.getAttribute("allowImport"); %>
 
 <portletAPI:init/>
 
 <ui:messagebox beanId="msg"/>
 
 <ui:form>
-<h3><ui:text key="LAYOUTMGR_GROUP_EDIT" style="nostyle"/>&nbsp; <%= name %></h3>
-<p>
-<ui:hiddenfield beanId="layoutHF"/>
-<ui:hiddenfield beanId="typeHF"/>
-</p>
+    <h3><ui:text key="LAYOUTMGR_GROUP_EDIT" style="nostyle"/>&nbsp; <%= name %></h3>
 
-<% if (allowImport.booleanValue()) { %>
-<p>
-<ui:text key="LAYOUTMGR_IMPORT"/>
+    <p>
+        <ui:hiddenfield beanId="layoutHF"/>
+        <ui:hiddenfield beanId="typeHF"/>
+    </p>
 
-<ui:listbox beanId="appsLB"/>
+    <% if (allowImport.booleanValue()) { %>
+    <p>
+        <ui:text key="LAYOUTMGR_IMPORT"/>
 
-<ui:actionsubmit action="importLayout" key="APPLY"/>
-</p>
-<p>
+        <ui:listbox beanId="appsLB"/>
+
+        <ui:actionsubmit action="importLayout" key="APPLY"/>
+    </p>
+
+    <p>
 
 
-<% } %>
+        <% } %>
 
-<ui:textarea beanId="layoutFile" rows="30" cols="80"/>
-</p>
+        <ui:textarea beanId="layoutFile" rows="30" cols="80"/>
+    </p>
 
-<ui:table>
+    <ui:table>
 
-<ui:tablerow>
-<ui:tablecell>
-<ui:actionsubmit action="saveLayout" key="SAVE"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:actionsubmit action="cancelLayout" key="CANCEL"/>
-</ui:tablecell>
-</ui:tablerow>
-</ui:table>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:actionsubmit action="saveLayout" key="SAVE"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:actionsubmit action="cancelLayout" key="CANCEL"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:table>
 
 </ui:form>

@@ -9,10 +9,10 @@
 <ui:text key="SETUP_MSG2"/>
 
 <ui:form>
-<p>
-<ui:hiddenfield beanId="userID"/>
-<ui:hiddenfield beanId="newuser"/>
-</p>
+    <p>
+        <ui:hiddenfield beanId="userID"/>
+        <ui:hiddenfield beanId="newuser"/>
+    </p>
     <ui:frame>
 
         <ui:tablerow>
@@ -51,9 +51,9 @@
             </ui:tablecell>
         </ui:tablerow>
 
-        </ui:frame>
+    </ui:frame>
 
-        <ui:frame>
+    <ui:frame>
         <ui:tablerow>
             <ui:tablecell width="200">
                 <ui:text key="PASSWORD"/>
@@ -71,9 +71,9 @@
                 <ui:password beanId="confirmPassword"/>
             </ui:tablecell>
         </ui:tablerow>
-        </ui:frame>
+    </ui:frame>
 
-<ui:frame>
+    <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
                 <ui:actionsubmit action="doSavePortalAdmin" key="SAVE"/>

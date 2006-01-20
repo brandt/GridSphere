@@ -1,4 +1,3 @@
-
 <%@ taglib uri="/portletUI" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
@@ -26,92 +25,98 @@ A recommended best practice for portlet development is to separate logic from pr
 programming all the presentation logic in the appropriate doView, doEdit, etc. method of the portlet and then
 including a JSP page responsible for the presentation via the following call: <p>
 
-<code>
-    public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {<br/>
-    ...<br/>
+    <code>
+        public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {<br/>
+        ...<br/>
         getPortletConfig().getContext().include("/jsp/any.jsp", request, response);<br/>
-    }<br/>
-</code>
-</p>
-<p>
-In the "any.jsp" file, the following JSP would be included to load in the tag library:
-</p>
-<p>
-<code>
-&lt;%@ taglib uri="/portletWidgets" prefix="gs" %&gt;<br/>
-&lt;%@ taglib uri="/portletAPI" prefix="portletAPI" %&gt;<br/>
-<br/>
-&lt;portletAPI:init/&gt;<br/>
-</code>
+        }<br/>
+    </code>
 </p>
 
 <p>
-Lines 1 and 2 indicate that the portletWidgets and portletAPI tag libraries are to be used and line 3
-must be called to make the necessary portlet objects i.e. PortletRequest available to the JSP.
+    In the "any.jsp" file, the following JSP would be included to load in the tag library:
+</p>
+
+<p>
+    <code>
+        &lt;%@ taglib uri="/portletWidgets" prefix="gs" %&gt;<br/>
+        &lt;%@ taglib uri="/portletAPI" prefix="portletAPI" %&gt;<br/>
+        <br/>
+        &lt;portletAPI:init/&gt;<br/>
+    </code>
+</p>
+
+<p>
+    Lines 1 and 2 indicate that the portletWidgets and portletAPI tag libraries are to be used and line 3
+    must be called to make the necessary portlet objects i.e. PortletRequest available to the JSP.
 </p>
 <br/>
 The prefix is used to reference the tag library later on e.g. to use the portletWidgets form tag:
 <p>
-<code>&lt;gs:form ... &gt;
+    <code>&lt;gs:form ... &gt;
 
-      &lt;/gs:form&gt;
+        &lt;/gs:form&gt;
 
-</code>
+    </code>
 </p>
+
 <p>
 </p>
+
 <h3>Creating Actions</h3>
 
 <h4>Action Links</h4>
 The simplest tag is the <b>actionlink</b> tag:
 <p>
-<code>&lt;gs:actionlink <b>action</b>="actionlink" <b>label</b>="a link"&gt;&lt;/gs:actionlink&gt;</code>
+    <code>&lt;gs:actionlink <b>action</b>="actionlink" <b>label</b>="a link"&gt;&lt;/gs:actionlink&gt;</code>
 </p>
+
 <p>
-Parameters:
+    Parameters:
 </p>
 <ul>
-<li><b>action</b> -- the action is a name given that can later be referenced as the event.getAction().getName() in
-the <code>actionPerformed(ActionEvent event)</code> portlet method.
-<li><b>label</b> -- the label is the text to be underlined and linked e.g "a link"
+    <li><b>action</b> -- the action is a name given that can later be referenced as the event.getAction().getName() in
+        the <code>actionPerformed(ActionEvent event)</code> portlet method.
+    <li><b>label</b> -- the label is the text to be underlined and linked e.g "a link"
 </ul>
 
 Example:
 <p>
-<gs:actionlink action="actionlink" label="a link"/>
+    <gs:actionlink action="actionlink" label="a link"/>
 </p>
 
 <h4>Forms</h4>
 
 The <b>form</b> tag is a lightweight replacement for the HTML form tag:
 <p>
-<code>
-&lt;gs:form <b>action</b>="myformaction"&gt;
-  ...
-&lt;/gs:form&gt;
-</code>
+    <code>
+        &lt;gs:form <b>action</b>="myformaction"&gt;
+        ...
+        &lt;/gs:form&gt;
+    </code>
 </p>
+
 <p>
-Parameters:
+    Parameters:
 </p>
 <ul>
-<li><b>action</b> -- the action is a name given that can later be referenced as the event.getAction().getName() in
-the <code>actionPerformed(ActionEvent event)</code> portlet method.
-<li><b>method</b> -- (optional) the HTTP method to use either GET or POST by default it's POST
+    <li><b>action</b> -- the action is a name given that can later be referenced as the event.getAction().getName() in
+        the <code>actionPerformed(ActionEvent event)</code> portlet method.
+    <li><b>method</b> -- (optional) the HTTP method to use either GET or POST by default it's POST
 </ul>
 
 <h4>File Forms</h4>
 
 
-    <table cellspacing=2 cellpadding=2 border=0>
+<table cellspacing=2 cellpadding=2 border=0>
     <tr>
-    <td align="right">File: </td>
-    <td align="left"><gs:fileinput name="filename" size="8" maxlength="20"/></td>
+        <td align="right">File: </td>
+        <td align="left"><gs:fileinput name="filename" size="8" maxlength="20"/></td>
     </tr>
     <tr>
-    <td colspan=5 align="center"><gs:actionsubmit name="option" value="Login"/></td>
+        <td colspan=5 align="center"><gs:actionsubmit name="option" value="Login"/></td>
     </tr>
-    </table>
+</table>
 
 <h4>Action Parameters</h4>
 Parameters can be associated with forms and actionlinks and can be used to perform action logic in
@@ -122,30 +127,31 @@ One or more <b>actionparam</b> tags can be placed anywhere between a <b>actionli
 end tags.
 
 <p>
-<code>
-&lt;gs:actionparam <b>name</b>="aparamname" <b>value</b>="aparamvalue"/&gt;
-</code>
+    <code>
+        &lt;gs:actionparam <b>name</b>="aparamname" <b>value</b>="aparamvalue"/&gt;
+    </code>
 </p>
 Parameters:
 <ul>
-<li><b>name</b> -- the name of the parameter
-<li><b>value</b> -- the value of the parameter
+    <li><b>name</b> -- the name of the parameter
+    <li><b>value</b> -- the value of the parameter
 </ul>
 
 <p>
-Example:
+    Example:
 </p>
+
 <p>
 </p>
 <gs:form action="myform">
-<gs:actionparam name="aparamname" value="aparamvalue"/>
+    <gs:actionparam name="aparamname" value="aparamvalue"/>
     <table cellspacing=2 cellpadding=2 border=0>
-    <tr>
-    <td colspan=5 align="center"><gs:actionsubmit value="Yes"></gs:actionsubmit></td>
-    </tr>
-    <tr>
-    <td colspan=5 align="center"><gs:actionsubmit value="No"></gs:actionsubmit></td>
-    </tr>
+        <tr>
+            <td colspan=5 align="center"><gs:actionsubmit value="Yes"></gs:actionsubmit></td>
+        </tr>
+        <tr>
+            <td colspan=5 align="center"><gs:actionsubmit value="No"></gs:actionsubmit></td>
+        </tr>
     </table>
 
 </gs:form>
@@ -154,7 +160,7 @@ Example:
 
 <b>textfield</b><br/>
 
-&lt;gs:textfield name="username" size="8" maxlength="20"/&gt;  <p/>
+&lt;gs:textfield name="username" size="8" maxlength="20"/&gt; <p/>
 
 <b>password</b><br/>
 
@@ -162,7 +168,7 @@ Example:
 
 <b>input</b><br/>
 
-&lt;gs:input type="submit" name="option" value="Login"/&gt;       <p/>
+&lt;gs:input type="submit" name="option" value="Login"/&gt; <p/>
 
 <b>submit</b><br/>
 &lt;gs:submit name="cancel" value="Cancel" /&gt; <br/>
@@ -174,7 +180,7 @@ FormEvent.getPressedSubmitButton() will return this name.
 <h4>More Information</h4>
 
 The Tag source code is in the org.gridlab.gridsphere.tags package and may be used as a reference or to develop
-new tags. Tags are defined in  Tag Library Descriptors (TLD) that is in the gridsphere webapp in WEB-INF/conf/tlds.
+new tags. Tags are defined in Tag Library Descriptors (TLD) that is in the gridsphere webapp in WEB-INF/conf/tlds.
 For more specific tag information including required and optional attributes, etc, please refer to the TLD.
 
 </body>

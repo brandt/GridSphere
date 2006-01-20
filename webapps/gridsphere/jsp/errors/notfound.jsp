@@ -1,4 +1,3 @@
-
 <%@ include file="/WEB-INF/CustomPortal/layouts/html/pagehead.html" %>
 
 <h2>Page not found!</h2>

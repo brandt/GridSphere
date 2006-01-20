@@ -2,13 +2,13 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 <ui:form>
-<ui:hiddenfield beanId="userID"/>
+    <ui:hiddenfield beanId="userID"/>
 
-<h3><ui:text key="USER_VIEW_USER" style="nostyle"/></h3>
+    <h3><ui:text key="USER_VIEW_USER" style="nostyle"/></h3>
 
-<%@ include file="/jsp/admin/users/doViewUser.jsp" %>
+    <%@ include file="/jsp/admin/users/doViewUser.jsp" %>
 
-<ui:frame>
+    <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
                 <ui:actionsubmit action="doListUsers" key="USER_LIST_USERS"/>
@@ -16,6 +16,6 @@
                 <ui:actionsubmit action="doDeleteUser" key="USER_DELETE_USER"/>
             </ui:tablecell>
         </ui:tablerow>
-</ui:frame>
+    </ui:frame>
 
 </ui:form>

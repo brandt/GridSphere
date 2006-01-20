@@ -23,12 +23,12 @@
 
     <ui:table>
         <ui:tablerow>
-             <ui:tablecell width="100">
-                 <ui:actionsubmit action="notifyUser" key="OK"/>
-             </ui:tablecell>
-             <ui:tablecell width="100">
-                 <ui:actionsubmit action="doViewUser" key="CANCEL"/>
-             </ui:tablecell>
+            <ui:tablecell width="100">
+                <ui:actionsubmit action="notifyUser" key="OK"/>
+            </ui:tablecell>
+            <ui:tablecell width="100">
+                <ui:actionsubmit action="doViewUser" key="CANCEL"/>
+            </ui:tablecell>
         </ui:tablerow>
     </ui:table>
 </ui:form>
