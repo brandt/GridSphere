@@ -94,19 +94,26 @@ public class PortletContent extends BasePortletComponent implements Serializable
         }
         if (textFile != null) {
             RequestDispatcher rd = null;
-            rd = ctx.getRequestDispatcher(textFile);
             try {
-                if (rd != null) {
-                    rd.include(req, sres);
+                if (!textFile.startsWith("http://")) {
+                    rd = ctx.getRequestDispatcher(textFile);
+                    if (rd != null) {
+                        rd.include(req, sres);
+                    } else {
+                        throw new PortletException("Unable to include resource: RequestDispatcher is null");
+                    }
                 } else {
-                    throw new PortletException("Unable to include resource: RequestDispatcher is null");
+                    writer.write("<iframe border=\"0\" width=\"100%\" height=\"100%\" src=\""+textFile+"\"></iframe>");
                 }
+
                 content = writer.getBuffer();
                 req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, content);
             } catch (Exception e) {
                 throw new PortletLayoutException("Unable to include textfile: " + textFile, e);
             }
         }
+
+
     }
 
     public Object clone() throws CloneNotSupportedException {
