@@ -56,8 +56,8 @@ public class Page extends BaseRender implements Render {
         Map props = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (props != null) {
             Object cssHrefObj = props.get("CSS_HREF");
-            if (cssHrefObj instanceof List) {
-                List cssHref = (List)cssHrefObj;
+            if ((cssHrefObj != null) && (cssHrefObj instanceof java.util.List)) {
+                java.util.List cssHref = (java.util.List)cssHrefObj;
                 Iterator it = cssHref.iterator();
                 while (it.hasNext()) {
                     String cssLink = (String)it.next();
@@ -67,10 +67,39 @@ public class Page extends BaseRender implements Render {
                 }
             }
         }
-        page.append("\n\t<link rel=\"icon\" href=\"" + req.getContextPath() + "/" + portletPage.getIcon() + "\" type=\"imge/x-icon\"/>");
+        page.append("\n\t<link rel=\"icon\" href=\"" + portletPage.getIcon() + "\" type=\"imge/x-icon\"/>");
         page.append("\n\t<link rel=\"shortcut icon\" href=\"" + req.getContextPath() + "/" + portletPage.getIcon() + "\" type=\"image/x-icon\"/>");
-        page.append("\n\t<script language=\"JavaScript\" src=\"" + req.getContextPath() + "/javascript/gridsphere.js\"></script>");
-        page.append("\n\t</head>\n\t<body>\n");
+        page.append("\n\t<script type=\"text/javascript\" src=\"" + req.getContextPath() + "/javascript/gridsphere.js\"></script>");
+        if (props != null) {
+            Object jsObj = props.get("JAVASCRIPT_SRC");
+            if ((jsObj != null) && (jsObj instanceof java.util.List)) {
+                java.util.List jsSrc = (java.util.List)jsObj;
+                Iterator it = jsSrc.iterator();
+                while (it.hasNext()) {
+                    String jsLink = (String)it.next();
+                    if (jsLink != null) {
+                        page.append("\n\t<script type=\"text/javascript\" src=\"" + jsLink + "\"></script>");
+                    }
+                }
+            }
+        }
+        page.append("\n\t</head>\n\t");
+        page.append("<body");
+        if (props != null) {
+        Object bodyOnLoadObj = props.get("BODY_ONLOAD");
+            if ((bodyOnLoadObj != null) && (bodyOnLoadObj instanceof java.util.List)) {
+                java.util.List onLoad = (java.util.List)bodyOnLoadObj;
+                Iterator it = onLoad.iterator();
+                page.append(" onload=");
+                while (it.hasNext()) {
+                    String onLoadFunc = (String)it.next();
+                    if (onLoadFunc != null) {
+                        page.append(onLoadFunc);
+                    }
+                }
+            }
+        }
+        page.append(">\n<div id=\"page\">");
         return page;
     }
 
