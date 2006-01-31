@@ -15,10 +15,6 @@ the WebSphere 4.1 API are:
 <ol>
 <li>The use of an XML schema for defining portlet services as opposed to a
 plain text properties file</li>
-<li>The notion of a <it>user service</li> that provides additional method
-levgel access control on a service. User services are useful when there are
-service methods that need to restrict functioanlity based on the access
-rights of the caller.</li>
 </ol>
 More information on developing portlet services using the GridSphere Portlet
 Services API can be found in the GridSphere documentation.
@@ -30,7 +26,6 @@ An example portlet service descriptor file is the following:
 <p>
     &lt;service&gt;    <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;Portlet Manager Service&lt;/name&gt;  <br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&lt;user-required&gt;true&lt;/user-required&gt;   <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;Provides Administration Capabilities for Portlet Web Applications&lt;/description&gt; <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&lt;interface&gt;org.gridlab.gridsphere.services.core.registry.PortletManagerService&lt;/interface&gt; <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&lt;implementation&gt;org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl&lt;/implementation&gt; <br>
@@ -54,7 +49,6 @@ An example portlet service descriptor file is the following:
 The following definitions are used in defining a portlet service:
 <ul>
 <li><b>portlet name</b> - the portlet name</li>
-<li><b>user-required</b> - true if the portlet is a user service</li>
 <li><b>description</b> - a description of the portlet service</li>
 <li><b>interface</b> - the portlet service interface class</li>
 <li><b>implementation</b> - the portlet service implementation class</li>
