@@ -68,10 +68,11 @@ public class FileInputTag extends BaseComponentTag {
         } else {
             fileInputBean = new FileInputBean();
             this.setBaseComponentBean(fileInputBean);
+            if (maxlength != 0) fileInputBean.setMaxLength(maxlength);
+            if (size != 0) fileInputBean.setSize(size);
         }
 
         //debug();
-
 
         try {
             JspWriter out = pageContext.getOut();
