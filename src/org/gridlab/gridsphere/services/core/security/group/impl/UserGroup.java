@@ -46,7 +46,7 @@ public class UserGroup {
 
     /**
      * @deprecated
-     * @return
+     * @return the portlet role
      */
     public PortletRole getRole() {
         return portletRole;
@@ -54,7 +54,7 @@ public class UserGroup {
 
     /**
      * @deprecated
-     * @param role
+     * @param role the portlet role
      */
     public void setRole(PortletRole role) {
         this.portletRole = role;
@@ -62,7 +62,7 @@ public class UserGroup {
 
     /**
      * @deprecated
-     * @return
+     * @return the role name
      */
     public String getRoleName() {
         return this.role;
@@ -70,7 +70,7 @@ public class UserGroup {
 
     /**
      * @deprecated
-     * @param roleName
+     * @param roleName the role name
      */
     public void setRoleName(String roleName) {
         this.role = roleName;

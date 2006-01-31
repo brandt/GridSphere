@@ -45,13 +45,13 @@ public interface GroupManagerService extends PortletService {
     // these methods should not be used publicly anymore
     /**
      * @deprecated
-     * @return
+     * @return a list of user group objects
      */
     public List getUserGroups();
 
     /**
      * @deprecated
-     * @param groupEntry
+     * @param groupEntry a group entry
      */
     public void saveUserGroup(UserGroup groupEntry);
 

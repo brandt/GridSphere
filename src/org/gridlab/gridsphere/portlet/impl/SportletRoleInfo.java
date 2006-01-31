@@ -31,7 +31,7 @@ public class SportletRoleInfo implements Serializable {
 
     /**
      * @deprecated
-     * @return
+     * @return role represented as a <code>String</code>
      */
     public String getRole() {
         return role;

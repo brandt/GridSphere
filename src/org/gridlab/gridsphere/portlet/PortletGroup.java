@@ -82,7 +82,7 @@ public class PortletGroup implements Serializable, Cloneable {
 
         public boolean equals(Object o) {
             if ((o != null) && (o instanceof Type)) {
-                return (this.type == ((Type) o).getType() ? true : false);
+                return (this.type == ((Type) o).getType());
             }
             return false;
         }
@@ -278,7 +278,7 @@ public class PortletGroup implements Serializable, Cloneable {
     /**
      * @deprecated
      *
-     * @param type
+     * @param type the group type
      */
     public void setGroupType(int type) {
         this.type = type;
@@ -287,7 +287,7 @@ public class PortletGroup implements Serializable, Cloneable {
     /**
      * @deprecated
      *
-     * @return
+     * @return the group type
      */
     public int getGroupType() {
         return type;

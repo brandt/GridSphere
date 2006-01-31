@@ -132,7 +132,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     /**
      * Allows a group to be associated with viewing this portlet
      *
-     * @param group the required group expressed as a <code>String</code>
+     * @param groupString the required group expressed as a <code>String</code>
      */
     public void setGroup(String groupString) {
         this.groupString = roleString;
