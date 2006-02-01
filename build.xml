@@ -42,9 +42,6 @@ Invoke "ant help"
     <!-- GridSphere webapps files -->
     <property name="gswebapp.dir" value="webapps/gridsphere"/>
 
-    <!-- GridSphere DocBook documentation -->
-    <property name="docbook.dir" value="docs/docbook"/>
-
     <property name="projects.dir" value="projects"/>
 
     <!-- GridSphere build targets -->
