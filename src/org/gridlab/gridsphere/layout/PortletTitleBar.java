@@ -613,7 +613,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * @throws PortletLayoutException if a layout error occurs during rendering
      * @throws IOException            if an I/O error occurs during rendering
      */
-    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void actionPerformed(GridSphereEvent event) {
         super.actionPerformed(event);
         isActive = true;
 
@@ -655,7 +655,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                     if (winEvent != null) {
                         try {
                             PortletInvoker.windowEvent((String)req.getAttribute(SportletProperties.PORTLETID), winEvent, req, res);
-                        } catch (PortletException e) {
+                        } catch (Exception e) {
                             hasError = true;
                             errorMessage += "Failed to invoke window event method of portlet: " + portletClass;
                         }
@@ -695,9 +695,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * Fires a title bar event notification
      *
      * @param event a portlet title bar event
-     * @throws PortletLayoutException if a layout error occurs
      */
-    protected void fireTitleBarEvent(PortletTitleBarEvent event) throws PortletLayoutException {
+    protected void fireTitleBarEvent(PortletTitleBarEvent event) {
         Iterator it = listeners.iterator();
         PortletTitleBarListener l;
         while (it.hasNext()) {
@@ -714,7 +713,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         return windowLinks;
     }
 
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void doRender(GridSphereEvent event) {
 
         hasError = false;
 
@@ -755,7 +754,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             PortletInvoker.doTitle((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
             //out.println(" (" + portletMode.toString() + ") ");
             title = storedWriter.toString();
-        } catch (PortletException e) {
+        } catch (Exception e) {
             ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
             title = bundle.getString("PORTLET_UNAVAILABLE");
             hasError = true;

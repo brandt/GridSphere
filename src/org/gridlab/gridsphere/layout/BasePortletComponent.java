@@ -35,7 +35,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected List listeners = null;
     protected boolean canModify = false;
     protected String renderKit = "classic";
-    private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
+    protected static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
     /**
      * css Style of the table
@@ -292,10 +292,8 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      * Performs an action on this portlet component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void actionPerformed(GridSphereEvent event) {
         super.actionPerformed(event);
     }
 
@@ -303,10 +301,8 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      * Renders the portlet component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void doRender(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
         req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
     }

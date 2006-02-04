@@ -90,25 +90,19 @@ public class PortletLayoutEngine {
      */
     public void service(GridSphereEvent event) throws IOException {
         log.debug("in service()");
-        PortletPage page;
+        PortletPage page = getPortletPage(event);
 
-        try {
-            page = getPortletPage(event);
-
-            setHeaders(event.getPortletResponse());
-            //int numcomps = page.getComponentIdentifierList().size();
-            /*
-            if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
-            event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
-            }
-            */
-            //if (!event.getPortletComponentID().equals("")) {
-            page.doRender(event);
-            //}
-        } catch (PortletLayoutException e) {
-            log.error("Caught LayoutException: ", e);
-            doRenderError(event.getPortletRequest(), event.getPortletResponse(), e);
+        setHeaders(event.getPortletResponse());
+        //int numcomps = page.getComponentIdentifierList().size();
+        /*
+        if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
+        event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
         }
+        */
+        //if (!event.getPortletComponentID().equals("")) {
+        page.doRender(event);
+        //}
+
     }
 
     /**
@@ -175,30 +169,25 @@ public class PortletLayoutEngine {
      */
     public void actionPerformed(GridSphereEvent event) throws IOException {
         log.debug("in actionPerformed()");
-        PortletPage page;
-        try {
-            page = getPortletPage(event);
-            //int numcomps = page.getComponentIdentifierList().size();
-            /*
-            if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
-            event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
-            }
-            */
-            if (!event.getPortletComponentID().equals("")) {
-                page.actionPerformed(event);
-
-                // sometimes the page needs reinitializing
-                if (event.getPortletRequest().getAttribute(SportletProperties.INIT_PAGE) != null) {
-                    log.info("\n\n\n\n\nreiniting and saving page!!!!!\n\n\n\n\n\n");
-                    page.init(event.getPortletRequest(), new Vector());
-                    PortletTabbedPane pane = pageFactory.getUserTabbedPane(event.getPortletRequest());
-                    if (pane != null) pane.save();
-                }
-            }
-        } catch (PortletLayoutException e) {
-            doRenderError(event.getPortletRequest(), event.getPortletResponse(), e);
-            log.error("Caught LayoutException: ", e);
+        PortletPage page = getPortletPage(event);
+        //int numcomps = page.getComponentIdentifierList().size();
+        /*
+        if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
+        event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
         }
+        */
+        if (!event.getPortletComponentID().equals("")) {
+            page.actionPerformed(event);
+
+            // sometimes the page needs reinitializing
+            if (event.getPortletRequest().getAttribute(SportletProperties.INIT_PAGE) != null) {
+                log.info("\n\n\n\n\nreiniting and saving page!!!!!\n\n\n\n\n\n");
+                page.init(event.getPortletRequest(), new Vector());
+                PortletTabbedPane pane = pageFactory.getUserTabbedPane(event.getPortletRequest());
+                if (pane != null) pane.save();
+            }
+        }
+
         log.debug("Exiting actionPerformed()");
     }
 

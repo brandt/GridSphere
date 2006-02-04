@@ -31,10 +31,8 @@ public interface ComponentLifecycle extends ComponentRender {
      * Performs an action on this portlet component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException;
+    public void actionPerformed(GridSphereEvent event);
 
     /**
      * Destroys this portlet component

@@ -73,21 +73,18 @@ public class PortletContainer extends BasePortletComponent implements
      * Performs an action on this portlet component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void actionPerformed(GridSphereEvent event) throws
-            PortletLayoutException, IOException {
+    public void actionPerformed(GridSphereEvent event) {
+        super.actionPerformed(event);
     }
 
     /**
      * Renders the portlet components in the frame layout
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void doRender(GridSphereEvent event) {
+        super.doRender(event);
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             Iterator it = scomponents.iterator();

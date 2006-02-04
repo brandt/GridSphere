@@ -346,10 +346,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      * contained by this PortletPage
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void actionPerformed(GridSphereEvent event) {
         // if there is a layout action do it!
         PortletComponent comp = getActiveComponent(event);
         if (comp != null) {
@@ -438,10 +436,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      * Renders the portlet cotainer by performing doRender on all portlet components
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void doRender(GridSphereEvent event) {
         // handle any client logic to determin which markup to display
         String markupName = event.getPortletRequest().getClient().getMarkupName();
         if (markupName.equals("html")) {
@@ -451,7 +447,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         }
     }
 
-    public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void doRenderWML(GridSphereEvent event) {
 
         PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();
@@ -463,7 +459,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         res.setContentType("text/wml");
         try {
             out = res.getWriter();
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             // means the writer has already been obtained
             return;
         }
@@ -498,7 +494,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         out.println("</body></html>");
     }
 
-    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void doRenderHTML(GridSphereEvent event) {
 
         PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();
@@ -565,7 +561,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         //res.setContentType("text/html; charset=utf-8");
         try {
             out = res.getWriter();
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             // means the writer has already been obtained
             return;
         }

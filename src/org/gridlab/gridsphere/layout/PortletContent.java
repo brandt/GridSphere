@@ -25,7 +25,6 @@ public class PortletContent extends BasePortletComponent implements Serializable
 
     private String textFile = null;
     private String context = null;
-    //private StringBuffer content = null;
 
     /**
      * Constructs an instance of PortletContent
@@ -74,10 +73,8 @@ public class PortletContent extends BasePortletComponent implements Serializable
      * Renders the portlet text component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void doRender(GridSphereEvent event) {
         super.doRender(event);
         ServletContext ctx = event.getPortletContext();
         PortletRequest req = event.getPortletRequest();
@@ -109,7 +106,8 @@ public class PortletContent extends BasePortletComponent implements Serializable
                 content = writer.getBuffer();
                 req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, content);
             } catch (Exception e) {
-                throw new PortletLayoutException("Unable to include textfile: " + textFile, e);
+                log.error("Unable to include textfile: " + textFile, e);
+                content.append("Unable to include textfile: " + textFile);
             }
         }
 

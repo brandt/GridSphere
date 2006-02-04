@@ -22,7 +22,6 @@ import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 
 import javax.servlet.RequestDispatcher;
 import javax.portlet.RenderResponse;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
@@ -246,9 +245,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * Fires a frame event notification
      *
      * @param event a portlet frame event
-     * @throws PortletLayoutException if a layout error occurs
      */
-    protected void fireFrameEvent(PortletFrameEvent event) throws PortletLayoutException {
+    protected void fireFrameEvent(PortletFrameEvent event) {
         List slisteners = Collections.synchronizedList(listeners);
         synchronized (slisteners) {
             Iterator it = slisteners.iterator();
@@ -264,10 +262,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * Performs an action on this portlet frame component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void actionPerformed(GridSphereEvent event) {
         //System.err.println("in action performed portlet frame: " + portletClass);
 
         super.actionPerformed(event);
@@ -356,10 +352,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
                 renderParams.clear();
                 onlyRender = false;
-
+                String pid = (String)request.getAttribute(SportletProperties.PORTLETID);
                 try {
-                    PortletInvoker.actionPerformed((String)request.getAttribute(SportletProperties.PORTLETID), action, request, res);
-                } catch (PortletException e) {
+                    PortletInvoker.actionPerformed(pid, action, request, res);
+                } catch (Exception e) {
+                    log.error("An error occured performing action on: " + pid, e);
                     // catch it and keep processing
                 }
 
@@ -456,10 +453,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * Renders the portlet frame component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void doRender(GridSphereEvent event) {
         super.doRender(event);
 
         PortletRequest req = event.getPortletRequest();
@@ -557,7 +552,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                         }
                         PortletInvoker.service((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
                         postframe.append(storedWriter.toString());
-                    } catch (PortletException e) {
+                    } catch (Exception e) {
                         doRenderCustomError(postframe, req, wrappedResponse);
                         if (storedWriter.toString().equals("")) {
                             doRenderError(postframe, req, wrappedResponse);

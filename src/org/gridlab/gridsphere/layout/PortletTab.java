@@ -221,10 +221,8 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      * Performs an action on this portlet tab component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void actionPerformed(GridSphereEvent event) {
 
         super.actionPerformed(event);
 
@@ -247,10 +245,8 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      * Renders the portlet tab component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void doRender(GridSphereEvent event) {
         super.doRender(event);
      
         List userRoles = event.getPortletRequest().getRoles();

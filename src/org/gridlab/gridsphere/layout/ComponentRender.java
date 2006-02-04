@@ -17,10 +17,8 @@ public interface ComponentRender extends Cloneable {
      * Renders the portlet component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException;
+    public void doRender(GridSphereEvent event);
 
     public Object clone() throws CloneNotSupportedException;
 }

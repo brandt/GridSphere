@@ -37,7 +37,7 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
         }
     }
 
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void doRender(GridSphereEvent event) {
         //System.err.println("\t\tin render ColumnLayout");
         StringBuffer col = new StringBuffer();
         // starting of the gridtable

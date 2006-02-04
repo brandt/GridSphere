@@ -58,10 +58,8 @@ public class PortletStaticContent extends BasePortletComponent implements Serial
      * Renders the portlet text component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void doRender(GridSphereEvent event) {
         super.doRender(event);
         PortletContext ctx = event.getPortletContext();
         PortletRequest req = event.getPortletRequest();
@@ -69,14 +67,15 @@ public class PortletStaticContent extends BasePortletComponent implements Serial
         if (textFile != null) {
 
             // Try the localized version first
-            try {
-                Client client = req.getClient();
 
-                StringWriter writer = new StringWriter();
-                PortletResponse sres = new StoredPortletResponseImpl(res, writer);
-                Locale locale = req.getLocale();
-                InputStream resourceStream = ctx.getResourceAsStream(textFile, client, locale);
-                if (resourceStream != null) {
+            Client client = req.getClient();
+
+            StringWriter writer = new StringWriter();
+            PortletResponse sres = new StoredPortletResponseImpl(res, writer);
+            Locale locale = req.getLocale();
+            InputStream resourceStream = ctx.getResourceAsStream(textFile, client, locale);
+            if (resourceStream != null) {
+                try {
                     Reader reader;
                     if (encoding != null) {
                         reader = new BufferedReader(new InputStreamReader(resourceStream, encoding));
@@ -85,10 +84,12 @@ public class PortletStaticContent extends BasePortletComponent implements Serial
                     }
                     writeData(reader, sres.getWriter());
                     content = writer.getBuffer();
+                } catch (IOException e) {
+                    log.error("Unable to render static content from file: " + textFile, e);
+                    content.append("Unable to render static content from file: " + textFile);
                 }
-            } catch (PortletException e) {
-                throw new PortletLayoutException("Unable to include text: " + textFile, e);
             }
+
         }
     }
 
@@ -96,14 +97,14 @@ public class PortletStaticContent extends BasePortletComponent implements Serial
         return content;
     }
 
-    private void writeData(Reader reader, Writer writer) throws PortletException {
+    private void writeData(Reader reader, Writer writer) {
         try {
             int ch;
             while ((ch = reader.read()) != -1) {
                 writer.write(ch);
             }
         } catch (IOException ioex) {
-            throw new PortletException("Unable to write data:", ioex);
+            log.error("Unable to write data:", ioex);
         }
     }
 

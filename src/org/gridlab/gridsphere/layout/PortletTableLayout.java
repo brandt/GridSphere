@@ -110,9 +110,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         req.setAttribute(SportletProperties.INIT_PAGE, "true");
     }
 
-    public void customActionPerformed(GridSphereEvent event) throws
-            PortletLayoutException, IOException {
-
+    public void customActionPerformed(GridSphereEvent event) {
         if (event.hasAction()) {
             if (event.getAction().getName().equals(PORTLET_ADD_ACTION)) {
                 addPortlet(event);
@@ -162,7 +160,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         return availPortlets;
     }
 
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void doRender(GridSphereEvent event) {
         super.doRender(event);
 
         StringBuffer table = new StringBuffer();

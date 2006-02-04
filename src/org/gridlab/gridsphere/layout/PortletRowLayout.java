@@ -26,7 +26,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
         return list;
     }
 
-    public void doRender(GridSphereEvent event) throws PortletLayoutException,IOException {
+    public void doRender(GridSphereEvent event) {
         StringBuffer row = new StringBuffer();
         PortletComponent p;
         row.append(rowView.doStart(event, this));

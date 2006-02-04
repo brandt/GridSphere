@@ -55,10 +55,8 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
      * Performs an action on this portlet component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void actionPerformed(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
         req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
     }
@@ -70,7 +68,7 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
      * @throws PortletLayoutException if a layout error occurs during rendering
      * @throws IOException            if an I/O error occurs during rendering
      */
-    public abstract void doRender(GridSphereEvent event) throws PortletLayoutException, IOException;
+    public abstract void doRender(GridSphereEvent event);
 
     public Object clone() throws CloneNotSupportedException {
         BaseComponentLifecycle b = (BaseComponentLifecycle) super.clone();

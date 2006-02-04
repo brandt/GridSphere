@@ -86,13 +86,11 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         return list;
     }
 
-    protected void customActionPerformed(GridSphereEvent event) throws
-            PortletLayoutException, IOException {
-
+    protected void customActionPerformed(GridSphereEvent event) {
+        
     }
 
-    public void actionPerformed(GridSphereEvent event) throws
-            PortletLayoutException, IOException {
+    public void actionPerformed(GridSphereEvent event) {
 
         super.actionPerformed(event);
 
@@ -237,8 +235,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      *
      * @param event a portlet frame event
      */
-    public void handleFrameEvent(PortletFrameEvent event)
-            throws PortletLayoutException {
+    public void handleFrameEvent(PortletFrameEvent event) {
         if (event.getAction() == PortletFrameEvent.FrameAction.FRAME_MAXIMIZED) {
             hasFrameMaximized = true;
             handleFrameMaximized(event);

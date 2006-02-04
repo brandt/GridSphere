@@ -4,9 +4,6 @@
  */
 package org.gridlab.gridsphere.layout.event;
 
-
-import org.gridlab.gridsphere.layout.PortletLayoutException;
-
 /**
  * The <code>PortletFrameListener</code> is an interface for an observer to register to
  * receive notifications of changes to a portlet frame component.
@@ -18,6 +15,6 @@ public interface PortletFrameListener {
      *
      * @param event the portlet frame event
      */
-    public void handleFrameEvent(PortletFrameEvent event) throws PortletLayoutException;
+    public void handleFrameEvent(PortletFrameEvent event);
 
 }

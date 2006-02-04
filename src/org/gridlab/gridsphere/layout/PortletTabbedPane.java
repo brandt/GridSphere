@@ -257,7 +257,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      *
      * @param event the portlet tab event
      */
-    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void actionPerformed(GridSphereEvent event) {
 
         super.actionPerformed(event);
 
@@ -289,10 +289,8 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      * Renders the portlet frame component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    public void doRender(GridSphereEvent event) {
         super.doRender(event);
         StringBuffer pane = new StringBuffer();
         PortletRequest req = event.getPortletRequest();
