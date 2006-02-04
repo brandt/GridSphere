@@ -5,7 +5,6 @@
  */
 package org.gridlab.gridsphere.provider.event.impl;
 
-import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -885,7 +884,7 @@ public abstract class BaseFormEventImpl {
         Iterator it = tagBeans.values().iterator();
         while (it.hasNext()) {
             TagBean tagBean = (TagBean) it.next();
-            //log.debug("tag bean id: " + tagBean.getBeanId());
+            log.debug("tag bean id: " + tagBean.getBeanId());
         }
     }
 

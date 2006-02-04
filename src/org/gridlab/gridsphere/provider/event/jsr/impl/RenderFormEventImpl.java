@@ -38,9 +38,8 @@ public class RenderFormEventImpl extends BaseFormEventImpl implements RenderForm
             tagBeans = new HashMap();
             createTagBeans(getRequest());
         }
-        logRequestParameters();
-
-        logTagBeans();
+        //logRequestParameters();
+        //logTagBeans();
     }
 
     /**
