@@ -11,7 +11,7 @@ public class TableRowBean extends BeanContainer implements TagBean {
 
     protected boolean isHeader = false;
     public static final String TABLE_HEADER_STYLE = "portlet-section-header";
-    public static final String TABLE_NORMAL_STYLE = "portlet-section-body";
+    //public static final String TABLE_NORMAL_STYLE = "portlet-section-body";
     public static final String TABLE_ALTERNATE_STYLE = "portlet-section-alternate";
 
     protected String align = null;
@@ -127,7 +127,7 @@ public class TableRowBean extends BeanContainer implements TagBean {
                 sb.append(" class=\"" + TABLE_ALTERNATE_STYLE + "\"");
                 //setBeanStyles(TABLE_ALTERNATE_STYLE);
             } else {
-                sb.append(" class=\"" + TABLE_NORMAL_STYLE + "\"");
+                //sb.append(" class=\"" + TABLE_NORMAL_STYLE + "\"");
                 //setBeanStyles(TABLE_NORMAL_STYLE);
             }
         }
