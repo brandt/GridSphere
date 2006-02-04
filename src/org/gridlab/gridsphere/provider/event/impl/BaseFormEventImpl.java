@@ -8,6 +8,10 @@ package org.gridlab.gridsphere.provider.event.impl;
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.servlet.ServletRequestContext;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -759,13 +763,11 @@ public abstract class BaseFormEventImpl {
             HttpServletRequest hreq = (HttpServletRequest)req;
             //logRequestParameters();
             //logRequestAttributes();
-            if (FileUpload.isMultipartContent(hreq)) {
-                //log.debug("File upload event");
-                DiskFileUpload upload = new DiskFileUpload();
-                // Set upload parameters
-                upload.setSizeMax(FileInputBean.MAX_UPLOAD_SIZE);
-                String tmpDir = System.getProperty("java.io.tmpdir");
-                upload.setRepositoryPath(tmpDir);
+            ServletRequestContext ctx = new ServletRequestContext(hreq);
+            if (FileUpload.isMultipartContent(ctx)) {
+                FileItemFactory factory = new DiskFileItemFactory();
+                // Create a new file upload handler
+                ServletFileUpload upload = new ServletFileUpload(factory);
                 try {
                     fileItems = upload.parseRequest(hreq);
                 } catch (Exception e) {
