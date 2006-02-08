@@ -20,7 +20,6 @@ Invoke "ant help"
 
 <project name="GridSphere" default="help">
 
-
     <!-- get environment vars -->
     <property environment="env"/>
 
