@@ -26,7 +26,6 @@ Invoke "ant help"
 
     <property file="build.properties"/>
 
-
     <property name="optimize" value="false"/>
     <property name="debug" value="on"/>
     <property name="deprecation" value="false"/>
