@@ -16,7 +16,7 @@ import org.exolab.castor.xml.validators.StringValidator;
 /**
  * Class TitleTypeDescriptor.
  *
- * @version $Revision$ $Date$
+ * @version $Revision: 3298 $ $Date: 2004-06-29 07:19:44 -0700 (Tue, 29 Jun 2004) $
  */
 public class TitleTypeDescriptor extends org.exolab.castor.xml.util.XMLClassDescriptorImpl {
 

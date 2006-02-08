@@ -16,7 +16,7 @@ import org.exolab.castor.xml.validators.StringValidator;
 /**
  * Class SecurityConstraintTypeDescriptor.
  *
- * @version $Revision$ $Date$
+ * @version $Revision: 3298 $ $Date: 2004-06-29 07:19:44 -0700 (Tue, 29 Jun 2004) $
  */
 public class SecurityConstraintTypeDescriptor extends org.exolab.castor.xml.util.XMLClassDescriptorImpl {
 

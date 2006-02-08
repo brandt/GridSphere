@@ -27,7 +27,7 @@ import org.exolab.castor.xml.Unmarshaller;
  * RFC 1766 (http://www.ietf.org/rfc/rfc1766.txt). The default
  * value of this attribute is English (en).
  *
- * @version $Revision$ $Date$
+ * @version $Revision: 4299 $ $Date: 2005-10-15 12:24:07 -0700 (Sat, 15 Oct 2005) $
  */
 public class DisplayNameType implements java.io.Serializable {
 

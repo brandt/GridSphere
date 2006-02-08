@@ -21,7 +21,7 @@ import org.exolab.castor.xml.Unmarshaller;
  * security roles defined in the security-role elements.
  * Used in: security-role-ref
  *
- * @version $Revision$ $Date$
+ * @version $Revision: 3298 $ $Date: 2004-06-29 07:19:44 -0700 (Tue, 29 Jun 2004) $
  */
 public class RoleLinkType implements java.io.Serializable {
 

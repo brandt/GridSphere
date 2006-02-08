@@ -19,7 +19,7 @@ import org.exolab.castor.xml.Unmarshaller;
  * The kewords are separated by commas.
  * Used in: portlet-info
  *
- * @version $Revision$ $Date$
+ * @version $Revision: 3298 $ $Date: 2004-06-29 07:19:44 -0700 (Tue, 29 Jun 2004) $
  */
 public class KeywordsType implements java.io.Serializable {
 

@@ -18,7 +18,7 @@ import org.exolab.castor.xml.Unmarshaller;
  * The name element contains the name of a parameter.
  * Used in: init-param, ...
  *
- * @version $Revision$ $Date$
+ * @version $Revision: 3298 $ $Date: 2004-06-29 07:19:44 -0700 (Tue, 29 Jun 2004) $
  */
 public class NameType implements java.io.Serializable {
 

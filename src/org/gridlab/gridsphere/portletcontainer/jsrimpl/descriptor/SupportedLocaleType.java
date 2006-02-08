@@ -18,7 +18,7 @@ import org.exolab.castor.xml.Unmarshaller;
  * Indicated the locales the portlet supports.
  * Used in: portlet
  *
- * @version $Revision$ $Date$
+ * @version $Revision: 3298 $ $Date: 2004-06-29 07:19:44 -0700 (Tue, 29 Jun 2004) $
  */
 public class SupportedLocaleType implements java.io.Serializable {
 

@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * and personalization by the portlet.
  * Used in: portlet-preferences
  *
- * @version $Revision$ $Date$
+ * @version $Revision: 3298 $ $Date: 2004-06-29 07:19:44 -0700 (Tue, 29 Jun 2004) $
  */
 public class PreferenceType implements java.io.Serializable {
 

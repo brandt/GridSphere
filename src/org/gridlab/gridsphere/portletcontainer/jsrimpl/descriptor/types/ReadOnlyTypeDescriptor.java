@@ -15,7 +15,7 @@ package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types;
 /**
  * Class ReadOnlyTypeDescriptor.
  * 
- * @version $Revision$ $Date$
+ * @version $Revision: 3298 $ $Date: 2004-06-29 07:19:44 -0700 (Tue, 29 Jun 2004) $
  */
 public class ReadOnlyTypeDescriptor extends org.exolab.castor.xml.util.XMLClassDescriptorImpl {
 

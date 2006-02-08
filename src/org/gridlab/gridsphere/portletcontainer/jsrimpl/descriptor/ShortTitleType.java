@@ -18,7 +18,7 @@ import org.exolab.castor.xml.Unmarshaller;
  * Locale specific short version of the static title.
  * Used in: portlet-info
  *
- * @version $Revision$ $Date$
+ * @version $Revision: 3298 $ $Date: 2004-06-29 07:19:44 -0700 (Tue, 29 Jun 2004) $
  */
 public class ShortTitleType implements java.io.Serializable {
 

@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * The portlet element contains the declarative data of a portlet.
  * Used in: portlet-app
  *
- * @version $Revision$ $Date$
+ * @version $Revision: 3558 $ $Date: 2004-09-21 07:47:21 -0700 (Tue, 21 Sep 2004) $
  */
 public class PortletDefinitionType implements java.io.Serializable {
 

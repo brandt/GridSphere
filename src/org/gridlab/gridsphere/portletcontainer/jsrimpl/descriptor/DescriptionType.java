@@ -30,7 +30,7 @@ import org.exolab.castor.xml.Unmarshaller;
  * value of this attribute is English (en).
  * Used in: init-param, portlet, portlet-app, security-role
  *
- * @version $Revision$ $Date$
+ * @version $Revision: 4299 $ $Date: 2005-10-15 12:24:07 -0700 (Sat, 15 Oct 2005) $
  */
 public class DescriptionType implements java.io.Serializable {
 

@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * portlet application supports.
  * Used in: portlet-app
  *
- * @version $Revision$ $Date$
+ * @version $Revision: 3298 $ $Date: 2004-06-29 07:19:44 -0700 (Tue, 29 Jun 2004) $
  */
 public class CustomWindowStateType implements java.io.Serializable {
 

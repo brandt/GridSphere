@@ -17,7 +17,7 @@ import org.exolab.castor.xml.Unmarshaller;
 /**
  * Class PortletName.
  *
- * @version $Revision$ $Date$
+ * @version $Revision: 3298 $ $Date: 2004-06-29 07:19:44 -0700 (Tue, 29 Jun 2004) $
  */
 public class PortletClass extends PortletClassType
         implements java.io.Serializable {
