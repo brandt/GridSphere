@@ -206,19 +206,16 @@ input, select, textarea {
 }
 
 /* settings for the ACTIVE tab in 2nd level tab menu */
-a.tab-sub-active:hover {
-    color: blue;
-}
-a.tab-sub-active {
+.tab-sub-active {
     color: white;
     font-weight: normal;
 }
 
 /* settings for INACTIVE tabs in 2nd level tab menu */
-.tab-sub-inactive { 
+a.tab-sub-inactive { 
     text-decoration: none; 
 }
-.tab-sub-inactive:hover {
+a.tab-sub-inactive:hover {
     color: blue;
 }
 
@@ -395,11 +392,15 @@ PORTLET ELEMENTS
   border-color: #000;
   color: #000000;
 }
+.portlet-section-header td {
+  background: #b6b6b6;
+  border-color: #000;
+} 
 
 /* *********************************************
   Normal text in a table cell
 ********************************************* */
-.portlet-section-body {
+.portlet-section-body td {
   background-color: inherit;
   color: inherit;
 }
@@ -407,7 +408,7 @@ PORTLET ELEMENTS
 /* *********************************************
   Text in every other row in the table
 ********************************************* */
-.portlet-section-alternate {
+.portlet-section-alternate td {
    background-color: #e0e0e0;
    color: inherit;
 }

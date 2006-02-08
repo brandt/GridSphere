@@ -150,7 +150,7 @@ input, select, textarea {
 /* settings for the WHOLE 1st level tab menu */
 .tab-pane {
     /* image for the background behind 1st level tabs*/
-    background: url("/gridsphere/themes/css/default/images/spacer.gif") repeat-x bottom;
+    background: url("/gridsphere/themes/css/default/images/spacer.gif") repeat-x bottom;	
     font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;
     font-size: 11px;
     font-weight: normal;
@@ -212,19 +212,16 @@ input, select, textarea {
 }
 
 /* settings for the ACTIVE tab in 2nd level tab menu */
-a.tab-sub-active:hover {
-    color: blue;
-}
-a.tab-sub-active {
+.tab-sub-active {
     color: black;
     font-weight: bold;
 }
 
 /* settings for INACTIVE tabs in 2nd level tab menu */
-.tab-sub-inactive { 
+a.tab-sub-inactive { 
     text-decoration: none; 
 }
-.tab-sub-inactive:hover {
+a.tab-sub-inactive:hover {
     color: blue;
 }
 
@@ -401,11 +398,15 @@ PORTLET ELEMENTS
   border-color: #0053e2;
   color: #000000;
 }
+.portlet-section-header td {
+  background: #69a8e7;
+  border-color: #0053e2;
+} 
 
 /* *********************************************
   Normal text in a table cell
 ********************************************* */
-.portlet-section-body {
+.portlet-section-body td {
   background-color: #eee;
   color: inherit;
 }
@@ -413,7 +414,7 @@ PORTLET ELEMENTS
 /* *********************************************
   Text in every other row in the table
 ********************************************* */
-.portlet-section-alternate {
+.portlet-section-alternate td {
    background-color: #ddd;
    color: inherit;
 }

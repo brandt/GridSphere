@@ -91,7 +91,6 @@ Version: $Id$
     margin: 0;
     padding-bottom: 0px;
 }
-
 /* settings for the ACTIVE tab in 1st level tab menu */
 .tab-pane ul li .tab-active {   
     float: left;
@@ -148,6 +147,9 @@ Version: $Id$
     list-style-type: none;
     margin: 0;
     padding: 0;
+}
+.tab-sub-pane div {
+    display: inline;
 }
 
 /* settings for the links of 2nd level tab menu */

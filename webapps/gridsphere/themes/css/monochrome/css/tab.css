@@ -148,6 +148,9 @@ Version: $Id$
     margin: 0;
     padding: 0;
 }
+.tab-sub-pane div {
+    display: inline;
+}
 
 /* settings for the links of 2nd level tab menu */
 .tab-sub-pane a {

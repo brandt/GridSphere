@@ -85,8 +85,8 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         if (tabPane.getStyle().equals("sub-menu")) {
             pane.append("\n<li>");
             if (tab.isSelected()) {
-                pane.append("<a class=\"tab-sub-active\" href=\"" + link + "\"" + " onclick=\"this.href='" + link + "&amp;JavaScript=enabled'\">");                
-                pane.append("<span class=\"tab-sub-menu-active\">" + replaceBlanks(title) + "</span></a>");            
+                pane.append("<div class=\"tab-sub-active\">");                
+                pane.append("<span class=\"tab-sub-menu-active\">" + replaceBlanks(title) + "</span></div>");            
             } else {
                 pane.append("<a class=\"tab-sub-inactive\" href=\"" + link + "\"" + " onclick=\"this.href='" + link + "&amp;JavaScript=enabled'\">");
                 pane.append("<span class=\"tab-sub-menu\">" + replaceBlanks(title) + "</span></a>");
