@@ -2,7 +2,6 @@
 	GRIDSPHERE SOFTWARE LICENSE
 
 All software developed by the GridSphere Project is made available under
-
 a liberal open source license.  This license allows the software to be used 
 by anyone and for any purpose, without restriction.
 
