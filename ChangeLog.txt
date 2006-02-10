@@ -1,7 +1,6 @@
 ChangeLog.txt
 =============
 
-
 Changes since GridSphere 2.1.0
 ==============================
 
