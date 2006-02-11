@@ -214,6 +214,12 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      * @see ComponentIdentifier
      */
     public List init(PortletRequest req, List list) {
+        ComponentIdentifier compId = new ComponentIdentifier();
+        compId.setPortletComponent(this);
+        compId.setComponentID(list.size());
+        compId.setComponentLabel(label);
+        compId.setClassName(this.getClass().getName());
+        list.add(compId);
         list = super.init(req, list);
         PortletTab tab;
 
