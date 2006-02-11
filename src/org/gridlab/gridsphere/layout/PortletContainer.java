@@ -19,20 +19,12 @@ import java.util.List;
 
 
 /**
- * The abstract <code>PortletFrameLayout</code> acts a container for the layout of portlet frame
- * components and handles PortletFrame events.
- * <p/>
- * The <code>PortletTableLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
- * that organizes portlets into a grid with a provided number of rows and columns.
- *
- * @see PortletFrame
- * @see PortletFrameEvent
+ * The <code>PortletContainer</code> acts a container for a list of one or more portlet components
  */
 public class PortletContainer extends BasePortletComponent implements
         Serializable, Cloneable {
 
     protected List components = new ArrayList();
-    //protected StringBuffer container = new StringBuffer();
 
     /**
      * Initializes the portlet component. Since the components are isolated
@@ -44,6 +36,12 @@ public class PortletContainer extends BasePortletComponent implements
      * @see ComponentIdentifier
      */
     public List init(PortletRequest req, List list) {
+        ComponentIdentifier compId = new ComponentIdentifier();
+        compId.setPortletComponent(this);
+        compId.setComponentID(list.size());
+        compId.setComponentLabel(label);
+        compId.setClassName(this.getClass().getName());
+        list.add(compId);
         list = super.init(req, list);
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
