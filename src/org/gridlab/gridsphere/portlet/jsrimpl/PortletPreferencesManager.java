@@ -51,7 +51,6 @@ public class PortletPreferencesManager {
      * @return the PortletPreferences for this portlet or null if none exists.
      */
     public javax.portlet.PortletPreferences getPortletPreferences(JSRApplicationPortletImpl appPortlet, User user, ClassLoader loader, boolean isRender) {
-
         PortletPreferencesImpl prefs = null;
         String portletID = appPortlet.getApplicationPortletID();
 
@@ -88,9 +87,6 @@ public class PortletPreferencesManager {
                     }
                 }
             }
-
-            //prefs.store();
-
             prefs.setRender(isRender);
         } catch (Exception e) {
             log.error("Error attempting to restore persistent preferences: ", e);
