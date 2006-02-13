@@ -164,7 +164,7 @@ public class PortletServlet extends HttpServlet
 
         // security check
         // make sure request comes only from gridsphere servlet same ip
-        System.err.println("remote Address: " + request.getRemoteAddr());
+        //System.err.println("remote Address: " + request.getRemoteAddr());
 
         registry = PortletRegistry.getInstance();
         // If no portlet ID exists, this may be a command to init or shutdown a portlet instance
@@ -359,21 +359,19 @@ public class PortletServlet extends HttpServlet
                     //actionRequest.clearParameters();
                 }
             } else {
-                PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), true);
-                request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
-
-
+                if (user != null) {
+                    PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), true);
+                    if (prefs != null) request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
+                }
                 RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
                 RenderResponse renderResponse = new RenderResponseImpl(request, response, portalContext);
 
                 renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
                 renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
 
-                //setGroupAndRole(renderRequest, renderResponse);
                 log.debug("in PortletServlet: rendering  portlet " + pid);
                 if (renderRequest.getAttribute(SportletProperties.RESPONSE_COMMITTED) == null) {
                     try {
-
                         portlet.render(renderRequest, renderResponse);
                     } catch (UnavailableException e) {
                         log.error("in PortletServlet(): doRender() caught unavailable exception: ");
