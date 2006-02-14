@@ -144,7 +144,11 @@ public class GridSphereEventImpl implements GridSphereEvent {
                         name = name.substring(SportletProperties.DEFAULT_PORTLET_ACTION.length() + 1);
 
                         StringTokenizer st = new StringTokenizer(name, "&");
-                        newname = st.nextToken();
+                        if (st.hasMoreTokens()) {
+                            newname = st.nextToken();
+                        } else {
+                            newname = "";
+                        }
                         myaction = new DefaultPortletAction(newname);
                         log.debug("Received " + myaction);
                         String paramName;
