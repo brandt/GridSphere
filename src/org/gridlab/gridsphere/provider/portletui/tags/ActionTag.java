@@ -330,6 +330,8 @@ public abstract class ActionTag extends BaseComponentTag {
 
         } else {
             if (compId == null) {
+                // since action is NULL at this point, make it an empty string
+                action = "";
                 portletAction = new DefaultPortletAction(action);
             } else {
                 portletAction = new DefaultPortletAction(compId + "%" + action);

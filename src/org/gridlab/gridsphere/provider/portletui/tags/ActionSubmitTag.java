@@ -140,7 +140,6 @@ public class ActionSubmitTag extends ActionTag {
         }
 
         String actionURI = createActionURI().toString();
-
         actionSubmitBean.setName(actionURI);
 
         if (portletAction != null) actionSubmitBean.setAction(portletAction.toString());
