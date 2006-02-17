@@ -85,7 +85,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
 
         String sname = createTagName(name);
         
-        sb.append("<select name='" + sname + "' size='" + size + "'");
+        sb.append("<select " + getFormattedCss() + " name='" + sname + "' size='" + size + "'");
         if (isMultiple) {
             sb.append(" multiple='multiple'");
         }
