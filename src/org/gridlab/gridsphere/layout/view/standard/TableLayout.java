@@ -3,7 +3,7 @@
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id: TableLayout.java 4496 2006-02-08 20:27:04Z wehrens $
  */
-package org.gridlab.gridsphere.layout.view.css;
+package org.gridlab.gridsphere.layout.view.standard;
 
 import org.gridlab.gridsphere.layout.PortletComponent;
 import org.gridlab.gridsphere.layout.PortletFrameLayout;

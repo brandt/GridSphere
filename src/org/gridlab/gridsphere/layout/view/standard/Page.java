@@ -2,7 +2,7 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id: Page.java 4496 2006-02-08 20:27:04Z wehrens $
  */
-package org.gridlab.gridsphere.layout.view.css;
+package org.gridlab.gridsphere.layout.view.standard;
 
 import org.gridlab.gridsphere.layout.PortletComponent;
 import org.gridlab.gridsphere.layout.PortletPage;
