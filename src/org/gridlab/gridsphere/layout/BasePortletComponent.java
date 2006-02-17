@@ -34,7 +34,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String groupString = "";
     protected List listeners = null;
     protected boolean canModify = false;
-    protected String renderKit = "classic";
+    protected String renderKit = "standard";
     protected static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
     /**
