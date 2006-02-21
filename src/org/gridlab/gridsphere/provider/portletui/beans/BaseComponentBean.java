@@ -21,6 +21,25 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     protected boolean supportsJS = false;
     protected String cssStyle = null;
     protected String cssClass = null;
+    protected String id = null;
+
+    /**
+     * Sets the id of the bean  (not to be confused with beanId)
+     *
+     * @param id the id of the bean
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * Gets the id of the bean
+     *
+     * @return id of the bean
+     */
+    public String getId() {
+        return this.id;
+    }
 
     /**
      * Constructs a default base component bean
