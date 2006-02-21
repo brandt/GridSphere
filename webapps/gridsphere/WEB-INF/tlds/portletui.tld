@@ -85,6 +85,11 @@
             Creates a portlet action link
         </description>
         <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>label</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -174,6 +179,11 @@
             Creates a submit button
         </description>
         <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>action</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -238,6 +248,11 @@
             Wraps HTML input checkbox tag
         </description>
         <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>beanId</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -282,6 +297,11 @@
             Wrapper around HTML form tag
         </description>
         <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>method</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -305,6 +325,11 @@
         <description>
             Wraps HTML input file upload tag
         </description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>beanId</name>
             <required>false</required>
@@ -344,6 +369,11 @@
         <description>
             Wrapper around HTML form tag
         </description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>method</name>
             <required>false</required>
@@ -393,6 +423,11 @@
         <description>
             Shows table frame
         </description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>align</name>
             <required>false</required>
@@ -483,6 +518,11 @@
             makes a hidden text field
         </description>
         <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>beanId</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -506,6 +546,11 @@
         <description>
             Displays an image
         </description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>src</name>
             <required>false</required>
@@ -604,6 +649,11 @@
             makes a list
         </description>
         <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>beanId</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -617,6 +667,11 @@
         <description>
             makes a listbox
         </description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>beanId</name>
             <required>false</required>
@@ -662,6 +717,11 @@
             makes a listbox item
         </description>
         <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>beanId</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -705,6 +765,11 @@
         <description>
             Creates an message box
         </description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>beanId</name>
             <required>false</required>
@@ -754,6 +819,11 @@
         <description>
             Shows table pane which contains tableframes
         </description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>align</name>
             <required>false</required>
@@ -809,6 +879,11 @@
             Wraps HTML input text tag
         </description>
         <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>beanId</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -852,6 +927,11 @@
         <description>
             Wraps HTML input radio button tag
         </description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>beanId</name>
             <required>false</required>
@@ -901,6 +981,11 @@
             Creates a tabbed pane
         </description>
         <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>beanId</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -930,6 +1015,11 @@
             Creates a tab
         </description>
         <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>beanId</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -958,6 +1048,11 @@
         <description>
             Shows table
         </description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>align</name>
             <required>false</required>
@@ -1038,6 +1133,11 @@
             Shows table row
         </description>
         <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>align</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -1082,6 +1182,11 @@
         <description>
             Shows table cell
         </description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>align</name>
             <required>false</required>
@@ -1142,6 +1247,11 @@
             Shows text
         </description>
         <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>style</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -1180,6 +1290,11 @@
         <description>
             Shows text
         </description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>value</name>
             <required>false</required>
@@ -1224,6 +1339,11 @@
         <description>
             Wraps HTML input text tag
         </description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>beanId</name>
             <required>false</required>
@@ -1461,6 +1581,11 @@
         <description>
             Creates an group around other items
         </description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
         <attribute>
             <name>label</name>
             <required>false</required>
