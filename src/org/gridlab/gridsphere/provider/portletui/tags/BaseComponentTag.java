@@ -31,7 +31,25 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     protected boolean supportsJS = false;
     protected boolean isVisible = true;
     protected Locale locale = null;
+    protected String id = null;
 
+    /**
+     * Sets the id of the bean  (not to be confused with beanId)
+     *
+     * @param id the id of the bean
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * Gets the id of the bean
+     *
+     * @return id of the bean
+     */
+    public String getId() {
+        return this.id;
+    }
 
     /**
      * Sets the name of the bean
