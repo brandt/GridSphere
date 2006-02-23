@@ -7,8 +7,6 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 
 /**
  * The <code>PortletContainer</code> acts a container for a list of one or more portlet components
@@ -52,6 +50,24 @@ public class SelectionContainer extends BasePortletComponent implements
 
         if (activeLabel == null) activeLabel = ((PortletComponent)components.get(0)).getLabel();
         return list;
+    }
+
+    /**
+     * Sets the list of new portlet component to the layout
+     *
+     * @param components an ArrayList of portlet components
+     */
+    public void setPortletComponents(List components) {
+        this.components = components;
+    }
+
+    /**
+     * Returns a list containing the portlet components in this layout
+     *
+     * @return a list of portlet components
+     */
+    public List getPortletComponents() {
+        return components;
     }
 
     public String getDefaultLabel() {

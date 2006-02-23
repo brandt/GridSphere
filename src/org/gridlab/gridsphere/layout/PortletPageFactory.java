@@ -580,7 +580,7 @@ public class PortletPageFactory implements PortletSessionListener {
         PortletSession session = req.getPortletSession();
         String id = session.getId();
         Map userLayouts = (Map)customLayouts.get(id);
-        return (List)userLayouts.values();
+        return (userLayouts != null) ? (List)userLayouts.values() : new ArrayList();
     }
 
     public PortletPage getCustomPage(PortletRequest req) {
