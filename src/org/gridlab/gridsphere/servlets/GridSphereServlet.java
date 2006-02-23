@@ -158,7 +158,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 updateDatabase();
 
                 // deep inside a service is used which is why this must follow the factory.init
-                layoutEngine.init();
+                layoutEngine.init(getServletConfig().getServletContext());
             } catch (Exception e) {
                 log.error("GridSphere initialization failed!", e);
                 RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/init_error.jsp");
@@ -238,7 +238,16 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         // Used for TCK tests
         if (isTCK) setTCKUser(portletReq);
 
+        
+        /*if (event.getPortletRequest().getParameter("ajax") != null) {
+            System.err.println("HAVE AN AJAX REQ");
+            res.setContentType("text/html");
+            res.getWriter().print("WHOHOOOOOO!");
+            res.flushBuffer();
+        } else {
+        */
         layoutEngine.service(event);
+        //}
 
         //log.debug("Session stats");
         //userSessionManager.dumpSessions();
