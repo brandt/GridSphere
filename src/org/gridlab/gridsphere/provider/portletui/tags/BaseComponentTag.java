@@ -28,7 +28,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     protected boolean disabled = false;
     protected String cssStyle = null;
     protected String cssClass = null;
-    protected boolean supportsJS = false;
+    //protected boolean supportsJS = false;
     protected boolean isVisible = true;
     protected Locale locale = null;
     protected String id = null;
@@ -200,12 +200,14 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         componentBean.setReadOnly(readonly);
         if (name != null) componentBean.setName(name);
         if (value != null) componentBean.setValue(value);
+        /*
         if (supportsJavaScript()) {
             supportsJS = true;
         } else {
             supportsJS = false;
         }
-        componentBean.setSupportsJS(supportsJS);
+        */
+        //componentBean.setSupportsJS(supportsJS);
         componentBean.setReadOnly(readonly);
     }
 
@@ -230,11 +232,13 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         if ((value != null) && (componentBean.getValue() == null)) {
             componentBean.setValue(value);
         }
+        /*
         if (supportsJavaScript()) {
             supportsJS = true;
         } else {
             supportsJS = false;
         }
+        */
     }
 
     protected void overrideBaseComponentBean(BaseComponentBean componentBean) {
@@ -250,11 +254,13 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         if (value != null) {
             componentBean.setValue(value);
         }
+        /*
         if (supportsJavaScript()) {
             supportsJS = true;
         } else {
             supportsJS = false;
         }
+        */
 
     }
 

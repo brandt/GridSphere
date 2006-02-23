@@ -111,10 +111,12 @@ public class ActionFormTag extends ActionTag {
             out.println("<input name=\"JavaScript\" value=\"\" type=\"hidden\" />");
             out.println("</p>"); // added for XHTML 1.0 Strict compliance
             // 'language="JavaScript"' replaced by 'type="text/javascript"' for XHTML 1.0 Strict compliance
-            out.println("<script type=\"text/javascript\">");
+
+            // these 3 lines add javascript to detect if js is supported
+            //out.println("<script type=\"text/javascript\">");
             // elements accessed by 'getElementById' method instead of 'name' attribute for XHTML 1.0 Strict compliance
-            out.println("document.getElementById(\"" + name + "\").JavaScript.value = \"enabled\";");
-            out.println("</script>");
+            //out.println("document.getElementById(\"" + name + "\").JavaScript.value = \"enabled\";");
+            //out.println("</script>");
             if (trackMe != null) {
                 out.println("<input name=\"" + TrackerService.TRACK_PARAM + "\" value=\"" + trackMe + "\" type=\"hidden\"/>");
             }

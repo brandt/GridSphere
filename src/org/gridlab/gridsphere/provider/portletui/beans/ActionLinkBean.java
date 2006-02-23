@@ -105,11 +105,8 @@ public class ActionLinkBean extends ActionBean implements TagBean {
                 e.printStackTrace();
             }
         } else {
-            if (onClick == null) {
-                onClickString = "this.href='" + action + "&amp;JavaScript=enabled'";
-            } else {
-                onClickString = onClick;
-            }
+            // onClickString = "this.href='" + action + "&amp;JavaScript=enabled'";
+            if (onClick != null) onClickString = onClick;
             sb.append(" href=\"" + action + "\"" + getFormattedCss() + " onclick=\"" + onClickString + "\">" + value);
         }
         sb.append("</a>");

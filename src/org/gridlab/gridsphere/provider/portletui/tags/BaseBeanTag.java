@@ -68,6 +68,7 @@ public abstract class BaseBeanTag extends BodyTagSupport {
      *
      * @return true if JavaScript is supported, false otherwise
      */
+    /*
     protected boolean supportsJavaScript() {
         //System.err.println("in supportsJavaScript");
         String isEnabled = pageContext.getRequest().getParameter("JavaScript");
@@ -78,6 +79,7 @@ public abstract class BaseBeanTag extends BodyTagSupport {
             return false;
         }
     }
+    */
 
     /**
      * Prints out all request attributes. Used for debugging
