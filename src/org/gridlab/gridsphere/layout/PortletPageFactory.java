@@ -2,7 +2,6 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
@@ -12,6 +11,7 @@ import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 
+import javax.servlet.ServletContext;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
@@ -25,7 +25,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private String userLayoutDir = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/users");
 
-    public static String PAGE = "org.gridsphere.layout.page";
+    public static String PAGE = "gsPageLayout";
     public static String SETUP_PAGE = "SetupLayout.xml";
 
     private static String DEFAULT_THEME = "default";
@@ -37,7 +37,6 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
-    private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
 
     private PortletPage templatePage = null;
     private PortletPage setupPage = null;
@@ -45,11 +44,7 @@ public class PortletPageFactory implements PortletSessionListener {
     //private PortletPage newuserPage = null;
     private PortletPage errorPage = null;
 
-    private String templateLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/TemplateLayout.xml");
-
-    private String newuserLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/users/");
-
-    private String setupLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/SetupLayout.xml");
+    private String layoutMappingFile = null;
 
     // Store user layouts in a hash
     private static Map userLayouts = new Hashtable();
@@ -57,14 +52,20 @@ public class PortletPageFactory implements PortletSessionListener {
     private Map tckLayouts = new Hashtable();
 
     private static Map guests = new Hashtable();
+    private static Map customPages = new Hashtable();
 
+    private static Map customLayouts = new Hashtable();
 
     private PortletPageFactory() {
 
     }
 
-    public void init() throws PortletException {
-        String errorLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/ErrorLayout.xml");
+    public void init(ServletContext ctx) throws PortletException {
+        layoutMappingFile = ctx.getRealPath("/WEB-INF/mapping/layout-mapping.xml");
+        String templateLayoutPath = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/TemplateLayout.xml");
+        String newuserLayoutPath = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/users/");
+        String setupLayoutFile = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/SetupLayout.xml");
+        String errorLayoutFile = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/ErrorLayout.xml");
         try {
             errorPage = PortletLayoutDescriptor.loadPortletPage(errorLayoutFile, layoutMappingFile);
             templatePage = PortletLayoutDescriptor.loadPortletPage(templateLayoutPath, layoutMappingFile);
@@ -74,6 +75,24 @@ public class PortletPageFactory implements PortletSessionListener {
         } catch (Exception e) {
             throw new PortletException("Error unmarshalling layout file", e);
         }
+
+        String layoutsDirPath = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/custom");
+        File layoutsDir = new File(layoutsDirPath);
+        File[] files = layoutsDir.listFiles();
+        PortletPage customPage = null;
+        for (int i = 0; i < files.length; i++) {
+            File f = (File)files[i];
+            try {
+                String pageName = f.getName();
+                pageName = pageName.substring(0, pageName.lastIndexOf("."));
+                System.err.println("found a page= " + pageName);
+                customPage = PortletLayoutDescriptor.loadPortletPage(f.getAbsolutePath(), layoutMappingFile);
+                customPages.put(pageName, customPage);
+            } catch (Exception e) {
+                throw new PortletException("Error unmarshalling layout file", e);
+            }
+        }
+
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
             portalConfigService = (PortalConfigService) factory.createPortletService(PortalConfigService.class, true);
@@ -102,7 +121,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public PortletPage createSetupPage(PortletRequest req) {
         setupPage.init(req, new ArrayList());
-        setupPage.setTheme("default");
+        setupPage.setTheme(DEFAULT_THEME);
         return setupPage;
     }
 
@@ -123,6 +142,10 @@ public class PortletPageFactory implements PortletSessionListener {
         if (userLayouts.containsKey(sessionId)) {
             log.debug("Removing user  container for:" + sessionId);
             userLayouts.remove(sessionId);
+        }
+        if (customLayouts.containsKey(sessionId)) {
+            log.debug("Removing custom containers for:" + sessionId);
+            customLayouts.remove(sessionId);
         }
     }
 
@@ -499,13 +522,19 @@ public class PortletPageFactory implements PortletSessionListener {
             return this.createSetupPage(req);
         }
 
+        PortletPage page;
+
+        // check for custom page
+        page = getCustomPage(req);
+        if (page != null) return page;
+
         Principal principal = req.getUserPrincipal();
         if (principal == null) {
             log.debug("Creating a guest layout!!");
             return createFromGuestLayoutXML(req);
         } 
 
-        PortletPage page;
+
 
         // Need to provide one guest container per users session
         if (userLayouts.containsKey(sessionId)) {
@@ -546,6 +575,40 @@ public class PortletPageFactory implements PortletSessionListener {
         }
         //log.debug("removed user layout: " + userLayout);
     }
+
+    public List getAllCustomPages(PortletRequest req) {
+        PortletSession session = req.getPortletSession();
+        String id = session.getId();
+        Map userLayouts = (Map)customLayouts.get(id);
+        return (List)userLayouts.values();
+    }
+
+    public PortletPage getCustomPage(PortletRequest req) {
+        PortletSession session = req.getPortletSession();
+        String customPageDesc = (String)req.getAttribute(PAGE);
+        if (customPageDesc == null) customPageDesc = req.getParameter(PAGE);
+        if (customPageDesc == null) return null;
+
+        String id = session.getId();
+        Map userLayouts = (Map)customLayouts.get(id);
+        if (userLayouts == null) userLayouts = new Hashtable();
+        PortletPage customPage = (PortletPage)userLayouts.get(customPageDesc);
+        if (customPage == null) {
+            PortletPage page = (PortletPage)customPages.get(customPageDesc);
+            try {
+                PortletPage newpage = (PortletPage) deepCopy(page);
+                newpage.init(req, new ArrayList());
+                newpage.setTheme(DEFAULT_THEME);
+                userLayouts.put(customPageDesc, newpage);
+                customLayouts.put(id, userLayouts);
+            } catch (Exception e) {
+                log.error("Unable to clone page: " + customPageDesc);
+            }
+        }
+        return customPage;
+
+    }
+
 
     public PortletPage createFromGuestLayoutXML(PortletRequest req) {
         PortletSession session = req.getPortletSession();

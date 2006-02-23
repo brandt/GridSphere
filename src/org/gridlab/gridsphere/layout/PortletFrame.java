@@ -264,8 +264,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @param event a gridsphere event
      */
     public void actionPerformed(GridSphereEvent event) {
-        //System.err.println("in action performed portlet frame: " + portletClass);
-
         super.actionPerformed(event);
 
         PortletRequest request = event.getPortletRequest();

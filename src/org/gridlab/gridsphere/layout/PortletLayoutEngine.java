@@ -10,10 +10,11 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Vector;
-import java.security.Principal;
+import java.util.List;
 
 /**
  * The <code>PortletLayoutEngine</code> is a singleton that is responsible for managing
@@ -42,9 +43,9 @@ public class PortletLayoutEngine {
     private PortletLayoutEngine() {
     }
 
-    public void init() throws PortletException {
+    public void init(ServletContext ctx) throws PortletException {
         try {
-            pageFactory.init();
+            pageFactory.init(ctx);
         } catch (Exception e) {
             String error = "Unable to initialize PortletPageFactory!";
             log.error(error, e);
@@ -61,7 +62,7 @@ public class PortletLayoutEngine {
         return instance;
     }
 
-    protected PortletPage getPortletPage(GridSphereEvent event) {
+    public PortletPage getPortletPage(GridSphereEvent event) {
 
         PortletRequest req = event.getPortletRequest();
 
@@ -94,14 +95,17 @@ public class PortletLayoutEngine {
 
         setHeaders(event.getPortletResponse());
         //int numcomps = page.getComponentIdentifierList().size();
-        /*
-        if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
-        event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
+        if (event.getPortletRequest().getParameter("ajax") != null) {
+            PortletComponent comp = page.getActiveComponent(event);
+            if (comp != null) {
+                comp.doRender(event);
+                StringBuffer sb = comp.getBufferedOutput(event.getPortletRequest());
+                event.getPortletResponse().setContentType("text/html");
+                event.getPortletResponse().getWriter().print(sb);
+            }
+        } else {
+            page.doRender(event);
         }
-        */
-        //if (!event.getPortletComponentID().equals("")) {
-        page.doRender(event);
-        //}
 
     }
 
@@ -117,6 +121,12 @@ public class PortletLayoutEngine {
         try {
             PortletPage page = getPortletPage(event);
             page.loginPortlets(event);
+
+            List pages = pageFactory.getAllCustomPages(req);
+            for (int i = 0; i < pages.size(); i++) {
+                PortletPage p = (PortletPage)pages.get(i);
+                p.logoutPortlets(event);
+            }
         } catch (Exception e) {
             log.error("Unable to loadUserLayout for user: " + req.getUser().getUserName(), e);
             //throw new PortletLayoutException("Unable to deserialize user layout from layout descriptor: " + e.getMessage());
@@ -132,9 +142,16 @@ public class PortletLayoutEngine {
      */
     public void logoutPortlets(GridSphereEvent event) {
         log.debug("in logoutPortlets()");
+        PortletRequest req = event.getPortletRequest();
         try {
             PortletPage page = getPortletPage(event);
             page.logoutPortlets(event);
+
+            List pages = pageFactory.getAllCustomPages(req);
+            for (int i = 0; i < pages.size(); i++) {
+                PortletPage p = (PortletPage)pages.get(i);
+                p.logoutPortlets(event);
+            }
             registry.removeAllPortletFrames(event);
             pageFactory.logStatistics();
         } catch (Exception e) {
