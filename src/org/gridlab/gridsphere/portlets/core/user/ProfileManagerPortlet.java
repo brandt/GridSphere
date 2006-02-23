@@ -196,17 +196,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
         TableCellBean tcGroupsDesc = new TableCellBean();
         tcGroupsDesc.addBean(tbGroupsDesc);
 
-        /*
-        TextBean tbRole = new TextBean();
-        String role = this.getLocalizedText(req, "PROFILE_ROLE_DESC");
-        tbRole.setValue(role);
-        TableCellBean tcRole = new TableCellBean();
-        tcRole.addBean(tbRole);
-        */
-
         tr.addBean(tcGroups);
         tr.addBean(tcGroupsDesc);
-        //tr.addBean(tcRole);
         model.addTableRowBean(tr);
 
         List groups = groupManagerService.getGroups();
@@ -214,16 +205,13 @@ public class ProfileManagerPortlet extends ActionPortlet {
         TableRowBean groupsTR;
         TableCellBean groupsTC;
         TableCellBean groupsDescTC;
-        //TableCellBean roleTC;
+
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup) it.next();
-            System.err.println("group= " + g);
             if (g.getType().equals(PortletGroup.Type.HIDDEN)) continue;
             groupsTR = new TableRowBean();
             groupsTC = new TableCellBean();
             groupsDescTC = new TableCellBean();
-            //roleTC = new TableCellBean();
-
             String groupDesc = g.getDescription();
 
             CheckBoxBean cb = new CheckBoxBean();
@@ -273,8 +261,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
             }
             model.addTableRowBean(groupsTR);
         }
-
-
         return model;
     }
 
