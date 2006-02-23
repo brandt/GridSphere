@@ -10,12 +10,10 @@ import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 import org.gridlab.gridsphere.layout.event.impl.PortletTabEventImpl;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -31,8 +29,10 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     private String title = "?";
     private List titles = new ArrayList();
     private transient boolean selected = false;
+    private String url = null;
     private PortletComponent portletComponent = null;
     private int tabOrder = 50;
+
 
     //protected StringBuffer tab = new StringBuffer();
     /**
@@ -59,6 +59,14 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
 
     public void setTabOrder(int tabOrder) {
         this.tabOrder = tabOrder;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     /**
@@ -139,6 +147,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      * @param event the gridsphere event
      */
     public String createTabTitleLink(GridSphereEvent event) {
+        if (url != null) return url;
         PortletResponse res = event.getPortletResponse();
         PortletURI portletURI = res.createURI();
         portletURI.addParameter(SportletProperties.COMPONENT_ID, componentIDStr);
@@ -285,6 +294,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public Object clone() throws CloneNotSupportedException {
         PortletTab t = (PortletTab) super.clone();
         t.tabOrder = this.tabOrder;
+        t.url = this.url;
         t.portletComponent = (this.portletComponent == null) ? null : (PortletComponent) this.portletComponent.clone();
         t.selected = this.selected;
         List stitles = Collections.synchronizedList(titles);
