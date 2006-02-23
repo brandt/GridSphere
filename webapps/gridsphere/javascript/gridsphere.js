@@ -432,3 +432,147 @@ function origalternateRowColors() {
       }
   }
 
+
+// TRY AJAX STUFF HERE
+var xmlHttp;
+var cid;
+
+function createXMLHttpRequest() {
+    if (window.ActiveXObject) {
+        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else if (window.XMLHttpRequest) {
+        xmlHttp = new XMLHttpRequest();
+    }
+}
+
+/*
+function startRequest(windowId) {
+    createXMLHttpRequest();
+    xmlHttp.onreadystatechange = handleStateChange(windowId);
+    xmlHttp.open("POST", "/layout?portlet=" + id, true);
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.send(null);
+}
+
+
+
+function handleStateChange(windowId) {
+    if(xmlHttp.readyState == 4) {
+        if(xmlHttp.status == 200) {
+            document.getElementById("82").innerHTML = xmlHttp.responseText;
+        }
+    }
+}
+*/
+
+  /*
+ * Copyright 2005 Matthew Eernisse (mde@fleegix.org)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Original code by Matthew Eernisse (mde@fleegix.org)
+ * Additional bugfixes by Mark Pruett (mark.pruett@comcast.net)
+ *
+*/
+
+// The var docForm should be a reference to a <form>
+
+function formData2QueryString(docForm) {
+
+  var submitContent = '';
+  var formElem;
+  var lastElemName = '';
+
+  for (i = 0; i < docForm.elements.length; i++) {
+
+    formElem = docForm.elements[i];
+    switch (formElem.type) {
+      // Text fields, hidden form elements
+      case 'text':
+      case 'hidden':
+      case 'password':
+      case 'textarea':
+      case 'select-one':
+        submitContent += formElem.name + '=' + escape(formElem.value) + '&'
+          //submitContent += formElem.name + '=' + escape(formElem[formElem.selectedIndex].value) + '&'
+          break;
+
+      // Radio buttons
+      case 'radio':
+        if (formElem.checked) {
+          submitContent += formElem.name + '=' + escape(formElem.value) + '&'
+        }
+        break;
+
+      // Checkboxes
+      case 'checkbox':
+        if (formElem.checked) {
+          // Continuing multiple, same-name checkboxes
+          if (formElem.name == lastElemName) {
+            // Strip of end ampersand if there is one
+            if (submitContent.lastIndexOf('&') == submitContent.length-1) {
+              submitContent = submitContent.substr(0, submitContent.length - 1);
+            }
+            // Append value as comma-delimited string
+            submitContent += ',' + escape(formElem.value);
+          }
+          else {
+            submitContent += formElem.name + '=' + escape(formElem.value);
+          }
+          submitContent += '&';
+          lastElemName = formElem.name;
+        }
+        break;
+
+    }
+  }
+  // Remove trailing separator
+  submitContent = submitContent.substr(0, submitContent.length - 1);
+  return submitContent;
+}
+
+  function startRequest(mycid, myform) {
+      createXMLHttpRequest();
+      cid = mycid;
+      xmlHttp.onreadystatechange = handleStateChange;
+      //alert(formData2QueryString(myform));
+      xmlHttp.open("POST", "gridsphere?ajax=true&cid=" + cid + "&" + formData2QueryString(myform), true);
+      xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xmlHttp.send(null);
+  }
+
+  function so_clearInnerHTML(obj) {
+      // so long as obj has children, remove them
+      while(obj.firstChild) obj.removeChild(obj.firstChild);
+  }
+
+
+function handleStateChange() {
+    if(xmlHttp.readyState == 4) {
+        if(xmlHttp.status == 200) {
+            //alert("The server replied with: " + xmlHttp.responseText);
+            //alert(document.getElementById('77'));
+
+            document.getElementById(cid).innerHTML = xmlHttp.responseText;
+
+            // clone the "hiddenContent" element and assign it to the "newContent" variable
+            //newContent = document.getElementById("hiddenContent").cloneNode(true);
+            // clear the contents of your destination element.
+            //so_clearInnerHTML(document.getElementById("mContainer"));
+            // append the cloned element to the destination element
+            //document.getElementById("mContainer").appendChild(newContent);
+
+        }
+    }
+}
