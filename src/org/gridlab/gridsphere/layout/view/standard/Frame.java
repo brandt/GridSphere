@@ -36,7 +36,7 @@ public class Frame extends BaseRender implements FrameView {
         ///// begin portlet frame
         StringBuffer frameBuffer = new StringBuffer();
         frameBuffer.append("\n<!-- PORTLET STARTS HERE -->");
-        frameBuffer.append("<div ");
+        frameBuffer.append("<div id=\"" + frame.getComponentID() + "\"");
         if (frame.getOuterPadding().equals("")) {
             frameBuffer.append(" class=\"window-main\"");
         } else {

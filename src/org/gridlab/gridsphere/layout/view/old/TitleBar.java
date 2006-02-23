@@ -2,7 +2,7 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id: TitleBar.java 4496 2006-02-08 20:27:04Z wehrens $
  */
-package org.gridlab.gridsphere.layout.view.classic;
+package org.gridlab.gridsphere.layout.view.old;
 
 import org.gridlab.gridsphere.layout.PortletComponent;
 import org.gridlab.gridsphere.layout.PortletTitleBar;
