@@ -78,6 +78,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
         String layoutsDirPath = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/custom");
         File layoutsDir = new File(layoutsDirPath);
+        if (!layoutsDir.exists()) layoutsDir.mkdir();
         File[] files = layoutsDir.listFiles();
         PortletPage customPage = null;
         for (int i = 0; i < files.length; i++) {
