@@ -5,6 +5,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.Serializable;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -90,7 +91,7 @@ public class SelectionContainer extends BasePortletComponent implements
      *
      * @param event a gridsphere event
      */
-    public void actionPerformed(GridSphereEvent event) {
+    public void actionPerformed(GridSphereEvent event) throws IOException, PortletLayoutException {
         super.actionPerformed(event);
         updateActiveLabel(event);
     }
@@ -100,7 +101,7 @@ public class SelectionContainer extends BasePortletComponent implements
      *
      * @param event a gridsphere event
      */
-    public void doRender(GridSphereEvent event) {
+    public void doRender(GridSphereEvent event) throws IOException, PortletLayoutException {
         super.doRender(event);
         PortletComponent p;
         for (int i = 0; i < components.size(); i++) {
