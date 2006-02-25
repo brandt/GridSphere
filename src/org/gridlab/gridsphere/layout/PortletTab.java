@@ -33,6 +33,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     private transient boolean selected = false;
     private PortletComponent portletComponent = null;
     private int tabOrder = 50;
+    private String url = null;
 
     //protected StringBuffer tab = new StringBuffer();
     /**
@@ -51,6 +52,14 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public PortletTab(List titles, PortletComponent portletComponent) {
         this.titles = titles;
         this.portletComponent = portletComponent;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public int getTabOrder() {
