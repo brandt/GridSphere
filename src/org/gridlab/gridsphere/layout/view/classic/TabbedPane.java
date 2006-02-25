@@ -86,10 +86,10 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             pane.append("\n<!-- START SUB MENU TAB --><td nowrap=\"nowrap\" background=\"" + path + "subtab-middle.gif\" height=\"24\">");
             if (tab.isSelected()) {
                 pane.append("<span class=\"tab-sub-active\">");
-                pane.append("<a class=\"tab-sub-menu-active\" href=\"" + link + "\"" + " onClick=\"this.href='" + link + "&amp;JavaScript=enabled'\">" + replaceBlanks(title) + "</a></span>");
+                pane.append("<a class=\"tab-sub-menu-active\" href=\"" + link + "\">" + replaceBlanks(title) + "</a></span>");
             } else {
                 pane.append("<span class=\"tab-sub-inactive\">");
-                pane.append("<a class=\"tab-sub-menu\" href=\"" + link + "\"" + " onClick=\"this.href='" + link + "&amp;JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
+                pane.append("<a class=\"tab-sub-menu\" href=\"" + link + "\">" + replaceBlanks(title) + "</a>");
                 pane.append("</span>");
             }
             pane.append("</td>\n");
@@ -102,7 +102,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             } else {
                 pane.append("\n<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-inactive-left.gif\"  alt=\"tab inactive left border\" /></td>");
                 pane.append("<td height=\"24\" nowrap=\"nowrap\" background=\"" + path + "tab-inactive-middle.gif\">");
-                pane.append("<a class=\"tab-menu\" href=\"" + link + "\"" + " onClick=\"this.href='" + link + "&amp;JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
+                pane.append("<a class=\"tab-menu\" href=\"" + link + "\">" + replaceBlanks(title) + "</a>");
                 pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-inactive-right.gif\" alt=\"tab inactive right border\" /></td>");
             }
         }

@@ -86,10 +86,10 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             pane.append("\n<!-- START SUB MENU TAB --><li>");
             if (tab.isSelected()) {
                 pane.append("<span class=\"tab-sub-active\">");
-                pane.append("<a class=\"tab-sub-menu-active\" href=\"" + link + "\"" + " onclick=\"this.href='" + link + "&amp;JavaScript=enabled'\">" + replaceBlanks(title) + "</a></span>");                
+                pane.append("<a class=\"tab-sub-menu-active\" href=\"" + link + "\">" + replaceBlanks(title) + "</a></span>");                
             } else {
                 pane.append("<span class=\"tab-sub-inactive\">");
-                pane.append("<a class=\"tab-sub-menu\" href=\"" + link + "\"" + " onclick=\"this.href='" + link + "&amp;JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
+                pane.append("<a class=\"tab-sub-menu\" href=\"" + link + "\">" + replaceBlanks(title) + "</a>");
                 pane.append("</span>");
             }
             pane.append("</li>\n");
@@ -101,7 +101,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             } else {
                 pane.append("\n<li>");
                 pane.append("<span>");
-                pane.append("<a class=\"tab-menu\" href=\"" + link + "\"" + " onclick=\"this.href='" + link + "&amp;JavaScript=enabled'\">" + replaceBlanks(title) + "</a></span>");
+                pane.append("<a class=\"tab-menu\" href=\"" + link + "\">" + replaceBlanks(title) + "</a></span>");
                 pane.append("</li>");
             }
         }
