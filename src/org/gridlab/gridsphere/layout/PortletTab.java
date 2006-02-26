@@ -301,6 +301,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         t.tabOrder = this.tabOrder;
         t.portletComponent = (this.portletComponent == null) ? null : (PortletComponent) this.portletComponent.clone();
         t.selected = this.selected;
+	t.url = this.url;
         List stitles = Collections.synchronizedList(titles);
         synchronized (stitles) {
             t.titles = new ArrayList(stitles.size());
