@@ -214,11 +214,13 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
-        portletComponent.setTheme(theme);
-        portletComponent.setRenderKit(renderKit);
-        list = portletComponent.init(req, list);
-        portletComponent.addComponentListener(this);
-        portletComponent.setParentComponent(this);
+        if (portletComponent != null) {
+	    portletComponent.setTheme(theme);
+            portletComponent.setRenderKit(renderKit);
+            list = portletComponent.init(req, list);
+            portletComponent.addComponentListener(this);
+            portletComponent.setParentComponent(this);
+	}
         return list;
     }
 
@@ -262,7 +264,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
-     
+    	if (portletComponent == null) return; 
         PortletRole userRole = event.getPortletRequest().getRole();
         StringBuffer tab = new StringBuffer();
         if (userRole.compare(userRole, requiredRole) >= 0) {
