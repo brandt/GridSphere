@@ -213,11 +213,13 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
-        portletComponent.setTheme(theme);
-        portletComponent.setRenderKit(renderKit);
-        list = portletComponent.init(req, list);
-        portletComponent.addComponentListener(this);
-        portletComponent.setParentComponent(this);
+        if (portletComponent != null) {
+            portletComponent.setTheme(theme);
+            portletComponent.setRenderKit(renderKit);
+            list = portletComponent.init(req, list);
+            portletComponent.addComponentListener(this);
+            portletComponent.setParentComponent(this);
+        }
         return list;
     }
 
@@ -237,17 +239,15 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
 
         PortletComponentEvent compEvt = event.getLastRenderEvent();
         PortletTabEvent tabEvent = new PortletTabEventImpl(this, event.getPortletRequest(), PortletTabEvent.TabAction.TAB_SELECTED, COMPONENT_ID);
-        List l = Collections.synchronizedList(listeners);
 
-        synchronized (l) {
-            Iterator it = l.iterator();
-            PortletComponent comp;
-            while (it.hasNext()) {
-                comp = (PortletComponent) it.next();
-                event.addNewRenderEvent(tabEvent);
-                comp.actionPerformed(event);
-            }
+        Iterator it = listeners.iterator();
+        PortletComponent comp;
+        while (it.hasNext()) {
+            comp = (PortletComponent) it.next();
+            event.addNewRenderEvent(tabEvent);
+            comp.actionPerformed(event);
         }
+
     }
 
     /**
@@ -257,7 +257,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      */
     public void doRender(GridSphereEvent event) {
         super.doRender(event);
-     
+        if (portletComponent == null) return;
         List userRoles = event.getPortletRequest().getRoles();
         StringBuffer tab = new StringBuffer();
         if (roleString.equals("") || (userRoles.contains(roleString))) {
