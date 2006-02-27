@@ -446,26 +446,6 @@ function createXMLHttpRequest() {
     }
 }
 
-/*
-function startRequest(windowId) {
-    createXMLHttpRequest();
-    xmlHttp.onreadystatechange = handleStateChange(windowId);
-    xmlHttp.open("POST", "/layout?portlet=" + id, true);
-    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xmlHttp.send(null);
-}
-
-
-
-function handleStateChange(windowId) {
-    if(xmlHttp.readyState == 4) {
-        if(xmlHttp.status == 200) {
-            document.getElementById("82").innerHTML = xmlHttp.responseText;
-        }
-    }
-}
-*/
-
   /*
  * Copyright 2005 Matthew Eernisse (mde@fleegix.org)
  *
@@ -552,27 +532,17 @@ function formData2QueryString(docForm) {
       xmlHttp.send(null);
   }
 
-  function so_clearInnerHTML(obj) {
-      // so long as obj has children, remove them
-      while(obj.firstChild) obj.removeChild(obj.firstChild);
-  }
-
-
 function handleStateChange() {
     if(xmlHttp.readyState == 4) {
         if(xmlHttp.status == 200) {
-            //alert("The server replied with: " + xmlHttp.responseText);
-            //alert(document.getElementById('77'));
-
-            document.getElementById(cid).innerHTML = xmlHttp.responseText;
-
-            // clone the "hiddenContent" element and assign it to the "newContent" variable
-            //newContent = document.getElementById("hiddenContent").cloneNode(true);
-            // clear the contents of your destination element.
-            //so_clearInnerHTML(document.getElementById("mContainer"));
-            // append the cloned element to the destination element
-            //document.getElementById("mContainer").appendChild(newContent);
-
+            // create a temporary div element to store the responseText...
+            var serverResponse = document.createElement("div");
+            // ... and store the responseText inside it
+            serverResponse.innerHTML = xmlHttp.responseText;
+            // create a collection of all the div elements returned
+            tempPageElements = serverResponse.getElementsByTagName("div");
+            // replace existing component with new one
+            document.getElementById(cid).innerHTML = tempPageElements[0].innerHTML;
         }
     }
 }
