@@ -178,9 +178,17 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         setUserAndGroups(event);
 
+        String userName;
+        User user = portletReq.getUser();
+        if (user == null) {
+            userName = "guest";
+        } else {
+            userName = user.getUserName();
+        }
+
         String trackme = req.getParameter(TrackerService.TRACK_PARAM);
         if (trackme != null) {
-            trackerService.trackURL(trackme, req.getHeader("user-agent"), portletReq.getUser().getUserName());
+            trackerService.trackURL(trackme, req.getHeader("user-agent"), userName);
             String url = req.getParameter(TrackerService.REDIRECT_URL);
             if (url != null) {
                 System.err.println("redirect: " + url);
@@ -203,7 +211,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 logout(event);
             }
             if (trackerService.hasTrackingAction(actionName)) {
-                trackerService.trackURL(actionName, req.getHeader("user-agent"), portletReq.getUser().getUserName());
+                trackerService.trackURL(actionName, req.getHeader("user-agent"), userName);
             }
         }
 
