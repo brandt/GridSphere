@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.portlet.PortletRole;
-
 /**
  * The <code>ConcretePortletConfig</code> provides concrete portlet
  * configuration information.

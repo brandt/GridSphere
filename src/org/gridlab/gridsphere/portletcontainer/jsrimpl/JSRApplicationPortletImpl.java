@@ -124,15 +124,6 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
      */
     public ConcretePortlet getConcretePortlet(String concretePortletID) {
         return (ConcretePortlet)concPortlets.get(0);
-        /*
-        Iterator it = concPortlets.iterator();
-        while (it.hasNext()) {
-            ConcretePortlet conc = (ConcretePortlet) it.next();
-            if (conc.getConcretePortletID().equals(concretePortletID)) return conc;
-            if (conc.getPortletName().equals(concretePortletID)) return conc;
-        }
-        return null;
-        */
     }
 
 
