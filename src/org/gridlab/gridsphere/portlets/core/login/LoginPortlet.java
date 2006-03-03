@@ -22,6 +22,7 @@ import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridsphere.tmf.TextMessagingException;
+import org.gridsphere.tmf.message.MailMessage;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
@@ -57,7 +58,6 @@ public class LoginPortlet extends ActionPortlet {
     private PasswordManagerService passwordManagerService = null;
     private PortalConfigService portalConfigService = null;
     private RequestService requestService = null;
-    //private MailService mailService = null;
     private LoginService loginService = null;
     private TextMessagingService tms = null;
 
@@ -71,7 +71,6 @@ public class LoginPortlet extends ActionPortlet {
             passwordManagerService = (PasswordManagerService) getPortletConfig().getContext().getService(PasswordManagerService.class);
             requestService = (RequestService) getPortletConfig().getContext().getService(RequestService.class);
             tms = (TextMessagingService) getPortletConfig().getContext().getService(TextMessagingService.class);
-           // mailService = (MailService) getPortletConfig().getContext().getService(MailService.class);
             portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
             canUserCreateAccount = portalConfigService.getPortalConfigSettings().getCanUserCreateAccount();
             PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
@@ -178,7 +177,7 @@ public class LoginPortlet extends ActionPortlet {
             user.setAttribute(User.DISABLED, "true");
             userManagerService.saveUser(user);
 
-            org.gridsphere.tmf.message.MailMessage mailToUser = tms.getMailMessage();
+            MailMessage mailToUser = tms.getMailMessage();
             StringBuffer body = new StringBuffer();
             body.append(getLocalizedText(req, "LOGIN_DISABLED_MSG1") + " " + getLocalizedText(req, "LOGIN_DISABLED_MSG2") + "\n\n");
             mailToUser.setBody(body.toString());
@@ -514,10 +513,6 @@ public class LoginPortlet extends ActionPortlet {
 
     }
 
-    public void doSomething(FormEvent evt) {
-        System.err.println("in doSomething!!!!!");    
-    }
-
     public void notifyNewUser(FormEvent evt) {
         PortletRequest req = evt.getPortletRequest();
         PortletResponse res = evt.getPortletResponse();
@@ -553,7 +548,7 @@ public class LoginPortlet extends ActionPortlet {
 
         requestService.saveRequest(request);
 
-        org.gridsphere.tmf.message.MailMessage mailToUser = tms.getMailMessage();
+        MailMessage mailToUser = tms.getMailMessage();
         mailToUser.setTo(emailTF.getValue());
         mailToUser.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
         StringBuffer body = new StringBuffer();
