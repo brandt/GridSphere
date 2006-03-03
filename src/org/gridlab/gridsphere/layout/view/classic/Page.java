@@ -70,12 +70,12 @@ public class Page extends BaseRender implements Render {
         page.append("\n\t<link rel=\"icon\" href=\"" + req.getContextPath() + "/" + portletPage.getIcon() + "\" type=\"imge/x-icon\"/>");
         page.append("\n\t<link rel=\"shortcut icon\" href=\"" + req.getContextPath() + "/" + portletPage.getIcon() + "\" type=\"image/x-icon\"/>");
         page.append("\n\t<script language=\"JavaScript\" src=\"" + req.getContextPath() + "/javascript/gridsphere.js\"></script>");
-        page.append("\n\t</head>\n\t<body>\n");
+        page.append("\n\t</head>\n\t<body>\n<div style=\"position:absolute;\">");
         return page;
     }
 
     public StringBuffer doEnd(GridSphereEvent event, PortletComponent comp) {
-        return new StringBuffer("\n</body></html>");
+        return new StringBuffer("\n</div></body></html>");
     }
 }
 
