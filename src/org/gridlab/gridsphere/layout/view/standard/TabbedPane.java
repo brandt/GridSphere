@@ -98,11 +98,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
                 pane.append("</li>");
             } else {
                 pane.append("\n<li>");
-                if (tab.getUrl() != null) {
-                    pane.append("<a href=\"" + link + "\">");
-                } else {
-                    pane.append("<a href=\"" + link + "\">");
-                }
+                pane.append("<a href=\"" + link + "\">");
                 pane.append("<span class=\"tab-menu\">" + replaceBlanks(title) + "</span></a>");
                 pane.append("</li>");
             }
