@@ -7,7 +7,7 @@ Version: $Id: window.css 4496 2006-02-08 20:27:04Z wehrens $
 
 .window-main {
    width: 100%;
-   spacing: 2px;
+   border-spacing: 2px;
    padding: 2px;
 }
 
@@ -57,8 +57,6 @@ Version: $Id: window.css 4496 2006-02-08 20:27:04Z wehrens $
   border-right: 1px solid #9FB086;
   border-left: 1px solid #9FB086;
   border-bottom: 1px solid #9FB086;
-  spacing-top: 5px;
-  spacing-right: 2px;
   height: 100%;
 }
 
