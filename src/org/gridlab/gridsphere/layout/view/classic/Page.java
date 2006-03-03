@@ -104,7 +104,7 @@ public class Page extends BaseRender implements Render {
     }
 
     public StringBuffer doEnd(GridSphereEvent event, PortletComponent comp) {
-        return new StringBuffer("\n</body></html>");
+        return new StringBuffer("\n</div></body></html>");
     }
 }
 
