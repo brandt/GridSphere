@@ -9,8 +9,6 @@
 <% PortletRequest pReq = (PortletRequest) pageContext.getAttribute("portletRequest"); %>
 <% List authModules = (List) request.getAttribute("authModules"); %>
 
-<portletAPI:init/>
-
 <ui:form>
     <ui:group>
         <ui:text style="bold" key="LOGIN_CONFIG_MSG"/>
