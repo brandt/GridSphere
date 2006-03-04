@@ -78,9 +78,7 @@ public class UserManagerPortlet extends ActionPortlet {
             req.setAttribute("user", user);
             HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
             hf.setValue(user.getID());
-            //PortletGroup coreGroup = groupManagerService.getCoreGroup();
-            //PortletRole role = groupManagerService.getRoleInGroup(user, coreGroup);
-            //req.setAttribute("role", role.getName());
+
             List userRoles = roleManagerService.getRolesForUser(user);
             Iterator it = userRoles.iterator();
             String userRole = "";
@@ -177,51 +175,46 @@ public class UserManagerPortlet extends ActionPortlet {
 
         FrameBean roleFrame = evt.getFrameBean("roleFrame");
 
-                DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel();
 
-                TableRowBean tr = new TableRowBean();
-                tr.setHeader(true);
-                TableCellBean tc = new TableCellBean();
-                TextBean text = new TextBean();
-                text.setValue("Select Roles");
-                tc.addBean(text);
-                tr.addBean(tc);
-                tc = new TableCellBean();
-                text = new TextBean();
-                text.setValue("Role name");
-                tc.addBean(text);
-                tr.addBean(tc);
+        TableRowBean tr = new TableRowBean();
+        tr.setHeader(true);
+        TableCellBean tc = new TableCellBean();
+        TextBean text = new TextBean();
+        text.setValue("Select Roles");
+        tc.addBean(text);
+        tr.addBean(tc);
+        tc = new TableCellBean();
+        text = new TextBean();
+        text.setValue("Role name");
+        tc.addBean(text);
+        tr.addBean(tc);
 
-                model.addTableRowBean(tr);
+        model.addTableRowBean(tr);
 
-                List roles = roleManagerService.getRoles();
-                List myroles = roleManagerService.getRolesForUser(user);
-                Iterator it = roles.iterator();
-                while (it.hasNext()) {
-                    PortletRole role = (PortletRole)it.next();
-                    tr = new TableRowBean();
-                    tc = new TableCellBean();
-                    CheckBoxBean cb = new CheckBoxBean();
-                    if (myroles.contains(role)) {
-                        cb.setSelected(true);
-                    }
-                    cb.setBeanId(role.getName() + "CB");
-                    tc.addBean(cb);
-                    tr.addBean(tc);
-                    tc = new TableCellBean();
-                    text = new TextBean();
-                    text.setValue(role.getName());
-                    tc.addBean(text);
-                    tr.addBean(tc);
-                    model.addTableRowBean(tr);
-                }
+        List roles = roleManagerService.getRoles();
+        List myroles = roleManagerService.getRolesForUser(user);
+        Iterator it = roles.iterator();
+        while (it.hasNext()) {
+            PortletRole role = (PortletRole)it.next();
+            tr = new TableRowBean();
+            tc = new TableCellBean();
+            CheckBoxBean cb = new CheckBoxBean();
+            if (myroles.contains(role)) {
+                cb.setSelected(true);
+            }
+            cb.setBeanId(role.getName() + "CB");
+            tc.addBean(cb);
+            tr.addBean(tc);
+            tc = new TableCellBean();
+            text = new TextBean();
+            text.setValue(role.getName());
+            tc.addBean(text);
+            tr.addBean(tc);
+            model.addTableRowBean(tr);
+        }
 
-                roleFrame.setTableModel(model);
-
-
-        //PortletGroup coreGroup = groupManagerService.getCoreGroup();
-        //PortletRole role = groupManagerService.getRoleInGroup(user, coreGroup);
-        //setSelectedUserRole(evt, role);
+        roleFrame.setTableModel(model);
 
         setUserValues(evt, user);
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
@@ -263,10 +256,6 @@ public class UserManagerPortlet extends ActionPortlet {
                 createSuccessMessage(evt, this.getLocalizedText(req, "USER_EDIT_SUCCESS"));
             }
             req.setAttribute("user", user);
-
-            //PortletGroup coreGroup = groupManagerService.getCoreGroup();
-            //PortletRole role = groupManagerService.getRoleInGroup(user, coreGroup);
-            //req.setAttribute("role", role.getName());
 
             setNextState(req, "doListUsers");
         } catch (PortletException e) {
@@ -310,6 +299,7 @@ public class UserManagerPortlet extends ActionPortlet {
         event.getTextFieldBean("emailAddress").setValue(user.getEmailAddress());
         event.getTextFieldBean("organization").setValue(user.getOrganization());
         event.getPasswordBean("password").setValue("");
+        event.getTextFieldBean("certificate").setValue((String)user.getAttribute("user.certificate"));
     }
 
     private void validateUser(FormEvent event, boolean newuser)
@@ -330,14 +320,6 @@ public class UserManagerPortlet extends ActionPortlet {
             }
         }
 
-        // Validate family name
-        /*
-        String familyName = event.getTextFieldBean("familyName").getValue();
-        if (familyName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br />");
-            isInvalid = true;
-        }
-        */
         // Validate given name
         String givenName = event.getTextFieldBean("fullName").getValue();
 
@@ -458,6 +440,8 @@ public class UserManagerPortlet extends ActionPortlet {
         } else {
             accountRequest.setAttribute(User.DISABLED, "false");
         }
+        String certval = event.getTextFieldBean("certificate").getValue();
+        if (!certval.equals("")) accountRequest.setAttribute("user.certificate", certval);
     }
 
     private void saveUserRole(FormEvent event, User user) {

@@ -28,6 +28,7 @@ import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.security.cert.X509Certificate;
 
 public class LoginPortlet extends ActionPortlet {
 
@@ -36,10 +37,11 @@ public class LoginPortlet extends ActionPortlet {
     private static String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
     private static String LOGIN_NAME = "LOGIN_NAME";
     public static String SAVE_PASSWORDS = "SAVE_PASSWORDS";
+    public static String SUPPORT_X509_AUTH = "SUPPORT_X509_AUTH";
     public static String SEND_USER_FORGET_PASSWORD = "SEND_USER_FORGET_PASSWD";
 
     private static long REQUEST_LIFETIME = 1000*60*24*3; // 3 days
-    
+
     public static final String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
     public static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
 
@@ -62,7 +64,7 @@ public class LoginPortlet extends ActionPortlet {
     private TextMessagingService tms = null;
 
     public void init(PortletConfig config) throws UnavailableException {
-      
+
         super.init(config);
         try {
             userManagerService = (UserManagerService) getPortletConfig().getContext().getService(UserManagerService.class);
@@ -109,11 +111,18 @@ public class LoginPortlet extends ActionPortlet {
         pass.setValue("");
         request.setAttribute("user", user);
 
-        //CheckBoxBean cb = event.getCheckBoxBean("remloginCB");
+        // Check certificates
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        String x509supported = settings.getAttribute(SUPPORT_X509_AUTH);
+        if ((x509supported != null) && (x509supported.equalsIgnoreCase("true"))) {
+            X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
+            if (certs != null && certs.length > 0) {
+                request.setAttribute("certificate", certs[0].getSubjectDN().toString());
+            }
+        }
 
         if (user == null) {
             if (canUserCreateAccount) request.setAttribute("canUserCreateAcct", "true");
-            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
             boolean dispUser = Boolean.valueOf(settings.getAttribute(SEND_USER_FORGET_PASSWORD)).booleanValue();
             if (dispUser) request.setAttribute("dispPass", "true");
             setNextState(request, "login/login.jsp");
@@ -389,6 +398,9 @@ public class LoginPortlet extends ActionPortlet {
         CheckBoxBean savepassCB = event.getCheckBoxBean("savepassCB");
         savepassCB.setSelected(Boolean.valueOf(settings.getAttribute(SAVE_PASSWORDS)).booleanValue());
 
+        CheckBoxBean supportX509CB = event.getCheckBoxBean("supportx509CB");
+        supportX509CB.setSelected(Boolean.valueOf(settings.getAttribute(SUPPORT_X509_AUTH)).booleanValue());
+
         String numTries = settings.getAttribute(LOGIN_NUMTRIES);
         TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
         if (numTries == null) {
@@ -426,6 +438,12 @@ public class LoginPortlet extends ActionPortlet {
             savePasswords = false;
             sendForget = false;
         }
+
+        CheckBoxBean supportsx509CB = event.getCheckBoxBean("supportx509CB");
+        String supportx509val = supportsx509CB.getSelectedValue();
+        boolean supportx509 = (supportx509val != null);
+        settings.setAttribute(SUPPORT_X509_AUTH, Boolean.toString(supportx509));
+
         settings.setAttribute(SAVE_PASSWORDS, Boolean.toString(savePasswords));
         settings.setAttribute(SEND_USER_FORGET_PASSWORD, Boolean.toString(sendForget));
         portalConfigService.savePortalConfigSettings(settings);
