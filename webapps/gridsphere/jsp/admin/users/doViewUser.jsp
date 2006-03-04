@@ -12,26 +12,7 @@
             <ui:text value="<%= user.getUserName() %>" style="plain"/>
         </ui:tablecell>
     </ui:tablerow>
-    <%--
-            <ui:tablerow>
-                <ui:tablecell width="100">
-                    <ui:text key="FAMILYNAME"/>
-                </ui:tablecell>
-                <ui:tablecell>
-                    <ui:text value="<%= user.getFamilyName() %>" style="plain"/>
-                </ui:tablecell>
-            </ui:tablerow>
 
-            <ui:tablerow>
-                <ui:tablecell width="100">
-                    <ui:text key="GIVENNAME" />
-                </ui:tablecell>
-                <ui:tablecell>
-                    <ui:text value="<%= user.getGivenName() %>" style="plain"/>
-                </ui:tablecell>
-            </ui:tablerow>
-
-    --%>
     <ui:tablerow>
         <ui:tablecell width="100">
             <ui:text key="FULLNAME"/>
@@ -76,5 +57,17 @@
             <ui:checkbox beanId="accountCB"/>
         </ui:tablecell>
     </ui:tablerow>
+
+<% String certattr = (String) user.getAttribute("user.certificate");
+    if (certattr != null) { %>
+    <ui:tablerow>
+            <ui:tablecell width="100">
+                <ui:text key="USER_CERTIFICATE"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:text value="<%= certattr %>" style="plain"/>
+            </ui:tablecell>
+    </ui:tablerow>
+%>
 
 </ui:frame>

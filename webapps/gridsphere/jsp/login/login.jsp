@@ -4,8 +4,25 @@
 
 <portletAPI:init/>
 
+<jsp:useBean id="certificate" class="java.lang.String" scope="request"/>
+
 <ui:form>
     <ui:messagebox beanId="msg"/>
+
+    <% if (request.getAttribute("certificate") != null && ((String) request.getAttribute("certificate")).length() > 0)  { %>
+    <ui:table>
+            <ui:tablerow>
+                <ui:tablecell width="160">
+                    <ui:text key="LOGIN_CERTIFICATE"/>
+                </ui:tablecell>
+            </ui:tablerow>
+            <ui:tablerow>
+                <ui:tablecell width="160">
+                    <%= certificate %>
+                </ui:tablecell>
+            </ui:tablerow>
+    </ui:table>
+    <% } else { %>
 
     <ui:table>
         <ui:tablerow>
@@ -32,6 +49,9 @@
     <p>
         <input type="checkbox" name="remlogin" value="yes"/><ui:text key="LOGIN_REMEMBER_ME"/>
     </p>
+
+    <% } %>
+
     <ui:table>
         <ui:tablerow>
             <ui:tablecell width="100">

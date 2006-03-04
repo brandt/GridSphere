@@ -68,20 +68,16 @@
 
 <ui:frame beanId="roleFrame"/>
 
-<%--
-<ui:frame>
-    <ui:tablerow>
-
-        <ui:tablecell width="200">
-            <ui:text key="USER_ROLE"/>
-        </ui:tablecell>
-        <ui:tablecell>
-            <ui:listbox beanId="userRole"/>
-        </ui:tablecell>
-
-    </ui:tablerow>
-</ui:frame>
---%>
+<% if (request.getAttribute("certSupport") != null) { %>
+<ui:tablerow>
+            <ui:tablecell width="200">
+                <ui:text key="CERTIFICATE"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:textfield beanId="certificate"/>
+            </ui:tablecell>
+</ui:tablerow>
+<% } %>
 
 <% if (request.getAttribute("savePass") != null) { %>
 <ui:frame>

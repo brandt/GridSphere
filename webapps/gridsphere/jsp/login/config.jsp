@@ -23,6 +23,11 @@
         </p>
 
         <p>
+            <ui:checkbox beanId="supportx509CB" value="TRUE"/>
+            <ui:text key="LOGIN_CONFIG_X509"/>
+        </p>
+
+        <p>
             <ui:checkbox beanId="savepassCB" value="TRUE"/>
             <ui:text key="LOGIN_CONFIG_PASSWD"/>
             <br/>
