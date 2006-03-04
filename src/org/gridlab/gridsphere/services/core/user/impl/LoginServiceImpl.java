@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
@@ -30,6 +31,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
+import java.security.cert.X509Certificate;
 
 /**
  * The <code>LoginService</code> is the primary interface that defines the login method used to obtain a
@@ -202,13 +204,35 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             throws AuthenticationException, AuthorizationException {
         String loginName = req.getParameter("username");
         String loginPassword = req.getParameter("password");
+        String certificate = null;
 
-        if ((loginName == null) || (loginPassword == null)) {
-            throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_BLANK"));
+        X509Certificate[] certs = (X509Certificate[]) req.getAttribute("javax.servlet.request.X509Certificate");
+        if (certs != null && certs.length > 0) {
+            certificate = certificateTransform(certs[0].getSubjectDN().toString());
         }
 
-        // first get user
-        User user = activeLoginModule.getLoggedInUser(loginName);
+        User user = null;
+
+        // if using client certificate, then don't use login modules
+        if (certificate == null) {
+            if ((loginName == null) || (loginPassword == null)) {
+                throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_BLANK"));
+            }
+            // first get user
+            user = activeLoginModule.getLoggedInUser(loginName);
+        } else {
+
+            log.debug("Using certificate for login :" + certificate);
+
+            try {
+                String command = "from " + SportletUserImpl.class.getName() + " u " +
+                        "where u.attributes['user.certificate'] = '" + certificate + "'";
+                user = (User) pm.restore(command);
+                if (user != null) return user;
+            } catch(PersistenceManagerException e) {
+                log.error("Error attempting to retrieve user from certificate: ", e);
+            }
+        }
 
         if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
 
@@ -245,6 +269,24 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         if (!success) throw authEx;
 
         return user;
+    }
+
+    /**
+     *  Transform certificate subject from :
+     *  CN=Engbert Heupers, O=sara, O=users, O=dutchgrid
+     *  to :
+     *  /O=dutchgrid/O=users/O=sara/CN=Engbert Heupers
+     * @param certificate string
+     * @return certificate string
+     */
+    private String certificateTransform(String certificate) {
+        String ls[] = certificate.split(", ");
+        StringBuffer res = new StringBuffer();
+        for(int i = ls.length - 1; i >= 0; i--) {
+            res.append("/");
+            res.append(ls[i]);
+        }
+        return res.toString();
     }
 
     protected String getLocalizedText(PortletRequest req, String key) {
