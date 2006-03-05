@@ -132,6 +132,16 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         return selectSportletUserImpl("where uzer.EmailAddress='" + email + "'");
     }
 
+    /**
+     * Retrieves users based on attribute criteria
+     *
+     * @param attrName the attribute name
+     * @param attrValue the attribute value
+     */
+    public List getUsersByAttribute(String attrName, String attrValue) {
+        String criteria = "where u.attributes['user." + attrName + "'] = '" + attrValue + "'";
+        return selectUsers(criteria);
+    }
 
     private SportletUserImpl getSportletUserImpl(String id) {
         return selectSportletUserImpl("where uzer.oid='" + id + "'");

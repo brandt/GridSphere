@@ -31,9 +31,9 @@ public interface UserManagerService extends LoginUserModule {
     public void deleteUser(User user);
 
     /**
-     * Administrators can retrieve all pending account request
+     * Return the list of users
      *
-     * @return a list of pending account requests
+     * @return a list of users
      */
     public List getUsers();
 
@@ -50,6 +50,14 @@ public interface UserManagerService extends LoginUserModule {
      * @param loginName the user name or login id of the user in question
      */
     public User getUserByUserName(String loginName);
+
+    /**
+     * Retrieves users based on attribute criteria
+     *
+     * @param attrName the attribute name
+     * @param attrValue the attribute value
+     */
+    public List getUsersByAttribute(String attrName, String attrValue);
 
     /**
      * Retrieves a user object with the given email from this service.

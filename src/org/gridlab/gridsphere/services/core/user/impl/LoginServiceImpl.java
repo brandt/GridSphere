@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
@@ -27,6 +28,7 @@ import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descripto
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.LoginUserModule;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import java.lang.reflect.Constructor;
@@ -44,6 +46,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
     private UserSessionManager userSessionManager = UserSessionManager.getInstance();
     private PortletLog log = SportletLog.getInstance(LoginServiceImpl.class);
+    private UserManagerService userManagerService = null;
     private static boolean inited = false;
     private List authModules = new ArrayList();
     private static LoginUserModule activeLoginModule = null;
@@ -99,7 +102,6 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         log.debug("in login service init");
         if (!inited) {
             pm = PersistenceManagerFactory.createGridSphereRdbms();
-
             String loginClassName = config.getInitParameter("LOGIN_MODULE");
             try {
                 PortletServiceFactory factory = SportletServiceFactory.getInstance();
@@ -114,6 +116,12 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
             loadAuthModules(authModulesPath, Thread.currentThread().getContextClassLoader());
 
+            SportletServiceFactory factory = SportletServiceFactory.getInstance();
+            try {
+                userManagerService = (UserManagerService)factory.createPortletService(UserManagerService.class, true);
+            } catch (PortletServiceException e) {
+                log.error("Unable to create a user manager service", e);
+            }
             inited = true;
         }
     }
@@ -223,14 +231,9 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         } else {
 
             log.debug("Using certificate for login :" + certificate);
-
-            try {
-                String command = "from " + SportletUserImpl.class.getName() + " u " +
-                        "where u.attributes['user.certificate'] = '" + certificate + "'";
-                user = (User) pm.restore(command);
-                if (user != null) return user;
-            } catch(PersistenceManagerException e) {
-                log.error("Error attempting to retrieve user from certificate: ", e);
+            List userList = userManagerService.getUsersByAttribute("certificate", certificate);
+            if (!userList.isEmpty()) {
+                return (User)userList.get(0);
             }
         }
 
