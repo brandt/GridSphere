@@ -48,6 +48,7 @@ public class ActionSubmitTag extends ActionTag {
         }
 
         actionSubmitBean.setName(createActionURI());
+        actionSubmitBean.setUseAjax(useAjax);
 
         if (anchor != null) actionSubmitBean.setAnchor(anchor);
 
@@ -58,11 +59,7 @@ public class ActionSubmitTag extends ActionTag {
 
         if (useAjax) {
             String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
-            onClick = "startRequest(" + cid + ", this.form);";
-        }
-
-        if (onClick != null) {
-            actionSubmitBean.setOnClick(onClick);
+            actionSubmitBean.setOnClick("startRequest(" + cid + ", this.form);");
         }
         
         if (!beanId.equals("")) {
