@@ -87,7 +87,8 @@ public class RenderURLTagImpl extends ActionTag {
         paramPrefixing = false;
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
 
-        actionlink.setAction(createJSRActionURI(res.createRenderURL()));
+        String actionString = createJSRActionURI(res.createRenderURL());
+        actionlink.setAction(actionString);
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
         }
@@ -100,12 +101,12 @@ public class RenderURLTagImpl extends ActionTag {
         if (var == null) {
             try {
                 JspWriter out = pageContext.getOut();
-                out.print(actionURL.toString());
+                out.print(actionString);
             } catch (Exception e) {
                 throw new JspException(e.getMessage());
             }
         } else {
-            pageContext.setAttribute(var, actionURL.toString(), PageContext.PAGE_SCOPE);
+            pageContext.setAttribute(var, actionString, PageContext.PAGE_SCOPE);
         }
         windowState = null;
         portletMode = null;

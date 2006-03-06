@@ -109,15 +109,15 @@ public class ActionURLTagImpl extends ActionTag {
             try {
                 JspWriter out = pageContext.getOut();
                 if (trackMe != null) {
-                    out.println("?trackMe=" + trackMe + "&url=" + actionURL.toString());
+                    out.println("?trackMe=" + trackMe + "&url=" + actionString);
                 } else {
-                    out.print(actionURL.toString());
+                    out.print(actionString);
                 }
             } catch (Exception e) {
                 throw new JspException(e.getMessage());
             }
         } else {
-            pageContext.setAttribute(var, actionURL.toString(), PageContext.PAGE_SCOPE);
+            pageContext.setAttribute(var, actionString, PageContext.PAGE_SCOPE);
         }
         windowState = null;
         portletMode = null;
