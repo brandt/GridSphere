@@ -90,6 +90,11 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>useAjax</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>label</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -180,6 +185,11 @@
         </description>
         <attribute>
             <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>useAjax</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
