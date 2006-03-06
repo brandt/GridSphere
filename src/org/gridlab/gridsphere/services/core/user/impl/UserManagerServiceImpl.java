@@ -139,7 +139,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param attrValue the attribute value
      */
     public List getUsersByAttribute(String attrName, String attrValue) {
-        String criteria = "where u.attributes['user." + attrName + "'] = '" + attrValue + "'";
+        String criteria = "where uzer.attributes['user." + attrName + "'] = '" + attrValue + "'";
         return selectUsers(criteria);
     }
 

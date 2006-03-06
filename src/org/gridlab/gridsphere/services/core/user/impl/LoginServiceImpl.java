@@ -233,7 +233,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             log.debug("Using certificate for login :" + certificate);
             List userList = userManagerService.getUsersByAttribute("certificate", certificate);
             if (!userList.isEmpty()) {
-                return (User)userList.get(0);
+                user = (User)userList.get(0);
             }
         }
 
@@ -242,6 +242,9 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         String accountStatus = (String)user.getAttribute(User.DISABLED);
         if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
             throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
+
+        // If authorized via certificates no other authorization needed
+        if (certificate != null) return user;
 
         // second invoke the appropriate auth module
         List modules = this.getActiveAuthModules();
