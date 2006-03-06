@@ -14,8 +14,6 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     public static final String SUBMIT_STYLE = "portlet-form-button";
     public static final String NAME = "as";
 
-    protected String onClick = null;
-
     /**
      * Constructs a default action submit bean
      */
@@ -36,18 +34,19 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     }
 
     public String toStartString() {
-        return "<input " + getFormattedCss() + " type=\"submit\" " + checkDisabled();
+        String inputType = "submit";
+        if (useAjax) inputType = "button";
+        return "<input " + getFormattedCss() + " type=\"" + inputType + "\" " + checkDisabled();
     }
 
     public String toEndString() {
-        String pname = (name == null) ? "" : name;
-        String sname = pname;
+        String sname = (name == null) ? "" : name;
         StringBuffer sb = new StringBuffer();
         if (action != null) sname = action;
         if (anchor != null) sname += "#" + anchor;
         if (onClick != null) {
             // 'onClick' replaced by 'onclick' for XHTML 1.0 Strict compliance
-            sb.append(" onclick='" + onClick + "' ");
+            sb.append(" onclick=\"" + onClick + "\" ");
         }
         sb.append("name=\"" + sname + "\" value=\"" + value + "\"/>");
         return sb.toString();
