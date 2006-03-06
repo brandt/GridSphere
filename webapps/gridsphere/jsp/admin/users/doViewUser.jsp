@@ -68,6 +68,6 @@
                 <ui:text value="<%= certattr %>" style="plain"/>
             </ui:tablecell>
     </ui:tablerow>
-%>
+<% } %>
 
 </ui:frame>
