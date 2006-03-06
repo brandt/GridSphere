@@ -276,8 +276,6 @@ public abstract class ActionTag extends BaseComponentTag {
     protected String createJSRActionURI(PortletURL url) throws JspException {
         // Builds a URI containing the actin and associated params
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-
-        System.err.println("create action passed in url= " + url.toString());
         //RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
         // action is a required attribute except for FormTag
         /*
@@ -318,10 +316,8 @@ public abstract class ActionTag extends BaseComponentTag {
         String compId = (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
 
         if (action != null) {
-            System.err.println("action is not NULL!!!");
             if (url instanceof PortletURLImpl) {
                 if (compId == null) {
-                    System.err.println("action =" + action);
                     ((PortletURLImpl)url).setAction(action);
                     portletAction = new DefaultPortletAction(action);
                 } else {
@@ -368,7 +364,7 @@ public abstract class ActionTag extends BaseComponentTag {
                 }
             }
         }
-        System.err.println("printing action  URL = " + url.toString());
+        //System.err.println("printing action  URL = " + url.toString());
         return url.toString();
     }
 
