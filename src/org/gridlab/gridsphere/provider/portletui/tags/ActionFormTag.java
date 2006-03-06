@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.jsrimpl.RenderResponseImpl;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
 
-import javax.portlet.RenderResponse;
+import javax.portlet.*;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
@@ -101,7 +101,7 @@ public class ActionFormTag extends ActionTag {
                 name = "form" + this.getUniqueId("gs_formNumber");
             }
 
-            // 'name' attribute replaced by 'id' for XHTML 1.0 Strict compliance     
+            // 'name' attribute replaced by 'id' for XHTML 1.0 Strict compliance
             out.print(" id=\"" + name + "\"");
 
             out.println(">");
@@ -124,7 +124,6 @@ public class ActionFormTag extends ActionTag {
                 out.println("<input name=\"" + TrackerService.REDIRECT_URL + "\" value=\"" +extUrl + "\" type=\"hidden\"/>");
             }
 
-
             // write out rest of body
             bodyContent.writeOut(getPreviousOut());
             // end form
@@ -132,8 +131,15 @@ public class ActionFormTag extends ActionTag {
         } catch (Exception e) {
             throw new JspTagException(e.getMessage());
         }
+        // nulling these out is ABSOLUTELY NECESSARY or weird
+        // interactins happen with actionsubmit nested inside actionform!
         name = null;
+        action = null;
         return EVAL_PAGE;
+    }
+
+    public void release() {
+        super.release();
     }
 
 }
