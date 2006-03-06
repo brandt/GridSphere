@@ -221,6 +221,11 @@ public class UserManagerPortlet extends ActionPortlet {
         if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
         }
+
+        if (settings.getAttribute(LoginPortlet.SUPPORT_X509_AUTH).equals(Boolean.TRUE.toString())) {
+            req.setAttribute("certSupport", "true");
+        }
+
         CheckBoxBean accountCB = evt.getCheckBoxBean("accountCB");
         String disabled = (String)user.getAttribute(User.DISABLED);
         if ((disabled != null) && ("TRUE".equalsIgnoreCase(disabled))) {

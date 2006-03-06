@@ -162,7 +162,7 @@ public class LoginPortlet extends ActionPortlet {
             req.getSession(true).setAttribute(LoginPortlet.LOGIN_NAME, req.getParameter("username"));
             System.err.println("num tries = " + i);
             // tried one to many times using same name
-            if (req.getParameter("username").equals(loginname)) {
+            if (req.getParameter("username") != null && req.getParameter("username").equals(loginname)) {
                 if ((i >= defaultNumTries) && (defaultNumTries != -1)) {
                     disableAccount(event);
                     errorMsg = this.getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS");
