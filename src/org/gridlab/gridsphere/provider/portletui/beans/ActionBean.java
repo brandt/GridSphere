@@ -24,6 +24,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     protected String extUrl = null;
     protected String onClick = null;
     protected String onSubmit = null;
+    protected boolean useAjax = false;
 
     /**
      * Constructs default action bean
@@ -76,6 +77,23 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
         this.onSubmit = onSubmit;
     }
 
+    /**
+     * Returns true if this action should only retrieve the portlet fragment using AJAX (XmlHttpRequest)
+     *
+     * @return true if this action should only retrieve the portlet fragment using AJAX (XmlHttpRequest)
+     */
+    public boolean getUseAjax() {
+        return useAjax;
+    }
+
+    /**
+     * If true this action should only retrieve the portlet fragment using AJAX (XmlHttpRequest)
+     * 
+     * @param useAjax true if this action should only retrieve the portlet fragment using AJAX (XmlHttpRequest)
+     */
+    public void setUseAjax(boolean useAjax) {
+        this.useAjax = useAjax;
+    }
 
     /**
      * Sets the label identified with the portlet component to link to
