@@ -522,15 +522,22 @@ function formData2QueryString(docForm) {
   return submitContent;
 }
 
-  function startRequest(mycid, myform) {
+  function startRequest(mycid) {
       createXMLHttpRequest();
       cid = mycid;
       xmlHttp.onreadystatechange = handleStateChange;
       //alert(formData2QueryString(myform));
-      xmlHttp.open("POST", "gridsphere?ajax=true&cid=" + cid + "&" + formData2QueryString(myform), true);
+      var formItems;
+      pageElements = document.getElementById(cid);
+      formElements = pageElements.getElementsByTagName("form");
+      for (i = 0; i < formElements.length; i++) {
+          formItems += formData2QueryString(formElements[i]);
+      }
+      xmlHttp.open("POST", "gridsphere?ajax=true&cid=" + cid + "&" + formItems, true);
       xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       xmlHttp.send(null);
   }
+
 
 function handleStateChange() {
     if(xmlHttp.readyState == 4) {
