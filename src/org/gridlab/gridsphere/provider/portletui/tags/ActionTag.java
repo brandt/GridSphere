@@ -32,10 +32,10 @@ public abstract class ActionTag extends BaseComponentTag {
     protected String var = null;
     protected String onClick = null;
     protected String onSubmit = null;
+    protected boolean useAjax = false;
     protected String key = null;
     protected boolean isSecure = false;
     protected PortletURI actionURI = null;
-    protected PortletURL actionURL = null;
     protected String windowState = null;
     protected String portletMode = null;
     protected DefaultPortletAction portletAction = null;
@@ -265,10 +265,19 @@ public abstract class ActionTag extends BaseComponentTag {
         return paramBeans;
     }
 
+    public boolean isUseAjax() {
+        return useAjax;
+    }
+
+    public void setUseAjax(boolean useAjax) {
+        this.useAjax = useAjax;
+    }
+
     protected String createJSRActionURI(PortletURL url) throws JspException {
         // Builds a URI containing the actin and associated params
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-        this.actionURL = url;
+
+        System.err.println("create action passed in url= " + url.toString());
         //RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
         // action is a required attribute except for FormTag
         /*
@@ -281,16 +290,16 @@ public abstract class ActionTag extends BaseComponentTag {
             System.err.println("portletMode " + portletMode);
         }
         */
-        if ((label != null)  && (actionURL instanceof PortletURLImpl)) {
+        if ((label != null)  && (url instanceof PortletURLImpl)) {
             res.setProperty("label", label);
-            ((PortletURLImpl)actionURL).setComponentID(label);
+            ((PortletURLImpl)url).setComponentID(label);
         }
 
         if (windowState != null) {
             WindowState state = new WindowState(windowState);
             try {
                 //System.err.println("set state to:" + state);
-                actionURL.setWindowState(state);
+                url.setWindowState(state);
             } catch (WindowStateException e) {
                 throw new JspException("Unknown window state in renderURL tag: " + windowState);
             }
@@ -299,7 +308,7 @@ public abstract class ActionTag extends BaseComponentTag {
             PortletMode mode = new PortletMode(portletMode);
             try {
                 //actionURL = res.createRenderURL();
-                actionURL.setPortletMode(mode);
+                url.setPortletMode(mode);
                 //System.err.println("set mode to:" + mode);
             } catch (PortletModeException e) {
                 throw new JspException("Unknown portlet mode in renderURL tag: " + portletMode);
@@ -309,21 +318,23 @@ public abstract class ActionTag extends BaseComponentTag {
         String compId = (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
 
         if (action != null) {
-            if (actionURL instanceof PortletURLImpl) {
+            System.err.println("action is not NULL!!!");
+            if (url instanceof PortletURLImpl) {
                 if (compId == null) {
-                    ((PortletURLImpl)actionURL).setAction(action);
+                    System.err.println("action =" + action);
+                    ((PortletURLImpl)url).setAction(action);
                     portletAction = new DefaultPortletAction(action);
                 } else {
-                    ((PortletURLImpl)actionURL).setAction(compId + "%" + action);
+                    ((PortletURLImpl)url).setAction(compId + "%" + action);
                     portletAction = new DefaultPortletAction(compId + "%" + action);
                 }
             } else {
                 // this is code for non-GS containers
                 if (compId == null) {
-                    actionURL.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, action);
+                    url.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, action);
                     portletAction = new DefaultPortletAction(action);
                 } else {
-                    actionURL.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, compId + "%" + action);
+                    url.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, compId + "%" + action);
                     portletAction = new DefaultPortletAction(compId + "%" + action);
                 }
             }
@@ -342,24 +353,23 @@ public abstract class ActionTag extends BaseComponentTag {
             String id = createUniquePrefix(2);
             Iterator it = paramBeans.iterator();
             if (paramPrefixing) {
-                actionURL.setParameter(SportletProperties.PREFIX, id);
+                url.setParameter(SportletProperties.PREFIX, id);
                 portletAction.addParameter(SportletProperties.PREFIX, id);
             }
             while (it.hasNext()) {
                 ActionParamBean pbean = (ActionParamBean) it.next();
                 //System.err.println("have param bean name= " + pbean.getName() + " value= " + pbean.getValue());
                 if (paramPrefixing) {
-                    actionURL.setParameter(id + "_" + pbean.getName(), pbean.getValue());
+                    url.setParameter(id + "_" + pbean.getName(), pbean.getValue());
                     portletAction.addParameter(id + "_" + pbean.getName(), pbean.getValue());
                 } else {
-                    actionURL.setParameter(pbean.getName(), pbean.getValue());
+                    url.setParameter(pbean.getName(), pbean.getValue());
                     portletAction.addParameter(pbean.getName(), pbean.getValue());
                 }
             }
         }
-
-        //System.err.println("printing action  URL = " + actionURL.toString());
-        return actionURL.toString();
+        System.err.println("printing action  URL = " + url.toString());
+        return url.toString();
     }
 
     public String createActionURI() throws JspException {
@@ -413,6 +423,28 @@ public abstract class ActionTag extends BaseComponentTag {
 
     }
 
+    public void release() {
+        super.release();
+        action = null;
+        anchor = null;
+        var = null;
+        onClick = null;
+        onSubmit = null;
+        useAjax = false;
+        key = null;
+        isSecure = false;
+        actionURI = null;
+        windowState = null;
+        portletMode = null;
+        portletAction = null;
+        paramBeans = null;
+        label = null;
+        trackMe = null;
+        extUrl = null;
+        imageBean = null;
+        paramPrefixing = true;
+    }
+
     /**
      * A string utility that produces a string composed of
      * <code>numChars</code> number of characters
@@ -420,7 +452,7 @@ public abstract class ActionTag extends BaseComponentTag {
      * @param numChars the number of characters in the resulting <code>String</code>
      * @return the <code>String</code>
      */
-    private String createUniquePrefix(int numChars) {
+    protected String createUniquePrefix(int numChars) {
         StringBuffer s = new StringBuffer();
         for (int i = 0; i <= numChars; i++) {
             int nextChar = (int) (Math.random() * 62);
