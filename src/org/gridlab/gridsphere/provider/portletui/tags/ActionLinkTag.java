@@ -6,12 +6,11 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 import org.gridlab.gridsphere.provider.portletui.beans.MessageStyle;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 import java.util.ArrayList;
 
@@ -123,6 +122,7 @@ public class ActionLinkTag extends ActionTag {
             paramBeans = new ArrayList();
         }
 
+        actionlink.setUseAjax(useAjax);
         if (name != null) actionlink.setName(name);
         if (anchor != null) actionlink.setAnchor(anchor);
         if (action != null) actionlink.setAction(action);
@@ -137,6 +137,11 @@ public class ActionLinkTag extends ActionTag {
             if (!actionMenuTag.getLayout().equals("horizontal")) {
                 actionlink.setCssStyle("display: block");
             }
+        }
+
+        if (useAjax) {
+            String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
+            actionlink.setOnClick("startRequest(" + cid + ");");
         }
 
         if (key != null) {

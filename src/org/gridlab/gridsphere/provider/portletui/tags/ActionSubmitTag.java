@@ -59,7 +59,7 @@ public class ActionSubmitTag extends ActionTag {
 
         if (useAjax) {
             String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
-            actionSubmitBean.setOnClick("startRequest(" + cid + ", this.form);");
+            actionSubmitBean.setOnClick("startRequest(" + cid + ");");
         }
         
         if (!beanId.equals("")) {
