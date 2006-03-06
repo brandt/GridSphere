@@ -6,10 +6,10 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionSubmitBean;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -19,47 +19,7 @@ import java.util.Iterator;
  */
 public class ActionSubmitTag extends ActionTag {
 
-    protected String key = "";
-
     protected ActionSubmitBean actionSubmitBean = null;
-
-    protected String onClick = null;
-
-    /**
-     * Returns the action link key used to locate localized text
-     *
-     * @return the action link key
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * Sets the action link key used to locate localized text
-     *
-     * @param key the action link key
-     */
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    /**
-     * Returns the onClick JavaScript function
-     *
-     * @return onClick JavaScript function
-     */
-    public String getOnClick() {
-        return onClick;
-    }
-
-    /**
-     * Sets the onClick JavaScript function
-     *
-     * @param onClick the onClick JavaScript function
-     */
-    public void setOnClick(String onClick) {
-        this.onClick = onClick;
-    }
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
@@ -68,7 +28,6 @@ public class ActionSubmitTag extends ActionTag {
                 actionSubmitBean = new ActionSubmitBean(beanId);
                 paramBeans = new ArrayList();
             } else {
-
                 if (actionSubmitBean.getAction() != null) {
                     action = actionSubmitBean.getAction();
                 }
@@ -92,9 +51,14 @@ public class ActionSubmitTag extends ActionTag {
 
         if (anchor != null) actionSubmitBean.setAnchor(anchor);
 
-        if (!key.equals("")) {
+        if (key != null) {
             actionSubmitBean.setKey(key);
             value = getLocalizedText(key);
+        }
+
+        if (useAjax) {
+            String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
+            onClick = "startRequest(" + cid + ", this.form);";
         }
 
         if (onClick != null) {
@@ -109,7 +73,7 @@ public class ActionSubmitTag extends ActionTag {
 
         if (action != null) actionSubmitBean.setAction(action);
         if (trackMe != null) actionSubmitBean.setTrackme(trackMe);
-        
+
         if (cssStyle != null) {
             actionSubmitBean.setCssStyle(cssStyle);
         }
@@ -156,6 +120,11 @@ public class ActionSubmitTag extends ActionTag {
         }
 
         return EVAL_PAGE;
+    }
+
+    public void release() {
+        super.release();
+        actionSubmitBean = null;
     }
 
 }
