@@ -495,11 +495,6 @@ function createXMLHttpRequest() {
                   }
                   break;
 
-              case 'button':
-                  submitContent += formElem.name + '&'
-
-                  break;
-
               // Checkboxes
               case 'checkbox':
                   if (formElem.checked) {
@@ -527,7 +522,7 @@ function createXMLHttpRequest() {
       return submitContent;
   }
 
-  function startRequest(mycid) {
+  function startRequest(mycid, action) {
       createXMLHttpRequest();
       cid = mycid;
       xmlHttp.onreadystatechange = handleStateChange;
@@ -538,7 +533,7 @@ function createXMLHttpRequest() {
       for (i = 0; i < formElements.length; i++) {
           formItems += formData2QueryString(formElements[i]);
       }
-      xmlHttp.open("POST", "gridsphere?ajax=true&cid=" + cid + "&" + formItems, true);
+      xmlHttp.open("POST", "gridsphere?ajax=true&cid=" + cid + "&" + formItems + action, true);
       xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       xmlHttp.send(null);
   }
