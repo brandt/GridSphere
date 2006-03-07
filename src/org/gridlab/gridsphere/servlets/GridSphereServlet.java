@@ -412,7 +412,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                                 if (genreq.getUserID().equals(uid)) {
                                     User newuser = userManagerService.getUser(uid);
                                     if (newuser != null) {
-                                        System.err.println("in checkUserHasCookie-- seting user settings!!");
+                                        //System.err.println("in checkUserHasCookie-- seting user settings!!");
                                         setUserSettings(event, newuser);
                                     }
                                 }
@@ -684,12 +684,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         while (it.hasNext()) {
             UserGroup ge = (UserGroup)it.next();
             String roleName = ge.getRoleName();
-            System.err.println(ge.getUser() + " " + ge.getGroup() + ge.getRole());
+            //System.err.println(ge.getUser() + " " + ge.getGroup() + ge.getRole());
             if ((roleName != null) && !roleName.equals("")) {
                 if (ge.getUser() != null) {
-                    System.err.println("user= " + ge.getUser() + " role=" + roleName);
+                    //System.err.println("user= " + ge.getUser() + " role=" + roleName);
                     roleService.addUserToRole(ge.getUser(), roleService.getRole(roleName));
-
                     if (roleName.equalsIgnoreCase("SUPER")) {
                         roleService.addUserToRole(ge.getUser(), PortletRole.ADMIN);
                         roleService.addUserToRole(ge.getUser(), PortletRole.USER);
@@ -704,7 +703,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             PortletRole role = ge.getRole();
             if (role != null) {
                 if (ge.getUser() != null) {
-                    System.err.println("user1= " + ge.getUser() + " role=" + roleName);
+                    //System.err.println("user1= " + ge.getUser() + " role=" + roleName);
                     roleService.addUserToRole(ge.getUser(), role);
                     if (role.equals(PortletRole.SUPER)) {
                         roleService.addUserToRole(ge.getUser(), PortletRole.ADMIN);
@@ -713,7 +712,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     if (role.equals(PortletRole.ADMIN)) {
                         roleService.addUserToRole(ge.getUser(), PortletRole.USER);
                     }
-
                     ge.setRole(null);
                     groupService.saveUserGroup(ge);
                 }
