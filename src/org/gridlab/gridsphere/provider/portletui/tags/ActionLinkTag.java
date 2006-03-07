@@ -139,10 +139,12 @@ public class ActionLinkTag extends ActionTag {
             }
         }
 
+        /*
         if (useAjax) {
             String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
             actionlink.setOnClick("startRequest(" + cid + ");");
         }
+        */
 
         if (key != null) {
             actionlink.setKey(key);
@@ -166,6 +168,12 @@ public class ActionLinkTag extends ActionTag {
         actionlink.setPortletURI(createActionURI());
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
+        }
+
+        if (useAjax) {
+            String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
+            String paction = ((!action.equals("")) ? "&" + portletAction.toString() : "");
+            actionlink.setOnClick("startRequest(" + cid + ", '" + paction + "');");
         }
 
         if (imageBean != null) {

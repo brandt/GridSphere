@@ -57,11 +57,7 @@ public class ActionSubmitTag extends ActionTag {
             value = getLocalizedText(key);
         }
 
-        if (useAjax) {
-            String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
-            actionSubmitBean.setOnClick("startRequest(" + cid + ");");
-        }
-        
+
         if (!beanId.equals("")) {
             this.updateBaseComponentBean(actionSubmitBean);
         } else {
@@ -104,6 +100,12 @@ public class ActionSubmitTag extends ActionTag {
         actionSubmitBean.setName(actionURI);
 
         if (portletAction != null) actionSubmitBean.setAction(portletAction.toString());
+
+        if (useAjax) {
+            String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
+            String paction = ((!action.equals("")) ? "&" + portletAction.toString() : "");
+            actionSubmitBean.setOnClick("startRequest(" + cid + ", '" + paction + "');");
+        }
 
         if ((bodyContent != null) && (value == null)) {
             actionSubmitBean.setValue(bodyContent.getString());
