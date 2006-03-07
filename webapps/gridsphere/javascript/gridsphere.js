@@ -468,59 +468,64 @@ function createXMLHttpRequest() {
 
 // The var docForm should be a reference to a <form>
 
-function formData2QueryString(docForm) {
+  function formData2QueryString(docForm) {
 
-  var submitContent = '';
-  var formElem;
-  var lastElemName = '';
+      var submitContent = '';
+      var formElem;
+      var lastElemName = '';
 
-  for (i = 0; i < docForm.elements.length; i++) {
+      for (i = 0; i < docForm.elements.length; i++) {
 
-    formElem = docForm.elements[i];
-    switch (formElem.type) {
-      // Text fields, hidden form elements
-      case 'text':
-      case 'hidden':
-      case 'password':
-      case 'textarea':
-      case 'select-one':
-        submitContent += formElem.name + '=' + escape(formElem.value) + '&'
-          //submitContent += formElem.name + '=' + escape(formElem[formElem.selectedIndex].value) + '&'
-          break;
+          formElem = docForm.elements[i];
+          switch (formElem.type) {
+          // Text fields, hidden form elements
+              case 'text':
+              case 'hidden':
+              case 'password':
+              case 'textarea':
+              case 'select-one':
+                  submitContent += formElem.name + '=' + escape(formElem.value) + '&'
+                  //submitContent += formElem.name + '=' + escape(formElem[formElem.selectedIndex].value) + '&'
+                  break;
 
-      // Radio buttons
-      case 'radio':
-        if (formElem.checked) {
-          submitContent += formElem.name + '=' + escape(formElem.value) + '&'
-        }
-        break;
+              // Radio buttons
+              case 'radio':
+                  if (formElem.checked) {
+                      submitContent += formElem.name + '=' + escape(formElem.value) + '&'
+                  }
+                  break;
 
-      // Checkboxes
-      case 'checkbox':
-        if (formElem.checked) {
-          // Continuing multiple, same-name checkboxes
-          if (formElem.name == lastElemName) {
-            // Strip of end ampersand if there is one
-            if (submitContent.lastIndexOf('&') == submitContent.length-1) {
-              submitContent = submitContent.substr(0, submitContent.length - 1);
-            }
-            // Append value as comma-delimited string
-            submitContent += ',' + escape(formElem.value);
+              case 'button':
+                  submitContent += formElem.name + '&'
+
+                  break;
+
+              // Checkboxes
+              case 'checkbox':
+                  if (formElem.checked) {
+                      // Continuing multiple, same-name checkboxes
+                      if (formElem.name == lastElemName) {
+                          // Strip of end ampersand if there is one
+                          if (submitContent.lastIndexOf('&') == submitContent.length-1) {
+                              submitContent = submitContent.substr(0, submitContent.length - 1);
+                          }
+                          // Append value as comma-delimited string
+                          submitContent += ',' + escape(formElem.value);
+                      }
+                      else {
+                          submitContent += formElem.name + '=' + escape(formElem.value);
+                      }
+                      submitContent += '&';
+                      lastElemName = formElem.name;
+                  }
+                  break;
+
           }
-          else {
-            submitContent += formElem.name + '=' + escape(formElem.value);
-          }
-          submitContent += '&';
-          lastElemName = formElem.name;
-        }
-        break;
-
-    }
+      }
+      // Remove trailing separator
+      submitContent = submitContent.substr(0, submitContent.length - 1);
+      return submitContent;
   }
-  // Remove trailing separator
-  submitContent = submitContent.substr(0, submitContent.length - 1);
-  return submitContent;
-}
 
   function startRequest(mycid) {
       createXMLHttpRequest();
@@ -539,17 +544,17 @@ function formData2QueryString(docForm) {
   }
 
 
-function handleStateChange() {
-    if(xmlHttp.readyState == 4) {
-        if(xmlHttp.status == 200) {
-            // create a temporary div element to store the responseText...
-            var serverResponse = document.createElement("div");
-            // ... and store the responseText inside it
-            serverResponse.innerHTML = xmlHttp.responseText;
-            // create a collection of all the div elements returned
-            tempPageElements = serverResponse.getElementsByTagName("div");
-            // replace existing component with new one
-            document.getElementById(cid).innerHTML = tempPageElements[0].innerHTML;
-        }
-    }
-}
+  function handleStateChange() {
+      if(xmlHttp.readyState == 4) {
+          if(xmlHttp.status == 200) {
+              // create a temporary div element to store the responseText...
+              var serverResponse = document.createElement("div");
+              // ... and store the responseText inside it
+              serverResponse.innerHTML = xmlHttp.responseText;
+              // create a collection of all the div elements returned
+              tempPageElements = serverResponse.getElementsByTagName("div");
+              // replace existing component with new one
+              document.getElementById(cid).innerHTML = tempPageElements[0].innerHTML;
+          }
+      }
+  }
