@@ -36,6 +36,7 @@ public class LoginPortlet extends ActionPortlet {
     private static String ACTIVATE_ACCOUNT_LABEL ="activateaccount";
     private static String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
     private static String LOGIN_NAME = "LOGIN_NAME";
+    private static String LOGIN_ERROR_HANDLING = "LOGIN_ERROR_HANDLING";
     public static String SAVE_PASSWORDS = "SAVE_PASSWORDS";
     public static String SUPPORT_X509_AUTH = "SUPPORT_X509_AUTH";
     public static String SEND_USER_FORGET_PASSWORD = "SEND_USER_FORGET_PASSWD";
@@ -83,6 +84,11 @@ public class LoginPortlet extends ActionPortlet {
                 settings.setAttribute(SAVE_PASSWORDS, Boolean.TRUE.toString());
             }
             String numTries = settings.getAttribute(LOGIN_NUMTRIES);
+
+
+            if (settings.getAttribute(LOGIN_ERROR_HANDLING) == null) {
+                settings.setAttribute(LOGIN_ERROR_HANDLING, Boolean.FALSE.toString());
+            }
 
             if (numTries == null) {
                 settings.setAttribute(LOGIN_NUMTRIES, "-1");
@@ -182,7 +188,6 @@ public class LoginPortlet extends ActionPortlet {
         String loginName = req.getParameter("username");
         User user = userManagerService.getUserByUserName(loginName);
         if (user != null) {
-            System.err.println("user= " + user);
             user.setAttribute(User.DISABLED, "true");
             userManagerService.saveUser(user);
 
@@ -194,7 +199,7 @@ public class LoginPortlet extends ActionPortlet {
             mailToUser.setTo(user.getEmailAddress());
             mailToUser.setServiceid("mail");
 
-            org.gridsphere.tmf.message.MailMessage mailToAdmin = tms.getMailMessage();
+            MailMessage mailToAdmin = tms.getMailMessage();
             StringBuffer body2 = new StringBuffer();
             body2.append(getLocalizedText(req, "LOGIN_DISABLED_ADMIN_MSG") + " " + user.getUserName());
             mailToAdmin.setBody(body2.toString());
@@ -392,6 +397,9 @@ public class LoginPortlet extends ActionPortlet {
         acctCB.setSelected(canUserCreateAccount);
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
 
+        Boolean sendMail = Boolean.valueOf(settings.getAttribute(LOGIN_ERROR_HANDLING));
+        req.setAttribute("sendMail", sendMail);
+
         CheckBoxBean notifyCB = event.getCheckBoxBean("notifyCB");
         notifyCB.setSelected(Boolean.valueOf(settings.getAttribute(SEND_USER_FORGET_PASSWORD)).booleanValue());
 
@@ -468,6 +476,23 @@ public class LoginPortlet extends ActionPortlet {
         portalConfigService.savePortalConfigSettings(settings);
         showConfigure(event);
     }
+
+    public void configErrorSettings(FormEvent event) throws PortletException {
+        PortletRequest req = event.getPortletRequest();
+        if (!req.getRoles().contains(PortletRole.ADMIN.getName())) return;
+
+        RadioButtonBean errorRB = event.getRadioButtonBean("errorRB");
+
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        System.err.println("chosen vlaue: "+ errorRB.getSelectedValue());
+        Boolean sendMail = Boolean.FALSE;
+        if (errorRB.getSelectedValue().equals("MAIL")) sendMail = Boolean.TRUE;
+        settings.setAttribute(LOGIN_ERROR_HANDLING, sendMail.toString());
+
+        portalConfigService.savePortalConfigSettings(settings);
+        showConfigure(event);
+    }
+
 
     public void displayForgotPassword(FormEvent event) {
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
@@ -605,11 +630,8 @@ public class LoginPortlet extends ActionPortlet {
     }
 
     public void newpassword(FormEvent evt) {
-
         PortletRequest req = evt.getPortletRequest();
-
         String id = req.getParameter("reqid");
-
         GenericRequest request = requestService.getRequest(id, FORGOT_PASSWORD_LABEL);
         if (request != null) {
             HiddenFieldBean reqid = evt.getHiddenFieldBean("reqid");
@@ -618,19 +640,14 @@ public class LoginPortlet extends ActionPortlet {
         } else {
             setNextState(req, DEFAULT_VIEW_PAGE);
         }
-
     }
 
     public void activate(FormEvent evt) {
-
         PortletRequest req = evt.getPortletRequest();
-
         String id = req.getParameter("reqid");
-
         GenericRequest request = requestService.getRequest(id, ACTIVATE_ACCOUNT_LABEL);
         if (request != null) {
             User user = saveUser(request);
-
             createSuccessMessage(evt, this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
                     "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN") +
                     " " + user.getUserName());
@@ -638,7 +655,6 @@ public class LoginPortlet extends ActionPortlet {
             requestService.deleteRequest(request);
             setNextState(req, "doViewUser");
         }
-
     }
 
     public void doSaveAuthModules(FormEvent event) {
