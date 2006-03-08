@@ -36,13 +36,6 @@ public interface ActionEvent extends Event {
     public String getActionString();
 
     /**
-     * Return the portlet request associated with this action event
-     *
-     * @return the <code>PortletRequest</code>
-     */
-    public PortletRequest getPortletRequest();
-
-    /**
      * Return the portlet response associated with this action event
      *
      * @return the <code>PortletResponse</code>

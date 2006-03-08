@@ -16,7 +16,7 @@ import java.util.EventListener;
 public interface MessageListener extends EventListener {
 
     /**
-     * Gives notification taht a message has been received
+     * Gives notification that a message has been received
      *
      * @param event the message event
      * @throws PortletException if the listener has trouble fulfilling the request
