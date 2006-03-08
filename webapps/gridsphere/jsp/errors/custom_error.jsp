@@ -8,7 +8,7 @@
 <% String lastFrame = (String)request.getAttribute("lastFrame"); %>
 
 <% if (error != null) { %>
-<ui:messagebox style="<%= MessageStyle.MSG_ALERT %>" value="An error occured!"/>
+<ui:messagebox style="<%= MessageStyle.MSG_ALERT %>" value="An error occurred!"/>
 
 Error message:    <%= error.getMessage() %>
 <p>
