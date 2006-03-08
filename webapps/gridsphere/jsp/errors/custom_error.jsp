@@ -10,7 +10,10 @@
 <% if (error != null) { %>
 <ui:messagebox style="<%= MessageStyle.MSG_ALERT %>" value="An error occurred!"/>
 
+<% if (error.getMessage() != null) { %>
 Error message:    <%= error.getMessage() %>
+<% } %>
+
 <p>
     <b>Stack Trace:</b><br/>
     <% error.printStackTrace(new java.io.PrintWriter(out)); %>
