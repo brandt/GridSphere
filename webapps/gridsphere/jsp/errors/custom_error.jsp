@@ -1,8 +1,24 @@
-<jsp:useBean id="error" class="java.lang.Throwable" scope="request"/>
+<%@ page import="org.gridlab.gridsphere.provider.portletui.beans.MessageStyle"%>
+<%@ taglib uri="/portletUI" prefix="ui" %>
+<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+<portletAPI:init/>
 
-<h3>An error occured!</h3>
+
+<% Throwable error = (Throwable)request.getAttribute("error"); %>
+<% String lastFrame = (String)request.getAttribute("lastFrame"); %>
+
+<% if (error != null) { %>
+<ui:messagebox style="<%= MessageStyle.MSG_ALERT %>" value="An error occured!"/>
+
 Error message:    <%= error.getMessage() %>
 <p>
     <b>Stack Trace:</b><br/>
     <% error.printStackTrace(new java.io.PrintWriter(out)); %>
 </p>
+
+<% } else { %>
+
+<ui:messagebox style="<%= MessageStyle.MSG_ALERT %>" key="PORTAL_ERROR_MSG"/>
+
+<%= lastFrame %>
+<% } %>

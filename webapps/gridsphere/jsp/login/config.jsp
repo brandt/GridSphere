@@ -11,6 +11,7 @@
 
 <ui:form>
     <ui:group>
+        <p>
         <ui:text style="bold" key="LOGIN_CONFIG_MSG"/>
         <p>
             <ui:checkbox beanId="acctCB" value="TRUE"/>
@@ -64,6 +65,29 @@
             <ui:tablerow>
                 <ui:tablecell>
                     <ui:actionsubmit action="configAccountSettings" key="APPLY"/>
+                </ui:tablecell>
+            </ui:tablerow>
+        </ui:frame>
+    </ui:group>
+</ui:form>
+
+<% Boolean sendMail = (Boolean)request.getAttribute("sendMail"); %>
+<ui:form>
+    <ui:group>
+        <p>
+        <ui:text style="bold" key="LOGIN_CONFIG_ERROR_MSG"/>
+        <p>
+            <ui:radiobutton beanId="errorRB" value="NOMAIL" selected="<%= !sendMail.booleanValue() %>"/>
+            <ui:text key="LOGIN_CONFIG_ERROR_STACKTRACE_MSG"/>
+        </p>
+        <p>
+            <ui:radiobutton beanId="errorRB" value="MAIL" selected="<%= sendMail.booleanValue() %>"/>
+            <ui:text key="LOGIN_CONFIG_ERROR_MAIL_MSG"/>
+        </p>
+        <ui:frame>
+            <ui:tablerow>
+                <ui:tablecell>
+                    <ui:actionsubmit action="configErrorSettings" key="APPLY"/>
                 </ui:tablecell>
             </ui:tablerow>
         </ui:frame>
