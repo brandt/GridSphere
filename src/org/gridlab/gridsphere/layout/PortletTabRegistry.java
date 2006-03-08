@@ -141,7 +141,7 @@ public class PortletTabRegistry {
             PortletRegistry registry = PortletRegistry.getInstance();
 
             String appID = PortletRegistry.getApplicationPortletID(portletClass);
-            System.err.println("appID = " + appID);
+            //System.err.println("appID = " + appID);
             ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
             ConcretePortlet conc = appPortlet.getConcretePortlet(portletClass);
 
