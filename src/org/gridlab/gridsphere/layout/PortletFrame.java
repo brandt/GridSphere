@@ -631,6 +631,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         Throwable ex = (Throwable)req.getAttribute(SportletProperties.PORTLETERROR + portletClass);
         if (ex == null) return;
+        Throwable cause = ex.getCause();
+        if (cause == null) {
+            cause = ex;
+        }
         try {
             PortalConfigService portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
             TextMessagingService tms = (TextMessagingService)factory.createPortletService(TextMessagingService.class, true);
@@ -651,9 +655,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 if (user != null) body.append(user + "\n\n");
                 StringWriter sw = new StringWriter();
                 PrintWriter pout = new PrintWriter(sw);
-                ex.printStackTrace(pout);
+                cause.printStackTrace(pout);
                 body.append(sw.getBuffer());
-
                 mailToUser.setBody(body.toString());
                 mailToUser.setServiceid("mail");
                 try {
@@ -670,12 +673,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             log.error("Unable to get instance of needed portlet services", e);
         }
         try {
-            req.setAttribute("error", ex);
+            req.setAttribute("error", cause);
             RequestDispatcher dispatcher = GridSphereConfig.getServletContext().getRequestDispatcher("/jsp/errors/custom_error.jsp");
             dispatcher.include(req, res);
         } catch (Exception e) {
             System.err.println("Unable to include custom error page!!");
-            ex.printStackTrace();
+            e.printStackTrace();
         }
     }
 
