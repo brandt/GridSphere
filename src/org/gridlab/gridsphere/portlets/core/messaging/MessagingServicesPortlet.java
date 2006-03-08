@@ -167,14 +167,12 @@ public class MessagingServicesPortlet extends ActionPortlet {
         MessageBoxBean msgBox = event.getMessageBoxBean("msg");
         msgBox.setMessageType(MessageStyle.MSG_ERROR);
         msgBox.appendText(msg);
-        msgBox.setDefaultImage(true);
     }
 
     private void createSuccessMessage(FormEvent event, String msg) {
         MessageBoxBean msgBox = event.getMessageBoxBean("msg");
         msgBox.setMessageType(MessageStyle.MSG_SUCCESS);
         msgBox.appendText(msg);
-        msgBox.setDefaultImage(true);
     }
 
 }
