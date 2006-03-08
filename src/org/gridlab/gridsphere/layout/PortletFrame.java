@@ -19,6 +19,10 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
+import org.gridsphere.tmf.message.MailMessage;
 
 import javax.servlet.RequestDispatcher;
 import javax.portlet.RenderResponse;
@@ -27,6 +31,7 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.*;
 import java.security.Principal;
+import java.text.DateFormat;
 
 /**
  * <code>PortletFrame</code> provides the visual representation of a portlet. A portlet frame
@@ -66,6 +71,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private boolean onlyRender = true;
 
     private transient FrameView frameView = null;
+
+    private String lastFrame = new String();
 
     /**
      * Constructs an instance of PortletFrame
@@ -534,13 +541,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             } else {
                 //System.err.println("in portlet frame render: class= " + portletClass + " setting prev mode= " + req.getPreviousMode() + " cur mode= " + req.getMode());
                 if (hasError(req)) {
-                    doRenderCustomError(postframe, req, wrappedResponse);
-                    if (storedWriter.toString().equals("")) {
-                        doRenderError(postframe, req, wrappedResponse);
-                    }
+                    doRenderError(req, wrappedResponse);
                     postframe.append(storedWriter.toString());
                 } else if ((titleBar != null) && (titleBar.hasRenderError())) {
-                     postframe.append(titleBar.getErrorMessage());
+                    postframe.append(titleBar.getErrorMessage());
                 } else {
                     try {
                         if (!renderParams.isEmpty()) {
@@ -549,18 +553,15 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                             req.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr, renderParams);
                         }
                         PortletInvoker.service((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
-                        postframe.append(storedWriter.toString());
+                        lastFrame = storedWriter.toString();
+                        postframe.append(lastFrame);
                     } catch (Exception e) {
-                        doRenderCustomError(postframe, req, wrappedResponse);
-                        if (storedWriter.toString().equals("")) {
-                            doRenderError(postframe, req, wrappedResponse);
-                        }
+                        doRenderError(req, wrappedResponse);
                         postframe.append(storedWriter.toString());
                     }
                 }
             }
             postframe.append(frameView.doEndBorder(event, this));
-
         } else {
             postframe.append(frameView.doRenderMinimizeFrame(event, this));
         }
@@ -583,7 +584,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             frame.append(titleBar.getPostBufferedTitle(req));
         }
         req.removeAttribute(SportletProperties.PORTLET_TITLE);
+
         frame.append(postframe);
+
+
         req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, frame);
 
         // check if expiration was set in render response
@@ -601,6 +605,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 }
             }
         }
+
         if (nocache == null) {
             if ((cacheExpiration > 0) || (cacheExpiration == -1)) {
                 cacheService.cache(this.getComponentID() + portletClass + id, frame, cacheExpiration);
@@ -616,33 +621,64 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         return (req.getAttribute(SportletProperties.PORTLETERROR + portletClass) != null);
     }
 
-    public void doRenderError(StringBuffer postframe, PortletRequest req, PortletResponse res) {
+    protected String getLocalizedText(PortletRequest req, String key) {
+        Locale locale = req.getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+        return bundle.getString(key);
+    }
+
+    public void doRenderError(PortletRequest req, PortletResponse res) {
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
         Throwable ex = (Throwable)req.getAttribute(SportletProperties.PORTLETERROR + portletClass);
-        if (ex != null) {
-            try {
-                req.setAttribute("error", ex);
-                RequestDispatcher dispatcher = GridSphereConfig.getServletContext().getRequestDispatcher("/jsp/errors/custom_error.jsp");
-                dispatcher.include(req, res);
-            } catch (Exception e) {
-                System.err.println("Unable to include custom error page!!");
-                ex.printStackTrace();
+        if (ex == null) return;
+        try {
+            PortalConfigService portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
+            TextMessagingService tms = (TextMessagingService)factory.createPortletService(TextMessagingService.class, true);
+            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+            RoleManagerService roleManagerService = (RoleManagerService)factory.createPortletService(RoleManagerService.class, true);
+            Boolean sendMail = Boolean.valueOf(settings.getAttribute("LOGIN_ERROR_HANDLING"));
+            if (sendMail.booleanValue()) {
+                MailMessage mailToUser = tms.getMailMessage();
+                List superUsers = roleManagerService.getUsersInRole(PortletRole.SUPER);
+                User superUser = (User)superUsers.get(0);
+                mailToUser.setTo(superUser.getEmailAddress());
+                mailToUser.setSubject(getLocalizedText(req, "PORTAL_ERROR_SUBJECT"));
+                StringBuffer body = new StringBuffer();
+                body.append(getLocalizedText(req, "PORTAL_ERROR_BODY") + "\n\n");
+                body.append("portlet title: " + titleBar.getTitle() + "\n\n");
+                User user = req.getUser();
+                body.append(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()) + "\n\n");
+                if (user != null) body.append(user + "\n\n");
+                StringWriter sw = new StringWriter();
+                PrintWriter pout = new PrintWriter(sw);
+                ex.printStackTrace(pout);
+                body.append(sw.getBuffer());
+
+                mailToUser.setBody(body.toString());
+                mailToUser.setServiceid("mail");
+                try {
+                    tms.send(mailToUser);
+                    req.setAttribute("lastFrame", lastFrame);
+                    RequestDispatcher dispatcher = GridSphereConfig.getServletContext().getRequestDispatcher("/jsp/errors/custom_error.jsp");
+                    dispatcher.include(req, res);
+                    return;
+                } catch (Exception e) {
+                    log.error("Unable to send mail message!", e);
+                }
             }
+        } catch (PortletServiceException e) {
+            log.error("Unable to get instance of needed portlet services", e);
+        }
+        try {
+            req.setAttribute("error", ex);
+            RequestDispatcher dispatcher = GridSphereConfig.getServletContext().getRequestDispatcher("/jsp/errors/custom_error.jsp");
+            dispatcher.include(req, res);
+        } catch (Exception e) {
+            System.err.println("Unable to include custom error page!!");
+            ex.printStackTrace();
         }
     }
 
-    public void doRenderCustomError(StringBuffer postframe, PortletRequest req, PortletResponse res) {
-        Throwable ex = (Throwable)req.getAttribute(SportletProperties.PORTLETERROR + portletClass);
-        if (ex != null) {
-            try {
-                req.setAttribute("error", ex);
-                RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/gs_error.jsp");
-                dispatcher.include(req, res);
-            } catch (Exception e) {
-                System.err.println("Unable to include custom error page!!");
-                ex.printStackTrace();
-            }
-        }
-    }
     public Object clone() throws CloneNotSupportedException {
         PortletFrame f = (PortletFrame) super.clone();
         f.titleBar = (this.titleBar == null) ? null : (PortletTitleBar) this.titleBar.clone();
