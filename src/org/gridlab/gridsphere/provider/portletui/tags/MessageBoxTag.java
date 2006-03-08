@@ -17,7 +17,6 @@ public class MessageBoxTag extends BaseComponentTag {
     protected String key = null;
     protected String style = null;
     protected String imagesource = null;
-    protected boolean defaultImage = false;
 
     /**
      * Returns the key used to identify localized text
@@ -35,24 +34,6 @@ public class MessageBoxTag extends BaseComponentTag {
      */
     public void setKey(String key) {
         this.key = key;
-    }
-
-    /**
-     * Returns true/false if defaultImages for the messagebox are enabled.
-     *
-     * @return true/false if defaultImages are enabled
-     */
-    public boolean isDefaultImage() {
-        return defaultImage;
-    }
-
-    /**
-     * Sets the defaultImages for the messageBox depending on the MessageStyle of the messagebox.
-     *
-     * @param defaultImage true/false to enable/disable default images
-     */
-    public void setDefaultimage(boolean defaultImage) {
-        this.defaultImage = defaultImage;
     }
 
     /**

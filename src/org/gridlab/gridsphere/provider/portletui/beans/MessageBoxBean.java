@@ -2,7 +2,6 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -246,6 +245,8 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
         String message = getMessage(true);
         if (height != null) this.addCssStyle("height=\"" + height + "\"");
         if (width != null) this.addCssStyle("width=\"" + width + "\"");
+
+        if (imageSource == null) this.setDefaultImage(true);
 
         // only return something if we have a message
         if (message != null) {
