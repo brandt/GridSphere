@@ -146,7 +146,7 @@ public class SportletRequest extends HttpServletRequestWrapper implements Portle
 
     /**
      * Returns the user object. The user object contains useful information about the user and his or her preferences.
-     * If the user has not logged in or does not grant access to the portlet, this method creates a GuestUser
+     * If the user has not logged in or does not grant access to the portlet, this method returns null
      *
      * @return the User object
      */
