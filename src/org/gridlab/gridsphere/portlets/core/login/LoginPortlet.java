@@ -596,14 +596,12 @@ public class LoginPortlet extends ActionPortlet {
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
         msg.setValue(text);
         msg.setMessageType(MessageStyle.MSG_ERROR);
-        msg.setDefaultImage(true);
     }
 
     private void createSuccessMessage(FormEvent evt, String text) {
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
         msg.setValue(text);
         msg.setMessageType(MessageStyle.MSG_SUCCESS);
-        msg.setDefaultImage(true);
     }
 
     public void newpassword(FormEvent evt) {
