@@ -1,8 +1,7 @@
-ChangeLog.txt
-=============
+ChangeLog.txt GridSphere 2.1.4
+==============================
 
-
-Changes since GridSphere 2.1.0
+Changes since GridSphere 2.1.2
 ==============================
 
 Release Notes - GridSphere Portal Framework - Version 2.1.2
@@ -14,6 +13,9 @@ Release Notes - GridSphere Portal Framework - Version 2.1.2
 
 ** Improvement
     * [GPF-180] - Create a GS setup portlet where an admin name and password gets created
+
+** New Feature
+    * [GPF-206] - add a new layout component SelectionContainer to selectively display content
 
 Changes since GridSphere 2.0.4
 ==============================
