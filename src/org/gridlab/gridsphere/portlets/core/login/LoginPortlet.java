@@ -35,6 +35,7 @@ public class LoginPortlet extends ActionPortlet {
     private static String FORGOT_PASSWORD_LABEL ="forgotpassword";
     private static String ACTIVATE_ACCOUNT_LABEL ="activateaccount";
     private static String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
+    private static String ADMIN_ACCOUNT_APPROVAL = "ADMIN_ACCOUNT_APPROVAL";
     private static String LOGIN_NAME = "LOGIN_NAME";
     private static String LOGIN_ERROR_HANDLING = "LOGIN_ERROR_HANDLING";
     public static String SAVE_PASSWORDS = "SAVE_PASSWORDS";
@@ -226,11 +227,15 @@ public class LoginPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
 
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
-        msg.setKey("LOGIN_CREATE_ACCT");
 
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
         if (settings.getAttribute(SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
+        }
+        if (settings.getAttribute(ADMIN_ACCOUNT_APPROVAL).equals(Boolean.TRUE.toString())) {
+            msg.setKey("LOGIN_ACCOUNT_CREATE_APPROVAL");
+        } else {
+            msg.setKey("LOGIN_CREATE_ACCT");
         }
 
         setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
@@ -426,6 +431,7 @@ public class LoginPortlet extends ActionPortlet {
         if (!req.getRoles().contains(PortletRole.ADMIN.getName())) return;
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
+
         String useracct = acctCB.getSelectedValue();
 
         canUserCreateAccount = (useracct != null);
@@ -451,6 +457,11 @@ public class LoginPortlet extends ActionPortlet {
         String supportx509val = supportsx509CB.getSelectedValue();
         boolean supportx509 = (supportx509val != null);
         settings.setAttribute(SUPPORT_X509_AUTH, Boolean.toString(supportx509));
+
+        CheckBoxBean accountApproval = event.getCheckBoxBean("acctApproval");
+        String accountApprovalval = accountApproval.getSelectedValue();
+        boolean accountApprove = (accountApprovalval != null);
+        settings.setAttribute(ADMIN_ACCOUNT_APPROVAL, Boolean.toString(accountApprove));
 
         settings.setAttribute(SAVE_PASSWORDS, Boolean.toString(savePasswords));
         settings.setAttribute(SEND_USER_FORGET_PASSWORD, Boolean.toString(sendForget));
@@ -592,17 +603,43 @@ public class LoginPortlet extends ActionPortlet {
         requestService.saveRequest(request);
 
         MailMessage mailToUser = tms.getMailMessage();
-        mailToUser.setTo(emailTF.getValue());
-        mailToUser.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
         StringBuffer body = new StringBuffer();
 
-        body.append(getLocalizedText(req, "LOGIN_ACTIVATE_MAIL") + "\n\n");
+        PortletURI activateAccountUri = res.createURI();
+        activateAccountUri.addAction("approveAccount");
+        activateAccountUri.addParameter("reqid", request.getOid());
 
-        PortletURI uri = res.createURI();
-        uri.addAction("activate");
-        uri.addParameter("reqid", request.getOid());
+        PortletURI denyAccountUri = res.createURI();
+        denyAccountUri.addAction("denyAccount");
+        denyAccountUri.addParameter("reqid", request.getOid());
 
-        body.append(uri.toString());
+        // check if this account request should be approved by an administrator
+        boolean accountApproval = Boolean.valueOf(settings.getAttribute(ADMIN_ACCOUNT_APPROVAL)).booleanValue();
+        if (accountApproval) {
+            List usersToBeNotified = roleService.getUsersInRole(PortletRole.SUPER);
+            Set admins = new HashSet();
+            for (int i=0;i<usersToBeNotified.size();i++) {
+                User u = (User)usersToBeNotified.get(i);
+                admins.add(u.getEmailAddress());
+            }
+            mailToUser.setTo(admins);
+            body.append(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ADMIN_MAIL")).append("\n\n");
+            mailToUser.setSubject(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ADMIN_MAILSUBJECT"));
+            body.append(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ALLOW")).append("\n\n");
+            body.append(activateAccountUri.toString()).append("\n\n");
+            body.append(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_DENY")).append("\n\n");
+            body.append(denyAccountUri.toString()).append("\n\n");
+        } else {
+            mailToUser.setTo(emailTF.getValue());
+            mailToUser.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
+            body.append(getLocalizedText(req, "LOGIN_ACTIVATE_MAIL")).append("\n\n");
+            body.append(activateAccountUri.toString());
+        }
+
+        body.append(getLocalizedText(req, "USERNAME"));body.append(evt.getTextFieldBean("userName").getValue()).append("\n");
+        body.append(getLocalizedText(req, "FULLNAME"));body.append(evt.getTextFieldBean("fullName").getValue()).append("\n");
+        body.append(getLocalizedText(req, "EMAILADDRESS"));body.append(evt.getTextFieldBean("emailAddress").getValue()).append("\n\n");
+
         mailToUser.setBody(body.toString());
         mailToUser.setServiceid("mail");
 
@@ -613,6 +650,7 @@ public class LoginPortlet extends ActionPortlet {
             createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
             return;
         }
+
         createSuccessMessage(evt, this.getLocalizedText(req, "LOGIN_ACCT_MAIL"));
 
     }
@@ -642,19 +680,62 @@ public class LoginPortlet extends ActionPortlet {
         }
     }
 
-    public void activate(FormEvent evt) {
-        PortletRequest req = evt.getPortletRequest();
+    private void doEmailAction(FormEvent event, String msg, boolean createAccount) {
+        PortletRequest req = event.getPortletRequest();
         String id = req.getParameter("reqid");
+        User user = null;
         GenericRequest request = requestService.getRequest(id, ACTIVATE_ACCOUNT_LABEL);
         if (request != null) {
-            User user = saveUser(request);
-            createSuccessMessage(evt, this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
-                    "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN") +
-                    " " + user.getUserName());
-
             requestService.deleteRequest(request);
-            setNextState(req, "doViewUser");
+            if (createAccount) {
+                user = saveUser(request);
+                createSuccessMessage(event, msg+" " + user.getUserName());
+
+                // send the user an email
+
+                PortletResponse res = event.getPortletResponse();
+                PortletURI portalURI = res.createURI();
+
+                MailMessage mailToUser = tms.getMailMessage();
+                mailToUser.setTo(user.getEmailAddress());
+                mailToUser.setSubject(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED"));
+                StringBuffer body = new StringBuffer();
+                body.append(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED")).append("\n\n");
+                body.append(portalURI.toString());
+                mailToUser.setBody(body.toString());
+                mailToUser.setServiceid("mail");
+
+                try {
+                    tms.send(mailToUser);
+                } catch (TextMessagingException e) {
+                    log.error("Error: " + e.getMessage());
+                    createErrorMessage(event, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
+                }
+            } else {
+                createSuccessMessage(event, msg);
+            }
         }
+        setNextState(req, "doViewUser");
+
+    }
+
+    public void activate(FormEvent event) {
+        PortletRequest req = event.getPortletRequest();
+        String msg = this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
+                    "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN");
+        doEmailAction(event, msg, true);
+    }
+
+    public void approveAccount(FormEvent event) {
+        PortletRequest req = event.getPortletRequest();
+        String msg = this.getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
+        doEmailAction(event, msg, true);
+    }
+
+    public void denyAccount(FormEvent event) {
+        PortletRequest req = event.getPortletRequest();
+        String msg = this.getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_DENY");
+        doEmailAction(event, msg, false);
     }
 
     public void doSaveAuthModules(FormEvent event) {

@@ -17,6 +17,10 @@
             <ui:checkbox beanId="acctCB" value="TRUE"/>
             <ui:text key="LOGIN_CONFIG_ALLOW"/>
         </p>
+        <p>
+            <ui:checkbox beanId="acctApproval" value="FALSE"/>
+            <ui:text key="LOGIN_ACCOUNT_APPROVAL"/>
+        </p>
 
         <p>
             <ui:checkbox beanId="notifyCB" value="TRUE"/>
