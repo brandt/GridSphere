@@ -69,7 +69,6 @@
 
         <mkdir dir="${project.dir}/src"/>
         <mkdir dir="${project.dir}/lib"/>
-        <mkdir dir="${project.dir}/config"/>
 
         <mkdir dir="${project.dir}/webapp"/>
         <mkdir dir="${project.dir}/webapp/WEB-INF"/>
