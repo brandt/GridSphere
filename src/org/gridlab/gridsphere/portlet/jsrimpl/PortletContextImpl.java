@@ -36,7 +36,6 @@ import java.net.MalformedURLException;
  */
 public class PortletContextImpl implements PortletContext {
 
-    //private ServletConfig config = null;
     private ServletContext context = null;
 
     /**
