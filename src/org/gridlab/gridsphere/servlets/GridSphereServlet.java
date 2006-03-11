@@ -228,7 +228,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             if (actionName.equals(SportletProperties.LOGOUT)) {
                 logout(event);
                 // since event is now invalidated, must create new one
-                event = new GridSphereEventImpl(context, req, res);
+                //event = new GridSphereEventImpl(context, req, res);
             }
             if (trackerService.hasTrackingAction(actionName)) {
                 trackerService.trackURL(actionName, req.getHeader("user-agent"), portletReq.getUser().getUserName());
