@@ -107,11 +107,6 @@ public class UserSessionManager implements PortletSessionListener {
                 log.debug("Logging out user: " + uid + " session: " + session.getId());
                 session.removeAttribute(SportletProperties.PORTLET_USER);
                 sessions.remove(session);
-                try {
-                    session.invalidate();
-                } catch (IllegalStateException e) {
-                    log.debug("Session already invalidated");
-                }
             }
         }
         //dumpSessions();
@@ -122,17 +117,6 @@ public class UserSessionManager implements PortletSessionListener {
         //List userSessions = (List)userSessions.get(user.getID());
         List s = getSessions(user);
         if (s != null) {
-            Iterator it = s.iterator();
-            while (it.hasNext()) {
-                PortletSession session = (PortletSession) it.next();
-                if (session != null) {
-                    try {
-                        session.invalidate();
-                    } catch (IllegalStateException e) {
-                        log.debug("session " + session.getId() + " for user " + user.getID() + " has already been invalidated!");
-                    }
-                }
-            }
             userSessions.remove(user.getID());
         }
     }
@@ -142,17 +126,6 @@ public class UserSessionManager implements PortletSessionListener {
         //List userSessions = (List)userSessions.get(user.getID());
         List s = getSessions(userid);
         if (s != null) {
-            Iterator it = s.iterator();
-            while (it.hasNext()) {
-                PortletSession session = (PortletSession) it.next();
-                if (session != null) {
-                    try {
-                        session.invalidate();
-                    } catch (IllegalStateException e) {
-                        log.debug("session " + session.getId() + " for user " + userid + " has already been invalidated!");
-                    }
-                }
-            }
             userSessions.remove(userid);
         }
     }

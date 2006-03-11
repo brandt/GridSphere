@@ -551,12 +551,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     protected void logout(GridSphereEvent event) {
         log.debug("in logout of GridSphere Servlet");
         PortletRequest req = event.getPortletRequest();
-        req.removeAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
         removeUserCookie(event);
-        PortletSession session = req.getPortletSession();
-        session.removeAttribute(SportletProperties.PORTLET_USER);
-        userSessionManager.removeSessions(req.getUser());
         layoutEngine.logoutPortlets(event);
+        PortletSession session = req.getPortletSession();
+        req.removeAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
+        session.removeAttribute(SportletProperties.PORTLET_USER);
+        userSessionManager.logout(session);
+        session.invalidate();
     }
 
     /**
