@@ -1103,13 +1103,13 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
-	<attribute>
+        <attribute>
             <name>title</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>cssStyle</name>
+        <name>cssStyle</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -1302,6 +1302,11 @@
         </attribute>
         <attribute>
             <name>value</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>name</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
