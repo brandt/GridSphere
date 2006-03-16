@@ -8,7 +8,7 @@
 
 <ui:form action="selectLang"> <!-- removed 'name="localeform"' for XHTML 1.0 Strict compliance -->
 
-    <% String flag = "/gridsphere/images/flags/" + locale.getLanguage() + ".gif"; %>
+    <% String flag = "images/flags/" + locale.getLanguage() + ".gif"; %>
     <table>
         <tr>
             <td>
