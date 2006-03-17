@@ -136,7 +136,7 @@ input, select, textarea {
 /* settings for the WHOLE 1st level tab menu */
 .tab-pane {
     /* image for the background behind 1st level tabs*/
-    background: url("/gridsphere/themes/standard/default/images/spacer.gif") repeat-x bottom;
+    background: url(../images/spacer.gif) repeat-x bottom;
     font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;
     font-size: 11px;
     font-weight: normal;
@@ -152,19 +152,19 @@ input, select, textarea {
 /* settings for the ACTIVE tab in 1st level tab menu */
 .tab-pane ul li .tab-active {
     /* left border image for the active 1st level tab */
-    background: url("/gridsphere/themes/standard/default/images/tab-active-left.gif") left top no-repeat;
+    background: url(../images/tab-active-left.gif) left top no-repeat;
     font-weight: bold;
     color: black;
 }
 .tab-pane ul li .tab-active span {
     /* right border image for the active 1st level tab */
-    background: url("/gridsphere/themes/standard/default/images/tab-active-right.gif") right top no-repeat;
+    background: url(../images/tab-active-right.gif) right top no-repeat;
 }
 
 /* settings for INACTIVE tabs in 1st level tab menu */
 .tab-pane ul a {
     /* left border image for inactive 1st level tabs */
-    background: url("/gridsphere/themes/standard/default/images/tab-inactive-left.gif") left top no-repeat;
+    background: url(../images/tab-inactive-left.gif) left top no-repeat;
     text-decoration: none;
     color: #000;
 }
@@ -174,7 +174,7 @@ input, select, textarea {
 }
 .tab-pane ul a span {
     /* right border image for inactive 1st level tabs */
-    background: url("/gridsphere/themes/standard/default/images/tab-inactive-right.gif") right top no-repeat;
+    background: url(../images/tab-inactive-right.gif) right top no-repeat;
     color: #000;
 }
 
@@ -185,7 +185,7 @@ input, select, textarea {
 /* settings for the WHOLE 2nd level tab menu */
 .tab-sub-pane {
     /* image for the background of the 2nd level tabs */
-    background: url("/gridsphere/themes/standard/default/images/sub-tab.gif") repeat-x;
+    background: url(../images/sub-tab.gif) repeat-x;
     font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;
     font-size: 11px;
     font-weight: normal;
