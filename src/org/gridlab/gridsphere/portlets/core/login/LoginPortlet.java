@@ -415,7 +415,7 @@ public class LoginPortlet extends ActionPortlet {
         supportX509CB.setSelected(Boolean.valueOf(settings.getAttribute(SUPPORT_X509_AUTH)).booleanValue());
 
         CheckBoxBean accountApproval = event.getCheckBoxBean("acctApproval");
-        accountApproval.setSelected(Boolean.valueOf(settings.getAttribute(ADMIN_ACCOUNT_APPROVAL)));
+        accountApproval.setSelected(Boolean.valueOf(settings.getAttribute(ADMIN_ACCOUNT_APPROVAL)).booleanValue());
 
         String numTries = settings.getAttribute(LOGIN_NUMTRIES);
         TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
