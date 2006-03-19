@@ -9,31 +9,31 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
+import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.request.RequestService;
-import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
+import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridsphere.tmf.TextMessagingException;
 import org.gridsphere.tmf.message.MailMessage;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
 import java.security.cert.X509Certificate;
+import java.util.*;
 
 public class LoginPortlet extends ActionPortlet {
 
-    private static String FORGOT_PASSWORD_LABEL ="forgotpassword";
-    private static String ACTIVATE_ACCOUNT_LABEL ="activateaccount";
+    private static String FORGOT_PASSWORD_LABEL = "forgotpassword";
+    private static String ACTIVATE_ACCOUNT_LABEL = "activateaccount";
     private static String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
     private static String ADMIN_ACCOUNT_APPROVAL = "ADMIN_ACCOUNT_APPROVAL";
     private static String LOGIN_NAME = "LOGIN_NAME";
@@ -42,7 +42,7 @@ public class LoginPortlet extends ActionPortlet {
     public static String SUPPORT_X509_AUTH = "SUPPORT_X509_AUTH";
     public static String SEND_USER_FORGET_PASSWORD = "SEND_USER_FORGET_PASSWD";
 
-    private static long REQUEST_LIFETIME = 1000*60*24*3; // 3 days
+    private static long REQUEST_LIFETIME = 1000 * 60 * 24 * 3; // 3 days
 
     public static final String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
     public static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
@@ -98,7 +98,7 @@ public class LoginPortlet extends ActionPortlet {
                 defaultNumTries = Integer.valueOf(numTries).intValue();
             }
             portalConfigService.savePortalConfigSettings(settings);
-            loginService = (LoginService)getPortletConfig().getContext().getService(LoginService.class);
+            loginService = (LoginService) getPortletConfig().getContext().getService(LoginService.class);
         } catch (PortletServiceException e) {
             throw new UnavailableException("Unable to initialize services");
         }
@@ -157,8 +157,8 @@ public class LoginPortlet extends ActionPortlet {
         String errorMsg = (String) req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
 
         if (errorMsg != null) {
-            Integer numTries = (Integer)req.getSession(true).getAttribute(LoginPortlet.LOGIN_NUMTRIES);
-            String loginname = (String)req.getSession(true).getAttribute(LoginPortlet.LOGIN_NAME);
+            Integer numTries = (Integer) req.getSession(true).getAttribute(LoginPortlet.LOGIN_NUMTRIES);
+            String loginname = (String) req.getSession(true).getAttribute(LoginPortlet.LOGIN_NAME);
             int i = 1;
             if (numTries != null) {
                 i = numTries.intValue();
@@ -284,7 +284,6 @@ public class LoginPortlet extends ActionPortlet {
             createErrorMessage(event, this.getLocalizedText(req, "USER_EXISTS") + "<br />");
             isInvalid = true;
         }
-
 
         // Validate full name
 
@@ -498,7 +497,7 @@ public class LoginPortlet extends ActionPortlet {
         RadioButtonBean errorRB = event.getRadioButtonBean("errorRB");
 
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        System.err.println("chosen vlaue: "+ errorRB.getSelectedValue());
+        System.err.println("chosen vlaue: " + errorRB.getSelectedValue());
         Boolean sendMail = Boolean.FALSE;
         if (errorRB.getSelectedValue().equals("MAIL")) sendMail = Boolean.TRUE;
         settings.setAttribute(LOGIN_ERROR_HANDLING, sendMail.toString());
@@ -621,8 +620,8 @@ public class LoginPortlet extends ActionPortlet {
         if (accountApproval) {
             List usersToBeNotified = roleService.getUsersInRole(PortletRole.SUPER);
             Set admins = new HashSet();
-            for (int i=0;i<usersToBeNotified.size();i++) {
-                User u = (User)usersToBeNotified.get(i);
+            for (int i = 0; i < usersToBeNotified.size(); i++) {
+                User u = (User) usersToBeNotified.get(i);
                 admins.add(u.getEmailAddress());
             }
             mailToUser.setTo(admins);
@@ -636,12 +635,15 @@ public class LoginPortlet extends ActionPortlet {
             mailToUser.setTo(emailTF.getValue());
             mailToUser.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
             body.append(getLocalizedText(req, "LOGIN_ACTIVATE_MAIL")).append("\n\n");
-            body.append(activateAccountUri.toString());
+            body.append(activateAccountUri.toString()).append("\n\n");
         }
 
-        body.append(getLocalizedText(req, "USERNAME"));body.append(evt.getTextFieldBean("userName").getValue()).append("\n");
-        body.append(getLocalizedText(req, "FULLNAME"));body.append(evt.getTextFieldBean("fullName").getValue()).append("\n");
-        body.append(getLocalizedText(req, "EMAILADDRESS"));body.append(evt.getTextFieldBean("emailAddress").getValue()).append("\n\n");
+        body.append(getLocalizedText(req, "USERNAME"));
+        body.append(evt.getTextFieldBean("userName").getValue()).append("\n");
+        body.append(getLocalizedText(req, "FULLNAME"));
+        body.append(evt.getTextFieldBean("fullName").getValue()).append("\n");
+        body.append(getLocalizedText(req, "EMAILADDRESS"));
+        body.append(evt.getTextFieldBean("emailAddress").getValue()).append("\n\n");
 
         mailToUser.setBody(body.toString());
         mailToUser.setServiceid("mail");
@@ -692,7 +694,7 @@ public class LoginPortlet extends ActionPortlet {
             requestService.deleteRequest(request);
             if (createAccount) {
                 user = saveUser(request);
-                createSuccessMessage(event, msg+" " + user.getUserName());
+                createSuccessMessage(event, msg + " " + user.getUserName());
 
                 // send the user an email
 
@@ -725,7 +727,7 @@ public class LoginPortlet extends ActionPortlet {
     public void activate(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
         String msg = this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
-                    "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN");
+                "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN");
         doEmailAction(event, msg, true);
     }
 
@@ -748,13 +750,13 @@ public class LoginPortlet extends ActionPortlet {
 
         List activeAuthMods = cb.getSelectedValues();
         for (int i = 0; i < activeAuthMods.size(); i++) {
-            System.err.println("active auth mod: " + (String)activeAuthMods.get(i));
+            System.err.println("active auth mod: " + (String) activeAuthMods.get(i));
         }
 
         List authModules = loginService.getAuthModules();
         Iterator it = authModules.iterator();
         while (it.hasNext()) {
-            LoginAuthModule authMod = (LoginAuthModule)it.next();
+            LoginAuthModule authMod = (LoginAuthModule) it.next();
             // see if a checked active auth module appears
             if (activeAuthMods.contains(authMod.getModuleName())) {
                 authMod.setModuleActive(true);
@@ -768,7 +770,6 @@ public class LoginPortlet extends ActionPortlet {
 
         showConfigure(event);
     }
-
 
 
     public void doSavePass(FormEvent event) {
