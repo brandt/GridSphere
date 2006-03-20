@@ -9,6 +9,7 @@
         <property name="activationList">
             <set>
                 <value>MailService</value>
+                <value>AIMService</value>
             </set>
         </property>
     </bean>
@@ -21,7 +22,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="AIMService" class="org.gridsphere.tmf.services.impl.AIMService">
+    <bean id="AIMService" class="org.gridsphere.tmf.services.impl.JaimBotService">
         <constructor-arg index="0">
             <ref bean="AIMConfig"/>
         </constructor-arg>
