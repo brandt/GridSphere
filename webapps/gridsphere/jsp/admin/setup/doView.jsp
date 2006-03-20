@@ -51,9 +51,6 @@
             </ui:tablecell>
         </ui:tablerow>
 
-    </ui:frame>
-
-    <ui:frame>
         <ui:tablerow>
             <ui:tablecell width="200">
                 <ui:text key="PASSWORD"/>
