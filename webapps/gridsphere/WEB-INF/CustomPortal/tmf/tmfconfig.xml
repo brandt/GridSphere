@@ -9,7 +9,6 @@
         <property name="activationList">
             <set>
                 <value>MailService</value>
-                <value>AIMService</value>
             </set>
         </property>
     </bean>
