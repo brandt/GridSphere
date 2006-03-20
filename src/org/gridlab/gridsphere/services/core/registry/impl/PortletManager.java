@@ -60,6 +60,19 @@ public class PortletManager implements PortletManagerService {
 
             int b = _webapp2.lastIndexOf(".");
 
+            // check if a and b do not have a priority then use alphabetical
+            if ((a > 0) && (b > 0)) {
+                try {
+                    int a1 = Integer.valueOf(_webapp1.substring(a + 1)).intValue();
+                    int a2 = Integer.valueOf(_webapp2.substring(b + 1)).intValue();
+                    if (a1 > a2) return 1;
+                    if (a1 < a2) return -1;
+                    if (a1 == a2) return 0;
+                } catch (NumberFormatException e) {
+                    // oh well
+                }
+            }
+
             // check if a has a priority and b does not
             if ((a > 0) && (b < 0)) {
                 return -1;
@@ -67,19 +80,6 @@ public class PortletManager implements PortletManagerService {
             // check if b has a priority and a does not
             if ((a < 0) && (b > 0)) {
                 return 1;
-            }
-            // check if a and b do not have a priority then use alphabetical
-            if ((a > 0) && (b > 0)) {
-
-                try {
-                    int a1 = Integer.valueOf(_webapp1.substring(a + 1)).intValue();
-                    int a2 = Integer.valueOf(_webapp2.substring(b + 1)).intValue();
-                    if (a1 > a2) return -1;
-                    if (a1 < a2) return 1;
-                    if (a1 == a2) return 0;
-                } catch (NumberFormatException e) {
-                    // oh well
-                }
             }
 
             // use alphabetical comparison
