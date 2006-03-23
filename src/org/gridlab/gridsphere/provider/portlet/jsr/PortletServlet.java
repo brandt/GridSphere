@@ -296,6 +296,11 @@ public class PortletServlet extends HttpServlet
             request.setAttribute(SportletProperties.PORTLET_USER_PRINCIPAL, userPrincipal);
         }
 
+        Enumeration e = user.getAttributeNames();
+        while (e.hasMoreElements()) {
+        String key = (String)e.nextElement();
+        if (userInfo.containsKey(key)) userInfo.put(key, user.getAttribute(key));
+        }
 
         /*
         UserAttribute[] userAttrs = portletWebApp.getUserAttributes();
