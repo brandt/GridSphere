@@ -289,17 +289,18 @@ public class PortletServlet extends HttpServlet
             if (userInfo.containsKey("user.login.id")) userInfo.put("user.login.id", user.getUserName());
             //userInfo.put("user.name.given", user.getGivenName());
             //userInfo.put("user.name.family", user.getFamilyName());
-            request.setAttribute(PortletRequest.USER_INFO, userInfo);
+           
+	    Enumeration attrs = user.getAttributeNames();        
+	    while (attrs.hasMoreElements()) {
+                String key = (String)attrs.nextElement();        
+	        if (userInfo.containsKey(key)) userInfo.put(key, user.getAttribute(key));        
+	    } 
+
+	    request.setAttribute(PortletRequest.USER_INFO, userInfo);
 
             // create user principal
             UserPrincipal userPrincipal = new UserPrincipal(user.getUserName());
             request.setAttribute(SportletProperties.PORTLET_USER_PRINCIPAL, userPrincipal);
-        }
-
-        Enumeration e = user.getAttributeNames();
-        while (e.hasMoreElements()) {
-        String key = (String)e.nextElement();
-        if (userInfo.containsKey(key)) userInfo.put(key, user.getAttribute(key));
         }
 
         /*
