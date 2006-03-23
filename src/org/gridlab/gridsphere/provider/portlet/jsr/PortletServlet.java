@@ -231,18 +231,18 @@ public class PortletServlet extends HttpServlet
 
         log.debug("have a portlet id " + pid + " component id= " + cid);
 
+        String portletName = "";
         int idx = pid.indexOf("#");
         Portlet portlet = null;
         if (idx > 0) {
-            String pname = pid.substring(idx+1);
-            portlet = (Portlet) portlets.get(pname);
-            request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(pname));
-
+            portletName = pid.substring(idx+1);
+            portlet = (Portlet) portlets.get(portletName);
+            request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(portletName));
             // this hack uses the portletclasses hash that identifies classname to portlet mappings
         } else {
-            String pname = (String)portletclasses.get(pid);
-            portlet = (Portlet)portlets.get(pname);
-            request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(pname));
+            portletName = (String)portletclasses.get(pid);
+            portlet = (Portlet)portlets.get(portletName);
+            request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(portletName));
         }
 
         JSRApplicationPortletImpl appPortlet =
@@ -283,6 +283,14 @@ public class PortletServlet extends HttpServlet
             if (userInfo.containsKey("user.theme")) userInfo.put("user.theme", user.getAttribute(User.THEME));
             if (userInfo.containsKey("user.role")) userInfo.put("user.role", ((PortletRole)request.getAttribute(SportletProperties.PORTLET_ROLE)).getName());
             if (userInfo.containsKey("user.login.id")) userInfo.put("user.login.id", user.getUserName());
+
+            Enumeration e = user.getAttributeNames();
+            while (e.hasMoreElements()) {
+                String key = (String)e.nextElement();
+                if (userInfo.containsKey(key)) userInfo.put(key, user.getAttribute(key));
+            }
+
+
             //userInfo.put("user.name.given", user.getGivenName());
             //userInfo.put("user.name.family", user.getFamilyName());
             request.setAttribute(PortletRequest.USER_INFO, userInfo);
@@ -343,6 +351,16 @@ public class PortletServlet extends HttpServlet
 
                     log.debug("in PortletServlet: action handling portlet " + pid);
                     try {
+
+                        // check for any filters to execute
+                        /*
+                        PortletFilter[] filters = filterManager.getFilters(portletName);
+                        for (int i = 0; i < filters.length; i++) {
+                            filters[i].doActionFilter(actionRequest, actionResponse);
+                        }
+                        */
+
+                        // INVOKE PORTLET ACTION
                         portlet.processAction(actionRequest, actionResponse);
 
                         Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
