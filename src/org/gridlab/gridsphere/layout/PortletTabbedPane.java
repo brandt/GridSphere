@@ -31,7 +31,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
 
     private List tabs = new ArrayList();
-    private int startIndex = 0;
     private String style = "menu";
     private String layoutDescriptor = null;
 
@@ -354,7 +353,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     public Object clone() throws CloneNotSupportedException {
         PortletTabbedPane t = (PortletTabbedPane) super.clone();
         t.style = this.style;
-        t.startIndex = this.startIndex;
         List stabs = Collections.synchronizedList(tabs);
         synchronized (stabs) {
             t.tabs = new ArrayList(stabs.size());
