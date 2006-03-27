@@ -18,7 +18,10 @@ import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.acl.impl.GroupRequestImpl;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
@@ -28,6 +31,7 @@ import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
+import org.gridlab.gridsphere.portlets.core.login.LoginPortlet;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -66,7 +70,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static LoginService loginService = null;
 
     private static TrackerService trackerService = null;
-    //private static TrackerDaoImpl trackerService = null;
+
+    private static PortalConfigService portalConfigService = null;
 
     private PortletMessageManager messageManager = SportletMessageManager.getInstance();
 
@@ -122,7 +127,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         loginService = (LoginService) factory.createPortletService(LoginService.class, getServletConfig().getServletContext(), true);
         log.debug("Creating portlet manager service");
         portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, getServletConfig().getServletContext(), true);
-
+        portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, getServletConfig().getServletContext(),true);
         trackerService = (TrackerService) factory.createPortletService(TrackerService.class, getServletConfig().getServletContext(), true);
 
         //trackerService = (TrackerDaoImpl)factory.getSpringService("trackerDao");
@@ -373,7 +378,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         } else {
             UserPrincipal userPrincipal = new UserPrincipal(user.getUserName());
             req.setAttribute(SportletProperties.PORTLET_USER_PRINCIPAL, userPrincipal);
+
             List mygroups = aclService.getGroups(user);
+
             Iterator it = mygroups.iterator();
             while (it.hasNext()) {
                 PortletGroup g = (PortletGroup) it.next();
@@ -503,9 +510,27 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
         PortletRequest req = event.getPortletRequest();
 
-
         try {
             User user = loginService.login(req);
+
+            // add user to all groups if config option has been set
+            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+            String addUserToGroups = settings.getAttribute(LoginPortlet.ADD_USER_TO_GROUPS);
+            if (Boolean.valueOf(addUserToGroups).booleanValue()) {
+                Iterator it = aclService.getGroupsNotMemberOf(user).iterator();
+                while (it.hasNext()) {
+                    PortletGroup selectedGroup = (PortletGroup)it.next();
+                    GroupRequest groupRequest = this.aclService.createGroupEntry();
+                    groupRequest.setUser(user);
+                    groupRequest.setGroup(selectedGroup);
+                    if (aclService.hasSuperRole(req.getUser())) {
+                        groupRequest.setRole(aclService.getRoleByName(PortletRole.ADMIN.getName()));
+                    } else {
+                        groupRequest.setRole(aclService.getRoleByName(PortletRole.USER.getName()));
+                    }
+                    this.aclService.saveGroupEntry(groupRequest);
+                }
+            }
 
             setUserSettings(event, user);
 
