@@ -22,6 +22,7 @@ import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
+import org.gridlab.gridsphere.services.core.tracker.TrackerService;
 import org.gridsphere.tmf.message.MailMessage;
 
 import javax.servlet.RequestDispatcher;
@@ -46,10 +47,13 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private transient CacheService cacheService = null;
 
     private transient RoleManagerService roleService = null;
+    private transient PortalConfigService portalConfigService = null;
+    private transient TrackerService trackerService = null;
 
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
     private String portletClass = null;
+    private String portletName = null;
 
     private PortletTitleBar titleBar = null;
     //private PortletErrorFrame errorFrame = new PortletErrorFrame();
@@ -63,7 +67,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private String originalWidth = "";
 
     // switch to determine if the user wishes to close this portlet
-
     private boolean isClosing = false;
 
     // render params are the persistent per portlet parameters stored as key names and string[] values
@@ -191,6 +194,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         try {
             cacheService = (CacheService) factory.createPortletService(CacheService.class, true);
             roleService = (RoleManagerService)factory.createPortletService(RoleManagerService.class, true);
+            portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
+            trackerService = (TrackerService)factory.createPortletService(TrackerService.class, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
@@ -236,6 +241,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
         if (appPortlet != null) {
+            portletName = appPortlet.getApplicationPortletName();
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
             if (appConfig != null) {
                 cacheExpiration = appConfig.getCacheExpires();
@@ -340,11 +346,14 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             // Override if user is a guest
             Principal principal = request.getUserPrincipal();
+            String userName = "";
             if (principal == null) {
                 request.setMode(Portlet.Mode.VIEW);
+                userName = "guest";
             } else {
                 Portlet.Mode mode = titleBar.getPortletMode();
                 request.setMode(mode);
+                userName = principal.getName();
             }
 
             titleBar.setPortletMode(request.getMode());
@@ -358,6 +367,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 renderParams.clear();
                 onlyRender = false;
                 String pid = (String)request.getAttribute(SportletProperties.PORTLETID);
+
+                String isCounterEnabled = portalConfigService.getPortalConfigSettings().getAttribute(SportletProperties.ENABLE_PORTAL_COUNTER);
+                if ((isCounterEnabled != null) && (Boolean.valueOf(isCounterEnabled).booleanValue())) {
+                    trackerService.trackURL(portletClass, request.getClient().getUserAgent(), userName);
+                }
+
                 try {
                     PortletInvoker.actionPerformed(pid, action, request, res);
                 } catch (Exception e) {
