@@ -232,5 +232,8 @@ public interface SportletProperties {
 
     public static final String PORTLET_USER_PRINCIPAL = "org.gridlab.gridsphere.portlet.UserPrincipal";
 
+    public static final String ENABLE_PORTAL_COUNTER = "org.gridlab.gridsphere.ENABLE_PORTAL_COUNTER";
+
+
 }
 
