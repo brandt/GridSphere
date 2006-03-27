@@ -9,7 +9,6 @@ import org.gridlab.gridsphere.provider.portletui.beans.SpecialBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 
 /**
  * A <code>SpecialTag</code> serves an example of developing a tag that can dynamically create presentation using

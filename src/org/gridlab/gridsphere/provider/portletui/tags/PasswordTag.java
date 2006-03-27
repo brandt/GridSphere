@@ -10,7 +10,6 @@ import org.gridlab.gridsphere.provider.portletui.beans.PasswordBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 
 /**
  * A <code>PasswordTag</code> provides a password tag for represnting HTML password input elements

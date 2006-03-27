@@ -7,12 +7,9 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.RadioButtonBean;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 import java.util.List;
-import java.util.Iterator;
 
 /**
  * A <code>RadioButtonTag</code> represents a radio button element

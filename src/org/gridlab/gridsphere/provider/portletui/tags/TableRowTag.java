@@ -8,7 +8,6 @@ import org.gridlab.gridsphere.provider.portletui.beans.TableRowBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 
 /**

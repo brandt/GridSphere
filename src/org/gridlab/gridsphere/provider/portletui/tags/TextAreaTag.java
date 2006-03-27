@@ -8,7 +8,6 @@ import org.gridlab.gridsphere.provider.portletui.beans.TextAreaBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 
 /**
  * A <code>TextAreaTag</code> represents a text area element

@@ -4,10 +4,10 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags;
 
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
 import org.gridlab.gridsphere.provider.portletui.beans.MessageStyle;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;

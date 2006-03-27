@@ -9,7 +9,6 @@ import org.gridlab.gridsphere.provider.portletui.beans.ListBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 
 /**
  * A <code>ListBoxTag</code> represents a list box element

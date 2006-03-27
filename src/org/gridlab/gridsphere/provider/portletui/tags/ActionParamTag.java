@@ -8,8 +8,8 @@ import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.tagext.Tag;
+import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  * The <code>ActionParamTag</code> is used to specify action paramters (name value pairs) inside of an

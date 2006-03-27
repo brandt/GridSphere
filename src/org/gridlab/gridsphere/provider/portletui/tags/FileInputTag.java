@@ -8,7 +8,6 @@ import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 
 /**
  * A <code>FileInputTag</code> represnts a file input element to be used for uploading files

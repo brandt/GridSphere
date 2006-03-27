@@ -7,7 +7,6 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 import org.gridlab.gridsphere.provider.portletui.beans.TabBean;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 
 /**
  * The <code>TableRowTag</code> represents a table row element that is conatined within a <code>TableTag</code>

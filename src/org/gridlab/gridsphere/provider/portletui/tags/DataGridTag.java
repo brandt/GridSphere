@@ -8,7 +8,6 @@ import org.gridlab.gridsphere.provider.portletui.beans.DataGridBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;

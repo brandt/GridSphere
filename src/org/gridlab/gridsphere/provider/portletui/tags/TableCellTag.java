@@ -5,11 +5,9 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TableCellBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TableRowBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 
 /**
  * A <code>TableCellTag</code> represents a table cell element contained by a <code>TableRowTag</code>

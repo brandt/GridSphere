@@ -6,13 +6,12 @@
 
 package org.gridlab.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
-import org.gridlab.gridsphere.provider.portletui.beans.MessageStyle;
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
+import org.gridlab.gridsphere.provider.portletui.beans.MessageStyle;
+import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 import java.util.Locale;
 

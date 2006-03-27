@@ -14,10 +14,8 @@ import javax.portlet.PortletModeException;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 
 /**
  * A <code>TableTag</code> represents a table element and is defined by a <code>DefaultTableModel</code>
