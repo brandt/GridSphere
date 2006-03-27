@@ -43,6 +43,7 @@
 </ui:table>
 
 <ui:form>
+    <ui:actionsubmit action="doReturn" key="RETURN"/>
     <ui:actionsubmit action="doDownload" key="TRACKING_DOWNLOAD">
         <ui:actionparam name="label" value="<%= label %>"/>
     </ui:actionsubmit>
