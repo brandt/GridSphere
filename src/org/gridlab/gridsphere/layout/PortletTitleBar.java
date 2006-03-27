@@ -60,6 +60,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         protected String imageSrc = "";
         protected String altTag = "";
         protected String symbol = "";
+        protected String cursor = "";
 
         /**
          * Returns the image source attribute in the link
@@ -72,6 +73,24 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         public String getSymbol() { //WAP 2.0 Extention
             return symbol;
+        }
+
+        /**
+         * Returns the CSS cursor style to use
+         *
+         * @return the cursor
+         */
+        public String getCursor() {
+            return cursor;
+        }
+
+        /**
+         * Sets the CSS cursor style to use
+         *
+         * @param cursor the cursor
+         */
+        public void setCursor(String cursor) {
+            this.cursor = cursor;
         }
 
         /**
@@ -149,6 +168,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             } else if (mode.equals(Portlet.Mode.HELP)) {
                 imageSrc = helpImage;
                 symbol=helpSymbol;//WAP 2.0
+                cursor = "help";
             } else if (mode.equals(Portlet.Mode.VIEW)) {
                 imageSrc = viewImage;
                 symbol=viewSymbol;//WAP 2.0

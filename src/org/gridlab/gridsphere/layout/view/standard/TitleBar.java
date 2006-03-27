@@ -37,11 +37,16 @@ public class TitleBar extends BaseRender implements Render {
         if (modeLinks != null) {
             Iterator modesIt = modeLinks.iterator();
             PortletTitleBar.PortletModeLink mode;
-            if (!modesIt.hasNext())
-            	{ titleBuffer.append("&nbsp;"); }
+            if (!modesIt.hasNext()) {
+                titleBuffer.append("&nbsp;");
+            }
             while (modesIt.hasNext()) {
-                 mode = (PortletTitleBar.PortletModeLink) modesIt.next();
-                 titleBuffer.append("<a href=\"" + mode.getHref() + "\"><img src=\"" + req.getContextPath() +"/themes/" + titleBar.getRenderKit() + "/" + titleBar.getTheme() + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\" alt=\"" + mode.getAltTag() + "\" /></a>"); /// Removed File.separator(s)
+                mode = (PortletTitleBar.PortletModeLink) modesIt.next();
+                titleBuffer.append("<a href=\"" + mode.getHref() + "\"><img src=\"" + req.getContextPath() +"/themes/" + titleBar.getRenderKit() + "/" + titleBar.getTheme() + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\" alt=\"" + mode.getAltTag() + "\"");
+                if (!mode.getCursor().equals("")) {
+                    titleBuffer.append(" style=\"cursor: " + mode.getCursor() + ";\"");
+                }
+                titleBuffer.append("\" /></a>"); /// Removed File.separator(s)
             }
         }
         titleBuffer.append("</div>");
