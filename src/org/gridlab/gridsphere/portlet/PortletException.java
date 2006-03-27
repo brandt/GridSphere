@@ -76,14 +76,12 @@ public class PortletException extends ServletException {
     }
 
     public void printStackTrace() {
-        //super.printStackTrace();
         if (cause != null) {
             cause.printStackTrace();
         }
     }
 
     public void printStackTrace(PrintStream ps) {
-        //super.printStackTrace(ps);
         if (text != null) ps.println(text);
         if (cause != null) {
             ps.println("Caused by:");
@@ -92,7 +90,6 @@ public class PortletException extends ServletException {
     }
 
     public void printStackTrace(PrintWriter pw) {
-        //super.printStackTrace(pw);
         if (text != null) pw.println(text);
         if (cause != null) {
             pw.println("Caused by:");
