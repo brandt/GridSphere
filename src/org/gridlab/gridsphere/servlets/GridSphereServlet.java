@@ -29,6 +29,9 @@ import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
+import org.gridlab.gridsphere.portlets.core.login.LoginPortlet;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -69,6 +72,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     private static TrackerService trackerService = null;
 
+    private static PortalConfigService portalConfigService = null;
     private PortletMessageManager messageManager = SportletMessageManager.getInstance();
 
     /* GridSphere Portlet layout Engine handles rendering */
@@ -122,7 +126,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         loginService = (LoginService) factory.createPortletService(LoginService.class, true);
         log.debug("Creating portlet manager service");
         portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, true);
-
+        portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
         trackerService = (TrackerService) factory.createPortletService(TrackerService.class, true);
     }
 
@@ -246,16 +250,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         // Used for TCK tests
         if (isTCK) setTCKUser(portletReq);
 
-        
-        /*if (event.getPortletRequest().getParameter("ajax") != null) {
-            System.err.println("HAVE AN AJAX REQ");
-            res.setContentType("text/html");
-            res.getWriter().print("WHOHOOOOOO!");
-            res.flushBuffer();
-        } else {
-        */
         layoutEngine.service(event);
-        //}
 
         //log.debug("Session stats");
         //userSessionManager.dumpSessions();
@@ -272,7 +267,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param res the HttpServletResponse
      * @throws org.gridlab.gridsphere.portlet.PortletException
      */
-    public void downloadFile(HttpServletRequest req, HttpServletResponse res) throws org.gridlab.gridsphere.portlet.PortletException {
+    public void downloadFile(HttpServletRequest req, HttpServletResponse res) throws PortletException {
 
         try {
             String fileName = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
@@ -477,6 +472,17 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         try {
             User user = loginService.login(req);
 
+            // add user to all groups if config option has been set
+            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+            String addUsersToGroups = settings.getAttribute(LoginPortlet.ADD_USER_TO_GROUPS);
+            if (Boolean.valueOf(addUsersToGroups).booleanValue()) {
+                List groups = groupService.getGroups();
+                Iterator it = groups.iterator();
+                while (it.hasNext()) {
+                    PortletGroup group = (PortletGroup)it.next();
+                    groupService.addUserToGroup(user, group);
+                }
+            }
             setUserSettings(event, user);
 
             String remme = req.getParameter("remlogin");
