@@ -38,6 +38,7 @@ public class LoginPortlet extends ActionPortlet {
     private static String ADMIN_ACCOUNT_APPROVAL = "ADMIN_ACCOUNT_APPROVAL";
     private static String LOGIN_NAME = "LOGIN_NAME";
     private static String LOGIN_ERROR_HANDLING = "LOGIN_ERROR_HANDLING";
+    public static String ADD_USER_TO_GROUPS = "ADD_USER_TO_GROUPS";
     public static String SAVE_PASSWORDS = "SAVE_PASSWORDS";
     public static String SUPPORT_X509_AUTH = "SUPPORT_X509_AUTH";
     public static String SEND_USER_FORGET_PASSWORD = "SEND_USER_FORGET_PASSWD";
@@ -85,7 +86,9 @@ public class LoginPortlet extends ActionPortlet {
                 settings.setAttribute(SAVE_PASSWORDS, Boolean.TRUE.toString());
             }
             String numTries = settings.getAttribute(LOGIN_NUMTRIES);
-
+            if (settings.getAttribute(ADD_USER_TO_GROUPS) == null) {
+                settings.setAttribute(ADD_USER_TO_GROUPS, Boolean.FALSE.toString());
+            }
 
             if (settings.getAttribute(LOGIN_ERROR_HANDLING) == null) {
                 settings.setAttribute(LOGIN_ERROR_HANDLING, Boolean.FALSE.toString());
@@ -407,6 +410,9 @@ public class LoginPortlet extends ActionPortlet {
         CheckBoxBean notifyCB = event.getCheckBoxBean("notifyCB");
         notifyCB.setSelected(Boolean.valueOf(settings.getAttribute(SEND_USER_FORGET_PASSWORD)).booleanValue());
 
+        CheckBoxBean addUserCB = event.getCheckBoxBean("acctAddGroups");
+        addUserCB.setSelected(Boolean.valueOf(settings.getAttribute(ADD_USER_TO_GROUPS)).booleanValue());
+
         CheckBoxBean savepassCB = event.getCheckBoxBean("savepassCB");
         savepassCB.setSelected(Boolean.valueOf(settings.getAttribute(SAVE_PASSWORDS)).booleanValue());
 
@@ -439,6 +445,11 @@ public class LoginPortlet extends ActionPortlet {
         canUserCreateAccount = (useracct != null);
 
         settings.setCanUserCreateAccount(canUserCreateAccount);
+
+
+        CheckBoxBean addUserCB = event.getCheckBoxBean("acctAddGroups");
+        boolean addUserToGroups = (addUserCB.getSelectedValue() != null);
+        settings.setAttribute(ADD_USER_TO_GROUPS, Boolean.toString(addUserToGroups));
 
         CheckBoxBean notifyCB = event.getCheckBoxBean("notifyCB");
         String notify = notifyCB.getSelectedValue();
