@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlets.core.admin.tracker;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
@@ -13,6 +14,8 @@ import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
 import org.gridlab.gridsphere.services.core.tracker.impl.TrackerInfo;
 import org.gridlab.gridsphere.services.core.tracker.impl.TrackerAction;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -32,11 +35,13 @@ public class TrackerStatisticsPortlet extends ActionPortlet {
 
     // Portlet services
     private TrackerService trackerService = null;
+    private PortalConfigService portalConfigService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         try {
             this.trackerService = (TrackerService) config.getContext().getService(TrackerService.class);
+            this.portalConfigService = (PortalConfigService)config.getContext().getService(PortalConfigService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -53,7 +58,25 @@ public class TrackerStatisticsPortlet extends ActionPortlet {
         List labels = trackerService.getTrackingLabels();
         Set labelSet = new HashSet(labels);
         req.setAttribute("labelSet", labelSet);
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        String isCounterEnabled = settings.getAttribute(SportletProperties.ENABLE_PORTAL_COUNTER);
+        CheckBoxBean trackCB = evt.getCheckBoxBean("trackPortletCB");
+        if (isCounterEnabled != null) {
+            trackCB.setSelected(Boolean.valueOf(isCounterEnabled).booleanValue());
+        }
         setNextState(req, DO_VIEW_LABELS);
+    }
+
+    public void savePortletCounter(FormEvent evt) {
+
+        CheckBoxBean trackCB = evt.getCheckBoxBean("trackPortletsCB");
+
+        boolean isSelected = trackCB.isSelected();
+
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        settings.setAttribute(SportletProperties.ENABLE_PORTAL_COUNTER, Boolean.valueOf(isSelected).toString());
+
+        portalConfigService.savePortalConfigSettings(settings);
     }
 
     public void showLabel(FormEvent evt) {
@@ -111,6 +134,10 @@ public class TrackerStatisticsPortlet extends ActionPortlet {
         String action = evt.getAction().getParameter("actionName");
         trackerService.removeTrackingAction(action);
         setNextState(req, "doEditActions");
+    }
+
+    public void doReturn(FormEvent evt) {
+        setNextState(evt.getPortletRequest(), DEFAULT_VIEW_PAGE);
     }
 
     public void doDownload(FormEvent evt) {
