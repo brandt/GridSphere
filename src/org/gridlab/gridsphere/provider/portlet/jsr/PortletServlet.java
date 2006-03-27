@@ -82,14 +82,19 @@ public class PortletServlet extends HttpServlet
         log.debug("in init of PortletServlet");
     }
 
-    public void initJSRPortletWebapp() throws ServletException {
+    public void initJSRPortletWebapp() {
         ServletContext ctx = this.getServletContext();
 
         portlets = new Hashtable();
         portletclasses = new Hashtable();
         portletConfigHash = new Hashtable();
-        portletWebApp = new JSRPortletWebApplicationImpl(ctx, Thread.currentThread().getContextClassLoader());
 
+        try {
+            portletWebApp = new JSRPortletWebApplicationImpl(ctx, Thread.currentThread().getContextClassLoader());
+        } catch (Exception e) {
+            log.error("Unable to create portlet web application ", e);
+            return;
+        }
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
@@ -110,7 +115,7 @@ public class PortletServlet extends HttpServlet
 
             } catch (Exception e) {
                 log.error("Unable to create jsr portlet instance: " + portletClass, e);
-                throw new ServletException("Unable to create jsr portlet instance: " + portletClass, e);
+                return;
             }
         }
 
@@ -149,14 +154,18 @@ public class PortletServlet extends HttpServlet
 
         // load in any authentication modules if found-- this is a GridSphere extension
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
-        LoginService loginService = (LoginService)factory.createPortletService(LoginService.class, true);
-        InputStream is = this.getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
-        if (is != null) {
-            String authModulePath = this.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
-            loginService.loadAuthModules(authModulePath, Thread.currentThread().getContextClassLoader());
-            log.info("loading authentication modules from: " + authModulePath);
-        } else {
-            log.debug("no auth module descriptor found");
+        try {
+            LoginService loginService = (LoginService)factory.createPortletService(LoginService.class, true);
+            InputStream is = this.getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
+            if (is != null) {
+                String authModulePath = this.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
+                loginService.loadAuthModules(authModulePath, Thread.currentThread().getContextClassLoader());
+                log.info("loading authentication modules from: " + authModulePath);
+            } else {
+                log.debug("no auth module descriptor found");
+            }
+        } catch (PortletServiceException e) {
+            log.error("Unable to create login service instance!", e);
         }
     }
 
