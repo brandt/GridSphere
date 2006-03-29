@@ -82,6 +82,14 @@ public interface FormEvent extends ActionEvent {
     public TextFieldBean getTextFieldBean(String beanId);
 
     /**
+     * Return an existing <code>TextEditorBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TextEditorBean
+     */
+    public TextEditorBean getTextEditorBean(String beanId);
+
+    /**
      * Return an existing <code>HiddenFieldBean</code> or create a new one
      *
      * @param beanId the bean identifier

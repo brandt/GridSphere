@@ -211,6 +211,24 @@ public abstract class BaseFormEventImpl {
     }
 
     /**
+     * Return an existing <code>TextEditorBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TextEditorBean
+     */
+    public TextEditorBean getTextEditorBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        //log.debug("Checking for texteditorbean with bean key=" + beanKey);
+        if (tagBeans.containsKey(beanKey)) {
+            return (TextEditorBean) tagBeans.get(beanKey);
+        }
+        TextEditorBean te = new TextEditorBean(beanId);
+        configureBean(te);
+        tagBeans.put(beanKey, te);
+        return te;
+    }
+
+    /**
      * Return an existing <code>HiddenFieldBean</code> or create a new one
      *
      * @param beanId the bean identifier
@@ -508,7 +526,7 @@ public abstract class BaseFormEventImpl {
             }
         }
         sb.append("--------------------\n");
-        //log.debug(sb.toString());
+        log.debug(sb.toString());
     }
 
     /**
@@ -531,7 +549,7 @@ public abstract class BaseFormEventImpl {
             }
         }
         sb.append("--------------------\n");
-        //log.debug(sb.toString());
+        log.debug(sb.toString());
     }
 
     /**
@@ -631,7 +649,7 @@ public abstract class BaseFormEventImpl {
                 configureBean(bean);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(FileInputBean.NAME)) {
-                logRequestAttributes();
+                //logRequestAttributes();
                 //log.debug("Creating a fileinput bean with id:" + beanId);
 
                 FileInputBean bean;
@@ -719,6 +737,14 @@ public abstract class BaseFormEventImpl {
             } else if (vb.equals(TextAreaBean.NAME)) {
                 //log.debug("Creating a textareabean bean with id:" + beanId);
                 TextAreaBean bean = new TextAreaBean(beanId);
+                bean.setValue(vals[0]);
+                bean.setName(name);
+                configureBean(bean);
+                //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
+                tagBeans.put(beanKey, bean);
+            } else if (vb.equals(TextEditorBean.NAME)) {
+                //log.debug("Creating a textareabean bean with id:" + beanId);
+                TextEditorBean bean = new TextEditorBean(beanId);
                 bean.setValue(vals[0]);
                 bean.setName(name);
                 configureBean(bean);

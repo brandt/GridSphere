@@ -16,13 +16,6 @@ import javax.portlet.ActionResponse;
 public interface ActionFormEvent extends FormEvent {
 
     /**
-     * Event identifier indicating that portlet request has been received that one or more actions associated with it.
-     * Each action will result in a separate event being fired.
-     * An event with this id is fired when an action HAS BEEN performed.
-     */
-    public final static int ACTION_PERFORMED = 1;
-
-    /**
      * Returns the action that this action event carries.
      *
      * @return the portlet action
