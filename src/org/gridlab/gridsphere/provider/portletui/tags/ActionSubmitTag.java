@@ -39,10 +39,15 @@ public class ActionSubmitTag extends ActionTag {
                 if (actionSubmitBean.getParamBeanList() != null) {
                     paramBeans = actionSubmitBean.getParamBeanList();
                 }
+                if (actionSubmitBean.getOnClick() != null) {
+                    onClick = actionSubmitBean.getOnClick();
+                }
             }
         } else {
             actionSubmitBean = new ActionSubmitBean();
         }
+
+        if (onClick != null) actionSubmitBean.setOnClick(onClick);
 
         actionSubmitBean.setName(createActionURI());
         actionSubmitBean.setUseAjax(useAjax);

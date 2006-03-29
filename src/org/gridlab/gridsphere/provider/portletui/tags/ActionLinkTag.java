@@ -113,6 +113,9 @@ public class ActionLinkTag extends ActionTag {
                 if (actionlink.getKey() != null) {
                     key = actionlink.getKey();
                 }
+                if (actionlink.getOnClick() != null) {
+                    onClick = actionlink.getOnClick();
+                }
             }
         } else {
             actionlink = new ActionLinkBean();
