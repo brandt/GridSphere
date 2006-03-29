@@ -1343,6 +1343,45 @@
     </tag>
 
     <tag>
+        <name>texteditor</name>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TextEditorTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+            Displays simple text editor
+        </description>
+        <attribute>
+            <name>action</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>viewsource</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>rows</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>cols</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <name>textfield</name>
         <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TextFieldTag</tag-class>
         <body-content>empty</body-content>
