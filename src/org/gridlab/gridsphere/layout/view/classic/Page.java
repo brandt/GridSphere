@@ -51,7 +51,7 @@ public class Page extends BaseRender implements Render {
         page.append("\n\t<link type=\"text/css\" href=\"" +
                 req.getContextPath() + "/themes/" + portletPage.getRenderKit() + "/" + portletPage.getTheme() + "/css" +
                     "/default.css\" rel=\"stylesheet\"/>");
-
+        page.append("\n\t<link rel=\"stylesheet\" type=\"text/css\" href=\"" + req.getContextPath() + "/css/SimpleTextEditor.css\"/>");
         // Add portlet defined stylesheet if defined
         Map props = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (props != null) {
@@ -70,6 +70,7 @@ public class Page extends BaseRender implements Render {
         page.append("\n\t<link rel=\"icon\" href=\"" + portletPage.getIcon() + "\" type=\"imge/x-icon\"/>");
         page.append("\n\t<link rel=\"shortcut icon\" href=\"" + req.getContextPath() + "/" + portletPage.getIcon() + "\" type=\"image/x-icon\"/>");
         page.append("\n\t<script type=\"text/javascript\" src=\"" + req.getContextPath() + "/javascript/gridsphere.js\"></script>");
+        page.append("\n\t<script type=\"text/javascript\" src=\"" + req.getContextPath() + "/javascript/SimpleTextEditor.js\"></script>");
         if (props != null) {
             Object jsObj = props.get("JAVASCRIPT_SRC");
             if ((jsObj != null) && (jsObj instanceof java.util.List)) {
