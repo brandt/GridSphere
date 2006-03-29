@@ -26,7 +26,6 @@ public class ActionSubmitTag extends ActionTag {
             actionSubmitBean = (ActionSubmitBean) getTagBean();
             if (actionSubmitBean == null) {
                 actionSubmitBean = new ActionSubmitBean(beanId);
-                paramBeans = new ArrayList();
             } else {
                 if (actionSubmitBean.getAction() != null) {
                     action = actionSubmitBean.getAction();
@@ -40,11 +39,9 @@ public class ActionSubmitTag extends ActionTag {
                 if (actionSubmitBean.getParamBeanList() != null) {
                     paramBeans = actionSubmitBean.getParamBeanList();
                 }
-
             }
         } else {
             actionSubmitBean = new ActionSubmitBean();
-            paramBeans = new ArrayList();
         }
 
         actionSubmitBean.setName(createActionURI());
@@ -56,7 +53,6 @@ public class ActionSubmitTag extends ActionTag {
             actionSubmitBean.setKey(key);
             value = getLocalizedText(key);
         }
-
 
         if (!beanId.equals("")) {
             this.updateBaseComponentBean(actionSubmitBean);

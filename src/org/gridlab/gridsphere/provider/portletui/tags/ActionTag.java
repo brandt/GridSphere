@@ -20,6 +20,7 @@ import javax.servlet.jsp.tagext.TagExtraInfo;
 import javax.servlet.jsp.tagext.VariableInfo;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * The abstract <code>ActionTag</code> is used by other Action tags to contain <code>DefaultPortletAction</code>s
@@ -39,7 +40,7 @@ public abstract class ActionTag extends BaseComponentTag {
     protected String windowState = null;
     protected String portletMode = null;
     protected DefaultPortletAction portletAction = null;
-    protected List paramBeans = null;
+    protected List paramBeans = new ArrayList();
     protected String label = null;
     protected String trackMe = null;
     protected String extUrl = null;
@@ -148,7 +149,7 @@ public abstract class ActionTag extends BaseComponentTag {
     public void setOnSubmit(String onSubmit) {
         this.onSubmit = onSubmit;
     }
-    
+
     /**
      * Sets a label to track this action and persist in the DB
      *
@@ -433,7 +434,7 @@ public abstract class ActionTag extends BaseComponentTag {
         windowState = null;
         portletMode = null;
         portletAction = null;
-        paramBeans = null;
+        paramBeans.clear();
         label = null;
         trackMe = null;
         extUrl = null;

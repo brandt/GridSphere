@@ -100,7 +100,6 @@ public class ActionLinkTag extends ActionTag {
                 actionlink = new ActionLinkBean(beanId);
                 actionlink.setStyle(style);
                 this.setBaseComponentBean(actionlink);
-                paramBeans = new ArrayList();
             } else {
                 if (actionlink.getParamBeanList() != null) {
                     paramBeans = actionlink.getParamBeanList();
@@ -119,7 +118,6 @@ public class ActionLinkTag extends ActionTag {
             actionlink = new ActionLinkBean();
             this.setBaseComponentBean(actionlink);
             actionlink.setStyle(style);
-            paramBeans = new ArrayList();
         }
 
         actionlink.setUseAjax(useAjax);
@@ -138,13 +136,6 @@ public class ActionLinkTag extends ActionTag {
                 actionlink.setCssStyle("display: block");
             }
         }
-
-        /*
-        if (useAjax) {
-            String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
-            actionlink.setOnClick("startRequest(" + cid + ");");
-        }
-        */
 
         if (key != null) {
             actionlink.setKey(key);
