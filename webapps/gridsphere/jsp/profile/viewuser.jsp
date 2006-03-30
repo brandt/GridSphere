@@ -1,6 +1,6 @@
-<%@ page import="java.util.Locale,
-                 org.gridlab.gridsphere.portlet.PortletRequest,
-                 org.gridlab.gridsphere.portlet.PortletRole" %>
+<%@ page import="org.gridlab.gridsphere.portlet.PortletRequest,
+                 org.gridlab.gridsphere.portlet.PortletRole,
+                 java.util.Locale" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
@@ -11,7 +11,7 @@
 
 <% Locale locale = (Locale) request.getAttribute("locale"); %>
 <% PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest"); %>
-<% String flag = "/gridsphere/images/flags/" + locale.getLanguage() + ".gif"; %>
+<% String flag = "images/flags/" + locale.getLanguage() + ".gif"; %>
 
 <ui:messagebox beanId="msg"/>
 
