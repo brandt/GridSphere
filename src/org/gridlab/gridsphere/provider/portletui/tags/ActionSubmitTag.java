@@ -23,8 +23,6 @@ public class ActionSubmitTag extends ActionTag {
 
     protected ActionSubmitBean actionSubmitBean = null;
 
-    protected String onClick = null;
-
     /**
      * Returns the action link key used to locate localized text
      *

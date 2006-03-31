@@ -14,8 +14,6 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     public static final String SUBMIT_STYLE = "portlet-form-button";
     public static final String NAME = "as";
 
-    protected String onClick = null;
-
     /**
      * Constructs a default action submit bean
      */
