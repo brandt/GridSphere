@@ -159,6 +159,23 @@ public abstract class BaseFormEventImpl {
     }
 
     /**
+     * Return an existing <code>CalendarBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a CalendarBean
+     */
+    public CalendarBean getCalendarBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (CalendarBean) tagBeans.get(beanKey);
+        }
+        CalendarBean ca = new CalendarBean(beanId);
+        configureBean(ca);
+        tagBeans.put(beanKey, ca);
+        return ca;
+    }
+
+    /**
      * Return an existing <code>RadioButtonBean</code> or create a new one
      *
      * @param beanId the bean identifier
@@ -676,7 +693,14 @@ public abstract class BaseFormEventImpl {
                 tagBeans.put(beanKey, bean);
 
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
-
+            } else if (vb.equals(CalendarBean.NAME)) {
+                //log.debug("Creating a calendarbean bean with id:" + beanId);
+                CalendarBean bean = new CalendarBean(beanId);
+                bean.setValue(vals[0]);
+                bean.setName(name);
+                configureBean(bean);
+                //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
+                tagBeans.put(beanKey, bean);
             } else if (vb.equals(CheckBoxBean.NAME)) {
                 CheckBoxBean bean = (CheckBoxBean) tagBeans.get(beanKey);
                 if (bean == null) {

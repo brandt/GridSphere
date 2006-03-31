@@ -56,6 +56,14 @@ public interface FormEvent {
     public FileInputBean getFileInputBean(String beanId) throws IOException;
 
     /**
+     * Return an existing <code>CalendarBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a CalendarBean
+     */
+    public CalendarBean getCalendarBean(String beanId);
+
+    /**
      * Return an existing <code>CheckBoxBean</code> or create a new one
      *
      * @param beanId the bean identifier
