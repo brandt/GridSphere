@@ -1,7 +1,5 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-
 
 /**
  * The <code>TextBean</code> represents text to be displayed
@@ -42,7 +40,7 @@ public class CalendarBean extends InputBean implements TagBean {
         sb.append(checkReadOnly());
         sb.append(checkDisabled());
         sb.append("/>");
-        sb.append("<button id=\"cal\" type=\"submit\" title=\"Calendar\" alt=\"Calendar\" onclick=\"scwShow(document.getElementById('" + id + "'),this);\">Calendar</button>");
+        sb.append("<button class=\"cal\" type=\"submit\" title=\"Calendar\" alt=\"Calendar\" onclick=\"scwShow(document.getElementById('" + id + "'),this);\">Calendar</button>");
         return sb.toString();
         //return "<input id='" + id + "' type='text' value='" + value + "'/><img src='images/scw.gif' title='Click Here' alt='Click Here' onclick=\"scwShow(document.getElementById('date2'),this,3);\"/>";
     }
