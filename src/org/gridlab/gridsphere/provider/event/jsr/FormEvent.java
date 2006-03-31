@@ -14,7 +14,7 @@ import java.util.Map;
  * <code>ActionPortlet</code> model to create and store visual beans representing user interfaces.
  */
 public interface FormEvent {
-
+              
     /**
      * Return an existing <code>ActionLinkBean</code> or create a new one
      *
