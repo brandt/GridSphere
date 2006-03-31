@@ -163,7 +163,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             } catch (Exception e) {
                 RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/database_error.jsp");
                 log.error("Check DB failed: ", e);
-                req.setAttribute("error", "<h3>Database Error!</h3> Please verify that the <b>" + GridSphereConfig.getServletContext().getRealPath("") + "/WEB-INF/CustomPortal/hibernate.properties</b> file is properly configured and that the tables have been created in your database using the <b>ant create-database</b> command (which normally gets called when using <b>ant install</b>)!");
+                req.setAttribute("error", "<h3>Database Error!</h3> Please verify that the <b>" + GridSphereConfig.getServletContext().getRealPath("") + "/WEB-INF/CustomPortal/database/hibernate.properties</b> file is properly configured and that the tables have been created in your database using the <b>ant create-database</b> command (which normally gets called when using <b>ant install</b>)!");
                 rd.forward(req, res);
                 return;
             }
