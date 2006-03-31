@@ -111,46 +111,29 @@ public class DBTask extends Task {
      * @return
      * @throws BuildException
      */
-    private Properties loadGSProperties() throws BuildException {
+    private Properties loadProperties() throws BuildException {
         Properties prop = new Properties();
 
-        String hibPath = configDir + File.separator + "WEB-INF" + File.separator + "CustomPortal" +
-                File.separator + "database" + File.separator + hibernatePropertiesFileName;
-
+        FileInputStream fis = null;
+        String hibPath = "";
         try {
-            FileInputStream fis = new FileInputStream(hibPath);
-            prop.load(fis);
-            log.info("Using database configuration information from: " + hibPath);
-        } catch (IOException e) {
-            throw new BuildException("DB Error:" + CONFIGFILE_ERROR + " (" + hibPath + ")");
-        }
-        return prop;
-    }
-
-    /**
-     * Loads properties from a given directory.
-     *
-     * @return
-     * @throws BuildException
-     */
-    private Properties loadProjectProperties() throws BuildException {
-        Properties prop = new Properties();
-        String hibPath = configDir + File.separator + "WEB-INF" + File.separator + "persistence" + File.separator + hibernatePropertiesFileName;
-
-        try {
-            
-            //File hibFile = new File(hibPath);
-            /*
-            if (!hibFile.exists()) {
-                log.info("Copying template hibernate properties file from " + hibPath + " to " + hibPath);
-                GridSphereConfig.copyFile(new File(hibPath), hibFile);
+            hibPath = configDir + File.separator + "WEB-INF" + File.separator + "CustomPortal" +
+                    File.separator + "database" + File.separator + hibernatePropertiesFileName;
+            fis = new FileInputStream(hibPath);
+        } catch (FileNotFoundException e) {
+            hibPath = configDir + File.separator + "WEB-INF" + File.separator + "persistence" + File.separator + hibernatePropertiesFileName;
+            try {
+                fis = new FileInputStream(hibPath);
+            } catch (FileNotFoundException ef) {
+                throw new BuildException("Unable to locate hibernate.properties file!", ef);
             }
-            */
-            FileInputStream fis = new FileInputStream(hibPath);
+
+        }
+        try {
             prop.load(fis);
             log.info("Using database configuration information from: " + hibPath);
         } catch (IOException e) {
-            throw new BuildException("DB Error:" + CONFIGFILE_ERROR + " (" + hibPath + ")");
+            throw new BuildException("DB Error:" + CONFIGFILE_ERROR + " (" + hibPath + ")", e);
         }
         return prop;
     }
@@ -224,38 +207,26 @@ public class DBTask extends Task {
         log.info("Config: " + this.configDir);
         log.info("Action: " + this.action);
 
-        try {
-            // try to load the properties
-            Properties properties = null;
-            if (configDir.endsWith("gridsphere")) {
-                log.info("Using GridSphere database");
-                properties = loadGSProperties();
-            } else {
-                log.info("Using project database");
-                properties = loadProjectProperties();
-            }
+        // try to load the properties
+        log.info("Using project database");
+        Properties properties = loadProperties();
 
-            // test the db connection
-            this.testDBConnection(properties);
-            log.info("Tested DB connection.");
+        // test the db connection
+        this.testDBConnection(properties);
+        log.info("Tested DB connection.");
 
-            // get a hibernate db Configuration
-            Configuration cfg = getDBConfiguration(properties);
-            log.info("Got DB configuration.");
+        // get a hibernate db Configuration
+        Configuration cfg = getDBConfiguration(properties);
+        log.info("Got DB configuration.");
 
-            if (action.equals(ACTION_CHECKDB)) {
-                this.checkDatabase();
-            } else if (action.equals(ACTION_CREATE)) {
-                this.createDatabase(cfg);
-            } else if (action.equals(ACTION_UPDATE)) {
-                this.updateDatabase(cfg);
-            } else {
-                throw new BuildException("Unknown Action specified (" + this.action + ")!");
-            }
-
-        } catch (BuildException e) {
-            log.info("Database not correctly installed.\n");
-            throw new BuildException("The database is not correctly installed!");
+        if (action.equals(ACTION_CHECKDB)) {
+            this.checkDatabase();
+        } else if (action.equals(ACTION_CREATE)) {
+            this.createDatabase(cfg);
+        } else if (action.equals(ACTION_UPDATE)) {
+            this.updateDatabase(cfg);
+        } else {
+            throw new BuildException("Unknown Action specified (" + this.action + ")!");
         }
     }
 
