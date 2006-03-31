@@ -4,23 +4,22 @@ ChangeLog.txt GridSphere 2.1.4
 Changes since GridSphere 2.1.2
 ==============================
 
-Release Notes - GridSphere Portal Framework - Version 2.1.2
-
 ** Bug
     * [GPF-177] - setFileDownloadEvent in ActionPortlet broken
     * [GPF-178] - TableTag sorting and zebra not working
     * [GPF-181] - NPE when removing a portlet web application
+    * [GPF-214] - Configuring a different portal URL does not work
 
 ** Improvement
     * [GPF-180] - Create a GS setup portlet where an admin name and password gets created
+    * [GPF-194] - Provide more information when DBTask fails
 
 ** New Feature
     * [GPF-206] - add a new layout component SelectionContainer to selectively display content
+   * [GPF-209] - Add configuration option to enable users to be subscribed to all known groups
 
 Changes since GridSphere 2.0.4
 ==============================
-
-Release Notes - GridSphere Portal Framework - Version 2.1
 
 ** Bug
     * [GPF-80] - Problems with Internet Explorer
