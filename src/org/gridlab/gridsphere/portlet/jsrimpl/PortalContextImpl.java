@@ -112,12 +112,10 @@ public class PortalContextImpl implements PortalContext {
     /**
      * Returns information about the portal like vendor, version, etc.
      * <p/>
-     * The form of the returned string is <I>servername/versionnumber</I>. For
-     * example, the reference implementation Pluto may return the string
-     * <CODE>Pluto/1.0</CODE>.
+     * The form of the returned string is <I>servername/versionnumber</I>. 
      * <p/>
      * The portlet container may return other optional information  after the
-     * primary string in parentheses, for example, <CODE>Pluto/1.0
+     * primary string in parentheses, for example, <CODE>GridSphere/1.0
      * (JDK 1.3.1; Windows NT 4.0 x86)</CODE>.
      *
      * @return a <CODE>String</CODE> containing at least the portal name and version number
