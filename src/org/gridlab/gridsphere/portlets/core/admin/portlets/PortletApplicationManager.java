@@ -177,6 +177,11 @@ public class PortletApplicationManager extends ActionPortlet {
                     //System.err.println("file exists");
                     portletManager.initPortletWebApplication(appName, req, res);
                 }
+                 // add portlet app to gridsphere portlet app directory
+                String portletAppFile = this.getPortletConfig().getContext().getRealPath("/WEB-INF/CustomPortal/portlets/" + appName);
+                File portletFile = new File(portletAppFile);
+                portletFile.createNewFile();
+                System.err.println(portletAppFile);
                 createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_DEPLOY") + " " + appName);
             }
             log.debug("fileinputbean value=" + fi.getValue());
@@ -194,7 +199,7 @@ public class PortletApplicationManager extends ActionPortlet {
         PortletResponse res = event.getPortletResponse();
 
         if (!req.getRoles().contains(PortletRole.SUPER.getName())) return;
-        
+
         try {
             TextFieldBean tf = event.getTextFieldBean("webappNameTF");
 
@@ -210,6 +215,7 @@ public class PortletApplicationManager extends ActionPortlet {
             if (pfile.exists()) {
                 portletManager.initPortletWebApplication(webappName, req, res);
             }
+
             createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_DEPLOY") + " " + webappName);
         } catch (Exception e) {
             createErrorMessage(event, this.getLocalizedText(req, "PORTLET_ERR_DEPLOY"));

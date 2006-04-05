@@ -467,10 +467,9 @@ public class PortletInvoker {
                     log.info("not invoking destroyConcrete on portlet " + concPortlet.getConcretePortletID());
                 }
             }
-            // destroy the application portlet
-            portletDispatcher.destroy(req, res);
         }
-
+        // destroy the application portlet
+        portletDispatcher.destroy(req, res);
     }
 
     /**

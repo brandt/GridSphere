@@ -37,8 +37,6 @@ import javax.portlet.PortletRequest;
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -54,15 +52,14 @@ import java.util.*;
 import java.util.ResourceBundle;
 
 public class PortletServlet extends HttpServlet
-        implements Servlet, ServletConfig, ServletContextListener,
+        implements Servlet, ServletConfig,
         HttpSessionAttributeListener, HttpSessionListener, HttpSessionActivationListener {
 
     protected transient static PortletLog log = SportletLog.getInstance(PortletServlet.class);
     protected transient static PortletRegistry registry = null;
 
     protected JSRPortletWebApplicationImpl portletWebApp = null;
-    protected String webAppName = null;
-
+    
     private PortletManager manager = PortletManager.getInstance();
 
     protected PortletContext portletContext = null;
@@ -519,30 +516,6 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         super.doDelete(req, res);
     }
 
-    public void destroy() {
-        Iterator it = portlets.values().iterator();
-        while (it.hasNext()) {
-            Portlet portlet = (Portlet)it.next();
-            try {
-                portlet.destroy();
-            } catch (RuntimeException e) {
-                // PLT 5.2.5 ignore it
-            }
-            it.remove();
-        }
-        portletWebApp.destroy();
-        portletWebApp = null;
-        portletContext = null;
-        portlets = null;
-        portletclasses = null;
-        portletConfigHash = null;
-        prefsManager = null;
-        userKeys = null;
-        securePortlets = null;
-        super.destroy();
-    }
-
-
     protected void redirect(HttpServletRequest servletRequest,
                             HttpServletResponse servletResponse,
                             ActionRequest actionRequest,
@@ -603,59 +576,6 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         log.debug("attributeReplaced('" + event.getSession().getId() + "', '" +
                 event.getName() + "', '" + event.getValue() + "')");
 
-    }
-
-
-    /**
-     * Record the fact that this ui application has been destroyed.
-     *
-     * @param event The servlet context event
-     */
-    public void contextDestroyed(ServletContextEvent event) {
-        ServletContext ctx = event.getServletContext();
-        log.debug("contextDestroyed()");
-        log.debug("contextName: " + ctx.getServletContextName());
-        log.debug("context path: " + ctx.getRealPath(""));
-        SportletServiceFactory factory = SportletServiceFactory.getInstance();
-        log.info("Shutting down services for webapp: " + webAppName);
-        factory.shutdownServices(webAppName);
-    }
-
-
-    /**
-     * Record the fact that this ui application has been initialized.
-     *
-     * @param event The servlet context event
-     */
-    public void contextInitialized(ServletContextEvent event) {
-        log.debug("contextInitialized()");
-        ServletContext ctx = event.getServletContext();
-        log.debug("contextName: " + ctx.getServletContextName());
-        log.debug("context path: " + ctx.getRealPath(""));
-        SportletServiceFactory factory = SportletServiceFactory.getInstance();
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        String realPath = ctx.getRealPath("");
-        int l = realPath.lastIndexOf(File.separator);
-        webAppName = realPath.substring(l + 1);
-        String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");
-        File f = new File(descriptor);
-        if (!f.exists()) {
-            descriptor = ctx.getRealPath("/WEB-INF/portlet-services");
-            f = new File(descriptor);
-            if (!f.exists()) {
-                descriptor = null;
-            }
-        }
-        if (descriptor != null) {
-            try {
-                System.err.println("Loading services from " + descriptor);
-                factory.addServices(webAppName, ctx, descriptor, loader);
-            } catch (PortletServiceException e) {
-                log.error("Unable to load services!", e);
-            }
-        } else {
-            log.info("No PortletServices.xml or portlet-services directory found");
-        }
     }
 
     /**
