@@ -192,7 +192,9 @@ public class PortletApplicationManager extends ActionPortlet {
         log.debug("in PortletApplicationManager: deployWebapp");
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-        if (!req.getRoles().contains(PortletRole.SUPER)) return;
+
+        if (!req.getRoles().contains(PortletRole.SUPER.getName())) return;
+        
         try {
             TextFieldBean tf = event.getTextFieldBean("webappNameTF");
 
