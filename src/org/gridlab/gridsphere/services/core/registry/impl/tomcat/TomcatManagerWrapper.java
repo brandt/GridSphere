@@ -106,7 +106,6 @@ public class TomcatManagerWrapper {
         List l = new ArrayList();
         TomcatWebAppResult result = doCommand(req, "/list");
         if (result != null) {
-
             Iterator it = result.getWebAppDescriptions().iterator();
             while (it.hasNext()) {
                 TomcatWebAppDescription webAppDesc = (TomcatWebAppDescription) it.next();

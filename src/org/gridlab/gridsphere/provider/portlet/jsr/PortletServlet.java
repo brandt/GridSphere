@@ -34,10 +34,7 @@ import javax.portlet.PortletConfig;
 import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,7 +49,7 @@ import java.util.*;
 import java.util.ResourceBundle;
 
 public class PortletServlet extends HttpServlet
-        implements Servlet, ServletConfig,
+        implements Servlet, ServletConfig, 
         HttpSessionAttributeListener, HttpSessionListener, HttpSessionActivationListener {
 
     protected transient static PortletLog log = SportletLog.getInstance(PortletServlet.class);
@@ -77,15 +74,13 @@ public class PortletServlet extends HttpServlet
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         log.debug("in init of PortletServlet");
+        portlets = new Hashtable();
+        portletclasses = new Hashtable();
+        portletConfigHash = new Hashtable();
     }
 
     public void initJSRPortletWebapp() {
         ServletContext ctx = this.getServletContext();
-
-        portlets = new Hashtable();
-        portletclasses = new Hashtable();
-        portletConfigHash = new Hashtable();
-
         try {
             portletWebApp = new JSRPortletWebApplicationImpl(ctx, Thread.currentThread().getContextClassLoader());
         } catch (Exception e) {
@@ -214,7 +209,6 @@ public class PortletServlet extends HttpServlet
                     log.error("Caught exception during portlet destroy", e);
                 }
             }
-            manager.removePortletWebApplication(portletWebApp);
             return;
         } else if (method.equals(SportletProperties.DESTROY_CONCRETE)) {
             // do nothing for concrete portlets
@@ -536,8 +530,6 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
                 redirectResponse.sendRedirect(location);
             }
         }
-
-
     }
 
     /**

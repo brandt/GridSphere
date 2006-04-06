@@ -230,7 +230,7 @@ public class PortletManager implements PortletManagerService {
                 it.remove();
             }
         }
-        removePortletFile(webApplicationName);
+        //removePortletFile(webApplicationName);
     }
 
     /**

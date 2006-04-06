@@ -93,12 +93,11 @@ public class PortletApplicationManager extends ActionPortlet {
                 if (operation.equals("start")) {
                     result = tomcat.startWebApp(req, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
-                    portletManager.destroyPortletWebApplication(appName, req, res);
                     portletManager.initPortletWebApplication(appName, req, res);
                 } else if (operation.equals("stop")) {
+                    portletManager.destroyPortletWebApplication(appName, req, res); 
                     result = tomcat.stopWebApp(req, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
-                    //portletManager.destroyPortletWebApplication(appName, req, res);
                 } else if (operation.equals("reload")) {
                     portletManager.destroyPortletWebApplication(appName, req, res);
                     result = tomcat.stopWebApp(req, appName);
