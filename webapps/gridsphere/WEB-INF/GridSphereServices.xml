@@ -162,4 +162,12 @@
         <interface>org.gridlab.gridsphere.services.core.charts.ChartService</interface>
         <implementation>org.gridlab.gridsphere.services.core.charts.impl.ChartServiceImpl</implementation>
     </service>
+    
+    <service>
+        <name>Mail Service</name>
+        <description lang="en">Provides mail sending capabilities</description>
+        <interface>org.gridlab.gridsphere.services.core.mail.MailService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.mail.impl.MailServiceImpl</implementation>
+    </service>
+
 </portlet-services>
