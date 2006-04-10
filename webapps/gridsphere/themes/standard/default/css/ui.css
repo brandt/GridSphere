@@ -67,8 +67,34 @@ a.ui-datagrid-controls-element-active:link {
     padding: 0px;
 }
 
-.ui-messagebox {
+.ui-messagebox-portlet-msg-alert {
     border: 1px solid black;
     margin: 5px;
-    padding: 5px;
+    padding: 5px 5px 5px 25px;
+    background: url(../images/msgicons/portlet-msg-alert.gif) left top no-repeat;
+    background-position: 5px;
+}
+
+.ui-messagebox-portlet-msg-error {
+    border: 1px solid black;
+    margin: 5px;
+    padding: 5px 5px 5px 25px;
+    background: url(../images/msgicons/portlet-msg-error.gif) left top no-repeat;
+    background-position: 5px;
+}
+
+.ui-messagebox-portlet-msg-info {
+    border: 1px solid black;
+    margin: 5px;
+    padding: 5px 5px 5px 25px;
+    background: url(../images/msgicons/portlet-msg-info.gif) left top no-repeat;
+    background-position: 5px;
+}
+
+.ui-messagebox-portlet-msg-success {
+    border: 1px solid black;
+    margin: 5px;
+    padding: 5px 5px 5px 25px;
+    background: url(../images/msgicons/portlet-msg-success.gif) left top no-repeat;
+    background-position: 5px;
 }
