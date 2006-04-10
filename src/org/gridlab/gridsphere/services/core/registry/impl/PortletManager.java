@@ -120,24 +120,6 @@ public class PortletManager implements PortletManagerService {
                         webappFiles[i] = webapp.substring(0, idx);
                     }
                 }
-                /*
-                for (int i = 0; i < webappFiles.length; i++) {
-
-                    try {
-                        webapp = webappFiles[i];
-
-                        // forget about readme file !
-                        if (webapp.startsWith("README")) continue;
-                        System.err.println("Creating webapp for " + webapp);
-                        PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
-                        addWebApp(portletWebApp);
-                        System.err.println("END Creating webapp for " + webapp);
-                    } catch (PortletException e) {
-                        log.error("Unable to create portlet web application: " + webapp);
-                        throw new PortletServiceUnavailableException("Unable to create portlet web application: " + webapp, e);
-                    }
-                }
-                 */
             } else {
                 log.error("Portlet application " + portletsPath + " does not exist!");
                 throw new PortletServiceUnavailableException("Portlet application " + portletsPath + " does not exist!");
@@ -318,10 +300,16 @@ public class PortletManager implements PortletManagerService {
         // get rid of duplicates -- in the case of JSR portlets two webapps exist by the same name
         // since the first one represents the "classical" webapp which itself adds the jsr webapp to the
         // registry with the same name
+        /*
         for (int i = 0; i < webapps.size(); i++) {
             PortletWebApplication webapp = (PortletWebApplication) webapps.get(i);
             String webappName = webapp.getWebApplicationName();
             if (!l.contains(webappName)) l.add(webappName);
+        }
+        */
+        for (int i = 0; i < webappFiles.length; i++) {
+            if (webappFiles[i].startsWith("README")) continue;
+            l.add(webappFiles[i]);
         }
         return l;
     }
