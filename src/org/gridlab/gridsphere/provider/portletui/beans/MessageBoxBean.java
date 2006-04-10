@@ -1,7 +1,5 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +18,6 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
     private String messageType = MessageStyle.MSG_INFO;
     private String width = null;
     private String height = null;
-    private String imageSource = null;
-
 
     public MessageBoxBean() {
         super(NAME);
@@ -30,39 +26,6 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
     public MessageBoxBean(String beanId) {
         super(NAME);
         this.beanId = beanId;
-    }
-
-    /**
-     * Gets the source of the image which should be displayed.
-     *
-     * @return imagesource
-     */
-    public String getImageSource() {
-        return imageSource;
-    }
-
-    /**
-     * Sets the source of the image displayed along with the messagebox.
-     *
-     * @param imageSource image source
-     */
-    public void setImageSource(String imageSource) {
-        this.imageSource = imageSource;
-    }
-
-    /**
-     * Enables/disables standard images depending on the style of the messagebox.
-     *
-     * @param images yes or no  if images should be displayed
-     */
-    private void setDefaultImage(boolean images){
-        String gswebapp = GridSphereConfig.PROJECT_NAME;
-        if (images) {
-            this.imageSource =  new StringBuffer("/").append(gswebapp).append("/images/").
-                    append("msgicons/").append(messageType).append(".gif").toString();
-        } else {
-            this.imageSource = null;
-        }
     }
 
     /**
@@ -226,7 +189,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
                     message = getLocalizedText(message);
                 }
 
-                if (format) sb.append("<div class=\"" + messageType + "\">" + message + "</div>");
+                if (format) sb.append("<span class=\"" + messageType + "\">" + message + "</span>");
                     else sb.append(message);
             }
             result = sb.toString();
@@ -240,24 +203,16 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
     }
 
     public String toEndString() {
-        this.cssClass = "ui-messagebox";
+        this.cssClass = "ui-messagebox-" + messageType;
         StringBuffer sb = new StringBuffer();
         String message = getMessage(true);
         if (height != null) this.addCssStyle("height=\"" + height + "\"");
         if (width != null) this.addCssStyle("width=\"" + width + "\"");
 
-        if (imageSource == null) this.setDefaultImage(true);
-
         // only return something if we have a message
         if (message != null) {
             sb.append("<div" + getFormattedCss() + ">");
-            if (imageSource!=null) {
-                sb.append("<table><tr><td valign=\"top\"><img src=\""+imageSource+"\" /></td><td>");
-                sb.append(message);
-                sb.append("</td></tr></table>");
-            } else {
-                sb.append(message);
-            }
+            sb.append(message);
             sb.append("</div>");
         }
 
