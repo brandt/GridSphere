@@ -1,1 +1,1 @@
-<Context path="/@GRIDSPHERE_DEPLOY@" docBase="gridsphere" debug="0" reloadable="false" crossContext="true"/>
+<Context path="/@GRIDSPHERE_DEPLOY@" debug="0" reloadable="false" crossContext="true"/>
