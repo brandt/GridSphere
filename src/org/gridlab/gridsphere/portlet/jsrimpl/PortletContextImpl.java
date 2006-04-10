@@ -91,12 +91,8 @@ public class PortletContextImpl implements PortletContext {
      * @see PortletRequestDispatcher
      */
     public PortletRequestDispatcher getRequestDispatcher(String path) {
-        try {
-            RequestDispatcher rd = context.getRequestDispatcher(path);
-            return new PortletRequestDispatcherImpl(rd);
-        } catch (Exception e) {
-            return null;
-        }
+        RequestDispatcher rd = context.getRequestDispatcher(path);
+        return new PortletRequestDispatcherImpl(rd);
     }
 
     /**
