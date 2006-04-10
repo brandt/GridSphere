@@ -5,10 +5,8 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-
-
 /**
- * The <code>TextBean</code> represents text to be displayed
+ * The <code>MessageStyle</code> represents portlet text style to be displayed
  */
 public class MessageStyle  {
 
