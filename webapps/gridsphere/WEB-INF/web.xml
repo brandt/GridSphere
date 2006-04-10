@@ -178,7 +178,7 @@
 
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
-        <url-pattern>/gridsphere/*</url-pattern>
+        <url-pattern>/@GRIDSPHERE_CONTEXT@/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
