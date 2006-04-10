@@ -134,7 +134,7 @@ Invoke "ant help"
         </path>
 
         <echo message="GridSphere Webserver is ${gridsphere.appserver}"/>
-        <echo message="GridSphere will be deployed to ${appserver.home}"/>
+        <echo message="GridSphere will be deployed to ${appserver.home} as the ${gridsphere.deploy} web application"/>
     </target>
 
 
