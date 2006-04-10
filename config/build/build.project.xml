@@ -330,7 +330,7 @@ Copyright:
             </fileset>
         </copy>
 
-        <touch file="${appserver.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${project.name}"/>
+        <touch file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portlets/${project.name}"/>
 
         <if>
             <equals arg1="${use.jsr}" arg2="jsr"/>
