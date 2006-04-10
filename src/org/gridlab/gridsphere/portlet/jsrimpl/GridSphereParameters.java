@@ -46,6 +46,10 @@ public class GridSphereParameters {
         this.targetedCid = request.getParameter(SportletProperties.COMPONENT_ID);
     }
 
+    public void addRenderParams(Map params) {
+        persistParams.putAll(params);
+    }
+
     public void parseQueryString(String queryString) {
 
         queryString = queryString + "&";
@@ -227,7 +231,7 @@ public class GridSphereParameters {
             map.putAll(persistParams);
         }
 
-        //printAllParams(map);
+        printAllParams(map);
 
         return Collections.unmodifiableMap(map);
     }

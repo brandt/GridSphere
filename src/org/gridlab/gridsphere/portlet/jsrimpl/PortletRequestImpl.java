@@ -130,6 +130,10 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     public boolean isIncluded() {
         return included;
     }
+    
+    public void addRenderParams(Map renderParams) {
+        portalParameters.addRenderParams(renderParams);
+    }
 
     /**
      * Is this attribute name a reserved name (by the J2EE spec)?.

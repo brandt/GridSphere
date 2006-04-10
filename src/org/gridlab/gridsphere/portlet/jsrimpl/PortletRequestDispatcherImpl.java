@@ -9,6 +9,9 @@ import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.RequestDispatcher;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.HashMap;
 
 
 /**
@@ -24,12 +27,18 @@ import javax.servlet.RequestDispatcher;
 public class PortletRequestDispatcherImpl implements PortletRequestDispatcher {
 
     protected RequestDispatcher rd = null;
+    protected String path = null;
 
     private PortletRequestDispatcherImpl() {
     }
 
     public PortletRequestDispatcherImpl(RequestDispatcher rd) {
         this.rd = rd;
+    }
+
+    public PortletRequestDispatcherImpl(RequestDispatcher rd, String path) {
+        this.rd = rd;
+        this.path = path;
     }
 
     /**
@@ -54,6 +63,12 @@ public class PortletRequestDispatcherImpl implements PortletRequestDispatcher {
         if ((request instanceof PortletRequestImpl) && (response instanceof PortletResponseImpl)) {
             try {
                 ((PortletRequestImpl) request).setIncluded(true);
+                if (path != null) {
+                    Map params = parseQueryParams(path);
+                    if (!params.isEmpty()) {
+                        ((PortletRequestImpl) request).addRenderParams(params);
+                    }
+                }
                 rd.include((PortletRequestImpl) request, (PortletResponseImpl) response);
             } catch (java.io.IOException e) {
                 throw e;
@@ -69,7 +84,27 @@ public class PortletRequestDispatcherImpl implements PortletRequestDispatcher {
         }
     }
 
-
+    /**
+     * Returns a map containing any query parameters contained in the path to obtain a request dispatcher
+     * @param path
+     * @return a map containing any query parameters contained in the path
+     */
+    private Map parseQueryParams(String path) {
+        Map map = new HashMap();
+        int idx = path.indexOf("?");
+        if (idx < 0) return map;
+        String parms = path.substring(idx+1);
+        StringTokenizer st = new StringTokenizer(parms, "&");
+        while(st.hasMoreTokens()) {
+            String pair = st.nextToken();
+            if (pair.indexOf("=") > 0) {
+                String key = pair.substring(0, pair.indexOf("="));
+                String val = pair.substring(pair.indexOf("=")+1);
+                map.put(key, new String[] {val});
+            }
+        }
+        return map;
+    }
 }
 
 
