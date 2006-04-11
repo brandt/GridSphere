@@ -25,7 +25,6 @@ import org.gridlab.gridsphere.services.core.security.auth.AuthenticationExceptio
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
@@ -51,7 +50,7 @@ import java.net.SocketException;
  * are rendered.
  */
 public class GridSphereServlet extends HttpServlet implements ServletContextListener,
-        HttpSessionAttributeListener, HttpSessionListener, HttpSessionActivationListener {
+        HttpSessionAttributeListener, HttpSessionListener {
 
     /* GridSphere logger */
     private static PortletLog log = SportletLog.getInstance(GridSphereServlet.class);
@@ -77,9 +76,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     /* GridSphere Portlet layout Engine handles rendering */
     private static PortletLayoutEngine layoutEngine = null;
-
-    /* Session manager maps users to sessions */
-    private UserSessionManager userSessionManager = UserSessionManager.getInstance();
 
     /* creates cookie requests */
     private RequestService requestService = null;
@@ -331,6 +327,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletSession session = event.getPortletRequest().getPortletSession();
         String uid = (String) session.getAttribute(SportletProperties.PORTLET_USER);
         if (uid != null) {
+            System.err.println("uid is not null " + session.getId());
+
             user = userManagerService.getUser(uid);
         }
 
@@ -373,7 +371,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 indeDelimeter = (indeDelimeter > 0) ? (indeDelimeter + 1) : 0;
                 String login = principal.getName().substring(indeDelimeter);
                 User user = userManagerService.getLoggedInUser(login);
-                if (user != null) setUserSettings(event, user);
+                if (user != null) {
+                    setUserSettings(event, user);
+                }
             }
         }
     }
@@ -386,9 +386,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             if (cookies != null) {
                 for (int i = 0; i < cookies.length; i++) {
                     Cookie c = cookies[i];
-                    //System.err.println("found a cookie:");
-                    //System.err.println("name=" + c.getName());
-                    //System.err.println("value=" + c.getValue());
+                    System.err.println("found a cookie:");
+                    System.err.println("name=" + c.getName());
+                    System.err.println("value=" + c.getValue());
                     if (c.getName().equals("gsuid")) {
 
                         String cookieVal = c.getValue();
@@ -396,10 +396,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                         if (hashidx > 0) {
                             String uid = cookieVal.substring(0, hashidx);
 
-                            //System.err.println("uid = " + uid);
+                            System.err.println("uid = " + uid);
 
                             String reqid = cookieVal.substring(hashidx+1);
-                            //System.err.println("reqid = " + reqid);
+                            System.err.println("reqid = " + reqid);
 
                             GenericRequest genreq = requestService.getRequest(reqid, COOKIE_REQUEST);
                             if (genreq != null) {
@@ -407,7 +407,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                                 if (genreq.getUserID().equals(uid)) {
                                     User newuser = userManagerService.getUser(uid);
                                     if (newuser != null) {
-                                        //System.err.println("in checkUserHasCookie-- seting user settings!!");
+                                        System.err.println("in checkUserHasCookie-- seting user settings!!");
                                         setUserSettings(event, newuser);
                                     }
                                 }
@@ -511,7 +511,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             session.setAttribute(User.LOCALE, new Locale((String)user.getAttribute(User.LOCALE), "", ""));
         }
         setUserAndGroups(event);
-        userSessionManager.addSession(user, session);
         layoutEngine.loginPortlets(event);
     }
 
@@ -521,7 +520,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event a <code>GridSphereEvent</code>
      */
     protected void logout(GridSphereEvent event) {
-        this.getServletContext().log("in logout of GridSphere Servlet");
+        getServletContext().log("in logout of GridSphere Servlet");
         PortletRequest req = event.getPortletRequest();
         removeUserCookie(event);
         PortletSession session = req.getPortletSession();
@@ -529,7 +528,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         layoutEngine.logoutPortlets(event);
         User user = req.getUser();
         if (user != null) {
-            userSessionManager.logout(session);
             req.removeAttribute(SportletProperties.PORTLET_USER);
             req.removeAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
         }
@@ -558,7 +556,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public final void destroy() {
         log.debug("in destroy: Shutting down services");
-        userSessionManager.destroy();
+        //userSessionManager.destroy();
         layoutEngine.destroy();
         // Shutdown services
         factory.shutdownServices();
@@ -647,7 +645,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session event
      */
     public void sessionCreated(HttpSessionEvent event) {
-        log.debug("sessionCreated('" + event.getSession().getId() + "')");
+        System.err.println("sessionCreated('" + event.getSession().getId() + "')");
         sessionManager.sessionCreated(event);
     }
 
@@ -659,28 +657,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public void sessionDestroyed(HttpSessionEvent event) {
         sessionManager.sessionDestroyed(event);
-        log.debug("sessionDestroyed('" + event.getSession().getId() + "')");
-    }
-
-    /**
-     * Record the fact that a session has been created.
-     *
-     * @param event The session event
-     */
-    public void sessionDidActivate(HttpSessionEvent event) {
-        log.debug("sessionDidActivate('" + event.getSession().getId() + "')");
-        sessionManager.sessionCreated(event);
-    }
-
-
-    /**
-     * Record the fact that a session has been destroyed.
-     *
-     * @param event The session event
-     */
-    public void sessionWillPassivate(HttpSessionEvent event) {
-        sessionManager.sessionDestroyed(event);
-        log.debug("sessionWillPassivate('" + event.getSession().getId() + "')");
+        System.err.println("sessionDestroyed('" + event.getSession().getId() + "')");
     }
 
     public void updateDatabase() {

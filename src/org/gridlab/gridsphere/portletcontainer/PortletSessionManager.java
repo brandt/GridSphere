@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletSession;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 /**
@@ -34,6 +35,10 @@ public class PortletSessionManager implements HttpSessionListener {
         return sessions.size();        
     }
 
+    public Set getSessions() {
+        return sessions.keySet();
+    }
+
     /**
      * Record the fact that a session has been created.
      *
@@ -41,9 +46,7 @@ public class PortletSessionManager implements HttpSessionListener {
      */
     public void sessionCreated(HttpSessionEvent event) {
         log.debug("sessionCreated('" + event.getSession().getId() + "')");
-        synchronized (sessions) {
-            sessions.put(event.getSession().getId(), new ArrayList());
-        }
+        sessions.put(event.getSession(), new ArrayList());
         //dumpSessions();
     }
 
@@ -55,14 +58,14 @@ public class PortletSessionManager implements HttpSessionListener {
      */
     public void sessionDestroyed(HttpSessionEvent event) {
         log.debug("sessionDestroyed('" + event.getSession().getId() + "')");
-        String id = event.getSession().getId();
-        if (id != null) {
-            List sessionListeners = (List) sessions.get(id);
+        HttpSession httpSession = event.getSession();
+        if (httpSession != null) {
+            List sessionListeners = (List) sessions.get(httpSession);
             if (sessionListeners != null) {
                 Iterator it = sessionListeners.iterator();
                 while (it.hasNext()) {
                     PortletSessionListener sessionListener = (PortletSessionListener) it.next();
-                    PortletSession session = new SportletSession(event.getSession());
+                    PortletSession session = new SportletSession(httpSession);
                     try {
                         log.debug("logging a session listener out: " + sessionListener.getClass());
                         sessionListener.logout(session);
@@ -70,10 +73,8 @@ public class PortletSessionManager implements HttpSessionListener {
                         log.error("Unable to invoke logout on session listener ", e);
                     }
                 }
-                log.debug("Removing session: " + id);
-                synchronized (sessions) {
-                    sessions.remove(id);
-                }
+                log.debug("Removing session: " + httpSession.getId());
+                sessions.remove(httpSession);
             }
         } else {
             log.info("Not sure why sessionDestroyed listener provides null session id!");
@@ -83,10 +84,17 @@ public class PortletSessionManager implements HttpSessionListener {
 
     public void addSessionListener(String sessionId, PortletSessionListener sessionListener) {
         log.debug("adding session listener for : " + sessionId + " " + sessionListener.getClass());
-        List sessionListeners = (List) sessions.get(sessionId);
-        if (sessionListeners == null) sessionListeners = new ArrayList();
-        sessionListeners.add(sessionListener);
-        sessions.put(sessionId, sessionListeners);
+        Iterator it = sessions.keySet().iterator();
+        while (it.hasNext()) {
+            HttpSession session = (HttpSession)it.next();
+            if (session.getId().equals(sessionId)) {
+                List sessionListeners = (List) sessions.get(session);
+                if (sessionListeners == null) sessionListeners = new ArrayList();
+                sessionListeners.add(sessionListener);
+                sessions.put(session, sessionListeners);
+                break;
+            }
+        }
         //dumpSessions();
     }
 
@@ -96,7 +104,8 @@ public class PortletSessionManager implements HttpSessionListener {
         Set keySet = sessions.keySet();
         Iterator it = keySet.iterator();
         while (it.hasNext()) {
-            log.debug("session #id: " + (String) it.next());
+            HttpSession session = (HttpSession)it.next();
+            log.debug("session #id: " + session.getId());
         }
     }
 

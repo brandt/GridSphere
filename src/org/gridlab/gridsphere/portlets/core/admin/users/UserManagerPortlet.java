@@ -435,8 +435,6 @@ public class UserManagerPortlet extends ActionPortlet {
     private void editAccountRequest(FormEvent event, User accountRequest) {
         log.debug("Entering editAccountRequest()");
         accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
-        //accountRequest.setFamilyName(event.getTextFieldBean("familyName").getValue());
-        //accountRequest.setGivenName(event.getTextFieldBean("givenName").getValue());
         accountRequest.setFullName(event.getTextFieldBean("fullName").getValue());
         accountRequest.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
         accountRequest.setOrganization(event.getTextFieldBean("organization").getValue());
