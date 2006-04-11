@@ -446,7 +446,7 @@ public class UserManagerPortlet extends ActionPortlet {
             accountRequest.setAttribute(User.DISABLED, "false");
         }
         String certval = event.getTextFieldBean("certificate").getValue();
-        if (!certval.equals("")) accountRequest.setAttribute("user.certificate", certval);
+        if (certval != null) accountRequest.setAttribute("user.certificate", certval);
     }
 
     private void saveUserRole(FormEvent event, User user) {
