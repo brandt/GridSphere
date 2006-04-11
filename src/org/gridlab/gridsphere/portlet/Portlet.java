@@ -60,7 +60,7 @@ import java.util.ResourceBundle;
  */
 public abstract class Portlet extends HttpServlet
         implements PortletSessionListener, Servlet, ServletConfig, Serializable, ServletContextListener,
-        HttpSessionAttributeListener, HttpSessionListener, HttpSessionActivationListener {
+        HttpSessionAttributeListener, HttpSessionListener {
 
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
 
@@ -148,8 +148,7 @@ public abstract class Portlet extends HttpServlet
         public String getText(Locale locale) {
             ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
             String key = toString();
-            String value = bundle.getString(key);
-            return value;
+            return bundle.getString(key);
         }
 
         public int compare(Object left, Object right) {
@@ -174,7 +173,7 @@ public abstract class Portlet extends HttpServlet
 
         public boolean equals(Object o) {
             if ((o != null) && (o instanceof Portlet.Mode)) {
-                return (this.mode == ((Portlet.Mode) o).getMode() ? true : false);
+                return (this.mode == ((Portlet.Mode) o).getMode());
             }
             return false;
         }
@@ -531,42 +530,7 @@ public abstract class Portlet extends HttpServlet
      */
     public void sessionDestroyed(HttpSessionEvent event) {
         sessionManager.sessionDestroyed(event);
-        //loginService.sessionDestroyed(event.getSession());
         log.debug("in Portlet: sessionDestroyed('" + event.getSession().getId() + "')");
-        //HttpSession session = event.getSession();
-        //User user = (User) session.getAttribute(SportletProperties.PORTLET_USER);
-        //System.err.println("user : " + user.getUserID() + " expired!");
-        //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();
-        //engine.removeUser(user);
-        //engine.logoutPortlets(event);
-    }
-
-    /**
-     * Record the fact that a session has been created.
-     *
-     * @param event The session event
-     */
-    public void sessionDidActivate(HttpSessionEvent event) {
-        log.debug("sessionDidActivate('" + event.getSession().getId() + "')");
-        sessionManager.sessionCreated(event);
-    }
-
-
-    /**
-     * Record the fact that a session has been destroyed.
-     *
-     * @param event The session event
-     */
-    public void sessionWillPassivate(HttpSessionEvent event) {
-        sessionManager.sessionDestroyed(event);
-        //loginService.sessionDestroyed(event.getSession());
-        log.debug("sessionWillPassivate('" + event.getSession().getId() + "')");
-        //HttpSession session = event.getSession();
-        //User user = (User) session.getAttribute(SportletProperties.USER);
-        //System.err.println("user : " + user.getUserID() + " expired!");
-        //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();
-        //engine.removeUser(user);
-        //engine.logoutPortlets(event);
     }
 
 }
