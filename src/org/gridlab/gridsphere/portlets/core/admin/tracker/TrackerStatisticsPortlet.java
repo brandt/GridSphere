@@ -4,27 +4,29 @@
  */
 package org.gridlab.gridsphere.portlets.core.admin.tracker;
 
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
-import org.gridlab.gridsphere.provider.event.FormEvent;
-import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
-import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
-import org.gridlab.gridsphere.services.core.tracker.TrackerService;
-import org.gridlab.gridsphere.services.core.tracker.impl.TrackerInfo;
-import org.gridlab.gridsphere.services.core.tracker.impl.TrackerAction;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.gridlab.gridsphere.portlet.PortletConfig;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletSettings;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.provider.event.FormEvent;
+import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
+import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
+import org.gridlab.gridsphere.services.core.tracker.TrackerService;
+import org.gridlab.gridsphere.services.core.tracker.impl.TrackerAction;
+import org.gridlab.gridsphere.services.core.tracker.impl.TrackerInfo;
 
 import javax.servlet.UnavailableException;
-import java.util.*;
-import java.io.FileOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DateFormat;
+import java.util.*;
 
 public class TrackerStatisticsPortlet extends ActionPortlet {
 
@@ -41,7 +43,7 @@ public class TrackerStatisticsPortlet extends ActionPortlet {
         super.init(config);
         try {
             this.trackerService = (TrackerService) config.getContext().getService(TrackerService.class);
-            this.portalConfigService = (PortalConfigService)config.getContext().getService(PortalConfigService.class);
+            this.portalConfigService = (PortalConfigService) config.getContext().getService(PortalConfigService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -60,7 +62,7 @@ public class TrackerStatisticsPortlet extends ActionPortlet {
         req.setAttribute("labelSet", labelSet);
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
         String isCounterEnabled = settings.getAttribute(SportletProperties.ENABLE_PORTAL_COUNTER);
-        CheckBoxBean trackCB = evt.getCheckBoxBean("trackPortletCB");
+        CheckBoxBean trackCB = evt.getCheckBoxBean("trackPortletsCB");
         if (isCounterEnabled != null) {
             trackCB.setSelected(Boolean.valueOf(isCounterEnabled).booleanValue());
         }
@@ -118,7 +120,7 @@ public class TrackerStatisticsPortlet extends ActionPortlet {
         List trackerActionList = trackerService.getTrackingActions();
         Iterator it = trackerActionList.iterator();
         while (it.hasNext()) {
-            TrackerAction ta  = (TrackerAction)it.next();
+            TrackerAction ta = (TrackerAction) it.next();
             if (vals.contains(ta.getAction())) {
                 ta.setEnabled(true);
             } else {
@@ -149,18 +151,18 @@ public class TrackerStatisticsPortlet extends ActionPortlet {
         HSSFSheet sheet = wb.createSheet("new sheet");
 
         // Create a row and put some cells in it. Rows are 0 based.
-        HSSFRow row = sheet.createRow((short)0);
-        row.createCell((short)0).setCellValue("Date");
-        row.createCell((short)1).setCellValue("User-Agent");
-        row.createCell((short)2).setCellValue("User Name");
+        HSSFRow row = sheet.createRow((short) 0);
+        row.createCell((short) 0).setCellValue("Date");
+        row.createCell((short) 1).setCellValue("User-Agent");
+        row.createCell((short) 2).setCellValue("User Name");
         TrackerInfo info;
 
         for (int i = 0; i < trackInfoList.size(); i++) {
-            info = (TrackerInfo)trackInfoList.get(i);
-            row = sheet.createRow((short)i+1);
-            row.createCell((short)0).setCellValue(DateFormat.getDateTimeInstance().format(new Date(info.getDate())));
-            row.createCell((short)1).setCellValue(info.getUserAgent());
-            row.createCell((short)2).setCellValue(info.getUserName());
+            info = (TrackerInfo) trackInfoList.get(i);
+            row = sheet.createRow((short) i + 1);
+            row.createCell((short) 0).setCellValue(DateFormat.getDateTimeInstance().format(new Date(info.getDate())));
+            row.createCell((short) 1).setCellValue(info.getUserAgent());
+            row.createCell((short) 2).setCellValue(info.getUserName());
         }
 
         try {
