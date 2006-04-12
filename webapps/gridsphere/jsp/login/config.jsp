@@ -19,10 +19,6 @@
 <ui:text key="LOGIN_CONFIG_ALLOW"/>
 </p>
 <p>
-<ui:checkbox beanId="acctAddGroups" value="TRUE"/>
-<ui:text key="LOGIN_ADD_GROUPS"/>
-</p>
-<p>
 <ui:checkbox beanId="notifyCB" value="TRUE"/>
 <ui:text key="LOGIN_CONFIG_NOTIFY"/>
 </p>
