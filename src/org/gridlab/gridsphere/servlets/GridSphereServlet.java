@@ -22,6 +22,7 @@ import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.impl.GroupRequestImpl;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
@@ -512,25 +513,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         try {
             User user = loginService.login(req);
-
-            // add user to all groups if config option has been set
-            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-            String addUserToGroups = settings.getAttribute(LoginPortlet.ADD_USER_TO_GROUPS);
-            if (Boolean.valueOf(addUserToGroups).booleanValue()) {
-                Iterator it = aclService.getGroupsNotMemberOf(user).iterator();
-                while (it.hasNext()) {
-                    PortletGroup selectedGroup = (PortletGroup)it.next();
-                    GroupRequest groupRequest = this.aclService.createGroupEntry();
-                    groupRequest.setUser(user);
-                    groupRequest.setGroup(selectedGroup);
-                    if (aclService.hasSuperRole(req.getUser())) {
-                        groupRequest.setRole(aclService.getRoleByName(PortletRole.ADMIN.getName()));
-                    } else {
-                        groupRequest.setRole(aclService.getRoleByName(PortletRole.USER.getName()));
-                    }
-                    this.aclService.saveGroupEntry(groupRequest);
-                }
-            }
 
             setUserSettings(event, user);
 
