@@ -1,0 +1,63 @@
+/*
+Part of the Gridsphere default theme
+Author: Oliver Wehrens (oliver.wehrens@aei.mpg.de)
+Version: $Id: window.css 4055 2005-06-29 18:53:33Z novotny $
+*/
+
+
+.window-main {
+   width: 100%;
+   spacing: 2px;
+   padding: 2px;
+}
+
+.window-title-inactive {
+  background-color: #b6b6b6;
+  color: #000000;
+  width: 100%;
+  border-top: 1px solid #000000;
+  border-right: 1px solid #000000;
+  border-left: 1px solid #000000;
+}
+
+.window-title-active {
+  background-color: #b6b6b6;
+  color: #000000;
+  width: 100%;
+  border-top: 1px solid #000000;
+  border-right: 1px solid #000000;
+  border-left: 1px solid #000000;
+}
+
+.window-title-name {
+  color: white;
+  font-family: inherit;
+  text-align: center;
+  font-weight: bold;
+}
+
+.window-icon-right {
+   text-align: right;
+   width: 80px;
+}
+
+.window-icon-left {
+    text-align: left;
+    width: 60px;
+}
+
+.window-content-minimize {
+
+}
+
+.window-content {
+  background-color: #ededed;
+  padding: 5px;
+  border-right: 1px solid #000000;
+  border-left: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  spacing-top: 5px;
+  spacing-right: 2px;
+  height: 100%;
+}
+
