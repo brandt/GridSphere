@@ -18,10 +18,6 @@
             <ui:text key="LOGIN_CONFIG_ALLOW"/>
         </p>
         <p>
-            <ui:checkbox beanId="acctAddGroups" value="TRUE"/>
-            <ui:text key="LOGIN_ADD_GROUPS"/>
-        </p>
-        <p>
             <ui:checkbox beanId="acctApproval" value="FALSE"/>
             <ui:text key="LOGIN_ACCOUNT_APPROVAL"/>
         </p>
