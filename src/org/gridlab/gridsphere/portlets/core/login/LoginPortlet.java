@@ -36,7 +36,6 @@ public class LoginPortlet extends ActionPortlet {
     private static String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
     private static String LOGIN_NAME = "LOGIN_NAME";
     public static String SAVE_PASSWORDS = "SAVE_PASSWORDS";
-    public static String ADD_USER_TO_GROUPS = "ADD_USER_TO_GROUPS";
     public static String SEND_USER_FORGET_PASSWORD = "SEND_USER_FORGET_PASSWD";
 
     private static long REQUEST_LIFETIME = 1000*60*24*3; // 3 days
@@ -80,9 +79,6 @@ public class LoginPortlet extends ActionPortlet {
             }
             if (settings.getAttribute(SAVE_PASSWORDS) == null) {
                 settings.setAttribute(SAVE_PASSWORDS, Boolean.TRUE.toString());
-            }
-            if (settings.getAttribute(ADD_USER_TO_GROUPS) == null) {
-                settings.setAttribute(ADD_USER_TO_GROUPS, Boolean.FALSE.toString());
             }
             String numTries = settings.getAttribute(LOGIN_NUMTRIES);
 
@@ -398,9 +394,6 @@ public class LoginPortlet extends ActionPortlet {
         acctCB.setSelected(canUserCreateAccount);
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
 
-        CheckBoxBean addUserCB = event.getCheckBoxBean("acctAddGroups");
-        addUserCB.setSelected(Boolean.valueOf(settings.getAttribute(ADD_USER_TO_GROUPS)).booleanValue());
-
         CheckBoxBean notifyCB = event.getCheckBoxBean("notifyCB");
         notifyCB.setSelected(Boolean.valueOf(settings.getAttribute(SEND_USER_FORGET_PASSWORD)).booleanValue());
 
@@ -429,10 +422,6 @@ public class LoginPortlet extends ActionPortlet {
         canUserCreateAccount = (useracct != null);
 
         settings.setCanUserCreateAccount(canUserCreateAccount);
-
-        CheckBoxBean addUserCB = event.getCheckBoxBean("acctAddGroups");
-        boolean addUserToGroups = (addUserCB.getSelectedValue() != null);
-        settings.setAttribute(ADD_USER_TO_GROUPS, Boolean.toString(addUserToGroups));
 
         CheckBoxBean notifyCB = event.getCheckBoxBean("notifyCB");
         String notify = notifyCB.getSelectedValue();
