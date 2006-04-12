@@ -580,6 +580,18 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         configSettings.setDefaultGroups(defaultGroups);
         portalConfigService.savePortalConfigSettings(configSettings);
+
+        // Now add groups to existing users
+        Iterator usersIt = userManagerService.getUsers().iterator();
+        while (usersIt.hasNext()) {
+            User user = (User)usersIt.next();
+            Iterator groupsIt = defaultGroups.iterator();
+            while (groupsIt.hasNext()) {
+                PortletGroup group = (PortletGroup)groupsIt.next();
+                groupManagerService.addUserToGroup(user, group);
+            }
+        }
+
         createSuccessMessage(evt, this.getLocalizedText(req, "GROUP_SAVE_DEFGROUPS_SUCCESS"));
         setNextState(req, DEFAULT_VIEW_PAGE);
     }

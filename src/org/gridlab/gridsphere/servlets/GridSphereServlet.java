@@ -472,17 +472,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         try {
             User user = loginService.login(req);
 
-            // add user to all groups if config option has been set
-            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-            String addUsersToGroups = settings.getAttribute(LoginPortlet.ADD_USER_TO_GROUPS);
-            if (Boolean.valueOf(addUsersToGroups).booleanValue()) {
-                List groups = groupService.getGroups();
-                Iterator it = groups.iterator();
-                while (it.hasNext()) {
-                    PortletGroup group = (PortletGroup)it.next();
-                    groupService.addUserToGroup(user, group);
-                }
-            }
             setUserSettings(event, user);
 
             String remme = req.getParameter("remlogin");
