@@ -1,4 +1,8 @@
 <%@ page import="org.gridlab.gridsphere.portlet.User" %>
+<%@ taglib uri="/portletUI" prefix="ui" %>
+<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+<portletAPI:init/>
+
 <jsp:useBean id="role" class="java.lang.String" scope="request"/>
 
 <% User user = (User) request.getAttribute("user"); %>
