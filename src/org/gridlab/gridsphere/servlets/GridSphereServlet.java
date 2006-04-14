@@ -19,20 +19,15 @@ import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
-import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.impl.GroupRequestImpl;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
-import org.gridlab.gridsphere.portlets.core.login.LoginPortlet;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -78,9 +73,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     /* GridSphere Portlet layout Engine handles rendering */
     private static PortletLayoutEngine layoutEngine = null;
-
-    /* Session manager maps users to sessions */
-    private UserSessionManager userSessionManager = UserSessionManager.getInstance();
 
     /* creates cookie requests */
     private RequestService requestService = null;
@@ -545,10 +537,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             log.debug("User: " + user.getUserName() + " logged in as SUPER");
         }
         setUserAndGroups(req);
-        log.debug("Adding User: " + user.getID() + " with session:" + session.getId() + " to usersessionmanager");
-        userSessionManager.addSession(user, session);
         layoutEngine.loginPortlets(event);
     }
+
 
     /**
      * Handles logout requests
@@ -563,7 +554,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         layoutEngine.logoutPortlets(event);
         req.removeAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
         session.removeAttribute(SportletProperties.PORTLET_USER);
-        userSessionManager.logout(session);
+
         session.invalidate();
     }
 
@@ -588,7 +579,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public final void destroy() {
         log.debug("in destroy: Shutting down services");
-        userSessionManager.destroy();
         layoutEngine.destroy();
         // Shutdown services
         factory.shutdownServices();

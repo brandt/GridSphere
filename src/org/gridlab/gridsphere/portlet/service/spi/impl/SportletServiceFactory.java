@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlet.service.spi.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
@@ -20,11 +21,11 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServic
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
-import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.net.URL;
@@ -42,8 +43,6 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
     private static SportletServiceFactory instance = null;
     private static AccessControlManagerServiceImpl aclManager = AccessControlManagerServiceImpl.getInstance();
     private static PortletSessionManager portletSessionManager = PortletSessionManager.getInstance();
-    private static UserSessionManager userSessionManager = UserSessionManager.getInstance();
-
 
     // Maintain a single copy of each service instantiated
     // as a classname and PortletServiceProvider pair
@@ -100,7 +99,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
     public void logout(PortletSession session) throws PortletException {
         log.debug("in logout of SportletServiceFactory");
-        String userid = userSessionManager.getUserIdFromSession(session);
+        String userid = (String) session.getAttribute(SportletProperties.PORTLET_USER);
         if ((userid != null) && (userServices.containsKey(userid))) {
             log.debug("Removing services for userid: " + userid);
             Map servs = (Map) userServices.get(userid);
@@ -469,13 +468,15 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         log.debug("Creating a user service for user: " + user.getID() + " " + serviceName);
         userServices.put(user.getID(), userServiceMap);
 
-        List sessions = userSessionManager.getSessions(user);
-        if (sessions != null) {
-            Iterator it = sessions.iterator();
-            while (it.hasNext()) {
-                PortletSession session = (PortletSession) it.next();
-                log.debug("Adding a session listener for session: " + session.getId() + " to portlet session manager");
-                if ((session != null) && (session.getId() != null)) portletSessionManager.addSessionListener(session.getId(), this);
+
+        Set sessions = portletSessionManager.getSessions();
+        Iterator it = sessions.iterator();
+        while (it.hasNext()) {
+            HttpSession session = (HttpSession)it.next();
+            String uid = (String) session.getAttribute(SportletProperties.PORTLET_USER);
+            if ((uid != null) && (uid.equals(user.getID()))) {
+            log.debug("Adding a session listener for session: " + session.getId() + " to portlet session manager");
+                portletSessionManager.addSessionListener(session.getId(), this);
             }
         }
         return psp;

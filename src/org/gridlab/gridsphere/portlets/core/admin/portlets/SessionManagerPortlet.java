@@ -3,24 +3,25 @@
 package org.gridlab.gridsphere.portlets.core.admin.portlets;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
-import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 
 import javax.servlet.UnavailableException;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * The
  */
 public class SessionManagerPortlet extends ActionPortlet {
 
-    private UserSessionManager userSessionMgr = null;
     private PortletSessionManager portletSessionMgr = null;
 
     private UserManagerService userManager = null;
@@ -32,7 +33,6 @@ public class SessionManagerPortlet extends ActionPortlet {
         } catch (PortletServiceException e) {
             log.error("Unable to get portlet manager instance", e);
         }
-        userSessionMgr = UserSessionManager.getInstance();
         portletSessionMgr = PortletSessionManager.getInstance();
         DEFAULT_VIEW_PAGE = "showSessions";
     }
@@ -41,13 +41,17 @@ public class SessionManagerPortlet extends ActionPortlet {
     public void showSessions(FormEvent event) throws PortletException {
 
         PortletRequest req = event.getPortletRequest();
-        List uids = userSessionMgr.getUserIds();
         List names = new ArrayList();
-        Iterator it = uids.iterator();
+
+        Set sessions = portletSessionMgr.getSessions();
+        Iterator it = sessions.iterator();
         while (it.hasNext()) {
-            String uid = (String)it.next();
-            User user = userManager.getUser(uid);
-            names.add(user);
+            HttpSession session = (HttpSession)it.next();
+            String uid = (String) session.getAttribute(SportletProperties.PORTLET_USER);
+            if (uid != null) {
+                User user = userManager.getUser(uid);
+                names.add(user);
+            }
         }
         int numSessions = portletSessionMgr.getNumSessions();
 
@@ -58,6 +62,5 @@ public class SessionManagerPortlet extends ActionPortlet {
 
 
     }
-
 
 }

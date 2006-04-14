@@ -25,7 +25,6 @@ import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descripto
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.LoginUserModule;
-import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import java.lang.reflect.Constructor;
@@ -40,7 +39,6 @@ import java.util.*;
  */
 public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
-    private UserSessionManager userSessionManager = UserSessionManager.getInstance();
     private PortletLog log = SportletLog.getInstance(LoginServiceImpl.class);
     private static boolean inited = false;
     private List authModules = new ArrayList();
@@ -78,10 +76,6 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
     public void setActiveLoginModule(LoginUserModule loginModule) {
         activeLoginModule = loginModule;
-    }
-
-    public List getActiveUserIds() {
-        return userSessionManager.getUserIds();
     }
 
     /**
