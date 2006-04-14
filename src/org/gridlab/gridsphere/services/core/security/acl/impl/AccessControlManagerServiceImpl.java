@@ -190,7 +190,6 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         oqlBuffer.append(criteria);
         // Generate object query
         String oql = oqlBuffer.toString();
-        log.debug(oql);
         try {
             return (SportletGroup) pm.restore(oql);
         } catch (PersistenceManagerException e) {
