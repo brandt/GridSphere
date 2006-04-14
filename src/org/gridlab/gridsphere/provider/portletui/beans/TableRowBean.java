@@ -11,7 +11,6 @@ public class TableRowBean extends BeanContainer implements TagBean {
 
     protected boolean isHeader = false;
     public static final String TABLE_HEADER_STYLE = "portlet-section-header";
-    //public static final String TABLE_NORMAL_STYLE = "portlet-section-body";
     public static final String TABLE_ALTERNATE_STYLE = "portlet-section-alternate";
 
     protected String align = null;
@@ -105,37 +104,20 @@ public class TableRowBean extends BeanContainer implements TagBean {
         return isZebra;
     }
 
-    private void setBeanStyles(String style) {
-        Iterator it = container.iterator();
-        while (it.hasNext()) {
-            BaseComponentBean tagBean = (BaseComponentBean) it.next();
-            tagBean.setCssClass(style);
-        }
-    }
-
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<tr");
         if (align != null) sb.append(" align=\"").append(align).append("\"");   // todo check usage of 'layout' instead of 'align' ??
         if (valign != null) sb.append(" valign=\"" + valign + "\"");
-        //sb.append(">");
         if (isHeader) {
             sb.append(" class=\"" + TABLE_HEADER_STYLE + "\"");
-            //setBeanStyles(TABLE_HEADER_STYLE);
         } else {
             if (isZebra) {
                 sb.append(" class=\"" + TABLE_ALTERNATE_STYLE + "\"");
-                //setBeanStyles(TABLE_ALTERNATE_STYLE);
-            } else {
-                //sb.append(" class=\"" + TABLE_NORMAL_STYLE + "\"");
-                //setBeanStyles(TABLE_NORMAL_STYLE);
             }
         }
         sb.append(getFormattedCss());
-
-
         sb.append(">");
-
         Iterator it = container.iterator();
         while (it.hasNext()) {
             TableCellBean cellBean = (TableCellBean) it.next();

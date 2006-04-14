@@ -323,8 +323,6 @@ public class TableTag extends BaseComponentTag {
         if (title != null) tableBean.setTitle(title);
         tableBean.setMaxRows(maxRows);
         tableBean.setZebra(isZebra);
-
-
         tableBean.setRowCount(0);
         tableBean.setShowall(isShowAll);
 

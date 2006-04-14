@@ -140,13 +140,10 @@ public class FrameTag extends TableTag {
 
         tableBean.setCurrentPage(currentPage);
         tableBean.setRowCount(rowCount);
-
-
+        tableBean.setZebra(isZebra);
         PanelTag panelTag = (PanelTag) findAncestorWithClass(this, PanelTag.class);
         if (panelTag != null) {
-
             int numCols = panelTag.getNumCols();
-
             int thiscol = panelTag.getColumnCounter();
             try {
                 JspWriter out = pageContext.getOut();
@@ -159,7 +156,6 @@ public class FrameTag extends TableTag {
                 throw new JspException(e.getMessage());
             }
         }
-
 
         try {
             JspWriter out = pageContext.getOut();

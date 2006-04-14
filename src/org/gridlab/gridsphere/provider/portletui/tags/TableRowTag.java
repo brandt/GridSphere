@@ -121,7 +121,6 @@ public class TableRowTag extends BaseComponentTag {
             // logic to determine if alternate (darkened row) should be set
             if (tableTag.getZebra()) {
                 if ((tableTag.getRowCount() % 2) == 0) {
-
                     isZebra = true;
                 } else {
                     isZebra = false;
@@ -142,7 +141,6 @@ public class TableRowTag extends BaseComponentTag {
                     }
                 }
             }
-
         }
 
         if (!beanId.equals("")) {
@@ -153,11 +151,9 @@ public class TableRowTag extends BaseComponentTag {
             rowBean.setHeader(isHeader);
             if (align != null) rowBean.setAlign(align);
             if (valign != null) rowBean.setValign(valign);
-            rowBean.setZebra(isZebra);
-            //rowBean.setCssClass(this.cssClass);
-            //rowBean.setCssStyle(this.cssStyle);
         }
 
+        rowBean.setZebra(isZebra);
 
         try {
             JspWriter out = pageContext.getOut();
@@ -169,13 +165,13 @@ public class TableRowTag extends BaseComponentTag {
     }
 
     public int doEndTag() throws JspException {
-        super.doEndTag();
         try {
             JspWriter out = pageContext.getOut();
             out.print(rowBean.toEndString());
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
+        isZebra = false;
         super.doEndTag();
         return EVAL_PAGE;
     }
