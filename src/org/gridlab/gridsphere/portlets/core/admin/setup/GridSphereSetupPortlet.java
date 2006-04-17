@@ -107,22 +107,20 @@ public class GridSphereSetupPortlet extends ActionPortlet {
         } catch (PortletException e) {
             return;
         }
+        String password = event.getPasswordBean("password").getValue();
+        boolean isbad = this.isInvalidPassword(event, true);
+        if (isbad) {
+            return;
+        }
+
         User  accountRequest = this.userManagerService.createUser();
         accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
         accountRequest.setFullName(event.getTextFieldBean("fullName").getValue());
         accountRequest.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
         accountRequest.setOrganization(event.getTextFieldBean("organization").getValue());
         PasswordEditor editor = passwordManagerService.editPassword(accountRequest);
-        String password = event.getPasswordBean("password").getValue();
-        boolean isbad = this.isInvalidPassword(event, true);
-        if (isbad) {
-            return;
-        } else {
-            if (!password.equals("")) {
-                editor.setValue(password);
-                passwordManagerService.savePassword(editor);
-            }
-        }
+        editor.setValue(password);
+        passwordManagerService.savePassword(editor);
         userManagerService.saveUser(accountRequest);
 
         log.info("Granting super role to root user.");
