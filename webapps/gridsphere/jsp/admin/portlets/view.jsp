@@ -153,11 +153,7 @@
     </ui:form>
 </ui:group>
 
-<%-- uploading portlet WAR files TBD --%>
-
-<!-- Table commented out
-<table><tr><td height="10px"></td></tr></table>
--->
+<%-- uploading portlet WAR files TBD
 
 
 <ui:group key="PORTLET_UPLOAD">
@@ -184,3 +180,5 @@
         </ui:frame>
     </ui:fileform>
 </ui:group>
+
+ --%>
