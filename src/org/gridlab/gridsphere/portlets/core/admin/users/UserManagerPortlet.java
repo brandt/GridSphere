@@ -85,7 +85,7 @@ public class UserManagerPortlet extends ActionPortlet {
             while (it.hasNext()) {
                 userRole += ((PortletRole)it.next()).getName() + ", ";
             }
-            req.setAttribute("role", userRole.substring(0, userRole.length() - 2));
+            if (userRole.length() > 2) req.setAttribute("role", userRole.substring(0, userRole.length() - 2));
             CheckBoxBean accountCB = evt.getCheckBoxBean("accountCB");
             String disabled = (String)user.getAttribute(User.DISABLED);
             if ((disabled != null) && ("TRUE".equalsIgnoreCase(disabled))) {
@@ -239,11 +239,12 @@ public class UserManagerPortlet extends ActionPortlet {
             throws PortletException {
 
         PortletRequest req = evt.getPortletRequest();
-        //User user = loadUser(evt);
+
+        HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
+        String newuser = hf.getValue();
         try {
             User user;
-            HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
-            String newuser = hf.getValue();
+
             log.debug("in doConfirmEditUser: " + newuser);
             if (newuser.equals("true")) {
                 validateUser(evt, true);
@@ -269,7 +270,11 @@ public class UserManagerPortlet extends ActionPortlet {
             if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
                 req.setAttribute("savePass", "true");
             }
-            setNextState(req, DO_VIEW_USER_EDIT);
+            if (newuser.equals("true")) {
+                setNextState(req, "doNewUser");
+            } else {
+                setNextState(req, DO_VIEW_USER_EDIT);
+            }
         }
     }
 

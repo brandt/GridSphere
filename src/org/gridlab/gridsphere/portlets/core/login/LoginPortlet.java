@@ -84,6 +84,9 @@ public class LoginPortlet extends ActionPortlet {
             if (settings.getAttribute(SAVE_PASSWORDS) == null) {
                 settings.setAttribute(SAVE_PASSWORDS, Boolean.TRUE.toString());
             }
+            if (settings.getAttribute(SUPPORT_X509_AUTH) == null) {
+                settings.setAttribute(SUPPORT_X509_AUTH, Boolean.FALSE.toString());
+            }
             if (settings.getAttribute(LOGIN_ERROR_HANDLING) == null) {
                 settings.setAttribute(LOGIN_ERROR_HANDLING, Boolean.FALSE.toString());
             }
