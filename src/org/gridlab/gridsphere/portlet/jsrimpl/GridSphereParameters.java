@@ -144,7 +144,6 @@ public class GridSphereParameters {
 
     public Map getParameterMap() {
         String mycid = (String) req.getAttribute(SportletProperties.COMPONENT_ID);
-        String pid = (String) req.getAttribute(SportletProperties.PORTLETID);
 
         Map map = new HashMap();
         // we need to distinguish between a render invocation abnd a render that follows an action
@@ -231,7 +230,7 @@ public class GridSphereParameters {
             map.putAll(persistParams);
         }
 
-        printAllParams(map);
+        //printAllParams(map);
 
         return Collections.unmodifiableMap(map);
     }
