@@ -8,6 +8,7 @@
 
 <ui:form>
     <ui:hiddenfield beanId="roleHF"/>
+    <ui:hiddenfield beanId="isNewRoleHF"/>
     <ui:frame>
 
         <ui:tablerow>
