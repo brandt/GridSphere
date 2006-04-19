@@ -133,7 +133,11 @@ public class ProfileManagerPortlet extends ActionPortlet {
         while (it.hasNext()) {
             userRole += ((PortletRole)it.next()).getName() + ", ";
         }
-        userRolesTB.setValue(userRole.substring(0, userRole.length()-2));
+        if (userRole.length() > 2) {
+            userRolesTB.setValue(userRole.substring(0, userRole.length()-2));
+        } else {
+            userRolesTB.setValue(this.getLocalizedText(req, "ROLES_HASNOROLES"));
+        }
 
         Locale locale = req.getLocale();
 

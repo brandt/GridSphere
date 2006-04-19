@@ -85,7 +85,11 @@ public class UserManagerPortlet extends ActionPortlet {
             while (it.hasNext()) {
                 userRole += ((PortletRole)it.next()).getName() + ", ";
             }
-            if (userRole.length() > 2) req.setAttribute("role", userRole.substring(0, userRole.length() - 2));
+            if (userRole.length() > 2) {
+                req.setAttribute("role", userRole.substring(0, userRole.length() - 2));
+            } else {
+                req.setAttribute("role", this.getLocalizedText(req, "ROLES_HASNOROLES"));
+            }
             CheckBoxBean accountCB = evt.getCheckBoxBean("accountCB");
             String disabled = (String)user.getAttribute(User.DISABLED);
             if ((disabled != null) && ("TRUE".equalsIgnoreCase(disabled))) {

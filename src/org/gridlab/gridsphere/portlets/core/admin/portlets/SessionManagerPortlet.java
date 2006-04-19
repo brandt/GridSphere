@@ -57,8 +57,6 @@ public class SessionManagerPortlet extends ActionPortlet {
 
         req.setAttribute("uids", names);
         setNextState(req, "admin/session/view.jsp");
-
-
     }
 
 
