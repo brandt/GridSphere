@@ -26,6 +26,8 @@
     <ui:group>
         <p>
             <ui:text key="LAYOUT_TAB_NAME"/>&nbsp;&nbsp;<ui:textfield beanId="userTabTF"/>
+        </p>
+        <p>
             <ui:radiobutton beanId="colsRB" value="1"/><ui:text key="LAYOUT_ONE_COL"/>
             <ui:radiobutton beanId="colsRB" value="2" selected="true"/><ui:text key="LAYOUT_TWO_COL"/>
             <ui:radiobutton beanId="colsRB" value="3"/><ui:text key="LAYOUT_THREE_COL"/>
