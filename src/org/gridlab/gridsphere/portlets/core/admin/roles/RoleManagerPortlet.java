@@ -49,7 +49,6 @@ public class RoleManagerPortlet extends ActionPortlet {
         List roleList = this.roleManagerService.getRoles();
         req.setAttribute("roleList", roleList);
         List coreRolesList = new ArrayList();
-        //coreRolesList.add(PortletRole.GUEST.getName());
         coreRolesList.add(PortletRole.USER.getName());
         coreRolesList.add(PortletRole.ADMIN.getName());
         coreRolesList.add(PortletRole.SUPER.getName());
@@ -60,6 +59,7 @@ public class RoleManagerPortlet extends ActionPortlet {
     public void doEditRole(FormEvent evt) {
         PortletRequest req = evt.getPortletRequest();
         String roleName = evt.getAction().getParameter("roleName");
+
         PortletRole role = null;
         if (roleName != null) {
             role = roleManagerService.getRole(roleName);
@@ -69,6 +69,9 @@ public class RoleManagerPortlet extends ActionPortlet {
             roleNameTF.setValue(role.getName());
             TextFieldBean roleDescTF = evt.getTextFieldBean("roleDescTF");
             roleDescTF.setValue(role.getDescription());
+        } else {
+            HiddenFieldBean isNewRoleHF = evt.getHiddenFieldBean("isNewRoleHF");
+            isNewRoleHF.setValue("true");
         }
         setNextState(req, ROLES_EDIT);
     }
@@ -96,10 +99,15 @@ public class RoleManagerPortlet extends ActionPortlet {
 
     public void doSaveRole(FormEvent evt) {
         PortletRequest req = evt.getPortletRequest();
+        boolean isNewRole = false;
+        HiddenFieldBean isNewRoleHF = evt.getHiddenFieldBean("isNewRoleHF");
+        if (isNewRoleHF.getValue().equals("true")) isNewRole = true;
+
         TextFieldBean roleNameTF = evt.getTextFieldBean("roleNameTF");
         // check if role name is already taken
-        if (roleManagerService.getRole(roleNameTF.getValue()) != null) {
+        if ((roleManagerService.getRole(roleNameTF.getValue()) != null) && (isNewRole)) {
             createErrorMessage(evt, this.getLocalizedText(req, "ROLE_EXISTS_MSG"));
+            setNextState(req, ROLES_EDIT);
             return;
         }
         TextFieldBean roleDescTF = evt.getTextFieldBean("roleDescTF");
@@ -115,20 +123,6 @@ public class RoleManagerPortlet extends ActionPortlet {
         }
         roleManagerService.saveRole(role);
         createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG") + ": " + role.getName());
-    }
-
-    public void doSaveNewRole(FormEvent evt) {
-        PortletRequest req = evt.getPortletRequest();
-        TextFieldBean roleNameTF = evt.getTextFieldBean("roleNameTF");
-
-        // check if role name is already taken
-        if (roleManagerService.getRole(roleNameTF.getValue()) != null) {
-            createErrorMessage(evt, this.getLocalizedText(req, "ROLE_EXISTS_MSG"));
-            return;
-        }
-        PortletRole role = new PortletRole(roleNameTF.getValue());
-        roleManagerService.saveRole(role);
-        createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG") + ": " + roleNameTF.getValue());
     }
 
     private void createErrorMessage(FormEvent event, String msg) {
