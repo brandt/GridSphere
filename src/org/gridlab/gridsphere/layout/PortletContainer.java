@@ -83,16 +83,16 @@ public class PortletContainer extends BasePortletComponent implements
      */
     public void doRender(GridSphereEvent event) {
         super.doRender(event);
-        List scomponents = Collections.synchronizedList(components);
-        synchronized (scomponents) {
-            Iterator it = scomponents.iterator();
-            PortletComponent comp;
-            while (it.hasNext()) {
-                comp = (PortletComponent) it.next();
-                comp.doRender(event);
-                event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, comp.getBufferedOutput(event.getPortletRequest()));
-            }
+        PortletRequest req = event.getPortletRequest();
+        StringBuffer container = new StringBuffer();
+        Iterator it = components.iterator();
+        PortletComponent comp;
+        while (it.hasNext()) {
+            comp = (PortletComponent) it.next();
+            comp.doRender(event);
+            container.append(comp.getBufferedOutput(req));
         }
+        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, container);
     }
 
 
