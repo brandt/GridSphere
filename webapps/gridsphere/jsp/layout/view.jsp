@@ -11,9 +11,9 @@
 <ui:messagebox beanId="msg"/>
 
 
-<h3><ui:text key="LAYOUT_THEME" style="nostyle"/></h3>
+
 <ui:form>
-    <ui:group>
+    <ui:group key="LAYOUT_THEME">
         <p>
             <ui:text key="LAYOUT_SELECT_THEME"/>&nbsp;<ui:listbox beanId="themeLB"/> <ui:actionsubmit action="saveTheme"
                                                                                                       key="SAVE"/>
@@ -21,9 +21,9 @@
     </ui:group>
 </ui:form>
 
-<h3><ui:text key="LAYOUT_NEW_TAB" style="nostyle"/></h3>
+
 <ui:form>
-    <ui:group>
+    <ui:group key="LAYOUT_NEW_TAB">
         <p>
             <ui:text key="LAYOUT_TAB_NAME"/>&nbsp;&nbsp;<ui:textfield beanId="userTabTF"/>
         </p>

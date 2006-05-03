@@ -10,9 +10,7 @@
 <% List authModules = (List) request.getAttribute("authModules"); %>
 
 <ui:form>
-    <ui:group>
-        <p>
-        <ui:text style="bold" key="LOGIN_CONFIG_MSG"/>
+    <ui:group key="LOGIN_CONFIG_MSG">
         <p>
             <ui:checkbox beanId="acctCB" value="TRUE"/>
             <ui:text key="LOGIN_CONFIG_ALLOW"/>
@@ -53,10 +51,7 @@
 
 
 <ui:form>
-    <ui:group>
-        <p>
-            <ui:text style="bold" key="LOGIN_TRIES_CONFIG_MSG"/>
-        </p>
+    <ui:group key="LOGIN_TRIES_CONFIG_MSG">
 
         <p>
             <ui:text key="LOGIN_TRIES_MSG"/>
@@ -77,9 +72,7 @@
 
 <% Boolean sendMail = (Boolean)request.getAttribute("sendMail"); %>
 <ui:form>
-    <ui:group>
-        <p>
-        <ui:text style="bold" key="LOGIN_CONFIG_ERROR_MSG"/>
+    <ui:group key="LOGIN_CONFIG_ERROR_MSG">
         <p>
             <ui:radiobutton beanId="errorRB" value="NOMAIL" selected="<%= !sendMail.booleanValue() %>"/>
             <ui:text key="LOGIN_CONFIG_ERROR_STACKTRACE_MSG"/>
@@ -99,10 +92,7 @@
 </ui:form>
 
 <ui:form>
-    <ui:group>
-        <p>
-            <ui:text style="bold" key="LOGIN_AUTHMODULES_MSG"/>
-        </p>
+    <ui:group key="LOGIN_AUTHMODULES_MSG">
         <% if (authModules.size() == 1) { %>
         <ui:messagebox key="LOGIN_AUTHMODULES_ONEREQ"/>
         <% } %>

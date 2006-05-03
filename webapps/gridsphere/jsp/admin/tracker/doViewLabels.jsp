@@ -9,12 +9,9 @@
 
 <h3><ui:actionlink action="doEditActions" key="TRACKING_ADD_ACTION"/></h3>
 
-<ui:group>
+<ui:group key="TRACKING_PORTLET_LABEL">
 
     <ui:form>
-        <p>
-        <ui:text style="bold" key="TRACKING_PORTLET_LABEL"/>
-        </p>
         <p>
         <ui:checkbox beanId="trackPortletsCB"/>
         <ui:text key="TRACKING_PORTLET_COUNTER" style="plain"/>
