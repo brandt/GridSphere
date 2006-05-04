@@ -45,7 +45,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private String errorMessage = "";
     private boolean hasError = false;
     private boolean isActive = false;
-    private transient RoleManagerService roleService = null;
 
     private List modeLinks = null, windowLinks = null;
 
@@ -231,10 +230,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * Constructs an instance of PortletTitleBar
      */
     public PortletTitleBar() {
-    }
-
-    public void setRoleService(RoleManagerService roleService) {
-        this.roleService = roleService;
     }
 
     /**
@@ -583,8 +578,10 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         */
         User user = req.getUser();
-        boolean hasConfigurePermission = ((roleService.isUserInRole(user, PortletRole.ADMIN)) || (roleService.isUserInRole(user, PortletRole.SUPER)));
+        //boolean hasConfigurePermission = ((roleService.isUserInRole(user, PortletRole.ADMIN)) || (roleService.isUserInRole(user, PortletRole.SUPER)));
 
+        List userRoles = (List)req.getAttribute(SportletProperties.PORTLET_ROLE);
+        boolean hasConfigurePermission = ((userRoles.contains(PortletRole.ADMIN.getName())) || userRoles.contains(PortletRole.SUPER.getName()));
         List smodes = new ArrayList();
         Portlet.Mode mode;
         for (i = 0; i < supportedModes.size(); i++) {

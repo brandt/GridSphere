@@ -46,14 +46,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private transient CacheService cacheService = null;
 
-    private transient RoleManagerService roleService = null;
     private transient PortalConfigService portalConfigService = null;
     private transient TrackerService trackerService = null;
 
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
     private String portletClass = null;
-    private String portletName = null;
 
     private PortletTitleBar titleBar = null;
     //private PortletErrorFrame errorFrame = new PortletErrorFrame();
@@ -193,7 +191,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
             cacheService = (CacheService) factory.createPortletService(CacheService.class, true);
-            roleService = (RoleManagerService)factory.createPortletService(RoleManagerService.class, true);
             portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
             trackerService = (TrackerService)factory.createPortletService(TrackerService.class, true);
         } catch (PortletServiceException e) {
@@ -226,7 +223,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         list = titleBar.init(req, list);
         titleBar.addComponentListener(this);
         titleBar.setParentComponent(this);
-        titleBar.setRoleService(roleService);
+
         //System.err.println("useDiv= " + useDiv);
 
         // invalidate cache
@@ -241,7 +238,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            portletName = appPortlet.getApplicationPortletName();
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
             if (appConfig != null) {
                 cacheExpiration = appConfig.getCacheExpires();
@@ -731,8 +727,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             // Override if user is a guest
             Principal principal = req.getUserPrincipal();
             if (principal == null) {
-            //User user = req.getUser();
-            //if (user instanceof GuestUser) {
                 req.setMode(Portlet.Mode.VIEW);
             } else {
                 if (titleBar != null) {
