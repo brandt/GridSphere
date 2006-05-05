@@ -31,6 +31,11 @@
         </p>
 
         <p>
+            <ui:checkbox beanId="remUserCB" value="TRUE"/>
+            <ui:text key="LOGIN_REMUSER"/>
+        </p>
+
+        <p>
             <ui:checkbox beanId="savepassCB" value="TRUE"/>
             <ui:text key="LOGIN_CONFIG_PASSWD"/>
             <br/>

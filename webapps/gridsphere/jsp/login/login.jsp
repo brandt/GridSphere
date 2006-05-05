@@ -46,9 +46,11 @@
         </ui:tablerow>
     </ui:table>
 
+    <% if (request.getAttribute("remUser") != null) { %>
     <p>
         <input type="checkbox" name="remlogin" value="yes"/><ui:text key="LOGIN_REMEMBER_ME"/>
     </p>
+    <% } %>
 
     <% } %>
 
