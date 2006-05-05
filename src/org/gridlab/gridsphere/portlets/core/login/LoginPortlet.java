@@ -39,6 +39,7 @@ public class LoginPortlet extends ActionPortlet {
     private static String LOGIN_NAME = "LOGIN_NAME";
     private static String LOGIN_ERROR_HANDLING = "LOGIN_ERROR_HANDLING";
     public static String SAVE_PASSWORDS = "SAVE_PASSWORDS";
+    public static String REMEMBER_USER = "REMEMBER_USER";
     public static String SUPPORT_X509_AUTH = "SUPPORT_X509_AUTH";
     public static String SEND_USER_FORGET_PASSWORD = "SEND_USER_FORGET_PASSWD";
 
@@ -90,6 +91,9 @@ public class LoginPortlet extends ActionPortlet {
             if (settings.getAttribute(LOGIN_ERROR_HANDLING) == null) {
                 settings.setAttribute(LOGIN_ERROR_HANDLING, Boolean.FALSE.toString());
             }
+            if (settings.getAttribute(REMEMBER_USER) == null) {
+                settings.setAttribute(REMEMBER_USER, Boolean.TRUE.toString());
+            }
             String numTries = settings.getAttribute(LOGIN_NUMTRIES);
             if (numTries == null) {
                 settings.setAttribute(LOGIN_NUMTRIES, "-1");
@@ -126,6 +130,11 @@ public class LoginPortlet extends ActionPortlet {
             if (certs != null && certs.length > 0) {
                 request.setAttribute("certificate", certs[0].getSubjectDN().toString());
             }
+        }
+
+        String remUser = settings.getAttribute(REMEMBER_USER);
+        if ((remUser != null) && (remUser.equalsIgnoreCase("TRUE"))) {
+            request.setAttribute("remUser", "true");
         }
 
         if (user == null) {
@@ -416,6 +425,9 @@ public class LoginPortlet extends ActionPortlet {
         CheckBoxBean accountApproval = event.getCheckBoxBean("acctApproval");
         accountApproval.setSelected(Boolean.valueOf(settings.getAttribute(ADMIN_ACCOUNT_APPROVAL)).booleanValue());
 
+        CheckBoxBean remUserCB = event.getCheckBoxBean("remUserCB");
+        remUserCB.setSelected(Boolean.valueOf(settings.getAttribute(REMEMBER_USER)).booleanValue());
+
         String numTries = settings.getAttribute(LOGIN_NUMTRIES);
         TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
         if (numTries == null) {
@@ -464,6 +476,10 @@ public class LoginPortlet extends ActionPortlet {
         String accountApprovalval = accountApproval.getSelectedValue();
         boolean accountApprove = (accountApprovalval != null);
         settings.setAttribute(ADMIN_ACCOUNT_APPROVAL, Boolean.toString(accountApprove));
+
+        CheckBoxBean remUserCB = event.getCheckBoxBean("remUserCB");
+        boolean remUser = (remUserCB.getSelectedValue() != null);
+        settings.setAttribute(REMEMBER_USER, Boolean.toString(remUser));
 
         settings.setAttribute(SAVE_PASSWORDS, Boolean.toString(savePasswords));
         settings.setAttribute(SEND_USER_FORGET_PASSWORD, Boolean.toString(sendForget));
