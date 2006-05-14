@@ -41,7 +41,8 @@ public class GridSphereParameters {
         reservedParams.add(SportletProperties.PORTLET_MODE);
         reservedParams.add(SportletProperties.PORTLET_WINDOW);
 
-        parseQueryString(queryString);
+        renderParams.putAll(parseQueryString(queryString, true));
+        params.putAll(parseQueryString(queryString, false));
 
         this.targetedCid = request.getParameter(SportletProperties.COMPONENT_ID);
     }
@@ -50,14 +51,14 @@ public class GridSphereParameters {
         persistParams.putAll(params);
     }
 
-    public void parseQueryString(String queryString) {
+    public Map parseQueryString(String queryString, boolean checkForRenderParams) {
 
         queryString = queryString + "&";
 
         //System.err.println("GP: queryString= " + queryString);
 
         StringTokenizer st = new StringTokenizer(queryString, "&");
-
+        Map tmpParams  = new HashMap();
         while (st.hasMoreTokens()) {
             String namevar = (String) st.nextElement();
 
@@ -75,32 +76,34 @@ public class GridSphereParameters {
                 e.printStackTrace();
             }
 
-            if (name.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
-                String sname = name.substring(3);
-                if (renderParams.containsKey(sname)) {
-                    String[] s = (String[]) renderParams.get(sname);
-                    String[] tmp = new String[s.length + 1];
-                    System.arraycopy(s, 0, tmp, 0, s.length);
-                    tmp[s.length] = value;
-                    renderParams.put(sname, tmp);
-                } else {
-                    renderParams.put(sname, new String[]{value});
-                }
-            } else {
-                if (!reservedParams.contains(name)) {
-                    if (params.containsKey(name)) {
-                        String[] s = (String[]) params.get(name);
+            if (checkForRenderParams) {
+                if  (name.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
+                    String sname = name.substring(3);
+                    if (tmpParams.containsKey(sname)) {
+                        String[] s = (String[]) tmpParams.get(sname);
                         String[] tmp = new String[s.length + 1];
                         System.arraycopy(s, 0, tmp, 0, s.length);
                         tmp[s.length] = value;
-                        params.put(name, tmp);
+                        tmpParams.put(sname, tmp);
                     } else {
-                        params.put(name, new String[]{value});
+                        tmpParams.put(sname, new String[]{value});
+                    }
+                }
+            } else {
+                if (!reservedParams.contains(name)) {
+                    if (tmpParams.containsKey(name)) {
+                        String[] s = (String[]) tmpParams.get(name);
+                        String[] tmp = new String[s.length + 1];
+                        System.arraycopy(s, 0, tmp, 0, s.length);
+                        tmp[s.length] = value;
+                        tmpParams.put(name, tmp);
+                    } else {
+                        tmpParams.put(name, new String[]{value});
                     }
                 }
             }
-
         }
+        return tmpParams;
     }
 
     private void parseRequestParams() {
@@ -143,9 +146,17 @@ public class GridSphereParameters {
     }
 
     public Map getParameterMap() {
+
         String mycid = (String) req.getAttribute(SportletProperties.COMPONENT_ID);
 
         Map map = new HashMap();
+
+        // check for any query params from an included JSP
+        String queryString = (String)req.getAttribute("javax.servlet.include.query_string");
+        if (queryString != null) {
+            map.putAll(parseQueryString(queryString, false));
+        }
+
         // we need to distinguish between a render invocation abnd a render that follows an action
         // In the first case, all params are returned. In the second case, params in action method
         // must not be returned
@@ -187,7 +198,7 @@ public class GridSphereParameters {
 
             map.putAll(persistParams);
 
-            //System.err.println("GP: in render, no action this IS the targeted portlet " + pid);
+            //System.err.println("GP: in render, no action this IS the targeted portlet ");
 
             parseRequestParams();
 
@@ -210,10 +221,8 @@ public class GridSphereParameters {
             while (it.hasNext()) {
                 String key = (String) it.next();
                 String[] paramVals = (String[]) params.get(key);
-
                 if (map.containsKey(key)) {
                     String[] vals = (String[]) map.get(key);
-
                     String[] tmp = new String[vals.length + paramVals.length];
                     System.arraycopy(paramVals, 0, tmp, 0, paramVals.length);
                     System.arraycopy(vals, 0, tmp, paramVals.length, vals.length);
@@ -221,11 +230,9 @@ public class GridSphereParameters {
                 } else {
                     map.put(key, paramVals);
                 }
-
             }
-
         } else {
-            //System.err.println("GP: in render, no action this is NOT the targeted portlet" + pid);
+            //System.err.println("GP: in render, no action this is NOT the targeted portlet");
             parsePersistParams();
             map.putAll(persistParams);
         }
