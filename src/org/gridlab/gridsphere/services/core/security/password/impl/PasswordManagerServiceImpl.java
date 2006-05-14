@@ -81,7 +81,7 @@ public class PasswordManagerServiceImpl
                 throw new InvalidPasswordException("Supplied password does not match user password!");
             }
         } catch (NoSuchAlgorithmException e) {
-            //
+            _log.error("No such algorithm: MD5", e);
         }
     }
 
@@ -97,12 +97,7 @@ public class PasswordManagerServiceImpl
                 } catch (NoSuchAlgorithmException e) {
                     throw new PersistenceManagerException("Can't get MD5 algorithm! " + e.getMessage());
                 }
-                if (pass.getOid() != null) {
-                    pm.update(pass);
-                } else {
-                    pm.create(pass);
-                }
-
+                pm.saveOrUpdate(pass);
             }
         } catch (PersistenceManagerException e) {
             _log.error("Unable to create or update password for user", e);
@@ -124,11 +119,7 @@ public class PasswordManagerServiceImpl
         try {
             if (editor instanceof PasswordImpl) {
                 PasswordImpl pass = (PasswordImpl) editor;
-                if (pass.getOid() != null) {
-                    pm.update(pass);
-                } else {
-                    pm.create(pass);
-                }
+                pm.saveOrUpdate(pass);
             }
         } catch (PersistenceManagerException e) {
             _log.error("Unable to create or update password for user", e);

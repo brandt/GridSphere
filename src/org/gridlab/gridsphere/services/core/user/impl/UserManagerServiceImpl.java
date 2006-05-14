@@ -170,23 +170,14 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     private void saveSportletUserImpl(SportletUserImpl user) {
         // Create or update user
-        if (user.getOid() != null) {
-            log.debug("Updating user record for " + user.getUserName());
-            try {
-                pm.update(user);
-            } catch (PersistenceManagerException e) {
-                String msg = "Error updating user";
-                log.error(msg, e);
-            }
-        } else {
-            log.debug("Creating user record for " + user.getUserName());
-            try {
-                pm.create(user);
-            } catch (PersistenceManagerException e) {
-                String msg = "Error creating user";
-                log.error(msg, e);
-            }
+        log.debug("Updating user record for " + user.getUserName());
+        try {
+            pm.saveOrUpdate(user);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error updating user";
+            log.error(msg, e);
         }
+
     }
 
     private void deleteSportletUserImpl(SportletUserImpl user) {
