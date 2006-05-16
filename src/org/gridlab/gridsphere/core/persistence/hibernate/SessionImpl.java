@@ -3,6 +3,7 @@ package org.gridlab.gridsphere.core.persistence.hibernate;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.Transaction;
 import org.gridlab.gridsphere.core.persistence.Session;
+import org.gridlab.gridsphere.core.persistence.QueryFilter;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
@@ -115,7 +116,8 @@ public class SessionImpl implements Session {
     }
 
 
-	/**
+
+    /**
 	 * <tt>Create()</tt> or <tt>update()</tt> the given instance, depending upon the value of
 	 * its identifier property. By default the instance is always saved. This behaviour may be
 	 * adjusted by specifying an <tt>unsaved-value</tt> attribute of the identifier property
@@ -264,7 +266,28 @@ public class SessionImpl implements Session {
         }
     }
 
-	/**
+    /**
+     * Restores objects from storage matching the query.
+     *
+     * @param query Query describing the objects
+     * @return list List of objects from OQL query
+     * @throws org.gridlab.gridsphere.core.persistence.PersistenceManagerException If a persistence error occurs
+     */
+    public List restoreList(String query, QueryFilter queryFilter) throws PersistenceManagerException {
+        try {
+            net.sf.hibernate.Query q = hbSession.createQuery(query);
+            if (queryFilter != null) {
+                queryFilter.setFirstResult(queryFilter.getFirstResult());
+                queryFilter.setMaxResults(queryFilter.getMaxResults());
+            }
+            return q.list();
+        } catch (Exception e) {
+            log.error("Unable to retrieve list in hibernate session with query " + query, e);
+            throw new PersistenceManagerException(e);
+        }
+    }
+
+    /**
 	 * Completely clear the session. Evict all loaded instances and cancel all pending
 	 * saves, updates and deletions. Do not close open iterators or instances of
 	 * <tt>ScrollableResults</tt>.

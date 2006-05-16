@@ -158,7 +158,17 @@ public interface Session {
       */
     public List restoreList(String query) throws PersistenceManagerException;
 
-	/**
+    /**
+      * Restores objects from storage matching the query and the query filter.
+      *
+      * @param query Query describing the objects
+     * * @param queryFilter a query filter describing which subset of the list to retrieve
+      * @return list List of objects from OQL query
+      * @throws PersistenceManagerException If a persistence error occurs
+      */
+    public List restoreList(String query, QueryFilter queryFilter) throws PersistenceManagerException;
+
+    /**
 	 * Completely clear the session. Evict all loaded instances and cancel all pending
 	 * saves, updates and deletions. Do not close open iterators or instances of
 	 * <tt>ScrollableResults</tt>.
