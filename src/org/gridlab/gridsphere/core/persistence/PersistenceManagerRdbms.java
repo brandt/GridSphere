@@ -90,6 +90,8 @@ public interface PersistenceManagerRdbms {
      */
     public List restoreList(String query) throws PersistenceManagerException;
 
+    public List restoreList(String query, QueryFilter queryFilter) throws PersistenceManagerException;
+    
     /**
      * Deletes the given object from the storage.
      *
