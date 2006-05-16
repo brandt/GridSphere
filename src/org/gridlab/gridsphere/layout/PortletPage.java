@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.*;
+import java.util.zip.GZIPOutputStream;
 import java.security.Principal;
 
 /**
@@ -392,8 +393,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
                 List userRoles = event.getPortletRequest().getRoles();
                 if (comp.getRequiredRole().equals("") || userRoles.contains(comp.getRequiredRole())) {
                         PortletRequest req = event.getPortletRequest();
-                        Principal principal = req.getUserPrincipal();
-                        User user = req.getUser();
+                        //Principal principal = req.getUserPrincipal();
+                        //User user = req.getUser();
                         /*
                         if (comp instanceof PortletFrame) {
                             // do role checking if user is logged in
@@ -557,17 +558,25 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         writer.print(pageView.doEnd(event, this));
 
         PrintWriter out;
-        // set content to UTF-8 for il8n
-        //res.setContentType("text/html; charset=utf-8");
         try {
-            out = res.getWriter();
-        } catch (Exception e) {
+            String ae = req.getHeader("accept-encoding");
+            if (ae != null && ae.indexOf("gzip") != -1) {
+                System.out.println("GZIP supported, compressing.");
+                GZIPOutputStream gzos =
+                        new GZIPOutputStream(res.getOutputStream());
+                gzos.write(sout.getBuffer().toString().getBytes());
+                gzos.close();
+            }  else {
+                out = res.getWriter();
+                out.println(sout);
+                writer.flush();
+            }
+            // set content to UTF-8 for il8n
+            //res.setContentType("text/html; charset=utf-8");
+        } catch (IOException e) {
             // means the writer has already been obtained
-            return;
+            log.error("Error writing page!", e);
         }
-        out.println(sout);
-        writer.flush();
-
     }
 
     public Object clone() throws CloneNotSupportedException {
