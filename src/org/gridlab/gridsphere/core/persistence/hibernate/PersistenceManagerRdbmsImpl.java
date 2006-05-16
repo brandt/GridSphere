@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.core.persistence.hibernate;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.QueryFilter;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -162,8 +163,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                 threadSession.set(gsSession);
             }
             return (org.gridlab.gridsphere.core.persistence.Session)threadSession.get();
-        } catch (Exception e) {
-            log.error("Could not open session", e);
+        } catch (HibernateException e) {
             throw new PersistenceManagerException(e);
         }
     }
@@ -176,64 +176,63 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public void create(Object object) throws PersistenceManagerException {
         try {
-            doTransaction(object, "", CMD_CREATE);
-        } catch (Exception e) {
-            log.error("Could not create object", e);
+            doTransaction(object, "", CMD_CREATE, null);
+        } catch (HibernateException e) {
             throw new PersistenceManagerException(e);
         }
     }
 
     public void update(Object object) throws PersistenceManagerException {
         try {
-            doTransaction(object, "", CMD_UPDATE);
-        } catch (Exception e) {
-            log.error("Could not update object", e);
+            doTransaction(object, "", CMD_UPDATE, null);
+        } catch (HibernateException e) {
             throw new PersistenceManagerException(e);
         }
     }
 
     public void saveOrUpdate(Object object) throws PersistenceManagerException {
         try {
-            doTransaction(object, "", CMD_SAVEORUPDATE);
-        } catch (Exception e) {
-            log.error("Could not create or update object", e);
+            doTransaction(object, "", CMD_SAVEORUPDATE, null);
+        } catch (HibernateException e) {
             throw new PersistenceManagerException(e);
         }
     }
 
     public Object restore(String query) throws PersistenceManagerException {
         List list = restoreList(query);
-        if (list.size() == 0) {
-            return null;
-//            throw new PersistenceManagerException("No object found with given query.");
-        }
+        if (list.size() == 0) return null;
         return restoreList(query).get(0);
     }
 
 
     public List restoreList(String query) throws PersistenceManagerException {
         try {
-            return (List) doTransaction(null, query, CMD_RESTORE_LIST);
-        } catch (Exception e) {
-            log.error("Could not restore list", e);
+            return (List) doTransaction(null, query, CMD_RESTORE_LIST, null);
+        } catch (HibernateException e) {
+            throw new PersistenceManagerException(e);
+        }
+    }
+
+    public List restoreList(String query, QueryFilter queryFilter) throws PersistenceManagerException {
+        try {
+            return (List) doTransaction(null, query, CMD_RESTORE_LIST, queryFilter);
+        } catch (HibernateException e) {
             throw new PersistenceManagerException(e);
         }
     }
 
     public void delete(Object object) throws PersistenceManagerException {
         try {
-            doTransaction(object, "", CMD_DELETE);
-        } catch (Exception e) {
-            log.error("Could not delete object", e);
+            doTransaction(object, "", CMD_DELETE, null);
+        } catch (HibernateException e) {
             throw new PersistenceManagerException(e);
         }
     }
 
     public void deleteList(String query) throws PersistenceManagerException {
         try {
-            doTransaction(null, query, CMD_DELETE_LIST);
-        } catch (Exception e) {
-            log.error("Could not delete list", e);
+            doTransaction(null, query, CMD_DELETE_LIST, null);
+        } catch (HibernateException e) {
             throw new PersistenceManagerException(e);
         }
     }
@@ -274,7 +273,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         }
     }
 
-    private Object doTransaction(Object object, String query, int command) throws Exception {
+    private Object doTransaction(Object object, String query, int command, QueryFilter queryFilter) throws HibernateException {
         Session session = null;
         Transaction tx = null;
         Object result = null;
@@ -303,6 +302,10 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                     break;
                 case CMD_RESTORE_LIST:
                     q = session.createQuery(query);
+                    if (queryFilter != null) {
+                        q.setFirstResult(queryFilter.getFirstResult());
+                        q.setMaxResults(queryFilter.getMaxResults());
+                    }
                     result = q.list();
                     break;
                 case CMD_RESTORE:
@@ -315,8 +318,6 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             if (tx != null) {
                 tx.rollback();
             }
-            log.error("Could not complete transaction", e);
-            e.printStackTrace();
             throw e;
         } finally {
             session.close();
@@ -329,7 +330,6 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             closeSession();
             factory.close();
         } catch (HibernateException e) {
-            log.error("Could not close session factory", e);
             throw new PersistenceManagerException(e);
         }
     }
