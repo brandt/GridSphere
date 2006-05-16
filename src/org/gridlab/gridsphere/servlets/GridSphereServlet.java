@@ -142,6 +142,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         GridSphereEvent event = new GridSphereEventImpl(context, req, res);
         PortletRequest portletReq = event.getPortletRequest();
 
+        String ae = req.getHeader("accept-encoding");
+        if (ae != null && ae.indexOf("gzip") != -1) {
+            res.setHeader("Content-Encoding", "gzip");
+        }
         // If first time being called, instantiate all portlets
         if (firstDoGet.equals(Boolean.TRUE)) {
             firstDoGet = Boolean.FALSE;
