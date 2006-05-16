@@ -9,7 +9,7 @@
         name="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo"
         table="sportletroleinfo"
         >
-
+        <cache usage="read-write"/>
         <id
             name="oid"
             column="gsoid"

@@ -9,7 +9,7 @@
         name="org.gridlab.gridsphere.services.core.security.role.impl.UserRole"
         table="userroles"
         >
-
+        <cache usage="read-write"/>
         <id
             name="oid"
             column="gsoid"
