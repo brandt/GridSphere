@@ -37,6 +37,8 @@ public class TableTag extends BaseComponentTag {
     protected int maxRows = -1;
     protected int currentPage = 0;
     protected boolean isShowAll = false;
+    protected boolean filter = false;
+    protected int numEntries = 0;
 
     /**
      * Sets the table model associated with this table
@@ -183,6 +185,27 @@ public class TableTag extends BaseComponentTag {
     }
 
     /**
+     * Returns true if a query filter is associated with this table
+     *
+     * @return true if a query filter is associated with this table
+     */
+    public boolean getFilter() {
+        return filter;
+    }
+
+    public void setFilter(boolean filter) {
+        this.filter = filter;
+    }
+
+    public int getNumentries() {
+        return numEntries;
+    }
+
+    public void setNumentries(int numEntries) {
+        this.numEntries = numEntries;
+    }
+
+    /**
      * Sets the table width
      *
      * @param width the table width
@@ -199,6 +222,7 @@ public class TableTag extends BaseComponentTag {
     public String getWidth() {
         return width;
     }
+
 
     public void setSortable(boolean isSortable) {
         sortable = isSortable;
@@ -266,6 +290,7 @@ public class TableTag extends BaseComponentTag {
         rowCount = 0;
         maxRows = -1;
         currentPage = 0;
+        numEntries = 0;
         super.release();
     }
 
@@ -325,6 +350,7 @@ public class TableTag extends BaseComponentTag {
         tableBean.setZebra(isZebra);
         tableBean.setRowCount(0);
         tableBean.setShowall(isShowAll);
+        if (numEntries != 0) tableBean.setNumEntries(numEntries);
 
         try {
             JspWriter out = pageContext.getOut();
@@ -348,7 +374,7 @@ public class TableTag extends BaseComponentTag {
             try {
                 url.setPortletMode(req.getPortletMode());
             } catch (PortletModeException e) {
-                // blah
+                throw new JspException(e);
             }
             //if (action != null) url.setAction(action);
             tableBean.setURIString(url.toString());

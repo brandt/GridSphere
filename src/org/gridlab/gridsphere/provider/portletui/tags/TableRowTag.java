@@ -117,7 +117,7 @@ public class TableRowTag extends BaseComponentTag {
         if (parent instanceof TableTag) {
             TableTag tableTag = (TableTag) parent;
             int maxrows = tableTag.getMaxrows();
-
+            boolean filter = tableTag.getFilter();
             // logic to determine if alternate (darkened row) should be set
             if (tableTag.getZebra()) {
                 if ((tableTag.getRowCount() % 2) == 0) {
@@ -131,13 +131,15 @@ public class TableRowTag extends BaseComponentTag {
             if (!isHeader) {
                 tableTag.incrementRowCount();
             }
-            // need to determine which rows to display
 
+            // need to determine which rows to display
             int currpage = tableTag.getCurrentPage();
             if (!isHeader) {
                 if (maxrows > 0) {
-                    if ((tableTag.getRowCount() <= maxrows * currpage) || (tableTag.getRowCount() > maxrows * (currpage + 1))) {
-                        return EVAL_PAGE;
+                    if (!filter) {
+                        if ((tableTag.getRowCount() <= maxrows * currpage) || (tableTag.getRowCount() > maxrows * (currpage + 1))) {
+                            return EVAL_PAGE;
+                        }
                     }
                 }
             }

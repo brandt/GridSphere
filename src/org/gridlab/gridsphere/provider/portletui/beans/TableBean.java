@@ -35,6 +35,8 @@ public class TableBean extends BaseComponentBean implements TagBean {
     protected String uris = "";
     protected String uriString = "";
     protected String title = null;
+    protected int numEntries = 0;
+
 
     /**
      * Constructs a default table bean
@@ -68,6 +70,14 @@ public class TableBean extends BaseComponentBean implements TagBean {
      */
     public DefaultTableModel getTableModel() {
         return defaultModel;
+    }
+
+    public int getNumEntries() {
+        return numEntries;
+    }
+
+    public void setNumEntries(int numEntries) {
+        this.numEntries = numEntries;
     }
 
     /**
@@ -168,7 +178,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     public void setBackground(String background) {
         this.background = background;
     }
-    
+
     /**
      * Returns the table background
      *
@@ -267,7 +277,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         if (isSortable) {
-            sb.append("<table class=\"sortable\" id=\"" + sortableId + "\" ");            
+            sb.append("<table class=\"sortable\" id=\"" + sortableId + "\" ");
         } else {
             sb.append("<table" + getFormattedCss());
         }
@@ -299,7 +309,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
             sb.append("</p>"); // added for XHTML 1.0 Strict compliance
         }
         if (maxRows > 0) {
-            int numpages = (rowCount + 1) / maxRows + 1;
+            int numpages = (numEntries != 0) ? (numEntries / maxRows) : (rowCount + 1) / maxRows + 1;
             int dispPage = currentPage + 1;
             int c = 0;
             sb.append("<p>"); // added for XHTML 1.0 Strict compliance  
@@ -314,7 +324,6 @@ public class TableBean extends BaseComponentBean implements TagBean {
                     uris = uriString;
                     //System.err.println("uri = " + uris);
                     uri = uris + "&amp;" + TableBean.CURRENT_PAGE + "=" + i;
-
                     sb.append(" | " + "<a href=\"" + uri + "\">" + c + "</a>");
                 }
             }
