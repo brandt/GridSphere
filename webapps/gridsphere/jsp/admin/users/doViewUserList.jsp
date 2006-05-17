@@ -8,11 +8,14 @@
 <ui:messagebox beanId="msg"/>
 
 <% List userList = (List) request.getAttribute("userList"); %>
+
+<% Integer numUsers = (Integer)request.getAttribute("numUsers"); %>
+
 <h3><ui:text key="USER_SHOW_USERS" style="nostyle"/></h3>
 
 <ui:form>
 
-    <ui:table sortable="true" zebra="true" maxrows="25">
+    <ui:table sortable="true" zebra="true" maxrows="20" numentries="<%= numUsers %>" filter="true">
         <ui:tablerow header="true">
             <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
             <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
