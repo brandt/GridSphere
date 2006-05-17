@@ -9,7 +9,7 @@
         name="org.gridlab.gridsphere.portlet.PortletRole"
         table="portletrole"
         >
-
+        <cache usage="read-write"/>
         <id
             name="oid"
             column="gsoid"

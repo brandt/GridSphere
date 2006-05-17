@@ -9,7 +9,7 @@
         name="org.gridlab.gridsphere.portlet.jsrimpl.PersistencePreferenceAttribute"
         table="persistencepreferenceattribute"
         >
-
+        <cache usage="read-write"/>
         <id
             name="oid"
             column="gsoid"
@@ -25,6 +25,7 @@
         <property name="readOnly" type="boolean" column="readonly"/>
 
         <list name="values" table="portletprefattrvalues" lazy="false">
+            <cache usage="read-write"/>
             <key column="value_oid"/>
             <index/>
             <element column="value" type="string"/>

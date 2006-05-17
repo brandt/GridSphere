@@ -9,7 +9,7 @@
         name="org.gridlab.gridsphere.portlet.impl.SportletData"
         table="sportletdata"
         >
-
+        <cache usage="read-write"/>
         <id
             name="oid"
             column="gsoid"
@@ -23,6 +23,7 @@
         <property name="UserID" type="string" column="userid"/>
         <property name="PortletID" type="string" column="portletid"/>
         <map name="Attributes" table="sportletdataattributes">
+            <cache usage="read-write"/>
             <key column="gsoid"/>
             <index column="attribute" type="string"/>
             <element column="value" type="string"/>

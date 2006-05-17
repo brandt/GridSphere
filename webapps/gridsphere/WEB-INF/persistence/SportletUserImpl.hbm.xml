@@ -9,7 +9,7 @@
         name="org.gridlab.gridsphere.portlet.impl.SportletUserImpl"
         table="sportletuserimpl"
         >
-
+        <cache usage="read-write"/>
         <id
             name="oid"
             column="gsoid"
@@ -28,6 +28,7 @@
         <property name="Organization" type="string" column="organization"/>
         <property name="LastLoginTime" column="lastlogintime"/>
         <map name="attributes" table="sportletuserattributes">
+            <cache usage="read-write"/>
             <key column="gsoid"/>
             <index column="attribute" type="string"/>
             <element column="value" type="string"/>

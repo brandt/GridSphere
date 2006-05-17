@@ -9,7 +9,7 @@
         name="org.gridlab.gridsphere.services.core.security.acl.impl.GroupRequestImpl"
         table="grouprequestimpl"
         >
-
+        <cache usage="read-write"/>
         <id
             name="oid"
             column="gsoid"
