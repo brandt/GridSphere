@@ -1138,7 +1138,12 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>cellspacing</name>
+            <name>filter</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>numentries</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -1158,7 +1163,7 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-        <name>cssStyle</name>
+            <name>cssStyle</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
