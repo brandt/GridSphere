@@ -4,6 +4,7 @@
 package org.gridlab.gridsphere.services.core.user;
 
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.core.persistence.QueryFilter;
 
 import java.util.List;
 
@@ -31,11 +32,28 @@ public interface UserManagerService extends LoginUserModule {
     public void deleteUser(User user);
 
     /**
-     * Return the list of users
+     * Return the list of users in an unsorted list
+     *
+     * @return a list of users
+     */
+    public List getUsers(QueryFilter queryFilter);
+
+    public int getNumUsers();
+
+    /**
+     * Return the list of users in an unsorted list
      *
      * @return a list of users
      */
     public List getUsers();
+
+    public List getUsersByUserName(QueryFilter queryFilter);
+
+    public List getUsersByOrganization(QueryFilter queryFilter);
+
+    public List getUsersByFullName(QueryFilter queryFilter);
+
+    public List getUsersByEmail(QueryFilter queryFilter);
 
     /**
      * Retrieves a user object with the given user name from this service.
@@ -57,7 +75,7 @@ public interface UserManagerService extends LoginUserModule {
      * @param attrName the attribute name
      * @param attrValue the attribute value
      */
-    public List getUsersByAttribute(String attrName, String attrValue);
+    public List getUsersByAttribute(String attrName, String attrValue, QueryFilter queryFilter);
 
     /**
      * Retrieves a user object with the given email from this service.

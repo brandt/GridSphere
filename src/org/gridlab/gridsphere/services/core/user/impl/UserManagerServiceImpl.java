@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.services.core.user.impl;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.QueryFilter;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -79,22 +80,55 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         }
     }
 
-    public List selectUsers(String criteria) {
+    public int getNumUsers() {
+        try {
+            String oql = "select count(UserID) from "
+                + this.jdoUser
+                + " uzer ";
+            return pm.count(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving num users";
+            log.error(msg, e);
+            return 0;
+        }
+    }
+
+    public List selectUsers(String criteria, QueryFilter queryFilter) {
         String oql = "select uzer from "
                 + this.jdoUser
                 + " uzer "
                 + criteria;
         try {
-            return pm.restoreList(oql);
+            return pm.restoreList(oql, queryFilter);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving users with criteria " + criteria;
             log.error(msg, e);
-            return new Vector();
+            return new ArrayList();
         }
     }
 
+    public List getUsersByUserName(QueryFilter queryFilter) {
+        return selectUsers("order by uzer.UserID", queryFilter);
+    }
+
+    public List getUsersByOrganization(QueryFilter queryFilter) {
+        return selectUsers("order by uzer.Organization", queryFilter);
+    }
+
+    public List getUsersByFullName(QueryFilter queryFilter) {
+        return selectUsers("order by uzer.FullName", queryFilter);
+    }
+
+    public List getUsersByEmail(QueryFilter queryFilter) {
+        return selectUsers("order by uzer.EmailAddress", queryFilter);
+    }
+
+    public List getUsers(QueryFilter queryFilter) {
+        return selectUsers("", queryFilter);
+    }
+
     public List getUsers() {
-        return selectUsers("");
+        return selectUsers("", null);
     }
 
     public User getUser(String id) {
@@ -138,9 +172,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param attrName the attribute name
      * @param attrValue the attribute value
      */
-    public List getUsersByAttribute(String attrName, String attrValue) {
+    public List getUsersByAttribute(String attrName, String attrValue, QueryFilter queryFilter) {
         String criteria = "where uzer.attributes['user." + attrName + "'] = '" + attrValue + "'";
-        return selectUsers(criteria);
+        return selectUsers(criteria, queryFilter);
     }
 
     private SportletUserImpl getSportletUserImpl(String id) {

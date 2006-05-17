@@ -224,7 +224,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         } else {
 
             log.debug("Using certificate for login :" + certificate);
-            List userList = userManagerService.getUsersByAttribute("certificate", certificate);
+            List userList = userManagerService.getUsersByAttribute("certificate", certificate, null);
             if (!userList.isEmpty()) {
                 user = (User)userList.get(0);
             }
