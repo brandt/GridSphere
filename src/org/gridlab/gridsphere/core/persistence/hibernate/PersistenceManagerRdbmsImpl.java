@@ -31,6 +31,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private final static int CMD_UPDATE = 5;
     private final static int CMD_CREATE = 6;
     private final static int CMD_SAVEORUPDATE = 7;
+    private final static int CMD_COUNT = 8;
 
     private static Properties prop = new Properties();
 
@@ -221,6 +222,15 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         }
     }
 
+    public int count(String query) throws PersistenceManagerException {
+        try {
+            Integer i = (Integer)doTransaction(null, query, CMD_COUNT, null);
+            return i.intValue();
+        } catch (HibernateException e) {
+            throw new PersistenceManagerException(e);
+        }
+    }
+
     public void delete(Object object) throws PersistenceManagerException {
         try {
             doTransaction(object, "", CMD_DELETE, null);
@@ -311,6 +321,10 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                 case CMD_RESTORE:
                     q = session.createQuery(query);
                     result = q.list().get(0);
+                    break;
+                case CMD_COUNT:
+                    q = session.createQuery(query);
+                    result = Integer.valueOf(q.list().size());
                     break;
             }
             tx.commit();
