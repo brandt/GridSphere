@@ -128,6 +128,7 @@ public class GridSphereSetupPortlet extends ActionPortlet {
         roleManagerService.addUserToRole(accountRequest, PortletRole.ADMIN);
         roleManagerService.addUserToRole(accountRequest, PortletRole.USER);
         groupManagerService.addUserToGroup(accountRequest, groupManagerService.getCoreGroup());
+        PortletPageFactory.setSetupNeeded(false);
         event.getPortletRequest().removeAttribute(PortletPageFactory.PAGE);
     }
 
