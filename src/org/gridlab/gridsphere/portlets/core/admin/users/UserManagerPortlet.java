@@ -18,6 +18,7 @@ import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.portlets.core.login.LoginPortlet;
+import org.gridlab.gridsphere.core.persistence.QueryFilter;
 
 import javax.servlet.UnavailableException;
 import java.util.Iterator;
@@ -62,8 +63,11 @@ public class UserManagerPortlet extends ActionPortlet {
     public void doListUsers(FormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
-        List userList = this.userManagerService.getUsers();
+        //List userList = this.userManagerService.getUsers();
+        int numusers = this.userManagerService.getNumUsers();
+        List userList = this.userManagerService.getUsersByUserName(getQueryFilter(req, 5));
         req.setAttribute("userList", userList);
+        req.setAttribute("numUsers", Integer.valueOf(numusers));
         setNextState(req, DO_VIEW_USER_LIST);
     }
 
