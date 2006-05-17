@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.*;
 import java.util.zip.GZIPOutputStream;
-import java.security.Principal;
 
 /**
  * The <code>PortletPage</code> is the generic container for a collection of

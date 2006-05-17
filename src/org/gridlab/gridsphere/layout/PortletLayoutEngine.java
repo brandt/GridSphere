@@ -129,9 +129,7 @@ public class PortletLayoutEngine {
             }
         } catch (Exception e) {
             log.error("Unable to loadUserLayout for user: " + req.getUser().getUserName(), e);
-            //throw new PortletLayoutException("Unable to deserialize user layout from layout descriptor: " + e.getMessage());
         }
-
     }
 
     /**
