@@ -164,7 +164,7 @@ public class PortletServlet extends HttpServlet
 
         // security check
         // make sure request comes only from gridsphere servlet same ip
-        System.err.println("remote Address: " + request.getRemoteAddr());
+        //System.err.println("remote Address: " + request.getRemoteAddr());
 
         registry = PortletRegistry.getInstance();
         // If no portlet ID exists, this may be a command to init or shutdown a portlet instance

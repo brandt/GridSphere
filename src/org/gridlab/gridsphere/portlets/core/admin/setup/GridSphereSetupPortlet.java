@@ -130,7 +130,7 @@ public class GridSphereSetupPortlet extends ActionPortlet {
 
         log.info("Granting super role to root user.");
         aclManagerService.grantSuperRole(accountRequest);
-        event.getPortletRequest().removeAttribute(PortletPageFactory.PAGE);
+        PortletPageFactory.setSetupNeeded(false);
     }
 
     private boolean isInvalidPassword(FormEvent event, boolean newuser) {

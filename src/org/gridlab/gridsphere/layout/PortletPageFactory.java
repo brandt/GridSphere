@@ -10,6 +10,8 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -32,6 +34,8 @@ public class PortletPageFactory implements PortletSessionListener {
     private static PortletPageFactory instance = null;
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
     protected static PortalConfigService portalConfigService = null;
+    protected static UserManagerService userManagerService = null;
+    protected static AccessControlManagerService aclManagerService = null;
 
     private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
@@ -40,7 +44,6 @@ public class PortletPageFactory implements PortletSessionListener {
     private PortletPage templatePage = null;
     private PortletPage setupPage = null;
 
-    //private PortletPage newuserPage = null;
     private PortletPage errorPage = null;
 
     private String templateLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/TemplateLayout.xml");
@@ -56,9 +59,14 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private static Map guests = new Hashtable();
 
+    private static boolean setupNeeded = false;
 
     private PortletPageFactory() {
 
+    }
+
+    public static void setSetupNeeded(boolean needSetup) {
+        setupNeeded = needSetup;
     }
 
     public void init() throws PortletException {
@@ -75,6 +83,9 @@ public class PortletPageFactory implements PortletSessionListener {
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
             portalConfigService = (PortalConfigService) factory.createPortletService(PortalConfigService.class, null, true);
+            aclManagerService = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, null, true);
+            userManagerService = (UserManagerService)factory.createPortletService(UserManagerService.class, null, true);
+
         } catch (PortletServiceException e) {
             log.error("Unable to init portal config service! ", e);
             throw new PortletException("Unable to init portal config service! ", e);
@@ -82,6 +93,9 @@ public class PortletPageFactory implements PortletSessionListener {
         File userdir = new File(newuserLayoutPath);
         if (!userdir.exists()) {
             userdir.mkdir();
+        }
+        if ((userManagerService.getUsers().isEmpty()) || (aclManagerService.getUsersWithSuperRole() == null)) {
+            setupNeeded = true;
         }
     }
 

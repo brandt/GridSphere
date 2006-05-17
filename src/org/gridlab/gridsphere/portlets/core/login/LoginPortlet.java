@@ -567,6 +567,7 @@ public class LoginPortlet extends ActionPortlet {
         body.append(getLocalizedText(req, "LOGIN_ACTIVATE_MAIL") + "\n\n");
 
         PortletURI uri = res.createURI();
+
         uri.addAction("activate");
         uri.addParameter("reqid", request.getOid());
 

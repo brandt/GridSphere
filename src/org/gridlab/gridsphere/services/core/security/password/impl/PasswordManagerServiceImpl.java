@@ -38,11 +38,6 @@ public class PasswordManagerServiceImpl
     public void destroy() {
     }
 
-    public Password getPassword(User user) {
-        return getPasswordImpl(user);
-    }
-
-
     /**
      * This method returns the <code>PasswordImpl</code> associated with
      * a user and is called internally by other methods in this class.
@@ -86,26 +81,17 @@ public class PasswordManagerServiceImpl
     }
 
     public void savePassword(Password editor) {
-        try {
-            if (editor instanceof PasswordImpl) {
-                PasswordImpl pass = (PasswordImpl) editor;
-                try {
-                    MessageDigest md5 = MessageDigest.getInstance("MD5");
-                    md5.update(pass.getValue().getBytes());
-                    String value = toHex(md5.digest());
-                    pass.setValue(value);
-                } catch (NoSuchAlgorithmException e) {
-                    throw new PersistenceManagerException("Can't get MD5 algorithm! " + e.getMessage());
-                }
-                if (pass.getOid() != null) {
-                    pm.update(pass);
-                } else {
-                    pm.create(pass);
-                }
-
+        if (editor instanceof PasswordImpl) {
+            PasswordImpl pass = (PasswordImpl) editor;
+            try {
+                MessageDigest md5 = MessageDigest.getInstance("MD5");
+                md5.update(pass.getValue().getBytes());
+                String value = toHex(md5.digest());
+                pass.setValue(value);
+            } catch (NoSuchAlgorithmException e) {
+                _log.error("Can't get MD5 algorithm! ", e);
             }
-        } catch (PersistenceManagerException e) {
-            _log.error("Unable to create or update password for user", e);
+            saveHashedPassword(editor);
         }
     }
 
@@ -136,24 +122,16 @@ public class PasswordManagerServiceImpl
     }
 
     public void deletePassword(User user) {
-        Password password = getPassword(user);
+        Password password = getPasswordImpl(user);
         if (password != null) {
-            deletePassword(password);
+            try {
+                pm.delete(password);
+            } catch (PersistenceManagerException e) {
+                _log.error("Unable to delete password", e);
+            }
         }
     }
 
-    private void deletePassword(Password password) {
-        try {
-            pm.delete(password);
-        } catch (PersistenceManagerException e) {
-            _log.error("Unable to delete password", e);
-        }
-    }
-
-    public boolean hasPassword(User user) {
-        Password password = getPassword(user);
-        return (password != null);
-    }
 
     public PasswordEditor editPassword(User user) {
         PasswordImpl password = this.getPasswordImpl(user);
