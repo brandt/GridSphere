@@ -173,10 +173,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             coreGroup = groupService.getCoreGroup();
         }
 
-        if ((userManagerService.getUsers().isEmpty() || (roleService.getUsersInRole(PortletRole.SUPER)) == null)) {
-            req.setAttribute(PortletPageFactory.PAGE, PortletPageFactory.SETUP_PAGE);
-        }
-
         // check to see if user has been authorized by means of container managed authorization
         checkWebContainerAuthorization(event);
 
