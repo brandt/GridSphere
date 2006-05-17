@@ -483,6 +483,8 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public PortletPage createPortletPage(PortletRequest req) {
 
+        if (setupNeeded) return createSetupPage(req);
+        
         String sessionId = req.getPortletSession().getId();
         User user = req.getUser();
 
