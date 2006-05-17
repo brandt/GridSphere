@@ -16,7 +16,9 @@ import org.gridlab.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridlab.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridlab.gridsphere.provider.event.jsr.impl.ActionFormEventImpl;
 import org.gridlab.gridsphere.provider.event.jsr.impl.RenderFormEventImpl;
+import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
+import org.gridlab.gridsphere.core.persistence.QueryFilter;
 
 import javax.portlet.*;
 import javax.portlet.PortletConfig;
@@ -69,6 +71,19 @@ public class ActionPortlet extends GenericPortlet {
     protected void setFileDownloadEvent(PortletRequest req, File file) {
         req.setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, file.getName());
         req.setAttribute(SportletProperties.FILE_DOWNLOAD_BINARY, file);
+    }
+
+    public QueryFilter getQueryFilter(PortletRequest req, int maxResults) {
+        if (req.getParameter(TableBean.SHOW_ALL) != null) return null;
+        int firstResult = 0;
+        QueryFilter queryFilter = new QueryFilter();
+        String curPage = req.getParameter(TableBean.CURRENT_PAGE);
+        if (curPage != null) {
+            firstResult = Integer.valueOf(curPage).intValue() * maxResults;
+        }
+        queryFilter.setFirstResult(firstResult);
+        queryFilter.setMaxResults(maxResults);
+        return queryFilter;
     }
 
     /**

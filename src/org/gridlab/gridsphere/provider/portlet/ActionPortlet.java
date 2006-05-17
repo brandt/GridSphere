@@ -9,6 +9,8 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.event.impl.FormEventImpl;
+import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
+import org.gridlab.gridsphere.core.persistence.QueryFilter;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
@@ -57,6 +59,19 @@ public class ActionPortlet extends AbstractPortlet {
         req.setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, fileName);
         req.setAttribute(SportletProperties.FILE_DOWNLOAD_PATH, path);
         req.setAttribute(SportletProperties.FILE_DELETE, Boolean.valueOf(deleteFile));
+    }
+
+    public QueryFilter getQueryFilter(PortletRequest req, int maxResults) {
+        if (req.getParameter(TableBean.SHOW_ALL) != null) return null;
+        int firstResult = 0;
+        QueryFilter queryFilter = new QueryFilter();
+        String curPage = req.getParameter(TableBean.CURRENT_PAGE);
+        if (curPage != null) {
+            firstResult = Integer.valueOf(curPage).intValue() * maxResults;
+        }
+        queryFilter.setFirstResult(firstResult);
+        queryFilter.setMaxResults(maxResults);
+        return queryFilter;
     }
 
     /**
