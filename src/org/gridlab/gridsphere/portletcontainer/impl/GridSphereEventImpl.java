@@ -72,7 +72,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
         action = createAction(portletRequest);
 
-
+        log.debug("Received action=" + action);
         /* This is where a DefaultPortletMessage gets put together if one exists */
         String messageStr = portletRequest.getParameter(SportletProperties.DEFAULT_PORTLET_MESSAGE);
         if (messageStr != null) {
@@ -96,7 +96,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
         }
         if (actionStr != null) {
 
-            log.debug("Received action=" + actionStr);
+
 
             myaction = new DefaultPortletAction(actionStr);
             String prefix = null;
