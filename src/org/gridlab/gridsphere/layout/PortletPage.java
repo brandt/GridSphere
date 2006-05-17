@@ -561,7 +561,6 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         try {
             String ae = req.getHeader("accept-encoding");
             if (ae != null && ae.indexOf("gzip") != -1) {
-                System.out.println("GZIP supported, compressing.");
                 GZIPOutputStream gzos =
                         new GZIPOutputStream(res.getOutputStream());
                 gzos.write(sout.getBuffer().toString().getBytes());
