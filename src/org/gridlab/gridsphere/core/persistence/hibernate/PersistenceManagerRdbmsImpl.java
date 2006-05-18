@@ -324,7 +324,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                     break;
                 case CMD_COUNT:
                     q = session.createQuery(query);
-                    result = Integer.valueOf(q.list().size());
+                    result = new Integer(q.list().size());
                     break;
             }
             tx.commit();
