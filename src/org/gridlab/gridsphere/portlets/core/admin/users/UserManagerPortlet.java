@@ -67,7 +67,7 @@ public class UserManagerPortlet extends ActionPortlet {
         int numusers = this.userManagerService.getNumUsers();
         List userList = this.userManagerService.getUsersByUserName(getQueryFilter(req, 20));
         req.setAttribute("userList", userList);
-        req.setAttribute("numUsers", Integer.valueOf(numusers));
+        req.setAttribute("numUsers", new Integer(numusers));
         setNextState(req, DO_VIEW_USER_LIST);
     }
 
