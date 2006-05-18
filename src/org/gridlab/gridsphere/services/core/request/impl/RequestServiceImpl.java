@@ -17,7 +17,7 @@ import java.util.*;
 
 public class RequestServiceImpl implements RequestService, PortletServiceProvider {
 
-    private static final long REQUEST_SWEEP_FREQUENCY =  1000 * 60; // 1 minute intervals
+    private static final long REQUEST_SWEEP_FREQUENCY =  5000 * 60; // 5 minute intervals
 
     private PersistenceManagerRdbms pm = null;
     private static PortletLog log = SportletLog.getInstance(RequestServiceImpl.class);
@@ -84,8 +84,6 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
                 log.debug("deleting request with no lifetime specified " + req.getOid());
                 deleteRequest(req);
             } else if (date.compareTo(req.getLifetime()) >= 0) {
-                System.err.println("my date=" +  date);
-                System.err.println("req lifetime=" +  req.getLifetime());
                 log.debug("deleting request " + req.getOid());
                 deleteRequest(req);
             }
