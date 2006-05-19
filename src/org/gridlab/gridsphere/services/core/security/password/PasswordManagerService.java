@@ -8,6 +8,8 @@ import org.gridlab.gridsphere.portlet.service.PortletService;
 
 public interface PasswordManagerService extends PortletService {
 
+    public Password getPassword(User user);
+
     public String getHashedPassword(String pass);
 
     public void validateSuppliedPassword(User user, String suppliedPassword)

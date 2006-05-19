@@ -38,6 +38,10 @@ public class PasswordManagerServiceImpl
     public void destroy() {
     }
 
+    public Password getPassword(User user) {
+        return getPasswordImpl(user);
+    }
+
     /**
      * This method returns the <code>PasswordImpl</code> associated with
      * a user and is called internally by other methods in this class.
