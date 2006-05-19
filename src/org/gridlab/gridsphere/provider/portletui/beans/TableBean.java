@@ -311,6 +311,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
         if (maxRows > 0) {
             int numpages = (numEntries != 0) ? (numEntries / maxRows + 1) : (rowCount + 1) / maxRows + 1;
             int dispPage = currentPage + 1;
+            if ((dispPage == numpages) && (numpages == 1)) return sb.toString();
             int c = 0;
             sb.append("<p>"); // added for XHTML 1.0 Strict compliance  
             sb.append(this.getLocalizedText("PAGE") + dispPage + this.getLocalizedText("OUT_OF_PAGES") + numpages);
