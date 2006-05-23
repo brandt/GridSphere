@@ -28,7 +28,6 @@ import org.gridlab.gridsphere.services.core.user.LoginService;
 
 import javax.portlet.*;
 import javax.portlet.PortletMode;
-import javax.portlet.PortletPreferences;
 import javax.portlet.Portlet;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletContext;
@@ -66,7 +65,7 @@ public class PortletServlet extends HttpServlet
 
     protected Map portletConfigHash = null;
 
-    private PortletPreferencesManager prefsManager = null;
+    //private PortletPreferencesManager prefsManager = null;
 
     private Map userKeys = new HashMap();
     private List securePortlets = new ArrayList();
@@ -142,8 +141,6 @@ public class PortletServlet extends HttpServlet
         // create portlet context
         portletContext = new PortletContextImpl(ctx);
 
-        prefsManager = PortletPreferencesManager.getInstance();
-
         // load in any authentication modules if found-- this is a GridSphere extension
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
@@ -213,6 +210,10 @@ public class PortletServlet extends HttpServlet
         } else if (method.equals(SportletProperties.DESTROY_CONCRETE)) {
             // do nothing for concrete portlets
             return;
+        } else if (method.equals(SportletProperties.LOGIN)) {
+
+        } else if (method.equals(SportletProperties.LOGOUT)) {
+            request.getSession(true).invalidate();
         }
 
         // There must be a portlet ID to know which portlet to service
@@ -344,28 +345,23 @@ public class PortletServlet extends HttpServlet
                 } else if (action.equals(SportletProperties.MESSAGE_RECEIVED)) {
                     // do nothing
                 } else if (action.equals(SportletProperties.ACTION_PERFORMED)) {
-                    PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), false);
-                    request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
+                    PortletPreferencesManager prefsManager = new PortletPreferencesManager();
+                    javax.portlet.PreferencesValidator validator = appPortlet.getPreferencesValidator();
+                    prefsManager.setValidator(validator);
+                    prefsManager.setIsRender(false);
+                    prefsManager.setUserId(user.getID());
+                    prefsManager.setPortletId(appPortlet.getApplicationPortletID());
+                    prefsManager.setPreferencesDesc(appPortlet.getPreferencesDescriptor());
+                    request.setAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER, prefsManager);
+
                     ActionRequestImpl actionRequest = new ActionRequestImpl(request, portalContext, portletContext, supports);
                     ActionResponse actionResponse = new ActionResponseImpl(request, response, portalContext);
 
                     log.debug("in PortletServlet: action handling portlet " + pid);
                     try {
-
-                        // check for any filters to execute
-                        /*
-                        PortletFilter[] filters = filterManager.getFilters(portletName);
-                        for (int i = 0; i < filters.length; i++) {
-                            filters[i].doActionFilter(actionRequest, actionResponse);
-                        }
-                        */
-
                         // INVOKE PORTLET ACTION
                         portlet.processAction(actionRequest, actionResponse);
-
                         Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
-
-
                         actionRequest.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid, params);
                         log.debug("placing render params in attribute: key= " + SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
                         redirect(request, response, actionRequest, actionResponse, portalContext);
@@ -373,13 +369,17 @@ public class PortletServlet extends HttpServlet
                         log.error("Error during processAction:", e);
                         request.setAttribute(SportletProperties.PORTLETERROR + pid, new org.gridlab.gridsphere.portlet.PortletException(e));
                     }
-
-                    //actionRequest.clearParameters();
                 }
             } else {
                 if (user != null) {
-                    PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), true);
-                    if (prefs != null) request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
+                    PortletPreferencesManager prefsManager = new PortletPreferencesManager();
+                    javax.portlet.PreferencesValidator validator = appPortlet.getPreferencesValidator();
+                    prefsManager.setValidator(validator);
+                    prefsManager.setIsRender(true);
+                    prefsManager.setUserId(user.getID());
+                    prefsManager.setPortletId(appPortlet.getApplicationPortletID());
+                    prefsManager.setPreferencesDesc(appPortlet.getPreferencesDescriptor());
+                    request.setAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER, prefsManager);
                 }
                 RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
                 RenderResponse renderResponse = new RenderResponseImpl(request, response, portalContext);
