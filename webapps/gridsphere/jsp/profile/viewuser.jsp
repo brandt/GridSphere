@@ -85,7 +85,7 @@
 
                         <% if (request.getAttribute("savePass") != null) { %>
 
-                        <% // <h3><ui:text key="PROFILE_UPDATE_PASS" style="nostyle"/></h3> %>
+
                         <ui:group key="PROFILE_UPDATE_PASS">
                             <ui:frame width="50%">
                                 <ui:tablerow>
@@ -109,19 +109,18 @@
                         <% } %>
                     </ui:form>
                 </td>
+                <% if (request.getAttribute("showgroups") != null) { %>
                 <td valign="top">
                     <ui:form>
-                        <% //<h3><ui:text key="PROFILE_CONFIG_GROUPS" style="nostyle"/></h3> %>
                         <ui:group key="PROFILE_CONFIG_GROUPS">
                             <ui:frame beanId="groupsFrame"/>
                             <p>
                                 <ui:actionsubmit action="doSaveGroups" key="SAVE"/>
                             </p>
                         </ui:group>
-
-
                     </ui:form>
                 </td>
+                <% } %>
             </tr>
         </table>
 
