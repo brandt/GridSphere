@@ -16,7 +16,6 @@ import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.locale.LocaleService;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
-import org.gridlab.gridsphere.services.core.security.group.impl.UserGroup;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
@@ -184,7 +183,11 @@ public class ProfileManagerPortlet extends ActionPortlet {
         DefaultTableModel model = new DefaultTableModel();
 
         // fill in groups model
+        List groups = groupManagerService.getGroups();
 
+        if (groups.size() > 1) {
+            req.setAttribute("showgroups", Boolean.TRUE);
+        } 
         TableRowBean tr = new TableRowBean();
         tr.setHeader(true);
         TableCellBean tcGroups = new TableCellBean();
@@ -204,7 +207,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         tr.addBean(tcGroupsDesc);
         model.addTableRowBean(tr);
 
-        List groups = groupManagerService.getGroups();
+
         it = groups.iterator();
         TableRowBean groupsTR;
         TableCellBean groupsTC;
@@ -429,7 +432,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 log.debug("does not have group: " + selectedGroup.getName());
                 this.groupManagerService.addUserToGroup(user, selectedGroup);
                 log.debug("adding tab " + selectedGroup.getName());
-                this.layoutMgr.addGroupTab(req, selectedGroup.getName());
+                this.layoutMgr.addGroupTab(req, selectedGroup);
                 this.layoutMgr.reloadPage(req);
             }
             usergroups.remove(selectedGroup.getName());
