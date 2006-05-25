@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.services.core.layout;
 import org.gridlab.gridsphere.layout.PortletPage;
 import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 
 /**
@@ -18,9 +19,9 @@ public interface LayoutManagerService extends PortletService {
 
     public void refreshPage(PortletRequest req);
 
-    public void addGroupTab(PortletRequest req, String groupName);
+    public void addGroupTab(PortletRequest req, PortletGroup group);
 
-    public void removeGroupTab(PortletRequest req, String groupName);
+    public void removeGroupTab(PortletRequest req, PortletGroup group);
 
     public PortletTabbedPane getUserTabbedPane(PortletRequest req);
 

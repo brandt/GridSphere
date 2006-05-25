@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.layout.PortletPageFactory;
 import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
@@ -47,12 +48,12 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         pageFactory.removePortletPage(req);
     }
 
-    public void addGroupTab(PortletRequest req, String groupName) {
-        pageFactory.addPortletGroupTab(req, groupName);
+    public void addGroupTab(PortletRequest req, PortletGroup group) {
+        pageFactory.addPortletGroupTab(req, group);
     }
 
-    public void removeGroupTab(PortletRequest req, String groupName) {
-        pageFactory.removePortletGroupTab(req, groupName);
+    public void removeGroupTab(PortletRequest req, PortletGroup group) {
+        pageFactory.removePortletGroupTab(req, group);
     }
 
     public PortletTabbedPane getUserTabbedPane(PortletRequest req) {
