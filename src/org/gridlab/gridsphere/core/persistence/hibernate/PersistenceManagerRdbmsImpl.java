@@ -123,9 +123,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             File mappingdir = new File(mappingPath);
             String[] children = mappingdir.list();
 
-            if (children == null) {
-                // Either dir does not exist or is not a directory
-            } else {
+            if (children != null) {
                 // Create list from children array
                 List filenameList = Arrays.asList(children);
                 // Ensure that this list is sorted alphabetically
