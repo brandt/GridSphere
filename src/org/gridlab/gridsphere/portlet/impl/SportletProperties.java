@@ -165,8 +165,6 @@ public interface SportletProperties {
 
     public static final String PORTLET_MODE = "gs_mode";
 
-    //public static final String PORTLET_MODE_JSR = "jsr_mode";
-
     public static final String PORTLET_TITLE = "title";
 
     public static final String PREVIOUS_MODE = "org.gridlab.gridsphere.portlet.PreviousMode";
@@ -175,7 +173,9 @@ public interface SportletProperties {
 
     public static final String PORTLET_WINDOW = "gs_state";
 
-    public static final String PORTLET_DATA = "org.gridlab.gridsphere.portlet.PortletData";
+    //public static final String PORTLET_DATA = "org.gridlab.gridsphere.portlet.PortletData";
+
+    public static final String PORTLET_DATA_MANAGER = "org.gridlab.gridsphere.portletcontainer.PortletDataManager";
 
     public static final String PORTLETERROR = "org.gridlab.gridsphere.portlet.PortletError";
 
@@ -191,6 +191,8 @@ public interface SportletProperties {
     public static final String PORTAL_CONTEXT = "javax.portlet.context";
 
     public static final String PORTLET_PREFERENCES = "javax.portlet.preferences";
+
+    public static final String PORTLET_PREFERENCES_MANAGER = "org.gridlab.gridsphere.portlet.jsrimpl.PortletPreferencesManager";
 
     public static final String PORTLET_GROUP = "org.gridlab.gridsphere.portlet.PortletGroup";
 

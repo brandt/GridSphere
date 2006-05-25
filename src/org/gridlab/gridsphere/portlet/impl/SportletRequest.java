@@ -5,6 +5,8 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.UserPrincipal;
+import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -130,18 +132,18 @@ public class SportletRequest extends HttpServletRequestWrapper implements Portle
         if (getMode() == Portlet.Mode.CONFIGURE) {
             return null;
         }
-        return (PortletData) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_DATA);
-    }
-
-    /**
-     * Sets the data of the concrete portlet instance
-     * If the portlet is run in CONFIGURE mode, the portlet data is not accessible and this method will return null.
-     *
-     * @param data the portlet data
-     */
-    public void setData(PortletData data) {
-        if (getMode() != Portlet.Mode.EDIT) return;
-        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_DATA, data);
+        PortletDataManager dataManager = (PortletDataManager)this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_DATA_MANAGER);
+        String portletID = (String) getAttribute(SportletProperties.PORTLETID);
+        if (portletID == null) {
+            // it may be in the request parameter
+            portletID = getParameter(SportletProperties.PORTLETID);
+        }
+        try {
+            return dataManager.getPortletData(getUser(), portletID);
+        } catch (PersistenceManagerException e) {
+            log.error("Unable to obtain PortletData for user", e);
+        }
+        return null;
     }
 
     /**
