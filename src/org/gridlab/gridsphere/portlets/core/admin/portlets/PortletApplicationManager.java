@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
+import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 import org.gridlab.gridsphere.layout.PortletTabRegistry;
 
 import javax.servlet.UnavailableException;
@@ -34,11 +35,13 @@ public class PortletApplicationManager extends ActionPortlet {
 
     private TomcatManagerWrapper tomcat = TomcatManagerWrapper.getInstance();
     private PortletManagerService portletManager = null;
+    private GroupManagerService groupManagerService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         try {
             portletManager = (PortletManagerService) getConfig().getContext().getService(PortletManagerService.class);
+            groupManagerService = (GroupManagerService) getConfig().getContext().getService(GroupManagerService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to get portlet manager instance", e);
         }
@@ -108,7 +111,10 @@ public class PortletApplicationManager extends ActionPortlet {
                     portletManager.destroyPortletWebApplication(appName, req, res);
                     result = tomcat.removeWebApp(req, appName);
                     log.debug("removing application tab :" + appName);
-                    PortletTabRegistry.removeGroupTab(appName);                   
+                    PortletGroup group = groupManagerService.getGroup(appName);
+                    if (group != null) {
+                        PortletTabRegistry.removeGroupTab(group);
+                    }
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                 } else if (operation.equals("deploy")) {
                     result = tomcat.deployWebApp(req, appName);

@@ -114,18 +114,14 @@ public class LayoutManagerPortlet extends ActionPortlet {
         }
 
 
-        Map groups = PortletTabRegistry.getGroupTabs();
-        Iterator it = groups.keySet().iterator();
+        List groups = groupManagerService.getGroups();
+        Iterator it = groups.iterator();
         Map groupNames = new HashMap();
 
-        String name;
         PortletGroup group;
         while (it.hasNext()) {
-            name = (String) it.next();
-            group = groupManagerService.getGroup(name);
-            if (group != null) {
-                groupNames.put(name, group.getDescription());
-            }
+            group = (PortletGroup) it.next();
+            groupNames.put(group.getName(), group.getDescription());
         }
         req.setAttribute("groupNames", groupNames);
         PortletGroup coreGroup = groupManagerService.getCoreGroup();
@@ -186,21 +182,21 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         HiddenFieldBean groupHF = event.getHiddenFieldBean("layoutHF");
         String thisgroup = groupHF.getValue();
-        String thisFile = PortletTabRegistry.getTabDescriptorPath(thisgroup);
+        PortletGroup group = groupManagerService.getGroup(thisgroup);
+        PortletGroup newgroup = groupManagerService.getGroup(val);
+        String thisFile = PortletTabRegistry.getTabDescriptorPath(group);
 
-        //String groupFile = PortletTabRegistry.getTabDescriptorPath(val);
-
-        PortletTabbedPane groupPane = PortletTabRegistry.getGroupTabs(val);
+        PortletTabbedPane groupPane = PortletTabRegistry.getGroupTabs(newgroup);
 
         groupPane.setLayoutDescriptor(thisFile);
 
         groupPane.save();
         try {
-            PortletTabRegistry.reloadTab(val, thisFile);
+            PortletTabRegistry.reloadTab(thisFile, newgroup);
             saveLayout(event);
 
-            String groupLayoutPath = PortletTabRegistry.getTabDescriptorPath(thisgroup);
-            editGroup(event, thisgroup, groupLayoutPath);
+            String groupLayoutPath = PortletTabRegistry.getTabDescriptorPath(group);
+            editGroup(event, group, groupLayoutPath);
 
         } catch (Exception e) {
             log.error("Unable to reload tab", e);
@@ -212,29 +208,24 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     public void editGroupLayout(FormEvent event) throws PortletException, IOException {
 
-        String group = event.getAction().getParameter("group");
-
+        String groupName = event.getAction().getParameter("group");
+        PortletGroup group = this.groupManagerService.getGroup(groupName);
         String groupLayoutPath = PortletTabRegistry.getTabDescriptorPath(group);
         editGroup(event, group, groupLayoutPath);
 
     }
 
-    public void editGroup(FormEvent event, String group, String layoutPath) throws PortletException, IOException {
+    public void editGroup(FormEvent event, PortletGroup group, String layoutPath) throws PortletException, IOException {
 
         PortletRequest req = event.getPortletRequest();
 
-        Boolean allowImport = Boolean.TRUE;
-
-        /*
-        if (PortletTabRegistry.getApplicationTabs(group) != null) {
-            allowImport = Boolean.FALSE;
-        }*/
+        Boolean allowImport = Boolean.FALSE;
 
         TextAreaBean ta = event.getTextAreaBean("layoutFile");
         HiddenFieldBean hf = event.getHiddenFieldBean("layoutHF");
         hf.setName("group");
-        hf.setValue(group);
-        req.setAttribute("name", group);
+        hf.setValue(group.getName());
+        req.setAttribute("name", group.getName());
         req.setAttribute("allowImport", allowImport);
 
         ListBoxBean appsLB = event.getListBoxBean("appsLB");
@@ -305,7 +296,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         }
         */
         
-        String groupFile = PortletTabRegistry.getTabDescriptorPath(group.getName());
+        String groupFile = PortletTabRegistry.getTabDescriptorPath(group);
         log.info("saving group layout: " + group.getName());
         String tmpFile = groupFile + "-tmp";
         Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpFile), "UTF-8"));
@@ -319,13 +310,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
             PortletTabRegistry.loadTab(tmpFile);
 
             PortletTabRegistry.copyFile(new File(tmpFile), new File(groupFile));
-            PortletTabRegistry.reloadTab(groupHF.getValue(), groupFile);
+            PortletTabRegistry.reloadTab(groupHF.getValue(), group);
             createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUTMGR_VALID_LAYOUT"));
         } catch (Exception e) {
             // ok use old tab
             log.error("Unable to reload new tab!", e);
             createErrorMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUTMGR_INVALID_LAYOUT"));
-            editGroup(event, group.getName(), tmpFile);
+            editGroup(event, group, tmpFile);
         } finally {
             File f = new File(tmpFile);
             f.delete();
@@ -358,16 +349,17 @@ public class LayoutManagerPortlet extends ActionPortlet {
         setNextState(req, EDIT_JSP);
     }
 
-
+    /*
     public void deleteLayout(FormEvent event) throws PortletException, IOException {
         PortletRequest req = event.getPortletRequest();
 
         String group = event.getAction().getParameter("group");
-
-        PortletTabRegistry.removeGroupTab(group);
+        PortletGroup pgroup = this.groupManagerService.getGroup(group);
+        PortletTabRegistry.removeGroupTab(pgroup);
         createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUTMGR_DELETE_LAYOUT") + "  " + group);
         setNextState(req, VIEW_JSP);
     }
+    */
 
     private void createErrorMessage(FormEvent event, String msg) {
         MessageBoxBean msgBox = event.getMessageBoxBean("msg");

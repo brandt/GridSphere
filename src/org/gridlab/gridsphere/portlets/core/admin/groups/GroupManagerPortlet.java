@@ -37,7 +37,6 @@ public class GroupManagerPortlet extends ActionPortlet {
     public static final String DO_VIEW_GROUP_CREATE = "admin/groups/groupCreate.jsp";
     public static final String DO_VIEW_GROUP_LAYOUT = "admin/groups/groupLayout.jsp";
 
-
     // Portlet services
     private UserManagerService userManagerService = null;
     private GroupManagerService groupManagerService = null;
@@ -125,15 +124,11 @@ public class GroupManagerPortlet extends ActionPortlet {
         DefaultTableModel model = new DefaultTableModel();
 
         List webappNames = portletMgr.getWebApplicationNames();
-
         Iterator it = webappNames.iterator();
 
-        //String gsname = coreGroup.getName();
-        //List roles = req.getRoles();
         while (it.hasNext()) {
 
             String g = (String) it.next();
-
             if (g.equals(coreGroup.getName())) {
                 if (group == null) continue;
                 if (!group.equals(coreGroup)) continue;
@@ -212,7 +207,6 @@ public class GroupManagerPortlet extends ActionPortlet {
                             }
 
                         }
-
                     }
 
                     // don't allow core portlets to be changed
@@ -227,7 +221,6 @@ public class GroupManagerPortlet extends ActionPortlet {
 
                     // set 2nd column to portlet display name from concrete portlet
                     Locale loc = req.getLocale();
-
                     String dispName = conc.getDisplayName(loc);
                     tb.setValue(dispName);
                     newtc2.addBean(tb);
@@ -270,7 +263,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     public void doMakeGroup(FormEvent evt) throws PortletException {
         PortletRequest req = evt.getPortletRequest();
-
+        boolean isNewGroup = false;
         List webappNames = portletMgr.getWebApplicationNames();
         Iterator it = webappNames.iterator();
         Set portletRoles = new HashSet();
@@ -281,6 +274,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletGroup group = null;
         if (groupNameHF.getValue().equals("")) {
             group = new PortletGroup();
+            isNewGroup = true;
         } else {
             group = groupManagerService.getGroup(groupNameHF.getValue());
         }
@@ -323,10 +317,10 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         // if group name has been modified update group tab
         if ((!group.getName().equals(groupTF.getValue())) && (!group.getName().equals(""))) {
-            String tabfile = PortletTabRegistry.getTabDescriptorPath(group.getName());
-            PortletTabRegistry.removeGroupTab(group.getName());
+            String tabfile = PortletTabRegistry.getTabDescriptorPath(group);
+            PortletTabRegistry.removeGroupTab(group);
             try {
-                PortletTabRegistry.addGroupTab(groupTF.getValue(), tabfile);
+                PortletTabRegistry.addGroupTab(group, tabfile);
             } catch (Exception e) {
                 log.error("unable to save group tab: " + groupTF.getValue(), e);
             }
@@ -363,13 +357,30 @@ public class GroupManagerPortlet extends ActionPortlet {
             if (group.getType().equals(PortletGroup.Type.PRIVATE)) {
                 createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_VISIBILITY_MOREDESC"));
             }
-            PortletTabRegistry.newEmptyGroupTab(groupTF.getValue());
+
+            if (isNewGroup) {
+
+                if (group != null) {
+                    try {
+                        // now create new group layout
+                        PortletTabRegistry.newTemplateGroupTab(group, portletRoles);
+                        User user = evt.getPortletRequest().getUser();
+                        if (groupManagerService.isUserInGroup(user, group)) layoutMgr.refreshPage(evt.getPortletRequest());
+                    } catch (Exception e) {
+                        log.error("Unable to save new group layout: ", e);
+                    }
+                } else {
+                    log.debug("No group exists for group id: " + group.getName());
+                }
+
+            }
+
         } catch (Exception e) {
             log.error("Unable to save new group layout: ", e);
         }
-        setNextState(req, DO_VIEW_GROUP_LAYOUT);
     }
 
+    /*
     public void doMakeTemplateLayout(FormEvent evt) {
 
         String groupName = evt.getAction().getParameter("groupName");
@@ -386,7 +397,7 @@ public class GroupManagerPortlet extends ActionPortlet {
             Set portletRoles = group.getPortletRoleList();
             try {
                 // now create new group layout
-                PortletTabRegistry.newTemplateGroupTab(fileName, group.getName(), portletRoles);
+                PortletTabRegistry.newTemplateGroupTab(fileName, group, portletRoles);
                 User user = evt.getPortletRequest().getUser();
                 if (groupManagerService.isUserInGroup(user, group)) layoutMgr.refreshPage(evt.getPortletRequest());
             } catch (Exception e) {
@@ -396,6 +407,7 @@ public class GroupManagerPortlet extends ActionPortlet {
             log.debug("No group exists for group id: " + groupName);
         }
     }
+    */
 
     public void doViewViewGroup(FormEvent evt)
             throws PortletException {
@@ -677,7 +689,7 @@ public class GroupManagerPortlet extends ActionPortlet {
                 User user = evt.getPortletRequest().getUser();
                 addGroupEntry(groupEntryUser, group);
                 if (groupEntryUser.getID().equals(user.getID())) {
-                    layoutMgr.addGroupTab(evt.getPortletRequest(), group.getName());
+                    layoutMgr.addGroupTab(evt.getPortletRequest(), group);
                 }
                 createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_ADD_USER_SUCCESS") + " " + group.getName());
                 //layoutMgr.addGroupTab(groupEntryUser, group.getName());
@@ -711,7 +723,7 @@ public class GroupManagerPortlet extends ActionPortlet {
                 groupManagerService.deleteUserInGroup(user, group);
 
                 if (event.getPortletRequest().getUser().getID().equals(user.getID())) {
-                    layoutMgr.removeGroupTab(event.getPortletRequest(), groupName);
+                    layoutMgr.removeGroupTab(event.getPortletRequest(), group);
                 }
 
                 createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "GROUP_REMOVE_USER_SUCCESS"));
@@ -737,7 +749,7 @@ public class GroupManagerPortlet extends ActionPortlet {
                 groupManagerService.deleteGroup(group);
 
                 // delete group from layout registry
-                PortletTabRegistry.removeGroupTab(group.getName());
+                PortletTabRegistry.removeGroupTab(group);
                 createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "GROUP_REMOVE_GROUP_SUCCESS") + " " + group.getName());
 
             }
