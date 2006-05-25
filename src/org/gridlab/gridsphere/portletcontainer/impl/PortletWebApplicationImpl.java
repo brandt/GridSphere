@@ -73,7 +73,7 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
         this.webAppDescription = ctx.getServletContextName();
 
         // load portlet.xml
-        loadPortlets(ctx);
+        loadPortlets(ctx, Thread.currentThread().getContextClassLoader());
         // load services xml
         if (!isJSR) loadServices(ctx, Thread.currentThread().getContextClassLoader());
         // load roles.xml
@@ -87,7 +87,7 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
      *
      * @param ctx the <code>ServletContext</code>
      */
-    protected void loadPortlets(ServletContext ctx) throws PortletException {
+    protected void loadPortlets(ServletContext ctx, ClassLoader loader) throws PortletException {
 
         // First we see if this is a gridsphere portlet descriptor and load in as gridsphere-portlet.xml
         log.info("Loading gridsphere-portlet.xml...");
@@ -139,8 +139,7 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
         //log.debug("removing application tab :" + webApplicationName);
         //PortletTabRegistry.removeGroupTab(webApplicationName);
         PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
-        SportletServiceFactory factory = SportletServiceFactory.getInstance();
-        factory.shutdownServices(webApplicationName);
+        SportletServiceFactory.shutdownServices(webApplicationName);
         appPortlets = null;
     }
 

@@ -70,25 +70,25 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
      *
      * @param ctx the <code>ServletContext</code>
      */
-    protected abstract void loadPortlets(ServletContext ctx) throws PortletException;
+    protected abstract void loadPortlets(ServletContext ctx, ClassLoader loader) throws PortletException;
 
     /**
      * Loads in a layout descriptor file from the associated servlet context
      *
      * @param ctx the <code>ServletContext</code>
      */
-    protected void loadLayout(ServletContext ctx, String groupName) throws PortletException {
+    protected void loadLayout(ServletContext ctx, PortletGroup group) throws PortletException {
         // load in the portlet.xml file
         String layoutXMLfile = ctx.getRealPath("/WEB-INF/layout.xml");
         File fin = new File(layoutXMLfile);
-
+        String pgroupName = "unknown group";
         if (fin.exists()) {
             try {
-                String pgroupName = URLEncoder.encode(groupName, "UTF-8");
-                PortletTabRegistry.copyFile(fin, pgroupName);
-                log.info("Loaded a layout descriptor " + groupName);
+                pgroupName = URLEncoder.encode(group.getName(), "UTF-8");
+                PortletTabRegistry.copyFile(fin, group);
+                log.info("Loaded a layout descriptor " + pgroupName);
             } catch (Exception e) {
-                throw new PortletException("Unable to deserialize layout.xml for: " + groupName + "!", e);
+                throw new PortletException("Unable to deserialize layout.xml for: " + pgroupName + "!", e);
             }
         } else {
             log.debug("Did not find layout.xml for: " + ctx.getServletContextName());
@@ -112,10 +112,11 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
                 if (g == null) {
                     log.info("Saving group: " + group.getName());
                     groupManager.saveGroup(group);
+                    g = groupManager.getGroup(group.getName());
                 }
-                log.info("Loaded a group descriptor " + group.getName());
+                log.info("Loaded a group descriptor " + g.getOid());
                 // now load layout
-                loadLayout(ctx, group.getName());
+                loadLayout(ctx, g);
             } catch (Exception e) {
                 throw new PortletException("Unable to deserialize group.xml for: " + webApplicationName, e);
             }
