@@ -15,9 +15,10 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDispatcher;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator;
 
-import javax.portlet.PortalContext;
-import javax.portlet.Portlet;
+import javax.portlet.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import java.net.URLEncoder;
@@ -45,6 +46,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
     private JSRApplicationPortletConfigImpl appConfig = null;
     private ServletContext context = null;
     private PortalContext portalContext = null;
+    private javax.portlet.PreferencesValidator prefsValidator = null;
 
     /**
      * Default constructor is private
@@ -60,7 +62,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
      * @param webApplication the ui application name for this application portlet
      * @param context        the <code>ServletContext</code> containing this application portlet
      */
-    public JSRApplicationPortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, String webApplication, ServletContext context)  {
+    public JSRApplicationPortletImpl(ClassLoader loader, PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, String webApplication, ServletContext context)  {
         this.portletDef = portletDef;
         this.webAppName = webApplication;
         this.portletClassName = portletDef.getPortletClass().getContent();
@@ -101,6 +103,21 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         log.debug("creating JSRConcretePortletImpl");
         JSRConcretePortletImpl concPortlet = new JSRConcretePortletImpl(pdd, portletDef, concConfig, webAppName);
         concPortlets.add(concPortlet);
+
+        org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefDesc = portletDef.getPortletPreferences();
+        if (prefDesc != null) {
+            org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator validator = prefDesc.getPreferencesValidator();
+            if (validator != null) {
+                String validatorClass = validator.getContent();
+                if (validatorClass != null) {
+                    try {
+                        prefsValidator = (javax.portlet.PreferencesValidator) Class.forName(validatorClass, true, loader).newInstance();
+                    } catch (Exception e) {
+                        log.error("Unable to create validator: " + validatorClass + "! ",  e);
+                    }
+                }
+            }
+        }
     }
 
 
@@ -299,9 +316,12 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         return portletDef.getSecurityRoleRef();
     }
 
-    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences getPortletPreferences() {
-        org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefDesc = portletDef.getPortletPreferences();
-        return prefDesc;
+    public javax.portlet.PreferencesValidator getPreferencesValidator() {
+        return prefsValidator;
+    }
+
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences getPreferencesDescriptor() {
+        return portletDef.getPortletPreferences();
     }
 
     public Portlet getPortletInstance() {

@@ -39,18 +39,16 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
 
     public JSRPortletWebApplicationImpl(ServletContext context, ClassLoader loader) throws PortletException {
         super(context);
-        String realPath = context.getRealPath("");
-        int l = realPath.lastIndexOf(File.separator);
-        String appName = realPath.substring(l + 1);
 
         // Make all jsr portlets have only one concrete instance
-        webApplicationName = appName;
-        //webApplicationName = appName + ".1";
+        String realPath = context.getRealPath("");
+        int l = realPath.lastIndexOf(File.separator);
+        webApplicationName = realPath.substring(l + 1);
 
         this.webAppDescription = context.getServletContextName();
 
         // load portlet.xml
-        loadPortlets(context);
+        loadPortlets(context, loader);
 
         // load services.xml
         loadServices(context, loader);
@@ -68,7 +66,7 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
      *
      * @param ctx the <code>ServletContext</code>
      */
-    protected void loadPortlets(ServletContext ctx) throws PortletException {
+    protected void loadPortlets(ServletContext ctx, ClassLoader loader) throws PortletException {
         // load in the portlet.xml file
         String portletXMLfile = ctx.getRealPath("/WEB-INF/portlet.xml");
         //String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
@@ -90,7 +88,7 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
 
         // Iterate thru portlet definitions for portlet applications
         for (int i = 0; i < portletDefs.length; i++) {
-            ApplicationPortlet portletApp = new JSRApplicationPortletImpl(pdd, portletDefs[i], webApplicationName, ctx);
+            ApplicationPortlet portletApp = new JSRApplicationPortletImpl(loader, pdd, portletDefs[i], webApplicationName, ctx);
 
             String portletClass = portletApp.getApplicationPortletID();
             String portletName = portletApp.getApplicationPortletName();
