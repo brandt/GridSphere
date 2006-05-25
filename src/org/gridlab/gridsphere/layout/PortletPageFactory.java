@@ -169,11 +169,10 @@ public class PortletPageFactory implements PortletSessionListener {
         userLayouts.clear();
     }
 
-    public void addPortletGroupTab(PortletRequest req, String groupName) {
+    public void addPortletGroupTab(PortletRequest req, PortletGroup group) {
         PortletPage page = createPortletPage(req);
         PortletTabbedPane pagePane = page.getPortletTabbedPane();
-        PortletTabbedPane appPane = PortletTabRegistry.getGroupTabs(groupName);
-        //getApplicationTabs(webAppName);
+        PortletTabbedPane appPane = PortletTabRegistry.getGroupTabs(group);
         if (appPane != null) {
             List tabs = appPane.getPortletTabs();
             try {
@@ -182,7 +181,7 @@ public class PortletPageFactory implements PortletSessionListener {
                     pagePane.addTab((PortletTab) deepCopy(tab));
                 }
             } catch (Exception e) {
-                log.error("Unable to copy application tabs for webapp: " + groupName);
+                log.error("Unable to copy application tabs for webapp: " + group.getName());
             }
 
             page.setPortletTabbedPane(pagePane);
@@ -190,11 +189,10 @@ public class PortletPageFactory implements PortletSessionListener {
         }
     }
 
-    public void removePortletGroupTab(PortletRequest req, String groupName) {
+    public void removePortletGroupTab(PortletRequest req, PortletGroup group) {
         PortletPage page = createPortletPage(req);
         PortletTabbedPane pagePane = page.getPortletTabbedPane();
-        PortletTabbedPane appPane = PortletTabRegistry.getGroupTabs(groupName);
-        //getApplicationTabs(webAppName);
+        PortletTabbedPane appPane = PortletTabRegistry.getGroupTabs(group);
         if (appPane != null) {
             List tabs = appPane.getPortletTabs();
             try {
@@ -203,7 +201,7 @@ public class PortletPageFactory implements PortletSessionListener {
                     pagePane.removeTab(tab);
                 }
             } catch (Exception e) {
-                log.error("Unable to copy application tabs for webapp: " + groupName);
+                log.error("Unable to copy application tabs for webapp: " + group.getName());
             }
             page.setPortletTabbedPane(pagePane);
             page.init(req, new ArrayList());
@@ -324,7 +322,7 @@ public class PortletPageFactory implements PortletSessionListener {
             pane = newPage.getPortletTabbedPane();
 
 
-            PortletTabbedPane gsTab = PortletTabRegistry.getGroupTabs(req.getGroup().getName());
+            PortletTabbedPane gsTab = PortletTabRegistry.getGroupTabs(req.getGroup());
             List tabs = gsTab.getPortletTabs();
             for (int j = 0; j < tabs.size(); j++) {
                 PortletTab tab = (PortletTab) tabs.get(j);
@@ -339,7 +337,8 @@ public class PortletPageFactory implements PortletSessionListener {
                 if (groupName.equals(((PortletGroup)req.getGroup()).getName())) continue;
 
                 log.debug("adding group layout: " + groupName);
-                PortletTabbedPane portletTabs = PortletTabRegistry.getGroupTabs(groupName);
+                PortletGroup group = groupManagerService.getGroup(groupName);
+                PortletTabbedPane portletTabs = PortletTabRegistry.getGroupTabs(group);
                 if (portletTabs != null) {
                     tabs = portletTabs.getPortletTabs();
 

@@ -3,6 +3,7 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
@@ -44,12 +45,12 @@ public class PortletTabRegistry {
                 for (int i = 0; i < files.length; i++) {
                     String group = files[i];
                     int idx = group.indexOf(".xml");
-                    String groupName = group.substring(0, idx);
-                    String groupFile = groupLayoutDir + File.separator + groupName + ".xml";
-                    tabDescriptors.put(groupName, groupFile);
+                    String groupOid = group.substring(0, idx);
+                    String groupFile = groupLayoutDir + File.separator + groupOid + ".xml";
+                    tabDescriptors.put(groupOid, groupFile);
 
                     PortletTabbedPane tabbedPane = PortletLayoutDescriptor.loadPortletTabs(groupFile, layoutMappingFile);
-                    groupTabs.put(groupName, tabbedPane);
+                    groupTabs.put(groupOid, tabbedPane);
                 }
             }
         } catch (Exception e) {
@@ -61,10 +62,10 @@ public class PortletTabRegistry {
     private PortletTabRegistry() {
     }
 
-    public synchronized static void addGroupTab(String groupName, String tabXMLfile) throws IOException, PersistenceManagerException {
+    public synchronized static void addGroupTab(PortletGroup group, String tabXMLfile) throws IOException, PersistenceManagerException {
         PortletTabbedPane webAppTabs = PortletLayoutDescriptor.loadPortletTabs(tabXMLfile, layoutMappingFile);
-        tabDescriptors.put(groupName, tabXMLfile);
-        groupTabs.put(groupName, webAppTabs);
+        tabDescriptors.put(group.getOid(), tabXMLfile);
+        groupTabs.put(group.getOid(), webAppTabs);
     }
 
     public static void reloadGuestLayout() throws IOException, PersistenceManagerException {
@@ -95,35 +96,35 @@ public class PortletTabRegistry {
         return guestLayoutFile;
     }
 
-    public static PortletTabbedPane getGroupTabs(String groupName) {
-        return (PortletTabbedPane) groupTabs.get(groupName);
+    public static PortletTabbedPane getGroupTabs(PortletGroup group) {
+        return (PortletTabbedPane) groupTabs.get(group.getOid());
     }
 
 
-    public static void newEmptyGroupTab(String groupName) {
-        if (tabDescriptors.get(groupName) == null) {
+    public static void newEmptyGroupTab(PortletGroup group) {
+        if (tabDescriptors.get(group.getOid()) == null) {
             File f = new File(groupLayoutDir);
             if (!f.exists()) {
                 f.mkdir();
             }
-            String groupFile = groupLayoutDir + File.separator + groupName + ".xml";
-            tabDescriptors.put(groupName, groupFile);
+            String groupFile = groupLayoutDir + File.separator + group.getOid() + ".xml";
+            tabDescriptors.put(group.getOid(), groupFile);
         }
     }
 
-    public static void newTemplateGroupTab(String fileName, String groupName, Set portletRoleInfo) throws IOException, PersistenceManagerException {
+    public static void newTemplateGroupTab(PortletGroup group, Set portletRoleInfo) throws IOException, PersistenceManagerException {
         File f = new File(groupLayoutDir);
         if (!f.exists()) {
             f.mkdir();
         }
-        String groupFile = groupLayoutDir + File.separator + fileName + ".xml";
-        tabDescriptors.put(groupName, groupFile);
+        String groupFile = groupLayoutDir + File.separator + group.getOid() + ".xml";
+        tabDescriptors.put(group.getOid(), groupFile);
         PortletTabbedPane parentPane = new PortletTabbedPane();
         Iterator it = portletRoleInfo.iterator();
         String portletClass;
         PortletRole reqRole = null;
         PortletTab parentTab = new PortletTab();
-        parentTab.setTitle(groupName);
+        parentTab.setTitle(group.getName());
         //parentTab.setLabel(groupName);
 
         PortletTabbedPane childPane = new PortletTabbedPane();
@@ -165,12 +166,12 @@ public class PortletTabRegistry {
         }
         parentPane.addTab(parentTab);
         PortletLayoutDescriptor.savePortletTabbedPane(parentPane, groupFile, layoutMappingFile);
-        groupTabs.put(groupName, parentPane);
+        groupTabs.put(group.getOid(), parentPane);
     }
 
-    public static synchronized void reloadTab(String tab, String tabXMLfile) throws PersistenceManagerException {
+    public static synchronized void reloadTab(String tab, PortletGroup group) throws PersistenceManagerException {
         try {
-            PortletTabbedPane pane = PortletLayoutDescriptor.loadPortletTabs(tabXMLfile, layoutMappingFile);
+            PortletTabbedPane pane = PortletLayoutDescriptor.loadPortletTabs(group.getOid(), layoutMappingFile);
             if (groupTabs.containsKey(tab)) {
                 groupTabs.put(tab, pane);
             }
@@ -183,29 +184,31 @@ public class PortletTabRegistry {
         }
     }
 
+    
     public static Map getGroupTabs() {
         return Collections.unmodifiableMap(groupTabs);
     }
 
-    public synchronized static void removeGroupTab(String groupName) {
-        String groupFile = (String) tabDescriptors.get(groupName);
+
+    public synchronized static void removeGroupTab(PortletGroup group) {
+        String groupFile = (String) tabDescriptors.get(group.getOid());
         if (groupFile != null) {
             File f = new File(groupFile);
             if (f.exists()) f.delete();
-            tabDescriptors.remove(groupName);
+            tabDescriptors.remove(group.getOid());
         }
-        groupTabs.remove(groupName);
+        groupTabs.remove(group.getOid());
         //applicationTabs.remove(groupName);
     }
 
-    public static String getTabDescriptorPath(String webAppName) {
-        return (String) tabDescriptors.get(webAppName);
+    public static String getTabDescriptorPath(PortletGroup group) {
+        return (String) tabDescriptors.get(group.getOid());
     }
 
-    public static void copyFile(File in, String groupName) throws Exception {
+    public static void copyFile(File in, PortletGroup group) throws Exception {
 
         // copy over group tabs if they don't exist
-        String tabDesc = groupLayoutDir + File.separator + groupName + ".xml";
+        String tabDesc = groupLayoutDir + File.separator + group.getOid() + ".xml";
         File out = new File(tabDesc);
 
   
@@ -215,7 +218,7 @@ public class PortletTabRegistry {
             // copy over file if it is more recent than existing one
             copyFile(in, out);
         }
-        addGroupTab(groupName, tabDesc);
+        addGroupTab(group, tabDesc);
     }
 
     public static void copyFile(File in, File out) throws Exception {
