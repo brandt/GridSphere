@@ -86,7 +86,6 @@ public class DeployGridSphereTCK extends Task {
             System.err.println((String) portlets.get(i));
             out.println("<portlet-frame>");
             out.println("<portlet-class>" + (String) portlets.get(i) + "</portlet-class>");
-            //out.println("<portlet-name>" + (String) portlets.get(i) + "</portlet-name>");
             out.println("</portlet-frame>");
         }
         out.println("</portlet-tab></portlet-tabbed-pane></page-layout");
@@ -119,6 +118,7 @@ public class DeployGridSphereTCK extends Task {
 
             addGridSphereJSRDescriptor(tempJar);
             addGridSphereTagLibs(tempJar);
+            addLogProps(tempJar);
 
             // loop thru all jars
             Enumeration files = jarFile.entries();
@@ -259,9 +259,9 @@ public class DeployGridSphereTCK extends Task {
         }
     }
 
-    public void addGridSphereTagLibs(JarOutputStream tempJar) throws IOException {
+    public void addLogProps(JarOutputStream tempJar) throws IOException {
 
-        String fileName = buildDir + File.separator + "lib" + File.separator + "gridsphere-ui-tags.jar";
+        String fileName = "config" + File.separator + "log4j.properties";
         byte[] buffer = new byte[1024];
         int bytesRead;
 
@@ -273,7 +273,37 @@ public class DeployGridSphereTCK extends Task {
         try {
 // Create a jar entry and add it to the temp jar.
 
-            JarEntry entry = new JarEntry("WEB-INF" + File.separator + "lib" + File.separator + "gridsphere-ui-tags.jar");
+            JarEntry entry = new JarEntry("WEB-INF" + File.separator + "classes" + File.separator + "log4j.properties");
+            tempJar.putNextEntry(entry);
+
+// Read the file and write it to the jar.
+
+            while ((bytesRead = file.read(buffer)) != -1) {
+                tempJar.write(buffer, 0, bytesRead);
+            }
+
+            System.out.println(entry.getName() + " added.");
+
+        } finally {
+            file.close();
+        }
+    }
+
+    public void addGridSphereTagLibs(JarOutputStream tempJar) throws IOException {
+
+        String fileName = buildDir + File.separator + "lib" + File.separator + "gridsphere-ui-tags-2.1.jar";
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+
+
+        // Open the given file.
+
+        FileInputStream file = new FileInputStream(fileName);
+
+        try {
+// Create a jar entry and add it to the temp jar.
+
+            JarEntry entry = new JarEntry("WEB-INF" + File.separator + "lib" + File.separator + "gridsphere-ui-tags-2.1.jar");
             tempJar.putNextEntry(entry);
 
 // Read the file and write it to the jar.
