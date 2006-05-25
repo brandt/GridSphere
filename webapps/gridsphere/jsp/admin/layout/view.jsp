@@ -100,6 +100,7 @@
                 </ui:actionlink>
                 <% } %>
             </ui:tablecell>
+ <%--
             <ui:tablecell>
                 <% if (!group.equals(coregroup)) { %>
                 <ui:actionlink action="deleteLayout" key="DELETE">
@@ -107,6 +108,7 @@
                 </ui:actionlink>
                 <% } %>
             </ui:tablecell>
+ --%>
         </ui:tablerow>
 
     </ui:hasrole>
@@ -115,3 +117,4 @@
 </ui:frame>
 
 </ui:form>
+
