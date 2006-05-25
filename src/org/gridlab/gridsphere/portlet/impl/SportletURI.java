@@ -188,9 +188,9 @@ public class SportletURI implements PortletURI {
         Set set = store.keySet();
         if (!set.isEmpty()) {
             // add question mark
-            url = contextPath + servletPath + "?";
+            url += servletPath + "?";
         } else {
-            return s.append(servletPath + url).toString();
+            return s.append(url + servletPath).toString();
         }
         boolean firstParam = true;
         try {
