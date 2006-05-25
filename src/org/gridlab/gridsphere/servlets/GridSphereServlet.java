@@ -8,7 +8,6 @@ package org.gridlab.gridsphere.servlets;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.hibernate.DBTask;
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
-import org.gridlab.gridsphere.layout.PortletPageFactory;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.UserPrincipal;
 import org.gridlab.gridsphere.portlet.impl.*;
@@ -29,8 +28,6 @@ import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
-import org.gridlab.gridsphere.portlets.core.login.LoginPortlet;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -313,10 +310,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             u.setUserName("tckuser");
             u.setUserID("tckuser");
             u.setID("500");
+            List groupList = new ArrayList();
+            groupList.add(coreGroup.getName());
             req.setAttribute(SportletProperties.PORTLET_GROUP, coreGroup);
             req.setAttribute(SportletProperties.PORTLET_USER, u);
-            req.setAttribute(SportletProperties.PORTLETGROUPS, coreGroup.getName());
-            req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.USER.getName());
+            req.setAttribute(SportletProperties.PORTLETGROUPS, groupList);
+            req.setAttribute(SportletProperties.PORTLET_ROLE, new ArrayList());
             isTCK = true;
         }
     }
