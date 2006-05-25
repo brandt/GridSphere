@@ -68,20 +68,17 @@ public class PortletPreferencesImpl implements PortletPreferences {
     public PortletPreferencesImpl() {
     }
 
-    public void init(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences portletPrefs) {
-        Map prefsMap = new HashMap();
+    public void setPreferencesDesc(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences portletPrefs) {
         if (portletPrefs != null) {
             Preference[] prefs = portletPrefs.getPreference();
             for (int i = 0; i < prefs.length; i++) {
                 String name = prefs[i].getName().getContent();
                 defaultPrefsMap.put(name, prefs[i]);
             }
-
             if (attributes.isEmpty()) {
                 for (int i = 0; i < prefs.length; i++) {
                     String name = prefs[i].getName().getContent();
                     PersistencePreferenceAttribute ppa = new PersistencePreferenceAttribute();
-                    prefsMap.put(prefs[i].getName().getContent(), prefs[i]);
                     ppa.setName(name);
                     String[] vals = new String[prefs[i].getValueCount()];
                     Value[] prefVals = prefs[i].getValue();
@@ -378,11 +375,7 @@ public class PortletPreferencesImpl implements PortletPreferences {
         if (isRender) throw new IllegalStateException("Cannot persist PortletPreferences in render method!");
         if (validator != null) validator.validate(this);
         try {
-            if (this.getOid() != null) {
-                pm.update(this);
-            } else {
-                pm.create(this);
-            }
+            pm.saveOrUpdate(this);
         } catch (PersistenceManagerException e) {
             throw new IOException(e.getMessage());
         }

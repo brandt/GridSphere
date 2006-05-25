@@ -125,15 +125,17 @@ public abstract class PortletAdapter extends Portlet {
             }
         }
 
-        PortletData data = null;
         User user = request.getUser();
         if (user != null) {
+            request.setAttribute(SportletProperties.PORTLET_DATA_MANAGER, dataManager);
+            /*
             try {
                 data = dataManager.getPortletData(user, portletID);
                 request.setAttribute(SportletProperties.PORTLET_DATA, data);
             } catch (PersistenceManagerException e) {
                 log.error("in PortletAdapter: Unable to obtain PortletData for user", e);
             }
+            */
         }
 
         portletSettings = (PortletSettings) allPortletSettings.get(portletID);

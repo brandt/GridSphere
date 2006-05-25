@@ -226,7 +226,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the portlet preferences
      */
     public PortletPreferences getPreferences() {
-        return (PortletPreferences) getAttribute(SportletProperties.PORTLET_PREFERENCES);
+        PortletPreferencesManager prefsManager = (PortletPreferencesManager) getAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER);
+        return prefsManager.getPortletPreferences();
     }
 
     /**

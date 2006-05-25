@@ -54,7 +54,7 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
         String method = (String) request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         if (method != null) {
             try {
-                log.info("Received ACTION_METHOD: " + method);
+                log.debug("Received ACTION_METHOD: " + method);
                 if (method.equals(SportletProperties.DO_TITLE)) {
                     doTitle(request, response);
                 } else if (method.equals(SportletProperties.WINDOW_EVENT)) {
@@ -89,11 +89,11 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                 }
             } catch (Exception e) {
                 log.error("in AbstractPortlet: service()");
-                if (request.getAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID()) == null) {
-                    request.setAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID(), e);
+                String errorKey = SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID();
+                if (request.getAttribute(errorKey) == null) {
+                    request.setAttribute(errorKey, e);
                 }
                 throw new PortletException(e);
-                //doError(request, response, e);
             } finally {
                 request.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
             }

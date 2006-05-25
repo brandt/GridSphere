@@ -22,25 +22,36 @@ public class PortletPreferencesManager {
 
     private static PortletLog log = SportletLog.getInstance(PortletPreferencesManager.class);
     private static PersistenceManagerRdbms pm = null;
-    private static PortletPreferencesManager instance = null;
-
+    private PreferencesValidator validator = null;
+    private boolean isRender = false;
+    private String userId = null;
+    private String portletId = null;
+    private org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefsDesc = null;
     /**
      * Default instantiation is disallowed
      */
-    private PortletPreferencesManager() {
+    public PortletPreferencesManager() {
         pm = PersistenceManagerFactory.createGridSphereRdbms();    
     }
 
-    /**
-     * Returns an instance of a <code>PortletDataManager</code>
-     *
-     * @return an instance of a <code>PortletDataManager</code>
-     */
-    public static synchronized PortletPreferencesManager getInstance() {
-        if (instance == null) {
-            instance = new PortletPreferencesManager();
-        }
-        return instance;
+    public void setPreferencesDesc(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefsDesc) {
+        this.prefsDesc = prefsDesc;
+    }
+
+    public void setValidator(PreferencesValidator validator) {
+        this.validator = validator;
+    }
+
+    public void setIsRender(boolean isRender) {
+        this.isRender = isRender;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setPortletId(String portletId) {
+        this.portletId = portletId;
     }
 
     /**
@@ -50,49 +61,32 @@ public class PortletPreferencesManager {
      * @param user       the <code>User</code>
      * @return the PortletPreferences for this portlet or null if none exists.
      */
-    public javax.portlet.PortletPreferences getPortletPreferences(JSRApplicationPortletImpl appPortlet, User user, ClassLoader loader, boolean isRender) {
+    public javax.portlet.PortletPreferences getPortletPreferences() {
         PortletPreferencesImpl prefs = null;
-        String portletID = appPortlet.getApplicationPortletID();
-
-        // get persistence prefs if it exists
-        org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefDesc = appPortlet.getPortletPreferences();
 
         try {
-            String userid = "";
-            if (user != null) {
-                userid = user.getID();
+            if (userId != null) {
                 String command =
-                        "select u from " + PortletPreferencesImpl.class.getName() + " u where u.userId='" + userid + "' and u.portletId='" + portletID + "'";
+                        "select u from " + PortletPreferencesImpl.class.getName() + " u where u.userId='" + userId + "' and u.portletId='" + portletId + "'";
                 prefs = (PortletPreferencesImpl) pm.restore(command);
             } else {
-                userid = "500";    
+                userId = "500";
             }
 
             if (prefs == null) {
                 // we have no prefs in the db so create one from the xml...
-                log.debug("No prefs exist-- storing prefs for user: " + userid + " portlet: " + portletID);
+                log.debug("No prefs exist-- storing prefs for user: " + userId + " portlet: " + portletId);
                 prefs = new PortletPreferencesImpl();
-                prefs.setPortletId(portletID);
-                prefs.setUserId(userid);
+                prefs.setPortletId(portletId);
+                prefs.setUserId(userId);
             } else {
-                log.debug("Retrieved prefs for user: " + user.getID() + " portlet: " + portletID);
+                log.debug("Retrieved prefs for user: " + userId + " portlet: " + portletId);
             }
             prefs.setPersistenceManager(pm);
-            prefs.init(prefDesc);
-            if (prefDesc != null) {
-                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator v = prefDesc.getPreferencesValidator();
-                if (v != null) {
-                    String validatorClass = v.getContent();
-                    if (validatorClass != null) {
-                        try {
-                            PreferencesValidator validator = (PreferencesValidator) Class.forName(validatorClass, true, loader).newInstance();
-                            prefs.setValidator(validator);
-                        } catch (Exception e) {
-                            log.error("Unable to create validator: " + validatorClass + "! ",  e);
-                        }
-                    }
-                }
-            }
+
+            if (prefsDesc != null) prefs.setPreferencesDesc(prefsDesc);
+            if (validator != null) prefs.setValidator(validator);
+
             prefs.setRender(isRender);
         } catch (Exception e) {
             log.error("Error attempting to restore persistent preferences: ", e);
