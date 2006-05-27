@@ -571,15 +571,13 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             if (ae != null && ae.indexOf("gzip") != -1) {
                 GZIPOutputStream gzos =
                         new GZIPOutputStream(res.getOutputStream());
-                gzos.write(sout.getBuffer().toString().getBytes());
+                gzos.write(sout.getBuffer().toString().getBytes("UTF-8"));
                 gzos.close();
             }  else {
                 out = res.getWriter();
                 out.println(sout);
                 writer.flush();
             }
-            // set content to UTF-8 for il8n
-            //res.setContentType("text/html; charset=utf-8");
         } catch (IOException e) {
             // means the writer has already been obtained
             log.error("Error writing page!", e);
