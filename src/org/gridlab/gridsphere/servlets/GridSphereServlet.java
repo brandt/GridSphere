@@ -142,7 +142,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         GridSphereEvent event = new GridSphereEventImpl(context, req, res);
         PortletRequest portletReq = event.getPortletRequest();
-
+	// set content to UTF-8 for il8n
+        res.setContentType("text/html; charset=utf-8");
         String ae = req.getHeader("accept-encoding");
         if (ae != null && ae.indexOf("gzip") != -1) {
             res.setHeader("Content-Encoding", "gzip");
