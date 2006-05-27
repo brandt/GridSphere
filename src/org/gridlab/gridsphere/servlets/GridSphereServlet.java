@@ -136,13 +136,17 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
     public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        GridSphereEvent event = new GridSphereEventImpl(context, req, res);
-        PortletRequest portletReq = event.getPortletRequest();
-
+        // set content to UTF-8 for il8n and compression if supported
+        req.setCharacterEncoding("utf-8");
+        res.setContentType("text/html; charset=utf-8");
         String ae = req.getHeader("accept-encoding");
         if (ae != null && ae.indexOf("gzip") != -1) {
             res.setHeader("Content-Encoding", "gzip");
         }
+
+        GridSphereEvent event = new GridSphereEventImpl(context, req, res);
+        PortletRequest portletReq = event.getPortletRequest();
+
         // If first time being called, instantiate all portlets
         if (firstDoGet.equals(Boolean.TRUE)) {
             firstDoGet = Boolean.FALSE;
@@ -213,6 +217,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
         layoutEngine.actionPerformed(event);
+
 
         // is this a file download operation?
         downloadFile(req, res);
