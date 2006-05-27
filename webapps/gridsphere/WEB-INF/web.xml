@@ -27,29 +27,10 @@
         <param-value>WEB-INF/classes/log4j.properties</param-value>
     </context-param>
 
-
-    <filter>
-        <filter-name>Request Encoding Filter</filter-name>
-        <filter-class>org.gridlab.gridsphere.filters.RequestEncodingFilter</filter-class>
-        <init-param>
-            <param-name>enabled</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <init-param>
-            <param-name>encoding</param-name>
-            <param-value>UTF-8</param-value>
-        </init-param>
-    </filter>
-
     <filter>
         <filter-name>GridSphere Filter</filter-name>
         <filter-class>org.gridlab.gridsphere.filters.GridSphereFilter</filter-class>
     </filter>
-
-    <filter-mapping>
-        <filter-name>Request Encoding Filter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
 
     <filter-mapping>
         <filter-name>GridSphere Filter</filter-name>
@@ -63,18 +44,6 @@
     <listener>
         <listener-class>org.apache.log4j.servlet.InitContextListener</listener-class>
     </listener>
-
-
-    <!--
-    <context-param>
-         <param-name>contextConfigLocation</param-name>
-         <param-value>/WEB-INF/applicationContext.xml</param-value>
-    </context-param>
-
-    <listener>
-         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-    -->
 
     <servlet>
         <servlet-name>gridsphere</servlet-name>
