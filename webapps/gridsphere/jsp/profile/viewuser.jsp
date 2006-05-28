@@ -20,7 +20,7 @@
     <td valign="top">
 
         <ui:form>
-            <ui:group key="PROFILE_EDIT">
+            <ui:group key="PROFILE_SETTINGS">
                 <p>
                     <ui:text key="PROFILE_LASTLOGIN"/>&nbsp;&nbsp;<b><%= logintime %></b>
                 </p>
@@ -41,7 +41,10 @@
                         </ui:tablerow>
                         <ui:tablerow>
                             <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
-                            <ui:tablecell><ui:textfield beanId="fullName"/></ui:tablecell>
+                            <ui:tablecell>
+                                <ui:textfield beanId="fullName"/>
+                       
+                            </ui:tablecell>
                         </ui:tablerow>
                         <ui:tablerow>
                             <ui:tablecell><ui:text key="ORGANIZATION"/></ui:tablecell>
