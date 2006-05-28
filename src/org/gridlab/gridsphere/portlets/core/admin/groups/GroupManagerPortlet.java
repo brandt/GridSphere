@@ -115,6 +115,8 @@ public class GroupManagerPortlet extends ActionPortlet {
                 portletRoleList = group.getPortletRoleList();
                 HiddenFieldBean gid = event.getHiddenFieldBean("groupName");
                 gid.setValue(groupName);
+            } else {
+                req.setAttribute("newgroup", "true");
             }
         }
 
