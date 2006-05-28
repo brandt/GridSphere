@@ -47,9 +47,12 @@
 
         <p>
             <ui:text key="GROUP_SELECT_MSG"/>
+            </p>
+        <% if (request.getAttribute("newgroup") != null) { %>
+            <p><ui:text key="GROUP_NEWLAYOUT_MSG"/></p>
+        <% } %>
             <ui:panel beanId="panel"/>
             <ui:actionsubmit action="doMakeGroup" key="SAVE"/>
             <ui:actionsubmit action="doViewListGroup" key="CANCEL"/>
-        </p>
     </ui:group>
 </ui:form>
