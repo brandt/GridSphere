@@ -1,5 +1,18 @@
-ChangeLog.txt GridSphere 2.1.4
+ChangeLog.txt GridSphere 2.1.5
 ==============================
+
+Changes since GridSphere 2.1.4
+==============================
+
+* Add support for GZIP compression (most browsers support this so pages can be compressed and unzipped by the user's browser)
+
+* Improve DB performance by turning on the EHCache library 
+
+* major optimization by eliminating getUsers() call from being invoked for every request
+
+* backported GPF-217 session manager portlet fixes, remove user session manager
+
+* GPF-209 add default groups to all users now when it is saved 
 
 Changes since GridSphere 2.1.2
 ==============================
