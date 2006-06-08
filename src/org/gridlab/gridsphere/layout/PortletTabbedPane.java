@@ -314,8 +314,8 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 //System.err.println("in PortletTabbedPane menu: role is < required role we try selecting the next possible tab");
                 if (tab.isSelected()) {
                     int index = (i + 1);
-                    PortletTab newtab = (PortletTab) tabs.get(index);
-                    if (index < tabs.size()) {
+		    if (index < tabs.size()) {
+                        PortletTab newtab = (PortletTab) tabs.get(index);
                         setSelectedPortletTab(newtab);
                     }
                 }
