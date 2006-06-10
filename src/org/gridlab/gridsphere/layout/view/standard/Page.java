@@ -75,6 +75,7 @@ public class Page extends BaseRender implements Render {
         page.append("\n\t<script type=\"text/javascript\" src=\"" + req.getContextPath() + "/javascript/SimpleTextEditor.js\"></script>");
         // add calendar
         page.append("\n\t<script type=\"text/javascript\" src=\"" + req.getContextPath() + "/javascript/scw.js\"></script>");
+        page.append("\n\t<script type=\"text/javascript\" src=\"" + req.getContextPath() + "/javascript/validation.js\"></script>");
         if (props != null) {
             Object jsObj = props.get("JAVASCRIPT_SRC");
             if ((jsObj != null) && (jsObj instanceof java.util.List)) {

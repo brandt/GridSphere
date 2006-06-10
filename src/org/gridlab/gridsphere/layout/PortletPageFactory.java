@@ -27,33 +27,31 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private String userLayoutDir = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/users");
 
-    public static String PAGE = "gsPageLayout";
-    public static String SETUP_PAGE = "SetupLayout.xml";
+    public static final String PAGE = "gsPageLayout";
+    public static final String SETUP_PAGE = "SetupLayout.xml";
 
-    private static String DEFAULT_THEME = "default";
+    private static final String DEFAULT_THEME = "default";
 
     private static PortletPageFactory instance = null;
-    private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
-    protected static PortalConfigService portalConfigService = null;
-    protected static GroupManagerService groupManagerService = null;
-    protected static RoleManagerService roleService = null;
-    protected static UserManagerService userManagerService = null;
+    private PortletSessionManager sessionManager = PortletSessionManager.getInstance();
+    private PortalConfigService portalConfigService = null;
+    private GroupManagerService groupManagerService = null;
 
     private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
 
-    private PortletPage templatePage = null;
-    private PortletPage setupPage = null;
+    private static PortletPage templatePage = null;
+    private static PortletPage setupPage = null;
 
     //private PortletPage newuserPage = null;
-    private PortletPage errorPage = null;
+    private static PortletPage errorPage = null;
 
-    private String layoutMappingFile = null;
+    private static String layoutMappingFile = null;
 
     // Store user layouts in a hash
     private static Map userLayouts = new Hashtable();
 
-    private Map tckLayouts = new Hashtable();
+    private static Map tckLayouts = new Hashtable();
 
     private static Map guests = new Hashtable();
     private static Map customPages = new Hashtable();
@@ -104,6 +102,9 @@ public class PortletPageFactory implements PortletSessionListener {
         }
 
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        RoleManagerService roleService = null;
+        UserManagerService userManagerService = null;
+
         try {
             portalConfigService = (PortalConfigService) factory.createPortletService(PortalConfigService.class, true);
             groupManagerService = (GroupManagerService) factory.createPortletService(GroupManagerService.class, true);

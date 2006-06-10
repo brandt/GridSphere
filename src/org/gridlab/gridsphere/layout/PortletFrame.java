@@ -73,7 +73,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private transient FrameView frameView = null;
 
-    private String lastFrame = new String();
+    private String lastFrame = "";
 
     /**
      * Constructs an instance of PortletFrame
@@ -440,7 +440,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         // first get rid of existing render params
         Iterator it;
         if (onlyRender) {
-            it = renderParams.keySet().iterator();
+            it = renderParams.entrySet().iterator();
             while (it.hasNext()) {
                 String key = (String)it.next();
                 if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
@@ -532,7 +532,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
 
 
-        // TODO try to cache portlet's rendering---
         StringWriter storedWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(storedWriter);
         if (renderPortlet) {
@@ -542,9 +541,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             postframe.append(frameView.doStartBorder(event, this));
 
-            // TODO try to cache portlet's rendering---
-            storedWriter = new StringWriter();
-            writer = new PrintWriter(storedWriter);
             PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
 
             if (isClosing) {
@@ -560,7 +556,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     try {
                         if (!renderParams.isEmpty()) {
                             //System.err.println("PortletFrame: in " + portletClass + " sending render params");
-                            System.err.println("in render " + portletClass + " there are render params in the frame setting in request! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
+                            //System.err.println("in render " + portletClass + " there are render params in the frame setting in request! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
                             req.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr, renderParams);
                         }
                         PortletInvoker.service((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);

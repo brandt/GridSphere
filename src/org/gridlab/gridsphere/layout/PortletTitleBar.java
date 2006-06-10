@@ -577,7 +577,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
 
         */
-        User user = req.getUser();
+        //User user = req.getUser();
         //boolean hasConfigurePermission = ((roleService.isUserInRole(user, PortletRole.ADMIN)) || (roleService.isUserInRole(user, PortletRole.SUPER)));
 
         List userRoles = (List)req.getAttribute(SportletProperties.PORTLET_ROLE);
@@ -627,8 +627,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * Performs an action on this portlet title bar component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) {
         super.actionPerformed(event);
@@ -638,7 +636,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
-        PortletComponentEvent lastEvent = event.getLastRenderEvent();
+        // pop last event off stack
+        event.getLastRenderEvent();
 
         PortletTitleBarEvent titleBarEvent = new PortletTitleBarEventImpl(this, event, COMPONENT_ID);
 
@@ -679,14 +678,13 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                     }
                 }
                 if (titleBarEvent.hasPortletModeAction()) {
-
+                    /*
                     if (titleBarEvent.getMode().equals(Portlet.Mode.CONFIGURE)) {
-                        //@TODO fix me
-                        /*
+                        @TODO fix me
                         boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
                         if (!hasrole) return;
-                        */
-                    }
+
+                    }*/
                     previousMode = portletMode;
                     portletMode = titleBarEvent.getMode();
                     //System.err.println("mode = " + portletMode);

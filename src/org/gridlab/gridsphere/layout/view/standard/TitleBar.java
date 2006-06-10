@@ -40,14 +40,17 @@ public class TitleBar extends BaseRender implements Render {
             if (!modesIt.hasNext()) {
                 titleBuffer.append("&nbsp;");
             }
+            String tmp = "";
             while (modesIt.hasNext()) {
                 mode = (PortletTitleBar.PortletModeLink) modesIt.next();
-                titleBuffer.append("<a href=\"" + mode.getHref() + "\"><img src=\"" + req.getContextPath() +"/themes/" + titleBar.getRenderKit() + "/" + titleBar.getTheme() + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\" alt=\"" + mode.getAltTag() + "\"");
+                tmp = "<a href=\"" + mode.getHref() + "\"><img src=\"" + req.getContextPath() +"/themes/" + titleBar.getRenderKit() + "/" + titleBar.getTheme() + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\" alt=\"" + mode.getAltTag() + "\"";
+
                 if (!mode.getCursor().equals("")) {
-                    titleBuffer.append(" style=\"cursor: " + mode.getCursor() + ";\"");
+                    tmp += " style=\"cursor: " + mode.getCursor() + ";\"";
                 }
-                titleBuffer.append("\" /></a>"); /// Removed File.separator(s)
+                tmp += "\" /></a>"; /// Removed File.separator(s)
             }
+            titleBuffer.append(tmp);
         }
         titleBuffer.append("</div>");
         titleBuffer.append("<div class=\"window-title-name\">");
@@ -62,16 +65,19 @@ public class TitleBar extends BaseRender implements Render {
         // Output window state icons
         List windowLinks = titleBar.getWindowLinks();
         titleBuffer.append("<div class=\"window-icon-right\">");        
+        String tmp = "";
         if (windowLinks != null) {
             Iterator windowsIt = windowLinks.iterator();
             PortletTitleBar.PortletStateLink state;
             while (windowsIt.hasNext()) {
                 state = (PortletTitleBar.PortletStateLink) windowsIt.next();
-                titleBuffer.append("<a href=\"" + state.getHref() + "\"><img src=\"" + req.getContextPath() +"/themes/" + titleBar.getRenderKit() + "/" + titleBar.getTheme() + "/" + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\" alt=\"" + state.getAltTag() + "\" /></a>");
+                tmp += "<a href=\"" + state.getHref() + "\"><img src=\"" + req.getContextPath() +"/themes/" + titleBar.getRenderKit() + "/" + titleBar.getTheme() + "/" + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\" alt=\"" + state.getAltTag() + "\" /></a>";
             }
         }
+        titleBuffer.append(tmp);
         titleBuffer.append("</div>");        
         titleBuffer.append("</div>");
+        tmp = null;
         return titleBuffer;
     }
 

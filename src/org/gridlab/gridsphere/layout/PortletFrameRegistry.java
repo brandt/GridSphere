@@ -9,11 +9,9 @@ import java.util.ArrayList;
 public class PortletFrameRegistry {
 
     private static PortletFrameRegistry instance = new PortletFrameRegistry();
-    private static HashMap portlets;
+    private static HashMap portlets = new HashMap();;
 
-    private PortletFrameRegistry() {
-        portlets = new HashMap();
-    }
+    private PortletFrameRegistry() {}
 
     public static PortletFrameRegistry getInstance() {
         return instance;

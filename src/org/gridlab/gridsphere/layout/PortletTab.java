@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.Description;
-import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 import org.gridlab.gridsphere.layout.event.impl.PortletTabEventImpl;
 import org.gridlab.gridsphere.portlet.PortletRequest;
@@ -32,6 +31,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     private String url = null;
     private PortletComponent portletComponent = null;
     private int tabOrder = 50;
+    private String align = "left";
 
 
     //protected StringBuffer tab = new StringBuffer();
@@ -51,6 +51,14 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public PortletTab(List titles, PortletComponent portletComponent) {
         this.titles = titles;
         this.portletComponent = portletComponent;
+    }
+
+    public String getAlign() {
+        return align;
+    }
+
+    public void setAlign(String align) {
+        this.align = align;
     }
 
     public int getTabOrder() {
@@ -237,7 +245,8 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
 
         super.actionPerformed(event);
 
-        PortletComponentEvent compEvt = event.getLastRenderEvent();
+        // pop last event from stack
+        event.getLastRenderEvent();
         PortletTabEvent tabEvent = new PortletTabEventImpl(this, event.getPortletRequest(), PortletTabEvent.TabAction.TAB_SELECTED, COMPONENT_ID);
 
         Iterator it = listeners.iterator();
@@ -283,13 +292,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         return result;
     }
 
-    public boolean equals(Object object) {
-        if (object != null && (object.getClass().equals(this.getClass()))) {
-            PortletTab portletTab = (PortletTab) object;
-            return (tabOrder == portletTab.getTabOrder());
-        }
-        return false;
-    }
 
     public Object clone() throws CloneNotSupportedException {
         PortletTab t = (PortletTab) super.clone();

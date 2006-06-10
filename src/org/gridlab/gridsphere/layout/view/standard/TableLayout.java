@@ -43,9 +43,11 @@ public class TableLayout extends BaseRender implements TableLayoutView {
         PortletTableLayout tableLayout = (PortletTableLayout)comp;
         StringBuffer table = new StringBuffer();
         table.append("\n<!-- START MODERN TABLE --><div ");
+        String tmp = "";
         if (!tableLayout.getStyle().equals("")) {
-            table.append("class=\"" + tableLayout.getStyle() + "\" ");
+            tmp += "class=\"" + tableLayout.getStyle() + "\" ";
         }
+        table.append(tmp);
         table.append(">");
         return table;
     }
@@ -56,14 +58,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
     }
 
     public StringBuffer doStartBorder(GridSphereEvent event, PortletComponent comp) {
-        StringBuffer table = new StringBuffer();
-// unuseful start-border DIV commented out        
-//        table.append("\n<!-- START MODERN TABLE BORDER --><div class=\"table\"");
-//        if (!comp.getWidth().equals("")) {
-//           table.append(" style=\"width: " + comp.getWidth() + "\""); 
-//        }  
-//        table.append(">");
-        return table;
+        return new StringBuffer();
     }
 
     public StringBuffer doEndBorder(GridSphereEvent event, PortletComponent comp) {
@@ -98,9 +93,11 @@ public class TableLayout extends BaseRender implements TableLayoutView {
                         PortletFrameLayout col = (PortletFrameLayout) o;
                                            
                         table.append("<div class=\"column\"");
+                        String tmp = "";
                         if (!col.getWidth().equals("")) {
-                           table.append(" style=\"width: " + col.getWidth() + "\""); 
-                        }    
+                           tmp = " style=\"width: " + col.getWidth() + "\"";
+                        }
+                        table.append(tmp);
                         table.append(">");                        
                         // render add portlets listbox
                         Map availPortlets = tableLayout.getAvailablePortletsToAdd(event);

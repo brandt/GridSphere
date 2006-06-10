@@ -54,15 +54,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         listeners = new Vector();
         defaultWidth = width;
 
-
-        if (parent != null) {
-
-        /*
-        if (parent.getRequiredRole().compare(parent.getRequiredRole(), requiredRole) > 0) {
-            requiredRole = parent.getRequiredRole();
-        }
-        */
-        }
         if ((label == null) || label.equals("")) {
             return super.init(req, list);
 

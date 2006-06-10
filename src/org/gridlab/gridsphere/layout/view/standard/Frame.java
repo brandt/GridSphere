@@ -36,11 +36,15 @@ public class Frame extends BaseRender implements FrameView {
         ///// begin portlet frame
         StringBuffer frameBuffer = new StringBuffer();
         frameBuffer.append("\n<!-- PORTLET STARTS HERE -->");
-        frameBuffer.append("<div id=\"" + frame.getComponentID() + "\"");
+        frameBuffer.append("<div id=\"");
+        frameBuffer.append(frame.getComponentID());
+        frameBuffer.append("\"");
         if (frame.getOuterPadding().equals("")) {
             frameBuffer.append(" class=\"window-main\"");
         } else {
-            frameBuffer.append(" style=\"padding:" + frame.getOuterPadding() + "px\" class=\"window-main\" "); // this is the main div around one portlet
+            frameBuffer.append(" style=\"padding:");
+            frameBuffer.append(frame.getOuterPadding());
+            frameBuffer.append("px\" class=\"window-main\" "); // this is the main div around one portlet
         }
         frameBuffer.append(">");
         return frameBuffer;
@@ -53,7 +57,9 @@ public class Frame extends BaseRender implements FrameView {
         if (!frame.getTransparent()) {
             postframe.append("\n<div ");      // now the portlet content begins
             if (!frame.getInnerPadding().equals("")) {
-                postframe.append("style=\"padding:" + frame.getInnerPadding() + "px\"");
+                postframe.append("style=\"padding:");
+                postframe.append(frame.getInnerPadding());
+                postframe.append("px\"");
             }
             postframe.append(" class=\"window-content\"> ");
         } else {
@@ -82,25 +88,28 @@ public class Frame extends BaseRender implements FrameView {
         PortletURI portletURI = res.createURI();
         portletURI.addParameter(SportletProperties.COMPONENT_ID, String.valueOf(frame.getPortletTitleBar().getComponentID()));
         portletURI.addParameter(SportletProperties.PORTLET_WINDOW, PortletWindow.State.CLOSED.toString());
-        postframe.append("<form action=\"" + portletURI.toString() + "\" method=\"post\"");
+        String tmp = "<form action=\"" + portletURI.toString() + "\" method=\"post\"";
+        postframe.append(tmp);
         Locale locale = req.getLocale();
         ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
         String value = bundle.getString("UNSUBSCRIBE_MESSAGE");
         String ok = bundle.getString("OK");
         String cancel = bundle.getString("CANCEL");
-        postframe.append("<p><b>" + value + "</b></p>");
+        tmp = "<p><b>" + value + "</b></p>";
+        postframe.append(tmp);
 
         portletURI = res.createURI();
 
         portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.TRUE.toString());
-
-        postframe.append("<p><input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + PortletFrame.FRAME_CLOSE_OK_ACTION + "\" value=\"" + ok + "\"");
+        tmp = "<p><input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + PortletFrame.FRAME_CLOSE_OK_ACTION + "\" value=\"" + ok + "\"";
+        postframe.append(tmp);
         portletURI = res.createURI();
 
         portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.FALSE.toString());
-        postframe.append("<input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + PortletFrame.FRAME_CLOSE_CANCEL_ACTION + "\" value=\"" + cancel + "\"");
+        tmp = "<input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + PortletFrame.FRAME_CLOSE_CANCEL_ACTION + "\" value=\"" + cancel + "\"";
+        postframe.append(tmp);
         postframe.append("</p></form>");
-
+        tmp = null;
         return postframe;
     }
 

@@ -55,12 +55,13 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
      * @return a title without blank spaces
      */
     private static String replaceBlanks(String title) {
-        String result = "&nbsp;";
+        StringBuffer result = new StringBuffer("&nbsp;");
         StringTokenizer st = new StringTokenizer(title);
         while (st.hasMoreTokens()) {
-            result += st.nextToken() + "&nbsp;";
+            result.append(st.nextToken());
+            result.append("&nbsp;");
         }
-        return result;
+        return result.toString();
     }
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
@@ -85,21 +86,33 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             pane.append("\n<li>");
             if (tab.isSelected()) {
                 pane.append("<div class=\"tab-sub-active\">");                
-                pane.append("<span class=\"tab-sub-menu-active\">" + replaceBlanks(title) + "</span></div>");            
+                pane.append("<span class=\"tab-sub-menu-active\">");
+                pane.append(replaceBlanks(title));
+                pane.append("</span></div>");
             } else {
-                pane.append("<a class=\"tab-sub-inactive\" href=\"" + link + "\">");
-                pane.append("<span class=\"tab-sub-menu\">" + replaceBlanks(title) + "</span></a>");
+                pane.append("<a class=\"tab-sub-inactive\" href=\"");
+                pane.append(link);
+                pane.append("\">");
+                pane.append("<span class=\"tab-sub-menu\">");
+                pane.append(replaceBlanks(title));
+                pane.append("</span></a>");
             }
             pane.append("</li>\n");
         } else {
             if (tab.isSelected()) {
                 pane.append("\n<li>");
-                pane.append("<div class=\"tab-active\"><span>" + replaceBlanks(title) + "</span></div>");
+                pane.append("<div class=\"tab-active\"><span>");
+                pane.append(replaceBlanks(title));
+                pane.append("</span></div>");
                 pane.append("</li>");
             } else {
                 pane.append("\n<li>");
-                pane.append("<a href=\"" + link + "\">");
-                pane.append("<span class=\"tab-menu\">" + replaceBlanks(title) + "</span></a>");
+                pane.append("<a href=\"");
+                pane.append(link);
+                pane.append("\">");
+                pane.append("<span class=\"tab-menu\">");
+                pane.append(replaceBlanks(title));
+                pane.append("</span></a>");
                 pane.append("</li>");
             }
         }

@@ -33,8 +33,6 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
     private transient PortletLog log = SportletLog.getInstance(PortletPage.class);
 
-    protected int COMPONENT_ID = -1;
-
     protected transient CacheService cacheService = null;
     
     protected PortletContainer footerContainer = null;
@@ -391,7 +389,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
                 // perform an action if the component is non null
                 List userRoles = event.getPortletRequest().getRoles();
                 if (comp.getRequiredRole().equals("") || userRoles.contains(comp.getRequiredRole())) {
-                        PortletRequest req = event.getPortletRequest();
+                        //PortletRequest req = event.getPortletRequest();
                         //Principal principal = req.getUserPrincipal();
                         //User user = req.getUser();
                         /*
