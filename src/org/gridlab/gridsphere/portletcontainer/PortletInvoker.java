@@ -222,13 +222,12 @@ public class PortletInvoker {
      */
     public final static void doTitle(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in doTitle " + concretePortletID);
-        String appID = registry.getApplicationPortletID(concretePortletID);
+        String appID = PortletRegistry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
             PortletDispatcher dispatcher = appPortlet.getPortletDispatcher(req, res);
             dispatcher.doTitle(req, res);
         } else {
-            log.info("in doTitle: Unable to find portlet in registry: " + concretePortletID);
             throw new PortletException("Unable to find portlet in registry: " + concretePortletID);
         }
     }

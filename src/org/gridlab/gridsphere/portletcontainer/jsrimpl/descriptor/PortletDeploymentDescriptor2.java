@@ -16,7 +16,7 @@ import java.io.IOException;
  * marshalling/unmarshalling the XML portlet schema represntation and the
  * associated Java classes using Castor.
  */
-public class PortletDeploymentDescriptor2 implements Cloneable {
+public class PortletDeploymentDescriptor2 {
 
     private PersistenceManagerXml pmXML = null;
     private PortletApp portletApp = null;

@@ -68,7 +68,7 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
                     if (!modes.contains(Portlet.Mode.CONFIGURE)) modes.add(Portlet.Mode.CONFIGURE);
                 } else {
                     try {
-                        modes.add(Portlet.Mode.toMode(m.toString()));
+                        modes.add(Portlet.Mode.toMode(m));
                     } catch (IllegalArgumentException e) {
                         System.err.println("Unknown mode defined in portlet.xml: " + m.toString());
                     }

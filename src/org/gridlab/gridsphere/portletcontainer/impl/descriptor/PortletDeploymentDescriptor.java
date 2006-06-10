@@ -20,7 +20,7 @@ import java.util.List;
  * marshalling/unmarshalling the XML portlet schema represntation and the
  * associated Java classes using Castor.
  */
-public class PortletDeploymentDescriptor implements Cloneable {
+public class PortletDeploymentDescriptor {
 
     private PersistenceManagerXml pmXML = null;
     private SportletCollection sportletCollection = null;

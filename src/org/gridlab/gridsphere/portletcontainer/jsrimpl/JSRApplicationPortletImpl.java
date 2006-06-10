@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer.jsrimpl;
 
-import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
@@ -15,8 +14,6 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDispatcher;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator;
 
 import javax.portlet.*;
 import javax.servlet.RequestDispatcher;
@@ -184,7 +181,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         String pid = (String) req.getAttribute(SportletProperties.PORTLETID);
         // TODO fix my hack to get any render params and pass them as queryInfo to the portlet
         Map params = (Map) req.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
-        String extraInfo = "";
+        StringBuffer extraInfo = new StringBuffer();
 
         //System.err.println("Dispatching: Looking for render params for " + SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
         if (params == null) {
@@ -198,9 +195,9 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         try {
         while (it.hasNext()) {
             if (!firstParam) {
-                extraInfo += "&";
+                extraInfo.append("&");
             } else {
-                extraInfo += "?";
+                extraInfo.append("?");
             }
             String name = (String) it.next();
 
@@ -216,17 +213,24 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
                 String[] vals = (String[]) val;
                 for (int j = 0; j < vals.length - 1; j++) {
                     String encvalue = URLEncoder.encode(vals[j], "UTF-8");
-                    extraInfo += encname + "=" + encvalue + "&";
+                    extraInfo.append(encname);
+                    extraInfo.append("=");
+                    extraInfo.append(encvalue);
+                    extraInfo.append("&");
                 }
                 String encvalue = URLEncoder.encode(vals[vals.length - 1], "UTF-8");
-                extraInfo += encname + "=" + encvalue;
+                extraInfo.append(encname);
+                extraInfo.append("=");
+                extraInfo.append(encvalue);
             } else if (val instanceof String) {
                 String aval = (String) params.get(name);
                 if ((aval != null) && (!aval.equals(""))) {
                     String encvalue = URLEncoder.encode(aval, "UTF-8");
-                    extraInfo += encname + "=" + encvalue;
+                    extraInfo.append(encname);
+                    extraInfo.append("=");
+                    extraInfo.append(encvalue);
                 } else {
-                    extraInfo += encname;
+                    extraInfo.append(encname);
                 }
             }
             firstParam = false;
@@ -241,7 +245,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
        
         //System.err.println("in getPortletDispatcher of jsr query string " + "/jsr/" + webAppName  + extraInfo);
         // TODO change dangerously hardcoded value!!!
-        RequestDispatcher rd = context.getRequestDispatcher("/jsr/" + webAppName + extraInfo);
+        RequestDispatcher rd = context.getRequestDispatcher("/jsr/" + webAppName + extraInfo.toString());
         //RequestDispatcher rd = context.getNamedDispatcher(servletName);
 
         if (rd == null) {

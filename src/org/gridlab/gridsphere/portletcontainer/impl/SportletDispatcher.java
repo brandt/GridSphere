@@ -71,7 +71,6 @@ public class SportletDispatcher implements PortletDispatcher {
         try {
             include(req, res);
         } catch (ServletException e) {
-            //log.error("Unable to perform init on: " + appPortletConfig.getApplicationPortletID(), e);
             throw new PortletException("Unable to initialize portlet: " + appPortletConfig.getApplicationPortletID(), e);
         }
     }
@@ -93,7 +92,6 @@ public class SportletDispatcher implements PortletDispatcher {
         try {
             include(req, res);
         } catch (ServletException e) {
-            //log.error("Unable to perform destroy on: " + appPortletConfig.getApplicationPortletID());
             throw new PortletException("Unable to perform destroy on: ", e);
         }
     }
@@ -117,7 +115,6 @@ public class SportletDispatcher implements PortletDispatcher {
         try {
             include(req, res);
         } catch (ServletException e) {
-            log.error("Unable to perform initConcrete");
             throw new PortletException("Unable to perform initConcrete", e);
         }
     }
@@ -139,7 +136,6 @@ public class SportletDispatcher implements PortletDispatcher {
         try {
             include(req, res);
         } catch (ServletException e) {
-            log.error("Unable to perform destroyConcrete");
             throw new PortletException("Unable to perform destroyConcrete", e);
         }
     }
@@ -161,7 +157,6 @@ public class SportletDispatcher implements PortletDispatcher {
         try {
             include(req, res);
         } catch (ServletException e) {
-            log.error("Unable to perform service");
             throw new PortletException("Unable to perform service", e);
         }
     }
@@ -177,7 +172,6 @@ public class SportletDispatcher implements PortletDispatcher {
         try {
             include(req, res);
         } catch (ServletException e) {
-            log.error("Unable to perform login");
             throw new PortletException("Unable to perform login", e);
         }
     }
@@ -196,7 +190,6 @@ public class SportletDispatcher implements PortletDispatcher {
         try {
             include(req, res);
         } catch (ServletException e) {
-            log.error("Unable to perform logout");
             throw new PortletException("Unable to perform logout", e);
         }
     }
@@ -217,11 +210,9 @@ public class SportletDispatcher implements PortletDispatcher {
         req.setAttribute(SportletProperties.ACTION_EVENT, action);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.ACTION_PERFORMED);
-
         try {
             include(req, res);
         } catch (ServletException e) {
-            log.error("Unable to perform actionPerformed");
             throw new PortletException("Unable to perform actionPerformed", e);
         }
     }
@@ -244,7 +235,6 @@ public class SportletDispatcher implements PortletDispatcher {
         try {
             include(req, res);
         } catch (ServletException e) {
-            log.error("Unable to perform messageEvent");
             throw new PortletException("Unable to perform messageEvent", e);
         }
     }
@@ -271,7 +261,6 @@ public class SportletDispatcher implements PortletDispatcher {
         try {
             include(req, res);
         } catch (ServletException e) {
-            log.error("Unable to perform doTitle");
             throw new PortletException("Unable to perform doTitle", e);
         }
     }
@@ -284,7 +273,6 @@ public class SportletDispatcher implements PortletDispatcher {
         try {
             include(req, res);
         } catch (ServletException e) {
-            log.error("Unable to perform windowEvent");
             throw new PortletException("Unable to perform windowEvent", e);
         }
     }
