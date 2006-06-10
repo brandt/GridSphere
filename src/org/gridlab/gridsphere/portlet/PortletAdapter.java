@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
@@ -29,7 +28,7 @@ public abstract class PortletAdapter extends Portlet {
     private Map allPortletSettings = new Hashtable();
 
     /* the datamanger injects PortletData into the request */
-    private transient PortletDataManager dataManager = null;
+    private transient PortletDataManager dataManager = SportletDataManager.getInstance();
 
     public PortletAdapter() {
     }
@@ -52,7 +51,6 @@ public abstract class PortletAdapter extends Portlet {
      */
     public void init(PortletConfig config) throws UnavailableException {
         this.portletConfig = config;
-        dataManager = SportletDataManager.getInstance();
     }
 
     /**
@@ -128,14 +126,6 @@ public abstract class PortletAdapter extends Portlet {
         User user = request.getUser();
         if (user != null) {
             request.setAttribute(SportletProperties.PORTLET_DATA_MANAGER, dataManager);
-            /*
-            try {
-                data = dataManager.getPortletData(user, portletID);
-                request.setAttribute(SportletProperties.PORTLET_DATA, data);
-            } catch (PersistenceManagerException e) {
-                log.error("in PortletAdapter: Unable to obtain PortletData for user", e);
-            }
-            */
         }
 
         portletSettings = (PortletSettings) allPortletSettings.get(portletID);
@@ -156,7 +146,6 @@ public abstract class PortletAdapter extends Portlet {
         }
         log.debug("in PortletAdapter: Displaying mode: " + mode + " for portlet: " + portletID);
         try {
-
             switch (mode.getMode()) {
                 case Portlet.Mode.VIEW_MODE:
                     doView(request, response);
@@ -175,7 +164,6 @@ public abstract class PortletAdapter extends Portlet {
                     throw new IllegalArgumentException("Received invalid PortletMode command: " + mode);
             }
         } catch (Exception e) {
-            log.error("in PortletAdapter: service()", e);
             request.setAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID(), e);
             throw new PortletException(e);
         }
