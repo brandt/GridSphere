@@ -339,6 +339,7 @@ public class PortletServlet extends HttpServlet
                         doTitle(portlet, renderRequest, renderResponse);
                     } catch (PortletException e) {
                         log.error("Error during doTitle:", e);
+                        request.setAttribute(SportletProperties.PORTLETERROR + pid, new org.gridlab.gridsphere.portlet.PortletException(e));
                     }
                 } else if (action.equals(SportletProperties.WINDOW_EVENT)) {
                     // do nothing
@@ -402,10 +403,7 @@ public class PortletServlet extends HttpServlet
                         if (request.getAttribute(SportletProperties.PORTLETERROR + pid) == null) {
                             request.setAttribute(SportletProperties.PORTLETERROR + pid, e);
                         }
-                        log.error("in PortletServlet(): doRender() caught exception", e);
                         throw new ServletException(e);
-                    } finally {
-                        //request.removeAttribute(SportletProperties.PORTLET_MODE_JSR);
                     }
                 }
             }
@@ -480,8 +478,8 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
                 PrintWriter out = response.getWriter();
                 out.println(title);
             }
-        } catch (IOException e) {
-            log.error("printing title failed", e);
+        } catch (Exception e) {
+            throw new PortletException(e);
         }
     }
 
