@@ -141,8 +141,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             long now = Calendar.getInstance().getTime().getTime();
             String lastlogin = (String) user.getAttribute("lastlogin");
             if (lastlogin != null) {
-                long lastl = Long.parseLong(lastlogin);
-                user.setLastLoginTime(lastl);
+                user.setLastLoginTime(Long.parseLong(lastlogin));
             } else {
                 user.setLastLoginTime(now);
             }

@@ -20,7 +20,7 @@ public class GroupManagerServiceImpl implements PortletServiceProvider, GroupMan
 
     private static PortletLog log = SportletLog.getInstance(GroupManagerServiceImpl.class);
 
-    private static PersistenceManagerRdbms pm = null;
+    private PersistenceManagerRdbms pm = null;
 
     private String jdoGroupRequest = UserGroup.class.getName();
     private String jdoPortletGroup = PortletGroup.class.getName();

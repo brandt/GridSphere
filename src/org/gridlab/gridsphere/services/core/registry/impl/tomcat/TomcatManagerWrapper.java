@@ -172,11 +172,7 @@ public class TomcatManagerWrapper {
     public TomcatWebAppResult installWebApp(PortletRequest req, String context, String warFile) throws TomcatManagerException {
         //install?path=/foo&war=file:/path/to/foo
         if (!context.startsWith("/")) context = "/" + context;
-        http://localhost:8080/manager/deploy?war=foo
-
 	    return doCommand(req, "/deploy?war=" + warFile);
-
-        //return doCommand(req, "/install?path=" + context + "&war=" + warFile);
     }
 
     public TomcatWebAppResult installWebApp(PortletRequest req, String warFile) throws TomcatManagerException {
