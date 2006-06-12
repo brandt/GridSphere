@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -75,12 +76,19 @@ public class PortletLayoutEngine {
         return pageFactory.createPortletPage(req);
     }
 
-    public void setHeaders(HttpServletResponse res) {
+    public void setHeaders(GridSphereEvent event) {
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
         res.setContentType("text/html; charset=utf-8"); // Necessary to display UTF-8 encoded characters
+
         res.setHeader("Cache-Control","no-cache"); //Forces caches to obtain a new copy of the page from the origin server
         res.setHeader("Cache-Control","no-store"); //Directs caches not to store the page under any circumstance
         res.setHeader("Expires", "0"); //Causes the proxy cache to see the page as "stale"
         res.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
+        String ae = req.getHeader("accept-encoding");
+        if (ae != null && ae.indexOf("gzip") != -1) {
+           res.setHeader("Content-Encoding", "gzip");
+        }
     }
 
     /**
@@ -90,10 +98,9 @@ public class PortletLayoutEngine {
      * @throws IOException if an I/O error occcurs during processing
      */
     public void service(GridSphereEvent event) throws IOException {
-        log.debug("in service()");
         PortletPage page = getPortletPage(event);
 
-        setHeaders(event.getPortletResponse());
+        setHeaders(event);
         //int numcomps = page.getComponentIdentifierList().size();
         if (event.getPortletRequest().getParameter("ajax") != null) {
             PortletComponent comp = page.getActiveComponent(event);

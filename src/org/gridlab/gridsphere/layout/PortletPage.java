@@ -564,7 +564,6 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             }  else {
                 out = res.getWriter();
                 out.println(sout);
-                writer.flush();
             }
         } catch (IOException e) {
             // means the writer has already been obtained
