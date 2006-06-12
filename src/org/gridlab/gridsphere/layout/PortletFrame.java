@@ -440,7 +440,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         // first get rid of existing render params
         Iterator it;
         if (onlyRender) {
-            it = renderParams.entrySet().iterator();
+            it = renderParams.keySet().iterator();
             while (it.hasNext()) {
                 String key = (String)it.next();
                 if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {

@@ -624,7 +624,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
         // support for broadcast messages
         if (concPortletID.equals("*")) {
-            Iterator entryIter = portletHash.entrySet().iterator();
+            Iterator entryIter = portletHash.keySet().iterator();
             while (entryIter.hasNext()) {
                 Map.Entry entry = (Map.Entry) entryIter.next();
                 Integer cint = (Integer) entry.getValue();
