@@ -337,7 +337,7 @@ public class PortletServlet extends HttpServlet
                     log.debug("in PortletServlet: do title " + pid);
                     try {
                         doTitle(portlet, renderRequest, renderResponse);
-                    } catch (PortletException e) {
+                    } catch (Exception e) {
                         log.error("Error during doTitle:", e);
                         request.setAttribute(SportletProperties.PORTLETERROR + pid, new org.gridlab.gridsphere.portlet.PortletException(e));
                     }
@@ -466,25 +466,21 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
 
     }
 
-    protected void doTitle(Portlet portlet, RenderRequest request, RenderResponse response) throws PortletException {
-        try {
-            Portlet por = (Portlet)portlet;
-            if (por instanceof GenericPortlet) {
-                GenericPortlet genPortlet = ((GenericPortlet) portlet);
-                if (genPortlet.getPortletConfig() == null) throw new PortletException("Unable to get PortletConfig from Portlet");
-                ResourceBundle resBundle = genPortlet.getPortletConfig().getResourceBundle(request.getLocale());
-                String title = resBundle.getString("javax.portlet.title");
-                response.setContentType("text/html");
-                PrintWriter out = response.getWriter();
-                out.println(title);
-            }
-        } catch (Exception e) {
-            throw new PortletException(e);
+    protected void doTitle(Portlet portlet, RenderRequest request, RenderResponse response) throws IOException, PortletException {
+        Portlet por = (Portlet)portlet;
+        if (por instanceof GenericPortlet) {
+            GenericPortlet genPortlet = ((GenericPortlet) portlet);
+            if (genPortlet.getPortletConfig() == null) throw new PortletException("Unable to get PortletConfig from Portlet");
+            ResourceBundle resBundle = genPortlet.getPortletConfig().getResourceBundle(request.getLocale());
+            String title = resBundle.getString("javax.portlet.title");
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println(title);
         }
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         super.doGet(req, res);
     }
 
