@@ -31,6 +31,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     private int rowCount = 0;
     private int maxRows = -1;
     private boolean showall = false;
+    private boolean isJSR = true;
     protected PortletResponse res = null;
     protected String uris = "";
     protected String uriString = "";
@@ -274,6 +275,10 @@ public class TableBean extends BaseComponentBean implements TagBean {
         this.uriString = uriString;
     }
 
+    public void setJSR(boolean isJSR) {
+        this.isJSR = isJSR;
+    }
+
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         if (isSortable) {
@@ -305,14 +310,18 @@ public class TableBean extends BaseComponentBean implements TagBean {
         if (showall) {
             uri = uriString;
             sb.append("<p>"); // added for XHTML 1.0 Strict compliance
-            sb.append("<a href=\"" + uri + "&amp;" + TableBean.SHOW_PAGES + "\">" + this.getLocalizedText("SHOW_PAGES") + "</a>");
+            String showPages = TableBean.SHOW_PAGES;
+            if (isJSR) showPages = "rp_" + showPages;
+            sb.append("<a href=\"" + uri + "&amp;" + showPages + "\">" + this.getLocalizedText("SHOW_PAGES") + "</a>");
             sb.append("</p>"); // added for XHTML 1.0 Strict compliance
         }
         if (maxRows > 0) {
-            int numpages = (numEntries != 0) ? (numEntries / maxRows + 1) : (rowCount + 1) / maxRows + 1;
+            int numpages = (numEntries != 0) ? (numEntries / maxRows + 1) : rowCount / maxRows + 1;
             int dispPage = currentPage + 1;
             if ((dispPage == numpages) && (numpages == 1)) return sb.toString();
             int c = 0;
+            //System.err.println("maxrows=" + maxRows + " numEntries=" + numEntries + " rowCount=" + rowCount + " numpages=" + numpages);
+
             sb.append("<p>"); // added for XHTML 1.0 Strict compliance  
             sb.append(this.getLocalizedText("PAGE") + dispPage + this.getLocalizedText("OUT_OF_PAGES") + numpages);
 
@@ -324,13 +333,17 @@ public class TableBean extends BaseComponentBean implements TagBean {
                     // create an actionlink
                     uris = uriString;
                     //System.err.println("uri = " + uris);
-                    uri = uris + "&amp;" + TableBean.CURRENT_PAGE + "=" + i;
+                    String curPage = TableBean.CURRENT_PAGE;
+                    if (isJSR) curPage = "rp_" + curPage;
+                    uri = uris + "&amp;" + curPage + "=" + i;
                     sb.append(" | " + "<a href=\"" + uri + "\">" + c + "</a>");
                 }
             }
             uri = uriString;
             sb.append(" | ");
-            sb.append("<a href=\"" + uri + "&amp;" + TableBean.SHOW_ALL + "\">" + this.getLocalizedText("SHOW_ALL") + "</a>");
+            String showall = TableBean.SHOW_ALL;
+            if (isJSR) showall = "rp_" + TableBean.SHOW_ALL;
+            sb.append("<a href=\"" + uri + "&amp;" + showall + "\">" + this.getLocalizedText("SHOW_ALL") + "</a>");
             sb.append("</p>"); // added for XHTML 1.0 Strict compliance
             rowCount = 0;
         }

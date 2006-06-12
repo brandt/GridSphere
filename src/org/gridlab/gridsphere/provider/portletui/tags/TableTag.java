@@ -376,14 +376,13 @@ public class TableTag extends BaseComponentTag {
             } catch (PortletModeException e) {
                 throw new JspException(e);
             }
-            //if (action != null) url.setAction(action);
+            tableBean.setJSR(true);
             tableBean.setURIString(url.toString());
         } else {
             PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
             PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
             PortletURI uri = res.createURI((org.gridlab.gridsphere.portlet.Portlet.Mode)req.getMode());
-            //if (action != null) uri.addAction(action);
-
+            tableBean.setJSR(false);
             tableBean.setURIString(uri.toString());
         }
         try {
