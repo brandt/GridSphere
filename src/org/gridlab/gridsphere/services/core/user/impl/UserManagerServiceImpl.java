@@ -181,7 +181,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     private SportletUserImpl getSportletUserImplByLoginName(String loginName) {
-        log.debug("Attempting to retrieve user by login name " + loginName);
         return selectSportletUserImpl("where uzer.UserID='" + loginName + "'");
     }
 
@@ -190,9 +189,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 + jdoUser
                 + " uzer "
                 + criteria;
-        log.debug("Retrieving user with OQL: " + oql);
         try {
-            //log.debug("Retrieved user with OQL: "+oql);
             return (SportletUserImpl) pm.restore(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving user with criteria " + criteria;
@@ -203,7 +200,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     private void saveSportletUserImpl(SportletUserImpl user) {
         // Create or update user
-        log.debug("Updating user record for " + user.getUserName());
         try {
             pm.saveOrUpdate(user);
         } catch (PersistenceManagerException e) {
