@@ -214,6 +214,8 @@ public interface SportletProperties {
 
     public static final String FILE_DELETE = "org.gridlab.gridsphere.portletcontainer.FILE_DELETE";
 
+    public static final String FILE_DOWNLOAD_ERROR = "org.gridlab.gridsphere.portletcontainer.FILE_DOWNLOAD_ERROR";
+
     public static final String PORTAL_PROPERTIES = "org.gridlab.gridsphere.PORTAL_PROPERTIES";
 
     public static final String ALLOWED_MODES = "org.gridlab.gridsphere.ALLOWED_MODES";

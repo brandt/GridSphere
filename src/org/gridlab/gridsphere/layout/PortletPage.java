@@ -569,18 +569,18 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         try {
             String ae = req.getHeader("accept-encoding");
             if (ae != null && ae.indexOf("gzip") != -1) {
-                GZIPOutputStream gzos =
-                        new GZIPOutputStream(res.getOutputStream());
-                gzos.write(sout.getBuffer().toString().getBytes("UTF-8"));
+                GZIPOutputStream gzos = new GZIPOutputStream(res.getOutputStream());
+                gzos.write(sout.getBuffer().toString().getBytes(req.getCharacterEncoding()));
                 gzos.close();
             }  else {
                 out = res.getWriter();
                 out.println(sout);
-                writer.flush();
             }
         } catch (IOException e) {
             // means the writer has already been obtained
             log.error("Error writing page!", e);
+        } finally {
+            writer.close();
         }
     }
 

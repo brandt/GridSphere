@@ -139,15 +139,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
     public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        res.setContentType("text/html; charset=utf-8");
 
         GridSphereEvent event = new GridSphereEventImpl(context, req, res);
         PortletRequest portletReq = event.getPortletRequest();
-	// set content to UTF-8 for il8n
-        res.setContentType("text/html; charset=utf-8");
-        String ae = req.getHeader("accept-encoding");
-        if (ae != null && ae.indexOf("gzip") != -1) {
-            res.setHeader("Content-Encoding", "gzip");
-        }
         
         // If first time being called, instantiate all portlets
         if (firstDoGet.equals(Boolean.TRUE)) {
@@ -239,7 +234,15 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         layoutEngine.actionPerformed(event);
 
         // is this a file download operation?
-        downloadFile(req, res);
+        if (isDownload(req)) {
+            try {
+                downloadFile(req, res);
+                return;
+            } catch (PortletException e) {
+                log.error("Unable to download file!", e);
+                req.setAttribute(SportletProperties.FILE_DOWNLOAD_ERROR, e);
+            }
+        }
 
         // Handle any outstanding messages
         // This needs work certainly!!!
@@ -294,8 +297,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param res the HttpServletResponse
      * @throws org.gridlab.gridsphere.portlet.PortletException
      */
-    public void downloadFile(HttpServletRequest req, HttpServletResponse res) throws org.gridlab.gridsphere.portlet.PortletException {
-
+    public void downloadFile(HttpServletRequest req, HttpServletResponse res) throws PortletException, IOException {
         try {
             String fileName = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
             String path = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
@@ -319,15 +321,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 file.delete();
             }
         } catch (FileNotFoundException e) {
-            log.error("Unable to find file!", e);
+            throw new PortletException("Unable to find file!", e);
         } catch (SecurityException e) {
             // this gets thrown if a security policy applies to the file. see java.io.File for details.
-            log.error("A security exception occured!", e);
+            throw new PortletException("A security error occurred!", e);
         } catch (SocketException e) {
-            log.error("Caught SocketException: " + e.getMessage());
-        } catch (IOException e) {
-            log.error("Caught IOException", e);
-            //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER,e.getMessage());
+            throw new PortletException("A socket error occurred!", e);
         } finally {
             req.removeAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
             req.removeAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
@@ -335,6 +334,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             req.removeAttribute(SportletProperties.FILE_DOWNLOAD_BINARY);
         }
     }
+
+    public boolean isDownload(HttpServletRequest req) {
+        return ((req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME) != null) ? true : false);
+    }
+
     public void setTCKUser(PortletRequest req) {
         //String tck = (String)req.getPortletSession(true).getAttribute("tck");
         String[] portletNames = req.getParameterValues("portletName");
