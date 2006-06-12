@@ -153,11 +153,11 @@ Copyright:
     <target name="compile" depends="setenv" description="Compile project source code">
         <echo>Compiling project source code</echo>
         <javac srcdir="src"
-            destdir="${build.classes}"
-            classpathref="classpath"
-            debug="${debug}"
-            optimize="${optimize}"
-            deprecation="false"/>
+               destdir="${build.classes}"
+               classpathref="classpath"
+               debug="${debug}"
+               optimize="${optimize}"
+               deprecation="false"/>
     </target>
 
     <target name="precompile-jsp" depends="setenv">
@@ -172,9 +172,9 @@ Copyright:
             <then>
 
                 <jspc50 outputDir="${project.build}/jsp/source"
-                    uriroot="webapp/"
-                    webXmlFragment="${project.build}/jsp/web.inc"
-                    validateXml="false">
+                        uriroot="webapp/"
+                        webXmlFragment="${project.build}/jsp/web.inc"
+                        validateXml="false">
                 </jspc50>
             </then>
         </if>
@@ -188,11 +188,11 @@ Copyright:
     <target name="compile-tests" depends="compile" description="Compiles all JUnit tests">
         <echo>Compiling JUnit Tests</echo>
         <javac srcdir="tests"
-            destdir="${build.classes}"
-            classpathref="classpath"
-            debug="${debug}"
-            optimize="${optimize}"
-            deprecation="${deprecation}">
+               destdir="${build.classes}"
+               classpathref="classpath"
+               debug="${debug}"
+               optimize="${optimize}"
+               deprecation="${deprecation}">
         </javac>
     </target>
 
@@ -202,32 +202,33 @@ Copyright:
 
     <target name="configure-database" depends="setenv">
         <mkdir dir="${appserver.home}/webapps/${project.name}/WEB-INF/persistence/"/>
-        <copy overwrite="true" file="webapp/WEB-INF/persistence/hibernate.properties" todir="${appserver.home}/webapps/${project.name}/WEB-INF/persistence/"/>
+        <copy overwrite="true" file="webapp/WEB-INF/persistence/hibernate.properties"
+              todir="${appserver.home}/webapps/${project.name}/WEB-INF/persistence/"/>
         <pathconvert targetos="windows" dirsep="/" property="cathome">
             <path location="${appserver.home}"/>
         </pathconvert>
         <replace file="${appserver.home}/webapps/${project.name}/WEB-INF/persistence/hibernate.properties"
-            token="@3RDPARTY_WEBAPP@"
-            value="${cathome}/webapps/${project.name}"/>
+                 token="@3RDPARTY_WEBAPP@"
+                 value="${cathome}/webapps/${project.name}"/>
     </target>
 
     <target name="create-database" depends="setenv, deploy">
         <echo message="Creating database"/>
         <taskdef name="dbtask"
-            classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
-            classpathref="classpath"/>
+                 classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
+                 classpathref="classpath"/>
         <dbtask
-            configdir="${appserver.home}/webapps/${project.name}"
-            action="CREATE"/>
+                configdir="${appserver.home}/webapps/${project.name}"
+                action="CREATE"/>
     </target>
 
     <target name="update-database" depends="setenv, configure-database, deploy">
         <taskdef name="dbtask"
-            classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
-            classpathref="classpath"/>
+                 classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
+                 classpathref="classpath"/>
         <dbtask
-            configdir="${appserver.home}/webapps/${project.name}"
-            action="UPDATE"/>
+                configdir="${appserver.home}/webapps/${project.name}"
+                action="UPDATE"/>
     </target>
 
     <!-- =================================================================== -->
@@ -249,7 +250,7 @@ Copyright:
     <!-- Creates a @PROJECT_TITLE@ JAR library archive configured for        -->
     <!-- =================================================================== -->
     <target name="services-jar" depends="compile" description="Creates services JAR">
-        <echo>Creating services JAR </echo>
+        <echo>Creating services JAR</echo>
         <jar jarfile="${build.lib}/${project.name}-services.jar" basedir="${build.classes}">
             <include name="**/services/**"/>
         </jar>
@@ -275,15 +276,15 @@ Copyright:
         <delete quiet="true" dir="${build.javadoc}"/>
         <mkdir dir="${build.javadoc}"/>
         <javadoc sourcepath="src"
-            classpathref="classpath"
-            destdir="${build.javadoc}"
-            author="true"
-            version="true"
-            splitindex="true"
-            use="true"
-            maxmemory="180m"
-            windowtitle="${project.title}"
-            doctitle="${project.api}">
+                 classpathref="classpath"
+                 destdir="${build.javadoc}"
+                 author="true"
+                 version="true"
+                 splitindex="true"
+                 use="true"
+                 maxmemory="180m"
+                 windowtitle="${project.title}"
+                 doctitle="${project.api}">
             <!-- bottom="Copyright &#169; 2002,2003 GridLab Project. All Rights Reserved."> -->
         </javadoc>
     </target>
@@ -293,11 +294,28 @@ Copyright:
     <!-- =================================================================== -->
     <target name="war" depends="jar" description="Create project WAR">
         <echo>Creating project web application WAR</echo>
+
+        <mkdir dir="${project.build}/webapp/WEB-INF/lib"/>
+        <mkdir dir="${project.build}/webapp/WEB-INF/classes"/>
+
+        <copy todir="${project.build}/webapp/WEB-INF/lib">
+            <fileset dir="${gridsphere.build}/lib/">
+                <include name="gridsphere-ui-tags*.jar"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${project.build}/webapp/WEB-INF/classes">
+            <fileset dir="${project.build}/classes/">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+
         <war warfile="${project.build}/${project.name}.war" update="true"
-            webxml="${webapp.dir}/WEB-INF/web.xml">
-            <fileset dir="${gswebapp.dir}">
+             webxml="webapp/WEB-INF/web.xml">
+            <fileset dir="webapp/">
                 <exclude name="WEB-INF/web.xml"/>
             </fileset>
+            <fileset dir="${project.build}/webapp/"/>
         </war>
     </target>
 
@@ -379,52 +397,52 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates a portlet template                                          -->
     <!-- =================================================================== -->
-<!--
+    <!--
 
-        work in progress
-        
-    <target name="create-portlet-template">
+    work in progress
 
-        <input message="Please enter the packagename (e.g. org.gridlab.myproject) " addproperty="portlet.packagename"/>
-        <input message="Please enter the classname (e.g. HelloWorld) " addproperty="portlet.classname"/>
-        <input message="Please enter the service you want to use (e.g. HelloService) " addproperty="portlet.servicename"/>
-        <input message="Please enter next state for view mode (e.g. view.jsp)" addproperty="portlet.view"/>
-        <input message="Please enter next state for edit mode (e.g. edit.jsp)" addproperty="portlet.edit"/>
+<target name="create-portlet-template">
 
-
-        <path id="portlet.package">
-            <pathelement location="src/${portlet.packagename}"/>
-        </path>
-
-        <pathconvert  dirSep="/" property="portletpath" refid="portlet.package">
-            <map from="." to="/"/>
-
-        </pathconvert>
-
-        <echo message="PATH ${portletpath} ${portlet.packagename}"/>
+    <input message="Please enter the packagename (e.g. org.gridlab.myproject) " addproperty="portlet.packagename"/>
+    <input message="Please enter the classname (e.g. HelloWorld) " addproperty="portlet.classname"/>
+    <input message="Please enter the service you want to use (e.g. HelloService) " addproperty="portlet.servicename"/>
+    <input message="Please enter next state for view mode (e.g. view.jsp)" addproperty="portlet.view"/>
+    <input message="Please enter next state for edit mode (e.g. edit.jsp)" addproperty="portlet.edit"/>
 
 
-        <mkdir dir="src/${portlet.packagename}"/>
-        <copy overwrite="true" file="${gridsphere.home}/config/template/${use.jsr}-portlet.tpl"
-            tofile="src/${portlet.packagename}/${portlet.classname}.java"/>
+    <path id="portlet.package">
+        <pathelement location="src/${portlet.packagename}"/>
+    </path>
 
-        <replace file="src/${portlet.packagename}/${portlet.classname}.java"
-            token="@PACKAGENAME@"
-            value="${portlet.packagename}"/>
+    <pathconvert  dirSep="/" property="portletpath" refid="portlet.package">
+        <map from="." to="/"/>
 
-        <replace file="src/${portlet.classname}/${portlet.classname}.java"
-            token="@SERVICENAME@"
-            value="${portlet.servicename}"/>
+    </pathconvert>
 
-        <replace file="src/${portlet.packagename}/${portlet.classname}.java"
-            token="@VIEW@"
-            value="${portlet.view}"/>
-
-        <replace file="src/${portlet.packagename}/${portlet.classname}.java"
-            token="@EDIT@"
-            value="${portlet.edit}"/>
+    <echo message="PATH ${portletpath} ${portlet.packagename}"/>
 
 
-    </target>    -->
+    <mkdir dir="src/${portlet.packagename}"/>
+    <copy overwrite="true" file="${gridsphere.home}/config/template/${use.jsr}-portlet.tpl"
+        tofile="src/${portlet.packagename}/${portlet.classname}.java"/>
+
+    <replace file="src/${portlet.packagename}/${portlet.classname}.java"
+        token="@PACKAGENAME@"
+        value="${portlet.packagename}"/>
+
+    <replace file="src/${portlet.classname}/${portlet.classname}.java"
+        token="@SERVICENAME@"
+        value="${portlet.servicename}"/>
+
+    <replace file="src/${portlet.packagename}/${portlet.classname}.java"
+        token="@VIEW@"
+        value="${portlet.view}"/>
+
+    <replace file="src/${portlet.packagename}/${portlet.classname}.java"
+        token="@EDIT@"
+        value="${portlet.edit}"/>
+
+
+</target>    -->
 
 </project>
