@@ -171,16 +171,11 @@ function validate( myform ) {
     for (i = 0; i < inputFields.length; i++) {
         var checkFuncStr = inputFields[i].className;
         if (checkFuncStr.indexOf('check') == 0) {
-            //alert( checkFuncStr );
             var checkIdx = checkFuncStr.indexOf('#');
             if (checkIdx > 0) {
                 checkFunc = checkFuncStr.substring(0, checkIdx);
-                //alert( checkFunc );
-                //message = checkFuncStr.substring(checkIdx+1, checkFuncStr.length);
                 var myfunc = checkFunc + "('" + inputFields[i].value + "')";
                 valid = eval(myfunc);
-                //alert("func:" + checkFunc + " msg: " + message + " valid:"  + valid);
-                //alert("hello");
                 if (!valid) {
                     message = inputFields[i+1].value;
                     displayError( myform, message);
