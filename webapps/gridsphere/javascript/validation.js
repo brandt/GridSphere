@@ -170,10 +170,11 @@ function validate( myform ) {
     var message = "";
     for (i = 0; i < inputFields.length; i++) {
         var checkFuncStr = inputFields[i].className;
-        if (checkFuncStr.indexOf('check') == 0) {
-            var checkIdx = checkFuncStr.indexOf('#');
-            if (checkIdx > 0) {
-                checkFunc = checkFuncStr.substring(0, checkIdx);
+        var startIdx = checkFuncStr.indexOf('check')
+        if (startIdx >= 0) {
+            var lastIdx = checkFuncStr.indexOf('#');
+            if (lastIdx > 0) {
+                checkFunc = checkFuncStr.substring(startIdx, lastIdx);
                 var myfunc = checkFunc + "('" + inputFields[i].value + "')";
                 valid = eval(myfunc);
                 if (!valid) {
@@ -185,7 +186,6 @@ function validate( myform ) {
         }
     }
 }
-
 
 function displayError( myform, message) {
     var msgDiv = null;
