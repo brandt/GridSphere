@@ -392,8 +392,8 @@ public class TableTag extends BaseComponentTag {
         } catch (Exception e) {
             throw new JspException(e);
         }
-
         super.doEndTag();
+        release();
         return EVAL_PAGE;
     }
 }
