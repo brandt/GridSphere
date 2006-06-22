@@ -170,20 +170,31 @@ function validate( myform ) {
     var message = "";
     for (i = 0; i < inputFields.length; i++) {
         var checkFuncStr = inputFields[i].className;
-        var startIdx = checkFuncStr.indexOf('check')
-        if (startIdx >= 0) {
-            var lastIdx = checkFuncStr.indexOf('#');
-            if (lastIdx > 0) {
-                checkFunc = checkFuncStr.substring(startIdx, lastIdx);
-                var myfunc = checkFunc + "('" + inputFields[i].value + "')";
-                valid = eval(myfunc);
-                if (!valid) {
-                    message = inputFields[i+1].value;
-                    displayError( myform, message);
-                    return false;
+        var startIdx = 0;
+        var endIdx = checkFuncStr.length;
+        var done = false;
+        do {
+            startIdx = checkFuncStr.indexOf('check', startIdx);
+            if (startIdx >= 0) {
+                var lastIdx = checkFuncStr.indexOf('#', startIdx);
+                if (lastIdx > 0) {
+                    checkFunc = checkFuncStr.substring(startIdx, lastIdx);
+                    startIdx = lastIdx;
+                    var myfunc = checkFunc + "('" + inputFields[i].value + "')";
+                    valid = eval(myfunc);
+                    if (!valid) {
+                        var validateName = inputFields[i].name + "#" + checkFunc;
+                        var hiddenField = document.getElementById(myform.id).elements[validateName];
+                        message = hiddenField.value;
+                        displayError( myform, message);
+                        return false;
+                    }
                 }
+            } else {
+                done = true;
             }
-        }
+            if (startIdx >= endIdx - 5) done = true;
+        } while (!done)
     }
 }
 
