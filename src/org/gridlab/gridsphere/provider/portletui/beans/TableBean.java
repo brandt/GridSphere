@@ -316,7 +316,17 @@ public class TableBean extends BaseComponentBean implements TagBean {
             sb.append("</p>"); // added for XHTML 1.0 Strict compliance
         }
         if (maxRows > 0) {
-            int numpages = (numEntries != 0) ? (numEntries / maxRows + numEntries % maxRows) : rowCount / maxRows +  rowCount % maxRows;
+            int numpages = 0;
+            // formula to figure out how many pages there should be-- if it divides evenly then
+            // use that, otherwise need to add 1
+            if (numEntries != 0) {
+                numpages = numEntries / maxRows;
+                numpages += numEntries % maxRows > 0 ? 1 : 0;
+            }  else {
+                numpages = rowCount / maxRows;
+                numpages += rowCount % maxRows > 0 ? 1 : 0;
+            }
+
             System.err.println("numpages = " + numpages);
             int dispPage = currentPage + 1;
             if ((dispPage == numpages) && (numpages == 1)) return sb.toString();
