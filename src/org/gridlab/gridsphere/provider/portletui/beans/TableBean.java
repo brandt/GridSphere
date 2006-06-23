@@ -289,7 +289,9 @@ public class TableBean extends BaseComponentBean implements TagBean {
             sb.append("</p>"); // added for XHTML 1.0 Strict compliance
         }
         if (maxRows > 0) {
-            int numpages = rowCount  / maxRows + rowCount % maxRows;
+            int numpages = rowCount / maxRows;
+            numpages += rowCount % maxRows > 0 ? 1 : 0;
+            
             int dispPage = currentPage + 1;
             int c = 0;
             sb.append("<p>"); // added for XHTML 1.0 Strict compliance  
