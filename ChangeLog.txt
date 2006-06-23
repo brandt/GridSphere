@@ -1,5 +1,12 @@
-ChangeLog.txt GridSphere 2.1.5
+ChangeLog.txt GridSphere 2.1.6
 ==============================
+
+Changes since GridSphere 2.1.5
+==============================
+
+* GPF-236 Fixes to table tag to display proper number of pages
+
+* GPF-234 Portlet file download fixed due to bug introduced when GZIP compression was added
 
 Changes since GridSphere 2.1.4
 ==============================
