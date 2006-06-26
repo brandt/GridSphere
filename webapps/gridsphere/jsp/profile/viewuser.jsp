@@ -33,7 +33,9 @@
                             <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
                             <ui:tablecell>
                                 <% if (req.getRoles().contains(PortletRole.SUPER.getName())) { %>
-                                <ui:textfield beanId="userNameTF"/>
+                                <ui:textfield beanId="userNameTF">
+                                    <ui:validator type="checkNotEmpty" key="USER_NAME_BLANK"/>
+                                </ui:textfield>
                                 <% } else { %>
                                 <ui:text beanId="userName"/>
                                 <% } %>
@@ -42,8 +44,10 @@
                         <ui:tablerow>
                             <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
                             <ui:tablecell>
-                                <ui:textfield beanId="fullName"/>
-                       
+                                <ui:textfield beanId="fullName">
+                                    <ui:validator type="checkNumber" value="You need a number!"/>
+                                    <ui:validator type="checkNotEmpty" key="USER_FULLNAME_BLANK"/>
+                                </ui:textfield>
                             </ui:tablecell>
                         </ui:tablerow>
                         <ui:tablerow>
