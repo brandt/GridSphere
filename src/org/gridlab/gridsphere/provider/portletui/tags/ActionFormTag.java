@@ -71,7 +71,8 @@ public class ActionFormTag extends ActionTag {
             JspWriter out = pageContext.getOut();
 
             out.print("<form ");
-            if (onSubmit != null) out.print(" onsubmit=\"" + onSubmit + "\" ");
+            //if (onSubmit != null) out.print(" onsubmit=\"" + onSubmit + "\" ");
+
             out.print("action=\"");
 
             // if using JSR then create render link
@@ -101,14 +102,15 @@ public class ActionFormTag extends ActionTag {
                 name = "form" + this.getUniqueId("gs_formNumber");
             }
 
-            // 'name' attribute replaced by 'id' for XHTML 1.0 Strict compliance
             out.print(" id=\"" + name + "\"");
+            out.print(" name=\"" + name + "\"");
+            if (onSubmit == null) out.print(" onsubmit=\"return validate( " + name + " );\" ");
 
             out.println(">");
             // add JS info
             out.println("<p>"); // added for XHTML 1.0 Strict compliance
             // added the closing slash of tag for XHTML 1.0 Strict compliance
-            out.println("<input name=\"JavaScript\" value=\"\" type=\"hidden\" />");
+            //out.println("<input name=\"JavaScript\" value=\"\" type=\"hidden\" />");
             out.println("</p>"); // added for XHTML 1.0 Strict compliance
             // 'language="JavaScript"' replaced by 'type="text/javascript"' for XHTML 1.0 Strict compliance
 

@@ -6,9 +6,8 @@
 
 package org.gridlab.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ValidatorBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -17,9 +16,7 @@ import javax.servlet.jsp.tagext.Tag;
 /**
  * A <code>TextFieldTag</code> represents a text field element
  */
-public class TextFieldTag extends BaseComponentTag {
-
-    private transient static PortletLog log = SportletLog.getInstance(TextFieldTag.class);
+public class TextFieldTag extends InputTag {
 
     protected TextFieldBean textFieldBean = null;
     protected int size = 0;
@@ -71,6 +68,10 @@ public class TextFieldTag extends BaseComponentTag {
     }
 
     public int doStartTag() throws JspException {
+        return EVAL_BODY_INCLUDE;
+    }
+
+    public int doEndTag() throws JspException {
         if (!beanId.equals("")) {
             textFieldBean = (TextFieldBean) getTagBean();
             if (textFieldBean == null) {
@@ -91,23 +92,34 @@ public class TextFieldTag extends BaseComponentTag {
             if (size != 0) textFieldBean.setSize(size);
             this.setBaseComponentBean(textFieldBean);
         }
-
+        if (cssClass != null) textFieldBean.addCssClass(cssClass);
         //debug();
         Tag parent = getParent();
+        JspWriter out;
         if (parent instanceof DataGridColumnTag) {
             DataGridColumnTag dataGridColumnTag = (DataGridColumnTag) parent;
             textFieldBean.setBeanIdSource(this.beanIdSource);
             dataGridColumnTag.addTagBean(this.textFieldBean);
         } else {
-
             try {
-                JspWriter out = pageContext.getOut();
+                out = pageContext.getOut();
                 out.print(textFieldBean.toStartString());
+                // print out validators, represented as hidden fields
+                if (!validatorBeans.isEmpty()) {
+                    ValidatorBean validatorBean = null;
+                    for (int i = 0; i < validatorBeans.size(); i++) {
+                        validatorBean = (ValidatorBean)validatorBeans.get(i);
+                        validatorBean.setName(textFieldBean.getEncodedName());
+                        out.print(validatorBean.toStartString());
+                    }
+                }
+                validatorBeans.clear();
+                cssClass = null;
             } catch (Exception e) {
                 throw new JspException(e.getMessage());
             }
         }
-        return SKIP_BODY;
+        return EVAL_PAGE;
     }
 
 }

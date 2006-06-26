@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletURI;
 import org.gridlab.gridsphere.portlet.jsrimpl.PortletURLImpl;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
@@ -36,7 +37,7 @@ public abstract class ActionTag extends BaseComponentTag {
     protected boolean useAjax = false;
     protected String key = null;
     protected boolean isSecure = false;
-    protected PortletURI actionURI = null;
+
     protected String windowState = null;
     protected String portletMode = null;
     protected DefaultPortletAction portletAction = null;
@@ -380,7 +381,7 @@ public abstract class ActionTag extends BaseComponentTag {
     public String createGSActionURI() throws JspException {
         // Builds a URI containing the actin and associated params
         PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
-
+        PortletURI actionURI = null;
         // action is a required attribute except for FormTag
         if (label != null) {
             actionURI = res.createURI(label, isSecure);
@@ -393,6 +394,7 @@ public abstract class ActionTag extends BaseComponentTag {
         } else {
             actionURI = res.createURI(isSecure);
         }
+
         if (action != null) {
             String compId = (String) pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
             if (compId == null) {
@@ -430,7 +432,6 @@ public abstract class ActionTag extends BaseComponentTag {
         useAjax = false;
         key = null;
         isSecure = false;
-        actionURI = null;
         windowState = null;
         portletMode = null;
         portletAction = null;

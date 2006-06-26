@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 import java.util.Locale;
 
@@ -23,6 +24,25 @@ public class TextTag extends BaseComponentTag {
     protected TextBean textBean = null;
     protected String key = null;
     protected String style = MessageStyle.MSG_INFO;
+    protected String var = null;
+
+    /**
+     * Sets the name of the variable to export as a RenderURL object
+     *
+     * @param var the name of the variable to export as a RenderURL object
+     */
+    public void setVar(String var) {
+        this.var = var;
+    }
+
+    /**
+     * Returns the name of the exported RenderURL object
+     *
+     * @return the exported variable
+     */
+    public String getVar() {
+        return var;
+    }
 
     /**
      * Sets the style of the text: Available styles are
@@ -142,15 +162,18 @@ public class TextTag extends BaseComponentTag {
             DataGridColumnTag dataGridColumnTag = (DataGridColumnTag) parent;
             dataGridColumnTag.addTagBean(this.textBean);
         } else {
-
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(textBean.toEndString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
+            if (var == null) {
+                try {
+                    JspWriter out = pageContext.getOut();
+                    out.print(textBean.toEndString());
+                } catch (Exception e) {
+                    throw new JspException(e.getMessage());
+                }
+            } else {
+                if (key != null) value = getLocalizedText(key);
+                pageContext.setAttribute(var, value, PageContext.PAGE_SCOPE);
             }
         }
-
         return EVAL_PAGE;
     }
 
