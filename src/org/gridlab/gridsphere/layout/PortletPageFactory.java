@@ -56,6 +56,7 @@ public class PortletPageFactory implements PortletSessionListener {
     private static Map guests = new Hashtable();
     private static Map customPages = new Hashtable();
     private static Map customLayouts = new Hashtable();
+    private static boolean useTCK = false;
 
     private static boolean setupNeeded = false;
 
@@ -65,6 +66,10 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public static void setSetupNeeded(boolean needSetup) {
         setupNeeded = needSetup;
+    }
+
+    public static void setUseTCK(boolean usetck) {
+        useTCK = usetck;
     }
 
     public void init(ServletContext ctx) throws PortletException {
@@ -518,17 +523,19 @@ public class PortletPageFactory implements PortletSessionListener {
         String[] portletNames = req.getParameterValues("portletName");
 
         // Sun TCK test uses Jakarta Commons-HttpClient/2.0beta1
-        if (req.getClient().getUserAgent().indexOf("HttpClient") > 0) {
-            if (portletNames != null) {
-                log.info("Creating TCK LAYOUT!");
-                PortletPage tckLayout = createTCKPage(req, portletNames);
-                tckLayout.init(req, new ArrayList());
-                tckLayouts.put(sessionId, tckLayout);
-                sessionManager.addSessionListener(sessionId, this);
-            }
+        if (useTCK) {
+            if (req.getClient().getUserAgent().indexOf("HttpClient") > 0) {
+                if (portletNames != null) {
+                    log.info("Creating TCK LAYOUT!");
+                    PortletPage tckLayout = createTCKPage(req, portletNames);
+                    tckLayout.init(req, new ArrayList());
+                    tckLayouts.put(sessionId, tckLayout);
+                    sessionManager.addSessionListener(sessionId, this);
+                }
 
-            if (tckLayouts.containsKey(sessionId)) {
-                return (PortletPage)tckLayouts.get(sessionId);
+                if (tckLayouts.containsKey(sessionId)) {
+                    return (PortletPage)tckLayouts.get(sessionId);
+                }
             }
         }
 
