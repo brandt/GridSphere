@@ -41,20 +41,14 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public PersistenceManagerRdbmsImpl() {
         ServletContext ctx = GridSphereConfig.getServletContext();
-        String origPropsPath = ctx.getRealPath("/WEB-INF/persistence/hibernate.properties");
         String gsPropsPath = ctx.getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties");
         String mappingPath = ctx.getRealPath("/WEB-INF/persistence");
-        File propsFile = new File(gsPropsPath);
         try {
-            if (!propsFile.exists()) {
-                GridSphereConfig.copyFile(new File(origPropsPath), propsFile);
-                log.info("Copying hibernate properties from " + origPropsPath + " to " + gsPropsPath);
-            }
             prop.load(ctx.getResourceAsStream("/WEB-INF/CustomPortal/database/hibernate.properties"));
             Configuration cfg = loadConfiguration(mappingPath, prop);
             factory = cfg.buildSessionFactory();
         } catch (IOException e) {
-            log.error("Unable to copy file from " + origPropsPath + " to " + gsPropsPath);
+            log.error("Unable to load file: " + gsPropsPath);
         } catch (HibernateException e) {
             log.error("Could not instantiate Hibernate Factory", e);
         }
