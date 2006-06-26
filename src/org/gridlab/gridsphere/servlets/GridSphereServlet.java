@@ -8,6 +8,7 @@ package org.gridlab.gridsphere.servlets;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.hibernate.DBTask;
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
+import org.gridlab.gridsphere.layout.PortletPageFactory;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.UserPrincipal;
 import org.gridlab.gridsphere.portlet.impl.*;
@@ -159,6 +160,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
                 // deep inside a service is used which is why this must follow the factory.init
                 layoutEngine.init(getServletConfig().getServletContext());
+                if (isTCK) PortletPageFactory.setUseTCK(true);
             } catch (Exception e) {
                 log.error("GridSphere initialization failed!", e);
                 RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/init_error.jsp");
