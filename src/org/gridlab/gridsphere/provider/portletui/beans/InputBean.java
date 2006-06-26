@@ -12,7 +12,6 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
  */
 public abstract class InputBean extends BaseComponentBean implements TagBean {
 
-    private transient static PortletLog log = SportletLog.getInstance(InputBean.class);
     public static final String INPUT_STYLE = "portlet-form-input-field";
 
     protected String inputtype = "";
@@ -83,16 +82,36 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
         this.beanIdSource = beanIdSource;
     }
 
+    public String getEncodedName() {
+        return createTagName(name);
+    }
+
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("<input " + getFormattedCss() + " ");
-        sb.append("type=\"" + inputtype + "\" ");
-
+        sb.append("<input ");
+        sb.append(getFormattedCss());
+        sb.append(" type=\"");
+        sb.append(inputtype);
+        sb.append("\" ");
         String sname = createTagName(name);
-        sb.append("name=\"" + sname + "\" ");
-        if (value != null) sb.append("value=\"" + value + "\" ");
-        if (size != 0) sb.append("size=\"" + size + "\" ");
-        if (maxlength != 0) sb.append("maxlength=\"" + maxlength + "\" ");
+        sb.append("name=\"");
+        sb.append(sname);
+        sb.append("\" ");
+        if (value != null) {
+            sb.append("value=\"");
+            sb.append(value);
+            sb.append("\" ");
+        }
+        if (size != 0) {
+            sb.append("size=\"");
+            sb.append(size);
+            sb.append("\" ");
+        }
+        if (maxlength != 0) {
+            sb.append("maxlength=\"");
+            sb.append(maxlength);
+            sb.append("\" ");
+        }
         sb.append(checkReadOnly());
         sb.append(checkDisabled());
         sb.append("/>");

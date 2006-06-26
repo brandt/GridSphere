@@ -251,6 +251,11 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
         if (cssClass != null) this.cssClass = cssClass;
     }
 
+    public void addCssClass(String cssClass) {
+        if (this.cssClass == null) this.cssClass = "";
+        if (cssClass != null) this.cssClass += " " + cssClass;
+    }
+
     /**
      * Returns the formatted css commands for inserting into html components.
      *
@@ -259,10 +264,10 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     protected String getFormattedCss() {
         String result = "";
         if (this.cssStyle != null) {
-            result = result + " style=\"" + this.cssStyle + "\"";
+            result = " style=\"" + this.cssStyle + "\"";
         }
         if (this.cssClass != null) {
-            result = result + " class=\"" + this.cssClass + "\"";
+            result = " class=\"" + this.cssClass + "\"";
         }
         return result;
     }

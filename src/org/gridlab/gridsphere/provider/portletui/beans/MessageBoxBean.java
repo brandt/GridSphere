@@ -189,8 +189,15 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
                     message = getLocalizedText(message);
                 }
 
-                if (format) sb.append("<span class=\"" + messageType + "\">" + message + "</span>");
-                    else sb.append(message);
+                if (format) {
+                    sb.append("<span class=\"");
+                    sb.append(messageType);
+                    sb.append("\">");
+                    sb.append(message);
+                    sb.append("</span>");
+                } else {
+                    sb.append(message);
+                }
             }
             result = sb.toString();
         }
@@ -211,7 +218,9 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
         // only return something if we have a message
         if (message != null) {
-            sb.append("<div" + getFormattedCss() + ">");
+            sb.append("<div");
+            sb.append(getFormattedCss());
+            sb.append(">");
             sb.append(message);
             sb.append("</div>");
         }

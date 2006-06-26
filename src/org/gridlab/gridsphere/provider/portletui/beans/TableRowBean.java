@@ -11,7 +11,9 @@ public class TableRowBean extends BeanContainer implements TagBean {
 
     protected boolean isHeader = false;
     public static final String TABLE_HEADER_STYLE = "portlet-section-header";
+    public static final String TABLE_NORMAL_STYLE = "portlet-section-body";
     public static final String TABLE_ALTERNATE_STYLE = "portlet-section-alternate";
+    public static final String TABLE_ROLLOVER_STYLE = "portlet-section-rollover";
 
     protected String align = null;
     protected String valign = null;
@@ -113,7 +115,7 @@ public class TableRowBean extends BeanContainer implements TagBean {
             sb.append(" class=\"" + TABLE_HEADER_STYLE + "\"");
         } else {
             if (isZebra) {
-                sb.append(" class=\"" + TABLE_ALTERNATE_STYLE + "\"");
+                sb.append(" onmouseover=\"this.className='" + TABLE_ROLLOVER_STYLE + "'\" onmouseout=\"this.className='" + TABLE_NORMAL_STYLE + "'\" class=\"'" + TABLE_ALTERNATE_STYLE + "'\"");
             }
         }
         sb.append(getFormattedCss());

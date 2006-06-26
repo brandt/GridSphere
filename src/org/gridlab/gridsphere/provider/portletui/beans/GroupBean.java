@@ -40,9 +40,13 @@ public class GroupBean extends BeanContainer implements TagBean {
         if (height != null) this.addCssStyle(" height=\"" + height + "\" ");
 
         StringBuffer sb = new StringBuffer();
-        sb.append("<fieldset" + getFormattedCss() + ">");
+        sb.append("<fieldset");
+        sb.append(getFormattedCss());
+        sb.append(">");
         if (this.label != null) {
-            sb.append("<legend>" + label + "</legend>");
+            sb.append("<legend>");
+            sb.append(label);
+            sb.append("</legend>");
         }
         return sb.toString();
     }

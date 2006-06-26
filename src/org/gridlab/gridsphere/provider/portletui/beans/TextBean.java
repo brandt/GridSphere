@@ -16,7 +16,7 @@ public class TextBean extends BaseComponentBean implements TagBean {
 
     protected String style = "info";
 
-    /* @deprectaed -- use MessageStyle instead */
+    /* @deprecated -- use MessageStyle instead */
     // CSS definitions according to Portlet API spec. PLT.C
     public static final String MSG_STATUS = "portlet-msg-status";
     public static final String MSG_INFO = "portlet-msg-info";
