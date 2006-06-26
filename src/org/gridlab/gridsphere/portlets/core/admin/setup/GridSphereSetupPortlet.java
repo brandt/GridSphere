@@ -36,7 +36,7 @@ public class GridSphereSetupPortlet extends ActionPortlet {
             this.groupManagerService = (GroupManagerService) config.getContext().getService(GroupManagerService.class);
             this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
         } catch (PortletServiceException e) {
-            log.error("Unable to get service instance!", e);
+            throw new UnavailableException("Unable to get services required");
         }
         log.debug("Exiting initServices()");
         DEFAULT_HELP_PAGE = "admin/setup/help.jsp";
