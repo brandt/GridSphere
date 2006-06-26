@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.portlet.PortalContext;
 import javax.portlet.PortletMode;
@@ -121,6 +121,6 @@ public class PortalContextImpl implements PortalContext {
      * @return a <CODE>String</CODE> containing at least the portal name and version number
      */
     public String getPortalInfo() {
-        return GridSphereConfigProperties.GRIDSPHERE_INFO;
+        return GridSphereConfig.getProperty("gridsphere.release");
     }
 }

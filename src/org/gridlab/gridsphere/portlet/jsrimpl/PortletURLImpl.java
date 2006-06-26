@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -281,12 +282,17 @@ public class PortletURLImpl implements PortletURL {
      */
     public String toString() {
         StringBuffer s = new StringBuffer();
+        String port = null;
         if (req.isSecure() || isSecure || (req.getAttribute(SportletProperties.SSL_REQUIRED) != null)) {
             s.append("https://");
+            port = GridSphereConfig.getProperty("gridsphere.port.https");
         } else {
             s.append("http://");
+            port = GridSphereConfig.getProperty("gridsphere.port.http");
         }
-        s.append(req.getServerName() + ":" + req.getServerPort());
+        s.append(req.getServerName());
+        s.append(":");
+        s.append((port != null) ? port : req.getServerPort());
 
         String url = contextPath;
 

@@ -73,6 +73,7 @@ public class GridSphereParameters {
                 name = URLDecoder.decode(name, "UTF-8");
                 value = URLDecoder.decode(value, "UTF-8");
             } catch (UnsupportedEncodingException e) {
+                System.err.println("name= " + " value= " + value);
                 e.printStackTrace();
             }
 

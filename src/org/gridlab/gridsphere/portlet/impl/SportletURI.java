@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -164,13 +165,18 @@ public class SportletURI implements PortletURI {
      */
     public String toString() {
         StringBuffer s = new StringBuffer();
+        String port = null;
         if (req.isSecure() || isSecure) {
+            port = GridSphereConfig.getProperty("gridsphere.port.https");
             s.append("https://");
         } else {
+            port = GridSphereConfig.getProperty("gridsphere.port.http");
             s.append("http://");
         }
-        //s.append(req.getServerName());
-        s.append(req.getServerName() + ":" + req.getServerPort());
+       
+        s.append(req.getServerName());
+        s.append(":");
+        s.append((port != null) ? port : req.getServerPort());
 
         // add the action params
         Set paramSet = actionParams.keySet();

@@ -9,9 +9,8 @@ import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletMessageManager;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 
 import javax.servlet.*;
@@ -258,21 +257,21 @@ public class SportletContext implements PortletContext {
     }
 
     /**
-     * Returns the major version of the PortletInfo API that this portlet
+     * Returns the major version of the API that this portlet
      * container supports.
      *
      * @return the major version
      */
     public String getVersionInfo() {
-        return GridSphereConfigProperties.GRIDSPHERE_INFO;
+        return GridSphereConfig.getProperty("gridsphere.release");
     }
 
     public int getMajorVersion() {
-        return GridSphereConfigProperties.GS_MAJOR_VERSION;
+        return Integer.valueOf(GridSphereConfig.getProperty("gridsphere.portletapi.majorversion"));
     }
 
     public int getMinorVersion() {
-        return GridSphereConfigProperties.GS_MINOR_VERSION;
+        return Integer.valueOf(GridSphereConfig.getProperty("gridsphere.portletapi.minorversion"));
     }
 
     /**
@@ -281,7 +280,7 @@ public class SportletContext implements PortletContext {
      * @return the minor version
      */
     public String getReleaseInfo() {
-        return GridSphereConfigProperties.GRIDSPHERE_INFO;
+        return getContainerInfo();
     }
 
     /**
@@ -292,9 +291,7 @@ public class SportletContext implements PortletContext {
      * @return the string containing at least name and version number
      */
     public String getContainerInfo() {
-        return GridSphereConfig.PROJECT_NAME + "/"
-                + getVersionInfo()
-                + "-" + getReleaseInfo();
+        return GridSphereConfig.getProperty("gridsphere.release");
     }
 
     /**
