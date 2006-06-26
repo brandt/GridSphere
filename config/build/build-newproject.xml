@@ -63,6 +63,9 @@
         <replace file="${project.dir}/build.properties"
             token="@PROJECT_NAME@"
             value="${project.name}"/>
+        <replace file="${project.dir}/build.xml"
+            token="@PROJECT_NAME@"
+            value="${project.name}"/>
         <replace file="${project.dir}/build.properties"
             token="@USE_JSR@"
             value="${which}"/>

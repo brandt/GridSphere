@@ -19,7 +19,7 @@ Copyright:
 
 ============================================================================ -->
 
-<project default="help" basedir=".">
+<project name="@PROJECT_NAME@" default="help" basedir=".">
 
     <property file="build.properties"/>
     <property file="${gridsphere.home}/build.properties"/>
