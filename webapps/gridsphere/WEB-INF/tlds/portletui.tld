@@ -1301,6 +1301,7 @@
     <tag>
         <name>text</name>
         <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TextTag</tag-class>
+        <tei-class>org.gridlab.gridsphere.provider.portletui.tags.ActionTag$TEI</tei-class>
         <body-content>JSP</body-content>
         <description>
             Shows text
@@ -1327,6 +1328,11 @@
         </attribute>
         <attribute>
             <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>var</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -1448,7 +1454,7 @@
     <tag>
         <name>textfield</name>
         <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TextFieldTag</tag-class>
-        <body-content>empty</body-content>
+        <body-content>JSP</body-content>
         <description>
             Wraps HTML input text tag
         </description>
@@ -1711,6 +1717,30 @@
         </attribute>
         <attribute>
             <name>height</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>key</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>validator</name>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ValidatorTag</tag-class>
+        <body-content>empty</body-content>
+        <description>
+            Provides a validator tag that can be used inside of a TextFieldTag
+        </description>
+        <attribute>
+            <name>type</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>value</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
