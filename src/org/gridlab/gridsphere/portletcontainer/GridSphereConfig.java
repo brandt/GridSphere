@@ -4,25 +4,32 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-import java.util.ResourceBundle;
-import java.io.*;
+import java.util.Properties;
+import java.io.InputStream;
+import java.io.IOException;
 
 /**
  * <code>GridSphereConfig</code> represents the <code>gridsphere.properties</code> properties file
  * used for maintaing properties about the GridSphere portlet container.
  */
-public class GridSphereConfig implements GridSphereConfigProperties {
+public class GridSphereConfig {
 
-    public static final String pathtype = System.getProperty("file.separator");
+    protected static PortletLog log = SportletLog.getInstance(GridSphereConfig.class);
+
     protected static ServletConfig config = null;
     protected static ServletContext context = null;
-    protected static ResourceBundle configBundle = null;
-    protected static String contextPath = "";
-    protected static String servletPath = "";
-    public static final String PROJECT_NAME = "gridsphere";
+    protected static Properties props = null;
 
+    /**
+     * Default constructor disallows instantiation
+     */
+    private GridSphereConfig() {
+    }
 
     public static void setServletConfig(ServletConfig servletConfig) {
         config = servletConfig;
@@ -41,24 +48,19 @@ public class GridSphereConfig implements GridSphereConfigProperties {
         context = ctx;
     }
 
-    public static void copyFile(File src, File dst) throws IOException {
-        InputStream in = new FileInputStream(src);
-        OutputStream out = new FileOutputStream(dst);
-
-        // Transfer bytes from in to out
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
+    public static String getProperty(String key) {
+        if (key == null) throw new IllegalArgumentException("property key cannot be null!");
+        if (props == null) {
+            InputStream propsStream = context.getResourceAsStream("/WEB-INF/gridsphere.properties");
+            props = new Properties();
+            try {
+                props.load(propsStream);
+            } catch (IOException e) {
+                log.error("Unable to load gridsphere.properties", e);
+            }
         }
-        in.close();
-        out.close();
+        return props.getProperty(key);
     }
 
-    /**
-     * Default constructor disallows instantiation
-     */
-    private GridSphereConfig() {
-    }
 
 }
