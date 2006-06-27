@@ -30,7 +30,9 @@
                 <ui:text key="LOGIN_NAME"/>
             </ui:tablecell>
             <ui:tablecell width="60">
-                <input type="text" name="username" size="20" maxlength="50"/>
+                <ui:text var="userkey" key="USER_NAME_BLANK"/>
+                <input class="checkNotEmpty#" type="text" name="username" size="20" maxlength="50"/>
+                <input type="hidden" name="username#checkNotEmpty" value="<%= userkey %>"/>
             </ui:tablecell>
             <ui:tablecell/>
         </ui:tablerow>
@@ -40,7 +42,9 @@
                 <ui:text key="LOGIN_PASS"/>
             </ui:tablecell>
             <ui:tablecell width="60">
-                <input type="password" name="password" size="20" maxlength="50"/>
+                <ui:text var="userkey" key="USER_PASSWORD_BLANK"/>
+                <input class="checkNotEmpty#" type="password" name="password" size="20" maxlength="50"/>
+                <input type="hidden" name="errors" value="Password cannot be blank"/>
             </ui:tablecell>
             <ui:tablecell/>
         </ui:tablerow>
