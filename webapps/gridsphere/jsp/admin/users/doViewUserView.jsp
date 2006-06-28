@@ -6,7 +6,7 @@
 
     <h3><ui:text key="USER_VIEW_USER" style="nostyle"/></h3>
 
-    <%@ include file="/jsp/admin/users/doViewUser.jsp" %>
+    <%@ include file="doViewUser.jsp" %>
 
     <ui:frame>
         <ui:tablerow>
