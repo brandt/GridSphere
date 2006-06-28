@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
-import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 

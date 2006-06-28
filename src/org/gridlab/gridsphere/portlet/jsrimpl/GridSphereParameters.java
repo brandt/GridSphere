@@ -7,9 +7,9 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
-import java.io.UnsupportedEncodingException;
 
 /**
  * GridSphereParameters is the dragon's end. A sick, twisted filter for request parameters owing to

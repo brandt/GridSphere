@@ -8,9 +8,7 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
 
 import javax.portlet.PreferencesValidator;
 
