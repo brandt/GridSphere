@@ -136,6 +136,10 @@
             cst:type="org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode" cst:collection="array">
             <bind-xml name="portlet-mode" node="element"/>
         </field>
+        <field cst:name="windowState"
+            cst:type="org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState" cst:collection="array">
+            <bind-xml name="window-state" node="element"/>
+        </field>
     </class>
     <class cst:name="org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundle">
         <description>Default mapping for class org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundle</description>
