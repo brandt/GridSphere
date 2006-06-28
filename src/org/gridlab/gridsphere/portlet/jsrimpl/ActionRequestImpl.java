@@ -10,8 +10,6 @@ import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.io.IOException;
-import java.util.List;
 
 
 /**

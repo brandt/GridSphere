@@ -8,7 +8,6 @@ import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 
 /**

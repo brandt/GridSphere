@@ -4,10 +4,10 @@
  */
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.portlet.PortalContext;
 import javax.portlet.PortletMode;
