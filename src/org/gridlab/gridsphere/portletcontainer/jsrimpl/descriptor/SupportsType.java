@@ -47,6 +47,10 @@ public class SupportsType implements java.io.Serializable {
      */
     private java.util.ArrayList _portletModeList;
 
+    /**
+     * Field _windowStateList
+     */
+    private java.util.ArrayList _windowStateList;
 
     //----------------/
     //- Constructors -/
@@ -55,6 +59,7 @@ public class SupportsType implements java.io.Serializable {
     public SupportsType() {
         super();
         _portletModeList = new ArrayList();
+        _windowStateList = new ArrayList();
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SupportsType()
 
 
@@ -98,6 +103,41 @@ public class SupportsType implements java.io.Serializable {
     } //-- java.util.Enumeration enumeratePortletMode()
 
     /**
+     * Method addWindowState
+     *
+     * @param vWindowState
+     */
+    public void addWindowState(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState vWindowState)
+            throws java.lang.IndexOutOfBoundsException {
+        _windowStateList.add(vWindowState);
+    } //-- void addPortletMode(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.WindowState)
+
+    /**
+     * Method addWindowState
+     *
+     * @param index
+     * @param vWindowState
+     */
+    public void addWindowState(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState vWindowState)
+            throws java.lang.IndexOutOfBoundsException {
+        _windowStateList.add(index, vWindowState);
+    } //-- void addWindowState(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.WindowState)
+
+    /**
+     * Method clearWindowState
+     */
+    public void clearWindowState() {
+        _windowStateList.clear();
+    } //-- void clearWindowState()
+
+    /**
+     * Method enumerateWindowState
+     */
+    public java.util.Enumeration enumerateWindowState() {
+        return new org.exolab.castor.util.IteratorEnumeration(_windowStateList.iterator());
+    } //-- java.util.Enumeration enumerateWindowState()
+
+    /**
      * Returns the value of field 'id'.
      *
      * @return the value of field 'id'.
@@ -114,6 +154,40 @@ public class SupportsType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.MimeType getMimeType() {
         return this._mimeType;
     } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.MimeType getMimeType()
+
+    /**
+     * Method getWindowState
+     *
+     * @param index
+     */
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState getWindowState(int index)
+            throws java.lang.IndexOutOfBoundsException {
+        //-- check bounds for index
+        if ((index < 0) || (index > _windowStateList.size())) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState) _windowStateList.get(index);
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.WindowState getWindowState(int)
+
+    /**
+     * Method getWindowState
+     */
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState[] getWindowState() {
+        int size = _windowStateList.size();
+        org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState[] mArray = new org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState[size];
+        for (int index = 0; index < size; index++) {
+            mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState) _windowStateList.get(index);
+        }
+        return mArray;
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.WindowState[] getWindowState()
+
+    /**
+     * Method getWindowStateCount
+     */
+    public int getWindowStateCount() {
+        return _windowStateList.size();
+    } //-- int getWindowStateCount()
 
     /**
      * Method getPortletMode
@@ -189,9 +263,17 @@ public class SupportsType implements java.io.Serializable {
      * @param vPortletMode
      */
     public boolean removePortletMode(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode vPortletMode) {
-        boolean removed = _portletModeList.remove(vPortletMode);
-        return removed;
+        return _portletModeList.remove(vPortletMode);
     } //-- boolean removePortletMode(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletMode)
+
+    /**
+     * Method removeWindowState
+     *
+     * @param vWindowState
+     */
+    public boolean removeWindowState(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState vWindowState) {
+        return _windowStateList.remove(vWindowState);
+    } //-- boolean removeWindowState(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.WindowState)
 
     /**
      * Sets the value of field 'id'.
@@ -238,6 +320,34 @@ public class SupportsType implements java.io.Serializable {
             _portletModeList.add(portletModeArray[i]);
         }
     } //-- void setPortletMode(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletMode)
+
+    /**
+     * Method setWindowState
+     *
+     * @param index
+     * @param vWindowState
+     */
+    public void setWindowState(int index, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState vWindowState)
+            throws java.lang.IndexOutOfBoundsException {
+        //-- check bounds for index
+        if ((index < 0) || (index > _windowStateList.size())) {
+            throw new IndexOutOfBoundsException();
+        }
+        _windowStateList.set(index, vWindowState);
+    } //-- void setWindowState(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.WindowState)
+
+    /**
+     * Method setWindowState
+     *
+     * @param windowStateArray
+     */
+    public void setWindowState(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState[] windowStateArray) {
+        //-- copy array
+        _windowStateList.clear();
+        for (int i = 0; i < windowStateArray.length; i++) {
+            _windowStateList.add(windowStateArray[i]);
+        }
+    } //-- void setWindowState(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.WindowState)
 
     /**
      * Method unmarshal

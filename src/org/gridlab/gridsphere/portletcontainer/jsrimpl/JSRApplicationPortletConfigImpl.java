@@ -79,10 +79,25 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
         }
         tmpMarkups = null;
 
+        List customStatesList = new ArrayList();
         CustomWindowState[] customStates = app.getCustomWindowState();
         if (customStates != null) {
             for (int i = 0; i < customStates.length; i++) {
-                states.add(PortletWindow.State.toState(customStates[i].getWindowState().getContent()));
+                customStatesList.add(customStates[i].getWindowState().getContent());
+            }
+        }
+
+        // defined window states
+        if (!customStatesList.isEmpty()) {
+            for (int i = 0; i < supports.length; i++) {
+                Supports s = (Supports) supports[i];
+                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState[] statesAllowed = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState[]) s.getWindowState();
+                if (statesAllowed != null) {
+                    for (int j = 0; j < statesAllowed.length; j++) {
+                        org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState w = statesAllowed[j];
+                        if (customStatesList.contains(w.getContent())) states.add(PortletWindow.State.toState(w.getContent()));
+                    }
+                }
             }
         }
         states.add(PortletWindow.State.MAXIMIZED);
