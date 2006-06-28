@@ -292,7 +292,7 @@ public class PortletURLImpl implements PortletURL {
         }
         s.append(req.getServerName());
         s.append(":");
-        s.append((port != null) ? port : req.getServerPort());
+        s.append((!port.equals("")) ? port : req.getServerPort());
 
         String url = contextPath;
 

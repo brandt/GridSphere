@@ -176,7 +176,7 @@ public class SportletURI implements PortletURI {
        
         s.append(req.getServerName());
         s.append(":");
-        s.append((port != null) ? port : req.getServerPort());
+        s.append((!port.equals("")) ? port : req.getServerPort());
 
         // add the action params
         Set paramSet = actionParams.keySet();
