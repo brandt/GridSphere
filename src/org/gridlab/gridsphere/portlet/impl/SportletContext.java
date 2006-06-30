@@ -267,11 +267,11 @@ public class SportletContext implements PortletContext {
     }
 
     public int getMajorVersion() {
-        return Integer.valueOf(GridSphereConfig.getProperty("gridsphere.portletapi.majorversion"));
+        return Integer.valueOf(GridSphereConfig.getProperty("gridsphere.portletapi.majorversion")).intValue();
     }
 
     public int getMinorVersion() {
-        return Integer.valueOf(GridSphereConfig.getProperty("gridsphere.portletapi.minorversion"));
+        return Integer.valueOf(GridSphereConfig.getProperty("gridsphere.portletapi.minorversion")).intValue();
     }
 
     /**

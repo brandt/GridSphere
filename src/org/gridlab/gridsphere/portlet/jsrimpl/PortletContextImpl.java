@@ -145,7 +145,7 @@ public class PortletContextImpl implements PortletContext {
      * @see #getMinorVersion()
      */
     public int getMajorVersion() {
-        return Integer.valueOf(GridSphereConfig.getProperty("portletapi.majorversion"));
+        return Integer.valueOf(GridSphereConfig.getProperty("portletapi.majorversion")).intValue();
     }
 
     /**
@@ -156,7 +156,7 @@ public class PortletContextImpl implements PortletContext {
      * @see #getMajorVersion()
      */
     public int getMinorVersion() {
-        return Integer.valueOf(GridSphereConfig.getProperty("portletapi.minorversion"));
+        return Integer.valueOf(GridSphereConfig.getProperty("portletapi.minorversion")).intValue();
     }
 
     /**
