@@ -21,6 +21,7 @@ import org.gridlab.gridsphere.services.core.security.password.PasswordManagerSer
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridsphere.tmf.TextMessagingException;
 import org.gridsphere.tmf.message.MailMessage;
 
@@ -56,6 +57,7 @@ public class LoginPortlet extends ActionPortlet {
 
     private boolean canUserCreateAccount = false;
     private int defaultNumTries = 0;
+    private Boolean useSecureLogin = false;
 
     private UserManagerService userManagerService = null;
     private GroupManagerService groupService = null;
@@ -101,6 +103,7 @@ public class LoginPortlet extends ActionPortlet {
             } else {
                 defaultNumTries = Integer.valueOf(numTries).intValue();
             }
+            useSecureLogin = Boolean.valueOf(GridSphereConfig.getProperty("use.https.login"));
             portalConfigService.savePortalConfigSettings(settings);
             loginService = (LoginService) getPortletConfig().getContext().getService(LoginService.class);
         } catch (PortletServiceException e) {
@@ -138,6 +141,7 @@ public class LoginPortlet extends ActionPortlet {
         }
 
         if (user == null) {
+            request.setAttribute("useSecureLogin", useSecureLogin.toString());
             if (canUserCreateAccount) request.setAttribute("canUserCreateAcct", "true");
             boolean dispUser = Boolean.valueOf(settings.getAttribute(SEND_USER_FORGET_PASSWORD)).booleanValue();
             if (dispUser) request.setAttribute("dispPass", "true");
