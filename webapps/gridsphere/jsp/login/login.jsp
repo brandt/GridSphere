@@ -5,8 +5,9 @@
 <portletAPI:init/>
 
 <jsp:useBean id="certificate" class="java.lang.String" scope="request"/>
+<jsp:useBean id="useSecureLogin" class="java.lang.String" scope="request"/>
 
-<ui:form>
+<ui:form secure="<%= Boolean.valueOf(useSecureLogin).booleanValue() %>">
     <ui:messagebox beanId="msg"/>
 
     <% if (request.getAttribute("certificate") != null && ((String) request.getAttribute("certificate")).length() > 0)  { %>
@@ -42,9 +43,9 @@
                 <ui:text key="LOGIN_PASS"/>
             </ui:tablecell>
             <ui:tablecell width="60">
-                <ui:text var="userkey" key="USER_PASSWORD_BLANK"/>
+                <ui:text var="passkey" key="USER_PASSWORD_BLANK"/>
                 <input class="checkNotEmpty#" type="password" name="password" size="20" maxlength="50"/>
-                <input type="hidden" name="errors" value="Password cannot be blank"/>
+                <input type="hidden" name="password#checkNotEmpty" value="<%= passkey %>"/>
             </ui:tablecell>
             <ui:tablecell/>
         </ui:tablerow>
