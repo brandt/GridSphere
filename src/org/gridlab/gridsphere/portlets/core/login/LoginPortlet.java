@@ -57,7 +57,7 @@ public class LoginPortlet extends ActionPortlet {
 
     private boolean canUserCreateAccount = false;
     private int defaultNumTries = 0;
-    private Boolean useSecureLogin = false;
+    private Boolean useSecureLogin = Boolean.FALSE;
 
     private UserManagerService userManagerService = null;
     private GroupManagerService groupService = null;
