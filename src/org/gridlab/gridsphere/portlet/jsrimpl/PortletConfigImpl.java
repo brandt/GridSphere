@@ -4,6 +4,8 @@ import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.InitParam;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SupportedLocale;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletConfig;
@@ -25,6 +27,8 @@ import java.util.*;
  * @see Portlet
  */
 public class PortletConfigImpl implements PortletConfig {
+
+    private PortletLog log = SportletLog.getInstance(PortletConfigImpl.class);
 
     private PortletContext context = null;
     private ClassLoader classLoader = null;
@@ -127,7 +131,6 @@ public class PortletConfigImpl implements PortletConfig {
 
         }
 
-        //this.logConfig();
     }
 
     /**
@@ -175,7 +178,7 @@ public class PortletConfigImpl implements PortletConfig {
                 return new ResourceBundleImpl(resourceBundle, infoBundle);
             }
         } catch (MissingResourceException e) {
-            System.err.println("Unable to find resource bundle: " + resources + " for locale: " + locale);
+            log.debug("Unable to find resource bundle: " + resources + " for locale: " + locale);
             if (infoBundle != null) {
                 return infoBundle;
             }

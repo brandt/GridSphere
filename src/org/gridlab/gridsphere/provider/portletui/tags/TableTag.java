@@ -362,6 +362,7 @@ public class TableTag extends BaseComponentTag {
         }
 
         super.doEndTag();
+	release();
         return EVAL_PAGE;
     }
 }

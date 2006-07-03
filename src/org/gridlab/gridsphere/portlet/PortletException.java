@@ -7,8 +7,6 @@ package org.gridlab.gridsphere.portlet;
 import javax.servlet.ServletException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The <code>PortletException</code> class defines a general exception that a

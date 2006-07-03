@@ -336,11 +336,7 @@ public class PortletServlet extends HttpServlet
                     renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
                     renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
                     log.debug("in PortletServlet: do title " + pid);
-                    try {
-                        doTitle(portlet, renderRequest, renderResponse);
-                    } catch (PortletException e) {
-                        log.error("Error during doTitle:", e);
-                    }
+                    doTitle(portlet, renderRequest, renderResponse);
                 } else if (action.equals(SportletProperties.WINDOW_EVENT)) {
                     // do nothing
                 } else if (action.equals(SportletProperties.MESSAGE_RECEIVED)) {
@@ -354,10 +350,7 @@ public class PortletServlet extends HttpServlet
                     log.debug("in PortletServlet: action handling portlet " + pid);
                     try {
                         portlet.processAction(actionRequest, actionResponse);
-
                         Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
-
-
                         actionRequest.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid, params);
                         log.debug("placing render params in attribute: key= " + SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
                         redirect(request, response, actionRequest, actionResponse, portalContext);
@@ -462,19 +455,18 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
 
     }
 
-    protected void doTitle(Portlet portlet, RenderRequest request, RenderResponse response) throws PortletException {
+    protected void doTitle(Portlet portlet, RenderRequest request, RenderResponse response) {
         try {
             Portlet por = (Portlet)portlet;
             if (por instanceof GenericPortlet) {
                 GenericPortlet genPortlet = ((GenericPortlet) portlet);
-                if (genPortlet.getPortletConfig() == null) throw new PortletException("Unable to get PortletConfig from Portlet");
                 ResourceBundle resBundle = genPortlet.getPortletConfig().getResourceBundle(request.getLocale());
                 String title = resBundle.getString("javax.portlet.title");
                 response.setContentType("text/html");
                 PrintWriter out = response.getWriter();
                 out.println(title);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("printing title failed", e);
         }
     }
