@@ -204,9 +204,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             String actionName = event.getAction().getName();
             if (actionName.equals(SportletProperties.LOGIN)) {
                 login(event);
+                return;
             }
             if (actionName.equals(SportletProperties.LOGOUT)) {
                 logout(event);
+                return;
             }
             if (trackerService.hasTrackingAction(actionName)) {
                 trackerService.trackURL(actionName, req.getHeader("user-agent"), userName);
@@ -309,7 +311,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
     public boolean isDownload(HttpServletRequest req) {
-        return ((req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME) != null) ? true : false);
+        return (req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME) != null);
     }
 
     public void setTCKUser(PortletRequest req) {
@@ -476,11 +478,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     protected void login(GridSphereEvent event) {
         String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
         PortletRequest req = event.getPortletRequest();
-
+        PortletResponse res = event.getPortletResponse();
         try {
             User user = loginService.login(req);
 
             setUserSettings(event, user);
+
+            String query = event.getAction().getParameter("queryString");
 
             String remme = req.getParameter("remlogin");
             if (remme != null) {
@@ -488,13 +492,21 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             } else {
                 removeUserCookie(event);
             }
+            Boolean useSecureRedirect = Boolean.valueOf(GridSphereConfig.getProperty("use.https.redirect"));
 
+            PortletURI uri = res.createURI(useSecureRedirect);
+            if (query != null) {
+                uri.addParameter("cid", query);
+            }
+            res.sendRedirect(uri.toString());
         } catch (AuthorizationException err) {
             log.debug(err.getMessage());
             req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
         } catch (AuthenticationException err) {
             log.debug(err.getMessage());
             req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
+        } catch (IOException e) {
+            log.error("Unable to perform a redirect!", e);
         }
     }
 
@@ -526,6 +538,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         req.removeAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
         //System.err.println("in logout of GS, calling invalidate on s=" + session.getId());
         session.invalidate();
+        try {
+            PortletResponse res = event.getPortletResponse();
+            res.sendRedirect(res.createURI().toString());
+        } catch (IOException e) {
+            log.error("Unable to do a redirect!", e);
+        }
     }
 
     /**
@@ -541,7 +559,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @return a string with the servlet information.
      */
     public final String getServletInfo() {
-        return "GridSphere Servlet 2.1";
+        return "GridSphere Servlet";
     }
 
     /**
