@@ -62,14 +62,17 @@
     <ui:table>
         <ui:tablerow>
             <ui:tablecell width="100">
-                <ui:actionsubmit action="<%= SportletProperties.LOGIN %>" key="LOGIN_ACTION"/>
+                <ui:actionsubmit action="<%= SportletProperties.LOGIN %>" key="LOGIN_ACTION">
+                    <% if (request.getParameter("cid") != null) { %>
+                    <ui:actionparam name="queryString" value="<%= request.getParameter("cid") %>"/>
+                    <% } %>
+                </ui:actionsubmit>
             </ui:tablecell>
             <ui:tablecell/>
         </ui:tablerow>
     </ui:table>
 
     <p>
-
         <% if (request.getAttribute("canUserCreateAcct") != null) { %>
         <ui:actionlink action="doNewUser" key="LOGIN_SIGNUP"/>
     </p>
