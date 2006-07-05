@@ -8,8 +8,8 @@ import org.gridlab.gridsphere.layout.PortletComponent;
 import org.gridlab.gridsphere.layout.PortletTitleBar;
 import org.gridlab.gridsphere.layout.view.BaseRender;
 import org.gridlab.gridsphere.layout.view.Render;
-import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.util.Iterator;
 import java.util.List;
@@ -40,15 +40,30 @@ public class TitleBar extends BaseRender implements Render {
             if (!modesIt.hasNext()) {
                 titleBuffer.append("&nbsp;");
             }
-            String tmp = "";
+            StringBuffer tmp = new StringBuffer();
             while (modesIt.hasNext()) {
                 mode = (PortletTitleBar.PortletModeLink) modesIt.next();
-                tmp = "<a href=\"" + mode.getHref() + "\"><img src=\"" + req.getContextPath() +"/themes/" + titleBar.getRenderKit() + "/" + titleBar.getTheme() + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\" alt=\"" + mode.getAltTag() + "\"";
-
+                tmp.append("<a href=\"");
+                tmp.append(mode.getHref());
+                tmp.append("\"><img src=\"");
+                tmp.append(req.getContextPath());
+                tmp.append("/themes/");
+                tmp.append(titleBar.getRenderKit());
+                tmp.append("/");
+                tmp.append(titleBar.getTheme());
+                tmp.append("/");
+                tmp.append(mode.getImageSrc());
+                tmp.append("\" title=\"");
+                tmp.append(mode.getAltTag());
+                tmp.append("\" alt=\"");
+                tmp.append(mode.getAltTag());
+                tmp.append("\"");
                 if (!mode.getCursor().equals("")) {
-                    tmp += " style=\"cursor: " + mode.getCursor() + ";\"";
+                    tmp.append(" style=\"cursor: ");
+                    tmp.append(mode.getCursor());
+                    tmp.append(";\"");
                 }
-                tmp += "\" /></a>"; /// Removed File.separator(s)
+                tmp.append("\" /></a>");
             }
             titleBuffer.append(tmp);
         }
