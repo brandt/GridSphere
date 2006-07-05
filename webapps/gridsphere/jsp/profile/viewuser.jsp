@@ -45,7 +45,6 @@
                             <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
                             <ui:tablecell>
                                 <ui:textfield beanId="fullName">
-                                    <ui:validator type="checkNumber" value="You need a number!"/>
                                     <ui:validator type="checkNotEmpty" key="USER_FULLNAME_BLANK"/>
                                 </ui:textfield>
                             </ui:tablecell>
