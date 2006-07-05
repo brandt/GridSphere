@@ -517,7 +517,7 @@ public class LoginPortlet extends ActionPortlet {
         RadioButtonBean errorRB = event.getRadioButtonBean("errorRB");
 
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        System.err.println("chosen vlaue: " + errorRB.getSelectedValue());
+        System.err.println("chosen value: " + errorRB.getSelectedValue());
         Boolean sendMail = Boolean.FALSE;
         if (errorRB.getSelectedValue().equals("MAIL")) sendMail = Boolean.TRUE;
         settings.setAttribute(LOGIN_ERROR_HANDLING, sendMail.toString());
