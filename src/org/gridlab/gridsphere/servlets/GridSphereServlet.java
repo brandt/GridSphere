@@ -140,6 +140,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         // set content to UTF-8 for il8n and compression if supported
         req.setCharacterEncoding("utf-8");
 
+        long startTime = System.currentTimeMillis();
         GridSphereEvent event = new GridSphereEventImpl(context, req, res);
         PortletRequest portletReq = event.getPortletRequest();
 
@@ -204,10 +205,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             String actionName = event.getAction().getName();
             if (actionName.equals(SportletProperties.LOGIN)) {
                 login(event);
+                long endTime = System.currentTimeMillis();
+                System.err.println("Time taken = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
                 return;
             }
             if (actionName.equals(SportletProperties.LOGOUT)) {
                 logout(event);
+                long endTime = System.currentTimeMillis();
+                System.err.println("Time taken = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
                 return;
             }
             if (trackerService.hasTrackingAction(actionName)) {
@@ -262,7 +267,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         //log.debug("Portlet service factory stats");
         //factory.logStatistics();
-
+        long endTime = System.currentTimeMillis();
+        System.err.println("Time taken = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
     }
 
     /**
