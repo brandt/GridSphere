@@ -8,7 +8,6 @@ package org.gridlab.gridsphere.servlets;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.hibernate.DBTask;
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
-import org.gridlab.gridsphere.layout.PortletPageFactory;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.UserPrincipal;
 import org.gridlab.gridsphere.portlet.impl.*;
@@ -140,7 +139,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         res.setContentType("text/html; charset=utf-8");
-
+        long startTime = System.currentTimeMillis();
         GridSphereEvent event = new GridSphereEventImpl(context, req, res);
         PortletRequest portletReq = event.getPortletRequest();
         
@@ -287,6 +286,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             log.error("Unable to get page factory", e);
         }
         */
+        long endTime = System.currentTimeMillis();
+        System.err.println("Time taken = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
 
     }
 
@@ -336,7 +337,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
     public boolean isDownload(HttpServletRequest req) {
-        return ((req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME) != null) ? true : false);
+        return (req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME) != null);
     }
 
     public void setTCKUser(PortletRequest req) {
