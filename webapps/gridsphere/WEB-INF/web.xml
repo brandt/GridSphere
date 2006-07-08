@@ -14,6 +14,9 @@
         GridSphere Portlet Container
     </description>
 
+    <!-- this is needed for clustering of multiple Tomcats -->
+    <distributable/>
+
     <context-param>
         <!-- preferred repository selector. "preferred" because
         if one is already installed, this choice is ignored. -->
