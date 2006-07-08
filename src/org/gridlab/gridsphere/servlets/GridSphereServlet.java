@@ -500,7 +500,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
             Boolean useSecureRedirect = Boolean.valueOf(GridSphereConfig.getProperty("use.https.redirect"));
 
-            PortletURI uri = res.createURI(useSecureRedirect);
+            PortletURI uri = res.createURI(useSecureRedirect.booleanValue());
             if (query != null) {
                 uri.addParameter("cid", query);
             }
