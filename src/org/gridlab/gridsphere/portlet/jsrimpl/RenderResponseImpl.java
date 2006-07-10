@@ -123,7 +123,9 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return the namespace
      */
     public String getNamespace() {
-        return "gridsphere_" + req.getAttribute(SportletProperties.PORTLETID);
+        // this is done due to an issue with MyFaces using getNamespace
+        String pid = ((String)req.getAttribute(SportletProperties.PORTLETID)).replace('#', '_');
+        return "gridsphere_" + pid;
     }
 
     /**
