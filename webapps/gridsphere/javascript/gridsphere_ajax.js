@@ -100,7 +100,6 @@ GridSphereAjaxHandler = {
 
         var sUrl = "/gridsphere/gridsphere" + "?ajax=true&portlet=" + encodeURIComponent(portlet) + "&" + YAHOO.util.Connect._sFormData;
 
-        //this.callback.argument = [ "portlet#" + portlet ];
         var postData = null;
 
         var transaction = YAHOO.util.Connect.asyncRequest('POST', sUrl,
