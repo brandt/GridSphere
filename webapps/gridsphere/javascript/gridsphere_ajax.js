@@ -37,13 +37,14 @@ function handleFailure(o) {
 */
 GridSphereAjaxHandler = {
 
-
+    /*
     callback:function() {
         success = this.handleSuccess;
         failure = this.handleFailure;
         argument = [];
         scope = this;
     },
+    */
 
     handleSuccess:function(o) {
         var cid = o.argument[0];
@@ -83,7 +84,9 @@ GridSphereAjaxHandler = {
         callback.argument = [ mycid ];
         var postData = null;
 
-        var transaction = YAHOO.util.Connect.asyncRequest('POST', sUrl, callback, postData);
+        var transaction = YAHOO.util.Connect.asyncRequest('POST', sUrl,
+            {success:this.handleSuccess, failure:this.handleFailure, argument:[], scope:this},
+                postData);
         //Abort the transaction if it isn't completed in ten seconds.
         //setTimeout("YAHOO.util.Connect.abort(transaction)",10000);
     },
@@ -97,11 +100,14 @@ GridSphereAjaxHandler = {
 
         var sUrl = "/gridsphere/gridsphere" + "?ajax=true&portlet=" + encodeURIComponent(portlet) + "&" + YAHOO.util.Connect._sFormData;
 
-        this.callback.argument = [ "portlet#" + portlet ];
+        //this.callback.argument = [ "portlet#" + portlet ];
         var postData = null;
 
-        var transaction = YAHOO.util.Connect.asyncRequest('POST', sUrl, this.callback, postData);
-        //Abort the transaction if it isn't completed in ten seconds.
+        var transaction = YAHOO.util.Connect.asyncRequest('POST', sUrl,
+            {success:this.handleSuccess, failure:this.handleFailure, argument:[ "portlet#" + portlet ], scope:this},
+                postData);
+
+         //Abort the transaction if it isn't completed in ten seconds.
         //setTimeout("YAHOO.util.Connect.abort(transaction)",10000);
     },
 
