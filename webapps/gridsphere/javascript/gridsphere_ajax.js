@@ -1,50 +1,5 @@
 
-/*
-var callback =
-{
-    success: this.handleSuccess,
-    failure: this.handleFailure,
-    argument: [],
-    scope: this
-}
-*/
- /*
-function handleSuccess(o) {
-    var cid = o.argument[0];
-    alert(cid);
-    if(o.responseText != undefined){
-        alert(o.responseText);
-        // create a temporary div element to store the responseText...
-        var serverResponse = document.createElement("div");
-        // ... and store the responseText inside it
-        serverResponse.innerHTML = o.responseText;
-        //alert(o.responseText);
-        // create a collection of all the div elements returned
-        tempPageElements = serverResponse.getElementsByTagName("div");
-        // replace existing component with new one
-        document.getElementById(cid).innerHTML = tempPageElements[0].innerHTML;
-    }
-}
-
-function handleFailure(o) {
-    var cid = o.argument[0];
-    if(o.responseText != undefined) {
-        // replace existing component with new one
-        alert(o.responseText);
-        document.getElementById(cid).innerHTML = "Unable to retrieve portlet fragment!!! ";
-    }
-}
-*/
 GridSphereAjaxHandler = {
-
-    /*
-    callback:function() {
-        success = this.handleSuccess;
-        failure = this.handleFailure;
-        argument = [];
-        scope = this;
-    },
-    */
 
     handleSuccess:function(o) {
         var cid = o.argument[0];
