@@ -6,10 +6,8 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.layout.view.Render;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -40,8 +38,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
                 row.append(rowView.doEndBorder(event, this));
             }
         row.append(rowView.doEnd(event, this));
-
-        event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, row);
+        setBufferedOutput(event.getPortletRequest(), row);
     }
 
 

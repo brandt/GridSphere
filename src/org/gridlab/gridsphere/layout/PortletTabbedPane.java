@@ -12,7 +12,6 @@ import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabListener;
 import org.gridlab.gridsphere.layout.view.TabbedPaneView;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
@@ -333,7 +332,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 pane.append(selectedTab.getBufferedOutput(req));
             }
         }
-        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, pane);
+        setBufferedOutput(req, pane);
     }
 
     public void remove(PortletComponent pc, PortletRequest req) {

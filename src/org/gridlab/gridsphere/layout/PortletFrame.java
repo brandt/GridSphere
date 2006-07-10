@@ -18,21 +18,21 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
-import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
+import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
 import org.gridsphere.tmf.message.MailMessage;
 
-import javax.servlet.RequestDispatcher;
 import javax.portlet.RenderResponse;
+import javax.servlet.RequestDispatcher;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.util.*;
 import java.security.Principal;
 import java.text.DateFormat;
+import java.util.*;
 
 /**
  * <code>PortletFrame</code> provides the visual representation of a portlet. A portlet frame
@@ -256,14 +256,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @param event a portlet frame event
      */
     protected void fireFrameEvent(PortletFrameEvent event) {
-        List slisteners = Collections.synchronizedList(listeners);
-        synchronized (slisteners) {
-            Iterator it = slisteners.iterator();
-            PortletFrameListener l;
-            while (it.hasNext()) {
-                l = (PortletFrameListener) it.next();
-                l.handleFrameEvent(event);
-            }
+        Iterator it = listeners.iterator();
+        PortletFrameListener l;
+        while (it.hasNext()) {
+            l = (PortletFrameListener) it.next();
+            l.handleFrameEvent(event);
         }
     }
 
@@ -317,16 +314,15 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     }
                 }
 
-                List slisteners = Collections.synchronizedList(listeners);
-                synchronized (slisteners) {
-                    Iterator it = slisteners.iterator();
-                    PortletComponent comp;
-                    while (it.hasNext()) {
-                        comp = (PortletComponent) it.next();
-                        event.addNewRenderEvent(frameEvent);
-                        comp.actionPerformed(event);
-                    }
+
+                Iterator it = listeners.iterator();
+                PortletComponent comp;
+                while (it.hasNext()) {
+                    comp = (PortletComponent) it.next();
+                    event.addNewRenderEvent(frameEvent);
+                    comp.actionPerformed(event);
                 }
+
 
             }
 
@@ -402,16 +398,15 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                         frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);
                     }
 
-                    List slisteners = Collections.synchronizedList(listeners);
-                    synchronized (slisteners) {
-                        Iterator it = slisteners.iterator();
-                        PortletComponent comp;
-                        while (it.hasNext()) {
-                            comp = (PortletComponent) it.next();
-                            event.addNewRenderEvent(frameEvent);
-                            comp.actionPerformed(event);
-                        }
+
+                    Iterator it = listeners.iterator();
+                    PortletComponent comp;
+                    while (it.hasNext()) {
+                        comp = (PortletComponent) it.next();
+                        event.addNewRenderEvent(frameEvent);
+                        comp.actionPerformed(event);
                     }
+
                 }
 
             }
@@ -422,16 +417,14 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             addRenderParams(request);
 
-            List slisteners = Collections.synchronizedList(listeners);
-            synchronized (slisteners) {
-                Iterator it = slisteners.iterator();
-                PortletComponent comp;
-                while (it.hasNext()) {
-                    comp = (PortletComponent) it.next();
-                    event.addNewRenderEvent(titleBarEvent);
-                    comp.actionPerformed(event);
-                }
+            Iterator it = listeners.iterator();
+            PortletComponent comp;
+            while (it.hasNext()) {
+                comp = (PortletComponent) it.next();
+                event.addNewRenderEvent(titleBarEvent);
+                comp.actionPerformed(event);
             }
+
         }
 
     }
@@ -507,7 +500,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         StringBuffer frame = (StringBuffer) cacheService.getCached(this.getComponentID() + portletClass + id);
         String nocache = (String) req.getAttribute(CacheService.NO_CACHE);
         if ((frame != null) && (nocache == null)) {
-            req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, frame);
+            setBufferedOutput(req, frame);
             return;
         }
         frame = new StringBuffer();
@@ -594,8 +587,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         frame.append(postframe);
 
-
-        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, frame);
+        setBufferedOutput(req, frame);
 
         // check if expiration was set in render response
         Map props = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
@@ -655,11 +647,18 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 mailToUser.setTo(superUser.getEmailAddress());
                 mailToUser.setSubject(getLocalizedText(req, "PORTAL_ERROR_SUBJECT"));
                 StringBuffer body = new StringBuffer();
-                body.append(getLocalizedText(req, "PORTAL_ERROR_BODY") + "\n\n");
-                body.append("portlet title: " + titleBar.getTitle() + "\n\n");
+                body.append(getLocalizedText(req, "PORTAL_ERROR_BODY"));
+                body.append("\n\n");
+                body.append("portlet title: ");
+                body.append(titleBar.getTitle());
+                body.append("\n\n");
                 User user = req.getUser();
-                body.append(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()) + "\n\n");
-                if (user != null) body.append(user + "\n\n");
+                body.append(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
+                body.append("\n\n");
+                if (user != null) {
+                    body.append(user);
+                    body.append("\n\n");
+                }
                 StringWriter sw = new StringWriter();
                 PrintWriter pout = new PrintWriter(sw);
                 cause.printStackTrace(pout);

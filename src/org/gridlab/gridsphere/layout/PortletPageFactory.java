@@ -16,8 +16,8 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import javax.servlet.ServletContext;
 import java.io.*;
 import java.net.URLEncoder;
-import java.util.*;
 import java.security.Principal;
+import java.util.*;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>

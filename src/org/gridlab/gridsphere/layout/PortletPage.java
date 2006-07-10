@@ -20,9 +20,7 @@ import org.gridlab.gridsphere.services.core.cache.CacheService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.util.*;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * The <code>PortletPage</code> is the generic container for a collection of
@@ -494,13 +492,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
     public void doRenderHTML(GridSphereEvent event) {
 
-        PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();
-
-        StringWriter sout = new StringWriter();
-        PrintWriter writer = new PrintWriter(sout);
-
-        //writer.print(pageView.doStart(event, this));
         boolean floating = false;
         PortletFrame f = null;
         // In case the "floating" portlet state has been selected:
@@ -547,30 +539,16 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
         }
 
-        writer.print(pageView.doStart(event, this));
-        if (floating) writer.println(f.getBufferedOutput(req));
-        if (headerContainer != null) writer.println(headerContainer.getBufferedOutput(req));
-        if (tabbedPane != null) writer.println(tabbedPane.getBufferedOutput(req));
-        if (footerContainer != null) writer.println(footerContainer.getBufferedOutput(req));
-        writer.print(pageView.doEnd(event, this));
+        StringBuffer page = new StringBuffer();
+        page.append(pageView.doStart(event, this));
+        if (floating) page.append(f.getBufferedOutput(req));
+        if (headerContainer != null) page.append(headerContainer.getBufferedOutput(req));
+        if (tabbedPane != null) page.append(tabbedPane.getBufferedOutput(req));
+        if (footerContainer != null) page.append(footerContainer.getBufferedOutput(req));
+        page.append(pageView.doEnd(event, this));
 
-        PrintWriter out;
-        try {
-            String ae = req.getHeader("accept-encoding");
-            if (ae != null && ae.indexOf("gzip") != -1) {
-                GZIPOutputStream gzos = new GZIPOutputStream(res.getOutputStream());
-                gzos.write(sout.getBuffer().toString().getBytes(req.getCharacterEncoding()));
-                gzos.close();
-            }  else {
-                out = res.getWriter();
-                out.println(sout);
-            }
-        } catch (IOException e) {
-            // means the writer has already been obtained
-            log.error("Error writing page!", e);
-        } finally {
-            writer.close();
-        }
+        setBufferedOutput(req, page);
+
     }
 
     public Object clone() throws CloneNotSupportedException {

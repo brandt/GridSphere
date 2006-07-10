@@ -9,13 +9,12 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Vector;
 import java.util.List;
+import java.util.Vector;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * The <code>PortletLayoutEngine</code> is a singleton that is responsible for managing
@@ -80,14 +79,13 @@ public class PortletLayoutEngine {
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         res.setContentType("text/html; charset=utf-8"); // Necessary to display UTF-8 encoded characters
-
         res.setHeader("Cache-Control","no-cache"); //Forces caches to obtain a new copy of the page from the origin server
         res.setHeader("Cache-Control","no-store"); //Directs caches not to store the page under any circumstance
         res.setHeader("Expires", "0"); //Causes the proxy cache to see the page as "stale"
         res.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
         String ae = req.getHeader("accept-encoding");
         if (ae != null && ae.indexOf("gzip") != -1) {
-           res.setHeader("Content-Encoding", "gzip");
+            res.setHeader("Content-Encoding", "gzip");
         }
     }
 
@@ -98,22 +96,56 @@ public class PortletLayoutEngine {
      * @throws IOException if an I/O error occcurs during processing
      */
     public void service(GridSphereEvent event) throws IOException {
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
         PortletPage page = getPortletPage(event);
-
         setHeaders(event);
-        //int numcomps = page.getComponentIdentifierList().size();
-        if (event.getPortletRequest().getParameter("ajax") != null) {
-            PortletComponent comp = page.getActiveComponent(event);
-            if (comp != null) {
-                comp.doRender(event);
-                StringBuffer sb = comp.getBufferedOutput(event.getPortletRequest());
-                event.getPortletResponse().setContentType("text/html");
-                event.getPortletResponse().getWriter().print(sb);
+        StringBuffer pageBuffer = new StringBuffer();
+        if (req.getParameter("ajax") != null) {
+            String portlet = req.getParameter("portlet");
+            System.err.println("it's ajax: " + portlet);
+            String cid = req.getParameter(SportletProperties.COMPONENT_ID);
+            if ((cid != null) && (cid.startsWith("portlet"))) {
+                portlet = cid.substring("portlet".length()+1);
+            }
+            if (portlet != null) {
+                PortletFrameRegistry registry = PortletFrameRegistry.getInstance();
+                PortletFrame frame = registry.getPortletFrame("portlet#" + portlet, portlet, event);
+                frame.setInnerPadding("");
+                frame.setOuterPadding("");
+                frame.setTransparent(false);
+                frame.setTheme("default");
+                frame.setRenderKit("standard");
+                //frame.setRequiredRole(role);
+                frame.doRender(event);
+                pageBuffer = frame.getBufferedOutput(req);
+            } else {
+                PortletComponent comp = page.getActiveComponent(event);
+                if (comp != null) {
+                    comp.doRender(event);
+                    pageBuffer = comp.getBufferedOutput(req);
+                    res.setContentType("text/html");
+                }
             }
         } else {
             page.doRender(event);
+            pageBuffer = page.getBufferedOutput(req);
         }
 
+        try {
+            String ae = req.getHeader("accept-encoding");
+            if (ae != null && ae.indexOf("gzip") != -1) {
+                GZIPOutputStream gzos = new GZIPOutputStream(res.getOutputStream());
+                gzos.write(pageBuffer.toString().getBytes(req.getCharacterEncoding()));
+                gzos.close();
+            }  else {
+                PrintWriter out = res.getWriter();
+                out.print(pageBuffer.toString());
+            }
+        } catch (IOException e) {
+            // means the writer has already been obtained
+            log.error("Error writing page!", e);
+        }
     }
 
     /**

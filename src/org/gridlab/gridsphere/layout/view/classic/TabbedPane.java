@@ -13,7 +13,6 @@ import org.gridlab.gridsphere.layout.view.BaseRender;
 import org.gridlab.gridsphere.layout.view.TabbedPaneView;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import java.io.File;
 import java.util.List;
 import java.util.StringTokenizer;
 

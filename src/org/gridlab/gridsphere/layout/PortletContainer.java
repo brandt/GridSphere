@@ -5,12 +5,9 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -92,7 +89,7 @@ public class PortletContainer extends BasePortletComponent implements
             comp.doRender(event);
             container.append(comp.getBufferedOutput(req));
         }
-        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, container);
+        setBufferedOutput(req, container);
     }
 
 

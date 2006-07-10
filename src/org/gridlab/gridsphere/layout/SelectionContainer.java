@@ -1,12 +1,11 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The <code>PortletContainer</code> acts a container for a list of one or more portlet components
@@ -105,10 +104,9 @@ public class SelectionContainer extends BasePortletComponent implements
         PortletComponent p;
         for (int i = 0; i < components.size(); i++) {
             p = (PortletComponent)components.get(i);
-
             if (p.getLabel().equals(activeLabel)) {
                 p.doRender(event);
-                event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, p.getBufferedOutput(event.getPortletRequest()));
+                setBufferedOutput(event.getPortletRequest(), p.getBufferedOutput(event.getPortletRequest()));
                 return;
             }
         }

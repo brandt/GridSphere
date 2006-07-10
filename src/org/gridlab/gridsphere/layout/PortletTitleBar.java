@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.event.WindowEvent;
 import org.gridlab.gridsphere.event.impl.WindowEventImpl;
-import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarListener;
 import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
@@ -16,14 +15,12 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portletcontainer.*;
-import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.util.*;
 import java.security.Principal;
+import java.util.*;
 
 /**
  * A <code>PortletTitleBar</code> represents the visual display of the portlet title bar
@@ -779,11 +776,15 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     }
 
     public String getPreBufferedTitle(PortletRequest req) {
-        return (String)req.getAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre");
+        String preTitle = (String)req.getAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre");
+        req.removeAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre");
+        return preTitle;
     }
 
     public String getPostBufferedTitle(PortletRequest req) {
-        return (String)req.getAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post");
+        String postTitle = (String)req.getAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post");
+        req.removeAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post");
+        return postTitle;
     }
 
 

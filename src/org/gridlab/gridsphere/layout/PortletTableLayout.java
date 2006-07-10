@@ -9,18 +9,17 @@ import org.gridlab.gridsphere.layout.view.TableLayoutView;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -180,7 +179,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
                     if ((canModify) && (!hasFrameMaximized)) {
                         table.append(tableView.doRenderUserSelects(event, this));
                     }
-                    event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, table);
+                    setBufferedOutput(event.getPortletRequest(), table);
                     return;
                 }
             }
@@ -204,9 +203,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         }
 
         table.append(tableView.doEnd(event, this));
-
-        event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, table);
-
+        setBufferedOutput(event.getPortletRequest(), table);
     }
 
     public Object clone() throws CloneNotSupportedException {

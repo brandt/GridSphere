@@ -12,11 +12,10 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
+import java.awt.*;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Iterator;
-import java.util.List;
-import java.awt.ComponentOrientation;
 
 public class Page extends BaseRender implements Render {
 
@@ -72,6 +71,10 @@ public class Page extends BaseRender implements Render {
         page.append("\n\t<script type=\"text/javascript\" src=\"" + req.getContextPath() + "/javascript/gridsphere.js\"></script>");
         page.append("\n\t<script type=\"text/javascript\" src=\"" + req.getContextPath() + "/javascript/SimpleTextEditor.js\"></script>");
         page.append("\n\t<script type=\"text/javascript\" src=\"" + req.getContextPath() + "/javascript/validation.js\"></script>");        
+        page.append("\n\t<script type=\"text/javascript\" src=\"" + req.getContextPath() + "/javascript/yahoo.js\"></script>");
+        page.append("\n\t<script type=\"text/javascript\" src=\"" + req.getContextPath() + "/javascript/connection.js\"></script>");
+        page.append("\n\t<script type=\"text/javascript\" src=\"" + req.getContextPath() + "/javascript/gridsphere_ajax.js\"></script>");
+                
         if (props != null) {
             Object jsObj = props.get("JAVASCRIPT_SRC");
             if ((jsObj != null) && (jsObj instanceof java.util.List)) {

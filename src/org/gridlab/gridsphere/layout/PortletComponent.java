@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletMessage;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 
@@ -125,6 +124,8 @@ public interface PortletComponent extends ComponentLifecycle {
     public void setParentComponent(PortletComponent parent);
 
     public void remove(PortletComponent pc, PortletRequest req);
+
+    public void setBufferedOutput(PortletRequest req, StringBuffer sb);
 
     public StringBuffer getBufferedOutput(PortletRequest req);
     

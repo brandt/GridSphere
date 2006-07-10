@@ -7,13 +7,11 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
-import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
 
@@ -102,13 +100,12 @@ public class PortletContent extends BasePortletComponent implements Serializable
                 } else {
                     writer.write("<iframe border=\"0\" width=\"100%\" height=\"100%\" src=\""+textFile+"\"></iframe>");
                 }
-
                 content = writer.getBuffer();
-                req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, content);
             } catch (Exception e) {
                 log.error("Unable to include textfile: " + textFile, e);
                 content.append("Unable to include textfile: " + textFile);
             }
+            setBufferedOutput(req, content);
         }
 
 

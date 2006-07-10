@@ -7,7 +7,6 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import java.io.IOException;
 import java.util.List;
 
 /**

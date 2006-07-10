@@ -266,14 +266,15 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      */
     public void doRender(GridSphereEvent event) {
         super.doRender(event);
+        PortletRequest req = event.getPortletRequest();
         if (portletComponent == null) return;
-        List userRoles = event.getPortletRequest().getRoles();
+        List userRoles = req.getRoles();
         StringBuffer tab = new StringBuffer();
         if (roleString.equals("") || (userRoles.contains(roleString))) {
             portletComponent.doRender(event);
-            tab.append(portletComponent.getBufferedOutput(event.getPortletRequest()));
+            tab.append(portletComponent.getBufferedOutput(req));
         }
-        event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, tab);
+        setBufferedOutput(req, tab);
     }
 
 
