@@ -167,7 +167,7 @@ public class ActionLinkTag extends ActionTag {
         if (useAjax) {
             String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
             String paction = ((!action.equals("")) ? "&" + portletAction.toString() : "");
-            actionlink.setOnClick("startRequest(" + cid + ", '" + paction + "');");
+            actionlink.setOnClick("GridSphereAjaxHandler.startRequest(" + cid + ", '" + paction + "');");
         }
 
         if (imageBean != null) {

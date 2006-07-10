@@ -10,7 +10,6 @@ import org.gridlab.gridsphere.provider.portletui.beans.ActionSubmitBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -105,7 +104,7 @@ public class ActionSubmitTag extends ActionTag {
         if (useAjax) {
             String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
             String paction = ((!action.equals("")) ? "&" + portletAction.toString() : "");
-            actionSubmitBean.setOnClick("startRequest(" + cid + ", '" + paction + "');");
+            actionSubmitBean.setOnClick("GridSphereAjaxHandler.startRequest('" + cid + "', '" + paction + "');");
         }
 
         if ((bodyContent != null) && (value == null)) {
