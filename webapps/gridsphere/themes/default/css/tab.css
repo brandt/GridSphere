@@ -7,19 +7,19 @@ Version: $Id$
 .tab-pane {
    font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;
    font-weight:normal;
-    background: #d6d6d6;
+/*    background: #d6d6d6;  */
    border-bottom: 1px solid #0B54B0;
 }
 
 .tab-empty {
    border-bottom: 1px solid black;
-    background: #d6d6d6;
+/*    background: #d6d6d6; */
    border-right: 1px solid black;
 }
 
 .tab-fillup {
     width: 90%;
-    background: #d6d6d6;
+/*    background: #d6d6d6;  */
     border-bottom: 1px solid #0B54B0;
 }
 
