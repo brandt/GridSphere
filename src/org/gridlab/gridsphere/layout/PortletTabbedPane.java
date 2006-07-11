@@ -35,6 +35,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     private int startIndex = 0;
     private String style = "menu";
     private String layoutDescriptor = null;
+    private String top = "-1";
 
     private transient TabbedPaneView tabbedPaneView = null;
 
@@ -51,6 +52,14 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
     public String getLayoutDescriptor() {
         return layoutDescriptor;
+    }
+
+    public String getTop() {
+        return top;
+    }
+
+    public void setTop(String top) {
+        this.top = top;
     }
 
     /**
