@@ -1,7 +1,7 @@
 $Id$
 
-	Building and Testing the GridSphere Distribution
-=========================================================
+	Building the GridSphere Distribution
+==================================================
 
 
 Requirements
