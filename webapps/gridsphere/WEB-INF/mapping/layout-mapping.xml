@@ -155,6 +155,9 @@
         <field name="Style" type="string">
             <bind-xml name="style" node="attribute"/>
         </field>
+        <field name="Top" type="string">
+            <bind-xml name="top" node="attribute"/>
+        </field>
     </class>
 
     <class name="org.gridlab.gridsphere.layout.PortletTab" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
