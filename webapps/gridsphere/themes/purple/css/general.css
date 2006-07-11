@@ -14,7 +14,7 @@ a {
 }
 a:link {
   color: #0D70C6;
-  text-decoration: bold;
+  text-decoration: none;
 }
 a:visited       {
   color: #0D70C6;

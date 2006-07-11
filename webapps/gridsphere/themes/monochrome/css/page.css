@@ -8,7 +8,6 @@ Version: $Id: page.css 3968 2005-04-21 21:42:17Z novotny $
   color: #7B7B7B;
   font-size: 36px;
   font-weight: normal;
-  background:#FFFFFF;
   padding-top: 3px;
   padding-left: 15px;
   padding-right: 15px;
@@ -17,7 +16,6 @@ Version: $Id: page.css 3968 2005-04-21 21:42:17Z novotny $
 
 #page-tagline {
   color:#cbccce;
-  background:#d6d6d6;
   padding-left: 15px;
   padding-right: 15px;
   padding-top: 1px;

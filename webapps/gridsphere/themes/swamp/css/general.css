@@ -16,7 +16,7 @@ a {
 }
 a:link {
   color: green;
-  text-decoration: bold;
+  text-decoration: none;
 }
 a:visited       {
   color: green;
