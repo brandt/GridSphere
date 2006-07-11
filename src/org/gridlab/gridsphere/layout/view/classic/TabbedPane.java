@@ -65,13 +65,16 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
         PortletTabbedPane pane = (PortletTabbedPane)comp;
+        StringBuffer sb = new StringBuffer();
         if (pane.getStyle().equalsIgnoreCase("sub-menu")) {
-           StringBuffer sb = new StringBuffer();
             sb.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"tab-sub-pane" /*+ pane.getTheme()*/ + "\" width=\"100%\"><tr><td>"); ///
             sb.append("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
             return sb;
         } else {
-            return TAB_START;
+            if (!pane.getTop().equals("-1")) {
+                sb.append("<div style=\"position: absolute; top: \"" + pane.getTop() + "\">");
+            }
+            return sb.append(TAB_START);
         }
     }
 
@@ -120,7 +123,10 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             pane.append("</tr></table><!-- end SUB MENU tabbed pane -->\n");
             return pane;
         } else {
-            return TAB_END;
+            if (!tabPane.getTop().equals("-1")) {
+                pane.append("</div>");
+            }
+            return pane.append(TAB_END);
         }
     }
 

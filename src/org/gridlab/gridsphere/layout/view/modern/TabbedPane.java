@@ -78,7 +78,6 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
     public StringBuffer doRenderTab(GridSphereEvent event, PortletTabbedPane tabPane, PortletTab tab) {
         // this really creates the individual tabs
         StringBuffer pane = new StringBuffer();
-        String path = event.getPortletRequest().getContextPath() + "/themes/" + tabPane.getTheme() + "/images/"; /// Removed File.separator(s)
         String link = tab.createTabTitleLink(event);
         String lang = event.getPortletRequest().getLocale().getLanguage();
         String title = tab.getTitle(lang);
@@ -113,8 +112,6 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         PortletTabbedPane tabPane = (PortletTabbedPane)component;
         StringBuffer pane = new StringBuffer();
         if (tabPane.getStyle().equals("sub-menu")) {
-            String path = event.getPortletRequest().getContextPath() + "/themes/" + tabPane.getTheme() + "/images/"; /// Removed File.separator(s)
-            ///pane.append("<li style=\"background-image: url('" + path + "subtab-middle.gif')\"><span style=\"width: 100%\">&nbsp;</span></li>");
             pane.append("</ul>");
             pane.append("<div class=\"tab-empty\">&nbsp;</div>");            
             pane.append("</div><!-- END SUB MENU TABBED PANE -->\n");
