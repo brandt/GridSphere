@@ -1,10 +1,10 @@
 $Id$
 
-	Building and Testing the GridSphere Distribution
-=========================================================
+	Building the GridSphere Distribution
+==================================================
 
 
- Requirements
+Requirements
 ------------
 
 1) Building the GridSphere distribution requires JDK 1.4.2 
