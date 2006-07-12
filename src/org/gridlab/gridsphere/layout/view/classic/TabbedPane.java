@@ -72,7 +72,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             return sb;
         } else {
             if (!pane.getTop().equals("-1")) {
-                sb.append("<div style=\"position: absolute; top: \"" + pane.getTop() + ";\">");
+                sb.append("<div style=\"position: absolute; top: 55px;\">");
             }
             return sb.append(TAB_START);
         }
