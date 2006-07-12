@@ -330,8 +330,10 @@ public class ActionPortlet extends AbstractPortlet {
             doAction(request, response, next, paramTypes, arguments);
             formEvent.store();
             next = getNextState(request);
-            log.debug("in doView: next page is= " + next);
-            doViewJSP(request, response, next);
+            if (next.endsWith(".jsp")) {
+                log.debug("in doView: next page is= " + next);
+                doViewJSP(request, response, next);
+            }
         }
     }
 

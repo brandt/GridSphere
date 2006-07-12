@@ -25,6 +25,7 @@ import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
+import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -356,7 +357,7 @@ public class ActionPortlet extends GenericPortlet {
             //System.err.println("in doMode: befoire store cid=" + request.getAttribute(SportletProperties.COMPONENT_ID));
             formEvent.store();
             next = getNextState(request);
-            if (next != null) {
+            if ((next != null) && (next.endsWith(".jsp"))) {
                 log.debug("in doView: next page is= " + next);
                 doViewJSP(request, response, next);
                /*
