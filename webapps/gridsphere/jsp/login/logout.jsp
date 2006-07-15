@@ -9,15 +9,14 @@
 
 <ui:table>
     <ui:tablerow cssStyle="background-color:inherit;">
-        <ui:tablecell>
+        <ui:tablecell align="center" valign="bottom">
             <ui:actionlink action="<%= SportletProperties.LOGOUT %>" value="<%= GRIDSPHERE_LOGOUT_LABEL %>"
                            style="bold"/>
         </ui:tablecell>
     </ui:tablerow>
     <ui:tablerow cssStyle="background-color:inherit;" align="center">
-        <ui:tablecell>
+        <ui:tablecell align="center" valign="top">
             <ui:text key="LOGIN_SUCCESS"/>, <%= username %>
         </ui:tablecell>
     </ui:tablerow>
-
 </ui:table>
