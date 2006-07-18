@@ -3,9 +3,9 @@ GridSphereAjaxHandler = {
 
     handleSuccess:function(o) {
         var cid = o.argument[0];
-        alert(cid);
+        //alert(cid);
         if(o.responseText != undefined){
-            alert(o.responseText);
+            //alert(o.responseText);
             // create a temporary div element to store the responseText...
             var serverResponse = document.createElement("div");
             // ... and store the responseText inside it
@@ -36,11 +36,11 @@ GridSphereAjaxHandler = {
         YAHOO.util.Connect.setForm(formElements[0]);
 
         var sUrl = "/gridsphere/gridsphere" + "?ajax=true&cid=" + encodeURIComponent(mycid) + "&" + YAHOO.util.Connect._sFormData;
-        callback.argument = [ mycid ];
+
         var postData = null;
 
         var transaction = YAHOO.util.Connect.asyncRequest('POST', sUrl,
-            {success:this.handleSuccess, failure:this.handleFailure, argument:[], scope:this},
+            {success:this.handleSuccess, failure:this.handleFailure, argument:[ mycid ], scope:this},
                 postData);
         //Abort the transaction if it isn't completed in ten seconds.
         //setTimeout("YAHOO.util.Connect.abort(transaction)",10000);
