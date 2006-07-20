@@ -173,6 +173,8 @@ public interface SportletProperties {
 
     public static final String PORTLET_WINDOW = "gs_state";
 
+    public static final String PORTLET_WINDOW_ID = "org.gridlab.gridsphere.layout.PORTLET_WINDOW_ID";
+
     //public static final String PORTLET_DATA = "org.gridlab.gridsphere.portlet.PortletData";
 
     public static final String PORTLET_DATA_MANAGER = "org.gridlab.gridsphere.portletcontainer.PortletDataManager";

@@ -75,6 +75,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private String lastFrame = "";
 
+    private String windowId = "";
+
     /**
      * Constructs an instance of PortletFrame
      */
@@ -228,6 +230,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         // invalidate cache
         req.setAttribute(CacheService.NO_CACHE, "true");
+
+	if (windowId.equals("")) windowId = componentIDStr;
+
         doConfig();
         return list;
     }
@@ -331,6 +336,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             titleBar.actionPerformed(event);
 
             request.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
+	    request.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
 
             PortletResponse res = event.getPortletResponse();
 
@@ -524,6 +530,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             renderPortlet = false;
         }
 
+	req.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
 
         StringWriter storedWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(storedWriter);
