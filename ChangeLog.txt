@@ -7,10 +7,12 @@ Changes since GridSphere 2.1.2
 Bug
 
     * [GPF-151] - New group layout disappears
+    * [GPF-179] - File Download does not work for any JSR Portlet
     * [GPF-184] - Test with Oracle 10G - ERROR
     * [GPF-186] - The page of a new group is blank
     * [GPF-188] - Eliminate GUEST role
     * [GPF-191] - can't add more than one portlet to user tab
+    * [GPF-198] - ListBoxBean does not support cssStyle
     * [GPF-208] - jsp with two tables, one with zebra="true", shows incorrectly
     * [GPF-213] - TextAreaBean does not support cssStyle
     * [GPF-214] - Configuring a different portal URL does not work
@@ -27,8 +29,10 @@ Bug
 New Feature
 
     * [GPF-89] - add onClick to actionsubmit tag
+    * [GPF-185] - please add ability to link to outside sites from tabs/subtabs
     * [GPF-187] - Spanish localization
     * [GPF-193] - Add ability to add external javascript library to page and onLoad attribute to BODY tag
+    * [GPF-201] - incorporate AJAX support for rendering only selected layout components    * [GPF-202] - Certificate login for gridsphere portal    * [GPF-203] - Provide option to email errors to a portal admin
     * [GPF-209] - Add configuration option to enable users to be subscribed to all known groups
     * [GPF-210] - provide config option to track/count all actions in portlets
     * [GPF-211] - Add Text Editor widget tag
@@ -44,6 +48,9 @@ Improvement
     * [GPF-190] - Eliminate user services
     * [GPF-194] - Provide more information when DBTask fails.
     * [GPF-196] - Update commons-fileupload-1.0 to 1.1
+    * [GPF-200] - Adding id attribute to tags
+    * [GPF-204] - Allow admins to approve accounts
+    * [GPF-207] - Tags doc: there is no attribute name in textarea.
     * [GPF-229] - use gzip compression to stream page
     * [GPF-238] - allow portal deployer to configure http/https ports used when generating links
     * [GPF-240] - Provide mechanism to forward to a particular portlet/component after logging in
