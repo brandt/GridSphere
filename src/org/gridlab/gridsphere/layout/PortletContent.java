@@ -98,7 +98,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
                         throw new PortletException("Unable to include resource: RequestDispatcher is null");
                     }
                 } else {
-                    writer.write("<iframe border=\"0\" width=\"100%\" height=\"100%\" src=\""+textFile+"\"></iframe>");
+                    writer.write("<iframe border=\"0\" width=\"100%\" height=\"100%\" src=\"" + textFile + "\"></iframe>");
                 }
                 content = writer.getBuffer();
             } catch (Exception e) {

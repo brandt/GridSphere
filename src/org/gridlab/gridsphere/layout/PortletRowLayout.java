@@ -20,7 +20,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
 
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
-        rowView = (Render)getRenderClass("RowLayout");
+        rowView = (Render) getRenderClass("RowLayout");
         return list;
     }
 
@@ -29,14 +29,14 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
         PortletComponent p;
         row.append(rowView.doStart(event, this));
         for (int i = 0; i < components.size(); i++) {
-                p = (PortletComponent) components.get(i);
-                row.append(rowView.doStartBorder(event, p));
-                if (p.getVisible()) {
-                    p.doRender(event);
-                    row.append(p.getBufferedOutput(event.getPortletRequest()));
-                }
-                row.append(rowView.doEndBorder(event, this));
+            p = (PortletComponent) components.get(i);
+            row.append(rowView.doStartBorder(event, p));
+            if (p.getVisible()) {
+                p.doRender(event);
+                row.append(p.getBufferedOutput(event.getPortletRequest()));
             }
+            row.append(rowView.doEndBorder(event, this));
+        }
         row.append(rowView.doEnd(event, this));
         setBufferedOutput(event.getPortletRequest(), row);
     }

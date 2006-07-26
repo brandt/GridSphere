@@ -5,6 +5,7 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.layout.view.Render;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
@@ -22,6 +23,10 @@ public class PortletContainer extends BasePortletComponent implements
         Serializable, Cloneable {
 
     protected List components = new ArrayList();
+    protected String style = null;
+    public final static String STYLE_HEADER = "STYLE_HEADER";
+    public final static String STYLE_FOOTER = "STYLE_FOOTER";
+    private Render containerView = null;
 
     /**
      * Initializes the portlet component. Since the components are isolated
@@ -33,6 +38,8 @@ public class PortletContainer extends BasePortletComponent implements
      * @see ComponentIdentifier
      */
     public List init(PortletRequest req, List list) {
+        containerView = (Render) getRenderClass("Container");
+
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setComponentID(list.size());
@@ -78,10 +85,13 @@ public class PortletContainer extends BasePortletComponent implements
      *
      * @param event a gridsphere event
      */
+
     public void doRender(GridSphereEvent event) {
         super.doRender(event);
-        PortletRequest req = event.getPortletRequest();
         StringBuffer container = new StringBuffer();
+        container.append(containerView.doStartBorder(event, this));
+        PortletRequest req = event.getPortletRequest();
+
         Iterator it = components.iterator();
         PortletComponent comp;
         while (it.hasNext()) {
@@ -89,9 +99,23 @@ public class PortletContainer extends BasePortletComponent implements
             comp.doRender(event);
             container.append(comp.getBufferedOutput(req));
         }
+
+        container.append(containerView.doEndBorder(event, this));
+
+  //      event.getPortletRequest().
+    //            setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, container);
+      //  req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, container);
+
         setBufferedOutput(req, container);
     }
 
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
+    }
 
     /**
      * Adds a new portlet component to the layout
@@ -141,7 +165,6 @@ public class PortletContainer extends BasePortletComponent implements
         }
         return f;
     }
-
 }
 
 

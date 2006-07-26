@@ -17,9 +17,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -32,7 +30,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     private transient PortletLog log = SportletLog.getInstance(PortletPage.class);
 
     protected transient CacheService cacheService = null;
-    
+
     protected PortletContainer footerContainer = null;
     protected PortletContainer headerContainer = null;
     protected PortletTabbedPane tabbedPane = null;
@@ -231,7 +229,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
-        pageView = (Render)getRenderClass("Page");
+        pageView = (Render) getRenderClass("Page");
 
         if (headerContainer != null) {
             headerContainer.setTheme(theme);
@@ -244,6 +242,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             tabbedPane.setRenderKit(renderKit);
             list = tabbedPane.init(req, list);
         }
+
 
         if (footerContainer != null) {
             footerContainer.setTheme(theme);
@@ -387,40 +386,40 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
                 // perform an action if the component is non null
                 List userRoles = event.getPortletRequest().getRoles();
                 if (comp.getRequiredRole().equals("") || userRoles.contains(comp.getRequiredRole())) {
-                        //PortletRequest req = event.getPortletRequest();
-                        //Principal principal = req.getUserPrincipal();
-                        //User user = req.getUser();
-                        /*
-                        if (comp instanceof PortletFrame) {
-                            // do role checking if user is logged in
-                            if (principal != null) {
-                            //if (!(user instanceof GuestUser)) {
-                                String portletClass = ((PortletFrame)comp).getPortletClass();
-                                boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
-                                if (!hasrole) {
-                                    System.err.println("User " + user + " does not have required role!");
-                                    return null;
-                                }
+                    //PortletRequest req = event.getPortletRequest();
+                    //Principal principal = req.getUserPrincipal();
+                    //User user = req.getUser();
+                    /*
+                     if (comp instanceof PortletFrame) {
+                         // do role checking if user is logged in
+                         if (principal != null) {
+                         //if (!(user instanceof GuestUser)) {
+                             String portletClass = ((PortletFrame)comp).getPortletClass();
+                             boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
+                             if (!hasrole) {
+                                 System.err.println("User " + user + " does not have required role!");
+                                 return null;
+                             }
 
-                            }
-                        } else if (comp instanceof PortletTitleBar) {
-                            if (principal == null) {
-                            //if (!(user instanceof GuestUser)) {
-                                String portletClass = ((PortletTitleBar)comp).getPortletClass();
-                                boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
-                                //System.err.println("hasRole = " + hasrole);
-                                if (!hasrole) {
-                                    System.err.println("User " + user + " does not have required role!");
-                                    return null;
-                                }
-                            }
-                        }
-                       */
-                        if (comp instanceof PortletFrame) {
-                            PortletFrame f = (PortletFrame)comp;
-                            System.err.println(" in portlet: " + f.getPortletClass());
-                        }
-                        return comp;
+                         }
+                     } else if (comp instanceof PortletTitleBar) {
+                         if (principal == null) {
+                         //if (!(user instanceof GuestUser)) {
+                             String portletClass = ((PortletTitleBar)comp).getPortletClass();
+                             boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
+                             //System.err.println("hasRole = " + hasrole);
+                             if (!hasrole) {
+                                 System.err.println("User " + user + " does not have required role!");
+                                 return null;
+                             }
+                         }
+                     }
+                    */
+                    if (comp instanceof PortletFrame) {
+                        PortletFrame f = (PortletFrame) comp;
+                        System.err.println(" in portlet: " + f.getPortletClass());
+                    }
+                    return comp;
                 }
             }
         }
@@ -501,10 +500,10 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             PortletComponent comp = getActiveComponent(event);
             PortletComponent pc = comp.getParentComponent();
             if (comp instanceof PortletFrame) {
-                f = (PortletFrame)comp;
+                f = (PortletFrame) comp;
             } else if (pc != null) {
                 if (pc instanceof PortletFrame) {
-                    f = (PortletFrame)pc;
+                    f = (PortletFrame) pc;
                 }
             }
             if (f != null) {
@@ -519,20 +518,40 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             }
         } else {
 
+//            String themePropFileName = GridSphereConfig.getServletContext().getRealPath("themes"+File.separator+
+//                    this.getRenderKit() + File.separator + theme + File.separator + "theme.properties");
+//
+//            File propFileName = new File(themePropFileName);
+//            Properties themeProperties = new Properties();
+//            if (propFileName.exists()) {
+//                try {
+//                    themeProperties.load(new FileInputStream(propFileName));
+//                } catch (IOException e) {
+//                    log.info("Could not load properties file for theme : " + theme+" "+e.getMessage());
+//                }
+//                log.info("We got a theme properties file!");
+//                event.getPortletContext().setAttribute("THEME_PROPERTIES", "test");
+//            }
+
+
+
             // A Portal page in 3 lines -- voila!
             //  -------- header ---------
             if (headerContainer != null) {
+                headerContainer.setStyle(PortletContainer.STYLE_HEADER);
                 headerContainer.doRender(event);
                 //writer.println(headerContainer.getBufferedOutput(req));
             }
 
             // ..| tabs | here |....
             if (tabbedPane != null) {
+
                 tabbedPane.doRender(event);
                 //writer.println(tabbedPane.getBufferedOutput(req));
             }
             //.... the footer ..........
             if (footerContainer != null) {
+                footerContainer.setStyle(PortletContainer.STYLE_FOOTER);
                 footerContainer.doRender(event);
                 //writer.println(footerContainer.getBufferedOutput(req));
             }
@@ -628,7 +647,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
         // the component id determines where in the list the portlet component is
         // first check the hash
-        ComponentIdentifier compId= null;
+        ComponentIdentifier compId = null;
 
         int compIntId;
         if (portletHash.containsKey(concPortletID)) {

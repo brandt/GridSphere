@@ -332,7 +332,12 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 pane.append(selectedTab.getBufferedOutput(req));
             }
         }
+
+        pane.append(tabbedPaneView.doEnd(event, this));
+        
+//        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, pane);
         setBufferedOutput(req, pane);
+
     }
 
     public void remove(PortletComponent pc, PortletRequest req) {
