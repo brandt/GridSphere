@@ -9,7 +9,7 @@
     $Id$
 -->
 
-<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="standard">
+<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush">
 
     <!-- Header components -->
     <portlet-header>
@@ -26,7 +26,6 @@
             </row-layout>
         </table-layout>
     </portlet-header>
-
     <portlet-tabbed-pane selected="0" style="menu" theme="default">
         <portlet-tab label="gridsphere">
             <title lang="en">GridSphere</title>
@@ -37,7 +36,8 @@
                         <row-layout>
                             <column-layout width="70%">
                                 <portlet-frame label="setup">
-                                    <portlet-class>org.gridlab.gridsphere.portlets.core.admin.setup.GridSphereSetupPortlet.1</portlet-class>
+                                    <portlet-class>
+                                        org.gridlab.gridsphere.portlets.core.admin.setup.GridSphereSetupPortlet.1</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                             <column-layout width="30%"/>
@@ -46,9 +46,7 @@
                 </portlet-tab>
             </portlet-tabbed-pane>
         </portlet-tab>
-
     </portlet-tabbed-pane>
-
     <!-- Footer components (if any) -->
     <portlet-footer>
         <table-layout style="footer">

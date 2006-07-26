@@ -9,7 +9,7 @@
     $Id$
 -->
 
-<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="standard">
+<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush">
 
 <!-- Header components -->
 <portlet-header>

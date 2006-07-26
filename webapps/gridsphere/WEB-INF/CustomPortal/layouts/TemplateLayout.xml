@@ -9,15 +9,15 @@ This descriptor defines the template user's portal layout configuration
 $Id$
 -->
 
-<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="standard">
+<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush">
 
     <portlet-header>
-        <table-layout style="header">
+        <table-layout>
             <row-layout>
                 <column-layout width="85%">
                     <portlet-content include="/WEB-INF/CustomPortal/layouts/html/pagehead.html"/>
                 </column-layout>
-                <column-layout width="15%">
+                <column-layout width="14%">
                     <portlet-frame transparent="true" outer-padding="0" label="logout">
                         <portlet-class>org.gridlab.gridsphere.portlets.core.login.LogoutPortlet.1</portlet-class>
                     </portlet-frame>
@@ -29,14 +29,12 @@ $Id$
     <portlet-tabbed-pane selected="0" style="menu">
 
     </portlet-tabbed-pane>
-
     <!-- Footer components (if any) -->
 
     <portlet-footer>
-        <table-layout style="footer">
+        <table-layout>
             <row-layout>
-                <column-layout width="40%"/>
-                <column-layout width="60%">
+                <column-layout width="100%">
                     <portlet-frame transparent="true" outer-padding="0" label="date">
                         <portlet-class>org.gridlab.gridsphere.portlets.core.date.DatePortlet.1</portlet-class>
                     </portlet-frame>
