@@ -1,0 +1,98 @@
+/*
+  Author: Oliver Wehrens (wehrens@gridsphere.org)
+  $Id$
+*/
+
+/* overall page styling, gs controled */
+#gridsphere-layout-page {
+    width: 96%;
+    margin-left: 2%;
+    margin-right: 2%;
+    font-family: "Lucida Grande", sans-serif;
+    padding: 0px;
+    border: 0px;
+}
+
+/* layout for the head */
+#gridsphere-layout-head {
+    background-color: #D9F1FF;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
+
+/* layout for navigation */
+#gridsphere-layout-navigation {
+    overflow: hidden;
+}
+
+/* ... for portlet body */
+#gridsphere-layout-body {
+    background-color: #ebebeb;
+    padding: 0 0 10px 0;
+    overflow: hidden;
+    margin: 0px;
+    width: 100%;
+}
+
+/* ... for the footer */
+#gridsphere-layout-footer {
+    background-color: #D9F1FF;
+    text-align: center;
+    overflow: hidden;
+    padding: 10px 0 0 0;
+    width: 100%;
+}
+
+/*-------------------------------------------------
+    rules for table-like layout
+-------------------------------------------------*/
+div {
+    border-width: 0px;
+    font-size: inherit;
+    margin: 0px;
+    padding: 0px;
+}
+
+div.gridsphere-layout-row {
+    clear: both;
+}
+
+div.gridsphere-layout-column {
+    float: left;
+    overflow: hidden;
+}
+
+/* Rounded corners */
+
+b.rtop, b.rbottom {
+    display: block;
+    background: #52A5F2
+}
+
+b.rtop b, b.rbottom b {
+    display: block;
+    height: 1px;
+    overflow: hidden;
+    background: #D9F1FF
+}
+
+b.r1 {
+    margin: 0 5px
+}
+
+b.r2 {
+    margin: 0 3px
+}
+
+b.r3 {
+    margin: 0 2px
+}
+
+b.rtop b.r4, b.rbottom b.r4 {
+    margin: 0 1px;
+    height: 2px
+}
+
+
