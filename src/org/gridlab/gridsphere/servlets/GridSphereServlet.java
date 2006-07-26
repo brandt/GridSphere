@@ -498,11 +498,17 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             } else {
                 removeUserCookie(event);
             }
-            Boolean useSecureRedirect = Boolean.valueOf(GridSphereConfig.getProperty("use.https.redirect"));
 
-            PortletURI uri = res.createURI(useSecureRedirect.booleanValue());
+            PortletURI uri = res.createURI();
             if (query != null) {
                 uri.addParameter("cid", query);
+            }
+            String realuri = uri.toString().substring("http".length());
+            Boolean useSecureRedirect = Boolean.valueOf(GridSphereConfig.getProperty("use.http.redirect"));
+            if (useSecureRedirect.booleanValue()) {
+                realuri = "https" + realuri;
+            } else {
+                realuri = "http" + realuri;
             }
             res.sendRedirect(uri.toString());
         } catch (AuthorizationException err) {
