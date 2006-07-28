@@ -15,7 +15,7 @@
 
 <ui:form>
 
-    <ui:table sortable="true" zebra="true" maxrows="20" numentries="<%= numUsers %>" filter="true">
+    <ui:table sortable="true" zebra="true" maxrows="20" numentries="<%= numUsers.intValue() %>" filter="true">
         <ui:tablerow header="true">
             <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
             <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
