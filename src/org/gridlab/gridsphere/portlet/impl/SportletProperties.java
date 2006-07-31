@@ -149,6 +149,19 @@ public interface SportletProperties {
 
     public static final String COMPONENT_ID = "cid";
 
+    public static final String COMPONENT_ID_VAR = "org.gridlab.gridsphere.layout.COMPONENT_ID_VAR";
+
+    public static final String LAYOUT_EDIT_MODE = "org.gridlab.gridsphere.layout.LAYOUT_EDIT_MODE";
+
+    public static final String LAYOUT_PAGE = "org.gridlab.gridsphere.layout.PAGE";
+
+    public static final String LAYOUT_THEME = "org.gridlab.gridsphere.layout.THEME";
+
+    public static final String LAYOUT_RENDERKIT = "org.gridlab.gridsphere.layout.RENDERKIT";
+
+    public static final String LAYOUT_PAGE_PARAM = "gs_PageLayout";
+
+
     // Used for "action component model" in grid portlets currently
     public static final String GP_COMPONENT_ID = "gpcompid";
 
@@ -173,9 +186,7 @@ public interface SportletProperties {
 
     public static final String PORTLET_WINDOW = "gs_state";
 
-    public static final String PORTLET_WINDOW_ID = "org.gridlab.gridsphere.layout.PORTLET_WINDOW_ID";
-
-    //public static final String PORTLET_DATA = "org.gridlab.gridsphere.portlet.PortletData";
+    public static final String PORTLET_WINDOW_ID = "org.gridsphere.layout.WINDOW_ID";
 
     public static final String PORTLET_DATA_MANAGER = "org.gridlab.gridsphere.portletcontainer.PortletDataManager";
 
@@ -240,6 +251,7 @@ public interface SportletProperties {
 
     public static final String ENABLE_PORTAL_COUNTER = "org.gridlab.gridsphere.ENABLE_PORTAL_COUNTER";
 
+    public static final String EXTRA_QUERY_INFO = "org.gridlab.gridsphere.layout.EXTRA_QUERY_INFO";
 
 }
 
