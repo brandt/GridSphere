@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<portlet-tabbed-pane>
+<portlet-tabbed-pane style="menu">
     <portlet-tab label="welcome">
         <title lang="en">Welcome</title>
         <title lang="es">Bienvenido</title>
@@ -30,16 +30,17 @@
                 <title lang="zh">配置</title>
                 <table-layout>
                     <row-layout>
-                        <column-layout>
+                        <column-layout width="100%">
                             <portlet-frame label="profile">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
                 </table-layout>
             </portlet-tab>
             <portlet-tab label="layouttab">
-            	<title lang="en">Layout</title>
+                <title lang="en">Layout</title>
                 <title lang="es">Layout</title>
                 <title lang="it">Layout</title>
                 <title lang="pl">Układ graficzny</title>
@@ -49,13 +50,14 @@
                 <title lang="cs">Umísťování</title>
                 <title lang="nl">Layout</title>
                 <title lang="hr">Izgled</title>
-            	<title lang="ja">レイアウト</title>
+                <title lang="ja">レイアウト</title>
                 <title lang="zh">版面</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
                             <portlet-frame label="layout">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet.1</portlet-class>
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                         <column-layout width="50%"/>
@@ -96,13 +98,16 @@
                         </column-layout>
                         <column-layout width="60%" label="portletMgrCL">
                             <portlet-frame label="portletmanager">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
                             </portlet-frame>
                             <portlet-frame label="sessionmanager">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet.1</portlet-class>
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet.1</portlet-class>
                             </portlet-frame>
                             <portlet-frame label="trackingstats">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet.1</portlet-class>
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
@@ -125,7 +130,8 @@
                     <row-layout>
                         <column-layout width="50%">
                             <portlet-frame label="usermanager">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                         <column-layout width="50%"/>
@@ -149,7 +155,8 @@
                     <row-layout>
                         <column-layout width="70%">
                             <portlet-frame label="groupmanager">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1</portlet-class>
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                         <column-layout width="30%"/>
@@ -165,7 +172,8 @@
                     <row-layout>
                         <column-layout width="50%">
                             <portlet-frame label="rolemanager">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.roles.RoleManagerPortlet.1</portlet-class>
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.admin.roles.RoleManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                         <column-layout width="50%"/>
@@ -187,9 +195,10 @@
                 <title lang="zh">版面组</title>
                 <table-layout>
                     <row-layout>
-                        <column-layout>
+                        <column-layout width="100%">
                             <portlet-frame label="adminlayout">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet.1</portlet-class>
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
@@ -205,9 +214,10 @@
                 <title lang="zh">信息</title>
                 <table-layout>
                     <row-layout>
-                        <column-layout>
+                        <column-layout width="100%">
                             <portlet-frame label="messagingservice">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.messaging.MessagingServicesPortlet.1</portlet-class>
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.messaging.MessagingServicesPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
