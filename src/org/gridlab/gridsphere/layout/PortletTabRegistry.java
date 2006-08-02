@@ -171,7 +171,7 @@ public class PortletTabRegistry {
 
     public static synchronized void reloadTab(String tab, PortletGroup group) throws PersistenceManagerException {
         try {
-            PortletTabbedPane pane = PortletLayoutDescriptor.loadPortletTabs(group.getOid(), layoutMappingFile);
+            PortletTabbedPane pane = PortletLayoutDescriptor.loadPortletTabs((String) tabDescriptors.get(group.getOid()), layoutMappingFile);
             if (groupTabs.containsKey(tab)) {
                 groupTabs.put(tab, pane);
             }
