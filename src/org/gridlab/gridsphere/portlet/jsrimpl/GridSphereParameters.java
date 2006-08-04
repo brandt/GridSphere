@@ -36,7 +36,11 @@ public class GridSphereParameters {
 
         // create reserved params list
         reservedParams = new ArrayList();
-        reservedParams.add(SportletProperties.COMPONENT_ID);
+
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+
+        reservedParams.add(compVar);
         reservedParams.add(SportletProperties.DEFAULT_PORTLET_ACTION);
         reservedParams.add(SportletProperties.PORTLET_MODE);
         reservedParams.add(SportletProperties.PORTLET_WINDOW);
@@ -44,7 +48,7 @@ public class GridSphereParameters {
         renderParams.putAll(parseQueryString(queryString, true));
         params.putAll(parseQueryString(queryString, false));
 
-        this.targetedCid = request.getParameter(SportletProperties.COMPONENT_ID);
+        this.targetedCid = request.getParameter(compVar);
     }
 
     public void addRenderParams(Map params) {
@@ -148,7 +152,9 @@ public class GridSphereParameters {
 
     public Map getParameterMap() {
 
-        String mycid = (String) req.getAttribute(SportletProperties.COMPONENT_ID);
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        String mycid = (String) req.getAttribute(compVar);
 
         Map map = new HashMap();
 

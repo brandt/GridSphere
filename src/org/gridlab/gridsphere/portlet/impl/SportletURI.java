@@ -62,7 +62,9 @@ public class SportletURI implements PortletURI {
         //this.id = createUniquePrefix(2);
         // don't prefix these parameters of an action
         sportletProps = new HashSet();
-        sportletProps.add(SportletProperties.COMPONENT_ID);
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        sportletProps.add(compVar);
         sportletProps.add(SportletProperties.PORTLET_WINDOW);
         sportletProps.add(SportletProperties.PORTLET_MODE);
     }
@@ -166,6 +168,7 @@ public class SportletURI implements PortletURI {
     public String toString() {
         StringBuffer s = new StringBuffer();
         String port = null;
+  
         if (req.isSecure() || isSecure) {
             port = GridSphereConfig.getProperty("gridsphere.port.https");
             s.append("https://");
@@ -173,7 +176,7 @@ public class SportletURI implements PortletURI {
             port = GridSphereConfig.getProperty("gridsphere.port.http");
             s.append("http://");
         }
-       
+
         s.append(req.getServerName());
         s.append(":");
         s.append((!port.equals("")) ? port : String.valueOf(req.getServerPort()));
@@ -196,17 +199,16 @@ public class SportletURI implements PortletURI {
             // add question mark
             url += servletPath + "?";
         } else {
-            return s.append(url + servletPath).toString();
+            return s.append(url).append(servletPath).toString();
         }
         boolean firstParam = true;
         try {
             it = set.iterator();
             while (it.hasNext()) {
                 if (!firstParam)
-//                    url += "&amp;"; // special character replaced with its corresponding entity for XHTML 1.0 Strict compliance
+//    url += "&amp;"; // special character replaced with its corresponding entity for XHTML 1.0 Strict compliance
                     url += "&";
                 String name = (String) it.next();
-
                 String encname = URLEncoder.encode(name, "UTF-8");
                 String val = (String) store.get(name);
                 if (val != null) {

@@ -81,7 +81,9 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
      */
     public PortletURI createURI(String componentLabel, boolean isSecure) {
         SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse(), isSecure);
-        sportletURI.addParameter(SportletProperties.COMPONENT_ID, componentLabel);
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        sportletURI.addParameter(compVar, componentLabel);
         sportletURI.setReturn(false);
         return sportletURI;
     }
@@ -119,7 +121,10 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
      * </li></ul>
      */
     protected void addURIParameters(PortletURI sportletURI) {
-        sportletURI.addParameter(SportletProperties.COMPONENT_ID, (String) req.getAttribute(SportletProperties.COMPONENT_ID));
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        String cid = (String)req.getAttribute(compVar);
+        if (cid != null) sportletURI.addParameter(compVar, cid );
     }
 
     /**

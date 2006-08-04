@@ -90,7 +90,9 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      */
     public PortletURL createRenderURL() {
         PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse) super.getResponse(), portalContext, true);
-        portletURL.setComponentID((String) req.getAttribute(SportletProperties.COMPONENT_ID));
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        portletURL.setComponentID((String) req.getAttribute(compVar));
         return portletURL;
     }
 
@@ -111,7 +113,9 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     public PortletURL createActionURL() {
         PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse) super.getResponse(), portalContext, false);
         portletURL.setAction("");
-        portletURL.setComponentID((String) req.getAttribute(SportletProperties.COMPONENT_ID));
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        portletURL.setComponentID((String) req.getAttribute(compVar));
         return portletURL;
     }
 
@@ -125,8 +129,9 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     public String getNamespace() {
         // this is done due to an issue with MyFaces using getNamespace
         String pid = ((String)req.getAttribute(SportletProperties.PORTLETID)).replace('#', '_');
-	String cid = (String)req.getAttribute(SportletProperties.COMPONENT_ID);
-        return "gridsphere_" + pid + "_" + cid;
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        return "gridsphere_" + pid + "_" + (String)req.getAttribute(compVar);
     }
 
     /**
