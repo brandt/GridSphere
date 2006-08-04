@@ -180,30 +180,6 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-            <portlet-tab label="adminlayouttab" required-role="ADMIN">
-                <title lang="en">Layouts</title>
-                <title lang="es">Layouts</title>
-                <title lang="it">Layouts</title>
-                <title lang="pl">Graficzny</title>
-                <title lang="hu">Kinézetok</title>
-                <title lang="fr">Agencements</title>
-                <title lang="de">Layouts</title>
-                <title lang="cs">Umísťování</title>
-                <title lang="nl">Layouts</title>
-                <title lang="hr">Izgledi</title>
-                <title lang="ja">レイアウト</title>
-                <title lang="zh">版面组</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout width="100%">
-                            <portlet-frame label="adminlayout">
-                                <portlet-class>
-                                    org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet.1</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
             <portlet-tab label="messagingservicestab" required-role="ADMIN">
                 <title lang="en">Messaging</title>
                 <title lang="es">Mensajería</title>
