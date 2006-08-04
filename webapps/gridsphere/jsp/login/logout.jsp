@@ -20,3 +20,7 @@
         </ui:tablecell>
     </ui:tablerow>
 </ui:table>
+
+<ui:hasrole role="SUPER">
+<a href="?gs_PageLayout=LayoutManager">Customize Layout</a>
+</ui:hasrole>
