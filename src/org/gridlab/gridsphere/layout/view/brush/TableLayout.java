@@ -53,7 +53,6 @@ public class TableLayout extends BaseRender implements TableLayoutView {
         return new StringBuffer("\n<!-- _____________________________________ table layout end -->\n");
     }
 
-
     public StringBuffer doStartMaximizedComponent(GridSphereEvent event, PortletTableLayout tableLayout) {
         return START_MAXIMIZED;
     }

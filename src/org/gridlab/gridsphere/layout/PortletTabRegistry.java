@@ -26,13 +26,9 @@ public class PortletTabRegistry {
 
     private static String groupLayoutDir = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/groups");
 
-    private static String guestLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/GuestUserLayout.xml");
-
 
     private static Map tabDescriptors = new Hashtable();
     private static Map groupTabs = new Hashtable();
-    private static PortletPage guestPage = null;
-
 
     static {
 
@@ -68,10 +64,6 @@ public class PortletTabRegistry {
         groupTabs.put(group.getOid(), webAppTabs);
     }
 
-    public static void reloadGuestLayout() throws IOException, PersistenceManagerException {
-        guestPage = PortletLayoutDescriptor.loadPortletPage(guestLayoutFile, layoutMappingFile);
-        guestPage.setLayoutDescriptor(guestLayoutFile);
-    }
 
     public static void loadPage(String file) throws IOException, PersistenceManagerException {
         PortletLayoutDescriptor.loadPortletPage(file, layoutMappingFile);
@@ -81,20 +73,6 @@ public class PortletTabRegistry {
         PortletLayoutDescriptor.loadPortletTabs(file, layoutMappingFile);
     }
 
-    public static PortletPage getGuestLayoutPage() {
-        if (guestPage == null) {
-            try {
-                reloadGuestLayout();
-            } catch (Exception e) {
-                log.error("Unable to reload guest user layout", e);
-            }
-        }
-        return guestPage;
-    }
-
-    public static String getGuestLayoutFile() {
-        return guestLayoutFile;
-    }
 
     public static PortletTabbedPane getGroupTabs(PortletGroup group) {
         return (PortletTabbedPane) groupTabs.get(group.getOid());
@@ -169,9 +147,10 @@ public class PortletTabRegistry {
         groupTabs.put(group.getOid(), parentPane);
     }
 
+
     public static synchronized void reloadTab(String tab, PortletGroup group) throws PersistenceManagerException {
         try {
-            PortletTabbedPane pane = PortletLayoutDescriptor.loadPortletTabs(group.getOid(), layoutMappingFile);
+            PortletTabbedPane pane = PortletLayoutDescriptor.loadPortletTabs((String) tabDescriptors.get(group.getOid()), layoutMappingFile);
             if (groupTabs.containsKey(tab)) {
                 groupTabs.put(tab, pane);
             }

@@ -75,12 +75,19 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private String lastFrame = "";
 
-    private String windowId = "";
+
+    private String portletName = "Untitled";
+
+    private String windowId = "unknown";
 
     /**
      * Constructs an instance of PortletFrame
      */
     public PortletFrame() {
+    }
+
+    public String getPortletName() {
+        return portletName;
     }
 
     /**
@@ -155,11 +162,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         return outerPadding;
     }
 
-    public void setTheme(String theme) {
-        this.theme = theme;
-        if (titleBar != null) titleBar.setTheme(theme);
-    }
-
     /**
      * If set to <code>true</code> the portlet is rendered transparently without a
      * defining border and title bar. This is used for example for the LogoutPortlet
@@ -200,7 +202,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
         list = super.init(req, list);
 
-        frameView = (FrameView)getRenderClass("Frame");
+        frameView = (FrameView)getRenderClass(req, "Frame");
 
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
@@ -220,8 +222,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         titleBar.setPortletClass(portletClass);
 
         titleBar.setCanModify(canModify);
-        titleBar.setTheme(theme);
-        titleBar.setRenderKit(renderKit);
+
         list = titleBar.init(req, list);
         titleBar.addComponentListener(this);
         titleBar.setParentComponent(this);
@@ -231,9 +232,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         // invalidate cache
         req.setAttribute(CacheService.NO_CACHE, "true");
 
-	if (windowId.equals("")) windowId = componentIDStr;
+	    if (windowId.equals("")) windowId = componentIDStr;
 
         doConfig();
+        if (windowId.equalsIgnoreCase("unknown")) windowId = componentIDStr;
+
         return list;
     }
 
@@ -245,6 +248,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if (appPortlet != null) {
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
             if (appConfig != null) {
+                portletName = appConfig.getPortletName();
                 cacheExpiration = appConfig.getCacheExpires();
                 //System.err.println("Cache for " + portletClass + "expires: " + cacheExpiration);
             }
@@ -334,9 +338,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         } else {
             // now perform actionPerformed on Portlet if it has an action
             titleBar.actionPerformed(event);
+            String compVar = this.getComponentIDVar(request);
+            request.setAttribute(compVar, componentIDStr);
 
-            request.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
-	    request.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
+	        request.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
 
             PortletResponse res = event.getPortletResponse();
 
@@ -464,6 +469,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
     }
 
+
+
     /**
      * Renders the portlet frame component
      *
@@ -475,6 +482,27 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
 
+        // check permissions
+        User user = req.getUser();
+        if (user != null) {
+            if (!requiredRoleName.equals("") && (!req.getRoles().contains(requiredRoleName))) return;
+        } else {
+            if (!requiredRoleName.equals("")) return;
+        }
+
+        req.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
+        if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
+            StringBuffer content = new StringBuffer();
+            String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
+            if (extraQuery != null) {
+                PortletURI portletURI = res.createURI();
+                String link = portletURI.toString() + extraQuery;
+                content.append("<br/><fieldset><a href=\"" + link + "\">" + portletName + "</a></fieldset>");
+                setBufferedOutput(req, content);
+            }
+            return;
+        }
+
         // check for render params
         if (onlyRender)  {
             if ((event.getPortletComponentID().equals(componentIDStr))) {
@@ -482,24 +510,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             }
         }
         onlyRender = true;
-        User user = req.getUser();
-        if (!roleString.equals("")) {
-            Principal principal = req.getUserPrincipal();
-            if (principal != null) {
-                List roles = req.getRoles();
-                if (!groupString.equals("")) {
-                    List groups = req.getGroups();
-                    if (groups.contains(groupString)) {
-                        System.err.println("User " + user + " has no permissions to access portlet: " + portletClass + "!");
-                        return;
-                    }
-                }
-                if (roles.contains(roleString)) {
-                    System.err.println("User " + user + " has no permissions to access portlet: " + portletClass + "!");
-                    return;
-                }
-            }
-        }
 
         String id = event.getPortletRequest().getPortletSession(true).getId();
 
@@ -530,7 +540,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             renderPortlet = false;
         }
 
-	req.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
+	    req.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
 
         StringWriter storedWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(storedWriter);
@@ -620,7 +630,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     }
 
     public boolean isTargetedPortlet(PortletRequest req) {
-        return (req.getParameter(SportletProperties.COMPONENT_ID).equals(req.getAttribute(SportletProperties.COMPONENT_ID)));
+        String compVar = this.getComponentIDVar(req);
+        return (req.getParameter(compVar).equals(req.getAttribute(compVar)));
     }
 
     public boolean hasError(PortletRequest req) {
@@ -715,10 +726,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if (portletClass.equals(concPortletID)) {
             PortletRequest req = event.getPortletRequest();
 
-            req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
-
-            List roles = req.getRoles();
-            if (!roleString.equals("") && (!roles.contains(roleString))) return;
 
             PortletResponse res = event.getPortletResponse();
 
@@ -751,4 +758,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
     }
 
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(super.toString());
+        sb.append("\nportlet class=").append(portletClass);
+        return sb.toString();
+    }
 }

@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.awt.*;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -52,14 +53,16 @@ public class Page extends BaseRender implements Render {
         page.append("\n\t<meta http-equiv=\"Pragma\" content=\"no-cache\" />");
         if (portletPage.getRefresh() > 0)
             page.append("\n\t<meta http-equiv=\"refresh\" content=\"").append(portletPage.getRefresh()).append("\"/>");
-        page.append("\n\t<link type=\"text/css\" href=\"").append(req.getContextPath()).append("/themes/").append(portletPage.getRenderKit()).append("/").append(portletPage.getTheme()).append("/css" + "/default.css\" rel=\"stylesheet\"/>");
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
+
+        page.append("\n\t<link type=\"text/css\" href=\"").append(req.getContextPath()).append("/themes/").append(portletPage.getRenderKit()).append("/").append(theme).append("/css" + "/default.css\" rel=\"stylesheet\"/>");
         page.append("\n\t<link rel=\"stylesheet\" type=\"text/css\" href=\"").append(req.getContextPath()).append("/css/SimpleTextEditor.css\"/>");
         // Add portlet defined stylesheet if defined
         Map props = (Map) req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (props != null) {
             Object cssHrefObj = props.get("CSS_HREF");
-            if ((cssHrefObj != null) && (cssHrefObj instanceof java.util.List)) {
-                java.util.List cssHref = (java.util.List) cssHrefObj;
+            if ((cssHrefObj != null) && (cssHrefObj instanceof List)) {
+                List cssHref = (List) cssHrefObj;
                 Iterator it = cssHref.iterator();
                 while (it.hasNext()) {
                     String cssLink = (String) it.next();
@@ -76,6 +79,11 @@ public class Page extends BaseRender implements Render {
         page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/SimpleTextEditor.js\"></script>");
         // add calendar
         page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/scw.js\"></script>");
+        page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/validation.js\"></script>");
+        page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/yahoo.js\"></script>");
+        page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/connection.js\"></script>");
+        page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/gridsphere_ajax.js\"></script>");
+
         if (props != null) {
             Object jsObj = props.get("JAVASCRIPT_SRC");
             if ((jsObj != null) && (jsObj instanceof java.util.List)) {

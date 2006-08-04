@@ -27,21 +27,19 @@ public class SelectionContainer extends BasePortletComponent implements
      * @see org.gridlab.gridsphere.layout.ComponentIdentifier
      */
     public List init(PortletRequest req, List list) {
+        list = super.init(req, list);
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setComponentID(list.size());
         compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
-        list = super.init(req, list);
+
 
         PortletComponent p;
         for (int i = 0; i < components.size(); i++) {
             p = (PortletComponent)components.get(i);
             if (p.getLabel().equals(defaultLabel)) activeLabel = defaultLabel;
-            // all the components have the same theme
-            p.setTheme(theme);
-            p.setRenderKit(renderKit);
             // invoke init on each component
             list = p.init(req, list);
             p.setParentComponent(this);
@@ -137,6 +135,14 @@ public class SelectionContainer extends BasePortletComponent implements
             f.components.add(comp.clone());
         }
         return f;
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(super.toString());
+        sb.append("activeLabel=").append(activeLabel);
+        sb.append("defaultLabel=").append(defaultLabel);
+        return sb.toString();
     }
 
 }

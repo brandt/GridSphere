@@ -12,8 +12,8 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import java.util.Vector;
+import java.util.ArrayList;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -69,10 +69,12 @@ public class PortletLayoutEngine {
         // Check for framework errors
         Exception portletException = (Exception) req.getAttribute(SportletProperties.ERROR);
         if (portletException != null) {
-            return pageFactory.createErrorPage(req);
+            PortletPage errorPage = pageFactory.createErrorPage();
+            errorPage.init(req, new ArrayList());
+            return errorPage;
         }
 
-        return pageFactory.createPortletPage(req);
+        return pageFactory.getPortletPage(req);
     }
 
     public void setHeaders(GridSphereEvent event) {
@@ -114,15 +116,22 @@ public class PortletLayoutEngine {
                 frame.setInnerPadding("");
                 frame.setOuterPadding("");
                 frame.setTransparent(false);
-                frame.setTheme("default");
-                frame.setRenderKit("standard");
-                //frame.setRequiredRole(role);
+
+                req.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, "default");
+                req.getPortletSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, "standard");
+
                 frame.doRender(event);
                 pageBuffer = frame.getBufferedOutput(req);
             } else {
-                PortletComponent comp = page.getActiveComponent(event);
+                PortletComponent comp = page.getActiveComponent(cid);
                 if (comp != null) {
-                    comp.doRender(event);
+                    String reqRole = comp.getRequiredRole();
+                    User user = req.getUser();
+                    if (user != null) {
+                        if (req.getRoles().contains(reqRole)) comp.doRender(event);
+                    } else {
+                        if (reqRole.equals("")) comp.doRender(event);
+                    }
                     pageBuffer = comp.getBufferedOutput(req);
                     res.setContentType("text/html");
                 }
@@ -160,12 +169,6 @@ public class PortletLayoutEngine {
         try {
             PortletPage page = getPortletPage(event);
             page.loginPortlets(event);
-
-            List pages = pageFactory.getAllCustomPages(req);
-            for (int i = 0; i < pages.size(); i++) {
-                PortletPage p = (PortletPage)pages.get(i);
-                p.logoutPortlets(event);
-            }
         } catch (Exception e) {
             log.error("Unable to loadUserLayout for user: " + req.getUser().getUserName(), e);
         }
@@ -179,16 +182,10 @@ public class PortletLayoutEngine {
      */
     public void logoutPortlets(GridSphereEvent event) {
         log.debug("in logoutPortlets()");
-        PortletRequest req = event.getPortletRequest();
+
         try {
             PortletPage page = getPortletPage(event);
             page.logoutPortlets(event);
-
-            List pages = pageFactory.getAllCustomPages(req);
-            for (int i = 0; i < pages.size(); i++) {
-                PortletPage p = (PortletPage)pages.get(i);
-                p.logoutPortlets(event);
-            }
             registry.removeAllPortletFrames(event);
             pageFactory.logStatistics();
         } catch (Exception e) {
@@ -260,7 +257,8 @@ public class PortletLayoutEngine {
 
     public void doRenderError(GridSphereEvent event, Throwable t) {
         PortletRequest req = event.getPortletRequest();
-        PortletPage errorpage = pageFactory.createErrorPage(req);
+        PortletPage errorpage = pageFactory.createErrorPage();
+        errorpage.init(req, new ArrayList());
         req.setAttribute("error", t);
         try {
             errorpage.doRender(event);

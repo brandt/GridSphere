@@ -1,23 +1,20 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
-import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import javax.servlet.ServletContext;
 import java.io.*;
 import java.net.URLEncoder;
-import java.security.Principal;
 import java.util.*;
+import java.security.Principal;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -25,10 +22,16 @@ import java.util.*;
  */
 public class PortletPageFactory implements PortletSessionListener {
 
-    private String userLayoutDir = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/users");
+    public static final String TCK_PAGE = "TCK";
+    public static final String SETUP_PAGE = "SetupLayout";
+    public static final String ERROR_PAGE = "ErrorLayout";
+    public static final String GUEST_PAGE = "GuestUserLayout";
 
-    public static final String PAGE = "gsPageLayout";
-    public static final String SETUP_PAGE = "SetupLayout.xml";
+    // TODO these need refactoring later on
+    public static final String TEMPLATE_PAGE = "TemplateLayout";
+    public static final String USER_PAGE = "LoggedInUserLayout";
+
+    private static String USER_LAYOUT_DIR = null;
 
     private static final String DEFAULT_THEME = "default";
 
@@ -40,92 +43,65 @@ public class PortletPageFactory implements PortletSessionListener {
     private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
 
-    private static PortletPage templatePage = null;
-    private static PortletPage setupPage = null;
+    //private static PortletPage templatePage = null;
 
-    //private PortletPage newuserPage = null;
-    private static PortletPage errorPage = null;
 
-    private static String layoutMappingFile = null;
+    public static String LAYOUT_MAPPING_FILE = null;
+
+    private static String LOGGEDIN_LAYOUT_DESCRIPTOR;
 
     // Store user layouts in a hash
-    private static Map userLayouts = new Hashtable();
+    private static Map userLayouts = new HashMap();
 
-    private static Map tckLayouts = new Hashtable();
+    // a hash of hashes to contain all the users layouts
+    private static Map layouts = new HashMap();
 
-    private static Map guests = new Hashtable();
-    private static Map customPages = new Hashtable();
-    private static Map customLayouts = new Hashtable();
-    private static boolean useTCK = false;
+    // a hash of loaded master layouts used to make copies
+    private static Map masterLayouts = new HashMap();
+    private static Set editableLayoutIds = new HashSet();
 
-    private static boolean setupNeeded = false;
 
     private PortletPageFactory() {
 
     }
 
-    public static void setSetupNeeded(boolean needSetup) {
-        setupNeeded = needSetup;
-    }
-
-    public static void setUseTCK(boolean usetck) {
-        useTCK = usetck;
-    }
-
     public void init(ServletContext ctx) throws PortletException {
-        layoutMappingFile = ctx.getRealPath("/WEB-INF/mapping/layout-mapping.xml");
-        String templateLayoutPath = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/TemplateLayout.xml");
-        String newuserLayoutPath = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/users/");
-        String setupLayoutFile = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/SetupLayout.xml");
-        String errorLayoutFile = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/ErrorLayout.xml");
-        try {
-            errorPage = PortletLayoutDescriptor.loadPortletPage(errorLayoutFile, layoutMappingFile);
-            templatePage = PortletLayoutDescriptor.loadPortletPage(templateLayoutPath, layoutMappingFile);
-            errorPage.setLayoutDescriptor(errorLayoutFile);
-            setupPage = PortletLayoutDescriptor.loadPortletPage(setupLayoutFile, layoutMappingFile);
-            setupPage.setLayoutDescriptor(setupLayoutFile);
-        } catch (Exception e) {
-            throw new PortletException("Error unmarshalling layout file", e);
-        }
+        USER_LAYOUT_DIR = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/users");
 
-        String layoutsDirPath = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/custom");
+        LAYOUT_MAPPING_FILE = ctx.getRealPath("/WEB-INF/mapping/layout-mapping.xml");
+
+        String layoutsDirPath = ctx.getRealPath("/WEB-INF/CustomPortal/layouts");
         File layoutsDir = new File(layoutsDirPath);
-        if (!layoutsDir.exists()) layoutsDir.mkdir();
-        File[] files = layoutsDir.listFiles();
-        PortletPage customPage = null;
-        for (int i = 0; i < files.length; i++) {
-            File f = (File)files[i];
-            try {
-                String pageName = f.getName();
-                pageName = pageName.substring(0, pageName.lastIndexOf("."));
-                System.err.println("found a page= " + pageName);
-                customPage = PortletLayoutDescriptor.loadPortletPage(f.getAbsolutePath(), layoutMappingFile);
-                customPages.put(pageName, customPage);
-            } catch (Exception e) {
-                throw new PortletException("Error unmarshalling layout file", e);
+        File[] layoutFiles = layoutsDir.listFiles();
+        PortletPage page = null;
+        for (int i = 0; i < layoutFiles.length; i++) {
+            File layoutFile = layoutFiles[i];
+            String layoutFileName = layoutFile.getName();
+            if (layoutFileName.endsWith(".xml")) {
+                String layoutId = layoutFileName.substring(0, layoutFileName.indexOf(".xml"));
+                try {
+                    page = PortletLayoutDescriptor.loadPortletPage(layoutFile.getAbsolutePath(), LAYOUT_MAPPING_FILE);
+                    page.setLayoutDescriptor(layoutFile.getAbsolutePath());
+                    if (page.getEditable()) editableLayoutIds.add(layoutId);
+                    masterLayouts.put(layoutId, page);
+                } catch (Exception e) {
+                    log.error("Unable to load portlet page: " + layoutFileName);
+                }
             }
         }
+        LOGGEDIN_LAYOUT_DESCRIPTOR = layoutsDir.getAbsolutePath() + File.separator + USER_PAGE + ".xml";
 
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
-        RoleManagerService roleService = null;
-        UserManagerService userManagerService = null;
+        portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
+        groupManagerService = (GroupManagerService)factory.createPortletService(GroupManagerService.class, true);
 
-        try {
-            portalConfigService = (PortalConfigService) factory.createPortletService(PortalConfigService.class, true);
-            groupManagerService = (GroupManagerService) factory.createPortletService(GroupManagerService.class, true);
-            roleService = (RoleManagerService)factory.createPortletService(RoleManagerService.class, true);
-            userManagerService = (UserManagerService)factory.createPortletService(UserManagerService.class, true);
-        } catch (PortletServiceException e) {
-            log.error("Unable to init portal config service! ", e);
-            throw new PortletException("Unable to init portal config service! ", e);
-        }
+
+        String newuserLayoutPath = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/users/");
         File userdir = new File(newuserLayoutPath);
         if (!userdir.exists()) {
             userdir.mkdir();
         }
-        if ((userManagerService.getNumUsers() == 0) || (roleService.getUsersInRole(PortletRole.SUPER)) == null) {
-            setupNeeded = true;
-        }
+
     }
 
     public static synchronized PortletPageFactory getInstance() {
@@ -135,18 +111,6 @@ public class PortletPageFactory implements PortletSessionListener {
         return instance;
     }
 
-    public PortletPage createErrorPage(PortletRequest req) {
-        errorPage.init(req, new ArrayList());
-        return errorPage;
-    }
-
-    public PortletPage createSetupPage(PortletRequest req) {
-        setupPage.init(req, new ArrayList());
-        setupPage.setTheme(DEFAULT_THEME);
-        return setupPage;
-    }
-
-
     public void login(PortletRequest request) {
 
     }
@@ -155,28 +119,37 @@ public class PortletPageFactory implements PortletSessionListener {
         log.debug("in logout PortletPageFactory");
         String sessionId = session.getId();
 
-        log.debug("in logout PortletPageFactory for session: " + sessionId);
-        if (guests.containsKey(sessionId)) {
-            log.debug("Removing guest container for:" + sessionId);
-            guests.remove(sessionId);
+        Map usersLayouts = (Map)layouts.get(sessionId);
+        if (usersLayouts != null) {
+            Iterator it = usersLayouts.keySet().iterator();
+            while (it.hasNext()) {
+                String layoutId = (String)it.next();
+                log.debug("Removing " + layoutId + " container for:" + sessionId);
+                it.remove();
+            }
+            layouts.remove(sessionId);
         }
         if (userLayouts.containsKey(sessionId)) {
             log.debug("Removing user  container for:" + sessionId);
             userLayouts.remove(sessionId);
         }
-        if (customLayouts.containsKey(sessionId)) {
-            log.debug("Removing custom containers for:" + sessionId);
-            customLayouts.remove(sessionId);
-        }
+
     }
 
     public synchronized void destroy() {
-        guests.clear();
-        userLayouts.clear();
+        layouts.clear();
+    }
+
+    public Set getEditableLayoutIds() {
+        return editableLayoutIds;
+    }
+
+    public Set getLayoutIds() {
+        return masterLayouts.keySet();
     }
 
     public void addPortletGroupTab(PortletRequest req, PortletGroup group) {
-        PortletPage page = createPortletPage(req);
+        PortletPage page = createPortletPage(req, USER_PAGE);
         PortletTabbedPane pagePane = page.getPortletTabbedPane();
         PortletTabbedPane appPane = PortletTabRegistry.getGroupTabs(group);
         if (appPane != null) {
@@ -192,11 +165,14 @@ public class PortletPageFactory implements PortletSessionListener {
 
             page.setPortletTabbedPane(pagePane);
             page.init(req, new ArrayList());
+            PortletSession session = req.getPortletSession();
+            Map usersLayouts = (Map)layouts.get(session.getId());
+            usersLayouts.put(USER_PAGE, page);
         }
     }
 
     public void removePortletGroupTab(PortletRequest req, PortletGroup group) {
-        PortletPage page = createPortletPage(req);
+        PortletPage page = createPortletPage(req, USER_PAGE);
         PortletTabbedPane pagePane = page.getPortletTabbedPane();
         PortletTabbedPane appPane = PortletTabRegistry.getGroupTabs(group);
         if (appPane != null) {
@@ -211,18 +187,23 @@ public class PortletPageFactory implements PortletSessionListener {
             }
             page.setPortletTabbedPane(pagePane);
             page.init(req, new ArrayList());
+            PortletSession session = req.getPortletSession();
+            Map usersLayouts = (Map)layouts.get(session.getId());
+            usersLayouts.put(USER_PAGE, page);
         }
     }
 
     public PortletTabbedPane getUserTabbedPane(PortletRequest req) {
+
+
         User user = req.getUser();
 
         String sessionId = req.getPortletSession(true).getId();
 
-        String userLayout = userLayoutDir + File.separator + user.getUserName();
+        String userLayout = USER_LAYOUT_DIR + File.separator + user.getUserName();
 
         if (userLayouts.containsKey(sessionId)) {
-            PortletPage page = (PortletPage) userLayouts.get(sessionId);
+            PortletPage page = (PortletPage)userLayouts.get(USER_PAGE);
             PortletTabbedPane pane = new PortletTabbedPane();
             pane.setLayoutDescriptor(userLayout);
             PortletTabbedPane existPane = page.getPortletTabbedPane();
@@ -240,16 +221,15 @@ public class PortletPageFactory implements PortletSessionListener {
         File f = new File(userLayout);
         PortletTabbedPane pane = null;
 
-        // try {
+
         if (f.exists()) {
-            //page = (PortletPage)deepCopy(templatePage);
-            //page.setLayoutDescriptor(userLayout);
             try {
-                pane = PortletLayoutDescriptor.loadPortletTabs(userLayout, layoutMappingFile);
+                pane = PortletLayoutDescriptor.loadPortletTabs(userLayout, LAYOUT_MAPPING_FILE);
                 pane.setLayoutDescriptor(userLayout);
                 log.debug("Adding user tab to layout");
             } catch (Exception e) {
                 log.error("Unable to make a clone of the templatePage", e);
+                return null;
             }
         } else {
             return null;
@@ -319,95 +299,106 @@ public class PortletPageFactory implements PortletSessionListener {
         PortletTabbedPane pane;
 
         try {
-
-            //newPage = (PortletPage)templatePage.clone();
+            PortletPage templatePage = (PortletPage)masterLayouts.get(TEMPLATE_PAGE);
             newPage = (PortletPage) deepCopy(templatePage);
+        } catch (Exception e) {
+            log.error("Unable to make a clone of the templatePage", e);
 
-            log.debug("Returning cloned layout from webapps:");
+        }
+        log.debug("Returning cloned layout from webapps:");
 
-            pane = newPage.getPortletTabbedPane();
+        pane = newPage.getPortletTabbedPane();
 
 
-            PortletTabbedPane gsTab = PortletTabRegistry.getGroupTabs(req.getGroup());
-            List tabs = gsTab.getPortletTabs();
+        PortletTabbedPane gsTab = PortletTabRegistry.getGroupTabs(req.getGroup());
+        List tabs = gsTab.getPortletTabs();
+        try {
             for (int j = 0; j < tabs.size(); j++) {
                 PortletTab tab = (PortletTab) tabs.get(j);
+
                 log.debug("adding tab: " + tab.getTitle("en"));
                 pane.addTab((PortletTab) deepCopy(tab));
+
             }
+        } catch (Exception e) {
+            log.error("Unable to make a clone of tab layout fro group: " + req.getGroup() , e);
 
-            Iterator it = groups.iterator();
-            while (it.hasNext()) {
-                String groupName = (String)it.next();
+        }
 
-                if (groupName.equals(((PortletGroup)req.getGroup()).getName())) continue;
+        Iterator it = groups.iterator();
+        while (it.hasNext()) {
+            String groupName = (String)it.next();
 
-                log.debug("adding group layout: " + groupName);
-                PortletGroup group = groupManagerService.getGroup(groupName);
-                PortletTabbedPane portletTabs = PortletTabRegistry.getGroupTabs(group);
-                if (portletTabs != null) {
-                    tabs = portletTabs.getPortletTabs();
+            if (groupName.equals(((PortletGroup)req.getGroup()).getName())) continue;
 
+            log.debug("adding group layout: " + groupName);
+            PortletGroup group = groupManagerService.getGroup(groupName);
+            PortletTabbedPane portletTabs = PortletTabRegistry.getGroupTabs(group);
+            if (portletTabs != null) {
+                tabs = portletTabs.getPortletTabs();
+                try {
                     for (int j = 0; j < tabs.size(); j++) {
                         PortletTab tab = (PortletTab) tabs.get(j);
                         log.debug("adding tab: " + tab.getTitle("en"));
 
-                        //pane.addTab(g.getName(), (PortletTab)tab.clone());
                         pane.addTab((PortletTab) deepCopy(tab));
                     }
+                } catch (Exception e) {
+                    log.error("Unable to make a clone of tab layout fro group: " + group , e);
+
                 }
             }
+        }
 
-            // place user tabs after group tabs
-            PortletTabbedPane userPane = getUserTabbedPane(req);
-            if (userPane != null) {
-                List userTabs = userPane.getPortletTabs();
+        // place user tabs after group tabs
+        PortletTabbedPane userPane = getUserTabbedPane(req);
+        if (userPane != null) {
+            List userTabs = userPane.getPortletTabs();
+            try {
                 for (int i = 0; i < userTabs.size(); i++) {
                     PortletTab tab = (PortletTab) userTabs.get(i);
                     log.debug("adding user tab: " + tab.getTitle("en"));
                     pane.addTab((PortletTab) deepCopy(tab));
                 }
+            } catch (Exception e) {
+                log.error("Unable to make a clone of user tabs: " , e);
+
             }
-
-            // sorting tabs
-            Collections.sort(pane.getPortletTabs(), new PortletTab());
-
-            // first use default theme
-            setPageTheme(newPage, req);
-            newPage.setPortletTabbedPane(pane);
-            //newPage = (PortletPage)templatePage;
-            newPage.init(req, new ArrayList());
-
-            List list = newPage.getComponentIdentifierList();
-            StringBuffer compSB = new StringBuffer();
-            for (int i = 0; i < list.size(); i++) {
-                ComponentIdentifier c = (ComponentIdentifier) list.get(i);
-                compSB.append("\tid: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet() + "\n");
-                //if (c.hasPortlet()) System.err.println("portlet= " + c.getPortletID());
-            }
-            log.debug("Made a components list!!!! " + list.size() + "\n" + compSB.toString());
-        } catch (Exception e) {
-            log.error("Unable to make a clone of the templatePage", e);
-
         }
+
+        // sorting tabs
+        Collections.sort(pane.getPortletTabs(), new PortletTab());
+
+        // first use default theme
+        setPageTheme(newPage, req);
+        newPage.setPortletTabbedPane(pane);
+        //newPage = (PortletPage)templatePage;
+        newPage.init(req, new ArrayList());
+
+        List list = newPage.getComponentIdentifierList();
+        StringBuffer compSB = new StringBuffer();
+        for (int i = 0; i < list.size(); i++) {
+            ComponentIdentifier c = (ComponentIdentifier) list.get(i);
+            compSB.append("\tid: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet() + "\n");
+            //if (c.hasPortlet()) System.err.println("portlet= " + c.getPortletID());
+        }
+        log.debug("Made a components list!!!! " + list.size() + "\n" + compSB.toString());
+        newPage.setLayoutDescriptor(LOGGEDIN_LAYOUT_DESCRIPTOR);
+        newPage.setEditable(true);
+        savePortletPageMaster(newPage);
         return newPage;
     }
 
-    protected void setPageTheme(PortletPage page, PortletRequest req) {
+    public void setPageTheme(PortletPage page, PortletRequest req) {
         String defaultTheme = portalConfigService.getPortalConfigSettings().getDefaultTheme();
-        if (defaultTheme != null) {
-            page.setTheme(defaultTheme);
-        }
+        String theme = null;
+        if (defaultTheme != null) theme = defaultTheme;
         User user = req.getUser();
         if (user != null) {
-            String theme = (String) user.getAttribute(User.THEME);
-            if (theme != null) {
-                page.setTheme(theme);
-            }
+            theme = (String) user.getAttribute(User.THEME);
         }
-        if ((page.getTheme() == null) || (page.getTheme().equals(""))) {
-            page.setTheme(DEFAULT_THEME);
-        }
+        if (theme == null) theme = DEFAULT_THEME;
+        req.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, theme);
     }
 
     public PortletTabbedPane createNewUserPane(PortletRequest req, int cols, String tabName) {
@@ -419,14 +410,13 @@ public class PortletPageFactory implements PortletSessionListener {
             if (pane == null) {
                 pane = new PortletTabbedPane();
                 User user = req.getUser();
-                String userLayout = userLayoutDir + File.separator + user.getUserName();
+                String userLayout = USER_LAYOUT_DIR + File.separator + user.getUserName();
                 pane.setLayoutDescriptor(userLayout);
             } else {
                 tabNum = pane.getLastPortletTab().getTabOrder() + 1;
             }
 
             PortletTab topTab = new PortletTab();
-            System.err.println("setting tab num to " + tabNum);
             topTab.setTabOrder(tabNum);
 
             topTab.setCanModify(true);
@@ -469,114 +459,140 @@ public class PortletPageFactory implements PortletSessionListener {
 
     }
 
-
-    public PortletPage createTCKPage(PortletRequest req, String[] portletNames) {
-        String pageName = req.getParameter("pageName");
-
-        PortletPage page = new PortletPage();
-        PortletTableLayout tableLayout = new PortletTableLayout();
-        StringTokenizer tokenizer;
-        for (int i = 0; i < portletNames.length; i++) {
-            tokenizer = new StringTokenizer(portletNames[i], "/");
-            String appName = tokenizer.nextToken();
-            String portletName = tokenizer.nextToken();
-            //String portletClass = registry.getPortletClassName(appName, portletName);
-            //if (portletClass == null) {
-            //    log.error("Unable to find portlet class for " + portletName);
-            //}
-            if (pageName == null) {
-                pageName = "TCK_testpage_" + portletName;
-            }
-            PortletFrame frame = new PortletFrame();
-            PortletTitleBar tb = new PortletTitleBar();
-            //tb.setPortletClass(portletClass);
-            tb.setPortletClass(appName + "#" + portletName);
-            frame.setPortletTitleBar(tb);
-            //frame.setPortletClass(portletClass);
-            frame.setPortletClass(appName + "#" + portletName);
-            tableLayout.addPortletComponent(frame);
-        }
-
-        PortletTab tab = new PortletTab();
-
-        tab.setTitle(pageName);
-        tab.setPortletComponent(tableLayout);
-        PortletTabbedPane pane = new PortletTabbedPane();
-        pane.addTab(tab);
-        page.setPortletTabbedPane(pane);
-        page.setLayoutDescriptor("/tmp/test.xml");
+    public PortletPage createPortletPageCopy(String layoutId) {
+        // get the master copy of the page
+        PortletPage masterPage = (PortletPage)masterLayouts.get(layoutId);
+        PortletPage copy = null;
+        // there are two cases where a master may not be there, TCK case and logged in  user
         try {
-            page.save();
-            this.setPageTheme(page, req);
-            page.init(req, new ArrayList());
-        } catch (IOException e) {
-            log.error("Unale to save TCK page to /tmp/test.xml", e);
+            copy = (PortletPage) deepCopy(masterPage);
+        } catch (Exception e) {
+            log.error("Failed to make a copy of the master page: " + layoutId);
+            return createErrorPage();
         }
-        return page;
+        return copy;
     }
 
-    public PortletPage createPortletPage(PortletRequest req) {
+    public void savePortletPageMaster(PortletPage page) {
+        String layoutDesc = page.getLayoutDescriptor();
+        String layoutId = layoutDesc.substring(layoutDesc.lastIndexOf(File.separator)+1, layoutDesc.lastIndexOf(".xml"));
+        log.debug("saving layout: " + layoutId);
 
-        String sessionId = req.getPortletSession().getId();
-        User user = req.getUser();
 
-        String[] portletNames = req.getParameterValues("portletName");
+        try {
+            PortletLayoutDescriptor.savePortletPage(page, layoutDesc, LAYOUT_MAPPING_FILE);
+            masterLayouts.put(layoutId, page);
+        } catch (Exception e) {
+            log.error("Unable to save layout descriptor: " + layoutDesc, e);
+        }
 
-        // Sun TCK test uses Jakarta Commons-HttpClient/2.0beta1
-        if (useTCK) {
-            if (req.getClient().getUserAgent().indexOf("HttpClient") > 0) {
-                if (portletNames != null) {
-                    log.info("Creating TCK LAYOUT!");
-                    PortletPage tckLayout = createTCKPage(req, portletNames);
-                    tckLayout.init(req, new ArrayList());
-                    tckLayouts.put(sessionId, tckLayout);
-                    sessionManager.addSessionListener(sessionId, this);
-                }
+        // remove any active layouts with this layoutId
+        Iterator it = layouts.values().iterator();
+        while (it.hasNext()) {
+            Map userLayouts = (Map)it.next();
+            userLayouts.remove(layoutId);
+            log.debug("removing a layout: " + layoutId);
+        }
 
-                if (tckLayouts.containsKey(sessionId)) {
-                    return (PortletPage)tckLayouts.get(sessionId);
-                }
+    }
+
+
+    /**
+     * This is the primary entrance to retrieving a PortletPage
+     *
+     * @param req
+     * @return a portlet page
+     */
+    public PortletPage getPortletPage(PortletRequest req) {
+        PortletSession session = req.getPortletSession();
+        // first check for layout id in request parameter
+        // TODO potential security risk!!! MUST DO SOME ROLE CHECKING HERE!!
+        String layoutId = req.getParameter(SportletProperties.LAYOUT_PAGE_PARAM);
+        boolean doSecurityCheck = false;
+        if (layoutId == null) {
+            // second check for a page layout id in session
+            layoutId = (String)session.getAttribute(SportletProperties.LAYOUT_PAGE);
+            if (layoutId == null) {
+                // if no reference to a layout exists, return a guest layout
+                layoutId = GUEST_PAGE;
             }
-        }
-
-        String pageLayout = (String)req.getAttribute(PAGE);
-        if (pageLayout != null) {
-            return this.createSetupPage(req);
-        }
-
-        PortletPage page;
-
-        if (setupNeeded) return createSetupPage(req);
-        // check for custom page
-        page = getCustomPage(req);
-        if (page != null) return page;
-
-        Principal principal = req.getUserPrincipal();
-        if (principal == null) {
-            log.debug("Creating a guest layout!!");
-            return createFromGuestLayoutXML(req);
-        } 
-
-
-
-        // Need to provide one guest container per users session
-        if (userLayouts.containsKey(sessionId)) {
-            page = (PortletPage) userLayouts.get(sessionId);
-            log.debug("Returning existing layout for:" + sessionId + " for user=" + user.getUserName());
         } else {
-            // Now the user is user so remove guest layout
-            if (guests.containsKey(sessionId)) {
-                log.debug("Removing guest container for:" + sessionId);
-                guests.remove(sessionId);
-            }
+            // this needs to be validated against the required-role of the page
+            doSecurityCheck = true;
+        }
+        Principal principal = req.getUserPrincipal();
+        if (principal == null) layoutId = GUEST_PAGE;
+        PortletPage page = getPortletPageFromHash(req, layoutId, doSecurityCheck);
+        if (page == null) {
+            layoutId = (String)session.getAttribute(SportletProperties.LAYOUT_PAGE);
+            page = getPortletPageFromHash(req, layoutId, false);
+        }
+        session.setAttribute(SportletProperties.LAYOUT_PAGE, layoutId);
+        return page;
+    }
 
-            page = createFromGroups(req);
-            userLayouts.put(sessionId, page);
-            sessionManager.addSessionListener(sessionId, this);
+    /**
+     * This returns the page from the hashtable or creates a new one if necessary
+     * @param req
+     * @param layoutId
+     * @return
+     */
+    protected PortletPage getPortletPageFromHash(PortletRequest req, String layoutId, boolean doSecurityCheck) {
+        PortletSession session = req.getPortletSession();
+        PortletPage page = null;
+        Map usersLayouts = (Map)layouts.get(session.getId());
+        if (usersLayouts == null) {
+            usersLayouts = new HashMap();
+            layouts.put(session.getId(), usersLayouts);
+        }
+        // now check for existing layout in hash
+        page = (PortletPage)usersLayouts.get(layoutId);
+        // only if no page exists, create a new one and place in hash
+        if (page == null) {
+            page = createPortletPage(req, layoutId);
+
+            if (doSecurityCheck) {
+                String role = page.getRequiredRole();
+                // does not have permissions!
+                if (!role.equals("") && !req.isUserInRole(role)) {
+                    // use existing page
+                    log.debug("User=" + req.getUser().getUserName() + " does not have proper permissions for layout=" + layoutId + "!!");
+                    return null;
+                }
+            }
+            usersLayouts.put(layoutId, page);
+            log.debug("Creating new page placing in session " + session.getId());
+            sessionManager.addSessionListener(session.getId(), this);
+            log.debug("afte session listener");
         }
         return page;
     }
 
+    public PortletPage createPortletPage(PortletRequest req, String layoutId) {
+        // get the master copy of the page
+        PortletPage masterPage = (PortletPage)masterLayouts.get(layoutId);
+        PortletPage copy = null;
+        // there are two cases where a master may not be there, TCK case and logged in  user
+        if (masterPage == null) {
+            if (layoutId.equals(TCK_PAGE)) {
+                copy = createTCKPage(req);
+            }
+            if (layoutId.equals(USER_PAGE)) {
+                copy = createFromGroups(req);
+            }
+        } else {
+            try {
+                copy = (PortletPage) deepCopy(masterPage);
+            } catch (Exception e) {
+                log.error("Failed to make a copy of the master page: " + layoutId);
+                return createErrorPage();
+            }
+        }
+        setPageTheme(copy, req);
+        req.setAttribute(SportletProperties.COMPONENT_ID_VAR, SportletProperties.COMPONENT_ID);
+        copy.init(req, new ArrayList());
+        return copy;
+    }
 
     public void removePortletPage(PortletRequest req) {
         PortletSession session = req.getPortletSession();
@@ -593,108 +609,15 @@ public class PortletPageFactory implements PortletSessionListener {
         }
         */
         String id = session.getId();
-        if (userLayouts.containsKey(id)) {
-            userLayouts.remove(id);
+        if (layouts.containsKey(id)) {
+            layouts.remove(id);
         }
         //log.debug("removed user layout: " + userLayout);
     }
 
-    public List getAllCustomPages(PortletRequest req) {
-        PortletSession session = req.getPortletSession();
-        String id = session.getId();
-        Map userLayouts = (Map)customLayouts.get(id);
-        return (userLayouts != null) ? (List)userLayouts.values() : new ArrayList();
-    }
-
-    public PortletPage getCustomPage(PortletRequest req) {
-        PortletSession session = req.getPortletSession();
-        String customPageDesc = (String)req.getAttribute(PAGE);
-        if (customPageDesc == null) customPageDesc = req.getParameter(PAGE);
-        if (customPageDesc == null) return null;
-
-        String id = session.getId();
-        Map userLayouts = (Map)customLayouts.get(id);
-        if (userLayouts == null) userLayouts = new Hashtable();
-        PortletPage customPage = (PortletPage)userLayouts.get(customPageDesc);
-        if (customPage == null) {
-            PortletPage page = (PortletPage)customPages.get(customPageDesc);
-            try {
-                PortletPage newpage = (PortletPage) deepCopy(page);
-                newpage.init(req, new ArrayList());
-                newpage.setTheme(DEFAULT_THEME);
-                userLayouts.put(customPageDesc, newpage);
-                customLayouts.put(id, userLayouts);
-            } catch (Exception e) {
-                log.error("Unable to clone page: " + customPageDesc);
-            }
-        }
-        return customPage;
-
-    }
 
 
-    public PortletPage createFromGuestLayoutXML(PortletRequest req) {
-        PortletSession session = req.getPortletSession();
-
-        String id = session.getId();
-
-        if (userLayouts.containsKey(id)) {
-            userLayouts.remove(id);
-        }
-
-        if ((id != null) && (guests.containsKey(id))) {
-            return (PortletPage) guests.get(id);
-        } else {
-            PortletPage newcontainer = null;
-            try {
-                //newcontainer = (PortletPage)guestPage.clone();
-                PortletPage guestPage = PortletTabRegistry.getGuestLayoutPage();
-
-                newcontainer = (PortletPage) deepCopy(guestPage);
-
-                this.setPageTheme(newcontainer, req);
-
-                // theme has to be set before it is inited
-                newcontainer.init(req, new ArrayList());
-                guests.put(id, newcontainer);
-                sessionManager.addSessionListener(id, this);
-            } catch (Exception e) {
-                log.error("Unable to clone GuestUserLayout!", e);
-                e.printStackTrace();
-            }
-            return newcontainer;
-        }
-    }
-
-    protected void copyFile(File oldFile, File newFile) throws IOException {
-        // Destination and streams
-        log.debug("in copyFile(): oldFile: " + oldFile.getAbsolutePath() + " newFile: " + newFile.getCanonicalPath());
-        FileInputStream fis = new FileInputStream(oldFile);
-        FileOutputStream fos = new FileOutputStream(newFile);
-
-        // Amount of data to copy
-        long fileLength = oldFile.length();
-        byte[] bytes = new byte[1024]; // 1K at a time
-        int length = 0;
-        long totalLength = 0;
-        while (length > -1) {
-            length = fis.read(bytes);
-            if (length > 0) {
-                fos.write(bytes, 0, length);
-                totalLength += length;
-            }
-        }
-        // Test that we copied all the data
-        if (fileLength != totalLength) {
-            throw new IOException("File copy size missmatch");
-        }
-        fos.flush();
-        fos.close();
-        fis.close();
-    }
-
-
-    static public Object deepCopy(Object oldObj) throws Exception {
+    public static Object deepCopy(Object oldObj) throws Exception {
         ObjectOutputStream oos = null;
         ObjectInputStream ois = null;
         try {
@@ -710,7 +633,7 @@ public class PortletPageFactory implements PortletSessionListener {
             // return the new object
             return ois.readObject(); // G
         } catch (Exception e) {
-            System.out.println("Exception in ObjectCloner = " + e);
+            log.error("Exception in ObjectCloner = ", e);
             throw(e);
         } finally {
             if (oos != null) oos.close();
@@ -719,7 +642,7 @@ public class PortletPageFactory implements PortletSessionListener {
     }
 
     public void logStatistics() {
-
+        /*
         log.debug("\n\nnumber of guest layouts: " + guests.size());
         Iterator it = guests.keySet().iterator();
         while (it.hasNext()) {
@@ -732,7 +655,66 @@ public class PortletPageFactory implements PortletSessionListener {
             String id = (String) it.next();
             log.debug("user has session: " + id);
         }
-
+        */
     }
+
+    // TODO
+    public PortletPage createErrorPage() {
+        PortletPage errorPage = createPortletPageCopy(ERROR_PAGE);
+        return errorPage;
+    }
+
+    public PortletPage createTCKPage(PortletRequest req) {
+        String[] portletNames = req.getParameterValues("portletName");
+        PortletPage page = null;
+        // Sun TCK test uses Jakarta Commons-HttpClient/2.0beta1
+
+        if (req.getClient().getUserAgent().indexOf("HttpClient") > 0) {
+            if (portletNames != null) {
+                log.info("Creating TCK LAYOUT!");
+                String pageName = req.getParameter("pageName");
+                page = new PortletPage();
+                PortletTableLayout tableLayout = new PortletTableLayout();
+                StringTokenizer tokenizer;
+                for (int i = 0; i < portletNames.length; i++) {
+                    tokenizer = new StringTokenizer(portletNames[i], "/");
+                    String appName = tokenizer.nextToken();
+                    String portletName = tokenizer.nextToken();
+                    //String portletClass = registry.getPortletClassName(appName, portletName);
+                    //if (portletClass == null) {
+                    //    log.error("Unable to find portlet class for " + portletName);
+                    //}
+                    if (pageName == null) {
+                        pageName = "TCK_testpage_" + portletName;
+                    }
+                    PortletFrame frame = new PortletFrame();
+                    PortletTitleBar tb = new PortletTitleBar();
+                    //tb.setPortletClass(portletClass);
+                    tb.setPortletClass(appName + "#" + portletName);
+                    frame.setPortletTitleBar(tb);
+                    //frame.setPortletClass(portletClass);
+                    frame.setPortletClass(appName + "#" + portletName);
+                    tableLayout.addPortletComponent(frame);
+                }
+
+                PortletTab tab = new PortletTab();
+                tab.setTitle(pageName);
+                tab.setPortletComponent(tableLayout);
+                PortletTabbedPane pane = new PortletTabbedPane();
+                pane.addTab(tab);
+                page.setPortletTabbedPane(pane);
+                page.setLayoutDescriptor("/tmp/test.xml");
+                try {
+                    page.save();
+                    this.setPageTheme(page, req);
+                    page.init(req, new ArrayList());
+                } catch (IOException e) {
+                    log.error("Unable to save TCK page to /tmp/test.xml", e);
+                }
+            }
+        }
+        return page;
+    }
+
 
 }

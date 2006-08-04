@@ -414,7 +414,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      */
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
-        titleView = (Render)getRenderClass("TitleBar");
+        titleView = (Render)getRenderClass(req, "TitleBar");
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);
@@ -523,7 +523,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         for (int i = 0; i < windowStates.size(); i++) {
             tmp = (PortletWindow.State) windowStates.get(i);
             portletURI = res.createURI();
-            portletURI.addParameter(SportletProperties.COMPONENT_ID, this.componentIDStr);
+            portletURI.addParameter(this.getComponentIDVar(req), this.componentIDStr);
 
             try {
                 stateLink = new PortletStateLink(tmp, locale);
@@ -577,7 +577,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         //User user = req.getUser();
         //boolean hasConfigurePermission = ((roleService.isUserInRole(user, PortletRole.ADMIN)) || (roleService.isUserInRole(user, PortletRole.SUPER)));
 
-        List userRoles = (List)req.getAttribute(SportletProperties.PORTLET_ROLE);
+        List userRoles = (List)req.getRoles();
         boolean hasConfigurePermission = ((userRoles.contains(PortletRole.ADMIN.getName())) || userRoles.contains(PortletRole.SUPER.getName()));
         List smodes = new ArrayList();
         Portlet.Mode mode;
@@ -605,7 +605,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             PortletModeLink modeLink;
             mode = (Portlet.Mode) smodes.get(i);
             portletURI = res.createURI();
-            portletURI.addParameter(SportletProperties.COMPONENT_ID, this.componentIDStr);
+            portletURI.addParameter(this.getComponentIDVar(req), this.componentIDStr);
             //portletURI.addParameter(SportletProperties.PORTLETID, portletClass);
             try {
                 modeLink = new PortletModeLink(mode, locale);
@@ -752,10 +752,10 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
 
         StringBuffer preTitle = titleView.doStart(event, this);
-        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre", preTitle.toString());
+        req.setAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID + ".pre", preTitle.toString());
 
         StringBuffer postTitle = titleView.doEnd(event, this);
-        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post", postTitle.toString());
+        req.setAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID + ".post", postTitle.toString());
 
         StringWriter storedWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(storedWriter);
@@ -776,14 +776,14 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     }
 
     public String getPreBufferedTitle(PortletRequest req) {
-        String preTitle = (String)req.getAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre");
-        req.removeAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".pre");
+        String preTitle = (String)req.getAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID + ".pre");
+        req.removeAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID + ".pre");
         return preTitle;
     }
 
     public String getPostBufferedTitle(PortletRequest req) {
-        String postTitle = (String)req.getAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post");
-        req.removeAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr + ".post");
+        String postTitle = (String)req.getAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID + ".post");
+        req.removeAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID + ".post");
         return postTitle;
     }
 
@@ -805,5 +805,13 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         return t;
 
     }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(super.toString());
+
+        return sb.toString();
+    }
+
 }
 

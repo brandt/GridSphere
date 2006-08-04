@@ -86,7 +86,7 @@ public class Frame extends BaseRender implements FrameView {
         PortletRequest req = event.getPortletRequest();
 
         PortletURI portletURI = res.createURI();
-        portletURI.addParameter(SportletProperties.COMPONENT_ID, String.valueOf(frame.getPortletTitleBar().getComponentID()));
+        portletURI.addParameter(frame.getComponentIDVar(req), String.valueOf(frame.getPortletTitleBar().getComponentID()));
         portletURI.addParameter(SportletProperties.PORTLET_WINDOW, PortletWindow.State.CLOSED.toString());
         String tmp = "<form action=\"" + portletURI.toString() + "\" method=\"post\"";
         postframe.append(tmp);

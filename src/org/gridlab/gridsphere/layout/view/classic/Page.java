@@ -29,6 +29,7 @@ public class Page extends BaseRender implements Render {
 
         PortletRequest req = event.getPortletRequest();
 
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
         StringBuffer page = new StringBuffer();
 
         PortletPage portletPage = (PortletPage)component;
@@ -48,7 +49,7 @@ public class Page extends BaseRender implements Render {
         page.append("\n\t<meta http-equiv=\"Pragma\" content=\"no-cache\"/>");
         if (portletPage.getRefresh() > 0) page.append("\n\t<meta http-equiv=\"refresh\" content=\"" + portletPage.getRefresh() + "\"/>");
         page.append("\n\t<link type=\"text/css\" href=\"" +
-                req.getContextPath() + "/themes/" + portletPage.getRenderKit() + "/" + portletPage.getTheme() + "/css" +
+                req.getContextPath() + "/themes/" + portletPage.getRenderKit() + "/" + theme + "/css" +
                     "/default.css\" rel=\"stylesheet\"/>");
         page.append("\n\t<link rel=\"stylesheet\" type=\"text/css\" href=\"" + req.getContextPath() + "/css/SimpleTextEditor.css\"/>");
         // Add portlet defined stylesheet if defined

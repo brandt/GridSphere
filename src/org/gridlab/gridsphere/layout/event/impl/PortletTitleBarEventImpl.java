@@ -87,15 +87,6 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
             } catch (Exception e) {
                 mode = Portlet.Mode.VIEW;
             }
-            //PortletRole role = req.getRole();
-            /*
-            if (mode.equals(Portlet.Mode.CONFIGURE)) {
-                if (role.compare(role, PortletRole.ADMIN) <  0) {
-                    System.err.println("im role: " + role.toString() + " about to send null");
-                    return null;
-                }
-            }
-            */
             return mode;
         }
         return null;

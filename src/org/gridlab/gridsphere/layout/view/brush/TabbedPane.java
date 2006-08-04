@@ -12,6 +12,10 @@ import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.layout.view.BaseRender;
 import org.gridlab.gridsphere.layout.view.TabbedPaneView;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.util.List;
 import java.util.StringTokenizer;
@@ -103,6 +107,38 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             pane.append("<li class=\"").append(selected).append("\">");
             pane.append("<a href=\"").append(link).append("\"><span>").append(replaceBlanks(title)).append("</span></a></li>");
         }
+        return pane;
+    }
+
+    public StringBuffer doRenderEditTab(GridSphereEvent event, PortletTabbedPane tabPane, boolean isSelected) {
+        PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getPortletRequest();
+        PortletURI portletURI = res.createURI();
+        String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
+        String link = portletURI.toString() + extraQuery;
+        StringBuffer pane = new StringBuffer();
+
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        String cid = (String)req.getAttribute(compVar);
+
+        if (tabPane.getStyle().equals("sub-menu")) {
+            pane.append("\n<li");
+            if (isSelected) {
+                pane.append(" class=\"sub-nav-sel\"");
+            }
+            pane.append(">");
+            pane.append("<a href=\"").append(link).append("&newsubtab=true").append("\">").append(replaceBlanks("New subtab")).append("</a></li>\n");
+        }
+        if (tabPane.getStyle().equals("menu")) {
+            String selected = "nav-nonsel";
+            if (isSelected) {
+                selected = "nav-sel";
+            }
+            pane.append("<li class=\"").append(selected).append("\">");
+            pane.append("<a href=\"").append(link).append("&newtab=true").append("\"><span>").append(replaceBlanks("New tab")).append("</span></a></li>");
+        }
+
         return pane;
     }
 

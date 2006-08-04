@@ -49,44 +49,36 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      */
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
-
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setComponentID(list.size());
         compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
-
-        List scomponents = Collections.synchronizedList(components);
-        synchronized (scomponents) {
-            Iterator it = scomponents.iterator();
-            List userRoles = req.getRoles();
-            PortletComponent p;
-
-            while (it.hasNext()) {
-                p = (PortletComponent) it.next();
-                if (!p.getRequiredRole().equals("") && (!userRoles.contains(p.getRequiredRole()))) {
-                    it.remove();
-                } else {
-                    // all the components have the same theme
-                    p.setTheme(theme);
-                    p.setRenderKit(renderKit);
-                    p.setCanModify(canModify);
-                    // invoke init on each component
-                    list = p.init(req, list);
-
-                    p.addComponentListener(this);
-
-                    p.setParentComponent(this);
-                }
+        Iterator it = components.iterator();
+        List userRoles = req.getRoles();
+        PortletComponent p;
+        while (it.hasNext()) {
+            p = (PortletComponent) it.next();
+            if (!p.getRequiredRole().equals("") && (!userRoles.contains(p.getRequiredRole()))) {
+                it.remove();
+            } else {
+                p.setCanModify(canModify);
+                // invoke init on each component
+                list = p.init(req, list);
+                p.addComponentListener(this);
+                p.setParentComponent(this);
             }
         }
-
         return list;
     }
 
     protected void customActionPerformed(GridSphereEvent event) {
-        
+
+    }
+
+    public void doRender(GridSphereEvent event) {
+        super.doRender(event);
     }
 
     public void actionPerformed(GridSphereEvent event) {
@@ -100,16 +92,12 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         }
 
         customActionPerformed(event);
-
-        List slisteners = Collections.synchronizedList(listeners);
-        synchronized (slisteners) {
-            Iterator it = slisteners.iterator();
-            PortletComponent comp;
-            while (it.hasNext()) {
-                comp = (PortletComponent) it.next();
-                event.addNewRenderEvent(compEvt);
-                comp.actionPerformed(event);
-            }
+        Iterator it = listeners.iterator();
+        PortletComponent comp;
+        while (it.hasNext()) {
+            comp = (PortletComponent) it.next();
+            event.addNewRenderEvent(compEvt);
+            comp.actionPerformed(event);
         }
     }
 
@@ -297,6 +285,15 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
             }
         }
         return f;
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(super.toString());
+        for (int i = 0; i < components.size(); i++) {
+            sb.append(components.toString());
+        }
+        return sb.toString();
     }
 
 }

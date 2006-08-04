@@ -12,6 +12,10 @@ import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.layout.view.BaseRender;
 import org.gridlab.gridsphere.layout.view.TabbedPaneView;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletURI;
 
 import java.util.List;
 import java.util.StringTokenizer;
@@ -74,10 +78,40 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         }
     }
 
+    public StringBuffer doRenderEditTab(GridSphereEvent event, PortletTabbedPane tabPane, boolean isSelected) {
+        PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getPortletRequest();
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
+        String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
+        StringBuffer pane = new StringBuffer();
+        String path = event.getPortletRequest().getContextPath() + "/themes/" + renderkit + "/" + theme + "/images/"; /// Removed File.separator(s)
+        PortletURI portletURI = res.createURI();
+        String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
+        String link = portletURI.toString() + extraQuery;
+        String title = "Make new tab";
+        if (tabPane.getStyle().equals("sub-menu")) {
+            pane.append("\n<!-- START SUB MENU TAB --><td nowrap=\"nowrap\" background=\"" + path + "subtab-middle.gif\" height=\"24\">");
+            pane.append("<span class=\"tab-sub-inactive\">");
+            pane.append("<a class=\"tab-sub-menu\" href=\"" + link + "\">" + replaceBlanks(title) + "</a>");
+            pane.append("</span>");
+            pane.append("</td>\n");
+        } else {
+            pane.append("\n<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-inactive-left.gif\"  alt=\"tab inactive left border\" /></td>");
+            pane.append("<td height=\"24\" nowrap=\"nowrap\" background=\"" + path + "tab-inactive-middle.gif\">");
+            pane.append("<a class=\"tab-menu\" href=\"" + link + "\">" + replaceBlanks(title) + "</a>");
+            pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-inactive-right.gif\" alt=\"tab inactive right border\" /></td>");
+
+        }
+        return pane;
+    }
+
     public StringBuffer doRenderTab(GridSphereEvent event, PortletTabbedPane tabPane, PortletTab tab) {
         // this really creates the individual tabs
+        PortletRequest req = event.getPortletRequest();
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
+        String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
         StringBuffer pane = new StringBuffer();
-        String path = event.getPortletRequest().getContextPath() + "/themes/" + tabPane.getRenderKit() + "/" + tabPane.getTheme() + "/images/"; /// Removed File.separator(s)
+        String path = event.getPortletRequest().getContextPath() + "/themes/" + renderkit + "/" + theme + "/images/"; /// Removed File.separator(s)
         String link = tab.createTabTitleLink(event);
         String lang = event.getPortletRequest().getLocale().getLanguage();
         String title = tab.getTitle(lang);
@@ -110,10 +144,13 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
 
     public StringBuffer doEndBorder(GridSphereEvent event, PortletComponent component) {
         // this ends the indivual tabs
+        PortletRequest req = event.getPortletRequest();
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
+        String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
         PortletTabbedPane tabPane = (PortletTabbedPane)component;
         StringBuffer pane = new StringBuffer();
         if (tabPane.getStyle().equals("sub-menu")) {
-            String path = event.getPortletRequest().getContextPath() + "/themes/" + tabPane.getRenderKit() + "/" + tabPane.getTheme() + "/images/"; /// Removed File.separator(s)
+            String path = event.getPortletRequest().getContextPath() + "/themes/" + renderkit + "/" + theme + "/images/"; /// Removed File.separator(s)
             pane.append("</tr></table>");
             pane.append("<td background=\"" + path + "subtab-middle.gif\" style=\"width:100%\">&nbsp;</td>");
             pane.append("</tr></table><!-- end SUB MENU tabbed pane -->\n");

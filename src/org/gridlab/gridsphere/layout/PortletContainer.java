@@ -26,7 +26,7 @@ public class PortletContainer extends BasePortletComponent implements
     protected String style = null;
     public final static String STYLE_HEADER = "STYLE_HEADER";
     public final static String STYLE_FOOTER = "STYLE_FOOTER";
-    private Render containerView = null;
+    private transient Render containerView = null;
 
     /**
      * Initializes the portlet component. Since the components are isolated
@@ -38,7 +38,10 @@ public class PortletContainer extends BasePortletComponent implements
      * @see ComponentIdentifier
      */
     public List init(PortletRequest req, List list) {
-        containerView = (Render) getRenderClass("Container");
+
+        list = super.init(req, list);
+
+        containerView = (Render) getRenderClass(req, "Container");
 
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
@@ -46,20 +49,14 @@ public class PortletContainer extends BasePortletComponent implements
         compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
-        list = super.init(req, list);
-        List scomponents = Collections.synchronizedList(components);
-        synchronized (scomponents) {
-            Iterator it = scomponents.iterator();
-            PortletComponent p;
-            while (it.hasNext()) {
-                p = (PortletComponent) it.next();
-                // all the components have the same theme
-                p.setTheme(theme);
-                p.setRenderKit(renderKit);
-                // invoke init on each component
-                list = p.init(req, list);
-                p.setParentComponent(this);
-            }
+
+        Iterator it = components.iterator();
+        PortletComponent p;
+        while (it.hasNext()) {
+            p = (PortletComponent) it.next();
+            // invoke init on each component
+            list = p.init(req, list);
+            p.setParentComponent(this);
         }
         return list;
     }
@@ -155,13 +152,10 @@ public class PortletContainer extends BasePortletComponent implements
 
     public Object clone() throws CloneNotSupportedException {
         PortletContainer f = (PortletContainer) super.clone();
-        List scomponents = Collections.synchronizedList(components);
-        synchronized (scomponents) {
-            f.components = new ArrayList(scomponents.size());
-            for (int i = 0; i < scomponents.size(); i++) {
-                PortletComponent comp = (PortletComponent) scomponents.get(i);
-                f.components.add(comp.clone());
-            }
+        f.components = new ArrayList(components.size());
+        for (int i = 0; i < components.size(); i++) {
+            PortletComponent comp = (PortletComponent) components.get(i);
+            f.components.add(comp.clone());
         }
         return f;
     }

@@ -8,4 +8,6 @@ public interface TabbedPaneView extends Render {
 
     public StringBuffer doRenderTab(GridSphereEvent event, PortletTabbedPane tabPane, PortletTab tab);
 
+    public StringBuffer doRenderEditTab(GridSphereEvent event, PortletTabbedPane tabPane, boolean isSelected);
+
 }

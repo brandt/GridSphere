@@ -24,13 +24,13 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
 
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
-        colView = (Render)getRenderClass("ColumnLayout");
+        colView = (Render)getRenderClass(req, "ColumnLayout");
         return list;
     }
 
     public void remove(PortletComponent pc, PortletRequest req) {
         components.remove(pc);
-        if (getPortletComponents().isEmpty() && (!canModify)) {
+        if (getPortletComponents().isEmpty()) {
             parent.remove(this, req);
         }
     }
@@ -39,6 +39,7 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
         //System.err.println("\t\tin render ColumnLayout");
         StringBuffer col = new StringBuffer();
         // starting of the gridtable
+        
         if (!components.isEmpty()) {
             col.append(colView.doStart(event, this));
             PortletComponent p;

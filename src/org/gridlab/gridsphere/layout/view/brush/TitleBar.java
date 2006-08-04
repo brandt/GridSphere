@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.layout.PortletTitleBar;
 import org.gridlab.gridsphere.layout.view.BaseRender;
 import org.gridlab.gridsphere.layout.view.Render;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.util.Iterator;
@@ -41,7 +42,8 @@ public class TitleBar extends BaseRender implements Render {
         List windowLinks = titleBar.getWindowLinks();
         titleBuffer.append("<div class=\"gridsphere-window-title-icon-right\">");
         List modeLinks = titleBar.getModeLinks();
-
+        String renderKit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
         // modes
         if (modeLinks != null) {
             Iterator modesIt = modeLinks.iterator();
@@ -51,7 +53,7 @@ public class TitleBar extends BaseRender implements Render {
             }
             while (modesIt.hasNext()) {
                 mode = (PortletTitleBar.PortletModeLink) modesIt.next();
-                titleBuffer.append("<a href=\"").append(mode.getHref()).append("\"><img border=\"0\" src=\"").append(req.getContextPath()).append("/themes/").append(titleBar.getRenderKit()).append("/").append(titleBar.getTheme()).append("/").append(mode.getImageSrc()).append("\" title=\"").append(mode.getAltTag()).append("\" alt=\"").append(mode.getAltTag()).append("\"");
+                titleBuffer.append("<a href=\"").append(mode.getHref()).append("\"><img border=\"0\" src=\"").append(req.getContextPath()).append("/themes/").append(renderKit).append("/").append(theme).append("/").append(mode.getImageSrc()).append("\" title=\"").append(mode.getAltTag()).append("\" alt=\"").append(mode.getAltTag()).append("\"");
                 if (!mode.getCursor().equals("")) {
                     titleBuffer.append(" style=\"cursor: ").append(mode.getCursor()).append(";\"");
                 }
@@ -65,7 +67,7 @@ public class TitleBar extends BaseRender implements Render {
             PortletTitleBar.PortletStateLink state;
             while (windowsIt.hasNext()) {
                 state = (PortletTitleBar.PortletStateLink) windowsIt.next();
-                titleBuffer.append("<a href=\"").append(state.getHref()).append("\"><img  border=\"0\" src=\"").append(req.getContextPath()).append("/themes/").append(titleBar.getRenderKit()).append("/").append(titleBar.getTheme()).append("/").append(state.getImageSrc()).append("\" title=\"").append(state.getAltTag()).append("\" alt=\"").append(state.getAltTag()).append("\" /></a>");
+                titleBuffer.append("<a href=\"").append(state.getHref()).append("\"><img  border=\"0\" src=\"").append(req.getContextPath()).append("/themes/").append(renderKit).append("/").append(theme).append("/").append(state.getImageSrc()).append("\" title=\"").append(state.getAltTag()).append("\" alt=\"").append(state.getAltTag()).append("\" /></a>");
             }
         }
         titleBuffer.append("</div>");    // title-icon-right

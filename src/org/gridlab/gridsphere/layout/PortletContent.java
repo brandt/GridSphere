@@ -7,13 +7,16 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.util.List;
 
 /**
  * <code>PortletContent</code> is used to display the contents of an included
@@ -28,6 +31,26 @@ public class PortletContent extends BasePortletComponent implements Serializable
      * Constructs an instance of PortletContent
      */
     public PortletContent() {
+    }
+
+    /**
+     * Initializes the portlet component. Since the components are isolated
+     * after Castor unmarshalls from XML, the ordering is determined by a
+     * passed in List containing the previous portlet components in the tree.
+     *
+     * @param list a list of component identifiers
+     * @return a list of updated component identifiers
+     * @see ComponentIdentifier
+     */
+    public List init(PortletRequest req, List list) {
+        list = super.init(req, list);
+        ComponentIdentifier compId = new ComponentIdentifier();
+        compId.setPortletComponent(this);
+        compId.setComponentID(list.size());
+        compId.setComponentLabel(label);
+        compId.setClassName(this.getClass().getName());
+        list.add(compId);
+        return list;
     }
 
     /**
@@ -67,6 +90,10 @@ public class PortletContent extends BasePortletComponent implements Serializable
         this.context = context;
     }
 
+    public String getFileName() {
+        return textFile.substring(textFile.lastIndexOf("/")+1);
+    }
+
     /**
      * Renders the portlet text component
      *
@@ -80,7 +107,17 @@ public class PortletContent extends BasePortletComponent implements Serializable
         StringWriter writer = new StringWriter();
         StoredPortletResponseImpl sres = new StoredPortletResponseImpl(res, writer);
         StringBuffer content = new StringBuffer();
-
+        String textFileName = textFile.substring(textFile.lastIndexOf("/")+1);
+        if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
+            String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
+            if (extraQuery != null) {
+                PortletURI portletURI = res.createURI();
+                String link = portletURI.toString() + extraQuery;
+                content.append("<br><fieldset><a href=\"" + link + "\">Static Content - " + textFileName + "</a></fieldset>");
+                setBufferedOutput(req, content);
+            }
+            return;
+        }
         if (context != null) {
             if (!context.startsWith("/")) {
                 context = "/" + context;
@@ -117,4 +154,10 @@ public class PortletContent extends BasePortletComponent implements Serializable
         return t;
     }
 
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(super.toString());
+        sb.append("\ntext file=").append(textFile);
+        return sb.toString();
+    }
 }

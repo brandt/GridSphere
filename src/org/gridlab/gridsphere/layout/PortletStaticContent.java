@@ -117,4 +117,10 @@ public class PortletStaticContent extends BasePortletComponent implements Serial
         return t;
     }
 
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(super.toString());
+        sb.append("\ntext file=").append(textFile);
+        return sb.toString();
+    }
 }

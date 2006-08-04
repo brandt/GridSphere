@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.layout.PortletTitleBar;
 import org.gridlab.gridsphere.layout.view.BaseRender;
 import org.gridlab.gridsphere.layout.view.Render;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.util.Iterator;
@@ -25,6 +26,8 @@ public class TitleBar extends BaseRender implements Render {
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
         PortletTitleBar titleBar = (PortletTitleBar)comp;
         PortletRequest req = event.getPortletRequest();
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
+        String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
         StringBuffer titleBuffer = new StringBuffer();
         if (titleBar.isActive()) {
             titleBuffer.append("<tr><td class=\"window-title-active\">");
@@ -42,7 +45,7 @@ public class TitleBar extends BaseRender implements Render {
             PortletTitleBar.PortletModeLink mode;
             while (modesIt.hasNext()) {
                 mode = (PortletTitleBar.PortletModeLink) modesIt.next();
-                titleBuffer.append("<a href=\"" + mode.getHref() + "\"><img border=\"0\" src=\"" + req.getContextPath() + "/themes/" + titleBar.getRenderKit() + "/" + titleBar.getTheme() + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\" alt=\"" + mode.getAltTag() + "\" /></a>"); /// Removed File.separator(s)
+                titleBuffer.append("<a href=\"" + mode.getHref() + "\"><img border=\"0\" src=\"" + req.getContextPath() + "/themes/" + renderkit + "/" + theme + "/" + mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\" alt=\"" + mode.getAltTag() + "\" /></a>"); /// Removed File.separator(s)
             }
             titleBuffer.append("</td>");
         }
@@ -53,6 +56,8 @@ public class TitleBar extends BaseRender implements Render {
     public StringBuffer doEnd(GridSphereEvent event, PortletComponent comp) {
         PortletTitleBar titleBar = (PortletTitleBar)comp;
         PortletRequest req = event.getPortletRequest();
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
+        String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
         StringBuffer titleBuffer = new StringBuffer();
         titleBuffer.append("</td>");
         // Output window state icons
@@ -64,7 +69,7 @@ public class TitleBar extends BaseRender implements Render {
             titleBuffer.append("<td class=\"window-icon-right\">");
             while (windowsIt.hasNext()) {
                 state = (PortletTitleBar.PortletStateLink) windowsIt.next();
-                titleBuffer.append("<a href=\"" + state.getHref() + "\"><img border=\"0\" src=\"" + req.getContextPath() + "/themes/" + titleBar.getRenderKit() + "/" + titleBar.getTheme() + "/" + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\" alt=\"" + state.getAltTag() + "\" /></a>"); /// Removed File.separator(s)
+                titleBuffer.append("<a href=\"" + state.getHref() + "\"><img border=\"0\" src=\"" + req.getContextPath() + "/themes/" + renderkit + "/" + theme + "/" + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\" alt=\"" + state.getAltTag() + "\" /></a>"); /// Removed File.separator(s)
             }
             titleBuffer.append("</td>");
         }

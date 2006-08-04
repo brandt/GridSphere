@@ -18,8 +18,8 @@ import java.util.List;
  */
 public abstract class BaseComponentLifecycle implements ComponentLifecycle {
 
-    protected int COMPONENT_ID = -1;
-    protected String componentIDStr = "-1";
+    protected int COMPONENT_ID = 0;
+    protected String componentIDStr = "0";
 
     /**
      * Initializes the portlet component. Since the components are isolated
@@ -52,13 +52,26 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
     }
 
     /**
+     * Returns the associated portlet component id variable
+     *
+     * @return the portlet component id variable
+     */
+    public String getComponentIDVar(PortletRequest req) {
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        return compVar;
+    }
+
+    /**
      * Performs an action on this portlet component
      *
      * @param event a gridsphere event
      */
     public void actionPerformed(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
-        req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        req.setAttribute(compVar, componentIDStr);
     }
 
     /**
@@ -76,4 +89,5 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
         b.componentIDStr = this.componentIDStr;
         return b;
     }
+
 }

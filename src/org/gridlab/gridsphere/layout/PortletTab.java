@@ -157,8 +157,15 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public String createTabTitleLink(GridSphereEvent event) {
         if (url != null) return url;
         PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getPortletRequest();
         PortletURI portletURI = res.createURI();
-        portletURI.addParameter(SportletProperties.COMPONENT_ID, componentIDStr);
+
+        portletURI.addParameter(this.getComponentIDVar(req), componentIDStr);
+
+        String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
+        if (extraQuery != null) {
+            return portletURI.toString() + extraQuery;
+        }
         return portletURI.toString();
     }
 
@@ -222,8 +229,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         compId.setClassName(this.getClass().getName());
         list.add(compId);
         if (portletComponent != null) {
-            portletComponent.setTheme(theme);
-            portletComponent.setRenderKit(renderKit);
             list = portletComponent.init(req, list);
             portletComponent.addComponentListener(this);
             portletComponent.setParentComponent(this);
@@ -270,7 +275,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         if (portletComponent == null) return;
         List userRoles = req.getRoles();
         StringBuffer tab = new StringBuffer();
-        if (roleString.equals("") || (userRoles.contains(roleString))) {
+        if ((requiredRoleName.equals("")) || (userRoles.contains(requiredRoleName))) {
             portletComponent.doRender(event);
             tab.append(portletComponent.getBufferedOutput(req));
         }
@@ -300,14 +305,25 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         t.url = this.url;
         t.portletComponent = (this.portletComponent == null) ? null : (PortletComponent) this.portletComponent.clone();
         t.selected = this.selected;
-        List stitles = Collections.synchronizedList(titles);
-        synchronized (stitles) {
-            t.titles = new ArrayList(stitles.size());
-            for (int i = 0; i < stitles.size(); i++) {
-                Description title = (Description) stitles.get(i);
-                t.titles.add(title.clone());
-            }
+        t.titles = new ArrayList(titles.size());
+        for (int i = 0; i < titles.size(); i++) {
+            Description title = (Description) titles.get(i);
+            t.titles.add(title.clone());
         }
         return t;
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(super.toString());
+        sb.append("\ntab order=").append(tabOrder);
+        sb.append("\ntab selected=").append(selected);
+        Iterator it = titles.iterator();
+        while (it.hasNext()) {
+            Description desc = (Description)it.next();
+            sb.append("\nlang=").append(desc.getLang());
+            sb.append("\ntitle=").append(desc.getText());
+        }
+        return sb.toString();
     }
 }

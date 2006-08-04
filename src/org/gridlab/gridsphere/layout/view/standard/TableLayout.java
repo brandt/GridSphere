@@ -15,6 +15,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletURI;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.util.*;
@@ -75,7 +76,9 @@ public class TableLayout extends BaseRender implements TableLayoutView {
     }
 
     public StringBuffer doRenderUserSelects(GridSphereEvent event, PortletTableLayout tableLayout) {
-	event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, tableLayout.getLabel());
+	    PortletRequest req = event.getPortletRequest();
+
+        //req.setAttribute(tableLayout.getComponentIDVar(req), tableLayout.getLabel());
         StringBuffer table = new StringBuffer();
         table.append("<div class=\"table\">");
         List components = tableLayout.getPortletComponents();
@@ -123,8 +126,14 @@ public class TableLayout extends BaseRender implements TableLayoutView {
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         Locale locale = req.getLocale();
+
         PortletURI uri = res.createURI();
-                uri.addAction(PortletTableLayout.PORTLET_ADD_ACTION);
+
+        uri.addAction(PortletTableLayout.PORTLET_ADD_ACTION);
+        String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
+        if (extraQuery != null) {
+            uri.addParameter("usertable", "edit");
+        }
 
         table.append("<form action=\"" + uri.toString() + "\"  method=\"post\" name=\"addform\"><p>");
         table.append("<input type=\"hidden\" name=\"" + PortletTableLayout.PORTLET_COL + "\" value=\"" + col + "\"/>");
@@ -149,7 +158,10 @@ public class TableLayout extends BaseRender implements TableLayoutView {
         }
 
         table.append("</select>");
-        table.append("&nbsp;&nbsp;<input type=\"submit\" name=\"gs_action=addportlet\" value=\"" + addButton + "\">");
+
+        String action = "gs_action=addportlet";
+
+        table.append("&nbsp;&nbsp;<input type=\"submit\" name=\"" + action + "\" value=\"" + addButton + "\">");
         table.append("</p></form>");
         return table;
     }

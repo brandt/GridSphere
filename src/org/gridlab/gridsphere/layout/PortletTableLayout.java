@@ -6,9 +6,7 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.layout.view.TableLayoutView;
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
@@ -38,37 +36,60 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
     private transient GroupManagerService groupService = null;
 
     /**
+     * css Style of the table
+     */
+    protected String style = "";
+
+    /**
      * Constructs an instance of PortletTableLayout
      */
     public PortletTableLayout() {
     }
 
+    /**
+     * Returns the CSS style name for the grid-layout.
+     *
+     * @return css style name
+     */
+    public String getStyle() {
+        return style;
+    }
+
+    /**
+     * Sets the CSS style name for the grid-layout.
+     * This needs to be set if you want to have transparent portlets, if there is
+     * no background there can't be a real transparent portlet.
+     * Most likely one sets just the background in that one.
+     *
+     * @param style css style of the that layout
+     */
+    public void setStyle(String style) {
+        this.style = style;
+    }
+
     public List init(PortletRequest req, List list) {
-        tableView = (TableLayoutView)getRenderClass("TableLayout");
+        tableView = (TableLayoutView)getRenderClass(req, "TableLayout");
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
             groupService = (GroupManagerService)factory.createPortletService(GroupManagerService.class, true);
         } catch (PortletServiceException e) {
-            System.err.println("Unable to init Cache service! " + e.getMessage());
+            System.err.println("Unable to init group manager service! " + e.getMessage());
         }
         return super.init(req, list);
     }
 
     private PortletComponent getMaximizedComponent(List components) {
         PortletComponent p;
-        List scomponents = Collections.synchronizedList(components);
-        synchronized (scomponents) {
-            for (int i = 0; i < scomponents.size(); i++) {
-                p = (PortletComponent) scomponents.get(i);
-                if (p instanceof PortletLayout) {
-                    PortletComponent layout = this.getMaximizedComponent(((PortletLayout) p).getPortletComponents());
-                    if (layout != null) {
-                        p = layout;
-                    }
+        for (int i = 0; i < components.size(); i++) {
+            p = (PortletComponent) components.get(i);
+            if (p instanceof PortletLayout) {
+                PortletComponent layout = this.getMaximizedComponent(((PortletLayout) p).getPortletComponents());
+                if (layout != null) {
+                    p = layout;
                 }
-                if (p.getWidth().equals("100%")) {
-                    return p;
-                }
+            }
+            if (p.getWidth().equals("100%")) {
+                return p;
             }
         }
         return null;
@@ -117,10 +138,33 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         }
     }
 
-    public Map getAvailablePortletsToAdd(GridSphereEvent event) {
-        //System.err.println("in getAvailablePortlteToAdd");
-        PortletRegistry registry = PortletRegistry.getInstance();
+    public Map getAllPortletsToAdd(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
+        PortletRegistry registry = PortletRegistry.getInstance();
+        Map allPortlets = new HashMap();
+        Collection appColl = registry.getAllApplicationPortlets();
+        Locale locale = req.getLocale();
+        Iterator appIt = appColl.iterator();
+        while (appIt.hasNext()) {
+            ApplicationPortlet appPortlet = (ApplicationPortlet) appIt.next();
+            List concPortlets = appPortlet.getConcretePortlets();
+            Iterator cit = concPortlets.iterator();
+            while (cit.hasNext()) {
+                ConcretePortlet conc = (ConcretePortlet) cit.next();
+                String concID = conc.getConcretePortletID();
+                // we don't want to list PortletServlet loader!
+                //if (concID.startsWith(PortletServlet.class.getName())) continue;
+                String dispName = conc.getDisplayName(locale);
+                allPortlets.put(concID, dispName);
+            }
+        }
+        return allPortlets;
+    }
+
+    public Map getAvailablePortletsToAdd(GridSphereEvent event) {
+        PortletRequest req = event.getPortletRequest();
+        if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) return getAllPortletsToAdd(event);
+        PortletRegistry registry = PortletRegistry.getInstance();
         Locale locale = req.getLocale();
         List groups = (List) req.getGroups();
         Map availPortlets = new HashMap();
@@ -129,7 +173,8 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
             String group = (String) it.next();
             PortletGroup g = groupService.getGroup(group);
             //System.err.println("group= " + g.getName());
-            if (g.equals(req.getAttribute(SportletProperties.PORTLET_GROUP))) continue;
+
+            if ((req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) == null) && (g.equals(req.getAttribute(SportletProperties.PORTLET_GROUP)))) continue;
             Iterator sit = g.getPortletRoleList().iterator();
             //PortletRole role = (PortletRole) groups.get(g);
             while (sit.hasNext()) {
@@ -161,9 +206,11 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
 
     public void doRender(GridSphereEvent event) {
         super.doRender(event);
-
+        PortletRequest req = event.getPortletRequest();
         StringBuffer table = new StringBuffer();
         PortletComponent p;
+
+
 
         // check if one window is maximized
 
@@ -174,9 +221,9 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
                 if (maxi != null) {
                     table.append(tableView.doStartMaximizedComponent(event, this));
                     maxi.doRender(event);
-                    table.append(maxi.getBufferedOutput(event.getPortletRequest()));
+                    table.append(maxi.getBufferedOutput(req));
                     table.append(tableView.doEndMaximizedComponent(event, this));
-                    if ((canModify) && (!hasFrameMaximized)) {
+                    if (((canModify) && (!hasFrameMaximized)) || (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null)) {
                         table.append(tableView.doRenderUserSelects(event, this));
                     }
                     setBufferedOutput(event.getPortletRequest(), table);
@@ -197,8 +244,13 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
             table.append(tableView.doEndBorder(event, this));
         }
 
+        // you have to make sure the component id is reset again to current component
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        req.setAttribute(compVar, componentIDStr);
+
         /** setup bottom add portlet listbox */
-        if ((canModify) && (!hasFrameMaximized)) {
+        if (((canModify) && (!hasFrameMaximized)) || (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null)) {
             table.append(tableView.doRenderUserSelects(event, this));
         }
 
@@ -211,5 +263,6 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         g.style = this.style;
         return g;
     }
+
 
 }

@@ -12,6 +12,10 @@ import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.layout.view.BaseRender;
 import org.gridlab.gridsphere.layout.view.TabbedPaneView;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.util.List;
 import java.util.StringTokenizer;
@@ -68,13 +72,51 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         PortletTabbedPane pane = (PortletTabbedPane)comp;
         if (pane.getStyle().equalsIgnoreCase("sub-menu")) {
            StringBuffer sb = new StringBuffer();
-            sb.append("<div class=\"tab-sub-pane" /*+ pane.getTheme()*/ + "\" >"); ///
+            sb.append("<div class=\"tab-sub-pane\" >");
             sb.append("<ul>\n");
             return sb;
         } else {
             return TAB_START;
         }
     }
+
+
+    public StringBuffer doRenderEditTab(GridSphereEvent event, PortletTabbedPane tabPane, boolean isSelected) {
+        PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getPortletRequest();
+        PortletURI portletURI = res.createURI();
+        String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
+
+
+        String link = portletURI.toString() + extraQuery;
+        StringBuffer pane = new StringBuffer();
+
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        String cid = (String)req.getAttribute(compVar);
+
+        if (tabPane.getStyle().equals("sub-menu")) {
+            pane.append("\n<li>");
+            pane.append("<a class=\"tab-sub-inactive\" href=\"");
+            pane.append(link).append("&newsubtab=true");
+            pane.append("\">");
+            pane.append("<span class=\"tab-sub-menu\">");
+            pane.append(replaceBlanks("New subtab"));
+            pane.append("</span></a>");
+            pane.append("</div>");
+        } else {
+            pane.append("\n<li>");
+            pane.append("<a href=\"");
+            pane.append(link).append("&newtab=true");
+            pane.append("\">");
+            pane.append("<span class=\"tab-menu\">");
+            pane.append(replaceBlanks("New tab"));
+            pane.append("</span></a>");
+            pane.append("</li>");
+        }
+        return pane;
+    }
+
 
     public StringBuffer doRenderTab(GridSphereEvent event, PortletTabbedPane tabPane, PortletTab tab) {
         // this really creates the individual tabs
@@ -86,9 +128,21 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             pane.append("\n<li>");
             if (tab.isSelected()) {
                 pane.append("<div class=\"tab-sub-active\">");                
-                pane.append("<span class=\"tab-sub-menu-active\">");
+                if (tabPane.isEditMode()) {
+                    pane.append("<a href=\"");
+                    pane.append(link);
+                    pane.append("\" ");
+                } else {
+                    pane.append("<span ");
+                }
+                pane.append("class=\"tab-sub-menu-active\">");
                 pane.append(replaceBlanks(title));
-                pane.append("</span></div>");
+                if (tabPane.isEditMode()) {
+                    pane.append("</a>");
+                } else {
+                    pane.append("</span>");
+                }
+                pane.append("</div>");
             } else {
                 pane.append("<a class=\"tab-sub-inactive\" href=\"");
                 pane.append(link);
@@ -101,9 +155,19 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         } else {
             if (tab.isSelected()) {
                 pane.append("\n<li>");
-                pane.append("<div class=\"tab-active\"><span>");
+                if (tabPane.isEditMode()) {
+                    pane.append("<a href=\"");
+                    pane.append(link);
+                    pane.append("\">");
+                }
+                pane.append("<div class=\"tab-active\">");
+                pane.append("<span>");
                 pane.append(replaceBlanks(title));
-                pane.append("</span></div>");
+                pane.append("</span>");
+                pane.append("</div>");
+                if (tabPane.isEditMode()) {
+                    pane.append("</a>");
+                }
                 pane.append("</li>");
             } else {
                 pane.append("\n<li>");

@@ -19,6 +19,7 @@ import org.gridlab.gridsphere.services.core.cache.CacheService;
 
 import java.io.*;
 import java.util.*;
+import java.security.Principal;
 
 /**
  * The <code>PortletPage</code> is the generic container for a collection of
@@ -42,6 +43,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     protected String title = "";
     protected String icon = "images/favicon.ico";
     protected int refresh = 0;
+    protected boolean editable = true;
 
     //private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
     private String layoutDescriptor = null;
@@ -50,6 +52,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     private Hashtable portletHash = new Hashtable();
 
     private transient Render pageView = null;
+
+    private String renderKit = "standard";
 
     /**
      * Constructs an instance of PortletPage
@@ -81,6 +85,24 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      */
     public String getTitle() {
         return title;
+    }
+
+    /**
+     * Boolean flag to determine if this layout can be customized
+     *
+     * @param editable flag to determine if this layout can be customized
+     */
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
+    /**
+     * Boolean flag to determine if this layout can be customized
+     *
+     * @return true if this layout can be customized
+     */
+    public boolean getEditable() {
+        return editable;
     }
 
     /**
@@ -135,6 +157,24 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      */
     public void setKeywords(String keywords) {
         this.keywords = keywords;
+    }
+
+    /**
+     * Returns the render kit  'standard' or 'classic'
+     *
+     * @return the render kit  'standard' or 'classic'
+     */
+    public String getRenderKit() {
+        return renderKit;
+    }
+
+    /**
+     * Sets the render kit  'standard' or 'classic'
+     *
+     * @param renderKit the render kit
+     */
+    public void setRenderKit(String renderKit) {
+        this.renderKit = renderKit;
     }
 
     /**
@@ -222,31 +262,31 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      */
     public List init(PortletRequest req, List list) {
 
+
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
-
             cacheService = (CacheService) factory.createPortletService(CacheService.class, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
-        pageView = (Render) getRenderClass("Page");
+
+        list = super.init(req, list);
+        if (renderKit == null) renderKit = "standard";
+        req.getPortletSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, renderKit);
+
+
+        pageView = (Render)getRenderClass(req, "Page");
 
         if (headerContainer != null) {
-            headerContainer.setTheme(theme);
-            headerContainer.setRenderKit(renderKit);
             list = headerContainer.init(req, list);
         }
 
         if (tabbedPane != null) {
-            tabbedPane.setTheme(theme);
-            tabbedPane.setRenderKit(renderKit);
             list = tabbedPane.init(req, list);
         }
 
 
         if (footerContainer != null) {
-            footerContainer.setTheme(theme);
-            footerContainer.setRenderKit(renderKit);
             list = footerContainer.init(req, list);
         }
 
@@ -344,86 +384,51 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      */
     public void actionPerformed(GridSphereEvent event) {
         // if there is a layout action do it!
-        PortletComponent comp = getActiveComponent(event);
-        if (comp != null) {
-            System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
-            comp.actionPerformed(event);
+        PortletRequest req = event.getPortletRequest();
+        String cid = event.getPortletComponentID();
+        if (cid != null) {
+            PortletComponent comp = getActiveComponent(cid);
+            if (comp != null) {
+                System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+                String reqRole = comp.getRequiredRole();
+                if (reqRole.equals("") || req.isUserInRole(reqRole)) comp.actionPerformed(event);
+            }
         }
     }
 
-    public PortletComponent getActiveComponent(GridSphereEvent event) {
-        String cid = event.getPortletComponentID();
+    public PortletComponent getActiveComponent(String cid) {
+        // the component id determines where in the list the portlet component is
+        // first check the hash
 
-        if (!cid.equals("")) {
+        /*
+        List compList = getComponentIdentifierList();
+        for (int i = 0; i < compList.size(); i++)  {
+            ComponentIdentifier compid = (ComponentIdentifier)compList.get(i);
+            System.err.println(compid.toString());
+        }
+        */
 
-            // the component id determines where in the list the portlet component is
-
-            // first check the hash
-            ComponentIdentifier compId = null;
-
-            int compIntId;
-            if (labelsHash.containsKey(cid)) {
-                Integer cint = (Integer) labelsHash.get(cid);
-                compIntId = cint.intValue();
-                compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
-            } else {
-                // try converting to integer
-                try {
-                    compIntId = Integer.parseInt(cid);
-                    // number can't exceed available components
-                    if (compIntId < componentIdentifiers.size()) {
-                        compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
-                    }
-                } catch (NumberFormatException e) {
-                    System.err.println("unable to convert cid=" + cid);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    System.err.println("unable to convert cid=" + cid);
+        ComponentIdentifier compId = null;
+        int compIntId;
+        if (labelsHash.containsKey(cid)) {
+            Integer cint = (Integer) labelsHash.get(cid);
+            compIntId = cint.intValue();
+            compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
+        } else {
+            // try converting to integer
+            try {
+                compIntId = Integer.parseInt(cid);
+                // number can't exceed available components
+                if (compIntId < componentIdentifiers.size()) {
+                    compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
                 }
-            }
-
-            if (compId != null) {
-                PortletComponent comp = compId.getPortletComponent();
-                // perform an action if the component is non null
-                List userRoles = event.getPortletRequest().getRoles();
-                if (comp.getRequiredRole().equals("") || userRoles.contains(comp.getRequiredRole())) {
-                    //PortletRequest req = event.getPortletRequest();
-                    //Principal principal = req.getUserPrincipal();
-                    //User user = req.getUser();
-                    /*
-                     if (comp instanceof PortletFrame) {
-                         // do role checking if user is logged in
-                         if (principal != null) {
-                         //if (!(user instanceof GuestUser)) {
-                             String portletClass = ((PortletFrame)comp).getPortletClass();
-                             boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
-                             if (!hasrole) {
-                                 System.err.println("User " + user + " does not have required role!");
-                                 return null;
-                             }
-
-                         }
-                     } else if (comp instanceof PortletTitleBar) {
-                         if (principal == null) {
-                         //if (!(user instanceof GuestUser)) {
-                             String portletClass = ((PortletTitleBar)comp).getPortletClass();
-                             boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
-                             //System.err.println("hasRole = " + hasrole);
-                             if (!hasrole) {
-                                 System.err.println("User " + user + " does not have required role!");
-                                 return null;
-                             }
-                         }
-                     }
-                    */
-                    if (comp instanceof PortletFrame) {
-                        PortletFrame f = (PortletFrame) comp;
-                        System.err.println(" in portlet: " + f.getPortletClass());
-                    }
-                    return comp;
-                }
+            } catch (NumberFormatException e) {
+                System.err.println("unable to convert cid=" + cid);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.err.println("unable to convert cid=" + cid);
             }
         }
-        return null;
+        return (compId != null) ? compId.getPortletComponent() : null;
     }
 
 
@@ -440,6 +445,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         } else {
             doRenderWML(event);
         }
+
+
     }
 
     public void doRenderWML(GridSphereEvent event) {
@@ -459,11 +466,13 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             return;
         }
 
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
+
         // page header
         out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         out.println("<!DOCTYPE html PUBLIC \"-//WAPFORUM//DTD XHTML Mobile 1.0//EN\" \"http://www.wapforum.org/DTD/xhtml-mobile10.dtd\">");
         out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
-        out.println("  <link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + this.getRenderKit() + "/" + theme + "/css/defaultwap.css\" rel=\"stylesheet\"/>");
+        out.println("  <link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + renderKit + "/" + theme + "/css/defaultwap.css\" rel=\"stylesheet\"/>");
         //out.println("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
         //out.println("<wml>");
         out.println("<head>");
@@ -492,12 +501,19 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     public void doRenderHTML(GridSphereEvent event) {
 
         PortletRequest req = event.getPortletRequest();
+
+
+        if (!req.isUserInRole(requiredRoleName)) return;
+
+
         boolean floating = false;
         PortletFrame f = null;
         // In case the "floating" portlet state has been selected:
         String wstate = event.getPortletRequest().getParameter(SportletProperties.PORTLET_WINDOW);
         if ((wstate != null) && (wstate.equalsIgnoreCase(PortletWindow.State.FLOATING.toString()))) {
-            PortletComponent comp = getActiveComponent(event);
+            String cid = event.getPortletComponentID();
+            PortletComponent comp = getActiveComponent(cid);
+
             PortletComponent pc = comp.getParentComponent();
             if (comp instanceof PortletFrame) {
                 f = (PortletFrame) comp;
@@ -506,33 +522,26 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
                     f = (PortletFrame) pc;
                 }
             }
+
             if (f != null) {
                 // render portlet frame in pop-up without titlebar
                 f.setTransparent(true);
                 req.setAttribute(CacheService.NO_CACHE, CacheService.NO_CACHE);
                 req.setAttribute(SportletProperties.FLOAT_STATE, "true");
-                f.doRender(event);
+
+                String reqRole = f.getRequiredRole();
+                User user = req.getUser();
+                if (user != null) {
+                    if (req.getRoles().contains(reqRole)) f.doRender(event);
+                } else {
+                    if (reqRole.equals("")) f.doRender(event);
+                }
+
                 f.setTransparent(false);
                 floating = true;
                 //writer.println(f.getBufferedOutput(req));
             }
         } else {
-
-//            String themePropFileName = GridSphereConfig.getServletContext().getRealPath("themes"+File.separator+
-//                    this.getRenderKit() + File.separator + theme + File.separator + "theme.properties");
-//
-//            File propFileName = new File(themePropFileName);
-//            Properties themeProperties = new Properties();
-//            if (propFileName.exists()) {
-//                try {
-//                    themeProperties.load(new FileInputStream(propFileName));
-//                } catch (IOException e) {
-//                    log.info("Could not load properties file for theme : " + theme+" "+e.getMessage());
-//                }
-//                log.info("We got a theme properties file!");
-//                event.getPortletContext().setAttribute("THEME_PROPERTIES", "test");
-//            }
-
 
 
             // A Portal page in 3 lines -- voila!
@@ -573,9 +582,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     public Object clone() throws CloneNotSupportedException {
         int i;
         PortletPage c = (PortletPage) super.clone();
-        c.theme = theme;
         c.COMPONENT_ID = this.COMPONENT_ID;
-        c.theme = this.theme;
+        c.renderKit = this.renderKit;
         List compList = new Vector(this.componentIdentifiers.size());
         for (i = 0; i < this.componentIdentifiers.size(); i++) {
             ComponentIdentifier cid = (ComponentIdentifier) this.componentIdentifiers.get(i);

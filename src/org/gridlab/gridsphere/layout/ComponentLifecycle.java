@@ -45,4 +45,11 @@ public interface ComponentLifecycle extends ComponentRender {
      */
     public int getComponentID();
 
+    /**
+     * Returns the associated portlet component id variable
+     *
+     * @param the portlet request
+     * @return the portlet component id variable
+     */
+    public String getComponentIDVar(PortletRequest req);
 }

@@ -12,13 +12,13 @@ import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabListener;
 import org.gridlab.gridsphere.layout.view.TabbedPaneView;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,7 +34,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     private String layoutDescriptor = null;
 
     private transient TabbedPaneView tabbedPaneView = null;
-
 
     /**
      * Constructs an instance of PortletTabbedPane
@@ -86,21 +85,48 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     }
 
     /**
+     * Returns the index of the supplied tab or -1 if not found
+     *
+     * @return the index of the supplied tab
+     */
+    public int getIndexOfTab(PortletTab tab) {
+        for (int i = 0; i < tabs.size(); i++) {
+            PortletTab atab = (PortletTab) tabs.get(i);
+            if (tab.equals(atab)) return i;
+        }
+        return -1;
+    }
+
+    /**
      * Sets the selected portlet tab in this tabbed pane
      *
      * @param tab the selected portlet tab
      */
     public void setSelectedPortletTab(PortletTab tab) {
         PortletTab portletTab;
-        List stabs = Collections.synchronizedList(tabs);
-        synchronized (stabs) {
-            for (int i = 0; i < stabs.size(); i++) {
-                portletTab = (PortletTab) stabs.get(i);
-                if (portletTab.getComponentID() == tab.getComponentID()) {
-                    portletTab.setSelected(true);
-                } else {
-                    portletTab.setSelected(false);
-                }
+        for (int i = 0; i < tabs.size(); i++) {
+            portletTab = (PortletTab) tabs.get(i);
+            if (portletTab.getComponentID() == tab.getComponentID()) {
+                portletTab.setSelected(true);
+            } else {
+                portletTab.setSelected(false);
+            }
+        }
+    }
+
+    /**
+     * Sets the selected portlet tab in this tabbed pane
+     *
+     * @param tab the selected portlet tab
+     */
+    public void setSelectedPortletTabIndex(int index) {
+        PortletTab portletTab;
+        for (int i = 0; i < tabs.size(); i++) {
+            portletTab = (PortletTab) tabs.get(i);
+            if (index == i) {
+                portletTab.setSelected(true);
+            } else {
+                portletTab.setSelected(false);
             }
         }
     }
@@ -136,7 +162,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     }
 
     public void insertTab(PortletTab tab, int index) {
-        tabs.add(index, tab);
+        if ((index >= 0) || index < tabs.size()) tabs.add(index, tab);
     }
 
     /**
@@ -212,22 +238,23 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      * @see ComponentIdentifier
      */
     public List init(PortletRequest req, List list) {
+
+        list = super.init(req, list);
+
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setComponentID(list.size());
         compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
-        list = super.init(req, list);
+
         PortletTab tab;
 
-        tabbedPaneView = (TabbedPaneView)getRenderClass("TabbedPane");
+        tabbedPaneView = (TabbedPaneView)getRenderClass(req, "TabbedPane");
         Iterator it = tabs.iterator();
 
         while (it.hasNext()) {
             tab = (PortletTab) it.next();
-            tab.setTheme(theme);
-            tab.setRenderKit(renderKit);
             list = tab.init(req, list);
             tab.addComponentListener(this);
             tab.setParentComponent(this);
@@ -270,23 +297,16 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
             PortletTabEvent tabEvent = (PortletTabEvent) compEvt;
             handlePortletTabEvent(tabEvent);
         }
-        List l = Collections.synchronizedList(listeners);
-        synchronized (l) {
-            Iterator it = l.iterator();
-            PortletComponent comp;
 
-            while (it.hasNext()) {
-                comp = (PortletComponent) it.next();
-                event.addNewRenderEvent(compEvt);
-                comp.actionPerformed(event);
-            }
+        Iterator it = listeners.iterator();
+        PortletComponent comp;
+
+        while (it.hasNext()) {
+            comp = (PortletComponent) it.next();
+            event.addNewRenderEvent(compEvt);
+            comp.actionPerformed(event);
         }
 
-    }
-
-
-    public void setTheme(String theme) {
-        this.theme = theme;
     }
 
     /**
@@ -301,6 +321,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
         List userRoles = req.getRoles();
 
+        log.debug("in tabbed pane: my comp is=" + componentIDStr);
         pane.append(tabbedPaneView.doStart(event, this));
 
         PortletTab tab;
@@ -323,8 +344,16 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
             }
         }
 
+
+        if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
+            log.debug("in tabbed paneedit mode: my comp is=" + componentIDStr);
+            pane.append(tabbedPaneView.doRenderEditTab(event, this, false));
+        }
+
+
         pane.append(tabbedPaneView.doEndBorder(event, this));
 
+        // render the selected tab
         if (!tabs.isEmpty()) {
             PortletTab selectedTab = getSelectedTab();
             if (selectedTab != null) {
@@ -334,7 +363,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         }
 
         pane.append(tabbedPaneView.doEnd(event, this));
-        
+
 //        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, pane);
         setBufferedOutput(req, pane);
 
@@ -357,14 +386,12 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     public Object clone() throws CloneNotSupportedException {
         PortletTabbedPane t = (PortletTabbedPane) super.clone();
         t.style = this.style;
-        List stabs = Collections.synchronizedList(tabs);
-        synchronized (stabs) {
-            t.tabs = new ArrayList(stabs.size());
-            for (int i = 0; i < stabs.size(); i++) {
-                PortletTab tab = (PortletTab) stabs.get(i);
-                t.tabs.add(tab.clone());
-            }
+        t.tabs = new ArrayList(tabs.size());
+        for (int i = 0; i < tabs.size(); i++) {
+            PortletTab tab = (PortletTab) tabs.get(i);
+            t.tabs.add(tab.clone());
         }
         return t;
     }
+
 }

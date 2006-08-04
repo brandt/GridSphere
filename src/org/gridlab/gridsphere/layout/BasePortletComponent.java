@@ -27,19 +27,15 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String height = "";
     protected String label = "";
     protected String name = "";
-    protected String theme = "";
-    protected boolean isVisible = true;
-    protected String roleString = "";
-    protected String groupString = "";
-    protected List listeners = null;
-    protected boolean canModify = false;
-    protected String renderKit = "standard";
-    protected static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
-    /**
-     * css Style of the table
-     */
-    protected String style = "";
+    protected boolean isVisible = true;
+    protected String requiredRoleName = "";
+
+    protected List listeners = null;
+
+    protected boolean canModify = false;
+
+    protected static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
     /**
      * Initializes the portlet component. Since the components are isolated
@@ -56,7 +52,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
 
         if ((label == null) || label.equals("")) {
             return super.init(req, list);
-
         } else {
             this.COMPONENT_ID = list.size();
             componentIDStr = label;
@@ -107,7 +102,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      * @param roleString the required portlet role expressed as a <code>String</code>
      */
     public void setRequiredRole(String roleString) {
-        this.roleString = roleString;
+        this.requiredRoleName = roleString;
     }
 
     /**
@@ -116,64 +111,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      * @return the required portlet role expressed as a <code>String</code>
      */
     public String getRequiredRole() {
-        return roleString;
-    }
-
-    /**
-     * Allows a group to be associated with viewing this portlet
-     *
-     * @param groupString the required group expressed as a <code>String</code>
-     */
-    public void setGroup(String groupString) {
-        this.groupString = roleString;
-    }
-
-    /**
-     * Allows a required group to be associated with viewing this portlet
-     *
-     * @return the required group expressed as a <code>String</code>
-     */
-    public String getGroup() {
-        return groupString;
-    }
-
-    /**
-     * Returns the renderkit family identifier of render classes to use for markup, default is "classic"
-     *
-     * @return the renderkit family identifier
-     */
-    public String getRenderKit() {
-        return renderKit;
-    }
-
-    /**
-     * Sets the renderkit family identifier of render classes to use for markup, default is "classic"
-     *
-     * @param renderKit the renderkit family identifier
-     */
-    public void setRenderKit(String renderKit) {
-        this.renderKit = renderKit;
-    }
-
-    /**
-     * Returns the CSS style name for the grid-layout.
-     *
-     * @return css style name
-     */
-    public String getStyle() {
-        return style;
-    }
-
-    /**
-     * Sets the CSS style name for the grid-layout.
-     * This needs to be set if you want to have transparent portlets, if there is
-     * no background there can't be a real transparent portlet.
-     * Most likely one sets just the background in that one.
-     *
-     * @param style css style of the that layout
-     */
-    public void setStyle(String style) {
-        this.style = style;
+        return requiredRoleName;
     }
 
     /**
@@ -248,24 +186,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         return isVisible;
     }
 
-    /**
-     * Sets the theme of this portlet component
-     *
-     * @param theme the theme of this portlet component
-     */
-    public void setTheme(String theme) {
-        this.theme = theme;
-    }
-
-    /**
-     * Return the theme of this portlet component
-     *
-     * @return the theme of this portlet component
-     */
-    public String getTheme() {
-        return theme;
-    }
-
     public PortletComponent getParentComponent() {
         return parent;
     }
@@ -294,16 +214,18 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public void doRender(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
-        req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        req.setAttribute(compVar, componentIDStr);
     }
 
     public void setBufferedOutput(PortletRequest req, StringBuffer sb) {
-        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, sb);
+        req.setAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID, sb);
     }
 
     public StringBuffer getBufferedOutput(PortletRequest req) {
-        StringBuffer sb =  (StringBuffer)req.getAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr);
-        req.removeAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr);
+        StringBuffer sb =  (StringBuffer)req.getAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID);
+        req.removeAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID);
         return ((sb != null) ? sb : new StringBuffer());
     }
 
@@ -316,10 +238,8 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         b.width = this.width;
         b.isVisible = this.isVisible;
         b.name = this.name;
-        b.theme = this.theme;
         b.label = this.label;
-        b.roleString = this.roleString;
-        b.groupString = this.groupString;
+        b.requiredRoleName = this.requiredRoleName;
         return b;
     }
 
@@ -336,10 +256,11 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
 
     }
 
-    protected Object getRenderClass(String renderClassName) {
+    protected Object getRenderClass(PortletRequest req, String renderClassName) {
         Object render= null;
+        String renderKit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
         try {
-            render = Class.forName("org.gridlab.gridsphere.layout.view." + renderKit + "." + renderClassName).newInstance();
+             render = Class.forName("org.gridlab.gridsphere.layout.view." + renderKit + "." + renderClassName).newInstance();
         } catch (Exception e) {
             log.error("Problems using files for renderkit: '"+renderKit+"' renderclass: "+renderClassName+" Reason: ", e);
         }

@@ -138,4 +138,13 @@ public class ComponentIdentifier implements Serializable, Cloneable {
         c.portletClass = (this.portletClass == null) ? null : this.portletClass;
         return c;
     }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("\nid=").append(id);
+        sb.append("\nlabel=").append(label);
+        sb.append("\ntype=").append(className);
+        return sb.toString();
+    }
 }
+
