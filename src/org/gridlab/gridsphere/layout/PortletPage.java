@@ -503,7 +503,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         PortletRequest req = event.getPortletRequest();
 
 
-        if (!req.isUserInRole(requiredRoleName)) return;
+        //if (!req.isUserInRole(requiredRoleName)) return;
 
 
         boolean floating = false;
