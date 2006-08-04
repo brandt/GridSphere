@@ -524,10 +524,11 @@ public class PortletPageFactory implements PortletSessionListener {
             // this needs to be validated against the required-role of the page
             doSecurityCheck = true;
         }
-        Principal principal = req.getUserPrincipal();
-        if (principal == null) layoutId = GUEST_PAGE;
+        //Principal principal = req.getUserPrincipal();
+        //if (principal == null) layoutId = GUEST_PAGE;
         PortletPage page = getPortletPageFromHash(req, layoutId, doSecurityCheck);
         if (page == null) {
+            log.debug("page is null");
             layoutId = (String)session.getAttribute(SportletProperties.LAYOUT_PAGE);
             page = getPortletPageFromHash(req, layoutId, false);
         }
@@ -565,9 +566,8 @@ public class PortletPageFactory implements PortletSessionListener {
                 }
             }
             usersLayouts.put(layoutId, page);
-            log.debug("Creating new page placing in session " + session.getId());
+            log.debug("Creating new page " + layoutId + " placing in session " + session.getId());
             sessionManager.addSessionListener(session.getId(), this);
-            log.debug("afte session listener");
         }
         return page;
     }
@@ -587,6 +587,7 @@ public class PortletPageFactory implements PortletSessionListener {
         } else {
             try {
                 copy = (PortletPage) deepCopy(masterPage);
+                log.debug("Creating deep copy of page " + layoutId);
             } catch (Exception e) {
                 log.error("Failed to make a copy of the master page: " + layoutId);
                 return createErrorPage();

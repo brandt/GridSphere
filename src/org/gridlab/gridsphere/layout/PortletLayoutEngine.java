@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Vector;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -44,7 +45,7 @@ public class PortletLayoutEngine {
     }
 
     public void init(ServletContext ctx) {
-        pageFactory.init(ctx);     
+        pageFactory.init(ctx);
     }
 
     /**
@@ -131,6 +132,7 @@ public class PortletLayoutEngine {
                 }
             }
         } else {
+            log.debug("rendering page");
             page.doRender(event);
             pageBuffer = page.getBufferedOutput(req);
         }
