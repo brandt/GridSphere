@@ -9,14 +9,15 @@
     $Id$
 -->
 
-<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush">
+<page-layout title="GridSphere Portal Setup" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="SUPER">
+
 
     <!-- Header components -->
     <portlet-header>
         <table-layout style="header">
             <row-layout>
                 <column-layout width="70%">
-                    <portlet-content include="/WEB-INF/CustomPortal/layouts/html/pagehead.html"/>
+                    <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
                 </column-layout>
                 <column-layout width="30%">
                     <portlet-frame transparent="true" outer-padding="0" label="locale">
@@ -52,7 +53,7 @@
         <table-layout style="footer">
             <row-layout>
                 <column-layout>
-                    <portlet-content include="/WEB-INF/CustomPortal/layouts/html/pagefooter.html"/>
+                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
                 </column-layout>
             </row-layout>
         </table-layout>

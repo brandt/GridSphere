@@ -9,13 +9,13 @@ This descriptor defines the template user's portal layout configuration
 $Id$
 -->
 
-<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush">
+<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false">
 
     <portlet-header>
         <table-layout>
             <row-layout>
                 <column-layout width="85%">
-                    <portlet-content include="/WEB-INF/CustomPortal/layouts/html/pagehead.html"/>
+                    <portlet-content include="/WEB-INF/CustomPortal/content/html/pagehead.html"/>
                 </column-layout>
                 <column-layout width="14%">
                     <portlet-frame transparent="true" outer-padding="0" label="logout">
