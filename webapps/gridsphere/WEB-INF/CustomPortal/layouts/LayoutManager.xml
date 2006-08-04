@@ -33,17 +33,6 @@
             <portlet-tabbed-pane selected="0" style="sub-menu">
                 <portlet-tab label="adminlayout">
                     <title lang="en">Layout Manager</title>
-                    <title lang="es">Layouts</title>
-                    <title lang="it">Layouts</title>
-                    <title lang="pl">Graficzny</title>
-                    <title lang="hu">Kinézetok</title>
-                    <title lang="fr">Agencements</title>
-                    <title lang="de">Layouts</title>
-                    <title lang="cs">Umís?ování</title>
-                    <title lang="nl">Layouts</title>
-                    <title lang="hr">Izgledi</title>
-                    <title lang="ja">?????</title>
-                    <title lang="zh">???</title>
                     <table-layout>
                         <row-layout>
                             <column-layout width="100%">
