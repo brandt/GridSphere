@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.layout.PortletFrameRegistry;
 import org.gridlab.gridsphere.portlet.PortletContext;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 
@@ -130,8 +131,8 @@ public class PortletTag extends BodyTagSupport {
         frame.setInnerPadding(innerPadding);
         frame.setOuterPadding(outerPadding);
         frame.setTransparent(transparent);
-        frame.setTheme(theme);
-        frame.setRenderKit(renderKit);
+        request.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, theme);
+        request.getPortletSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, renderKit);
         frame.setRequiredRole(role);
         JspWriter out;
         try {
