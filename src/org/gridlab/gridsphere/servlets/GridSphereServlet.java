@@ -1,6 +1,6 @@
 /*
 * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
-* @version $Id: GridSphereServlet.java 4909 2006-07-08 20:21:53Z novotny $
+* @version $Id: GridSphereServlet.java 4956 2006-07-26 16:15:56Z novotny $
 */
 package org.gridlab.gridsphere.servlets;
 
@@ -104,6 +104,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         factory = SportletServiceFactory.getInstance();
         factory.init();
         layoutEngine = PortletLayoutEngine.getInstance();
+        layoutEngine.init(context);
         log.debug("in init of GridSphereServlet");
     }
 
@@ -161,7 +162,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
                 // deep inside a service is used which is why this must follow the factory.init
                 layoutEngine.init(getServletConfig().getServletContext());
-                if (isTCK) PortletPageFactory.setUseTCK(true);
+                if (isTCK) req.getSession().setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.TCK_PAGE);
             } catch (Exception e) {
                 log.error("GridSphere initialization failed!", e);
                 RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/init_error.jsp");
@@ -170,8 +171,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 return;
             }
             coreGroup = groupService.getCoreGroup();
-        }
 
+            if ((userManagerService.getNumUsers() == 0) || (roleService.getUsersInRole(PortletRole.SUPER)) == null) {
+                req.getSession().setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.SETUP_PAGE);
+            }
+
+        }
         // check to see if user has been authorized by means of container managed authorization
         checkWebContainerAuthorization(event);
 
@@ -206,13 +211,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             if (actionName.equals(SportletProperties.LOGIN)) {
                 login(event);
                 long endTime = System.currentTimeMillis();
-                System.err.println("Time taken = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
-                return;
+                //System.err.println("Page render time = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
+                //return;
             }
             if (actionName.equals(SportletProperties.LOGOUT)) {
                 logout(event);
                 long endTime = System.currentTimeMillis();
-                System.err.println("Time taken = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
+                System.err.println("Page render time = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
                 return;
             }
             if (trackerService.hasTrackingAction(actionName)) {
@@ -268,7 +273,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         //log.debug("Portlet service factory stats");
         //factory.logStatistics();
         long endTime = System.currentTimeMillis();
-        System.err.println("Time taken = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
+        System.err.println("Page render time = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
     }
 
     /**
@@ -341,14 +346,15 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public void setUserAndGroups(GridSphereEvent event) {
         // Retrieve user if there is one
+        PortletRequest req = event.getPortletRequest();
+        PortletSession session = req.getPortletSession();
         User user = null;
-        PortletSession session = event.getPortletRequest().getPortletSession();
         String uid = (String) session.getAttribute(SportletProperties.PORTLET_USER);
         if (uid != null) {
             user = userManagerService.getUser(uid);
         }
-
         List groups = new ArrayList();
+        List roles = new ArrayList();
         if (user != null) {
             UserPrincipal userPrincipal = new UserPrincipal(user.getUserName());
             event.getPortletRequest().setAttribute(SportletProperties.PORTLET_USER_PRINCIPAL, userPrincipal);
@@ -359,18 +365,17 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 groups.add(g.getName());
             }
             List proles = roleService.getRolesForUser(user);
-            List roles = new ArrayList();
             it = proles.iterator();
             while (it.hasNext()) {
                 roles.add(((PortletRole)it.next()).getName());
             }
-            PortletRequest req = event.getPortletRequest();
-            // set user, role and groups in request
-            req.setAttribute(SportletProperties.PORTLET_GROUP, coreGroup);
-            req.setAttribute(SportletProperties.PORTLET_USER, user);
-            req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
-            req.setAttribute(SportletProperties.PORTLET_ROLE, roles);
+
         }
+        // set user, role and groups in request
+        req.setAttribute(SportletProperties.PORTLET_GROUP, coreGroup);
+        req.setAttribute(SportletProperties.PORTLET_USER, user);
+        req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
+        req.setAttribute(SportletProperties.PORTLET_ROLE, roles);
     }
 
     // Dmitry Gavrilov (2005-03-17)
@@ -481,11 +486,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      *
      * @param event a <code>GridSphereEvent</code>
      */
-    protected void login(GridSphereEvent event) {
+    protected void login(GridSphereEvent event) throws AuthenticationException, AuthorizationException {
         String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         try {
+
             User user = loginService.login(req);
 
             setUserSettings(event, user);
@@ -498,11 +504,20 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             } else {
                 removeUserCookie(event);
             }
-            Boolean useSecureRedirect = Boolean.valueOf(GridSphereConfig.getProperty("use.https.redirect"));
 
-            PortletURI uri = res.createURI(useSecureRedirect.booleanValue());
+            PortletURI uri = res.createURI();
             if (query != null) {
                 uri.addParameter("cid", query);
+            }
+            req.getSession().setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
+            layoutEngine.loginPortlets(event);
+
+            String realuri = uri.toString().substring("http".length());
+            Boolean useSecureRedirect = Boolean.valueOf(GridSphereConfig.getProperty("use.https.redirect"));
+            if (useSecureRedirect.booleanValue()) {
+                realuri = "https" + realuri;
+            } else {
+                realuri = "http" + realuri;
             }
             res.sendRedirect(uri.toString());
         } catch (AuthorizationException err) {
@@ -526,7 +541,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             session.setAttribute(User.LOCALE, new Locale((String)user.getAttribute(User.LOCALE), "", ""));
         }
         setUserAndGroups(event);
-        layoutEngine.loginPortlets(event);
     }
 
     /**
