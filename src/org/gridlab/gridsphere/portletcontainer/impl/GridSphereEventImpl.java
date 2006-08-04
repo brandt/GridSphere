@@ -61,7 +61,9 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
         } else {
         */
-        portletComponentID = req.getParameter(SportletProperties.COMPONENT_ID);
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        portletComponentID = req.getParameter(compVar);
         if (portletComponentID == null) {
             log.debug("Received a null component ID");
             portletComponentID = "";
@@ -72,7 +74,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
         action = createAction(portletRequest);
 
-        log.debug("Received action=" + action);
+        //log.debug("Received action=" + action);
         /* This is where a DefaultPortletMessage gets put together if one exists */
         String messageStr = portletRequest.getParameter(SportletProperties.DEFAULT_PORTLET_MESSAGE);
         if (messageStr != null) {

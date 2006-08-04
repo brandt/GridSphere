@@ -19,7 +19,7 @@ import java.util.*;
 public class PortletSessionManager implements HttpSessionListener {
 
     private static PortletSessionManager instance = new PortletSessionManager();
-    private PortletLog log = SportletLog.getInstance(PortletSessionManager.class);
+    private static PortletLog log = SportletLog.getInstance(PortletSessionManager.class);
 
     private Hashtable sessions = new Hashtable();
 
@@ -88,6 +88,7 @@ public class PortletSessionManager implements HttpSessionListener {
         while (it.hasNext()) {
             HttpSession session = (HttpSession)it.next();
             if (session.getId().equals(sessionId)) {
+                System.err.println("adding session listener for : " + sessionId + " " + sessionListener.getClass());
                 List sessionListeners = (List) sessions.get(session);
                 if (sessionListeners == null) sessionListeners = new ArrayList();
                 sessionListeners.add(sessionListener);

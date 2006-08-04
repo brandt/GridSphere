@@ -177,7 +177,9 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
     public PortletDispatcher getPortletDispatcher(org.gridlab.gridsphere.portlet.PortletRequest req, org.gridlab.gridsphere.portlet.PortletResponse res) {
 
         //System.err.println("in getPortletDispatcher: cid=" + req.getAttribute(SportletProperties.COMPONENT_ID));
-        String cid = (String) req.getAttribute(SportletProperties.COMPONENT_ID);
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        String cid = (String) req.getAttribute(compVar);
         String pid = (String) req.getAttribute(SportletProperties.PORTLETID);
         // TODO fix my hack to get any render params and pass them as queryInfo to the portlet
         Map params = (Map) req.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
