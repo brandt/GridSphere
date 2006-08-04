@@ -113,7 +113,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
             if (extraQuery != null) {
                 PortletURI portletURI = res.createURI();
                 String link = portletURI.toString() + extraQuery;
-                content.append("<br><fieldset><a href=\"" + link + "\">Static Content - " + textFileName + "</a></fieldset>");
+                content.append("<br><fieldset><a href=\"" + link + "\">" + textFileName + "</a></fieldset>");
                 setBufferedOutput(req, content);
             }
             return;
