@@ -39,7 +39,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     }
 
     public void reloadPage(PortletRequest req) {
-        PortletPage page = pageFactory.createPortletPage(req);
+        PortletPage page = pageFactory.getPortletPage(req);
 
         page.init(req, new ArrayList());
     }
@@ -65,7 +65,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     }
 
     public PortletPage getPortletPage(PortletRequest req) {
-        return pageFactory.createPortletPage(req);
+        return pageFactory.getPortletPage(req);
     }
 
 
