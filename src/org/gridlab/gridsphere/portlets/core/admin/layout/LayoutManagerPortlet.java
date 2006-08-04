@@ -25,7 +25,7 @@ import java.net.URLEncoder;
 public class LayoutManagerPortlet extends ActionPortlet {
 
 
-    public static final String VIEW_JSP = "admin/layout2/view.jsp";
+    public static final String VIEW_JSP = "admin/layout/view.jsp";
 
     private static Map pages = new HashMap();
     private static RoleManagerService roleManagerService;
