@@ -103,8 +103,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         this.context = new SportletContext(config);
         factory = SportletServiceFactory.getInstance();
         factory.init();
-        layoutEngine = PortletLayoutEngine.getInstance();
-        layoutEngine.init(context);
         log.debug("in init of GridSphereServlet");
     }
 
@@ -123,6 +121,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, true);
         portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
         trackerService = (TrackerService) factory.createPortletService(TrackerService.class, true);
+        layoutEngine = PortletLayoutEngine.getInstance();
+        layoutEngine.init(context);
     }
 
     /**
