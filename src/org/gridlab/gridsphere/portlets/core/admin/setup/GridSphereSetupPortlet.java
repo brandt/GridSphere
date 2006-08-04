@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlets.core.admin.setup;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
@@ -128,8 +129,8 @@ public class GridSphereSetupPortlet extends ActionPortlet {
         roleManagerService.addUserToRole(accountRequest, PortletRole.ADMIN);
         roleManagerService.addUserToRole(accountRequest, PortletRole.USER);
         groupManagerService.addUserToGroup(accountRequest, groupManagerService.getCoreGroup());
-        PortletPageFactory.setSetupNeeded(false);
-        event.getPortletRequest().removeAttribute(PortletPageFactory.PAGE);
+
+        event.getPortletRequest().getPortletSession().removeAttribute(SportletProperties.LAYOUT_PAGE);
     }
 
     private boolean isInvalidPassword(FormEvent event, boolean newuser) {

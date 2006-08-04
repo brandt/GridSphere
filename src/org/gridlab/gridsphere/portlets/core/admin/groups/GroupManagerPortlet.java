@@ -163,7 +163,7 @@ public class GroupManagerPortlet extends ActionPortlet {
             //if (group != null) break;
 
             List appColl = portletRegistry.getApplicationPortlets(g);
-            if (appColl.isEmpty()) appColl = portletRegistry.getApplicationPortlets(g);
+            //if (appColl.isEmpty()) appColl = portletRegistry.getApplicationPortlets(g);
             Iterator appIt = appColl.iterator();
             while (appIt.hasNext()) {
                 ApplicationPortlet app = (ApplicationPortlet) appIt.next();

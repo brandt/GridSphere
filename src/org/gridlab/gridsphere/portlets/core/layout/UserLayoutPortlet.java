@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.layout.PortletPage;
 import org.gridlab.gridsphere.layout.PortletTab;
 import org.gridlab.gridsphere.layout.PortletTabbedPane;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
@@ -156,7 +157,7 @@ public class UserLayoutPortlet extends ActionPortlet {
         
         ListBoxBean themeLB = event.getListBoxBean("themeLB");
         PortletPage page = layoutMgr.getPortletPage(req);
-        String theme = page.getTheme();
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
         themeLB.clear();
         
         String themesPath = getPortletConfig().getContext().getRealPath("/themes");       
@@ -195,10 +196,8 @@ public class UserLayoutPortlet extends ActionPortlet {
         if (user != null) {
             user.setAttribute(User.THEME, theme);
             userManagerService.saveUser(user);
+            req.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, theme);
         }
-
-        PortletPage page = layoutMgr.getPortletPage(req);
-        page.setTheme(theme);
         layoutMgr.reloadPage(req);
     }
 
