@@ -53,6 +53,13 @@
     </service>
 
     <service>
+        <name>Content Manager Service</name>
+        <description lang="en">Provides Content Management Capabilities</description>
+        <interface>org.gridlab.gridsphere.services.core.content.ContentManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.content.impl.ContentManagerServiceImpl</implementation>
+    </service>
+
+    <service>
         <name>Role Manager Service</name>
         <description lang="en">Provides Role Capabilities to Portal Users</description>
         <interface>org.gridlab.gridsphere.services.core.security.role.RoleManagerService</interface>
