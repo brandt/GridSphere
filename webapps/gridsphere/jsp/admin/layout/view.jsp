@@ -1,111 +1,73 @@
-<%@ page import="java.util.Iterator,
-                 java.util.Map" %>
+
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
-<% Map groupNames = (Map) request.getAttribute("groupNames"); %>
-<% String coregroup = (String) request.getAttribute("coreGroup"); %>
+
 <portletAPI:init/>
+
+<jsp:useBean id="actionURI"  class="java.lang.String" scope="request"/>
+<jsp:useBean id="controlUI"  class="java.lang.String" scope="request"/>
+<jsp:useBean id="layoutlabel"  class="java.lang.String" scope="request"/>
+
+
+<% String guestPane = (String)request.getAttribute("pane"); %>
 
 <ui:messagebox beanId="msg"/>
 
 <ui:form>
-
-    <ui:hasrole role="super">
-
-        <ui:table cellpadding="5">
-            <ui:tablerow>
-                <ui:tablecell>
-                    <ui:group key="LAYOUTMGR_EDIT_BANNER">
-                        <ui:text key="LAYOUTMGR_EDIT_MSG"/><br/>
-                        <ui:textarea beanId="bannerTA" rows="8" cols="70"/>
-                        <br/>
-                        <ui:actionsubmit action="saveBanner" key="SAVE"/>
-                    </ui:group>
-                </ui:tablecell>
-            </ui:tablerow>
-            <ui:tablerow>
-                <ui:tablecell>
-                    <ui:group key="LAYOUTMGR_EDIT_FOOTER">
-                        <ui:text key="LAYOUTMGR_EDIT_FOOTER_MSG"/><br/>
-                        <ui:textarea beanId="footerTA" rows="8" cols="70"/>
-                        <br>
-                        <ui:actionsubmit action="saveFooter" key="SAVE"/>
-                    </ui:group>
-                </ui:tablecell>
-            </ui:tablerow>
-        </ui:table>
-
-        <ui:group key="LAYOUTMGR_EDIT_THEME">
-            <ui:text key="LAYOUTMGR_THEME_MSG"/>&nbsp;
-            <ui:listbox beanId="themesLB"/>
-            <ui:actionsubmit action="saveDefaultTheme" key="SAVE"/>
-        </ui:group>
-
-        <ui:group key="LAYOUTMGR_GUEST">
-            <ui:actionlink action="editGuestLayout" key="LAYOUTMGR_EDIT_GUEST"/>
-        </ui:group>
-
-    </ui:hasrole>
-
-
-    <ui:group key="LAYOUTMGR_GROUPS">
-
-        <p>
-            <ui:text key="LAYOUTMGR_GROUP_MSG"/>
-        </p>
-        <ui:frame>
-            <ui:tablerow header="true">
-                <ui:tablecell><ui:text key="GROUP_NAME"/></ui:tablecell>
-                <ui:tablecell><ui:text key="GROUP_DESCRIPTION"/></ui:tablecell>
-                <ui:tablecell><ui:text key="LAYOUTMGR_GROUP_EDIT"/></ui:tablecell>
-                <ui:tablecell><ui:text key="LAYOUTMGR_GROUP_DELETE"/></ui:tablecell>
-            </ui:tablerow>
-
-            <% Iterator it = groupNames.keySet().iterator();
-                while (it.hasNext()) {
-                    String group = (String) it.next();
-                    String groupDesc = (String) groupNames.get(group);
-            %>
-
-            <ui:hasrole role="admin" group="<%= group %>">
-
-                <ui:tablerow>
-                    <ui:tablecell>
-                        <ui:text value="<%= group %>"/>
-                    </ui:tablecell>
-                    <ui:tablecell>
-                        <ui:text value="<%= groupDesc %>"/>
-                    </ui:tablecell>
-
-
-                    <ui:tablecell>
-                        <% if (group.equals(coregroup)) { %>
-                        <ui:hasrole role="super">
-                            <ui:actionlink action="editGroupLayout" key="EDIT">
-                                <ui:actionparam name="group" value="<%= group %>"/>
-                            </ui:actionlink>
-                        </ui:hasrole>
-                        <% } else { %>
-                        <ui:actionlink action="editGroupLayout" key="EDIT">
-                            <ui:actionparam name="group" value="<%= group %>"/>
-                        </ui:actionlink>
-                        <% } %>
-                    </ui:tablecell>
-                    <%--                    <ui:tablecell>
-                                            <% if (!group.equals(coregroup)) { %>
-                                            <ui:actionlink action="deleteLayout" key="DELETE">
-                                                <ui:actionparam name="group" value="<%= group %>"/>
-                                            </ui:actionlink>
-                                            <% } %>
-                                        </ui:tablecell>
-                    --%>
-                </ui:tablerow>
-
-            </ui:hasrole>
-
-            <% } %>
-        </ui:frame>
-    </ui:group>
-
+    <ui:frame>
+        <ui:tablerow>
+            <ui:tablecell>
+                Select a layout to customize:
+                <ui:listbox beanId="layoutsLB"/>
+                <ui:actionsubmit action="selectLayout" value="Display"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                Select default theme for new users:
+                <ui:listbox beanId="themesLB"/>
+                <ui:actionsubmit action="selectTheme" value="Save"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
 </ui:form>
+
+
+
+<ui:frame>
+  <ui:tablerow>
+    <ui:tablecell width="60%">
+    <%--     <ui:group label="<%= layoutlabel %>">  --%>
+        <%= guestPane %>
+    <%--     </ui:group>  --%>
+    </ui:tablecell>
+         </ui:tablerow>
+  </ui:frame>
+
+ <ui:form>
+
+<ui:frame>
+    <ui:tablerow>
+    <ui:tablecell>
+
+           <ui:hiddenfield beanId="compHF"/>
+         <% if (controlUI.equals("frame")) { %>
+            <jsp:include page="frame.jsp"/>
+         <% } else if (controlUI.equals("content")) { %>
+            <jsp:include page="content.jsp"/>
+         <% } else if (controlUI.equals("tab")) { %>
+            <jsp:include page="tab.jsp"/>
+         <% } else if (controlUI.equals("subtab")) { %>
+            <jsp:include page="subtab.jsp"/>
+         <% } %>
+      </ui:tablecell>
+    </ui:tablerow>
+    </ui:frame>
+
+  </ui:form>
+
+
+<hr/>
+
+<h3><ui:actionlink action="doFinish" value="Return to portal"/></h3>
+
+
