@@ -3,6 +3,7 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
@@ -65,7 +66,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     }
 
-    public void init(ServletContext ctx) throws PortletException {
+    public void init(ServletContext ctx) {
         USER_LAYOUT_DIR = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/users");
 
         LAYOUT_MAPPING_FILE = ctx.getRealPath("/WEB-INF/mapping/layout-mapping.xml");
@@ -91,15 +92,18 @@ public class PortletPageFactory implements PortletSessionListener {
         }
         LOGGEDIN_LAYOUT_DESCRIPTOR = layoutsDir.getAbsolutePath() + File.separator + USER_PAGE + ".xml";
 
-        PortletServiceFactory factory = SportletServiceFactory.getInstance();
-        portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
-        groupManagerService = (GroupManagerService)factory.createPortletService(GroupManagerService.class, true);
-
-
         String newuserLayoutPath = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/users/");
         File userdir = new File(newuserLayoutPath);
         if (!userdir.exists()) {
             userdir.mkdir();
+        }
+
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        try {
+            portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
+            groupManagerService = (GroupManagerService)factory.createPortletService(GroupManagerService.class, true);
+        } catch (PortletServiceException e) {
+            log.error("Unable to get service instance", e);
         }
 
     }

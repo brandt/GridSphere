@@ -43,14 +43,8 @@ public class PortletLayoutEngine {
     private PortletLayoutEngine() {
     }
 
-    public void init(ServletContext ctx) throws PortletException {
-        try {
-            pageFactory.init(ctx);
-        } catch (Exception e) {
-            String error = "Unable to initialize PortletPageFactory!";
-            log.error(error, e);
-            throw new PortletException(error, e);
-        }
+    public void init(ServletContext ctx) {
+        pageFactory.init(ctx);     
     }
 
     /**
