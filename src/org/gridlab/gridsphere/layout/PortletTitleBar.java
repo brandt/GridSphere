@@ -43,7 +43,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private boolean hasError = false;
     private boolean isActive = false;
 
-    private List modeLinks = null, windowLinks = null;
+    private transient List modeLinks = null;
+    private transient List windowLinks = null;
 
     private transient Render titleView = null;
 
