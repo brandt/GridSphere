@@ -12,8 +12,7 @@ body {
 }
 
 * html body {
-    font-size: x-small; /* for IE5/Win */
-    f\ont-size: x-small; /* for other IE Versions */
+    font-size: small; /* for IE5/Win */
 }
 
 html {
