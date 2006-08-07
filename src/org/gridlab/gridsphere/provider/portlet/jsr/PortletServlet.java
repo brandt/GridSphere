@@ -282,7 +282,6 @@ public class PortletServlet extends HttpServlet
             if (userInfo.containsKey("user.timezone")) userInfo.put("user.timezone", user.getAttribute(User.TIMEZONE));
             if (userInfo.containsKey("user.locale")) userInfo.put("user.locale", user.getAttribute(User.LOCALE));
             if (userInfo.containsKey("user.theme")) userInfo.put("user.theme", user.getAttribute(User.THEME));
-            if (userInfo.containsKey("user.role")) userInfo.put("user.role", ((PortletRole)request.getAttribute(SportletProperties.PORTLET_ROLE)).getName());
             if (userInfo.containsKey("user.login.id")) userInfo.put("user.login.id", user.getUserName());
 
             Enumeration e = user.getAttributeNames();
