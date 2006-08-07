@@ -474,7 +474,11 @@ public class UserManagerPortlet extends ActionPortlet {
         while (it.hasNext()) {
             PortletRole role = (PortletRole)it.next();
             CheckBoxBean cb = event.getCheckBoxBean(role.getName() + "CB");
-            if (cb.isSelected()) roleManagerService.addUserToRole(user, role);
+            if (cb.isSelected()) {
+                roleManagerService.addUserToRole(user, role);
+            } else {
+                if(roleManagerService.isUserInRole(user, role)) roleManagerService.deleteUserInRole(user, role);
+            } 
         }
         groupManagerService.addUserToGroup(user, groupManagerService.getCoreGroup());
 
