@@ -303,6 +303,12 @@ public class UserManagerPortlet extends ActionPortlet {
                 PortletGroup group = (PortletGroup)it.next();
                 this.groupManagerService.deleteUserInGroup(user, group);
             }
+            List userRoles = this.roleManagerService.getRolesForUser(user);
+            Iterator ur = userRoles.iterator();
+            while (ur.hasNext()) {
+                PortletRole pr = (PortletRole)ur.next();
+                this.roleManagerService.deleteUserInRole(user, pr);
+            }
             createSuccessMessage(evt, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
         }
         setNextState(req, "doListUsers");
