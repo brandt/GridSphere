@@ -1,6 +1,15 @@
 ChangeLog.txt
 =============
 
+Changes since GridSphere 2.2.0
+==============================
+
+Bug
+
+    * [GPF-245] - Error message when saving gridsphere-generated layout
+    * [GPF-249] - Can't delete User
+    * [GPF-250] - ClassCast exception when trying to retrieve "user.role" attribute from JSR 168 portlet
+
 Changes since GridSphere 2.1.2
 ==============================
 
