@@ -203,8 +203,8 @@ public class SportletRequest extends HttpServletRequestWrapper implements Portle
     public boolean isUserInRole(String role) {
         // TODO
         // As specified in PLT-20-3, the <security-role-ref> mapping in portlet.xml must be used.
-        PortletRole prole = (PortletRole)getAttribute(SportletProperties.PORTLET_ROLE);
-        return (prole != null) ? (prole.getName().equalsIgnoreCase(role)) : this.getHttpServletRequest().isUserInRole(role);
+        List roles = (List)getAttribute(SportletProperties.PORTLET_ROLE);
+        return (roles != null) ? (roles.contains(role)) : this.getHttpServletRequest().isUserInRole(role);
     }
     
     public void setRoles(List roles) {
