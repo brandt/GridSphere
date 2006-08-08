@@ -57,13 +57,6 @@ Invoke "ant help"
         </classpath>
     </taskdef>
 
-    <taskdef resource="cactus.tasks">
-        <classpath>
-            <pathelement location="lib/cactus-integration-ant-20030401.jar"/>
-        </classpath>
-    </taskdef>
-
-
     <!-- ============================= Include the other build files =============================== -->
 
     <import file="config/build/build-compile.xml"/>
