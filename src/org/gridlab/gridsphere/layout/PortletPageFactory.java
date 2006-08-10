@@ -123,7 +123,7 @@ public class PortletPageFactory implements PortletSessionListener {
         if (!userdir.exists()) {
             userdir.mkdir();
         }
-        if ((userManagerService.getNumUsers() == 0) || (roleService.getUsersInRole(PortletRole.SUPER)) == null) {
+        if ((userManagerService.getNumUsers() == 0) || (roleService.getUsersInRole(PortletRole.SUPER).size() == 0)) {
             setupNeeded = true;
         }
     }
