@@ -477,8 +477,15 @@ public class UserManagerPortlet extends ActionPortlet {
             if (cb.isSelected()) {
                 roleManagerService.addUserToRole(user, role);
             } else {
-                if(roleManagerService.isUserInRole(user, role)) roleManagerService.deleteUserInRole(user, role);
-            } 
+                if(roleManagerService.isUserInRole(user, role))
+                    if((!role.equals(PortletRole.SUPER)) || (roleManagerService.getUsersInRole(PortletRole.SUPER).size() > 1))
+                    {
+                        roleManagerService.deleteUserInRole(user, role);
+                    } else {
+                        log.warn("Can't delete user, one user in role SUPER necessary");
+                        createErrorMessage(event, "Unable to delete user! One user with SUPER role is necessary");
+                    }
+            }
         }
         groupManagerService.addUserToGroup(user, groupManagerService.getCoreGroup());
 
