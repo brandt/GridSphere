@@ -64,7 +64,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
     public StringBuffer doRenderUserSelects(GridSphereEvent event, PortletTableLayout tableLayout) {
         event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, tableLayout.getLabel());
         StringBuffer table = new StringBuffer();
-        table.append("<div class=\"row\">");
+        table.append("<div class=\"gridsphere-layout-row\">");
         List components = tableLayout.getPortletComponents();
         if (!components.isEmpty()) {
             Object o = components.get(0);
