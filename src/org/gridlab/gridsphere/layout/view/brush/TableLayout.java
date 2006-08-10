@@ -77,7 +77,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
                     if (o instanceof PortletFrameLayout) {
                         PortletFrameLayout col = (PortletFrameLayout) o;
 
-                        table.append("<div class=\"column\"");
+                        table.append("<div class=\"gridsphere-layout-column\"");
                         if (!col.getWidth().equals("")) {
                             table.append(" style=\"width: ").append(col.getWidth()).append("\"");
                         }
@@ -96,38 +96,47 @@ public class TableLayout extends BaseRender implements TableLayoutView {
     }
 
     public StringBuffer renderAddPortlets(GridSphereEvent event, int col, Map availPortlets) {
-        StringBuffer table = new StringBuffer();
+       StringBuffer table = new StringBuffer();
 
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         Locale locale = req.getLocale();
-        PortletURI uri = res.createURI();
-        uri.addAction(PortletTableLayout.PORTLET_ADD_ACTION);
 
-        table.append("<form action=\"").append(uri.toString()).append("\"  method=\"post\" name=\"addform\"><p>");
-        table.append("<input type=\"hidden\" name=\"" + PortletTableLayout.PORTLET_COL + "\" value=\"").append(col).append("\"/>");
+        PortletURI uri = res.createURI();
+
+        uri.addAction(PortletTableLayout.PORTLET_ADD_ACTION);
+        String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
+        if (extraQuery != null) {
+            uri.addParameter("usertable", "edit");
+        }
+
+        table.append("<form action=\"" + uri.toString() + "\"  method=\"post\" name=\"addform\"><p>");
+        table.append("<input type=\"hidden\" name=\"" + PortletTableLayout.PORTLET_COL + "\" value=\"" + col + "\"/>");
 
         ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
         String addLabel = bundle.getString("ADDPORTLETS");
         String addButton = bundle.getString("ADD");
         String noPortletsMsg = bundle.getString("NOPORTLETS");
 
-        table.append("<b>").append(addLabel).append("</b>&nbsp;&nbsp;&nbsp;");
+        table.append("<b>" + addLabel + "</b>&nbsp;&nbsp;&nbsp;");
         table.append("<select name=\"" + PortletTableLayout.PORTLET_ADD_ACTION + "\">");
 
         if (availPortlets.isEmpty()) {
-            table.append("<option value=\"" + PortletTableLayout.PORTLET_NO_ACTION + "\">").append(noPortletsMsg).append("</option>");
+            table.append("<option value=\"" + PortletTableLayout.PORTLET_NO_ACTION + "\">" + noPortletsMsg + "</option>");
         }
 
         Iterator it = availPortlets.keySet().iterator();
         while (it.hasNext()) {
             String pid = (String) it.next();
             String dispName = (String) availPortlets.get(pid);
-            table.append("<option value=\"").append(pid).append("\">").append(dispName).append("</option>");
+            table.append("<option value=\"" + pid + "\">" + dispName + "</option>");
         }
 
         table.append("</select>");
-        table.append("&nbsp;&nbsp;<input type=\"submit\" name=\"gs_action=addportlet\" value=\"").append(addButton).append("\">");
+
+        String action = "gs_action=addportlet";
+
+        table.append("&nbsp;&nbsp;<input type=\"submit\" name=\"" + action + "\" value=\"" + addButton + "\">");
         table.append("</p></form>");
         return table;
     }
