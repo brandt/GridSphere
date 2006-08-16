@@ -1,6 +1,76 @@
 ChangeLog.txt
 =============
 
+Changes since GridSphere 2.2.4
+==============================
+
+Bug
+
+    * [GPF-251] -  Delete a user's role if not selected in the UserManagerPortlet
+
+Changes since GridSphere 2.2.0
+==============================
+
+Bug
+   
+    * [GPF-245] - Error message when saving gridsphere-generated layout
+    * [GPF-249] - Can't delete User
+    * [GPF-250] - ClassCast exception when trying to retrieve "user.role" attribute from JSR 168 portlet
+
+Changes since GridSphere 2.1.2
+==============================
+
+Bug
+
+    * [GPF-151] - New group layout disappears
+    * [GPF-179] - File Download does not work for any JSR Portlet
+    * [GPF-184] - Test with Oracle 10G - ERROR
+    * [GPF-186] - The page of a new group is blank
+    * [GPF-188] - Eliminate GUEST role
+    * [GPF-191] - can't add more than one portlet to user tab
+    * [GPF-198] - ListBoxBean does not support cssStyle
+    * [GPF-208] - jsp with two tables, one with zebra="true", shows incorrectly
+    * [GPF-213] - TextAreaBean does not support cssStyle
+    * [GPF-214] - Configuring a different portal URL does not work
+    * [GPF-215] - reload, start and stop portlet
+    * [GPF-216] - if a query string is passed into path when creating request dispatcher, the params are not included as render params
+    * [GPF-217] - when user logs out, the SessionManagerPortlet still shows user as logged in
+    * [GPF-218] - date is not displayed anymore on the bottom of the pages
+    * [GPF-225] - parameters are not being passed if <jsp:include page="some.jsp?foo=bar"> is used
+    * [GPF-226] - PortletSession.invalidate() does not be invoked when a user clicks "logout"
+    * [GPF-234] - Portlet file download doesn't work
+    * [GPF-236] - Sortable <table> elements exibit funny behavior
+    * [GPF-241] - POrtletSession.PORTLET_SCOPE should be tied to the portlet window id and not the portlet id
+
+New Feature
+
+    * [GPF-89] - add onClick to actionsubmit tag
+    * [GPF-185] - please add ability to link to outside sites from tabs/subtabs
+    * [GPF-187] - Spanish localization
+    * [GPF-193] - Add ability to add external javascript library to page and onLoad attribute to BODY tag
+    * [GPF-201] - incorporate AJAX support for rendering only selected layout components    * [GPF-202] - Certificate login for gridsphere portal    * [GPF-203] - Provide option to email errors to a portal admin
+    * [GPF-209] - Add configuration option to enable users to be subscribed to all known groups
+    * [GPF-210] - provide config option to track/count all actions in portlets
+    * [GPF-211] - Add Text Editor widget tag
+    * [GPF-212] - Add calendar widget tag
+    * [GPF-222] - Disabling "Remember me" option
+    * [GPF-231] - add support for paginated tables
+    * [GPF-235] - Add validator tag/bean
+    * [GPF-239] - Add the ability to support custom window states per portlet
+
+Improvement
+
+    * [GPF-189] - Eliminate GuestUser
+    * [GPF-190] - Eliminate user services
+    * [GPF-194] - Provide more information when DBTask fails.
+    * [GPF-196] - Update commons-fileupload-1.0 to 1.1
+    * [GPF-200] - Adding id attribute to tags
+    * [GPF-204] - Allow admins to approve accounts
+    * [GPF-207] - Tags doc: there is no attribute name in textarea.
+    * [GPF-229] - use gzip compression to stream page
+    * [GPF-238] - allow portal deployer to configure http/https ports used when generating links
+    * [GPF-240] - Provide mechanism to forward to a particular portlet/component after logging in
+
 Changes since GridSphere 2.1.2
 ==============================
 
