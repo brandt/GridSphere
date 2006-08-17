@@ -215,7 +215,7 @@ Copyright:
     <target name="create-database" depends="setenv, deploy">
         <echo message="Creating database"/>
         <taskdef name="dbtask"
-                 classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
+                 classname="org.gridlab.gridsphere.services.core.persistence.impl.DBTask"
                  classpathref="classpath"/>
         <dbtask
                 configdir="${appserver.home}/webapps/${project.name}"
@@ -224,7 +224,7 @@ Copyright:
 
     <target name="update-database" depends="setenv, configure-database, deploy">
         <taskdef name="dbtask"
-                 classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
+                 classname="org.gridlab.gridsphere.services.core.persistence.impl.DBTask"
                  classpathref="classpath"/>
         <dbtask
                 configdir="${appserver.home}/webapps/${project.name}"
@@ -300,7 +300,9 @@ Copyright:
 
         <copy todir="${project.build}/webapp/WEB-INF/lib">
             <fileset dir="${gridsphere.build}/lib/">
-                <include name="gridsphere-ui-tags*.jar"/>
+                <include name="gridsphere-provider*.jar"/>
+                <include name="gridsphere-portal*.jar"/>
+                <include name="castor*.jar"/>
             </fileset>
         </copy>
 
@@ -345,27 +347,13 @@ Copyright:
 
         <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="${gridsphere.build}/lib/">
-                <include name="gridsphere-ui-tags*.jar"/>
+                <include name="gridsphere-provider*.jar"/>
+                <include name="gridsphere-portal*.jar"/>
+                <include name="castor*.jar"/>
             </fileset>
         </copy>
 
         <touch file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portlets/${project.name}"/>
-
-        <if>
-            <equals arg1="${use.jsr}" arg2="jsr"/>
-            <then>
-                <antcall target="copyjsr"/>
-            </then>
-            <else>
-                <antcall target="copygs"/>
-            </else>
-        </if>
-
-        <antcall target="configure-database"/>
-    </target>
-
-    <target name="copyjsr">
-
         <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="${build.lib}">
                 <include name="${project.name}-services*.jar"/>
@@ -375,75 +363,12 @@ Copyright:
                 <include name="*.jar"/>
             </fileset>
         </copy>
-    </target>
 
-    <target name="copygs">
-
-        <copy todir="${appserver.home}/shared/lib">
-            <fileset dir="${build.lib}">
-                <include name="${project.name}-services*.jar"/>
-                <include name="${project.name}-test*.jar"/>
-            </fileset>
-            <fileset dir="lib">
-                <include name="*.jar"/>
-            </fileset>
-        </copy>
+        <antcall target="configure-database"/>
     </target>
 
     <target name="install" depends="deploy">
         <antcall target="create-database"/>
     </target>
-
-
-    <!-- =================================================================== -->
-    <!-- Creates a portlet template                                          -->
-    <!-- =================================================================== -->
-    <!--
-
-    work in progress
-
-<target name="create-portlet-template">
-
-    <input message="Please enter the packagename (e.g. org.gridlab.myproject) " addproperty="portlet.packagename"/>
-    <input message="Please enter the classname (e.g. HelloWorld) " addproperty="portlet.classname"/>
-    <input message="Please enter the service you want to use (e.g. HelloService) " addproperty="portlet.servicename"/>
-    <input message="Please enter next state for view mode (e.g. view.jsp)" addproperty="portlet.view"/>
-    <input message="Please enter next state for edit mode (e.g. edit.jsp)" addproperty="portlet.edit"/>
-
-
-    <path id="portlet.package">
-        <pathelement location="src/${portlet.packagename}"/>
-    </path>
-
-    <pathconvert  dirSep="/" property="portletpath" refid="portlet.package">
-        <map from="." to="/"/>
-
-    </pathconvert>
-
-    <echo message="PATH ${portletpath} ${portlet.packagename}"/>
-
-
-    <mkdir dir="src/${portlet.packagename}"/>
-    <copy overwrite="true" file="${gridsphere.home}/config/template/${use.jsr}-portlet.tpl"
-        tofile="src/${portlet.packagename}/${portlet.classname}.java"/>
-
-    <replace file="src/${portlet.packagename}/${portlet.classname}.java"
-        token="@PACKAGENAME@"
-        value="${portlet.packagename}"/>
-
-    <replace file="src/${portlet.classname}/${portlet.classname}.java"
-        token="@SERVICENAME@"
-        value="${portlet.servicename}"/>
-
-    <replace file="src/${portlet.packagename}/${portlet.classname}.java"
-        token="@VIEW@"
-        value="${portlet.view}"/>
-
-    <replace file="src/${portlet.packagename}/${portlet.classname}.java"
-        token="@EDIT@"
-        value="${portlet.edit}"/>
-
-
-</target>    -->
 
 </project>

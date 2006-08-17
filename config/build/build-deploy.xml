@@ -44,10 +44,6 @@ Build include file for the GridSphere Portal source code, see build.xml
         <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/web.xml"
               file="${gswebapp.dir}/WEB-INF/web.xml"
               filtering="true"/>
-        <filter token="GRIDSPHERE_RELEASE" value="${gridsphere.name}"/>
-        <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/gridsphere.properties"
-              file="${gswebapp.dir}/WEB-INF/gridsphere.properties"
-              filtering="true"/>
         <copy todir="${build.webapps}/${gridsphere.deploy}">
             <fileset dir="${gswebapp.dir}">
                 <exclude name="**/tlds/**"/>
@@ -56,32 +52,34 @@ Build include file for the GridSphere Portal source code, see build.xml
         </copy>
         <antcall target="modify-webxml"/>
 
-        <!-- copy webappsdir to deployed location -->
-        <copy todir="${appserver.home}/webapps">
-            <fileset dir="${build.webapps}"/>
-        </copy>
-
-        <mkdir dir="${appserver.home}/webapps/${gridsphere.deploy}/docs"/>
-        <copy todir="${appserver.home}/webapps/${gridsphere.deploy}/docs">
-            <fileset dir="${gridsphere.build}/docs"/>
-        </copy>
-
-        <copy overwrite="true" todir="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/lib">
+        <copy overwrite="true" todir="${build.webapps}/${gridsphere.deploy}/WEB-INF/lib">
+            <fileset dir="lib">
+                <exclude name="licenses/**"/>
+                <exclude name="*.txt"/>
+            </fileset>
             <fileset dir="${build.lib}">
-                <include name="gridsphere-ui-tags*.jar"/>
-                <include name="coreportlets*.jar"/>
+                <include name="gridsphere-core*.jar"/>
+                <include name="gridsphere-portal*.jar"/>
+                <include name="gridsphere-provider*.jar"/>
             </fileset>
         </copy>
 
-        <touch file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portlets/${gridsphere.deploy}.1"/>
+        <touch file="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portlets/${gridsphere.deploy}.1"/>
 
         <!-- only copy if it is there -->
         <if>
             <available file="${build.lib}/gridsphere-jsp.jar"/>
             <then>
-                <copy overwrite="true" file="${build.lib}/gridsphere-jsp.jar" todir="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/lib"/>
+                <copy overwrite="true" file="${build.lib}/gridsphere-jsp.jar" todir="${build.webapps}/${gridsphere.deploy}/WEB-INF/lib"/>
             </then>
         </if>
+
+
+        <!-- copy webappsdir to deployed location -->
+        <copy todir="${appserver.home}/webapps">
+            <fileset dir="${build.webapps}"/>
+        </copy>
+
     </target>
 
     <target name="modify-webxml">
@@ -166,7 +164,7 @@ Build include file for the GridSphere Portal source code, see build.xml
                     </available>
                     <then>
                         <echo message="Detected Tomcat 5.5"/>
-                        <copy file="${env.ANT_HOME}/lib/ant.jar" tofile="${appserver.home}/shared/lib/ant.jar"/>
+                  <!--      <copy file="${env.ANT_HOME}/lib/ant.jar" tofile="${appserver.home}/shared/lib/ant.jar"/> -->
                     </then>
                     <else>
                         <echo message="Detected Tomcat 5"/>
@@ -180,19 +178,11 @@ Build include file for the GridSphere Portal source code, see build.xml
         </if>
 
         <copy overwrite="true" todir="${appserver.home}/shared/lib">
-            <fileset dir="lib">
-                <exclude name="licenses/**"/>
-                <exclude name="*.txt"/>
-            </fileset>
             <fileset dir="${build.lib}">
-                <exclude name="gridsphere-test*.jar"/>
-                <exclude name="gridsphere-ui-tags*.jar"/>
-                <exclude name="coreportlets*.jar"/>
-                <exclude name="gridsphere-jsp.jar"/>
+                <include name="gridsphere-service-framework*.jar"/>
+                <include name="gridsphere-portal-api*.jar"/>
             </fileset>
         </copy>
-
-        <copy file="webapps/log4j.xml" todir="${appserver.home}/common/classes"/>
 
     </target>
 

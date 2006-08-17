@@ -44,11 +44,6 @@
         <fail if="${new-project-exists}" message="This project already exists! Please delete the old one in ${project.dir}"/>
         <mkdir dir="${project.dir}"/>
 
-        <input message="Do you wish to develop GridSphere/WebSphere portlets or JSR 168 portlets? Enter gs or jsr " validargs="gs,jsr" addProperty="which"/>
-
-        <condition property="use.jsr">
-            <equals arg1="jsr" arg2="${which}"/>
-        </condition>
 
         <copy file="config/build/build.project.xml" tofile="${project.dir}/build.xml"/>
 
@@ -66,9 +61,6 @@
         <replace file="${project.dir}/build.xml"
             token="@PROJECT_NAME@"
             value="${project.name}"/>
-        <replace file="${project.dir}/build.properties"
-            token="@USE_JSR@"
-            value="${which}"/>
 
         <mkdir dir="${project.dir}/src"/>
         <mkdir dir="${project.dir}/lib"/>
@@ -85,11 +77,15 @@
         </copy>
         <copy file="config/template/hibernate.properties" todir="${project.dir}/webapp/WEB-INF/persistence"/>
 
-        <antcall target="checkjsr"/>
-        <antcall target="checkgs"/>
+        <copy overwrite="true" file="config/template/gridsphere-portlet-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/gridsphere-portlet.xml"/>
+        <copy overwrite="true" file="config/template/portlet-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/portlet.xml"/>
+        <copy overwrite="true" file="config/template/layout-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/layout.xml"/>
+        <copy overwrite="true" file="config/template/web-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/web.xml"/>
+        <copy overwrite="true" file="config/template/group.sample.xml.tpl" tofile="${project.dir}/webapp/WEB-INF/group.sample.xml"/>
+
 
         <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_TITLE@"
-            value="${project.title}"/>
+                 value="${project.title}"/>
         <replace file="${project.dir}/webapp/WEB-INF/layout.xml" token="@PROJECT_TITLE@"
             value="${project.title}"/>
         <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_NAME@"
@@ -102,18 +98,5 @@
         <echo>Please edit src/ webapps/ and webapps/WEB-INF/{web.xml, layout.xml, PortletServices.xml} appropriately</echo>
         <echo>Please place portlets in src/**/portlets/ directory and service in src/**/services directory for proper compilation!</echo>
     </target>
-
-    <target name="checkjsr" if="use.jsr">
-        <copy overwrite="true" file="config/template/gridsphere-portlet-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/gridsphere-portlet.xml"/>
-        <copy overwrite="true" file="config/template/portlet-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/portlet.xml"/>
-        <copy overwrite="true" file="config/template/layout-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/layout.xml"/>
-        <copy overwrite="true" file="config/template/web-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/web.xml"/>
-        <copy overwrite="true" file="config/template/group.sample.xml.tpl" tofile="${project.dir}/webapp/WEB-INF/group.sample.xml"/>
-    </target>
-
-    <target name="checkgs" unless="use.jsr">
-        <delete file="${project.dir}/webapp/WEB-INF/portlet.xml"/>
-    </target>
-
 
 </project>

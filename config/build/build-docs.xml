@@ -39,7 +39,7 @@ Build include file for the GridSphere Portal source code, see build.xml
             maxmemory="256m"
             windowtitle="${gridsphere.name}"
             doctitle="${gridsphere.api}"
-            bottom="Copyright &#169; 2002,2003,2004 GridSphere Project. All Rights Reserved.">
+            bottom="Copyright &#169; 2002-2006 GridSphere Project. All Rights Reserved.">
 
             <!-- <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
 

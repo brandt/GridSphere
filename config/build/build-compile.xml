@@ -22,141 +22,108 @@ Build include file for the GridSphere Portal source code, see build.xml
             deprecation="${deprecation}"/>
     </target>
 
-    <!-- =================================================================== -->
-    <!-- Compiles JUnit tests                                                -->
-    <!-- =================================================================== -->
-    <target name="compile-tests" depends="compile" description="Compiles all JUnit tests">
-        <echo>Compiling JUnit Tests</echo>
-        <javac srcdir="tests"
-            destdir="${build.classes}"
-            classpathref="classpath"
-            debug="${debug}"
-            optimize="${optimize}"
-            deprecation="${deprecation}">
-        </javac>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Internal target to create the GridSphere JAR library archive        -->
-    <!-- =================================================================== -->
-    <target name="gridsphere-jar" depends="compile" description="Makes gridsphere JAR">
-
-        <ant target="make-gridsphere-jar"/>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Internal target to create the GridSphere JAR library archive        -->
-    <!-- =================================================================== -->
-    <target name="gridsphere-test-jar" depends="compile-tests" description="Makes gridsphere test JAR">
-
-        <echo message="Configuring Test Database"/>
-
-        <jar jarfile="${build.lib}/gridsphere-test.jar" basedir="${build.classes}">
-            <include name="**/*Test.class"/>
-        </jar>
-
-        <ant target="make-gridsphere-jar"/>
-
-    </target>
-
-    <target name="make-gridsphere-jar" depends="compile">
-
+    <!-- ================================================================== -->
+    <!-- Create the GridSphere Portlet Container JAR library archive        -->
+    <!-- ================================================================== -->
+    <target name="gridsphere-portal-jar" depends="compile" description="Makes gridsphere JAR">
         <mkdir dir="${build.classes}/gridsphere"/>
-
+        <filter token="GRIDSPHERE_RELEASE" value="${gridsphere.name}"/>
+        <copy todir="${build.classes}/org/gridlab/gridsphere/portlet/"
+              file="webapps/gridsphere/WEB-INF/portlet.properties"
+              filtering="true"/>
+        <copy file="webapps/gridsphere/WEB-INF/mapping/portlet-jsr-mapping.xml"
+              todir="${build.classes}/org/gridlab/gridsphere/portletcontainer/jsrimpl/descriptor"/>
+        <copy file="webapps/gridsphere/WEB-INF/mapping/portlet-mapping.xml"
+              todir="${build.classes}/org/gridlab/gridsphere/portletcontainer/impl/descriptor"/>
         <jar jarfile="${build.lib}/gridsphere-portal-${gridsphere.version}.jar" basedir="${build.classes}" defaultexcludes="yes">
-
-            <include name="org/**"/>
-            <!-- don't include portlet API -->
-            <exclude name="org/gridlab/gridsphere/portlet/**"/>
-            <!-- don't include gs servlet -->
-            <exclude name="org/gridlab/gridsphere/servlets/**"/>
-            <exclude name="org/gridlab/gridsphere/event/**"/>
-            <!-- don't include portlet widgets tag library -->
-            <exclude name="org/gridlab/gridsphere/provider/**"/>
-            <!-- don't include GridSphere portlets  -->
-            <exclude name="org/gridlab/gridsphere/portlets/**"/>
-
-        </jar>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Creates a Portlet API JAR library archive                           -->
-    <!-- =================================================================== -->
-    <target name="portlet-jar" depends="compile" description="Create lib/portlet.jar">
-        <jar jarfile="${build.lib}/portlet-api-${gridsphere.version}.jar" basedir="${build.classes}">
-            <include name="org/gridlab/gridsphere/portlet/**"/>
-            <exclude name="**/jsrimpl/**"/>
-            <exclude name="**/service/**"/>
-            <include name="org/gridlab/gridsphere/event/**"/>
-            <exclude name="**/*Test.class"/>
-            <!--  <include name="gridsphere/log4j.properties"/>  -->
-        </jar>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Creates a JSR Portlet API JAR library archive configured            -->
-    <!-- =================================================================== -->
-    <target name="portlet-api-jar" depends="compile" description="Creates JSR portlet API JAR">
-        <echo>Creating JSR portlet API JAR</echo>
-        <jar jarfile="${build.lib}/portlet-jsr-api-${gridsphere.version}.jar" basedir="${build.classes}">
-            <include name="javax/**"/>
-            <include name="**/portlet/jsrimpl/**"/>
-        </jar>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Creates the GridSphere service framework JAR library archive        -->
-    <!-- =================================================================== -->
-    <target name="gridsphere-service-jar" depends="compile" description="Creates GS portlet service framework JAR">
-        <echo>Creating GridSphere service framework JAR</echo>
-        <copy file="webapps/gridsphere/WEB-INF/mapping/portlet-services-mapping.xml" todir="${build.classes}/gridsphere/"/>
-        <jar jarfile="${build.lib}/gridsphere-service-framework-${gridsphere.version}.jar" basedir="${build.classes}">
-            <include name="gridsphere/portlet-services-mapping.xml"/>
-            <include name="**/portlet/service/**"/>
-        </jar>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Creates the GridSphere UI tags JAR                                  -->
-    <!-- =================================================================== -->
-    <target name="gridsphere-ui-tags-jar" depends="compile" description="Create lib/gridsphere-ui-tags.jar">
-        <jar jarfile="${build.lib}/gridsphere-ui-tags-${gridsphere.version}.jar" basedir="${build.classes}">
-            <include name="gridsphere/log4j.properties"/>
-            <include name="org/gridlab/gridsphere/provider/portlet/**"/>
-            <include name="org/gridlab/gridsphere/provider/portletui/tags/**"/>
-            <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
-        </jar>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Creates the GridSphere UI beans provider JAR                        -->
-    <!-- =================================================================== -->
-    <target name="gridsphere-provider-jar" depends="compile" description="Create lib/gridsphere-provider.jar">
-        <copy todir="${build.classes}/gridsphere/resources">
-            <fileset dir="config/resources"/>
-        </copy>
-        <jar jarfile="${build.lib}/gridsphere-provider-${gridsphere.version}.jar" basedir="${build.classes}">
-            <include name="org/gridlab/gridsphere/provider/event/**"/>
-            <include name="org/gridlab/gridsphere/provider/portletui/beans/**"/>
-            <include name="org/gridlab/gridsphere/provider/portletui/model/**"/>
-            <include name="gridsphere/**"/>
+            <include name="org/gridlab/gridsphere/portletcontainer/impl/**"/>
+            <include name="org/gridlab/gridsphere/portletcontainer/jsrimpl/**"/>
+            <include name="org/gridlab/gridsphere/portlet/impl/**"/>
+            <include name="org/gridlab/gridsphere/portlet/jsrimpl/**"/>
         </jar>
     </target>
 
     <!-- =================================================================== -->
     <!-- Creates the GridSphere portlets JAR                                 -->
     <!-- =================================================================== -->
-    <target name="coreportlets-jar" depends="compile" description="Create lib/coreportlets.jar">
-        <jar jarfile="${build.lib}/coreportlets-${gridsphere.version}.jar" basedir="${build.classes}">
+    <target name="gridsphere-core-jar" depends="compile" description="Create GridSphere Core JAR">
+        <jar jarfile="${build.lib}/gridsphere-core-${gridsphere.version}.jar" basedir="${build.classes}">
+            <!-- core portlets, GS servlet & filter, event impl -->
             <include name="org/gridlab/gridsphere/portlets/**"/>
             <include name="org/gridlab/gridsphere/servlets/**"/>
+            <include name="org/gridlab/gridsphere/filters/**"/>
+            <include name="org/gridlab/gridsphere/tools/**"/>
+            <include name="org/gridlab/gridsphere/event/impl/**"/>
+            <!-- layout impl classes -->
+            <include name="org/gridlab/gridsphere/layout/**"/>
+            <include name="org/gridlab/gridsphere/layout/event/impl/**"/>
+            <exclude name="org/gridlab/gridsphere/layout/event/*.class"/>
+            <exclude name="org/gridlab/gridsphere/layout/PortletComponent.class"/>
+            <exclude name="org/gridlab/gridsphere/layout/ComponentRender.class"/>
+            <exclude name="org/gridlab/gridsphere/layout/ComponentLifecycle.class"/>
+            <!-- core service impl classes -->
+            <include name="org/gridlab/gridsphere/services/**/impl/**"/>
+        </jar>
+    </target>
+
+
+    <target name="gridsphere-portal-api-jar" depends="compile" description="Create GridSphere Portal API JAR">
+        <echo>Creating GridSphere Portal API JAR</echo>
+        <copy todir="${build.classes}/gridsphere/resources">
+            <fileset dir="config/resources"/>
+        </copy>
+        <jar jarfile="${build.lib}/gridsphere-portal-api-${gridsphere.version}.jar" basedir="${build.classes}">
+            <!-- portlet container interfaces -->
+            <include name="org/gridlab/gridsphere/portletcontainer/**"/>
+            <!-- core services interfaces -->
+            <include name="org/gridlab/gridsphere/services/**"/>
+            <!-- core layout interfaces -->
+            <include name="org/gridlab/gridsphere/layout/PortletComponent.class"/>
+            <include name="org/gridlab/gridsphere/layout/ComponentRender.class"/>
+            <include name="org/gridlab/gridsphere/layout/ComponentLifecycle.class"/>
+            <include name="org/gridlab/gridsphere/layout/event/**"/>
+            <!-- core event interfcaes -->
+            <include name="org/gridlab/gridsphere/event/**"/>
+            <!-- JSR 168 API -->
+            <include name="javax/**"/>
+            <!-- GS properties -->
+            <include name="gridsphere/**"/>
+            <!-- GS portlet API -->
+            <include name="org/gridlab/gridsphere/portlet/**"/>
+            <exclude name="**/impl/**"/>
+            <exclude name="**/jsrimpl/**"/>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates the GridSphere service framework JAR library archive        -->
+    <!-- =================================================================== -->
+    <target name="gridsphere-service-framework-jar" depends="compile" description="Creates GS portlet service framework JAR">
+        <echo>Creating GridSphere service framework JAR</echo>
+        <copy file="webapps/gridsphere/WEB-INF/mapping/portlet-services-mapping.xml" todir="${build.classes}/org/gridlab/gridsphere/portlet/service/spi/impl"/>
+        <jar jarfile="${build.lib}/gridsphere-service-framework-${gridsphere.version}.jar" basedir="${build.classes}">
+            <include name="**/portlet/service/**"/>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates the GridSphere Provider JAR                                 -->
+    <!-- =================================================================== -->
+    <target name="gridsphere-provider-jar" depends="compile" description="Create lib/gridsphere-provider.jar">
+        <copy todir="${build.classes}/gridsphere/resources">
+            <fileset dir="config/resources"/>
+        </copy>
+        <jar jarfile="${build.lib}/gridsphere-provider-${gridsphere.version}.jar" basedir="${build.classes}">
+            <include name="org/gridlab/gridsphere/provider/**"/>
+            <include name="gridsphere/**"/>
+            <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
         </jar>
     </target>
 
     <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="gridsphere-ui-tags-jar, gridsphere-provider-jar, portlet-api-jar, portlet-jar, gridsphere-service-jar, coreportlets-jar, make-gridsphere-jar, gridsphere-jsp-jar" description="Creates all jars"/>
+    <target name="jar" depends="gridsphere-service-framework-jar, gridsphere-provider-jar, gridsphere-portal-api-jar, gridsphere-core-jar, gridsphere-portal-jar, gridsphere-jsp-jar" description="Creates all jars"/>
 
 
     <!-- =================================================================== -->
@@ -171,8 +138,7 @@ Build include file for the GridSphere Portal source code, see build.xml
 
     -->
 
-
-    <target name="jsp-precompile" depends="gridsphere-ui-tags-jar">
+    <target name="jsp-precompile" depends="gridsphere-provider-jar">
 
         <taskdef name="jspc50" classname="org.apache.jasper.JspC" classpathref="classpath">
         </taskdef>
@@ -200,39 +166,12 @@ Build include file for the GridSphere Portal source code, see build.xml
             debug="true"
             optimize="false"
             includes="**/*.java"
-            classpath="${build.lib}/gridsphere-ui-tags.jar"
+            classpath="${build.lib}/gridsphere-provider-${gridsphere.version}.jar"
             classpathref="classpath"
             source="1.4">
         </javac>
 
     </target>
-
- <!--   <target name="jsp-compile" depends="gridsphere-ui-tags-jar">
-            <mkdir dir="${gridsphere.build}/jsp/classes"/>
-            <mkdir dir="${gridsphere.build}/jsp/source/jsp"/>
-
-            <jspc destdir="${gridsphere.build}/jsp/source/jsp"
-                srcdir="webapps/gridsphere/jsp"
-                webinc="${gridsphere.build}/jsp/web.inc"
-                classpathref="classpath">
-                <include name="**/*.jsp"/>
-                <exclude name="**/include/**.jsp"/>
-                <webapp basedir="webapps/gridsphere"/>
-            </jspc>
-            <depend
-                srcdir="${gridsphere.build}/jsp/source/jsp"
-                destdir="${gridsphere.build}/jsp/classes"
-                cache="${gridsphere.build}/jsp/dependencies"
-                classpath="lib/gridsphere-ui-tags.jar"/>
-            <javac
-                srcdir="${gridsphere.build}/jsp/source"
-                destdir="${gridsphere.build}/jsp/classes"
-                classpath="${build.lib}/gridsphere-ui-tags.jar"
-                classpathref="classpath"
-                debug="on">
-            </javac>
-
-        </target>  -->
 
     <!-- =================================================================== -->
     <!-- Put JSP pages in a jar                                              -->
