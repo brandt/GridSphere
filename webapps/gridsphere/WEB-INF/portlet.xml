@@ -114,7 +114,7 @@
     </portlet-app-def>
 
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.login.LogoutPortlet">
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.logout.LogoutPortlet">
             <portlet-name>Logout</portlet-name>
             <servlet-name>LogoutPortlet</servlet-name>
             <supports>
@@ -125,7 +125,7 @@
             </supports>
         </portlet-app>
 
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.login.LogoutPortlet.1">
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.logout.LogoutPortlet.1">
             <concrete-portlet>
                 <portlet-name>Logout</portlet-name>
                 <default-locale>en</default-locale>
@@ -204,7 +204,7 @@
                 <language locale="ja">
                     <title>ログアウト</title>
                     <title-short>ログアウト</title-short>
-                    <description>Portletログアウト機能を提供します</description>
+                    <description>Portlet ログアウト機能を提供します</description>
                     <keywords>portlet ログアウト</keywords>
                 </language>
             </concrete-portlet>
@@ -340,90 +340,6 @@
                     <title-short>役割(Role)管理</title-short>
                     <description>ポータル管理者にセキュリティ権限管理機能を提供します</description>
                     <keywords>役割 管理</keywords>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
-
-    <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet">
-            <portlet-name>Portlet Group Manager</portlet-name>
-            <servlet-name>GroupManagerPortlet</servlet-name>
-            <allows>
-                <minimized/>
-                <maximized/>
-                <resizing/>
-            </allows>
-            <supports>
-                <markup name="html">
-                    <view/>
-                    <help/>
-                </markup>
-            </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1">
-            <concrete-portlet>
-                <portlet-name>Portlet Group Manager</portlet-name>
-                <access-restrictions role="SUPER"/>
-                <default-locale>en</default-locale>
-                <language locale="zh">
-                    <title>【门件用户组管理者 Portlet Group Manager】</title>
-                    <description>使门户网站管理者能够管理门件用户组</description>
-                </language>
-                <language locale="en">
-                    <title>Portlet Group Manager</title>
-                    <description>Enables portal administrators to administer portlet groups</description>
-                </language>
-                <language locale="es">
-                    <title>Administrador de Grupos de Portlet</title>
-                    <description>Les permite a administradores del portal que administren los grupos de portlet</description>
-                </language>
-                <language locale="cs">
-                    <title>Správa skupin portletů</title>
-                    <description>Umožňuje správcům portálu spravovat skupiny portletů.</description>
-                </language>
-                <language locale="de">
-                    <title>Portlet Gruppen Verwaltung</title>
-                    <description>Ermöglicht Portal-Administratoren Portlet Gruppen zu verwalten</description>
-                </language>
-                <language locale="es">
-                    <title>Administrador de Grupos de Portlet</title>
-                    <description>Les permite a administradores del portal que administren los grupos de portlet</description>
-                </language>
-                <language locale="fr">
-                    <title>Gestionnaire de groupe</title>
-                    <description>Permet à l'administrateur du portail d'aministrer les groupes</description>
-                </language>
-                <language locale="it">
-                    <title>Gestione Gruppo Portlet</title>
-                    <description>Consente agli amministratori del portale di gestire i gruppi di portlet</description>
-                </language>
-                <language locale="hu">
-                    <title>Portlet csoport kezelő</title>
-                    <description>Lehetővé teszi a portal adminisztrátorok számára, portlet csoportok kezelését.</description>
-                </language>
-                <language locale="pl">
-                    <title>Menadżer grup portletów</title>
-                    <description>Umożliwia administratorowi portalu administrowanie grupami portletów</description>
-                </language>
-				<language locale="ar">
-                    <title>مدير مجموعة البرنامج</title>
-                    <description>يمكن مدير النظام لإدارة مجموعات البرامج</description>
-                </language>
-                <language locale="nl">
-                    <title>Portlet Groep Manager</title>
-                    <description>Administratoren kunnen de portlet groepen beheren</description>
-                </language>
-                <language locale="hr">
-                    <title>Upravitelj grupa</title>
-                    <title-short>Upravitelj grupa</title-short>
-                    <description>Portlet omogućava administriranje grupa</description>
-                    <keywords>administriranje grupa</keywords>
-                </language>
-                <language locale="ja">
-                    <title>Portletグループ管理</title>
-                    <description>portletグループの管理機能をポータル管理者に提供します</description>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -614,81 +530,6 @@
                     <title-short>Setup</title-short>
                     <description>GridSphere setup</description>
                     <keywords>portlet gridsphere setup</keywords>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
-
-    <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet">
-            <portlet-name>Layout Manager Portlet</portlet-name>
-            <servlet-name>LayoutPortlet</servlet-name>
-            <allows>
-                <minimized/>
-                <maximized/>
-                <resizing/>
-            </allows>
-            <supports>
-                <markup name="html">
-                    <view/>
-                    <help/>
-                </markup>
-            </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet.1">
-            <concrete-portlet>
-                <portlet-name>Layout Manager Portlet</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="zh">
-                    <title>【用户版面管理者 User Layout Manager】</title>
-                    <description>提供了用户版面定制化功能</description>
-                </language>
-                <language locale="en">
-                    <title>Layout Manager</title>
-                    <description>Provides user layout customization</description>
-                </language>
-                <language locale="de">
-                    <title>Layout einstellen</title>
-                    <description>Ermöglicht die benutzerspezifische Anpassung der Darstellung</description>
-                </language>
-                <language locale="fr">
-                    <title>Gestionnaire de Layout</title>
-                    <description>Permet a l'usager de modifier le layout</description>
-                </language>
-                <language locale="it">
-                    <title>Gestione Layout</title>
-                    <description>Consente la personalizzazione del layout utente</description>
-                </language>
-                <language locale="cs">
-                    <title>Správa umístění portletů</title>
-                    <description>Poskytuje uživatelem nastavitelné umístění portletů</description>
-                </language>
-                <language locale="hu">
-                    <title>Felépítés szekesztő</title>
-                    <description>Lehetővé teszi a portletekből egyéni weblapok felépítését</description>
-                </language>
-                <language locale="pl">
-                    <title>Menadżer układów graficznych</title>
-                    <description>Udostępnia użytkownikowi dostosowywanie układów graficznych</description>
-                </language>
-				<language locale="ar">
-                    <title>مدير التنسيق</title>
-                    <description>يمكن تعديل تنسيق المستخدم</description>
-                </language>
-                <language locale="nl">
-                    <title>Layout Manager</title>
-                    <description>Gebruikers kunnen hun eigen layout bepalen</description>
-                </language>
-                <language locale="hr">
-                    <title>Upravitelj izgleda</title>
-                    <title-short>Upravitelj izgleda</title-short>
-                    <description>Portlet omogućava administriranje izgleda</description>
-                    <keywords>administriranje izgleda</keywords>
-                </language>
-                <language locale="ja">
-                    <title>レイアウト管理</title>
-                    <description>ユーザーにレイアウトカスタマイズ機能を提供します</description>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>

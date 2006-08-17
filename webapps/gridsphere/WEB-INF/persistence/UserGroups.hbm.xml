@@ -28,12 +28,12 @@
         <many-to-one
             name="group"
             column="sportletgroup"
-            class="org.gridlab.gridsphere.portlet.PortletGroup">
+            class="org.gridlab.gridsphere.services.core.security.group.PortletGroup">
         </many-to-one>
         <!-- deprecated -->
         <many-to-one
             name="role"
-            class="org.gridlab.gridsphere.portlet.PortletRole">
+            class="org.gridlab.gridsphere.services.core.security.role.PortletRole">
         </many-to-one>
         <!-- deprecated -->
         <property name="roleName" type="string" column="roleName"/>

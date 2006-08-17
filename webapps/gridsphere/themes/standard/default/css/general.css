@@ -156,6 +156,9 @@ input, select, textarea {
     font-weight: bold;
     color: black;
 }
+
+
+
 .tab-pane ul li .tab-active span {
     /* right border image for the active 1st level tab */
     background: url(../images/tab-active-right.gif) right top no-repeat;

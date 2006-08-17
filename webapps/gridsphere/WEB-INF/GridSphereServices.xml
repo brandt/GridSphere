@@ -11,6 +11,13 @@
 <portlet-services>
 
     <service>
+        <name>Persistence Manager Service</name>
+        <description lang="en">Provides JDBC Persistence Capabilities using Hibernate</description>
+        <interface>org.gridlab.gridsphere.services.core.persistence.PersistenceManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.persistence.impl.PersistenceManagerServiceImpl</implementation>
+    </service>
+
+    <service>
         <name>Portlet Manager Service</name>
         <description lang="en">Provides Administration Capabilities for Portlet Web Applications</description>
         <interface>org.gridlab.gridsphere.services.core.registry.PortletManagerService</interface>
@@ -24,6 +31,13 @@
             <param-name>password</param-name>
             <param-value>gridsphere</param-value>
         </service-config>
+    </service>
+
+    <service>
+        <name>Portlet Registry Service</name>
+        <description lang="en">Provides Portlet Registry</description>
+        <interface>org.gridlab.gridsphere.services.core.registry.PortletRegistryService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.registry.impl.PortletRegistryServiceImpl</implementation>
     </service>
 
     <service>
@@ -42,14 +56,6 @@
         <description lang="en">Provides GridSphere portal configuration settings</description>
         <interface>org.gridlab.gridsphere.services.core.portal.PortalConfigService</interface>
         <implementation>org.gridlab.gridsphere.services.core.portal.impl.PortalConfigServiceImpl</implementation>
-        <service-config>
-            <param-name>canUserCreateNewAccount</param-name>
-            <param-value>false</param-value>
-        </service-config>
-        <service-config>
-            <param-name>mailService</param-name>
-            <param-value></param-value>
-        </service-config>
     </service>
 
     <service>

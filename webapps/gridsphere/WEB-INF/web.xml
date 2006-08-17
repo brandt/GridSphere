@@ -17,19 +17,6 @@
     <!-- this is needed for clustering of multiple Tomcats -->
     <distributable/>
 
-    <context-param>
-        <!-- preferred repository selector. "preferred" because
-        if one is already installed, this choice is ignored. -->
-        <param-name>log4j-selector</param-name>
-        <param-value>org.apache.log4j.selector.ContextJNDISelector</param-value>
-    </context-param>
-
-    <context-param>
-        <!-- relative path to config file within current webapp -->
-        <param-name>log4j-config</param-name>
-        <param-value>WEB-INF/classes/log4j.properties</param-value>
-    </context-param>
-
     <filter>
         <filter-name>GridSphere Filter</filter-name>
         <filter-class>org.gridlab.gridsphere.filters.GridSphereFilter</filter-class>
@@ -39,14 +26,6 @@
         <filter-name>GridSphere Filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
-    <listener>
-        <listener-class>org.gridlab.gridsphere.servlets.GridSphereServlet</listener-class>
-    </listener>
-
-    <listener>
-        <listener-class>org.apache.log4j.servlet.InitContextListener</listener-class>
-    </listener>
 
     <servlet>
         <servlet-name>gridsphere</servlet-name>
@@ -61,7 +40,7 @@
 
     <servlet>
         <servlet-name>LogoutPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.login.LogoutPortlet</servlet-class>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.logout.LogoutPortlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -72,11 +51,6 @@
     <servlet>
         <servlet-name>UserManagerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>GroupManagerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -112,11 +86,6 @@
     <servlet>
         <servlet-name>LocalePortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.locale.LocalePortlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>LayoutPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -164,11 +133,6 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>LayoutPortlet</servlet-name>
-        <url-pattern>/layout</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
         <servlet-name>SetupPortlet</servlet-name>
         <url-pattern>/admin/setup</url-pattern>
     </servlet-mapping>
@@ -176,11 +140,6 @@
     <servlet-mapping>
         <servlet-name>UserManagerPortlet</servlet-name>
         <url-pattern>/admin/users</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>GroupManagerPortlet</servlet-name>
-        <url-pattern>/admin/groups</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -271,11 +230,4 @@
         <location>/jsp/error.jsp</location>
     </error-page>
 
-    <env-entry>
-        <description>JNDI logging context for this app</description>
-        <env-entry-name>log4j/logging-context</env-entry-name>
-        <env-entry-value>gridsphere</env-entry-value>
-        <env-entry-type>java.lang.String</env-entry-type>
-    </env-entry>
-    
 </web-app>

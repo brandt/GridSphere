@@ -31,7 +31,7 @@
         <field name="concretePortletID" type="string">
             <bind-xml name="id" node="attribute"/>
         </field>
-        <field name="PortletContextList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="arraylist">
+        <field name="PortletContextList" type="org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="arraylist">
             <bind-xml name="context-param"/>
         </field>
         <field name="ConcreteSportletConfig" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig">
@@ -52,7 +52,7 @@
         <field name="AccessRestrictions" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions">
             <bind-xml name="access-restrictions"/>
         </field>
-        <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="arraylist">
+        <field name="ConfigParamList" type="org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="arraylist">
             <bind-xml name="config-param"/>
         </field>
     </class>
@@ -94,7 +94,7 @@
         <field name="ServletName" type="string">
             <bind-xml name="servlet-name"/>
         </field>
-        <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="arraylist">
+        <field name="ConfigParamList" type="org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="arraylist">
             <bind-xml name="portlet-config"/>
         </field>
         <field name="CacheInfo" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.CacheInfo">
@@ -138,7 +138,7 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam">
+    <class name="org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam">
         <field name="ParamName" type="string">
             <bind-xml name="param-name"/>
         </field>

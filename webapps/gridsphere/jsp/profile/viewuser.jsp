@@ -32,7 +32,7 @@
                         <ui:tablerow>
                             <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
                             <ui:tablecell>
-                                <% if (req.getRoles().contains(PortletRole.SUPER.getName())) { %>
+                                <% if (req.getRoles().contains(PortletRole.ADMIN.getName())) { %>
                                 <ui:textfield beanId="userNameTF">
                                     <ui:validator type="checkNotEmpty" key="USER_NAME_BLANK"/>
                                 </ui:textfield>
@@ -115,21 +115,19 @@
                         <% } %>
                     </ui:form>
                 </td>
-                <% if (request.getAttribute("showgroups") != null) { %>
-                <td valign="top">
-                    <ui:form>
-                        <ui:group key="PROFILE_CONFIG_GROUPS">
-                            <ui:frame beanId="groupsFrame"/>
-                            <p>
-                                <ui:actionsubmit action="doSaveGroups" key="SAVE"/>
-                            </p>
-                        </ui:group>
-                    </ui:form>
-                </td>
-                <% } %>
+
             </tr>
         </table>
 
     </td>
 </tr>
 </table>
+
+<ui:form>
+    <ui:group key="LAYOUT_THEME">
+        <p>
+            <ui:text key="LAYOUT_SELECT_THEME"/>&nbsp;<ui:listbox beanId="themeLB"/> <ui:actionsubmit action="saveTheme"
+                                                                                                      key="SAVE"/>
+        </p>
+    </ui:group>
+</ui:form>

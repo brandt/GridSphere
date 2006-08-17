@@ -32,35 +32,9 @@
                     <row-layout>
                         <column-layout width="100%">
                             <portlet-frame label="profile">
-                                <portlet-class>
-                                    org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-            <portlet-tab label="layouttab">
-                <title lang="en">Layout</title>
-                <title lang="es">Layout</title>
-                <title lang="it">Layout</title>
-                <title lang="pl">Układ graficzny</title>
-                <title lang="hu">Kinézet</title>
-                <title lang="fr">Agencement</title>
-                <title lang="de">Layout</title>
-                <title lang="cs">Umísťování</title>
-                <title lang="nl">Layout</title>
-                <title lang="hr">Izgled</title>
-                <title lang="ja">レイアウト</title>
-                <title lang="zh">版面</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout width="50%">
-                            <portlet-frame label="layout">
-                                <portlet-class>
-                                    org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet.1</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                        <column-layout width="50%"/>
                     </row-layout>
                 </table-layout>
             </portlet-tab>
@@ -80,7 +54,7 @@
         <title lang="ja">管理</title>
         <title lang="zh">管理者</title>
         <portlet-tabbed-pane style="sub-menu">
-            <portlet-tab label="portlets" required-role="SUPER">
+            <portlet-tab label="portlets" required-role="ADMIN">
                 <title lang="en">Portlets</title>
                 <title lang="es">Portlets</title>
                 <title lang="pl">Portlety</title>
@@ -113,7 +87,7 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-            <portlet-tab label="users" required-role="SUPER">
+            <portlet-tab label="users" required-role="ADMIN">
                 <title lang="en">Users</title>
                 <title lang="es">Usuarios</title>
                 <title lang="it">Utenti</title>
@@ -138,32 +112,7 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-            <portlet-tab label="groups" required-role="ADMIN">
-                <title lang="en">Groups</title>
-                <title lang="es">Grupos</title>
-                <title lang="it">Gruppi</title>
-                <title lang="pl">Grupy</title>
-                <title lang="hu">Csoportok</title>
-                <title lang="fr">Groupes</title>
-                <title lang="de">Gruppen</title>
-                <title lang="cs">Skupiny</title>
-                <title lang="nl">Groepen</title>
-                <title lang="hr">Grupe</title>
-                <title lang="ja">グループ</title>
-                <title lang="zh">用户组</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout width="70%">
-                            <portlet-frame label="groupmanager">
-                                <portlet-class>
-                                    org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                        <column-layout width="30%"/>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-            <portlet-tab label="roles" required-role="SUPER">
+            <portlet-tab label="roles" required-role="ADMIN">
                 <title lang="en">Roles</title>
                 <title lang="es">Roles</title>
                 <title lang="hr">Uloge</title>

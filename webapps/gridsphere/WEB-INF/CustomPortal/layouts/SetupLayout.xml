@@ -9,7 +9,7 @@
     $Id$
 -->
 
-<page-layout title="GridSphere Portal Setup" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="SUPER">
+<page-layout title="GridSphere Portal Setup" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="ADMIN">
 
 
     <!-- Header components -->

@@ -6,7 +6,7 @@
 
 <hibernate-mapping>
     <class
-        name="org.gridlab.gridsphere.portlet.PortletGroup"
+        name="org.gridlab.gridsphere.services.core.security.group.PortletGroup"
         table="sportletgroup"
         >
         <cache usage="read-write"/>

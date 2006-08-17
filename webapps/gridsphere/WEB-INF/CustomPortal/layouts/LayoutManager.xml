@@ -9,7 +9,7 @@
     $Id: SetupLayout.xml 4633 2006-03-09 16:44:16Z wehrens $
 -->
 
-<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="SUPER">
+<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="ADMIN">
 
     <!-- Header components -->
     <portlet-header>
@@ -20,7 +20,7 @@
                 </column-layout>
                 <column-layout width="15%">
                     <portlet-frame transparent="true" outer-padding="0" label="logout">
-                        <portlet-class>org.gridlab.gridsphere.portlets.core.login.LogoutPortlet.1</portlet-class>
+                        <portlet-class>org.gridlab.gridsphere.portlets.core.logout.LogoutPortlet.1</portlet-class>
                     </portlet-frame>
                 </column-layout>
             </row-layout>

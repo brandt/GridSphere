@@ -21,6 +21,6 @@
     </ui:tablerow>
 </ui:table>
 
-<ui:hasrole role="SUPER">
+<ui:hasrole role="ADMIN">
 <a href="?gs_PageLayout=LayoutManager">Customize Layout</a>
 </ui:hasrole>

@@ -92,7 +92,7 @@ Version: $Id$
     padding-bottom: 0px;
 }
 /* settings for the ACTIVE tab in 1st level tab menu */
-.tab-pane ul li .tab-active {   
+.tab-pane ul li .tab-active {
     float: left;
     padding-left: 6px;
 }
@@ -109,6 +109,7 @@ Version: $Id$
 .tab-pane ul a span {
     padding: 4px 6px 5px 0px;
 }
+
 .tab-pane ul a, .tab-pane ul a span {
     display: block;
     float: left;

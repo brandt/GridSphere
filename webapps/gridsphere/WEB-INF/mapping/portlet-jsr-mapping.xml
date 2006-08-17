@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping xmlns="http://castor.exolab.org/" xmlns:cst="http://castor.exolab.org/">
     <description>Castor generated mapping file</description>
-<!--
-    <class cst:name="org.gridlab.gridsphere.portletcontainer.impl.descriptor2.PortletTypeChoiceSequence">
-        <description>Default mapping for class org.gridlab.gridsphere.portletcontainer.impl.descriptor2.PortletTypeChoiceSequence</description>
-        <map-to cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
-        <field cst:name="resourceBundle"
-            cst:type="org.gridlab.gridsphere.portletcontainer.impl.descriptor2.ResourceBundle" cst:required="true">
-            <bind-xml name="resource-bundle" node="element"/>
-        </field>
-        <field cst:name="portletInfo" cst:type="org.gridlab.gridsphere.portletcontainer.impl.descriptor2.PortletInfo">
-            <bind-xml name="portlet-info" node="element"/>
-        </field>
-    </class>
--->
+
     <class cst:name="org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition">
         <description>Default mapping for class org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Portlet</description>
         <map-to cst:xml="portlet" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
@@ -51,12 +39,6 @@
             cst:type="org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SupportedLocale" cst:collection="array">
             <bind-xml name="supported-locale" node="element"/>
         </field>
-<!--
-        <field cst:name="portletTypeChoice"
-            cst:type="org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoice" cst:required="true">
-            <bind-xml name="-error-if-this-is-used-" node="element"/>
-        </field>
--->
         <field cst:name="resourceBundle"
             cst:type="org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundle">
             <bind-xml name="resource-bundle" node="element"/>

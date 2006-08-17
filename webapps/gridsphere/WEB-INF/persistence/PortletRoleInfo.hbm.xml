@@ -24,7 +24,7 @@
         <property name="Role" type="string" column="portletrole"/>
         <many-to-one
             name="sportletRole"
-            class="org.gridlab.gridsphere.portlet.PortletRole">
+            class="org.gridlab.gridsphere.services.core.security.role.PortletRole">
         </many-to-one>
 
     </class>
