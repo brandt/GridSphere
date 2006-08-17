@@ -15,11 +15,15 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.net.URL;
+
 /**
  * <code>BasePortletComponent</code> represents an abstract portlet component with a particular
  * size, layout and theme and is subclasses by concrete portlet component instances.
  */
 public abstract class BasePortletComponent extends BaseComponentLifecycle implements PortletComponent, Serializable {
+
+    protected URL LAYOUT_MAPPING_PATH = this.getClass().getResource("/org/gridlab/gridsphere/layout/layout-mapping.xml");
 
     protected PortletComponent parent;
     protected String defaultWidth = "";

@@ -16,6 +16,7 @@ public class PortalConfigSettings {
 
     private boolean canCreateAccount = false;
 
+    // @deprecated
     private Set defaultGroups = null;
 
     private String defaultTheme = null;
@@ -41,10 +42,12 @@ public class PortalConfigSettings {
         return canCreateAccount;
     }
 
+    // @deprecated
     public Set getDefaultGroups() {
         return defaultGroups;
     }
 
+    // @deprectated
     public void setDefaultGroups(Set defaultGroups) {
         this.defaultGroups = defaultGroups;
     }

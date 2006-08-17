@@ -29,10 +29,6 @@ import org.apache.log4j.*;
  */
 public class SportletLog implements PortletLog {
 
-    public static void setConfigureURL(String url) {
-        PropertyConfigurator.configure(url);
-    }
-
     private static final String FQCN = SportletLog.class.getName() + ".";
     private final Logger logger;
 

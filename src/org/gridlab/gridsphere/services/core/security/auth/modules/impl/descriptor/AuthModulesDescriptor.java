@@ -4,9 +4,9 @@
  */
 package org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
+import org.gridlab.gridsphere.portletcontainer.impl.JavaXMLBindingFactory;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerXml;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -27,7 +27,7 @@ public class AuthModulesDescriptor {
     }
 
     public AuthModulesDescriptor(String descriptorFile, String mappingFile) throws IOException, PersistenceManagerException {
-        pmXML = PersistenceManagerFactory.createPersistenceManagerXml(descriptorFile, mappingFile);
+        pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorFile, mappingFile);
         authModules = (AuthModuleCollection) pmXML.load();
     }
 

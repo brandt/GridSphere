@@ -5,11 +5,12 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.services.core.messaging.MessagingID;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerService;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.tmf.TextMessagingException;
 import org.gridsphere.tmf.TMFService;
 import org.gridsphere.tmf.TMFFactory;
@@ -37,7 +38,8 @@ public class TextMessagingServiceImpl implements TextMessagingService, PortletSe
         String configfile = config.getServletContext().getRealPath("WEB-INF"+
                 File.separator+"CustomPortal"+File.separator+"tmf");
         tmfService = TMFFactory.createTMFService(configfile);
-        pm = PersistenceManagerFactory.createGridSphereRdbms();
+        PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+        pm = pmservice.createGridSphereRdbms();
         log.info("Starting up TextMessagingService with config " + configfile);
         tmfService.startup();
     }

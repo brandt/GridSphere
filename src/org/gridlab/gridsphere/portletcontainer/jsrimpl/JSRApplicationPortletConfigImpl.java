@@ -6,8 +6,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.jsrimpl;
 
-import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portlet.Mode;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
 
@@ -65,16 +65,16 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
             for (int i = 0; i < tmpModes.size(); i++) {
                 String m = (String) tmpModes.get(i);
                 if (m.equalsIgnoreCase("CONFIG")) {
-                    if (!modes.contains(Portlet.Mode.CONFIGURE)) modes.add(Portlet.Mode.CONFIGURE);
+                    if (!modes.contains(Mode.CONFIGURE)) modes.add(Mode.CONFIGURE);
                 } else {
                     try {
-                        modes.add(Portlet.Mode.toMode(m));
+                        modes.add(Mode.toMode(m));
                     } catch (IllegalArgumentException e) {
                         System.err.println("Unknown mode defined in portlet.xml: " + m.toString());
                     }
                 }
             }
-            if (!modes.contains(Portlet.Mode.VIEW)) modes.add(Portlet.Mode.VIEW);
+            if (!modes.contains(Mode.VIEW)) modes.add(Mode.VIEW);
             markupModes.put(mtype, modes);
         }
         tmpMarkups = null;

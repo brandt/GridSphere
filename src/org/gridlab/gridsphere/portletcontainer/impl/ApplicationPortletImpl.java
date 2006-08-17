@@ -91,7 +91,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
             concretePortlets.add(concretePortlet);
         }
         portletClass = appPortletConfig.getApplicationPortletID();
-        //applicationPortletID = webAppName + "#" + portletClass;
+
         applicationPortletID = portletClass;
         portletName = appPortletConfig.getPortletName();
         servletName = appPortletConfig.getServletName();

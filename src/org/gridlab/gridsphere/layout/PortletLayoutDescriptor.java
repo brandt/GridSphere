@@ -5,11 +5,12 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
+import org.gridlab.gridsphere.portletcontainer.impl.JavaXMLBindingFactory;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerXml;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * The <code>PortletLayoutDescriptor</code> is responsible for marshalling and
@@ -17,8 +18,6 @@ import java.io.IOException;
  * using Castor XML data binding capabilities.
  */
 public class PortletLayoutDescriptor {
-
-    private static PersistenceManagerXml pmXML = null;
 
     /**
      * Constructs an instance of PortletLayoutDescriptor
@@ -36,7 +35,7 @@ public class PortletLayoutDescriptor {
      * @throws PersistenceManagerException if a descriptor error occurs
      */
     public static PortletPage loadPortletPage(String layoutDescriptorPath, String layoutMappingPath) throws IOException, PersistenceManagerException {
-        pmXML = PersistenceManagerFactory.createPersistenceManagerXml(layoutDescriptorPath, layoutMappingPath);
+        PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(layoutDescriptorPath, layoutMappingPath);
         PortletPage page = (PortletPage) pmXML.load();
         page.setLayoutDescriptor(layoutDescriptorPath);
         return page;
@@ -52,7 +51,7 @@ public class PortletLayoutDescriptor {
      * @throws PersistenceManagerException if a descriptor error occurs
      */
     public static PortletTabbedPane loadPortletTabs(String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
-        pmXML = PersistenceManagerFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
+        PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
         return (PortletTabbedPane) pmXML.load();
     }
 
@@ -66,8 +65,7 @@ public class PortletLayoutDescriptor {
      * @throws PersistenceManagerException if a descriptor error occurs
      */
     public static void savePortletPage(PortletPage pc, String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
-        pmXML.setDescriptorPath(descriptorPath);
-        pmXML.setMappingPath(mappingPath);
+        PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
         pmXML.save(pc);
     }
 
@@ -80,9 +78,32 @@ public class PortletLayoutDescriptor {
      * @throws IOException                 if an I/O error occurs
      * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static void validatePortletPage(PortletPage pc, String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
-        pmXML.setDescriptorPath(descriptorPath);
-        pmXML.setMappingPath(mappingPath);
+    public static void savePortletPage(PortletPage pc, String descriptorPath, URL mappingPath) throws IOException, PersistenceManagerException {
+        PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
+        pmXML.save(pc);
+    }
+
+    /**
+     * Validates the portlet page associated with this descriptor
+     *
+     * @param descriptorPath location of the layout.xml
+     * @param mappingPath    location of the mapping file
+     */
+    public static void validatePortletPage(String descriptorPath, String mappingPath) {
+        JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
+    }
+
+    /**
+     * Saves the portlet tab associated with this descriptor
+     *
+     * @param pane           the list of portlet tabs to save
+     * @param descriptorPath location of the layout.xml
+     * @param mappingPath    location of the mapping file
+     * @throws IOException                 if an I/O error occurs
+     */
+    public static void savePortletTabbedPane(PortletTabbedPane pane, String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
+        PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
+        pmXML.save(pane);
     }
 
     /**
@@ -94,9 +115,9 @@ public class PortletLayoutDescriptor {
      * @throws IOException                 if an I/O error occurs
      * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static void savePortletTabbedPane(PortletTabbedPane pane, String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
-        pmXML.setDescriptorPath(descriptorPath);
-        pmXML.setMappingPath(mappingPath);
+    public static void savePortletTabbedPane(PortletTabbedPane pane, String descriptorPath, URL mappingPath) throws IOException, PersistenceManagerException {
+        PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
         pmXML.save(pane);
     }
+
 }

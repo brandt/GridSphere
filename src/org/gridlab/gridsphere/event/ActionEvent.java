@@ -4,9 +4,8 @@
  */
 package org.gridlab.gridsphere.event;
 
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
-import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 
 /**
  * An <code>ActionEvent</code> is sent by the portlet container when an HTTP request is received that is

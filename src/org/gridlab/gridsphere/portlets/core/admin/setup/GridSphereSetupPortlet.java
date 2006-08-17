@@ -14,9 +14,8 @@ import org.gridlab.gridsphere.provider.portletui.beans.MessageStyle;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
-import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
+import org.gridlab.gridsphere.services.core.security.role.PortletRole;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.layout.PortletPageFactory;
 
 import javax.servlet.UnavailableException;
 
@@ -26,7 +25,6 @@ public class GridSphereSetupPortlet extends ActionPortlet {
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
     private RoleManagerService roleManagerService = null;
-    private GroupManagerService groupManagerService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -34,7 +32,6 @@ public class GridSphereSetupPortlet extends ActionPortlet {
         try {
             this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
             this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
-            this.groupManagerService = (GroupManagerService) config.getContext().getService(GroupManagerService.class);
             this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
         } catch (PortletServiceException e) {
             throw new UnavailableException("Unable to get services required");
@@ -124,11 +121,8 @@ public class GridSphereSetupPortlet extends ActionPortlet {
         passwordManagerService.savePassword(editor);
         userManagerService.saveUser(accountRequest);
 
-        log.info("Granting super role to root user.");
-        roleManagerService.addUserToRole(accountRequest, PortletRole.SUPER);
         roleManagerService.addUserToRole(accountRequest, PortletRole.ADMIN);
         roleManagerService.addUserToRole(accountRequest, PortletRole.USER);
-        groupManagerService.addUserToGroup(accountRequest, groupManagerService.getCoreGroup());
 
         event.getPortletRequest().getPortletSession().removeAttribute(SportletProperties.LAYOUT_PAGE);
     }

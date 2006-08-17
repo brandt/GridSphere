@@ -14,6 +14,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
 
     private int cols = 0;
     private int rows = 0;
+    protected String onFocus = null;
 
     /**
      * Constructs a default text area bean
@@ -68,6 +69,14 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
      */
     public void setRows(int rows) {
         this.rows = rows;
+    }
+
+    public void setOnfocus(String onFocus) {
+        this.onFocus = onFocus;
+    }
+
+    public String getOnfocus() {
+        return onFocus;
     }
 
     public String toStartString() {

@@ -4,8 +4,8 @@
  */
 package org.gridlab.gridsphere.layout.event;
 
-import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portlet.Mode;
 
 /**
  * A <code>PortletTitleBarEvent</code> is created by a <code>PortletTitleBar</code>
@@ -42,7 +42,7 @@ public interface PortletTitleBarEvent extends PortletComponentEvent {
      *
      * @return mode the portlet title bar mode
      */
-    public Portlet.Mode getMode();
+    public Mode getMode();
 
     /**
      * Returns the portlet title bar window state

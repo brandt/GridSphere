@@ -4,15 +4,17 @@
  */
 package org.gridlab.gridsphere.services.core.security.role.impl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridlab.gridsphere.services.core.security.role.PortletRole;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerService;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 
 import java.util.*;
 
@@ -27,7 +29,26 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
     public RoleManagerServiceImpl() {}
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        pm = PersistenceManagerFactory.createGridSphereRdbms();
+        PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+        pm = pmservice.createGridSphereRdbms();
+
+        // create user role if none exists
+        PortletRole userRole = getRole("USER");
+        if (userRole == null) {
+            userRole = new PortletRole();
+            userRole.setName("USER");
+            userRole.setDescription("portal user");
+            saveRole(userRole);
+        }
+
+        // create admin role if none exists
+        PortletRole adminRole = getRole("ADMIN");
+        if (adminRole == null) {
+            adminRole = new PortletRole();
+            adminRole.setName("ADMIN");
+            adminRole.setDescription("portal administrator");
+            saveRole(adminRole);
+        }
     }
 
     public void destroy() {

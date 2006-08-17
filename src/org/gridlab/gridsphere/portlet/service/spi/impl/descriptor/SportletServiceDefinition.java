@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
-
 import java.util.*;
 
 /**
@@ -14,7 +12,6 @@ import java.util.*;
  */
 public class SportletServiceDefinition {
 
-    protected SportletServiceDescriptor serviceDescriptor = null;
     protected String serviceName = "";
     protected List serviceDescriptions = new Vector();
     protected String serviceInterface = "";
@@ -23,24 +20,6 @@ public class SportletServiceDefinition {
     protected Vector configParamList = new Vector();
     protected Properties configProps = null;
     protected boolean loadOnStartup = false;
-
-    /**
-     * Sets the portlet service descriptor
-     *
-     * @param descriptor the portlet service descriptor
-     */
-    public void setServiceDescriptor(SportletServiceDescriptor descriptor) {
-        this.serviceDescriptor = descriptor;
-    }
-
-    /**
-     * Returns the portlet service descriptor
-     *
-     * @return descriptor the portlet service descriptor
-     */
-    public SportletServiceDescriptor getServiceDescriptor() {
-        return serviceDescriptor;
-    }
 
     /**
      * Sets the portlet service name

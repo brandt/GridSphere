@@ -4,10 +4,6 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.QueryFilter;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -15,8 +11,12 @@ import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerService;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.services.core.persistence.QueryFilter;
 
 import java.util.*;
 
@@ -28,19 +28,12 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     private String jdoUser = SportletUserImpl.class.getName();
 
-    private String accountMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/account-mapping.xml");
-    private String accountDescPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/account.xml");
-
     public UserManagerServiceImpl() {
     }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        pm = PersistenceManagerFactory.createGridSphereRdbms();
-        /*try {
-            userAccount = new UserAccountDescriptor(accountDescPath, accountMappingPath);
-        } catch (Exception e) {
-            throw new PortletServiceUnavailableException("Unable to load account.xml from " + accountDescPath);
-        }*/
+        PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+        pm = pmservice.createGridSphereRdbms();
     }
 
     public void destroy() {

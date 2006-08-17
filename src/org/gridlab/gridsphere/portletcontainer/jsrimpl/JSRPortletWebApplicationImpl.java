@@ -4,16 +4,15 @@
  */
 package org.gridlab.gridsphere.portletcontainer.jsrimpl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.portletcontainer.impl.BasePortletWebApplicationImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -53,11 +52,8 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
         // load services.xml
         loadServices(context, loader);
 
-        //load roles.xml
-        loadRoles(context);
-
-        // load group.xml
-        loadGroup(context);
+        // load layout.xml
+        loadLayout(context);
     }
 
 
@@ -69,13 +65,10 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
     protected void loadPortlets(ServletContext ctx, ClassLoader loader) throws PortletException {
         // load in the portlet.xml file
         String portletXMLfile = ctx.getRealPath("/WEB-INF/portlet.xml");
-        //String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
-
-        String portletMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-jsr-mapping.xml");
 
         PortletDeploymentDescriptor2 pdd = null;
         try {
-            pdd = new PortletDeploymentDescriptor2(portletXMLfile, portletMappingFile);
+            pdd = new PortletDeploymentDescriptor2(portletXMLfile);
         } catch (Exception e) {
             log.error("Mapping Error! " + webApplicationName, e);
             throw new PortletException("Unable to load portlets from: " + webApplicationName + " + due to mapping error", e);
@@ -107,12 +100,10 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
     public void init() {}
 
     public void destroy() {
-        //log.debug("removing application tab :" + webApplicationName);
-        //PortletTabRegistry.removeGroupTab(webApplicationName);
         log.debug("unloading portlet services for : " + webApplicationName);
-        SportletServiceFactory factory = SportletServiceFactory.getInstance();
-        factory.shutdownServices(webApplicationName);
-        PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
+        PortletServiceFactory.shutdownServices(webApplicationName);
+        PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+        pmservice.destroyPersistenceManagerRdbms(webApplicationName);
         portletWebApp = null;
         appPortlets = null;
         portletDefinitions = null;

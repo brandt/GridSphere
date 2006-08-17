@@ -9,7 +9,6 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.services.core.file.FileManagerService;
 
 import java.io.*;
@@ -28,7 +27,7 @@ public class FileManagerServiceImpl implements FileManagerService, PortletServic
     public void init(PortletServiceConfig config) {
         if (!inited) {
             String tmpDir = config.getInitParameter("tmp_dir");
-            PORTAL_TMP_DIR = GridSphereConfig.getServletContext().getRealPath("/" + tmpDir);
+            PORTAL_TMP_DIR = config.getServletContext().getRealPath("/" + tmpDir);
             File f = new File(PORTAL_TMP_DIR);
             if (!f.exists()) {
                 log.debug("Creating temp directory for users: " + PORTAL_TMP_DIR);

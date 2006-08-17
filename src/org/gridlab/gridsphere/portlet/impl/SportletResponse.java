@@ -94,7 +94,7 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
      *
      * @param mode the portlet mode
      */
-    public PortletURI createURI(Portlet.Mode mode) {
+    public PortletURI createURI(Mode mode) {
         SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse());
         addURIParameters(sportletURI);
         sportletURI.setPortletMode(mode);

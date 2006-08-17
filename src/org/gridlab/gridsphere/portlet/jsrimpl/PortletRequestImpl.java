@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
-import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
@@ -186,15 +185,15 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     public PortletMode getPortletMode() {
 
         String modeStr = (String) getAttribute(SportletProperties.PORTLET_MODE);
-        Portlet.Mode mode = Portlet.Mode.toMode(modeStr);
+        Mode mode = Mode.toMode(modeStr);
         PortletMode m = PortletMode.VIEW;
-        if (mode == Portlet.Mode.VIEW) {
+        if (mode == Mode.VIEW) {
             m = PortletMode.VIEW;
-        } else if (mode == Portlet.Mode.EDIT) {
+        } else if (mode == Mode.EDIT) {
             m = PortletMode.EDIT;
-        } else if (mode == Portlet.Mode.HELP) {
+        } else if (mode == Mode.HELP) {
             m = PortletMode.HELP;
-        } else if (mode == Portlet.Mode.CONFIGURE) {
+        } else if (mode == Mode.CONFIGURE) {
             m = new PortletMode("config");
         } else {
             m = new PortletMode(mode.toString());
@@ -700,7 +699,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public String getResponseContentType() {
         String modeStr = (String) getAttribute(SportletProperties.PORTLET_MODE);
-        Portlet.Mode mode = Portlet.Mode.toMode(modeStr);
+        Mode mode = Mode.toMode(modeStr);
         if (supports != null) {
             Supports s = supports[0];
             org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = s.getPortletMode();
@@ -735,7 +734,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     public java.util.Enumeration getResponseContentTypes() {
         List types = new ArrayList();
         String modeStr = (String) getAttribute(SportletProperties.PORTLET_MODE);
-        Portlet.Mode mode = Portlet.Mode.toMode(modeStr);
+        Mode mode = Mode.toMode(modeStr);
         if (supports != null) {
             for (int i = 0; i < supports.length; i++) {
                 Supports s = supports[i];

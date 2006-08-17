@@ -4,16 +4,15 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinition;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerService;
 
 import javax.servlet.ServletContext;
 import java.io.File;
@@ -29,7 +28,6 @@ import java.util.Iterator;
 public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl implements PortletWebApplication {
 
     private PortletLog log = SportletLog.getInstance(PortletWebApplicationImpl.class);
-    private PortletDeploymentDescriptor pdd = null;
 
     /**
      * Constructs an instance of a PortletWebApplicationImpl from a supplied ui application name and corresponding
@@ -76,10 +74,8 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
         loadPortlets(ctx, Thread.currentThread().getContextClassLoader());
         // load services xml
         if (!isJSR) loadServices(ctx, Thread.currentThread().getContextClassLoader());
-        // load roles.xml
-        if (!isJSR)loadRoles(ctx);
-        // load group.xml (and if found load layout.xml)
-        if (!isJSR) loadGroup(ctx);
+        // load layout.xml
+        if (!isJSR) loadLayout(ctx);
     }
 
     /**
@@ -106,12 +102,11 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
             log.info("Instead loading portlet.xml as a gridsphere portlet descriptor...");
             gsportletXMLfile = portletXMLfile;
         }
-        //String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
 
-        String portletMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-mapping.xml");
-        pdd = null;
+        PortletDeploymentDescriptor pdd = null;
+
         try {
-            pdd = new PortletDeploymentDescriptor(gsportletXMLfile, portletMappingFile);
+            pdd = new PortletDeploymentDescriptor(gsportletXMLfile);
         } catch (Exception e) {
             log.error("Mapping Error! " + webApplicationName, e);
             throw new PortletException("Unable to load portlets from: " + webApplicationName + " + due to mapping error!");
@@ -136,10 +131,9 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
      * Under development. A portlet web application can unregister itself from the application server
      */
     public void destroy() {
-        //log.debug("removing application tab :" + webApplicationName);
-        //PortletTabRegistry.removeGroupTab(webApplicationName);
-        PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
-        SportletServiceFactory.shutdownServices(webApplicationName);
+        PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+        pmservice.destroyPersistenceManagerRdbms(webApplicationName);
+        PortletServiceFactory.shutdownServices(webApplicationName);
         appPortlets = null;
     }
 

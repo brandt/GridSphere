@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer.jsrimpl;
 
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
 

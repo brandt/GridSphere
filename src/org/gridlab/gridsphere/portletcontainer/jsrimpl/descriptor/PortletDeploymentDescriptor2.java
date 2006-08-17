@@ -5,11 +5,12 @@
  */
 package org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
+import org.gridlab.gridsphere.portletcontainer.impl.JavaXMLBindingFactory;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerXml;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * The <code>PortletDeploymentDescriptor</code> is responsible for
@@ -25,11 +26,11 @@ public class PortletDeploymentDescriptor2 {
      * Constructs a PortletDeploymentDescriptor from a portlet.xml and mapping file
      *
      * @param portletFilePath location of the portlet.xml
-     * @param mappingFilePath location of the mapping file
      * @throws PersistenceManagerException if the PortletDeploymentPersistenceManager cannot be created
      */
-    public PortletDeploymentDescriptor2(String portletFilePath, String mappingFilePath) throws IOException, PersistenceManagerException {
-        pmXML = PersistenceManagerFactory.createPersistenceManagerXml(portletFilePath, mappingFilePath);
+    public PortletDeploymentDescriptor2(String portletFilePath) throws IOException, PersistenceManagerException {
+        URL portletMappingStream = this.getClass().getResource("/org/gridlab/gridsphere/portletcontainer/jsrimpl/descriptor/portlet-jsr-mapping.xml");
+        pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(portletFilePath, portletMappingStream);
         portletApp = (PortletApp) pmXML.load();
     }
 

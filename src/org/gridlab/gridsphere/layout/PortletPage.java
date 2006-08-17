@@ -4,22 +4,20 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.layout.view.Render;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
+import org.gridlab.gridsphere.portletcontainer.impl.PortletInvoker;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 
+import javax.servlet.ServletContext;
 import java.io.*;
 import java.util.*;
-import java.security.Principal;
 
 /**
  * The <code>PortletPage</code> is the generic container for a collection of
@@ -31,6 +29,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     private transient PortletLog log = SportletLog.getInstance(PortletPage.class);
 
     protected transient CacheService cacheService = null;
+
+    protected transient PortletInvoker portletInvoker = null;
 
     protected PortletContainer footerContainer = null;
     protected PortletContainer headerContainer = null;
@@ -262,14 +262,12 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      */
     public List init(PortletRequest req, List list) {
 
-
-        PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
-            cacheService = (CacheService) factory.createPortletService(CacheService.class, true);
+            cacheService = (CacheService) PortletServiceFactory.createPortletService(CacheService.class, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
-
+        portletInvoker = new PortletInvoker();
         list = super.init(req, list);
         if (renderKit == null) renderKit = "standard";
         req.getPortletSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, renderKit);
@@ -334,7 +332,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
                 // remove any cached portlet
                 cacheService.removeCached(f.getComponentID() + pid + id);
                 //portlets.add(f.getPortletID());
-                PortletInvoker.login(pid, event.getPortletRequest(), event.getPortletResponse());
+                portletInvoker.login(pid, event.getPortletRequest(), event.getPortletResponse());
             }
         }
     }
@@ -362,7 +360,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
                 // remove any cached portlet
                 cacheService.removeCached(f.getComponentID() + pid + id);
-                PortletInvoker.logout(pid, req, res);
+                portletInvoker.logout(pid, req, res);
             }
         }
     }
@@ -502,10 +500,6 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
         PortletRequest req = event.getPortletRequest();
 
-
-        //if (!req.isUserInRole(requiredRoleName)) return;
-
-
         boolean floating = false;
         PortletFrame f = null;
         // In case the "floating" portlet state has been selected:
@@ -597,7 +591,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         return c;
     }
 
-    public void save() throws IOException {
+    public void save(ServletContext ctx) throws IOException {
         try {
             // save user tab
             PortletTabbedPane myPane = new PortletTabbedPane();
@@ -608,7 +602,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
                 }
             }
             if (myPane.getTabCount() > 0) {
-                String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
+                String layoutMappingFile = ctx.getRealPath("/WEB-INF/mapping/layout-mapping.xml");
                 PortletLayoutDescriptor.savePortletTabbedPane(myPane, layoutDescriptor, layoutMappingFile);
             }
         } catch (PersistenceManagerException e) {

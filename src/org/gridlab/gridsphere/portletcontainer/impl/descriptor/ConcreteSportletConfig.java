@@ -7,9 +7,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParamList;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
+import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ConfigParamList;
 
 import java.util.ArrayList;
 import java.util.Hashtable;

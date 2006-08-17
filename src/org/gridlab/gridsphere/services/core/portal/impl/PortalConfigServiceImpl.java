@@ -5,23 +5,18 @@
  */
 package org.gridlab.gridsphere.services.core.portal.impl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
-import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Properties;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 
 /**
  * Portal configuration service is used to manage portal administrative settings
@@ -30,59 +25,43 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
 
     private PortletLog log = SportletLog.getInstance(PortalConfigServiceImpl.class);
 
-    private PersistenceManagerRdbms pm = null;
 
-    public synchronized void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        if (pm == null) pm = PersistenceManagerFactory.createGridSphereRdbms();
-        PortalConfigSettings configSettings = this.getPortalConfigSettings();
-        if (configSettings == null) {
-            configSettings = new PortalConfigSettings();
-            boolean canCreate = Boolean.getBoolean(config.getInitParameter("canUserCreateNewAccount"));
-            configSettings.setCanUserCreateAccount(canCreate);
-            // set gridsphere as a default group
-            Set defaultGroups = new HashSet();
+    private String GRIDSPHERE_PROPERTIES = "/WEB-INF/CustomPortal/portal/gridsphere.properties";
 
-            PortletServiceFactory factory = SportletServiceFactory.getInstance();
-            try {
-                GroupManagerService aclService =
-                        (GroupManagerService)factory.createPortletService(GroupManagerService.class, true);
-                defaultGroups.add(aclService.getCoreGroup());
-            } catch (PortletServiceNotFoundException e) {
-                log.error("No core group found!!");
-            }
-            configSettings.setDefaultGroups(defaultGroups);
-            // set default theme
-            //configSettings.setDefaultTheme(config.getInitParameter("defaultTheme"));
-            // set mailer
-            savePortalConfigSettings(configSettings);
-        }
+    private FileOutputStream propertiesOutputStream = null;
+    protected Properties props = null;
 
-    }
-
-    public synchronized void destroy() {
-
-    }
-
-    public void savePortalConfigSettings(PortalConfigSettings configSettings) {
+    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+        InputStream propsStream = config.getServletContext().getResourceAsStream(GRIDSPHERE_PROPERTIES);
         try {
-            if (configSettings.getOid() == null) {
-                pm.create(configSettings);
-            } else {
-                pm.update(configSettings);
-            }
-        } catch (PersistenceManagerException e) {
-            log.error("Unable to save or update config settings!", e);
+            propertiesOutputStream = new FileOutputStream(config.getServletContext().getRealPath(GRIDSPHERE_PROPERTIES));
+            props = new Properties();
+            props.load(propsStream);
+            props.store(propertiesOutputStream, "GridSphere Portal Properties");
+        } catch (FileNotFoundException e) {
+            log.error("Unable to find gridsphere.properties", e);
+        } catch (IOException e) {
+            log.error("Unable to load gridsphere.properties", e);
         }
     }
 
-    public PortalConfigSettings getPortalConfigSettings() {
-        PortalConfigSettings settings = null;
-        try {
-            settings = (PortalConfigSettings) pm.restore("select c from " + PortalConfigSettings.class.getName() + " c");
-        } catch (PersistenceManagerException e) {
-            log.error("Unable to retrieve config settings!", e);
-        }
-        return settings;
+    public void destroy() {
+
+    }
+
+    public String getProperty(String key) {
+        if (key == null) throw new IllegalArgumentException("property key cannot be null!");
+        return props.getProperty(key);
+    }
+
+    public void setProperty(String key, String value) {
+        if (key == null) throw new IllegalArgumentException("property key cannot be null!");
+        if (value == null) throw new IllegalArgumentException("property value cannot be null!");
+        props.setProperty(key, value);
+    }
+
+    public void storeProperties() throws IOException {
+        props.store(propertiesOutputStream, "GridSphere Portal Properties");
     }
 
 }

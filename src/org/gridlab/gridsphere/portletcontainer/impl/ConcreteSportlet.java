@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletSettings;
@@ -16,6 +15,7 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 
 import java.io.IOException;
 import java.util.Hashtable;

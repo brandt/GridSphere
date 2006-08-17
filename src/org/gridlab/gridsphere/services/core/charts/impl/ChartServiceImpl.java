@@ -6,7 +6,7 @@ import org.gridlab.gridsphere.services.core.charts.*;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.exolab.castor.xml.MarshalException;
@@ -33,10 +33,8 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         if (!inited) {
             System.setProperty("java.awt.headless", "true");
-            
-            PortletServiceFactory factory = SportletServiceFactory.getInstance();
             try {
-                secureDirectoryService = (SecureDirectoryService)factory.createPortletService(SecureDirectoryService.class, true);
+                secureDirectoryService = (SecureDirectoryService)PortletServiceFactory.createPortletService(SecureDirectoryService.class, true);
             } catch (PortletServiceException e) {
                 throw new PortletServiceUnavailableException("Unable to get instance of SecureDirectoryService!", e);
             }

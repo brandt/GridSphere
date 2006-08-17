@@ -7,10 +7,11 @@ package org.gridlab.gridsphere.provider.portlet;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.AbstractPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.event.impl.FormEventImpl;
 import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
-import org.gridlab.gridsphere.core.persistence.QueryFilter;
+import org.gridlab.gridsphere.services.core.persistence.QueryFilter;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;

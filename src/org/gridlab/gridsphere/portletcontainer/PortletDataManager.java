@@ -4,9 +4,9 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.PortletData;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 
 /**
  * The <code>PortletDataManager</code> is a singleton used for loading and storing <code>PortletData</code>,

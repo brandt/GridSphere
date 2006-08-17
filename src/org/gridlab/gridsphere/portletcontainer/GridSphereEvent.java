@@ -6,9 +6,9 @@ package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.event.Event;
 import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletContext;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 
 /**
  * A <code>GridSphereEvent</code> represents a general portlet container

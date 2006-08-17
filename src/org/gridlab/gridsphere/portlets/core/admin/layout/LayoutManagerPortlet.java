@@ -9,18 +9,19 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.layout.*;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridlab.gridsphere.services.core.security.role.PortletRole;
 import org.gridlab.gridsphere.services.core.content.ContentManagerService;
 import org.gridlab.gridsphere.services.core.content.ContentFile;
+import org.gridlab.gridsphere.services.core.registry.PortletRegistryService;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
+import java.io.File;
 import java.util.*;
-import java.net.URLEncoder;
 
 public class LayoutManagerPortlet extends ActionPortlet {
 
@@ -31,7 +32,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     private static RoleManagerService roleManagerService;
     private static ContentManagerService contentManagerService;
 
-    private PortletRegistry portletRegistry = null;
+    private PortletRegistryService portletRegistryService = null;
     private PortletPageFactory pageFactory = null;
 
     private static final String SELECTED_LAYOUT = LayoutManagerPortlet.class.getName() + ".SELECTED_LAYOUT";
@@ -48,7 +49,11 @@ public class LayoutManagerPortlet extends ActionPortlet {
         } catch (PortletServiceException e) {
             throw new UnavailableException("Could not get instance of RoleManagerService!");
         }
-        portletRegistry = PortletRegistry.getInstance();
+        try {
+            portletRegistryService = (PortletRegistryService) config.getContext().getService(PortletRegistryService.class);
+        } catch (PortletServiceException e) {
+            throw new UnavailableException("Could not get instance of RoleManagerService!");
+        }
 
         pageFactory = PortletPageFactory.getInstance();
         DEFAULT_VIEW_PAGE = "doShowLayout";
@@ -334,6 +339,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         // do nothing
     }
 
+
     public void doShowLayout(FormEvent event) throws PortletException, IOException {
 
         PortletRequest req = event.getPortletRequest();
@@ -356,14 +362,39 @@ public class LayoutManagerPortlet extends ActionPortlet {
         }
 
 
+
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
+
+        String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
+
+        ListBoxBean themesLB = event.getListBoxBean("themesLB");
+
+        themesLB.clear();
+
+        String themesPath = getPortletConfig().getContext().getRealPath("/themes");
+        /// retrieve the current renderkit
+        themesPath += "/" + renderkit;
+
+        String[] themes = null;
+        File f = new File(themesPath);
+        if (f.isDirectory()) {
+            themes = f.list();
+        }
+
+        for (int i = 0; i < themes.length; i++) {
+            ListBoxItemBean lb = new ListBoxItemBean();
+            lb.setValue(themes[i].trim());
+            if (themes[i].trim().equalsIgnoreCase(theme)) lb.setSelected(true);
+            themesLB.addBean(lb);
+        }
+
+
         req.setAttribute(SportletProperties.COMPONENT_ID_VAR, "compid");
 
         String sessionId = session.getId();
         PortletResponse res = event.getPortletResponse();
         PortletContext context = this.getPortletConfig().getContext();
         GridSphereEvent gsevent = new GridSphereEventImpl(context, req, res);
-
-
 
 
         // theme has to be set before it is inited
@@ -409,7 +440,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 }
 
                 ListBoxBean portletsLB = event.getListBoxBean("portletsLB");
-                Collection appColl = portletRegistry.getAllApplicationPortlets();
+                Collection appColl = portletRegistryService.getAllApplicationPortlets();
                 Locale loc = req.getLocale();
                 Iterator appIt = appColl.iterator();
                 while (appIt.hasNext()) {

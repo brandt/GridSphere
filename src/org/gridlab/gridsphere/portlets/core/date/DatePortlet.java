@@ -5,6 +5,8 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.impl.AbstractPortlet;
+
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.TimeZone;

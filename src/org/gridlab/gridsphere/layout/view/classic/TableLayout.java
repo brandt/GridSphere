@@ -98,7 +98,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
                         table.append("<tbody><tr><td>");
 
                         // render add portlets listbox
-                        Map availPortlets = tableLayout.getAvailablePortletsToAdd(event);
+                        Map availPortlets = tableLayout.getAllPortletsToAdd(event);
                         table.append(renderAddPortlets(event, j, availPortlets));
 
                         table.append("</td></tr></tbody>");

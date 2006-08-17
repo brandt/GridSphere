@@ -17,6 +17,7 @@ public class TextAreaTag extends BaseComponentTag {
     protected TextAreaBean textAreaBean = null;
     protected int cols = 0;
     protected int rows = 0;
+    protected String onFocus = null;
 
     /**
      * Returns the number of columns of the text area
@@ -52,6 +53,14 @@ public class TextAreaTag extends BaseComponentTag {
      */
     public void setRows(int rows) {
         this.rows = rows;
+    }
+
+    public void setOnfocus(String onFocus) {
+        this.onFocus = onFocus;
+    }
+
+    public String getOnfocus() {
+        return onFocus;
     }
 
     public int doStartTag() throws JspException {

@@ -5,10 +5,11 @@
  */
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerService;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 
 import javax.portlet.PreferencesValidator;
 
@@ -18,8 +19,8 @@ import javax.portlet.PreferencesValidator;
  */
 public class PortletPreferencesManager {
 
-    private static PortletLog log = SportletLog.getInstance(PortletPreferencesManager.class);
-    private static PersistenceManagerRdbms pm = null;
+    private PortletLog log = SportletLog.getInstance(PortletPreferencesManager.class);
+    private PersistenceManagerRdbms pm = null;
     private PreferencesValidator validator = null;
     private boolean isRender = false;
     private String userId = null;
@@ -29,7 +30,8 @@ public class PortletPreferencesManager {
      * Default instantiation is disallowed
      */
     public PortletPreferencesManager() {
-        pm = PersistenceManagerFactory.createGridSphereRdbms();    
+        PersistenceManagerService pmservice = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+        pm = pmservice.createGridSphereRdbms();
     }
 
     public void setPreferencesDesc(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefsDesc) {

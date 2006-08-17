@@ -2,20 +2,16 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
-import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.portletcontainer.impl.PortletSessionManager;
 
 import javax.servlet.ServletContext;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
-import java.security.Principal;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -39,13 +35,8 @@ public class PortletPageFactory implements PortletSessionListener {
     private static PortletPageFactory instance = null;
     private PortletSessionManager sessionManager = PortletSessionManager.getInstance();
     private PortalConfigService portalConfigService = null;
-    private GroupManagerService groupManagerService = null;
 
     private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
-
-
-    //private static PortletPage templatePage = null;
-
 
     public static String LAYOUT_MAPPING_FILE = null;
 
@@ -61,13 +52,27 @@ public class PortletPageFactory implements PortletSessionListener {
     private static Map masterLayouts = new HashMap();
     private static Set editableLayoutIds = new HashSet();
 
+    private ServletContext context;
+
+    private static String GROUP_LAYOUT_DIR = null;
+
+    // these are deprectaed, taken from PortletTabRegistry
+    private static Map tabDescriptors = new Hashtable();
+    private static Map groupTabs = new Hashtable();
+
 
     private PortletPageFactory() {
 
     }
 
     public void init(ServletContext ctx) {
+
+        this.context = ctx;
+
         USER_LAYOUT_DIR = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/users");
+
+        GROUP_LAYOUT_DIR = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/groups");
+
 
         LAYOUT_MAPPING_FILE = ctx.getRealPath("/WEB-INF/mapping/layout-mapping.xml");
 
@@ -98,12 +103,28 @@ public class PortletPageFactory implements PortletSessionListener {
             userdir.mkdir();
         }
 
-        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        portalConfigService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+
+        // tghis stuff is deprecated and is from PortletTabRegistry
         try {
-            portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
-            groupManagerService = (GroupManagerService)factory.createPortletService(GroupManagerService.class, true);
-        } catch (PortletServiceException e) {
-            log.error("Unable to get service instance", e);
+            File f = new File(GROUP_LAYOUT_DIR);
+            if (!f.exists()) {
+                f.mkdir();
+            } else {
+                String[] files = f.list();
+                for (int i = 0; i < files.length; i++) {
+                    String group = files[i];
+                    int idx = group.indexOf(".xml");
+                    String groupOid = group.substring(0, idx);
+                    String groupFile = GROUP_LAYOUT_DIR + File.separator + groupOid + ".xml";
+                    tabDescriptors.put(groupOid, groupFile);
+                    PortletTabbedPane tabbedPane = PortletLayoutDescriptor.loadPortletTabs(groupFile, LAYOUT_MAPPING_FILE);
+                    groupTabs.put(groupOid, tabbedPane);
+                }
+            }
+        } catch (Exception e) {
+            log.error("Unable to load group layout files!!");
+            e.printStackTrace();
         }
 
     }
@@ -152,51 +173,6 @@ public class PortletPageFactory implements PortletSessionListener {
         return masterLayouts.keySet();
     }
 
-    public void addPortletGroupTab(PortletRequest req, PortletGroup group) {
-        PortletPage page = createPortletPage(req, USER_PAGE);
-        PortletTabbedPane pagePane = page.getPortletTabbedPane();
-        PortletTabbedPane appPane = PortletTabRegistry.getGroupTabs(group);
-        if (appPane != null) {
-            List tabs = appPane.getPortletTabs();
-            try {
-                for (int j = 0; j < tabs.size(); j++) {
-                    PortletTab tab = (PortletTab) tabs.get(j);
-                    pagePane.addTab((PortletTab) deepCopy(tab));
-                }
-            } catch (Exception e) {
-                log.error("Unable to copy application tabs for webapp: " + group.getName());
-            }
-
-            page.setPortletTabbedPane(pagePane);
-            page.init(req, new ArrayList());
-            PortletSession session = req.getPortletSession();
-            Map usersLayouts = (Map)layouts.get(session.getId());
-            usersLayouts.put(USER_PAGE, page);
-        }
-    }
-
-    public void removePortletGroupTab(PortletRequest req, PortletGroup group) {
-        PortletPage page = createPortletPage(req, USER_PAGE);
-        PortletTabbedPane pagePane = page.getPortletTabbedPane();
-        PortletTabbedPane appPane = PortletTabRegistry.getGroupTabs(group);
-        if (appPane != null) {
-            List tabs = appPane.getPortletTabs();
-            try {
-                for (int j = 0; j < tabs.size(); j++) {
-                    PortletTab tab = (PortletTab) tabs.get(j);
-                    pagePane.removeTab(tab);
-                }
-            } catch (Exception e) {
-                log.error("Unable to copy application tabs for webapp: " + group.getName());
-            }
-            page.setPortletTabbedPane(pagePane);
-            page.init(req, new ArrayList());
-            PortletSession session = req.getPortletSession();
-            Map usersLayouts = (Map)layouts.get(session.getId());
-            usersLayouts.put(USER_PAGE, page);
-        }
-    }
-
     public PortletTabbedPane getUserTabbedPane(PortletRequest req) {
 
 
@@ -240,6 +216,7 @@ public class PortletPageFactory implements PortletSessionListener {
         }
 
         // check for portlets no longer in groups and remove if necessary
+        /*
         List groups = (List) req.getGroups();
         List allowedPortlets = new ArrayList();
         Iterator it = groups.iterator();
@@ -253,7 +230,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 allowedPortlets.add(roleInfo.getPortletClass());
             }
         }
-
+        */
 
         // create tmp page
         PortletPage tmpPage = new PortletPage();
@@ -267,9 +244,10 @@ public class PortletPageFactory implements PortletSessionListener {
             // when deleting must reinit everytime
             int i = 0;
             boolean found;
+            List allowedPortlets = new ArrayList();
             while (i < tmpPage.getComponentIdentifierList().size()) {
                 found = false;
-                it = tmpPage.getComponentIdentifierList().iterator();
+                Iterator it = tmpPage.getComponentIdentifierList().iterator();
                 while (it.hasNext() && (!found)) {
                     found = false;
                     ComponentIdentifier cid = (ComponentIdentifier) it.next();
@@ -286,7 +264,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 i++;
             }
 
-            tmpPane.save();
+            tmpPane.save(context);
             return tmpPane;
         } catch (Exception e) {
             log.error("Unable to save user pane!", e);
@@ -298,7 +276,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public PortletPage createFromGroups(PortletRequest req) {
 
-        List groups = (List) req.getGroups();
+
         PortletPage newPage = null;
         PortletTabbedPane pane;
 
@@ -314,41 +292,22 @@ public class PortletPageFactory implements PortletSessionListener {
         pane = newPage.getPortletTabbedPane();
 
 
-        PortletTabbedPane gsTab = PortletTabRegistry.getGroupTabs(req.getGroup());
-        List tabs = gsTab.getPortletTabs();
-        try {
-            for (int j = 0; j < tabs.size(); j++) {
-                PortletTab tab = (PortletTab) tabs.get(j);
+        Map allTabs = getGroupTabs();
 
-                log.debug("adding tab: " + tab.getTitle("en"));
-                pane.addTab((PortletTab) deepCopy(tab));
 
-            }
-        } catch (Exception e) {
-            log.error("Unable to make a clone of tab layout fro group: " + req.getGroup() , e);
-
-        }
-
-        Iterator it = groups.iterator();
+        Iterator it = allTabs.values().iterator();
         while (it.hasNext()) {
-            String groupName = (String)it.next();
-
-            if (groupName.equals(((PortletGroup)req.getGroup()).getName())) continue;
-
-            log.debug("adding group layout: " + groupName);
-            PortletGroup group = groupManagerService.getGroup(groupName);
-            PortletTabbedPane portletTabs = PortletTabRegistry.getGroupTabs(group);
+            PortletTabbedPane portletTabs = (PortletTabbedPane)it.next();
             if (portletTabs != null) {
-                tabs = portletTabs.getPortletTabs();
+                List tabs = portletTabs.getPortletTabs();
                 try {
                     for (int j = 0; j < tabs.size(); j++) {
                         PortletTab tab = (PortletTab) tabs.get(j);
                         log.debug("adding tab: " + tab.getTitle("en"));
-
                         pane.addTab((PortletTab) deepCopy(tab));
                     }
                 } catch (Exception e) {
-                    log.error("Unable to make a clone of tab layout fro group: " + group , e);
+                    log.error("Unable to make a clone of tab layout for group: ", e);
 
                 }
             }
@@ -394,7 +353,7 @@ public class PortletPageFactory implements PortletSessionListener {
     }
 
     public void setPageTheme(PortletPage page, PortletRequest req) {
-        String defaultTheme = portalConfigService.getPortalConfigSettings().getDefaultTheme();
+        String defaultTheme = portalConfigService.getProperty("DEFAULT_THEME");
         String theme = null;
         if (defaultTheme != null) theme = defaultTheme;
         User user = req.getUser();
@@ -561,7 +520,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 // does not have permissions!
                 if (!role.equals("") && !req.isUserInRole(role)) {
                     // use existing page
-                    log.debug("User=" + req.getUser().getUserName() + " does not have proper permissions for layout=" + layoutId + "!!");
+                    log.debug("User does not have proper permissions for layout=" + layoutId + "!!");
                     return null;
                 }
             }
@@ -703,14 +662,14 @@ public class PortletPageFactory implements PortletSessionListener {
                 }
 
                 PortletTab tab = new PortletTab();
-                tab.setTitle(pageName);
+                tab.setTitle("en", pageName);
                 tab.setPortletComponent(tableLayout);
                 PortletTabbedPane pane = new PortletTabbedPane();
                 pane.addTab(tab);
                 page.setPortletTabbedPane(pane);
                 page.setLayoutDescriptor("/tmp/test.xml");
                 try {
-                    page.save();
+                    page.save(context);
                     this.setPageTheme(page, req);
                     page.init(req, new ArrayList());
                 } catch (IOException e) {
@@ -720,6 +679,43 @@ public class PortletPageFactory implements PortletSessionListener {
         }
         return page;
     }
+
+    // This stuff here is all from PortletTabRegistry and is deprecated!!!
+    public void addPortletApplicationTab(String webApplicationName, String tabXMLfile) throws IOException, PersistenceManagerException {
+        PortletTabbedPane webAppTabs = PortletLayoutDescriptor.loadPortletTabs(tabXMLfile, LAYOUT_MAPPING_FILE);
+        tabDescriptors.put(webApplicationName, tabXMLfile);
+        groupTabs.put(webApplicationName, webAppTabs);
+    }
+
+    public Map getGroupTabs() {
+        return Collections.unmodifiableMap(groupTabs);
+    }
+
+
+
+    public void copyFile(File in, String webApplicationName) throws Exception {
+        // copy over group tabs if they don't exist
+        String tabDesc = GROUP_LAYOUT_DIR + File.separator + webApplicationName + ".xml";
+        File out = new File(tabDesc);
+        if (!out.exists() || (in.lastModified() > out.lastModified())) {
+            copyFile(in, out);
+        }
+        addPortletApplicationTab(webApplicationName, tabDesc);
+    }
+
+    private void copyFile(File in, File out) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(in), "UTF-8"));
+        OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(out), "UTF-8");
+        char[] buf = new char[1024];
+        int i = 0;
+        while ((i = reader.read(buf)) != -1) {
+            writer.write(buf, 0, i);
+        }
+        reader.close();
+        writer.close();
+    }
+
+
 
 
 }

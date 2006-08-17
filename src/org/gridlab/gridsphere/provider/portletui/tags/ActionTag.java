@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.jsrimpl.PortletURLImpl;
@@ -388,7 +387,7 @@ public abstract class ActionTag extends BaseComponentTag {
             PortletWindow.State state = PortletWindow.State.toState(windowState);
             actionURI = res.createURI(state);
         } else if (portletMode != null) {
-            Portlet.Mode mode = Portlet.Mode.toMode(portletMode);
+            Mode mode = Mode.toMode(portletMode);
             actionURI = res.createURI(mode);
         } else {
             actionURI = res.createURI(isSecure);

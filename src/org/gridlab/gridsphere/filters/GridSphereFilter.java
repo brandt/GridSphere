@@ -26,10 +26,12 @@ package org.gridlab.gridsphere.filters;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
-import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
+import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
+import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
@@ -42,9 +44,12 @@ import java.io.IOException;
 public class GridSphereFilter implements Filter {
 
     private static Boolean firstDoGet = Boolean.TRUE;
-    private static PortletLog log = SportletLog.getInstance(GridSphereFilter.class);
+    private PortletLog log = SportletLog.getInstance(GridSphereFilter.class);
+    private ServletContext context = null;
 
-    public void init(FilterConfig filterConfig) {}
+    public void init(FilterConfig filterConfig) {
+        context = filterConfig.getServletContext();
+    }
 
     public void destroy() {
     }
@@ -55,11 +60,13 @@ public class GridSphereFilter implements Filter {
         // If first time being called, instantiate all portlets
         if (firstDoGet.equals(Boolean.TRUE)) {
             firstDoGet = Boolean.FALSE;
+            PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
+            layoutEngine.init(context);
             log.debug("Initializing portlets");
             try {
                 // initialize needed services
-                PortletManager portletManager = PortletManager.getInstance();
-                portletManager.init();
+                PortletManagerService portletManager = (PortletManagerService)PortletServiceFactory.createPortletService(PortletManagerService.class, true);
+
                 // initialize all portlets
                 if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
                     PortletRequest portletRequest = new SportletRequest((HttpServletRequest)request);

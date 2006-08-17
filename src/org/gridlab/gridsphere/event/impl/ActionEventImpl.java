@@ -5,9 +5,9 @@
 package org.gridlab.gridsphere.event.impl;
 
 import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 
 import java.util.EventObject;
 

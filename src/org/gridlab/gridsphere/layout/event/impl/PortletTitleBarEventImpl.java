@@ -8,9 +8,9 @@ import org.gridlab.gridsphere.layout.PortletComponent;
 import org.gridlab.gridsphere.layout.PortletTitleBar;
 import org.gridlab.gridsphere.layout.event.ComponentAction;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
-import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portlet.Mode;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
@@ -78,14 +78,14 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      *
      * @return mode the portlet title bar mode
      */
-    public Portlet.Mode getMode() {
-        Portlet.Mode mode;
+    public Mode getMode() {
+        Mode mode;
         String pMode = request.getParameter(SportletProperties.PORTLET_MODE);
         if (pMode != null) {
             try {
-                mode = Portlet.Mode.toMode(pMode);
+                mode = Mode.toMode(pMode);
             } catch (Exception e) {
-                mode = Portlet.Mode.VIEW;
+                mode = Mode.VIEW;
             }
             return mode;
         }

@@ -15,14 +15,15 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.*;
+import org.gridlab.gridsphere.portletcontainer.impl.PortletInvoker;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
-import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridlab.gridsphere.services.core.security.role.PortletRole;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
+import org.gridlab.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.tmf.message.MailMessage;
 
 import javax.portlet.RenderResponse;
@@ -48,6 +49,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private transient PortalConfigService portalConfigService = null;
     private transient TrackerService trackerService = null;
+    private transient PortletRegistryService portletRegistryService = null;
+
+    private transient PortletInvoker portletInvoker = null;
 
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
@@ -192,16 +196,17 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @see ComponentIdentifier
      */
     public List init(PortletRequest req, List list) {
-        PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
-            cacheService = (CacheService) factory.createPortletService(CacheService.class, true);
-            portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
-            trackerService = (TrackerService)factory.createPortletService(TrackerService.class, true);
+            cacheService = (CacheService)PortletServiceFactory.createPortletService(CacheService.class, true);
+            portalConfigService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+            trackerService = (TrackerService)PortletServiceFactory.createPortletService(TrackerService.class, true);
+            portletRegistryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
         } catch (PortletServiceException e) {
-            System.err.println("Unable to init Cache service! " + e.getMessage());
+            log.error("Unable to init services! ", e);
         }
         list = super.init(req, list);
 
+        portletInvoker = new PortletInvoker();
         frameView = (FrameView)getRenderClass(req, "Frame");
 
         ComponentIdentifier compId = new ComponentIdentifier();
@@ -241,10 +246,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     }
 
     protected void doConfig() {
-        PortletRegistry registryManager = PortletRegistry.getInstance();
-        String appID = PortletRegistry.getApplicationPortletID(portletClass);
 
-        ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
+        String appID = portletRegistryService.getApplicationPortletID(portletClass);
+
+        ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
         if (appPortlet != null) {
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
             if (appConfig != null) {
@@ -351,10 +356,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             Principal principal = request.getUserPrincipal();
             String userName = "";
             if (principal == null) {
-                request.setMode(Portlet.Mode.VIEW);
+                request.setMode(Mode.VIEW);
                 userName = "guest";
             } else {
-                Portlet.Mode mode = titleBar.getPortletMode();
+                Mode mode = titleBar.getPortletMode();
                 request.setMode(mode);
                 userName = principal.getName();
             }
@@ -371,13 +376,13 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 onlyRender = false;
                 String pid = (String)request.getAttribute(SportletProperties.PORTLETID);
 
-                String isCounterEnabled = portalConfigService.getPortalConfigSettings().getAttribute(SportletProperties.ENABLE_PORTAL_COUNTER);
+                String isCounterEnabled = portalConfigService.getProperty("ENABLE_PORTAL_COUNTER");
                 if ((isCounterEnabled != null) && (Boolean.valueOf(isCounterEnabled).booleanValue())) {
                     trackerService.trackURL(portletClass, request.getClient().getUserAgent(), userName);
                 }
 
                 try {
-                    PortletInvoker.actionPerformed(pid, action, request, res);
+                    portletInvoker.actionPerformed(pid, action, request, res);
                 } catch (Exception e) {
                     log.error("An error occured performing action on: " + pid, e);
                     // catch it and keep processing
@@ -385,7 +390,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
                 // see if mode has been set
                 String mymodeStr = (String)request.getAttribute(SportletProperties.PORTLET_MODE);
-                Portlet.Mode mymode = Portlet.Mode.toMode(mymodeStr);
+                Mode mymode = Mode.toMode(mymodeStr);
                 if (mymode != null) {
                     //System.err.println("setting title mode to " + mymode);
                     titleBar.setPortletMode(mymode);
@@ -558,7 +563,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             } else {
                 //System.err.println("in portlet frame render: class= " + portletClass + " setting prev mode= " + req.getPreviousMode() + " cur mode= " + req.getMode());
                 if (hasError(req)) {
-                    doRenderError(req, wrappedResponse);
+                    doRenderError(event.getPortletContext(), req, wrappedResponse);
                     postframe.append(storedWriter.toString());
                 } else if ((titleBar != null) && (titleBar.hasRenderError())) {
                     postframe.append(titleBar.getErrorMessage());
@@ -569,11 +574,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                             //System.err.println("in render " + portletClass + " there are render params in the frame setting in request! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
                             req.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr, renderParams);
                         }
-                        PortletInvoker.service((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
+                        portletInvoker.service((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
                         lastFrame = storedWriter.toString();
                         postframe.append(lastFrame);
                     } catch (Exception e) {
-                        doRenderError(req, wrappedResponse);
+                        doRenderError(event.getPortletContext(), req, wrappedResponse);
                         postframe.append(storedWriter.toString());
                     }
                 }
@@ -644,8 +649,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         return bundle.getString(key);
     }
 
-    public void doRenderError(PortletRequest req, PortletResponse res) {
-        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+    public void doRenderError(PortletContext ctx, PortletRequest req, PortletResponse res) {
         Throwable ex = (Throwable)req.getAttribute(SportletProperties.PORTLETERROR + portletClass);
         if (ex == null) return;
         Throwable cause = ex.getCause();
@@ -653,14 +657,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             cause = ex;
         }
         try {
-            PortalConfigService portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
-            TextMessagingService tms = (TextMessagingService)factory.createPortletService(TextMessagingService.class, true);
-            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-            RoleManagerService roleManagerService = (RoleManagerService)factory.createPortletService(RoleManagerService.class, true);
-            Boolean sendMail = Boolean.valueOf(settings.getAttribute("LOGIN_ERROR_HANDLING"));
+            TextMessagingService tms = (TextMessagingService)PortletServiceFactory.createPortletService(TextMessagingService.class, true);
+            RoleManagerService roleManagerService = (RoleManagerService)PortletServiceFactory.createPortletService(RoleManagerService.class, true);
+            Boolean sendMail = Boolean.valueOf(portalConfigService.getProperty("ENABLE_ERROR_HANDLING"));
             if (sendMail.booleanValue()) {
                 MailMessage mailToUser = tms.getMailMessage();
-                List superUsers = roleManagerService.getUsersInRole(PortletRole.SUPER);
+                List superUsers = roleManagerService.getUsersInRole(PortletRole.ADMIN);
                 User superUser = (User)superUsers.get(0);
                 mailToUser.setTo(superUser.getEmailAddress());
                 mailToUser.setSubject(getLocalizedText(req, "PORTAL_ERROR_SUBJECT"));
@@ -686,7 +688,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 try {
                     tms.send(mailToUser);
                     req.setAttribute("lastFrame", lastFrame);
-                    RequestDispatcher dispatcher = GridSphereConfig.getServletContext().getRequestDispatcher("/jsp/errors/custom_error.jsp");
+                    RequestDispatcher dispatcher = ctx.getRequestDispatcher("/jsp/errors/custom_error.jsp");
                     dispatcher.include(req, res);
                     return;
                 } catch (Exception e) {
@@ -698,7 +700,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
         try {
             req.setAttribute("error", cause);
-            RequestDispatcher dispatcher = GridSphereConfig.getServletContext().getRequestDispatcher("/jsp/errors/custom_error.jsp");
+            RequestDispatcher dispatcher = ctx.getRequestDispatcher("/jsp/errors/custom_error.jsp");
             dispatcher.include(req, res);
         } catch (Exception e) {
             System.err.println("Unable to include custom error page!!");
@@ -736,21 +738,21 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             // Override if user is a guest
             Principal principal = req.getUserPrincipal();
             if (principal == null) {
-                req.setMode(Portlet.Mode.VIEW);
+                req.setMode(Mode.VIEW);
             } else {
                 if (titleBar != null) {
-                    Portlet.Mode mode = titleBar.getPortletMode();
+                    Mode mode = titleBar.getPortletMode();
                     //System.err.println("setting mode in " + portletClass + " to " + mode.toString());
                     req.setMode(mode);
                 } else {
-                    req.setMode(Portlet.Mode.VIEW);
+                    req.setMode(Mode.VIEW);
                 }
             }
 
             try {
-                PortletInvoker.messageEvent(portletClass, msg, req, res);
+                portletInvoker.messageEvent(portletClass, msg, req, res);
             } catch (Exception ioex) {
-                // do nothing the render will take care of displaying the error    
+                // do nothing the render will take care of displaying the error
             }
 
         } else {

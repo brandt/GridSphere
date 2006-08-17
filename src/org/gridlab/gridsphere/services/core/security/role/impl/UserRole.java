@@ -4,10 +4,10 @@
 package org.gridlab.gridsphere.services.core.security.role.impl;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridlab.gridsphere.services.core.security.role.PortletRole;
 
 public class UserRole {
 

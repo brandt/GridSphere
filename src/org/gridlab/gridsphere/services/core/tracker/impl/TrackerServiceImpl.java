@@ -3,12 +3,13 @@ package org.gridlab.gridsphere.services.core.tracker.impl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerService;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 
 import java.util.Calendar;
 import java.util.List;
@@ -20,7 +21,8 @@ public class TrackerServiceImpl implements TrackerService, PortletServiceProvide
     private PortletLog log = SportletLog.getInstance(TrackerServiceImpl.class);
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        pm = PersistenceManagerFactory.createGridSphereRdbms();
+        PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+        pm = pmservice.createGridSphereRdbms();
     }
 
     public void destroy() {

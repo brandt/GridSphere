@@ -25,6 +25,7 @@ import org.gridlab.gridsphere.services.core.tracker.impl.TrackerInfo;
 import javax.servlet.UnavailableException;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.*;
 
@@ -60,8 +61,7 @@ public class TrackerStatisticsPortlet extends ActionPortlet {
         List labels = trackerService.getTrackingLabels();
         Set labelSet = new HashSet(labels);
         req.setAttribute("labelSet", labelSet);
-        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        String isCounterEnabled = settings.getAttribute(SportletProperties.ENABLE_PORTAL_COUNTER);
+        String isCounterEnabled = portalConfigService.getProperty("ENABLE_PORTAL_COUNTER");
         CheckBoxBean trackCB = evt.getCheckBoxBean("trackPortletsCB");
         if (isCounterEnabled != null) {
             trackCB.setSelected(Boolean.valueOf(isCounterEnabled).booleanValue());
@@ -75,10 +75,12 @@ public class TrackerStatisticsPortlet extends ActionPortlet {
 
         boolean isSelected = trackCB.isSelected();
 
-        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        settings.setAttribute(SportletProperties.ENABLE_PORTAL_COUNTER, Boolean.valueOf(isSelected).toString());
-
-        portalConfigService.savePortalConfigSettings(settings);
+        portalConfigService.setProperty("ENABLE_PORTAL_COUNTER", Boolean.valueOf(isSelected).toString());
+        try {
+            portalConfigService.storeProperties();
+        } catch (IOException e) {
+            log.error("Unable to set ENABLE_PORTAL_COUNTER in properties file");
+        }
     }
 
     public void showLabel(FormEvent evt) {

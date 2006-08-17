@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +17,8 @@ public final class DefaultPortletAction implements PortletAction, Serializable {
 
     private Map store = new HashMap();
     private String name;
-
+    public static final String DEFAULT_PORTLET_ACTION = "gs_action";
+    
     /**
      * Constructs an instance of DefaultPortletAction with the provided name
      */
@@ -91,7 +90,7 @@ public final class DefaultPortletAction implements PortletAction, Serializable {
 
     public String toString() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append(SportletProperties.DEFAULT_PORTLET_ACTION + "=");
+        buffer.append(DEFAULT_PORTLET_ACTION + "=");
         buffer.append(name);
         Object[] parameterNames = store.keySet().toArray();
         for (int ii = 0; ii < parameterNames.length; ++ii) {

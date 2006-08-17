@@ -4,13 +4,12 @@
  */
 package org.gridlab.gridsphere.portlet.service;
 
-import org.gridlab.gridsphere.portlet.PortletException;
 
 /**
  * The <code>PortletServiceException</code> is the base class of all
- * checked exceptions thrown by portlet services.
+ * exceptions thrown by portlet services.
  */
-public class PortletServiceException extends PortletException {
+public class PortletServiceException extends RuntimeException {
 
     /**
      * Constructs a new portlet exception.

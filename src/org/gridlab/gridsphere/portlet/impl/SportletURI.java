@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -153,7 +152,7 @@ public class SportletURI implements PortletURI {
      *
      * @param mode the portlet mode that will be invoked by this URI
      */
-    public void setPortletMode(Portlet.Mode mode) {
+    public void setPortletMode(Mode mode) {
         store.put(SportletProperties.PORTLET_MODE, mode.toString());
     }
 
@@ -170,10 +169,10 @@ public class SportletURI implements PortletURI {
         String port = null;
   
         if (req.isSecure() || isSecure) {
-            port = GridSphereConfig.getProperty("gridsphere.port.https");
+            port = SportletProperties.getInstance().getProperty("gridsphere.port.https");
             s.append("https://");
         } else {
-            port = GridSphereConfig.getProperty("gridsphere.port.http");
+            port = SportletProperties.getInstance().getProperty("gridsphere.port.http");
             s.append("http://");
         }
 

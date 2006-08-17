@@ -124,20 +124,6 @@ public interface PortletRequest extends HttpServletRequest {
     public List getRoles();
 
     /**
-     * Returns the portlet groups associated with this user
-     *
-     * @return the portlet groups associated with this user
-     */
-    public List getGroups();
-
-    /**
-     * Returns the core portlet group
-     *
-     * @return the core portlet groups
-     */
-    public PortletGroup getGroup();
-
-    /**
      * Returns the PortletSettings object of the concrete portlet.
      *
      * @return the portlet settings
@@ -250,14 +236,14 @@ public interface PortletRequest extends HttpServletRequest {
      *
      * @return the portlet mode
      */
-    public Portlet.Mode getMode();
+    public Mode getMode();
 
     /**
      * Sets the mode that the portlet is running in.
      *
      * @param mode the portlet mode
      */
-    public void setMode(Portlet.Mode mode);
+    public void setMode(Mode mode);
 
     /**
      * Returns the value of the parameter with the given name, or null if no
@@ -302,7 +288,7 @@ public interface PortletRequest extends HttpServletRequest {
      *
      * @return the previous portlet mode
      */
-    public Portlet.Mode getPreviousMode();
+    public Mode getPreviousMode();
 
     /**
      * Returns the window state that the portlet is running in.

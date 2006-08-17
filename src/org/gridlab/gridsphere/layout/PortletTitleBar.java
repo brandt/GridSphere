@@ -11,10 +11,15 @@ import org.gridlab.gridsphere.layout.event.PortletTitleBarListener;
 import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.layout.view.Render;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portletcontainer.*;
+import org.gridlab.gridsphere.portletcontainer.impl.PortletInvoker;
+import org.gridlab.gridsphere.services.core.registry.PortletRegistryService;
+import org.gridlab.gridsphere.services.core.security.role.PortletRole;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -34,14 +39,17 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private String title = "unknown title";
     private String portletClass = null;
 
+    private transient PortletRegistryService portletRegistryService = null;
+    private transient PortletInvoker portletInvoker = null;
+
     private transient PortletWindow.State windowState = PortletWindow.State.NORMAL;
 
-    private transient Portlet.Mode portletMode = Portlet.Mode.VIEW;
-    private transient Portlet.Mode previousMode = Portlet.Mode.VIEW;
+    private transient Mode portletMode = Mode.VIEW;
+    private transient Mode previousMode = Mode.VIEW;
     private transient List allowedWindowStates = new ArrayList();
-    private String errorMessage = "";
-    private boolean hasError = false;
-    private boolean isActive = false;
+    private transient String errorMessage = "";
+    private transient boolean hasError = false;
+    private transient boolean isActive = false;
 
     private transient List modeLinks = null;
     private transient List windowLinks = null;
@@ -150,23 +158,23 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
          *
          * @param mode the portlet mode
          */
-        public PortletModeLink(Portlet.Mode mode, Locale locale) throws IllegalArgumentException {
+        public PortletModeLink(Mode mode, Locale locale) throws IllegalArgumentException {
             if (mode == null) return;
 
             altTag = mode.getText(locale);
 
             // Set the image src
-            if (mode.equals(Portlet.Mode.CONFIGURE)) {
+            if (mode.equals(Mode.CONFIGURE)) {
                 imageSrc = configImage;
                 symbol=configSymbol;//WAP 2.0
-            } else if (mode.equals(Portlet.Mode.EDIT)) {
+            } else if (mode.equals(Mode.EDIT)) {
                 imageSrc = editImage;
                 symbol=editSymbol;//WAP 2.0
-            } else if (mode.equals(Portlet.Mode.HELP)) {
+            } else if (mode.equals(Mode.HELP)) {
                 imageSrc = helpImage;
                 symbol=helpSymbol;//WAP 2.0
                 cursor = "help";
-            } else if (mode.equals(Portlet.Mode.VIEW)) {
+            } else if (mode.equals(Mode.VIEW)) {
                 imageSrc = viewImage;
                 symbol=viewSymbol;//WAP 2.0
             } else {
@@ -321,7 +329,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      *
      * @param mode the portlet mode expressed as a string
      */
-    public void setPortletMode(Portlet.Mode mode) {
+    public void setPortletMode(Mode mode) {
         if (mode != null) this.portletMode = mode;
     }
 
@@ -330,7 +338,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      *
      * @return the portlet mode expressed as a string
      */
-    public Portlet.Mode getPortletMode() {
+    public Mode getPortletMode() {
         return portletMode;
     }
 
@@ -339,7 +347,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      *
      * @param mode the portlet mode expressed as a string
      */
-    public void setPreviousMode(Portlet.Mode mode) {
+    public void setPreviousMode(Mode mode) {
         if (mode != null) this.previousMode = mode;
     }
 
@@ -348,7 +356,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      *
      * @return the portlet mode expressed as a string
      */
-    public Portlet.Mode getPreviousMode() {
+    public Mode getPreviousMode() {
         return previousMode;
     }
 
@@ -360,7 +368,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     public void setPortletModeAsString(String mode) {
         if (mode == null) return;
         try {
-            this.portletMode = Portlet.Mode.toMode(mode);
+            this.portletMode = Mode.toMode(mode);
         } catch (IllegalArgumentException e) {
             // do nothing
         }
@@ -416,6 +424,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
         titleView = (Render)getRenderClass(req, "TitleBar");
+        portletInvoker = new PortletInvoker();
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);
@@ -430,13 +439,17 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     /**
      * Sets configuration information about the supported portlet modes,
      * allowed window states and title bar and web app name obtained from {@link PortletSettings}.
-     * Information is queried from the {@link PortletRegistry}
+     * Information is queried from the {@link PortletRegistryService}
      */
     protected void doConfig() {
-        PortletRegistry registryManager = PortletRegistry.getInstance();
-        String appID = PortletRegistry.getApplicationPortletID(portletClass);
+        try {
+            portletRegistryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
+        } catch (PortletServiceException e) {
+            log.error("Unable to init services! ", e);
+        }
 
-        ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
+        String appID = portletRegistryService.getApplicationPortletID(portletClass);
+        ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
         if (appPortlet != null) {
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
             if (appConfig != null) {
@@ -556,10 +569,10 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         Client client = req.getClient();
         List supportedModes = new ArrayList();
         // set portlet modes
-        PortletRegistry registryManager = PortletRegistry.getInstance();
-        String appID = PortletRegistry.getApplicationPortletID(portletClass);
 
-        ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
+        String appID = portletRegistryService.getApplicationPortletID(portletClass);
+
+        ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
         if (appPortlet != null) {
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
             if (appConfig != null) {
@@ -571,20 +584,13 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         }
 
         // Unless user is admin they should not see configure mode
-        /*
-        boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
-
-        */
-        //User user = req.getUser();
-        //boolean hasConfigurePermission = ((roleService.isUserInRole(user, PortletRole.ADMIN)) || (roleService.isUserInRole(user, PortletRole.SUPER)));
-
         List userRoles = (List)req.getRoles();
-        boolean hasConfigurePermission = ((userRoles.contains(PortletRole.ADMIN.getName())) || userRoles.contains(PortletRole.SUPER.getName()));
+        boolean hasConfigurePermission = userRoles.contains(PortletRole.ADMIN.getName());
         List smodes = new ArrayList();
-        Portlet.Mode mode;
+        Mode mode;
         for (i = 0; i < supportedModes.size(); i++) {
-            mode = (Portlet.Mode) supportedModes.get(i);
-            if (mode.equals(Portlet.Mode.CONFIGURE)) {
+            mode = (Mode) supportedModes.get(i);
+            if (mode.equals(Mode.CONFIGURE)) {
                 if (hasConfigurePermission) {
                     smodes.add(mode);
                 }
@@ -604,7 +610,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             // create a URI for each of the portlet modes
             PortletURI portletURI;
             PortletModeLink modeLink;
-            mode = (Portlet.Mode) smodes.get(i);
+            mode = (Mode) smodes.get(i);
             portletURI = res.createURI();
             portletURI.addParameter(this.getComponentIDVar(req), this.componentIDStr);
             //portletURI.addParameter(SportletProperties.PORTLETID, portletClass);
@@ -668,7 +674,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                     }
                     if (winEvent != null) {
                         try {
-                            PortletInvoker.windowEvent((String)req.getAttribute(SportletProperties.PORTLETID), winEvent, req, res);
+                            portletInvoker.windowEvent((String)req.getAttribute(SportletProperties.PORTLETID), winEvent, req, res);
                         } catch (Exception e) {
                             hasError = true;
                             errorMessage += "Failed to invoke window event method of portlet: " + portletClass;
@@ -764,7 +770,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         try {
             //System.err.println("invoking  doTitle:" + title);
-            PortletInvoker.doTitle((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
+            portletInvoker.doTitle((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
             //out.println(" (" + portletMode.toString() + ") ");
             title = storedWriter.toString();
         } catch (Exception e) {
@@ -793,7 +799,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         PortletTitleBar t = (PortletTitleBar) super.clone();
         t.title = this.title;
         t.portletClass = this.portletClass;
-        t.portletMode = Portlet.Mode.toMode(this.portletMode.toString());
+        t.portletMode = Mode.toMode(this.portletMode.toString());
         t.windowState = PortletWindow.State.toState(this.windowState.toString());
         t.previousMode = this.previousMode;
         t.errorMessage = this.errorMessage;

@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlet.service.spi;
 
 import javax.servlet.ServletContext;
-import java.io.IOException;
 import java.util.Enumeration;
 
 /**
@@ -54,12 +53,5 @@ public interface PortletServiceConfig {
      * @return the servlet configuration
      */
     public ServletContext getServletContext();
-
-    /**
-     * Stores the service config settings
-     *
-     * @throws java.io.IOException if the store failed
-     */
-    public void store() throws IOException;
 
 }

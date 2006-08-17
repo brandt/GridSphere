@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.service.PortletService;
+import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 
 import java.io.IOException;
 import java.util.List;
@@ -63,4 +64,6 @@ public interface PortletManagerService extends PortletService {
      * @return the portlet web application description
      */
     public String getPortletWebApplicationDescription(String webApplicationName);
+
+    public void addPortletWebApplication(PortletWebApplication portletWebApp);
 }

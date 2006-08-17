@@ -1,6 +1,6 @@
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.PortletContext;
 import javax.portlet.PortletRequestDispatcher;
@@ -66,7 +66,7 @@ public class PortletContextImpl implements PortletContext {
      */
 
     public String getServerInfo() {
-        return GridSphereConfig.getProperty("gridsphere.release");
+        return SportletProperties.getInstance().getProperty("gridsphere.release");
     }
 
     /**
@@ -145,7 +145,7 @@ public class PortletContextImpl implements PortletContext {
      * @see #getMinorVersion()
      */
     public int getMajorVersion() {
-        return Integer.valueOf(GridSphereConfig.getProperty("portletapi.majorversion")).intValue();
+        return Integer.valueOf(SportletProperties.getInstance().getProperty("portletapi.majorversion")).intValue();
     }
 
     /**
@@ -156,7 +156,7 @@ public class PortletContextImpl implements PortletContext {
      * @see #getMajorVersion()
      */
     public int getMinorVersion() {
-        return Integer.valueOf(GridSphereConfig.getProperty("portletapi.minorversion")).intValue();
+        return Integer.valueOf(SportletProperties.getInstance().getProperty("portletapi.minorversion")).intValue();
     }
 
     /**

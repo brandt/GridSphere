@@ -21,26 +21,14 @@ import java.util.List;
  */
 public interface LoginService extends PortletService {
 
-    public static final String CAN_USER_CREATE_ACCOUNT = "LoginService.CAN_USER_CREATE_ACCOUNT";
-
     public List getSupportedAuthModules();
 
     public void loadAuthModules(String authModsPath, ClassLoader classloader);
 
-    //public void addActiveAuthModule(User user, LoginAuthModule authModule);
-
-    //public void removeActiveAuthModule(User user, String moduleClassName);
-
-    //public List getActiveAuthModules(User user);
-
     public List getActiveAuthModules();
-
-    //public boolean hasActiveAuthModule(User user, String moduleClassName);
 
     public List getAuthModules();
 
-    //public LoginAuthModule getAuthModule(String moduleClassName);
-    
     public LoginUserModule getActiveLoginModule();
 
     /**

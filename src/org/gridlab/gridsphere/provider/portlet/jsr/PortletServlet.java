@@ -9,7 +9,6 @@ import org.gridlab.gridsphere.portlet.jsrimpl.*;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 
@@ -17,13 +16,13 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.ClientImpl;
 
-import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRPortletWebApplicationImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType;
-import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
+import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
+import org.gridlab.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 
 import javax.portlet.*;
@@ -51,21 +50,18 @@ public class PortletServlet extends HttpServlet
         implements Servlet, ServletConfig, 
         HttpSessionAttributeListener, HttpSessionListener, HttpSessionActivationListener {
 
-    protected transient static PortletLog log = SportletLog.getInstance(PortletServlet.class);
-    protected transient static PortletRegistry registry = null;
+    private transient PortletLog log = SportletLog.getInstance(PortletServlet.class);
 
-    protected JSRPortletWebApplicationImpl portletWebApp = null;
-    
-    private PortletManager manager = PortletManager.getInstance();
+    private transient PortletRegistryService registryService = null;
 
-    protected PortletContext portletContext = null;
+    private JSRPortletWebApplicationImpl portletWebApp = null;
 
-    protected Map portlets = null;
-    protected Map portletclasses = null;
+    private PortletContext portletContext = null;
 
-    protected Map portletConfigHash = null;
+    private Map portlets = null;
+    private Map portletclasses = null;
 
-    //private PortletPreferencesManager prefsManager = null;
+    private Map portletConfigHash = null;
 
     private Map userKeys = new HashMap();
     private List securePortlets = new ArrayList();
@@ -142,10 +138,9 @@ public class PortletServlet extends HttpServlet
         portletContext = new PortletContextImpl(ctx);
 
         // load in any authentication modules if found-- this is a GridSphere extension
-        PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
-            LoginService loginService = (LoginService)factory.createPortletService(LoginService.class, true);
-            InputStream is = this.getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
+            LoginService loginService = (LoginService)PortletServiceFactory.createPortletService(LoginService.class, true);
+            InputStream is = getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
             if (is != null) {
                 String authModulePath = this.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
                 loginService.loadAuthModules(authModulePath, Thread.currentThread().getContextClassLoader());
@@ -164,7 +159,7 @@ public class PortletServlet extends HttpServlet
         // make sure request comes only from gridsphere servlet same ip
         //System.err.println("remote Address: " + request.getRemoteAddr());
 
-        registry = PortletRegistry.getInstance();
+
         // If no portlet ID exists, this may be a command to init or shutdown a portlet instance
 
         // currently either all portlets are initialized or shutdown, not one individually...
@@ -189,7 +184,17 @@ public class PortletServlet extends HttpServlet
                     it.remove();
                 }
             }
-            manager.addWebApp(portletWebApp);
+            try {
+                PortletManagerService manager = (PortletManagerService)PortletServiceFactory.createPortletService(PortletManagerService.class, true);
+                manager.addPortletWebApplication(portletWebApp);
+            } catch (PortletServiceException e) {
+                log.error("Unable to create instance of PortletManagerService", e);
+            }
+            try {
+                registryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
+            } catch (PortletServiceException e) {
+                log.error("Unable to create instance of PortletRegistryService", e);
+            }
             return;
         } else if (method.equals(SportletProperties.INIT_CONCRETE)) {
             // do nothing for concrete portlets
@@ -237,17 +242,15 @@ public class PortletServlet extends HttpServlet
         Portlet portlet = null;
         if (idx > 0) {
             portletName = pid.substring(idx+1);
-            portlet = (Portlet) portlets.get(portletName);
-            request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(portletName));
             // this hack uses the portletclasses hash that identifies classname to portlet mappings
         } else {
             portletName = (String)portletclasses.get(pid);
-            portlet = (Portlet)portlets.get(portletName);
-            request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(portletName));
         }
+        portlet = (Portlet) portlets.get(portletName);
+        request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(portletName));
 
         JSRApplicationPortletImpl appPortlet =
-                (JSRApplicationPortletImpl) registry.getApplicationPortlet(pid);
+                (JSRApplicationPortletImpl) registryService.getApplicationPortlet(pid);
 
         if (appPortlet == null) {
             log.error("Unable to get portlet from registry identified by: " + pid);
@@ -447,14 +450,14 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         List myModes = new ArrayList();
         PortletMode m = PortletMode.VIEW;
         while (it.hasNext()) {
-            org.gridlab.gridsphere.portlet.Portlet.Mode mode = (org.gridlab.gridsphere.portlet.Portlet.Mode)it.next();
-            if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.VIEW) {
+            org.gridlab.gridsphere.portlet.Mode mode = (org.gridlab.gridsphere.portlet.Mode)it.next();
+            if (mode == org.gridlab.gridsphere.portlet.Mode.VIEW) {
                 m = PortletMode.VIEW;
-            } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.EDIT) {
+            } else if (mode == org.gridlab.gridsphere.portlet.Mode.EDIT) {
                 m = PortletMode.EDIT;
-            } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.HELP) {
+            } else if (mode == org.gridlab.gridsphere.portlet.Mode.HELP) {
                 m = PortletMode.HELP;
-            } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.CONFIGURE) {
+            } else if (mode == org.gridlab.gridsphere.portlet.Mode.CONFIGURE) {
                 m = new PortletMode("config");
             } else {
                 m = new PortletMode(mode.toString());

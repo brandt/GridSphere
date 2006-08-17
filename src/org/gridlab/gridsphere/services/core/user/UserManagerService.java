@@ -4,7 +4,7 @@
 package org.gridlab.gridsphere.services.core.user;
 
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.core.persistence.QueryFilter;
+import org.gridlab.gridsphere.services.core.persistence.QueryFilter;
 
 import java.util.List;
 

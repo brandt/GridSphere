@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Vector;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -231,7 +230,7 @@ public class PortletLayoutEngine {
                 log.info("\n\n\n\n\nreiniting and saving page!!!!!\n\n\n\n\n\n");
                 page.init(event.getPortletRequest(), new Vector());
                 PortletTabbedPane pane = pageFactory.getUserTabbedPane(event.getPortletRequest());
-                if (pane != null) pane.save();
+                if (pane != null) pane.save(event.getPortletContext());
             }
         }
 

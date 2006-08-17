@@ -11,21 +11,19 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridlab.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridlab.gridsphere.provider.event.jsr.impl.ActionFormEventImpl;
 import org.gridlab.gridsphere.provider.event.jsr.impl.RenderFormEventImpl;
 import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
-import org.gridlab.gridsphere.core.persistence.QueryFilter;
+import org.gridlab.gridsphere.services.core.persistence.QueryFilter;
 
 import javax.portlet.*;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
-import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -793,8 +791,7 @@ public class ActionPortlet extends GenericPortlet {
     }
 
     public PortletService createPortletService(Class serviceClass) throws PortletServiceException {
-        PortletServiceFactory factory = SportletServiceFactory.getInstance();
-        return factory.createPortletService(serviceClass, true);
+        return PortletServiceFactory.createPortletService(serviceClass, true);
     }
 
 }

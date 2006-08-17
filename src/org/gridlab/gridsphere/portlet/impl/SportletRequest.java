@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.UserPrincipal;
 import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -129,7 +129,7 @@ public class SportletRequest extends HttpServletRequestWrapper implements Portle
      * @return the PortletData
      */
     public PortletData getData() {
-        if (getMode() == Portlet.Mode.CONFIGURE) {
+        if (getMode() == Mode.CONFIGURE) {
             return null;
         }
         PortletDataManager dataManager = (PortletDataManager)this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_DATA_MANAGER);
@@ -215,28 +215,6 @@ public class SportletRequest extends HttpServletRequestWrapper implements Portle
     }
 
     /**
-     * Returns the PortletGroup representing the core portal group
-     *
-     * @param group a PortletGroup .
-     * @see PortletGroup
-     */
-    public void setGroup(PortletGroup group) {
-        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_GROUP, group);
-    }
-
-    public PortletGroup getGroup() {
-        return (PortletGroup)this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_GROUP);
-    }
-
-    public List getGroups() {
-        return (List)this.getHttpServletRequest().getAttribute(SportletProperties.PORTLETGROUPS);
-    }
-
-    public void setGroups(List roles) {
-        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLETGROUPS, roles);
-    }
-
-    /**
      * Returns the locale of the preferred language. The preference is based on the user's
      * choice of language(s) and/or the client's Accept-Language header.
      * <p/>
@@ -300,9 +278,9 @@ public class SportletRequest extends HttpServletRequestWrapper implements Portle
      *
      * @return the previous portlet mode
      */
-    public Portlet.Mode getPreviousMode() {
-        Portlet.Mode prev = (Portlet.Mode) this.getHttpServletRequest().getAttribute(SportletProperties.PREVIOUS_MODE);
-        if (prev == null) prev = Portlet.Mode.VIEW;
+    public Mode getPreviousMode() {
+        Mode prev = (Mode) this.getHttpServletRequest().getAttribute(SportletProperties.PREVIOUS_MODE);
+        if (prev == null) prev = Mode.VIEW;
         return prev;
     }
 
@@ -311,7 +289,7 @@ public class SportletRequest extends HttpServletRequestWrapper implements Portle
      *
      * @param previousMode the previous portlet mode
      */
-    public void setPreviousMode(Portlet.Mode previousMode) {
+    public void setPreviousMode(Mode previousMode) {
         this.getHttpServletRequest().setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
     }
 
@@ -338,9 +316,9 @@ public class SportletRequest extends HttpServletRequestWrapper implements Portle
      *
      * @return the portlet mode
      */
-    public Portlet.Mode getMode() {
+    public Mode getMode() {
         String mode = (String) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_MODE);
-        return Portlet.Mode.toMode(mode);
+        return Mode.toMode(mode);
     }
 
     /**
@@ -348,7 +326,7 @@ public class SportletRequest extends HttpServletRequestWrapper implements Portle
      *
      * @param mode the portlet mode
      */
-    public void setMode(Portlet.Mode mode) {
+    public void setMode(Mode mode) {
         this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_MODE, mode.toString());
     }
 

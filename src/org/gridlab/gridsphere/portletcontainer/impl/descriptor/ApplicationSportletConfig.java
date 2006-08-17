@@ -6,9 +6,9 @@
 
 package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParamList;
-import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portlet.Mode;
+import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ConfigParamList;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 
 import java.util.*;
@@ -212,7 +212,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
             int idx2 = markup.indexOf(m.getName());
             if ((idx1 > 0) || (idx2 > 0) || (markup.equalsIgnoreCase(m.getName()))) {
                 modes = m.getPortletModes();
-                if (!modes.contains(Portlet.Mode.VIEW)) modes.add(Portlet.Mode.VIEW);
+                if (!modes.contains(Mode.VIEW)) modes.add(Mode.VIEW);
                 return modes;
             }
         }

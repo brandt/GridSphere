@@ -22,6 +22,7 @@ public class TextFieldTag extends InputTag {
     protected int size = 0;
     protected int maxlength = 0;
     protected String beanIdSource = null;
+    protected String onFocus = null;
 
     public String getBeanidsource() {
         return beanIdSource;
@@ -67,6 +68,14 @@ public class TextFieldTag extends InputTag {
         this.maxlength = maxlength;
     }
 
+    public void setOnfocus(String onFocus) {
+        this.onFocus = onFocus;
+    }
+
+    public String getOnfocus() {
+        return onFocus;
+    }
+
     public int doStartTag() throws JspException {
         return EVAL_BODY_INCLUDE;
     }
@@ -77,21 +86,18 @@ public class TextFieldTag extends InputTag {
             if (textFieldBean == null) {
                 //log.debug("Creating new text field bean");
                 textFieldBean = new TextFieldBean();
-                if (maxlength != 0) textFieldBean.setMaxLength(maxlength);
-                if (size != 0) textFieldBean.setSize(size);
                 this.setBaseComponentBean(textFieldBean);
             } else {
                 //log.debug("Using existing text field bean");
-                if (maxlength != 0) textFieldBean.setMaxLength(maxlength);
-                if (size != 0) textFieldBean.setSize(size);
                 this.updateBaseComponentBean(textFieldBean);
             }
         } else {
             textFieldBean = new TextFieldBean();
-            if (maxlength != 0) textFieldBean.setMaxLength(maxlength);
-            if (size != 0) textFieldBean.setSize(size);
             this.setBaseComponentBean(textFieldBean);
         }
+        if (maxlength != 0) textFieldBean.setMaxLength(maxlength);
+        if (size != 0) textFieldBean.setSize(size);
+        if (onFocus != null) textFieldBean.setOnfocus(onFocus);
         if (cssClass != null) textFieldBean.addCssClass(cssClass);
         //debug();
         Tag parent = getParent();

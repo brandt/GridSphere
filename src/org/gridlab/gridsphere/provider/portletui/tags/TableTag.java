@@ -381,7 +381,7 @@ public class TableTag extends BaseComponentTag {
         } else {
             PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
             PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
-            PortletURI uri = res.createURI((org.gridlab.gridsphere.portlet.Portlet.Mode)req.getMode());
+            PortletURI uri = res.createURI((org.gridlab.gridsphere.portlet.Mode)req.getMode());
             tableBean.setJSR(false);
             tableBean.setURIString(uri.toString());
         }

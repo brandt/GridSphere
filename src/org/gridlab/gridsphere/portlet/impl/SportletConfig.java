@@ -96,7 +96,7 @@ public class SportletConfig implements PortletConfig {
      * @return <code>true</code> if the window supports the given state,
      *         <code>false</code> otherwise
      */
-    public boolean supports(Portlet.Mode mode, Client client) {
+    public boolean supports(Mode mode, Client client) {
         // set portlet modes
         List supportedModes = appConfig.getSupportedModes(client.getMimeType());
         return (supportedModes.contains(mode) ? true : false);

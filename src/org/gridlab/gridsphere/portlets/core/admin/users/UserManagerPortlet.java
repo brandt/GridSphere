@@ -15,10 +15,9 @@ import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
-import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
+import org.gridlab.gridsphere.services.core.security.role.PortletRole;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.portlets.core.login.LoginPortlet;
-import org.gridlab.gridsphere.core.persistence.QueryFilter;
 
 import javax.servlet.UnavailableException;
 import java.util.Iterator;
@@ -34,7 +33,7 @@ public class UserManagerPortlet extends ActionPortlet {
     // Portlet services
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
-    private GroupManagerService groupManagerService = null;
+
     private RoleManagerService roleManagerService = null;
     private PortalConfigService portalConfigService = null;
 
@@ -44,7 +43,6 @@ public class UserManagerPortlet extends ActionPortlet {
         log.debug("Entering initServices()");
         try {
             this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
-            this.groupManagerService = (GroupManagerService) config.getContext().getService(GroupManagerService.class);
             this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
             this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
             this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
@@ -115,8 +113,8 @@ public class UserManagerPortlet extends ActionPortlet {
         HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
         hf.setValue("true");
 
-        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+        String savePasswd = portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS);
+        if (savePasswd.equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
         }
 
@@ -225,12 +223,13 @@ public class UserManagerPortlet extends ActionPortlet {
         roleFrame.setTableModel(model);
 
         setUserValues(evt, user);
-        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+        String savePasswds = portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS);
+        if (savePasswds.equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
         }
 
-        if (settings.getAttribute(LoginPortlet.SUPPORT_X509_AUTH).equals(Boolean.TRUE.toString())) {
+        String supportX509 = portalConfigService.getProperty(LoginPortlet.SUPPORT_X509_AUTH);
+        if (supportX509.equals(Boolean.TRUE.toString())) {
             req.setAttribute("certSupport", "true");
         }
 
@@ -274,8 +273,8 @@ public class UserManagerPortlet extends ActionPortlet {
             setNextState(req, "doListUsers");
         } catch (PortletException e) {
             createErrorMessage(evt, e.getMessage());
-            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-            if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+            String savePasswds = portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS);
+            if (savePasswds.equals(Boolean.TRUE.toString())) {
                 req.setAttribute("savePass", "true");
             }
             if (newuser.equals("true")) {
@@ -297,11 +296,11 @@ public class UserManagerPortlet extends ActionPortlet {
             req.setAttribute("user", user);
             this.userManagerService.deleteUser(user);
             this.passwordManagerService.deletePassword(user);
-            List groups = this.groupManagerService.getGroups(user);
-            Iterator it = groups.iterator();
-            while (it.hasNext()) {
-                PortletGroup group = (PortletGroup)it.next();
-                this.groupManagerService.deleteUserInGroup(user, group);
+            List userRoles = this.roleManagerService.getRolesForUser(user);
+            Iterator ur = userRoles.iterator();
+            while (ur.hasNext()) {
+                PortletRole pr = (PortletRole)ur.next();
+                this.roleManagerService.deleteUserInRole(user, pr);
             }
             createSuccessMessage(evt, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
         }
@@ -359,8 +358,8 @@ public class UserManagerPortlet extends ActionPortlet {
             isInvalid = true;
         }
 
-        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+        String savePasswds = portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS);
+        if (savePasswds.equals(Boolean.TRUE.toString())) {
             if (isInvalidPassword(event, newuser)){
                 isInvalid = true;
             }
@@ -416,8 +415,8 @@ public class UserManagerPortlet extends ActionPortlet {
             newuserflag = true;
         }
 
-        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+        String savePasswds = portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS);
+        if (savePasswds.equals(Boolean.TRUE.toString())) {
             PasswordEditor editor = passwordManagerService.editPassword(user);
             String password = event.getPasswordBean("password").getValue();
             boolean isgood = this.isInvalidPassword(event, newuserflag);
@@ -468,12 +467,19 @@ public class UserManagerPortlet extends ActionPortlet {
         while (it.hasNext()) {
             PortletRole role = (PortletRole)it.next();
             CheckBoxBean cb = event.getCheckBoxBean(role.getName() + "CB");
-            if (cb.isSelected()) roleManagerService.addUserToRole(user, role);
+            if (cb.isSelected()) {
+                roleManagerService.addUserToRole(user, role);
+            } else {
+                if (roleManagerService.isUserInRole(user, role))
+                    if((!role.equals(PortletRole.ADMIN)) || (roleManagerService.getUsersInRole(PortletRole.ADMIN).size() > 1)) {
+                        roleManagerService.deleteUserInRole(user, role);
+                    } else {
+                        log.warn("Can't delete user, one user in role ADMIN necessary");
+                        createErrorMessage(event, "Unable to delete user! One user with ADMIN role is necessary");
+                    }
+            }
+            log.debug("Exiting saveUserRole()");
         }
-        groupManagerService.addUserToGroup(user, groupManagerService.getCoreGroup());
-
-
-        log.debug("Exiting saveUserRole()");
     }
 
     private void createErrorMessage(FormEvent event, String msg) {

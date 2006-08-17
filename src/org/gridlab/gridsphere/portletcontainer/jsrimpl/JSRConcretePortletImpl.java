@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer.jsrimpl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -12,6 +11,7 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDeploymentDescriptor2;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -102,10 +102,9 @@ public class JSRConcretePortletImpl implements ConcretePortlet {
      */
     public void save() throws IOException {
         try {
-            //portletDD.setConcretePortlet(this);
             portletDD.save();
         } catch (PersistenceManagerException e) {
-            //  log.error("Unable to save concrete portlet descriptor! " + concreteID, e);
+            throw new IOException("Unable to save JSR concrete portlet: " + e.getMessage());
         }
     }
 

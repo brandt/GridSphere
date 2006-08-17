@@ -5,10 +5,6 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.User;
 
 import javax.servlet.http.HttpSessionBindingEvent;
@@ -280,13 +276,6 @@ public class SportletUserImpl implements User, HttpSessionBindingListener {
 
     public void valueUnbound(HttpSessionBindingEvent event) {
         //System.err.println("valueUnbound of SportletUserImpl invoked");
-        PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
-        try {
-            pm.update(this);
-        } catch (PersistenceManagerException e) {
-            // what can we do??
-        }
-        pm = null;
     }
 
     /**

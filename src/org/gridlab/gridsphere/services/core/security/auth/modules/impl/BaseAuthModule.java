@@ -2,8 +2,8 @@ package org.gridlab.gridsphere.services.core.security.auth.modules.impl;
 
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.Description;
+import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam;
+import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.Description;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;

@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
@@ -29,11 +29,9 @@ public class PasswordAuthModule extends BaseAuthModule implements LoginAuthModul
 
         super(moduleDef);
 
-        // Get instance of service factory
-        PortletServiceFactory factory = SportletServiceFactory.getInstance();
         // Get instance of password manager service
         try {
-            this.passwordManager = (PasswordManagerService) factory.createPortletService(PasswordManagerService.class, true);
+            this.passwordManager = (PasswordManagerService)PortletServiceFactory.createPortletService(PasswordManagerService.class, true);
         } catch (Exception e) {
             log.error("Unable to get instance of password manager service!", e);
         }

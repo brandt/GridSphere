@@ -18,6 +18,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
     protected int size = 0;
     protected int maxlength = 0;
     private String beanIdSource = null;
+    protected String onFocus = null;
 
 
     /**
@@ -36,6 +37,14 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
     public InputBean(String name) {
         super(name);
         this.cssClass = INPUT_STYLE;
+    }
+
+    public void setOnfocus(String onFocus) {
+        this.onFocus = onFocus;
+    }
+
+    public String getOnfocus() {
+        return onFocus;
     }
 
     /**
@@ -111,6 +120,11 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
             sb.append("maxlength=\"");
             sb.append(maxlength);
             sb.append("\" ");
+        }
+        if (onFocus != null) {
+            sb.append("onfocus=\"");
+            sb.append(onFocus);
+            sb.append("\"");
         }
         sb.append(checkReadOnly());
         sb.append(checkDisabled());

@@ -5,6 +5,7 @@
  */
 package org.gridlab.gridsphere.services.core.portal;
 
+import java.io.IOException;
 
 
 /**
@@ -12,8 +13,10 @@ package org.gridlab.gridsphere.services.core.portal;
  */
 public interface PortalConfigService {
 
-    public void savePortalConfigSettings(PortalConfigSettings configSettings);
+    public String getProperty(String key);
 
-    public PortalConfigSettings getPortalConfigSettings();
+    public void setProperty(String key, String value);
+
+    public void storeProperties() throws IOException;
 
 }

@@ -4,13 +4,10 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi.impl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition;
-import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
 
 import javax.servlet.ServletContext;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -24,7 +21,6 @@ public class SportletServiceConfig implements PortletServiceConfig {
 
     private Properties configProperties;
     private ServletContext servletContext;
-    private SportletServiceDefinition def;
 
     /**
      * Constructor disallows non-argument instantiation
@@ -41,7 +37,6 @@ public class SportletServiceConfig implements PortletServiceConfig {
      */
     public SportletServiceConfig(SportletServiceDefinition def,
                                  ServletContext servletContext) {
-        this.def = def;
         this.configProperties = def.getConfigProperties();
         this.servletContext = servletContext;
     }
@@ -94,22 +89,6 @@ public class SportletServiceConfig implements PortletServiceConfig {
      */
     public ServletContext getServletContext() {
         return servletContext;
-    }
-
-    /**
-     * Stores the service config settings
-     *
-     * @throws java.io.IOException if the store failed
-     */
-    public void store() throws IOException {
-        SportletServiceDescriptor desc = def.getServiceDescriptor();
-        def.setConfigProperties(configProperties);
-        desc.setServiceDefinition(def);
-        try {
-            desc.save();
-        } catch (PersistenceManagerException e) {
-            throw new IOException("Unable to serialize portlet service config");
-        }
     }
 
 }

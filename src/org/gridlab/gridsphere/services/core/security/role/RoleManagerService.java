@@ -8,7 +8,6 @@
  */
 package org.gridlab.gridsphere.services.core.security.role;
 
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 

@@ -4,15 +4,17 @@
  */
 package org.gridlab.gridsphere.services.core.security.group.impl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
+import org.gridlab.gridsphere.services.core.security.group.PortletGroup;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerService;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 
 import java.util.*;
 
@@ -30,30 +32,12 @@ public class GroupManagerServiceImpl implements PortletServiceProvider, GroupMan
     }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        pm = PersistenceManagerFactory.createGridSphereRdbms();
+        PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+        pm = pmservice.createGridSphereRdbms();
     }
 
     public void destroy() {
         log.info("Calling destroy()");
-    }
-
-    public List getUserGroups() {
-        String criteria = "";
-        return selectGroupEntries(criteria);
-    }
-
-    private List selectGroupEntries(String criteria) {
-        String oql = "select groupRequest from "
-                + jdoGroupRequest
-                + " groupRequest "
-                + criteria;
-        try {
-            return pm.restoreList(oql);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving access right";
-            log.error(msg, e);
-            return new ArrayList();
-        }
     }
 
     public UserGroup getUserGroup(User user, PortletGroup group) {
@@ -117,10 +101,6 @@ public class GroupManagerServiceImpl implements PortletServiceProvider, GroupMan
     public PortletGroup getGroup(String name) {
         if (name == null) throw new IllegalArgumentException("group name cannot be null!");
         return selectPortletGroup("where grp.Name='" + name + "'");
-    }
-
-    public PortletGroup getCoreGroup() {
-        return selectPortletGroup("where grp.Core=" + true);
     }
 
     private PortletGroup selectPortletGroup(String criteria) {

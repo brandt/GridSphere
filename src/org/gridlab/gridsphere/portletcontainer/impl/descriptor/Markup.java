@@ -5,7 +5,7 @@
 package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
 import org.exolab.castor.types.AnyNode;
-import org.gridlab.gridsphere.portlet.Portlet;
+import org.gridlab.gridsphere.portlet.Mode;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
@@ -82,16 +82,16 @@ public class Markup {
     public List getPortletModesAsStrings() {
         List modeStrings = new ArrayList();
         if (this.modes.isEmpty()) {
-            modeStrings.add(Portlet.Mode.CONFIGURE.toString());
-            modeStrings.add(Portlet.Mode.EDIT.toString());
-            modeStrings.add(Portlet.Mode.HELP.toString());
-            modeStrings.add(Portlet.Mode.VIEW.toString());
+            modeStrings.add(Mode.CONFIGURE.toString());
+            modeStrings.add(Mode.EDIT.toString());
+            modeStrings.add(Mode.HELP.toString());
+            modeStrings.add(Mode.VIEW.toString());
         }
         for (int i = 0; i < this.modes.size(); i++) {
             AnyNode a = (AnyNode) this.modes.get(i);
-            Portlet.Mode mode = null;
+            Mode mode = null;
             try {
-                mode = Portlet.Mode.toMode(a.getLocalName());
+                mode = Mode.toMode(a.getLocalName());
                 modeStrings.add(mode.toString());
             } catch (IllegalArgumentException e) {
                 log.error("unable to parse mode: " + mode);
@@ -109,16 +109,16 @@ public class Markup {
     public List getPortletModes() {
         List portletModes = new ArrayList();
         if (this.modes.isEmpty()) {
-            portletModes.add(Portlet.Mode.CONFIGURE);
-            portletModes.add(Portlet.Mode.EDIT);
-            portletModes.add(Portlet.Mode.HELP);
-            portletModes.add(Portlet.Mode.VIEW);
+            portletModes.add(Mode.CONFIGURE);
+            portletModes.add(Mode.EDIT);
+            portletModes.add(Mode.HELP);
+            portletModes.add(Mode.VIEW);
         }
         for (int i = 0; i < this.modes.size(); i++) {
             AnyNode a = (AnyNode) this.modes.get(i);
-            Portlet.Mode mode = null;
+            Mode mode = null;
             try {
-                mode = Portlet.Mode.toMode(a.getLocalName());
+                mode = Mode.toMode(a.getLocalName());
                 portletModes.add(mode);
             } catch (Exception e) {
                 log.error("unable to parse mode: " + mode);

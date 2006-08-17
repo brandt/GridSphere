@@ -7,16 +7,14 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.layout.view.TableLayoutView;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
-import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
+import org.gridlab.gridsphere.services.core.registry.PortletRegistryService;
 
 import java.io.Serializable;
 import java.util.*;
@@ -33,8 +31,8 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
     public static final String PORTLET_NO_ACTION = "gs_none";
 
     protected transient TableLayoutView tableView = null;
-    private transient GroupManagerService groupService = null;
 
+    protected transient PortletRegistryService registryService;
     /**
      * css Style of the table
      */
@@ -68,13 +66,12 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
     }
 
     public List init(PortletRequest req, List list) {
-        tableView = (TableLayoutView)getRenderClass(req, "TableLayout");
-        PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
-            groupService = (GroupManagerService)factory.createPortletService(GroupManagerService.class, true);
+            registryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
         } catch (PortletServiceException e) {
-            System.err.println("Unable to init group manager service! " + e.getMessage());
+            log.error("Unable to create instance of PortletRegistryService!");
         }
+        tableView = (TableLayoutView)getRenderClass(req, "TableLayout");
         return super.init(req, list);
     }
 
@@ -140,9 +137,9 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
 
     public Map getAllPortletsToAdd(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
-        PortletRegistry registry = PortletRegistry.getInstance();
+
         Map allPortlets = new HashMap();
-        Collection appColl = registry.getAllApplicationPortlets();
+        Collection appColl = registryService.getAllApplicationPortlets();
         Locale locale = req.getLocale();
         Iterator appIt = appColl.iterator();
         while (appIt.hasNext()) {
@@ -161,6 +158,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         return allPortlets;
     }
 
+    /*
     public Map getAvailablePortletsToAdd(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
         if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) return getAllPortletsToAdd(event);
@@ -203,6 +201,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         }
         return availPortlets;
     }
+    */
 
     public void doRender(GridSphereEvent event) {
         super.doRender(event);

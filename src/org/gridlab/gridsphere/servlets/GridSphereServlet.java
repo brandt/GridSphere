@@ -5,24 +5,25 @@
 package org.gridlab.gridsphere.servlets;
 
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.hibernate.DBTask;
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 import org.gridlab.gridsphere.layout.PortletPageFactory;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.UserPrincipal;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceCollection;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
+import org.gridlab.gridsphere.portletcontainer.impl.PortletSessionManager;
+import org.gridlab.gridsphere.portletcontainer.impl.PortletServiceDescriptor;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
-import org.gridlab.gridsphere.services.core.security.group.impl.UserGroup;
 import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
+import org.gridlab.gridsphere.services.core.security.group.PortletGroup;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridlab.gridsphere.services.core.security.role.PortletRole;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.request.RequestService;
@@ -51,43 +52,39 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         HttpSessionAttributeListener, HttpSessionListener {
 
     /* GridSphere logger */
-    private static PortletLog log = SportletLog.getInstance(GridSphereServlet.class);
-
-    /* GridSphere service factory */
-    private static SportletServiceFactory factory = null;
+    private PortletLog log = SportletLog.getInstance(GridSphereServlet.class);
 
     /* GridSphere Portlet Registry Service */
-    private static PortletManagerService portletManager = null;
+    private PortletManagerService portletManager = null;
 
     /* GridSphere Access Control Service */
-    private static RoleManagerService roleService = null;
-    private static GroupManagerService groupService = null;
+    private RoleManagerService roleService = null;
+    private GroupManagerService groupService = null;
 
-    private static UserManagerService userManagerService = null;
+    private UserManagerService userManagerService = null;
 
-    private static LoginService loginService = null;
+    private PortalConfigService portalConfigService = null;
 
-    private static TrackerService trackerService = null;
+    private LoginService loginService = null;
 
-    private static PortalConfigService portalConfigService = null;
+    private TrackerService trackerService = null;
+
     private PortletMessageManager messageManager = SportletMessageManager.getInstance();
 
     /* GridSphere Portlet layout Engine handles rendering */
-    private static PortletLayoutEngine layoutEngine = null;
+    private PortletLayoutEngine layoutEngine = null;
 
     /* creates cookie requests */
     private RequestService requestService = null;
 
     private PortletContext context = null;
-    private static Boolean firstDoGet = Boolean.TRUE;
+    private Boolean firstDoGet = Boolean.TRUE;
 
-    private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
+    private PortletSessionManager sessionManager = PortletSessionManager.getInstance();
 
     //private static PortletRegistry registry = PortletRegistry.getInstance();
     private static final String COOKIE_REQUEST = "cookie-request";
     private int COOKIE_EXPIRATION_TIME = 60 * 60 * 24 * 7;  // 1 week (in secs)
-
-    private PortletGroup coreGroup = null;
 
     private boolean isTCK = false;
 
@@ -99,30 +96,40 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
-        GridSphereConfig.setServletConfig(config);
         this.context = new SportletContext(config);
-        factory = SportletServiceFactory.getInstance();
-        factory.init();
+        String descriptorPath = config.getServletContext().getRealPath("/WEB-INF/GridSphereServices.xml");
+        // add core gridsphere services to ServiceFactory
+        PortletServiceDescriptor descriptor = null;
+        try {
+            System.err.println("loading from: " + descriptorPath);
+            descriptor = new PortletServiceDescriptor(descriptorPath);
+            SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
+            PortletServiceFactory.addServices("gridsphere", config.getServletContext(), serviceCollection, Thread.currentThread().getContextClassLoader());
+        } catch (Exception e) {
+            //log.error("error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
+            throw new PortletServiceException("error unmarshalling " + descriptorPath, e);
+        }
         log.debug("in init of GridSphereServlet");
     }
 
     public synchronized void initializeServices() throws PortletServiceException {
-        requestService = (RequestService) factory.createPortletService(RequestService.class, true);
-        log.debug("Creating access control manager service");
-        roleService = (RoleManagerService) factory.createPortletService(RoleManagerService.class, true);
-        groupService = (GroupManagerService) factory.createPortletService(GroupManagerService.class, true);
+        requestService = (RequestService) PortletServiceFactory.createPortletService(RequestService.class, true);
+
+        roleService = (RoleManagerService) PortletServiceFactory.createPortletService(RoleManagerService.class, true);
+        groupService = (GroupManagerService) PortletServiceFactory.createPortletService(GroupManagerService.class, true);
 
         // create root user in default group if necessary
         log.debug("Creating user manager service");
-        userManagerService = (UserManagerService) factory.createPortletService(UserManagerService.class, true);
-
-        loginService = (LoginService) factory.createPortletService(LoginService.class, true);
+        userManagerService = (UserManagerService) PortletServiceFactory.createPortletService(UserManagerService.class, true);
+        portalConfigService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+        loginService = (LoginService) PortletServiceFactory.createPortletService(LoginService.class, true);
         log.debug("Creating portlet manager service");
-        portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, true);
-        portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
-        trackerService = (TrackerService) factory.createPortletService(TrackerService.class, true);
+
         layoutEngine = PortletLayoutEngine.getInstance();
-        layoutEngine.init(context);
+
+        portletManager = (PortletManagerService) PortletServiceFactory.createPortletService(PortletManagerService.class, true);
+        trackerService = (TrackerService) PortletServiceFactory.createPortletService(TrackerService.class, true);
+
     }
 
     /**
@@ -148,20 +155,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         // If first time being called, instantiate all portlets
         if (firstDoGet.equals(Boolean.TRUE)) {
             firstDoGet = Boolean.FALSE;
-            log.debug("Testing Database");
-            // checking if database setup is correct
-            DBTask dt = new DBTask();
-            dt.setAction(DBTask.ACTION_CHECKDB);
-            dt.setConfigDir(GridSphereConfig.getServletContext().getRealPath(""));
 
             log.debug("Initializing services");
             try {
                 // initialize needed services
                 initializeServices();
                 updateDatabase();
-
-                // deep inside a service is used which is why this must follow the factory.init
-                layoutEngine.init(getServletConfig().getServletContext());
                 if (isTCK) req.getSession().setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.TCK_PAGE);
             } catch (Exception e) {
                 log.error("GridSphere initialization failed!", e);
@@ -170,13 +169,15 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 rd.forward(req, res);
                 return;
             }
-            coreGroup = groupService.getCoreGroup();
 
-            if ((userManagerService.getNumUsers() == 0) || (roleService.getUsersInRole(PortletRole.SUPER)) == null) {
+            if ((userManagerService.getNumUsers() == 0) || (roleService.getUsersInRole(PortletRole.ADMIN)).size() == 0) {
                 req.getSession().setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.SETUP_PAGE);
             }
 
         }
+
+        req.setAttribute("context", context);
+
         // check to see if user has been authorized by means of container managed authorization
         checkWebContainerAuthorization(event);
 
@@ -335,8 +336,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             u.setUserID("tckuser");
             u.setID("500");
             List groupList = new ArrayList();
-            groupList.add(coreGroup.getName());
-            req.setAttribute(SportletProperties.PORTLET_GROUP, coreGroup);
+
             req.setAttribute(SportletProperties.PORTLET_USER, u);
             req.setAttribute(SportletProperties.PORTLETGROUPS, groupList);
             req.setAttribute(SportletProperties.PORTLET_ROLE, new ArrayList());
@@ -372,7 +372,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         }
         // set user, role and groups in request
-        req.setAttribute(SportletProperties.PORTLET_GROUP, coreGroup);
+
         req.setAttribute(SportletProperties.PORTLET_USER, user);
         req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
         req.setAttribute(SportletProperties.PORTLET_ROLE, roles);
@@ -513,7 +513,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             layoutEngine.loginPortlets(event);
 
             String realuri = uri.toString().substring("http".length());
-            Boolean useSecureRedirect = Boolean.valueOf(GridSphereConfig.getProperty("use.https.redirect"));
+            Boolean useSecureRedirect = Boolean.valueOf(portalConfigService.getProperty("use.https.redirect"));
             if (useSecureRedirect.booleanValue()) {
                 realuri = "https" + realuri;
             } else {
@@ -590,9 +590,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         //userSessionManager.destroy();
         layoutEngine.destroy();
         // Shutdown services
-        factory.shutdownServices();
-        // shutdown the persistencemanagers
-        PersistenceManagerFactory.shutdown();
+        PortletServiceFactory.shutdownServices();
         System.gc();
     }
 
@@ -664,7 +662,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void contextInitialized(ServletContextEvent event) {
         System.err.println("in contextInitialized of GridSphereServlet");
         ServletContext ctx = event.getServletContext();
-        GridSphereConfig.setServletContext(ctx);
         log.debug("contextName: " + ctx.getServletContextName());
         log.debug("context path: " + ctx.getRealPath(""));
 
@@ -692,65 +689,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
     public void updateDatabase() {
-        // update group entries from 2.0.4 to 2.1
-        List groupEntries = groupService.getUserGroups();
-        Iterator it = groupEntries.iterator();
-        while (it.hasNext()) {
-            UserGroup ge = (UserGroup)it.next();
-            String roleName = ge.getRoleName();
-            //System.err.println(ge.getUser() + " " + ge.getGroup() + ge.getRole());
-            if ((roleName != null) && !roleName.equals("")) {
-                if (ge.getUser() != null) {
-                    //System.err.println("user= " + ge.getUser() + " role=" + roleName);
-                    roleService.addUserToRole(ge.getUser(), roleService.getRole(roleName));
-                    if (roleName.equalsIgnoreCase("SUPER")) {
-                        roleService.addUserToRole(ge.getUser(), PortletRole.ADMIN);
-                        roleService.addUserToRole(ge.getUser(), PortletRole.USER);
-                    }
-                    if (roleName.equalsIgnoreCase("ADMIN")) {
-                        roleService.addUserToRole(ge.getUser(), PortletRole.USER);
-                    }
-                    ge.setRoleName("");
-                    groupService.saveUserGroup(ge);
-                }
-            }
-            PortletRole role = ge.getRole();
-            if (role != null) {
-                if (ge.getUser() != null) {
-                    //System.err.println("user1= " + ge.getUser() + " role=" + roleName);
-                    roleService.addUserToRole(ge.getUser(), role);
-                    if (role.equals(PortletRole.SUPER)) {
-                        roleService.addUserToRole(ge.getUser(), PortletRole.ADMIN);
-                        roleService.addUserToRole(ge.getUser(), PortletRole.USER);
-                    }
-                    if (role.equals(PortletRole.ADMIN)) {
-                        roleService.addUserToRole(ge.getUser(), PortletRole.USER);
-                    }
-                    ge.setRole(null);
-                    groupService.saveUserGroup(ge);
-                }
-            }
-        }
-        List groups = groupService.getGroups();
-        it = groups.iterator();
-        while (it.hasNext()) {
-            PortletGroup group = (PortletGroup)it.next();
-            Set portletSet = group.getPortletRoleList();
-            Iterator portletSetIt = portletSet.iterator();
-            while (portletSetIt.hasNext()) {
-                SportletRoleInfo roleInfo = (SportletRoleInfo)portletSetIt.next();
-                String roleName = roleInfo.getRole();
-                PortletRole portletRole = roleService.getRole(roleName);
-                if (portletRole != null) {
-                    if (portletRole.getName().equalsIgnoreCase("GUEST")) portletRole = roleService.getRole("USER");
-                    roleInfo.setSportletRole(portletRole);
-                    roleInfo.setRole("");
-                }
-            }
-            groupService.saveGroup(group);
-        }
-        // eliminate GUEST role
-        PortletRole guest = roleService.getRole("GUEST");
-        if (guest != null) roleService.deleteRole(guest);
+
     }
 }

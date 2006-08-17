@@ -12,7 +12,6 @@ import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
-import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.locale.LocaleService;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
@@ -20,6 +19,7 @@ import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordExc
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridlab.gridsphere.services.core.security.role.PortletRole;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.utils.DateUtil;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
@@ -31,6 +31,7 @@ import org.gridsphere.tmf.services.TextMessageServiceConfig;
 import javax.servlet.UnavailableException;
 import java.text.DateFormat;
 import java.util.*;
+import java.io.File;
 
 public class ProfileManagerPortlet extends ActionPortlet {
 
@@ -43,9 +44,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
     private RoleManagerService roleManagerService = null;
-    private GroupManagerService groupManagerService = null;
     private LocaleService localeService = null;
-    private LayoutManagerService layoutMgr = null;
+
     private TextMessagingService tms = null;
     private PortalConfigService portalConfigService = null;
 
@@ -54,10 +54,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
         try {
             this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
             this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
-            this.groupManagerService = (GroupManagerService) config.getContext().getService(GroupManagerService.class);
             this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
             this.localeService = (LocaleService) config.getContext().getService(LocaleService.class);
-            this.layoutMgr = (LayoutManagerService) config.getContext().getService(LayoutManagerService.class);
             this.tms = (TextMessagingService) config.getContext().getService(TextMessagingService.class);
             this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
         } catch (PortletServiceException e) {
@@ -75,19 +73,54 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
     public void doViewUser(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
-        DefaultTableModel model = setUserTable(event, false);
+        setUserTable(event, false);
         DefaultTableModel messaging = getMessagingFrame(event, false);
         FrameBean messagingFrame = event.getFrameBean("messagingFrame");
-        FrameBean groupsFrame = event.getFrameBean("groupsFrame");
-        groupsFrame.setTableModel(model);
+
         messagingFrame.setTableModel(messaging);
         messagingFrame.setValign("top");
-        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-        if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+
+        if (portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
         }
 
+        ListBoxBean themeLB = event.getListBoxBean("themeLB");
+        String[] themes = null;
+
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
+        String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
+        themeLB.clear();
+
+        String themesPath = getPortletConfig().getContext().getRealPath("/themes");
+        /// retrieve the current renderkit
+        themesPath += "/" + renderkit;
+
+        File f = new File(themesPath);
+        if (f.isDirectory()) {
+            themes = f.list();
+        }
+
+        for (int i = 0; i < themes.length; i++) {
+            ListBoxItemBean lb = new ListBoxItemBean();
+            lb.setValue(themes[i].trim());
+            if (themes[i].trim().equalsIgnoreCase(theme)) lb.setSelected(true);
+            themeLB.addBean(lb);
+        }
+
         setNextState(req, VIEW_USER_JSP);
+    }
+
+    public void saveTheme(FormEvent event) {
+        PortletRequest req = event.getPortletRequest();
+        ListBoxBean themeLB = event.getListBoxBean("themeLB");
+        String theme = themeLB.getSelectedValue();
+
+        User user = req.getUser();
+        if (user != null) {
+            user.setAttribute(User.THEME, theme);
+            userManagerService.saveUser(user);
+            req.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, theme);
+        }
     }
 
     public void doConfigureSettings(FormEvent event) throws PortletException {
@@ -98,7 +131,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         setNextState(req, CONFIGURE_JSP);
     }
 
-    public DefaultTableModel setUserTable(FormEvent event, boolean disable) {
+    public void setUserTable(FormEvent event, boolean disable) {
         PortletRequest req = event.getPortletRequest();
         User user = req.getUser();
 
@@ -108,7 +141,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 user.getLastLoginTime(), DateFormat.FULL, DateFormat.FULL));
         req.setAttribute("username", user.getUserName());
 
-        if (req.getRoles().contains(PortletRole.SUPER.getName())) {
+        if (req.getRoles().contains(PortletRole.ADMIN.getName())) {
             TextFieldBean userName = event.getTextFieldBean("userNameTF");
             userName.setValue(user.getUserName());
         }   else {
@@ -179,96 +212,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         timezoneList.sortByValue();
         timezoneList.setDisabled(disable);
         timezoneList.setMultipleSelection(false);
-
-        DefaultTableModel model = new DefaultTableModel();
-
-        // fill in groups model
-        List groups = groupManagerService.getGroups();
-
-        if (groups.size() > 1) {
-            req.setAttribute("showgroups", Boolean.TRUE);
-        } 
-        TableRowBean tr = new TableRowBean();
-        tr.setHeader(true);
-        TableCellBean tcGroups = new TableCellBean();
-        TextBean tbGroups = new TextBean();
-
-        String text = this.getLocalizedText(req, "PROFILE_GROUPS");
-        tbGroups.setValue(text);
-
-        TextBean tbGroupsDesc = new TextBean();
-        String desc = this.getLocalizedText(req, "PROFILE_GROUP_DESC");
-        tbGroupsDesc.setValue(desc);
-        tcGroups.addBean(tbGroups);
-        TableCellBean tcGroupsDesc = new TableCellBean();
-        tcGroupsDesc.addBean(tbGroupsDesc);
-
-        tr.addBean(tcGroups);
-        tr.addBean(tcGroupsDesc);
-        model.addTableRowBean(tr);
-
-
-        it = groups.iterator();
-        TableRowBean groupsTR;
-        TableCellBean groupsTC;
-        TableCellBean groupsDescTC;
-
-        while (it.hasNext()) {
-            PortletGroup g = (PortletGroup) it.next();
-            if (g.getType().equals(PortletGroup.Type.HIDDEN)) continue;
-            groupsTR = new TableRowBean();
-            groupsTC = new TableCellBean();
-            groupsDescTC = new TableCellBean();
-            String groupDesc = g.getDescription();
-
-            CheckBoxBean cb = new CheckBoxBean();
-            cb.setBeanId("groupCheckBox");
-            if (groupManagerService.isUserInGroup(user, g)) cb.setSelected(true);
-            cb.setValue(g.getName());
-            cb.setDisabled(disable);
-            // make sure user cannot deselect core gridsphere group -- not necessary since
-            // we made core group HIDDEN
-            //PortletGroup coreGroup = groupManagerService.getCoreGroup();
-            //if (g.equals(coreGroup)) cb.setDisabled(true);
-
-            TextBean groupTB = new TextBean();
-            groupTB.setValue(g.getName());
-            if (g.getType().equals(PortletGroup.Type.PRIVATE) && (!cb.isSelected())) {
-                cb.setDisabled(true);
-            }
-            groupsTC.addBean(cb);
-            groupsTC.addBean(groupTB);
-            TextBean groupDescTB = new TextBean();
-            groupDescTB.setValue(groupDesc);
-            groupsDescTC.addBean(groupDescTB);
-            if (g.getType().equals(PortletGroup.Type.PRIVATE)) {
-                TextBean priv = event.getTextBean("privateTB");
-                priv.setValue("<br/>" + this.getLocalizedText(req, "GROUP_NOTIFY"));
-                List admins = roleManagerService.getUsersInRole(PortletRole.ADMIN);
-                //List admins = aclManagerService.getUsers(g, PortletRole.ADMIN);
-                String emailAddress;
-                if (admins.isEmpty()) {
-                    List supers = roleManagerService.getUsersInRole(PortletRole.SUPER);
-                    User root = (User) supers.get(0);
-                    emailAddress = root.getEmailAddress();
-                } else {
-                    User admin = (User) admins.get(0);
-                    emailAddress = admin.getEmailAddress();
-                }
-                String mailhref = "&nbsp;<a href=\"mailto:" + emailAddress + "\">" + this.getLocalizedText(req, "GROUP_ADMIN") + "</a>";
-                TextBean mailTB = new TextBean();
-                mailTB.setValue(mailhref);
-                groupsDescTC.addBean(priv);
-                groupsDescTC.addBean(mailTB);
-                groupsTR.addBean(groupsTC);
-                groupsTR.addBean(groupsDescTC);
-            }  else {
-                groupsTR.addBean(groupsTC);
-                groupsTR.addBean(groupsDescTC);
-            }
-            model.addTableRowBean(groupsTR);
-        }
-        return model;
     }
 
 
@@ -276,29 +219,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         DefaultTableModel model = new DefaultTableModel();
 
         PortletRequest req = event.getPortletRequest();
-
-   //     TableRowBean trMessaging = new TableRowBean();
-
- //       TableCellBean tcMessagingDesc = new TableCellBean();
- //       TableCellBean tcMessagingUserid = new TableCellBean();
-
-
-  //      TextBean tbMessagingDesc = event.getTextBean("tbMessagingDesc");
-  //      TextBean tbMessagingUserid = event.getTextBean("tbMessagingUserid");
-  //      String text = this.getLocalizedText(req, "PROFILE_MESSAGING_SERVICE");
-  //      tbMessagingDesc.setValue(text);
-  //      tcMessagingDesc.addBean(tbMessagingDesc);
-  //      tbMessagingUserid = event.getTextBean("tbMessagingUserid");
-  //      text = this.getLocalizedText(req, "PROFILE_MESSAGING_USERID");
- //       tbMessagingUserid.setValue(text);
-  //      tcMessagingUserid.addBean(tbMessagingUserid);
-
-   //     trMessaging.addBean(tcMessagingDesc);
-   //     trMessaging.addBean(tcMessagingUserid);
-        // add the header to the model
-   //     trMessaging.setHeader(true);
-
-    //    model.addTableRowBean(trMessaging);
 
         Set services = tms.getServices();
 
@@ -400,56 +320,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
     }
 
 
-    public void doSaveGroups(FormEvent event) {
-
-        PortletRequest req = event.getPortletRequest();
-        User user = req.getUser();
-
-        CheckBoxBean groupsCB = event.getCheckBoxBean("groupCheckBox");
-        List selectedGroups = groupsCB.getSelectedValues();
-
-        // first get groups user is already in
-        List groups = groupManagerService.getGroups(user);
-        PortletGroup coreGroup = groupManagerService.getCoreGroup();
-        Iterator groupsIt = groups.iterator();
-        List usergroups = new ArrayList();
-        while (groupsIt.hasNext()) {
-            PortletGroup group = (PortletGroup) groupsIt.next();
-            if (!group.equals(coreGroup)) {
-                log.debug("user is in group: " + group.getName());
-                //aclManagerService.deleteUserGroup(ge);
-                usergroups.add(group.getName());
-            }
-        }
-
-        // approve all selected group requests
-        Iterator it = selectedGroups.iterator();
-        while (it.hasNext()) {
-            String groupStr = (String) it.next();
-            log.debug("Selected group: " + groupStr);
-            PortletGroup selectedGroup = this.groupManagerService.getGroup(groupStr);
-            if (!usergroups.contains(selectedGroup.getName())) {
-                log.debug("does not have group: " + selectedGroup.getName());
-                this.groupManagerService.addUserToGroup(user, selectedGroup);
-                log.debug("adding tab " + selectedGroup.getName());
-                this.layoutMgr.addGroupTab(req, selectedGroup);
-                this.layoutMgr.reloadPage(req);
-            }
-            usergroups.remove(selectedGroup.getName());
-        }
-
-        // subtract groups
-        it = usergroups.iterator();
-        while (it.hasNext()) {
-            String groupStr = (String) it.next();
-            log.debug("Removing group :" + groupStr);
-            PortletGroup group = this.groupManagerService.getGroup(groupStr);
-            this.groupManagerService.deleteUserInGroup(user, group);
-            createSuccessMessage(event, this.getLocalizedText(req, "USER_GROUPS_SUCCESS"));
-            this.layoutMgr.refreshPage(req);
-        }
-    }
-
     public void doSaveUser(FormEvent event) {
 
         PortletRequest req = event.getPortletRequest();
@@ -491,7 +361,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         // Validate user name
         String userName = "";
-        if (req.getRoles().contains(PortletRole.SUPER.getName())) {
+        if (req.getRoles().contains(PortletRole.ADMIN.getName())) {
             userName = event.getTextFieldBean("userNameTF").getValue();
             if (userName.equals("")) {
                 message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br />");

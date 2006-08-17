@@ -46,21 +46,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
         req.setAttribute(SportletProperties.CONTEXT_PATH, req.getContextPath()); // contextPath;
         req.setAttribute(SportletProperties.SERVLET_PATH, req.getServletPath());
 
-        /*
-        String[] portletNames = req.getParameterValues("portletName");
-        if ( portletNames != null ) {
-        System.err.println("have a TCK POrtlet!!");
-        StringTokenizer tokenizer;
-        if (portletNames.length > 1) System.err.println("Arggh multiple portlets!!");
-        for (int i = 0; i < portletNames.length; i++) {
-        tokenizer =  new StringTokenizer(portletNames[i], "/");
-        String appName = tokenizer.nextToken();
-        portletComponentID = tokenizer.nextToken();
-        }
-
-
-        } else {
-        */
         String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
         if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
         portletComponentID = req.getParameter(compVar);
@@ -68,7 +53,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
             log.debug("Received a null component ID");
             portletComponentID = "";
         }
-
 
         log.debug("Received cid= " + portletComponentID);
 
@@ -81,7 +65,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
             log.debug("Received message: " + messageStr);
             message = new DefaultPortletMessage(messageStr);
         }
-
     }
 
     public static DefaultPortletAction createAction(Object request) {
@@ -97,9 +80,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
             actionStr = ((javax.portlet.PortletRequest)request).getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
         }
         if (actionStr != null) {
-
-
-
             myaction = new DefaultPortletAction(actionStr);
             String prefix = null;
             if (request instanceof PortletRequest) {

@@ -8,9 +8,8 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.PortletMessageManager;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 
 import javax.servlet.*;
@@ -31,8 +30,6 @@ import java.util.Set;
  * obtained).
  */
 public class SportletContext implements PortletContext {
-
-    private static SportletServiceFactory factory = SportletServiceFactory.getInstance();
 
     private ServletContext context = null;
 
@@ -253,7 +250,7 @@ public class SportletContext implements PortletContext {
      */
     public PortletService getService(Class service)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
-        return factory.createPortletService(service, true);
+        return PortletServiceFactory.createPortletService(service, true);
     }
 
     /**
@@ -263,15 +260,15 @@ public class SportletContext implements PortletContext {
      * @return the major version
      */
     public String getVersionInfo() {
-        return GridSphereConfig.getProperty("gridsphere.release");
+        return SportletProperties.getInstance().getProperty("gridsphere.release");
     }
 
     public int getMajorVersion() {
-        return Integer.valueOf(GridSphereConfig.getProperty("gridsphere.portletapi.majorversion")).intValue();
+        return Integer.valueOf(SportletProperties.getInstance().getProperty("gridsphere.portletapi.majorversion")).intValue();
     }
 
     public int getMinorVersion() {
-        return Integer.valueOf(GridSphereConfig.getProperty("gridsphere.portletapi.minorversion")).intValue();
+        return Integer.valueOf(SportletProperties.getInstance().getProperty("gridsphere.portletapi.minorversion")).intValue();
     }
 
     /**
@@ -291,7 +288,7 @@ public class SportletContext implements PortletContext {
      * @return the string containing at least name and version number
      */
     public String getContainerInfo() {
-        return GridSphereConfig.getProperty("gridsphere.release");
+        return SportletProperties.getInstance().getProperty("gridsphere.release");
     }
 
     /**

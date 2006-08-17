@@ -3,13 +3,10 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridlab.gridsphere.provider.portletui.beans.CalendarBean;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.Tag;
 
 /**
  * A <code>TextFieldTag</code> represents a text field element

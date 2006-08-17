@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridlab.gridsphere.services.core.security.role.PortletRole;
 
 import javax.servlet.UnavailableException;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class RoleManagerPortlet extends ActionPortlet {
         List coreRolesList = new ArrayList();
         coreRolesList.add(PortletRole.USER.getName());
         coreRolesList.add(PortletRole.ADMIN.getName());
-        coreRolesList.add(PortletRole.SUPER.getName());
+
         req.setAttribute("coreRoleList", coreRolesList);
         setNextState(req, ROLES_LIST);
     }

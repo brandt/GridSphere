@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
+import org.gridlab.gridsphere.portletcontainer.impl.PortletSessionManager;
 
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpSession;

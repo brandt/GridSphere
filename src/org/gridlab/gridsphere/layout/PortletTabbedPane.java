@@ -6,16 +6,16 @@
 
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabListener;
 import org.gridlab.gridsphere.layout.view.TabbedPaneView;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 
+import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -374,9 +374,9 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         if (tabs.isEmpty()) parent.remove(this, req);
     }
 
-    public void save() throws IOException {
+    public void save(ServletContext ctx) throws IOException {
         try {
-            String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
+            String layoutMappingFile = ctx.getRealPath("/WEB-INF/mapping/layout-mapping.xml");
             PortletLayoutDescriptor.savePortletTabbedPane(this, layoutDescriptor, layoutMappingFile);
         } catch (PersistenceManagerException e) {
             throw new IOException("Unable to save user's tabbed pane: " + e.getMessage());

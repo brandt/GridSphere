@@ -48,7 +48,7 @@ public interface PortletResponse extends HttpServletResponse {
      *
      * @param mode the portlet mode
      */
-    public PortletURI createURI(Portlet.Mode mode);
+    public PortletURI createURI(Mode mode);
 
     /**
      * Creates a portlet URI pointing to another portal component with the specified security

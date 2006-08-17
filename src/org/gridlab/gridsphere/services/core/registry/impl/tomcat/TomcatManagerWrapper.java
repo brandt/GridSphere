@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.services.core.registry.impl.tomcat;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
+import org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
@@ -27,7 +27,6 @@ public class TomcatManagerWrapper {
     private static String PASSWORD = "gridsphere";
 
     private static TomcatManagerWrapper instance = new TomcatManagerWrapper();
-    private PortletManagerService pm = PortletManager.getInstance();
     private static PortletLog log = SportletLog.getInstance(TomcatManagerWrapper.class);
 
     private TomcatManagerWrapper() {
@@ -99,44 +98,6 @@ public class TomcatManagerWrapper {
      */
     public TomcatWebAppResult getWebAppList(PortletRequest req) throws TomcatManagerException {
         return doCommand(req, "/list");
-    }
-
-    public List getPortletAppList(PortletRequest req) throws TomcatManagerException {
-        List webapps = pm.getPortletWebApplicationNames();
-        List l = new ArrayList();
-        TomcatWebAppResult result = doCommand(req, "/list");
-        if (result != null) {
-            Iterator it = result.getWebAppDescriptions().iterator();
-            while (it.hasNext()) {
-                TomcatWebAppDescription webAppDesc = (TomcatWebAppDescription) it.next();
-                //System.err.println(webAppDesc.toString());
-                if (webapps.contains((webAppDesc.getContextPath()))) {
-                    String desc = pm.getPortletWebApplicationDescription(webAppDesc.getContextPath());
-                    webAppDesc.setDescription(desc);
-                    l.add(webAppDesc);
-                }
-            }
-        }
-        return l;
-    }
-
-    public List getNonPortletAppList(PortletRequest req) throws TomcatManagerException {
-        List webapps = pm.getPortletWebApplicationNames();
-        List l = new ArrayList();
-        TomcatWebAppResult result = doCommand(req, "/list");
-        if (result != null) {
-            Iterator it = result.getWebAppDescriptions().iterator();
-            while (it.hasNext()) {
-                TomcatWebAppDescription webAppDesc = (TomcatWebAppDescription) it.next();
-                //System.err.println(webAppDesc.toString());
-                if (!webapps.contains((webAppDesc.getContextPath()))) {
-                    //String desc = pm.getPortletWebApplicationDescription(webAppDesc.getContextPath());
-                    //webAppDesc.setDescription("");
-                    l.add(webAppDesc);
-                }
-            }
-        }
-        return l;
     }
 
     public TomcatWebAppResult reloadWebApp(PortletRequest req, String context) throws TomcatManagerException {

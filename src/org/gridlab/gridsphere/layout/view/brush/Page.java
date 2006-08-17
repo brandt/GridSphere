@@ -40,12 +40,12 @@ public class Page extends BaseRender implements Render {
         page.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" ");
         page.append("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
         if (orientation.isLeftToRight()) {
-            page.append("<html");
+            page.append("\n<html");
         } else {
-            page.append("<html dir=\"rtl\"");
+            page.append("\n<html dir=\"rtl\"");
         }
         page.append(" xmlns=\"http://www.w3.org/1999/xhtml\">");
-
+        page.append("\n<!-- GridSphere Release: " + event.getPortletContext().getReleaseInfo() + "-->");
         page.append("\n\t<head>");
         page.append("\n\t<title>").append(portletPage.getTitle()).append("</title>");
         ///page.append("\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");

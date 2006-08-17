@@ -4,10 +4,7 @@
  */
 package org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
-import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
-import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
-import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam;
 
 import java.util.*;
 

@@ -4,9 +4,6 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletRequest;
@@ -17,7 +14,6 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
@@ -27,7 +23,9 @@ import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descripto
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.LoginUserModule;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerService;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -44,14 +42,13 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
     private PortletLog log = SportletLog.getInstance(LoginServiceImpl.class);
     private UserManagerService userManagerService = null;
-    private static boolean inited = false;
+    private boolean inited = false;
     private List authModules = new ArrayList();
-    private static LoginUserModule activeLoginModule = null;
+    private LoginUserModule activeLoginModule = null;
 
     private PersistenceManagerRdbms pm = null;
 
-    private String authMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/auth-modules-mapping.xml");
-    private String authModulesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
+    private String authMappingPath = null;
 
     public LoginServiceImpl() {
     }
@@ -94,12 +91,12 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.debug("in login service init");
         if (!inited) {
-            pm = PersistenceManagerFactory.createGridSphereRdbms();
+            PersistenceManagerService pmservice = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+            pm = pmservice.createGridSphereRdbms();
             String loginClassName = config.getInitParameter("LOGIN_MODULE");
             try {
-                PortletServiceFactory factory = SportletServiceFactory.getInstance();
                 Class loginModClass = Class.forName(loginClassName);
-                activeLoginModule = (LoginUserModule) factory.createPortletService(loginModClass, true);
+                activeLoginModule = (LoginUserModule)PortletServiceFactory.createPortletService(loginModClass, true);
             } catch (ClassNotFoundException e) {
                 log.error("Unable to create class from class name: " + loginClassName, e);
             } catch (PortletServiceNotFoundException e) {
@@ -107,11 +104,11 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             }
             log.debug("Created a login module service: " + loginClassName);
 
+            authMappingPath = config.getServletContext().getRealPath("/WEB-INF/mapping/auth-modules-mapping.xml");
+            String authModulesPath = config.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
             loadAuthModules(authModulesPath, Thread.currentThread().getContextClassLoader());
-
-            SportletServiceFactory factory = SportletServiceFactory.getInstance();
             try {
-                userManagerService = (UserManagerService)factory.createPortletService(UserManagerService.class, true);
+                userManagerService = (UserManagerService)PortletServiceFactory.createPortletService(UserManagerService.class, true);
             } catch (PortletServiceException e) {
                 log.error("Unable to create a user manager service", e);
             }

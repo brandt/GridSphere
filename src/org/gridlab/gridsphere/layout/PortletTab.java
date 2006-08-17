@@ -4,12 +4,12 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.Description;
 import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 import org.gridlab.gridsphere.layout.event.impl.PortletTabEventImpl;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.Description;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
@@ -93,24 +93,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      */
     public void setTitles(List titles) {
         this.titles = titles;
-    }
-
-    /**
-     * Returns the portlet tab title
-     *
-     * @return the portlet tab title
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * Sets the portlet tab title
-     *
-     * @param title the portlet tab title
-     */
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getTitle(String lang) {

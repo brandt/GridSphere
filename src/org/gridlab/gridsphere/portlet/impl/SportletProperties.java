@@ -4,6 +4,10 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
+import java.util.Properties;
+import java.io.InputStream;
+import java.io.IOException;
+
 /**
  * <code>SportletProperties</code> conatins all the "hidden" variable names
  * that get transmitted between the portlet container and the portlets to
@@ -19,7 +23,11 @@ package org.gridlab.gridsphere.portlet.impl;
  * <li>Portlet event objects</li>
  * </ul>
  */
-public interface SportletProperties {
+public class SportletProperties {
+
+    protected static Properties props = null;
+
+    private static SportletProperties instance = new SportletProperties();
 
     /**
      * Specifes GS context path for use in creating urls
@@ -249,9 +257,29 @@ public interface SportletProperties {
 
     public static final String PORTLET_USER_PRINCIPAL = "org.gridlab.gridsphere.portlet.UserPrincipal";
 
-    public static final String ENABLE_PORTAL_COUNTER = "org.gridlab.gridsphere.ENABLE_PORTAL_COUNTER";
-
     public static final String EXTRA_QUERY_INFO = "org.gridlab.gridsphere.layout.EXTRA_QUERY_INFO";
+
+    private SportletProperties() {
+        if (props == null) {
+            InputStream propsStream = getClass().getResourceAsStream("/org/gridlab/gridsphere/portlet/portlet.properties");
+            props = new Properties();
+            try {
+                props.load(propsStream);
+            } catch (IOException e) {
+                System.err.println("Unable to load gridsphere.properties");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static SportletProperties getInstance() {
+        return instance;
+    }
+
+    public String getProperty(String key) {
+        if (key == null) throw new IllegalArgumentException("property key cannot be null!");
+        return props.getProperty(key);
+    }
 
 }
 

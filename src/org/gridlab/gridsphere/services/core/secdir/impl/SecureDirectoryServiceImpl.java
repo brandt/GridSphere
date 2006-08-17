@@ -27,7 +27,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
 
     public void init(PortletServiceConfig config) {
         if (!inited) {
-            secureDirPath = org.gridlab.gridsphere.portletcontainer.GridSphereConfig.getServletContext().getRealPath("/WEB-INF/" + SECURE_SERVLET_MAPPING);
+            secureDirPath = config.getServletContext().getRealPath("/WEB-INF/" + SECURE_SERVLET_MAPPING);
             File f = new File(secureDirPath);
             if (!f.exists()) {
                 log.debug("Creating secure directory for users: " + secureDirPath);

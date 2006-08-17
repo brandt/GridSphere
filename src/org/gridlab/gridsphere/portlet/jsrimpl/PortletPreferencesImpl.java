@@ -4,10 +4,10 @@
  */
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.services.core.persistence.PersistenceManagerException;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.PreferencesValidator;

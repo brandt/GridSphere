@@ -38,7 +38,7 @@ public interface PortletConfig extends ServletConfig {
      * @return <code>true</code> if the window supports the given state,
      *         <code>false</code> otherwise
      */
-    public boolean supports(Portlet.Mode mode, Client client);
+    public boolean supports(Mode mode, Client client);
 
 
     /**

@@ -14,7 +14,7 @@ public class PasswordImpl implements PasswordEditor {
     private String oid = null;
     private SportletUserImpl user;
     // used for JSR/Tomcat/Realm
-    private String userName;
+    //private String userName;
     private String value = "";
     private String hint = "";
     private long lifetime = -1;
@@ -84,9 +84,10 @@ public class PasswordImpl implements PasswordEditor {
 
     public void setUser(User user) {
         this.user = (SportletUserImpl) user;
-        this.userName = user.getUserName();
+        //this.userName = user.getUserName();
     }
 
+    /*
     public String getUserName() {
         return userName;
     }
@@ -94,6 +95,7 @@ public class PasswordImpl implements PasswordEditor {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+    */
 
     /**
      * Castor method for setting user object.
