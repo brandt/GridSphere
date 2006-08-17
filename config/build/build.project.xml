@@ -308,6 +308,7 @@ Copyright:
             <fileset dir="${project.build}/classes/">
                 <include name="**/*"/>
             </fileset>
+            <fileset dir="lib/"/>
         </copy>
 
         <war warfile="${project.build}/${project.name}.war" update="true"
