@@ -46,10 +46,7 @@ Invoke "ant help"
     <property name="build.lib" value="${gridsphere.build}/lib"/>
     <property name="build.classes" value="${gridsphere.build}/classes"/>
     <property name="build.webapps" value="${gridsphere.build}/webapps"/>
-    <property name="build.docs" value="${gridsphere.build}/docs"/>
-    <property name="build.javadoc" value="${build.docs}/javadocs"/>
-    <property name="build.tests" value="${gridsphere.build}/tests"/>
-
+    <property name="build.javadoc" value="${build.webapps}/${gridsphere.deploy}/docs"/>
 
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
@@ -64,7 +61,6 @@ Invoke "ant help"
     <import file="config/build/build-dist.xml"/>
     <import file="config/build/build-docs.xml"/>
     <import file="config/build/build-deploy.xml"/>
-    <import file="config/build/build-unittests.xml"/>
     <import file="config/build/build-server-tomcat.xml"/>
     <import file="config/build/build-update.xml"/>
 
@@ -80,7 +76,6 @@ Invoke "ant help"
         <mkdir dir="${build.classes}"/>
         <mkdir dir="${build.lib}"/>
         <mkdir dir="${build.webapps}"/>
-        <mkdir dir="${build.docs}"/>
 
         <!--
            if tomcat check first for env.CATALINA_HOME
@@ -194,7 +189,6 @@ Invoke "ant help"
     <!-- =================================================================== -->
 
     <target name="install" depends="clean, license" description="Build and deploy GridSphere">
-<!--        <antcall target="create-database"/>-->
         <echo>------------------------------------------------------------</echo>
         <echo>-- Installing GridSphere documentation is recommended  --</echo>
         <echo>------------------------------------------------------------</echo>
@@ -202,7 +196,7 @@ Invoke "ant help"
         <echo>If you answer 'n' you can deploy the javadoc API documentation at a later time </echo>
         <echo>with 'ant docs'.                                     </echo>
         <echo>------------------------------------------------------------</echo>
-        <input message="Do you want to install GridSphere documentation? "
+        <input message="Do you want to install GridSphere JavaDoc API? "
                validargs="y,n" defaultvalue="y" addProperty="install.docs.agreed"/>
         <condition property="install.docs">
             <equals arg1="y" arg2="${install.docs.agreed}"/>
