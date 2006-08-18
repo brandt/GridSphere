@@ -45,7 +45,12 @@
 
     <servlet>
         <servlet-name>SetupPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.setup.GridSphereSetupPortlet</servlet-class>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.setup.SetupPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ConfigPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.config.ConfigPortlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -136,7 +141,12 @@
         <servlet-name>SetupPortlet</servlet-name>
         <url-pattern>/admin/setup</url-pattern>
     </servlet-mapping>
-    
+
+    <servlet-mapping>
+        <servlet-name>ConfigPortlet</servlet-name>
+        <url-pattern>/admin/config</url-pattern>
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>UserManagerPortlet</servlet-name>
         <url-pattern>/admin/users</url-pattern>

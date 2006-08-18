@@ -6,10 +6,6 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.login.LoginPortlet">
             <portlet-name>Login</portlet-name>
             <servlet-name>LoginPortlet</servlet-name>
-            <portlet-config>
-                <param-name>canUserCreateAccount</param-name>
-                <param-value>false</param-value>
-            </portlet-config>
             <allows>
                 <minimized/>
                 <maximized/>
@@ -505,7 +501,7 @@
     </portlet-app-def>
 
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.setup.GridSphereSetupPortlet">
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.setup.SetupPortlet">
             <portlet-name>Setup</portlet-name>
             <servlet-name>SetupPortlet</servlet-name>
             <allows>
@@ -521,7 +517,7 @@
             </supports>
         </portlet-app>
 
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.setup.GridSphereSetupPortlet.1">
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.setup.SetupPortlet.1">
             <concrete-portlet>
                 <portlet-name>Setup</portlet-name>
                 <default-locale>en</default-locale>
@@ -530,6 +526,37 @@
                     <title-short>Setup</title-short>
                     <description>GridSphere setup</description>
                     <keywords>portlet gridsphere setup</keywords>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
+
+    <portlet-app-def>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.config.ConfigPortlet">
+            <portlet-name>Config</portlet-name>
+            <servlet-name>ConfigPortlet</servlet-name>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
+            <supports>
+                <markup name="html">
+                    <view/>
+                    <help/>
+                </markup>
+            </supports>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.config.ConfigPortlet.1">
+            <concrete-portlet>
+                <portlet-name>Config</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>GridSphere Configuration</title>
+                    <title-short>Configuration</title-short>
+                    <description>GridSphere configuration</description>
+                    <keywords>portlet gridsphere configuration</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>

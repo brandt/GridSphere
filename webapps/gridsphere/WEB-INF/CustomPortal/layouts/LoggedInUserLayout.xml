@@ -91,13 +91,15 @@ $Id$
                     <title lang="hr">Portleti</title>
                     <title lang="zh">门件</title>
                     <table-layout label="portletTL">
-                        <row-layout label="portletLoginRL">
-                            <column-layout width="40%" label="portletLoginCL">
-                                <portlet-frame label="loginconfig">
-                                    <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
+                        <row-layout>
+                            <column-layout width="40%">
+                                <portlet-frame label="config">
+                                    <portlet-class>
+                                        org.gridlab.gridsphere.portlets.core.admin.config.ConfigPortlet.1
+                                    </portlet-class>
                                 </portlet-frame>
                             </column-layout>
-                            <column-layout width="60%" label="portletMgrCL">
+                            <column-layout width="60%">
                                 <portlet-frame label="portletmanager">
                                     <portlet-class>
                                         org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
