@@ -261,7 +261,7 @@ public class SportletProperties {
 
     private SportletProperties() {
         if (props == null) {
-            InputStream propsStream = getClass().getResourceAsStream("/org/gridlab/gridsphere/portlet/portlet.properties");
+            InputStream propsStream = getClass().getResourceAsStream("/org/gridlab/gridsphere/portlet/impl/portlet.properties");
             props = new Properties();
             try {
                 props.load(propsStream);
