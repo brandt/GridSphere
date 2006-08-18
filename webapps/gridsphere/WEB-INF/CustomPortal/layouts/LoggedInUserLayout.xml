@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-tabbed-pane style="menu">
+    <portlet-tab label="welcome">
+        <title lang="en">Welcome</title>
+        <title lang="es">Bienvenido</title>
+        <title lang="de">Willkommen</title>
+        <title lang="it">Benvenuto</title>
+        <title lang="pl">Witamy</title>
+        <title lang="hu">Üdvözöllek</title>
+        <title lang="fr">Bienvenue</title>
+        <title lang="de">Willkommen</title>
+        <title lang="cs">Vítejte</title>
+        <title lang="nl">Welkom</title>
+        <title lang="hr">Dobrodošli</title>
+        <title lang="ja">ようこそ</title>
+        <title lang="zh">欢迎</title>
+        <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab label="settings">
+                <title lang="en">Settings</title>
+                <title lang="es">Seteos</title>
+                <title lang="it">Preferenze</title>
+                <title lang="pl">Ustawienia</title>
+                <title lang="hu">Beállítások</title>
+                <title lang="fr">Configuration</title>
+                <title lang="de">Einstellungen</title>
+                <title lang="cs">Nastavení</title>
+                <title lang="nl">Eigenschappen</title>
+                <title lang="hr">Postavke</title>
+                <title lang="ja">設定</title>
+                <title lang="zh">配置</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="100%">
+                            <portlet-frame label="profile">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+        </portlet-tabbed-pane>
+    </portlet-tab>
+    <portlet-tab label="admin" required-role="ADMIN">
+        <title lang="en">Administration</title>
+        <title lang="es">Administración</title>
+        <title lang="it">Amministrazione</title>
+        <title lang="pl">Administracja</title>
+        <title lang="hu">Adminisztráció</title>
+        <title lang="fr">Administration</title>
+        <title lang="de">Administrieren</title>
+        <title lang="cs">Administrace</title>
+        <title lang="nl">Administratie</title>
+        <title lang="hr">Administriranje</title>
+        <title lang="ja">管理</title>
+        <title lang="zh">管理者</title>
+        <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab label="portlets" required-role="ADMIN">
+                <title lang="en">Portlets</title>
+                <title lang="es">Portlets</title>
+                <title lang="pl">Portlety</title>
+                <title lang="hu">Portletek</title>
+                <title lang="cs">Portlety</title>
+                <title lang="nl">Portlets</title>
+                <title lang="hr">Portleti</title>
+                <title lang="zh">门件</title>
+                <table-layout label="portletTL">
+                    <row-layout label="portletLoginRL">
+                        <column-layout width="40%" label="portletLoginCL">
+                            <portlet-frame label="loginconfig">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                        <column-layout width="60%" label="portletMgrCL">
+                            <portlet-frame label="portletmanager">
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
+                            </portlet-frame>
+                            <portlet-frame label="sessionmanager">
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                            <portlet-frame label="trackingstats">
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+            <portlet-tab label="users" required-role="ADMIN">
+                <title lang="en">Users</title>
+                <title lang="es">Usuarios</title>
+                <title lang="it">Utenti</title>
+                <title lang="pl">Użytkownicy</title>
+                <title lang="hu">Felhasználók</title>
+                <title lang="fr">Utilisateurs</title>
+                <title lang="de">Nutzer</title>
+                <title lang="cs">Uživatelé</title>
+                <title lang="nl">Gebruikers</title>
+                <title lang="hr">Korisnici</title>
+                <title lang="ja">ユーザー</title>
+                <title lang="zh">用户</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="50%">
+                            <portlet-frame label="usermanager">
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                        <column-layout width="50%"/>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+            <portlet-tab label="roles" required-role="ADMIN">
+                <title lang="en">Roles</title>
+                <title lang="es">Roles</title>
+                <title lang="hr">Uloge</title>
+                <title lang="ja">役割</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="50%">
+                            <portlet-frame label="rolemanager">
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.admin.roles.RoleManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                        <column-layout width="50%"/>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+            <portlet-tab label="messagingservicestab" required-role="ADMIN">
+                <title lang="en">Messaging</title>
+                <title lang="es">Mensajería</title>
+                <title lang="de">Textnachrichtendienste</title>
+                <title lang="fr">Messagerie</title>
+                <title lang="hr">Razmjena poruka</title>
+                <title lang="ja">伝言</title>
+                <title lang="zh">信息</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="100%">
+                            <portlet-frame label="messagingservice">
+                                <portlet-class>
+                                    org.gridlab.gridsphere.portlets.core.messaging.MessagingServicesPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+        </portlet-tabbed-pane>
+    </portlet-tab>
+</portlet-tabbed-pane>
+
