@@ -300,8 +300,6 @@ public class PortletInvoker {
         // Initialize all concrete portlets for each application portlet
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(concretePortletID);
         PortletDispatcher portletDispatcher = null;
-
-        log.debug("init app portlet" + appPortlet.getApplicationPortletID());
         portletDispatcher = appPortlet.getPortletDispatcher(req, res);
         if (portletDispatcher == null) {
             throw new PortletException("Unable to get a dispatcher for application portlet: " + appPortlet);
@@ -310,13 +308,13 @@ public class PortletInvoker {
         Iterator concIt = concPortlets.iterator();
         PortletSettings settings = null;
         // initialize the application portlet
-        log.info("initializing application portlet " + appPortlet.getApplicationPortletID());
+        log.debug("initializing application portlet " + appPortlet.getApplicationPortletID());
         portletDispatcher.init(req, res);
         while (concIt.hasNext()) {
             ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
             settings = concPortlet.getPortletSettings();
             // initialize the concrete portlet
-            log.info("initializing concrete portlet " + concPortlet.getConcretePortletID());
+            log.debug("initializing concrete portlet " + concPortlet.getConcretePortletID());
             if (settings != null) {
                 portletDispatcher.initConcrete(settings, req, res);
             } else {
@@ -348,7 +346,6 @@ public class PortletInvoker {
         Iterator it = appPortletsCopy.iterator();
         while (it.hasNext()) {
             ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-            log.debug("init app portlet" + appPortlet.getApplicationPortletID());
             portletDispatcher = appPortlet.getPortletDispatcher(req, res);
             if (portletDispatcher == null) {
                 throw new PortletException("Unable to get a dispatcher for application portlet: " + appPortlet);
@@ -357,13 +354,13 @@ public class PortletInvoker {
             Iterator concIt = concPortlets.iterator();
             PortletSettings settings = null;
             // initialize the application portlet
-            log.info("initializing application portlet " + appPortlet.getApplicationPortletID());
+            log.debug("initializing application portlet " + appPortlet.getApplicationPortletID());
             portletDispatcher.init(req, res);
             while (concIt.hasNext()) {
                 ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
                 settings = concPortlet.getPortletSettings();
                 // initialize the concrete portlet
-                log.info("initializing concrete portlet " + concPortlet.getConcretePortletID());
+                log.debug("initializing concrete portlet " + concPortlet.getConcretePortletID());
                 if (settings != null) {
                     portletDispatcher.initConcrete(settings, req, res);
                 } else {
@@ -395,13 +392,13 @@ public class PortletInvoker {
             Iterator concIt = concPortlets.iterator();
             PortletSettings settings = null;
             // initialize the application portlet
-            log.info("initializing application portlet " + appPortlet.getApplicationPortletID());
+            log.debug("initializing application portlet " + appPortlet.getApplicationPortletID());
             portletDispatcher.init(req, res);
             while (concIt.hasNext()) {
                 ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
                 settings = concPortlet.getPortletSettings();
                 // initialize the concrete portlet
-                log.info("initializing concrete portlet " + concPortlet.getConcretePortletID());
+                log.debug("initializing concrete portlet " + concPortlet.getConcretePortletID());
                 if (settings != null) {
                     portletDispatcher.initConcrete(settings, req, res);
                 } else {
@@ -430,12 +427,12 @@ public class PortletInvoker {
             List concPortlets = appPortlet.getConcretePortlets();
             Iterator concIt = concPortlets.iterator();
             PortletSettings settings = null;
-            log.info("destroying application portlet " + appPortlet.getApplicationPortletID());
+            log.debug("destroying application portlet " + appPortlet.getApplicationPortletID());
             while (concIt.hasNext()) {
                 ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
                 settings = concPortlet.getPortletSettings();
                 // destroy the concrete portlet
-                log.info("destroying concrete portlet " + concPortlet.getConcretePortletID());
+                log.debug("destroying concrete portlet " + concPortlet.getConcretePortletID());
                 if (settings != null) {
                     portletDispatcher.destroyConcrete(settings, req, res);
                 } else {
@@ -468,7 +465,7 @@ public class PortletInvoker {
             List concPortlets = appPortlet.getConcretePortlets();
             Iterator concIt = concPortlets.iterator();
             PortletSettings settings = null;
-            log.info("destroying application portlet " + appPortlet.getApplicationPortletID());
+            log.debug("destroying application portlet " + appPortlet.getApplicationPortletID());
             while (concIt.hasNext()) {
                 ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
                 settings = concPortlet.getPortletSettings();
