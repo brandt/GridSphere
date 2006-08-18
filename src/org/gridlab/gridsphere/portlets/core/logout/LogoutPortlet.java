@@ -20,7 +20,7 @@ public class LogoutPortlet extends AbstractPortlet {
         title = getPortletSettings().getTitle(locale, client);
         request.setAttribute("GRIDSPHERE_LOGOUT_LABEL", title);
         request.setAttribute("username", request.getUser().getFullName());
-        getPortletConfig().getContext().include("/jsp/login/logout.jsp", request, response);
+        getPortletConfig().getContext().include("/jsp/logout/logout.jsp", request, response);
     }
 
 }
