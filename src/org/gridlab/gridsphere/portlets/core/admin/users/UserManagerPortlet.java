@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlets.core.admin.users;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
@@ -39,16 +38,10 @@ public class UserManagerPortlet extends ActionPortlet {
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        log.debug("Entering initServices()");
-        try {
-            this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
-            this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
-            this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
-            this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
-        } catch (PortletServiceException e) {
-            log.error("Unable to initialize services!", e);
-        }
-        log.debug("Exiting initServices()");
+        this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
+        this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
+        this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
+        this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
         DEFAULT_HELP_PAGE = "admin/users/help.jsp";
         DEFAULT_VIEW_PAGE = "doListUsers";
     }
