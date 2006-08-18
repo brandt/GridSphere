@@ -23,6 +23,7 @@ import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
+import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -207,8 +208,6 @@ public class ActionPortlet extends GenericPortlet {
 
         String methodName = formEvent.getAction().getName();
 
-        log.debug("method name to invoke: " + methodName);
-
         doAction(actionRequest, actionResponse, methodName, parameterTypes, arguments);
         //System.err.println("in processAction: befoire store cid=" + actionRequest.getAttribute(SportletProperties.COMPONENT_ID));
 
@@ -237,15 +236,19 @@ public class ActionPortlet extends GenericPortlet {
         Class thisClass = this.getClass();
         // Call method specified by action name
         try {
-            if (log.isDebugEnabled()) {
-                log.debug("Getting action method " + thisClass.getName() + "." + methodName + "()");
-            }
-
             Method method = thisClass.getMethod(methodName, parameterTypes);
-            log.debug("Invoking action method: " + methodName);
-
             method.invoke(this, arguments);
-
+            StringBuffer sb = new StringBuffer();
+            sb.append("Invoking portlet action ").append(thisClass.getName()).append("#").append(methodName);
+            if (request.getUserPrincipal() != null) {
+                sb.append(" user=").append(request.getUserPrincipal().getName());
+                sb.append(" session id=").append(request.getPortletSession().getId());
+            }
+            if (request instanceof HttpServletRequestWrapper) {
+                sb.append(" remote ip=").append(((HttpServletRequestWrapper)request).getRemoteAddr());
+                sb.append(" user agent=").append(((HttpServletRequestWrapper)request).getHeader("user-agent"));
+            }
+            log.info(sb.toString());
         } catch (NoSuchMethodException e) {
             String error = "No such method: " + methodName + "\n" + e.getMessage();
             log.error(error, e);

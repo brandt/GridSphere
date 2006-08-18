@@ -7,11 +7,11 @@ package org.gridlab.gridsphere.provider.portlet;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.event.impl.FormEventImpl;
 
 import javax.servlet.UnavailableException;
+import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -149,7 +149,6 @@ public class ActionPortlet extends AbstractPortlet {
      * @param error   the error text to display in the portlet
      */
     protected void setNextError(PortletRequest request, String error) {
-        String id = request.getPortletSettings().getConcretePortletID();
         request.setAttribute("somerror", error);
     }
 
@@ -160,8 +159,7 @@ public class ActionPortlet extends AbstractPortlet {
      * @return true if an error has occurred, false otherwise
      */
     protected boolean hasError(PortletRequest request) {
-        String id = request.getPortletSettings().getConcretePortletID();
-        return (request.getAttribute("somerror") == null) ? false : true;
+        return (request.getAttribute("somerror") != null);
     }
 
     /**
@@ -171,9 +169,7 @@ public class ActionPortlet extends AbstractPortlet {
      * @return the error text to display in the portlet
      */
     protected String getNextError(PortletRequest request) {
-        String id = request.getPortletSettings().getConcretePortletID();
-        String error = (String) request.getAttribute("somerror");
-        return error;
+        return (String) request.getAttribute("somerror");
     }
 
     /**
@@ -197,8 +193,7 @@ public class ActionPortlet extends AbstractPortlet {
      */
     protected Map getTagBeans(PortletRequest request) {
         String id = request.getPortletSettings().getConcretePortletID();
-        Map tagBeans = (Map) request.getAttribute(id + ".form");
-        return tagBeans;
+        return (Map) request.getAttribute(id + ".form");
     }
 
     /**
@@ -219,24 +214,9 @@ public class ActionPortlet extends AbstractPortlet {
         PortletResponse res = event.getPortletResponse();
         String methodName = event.getAction().getName();
 
-        log.debug("method name to invoke: " + methodName);
-
-        // have to perform user checking  --
-        //User user = req.getUser();
-        //if (user instanceof GuestUser) {
-        //    methodName = DEFAULT_VIEW_PAGE;
-        //    setNextState(req, DEFAULT_VIEW_PAGE);
-        //}
-
-        //try {
-            doAction(req, res, methodName, parameterTypes, arguments);
-            formEvent.store();
-            setTagBeans(req, formEvent.getTagBeans());
-        /*} catch (PortletException e) {
-            this.setNextError(req, "Error invoking method: " + e);
-            throw e;
-
-        } */
+        doAction(req, res, methodName, parameterTypes, arguments);
+        formEvent.store();
+        setTagBeans(req, formEvent.getTagBeans());
     }
 
     /**
@@ -260,14 +240,20 @@ public class ActionPortlet extends AbstractPortlet {
         Class thisClass = this.getClass();
         // Call method specified by action name
         try {
-            if (log.isDebugEnabled()) {
-                log.debug("Getting action method " + thisClass.getName() + "." + methodName + "()");
-            }
 
             Method method = thisClass.getMethod(methodName, parameterTypes);
-            log.debug("Invoking action method: " + methodName);
-
             method.invoke(thisObject, arguments);
+            StringBuffer sb = new StringBuffer();
+            sb.append("Invoking portlet action ").append(thisClass.getName()).append("#").append(methodName);
+            if (request.getUserPrincipal() != null) {
+                sb.append(" user=").append(request.getUserPrincipal().getName());
+                sb.append(" session id=").append(request.getPortletSession().getId());
+            }
+            if (request instanceof HttpServletRequestWrapper) {
+                sb.append(" remote ip=").append(((HttpServletRequestWrapper)request).getRemoteAddr());
+                sb.append(" user agent=").append(((HttpServletRequestWrapper)request).getHeader("user-agent"));
+            }
+            log.info(sb.toString());
         } catch (NoSuchMethodException e) {
             String error = "No such method: " + methodName + "\n" + e.getMessage();
             log.error(error, e);
