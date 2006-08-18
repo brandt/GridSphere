@@ -28,7 +28,7 @@ Build include file for the GridSphere Portal source code, see build.xml
     <target name="gridsphere-portal-jar" depends="compile" description="Makes gridsphere JAR">
         <mkdir dir="${build.classes}/gridsphere"/>
         <filter token="GRIDSPHERE_RELEASE" value="${gridsphere.name}"/>
-        <copy todir="${build.classes}/org/gridlab/gridsphere/portlet/"
+        <copy todir="${build.classes}/org/gridlab/gridsphere/portlet/impl/"
               file="webapps/gridsphere/WEB-INF/portlet.properties"
               filtering="true"/>
         <copy file="webapps/gridsphere/WEB-INF/mapping/portlet-jsr-mapping.xml"
