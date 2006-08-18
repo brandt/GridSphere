@@ -58,9 +58,9 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <exclude name="*.txt"/>
             </fileset>
             <fileset dir="${build.lib}">
-                <include name="gridsphere-core*.jar"/>
-                <include name="gridsphere-portal*.jar"/>
-                <include name="gridsphere-provider*.jar"/>
+                <include name="gridsphere-core-${gridsphere.version}.jar"/>
+                <include name="gridsphere-portal-${gridsphere.version}.jar"/>
+                <include name="gridsphere-provider-${gridsphere.version}.jar"/>
             </fileset>
         </copy>
 
@@ -125,14 +125,9 @@ Build include file for the GridSphere Portal source code, see build.xml
     <target name="deploy-jetty" depends="deploy-common">
 
         <copy overwrite="true" todir="${appserver.home}/ext">
-            <fileset dir="lib">
-                <exclude name="*.LICENSE"/>
-            </fileset>
             <fileset dir="${build.lib}">
-                <exclude name="gridsphere-test*.jar"/>
-                <exclude name="gridsphere-ui-tags*.jar"/>
-                <exclude name="coreportlets*.jar"/>
-                <exclude name="gridsphere-jsp.jar"/>
+               <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
+               <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
             </fileset>
         </copy>
 
@@ -179,8 +174,8 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <copy overwrite="true" todir="${appserver.home}/shared/lib">
             <fileset dir="${build.lib}">
-                <include name="gridsphere-service-framework*.jar"/>
-                <include name="gridsphere-portal-api*.jar"/>
+                <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
+                <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
             </fileset>
         </copy>
 
