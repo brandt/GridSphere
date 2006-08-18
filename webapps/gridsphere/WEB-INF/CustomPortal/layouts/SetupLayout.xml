@@ -38,7 +38,7 @@
                             <column-layout width="70%">
                                 <portlet-frame label="setup">
                                     <portlet-class>
-                                        org.gridlab.gridsphere.portlets.core.admin.setup.GridSphereSetupPortlet.1</portlet-class>
+                                        org.gridlab.gridsphere.portlets.core.admin.setup.SetupPortlet.1</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                             <column-layout width="30%"/>
