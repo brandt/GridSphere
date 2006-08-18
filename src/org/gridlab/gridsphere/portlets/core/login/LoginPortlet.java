@@ -12,19 +12,15 @@ import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.request.RequestService;
-import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.security.role.PortletRole;
-import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.tmf.TextMessagingException;
 import org.gridsphere.tmf.message.MailMessage;
 
 import javax.servlet.UnavailableException;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.security.cert.X509Certificate;
 import java.util.*;
 
@@ -35,7 +31,6 @@ public class LoginPortlet extends ActionPortlet {
     private static String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
     private static String ADMIN_ACCOUNT_APPROVAL = "ADMIN_ACCOUNT_APPROVAL";
     private static String LOGIN_NAME = "LOGIN_NAME";
-    private static String LOGIN_ERROR_HANDLING = "LOGIN_ERROR_HANDLING";
     public static String SAVE_PASSWORDS = "SAVE_PASSWORDS";
     public static String REMEMBER_USER = "REMEMBER_USER";
     public static String SUPPORT_X509_AUTH = "SUPPORT_X509_AUTH";
@@ -61,7 +56,6 @@ public class LoginPortlet extends ActionPortlet {
     private PasswordManagerService passwordManagerService = null;
     private PortalConfigService portalConfigService = null;
     private RequestService requestService = null;
-    private LoginService loginService = null;
     private TextMessagingService tms = null;
 
     public void init(PortletConfig config) throws UnavailableException {
@@ -74,18 +68,18 @@ public class LoginPortlet extends ActionPortlet {
         requestService = (RequestService) getPortletConfig().getContext().getService(RequestService.class);
         tms = (TextMessagingService) getPortletConfig().getContext().getService(TextMessagingService.class);
         portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
-        canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty("CAN_USER_CREATE_ACCOUNT")).booleanValue();
 
         String numTries = portalConfigService.getProperty(LOGIN_NUMTRIES);
-        System.err.println("numtries= "+ numTries);
+
         defaultNumTries = Integer.valueOf(numTries).intValue();
+
+
+        canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty("CAN_USER_CREATE_ACCOUNT")).booleanValue();
+
 
         useSecureLogin = Boolean.valueOf(portalConfigService.getProperty("use.https.login"));
 
-        loginService = (LoginService) getPortletConfig().getContext().getService(LoginService.class);
-
         DEFAULT_VIEW_PAGE = "doViewUser";
-        DEFAULT_CONFIGURE_PAGE = "showConfigure";
     }
 
     public void initConcrete(PortletSettings settings) throws UnavailableException {
@@ -114,27 +108,12 @@ public class LoginPortlet extends ActionPortlet {
             request.setAttribute("remUser", "true");
         }
 
-        if (user == null) {
-            request.setAttribute("useSecureLogin", useSecureLogin.toString());
-            if (canUserCreateAccount) request.setAttribute("canUserCreateAcct", "true");
-            boolean dispUser = Boolean.valueOf(portalConfigService.getProperty(SEND_USER_FORGET_PASSWORD)).booleanValue();
-            if (dispUser) request.setAttribute("dispPass", "true");
-            setNextState(request, "login/login.jsp");
-        } else {
-            showConfigure(event);
-        }
-    }
+        request.setAttribute("useSecureLogin", useSecureLogin.toString());
+        if (canUserCreateAccount) request.setAttribute("canUserCreateAcct", "true");
+        boolean dispUser = Boolean.valueOf(portalConfigService.getProperty(SEND_USER_FORGET_PASSWORD)).booleanValue();
+        if (dispUser) request.setAttribute("dispPass", "true");
+        setNextState(request, "login/login.jsp");
 
-
-    public void doTitle(PortletRequest request, PortletResponse response) throws PortletException, IOException {
-        User user = request.getUser();
-        PrintWriter out = response.getWriter();
-
-        if (user == null) {
-            out.println(getNextTitle(request));
-        } else {
-            out.println(getLocalizedText(request, "LOGIN_CONFIGURE"));
-        }
     }
 
     public void gs_login(FormEvent event) throws PortletException {
@@ -377,130 +356,7 @@ public class LoginPortlet extends ActionPortlet {
         roleService.addUserToRole(user, PortletRole.USER);
     }
 
-    public void showConfigure(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
-        acctCB.setSelected(canUserCreateAccount);
 
-        Boolean sendMail = Boolean.valueOf(portalConfigService.getProperty("ENABLE_ERROR_HANDLING"));
-        req.setAttribute("sendMail", sendMail);
-
-        CheckBoxBean notifyCB = event.getCheckBoxBean("notifyCB");
-        notifyCB.setSelected(Boolean.valueOf(portalConfigService.getProperty(SEND_USER_FORGET_PASSWORD)).booleanValue());
-
-        CheckBoxBean savepassCB = event.getCheckBoxBean("savepassCB");
-        savepassCB.setSelected(Boolean.valueOf(portalConfigService.getProperty(SAVE_PASSWORDS)).booleanValue());
-
-        CheckBoxBean supportX509CB = event.getCheckBoxBean("supportx509CB");
-        supportX509CB.setSelected(Boolean.valueOf(portalConfigService.getProperty(SUPPORT_X509_AUTH)).booleanValue());
-
-        CheckBoxBean accountApproval = event.getCheckBoxBean("acctApproval");
-        accountApproval.setSelected(Boolean.valueOf(portalConfigService.getProperty(ADMIN_ACCOUNT_APPROVAL)).booleanValue());
-
-        CheckBoxBean remUserCB = event.getCheckBoxBean("remUserCB");
-        remUserCB.setSelected(Boolean.valueOf(portalConfigService.getProperty(REMEMBER_USER)).booleanValue());
-
-        String numTries = portalConfigService.getProperty(LOGIN_NUMTRIES);
-        TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
-        if (numTries == null) {
-            numTries = "-1";
-        }
-        numTriesTF.setValue(numTries);
-
-        List authModules = loginService.getAuthModules();
-        req.setAttribute("authModules", authModules);
-        setNextState(req, DO_CONFIGURE);
-    }
-
-    public void setLoginSettings(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-        if (!req.getRoles().contains(PortletRole.ADMIN.getName())) return;
-
-        CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
-
-        String useracct = acctCB.getSelectedValue();
-
-        canUserCreateAccount = (useracct != null);
-
-        portalConfigService.setProperty("CAN_USER_CREATE_ACCOUNT", String.valueOf(canUserCreateAccount));
-
-        CheckBoxBean notifyCB = event.getCheckBoxBean("notifyCB");
-        String notify = notifyCB.getSelectedValue();
-        boolean sendForget = (notify != null);
-
-        CheckBoxBean savepassCB = event.getCheckBoxBean("savepassCB");
-        String savepass = savepassCB.getSelectedValue();
-        boolean savePasswords;
-        if (savepass != null) {
-            savePasswords = true;
-        } else {
-            // if save passwords is false than can't send notification to update password so both must be false
-            savePasswords = false;
-            sendForget = false;
-        }
-
-        CheckBoxBean supportsx509CB = event.getCheckBoxBean("supportx509CB");
-        String supportx509val = supportsx509CB.getSelectedValue();
-        boolean supportx509 = (supportx509val != null);
-        portalConfigService.setProperty(SUPPORT_X509_AUTH, Boolean.toString(supportx509));
-
-        CheckBoxBean accountApproval = event.getCheckBoxBean("acctApproval");
-        String accountApprovalval = accountApproval.getSelectedValue();
-        boolean accountApprove = (accountApprovalval != null);
-        portalConfigService.setProperty(ADMIN_ACCOUNT_APPROVAL, Boolean.toString(accountApprove));
-
-        CheckBoxBean remUserCB = event.getCheckBoxBean("remUserCB");
-        boolean remUser = (remUserCB.getSelectedValue() != null);
-        portalConfigService.setProperty(REMEMBER_USER, Boolean.toString(remUser));
-
-        portalConfigService.setProperty(SAVE_PASSWORDS, Boolean.toString(savePasswords));
-        portalConfigService.setProperty(SEND_USER_FORGET_PASSWORD, Boolean.toString(sendForget));
-        try {
-            portalConfigService.storeProperties();
-        } catch (IOException e) {
-            log.error("unable to save gridsphere.properties", e);
-        }
-        showConfigure(event);
-    }
-
-    public void configAccountSettings(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-        if (!req.getRoles().contains(PortletRole.ADMIN.getName())) return;
-        TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
-        String numTries = numTriesTF.getValue();
-        int numtries = -1;
-        try {
-            numtries = Integer.valueOf(numTries).intValue();
-        } catch (NumberFormatException e) {
-            // do nothing
-        }
-
-        portalConfigService.setProperty(LOGIN_NUMTRIES, numTries);
-        defaultNumTries = numtries;
-        try {
-            portalConfigService.storeProperties();
-        } catch (IOException e) {
-            log.error("Unable to save gridsphere.properties", e);
-        }
-        showConfigure(event);
-    }
-
-    public void configErrorSettings(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-        if (!req.getRoles().contains(PortletRole.ADMIN.getName())) return;
-
-        RadioButtonBean errorRB = event.getRadioButtonBean("errorRB");
-
-        Boolean sendMail = Boolean.FALSE;
-        if (errorRB.getSelectedValue().equals("MAIL")) sendMail = Boolean.TRUE;
-        portalConfigService.setProperty(LOGIN_ERROR_HANDLING, sendMail.toString());
-        try {
-            portalConfigService.storeProperties();
-        } catch (IOException e) {
-            log.error("Unable to save gridsphere.properties", e);
-        }
-        showConfigure(event);
-    }
 
 
     public void displayForgotPassword(FormEvent event) {
@@ -736,34 +592,6 @@ public class LoginPortlet extends ActionPortlet {
         PortletRequest req = event.getPortletRequest();
         String msg = this.getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_DENY");
         doEmailAction(event, msg, false);
-    }
-
-    public void doSaveAuthModules(FormEvent event) {
-
-        PortletRequest req = event.getPortletRequest();
-        CheckBoxBean cb = event.getCheckBoxBean("authModCB");
-
-        List activeAuthMods = cb.getSelectedValues();
-        for (int i = 0; i < activeAuthMods.size(); i++) {
-            System.err.println("active auth mod: " + (String) activeAuthMods.get(i));
-        }
-
-        List authModules = loginService.getAuthModules();
-        Iterator it = authModules.iterator();
-        while (it.hasNext()) {
-            LoginAuthModule authMod = (LoginAuthModule) it.next();
-            // see if a checked active auth module appears
-            if (activeAuthMods.contains(authMod.getModuleName())) {
-                authMod.setModuleActive(true);
-            } else {
-                authMod.setModuleActive(false);
-            }
-            String priority = req.getParameter(authMod.getModuleName());
-            authMod.setModulePriority(Integer.valueOf(priority).intValue());
-            loginService.saveAuthModule(authMod);
-        }
-
-        showConfigure(event);
     }
 
 
