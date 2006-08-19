@@ -1,5 +1,5 @@
-<%@ page import="org.gridlab.gridsphere.portlet.PortletRequest,
-                 org.gridlab.gridsphere.services.core.security.role.PortletRole,
+<%@ page import="org.gridsphere.portlet.PortletRequest,
+                 org.gridsphere.services.core.security.role.PortletRole,
                  java.util.Locale" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>

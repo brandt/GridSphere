@@ -3,7 +3,7 @@
 
 <portlet-app-def>
 
-<portlet-app id="org.gridlab.gridsphere.portlets.examples.HelloWorld">
+<portlet-app id="org.gridsphere.portlets.examples.HelloWorld">
     <portlet-name>Hello World Portlet Application</portlet-name>
     <servlet-name>HelloWorld</servlet-name>
     <portlet-config>
@@ -23,7 +23,7 @@
     </supports>
 </portlet-app>
 
-<concrete-portlet-app id="org.gridlab.gridsphere.portlets.examples.HelloWorld.1">
+<concrete-portlet-app id="org.gridsphere.portlets.examples.HelloWorld.1">
     <context-param>
         <param-name>A PortletApplicationSettings parameter</param-name>
         <param-value>the value</param-value>
@@ -44,7 +44,7 @@
     </concrete-portlet>
 </concrete-portlet-app>
 
-<concrete-portlet-app id="org.gridlab.gridsphere.portlets.examples.HelloWorld.2">
+<concrete-portlet-app id="org.gridsphere.portlets.examples.HelloWorld.2">
     <context-param>
         <param-name>Yet another PortletApplicationSettings param</param-name>
         <param-value>another value</param-value>

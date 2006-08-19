@@ -3,8 +3,8 @@
     <service>
         <name>Test Portlet Service</name>
         <description>This is a Test Portlet Service</description>
-        <interface>org.gridlab.gridsphere.services.test.PortletTestService</interface>
-        <implementation>org.gridlab.gridsphere.services.test.PortletTestServiceImpl</implementation>
+        <interface>org.gridsphere.services.test.PortletTestService</interface>
+        <implementation>org.gridsphere.services.test.PortletTestServiceImpl</implementation>
         <service-config>
             <param-name>some parameter</param-name>
             <param-value>some value</param-value>
@@ -15,8 +15,8 @@
         <name>User Test Portlet Service</name>
         <user-required>true</user-required>
         <description>This is a User Test Portlet Service</description>
-        <interface>org.gridlab.gridsphere.services.test.PortletTestService</interface>
-        <implementation>org.gridlab.gridsphere.services.test.PortletTestServiceImpl</implementation>
+        <interface>org.gridsphere.services.test.PortletTestService</interface>
+        <implementation>org.gridsphere.services.test.PortletTestServiceImpl</implementation>
     </service>
 
 </portlet-services>

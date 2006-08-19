@@ -27,7 +27,7 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- =================================================================== -->
     <target name="javadoc" depends="setenv, check-javadocs" description="Create GridSphere Javadocs" unless="javadocs.exists">
         <mkdir dir="${build.javadoc}"/>
-        <javadoc packagenames="org.gridlab.gridsphere.*, javax.*"
+        <javadoc packagenames="org.gridsphere.*, javax.*"
             sourcepath="src"
             classpathref="classpath"
             destdir="${build.javadoc}"
@@ -48,37 +48,37 @@ Build include file for the GridSphere Portal source code, see build.xml
             <link href="http://www.junit.org/junit/javadoc/3.8/index.htm"/>  -->
 
             <group title="GridSphere Framework API"
-                packages="org.gridlab.gridsphere:org.gridlab.gridsphere.*"/>
+                packages="org.gridsphere:org.gridsphere.*"/>
 
             <group title="GridSphere Portlet API"
-                packages="org.gridlab.gridsphere.event:org.gridlab.gridsphere.event.*,
-                          org.gridlab.gridsphere.portlet:org.gridlab.gridsphere.portlet.*,
-                          org.gridlab.gridsphere.portlet.service:org.gridlab.gridsphere.portlet.service.*,
-                          org.gridlab.gridsphere.portlet.service.spi:org.gridlab.gridsphere.portlet.service.spi.*"/>
+                packages="org.gridsphere.event:org.gridsphere.event.*,
+                          org.gridsphere.portlet:org.gridsphere.portlet.*,
+                          org.gridsphere.portlet.service:org.gridsphere.portlet.service.*,
+                          org.gridsphere.portlet.service.spi:org.gridsphere.portlet.service.spi.*"/>
 
             <group title="JSR 168 Portlet API"
                 packages="javax.portlet:javax.portlet.*"/>
 
             <group title="GridSphere Portlet API Implementation"
-                packages="org.gridlab.gridsphere.event.impl:org.gridlab.gridsphere.event.impl.*,
-                          org.gridlab.gridsphere.portlet.impl:org.gridlab.gridsphere.portlet.impl.*,
-                          org.gridlab.gridsphere.portlet.service.impl:org.gridlab.gridsphere.portlet.service.impl.*,
-                          org.gridlab.gridsphere.portlet.service.spi.impl:org.gridlab.gridsphere.portlet.service.spi.impl.*"/>
+                packages="org.gridsphere.event.impl:org.gridsphere.event.impl.*,
+                          org.gridsphere.portlet.impl:org.gridsphere.portlet.impl.*,
+                          org.gridsphere.portlet.service.impl:org.gridsphere.portlet.service.impl.*,
+                          org.gridsphere.portlet.service.spi.impl:org.gridsphere.portlet.service.spi.impl.*"/>
 
             <group title="GridSphere JSR 168 Portlet API Implementation"
-                packages="org.gridlab.gridsphere.portlet.jsrimpl:org.gridlab.gridsphere.portlet.jsrimpl.*"/>
+                packages="org.gridsphere.portlet.jsrimpl:org.gridsphere.portlet.jsrimpl.*"/>
 
             <group title="GridSphere Portal Component Library"
-                packages="org.gridlab.gridsphere.layout:org.gridlab.gridsphere.layout.*"/>
+                packages="org.gridsphere.layout:org.gridsphere.layout.*"/>
 
             <group title="GridSphere UI Tag Library"
-                packages="org.gridlab.gridsphere.tags:org.gridlab.gridsphere.tags.*"/>
+                packages="org.gridsphere.tags:org.gridsphere.tags.*"/>
 
             <group title="GridSphere Portlet Service Library"
-                packages="org.gridlab.gridsphere.services:org.gridlab.gridsphere.services.*"/>
+                packages="org.gridsphere.services:org.gridsphere.services.*"/>
 
             <group title="GridSphere Portlets"
-                packages="org.gridlab.gridsphere.portlets:org.gridlab.gridsphere.portlets.*"/>
+                packages="org.gridsphere.portlets:org.gridsphere.portlets.*"/>
 
         </javadoc>
     </target>

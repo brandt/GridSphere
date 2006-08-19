@@ -6,7 +6,7 @@
         
 <hibernate-mapping>
     <class
-        name="org.gridlab.gridsphere.portlet.impl.SportletData"
+        name="org.gridsphere.portlet.impl.SportletData"
         table="sportletdata"
         >
         <cache usage="read-write"/>

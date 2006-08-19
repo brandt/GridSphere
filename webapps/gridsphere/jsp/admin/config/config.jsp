@@ -1,7 +1,7 @@
 <%@ page import="java.util.List,
                  java.util.Iterator,
-                 org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule,
-                 org.gridlab.gridsphere.portlet.PortletRequest" %>
+                 org.gridsphere.services.core.security.auth.modules.LoginAuthModule,
+                 org.gridsphere.portlet.PortletRequest" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>

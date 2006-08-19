@@ -2,7 +2,7 @@
 <!--
 
     Portlet mapping file controls mappings between portlet descriptors and
-    org.gridlab.gridsphere.portletconatiner.descriptor.* classes used in
+    org.gridsphere.portletconatiner.descriptor.* classes used in
     creation of portlets
 
     $Id$
@@ -11,53 +11,53 @@
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
 <mapping>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletCollection">
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.SportletCollection">
         <map-to xml="portlet-app-collection"/>
-        <field name="PortletDefinitionList" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinition" collection="arraylist">
+        <field name="PortletDefinitionList" type="org.gridsphere.portletcontainer.impl.descriptor.SportletDefinition" collection="arraylist">
             <bind-xml name="portlet-app-def"/>
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinition">
-        <field name="ApplicationSportletConfig" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig">
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.SportletDefinition">
+        <field name="ApplicationSportletConfig" type="org.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig">
             <bind-xml name="portlet-app"/>
         </field>
-        <field name="ConcreteSportletList" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition" collection="arraylist">
+        <field name="ConcreteSportletList" type="org.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition" collection="arraylist">
             <bind-xml name="concrete-portlet-app"/>
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition">
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition">
         <field name="concretePortletID" type="string">
             <bind-xml name="id" node="attribute"/>
         </field>
-        <field name="PortletContextList" type="org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="arraylist">
+        <field name="PortletContextList" type="org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="arraylist">
             <bind-xml name="context-param"/>
         </field>
-        <field name="ConcreteSportletConfig" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig">
+        <field name="ConcreteSportletConfig" type="org.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig">
             <bind-xml name="concrete-portlet"/>
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig">
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig">
         <field name="Name" type="string">
             <bind-xml name="portlet-name" attribute="element"/>
         </field>
         <field name="DefaultLocale" type="string">
             <bind-xml name="default-locale" attribute="element"/>
         </field>
-        <field name="LanguageList" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.LanguageInfo" collection="arraylist">
+        <field name="LanguageList" type="org.gridsphere.portletcontainer.impl.descriptor.LanguageInfo" collection="arraylist">
             <bind-xml name="language"/>
         </field>
-        <field name="AccessRestrictions" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions">
+        <field name="AccessRestrictions" type="org.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions">
             <bind-xml name="access-restrictions"/>
         </field>
-        <field name="ConfigParamList" type="org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="arraylist">
+        <field name="ConfigParamList" type="org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="arraylist">
             <bind-xml name="config-param"/>
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.LanguageInfo">
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.LanguageInfo">
         <field name="Locale" type="string">
             <bind-xml name="locale" node="attribute"/>
         </field>
@@ -75,7 +75,7 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions">
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions">
         <field name="Visibility" type="string">
             <bind-xml name="visibility" node="attribute"/>
         </field>
@@ -84,7 +84,7 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig">
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig">
         <field name="ApplicationPortletID" type="string">
             <bind-xml name="id" node="attribute"/>
         </field>
@@ -94,21 +94,21 @@
         <field name="ServletName" type="string">
             <bind-xml name="servlet-name"/>
         </field>
-        <field name="ConfigParamList" type="org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="arraylist">
+        <field name="ConfigParamList" type="org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="arraylist">
             <bind-xml name="portlet-config"/>
         </field>
-        <field name="CacheInfo" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.CacheInfo">
+        <field name="CacheInfo" type="org.gridsphere.portletcontainer.impl.descriptor.CacheInfo">
             <bind-xml name="cache"/>
         </field>
-        <field name="AllowsWindowStates" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.AllowsWindowStates">
+        <field name="AllowsWindowStates" type="org.gridsphere.portletcontainer.impl.descriptor.AllowsWindowStates">
             <bind-xml name="allows"/>
         </field>
-        <field name="Supports" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.Supports">
+        <field name="Supports" type="org.gridsphere.portletcontainer.impl.descriptor.Supports">
             <bind-xml name="supports"/>
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.CacheInfo">
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.CacheInfo">
         <field name="Expires" type="long">
             <bind-xml name="expires"/>
         </field>
@@ -117,19 +117,19 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.AllowsWindowStates">
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.AllowsWindowStates">
         <field name="WindowStates" type="org.exolab.castor.types.AnyNode" collection="arraylist">
             <bind-xml matches="*"/>
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.Supports">
-        <field name="Markups" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.Markup" collection="arraylist">
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.Supports">
+        <field name="Markups" type="org.gridsphere.portletcontainer.impl.descriptor.Markup" collection="arraylist">
             <bind-xml name="markup"/>
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.Markup">
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.Markup">
         <field name="Name" type="string">
             <bind-xml name="name" node="attribute"/>
         </field>
@@ -138,7 +138,7 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam">
+    <class name="org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam">
         <field name="ParamName" type="string">
             <bind-xml name="param-name"/>
         </field>

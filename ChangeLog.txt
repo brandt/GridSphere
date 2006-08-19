@@ -138,7 +138,7 @@ Release Notes - GridSphere Portal Framework - Version 2.1
 
 ** Bug
     * [GPF-80] - Problems with Internet Explorer
-    * [GPF-154] - org.gridlab.gridsphere.portlet.Client must extends java.io.Serializable
+    * [GPF-154] - org.gridsphere.portlet.Client must extends java.io.Serializable
     * [GPF-161] - PortletSession.SESSION_SCOPE is not unique
 
 ** New Feature

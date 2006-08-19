@@ -1,4 +1,4 @@
-<%@ page import="org.gridlab.gridsphere.portlet.User" %>
+<%@ page import="org.gridsphere.portlet.User" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>

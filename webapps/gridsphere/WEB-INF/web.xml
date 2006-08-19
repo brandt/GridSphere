@@ -19,7 +19,7 @@
 
     <filter>
         <filter-name>GridSphere Filter</filter-name>
-        <filter-class>org.gridlab.gridsphere.filters.GridSphereFilter</filter-class>
+        <filter-class>org.gridsphere.filters.GridSphereFilter</filter-class>
     </filter>
 
     <filter-mapping>
@@ -29,73 +29,73 @@
 
     <servlet>
         <servlet-name>gridsphere</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.servlets.GridSphereServlet</servlet-class>
+        <servlet-class>org.gridsphere.servlets.GridSphereServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet>
         <servlet-name>LoginPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.login.LoginPortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>LogoutPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.logout.LogoutPortlet</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.logout.LogoutPortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>SetupPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.setup.SetupPortlet</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.admin.setup.SetupPortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>ConfigPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.config.ConfigPortlet</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.admin.config.ConfigPortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>UserManagerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.admin.users.UserManagerPortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>RoleManagerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.roles.RoleManagerPortlet</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>LayoutManagerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>PortletApplicationManager</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.admin.portlets.PortletApplicationManager</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>ProfileManagerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>SessionManagerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>TrackerStatisticsPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>LocalePortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.locale.LocalePortlet</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.locale.LocalePortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>MessagingServicesPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.messaging.MessagingServicesPortlet</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.messaging.MessagingServicesPortlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -110,12 +110,12 @@
 
     <servlet>
         <servlet-name>DatePortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.date.DatePortlet</servlet-class>
+        <servlet-class>org.gridsphere.portlets.core.date.DatePortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>SecureDirectory</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.servlets.SecureDirectory</servlet-class>
+        <servlet-class>org.gridsphere.servlets.SecureDirectory</servlet-class>
         <init-param>
             <param-name>strongProtection</param-name>
             <param-value>true</param-value>

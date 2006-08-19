@@ -6,7 +6,7 @@
 
 <hibernate-mapping>
     <class
-        name="org.gridlab.gridsphere.services.core.messaging.MessagingID"
+        name="org.gridsphere.services.core.messaging.MessagingID"
         table="gsmessagingid"
         >
         <cache usage="read-write"/>

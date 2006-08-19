@@ -12,8 +12,8 @@
 
     <tag>
         <name>defineObjects</name>
-        <tag-class>org.gridlab.gridsphere.provider.portlet.tags.jsr.DefineObjectsTag</tag-class>
-        <tei-class>org.gridlab.gridsphere.provider.portlet.tags.jsr.DefineObjectsTag$TEI</tei-class>
+        <tag-class>org.gridsphere.provider.portlet.tags.jsr.DefineObjectsTag</tag-class>
+        <tei-class>org.gridsphere.provider.portlet.tags.jsr.DefineObjectsTag$TEI</tei-class>
         <body-content>empty</body-content>
         <description>
             Initializes Core Portlet Objects: RenderRequest, RenderResponse, PortletConfig
@@ -22,8 +22,8 @@
 
     <tag>
         <name>renderURL</name>
-        <tag-class>org.gridlab.gridsphere.provider.portlet.tags.jsr.RenderURLTagImpl</tag-class>
-        <tei-class>org.gridlab.gridsphere.provider.portletui.tags.ActionTag$TEI</tei-class>
+        <tag-class>org.gridsphere.provider.portlet.tags.jsr.RenderURLTagImpl</tag-class>
+        <tei-class>org.gridsphere.provider.portletui.tags.ActionTag$TEI</tei-class>
         <body-content>JSP</body-content>
         <description>
             provides a render hyperlink that can contain additional nested param tags
@@ -51,8 +51,8 @@
     </tag>
     <tag>
         <name>actionURL</name>
-        <tag-class>org.gridlab.gridsphere.provider.portlet.tags.jsr.ActionURLTagImpl</tag-class>
-        <tei-class>org.gridlab.gridsphere.provider.portletui.tags.ActionTag$TEI</tei-class>
+        <tag-class>org.gridsphere.provider.portlet.tags.jsr.ActionURLTagImpl</tag-class>
+        <tei-class>org.gridsphere.provider.portletui.tags.ActionTag$TEI</tei-class>
         <body-content>JSP</body-content>
         <description>
             provides action hyperlink that can contain additional nested param tags
@@ -85,12 +85,12 @@
     </tag>
     <tag>
         <name>namespace</name>
-        <tag-class>org.gridlab.gridsphere.provider.portlet.tags.jsr.NamespaceTag</tag-class>
+        <tag-class>org.gridsphere.provider.portlet.tags.jsr.NamespaceTag</tag-class>
         <body-content>empty</body-content>
     </tag>
     <tag>
         <name>param</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionParamTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ActionParamTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Creates a portlet action parameter

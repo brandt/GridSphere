@@ -9,12 +9,12 @@
                     <row-layout>
                         <column-layout>
                             <portlet-frame label="hello">
-                                <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.1</portlet-class>
+                                <portlet-class>org.gridsphere.portlets.examples.HelloWorld.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                         <column-layout>
                             <portlet-frame>
-                                <portlet-class>org.gridlab.gridsphere.portlets.examples.HalloWelt.1</portlet-class>
+                                <portlet-class>org.gridsphere.portlets.examples.HalloWelt.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>

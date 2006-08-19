@@ -25,7 +25,7 @@
 
     <!-- uncomment only if using in non-GridSphere container
     <listener>
-        <listener-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</listener-class>
+        <listener-class>org.gridsphere.provider.portlet.jsr.PortletServlet</listener-class>
     </listener>
      -->
 
@@ -35,7 +35,7 @@
 
     <servlet>
         <servlet-name>PortletServlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>
+        <servlet-class>org.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

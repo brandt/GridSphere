@@ -6,7 +6,7 @@
 
 <hibernate-mapping>
 
-    <class name="org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition" table="authmoddef">
+    <class name="org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition" table="authmoddef">
         <cache usage="read-write"/>
         <id name="oid" column="gsoid" type="string" length="32">
             <generator class="uuid.hex"/>

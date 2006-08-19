@@ -19,7 +19,7 @@ $Id$
                 </column-layout>
                 <column-layout width="14%">
                     <portlet-frame transparent="true" outer-padding="0" label="logout">
-                        <portlet-class>org.gridlab.gridsphere.portlets.core.logout.LogoutPortlet.1</portlet-class>
+                        <portlet-class>org.gridsphere.portlets.core.logout.LogoutPortlet.1</portlet-class>
                     </portlet-frame>
                 </column-layout>
             </row-layout>
@@ -59,7 +59,7 @@ $Id$
                         <row-layout>
                             <column-layout width="100%">
                                 <portlet-frame label="profile">
-                                    <portlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
+                                    <portlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                         </row-layout>
@@ -95,22 +95,22 @@ $Id$
                             <column-layout width="40%">
                                 <portlet-frame label="config">
                                     <portlet-class>
-                                        org.gridlab.gridsphere.portlets.core.admin.config.ConfigPortlet.1
+                                        org.gridsphere.portlets.core.admin.config.ConfigPortlet.1
                                     </portlet-class>
                                 </portlet-frame>
                             </column-layout>
                             <column-layout width="60%">
                                 <portlet-frame label="portletmanager">
                                     <portlet-class>
-                                        org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
+                                        org.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
                                 </portlet-frame>
                                 <portlet-frame label="sessionmanager">
                                     <portlet-class>
-                                        org.gridlab.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet.1</portlet-class>
+                                        org.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet.1</portlet-class>
                                 </portlet-frame>
                                 <portlet-frame label="trackingstats">
                                     <portlet-class>
-                                        org.gridlab.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet.1</portlet-class>
+                                        org.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet.1</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                         </row-layout>
@@ -134,7 +134,7 @@ $Id$
                             <column-layout width="50%">
                                 <portlet-frame label="usermanager">
                                     <portlet-class>
-                                        org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
+                                        org.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                             <column-layout width="50%"/>
@@ -151,7 +151,7 @@ $Id$
                             <column-layout width="50%">
                                 <portlet-frame label="rolemanager">
                                     <portlet-class>
-                                        org.gridlab.gridsphere.portlets.core.admin.roles.RoleManagerPortlet.1</portlet-class>
+                                        org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet.1</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                             <column-layout width="50%"/>
@@ -171,7 +171,7 @@ $Id$
                             <column-layout width="100%">
                                 <portlet-frame label="messagingservice">
                                     <portlet-class>
-                                        org.gridlab.gridsphere.portlets.core.messaging.MessagingServicesPortlet.1</portlet-class>
+                                        org.gridsphere.portlets.core.messaging.MessagingServicesPortlet.1</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                         </row-layout>
@@ -186,7 +186,7 @@ $Id$
             <row-layout>
                 <column-layout width="100%">
                     <portlet-frame transparent="true" outer-padding="0" label="date">
-                        <portlet-class>org.gridlab.gridsphere.portlets.core.date.DatePortlet.1</portlet-class>
+                        <portlet-class>org.gridsphere.portlets.core.date.DatePortlet.1</portlet-class>
                     </portlet-frame>
                 </column-layout>
             </row-layout>

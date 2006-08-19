@@ -3,12 +3,12 @@
 
 <portlet-app-def>
 
-<portlet-app id="org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet">
+<portlet-app id="org.gridsphere.provider.portlet.jsr.PortletServlet">
     <portlet-name>JSR Portlet Servlet</portlet-name>
     <servlet-name>PortletServlet</servlet-name>
 </portlet-app>
 
-<concrete-portlet-app id="org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet.1">
+<concrete-portlet-app id="org.gridsphere.provider.portlet.jsr.PortletServlet.1">
     <concrete-portlet>
         <portlet-name>Portlet Servlet</portlet-name>
         <default-locale>en</default-locale>

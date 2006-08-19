@@ -20,7 +20,7 @@
             </column-layout>
             <column-layout width="30%">
                 <portlet-frame transparent="true" outer-padding="0" label="locale">
-                    <portlet-class>org.gridlab.gridsphere.portlets.core.locale.LocalePortlet.1</portlet-class>
+                    <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet.1</portlet-class>
                 </portlet-frame>
             </column-layout>
         </row-layout>
@@ -49,7 +49,7 @@
                         </column-layout>
                         <column-layout width="30%">
                             <portlet-frame label="login">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
+                                <portlet-class>org.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>

@@ -6,7 +6,7 @@
 
 <hibernate-mapping>
     <class
-        name="org.gridlab.gridsphere.services.core.request.GenericRequest"
+        name="org.gridsphere.services.core.request.GenericRequest"
         table="gsrequest"
         >
         <cache usage="read-write"/>

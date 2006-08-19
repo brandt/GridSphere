@@ -9,7 +9,7 @@
                     <row-layout>
                         <column-layout>
                             <portlet-frame label="zoneclock">
-                                <portlet-class>org.gridlab.gridsphere.portlets.ZoneClock</portlet-class>
+                                <portlet-class>org.gridsphere.portlets.ZoneClock</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>

@@ -6,7 +6,7 @@
 
 <hibernate-mapping>
     <class
-        name="org.gridlab.gridsphere.services.core.security.role.impl.UserRole"
+        name="org.gridsphere.services.core.security.role.impl.UserRole"
         table="userroles"
         >
         <cache usage="read-write"/>
@@ -23,11 +23,11 @@
         <many-to-one
             name="user"
             column="sportletuser"
-            class="org.gridlab.gridsphere.portlet.impl.SportletUserImpl">
+            class="org.gridsphere.portlet.impl.SportletUserImpl">
         </many-to-one>
         <many-to-one
             name="role"
-            class="org.gridlab.gridsphere.services.core.security.role.PortletRole">
+            class="org.gridsphere.services.core.security.role.PortletRole">
         </many-to-one>
 
     </class>

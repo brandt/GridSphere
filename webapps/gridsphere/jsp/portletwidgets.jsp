@@ -179,7 +179,7 @@ FormEvent.getPressedSubmitButton() will return this name.
 
 <h4>More Information</h4>
 
-The Tag source code is in the org.gridlab.gridsphere.tags package and may be used as a reference or to develop
+The Tag source code is in the org.gridsphere.tags package and may be used as a reference or to develop
 new tags. Tags are defined in Tag Library Descriptors (TLD) that is in the gridsphere webapp in WEB-INF/conf/tlds.
 For more specific tag information including required and optional attributes, etc, please refer to the TLD.
 

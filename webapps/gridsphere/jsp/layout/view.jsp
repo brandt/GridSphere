@@ -1,5 +1,5 @@
 <%@ page import="java.util.List,
-                 org.gridlab.gridsphere.layout.PortletTab" %>
+                 org.gridsphere.layout.PortletTab" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 

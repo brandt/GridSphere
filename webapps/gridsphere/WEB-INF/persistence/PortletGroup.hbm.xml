@@ -6,7 +6,7 @@
 
 <hibernate-mapping>
     <class
-        name="org.gridlab.gridsphere.services.core.security.group.PortletGroup"
+        name="org.gridsphere.services.core.security.group.PortletGroup"
         table="sportletgroup"
         >
         <cache usage="read-write"/>
@@ -30,7 +30,7 @@
         <set name="PortletRoleList" table="portletrolelist" cascade="all">
             <cache usage="read-write"/>
             <key column="role_oid"/>
-            <one-to-many class="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo"/>
+            <one-to-many class="org.gridsphere.portlet.impl.SportletRoleInfo"/>
         </set>
 
     </class>

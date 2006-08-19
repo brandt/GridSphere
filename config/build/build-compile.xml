@@ -28,18 +28,18 @@ Build include file for the GridSphere Portal source code, see build.xml
     <target name="gridsphere-portal-jar" depends="compile" description="Makes gridsphere JAR">
         <mkdir dir="${build.classes}/gridsphere"/>
         <filter token="GRIDSPHERE_RELEASE" value="${gridsphere.name}"/>
-        <copy todir="${build.classes}/org/gridlab/gridsphere/portlet/impl/"
+        <copy todir="${build.classes}/org/gridsphere/portlet/impl/"
               file="webapps/gridsphere/WEB-INF/portlet.properties"
               filtering="true"/>
         <copy file="webapps/gridsphere/WEB-INF/mapping/portlet-jsr-mapping.xml"
-              todir="${build.classes}/org/gridlab/gridsphere/portletcontainer/jsrimpl/descriptor"/>
+              todir="${build.classes}/org/gridsphere/portletcontainer/jsrimpl/descriptor"/>
         <copy file="webapps/gridsphere/WEB-INF/mapping/portlet-mapping.xml"
-              todir="${build.classes}/org/gridlab/gridsphere/portletcontainer/impl/descriptor"/>
+              todir="${build.classes}/org/gridsphere/portletcontainer/impl/descriptor"/>
         <jar jarfile="${build.lib}/gridsphere-portal-${gridsphere.version}.jar" basedir="${build.classes}" defaultexcludes="yes">
-            <include name="org/gridlab/gridsphere/portletcontainer/impl/**"/>
-            <include name="org/gridlab/gridsphere/portletcontainer/jsrimpl/**"/>
-            <include name="org/gridlab/gridsphere/portlet/impl/**"/>
-            <include name="org/gridlab/gridsphere/portlet/jsrimpl/**"/>
+            <include name="org/gridsphere/portletcontainer/impl/**"/>
+            <include name="org/gridsphere/portletcontainer/jsrimpl/**"/>
+            <include name="org/gridsphere/portlet/impl/**"/>
+            <include name="org/gridsphere/portlet/jsrimpl/**"/>
         </jar>
     </target>
 
@@ -49,20 +49,20 @@ Build include file for the GridSphere Portal source code, see build.xml
     <target name="gridsphere-core-jar" depends="compile" description="Create GridSphere Core JAR">
         <jar jarfile="${build.lib}/gridsphere-core-${gridsphere.version}.jar" basedir="${build.classes}">
             <!-- core portlets, GS servlet & filter, event impl -->
-            <include name="org/gridlab/gridsphere/portlets/**"/>
-            <include name="org/gridlab/gridsphere/servlets/**"/>
-            <include name="org/gridlab/gridsphere/filters/**"/>
-            <include name="org/gridlab/gridsphere/tools/**"/>
-            <include name="org/gridlab/gridsphere/event/impl/**"/>
+            <include name="org/gridsphere/portlets/**"/>
+            <include name="org/gridsphere/servlets/**"/>
+            <include name="org/gridsphere/filters/**"/>
+            <include name="org/gridsphere/tools/**"/>
+            <include name="org/gridsphere/event/impl/**"/>
             <!-- layout impl classes -->
-            <include name="org/gridlab/gridsphere/layout/**"/>
-            <include name="org/gridlab/gridsphere/layout/event/impl/**"/>
-            <exclude name="org/gridlab/gridsphere/layout/event/*.class"/>
-            <exclude name="org/gridlab/gridsphere/layout/PortletComponent.class"/>
-            <exclude name="org/gridlab/gridsphere/layout/ComponentRender.class"/>
-            <exclude name="org/gridlab/gridsphere/layout/ComponentLifecycle.class"/>
+            <include name="org/gridsphere/layout/**"/>
+            <include name="org/gridsphere/layout/event/impl/**"/>
+            <exclude name="org/gridsphere/layout/event/*.class"/>
+            <exclude name="org/gridsphere/layout/PortletComponent.class"/>
+            <exclude name="org/gridsphere/layout/ComponentRender.class"/>
+            <exclude name="org/gridsphere/layout/ComponentLifecycle.class"/>
             <!-- core service impl classes -->
-            <include name="org/gridlab/gridsphere/services/**/impl/**"/>
+            <include name="org/gridsphere/services/**/impl/**"/>
         </jar>
     </target>
 
@@ -74,22 +74,22 @@ Build include file for the GridSphere Portal source code, see build.xml
         </copy>
         <jar jarfile="${build.lib}/gridsphere-portal-api-${gridsphere.version}.jar" basedir="${build.classes}">
             <!-- portlet container interfaces -->
-            <include name="org/gridlab/gridsphere/portletcontainer/**"/>
+            <include name="org/gridsphere/portletcontainer/**"/>
             <!-- core services interfaces -->
-            <include name="org/gridlab/gridsphere/services/**"/>
+            <include name="org/gridsphere/services/**"/>
             <!-- core layout interfaces -->
-            <include name="org/gridlab/gridsphere/layout/PortletComponent.class"/>
-            <include name="org/gridlab/gridsphere/layout/ComponentRender.class"/>
-            <include name="org/gridlab/gridsphere/layout/ComponentLifecycle.class"/>
-            <include name="org/gridlab/gridsphere/layout/event/**"/>
+            <include name="org/gridsphere/layout/PortletComponent.class"/>
+            <include name="org/gridsphere/layout/ComponentRender.class"/>
+            <include name="org/gridsphere/layout/ComponentLifecycle.class"/>
+            <include name="org/gridsphere/layout/event/**"/>
             <!-- core event interfcaes -->
-            <include name="org/gridlab/gridsphere/event/**"/>
+            <include name="org/gridsphere/event/**"/>
             <!-- JSR 168 API -->
             <include name="javax/**"/>
             <!-- GS properties -->
             <include name="gridsphere/**"/>
             <!-- GS portlet API -->
-            <include name="org/gridlab/gridsphere/portlet/**"/>
+            <include name="org/gridsphere/portlet/**"/>
             <exclude name="**/impl/**"/>
             <exclude name="**/jsrimpl/**"/>
         </jar>
@@ -100,7 +100,7 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- =================================================================== -->
     <target name="gridsphere-service-framework-jar" depends="compile" description="Creates GS portlet service framework JAR">
         <echo>Creating GridSphere service framework JAR</echo>
-        <copy file="webapps/gridsphere/WEB-INF/mapping/portlet-services-mapping.xml" todir="${build.classes}/org/gridlab/gridsphere/portlet/service/spi/impl"/>
+        <copy file="webapps/gridsphere/WEB-INF/mapping/portlet-services-mapping.xml" todir="${build.classes}/org/gridsphere/portlet/service/spi/impl"/>
         <jar jarfile="${build.lib}/gridsphere-service-framework-${gridsphere.version}.jar" basedir="${build.classes}">
             <include name="**/portlet/service/**"/>
         </jar>
@@ -114,7 +114,7 @@ Build include file for the GridSphere Portal source code, see build.xml
             <fileset dir="config/resources"/>
         </copy>
         <jar jarfile="${build.lib}/gridsphere-provider-${gridsphere.version}.jar" basedir="${build.classes}">
-            <include name="org/gridlab/gridsphere/provider/**"/>
+            <include name="org/gridsphere/provider/**"/>
             <include name="gridsphere/**"/>
             <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
         </jar>

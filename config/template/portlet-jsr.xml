@@ -12,12 +12,17 @@
         <display-name xml:lang="en">A sample Portlet</display-name>
         <display-name xml:lang="de">Ein sample Portlet</display-name>
         <!-- place your portlet class name here -->
-        <portlet-class>org.gridlab.gridsphere.portlets.SamplePortlet</portlet-class>
-        <expiration-cache>60</expiration-cache>
-        <!-- place supported modes here -->
+        <portlet-class>org.gridsphere.portlets.SamplePortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <!-- place any initialization params here -->
+        <init-param>
+            <name>aname</name>
+            <value>avalue</value>
+        </init-param>
+	<!-- place supported modes here -->
         <supports>
             <mime-type>text/html</mime-type>
-            <portlet-mode>config</portlet-mode>
+            <portlet-mode>configure</portlet-mode>
             <portlet-mode>edit</portlet-mode>
             <portlet-mode>help</portlet-mode>
         </supports>

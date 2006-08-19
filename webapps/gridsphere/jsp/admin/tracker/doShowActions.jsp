@@ -1,5 +1,5 @@
 <%@ page import="java.util.Iterator" %>
-<%@ page import="org.gridlab.gridsphere.services.core.tracker.impl.TrackerAction" %>
+<%@ page import="org.gridsphere.services.core.tracker.impl.TrackerAction" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>

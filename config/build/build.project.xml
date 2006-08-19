@@ -215,7 +215,7 @@ Copyright:
     <target name="create-database" depends="setenv, deploy">
         <echo message="Creating database"/>
         <taskdef name="dbtask"
-                 classname="org.gridlab.gridsphere.services.core.persistence.impl.DBTask"
+                 classname="org.gridsphere.services.core.persistence.impl.DBTask"
                  classpathref="classpath"/>
         <dbtask
                 configdir="${appserver.home}/webapps/${project.name}"
@@ -224,7 +224,7 @@ Copyright:
 
     <target name="update-database" depends="setenv, configure-database, deploy">
         <taskdef name="dbtask"
-                 classname="org.gridlab.gridsphere.services.core.persistence.impl.DBTask"
+                 classname="org.gridsphere.services.core.persistence.impl.DBTask"
                  classpathref="classpath"/>
         <dbtask
                 configdir="${appserver.home}/webapps/${project.name}"

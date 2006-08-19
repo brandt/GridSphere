@@ -6,7 +6,7 @@
         
 <hibernate-mapping>
     <class
-        name="org.gridlab.gridsphere.services.core.tracker.impl.TrackerInfo"
+        name="org.gridsphere.services.core.tracker.impl.TrackerInfo"
         table="tracker_info"
         >
         <cache usage="read-write"/>
@@ -27,7 +27,7 @@
     </class>
 
     <class
-        name="org.gridlab.gridsphere.services.core.tracker.impl.TrackerAction"
+        name="org.gridsphere.services.core.tracker.impl.TrackerAction"
         table="tracker_action"
         >
         <cache usage="read-write"/>

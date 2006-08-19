@@ -17,7 +17,7 @@
 
     <servlet>
         <servlet-name>HelloWorld</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld</servlet-class>
+        <servlet-class>org.gridsphere.portlets.examples.HelloWorld</servlet-class>
     </servlet>
 
     <servlet-mapping>

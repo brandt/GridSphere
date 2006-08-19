@@ -168,7 +168,7 @@ Invoke "ant help"
 
     <target name="deploy-tck" depends="jar">
         <taskdef name="deploytck"
-            classname="org.gridlab.gridsphere.tools.DeployGridSphereTCK"
+            classname="org.gridsphere.tools.DeployGridSphereTCK"
             classpathref="classpath"/>
         <deploytck builddir="${gridsphere.build}" wardir="webapps/tck" server="${appserver.home}"/>
     </target>

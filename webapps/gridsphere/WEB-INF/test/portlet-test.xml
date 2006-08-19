@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <portlet-app-collection>
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.HelloWorld.666">
+        <portlet-app id="org.gridsphere.portlets.core.HelloWorld.666">
             <portlet-name>Hello World</portlet-name>
             <servlet-name>hello</servlet-name>
             <portlet-config>
@@ -30,7 +30,7 @@
             </supports>
         </portlet-app>
 
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.HelloWorld.666.2">
+        <concrete-portlet-app id="org.gridsphere.portlets.core.HelloWorld.666.2">
             <context-param>
                 <param-name>buzzle</param-name>
                 <param-value>yea</param-value>
@@ -58,7 +58,7 @@
             </concrete-portlet>
         </concrete-portlet-app>
 
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.HelloWorld.666.4">
+        <concrete-portlet-app id="org.gridsphere.portlets.core.HelloWorld.666.4">
             <context-param>
                 <param-name>Portlet Master</param-name>
                 <param-value>secondguy@some.com</param-value>

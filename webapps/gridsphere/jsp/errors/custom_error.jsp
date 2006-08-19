@@ -1,4 +1,4 @@
-<%@ page import="org.gridlab.gridsphere.provider.portletui.beans.MessageStyle"%>
+<%@ page import="org.gridsphere.provider.portletui.beans.MessageStyle"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>

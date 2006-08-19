@@ -12,7 +12,7 @@
 
     <tag>
         <name>hasaction</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.HasActionTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.HasActionTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Is used to create layout based on an action
@@ -31,7 +31,7 @@
 
     <tag>
         <name>hasrole</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.HasRoleTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.HasRoleTag</tag-class>
         <body-content>JSP</body-content>
         <description>
                 requires the user have the minimum role specified  to display content
@@ -55,7 +55,7 @@
 
     <tag>
         <name>actionparam</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionParamTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ActionParamTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Creates a portlet action parameter
@@ -79,7 +79,7 @@
 
     <tag>
         <name>actionlink</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionLinkTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ActionLinkTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates a portlet action link
@@ -178,7 +178,7 @@
 
     <tag>
         <name>actionsubmit</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionSubmitTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ActionSubmitTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates a submit button
@@ -257,7 +257,7 @@
 
     <tag>
         <name>calendar</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.CalendarTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.CalendarTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Creates a calendar input widget
@@ -306,7 +306,7 @@
 
     <tag>
         <name>checkbox</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.CheckboxTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.CheckboxTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input checkbox tag
@@ -355,7 +355,7 @@
 
     <tag>
         <name>fileform</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.FileFormTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.FileFormTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Wrapper around HTML form tag
@@ -384,7 +384,7 @@
 
     <tag>
         <name>fileinput</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.FileInputTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.FileInputTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input file upload tag
@@ -428,7 +428,7 @@
 
     <tag>
         <name>form</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionFormTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ActionFormTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Wrapper around HTML form tag
@@ -482,7 +482,7 @@
 
     <tag>
         <name>frame</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.FrameTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.FrameTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table frame
@@ -576,7 +576,7 @@
 
     <tag>
         <name>hiddenfield</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.HiddenFieldTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.HiddenFieldTag</tag-class>
         <body-content>empty</body-content>
         <description>
             makes a hidden text field
@@ -605,7 +605,7 @@
 
     <tag>
         <name>image</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ImageTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ImageTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Displays an image
@@ -659,7 +659,7 @@
 
     <tag>
         <name>include</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.IncludeTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.IncludeTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Includes pages from any web application
@@ -683,7 +683,7 @@
 
     <tag>
         <name>actioncomponent</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionComponentTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ActionComponentTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Includes action components from any web application
@@ -707,7 +707,7 @@
 
     <tag>
         <name>list</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ListTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ListTag</tag-class>
         <body-content>empty</body-content>
         <description>
             makes a list
@@ -726,7 +726,7 @@
 
     <tag>
         <name>listbox</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ListBoxTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ListBoxTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             makes a listbox
@@ -775,7 +775,7 @@
 
     <tag>
         <name>listboxitem</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ListBoxItemTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ListBoxItemTag</tag-class>
         <body-content>empty</body-content>
         <description>
             makes a listbox item
@@ -824,7 +824,7 @@
 
     <tag>
         <name>messagebox</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.MessageBoxTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.MessageBoxTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates an message box
@@ -873,7 +873,7 @@
 
     <tag>
         <name>panel</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.PanelTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.PanelTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table pane which contains tableframes
@@ -932,7 +932,7 @@
 
     <tag>
         <name>password</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.PasswordTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.PasswordTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input text tag
@@ -981,7 +981,7 @@
 
     <tag>
         <name>radiobutton</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.RadioButtonTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.RadioButtonTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input radio button tag
@@ -1020,7 +1020,7 @@
 
     <tag>
         <name>special</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.SpecialTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.SpecialTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table row
@@ -1034,7 +1034,7 @@
 
     <tag>
         <name>tabbedpane</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TabbedPaneTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.TabbedPaneTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates a tabbed pane
@@ -1068,7 +1068,7 @@
 
     <tag>
         <name>tab</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TabTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.TabTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates a tab
@@ -1102,7 +1102,7 @@
 
     <tag>
         <name>table</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TableTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.TableTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table
@@ -1191,7 +1191,7 @@
 
     <tag>
         <name>tablerow</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TableRowTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.TableRowTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table row
@@ -1241,7 +1241,7 @@
 
     <tag>
         <name>tablecell</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TableCellTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.TableCellTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table cell
@@ -1305,8 +1305,8 @@
 
     <tag>
         <name>text</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TextTag</tag-class>
-        <tei-class>org.gridlab.gridsphere.provider.portletui.tags.ActionTag$TEI</tei-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.TextTag</tag-class>
+        <tei-class>org.gridsphere.provider.portletui.tags.ActionTag$TEI</tei-class>
         <body-content>JSP</body-content>
         <description>
             Shows text
@@ -1355,7 +1355,7 @@
 
     <tag>
         <name>textarea</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TextAreaTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.TextAreaTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows text
@@ -1419,7 +1419,7 @@
 
     <tag>
         <name>texteditor</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TextEditorTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.TextEditorTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Displays simple text editor
@@ -1458,7 +1458,7 @@
 
     <tag>
         <name>textfield</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TextFieldTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.TextFieldTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Wraps HTML input text tag
@@ -1518,7 +1518,7 @@
 
     <tag>
         <name>actionpane</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionPaneTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ActionPaneTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates an action pane
@@ -1533,7 +1533,7 @@
 
     <tag>
         <name>actionbody</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionBodyTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ActionBodyTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates an action body
@@ -1543,7 +1543,7 @@
 
     <tag>
         <name>actionmenu</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionMenuTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ActionMenuTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates an action menu
@@ -1588,7 +1588,7 @@
 
     <tag>
         <name>actionmenuitem</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionMenuItemTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ActionMenuItemTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates an action menu item
@@ -1613,7 +1613,7 @@
 
     <tag>
         <name>datagrid</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.DataGridTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.DataGridTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates a datagrid
@@ -1661,7 +1661,7 @@
 
     <tag>
         <name>datagridcolumn</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.DataGridColumnTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.DataGridColumnTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates a column in a datagrid
@@ -1705,7 +1705,7 @@
 
     <tag>
         <name>group</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.GroupTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.GroupTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates an group around other items
@@ -1739,7 +1739,7 @@
 
     <tag>
         <name>validator</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ValidatorTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ValidatorTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Provides a validator tag that can be used inside of a TextFieldTag
@@ -1763,7 +1763,7 @@
 
     <tag>
         <name>portlet</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.PortletTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.PortletTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Displays a portlet

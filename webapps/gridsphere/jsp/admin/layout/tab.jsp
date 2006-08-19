@@ -1,6 +1,6 @@
-<%@ page import="org.gridlab.gridsphere.layout.PortletTab"%>
-<%@ page import="org.gridlab.gridsphere.layout.PortletComponent"%>
-<%@ page import="org.gridlab.gridsphere.layout.PortletTableLayout"%>
+<%@ page import="org.gridsphere.layout.PortletTab"%>
+<%@ page import="org.gridsphere.layout.PortletComponent"%>
+<%@ page import="org.gridsphere.layout.PortletTableLayout"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 

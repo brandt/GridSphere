@@ -14,7 +14,7 @@
         <name>GridSphere Password</name>
         <description lang="en">Hashed password based authentication using GridSphere database</description>
         <description lang="ja">GridSphereデータベースを用いたハッシュベースのパスワード認証</description>
-        <implementation>org.gridlab.gridsphere.services.core.security.auth.modules.impl.PasswordAuthModule</implementation>
+        <implementation>org.gridsphere.services.core.security.auth.modules.impl.PasswordAuthModule</implementation>
         <active>true</active>
         <priority>100</priority>
         <auth-config>
@@ -33,7 +33,7 @@
         <name>GridSphere JAAS</name>
         <description lang="en">Use the Java Authentication and Authorization Framework</description>
         <description lang="ja">Java認証＆授権フレームワーク(Java Authentication and Authorization Framework)を使用</description>
-        <implementation>org.gridlab.gridsphere.services.core.security.auth.modules.impl.JaasAuthModule</implementation>
+        <implementation>org.gridsphere.services.core.security.auth.modules.impl.JaasAuthModule</implementation>
         <active>false</active>
         <priority>40</priority>
         <auth-config>
