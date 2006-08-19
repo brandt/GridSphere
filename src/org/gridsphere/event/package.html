@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<body>
+<b>Portlet Events API</b>
+<p>
+Portlet events are a part of the Portlet API and permit actions to be
+genererated by the portlet container when a change of state occurs in the
+portlet window, a message is sent to another portlet, or a portlet action
+is performed. The {@link org.gridsphere.portlet.AbstractPortlet}
+provides base implementations of the portlet event listener methods and should
+be overriden for particular event handling.
+<p>
+The current portlet events are:
+<ul>
+<li>{@link org.gridsphere.event.ActionEvent}</li>
+<li>{@link org.gridsphere.event.MessageEvent}</li>
+<li>{@link org.gridsphere.event.WindowEvent}</li>
+</ul>
+<p>
+The corresponding listeners are:
+<ul>
+<li>{@link org.gridsphere.event.ActionListener}</li>
+<li>{@link org.gridsphere.event.MessageListener}</li>
+<li>{@link org.gridsphere.event.WindowListener}</li>
+</ul>
+<p>
+
+</body>
+</html>
