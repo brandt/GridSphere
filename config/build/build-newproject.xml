@@ -81,8 +81,6 @@
         <copy overwrite="true" file="config/template/portlet-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/portlet.xml"/>
         <copy overwrite="true" file="config/template/layout-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/layout.xml"/>
         <copy overwrite="true" file="config/template/web-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/web.xml"/>
-        <copy overwrite="true" file="config/template/group.sample.xml.tpl" tofile="${project.dir}/webapp/WEB-INF/group.sample.xml"/>
-
 
         <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_TITLE@"
                  value="${project.title}"/>
