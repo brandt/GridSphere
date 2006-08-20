@@ -14,3 +14,5 @@
 /* styling for the tabbed pane navigation */
 @import url( portlet.css );
 /* JSR 168 css */
+@import url( tags.css );
+/* GS UI tags css */
