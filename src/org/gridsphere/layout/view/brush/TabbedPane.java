@@ -126,6 +126,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         String lang = event.getPortletRequest().getLocale().getLanguage();
         String title = tab.getTitle(lang);
 
+        if (title == null) return pane;
         if (tabPane.getStyle().equalsIgnoreCase(TAB_STYLE_SUBMENU)) {
             pane.append("\n<li");
             if (tab.isSelected()) {
@@ -164,7 +165,6 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
 
         String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
         if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-        String cid = (String)req.getAttribute(compVar);
 
         if (tabPane.getStyle().equals(TAB_STYLE_SUBMENU)) {
             pane.append("\n<li");

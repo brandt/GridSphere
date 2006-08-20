@@ -25,7 +25,6 @@ import java.util.*;
 public class PortletTab extends BasePortletComponent implements Serializable, Cloneable, Comparator {
 
     public static final int DEFAULT_USERTAB_ORDER = 20;
-    private String title = "?";
     private List titles = new ArrayList();
     private transient boolean selected = false;
     private String url = null;
@@ -98,7 +97,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public String getTitle(String lang) {
         if (lang == null) throw new IllegalArgumentException("lang is NULL");
         Iterator it = titles.iterator();
-        String defTitle = title;
+        String defTitle = null;
         while (it.hasNext()) {
             Description t = (Description) it.next();
             if (t.getLang() == null) t.setLang(Locale.ENGLISH.getLanguage());

@@ -124,24 +124,15 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         String link = tab.createTabTitleLink(event);
         String lang = event.getPortletRequest().getLocale().getLanguage();
         String title = tab.getTitle(lang);
+        if (title == null) return pane;
         if (tabPane.getStyle().equals("sub-menu")) {
             pane.append("\n<li>");
             if (tab.isSelected()) {
-                pane.append("<div class=\"tab-sub-active\">");                
-                //if (tabPane.isEditMode()) {
-                //    pane.append("<a href=\"");
-                //    pane.append(link);
-                //    pane.append("\" ");
-                //} else {
-                    pane.append("<span ");
-                //}
+                pane.append("<div class=\"tab-sub-active\">");
+                pane.append("<span ");
                 pane.append("class=\"tab-sub-menu-active\">");
                 pane.append(replaceBlanks(title));
-                //if (tabPane.isEditMode()) {
-                //    pane.append("</a>");
-                //} else {
-                    pane.append("</span>");
-                //}
+                pane.append("</span>");
                 pane.append("</div>");
             } else {
                 pane.append("<a class=\"tab-sub-inactive\" href=\"");
@@ -155,19 +146,11 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         } else {
             if (tab.isSelected()) {
                 pane.append("\n<li>");
-                //if (tabPane.isEditMode()) {
-                //    pane.append("<a href=\"");
-                //    pane.append(link);
-                //    pane.append("\">");
-                //}
                 pane.append("<div class=\"tab-active\">");
                 pane.append("<span>");
                 pane.append(replaceBlanks(title));
                 pane.append("</span>");
                 pane.append("</div>");
-                //if (tabPane.isEditMode()) {
-                //    pane.append("</a>");
-                //}
                 pane.append("</li>");
             } else {
                 pane.append("\n<li>");
