@@ -30,18 +30,8 @@
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane selected="0" style="menu">
     <portlet-tab label="gridsphere">
-        <title lang="zh">GridSphere网络门户框架</title>
-        <title lang="en">GridSphere</title>
         <portlet-tabbed-pane selected="0" style="sub-menu">
             <portlet-tab label="home">
-               	<title lang="zh">首页</title>
-               	<title lang="en">Home</title>
-                <title lang="it">Inizio</title>
-		        <title lang="pl">Start</title>
-		        <title lang="hu">Otthon</title>
-		        <title lang="de">Start</title>
-		        <title lang="cs">Výchozí</title>
-                <title lang="hr">Ulaz</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="70%">
