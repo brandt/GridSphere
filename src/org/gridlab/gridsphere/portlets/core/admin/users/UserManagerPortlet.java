@@ -295,7 +295,6 @@ public class UserManagerPortlet extends ActionPortlet {
         User user = this.userManagerService.getUser(userId);
         if (user != null) {
             req.setAttribute("user", user);
-            this.userManagerService.deleteUser(user);
             this.passwordManagerService.deletePassword(user);
             List groups = this.groupManagerService.getGroups(user);
             Iterator it = groups.iterator();
@@ -309,6 +308,7 @@ public class UserManagerPortlet extends ActionPortlet {
                 PortletRole pr = (PortletRole)ur.next();
                 this.roleManagerService.deleteUserInRole(user, pr);
             }
+            this.userManagerService.deleteUser(user);
             createSuccessMessage(evt, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
         }
         setNextState(req, "doListUsers");
