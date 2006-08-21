@@ -207,7 +207,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 login(event);
                 long endTime = System.currentTimeMillis();
                 System.err.println("Time taken = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
-                return;
             }
             if (actionName.equals(SportletProperties.LOGOUT)) {
                 logout(event);
@@ -504,7 +503,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 uri.addParameter("cid", query);
             }
             String realuri = uri.toString().substring("http".length());
-            Boolean useSecureRedirect = Boolean.valueOf(GridSphereConfig.getProperty("use.http.redirect"));
+            Boolean useSecureRedirect = Boolean.valueOf(GridSphereConfig.getProperty("use.https.redirect"));
             if (useSecureRedirect.booleanValue()) {
                 realuri = "https" + realuri;
             } else {
