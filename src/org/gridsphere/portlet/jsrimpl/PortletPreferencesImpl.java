@@ -43,6 +43,8 @@ import java.util.Map;
  */
 public class PortletPreferencesImpl implements PortletPreferences {
 
+    public static final String NO_USER = "org.gridsphere.NO_USER";
+
     private transient Map defaultPrefsMap = new HashMap();
     private transient PreferencesValidator validator = null;
     private transient PersistenceManagerRdbms pm = null;
@@ -57,7 +59,8 @@ public class PortletPreferencesImpl implements PortletPreferences {
     /**
      * The unique userid this data belongs to
      */
-    private String userId = "";
+    private String userId = NO_USER;
+
     // key/value pairs
 
     private Map attributes = new HashMap();
