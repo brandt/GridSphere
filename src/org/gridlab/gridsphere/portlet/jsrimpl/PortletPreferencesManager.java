@@ -68,7 +68,7 @@ public class PortletPreferencesManager {
                         "select u from " + PortletPreferencesImpl.class.getName() + " u where u.userId='" + userId + "' and u.portletId='" + portletId + "'";
                 prefs = (PortletPreferencesImpl) pm.restore(command);
             } else {
-                userId = "500";
+                userId = PortletPreferencesImpl.NO_USER;
             }
 
             if (prefs == null) {
