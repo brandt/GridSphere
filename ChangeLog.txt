@@ -1,6 +1,16 @@
 ChangeLog.txt
 =============
 
+Changes since GridSphere 2.2.5
+==============================
+
+Bug
+
+    * [GPF-263] - Trying to login with non existing user leads to blank page
+    * [GPF-264] - war file creation for 3rd party portlets does not work
+    * [GPF-265] - NPE occurs in PortletServlet if user is null and PortletPreferences are created
+    * [GPF-266] - User deletion causes Hibernate integrity violation
+
 Changes since GridSphere 2.2.4
 ==============================
 
