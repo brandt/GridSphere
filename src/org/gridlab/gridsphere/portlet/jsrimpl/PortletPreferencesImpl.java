@@ -43,7 +43,7 @@ import java.util.Map;
  */
 public class PortletPreferencesImpl implements PortletPreferences {
 
-    public static final String NO_USER = "org.gridpshere.NO_USER";
+    public static final String NO_USER = "org.gridsphere.NO_USER";
 
     private transient Map defaultPrefsMap = new HashMap();
     private transient PreferencesValidator validator = null;
