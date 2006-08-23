@@ -167,8 +167,7 @@ Build include file for the GridSphere Portal source code, see build.xml
             optimize="false"
             includes="**/*.java"
             classpath="${build.lib}/gridsphere-provider-${gridsphere.version}.jar"
-            classpathref="classpath"
-            source="1.4">
+            classpathref="classpath">
         </javac>
 
     </target>

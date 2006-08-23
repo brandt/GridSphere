@@ -40,17 +40,28 @@ Build include file for the GridSphere Portal source code, see build.xml
         <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/database/hibernate.properties"
               file="${gswebapp.dir}/WEB-INF/CustomPortal/database/hibernate.properties"
               filtering="true"/>
+
+        <antcall target="modify-webxml"/>
+
+
         <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
+
+
+
         <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/web.xml"
               file="${gswebapp.dir}/WEB-INF/web.xml"
               filtering="true"/>
+
+
+
+
         <copy todir="${build.webapps}/${gridsphere.deploy}">
             <fileset dir="${gswebapp.dir}">
                 <exclude name="**/tlds/**"/>
                 <exclude name="**/test/**"/>
             </fileset>
         </copy>
-        <antcall target="modify-webxml"/>
+
 
         <copy overwrite="true" todir="${build.webapps}/${gridsphere.deploy}/WEB-INF/lib">
             <fileset dir="lib">
@@ -84,6 +95,10 @@ Build include file for the GridSphere Portal source code, see build.xml
 
     <target name="modify-webxml">
         <!-- change web.xml if precompiled jsps are available -->
+
+        <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
+        <filter token="PRECOMPILED-JSP" value=""/>
+
         <if>
             <equals arg1="${gridsphere.useprecompiledjsp}" arg2="true"/>
             <then>
@@ -92,27 +107,15 @@ Build include file for the GridSphere Portal source code, see build.xml
                     <available file="${gridsphere.build}/jsp/web.inc"/>
                     <then>
                         <loadfile property="web.inc" srcfile="${gridsphere.build}/jsp/web.inc" failonerror="false"/>
+                        <filter token="PRECOMPILED-JSP" value="${web.inc}"/>
                     </then>
                 </if>
-
-                <condition property="web.inc" value="">
-                    <not>
-                        <isset property="${web.inc}"/>
-                    </not>
-                </condition>
-
-
-                <!-- add the web.inc to web.xml (if avail)-->
-                <copy
-                    tofile="${gridsphere.build}/webapps/${gridsphere.deploy}/WEB-INF/web.xml"
-                    file="${gridsphere.build}/webapps/${gridsphere.deploy}/WEB-INF/web-xml.tmpl" overwrite="true">
-                    <filterset>
-                        <filter token="PRECOMPILED-JSP" value="${web.inc}"/>
-                    </filterset>
-                </copy>          
             </then>
         </if>
-        <delete file="${gridsphere.build}/webapps/${gridsphere.deploy}/WEB-INF/web-xml.tmpl"/>
+
+        <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/web.xml"
+                      file="${gswebapp.dir}/WEB-INF/web.xml"
+                      filtering="true"/>
     </target>
 
 
