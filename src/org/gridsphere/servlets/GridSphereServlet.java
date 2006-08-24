@@ -86,6 +86,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static final String COOKIE_REQUEST = "cookie-request";
     private int COOKIE_EXPIRATION_TIME = 60 * 60 * 24 * 7;  // 1 week (in secs)
 
+    private boolean setupNeeded = false;
     private boolean isTCK = false;
 
     /**
@@ -141,10 +142,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @throws ServletException if a servlet error occurs
      */
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        processRequest(req, res);
-    }
 
-    public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         // set content to UTF-8 for il8n and compression if supported
         req.setCharacterEncoding("utf-8");
 
@@ -171,12 +169,15 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
 
             if ((userManagerService.getNumUsers() == 0) || (roleService.getUsersInRole(PortletRole.ADMIN)).size() == 0) {
-                req.getSession().setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.SETUP_PAGE);
+                setupNeeded = true;
             }
 
         }
 
-        req.setAttribute("context", context);
+        if (setupNeeded) {
+            req.getSession().setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.SETUP_PAGE);
+            setupNeeded = false;
+        }
 
         // check to see if user has been authorized by means of container managed authorization
         checkWebContainerAuthorization(event);
@@ -201,6 +202,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
          }
 
+
         checkUserHasCookie(event);
 
         // Used for TCK tests
@@ -211,9 +213,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             String actionName = event.getAction().getName();
             if (actionName.equals(SportletProperties.LOGIN)) {
                 login(event);
-                long endTime = System.currentTimeMillis();
-                //System.err.println("Page render time = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
-                //return;
             }
             if (actionName.equals(SportletProperties.LOGOUT)) {
                 logout(event);
@@ -405,6 +404,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         if (user == null) {
             Cookie[] cookies = req.getCookies();
             if (cookies != null) {
+                System.err.println("cookie length=" + cookies.length);
                 for (int i = 0; i < cookies.length; i++) {
                     Cookie c = cookies[i];
                     System.err.println("found a cookie:");
