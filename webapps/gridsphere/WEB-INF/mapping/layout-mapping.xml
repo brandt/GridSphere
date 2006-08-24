@@ -161,10 +161,31 @@
         <field name="TabOrder" type="integer">
             <bind-xml name="order" node="attribute"/>
         </field>
+        <field name="Outline" type="boolean">
+            <bind-xml name="outline" node="attribute"/>
+        </field>
+        <field name="Include" type="string">
+            <bind-xml name="include" node="attribute"/>
+        </field>
+        <field name="Align" type="string">
+            <bind-xml name="align" node="attribute"/>
+        </field>
+        <field name="Padding" type="string">
+            <bind-xml name="padding" node="attribute"/>
+        </field>
         <field name="PortletComponent" type="org.gridsphere.layout.PortletComponent">
             <bind-xml auto-naming="deriveByClass"/>
         </field>
     </class>
+
+    <!--
+    <class name="org.gridsphere.layout.PortletTabTitle" extends="org.gridsphere.portlet.service.spi.impl.descriptor.Description">
+        <map-to xml="portlet-tab-title"/>
+        <field name="Include" type="string">
+            <bind-xml name="include" node="attribute"/>
+        </field>
+    </class>
+    -->
 
     <class name="org.gridsphere.layout.SelectionContainer" extends="org.gridsphere.layout.BasePortletComponent">
         <map-to xml="selection-container"/>
