@@ -29,10 +29,8 @@
 
     <portlet-tabbed-pane selected="0" style="menu" theme="default">
         <portlet-tab label="gridsphere">
-            <title lang="en">GridSphere</title>
             <portlet-tabbed-pane selected="0" style="sub-menu">
                 <portlet-tab label="adminlayout">
-                    <title lang="en">Layout Manager</title>
                     <table-layout>
                         <row-layout>
                             <column-layout width="100%">
@@ -45,7 +43,7 @@
                 </portlet-tab>
             </portlet-tabbed-pane>
         </portlet-tab>
-
+        <portlet-tab label="logout" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/logout/logoutnav.jsp"/>
     </portlet-tabbed-pane>
 
     <!-- Footer components (if any) -->

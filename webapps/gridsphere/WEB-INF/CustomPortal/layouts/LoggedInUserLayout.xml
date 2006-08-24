@@ -179,6 +179,8 @@ $Id$
                 </portlet-tab>
             </portlet-tabbed-pane>
         </portlet-tab>
+        <portlet-tab label="logout" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/logout/logoutnav.jsp"/>
+        <portlet-tab required-role="ADMIN" label="layout" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/admin/layout/layoutnav.jsp"/>
     </portlet-tabbed-pane>
 
     <portlet-footer>
