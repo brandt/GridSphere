@@ -237,11 +237,9 @@ public abstract class Portlet extends HttpServlet
         // create portlet request and response objects
         PortletRequest portletRequest = new SportletRequest(request);
         PortletResponse portletResponse = new SportletResponse(response, portletRequest);
-
         
         String method = (String) request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         if (method != null) {
-
             if (method.equals(SportletProperties.INIT)) {
                 ApplicationSportletConfig app = (ApplicationSportletConfig) request.getAttribute(SportletProperties.PORTLET_APPLICATION);
                 if (app != null) {
@@ -282,7 +280,10 @@ public abstract class Portlet extends HttpServlet
                 PortletSession portletSession = portletRequest.getPortletSession();
                 logout(portletSession);
             }
-
+        } else {
+            request.setAttribute(SportletProperties.SERVLET_PATH, "");
+            PortletURI uri = portletResponse.createReturnURI();
+            response.sendRedirect(uri.toString());
         }
         request.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }
