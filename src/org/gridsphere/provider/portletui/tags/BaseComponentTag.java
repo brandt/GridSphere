@@ -199,7 +199,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         componentBean.setLocale(getLocale());
         componentBean.addParam(SportletProperties.COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.COMPONENT_ID));
         componentBean.addParam(SportletProperties.GP_COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID));
-        if (cssStyle != null) componentBean.setCssClass(cssStyle);
+        if (cssStyle != null) componentBean.setCssStyle(cssStyle);
         componentBean.setDisabled(disabled);
         componentBean.setReadOnly(readonly);
         if (name != null) componentBean.setName(name);

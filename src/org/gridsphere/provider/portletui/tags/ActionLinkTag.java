@@ -12,7 +12,6 @@ import org.gridsphere.provider.portletui.beans.MessageStyle;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.Tag;
-import java.util.ArrayList;
 
 /**
  * The <code>ActionLinkTag</code> provides a hyperlink element that includes a <code>DefaultPortletAction</code>
@@ -131,6 +130,9 @@ public class ActionLinkTag extends ActionTag {
         if (trackMe != null) actionlink.setTrackme(trackMe);
         if (extUrl != null) actionlink.setExturl(extUrl);
         if (onClick != null) actionlink.setOnClick(onClick);
+        if (style != null) actionlink.setStyle(style);
+        if (cssStyle != null) actionlink.setCssStyle(cssStyle);
+        if (cssClass != null) actionlink.setCssClass(cssClass);
 
         Tag parent = getParent();
         if (parent instanceof ActionMenuTag) {
@@ -150,7 +152,6 @@ public class ActionLinkTag extends ActionTag {
     }
 
     public int doEndTag() throws JspException {
-
         if (!beanId.equals("")) {
             paramBeans = actionlink.getParamBeanList();
             label = actionlink.getLabel();
