@@ -31,7 +31,9 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     private PortletComponent portletComponent = null;
     private int tabOrder = 50;
     private String align = "left";
-
+    private boolean outline = true;
+    private String padding = null;
+    private String include = null;
 
     //protected StringBuffer tab = new StringBuffer();
     /**
@@ -58,6 +60,30 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
 
     public void setAlign(String align) {
         this.align = align;
+    }
+
+    public String getInclude() {
+        return include;
+    }
+
+    public void setInclude(String include) {
+        this.include = include;
+    }
+
+    public boolean getOutline() {
+        return outline;
+    }
+
+    public void setOutline(boolean outline) {
+        this.outline = outline;
+    }
+
+    public String getPadding() {
+        return padding;
+    }
+
+    public void setPadding(String padding) {
+        this.padding = padding;
     }
 
     public int getTabOrder() {

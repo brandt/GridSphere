@@ -16,9 +16,13 @@ import org.gridsphere.portlet.PortletResponse;
 import org.gridsphere.portlet.PortletRequest;
 import org.gridsphere.portlet.PortletURI;
 import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
 
+import javax.servlet.ServletContext;
+import javax.servlet.RequestDispatcher;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.io.StringWriter;
 
 public class TabbedPane extends BaseRender implements TabbedPaneView {
 
@@ -33,7 +37,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             new StringBuffer("\n<ul id=\"gridsphere-sub-nav\"><li id=\"gridsphere-sub-nav-border-left\">&nbsp;</li>\n");
     protected static final StringBuffer TAB_END_SUBMENU =
             new StringBuffer("\n<li id=\"gridsphere-sub-nav-border-right\">&nbsp;</li></ul> <!-- END NAVIGATION (SUB) MENU -->\n");
-    
+
     // SIDEMENU
     protected static final StringBuffer TAB_START_SIDEMENU =
             new StringBuffer("\n<!-- BEGIN NAVIGATION SIDE MENU -->\n")
@@ -126,7 +130,8 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         String lang = event.getPortletRequest().getLocale().getLanguage();
         String title = tab.getTitle(lang);
 
-        if (title == null) return pane;
+        if ((title == null) && (tab.getInclude() == null)) return pane;
+
         if (tabPane.getStyle().equalsIgnoreCase(TAB_STYLE_SUBMENU)) {
             pane.append("\n<li");
             if (tab.isSelected()) {
@@ -140,9 +145,43 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             if (tab.isSelected()) {
                 selected = "nav-sel";
             }
-            pane.append("<li class=\"").append(selected).append("\">");
-            pane.append("<a href=\"").append(link).append("\"><span>").
-                    append(replaceBlanks(title)).append("</span></a></li>");
+            if (!tab.getOutline()) {
+                selected = "";
+            }
+            String style = "";
+            if (tab.getPadding() != null) {
+                style += " padding: " + tab.getPadding() + "; ";
+            }
+            if (tab.getAlign().equals("right")) {
+                style += " float: right; ";
+            }
+            pane.append("<li class=\"").append(selected);
+            if (!style.equals("")) {
+                pane.append("\" style=\"").append(style).append("\">");
+            } else {
+                pane.append("\">");
+            }
+            pane.append("<a href=\"").append(link).append("\"><span>");
+
+            if (title != null) {
+                pane.append(replaceBlanks(title));
+            }
+            if (tab.getInclude() != null) {
+                PortletRequest req = event.getPortletRequest();
+                PortletResponse res = event.getPortletResponse();
+                StringWriter writer = new StringWriter();
+                StoredPortletResponseImpl sres = new StoredPortletResponseImpl(res, writer);
+                ServletContext ctx = event.getPortletContext();
+                RequestDispatcher rd = null;
+                rd = ctx.getRequestDispatcher(tab.getInclude());
+                try {
+                    rd.include(req, sres);
+                    pane.append(writer.getBuffer());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            pane.append("</span></a></li>");
         }
         if (tabPane.getStyle().equalsIgnoreCase(TAB_STYLE_SIDEMENU)) {
             String selected = "";

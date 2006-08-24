@@ -99,10 +99,6 @@ public class PortletContainer extends BasePortletComponent implements
 
         container.append(containerView.doEndBorder(event, this));
 
-  //      event.getPortletRequest().
-    //            setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, container);
-      //  req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, container);
-
         setBufferedOutput(req, container);
     }
 
