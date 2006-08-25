@@ -28,12 +28,12 @@ Build include file for the GridSphere Portal source code, see build.xml
     <target name="gridsphere-portal-jar" depends="compile" description="Makes gridsphere JAR">
         <mkdir dir="${build.classes}/gridsphere"/>
         <filter token="GRIDSPHERE_RELEASE" value="${gridsphere.name}"/>
-        <copy todir="${build.classes}/org/gridsphere/portlet/impl/"
-              file="webapps/gridsphere/WEB-INF/portlet.properties"
+        <copy file="webapps/gridsphere/WEB-INF/portlet.properties"
+              todir="${build.classes}/org/gridsphere/portlet/impl/"
               filtering="true"/>
-        <copy file="webapps/gridsphere/WEB-INF/mapping/portlet-jsr-mapping.xml"
+        <copy file="config/mapping/portlet-jsr-mapping.xml"
               todir="${build.classes}/org/gridsphere/portletcontainer/jsrimpl/descriptor"/>
-        <copy file="webapps/gridsphere/WEB-INF/mapping/portlet-mapping.xml"
+        <copy file="config/mapping/portlet-mapping.xml"
               todir="${build.classes}/org/gridsphere/portletcontainer/impl/descriptor"/>
         <jar jarfile="${build.lib}/gridsphere-portal-${gridsphere.version}.jar" basedir="${build.classes}" defaultexcludes="yes">
             <include name="org/gridsphere/portletcontainer/impl/**"/>
@@ -47,6 +47,8 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- Creates the GridSphere portlets JAR                                 -->
     <!-- =================================================================== -->
     <target name="gridsphere-core-jar" depends="compile" description="Create GridSphere Core JAR">
+        <copy file="config/mapping/layout-mapping.xml"
+              todir="${build.classes}/org/gridsphere/layout/"/>
         <jar jarfile="${build.lib}/gridsphere-core-${gridsphere.version}.jar" basedir="${build.classes}">
             <!-- core portlets, GS servlet & filter, event impl -->
             <include name="org/gridsphere/portlets/**"/>
@@ -72,6 +74,8 @@ Build include file for the GridSphere Portal source code, see build.xml
         <copy todir="${build.classes}/gridsphere/resources">
             <fileset dir="config/resources"/>
         </copy>
+        <copy file="config/mapping/auth-modules-mapping.xml"
+              todir="${build.classes}/org/gridsphere/services/core/security/auth/modules/impl/descriptor"/>
         <jar jarfile="${build.lib}/gridsphere-portal-api-${gridsphere.version}.jar" basedir="${build.classes}">
             <!-- portlet container interfaces -->
             <include name="org/gridsphere/portletcontainer/**"/>
@@ -180,7 +184,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         <if>
             <equals arg1="${gridsphere.useprecompiledjsp}" arg2="true"/>
             <then>
-                <jar jarfile="${build.lib}/gridsphere-jsp.jar" basedir="${gridsphere.build}/jsp/classes/">
+                <jar jarfile="${build.lib}/gridsphere-jsp-${gridsphere.version}.jar" basedir="${gridsphere.build}/jsp/classes/">
                     <include name="**"/>
                 </jar>
             </then>

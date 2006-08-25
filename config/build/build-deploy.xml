@@ -79,9 +79,9 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <!-- only copy if it is there -->
         <if>
-            <available file="${build.lib}/gridsphere-jsp.jar"/>
+            <available file="${build.lib}/gridsphere-jsp-${gridsphere.version}.jar"/>
             <then>
-                <copy overwrite="true" file="${build.lib}/gridsphere-jsp.jar" todir="${build.webapps}/${gridsphere.deploy}/WEB-INF/lib"/>
+                <copy overwrite="true" file="${build.lib}/gridsphere-jsp-${gridsphere.version}.jar" todir="${build.webapps}/${gridsphere.deploy}/WEB-INF/lib"/>
             </then>
         </if>
 
