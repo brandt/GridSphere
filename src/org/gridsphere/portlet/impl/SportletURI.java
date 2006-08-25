@@ -55,7 +55,7 @@ public class SportletURI implements PortletURI {
         this.store = new HashMap();
         this.isSecure = isSecure;
         this.contextPath = (String)req.getAttribute(SportletProperties.CONTEXT_PATH); // contextPath;
-        this.servletPath = (String)req.getAttribute(SportletProperties.SERVLET_PATH); 
+        this.servletPath = (String)req.getAttribute(SportletProperties.SERVLET_PATH);
         this.req = req;
         this.res = res;
         //this.id = createUniquePrefix(2);

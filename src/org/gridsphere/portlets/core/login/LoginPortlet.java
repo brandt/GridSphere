@@ -45,8 +45,6 @@ public class LoginPortlet extends ActionPortlet {
     public static final String DO_FORGOT_PASSWORD = "login/forgotpassword.jsp";
     public static final String DO_NEW_PASSWORD = "login/newpassword.jsp";
 
-    public static final String DO_CONFIGURE = "login/config.jsp"; //configure login
-
     private boolean canUserCreateAccount = false;
     private int defaultNumTries = 0;
     private Boolean useSecureLogin = Boolean.FALSE;

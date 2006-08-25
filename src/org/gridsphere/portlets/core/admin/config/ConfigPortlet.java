@@ -9,8 +9,8 @@ import org.gridsphere.provider.portlet.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
+import org.gridsphere.services.core.security.auth.LoginService;
 import org.gridsphere.services.core.security.role.PortletRole;
-import org.gridsphere.services.core.user.LoginService;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
