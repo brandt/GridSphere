@@ -9,7 +9,7 @@ This descriptor defines the user's portal layout upon logging into the portal
 $Id$
 -->
 
-<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false">
+<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="true">
 
     <portlet-header>
         <table-layout>
