@@ -5,6 +5,7 @@ package org.gridsphere.services.core.user;
 
 import org.gridsphere.portlet.User;
 import org.gridsphere.services.core.persistence.QueryFilter;
+import org.gridsphere.services.core.security.auth.LoginUserModule;
 
 import java.util.List;
 
