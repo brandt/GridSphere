@@ -34,7 +34,7 @@ public class PortletLayoutDescriptor {
      * @throws IOException                 if an I/O error occurs
      * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static PortletPage loadPortletPage(String layoutDescriptorPath, String layoutMappingPath) throws IOException, PersistenceManagerException {
+    public static PortletPage loadPortletPage(String layoutDescriptorPath, URL layoutMappingPath) throws IOException, PersistenceManagerException {
         PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(layoutDescriptorPath, layoutMappingPath);
         PortletPage page = (PortletPage) pmXML.load();
         page.setLayoutDescriptor(layoutDescriptorPath);
@@ -50,7 +50,7 @@ public class PortletLayoutDescriptor {
      * @throws IOException                 if an I/O error occurs
      * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static PortletTabbedPane loadPortletTabs(String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
+    public static PortletTabbedPane loadPortletTabs(String descriptorPath, URL mappingPath) throws IOException, PersistenceManagerException {
         PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
         return (PortletTabbedPane) pmXML.load();
     }

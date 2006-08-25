@@ -34,6 +34,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     private boolean outline = true;
     private String padding = null;
     private String include = null;
+    private boolean display = true;
 
     //protected StringBuffer tab = new StringBuffer();
     /**
@@ -60,6 +61,14 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
 
     public void setAlign(String align) {
         this.align = align;
+    }
+
+    public boolean getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(boolean display) {
+        this.display = display;
     }
 
     public String getInclude() {

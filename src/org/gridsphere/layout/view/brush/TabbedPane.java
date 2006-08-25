@@ -131,6 +131,9 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         String title = tab.getTitle(lang);
 
         if ((title == null) && (tab.getInclude() == null)) return pane;
+        if (event.getPortletRequest().getAttribute(SportletProperties.LAYOUT_EDIT_MODE) == null) {
+            if ((!tab.getDisplay()) && (tab.getInclude() == null)) return pane;
+        }
 
         if (tabPane.getStyle().equalsIgnoreCase(TAB_STYLE_SUBMENU)) {
             pane.append("\n<li");

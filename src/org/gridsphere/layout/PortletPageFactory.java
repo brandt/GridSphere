@@ -10,6 +10,7 @@ import org.gridsphere.portletcontainer.impl.PortletSessionManager;
 import javax.servlet.ServletContext;
 import java.io.*;
 import java.net.URLEncoder;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -37,7 +38,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
-    public static String LAYOUT_MAPPING_FILE = null;
+    protected URL LAYOUT_MAPPING_PATH = this.getClass().getResource("/org/gridsphere/layout/layout-mapping.xml");
 
     // Store user layouts in a hash
     private static Map userLayouts = new HashMap();
@@ -62,11 +63,6 @@ public class PortletPageFactory implements PortletSessionListener {
 
         USER_LAYOUT_DIR = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/users");
 
-        //GROUP_LAYOUT_DIR = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/groups");
-
-
-        LAYOUT_MAPPING_FILE = ctx.getRealPath("/WEB-INF/mapping/layout-mapping.xml");
-
         String layoutsDirPath = ctx.getRealPath("/WEB-INF/CustomPortal/layouts");
         File layoutsDir = new File(layoutsDirPath);
         File[] layoutFiles = layoutsDir.listFiles();
@@ -77,7 +73,7 @@ public class PortletPageFactory implements PortletSessionListener {
             if (layoutFileName.endsWith(".xml")) {
                 String layoutId = layoutFileName.substring(0, layoutFileName.indexOf(".xml"));
                 try {
-                    page = PortletLayoutDescriptor.loadPortletPage(layoutFile.getAbsolutePath(), LAYOUT_MAPPING_FILE);
+                    page = PortletLayoutDescriptor.loadPortletPage(layoutFile.getAbsolutePath(), LAYOUT_MAPPING_PATH);
                     page.setLayoutDescriptor(layoutFile.getAbsolutePath());
                     if (page.getEditable()) editableLayoutIds.add(layoutId);
                     masterLayouts.put(layoutId, page);
@@ -132,6 +128,9 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public synchronized void destroy() {
         layouts.clear();
+        userLayouts.clear();
+        masterLayouts.clear();
+        editableLayoutIds.clear();
     }
 
     public Set getEditableLayoutIds() {
@@ -173,7 +172,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
         if (f.exists()) {
             try {
-                pane = PortletLayoutDescriptor.loadPortletTabs(userLayout, LAYOUT_MAPPING_FILE);
+                pane = PortletLayoutDescriptor.loadPortletTabs(userLayout, LAYOUT_MAPPING_PATH);
                 pane.setLayoutDescriptor(userLayout);
                 log.debug("Adding user tab to layout");
             } catch (Exception e) {
@@ -317,7 +316,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
 
         try {
-            PortletLayoutDescriptor.savePortletPage(page, layoutDesc, LAYOUT_MAPPING_FILE);
+            PortletLayoutDescriptor.savePortletPage(page, layoutDesc, LAYOUT_MAPPING_PATH);
             masterLayouts.put(layoutId, page);
         } catch (Exception e) {
             log.error("Unable to save layout descriptor: " + layoutDesc, e);

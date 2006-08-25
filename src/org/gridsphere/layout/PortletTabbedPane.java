@@ -321,7 +321,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
         List userRoles = req.getRoles();
 
-        log.debug("in tabbed pane: my comp is=" + componentIDStr);
+        //log.debug("in tabbed pane: my comp is=" + componentIDStr);
         pane.append(tabbedPaneView.doStart(event, this));
 
         PortletTab tab;
@@ -346,7 +346,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
 
         if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
-            log.debug("in tabbed paneedit mode: my comp is=" + componentIDStr);
             pane.append(tabbedPaneView.doRenderEditTab(event, this, false));
         }
 
@@ -376,8 +375,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
     public void save(ServletContext ctx) throws IOException {
         try {
-            String layoutMappingFile = ctx.getRealPath("/WEB-INF/mapping/layout-mapping.xml");
-            PortletLayoutDescriptor.savePortletTabbedPane(this, layoutDescriptor, layoutMappingFile);
+            PortletLayoutDescriptor.savePortletTabbedPane(this, layoutDescriptor, LAYOUT_MAPPING_PATH);
         } catch (PersistenceManagerException e) {
             throw new IOException("Unable to save user's tabbed pane: " + e.getMessage());
         }
