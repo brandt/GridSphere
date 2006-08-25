@@ -1,0 +1,150 @@
+<?xml version="1.0" ?>
+<!--
+
+    Portlet mapping file controls mappings between portlet descriptors and
+    org.gridsphere.portletconatiner.descriptor.* classes used in
+    creation of portlets
+
+    $Id: portlet-mapping.xml 5092 2006-08-19 04:17:21Z novotny $
+
+-->
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
+<mapping>
+
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.SportletCollection">
+        <map-to xml="portlet-app-collection"/>
+        <field name="PortletDefinitionList" type="org.gridsphere.portletcontainer.impl.descriptor.SportletDefinition" collection="arraylist">
+            <bind-xml name="portlet-app-def"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.SportletDefinition">
+        <field name="ApplicationSportletConfig" type="org.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig">
+            <bind-xml name="portlet-app"/>
+        </field>
+        <field name="ConcreteSportletList" type="org.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition" collection="arraylist">
+            <bind-xml name="concrete-portlet-app"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition">
+        <field name="concretePortletID" type="string">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field name="PortletContextList" type="org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="arraylist">
+            <bind-xml name="context-param"/>
+        </field>
+        <field name="ConcreteSportletConfig" type="org.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig">
+            <bind-xml name="concrete-portlet"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig">
+        <field name="Name" type="string">
+            <bind-xml name="portlet-name" attribute="element"/>
+        </field>
+        <field name="DefaultLocale" type="string">
+            <bind-xml name="default-locale" attribute="element"/>
+        </field>
+        <field name="LanguageList" type="org.gridsphere.portletcontainer.impl.descriptor.LanguageInfo" collection="arraylist">
+            <bind-xml name="language"/>
+        </field>
+        <field name="AccessRestrictions" type="org.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions">
+            <bind-xml name="access-restrictions"/>
+        </field>
+        <field name="ConfigParamList" type="org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="arraylist">
+            <bind-xml name="config-param"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.LanguageInfo">
+        <field name="Locale" type="string">
+            <bind-xml name="locale" node="attribute"/>
+        </field>
+        <field name="Title" type="string">
+            <bind-xml name="title"/>
+        </field>
+        <field name="TitleShort" type="string">
+            <bind-xml name="title-short"/>
+        </field>
+        <field name="Description" type="string">
+            <bind-xml name="description"/>
+        </field>
+        <field name="Keywords" type="string">
+            <bind-xml name="keywords"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions">
+        <field name="Visibility" type="string">
+            <bind-xml name="visibility" node="attribute"/>
+        </field>
+        <field name="RoleName" type="string">
+            <bind-xml name="role" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig">
+        <field name="ApplicationPortletID" type="string">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field name="PortletName" type="string">
+            <bind-xml name="portlet-name"/>
+        </field>
+        <field name="ServletName" type="string">
+            <bind-xml name="servlet-name"/>
+        </field>
+        <field name="ConfigParamList" type="org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="arraylist">
+            <bind-xml name="portlet-config"/>
+        </field>
+        <field name="CacheInfo" type="org.gridsphere.portletcontainer.impl.descriptor.CacheInfo">
+            <bind-xml name="cache"/>
+        </field>
+        <field name="AllowsWindowStates" type="org.gridsphere.portletcontainer.impl.descriptor.AllowsWindowStates">
+            <bind-xml name="allows"/>
+        </field>
+        <field name="Supports" type="org.gridsphere.portletcontainer.impl.descriptor.Supports">
+            <bind-xml name="supports"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.CacheInfo">
+        <field name="Expires" type="long">
+            <bind-xml name="expires"/>
+        </field>
+        <field name="Shared" type="boolean">
+            <bind-xml name="shared"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.AllowsWindowStates">
+        <field name="WindowStates" type="org.exolab.castor.types.AnyNode" collection="arraylist">
+            <bind-xml matches="*"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.Supports">
+        <field name="Markups" type="org.gridsphere.portletcontainer.impl.descriptor.Markup" collection="arraylist">
+            <bind-xml name="markup"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.portletcontainer.impl.descriptor.Markup">
+        <field name="Name" type="string">
+            <bind-xml name="name" node="attribute"/>
+        </field>
+        <field name="Modes" type="org.exolab.castor.types.AnyNode" collection="arraylist">
+            <bind-xml matches="*"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam">
+        <field name="ParamName" type="string">
+            <bind-xml name="param-name"/>
+        </field>
+        <field name="ParamValue" type="string">
+            <bind-xml name="param-value"/>
+        </field>
+    </class>
+
+</mapping>
