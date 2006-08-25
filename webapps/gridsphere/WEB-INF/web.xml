@@ -122,9 +122,13 @@
         </init-param>
     </servlet>
 
+    <!-- PRECOMPILED JSP (if any)-->
+
+    @PRECOMPILED-JSP@
+
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
-        <url-pattern>/@GRIDSPHERE_CONTEXT@/*</url-pattern>
+        <url-pattern>/@GRIDSPHERE_CONTEXT@</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
