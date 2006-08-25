@@ -11,6 +11,7 @@ import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.net.URL;
 
 /**
  * The <code>AuthModulesDescriptor</code> 
@@ -26,7 +27,7 @@ public class AuthModulesDescriptor {
     private AuthModulesDescriptor() {
     }
 
-    public AuthModulesDescriptor(String descriptorFile, String mappingFile) throws IOException, PersistenceManagerException {
+    public AuthModulesDescriptor(String descriptorFile, URL mappingFile) throws IOException, PersistenceManagerException {
         pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorFile, mappingFile);
         authModules = (AuthModuleCollection) pmXML.load();
     }
