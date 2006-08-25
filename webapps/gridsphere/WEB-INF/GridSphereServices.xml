@@ -43,8 +43,8 @@
     <service>
         <name>Login Service</name>
         <description lang="en">Provides Login Capabilities</description>
-        <interface>org.gridsphere.services.core.user.LoginService</interface>
-        <implementation>org.gridsphere.services.core.user.impl.LoginServiceImpl</implementation>
+        <interface>org.gridsphere.services.core.security.auth.LoginService</interface>
+        <implementation>org.gridsphere.services.core.security.auth.impl.LoginServiceImpl</implementation>
         <service-config>
             <param-name>LOGIN_MODULE</param-name>
             <param-value>org.gridsphere.services.core.user.UserManagerService</param-value>
