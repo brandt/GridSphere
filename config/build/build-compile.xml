@@ -104,7 +104,7 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- =================================================================== -->
     <target name="gridsphere-service-framework-jar" depends="compile" description="Creates GS portlet service framework JAR">
         <echo>Creating GridSphere service framework JAR</echo>
-        <copy file="webapps/gridsphere/WEB-INF/mapping/portlet-services-mapping.xml" todir="${build.classes}/org/gridsphere/portlet/service/spi/impl"/>
+        <copy file="config/mapping/portlet-services-mapping.xml" todir="${build.classes}/org/gridsphere/portlet/service/spi/impl"/>
         <jar jarfile="${build.lib}/gridsphere-service-framework-${gridsphere.version}.jar" basedir="${build.classes}">
             <include name="**/portlet/service/**"/>
         </jar>
