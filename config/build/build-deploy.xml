@@ -45,20 +45,23 @@ Build include file for the GridSphere Portal source code, see build.xml
 
 
         <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
-
+        <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
 
 
         <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/web.xml"
               file="${gswebapp.dir}/WEB-INF/web.xml"
               filtering="true"/>
 
-
+       <copy tofile="${build.webapps}/${gridsphere.deploy}/index.html"
+              file="${gswebapp.dir}/index.html"
+              filtering="true"/>
 
 
         <copy todir="${build.webapps}/${gridsphere.deploy}">
             <fileset dir="${gswebapp.dir}">
                 <exclude name="**/tlds/**"/>
-                <exclude name="**/test/**"/>
+                <exclude name="index.html"/>
+                <exclude name="WEB-INF/web.xml"/>
             </fileset>
         </copy>
 
