@@ -39,22 +39,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        try {
-            roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
-        } catch (PortletServiceException e) {
-            throw new UnavailableException("Could not get instance of RoleManagerService!");
-        }
-        try {
-            contentManagerService = (ContentManagerService) config.getContext().getService(ContentManagerService.class);
-        } catch (PortletServiceException e) {
-            throw new UnavailableException("Could not get instance of RoleManagerService!");
-        }
-        try {
-            portletRegistryService = (PortletRegistryService) config.getContext().getService(PortletRegistryService.class);
-        } catch (PortletServiceException e) {
-            throw new UnavailableException("Could not get instance of RoleManagerService!");
-        }
-
+        roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
+        contentManagerService = (ContentManagerService) config.getContext().getService(ContentManagerService.class);
+        portletRegistryService = (PortletRegistryService) config.getContext().getService(PortletRegistryService.class);
         pageFactory = PortletPageFactory.getInstance();
         DEFAULT_VIEW_PAGE = "doShowLayout";
     }
@@ -73,7 +60,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         if (page == null) page = createLayout(event);
         page.actionPerformed(gsevent);
         page.init(req, new ArrayList());
-
         pageFactory.savePortletPageMaster(page);
     }
 
@@ -100,11 +86,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletPage page = null;
         PortletSession session = event.getPortletRequest().getPortletSession();
         String layoutId = (String)session.getAttribute(SELECTED_LAYOUT);
-        if (layoutId == null) {
-            page = pageFactory.createFromGroups(req);
-        } else {
-            page = pageFactory.createPortletPageCopy(layoutId);
-        }
+
+        page = pageFactory.createPortletPageCopy(layoutId);
+
         pageFactory.setPageTheme(page, req);
 
         page.init(req, new ArrayList());
@@ -345,9 +329,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletRequest req = event.getPortletRequest();
         PortletSession session = event.getPortletRequest().getPortletSession();
 
-
-
         Set layoutIds = pageFactory.getEditableLayoutIds();
+
+        // set guest page as the selected page
+        if (session.getAttribute(SELECTED_LAYOUT) == null) {
+            session.setAttribute(SELECTED_LAYOUT, PortletPageFactory.GUEST_PAGE);
+        }
+
         String selectedLayout = (String)session.getAttribute(SELECTED_LAYOUT);
         ListBoxBean layoutsLB = event.getListBoxBean("layoutsLB");
         layoutsLB.clear();
