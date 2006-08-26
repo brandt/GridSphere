@@ -54,7 +54,6 @@ Build include file for the GridSphere Portal source code, see build.xml
             <include name="org/gridsphere/portlets/**"/>
             <include name="org/gridsphere/servlets/**"/>
             <include name="org/gridsphere/filters/**"/>
-            <include name="org/gridsphere/tools/**"/>
             <include name="org/gridsphere/event/impl/**"/>
             <!-- layout impl classes -->
             <include name="org/gridsphere/layout/**"/>
