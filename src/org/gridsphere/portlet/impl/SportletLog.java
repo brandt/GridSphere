@@ -48,6 +48,10 @@ public class SportletLog implements PortletLog {
         return new SportletLog(clazz);
     }
 
+    public static void setConfigureURL(String url) {
+        PropertyConfigurator.configure(url);
+    }
+
     /**
      * Returns whether the debug level of the portlet log is enabled.
      *
