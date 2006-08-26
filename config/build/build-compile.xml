@@ -68,6 +68,14 @@ Build include file for the GridSphere Portal source code, see build.xml
         </jar>
     </target>
 
+    <target name="gridsphere-ant-tools-jar" depends="compile" description="Create GridSphere Core JAR">
+            <copy file="config/log4j.properties"
+                  todir="${build.classes}/org/gridsphere/tools"/>
+            <jar jarfile="${build.lib}/gridsphere-ant-tools-${gridsphere.version}.jar" basedir="${build.classes}">
+                <include name="org/gridsphere/tools/**"/>
+            </jar>
+        </target>
+
 
     <target name="gridsphere-portal-api-jar" depends="compile" description="Create GridSphere Portal API JAR">
         <echo>Creating GridSphere Portal API JAR</echo>
@@ -127,7 +135,7 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="gridsphere-service-framework-jar, gridsphere-provider-jar, gridsphere-portal-api-jar, gridsphere-core-jar, gridsphere-portal-jar, gridsphere-jsp-jar" description="Creates all jars"/>
+    <target name="jar" depends="gridsphere-service-framework-jar, gridsphere-provider-jar, gridsphere-portal-api-jar, gridsphere-core-jar, gridsphere-portal-jar, gridsphere-ant-tools-jar, gridsphere-jsp-jar" description="Creates all jars"/>
 
 
     <!-- =================================================================== -->
