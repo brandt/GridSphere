@@ -83,7 +83,6 @@
 
         <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_TITLE@"
                  value="${project.title}"/>
-            value="${project.title}"/>
         <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_NAME@"
             value="${project.name}"/>
 
