@@ -298,10 +298,14 @@ Copyright:
         <mkdir dir="${project.build}/webapp/WEB-INF/lib"/>
         <mkdir dir="${project.build}/webapp/WEB-INF/classes"/>
 
-        <copy todir="${project.build}/webapp/WEB-INF/lib">
+        <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="${gridsphere.build}/lib/">
                 <include name="gridsphere-provider*.jar"/>
                 <include name="gridsphere-portal*.jar"/>
+                <exclude name="gridsphere-portal-api*.jar"/>
+            </fileset>
+            <fileset dir="${gridsphere.home}/lib/">
+                <include name="log4j*.jar"/>
                 <include name="castor*.jar"/>
             </fileset>
         </copy>
@@ -349,6 +353,7 @@ Copyright:
             <fileset dir="${gridsphere.build}/lib/">
                 <include name="gridsphere-provider*.jar"/>
                 <include name="gridsphere-portal*.jar"/>
+                <exclude name="gridsphere-portal-api*.jar"/>
             </fileset>
             <fileset dir="${gridsphere.home}/lib/">
                 <include name="log4j*.jar"/>
