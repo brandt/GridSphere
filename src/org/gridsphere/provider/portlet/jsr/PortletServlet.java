@@ -219,12 +219,8 @@ public class PortletServlet extends HttpServlet
 
         } else if (method.equals(SportletProperties.LOGOUT)) {
             request.getSession(true).invalidate();
-        } else {
-
-            System.err.println("not sure how i got here!!");
-            return;
         }
-
+        
         // There must be a portlet ID to know which portlet to service
         String pid = (String) request.getAttribute(SportletProperties.PORTLETID);
         String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
