@@ -164,7 +164,7 @@ public class PortletServlet extends HttpServlet
 
         // currently either all portlets are initialized or shutdown, not one individually...
         String method = (String) request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
-
+        if (method == null) return;
         if (method.equals(SportletProperties.INIT)) {
             initJSRPortletWebapp();
             Set set = portlets.keySet();
@@ -220,7 +220,7 @@ public class PortletServlet extends HttpServlet
         } else if (method.equals(SportletProperties.LOGOUT)) {
             request.getSession(true).invalidate();
         }
-        
+
         // There must be a portlet ID to know which portlet to service
         String pid = (String) request.getAttribute(SportletProperties.PORTLETID);
         String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
