@@ -20,13 +20,13 @@ public class DatePortlet extends AbstractPortlet {
         Locale locale;
         TimeZone tz;
         User user = request.getUser();
-        String tzStr = (String)user.getAttribute(User.TIMEZONE);
-        locale = request.getLocale();
-        if (tzStr == null) {
-            tz = TimeZone.getDefault();
-        } else {
+        if (user != null) {
+            String tzStr = (String)user.getAttribute(User.TIMEZONE);
             tz = TimeZone.getTimeZone(tzStr);
+        } else {
+            tz = TimeZone.getDefault();
         }
+        locale = request.getLocale();
         if (locale==null) {
             locale = Locale.getDefault();
         }
