@@ -1,6 +1,13 @@
 ChangeLog.txt
 =============
 
+Changes since GridSphere 2.2.6
+==============================
+
+Bug
+
+    * [GPF-275] - Wrong rendering in IE 6
+
 Changes since GridSphere 2.2.5
 ==============================
 
