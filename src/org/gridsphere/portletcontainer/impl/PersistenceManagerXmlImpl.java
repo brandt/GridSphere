@@ -32,7 +32,6 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
 
     private List mappingPaths = new ArrayList();
     private String descriptorPath = null;
-    private URL mappingURL = null;
 
     /**
      * PersistenceManagerXmlImpl default constructor
@@ -59,10 +58,14 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
      */
     public PersistenceManagerXmlImpl(String descriptorPath, URL mappingURL) {
         this.descriptorPath = descriptorPath;
-        this.mappingURL = mappingURL;
+        addMappingPath(mappingURL);
     }
 
     public void addMappingPath(String path) {
+        mappingPaths.add(path);
+    }
+
+    public void addMappingPath(URL path) {
         mappingPaths.add(path);
     }
 
@@ -77,12 +80,13 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
     }
 
     /**
-     * Return the mapping file path
+     * Sets the mapping file url
      *
-     * @return the mapping file path
+     * @param mappingURL the mapping url
      */
-    public List getMappingPaths() {
-        return mappingPaths;
+    public void setMappingPath(URL mappingURL) {
+        mappingPaths.clear();
+        mappingPaths.add(mappingURL);
     }
 
     /**
@@ -117,14 +121,16 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
             FileWriter filewriter = new FileWriter(descriptorPath);
             Marshaller marshal = new Marshaller(w);
             Mapping map = new Mapping();
-
             Iterator iterMappingPaths = mappingPaths.iterator();
             while (iterMappingPaths.hasNext()) {
-                String mappingPath = (String)iterMappingPaths.next();
-                log.debug("Loading mapping path " + mappingPath);
-                map.loadMapping(mappingPath);
+                Object mappingObj = iterMappingPaths.next();
+                log.debug("Loading mapping path " + mappingObj);
+                if (mappingObj instanceof String) {         
+                    map.loadMapping((String)mappingObj);
+                } else if (mappingObj instanceof URL) {
+                    map.loadMapping((URL)mappingObj);
+                }
             }
-
             marshal.setMapping(map);
             marshal.marshal(object);
             filewriter.close();
@@ -156,14 +162,14 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
             log.debug("Using getConnectionURL() " + descriptorPath);
             InputSource xmlSource = new InputSource(descriptorPath);
             Mapping mapping = new Mapping();
-            if (mappingURL != null) {
-                mapping.loadMapping(mappingURL);
-            } else {
-                Iterator iterMappingPaths = mappingPaths.iterator();
-                while (iterMappingPaths.hasNext()) {
-                    String mappingPath = (String)iterMappingPaths.next();
-                    log.debug("Loading mapping path " + mappingPath);
-                    mapping.loadMapping(mappingPath);
+            Iterator iterMappingPaths = mappingPaths.iterator();
+            while (iterMappingPaths.hasNext()) {
+                Object mappingObj = iterMappingPaths.next();
+                log.debug("Loading mapping path " + mappingObj);
+                if (mappingObj instanceof String) {
+                    mapping.loadMapping((String)mappingObj);
+                } else if (mappingObj instanceof URL) {
+                    mapping.loadMapping((URL)mappingObj);
                 }
             }
             Unmarshaller unmarshal = new Unmarshaller(mapping);

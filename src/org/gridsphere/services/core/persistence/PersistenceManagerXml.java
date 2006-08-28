@@ -6,12 +6,13 @@ package org.gridsphere.services.core.persistence;
 
 import java.io.IOException;
 import java.util.List;
+import java.net.URL;
 
 public interface PersistenceManagerXml {
 
     public void setMappingPath(String mappingPath);
 
-    public List getMappingPaths();
+    public void setMappingPath(URL mappingURL);
 
     public void setDescriptorPath(String descriptorPath);
 

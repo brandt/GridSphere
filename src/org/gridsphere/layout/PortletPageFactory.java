@@ -38,7 +38,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
-    protected URL LAYOUT_MAPPING_PATH = this.getClass().getResource("/org/gridsphere/layout/layout-mapping.xml");
+    protected URL LAYOUT_MAPPING_PATH = getClass().getResource("/org/gridsphere/layout/layout-mapping.xml");
 
     // Store user layouts in a hash
     private static Map userLayouts = new HashMap();

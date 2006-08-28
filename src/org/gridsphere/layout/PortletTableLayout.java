@@ -15,6 +15,7 @@ import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.services.core.registry.PortletRegistryService;
+import org.gridsphere.provider.portlet.jsr.PortletServlet;
 
 import java.io.Serializable;
 import java.util.*;
@@ -150,7 +151,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
                 ConcretePortlet conc = (ConcretePortlet) cit.next();
                 String concID = conc.getConcretePortletID();
                 // we don't want to list PortletServlet loader!
-                //if (concID.startsWith(PortletServlet.class.getName())) continue;
+                if (concID.startsWith(PortletServlet.class.getName())) continue;
                 String dispName = conc.getDisplayName(locale);
                 allPortlets.put(concID, dispName);
             }

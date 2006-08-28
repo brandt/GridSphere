@@ -64,46 +64,9 @@ public class PortletLayoutDescriptor {
      * @throws IOException                 if an I/O error occurs
      * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static void savePortletPage(PortletPage pc, String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
-        PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
-        pmXML.save(pc);
-    }
-
-    /**
-     * Saves the portlet page associated with this descriptor
-     *
-     * @param pc             the portlet container to load
-     * @param descriptorPath location of the layout.xml
-     * @param mappingPath    location of the mapping file
-     * @throws IOException                 if an I/O error occurs
-     * @throws PersistenceManagerException if a descriptor error occurs
-     */
     public static void savePortletPage(PortletPage pc, String descriptorPath, URL mappingPath) throws IOException, PersistenceManagerException {
         PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
         pmXML.save(pc);
-    }
-
-    /**
-     * Validates the portlet page associated with this descriptor
-     *
-     * @param descriptorPath location of the layout.xml
-     * @param mappingPath    location of the mapping file
-     */
-    public static void validatePortletPage(String descriptorPath, String mappingPath) {
-        JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
-    }
-
-    /**
-     * Saves the portlet tab associated with this descriptor
-     *
-     * @param pane           the list of portlet tabs to save
-     * @param descriptorPath location of the layout.xml
-     * @param mappingPath    location of the mapping file
-     * @throws IOException                 if an I/O error occurs
-     */
-    public static void savePortletTabbedPane(PortletTabbedPane pane, String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
-        PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
-        pmXML.save(pane);
     }
 
     /**
