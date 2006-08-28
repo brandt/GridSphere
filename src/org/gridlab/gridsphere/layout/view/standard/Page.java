@@ -36,7 +36,7 @@ public class Page extends BaseRender implements Render {
         Locale locale = req.getLocale();
         ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
         // causes IE to go into quirks mode
-        //page.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+        page.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
         page.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" " );
         page.append("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
         if (orientation.isLeftToRight()) {
