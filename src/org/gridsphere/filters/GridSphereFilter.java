@@ -30,7 +30,6 @@ import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.impl.SportletRequest;
 import org.gridsphere.portlet.impl.SportletResponse;
-import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.layout.PortletLayoutEngine;
 
@@ -58,10 +57,6 @@ public class GridSphereFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain)
             throws IOException, ServletException {
-
-        // Set the context path and servlet path to be used when creating url's
-        request.setAttribute(SportletProperties.CONTEXT_PATH, ((HttpServletRequest)request).getContextPath()); // contextPath;
-        request.setAttribute(SportletProperties.SERVLET_PATH, (((HttpServletRequest)request).getServletPath()));
 
         // If first time being called, instantiate all portlets
         if (firstDoGet.equals(Boolean.TRUE)) {

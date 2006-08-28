@@ -24,8 +24,8 @@ public class SportletURI implements PortletURI {
     private Map store = new HashMap();
     private boolean isSecure = false;
     private boolean redirect = true;
-    private String contextPath = null;
-    private String servletPath = null;
+    //private String contextPath = null;
+    //private String servletPath = null;
     private Map actionParams = new HashMap();
     private Set sportletProps = null;
 
@@ -54,8 +54,7 @@ public class SportletURI implements PortletURI {
     public SportletURI(HttpServletRequest req, HttpServletResponse res, boolean isSecure) {
         this.store = new HashMap();
         this.isSecure = isSecure;
-        this.contextPath = (String)req.getAttribute(SportletProperties.CONTEXT_PATH); // contextPath;
-        this.servletPath = (String)req.getAttribute(SportletProperties.SERVLET_PATH);
+
         this.req = req;
         this.res = res;
         //this.id = createUniquePrefix(2);
@@ -191,6 +190,10 @@ public class SportletURI implements PortletURI {
 
         // if underlying window state is floating then set it in the URI
         if (req.getAttribute(SportletProperties.FLOAT_STATE) != null) store.put(SportletProperties.PORTLET_WINDOW, PortletWindow.State.FLOATING.toString());
+
+        String contextPath = SportletProperties.getInstance().getProperty("gridsphere.deploy"); // contextPath;
+        String servletPath = SportletProperties.getInstance().getProperty("gridsphere.context");
+        
         String url = contextPath;
         String newURL;
         Set set = store.keySet();

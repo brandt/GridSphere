@@ -164,7 +164,13 @@ public class PortletServlet extends HttpServlet
 
         // currently either all portlets are initialized or shutdown, not one individually...
         String method = (String) request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
-        if (method == null) return;
+        if (method == null) {
+            response.sendRedirect("/" + SportletProperties.getInstance().getProperty("gridsphere.deploy") +
+                    "/" + SportletProperties.getInstance().getProperty("gridsphere.context") +
+                    "?" + SportletProperties.LAYOUT_PAGE_PARAM + "=" + "ErrorLayout" + "&" + "errorPage=unauthorized.jsp");
+            return;
+        }
+
         if (method.equals(SportletProperties.INIT)) {
             initJSRPortletWebapp();
             Set set = portlets.keySet();

@@ -30,16 +30,6 @@ public class SportletProperties {
     private static SportletProperties instance = new SportletProperties();
 
     /**
-     * Specifes GS context path for use in creating urls
-     */
-    public static final String CONTEXT_PATH = "org.gridsphere.CONTEXT_PATH";
-
-    /**
-     * Specifes GS servlet path for use in creating urls
-     */
-    public static final String SERVLET_PATH = "org.gridsphere.SERVLET_PATH";
-
-    /**
      * Determines which lifecycle command to invoke
      */
     public static final String PORTLET_LIFECYCLE_METHOD = "org.gridsphere.portlet.portletLifecycleMethod";
@@ -266,7 +256,7 @@ public class SportletProperties {
             try {
                 props.load(propsStream);
             } catch (IOException e) {
-                System.err.println("Unable to load gridsphere.properties");
+                System.err.println("Unable to load portlet.properties");
                 e.printStackTrace();
             }
         }

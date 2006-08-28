@@ -191,14 +191,6 @@ public abstract class Portlet extends HttpServlet
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        /*
-        String propsFile = config.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties");
-        File f = new File(propsFile);
-        if (f.exists()) {
-            //System.err.println("configuring to use " + propsFile);
-            SportletLog.setConfigureURL(propsFile);
-        }
-        */
     }
 
     public void init() throws ServletException {
@@ -281,9 +273,10 @@ public abstract class Portlet extends HttpServlet
                 logout(portletSession);
             }
         } else {
-            request.setAttribute(SportletProperties.SERVLET_PATH, "");
-            PortletURI uri = portletResponse.createReturnURI();
-            response.sendRedirect(uri.toString());
+            response.sendRedirect("/" + SportletProperties.getInstance().getProperty("gridsphere.deploy") +
+                    "/" + SportletProperties.getInstance().getProperty("gridsphere.context") +
+                    "?" + SportletProperties.LAYOUT_PAGE_PARAM + "=" + "ErrorLayout" + "&" + "errorPage=unauthorized.jsp");
+            return;
         }
         request.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }

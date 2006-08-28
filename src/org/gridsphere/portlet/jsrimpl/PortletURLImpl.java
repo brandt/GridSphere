@@ -45,8 +45,6 @@ public class PortletURLImpl implements PortletURL {
     private boolean isSecure = false;
     private Map store = new HashMap();
     private boolean redirect = true;
-    private String contextPath = null;
-    private String servletPath = null;
     private PortalContext context = null;
 
     private String action = null;
@@ -71,8 +69,6 @@ public class PortletURLImpl implements PortletURL {
         this.res = res;
         this.req = req;
         this.context = context;
-        this.contextPath = (String)req.getAttribute(SportletProperties.CONTEXT_PATH); // contextPath;
-        this.servletPath = (String)req.getAttribute(SportletProperties.SERVLET_PATH); 
         this.isSecure = req.isSecure();
         this.isRender = isRender;
     }
@@ -292,6 +288,9 @@ public class PortletURLImpl implements PortletURL {
         s.append(req.getServerName());
         s.append(":");
         s.append((!port.equals("")) ? port : String.valueOf(req.getServerPort()));
+
+        String contextPath = SportletProperties.getInstance().getProperty("gridsphere.deploy"); // contextPath;
+        String servletPath = SportletProperties.getInstance().getProperty("gridsphere.context");
 
         String url = contextPath;
 
