@@ -130,7 +130,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         <jar jarfile="${build.lib}/gridsphere-provider-${gridsphere.version}.jar" basedir="${build.classes}">
             <include name="org/gridsphere/provider/**"/>
             <include name="gridsphere/**"/>
-            <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
+            <metainf dir="config/tlds"/>
         </jar>
     </target>
 
