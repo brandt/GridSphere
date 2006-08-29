@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+    Guest User Layout Descriptor
+
+    This descriptor defines the guest user's portal layout configuration
+
+    $Id: SetupLayout.xml 5092 2006-08-19 04:17:21Z novotny $
+-->
+
+<page-layout title="GridSphere Portal Setup" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="ADMIN">
+
+
+    <!-- Header components -->
+    <portlet-header>
+        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
+        <portlet-content include="/jsp/login/welcome.jsp"/>
+    </portlet-header>
+
+    <portlet-tabbed-pane selected="0" style="menu" theme="default">
+        <portlet-tab label="admin" required-role="ADMIN">
+            <title lang="en">Administration</title>
+            <portlet-tabbed-pane style="sub-menu">
+                <portlet-tab label="portlets" required-role="ADMIN">
+                    <title lang="en">Portlets</title>
+                    <table-layout label="portletTL">
+                        <row-layout>
+                            <column-layout width="40%">
+                                <portlet-frame label="config">
+                                    <portlet-class>
+                                        org.gridsphere.portlets.core.admin.config.ConfigPortlet.1
+                                    </portlet-class>
+                                </portlet-frame>
+                            </column-layout>
+                            <column-layout width="60%">
+                                <portlet-frame label="portletmanager">
+                                    <portlet-class>
+                                        org.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
+                                </portlet-frame>
+                                <portlet-frame label="sessionmanager">
+                                    <portlet-class>
+                                        org.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet.1</portlet-class>
+                                </portlet-frame>
+                                <portlet-frame label="trackingstats">
+                                    <portlet-class>
+                                        org.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet.1</portlet-class>
+                                </portlet-frame>
+                            </column-layout>
+                        </row-layout>
+                    </table-layout>
+                </portlet-tab>
+                <portlet-tab label="users" required-role="ADMIN">
+                    <title lang="en">Users</title>
+                    <table-layout>
+                        <row-layout>
+                            <column-layout width="50%">
+                                <portlet-frame label="usermanager">
+                                    <portlet-class>
+                                        org.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
+                                </portlet-frame>
+                            </column-layout>
+                            <column-layout width="50%"/>
+                        </row-layout>
+                    </table-layout>
+                </portlet-tab>
+                <portlet-tab label="roles" required-role="ADMIN">
+                    <title lang="en">Roles</title>
+                    <table-layout>
+                        <row-layout>
+                            <column-layout width="50%">
+                                <portlet-frame label="rolemanager">
+                                    <portlet-class>
+                                        org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet.1</portlet-class>
+                                </portlet-frame>
+                            </column-layout>
+                            <column-layout width="50%"/>
+                        </row-layout>
+                    </table-layout>
+                </portlet-tab>
+                <portlet-tab label="messagingservicestab" required-role="ADMIN">
+                    <title lang="en">Messaging</title>
+                    <table-layout>
+                        <row-layout>
+                            <column-layout width="100%">
+                                <portlet-frame label="messagingservice">
+                                    <portlet-class>
+                                        org.gridsphere.portlets.core.messaging.MessagingServicesPortlet.1</portlet-class>
+                                </portlet-frame>
+                            </column-layout>
+                        </row-layout>
+                    </table-layout>
+                </portlet-tab>
+            </portlet-tabbed-pane>
+        </portlet-tab>
+        <portlet-tab label="portal" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/returnnav.jsp"/>
+    </portlet-tabbed-pane>
+
+    <!-- Footer components (if any) -->
+    <portlet-footer>
+        <table-layout style="footer">
+            <row-layout>
+                <column-layout>
+                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
+                </column-layout>
+            </row-layout>
+        </table-layout>
+    </portlet-footer>
+
+
+</page-layout>

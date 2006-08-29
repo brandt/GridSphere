@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+    Layout Manager Descriptor
+
+    This descriptor defines the guest user's portal layout configuration
+
+    $Id: SetupLayout.xml 4633 2006-03-09 16:44:16Z wehrens $
+-->
+
+<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false">
+
+    <!-- Header components -->
+    <portlet-header>
+        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
+        <portlet-content include="/jsp/login/welcome.jsp"/>
+    </portlet-header>
+
+    <portlet-tabbed-pane selected="0" style="menu" theme="default">
+        <portlet-tab label="gridsphere" display="false">
+            <portlet-tabbed-pane selected="0" style="sub-menu">
+                <portlet-tab label="profile" display="false">
+                    <table-layout>
+                        <row-layout>
+                            <column-layout width="100%">
+                                <portlet-frame label="profilemanager">
+                                    <portlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
+                                </portlet-frame>
+                            </column-layout>
+                        </row-layout>
+                    </table-layout>
+                </portlet-tab>
+            </portlet-tabbed-pane>
+        </portlet-tab>
+        <portlet-tab label="logout" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/logout/logoutnav.jsp"/>
+    </portlet-tabbed-pane>
+
+    <!-- Footer components (if any) -->
+    <portlet-footer>
+        <table-layout style="footer">
+            <row-layout>
+                <column-layout width="50%">
+                    <portlet-frame transparent="true" outer-padding="0" label="date">
+                        <portlet-class>org.gridsphere.portlets.core.date.DatePortlet.1</portlet-class>
+                    </portlet-frame>
+                </column-layout>
+                <column-layout width="50%">
+                <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
+                </column-layout>
+            </row-layout>
+        </table-layout>
+    </portlet-footer>
+
+</page-layout>
