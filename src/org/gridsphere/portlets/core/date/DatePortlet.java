@@ -19,15 +19,18 @@ public class DatePortlet extends AbstractPortlet {
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         Locale locale;
         TimeZone tz;
+        String tzStr = null;
         User user = request.getUser();
         if (user != null) {
-            String tzStr = (String)user.getAttribute(User.TIMEZONE);
+            tzStr = (String)user.getAttribute(User.TIMEZONE);
+        }
+        if (tzStr != null) {
             tz = TimeZone.getTimeZone(tzStr);
         } else {
             tz = TimeZone.getDefault();
         }
         locale = request.getLocale();
-        if (locale==null) {
+        if (locale == null) {
             locale = Locale.getDefault();
         }
         Calendar date = Calendar.getInstance(tz, locale);
