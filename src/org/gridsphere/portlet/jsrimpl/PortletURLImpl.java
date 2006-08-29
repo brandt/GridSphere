@@ -289,8 +289,8 @@ public class PortletURLImpl implements PortletURL {
         s.append(":");
         s.append((!port.equals("")) ? port : String.valueOf(req.getServerPort()));
 
-        String contextPath = SportletProperties.getInstance().getProperty("gridsphere.deploy"); // contextPath;
-        String servletPath = SportletProperties.getInstance().getProperty("gridsphere.context");
+        String contextPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.deploy"); // contextPath;
+        String servletPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.context");
 
         String url = contextPath;
 

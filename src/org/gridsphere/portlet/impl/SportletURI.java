@@ -191,9 +191,9 @@ public class SportletURI implements PortletURI {
         // if underlying window state is floating then set it in the URI
         if (req.getAttribute(SportletProperties.FLOAT_STATE) != null) store.put(SportletProperties.PORTLET_WINDOW, PortletWindow.State.FLOATING.toString());
 
-        String contextPath = SportletProperties.getInstance().getProperty("gridsphere.deploy"); // contextPath;
-        String servletPath = SportletProperties.getInstance().getProperty("gridsphere.context");
-        
+        String contextPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.deploy"); // contextPath;
+        String servletPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.context");
+
         String url = contextPath;
         String newURL;
         Set set = store.keySet();
