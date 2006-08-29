@@ -25,11 +25,13 @@ import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.portlets.core.login.LoginPortlet;
 import org.gridsphere.tmf.services.TextMessageService;
 import org.gridsphere.tmf.services.TextMessageServiceConfig;
+import org.gridsphere.layout.PortletPageFactory;
 
 import javax.servlet.UnavailableException;
 import java.text.DateFormat;
 import java.util.*;
 import java.io.File;
+import java.io.IOException;
 
 public class ProfileManagerPortlet extends ActionPortlet {
 
@@ -426,6 +428,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
         return bean;
     }
 
+    public void doFinish(FormEvent event) throws PortletException, IOException {
+        PortletSession session = event.getPortletRequest().getPortletSession();
+        session.setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
+    }
 
     private void createErrorMessage(FormEvent event, String msg) {
         MessageBoxBean msgBox = event.getMessageBoxBean("msg");

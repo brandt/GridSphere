@@ -33,23 +33,13 @@ public class ConfigPortlet extends ActionPortlet {
 
     public static final String DO_CONFIGURE = "admin/config/config.jsp"; //configure login
 
-    private boolean canUserCreateAccount = false;
     private PortalConfigService portalConfigService = null;
     private LoginService loginService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
-
         super.init(config);
-
         portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
-        canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty("CAN_USER_CREATE_ACCOUNT")).booleanValue();
-
-        String numTries = portalConfigService.getProperty(LOGIN_NUMTRIES);
-        System.err.println("numtries= "+ numTries);
-
         loginService = (LoginService) getPortletConfig().getContext().getService(LoginService.class);
-
-
         DEFAULT_VIEW_PAGE = "showConfigure";
     }
 
@@ -61,6 +51,8 @@ public class ConfigPortlet extends ActionPortlet {
     public void showConfigure(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
+        boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty("CAN_USER_CREATE_ACCOUNT")).booleanValue();
+
         acctCB.setSelected(canUserCreateAccount);
 
         Boolean sendMail = Boolean.valueOf(portalConfigService.getProperty("ENABLE_ERROR_HANDLING"));
@@ -101,7 +93,7 @@ public class ConfigPortlet extends ActionPortlet {
 
         String useracct = acctCB.getSelectedValue();
 
-        canUserCreateAccount = (useracct != null);
+        boolean canUserCreateAccount = (useracct != null);
 
         portalConfigService.setProperty("CAN_USER_CREATE_ACCOUNT", String.valueOf(canUserCreateAccount));
 
