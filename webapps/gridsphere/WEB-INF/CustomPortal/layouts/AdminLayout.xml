@@ -22,18 +22,25 @@
         <portlet-tab label="admin" required-role="ADMIN">
             <title lang="en">Administration</title>
             <portlet-tabbed-pane style="sub-menu">
-                <portlet-tab label="portlets" required-role="ADMIN">
-                    <title lang="en">Portlets</title>
-                    <table-layout label="portletTL">
+                <portlet-tab label="configTab" required-role="ADMIN">
+                    <title lang="en">Configuration</title>
+                    <table-layout label="configTL">
                         <row-layout>
-                            <column-layout width="40%">
+                            <column-layout width="100%">
                                 <portlet-frame label="config">
                                     <portlet-class>
                                         org.gridsphere.portlets.core.admin.config.ConfigPortlet.1
                                     </portlet-class>
                                 </portlet-frame>
                             </column-layout>
-                            <column-layout width="60%">
+                        </row-layout>
+                    </table-layout>
+                </portlet-tab>
+                <portlet-tab label="portlets" required-role="ADMIN">
+                    <title lang="en">Portlets</title>
+                    <table-layout label="portletTL">
+                        <row-layout>
+                            <column-layout width="100%">
                                 <portlet-frame label="portletmanager">
                                     <portlet-class>
                                         org.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
@@ -75,19 +82,6 @@
                                 </portlet-frame>
                             </column-layout>
                             <column-layout width="50%"/>
-                        </row-layout>
-                    </table-layout>
-                </portlet-tab>
-                <portlet-tab label="messagingservicestab" required-role="ADMIN">
-                    <title lang="en">Messaging</title>
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="100%">
-                                <portlet-frame label="messagingservice">
-                                    <portlet-class>
-                                        org.gridsphere.portlets.core.messaging.MessagingServicesPortlet.1</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
                         </row-layout>
                     </table-layout>
                 </portlet-tab>
