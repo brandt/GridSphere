@@ -17,12 +17,15 @@ import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.user.UserManagerService;
+import org.gridsphere.services.core.captcha.impl.CaptchaServiceSingleton;
 import org.gridsphere.tmf.TextMessagingException;
 import org.gridsphere.tmf.message.MailMessage;
 
 import javax.servlet.UnavailableException;
 import java.security.cert.X509Certificate;
 import java.util.*;
+
+import com.octo.captcha.service.CaptchaServiceException;
 
 public class LoginPortlet extends ActionPortlet {
 
@@ -273,6 +276,24 @@ public class LoginPortlet extends ActionPortlet {
                 isInvalid = isInvalidPassword(event);
             }
         }
+
+
+        //remenber that we need an id to validate!
+        String captchaId = req.getSession().getId();
+        //retrieve the response
+        String response = event.getTextFieldBean("captchaTF").getValue();
+        // Call the Service method
+        try {
+            isInvalid = CaptchaServiceSingleton.getInstance().validateResponseForID(captchaId,
+                    response);
+        } catch (CaptchaServiceException e) {
+            //should not happen, may be thrown if the id is not valid
+        }
+        if (!isInvalid) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_CAPTCHA_MISMATCH"));
+        }
+
+
         // Throw exception if error was found
         if (isInvalid) {
             throw new PortletException(message.toString());
