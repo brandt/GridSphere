@@ -5,6 +5,7 @@
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
+<jsp:useBean id="services" class="java.lang.String" scope="request"/>
 
 <% PortletRequest pReq = (PortletRequest) pageContext.getAttribute("portletRequest"); %>
 <% List authModules = (List) request.getAttribute("authModules"); %>
@@ -161,6 +162,21 @@
     </ui:group>
 </ui:form>
 
+
+<ui:form>
+    <ui:group key="LOGIN_CONFIG_SMTP">
+        <ui:frame beanId="serviceframe"/>
+
+        <ui:frame>
+            <ui:tablerow>
+                <ui:tablecell>
+                    <ui:actionsubmit action="doSaveValues" key="APPLY"/>
+                </ui:tablecell>
+            </ui:tablerow>
+        </ui:frame>
+
+    </ui:group>
+</ui:form>
 
 
 
