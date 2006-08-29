@@ -12,6 +12,7 @@ import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.services.core.portal.PortalConfigService;
 
+import javax.servlet.ServletContext;
 import java.util.Properties;
 import java.io.InputStream;
 import java.io.IOException;
@@ -28,13 +29,15 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
 
     private String GRIDSPHERE_PROPERTIES = "/WEB-INF/CustomPortal/portal/gridsphere.properties";
 
-    private FileOutputStream propertiesOutputStream = null;
     protected Properties props = null;
+    protected ServletContext ctx = null;
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+        ctx = config.getServletContext();
         InputStream propsStream = config.getServletContext().getResourceAsStream(GRIDSPHERE_PROPERTIES);
         try {
-            propertiesOutputStream = new FileOutputStream(config.getServletContext().getRealPath(GRIDSPHERE_PROPERTIES));
+            FileOutputStream propertiesOutputStream = null;
+            propertiesOutputStream = new FileOutputStream(ctx.getRealPath(GRIDSPHERE_PROPERTIES));
             props = new Properties();
             props.load(propsStream);
             props.store(propertiesOutputStream, "GridSphere Portal Properties");
@@ -61,6 +64,8 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
     }
 
     public void storeProperties() throws IOException {
+        FileOutputStream propertiesOutputStream = null;
+        propertiesOutputStream = new FileOutputStream(ctx.getRealPath(GRIDSPHERE_PROPERTIES));
         props.store(propertiesOutputStream, "GridSphere Portal Properties");
     }
 
