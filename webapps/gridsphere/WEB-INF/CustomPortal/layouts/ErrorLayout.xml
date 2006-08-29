@@ -12,13 +12,7 @@
 <page-layout title="GridSphere Error Page" editable="false" renderkit="brush">
 
     <portlet-header>
-        <table-layout>
-            <row-layout>
-                <column-layout width="85%">
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
-                </column-layout>
-            </row-layout>
-        </table-layout>
+        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
     </portlet-header>
 
     <!-- Tabbed Panes -->
@@ -44,15 +38,19 @@
     </portlet-tabbed-pane>
 
     <portlet-footer>
-        <table-layout>
+        <table-layout style="footer">
             <row-layout>
-                <column-layout width="100%">
+                <column-layout width="50%">
                     <portlet-frame transparent="true" outer-padding="0" label="date">
                         <portlet-class>org.gridsphere.portlets.core.date.DatePortlet.1</portlet-class>
                     </portlet-frame>
                 </column-layout>
+                <column-layout width="50%">
+                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
+                </column-layout>
             </row-layout>
         </table-layout>
     </portlet-footer>
+
 
 </page-layout>

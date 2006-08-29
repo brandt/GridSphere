@@ -13,18 +13,8 @@
 
     <!-- Header components -->
     <portlet-header>
-        <table-layout style="header">
-            <row-layout>
-                <column-layout width="70%">
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
-                </column-layout>
-                <column-layout width="15%">
-                    <portlet-frame transparent="true" outer-padding="0" label="logout">
-                        <portlet-class>org.gridsphere.portlets.core.logout.LogoutPortlet.1</portlet-class>
-                    </portlet-frame>
-                </column-layout>
-            </row-layout>
-        </table-layout>
+        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
+        <portlet-content include="/jsp/login/welcome.jsp"/>
     </portlet-header>
 
     <portlet-tabbed-pane selected="0" style="menu" theme="default">
@@ -46,16 +36,21 @@
         <portlet-tab label="logout" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/logout/logoutnav.jsp"/>
     </portlet-tabbed-pane>
 
-    <!-- Footer components (if any) -->
     <portlet-footer>
         <table-layout style="footer">
             <row-layout>
-                <column-layout>
+                <column-layout width="50%">
+                    <portlet-frame transparent="true" outer-padding="0" label="date">
+                        <portlet-class>org.gridsphere.portlets.core.date.DatePortlet.1</portlet-class>
+                    </portlet-frame>
+                </column-layout>
+                <column-layout width="50%">
                     <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
                 </column-layout>
             </row-layout>
         </table-layout>
     </portlet-footer>
+
 
 
 </page-layout>

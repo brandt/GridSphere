@@ -11,57 +11,50 @@
 
 <page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush">
 
-<!-- Header components -->
-<portlet-header>
-    <table-layout style="header">
-        <row-layout>
-            <column-layout width="70%">
-                <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
-            </column-layout>
-            <column-layout width="30%">
-                <portlet-frame transparent="true" outer-padding="0" label="locale">
-                    <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet.1</portlet-class>
-                </portlet-frame>
-            </column-layout>
-        </row-layout>
-    </table-layout>
-</portlet-header>
-
-<!-- Tabbed Panes -->
-<portlet-tabbed-pane selected="0" style="menu">
-    <portlet-tab label="gridsphere" display="false">
-        <title lang="en">GridSphere</title>
-        <portlet-tabbed-pane selected="0" style="sub-menu">
-            <portlet-tab label="home" display="false">
-                <title lang="en">Home</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout width="70%">
-                            <portlet-content include="/WEB-INF/CustomPortal/content/main.html"/>
-                        </column-layout>
-                        <column-layout width="30%">
-                            <portlet-frame label="login">
-                                <portlet-class>org.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-        </portlet-tabbed-pane>
-    </portlet-tab>
-
-</portlet-tabbed-pane>
-
-    <!-- Footer components (if any) -->
-    <portlet-footer>
-        <table-layout style="footer">
+    <!-- Header components -->
+    <portlet-header>
+        <table-layout style="header">
             <row-layout>
-                <column-layout>
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
+                <column-layout width="70%">
+                    <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
+                </column-layout>
+                <column-layout width="30%">
+                    <portlet-frame transparent="true" outer-padding="0" label="locale">
+                        <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet.1</portlet-class>
+                    </portlet-frame>
                 </column-layout>
             </row-layout>
         </table-layout>
-    </portlet-footer>
+    </portlet-header>
 
+    <!-- Tabbed Panes -->
+    <portlet-tabbed-pane selected="0" style="menu">
+        <portlet-tab label="gridsphere" display="false">
+            <title lang="en">GridSphere</title>
+            <portlet-tabbed-pane selected="0" style="sub-menu">
+                <portlet-tab label="home" display="false">
+                    <title lang="en">Home</title>
+                    <table-layout>
+                        <row-layout>
+                            <column-layout width="70%">
+                                <portlet-content include="/WEB-INF/CustomPortal/content/main.html"/>
+                            </column-layout>
+                            <column-layout width="30%">
+                                <portlet-frame label="login">
+                                    <portlet-class>org.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
+                                </portlet-frame>
+                            </column-layout>
+                        </row-layout>
+                    </table-layout>
+                </portlet-tab>
+            </portlet-tabbed-pane>
+        </portlet-tab>
+
+    </portlet-tabbed-pane>
+
+    <!-- Footer components (if any) -->
+    <portlet-footer>
+        <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
+    </portlet-footer>
 
 </page-layout>

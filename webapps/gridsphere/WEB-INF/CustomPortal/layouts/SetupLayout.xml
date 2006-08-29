@@ -52,12 +52,16 @@
     <portlet-footer>
         <table-layout style="footer">
             <row-layout>
-                <column-layout>
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
+                <column-layout width="50%">
+                    <portlet-frame transparent="true" outer-padding="0" label="date">
+                        <portlet-class>org.gridsphere.portlets.core.date.DatePortlet.1</portlet-class>
+                    </portlet-frame>
+                </column-layout>
+                <column-layout width="50%">
+                <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
                 </column-layout>
             </row-layout>
         </table-layout>
     </portlet-footer>
-
 
 </page-layout>
