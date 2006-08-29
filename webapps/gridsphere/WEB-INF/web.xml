@@ -226,22 +226,29 @@
         <mime-type>text/vnd.wap.wmlscript</mime-type>
     </mime-mapping>
 
-    <!-- the 404 page -->
+    <!-- the 401 page -->
     <error-page>
-        <error-code>404</error-code>
-        <location>/jsp/errors/notfound.jsp</location>
+        <error-code>401</error-code>
+        <location>/@GRIDSPHERE_CONTEXT@?gs_PageLayout=ErrorLayout&amp;errorPage=unauthorized.jsp</location>
+    </error-page>
+
+    <!-- the 403 page -->
+    <error-page>
+        <error-code>403</error-code>
+        <location>/@GRIDSPHERE_CONTEXT@?gs_PageLayout=ErrorLayout&amp;errorPage=unauthorized.jsp</location>
     </error-page>
 
     <!-- the 404 page -->
     <error-page>
-        <error-code>401</error-code>
-        <location>/jsp/errors/unauthorized.jsp</location>
+        <error-code>404</error-code>
+        <location>/@GRIDSPHERE_CONTEXT@?gs_PageLayout=ErrorLayout&amp;errorPage=notfound.jsp</location>
     </error-page>
+
 
     <!-- for internal errors -->
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
-        <location>/jsp/error.jsp</location>
+        <location>/@GRIDSPHERE_CONTEXT@?gs_PageLayout=ErrorLayout&amp;errorPage=error.jsp</location>
     </error-page>
 
 </web-app>
