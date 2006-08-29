@@ -4,18 +4,26 @@ import org.gridsphere.portlet.PortletConfig;
 import org.gridsphere.portlet.PortletException;
 import org.gridsphere.portlet.PortletRequest;
 import org.gridsphere.portlet.PortletSettings;
+import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.provider.event.FormEvent;
 import org.gridsphere.provider.portlet.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
+import org.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridsphere.services.core.security.auth.LoginService;
 import org.gridsphere.services.core.security.role.PortletRole;
+import org.gridsphere.services.core.messaging.TextMessagingService;
+import org.gridsphere.tmf.services.TMService;
+import org.gridsphere.tmf.services.TextMessageServiceConfig;
+import org.gridsphere.tmf.services.config.BaseConfig;
+import org.gridsphere.tmf.TextMessagingException;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class ConfigPortlet extends ActionPortlet {
 
@@ -35,11 +43,13 @@ public class ConfigPortlet extends ActionPortlet {
 
     private PortalConfigService portalConfigService = null;
     private LoginService loginService = null;
+    private TextMessagingService tms = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
         loginService = (LoginService) getPortletConfig().getContext().getService(LoginService.class);
+        tms = (TextMessagingService) config.getContext().getService(TextMessagingService.class);
         DEFAULT_VIEW_PAGE = "showConfigure";
     }
 
@@ -82,6 +92,9 @@ public class ConfigPortlet extends ActionPortlet {
 
         List authModules = loginService.getAuthModules();
         req.setAttribute("authModules", authModules);
+
+        doViewMessaging(event);
+
         setNextState(req, DO_CONFIGURE);
     }
 
@@ -198,6 +211,103 @@ public class ConfigPortlet extends ActionPortlet {
 
         showConfigure(event);
     }
+
+    private DefaultTableModel getMessagingService(FormEvent event) {
+
+        DefaultTableModel configTable = new DefaultTableModel();
+
+        Set services = tms.getServices();
+
+        // get the mail service
+        TMService service = null;
+        Iterator it = services.iterator();
+        while (it.hasNext()) {
+            service  = (TMService)it.next();
+        }
+        if (service == null) return configTable;
+
+        // description
+
+        TextMessageServiceConfig config = service.getServiceConfig();
+
+        // configuration
+        List params = config.getConfigPropertyKeys();
+
+        for (int j=0;j<params.size();j++) {
+
+            TableRowBean configRow = new TableRowBean();
+            TableCellBean configDescription = new TableCellBean();
+            TableCellBean configValue = new TableCellBean();
+
+            TextBean paramName = event.getTextBean(service.getClass().getName()+"paramKey"+params.get(j));
+            paramName.setValue((String)params.get(j));
+            configDescription.addBean(paramName);
+
+            TextFieldBean paramValue = event.getTextFieldBean(service.getClass().getName()+"paramValue"+params.get(j));
+            paramValue.setValue(config.getProperty((String)params.get(j)));
+            configValue.addBean(paramValue);
+
+            configRow.addBean(configDescription); configDescription.setAlign("top");
+            configRow.addBean(configValue);
+
+            configTable.addTableRowBean(configRow);
+        }
+
+        FrameBean frameConfig = new FrameBean();
+        frameConfig.setTableModel(configTable);
+
+
+        return configTable;
+
+    }
+
+    public void doViewMessaging(FormEvent event)  {
+        FrameBean serviceFrame = event.getFrameBean("serviceframe");
+        serviceFrame.setTableModel(getMessagingService(event));
+        Set services = tms.getServices();
+        event.getPortletRequest().setAttribute("services", ""+services.size());
+    }
+
+    public void doSaveValues(FormEvent event) {
+        Set services = tms.getServices();
+        for (Iterator iterator = services.iterator(); iterator.hasNext();) {
+            // get the service
+            TMService service = (TMService) iterator.next();
+                TextMessageServiceConfig config = service.getServiceConfig();
+
+                List params = config.getConfigPropertyKeys();
+
+                boolean isDirty = false;
+                for (int j=0;j<params.size();j++) {
+                    String propKey = (String)params.get(j);
+                    String propValue = config.getProperty(propKey);
+
+                    TextFieldBean paramValue = event.getTextFieldBean(service.getClass().getName()+"paramValue"+propKey);
+                    String propTextBeanValue = paramValue.getValue();
+
+                    // if a parameter changed, restart the service....
+                    if (!propTextBeanValue.equals(propValue)) {
+                        config.setProperty((String)params.get(j), paramValue.getValue());
+                        isDirty = true;
+                    }
+                }
+                if (isDirty) {
+                    try {
+                        config.saveConfig();
+                        service.shutdown();
+                        service.startup();
+                        String msg = this.getLocalizedText(event.getPortletRequest(), "MESSAGING_SERVICE_SERVICERESTARTED");
+                        createSuccessMessage(event, msg + ": "+config.getProperty(TextMessagingService.SERVICE_NAME));
+                    } catch (IOException e) {
+                        createErrorMessage(event, this.getLocalizedText(event.getPortletRequest(), "MESSAGING_SERVICE_SAVEFAILURE"));
+                    } catch (TextMessagingException e) {
+                        String msg = this.getLocalizedText(event.getPortletRequest(), "MESSAGING_SERVICE_RESTARTFAILURE");
+                        createErrorMessage(event, msg+" : "+config.getProperty(TextMessagingService.SERVICE_NAME));
+                    }
+                }
+            }
+        }
+
 
     private void createErrorMessage(FormEvent evt, String text) {
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
