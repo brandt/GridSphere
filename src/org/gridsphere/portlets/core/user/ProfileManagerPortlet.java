@@ -428,11 +428,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         return bean;
     }
 
-    public void doFinish(FormEvent event) throws PortletException, IOException {
-        PortletSession session = event.getPortletRequest().getPortletSession();
-        session.setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
-    }
-
     private void createErrorMessage(FormEvent event, String msg) {
         MessageBoxBean msgBox = event.getMessageBoxBean("msg");
         msgBox.setMessageType(MessageStyle.MSG_ERROR);
