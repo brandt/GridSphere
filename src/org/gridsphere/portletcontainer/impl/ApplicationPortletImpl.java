@@ -64,24 +64,6 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         this.webAppName = webApplication;
         this.appPortletConfig = portletDef.getApplicationSportletConfig();
 
-        // Set cache information
-        /*
-        CacheInfo cacheInfo = appDescriptor.getCacheInfo();
-        if (cacheInfo == null) {
-            cacheInfo = new CacheInfo("true", -1);
-        }
-        cacheable = new Cacheable();
-        cacheable.setExpiration(cacheInfo.getExpires());
-        String shared = cacheInfo.getShared();
-        if ((shared.equalsIgnoreCase("true")) ||
-                (shared.equalsIgnoreCase("t")) ||
-                (shared.equalsIgnoreCase("yes")) ||
-                (shared.equalsIgnoreCase("y"))) {
-            cacheable.setShared(true);
-        } else {
-            cacheable.setShared(false);
-        }*/
-
         // Set concrete portlet information
         List concPortletDefs = portletDef.getConcreteSportletList();
         Iterator it = concPortletDefs.iterator();
@@ -101,7 +83,6 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         if (rd == null) {
             String msg = "Unable to create a dispatcher for portlet: " + portletName + "\n";
             msg += "Make sure the servletName: " + servletName + " is the servlet-name defined in web.xml";
-            log.error(msg);
             throw new PortletException(msg);
         }
         portletDispatcher = new SportletDispatcher(rd, appPortletConfig);

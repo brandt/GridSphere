@@ -54,15 +54,6 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
         //System.err.println("contextName: " + ctx.getServletContextName());
         //System.err.println("context path: " + ctx.getRealPath(""));
 
-
-        //System.err.println("testing example portlets");
-        //ServletContext testsc = context.getContext("/exampleportlets");
-        //System.err.println("description: " + ctx.getServletContextName());
-        //System.err.println("testing core portlets");
-        //testsc = context.getContext("/coreportlets");
-        //System.err.println("description: " + testsc.getServletContextName());
-        //System.err.println("context path: " + te.getRealPath(""));
-
         if (ctx == null) {
             log.error(webApplicationName + ": Unable to get ServletContext for: " + contextURIPath);
             throw new PortletException(webApplicationName + ": Unable to get ServletContext for: " + contextURIPath);

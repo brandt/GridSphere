@@ -20,7 +20,7 @@ public interface PortletWebApplication {
     /**
      * Returns the portlet web application name
      *
-     * @return the ui application name
+     * @return the portlet web application name
      */
     public String getWebApplicationName();
 
@@ -37,4 +37,5 @@ public interface PortletWebApplication {
      * @return the collection of application portlets
      */
     public Collection getAllApplicationPortlets();
+
 }
