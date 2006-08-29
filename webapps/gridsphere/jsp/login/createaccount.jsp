@@ -84,7 +84,21 @@
         </ui:tablerow>
         <% } %>
 
+        <ui:tablerow>
+            <ui:tablecell width="200">
+                <img src="jcaptcha"/>
+            </ui:tablecell>
+        </ui:tablerow>
+        <ui:tablerow>
+            <ui:tablecell width="200">
+                <ui:textfield beanId="captchaTF"/>   
+            </ui:tablecell>
+        </ui:tablerow>
+
     </ui:frame>
+
+
+
 
     <ui:frame>
         <ui:tablerow>
