@@ -131,6 +131,3 @@
         </p>
     </ui:group>
 </ui:form>
-
-
-<h3><ui:actionlink action="doFinish" value="Return to portal"/></h3>
