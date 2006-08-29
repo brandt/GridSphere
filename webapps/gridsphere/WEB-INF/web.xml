@@ -39,11 +39,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>LogoutPortlet</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.logout.LogoutPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>SetupPortlet</servlet-name>
         <servlet-class>org.gridsphere.portlets.core.admin.setup.SetupPortlet</servlet-class>
     </servlet>
@@ -94,11 +89,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>MessagingServicesPortlet</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.messaging.MessagingServicesPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>ServletRedirector</servlet-name>
         <servlet-class>org.apache.cactus.server.ServletTestRedirector</servlet-class>
     </servlet>
@@ -134,11 +124,6 @@
     <servlet-mapping>
         <servlet-name>LoginPortlet</servlet-name>
         <url-pattern>/login</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>LogoutPortlet</servlet-name>
-        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -199,11 +184,6 @@
     <servlet-mapping>
         <servlet-name>LocalePortlet</servlet-name>
         <url-pattern>/locale</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>MessagingServicesPortlet</servlet-name>
-        <url-pattern>/admin/messagingservice</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
