@@ -9,12 +9,12 @@
     $Id: SetupLayout.xml 5092 2006-08-19 04:17:21Z novotny $
 -->
 
-<page-layout title="GridSphere Portal Setup" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="ADMIN">
+<page-layout label="admin" title="GridSphere Portal Setup" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="ADMIN">
 
 
     <!-- Header components -->
     <portlet-header>
-        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
+        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
         <portlet-content include="/jsp/login/welcome.jsp"/>
     </portlet-header>
 
@@ -95,7 +95,7 @@
         <table-layout style="footer">
             <row-layout>
                 <column-layout>
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
+                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
                 </column-layout>
             </row-layout>
         </table-layout>

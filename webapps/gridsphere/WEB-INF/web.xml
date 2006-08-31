@@ -24,7 +24,7 @@
 
     <filter-mapping>
         <filter-name>GridSphere Filter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/@GRIDSPHERE_CONTEXT@/*</url-pattern>
     </filter-mapping>
 
 
@@ -33,6 +33,7 @@
         <servlet-class>org.gridsphere.servlets.GridSphereServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+
 
     <servlet>
         <servlet-name>jcaptcha</servlet-name>
@@ -125,7 +126,7 @@
 
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
-        <url-pattern>/@GRIDSPHERE_CONTEXT@</url-pattern>
+        <url-pattern>/@GRIDSPHERE_CONTEXT@/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -233,7 +234,7 @@
     <!-- the 404 page -->
     <error-page>
         <error-code>404</error-code>
-        <location>/@GRIDSPHERE_CONTEXT@?gs_PageLayout=ErrorLayout&amp;errorPage=notfound.jsp</location>
+        <location>/@GRIDSPHERE_CONTEXT@/ErrorLayout/errorPage=notfound.jsp</location>
     </error-page>
 
 

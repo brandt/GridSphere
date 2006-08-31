@@ -9,10 +9,10 @@
     $Id$
 -->
 
-<page-layout title="GridSphere Error Page" editable="false" renderkit="brush">
+<page-layout label="error" title="GridSphere Error Page" editable="false" renderkit="brush">
 
     <portlet-header>
-        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
+        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
     </portlet-header>
 
     <!-- Tabbed Panes -->
@@ -34,7 +34,7 @@
                 </portlet-tab>
             </portlet-tabbed-pane>
         </portlet-tab>
-
+        <portlet-tab label="portal" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/returnnav.jsp"/>
     </portlet-tabbed-pane>
 
     <portlet-footer>
@@ -46,7 +46,7 @@
                     </portlet-frame>
                 </column-layout>
                 <column-layout width="50%">
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
+                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
                 </column-layout>
             </row-layout>
         </table-layout>

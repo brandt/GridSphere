@@ -9,11 +9,11 @@
     $Id: SetupLayout.xml 4633 2006-03-09 16:44:16Z wehrens $
 -->
 
-<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="ADMIN">
+<page-layout label="layout" title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="ADMIN">
 
     <!-- Header components -->
     <portlet-header>
-        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
+        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
         <portlet-content include="/jsp/login/welcome.jsp"/>
     </portlet-header>
 
@@ -33,7 +33,7 @@
                 </portlet-tab>
             </portlet-tabbed-pane>
         </portlet-tab>
-        <portlet-tab label="logout" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/logout/logoutnav.jsp"/>
+        <portlet-tab label="portal" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/returnnav.jsp"/>
     </portlet-tabbed-pane>
 
     <portlet-footer>
@@ -45,7 +45,7 @@
                     </portlet-frame>
                 </column-layout>
                 <column-layout width="50%">
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
+                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
                 </column-layout>
             </row-layout>
         </table-layout>

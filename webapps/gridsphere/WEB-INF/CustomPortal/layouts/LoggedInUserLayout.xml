@@ -9,10 +9,10 @@ This descriptor defines the user's portal layout upon logging into the portal
 $Id$
 -->
 
-<page-layout title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="true">
+<page-layout label="user" title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="true" required-role="USER">
 
     <portlet-header>
-        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
+        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
         <portlet-content include="/jsp/login/welcome.jsp"/>
     </portlet-header>
 
@@ -47,7 +47,7 @@ $Id$
                     </portlet-frame>
                 </column-layout>
                 <column-layout width="50%">
-                <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
+                <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
                 </column-layout>
             </row-layout>
         </table-layout>
