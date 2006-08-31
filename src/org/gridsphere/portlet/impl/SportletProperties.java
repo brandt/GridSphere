@@ -151,13 +151,15 @@ public class SportletProperties {
 
     public static final String LAYOUT_EDIT_MODE = "org.gridsphere.layout.LAYOUT_EDIT_MODE";
 
-    public static final String LAYOUT_PAGE = "org.gridsphere.layout.PAGE";
 
     public static final String LAYOUT_THEME = "org.gridsphere.layout.THEME";
 
     public static final String LAYOUT_RENDERKIT = "org.gridsphere.layout.RENDERKIT";
 
+
     public static final String LAYOUT_PAGE_PARAM = "gs_PageLayout";
+
+    public static final String LAYOUT_PAGE = "org.gridsphere.layout.PAGE";
 
 
     // Used for "action component model" in grid portlets currently
