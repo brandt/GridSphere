@@ -28,7 +28,9 @@ public class GridSphereEventImpl implements GridSphereEvent {
     protected SportletResponse portletResponse;
     protected PortletContext portletContext;
 
-    protected String portletComponentID = null;
+    protected String componentID = null;
+    protected String layoutID = null;
+
     protected DefaultPortletAction action = null;
     protected PortletMessage message = null;
 
@@ -44,13 +46,23 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
         String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
         if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-        portletComponentID = req.getParameter(compVar);
-        if (portletComponentID == null) {
+        componentID = req.getParameter(compVar);
+        if (componentID == null) {
             log.debug("Received a null component ID");
-            portletComponentID = "";
+            componentID = "";
+        } else {
+            log.debug("Received cid= " + componentID);
         }
 
-        log.debug("Received cid= " + portletComponentID);
+        layoutID = req.getParameter(SportletProperties.LAYOUT_PAGE_PARAM);
+        if (layoutID == null) {
+            log.debug("Received a null layout ID");
+            layoutID = "";
+        } else {
+            log.debug("Received layout id= " + layoutID);
+            req.setAttribute(SportletProperties.LAYOUT_PAGE, layoutID);
+        }
+
 
         action = createAction(portletRequest);
 
@@ -195,8 +207,12 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return message;
     }
 
-    public String getPortletComponentID() {
-        return portletComponentID;
+    public String getComponentID() {
+        return componentID;
+    }
+
+    public String getLayoutID() {
+        return layoutID;
     }
 
     public void addNewRenderEvent(PortletComponentEvent evt) {

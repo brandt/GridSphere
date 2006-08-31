@@ -48,12 +48,18 @@ public interface GridSphereEvent extends Event {
     public boolean hasAction();
 
     /**
-     * Returns the portal layout component id associated with this event
+     * Returns the layout component id associated with this page and event
      *
-     * @return the portal layout component id or empty String iff none exists
+     * @return the layout component id or empty String if none exists
      */
-    public String getPortletComponentID();
+    public String getComponentID();
 
+    /**
+     * Returns the page layout id associated with this event
+     *
+     * @return page layout id or empty String if none exists
+     */
+    public String getLayoutID();
 
     public void addNewRenderEvent(PortletComponentEvent evt);
 
