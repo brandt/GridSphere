@@ -30,6 +30,7 @@ import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.impl.SportletRequest;
 import org.gridsphere.portlet.impl.SportletResponse;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.layout.PortletLayoutEngine;
 
@@ -37,6 +38,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 /**
  * GridSphereFilter is used for first time portal initialization including portlets
@@ -82,7 +84,54 @@ public class GridSphereFilter implements Filter {
                 return;
             }
         }
-        chain.doFilter(request, response);
-    }
 
+
+        if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
+            HttpServletRequest req = (HttpServletRequest)request;
+            HttpServletResponse res = (HttpServletResponse)response;
+            String pathInfo = req.getPathInfo();
+            StringBuffer requestURL = req.getRequestURL();
+            String requestURI = req.getRequestURI();
+            String query = req.getQueryString();
+
+            log.info("\n pathInfo= " + pathInfo + " query= " + query);
+            log.info(" requestURL= " + requestURL + " requestURI= " + requestURI + "\n");
+            if (query == null) {
+                query = "";
+            } else {
+                query = "&" + query;
+            }
+
+            String extraInfo = "";
+
+            if (pathInfo != null) {
+                extraInfo = "?";
+                StringTokenizer st = new StringTokenizer(pathInfo, "/");
+
+                if (st.hasMoreTokens()) {
+                    String layoutId = (String)st.nextElement();
+                    extraInfo += SportletProperties.LAYOUT_PAGE_PARAM + "=" + layoutId;
+                }
+                if (st.hasMoreTokens()) {
+                    String cid = (String)st.nextElement();
+                    extraInfo += "&" + SportletProperties.COMPONENT_ID+ "=" + cid;
+                }
+                if (st.hasMoreTokens()) {
+                    String action = (String)st.nextElement();
+                    extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
+                }
+                extraInfo +=  query;
+
+                //String ctxPath = hreq.getContextPath();
+                //String ctxPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.context");
+                String ctxPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.context");
+                log.info("forwarded URL: " + ctxPath + extraInfo);
+                context.getRequestDispatcher(ctxPath + extraInfo).forward(req, res);
+                return;
+            }
+
+        }
+        chain.doFilter(request, response);
+
+    }
 }
