@@ -11,7 +11,7 @@
 
 <% Locale locale = (Locale) request.getAttribute("locale"); %>
 <% PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest"); %>
-<% String flag = "images/flags/" + locale.getLanguage() + ".gif"; %>
+<% String flag = request.getContextPath() + "/images/flags/" + locale.getLanguage() + ".gif"; %>
 
 <ui:messagebox beanId="msg"/>
 

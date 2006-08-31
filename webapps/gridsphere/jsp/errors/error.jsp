@@ -1,19 +1,29 @@
-<%@ page import="org.gridsphere.portlet.impl.SportletProperties"%>
 
-<% String errorPage = request.getParameter("errorPage");
+<%@ page isErrorPage="true" %>
 
-if (errorPage == null) {
-    errorPage = (String)request.getAttribute("errorPage");
-}
+<div style="padding: 0px 0px 5px 0px; margin: 10px">
+<h2>Unexpected server error!</h2>
 
-if (errorPage == null) { %>
-    <h2>Some Unknown error occurred!</h2>
-<%  } else { %>
+<b>HTTP Status Code:</b>  <b style="color: red;"><%= request.getAttribute("javax.servlet.error.status_code") %></b>
+<p/>
+<b>Originating URI:</b> <b style="color: red;"><%= request.getAttribute("javax.servlet.error.request_uri") %></b>
 
-    <jsp:include page="<%= errorPage %>"/>
 
-<% } %>
+<p/>
 
-<h2><a href="<%= request.getContextPath() %>">Return to Portal</a></h2>
 
-<% request.getSession().removeAttribute(SportletProperties.LAYOUT_PAGE); %>
+    <table style="border-collapse: collapse; width: 50em; border: 1px solid black;"><caption>Stack Trace</caption>
+        <thead><tr><th scope="col">Class</th><th scope="col">Method</th><th scope="col">Line #</th></tr></thead>
+  <% Throwable t = (Throwable)request.getAttribute("javax.servlet.error.exception");
+     StackTraceElement[] elem = t.getStackTrace();
+     for (int i = 0; i < 10; i++) {
+      %>
+<tr>
+  <td><%= elem[i].getClassName() %> </td> <td> <%= elem[i].getMethodName() %> </td> <td> <%= elem[i].getLineNumber() %>  </td>
+ </tr>
+    <%
+     }
+     %>
+   </table>
+
+</div>

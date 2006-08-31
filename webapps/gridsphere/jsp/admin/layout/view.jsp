@@ -68,6 +68,3 @@
 
 <hr/>
 
-<h3><ui:actionlink action="doFinish" value="Return to portal"/></h3>
-
-
