@@ -86,7 +86,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static final String COOKIE_REQUEST = "cookie-request";
     private int COOKIE_EXPIRATION_TIME = 60 * 60 * 24 * 7;  // 1 week (in secs)
 
-    private boolean setupNeeded = false;
     private boolean isTCK = false;
 
     /**
@@ -115,19 +114,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public synchronized void initializeServices() throws PortletServiceException {
         requestService = (RequestService) PortletServiceFactory.createPortletService(RequestService.class, true);
-
         roleService = (RoleManagerService) PortletServiceFactory.createPortletService(RoleManagerService.class, true);
         groupService = (GroupManagerService) PortletServiceFactory.createPortletService(GroupManagerService.class, true);
-
-        // create root user in default group if necessary
-        log.debug("Creating user manager service");
         userManagerService = (UserManagerService) PortletServiceFactory.createPortletService(UserManagerService.class, true);
         portalConfigService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
         loginService = (LoginService) PortletServiceFactory.createPortletService(LoginService.class, true);
-        log.debug("Creating portlet manager service");
-
         layoutEngine = PortletLayoutEngine.getInstance();
-
         portletManager = (PortletManagerService) PortletServiceFactory.createPortletService(PortletManagerService.class, true);
         trackerService = (TrackerService) PortletServiceFactory.createPortletService(TrackerService.class, true);
 
@@ -159,7 +151,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 // initialize needed services
                 initializeServices();
                 updateDatabase();
-                if (isTCK) req.getSession().setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.TCK_PAGE);
+                if (isTCK) req.setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.TCK_PAGE);
             } catch (Exception e) {
                 log.error("GridSphere initialization failed!", e);
                 RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/init_error.jsp");
@@ -167,16 +159,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 rd.forward(req, res);
                 return;
             }
-
-            if ((userManagerService.getNumUsers() == 0) || (roleService.getUsersInRole(PortletRole.ADMIN)).size() == 0) {
-                setupNeeded = true;
-            }
-
-        }
-
-        if (setupNeeded) {
-            req.getSession().setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.SETUP_PAGE);
-            setupNeeded = false;
         }
 
         // check to see if user has been authorized by means of container managed authorization
@@ -509,7 +491,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             if (query != null) {
                 uri.addParameter("cid", query);
             }
-            req.getSession().setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
+            req.setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
             layoutEngine.loginPortlets(event);
 
             String realuri = uri.toString().substring("http".length());
