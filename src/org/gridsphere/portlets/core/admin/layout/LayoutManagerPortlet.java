@@ -95,13 +95,14 @@ public class LayoutManagerPortlet extends ActionPortlet {
         return page;
     }
 
-
+    /*
     public void doFinish(FormEvent event) throws PortletException, IOException {
         PortletSession session = event.getPortletRequest().getPortletSession();
         session.setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
         session.removeAttribute(SELECTED_LAYOUT);
         pages.remove(session.getId());
     }
+    */
 
     public void doSaveFrame(FormEvent event) throws PortletException, IOException {
         PortletRequest req = event.getPortletRequest();

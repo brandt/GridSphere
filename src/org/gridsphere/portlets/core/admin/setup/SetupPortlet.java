@@ -16,8 +16,10 @@ import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.user.UserManagerService;
+import org.gridsphere.layout.PortletPageFactory;
 
 import javax.servlet.UnavailableException;
+import java.io.IOException;
 
 public class SetupPortlet extends ActionPortlet {
 
@@ -124,7 +126,7 @@ public class SetupPortlet extends ActionPortlet {
         roleManagerService.addUserToRole(accountRequest, PortletRole.ADMIN);
         roleManagerService.addUserToRole(accountRequest, PortletRole.USER);
 
-        event.getPortletRequest().getPortletSession().removeAttribute(SportletProperties.LAYOUT_PAGE);
+        event.getPortletRequest().setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
     }
 
     private boolean isInvalidPassword(FormEvent event, boolean newuser) {
