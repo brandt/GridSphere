@@ -5,6 +5,10 @@ import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.services.core.portal.PortalConfigService;
+import org.gridsphere.services.core.security.role.PortletRole;
+import org.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridsphere.services.core.security.group.GroupManagerService;
+import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.portletcontainer.impl.PortletSessionManager;
 
 import javax.servlet.ServletContext;
@@ -35,7 +39,9 @@ public class PortletPageFactory implements PortletSessionListener {
     private static PortletPageFactory instance = null;
     private PortletSessionManager sessionManager = PortletSessionManager.getInstance();
     private PortalConfigService portalConfigService = null;
+    private RoleManagerService roleService = null;
 
+    private UserManagerService userManagerService = null;
     private PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
     protected URL LAYOUT_MAPPING_PATH = getClass().getResource("/org/gridsphere/layout/layout-mapping.xml");
@@ -52,6 +58,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private ServletContext context;
 
+    private boolean setupNeeded = true;
 
     private PortletPageFactory() {
 
@@ -90,8 +97,8 @@ public class PortletPageFactory implements PortletSessionListener {
         }
 
         portalConfigService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
-
-
+        roleService = (RoleManagerService) PortletServiceFactory.createPortletService(RoleManagerService.class, true);
+        userManagerService = (UserManagerService) PortletServiceFactory.createPortletService(UserManagerService.class, true);
     }
 
     public static synchronized PortletPageFactory getInstance() {
@@ -340,32 +347,26 @@ public class PortletPageFactory implements PortletSessionListener {
      * @return a portlet page
      */
     public PortletPage getPortletPage(PortletRequest req) {
-        PortletSession session = req.getPortletSession();
         // first check for layout id in request parameter
         // TODO potential security risk!!! MUST DO SOME ROLE CHECKING HERE!!
-        String layoutId = req.getParameter(SportletProperties.LAYOUT_PAGE_PARAM);
-        boolean doSecurityCheck = false;
+        if (setupNeeded) {
+            if (!(userManagerService.getNumUsers() == 0) || (roleService.getUsersInRole(PortletRole.ADMIN)).size() > 0) {
+                setupNeeded = false;
+            } else {
+                req.setAttribute(SportletProperties.LAYOUT_PAGE, SETUP_PAGE);
+            }
+        }
+        String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
         if (layoutId == null) {
-            // second check for a page layout id in session
-            layoutId = (String)session.getAttribute(SportletProperties.LAYOUT_PAGE);
-            if (layoutId == null) {
+            if (req.getUser() == null) {
                 // if no reference to a layout exists, return a guest layout
                 layoutId = GUEST_PAGE;
+            } else {
+                layoutId = USER_PAGE;
             }
-        } else {
-            // this needs to be validated against the required-role of the page
-            doSecurityCheck = true;
+            req.setAttribute(SportletProperties.LAYOUT_PAGE, layoutId);
         }
-        //Principal principal = req.getUserPrincipal();
-        //if (principal == null) layoutId = GUEST_PAGE;
-        PortletPage page = getPortletPageFromHash(req, layoutId, doSecurityCheck);
-        if (page == null) {
-            log.debug("page is null");
-            layoutId = (String)session.getAttribute(SportletProperties.LAYOUT_PAGE);
-            page = getPortletPageFromHash(req, layoutId, false);
-        }
-        session.setAttribute(SportletProperties.LAYOUT_PAGE, layoutId);
-        return page;
+        return getPortletPageFromHash(req, layoutId);
     }
 
     /**
@@ -374,9 +375,10 @@ public class PortletPageFactory implements PortletSessionListener {
      * @param layoutId
      * @return the page
      */
-    protected PortletPage getPortletPageFromHash(PortletRequest req, String layoutId, boolean doSecurityCheck) {
+    protected PortletPage getPortletPageFromHash(PortletRequest req, String layoutId) {
         PortletSession session = req.getPortletSession();
         PortletPage page = null;
+
         Map usersLayouts = (Map)layouts.get(session.getId());
         if (usersLayouts == null) {
             usersLayouts = new HashMap();
@@ -387,15 +389,19 @@ public class PortletPageFactory implements PortletSessionListener {
         // only if no page exists, create a new one and place in hash
         if (page == null) {
             page = createPortletPage(req, layoutId);
-
-            if (doSecurityCheck) {
-                String role = page.getRequiredRole();
-                // does not have permissions!
-                if (!role.equals("") && !req.isUserInRole(role)) {
-                    // use existing page
-                    log.debug("User does not have proper permissions for layout=" + layoutId + "!!");
-                    return null;
+            String role = page.getRequiredRole();
+            if (!role.equals("") && !req.isUserInRole(role) && !setupNeeded) {
+                // use existing page
+                log.debug("User does not have proper permissions for layout=" + layoutId + "!!");
+                if (req.getUser() == null) {
+                    // if no reference to a layout exists, return a guest layout
+                    layoutId = GUEST_PAGE;
+                } else {
+                    layoutId = USER_PAGE;
                 }
+                page = (PortletPage)usersLayouts.get(layoutId);
+                if (page == null) page = createPortletPage(req, layoutId);
+                req.setAttribute(SportletProperties.LAYOUT_PAGE, layoutId);
             }
             usersLayouts.put(layoutId, page);
             log.debug("Creating new page " + layoutId + " placing in session " + session.getId());
@@ -412,6 +418,13 @@ public class PortletPageFactory implements PortletSessionListener {
         if (masterPage == null) {
             if (layoutId.equals(TCK_PAGE)) {
                 copy = createTCKPage(req);
+            } else {
+              if (req.getUser() == null) {
+                    // if no reference to a layout exists, return a guest layout
+                    return getPortletPageFromHash(req, GUEST_PAGE);
+                } else {
+                    return getPortletPageFromHash(req, USER_PAGE);
+                }  
             }
         } else {
             try {

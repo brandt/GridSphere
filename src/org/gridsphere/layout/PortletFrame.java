@@ -510,7 +510,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         // check for render params
         if (onlyRender)  {
-            if ((event.getPortletComponentID().equals(componentIDStr))) {
+            if ((event.getComponentID().equals(componentIDStr))) {
                 addRenderParams(req);
             }
         }

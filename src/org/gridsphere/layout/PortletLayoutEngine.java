@@ -100,7 +100,7 @@ public class PortletLayoutEngine {
         if (req.getParameter("ajax") != null) {
             String portlet = req.getParameter("portlet");
             System.err.println("it's ajax: " + portlet);
-            String cid = req.getParameter(SportletProperties.COMPONENT_ID);
+            String cid = event.getComponentID();
             if ((cid != null) && (cid.startsWith("portlet"))) {
                 portlet = cid.substring("portlet".length()+1);
             }
@@ -193,7 +193,7 @@ public class PortletLayoutEngine {
     }
 
     public void doAction(GridSphereEvent event) {
-         String cid = event.getPortletComponentID();
+         String cid = event.getComponentID();
          if (!cid.equals("")) {
              PortletFrame frame = registry.getPortletFrame(cid, null, event);
              if (frame != null)  {
@@ -218,11 +218,11 @@ public class PortletLayoutEngine {
         PortletPage page = getPortletPage(event);
         //int numcomps = page.getComponentIdentifierList().size();
         /*
-        if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
+        if (event.getComponentID() < 0 || event.getComponentID() > numcomps) {
         event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
         }
         */
-        if (!event.getPortletComponentID().equals("")) {
+        if (!event.getComponentID().equals("")) {
             page.actionPerformed(event);
 
             // sometimes the page needs reinitializing

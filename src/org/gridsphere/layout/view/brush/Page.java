@@ -48,7 +48,7 @@ public class Page extends BaseRender implements Render {
         page.append("\n<!-- GridSphere Release: " + event.getPortletContext().getReleaseInfo() + "-->");
         page.append("\n\t<head>");
         page.append("\n\t<title>").append(portletPage.getTitle()).append("</title>");
-        ///page.append("\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
+
         page.append("\n\t<meta name='keywords' content='").append(portletPage.getKeywords()).append("' />");
         page.append("\n\t<meta http-equiv=\"Pragma\" content=\"no-cache\" />");
         if (portletPage.getRefresh() > 0)
@@ -72,7 +72,7 @@ public class Page extends BaseRender implements Render {
                 }
             }
         }
-        page.append("\n\t<link rel=\"icon\" href=\"").append(portletPage.getIcon()).append("\" type=\"imge/x-icon\"/>");
+        page.append("\n\t<link rel=\"icon\" href=\"").append(req.getContextPath()).append("/").append(portletPage.getIcon()).append("\" type=\"imge/x-icon\"/>");
         page.append("\n\t<link rel=\"shortcut icon\" href=\"").append(req.getContextPath()).append("/").append(portletPage.getIcon()).append("\" type=\"image/x-icon\"/>");
         page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/gridsphere.js\"></script>");
         // add editor

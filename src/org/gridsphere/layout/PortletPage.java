@@ -383,7 +383,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     public void actionPerformed(GridSphereEvent event) {
         // if there is a layout action do it!
         PortletRequest req = event.getPortletRequest();
-        String cid = event.getPortletComponentID();
+        String cid = event.getComponentID();
         if (cid != null) {
             PortletComponent comp = getActiveComponent(cid);
             if (comp != null) {
@@ -505,7 +505,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         // In case the "floating" portlet state has been selected:
         String wstate = event.getPortletRequest().getParameter(SportletProperties.PORTLET_WINDOW);
         if ((wstate != null) && (wstate.equalsIgnoreCase(PortletWindow.State.FLOATING.toString()))) {
-            String cid = event.getPortletComponentID();
+            String cid = event.getComponentID();
             PortletComponent comp = getActiveComponent(cid);
 
             PortletComponent pc = comp.getParentComponent();
