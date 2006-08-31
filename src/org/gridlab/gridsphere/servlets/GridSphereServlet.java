@@ -731,11 +731,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             while (portletSetIt.hasNext()) {
                 SportletRoleInfo roleInfo = (SportletRoleInfo)portletSetIt.next();
                 String roleName = roleInfo.getRole();
-                PortletRole portletRole = roleService.getRole(roleName);
-                if (portletRole != null) {
-                    if (portletRole.getName().equalsIgnoreCase("GUEST")) portletRole = roleService.getRole("USER");
-                    roleInfo.setSportletRole(portletRole);
-                    roleInfo.setRole("");
+                if (roleName != null) {
+                    PortletRole portletRole = roleService.getRole(roleName);
+                    if (portletRole != null) {
+                        if (portletRole.getName().equalsIgnoreCase("GUEST")) portletRole = roleService.getRole("USER");
+                        roleInfo.setSportletRole(portletRole);
+                        roleInfo.setRole("");
+                    }
                 }
             }
             groupService.saveGroup(group);
