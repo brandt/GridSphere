@@ -24,8 +24,6 @@ public class SportletURI implements PortletURI {
     private Map store = new HashMap();
     private boolean isSecure = false;
     private boolean redirect = true;
-    //private String contextPath = null;
-    //private String servletPath = null;
     private Map actionParams = new HashMap();
     private Set sportletProps = null;
 
@@ -65,6 +63,10 @@ public class SportletURI implements PortletURI {
         sportletProps.add(compVar);
         sportletProps.add(SportletProperties.PORTLET_WINDOW);
         sportletProps.add(SportletProperties.PORTLET_MODE);
+
+        // added JN 8-29
+        sportletProps.add(SportletProperties.LAYOUT_PAGE_PARAM);
+
     }
 
     /**
@@ -164,6 +166,7 @@ public class SportletURI implements PortletURI {
      * @return the URI as a string
      */
     public String toString() {
+
         StringBuffer s = new StringBuffer();
         String port = null;
   
@@ -194,24 +197,47 @@ public class SportletURI implements PortletURI {
         String contextPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.deploy"); // contextPath;
         String servletPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.context");
 
-        String url = contextPath;
+        String url = contextPath + servletPath;
+
         String newURL;
+
+        ///////////  JASON ADDED BELOW
+
+        String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
+        if (layoutId != null) {
+            url += "/" + layoutId;
+            String cid = (String)store.get(SportletProperties.COMPONENT_ID);
+            if (cid != null) {
+                store.remove(SportletProperties.COMPONENT_ID);
+                url += "/" + cid;
+                String action = (String)store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
+                if (action != null) {
+                    store.remove(SportletProperties.DEFAULT_PORTLET_ACTION);
+                    url += "/" + action;
+                }
+            }
+        }
+        ///////////// JASON ADDED ABOVE
+
+
+
         Set set = store.keySet();
         if (!set.isEmpty()) {
             // add question mark
-            url += servletPath + "?";
+            url += "?";
         } else {
-            return s.append(url).append(servletPath).toString();
+            return s.append(url).toString();
         }
         boolean firstParam = true;
         try {
             it = set.iterator();
             while (it.hasNext()) {
-                if (!firstParam)
-//    url += "&amp;"; // special character replaced with its corresponding entity for XHTML 1.0 Strict compliance
-                    url += "&";
+                if (!firstParam) url += "&";
                 String name = (String) it.next();
                 String encname = URLEncoder.encode(name, "UTF-8");
+
+
+
                 String val = (String) store.get(name);
                 if (val != null) {
                     String encvalue = URLEncoder.encode(val, "UTF-8");
