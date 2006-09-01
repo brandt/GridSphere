@@ -14,13 +14,13 @@ describe how to set and install GridSphere as well as portlet development
 and deployment
 
 In addition, please subscribe to the following mail lists from the mailman
-interface at https://www.gridlab.org/mailman/listinfo:
+interface at http://lists.gridsphere.org/mailman/listinfo:
 
 gridsphere-users -- Mail list used for the discussion of developing portals using the GridSphere framework
 
 gridsphere-dev -- Mail list used for the discussion of GridSphere framework development
 
-gridsphere-cvs -- Mail list used to receive CVS notifications
+gridsphere-svn -- Mail list used to receive SVN notifications
 
 To report bugs, please use the bugtracker at http://bugs.gridsphere.org
 
