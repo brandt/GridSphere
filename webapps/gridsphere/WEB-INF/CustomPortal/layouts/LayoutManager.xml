@@ -9,7 +9,7 @@
     $Id: SetupLayout.xml 4633 2006-03-09 16:44:16Z wehrens $
 -->
 
-<page-layout label="layout" title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="ADMIN">
+<page-layout label="layout" title="GridSphere Layout Management" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="ADMIN">
 
     <!-- Header components -->
     <portlet-header>
