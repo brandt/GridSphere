@@ -91,9 +91,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
         String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
         themeLB.clear();
 
-        String themesPath = getPortletConfig().getContext().getRealPath("/themes");
+        String themesPath = getPortletConfig().getContext().getRealPath("themes");
         /// retrieve the current renderkit
-        themesPath += "/" + renderkit;
+        themesPath += File.separator + renderkit;
 
         File f = new File(themesPath);
         if (f.isDirectory()) {

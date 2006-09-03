@@ -789,5 +789,45 @@
         </concrete-portlet-app>
     </portlet-app-def>
 
+
+    <portlet-app-def>
+        <portlet-app id="org.gridsphere.portlets.core.rss.RSSPortlet">
+            <portlet-name>RSSPortlet</portlet-name>
+            <servlet-name>RSSPortlet</servlet-name>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
+            <supports>
+                <markup name="html">
+                    <view/>
+                </markup>
+            </supports>
+
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridsphere.portlets.core.rss.RSSPortlet.1">
+            <context-param>
+                <param-name>feedurl</param-name>
+                <param-value>http://rss.cnn.com/rss/cnn_topstories.rss</param-value>
+            </context-param>
+
+            <concrete-portlet>
+
+                <portlet-name>RSSPortlet</portlet-name>
+                <default-locale>en</default-locale>
+
+                <language locale="en">
+                    <title>RSS Portlet</title>
+                    <title-short>RSS Portlet</title-short>
+                    <description>Shows RSS information</description>
+                    <keywords>rss</keywords>
+                </language>
+
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
+
 </portlet-app-collection>
 

@@ -34,6 +34,18 @@
     </service>
 
     <service>
+        <name>RSS Service</name>
+        <description lang="en">Provides RSS Service</description>
+        <interface>org.gridsphere.services.core.rss.RssService</interface>
+        <implementation>org.gridsphere.services.core.rss.impl.RssServiceImpl</implementation>
+        <service-config>
+            <param-name>cache_time</param-name>
+            <param-value>10</param-value>
+        </service-config>
+
+    </service>
+
+    <service>
         <name>Portlet Registry Service</name>
         <description lang="en">Provides Portlet Registry</description>
         <interface>org.gridsphere.services.core.registry.PortletRegistryService</interface>

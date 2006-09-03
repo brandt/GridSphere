@@ -26,16 +26,20 @@ $Id$
                     <row-layout>
                         <column-layout width="70%">
                             <portlet-content include="/WEB-INF/CustomPortal/content/main.html"/>
+                            <portlet-frame transparent="true" outer-padding="0" label="rss">
+                                <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet.1</portlet-class>
+                            </portlet-frame>
                         </column-layout>
                     </row-layout>
+
                 </table-layout>
             </portlet-tab>
         </portlet-tabbed-pane>
         </portlet-tab>
-        <portlet-tab label="logout" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/logout/logoutnav.jsp"/>
-        <portlet-tab label="profile" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/profile/profilenav.jsp"/>
-        <portlet-tab required-role="ADMIN" label="layout" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/admin/layout/layoutnav.jsp"/>
-        <portlet-tab label="admin" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/admin/adminnav.jsp"/>
+        <portlet-tab label="logout" outline="false" align="right"  include="/jsp/logout/logoutnav.jsp"/>
+        <portlet-tab label="profile" outline="false" align="right"  include="/jsp/profile/profilenav.jsp"/>
+        <portlet-tab required-role="ADMIN" label="layout" outline="false" align="right"  include="/jsp/admin/layout/layoutnav.jsp"/>
+        <portlet-tab label="admin" outline="false" align="right"  include="/jsp/admin/adminnav.jsp"/>
     </portlet-tabbed-pane>
 
     <portlet-footer>

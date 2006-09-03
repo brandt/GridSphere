@@ -112,6 +112,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>RSSPortlet</servlet-name>
+        <servlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>SecureDirectory</servlet-name>
         <servlet-class>org.gridsphere.servlets.SecureDirectory</servlet-class>
         <init-param>
