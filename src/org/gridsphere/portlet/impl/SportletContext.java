@@ -59,15 +59,13 @@ public class SportletContext implements PortletContext {
     }
 
     /**
-     * Returns the name of this web application correponding to this ServletContext as
-     * specified in the deployment descriptor for this web application by the display-name element.
-     * Uses getServletContextName().
+     * Returns the path name of this portlet context
      *
      * @return Returns the context path of the web application.
      */
     public String getContextPath() {
         // todo fix me to confirm to servlet spec 2.5
-        return context.getServletContextName();
+        return "";
     }
 
     /**

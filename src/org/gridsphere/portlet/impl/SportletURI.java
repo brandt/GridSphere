@@ -217,9 +217,16 @@ public class SportletURI implements PortletURI {
                 }
             }
         }
+
+        // Add "render params" for GS portlet case
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+        String cid = (String) req.getAttribute(compVar);
+        String pid = (String) req.getAttribute(SportletProperties.PORTLETID);
+        Map renderParams = (Map)req.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
+        if (renderParams != null) store.putAll(renderParams);
+
         ///////////// JASON ADDED ABOVE
-
-
 
         Set set = store.keySet();
         if (!set.isEmpty()) {
@@ -228,6 +235,7 @@ public class SportletURI implements PortletURI {
         } else {
             return s.append(url).toString();
         }
+
         boolean firstParam = true;
         try {
             it = set.iterator();
@@ -257,6 +265,7 @@ public class SportletURI implements PortletURI {
             newURL = res.encodeURL(url);
         }
         s.append(newURL);
+
         //System.err.println("url=" + s.toString());
         return s.toString();
     }

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.Cookie;
+import java.io.IOException;
 
 /**
  * A <code>SportletResponse</code> provides an implementation of the
@@ -146,10 +147,14 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
     }
     */
 
+    public void sendRedirect(String redirect) throws IOException {
+        this.getHttpServletResponse().sendRedirect(redirect);
+    }
+
     public void addCookie(Cookie cookie) {
         this.getHttpServletResponse().addCookie(cookie);
     }
-    
+
     private HttpServletResponse getHttpServletResponse() {
         return (HttpServletResponse) super.getResponse();
     }

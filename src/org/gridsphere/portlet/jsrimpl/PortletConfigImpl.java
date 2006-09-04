@@ -156,6 +156,16 @@ public class PortletConfigImpl implements PortletConfig {
     }
 
     /**
+     * Returns the path name of this portlet context
+     *
+     * @return Returns the context path of the web application.
+     */
+    public String getContextPath() {
+        // todo fix me to confirm to servlet spec 2.5
+        return "";
+    }
+
+    /**
      * Gets the resource bundle for the given locale based on the
      * resource bundle defined in the deployment descriptor
      * with <code>resource-bundle</code> tag or the inlined resources
