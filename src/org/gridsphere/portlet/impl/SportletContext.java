@@ -59,6 +59,15 @@ public class SportletContext implements PortletContext {
     }
 
     /**
+     * Returns the context path of the web application.
+     *
+     * @return Returns the context path of the web application.
+     */
+    public String getContextPath() {
+        return context.getContextPath();
+    }
+
+    /**
      * Returns an enumeration of the attribute names that this portlet context
      * is aware of.
      *
