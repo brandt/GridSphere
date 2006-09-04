@@ -59,12 +59,15 @@ public class SportletContext implements PortletContext {
     }
 
     /**
-     * Returns the context path of the web application.
+     * Returns the name of this web application correponding to this ServletContext as
+     * specified in the deployment descriptor for this web application by the display-name element.
+     * Uses getServletContextName().
      *
      * @return Returns the context path of the web application.
      */
     public String getContextPath() {
-        return context.getContextPath();
+        // todo fix me to confirm to servlet spec 2.5
+        return context.getServletContextName();
     }
 
     /**
@@ -88,7 +91,7 @@ public class SportletContext implements PortletContext {
 
     /**
      * Allows the portlet to delegate the rendering to another resource as
-     * specified by the given path. The path has to be relative and will be
+     * specified by the given . The path has to be relative and will be
      * resolved by this method, so that the portlet's resources are accessed.
      * <p/>
      * To access protected resources the path has to be prefixed with /WEB-INF/
