@@ -21,6 +21,14 @@ Build include file for the GridSphere Portal source code, see build.xml
         </if>
 
         <if>
+            <equals arg1="${gridsphere.appserver}" arg2="jetty6"/>
+            <then>
+                <echo message="Installing for Jetty6"/>
+                <antcall target="deploy-jetty6"/>
+            </then>
+        </if>
+
+        <if>
             <equals arg1="${gridsphere.appserver}" arg2="tomcat"/>
             <then>
                 <echo message="Installing for Tomcat"/>
@@ -134,6 +142,29 @@ Build include file for the GridSphere Portal source code, see build.xml
             <fileset dir="${build.lib}">
                <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
                <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
+            </fileset>
+        </copy>
+
+    </target>
+
+    <!-- ========================================================= -->
+    <!-- =          JETTY6                                        = -->
+    <!-- ========================================================= -->
+
+
+    <!-- deploys gridsphere to jetty -->
+    <target name="deploy-jetty6" depends="deploy-common">
+
+        <copy overwrite="true" todir="${appserver.home}/lib">
+            <fileset dir="${build.lib}">
+               <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
+               <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
+            </fileset>
+        </copy>
+        <copy overwrite="true" todir="${appserver.home}/lib">
+            <fileset dir="lib/">
+                <include name="log4j*.jar"/>
+                <include name="commons-logging*.jar"/>
             </fileset>
         </copy>
 

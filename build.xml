@@ -107,6 +107,21 @@ Invoke "ant help"
             </then>
         </if>
 
+        <if>
+            <equals arg1="${gridsphere.appserver}" arg2="jetty6"/>
+            <then>
+                <echo message="Installing for Jetty6"/>
+                <property name="appserver.home" value="${env.APPSERVER_HOME}"/>
+                <path id="servletpath">
+                    <fileset file="${appserver.home}/lib/servlet-api-2.5-6.0.0rc3.jar"/>
+                    <fileset dir="${appserver.home}/lib/jsp-2.0/">
+                        <exclude name="*.LICENSE"/>
+                        <include name="*.jar"/>
+                    </fileset>
+                </path>
+            </then>
+        </if>
+
         <path id="classpath">
             <pathelement location="${build.classes}"/>
             <fileset dir="lib">
