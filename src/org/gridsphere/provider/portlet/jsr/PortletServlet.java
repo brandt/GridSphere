@@ -10,13 +10,14 @@ import org.gridsphere.portlet.jsrimpl.*;
 import org.gridsphere.portlet.PortletLog;
 import org.gridsphere.portlet.User;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.portlet.service.PortletServiceException;
 
 import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.impl.ClientImpl;
 
 import org.gridsphere.portletcontainer.ApplicationPortletConfig;
+import org.gridsphere.portletcontainer.PortletWebApplication;
+import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
 import org.gridsphere.portletcontainer.jsrimpl.JSRPortletWebApplicationImpl;
 import org.gridsphere.portletcontainer.jsrimpl.descriptor.*;
@@ -60,7 +61,7 @@ public class PortletServlet extends HttpServlet
 
     private Map portlets = null;
     private Map portletclasses = null;
-
+    private Map portletApps = null;
     private Map portletConfigHash = null;
 
     private Map userKeys = new HashMap();
@@ -71,17 +72,16 @@ public class PortletServlet extends HttpServlet
         log.debug("in init of PortletServlet");
         portlets = new Hashtable();
         portletclasses = new Hashtable();
+        portletApps = new Hashtable();
         portletConfigHash = new Hashtable();
     }
 
     public void initJSRPortletWebapp() {
+        registryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
         ServletContext ctx = this.getServletContext();
-        try {
-            portletWebApp = new JSRPortletWebApplicationImpl(ctx, Thread.currentThread().getContextClassLoader());
-        } catch (Exception e) {
-            log.error("Unable to create portlet web application ", e);
-            return;
-        }
+
+        portletWebApp = new JSRPortletWebApplicationImpl(ctx, Thread.currentThread().getContextClassLoader());
+        if (portletWebApp.getWebApplicationStatus().equals(PortletStatus.Failure)) return;
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
@@ -91,6 +91,9 @@ public class PortletServlet extends HttpServlet
             try {
                 // instantiate portlet classes
                 Portlet portletInstance = (Portlet) Class.forName(portletClass).newInstance();
+
+                portletApps.put(portletName, appPortlet);
+
                 //portlets.put(portletClass, portletInstance);
                 portlets.put(portletName, portletInstance);
 
@@ -101,8 +104,12 @@ public class PortletServlet extends HttpServlet
                 // put portlet web app in registry
 
             } catch (Exception e) {
-                log.error("Unable to create jsr portlet instance: " + portletClass, e);
-                return;
+                String msg = "Unable to create jsr portlet instance: " + portletClass;
+                log.error(msg, e);
+                appPortlet.setApplicationPortletStatus(PortletStatus.Failure);
+                appPortlet.setApplicationPortletStatusMessage(msg);
+                portletWebApp.setWebApplicationStatusMessage("Failure to instantiate one or more portlet instances");
+                portletWebApp.setWebApplicationStatus(PortletStatus.Failure);
             }
         }
 
@@ -138,31 +145,21 @@ public class PortletServlet extends HttpServlet
         portletContext = new PortletContextImpl(ctx);
 
         // load in any authentication modules if found-- this is a GridSphere extension
-        try {
-            LoginService loginService = (LoginService)PortletServiceFactory.createPortletService(LoginService.class, true);
-            InputStream is = getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
-            if (is != null) {
-                String authModulePath = this.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
-                loginService.loadAuthModules(authModulePath, Thread.currentThread().getContextClassLoader());
-                log.info("loading authentication modules from: " + authModulePath);
-            } else {
-                log.debug("no auth module descriptor found");
-            }
-        } catch (PortletServiceException e) {
-            log.error("Unable to create login service instance!", e);
+
+        LoginService loginService = (LoginService)PortletServiceFactory.createPortletService(LoginService.class, true);
+        InputStream is = getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
+        if (is != null) {
+            String authModulePath = this.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
+            loginService.loadAuthModules(authModulePath, Thread.currentThread().getContextClassLoader());
+            log.info("loading authentication modules from: " + authModulePath);
+        } else {
+            log.debug("no auth module descriptor found");
         }
+
     }
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        // security check
-        // make sure request comes only from gridsphere servlet same ip
-        //System.err.println("remote Address: " + request.getRemoteAddr());
-
-
-        // If no portlet ID exists, this may be a command to init or shutdown a portlet instance
-
-        // currently either all portlets are initialized or shutdown, not one individually...
+        // if no lifecycle method exists, redirect to error page!
         String method = (String) request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         if (method == null) {
             response.sendRedirect("/" + SportletProperties.getInstance().getProperty("gridsphere.deploy") +
@@ -173,10 +170,12 @@ public class PortletServlet extends HttpServlet
 
         if (method.equals(SportletProperties.INIT)) {
             initJSRPortletWebapp();
+            if (portletWebApp.getWebApplicationStatus().equals(PortletStatus.Failure)) return;
             Set set = portlets.keySet();
             Iterator it = set.iterator();
             while (it.hasNext()) {
                 String portletName = (String) it.next();
+                JSRApplicationPortletImpl appPortlet = (JSRApplicationPortletImpl) portletApps.get(portletName);
                 Portlet portlet = (Portlet) portlets.get(portletName);
                 log.debug("in PortletServlet: service(): Initializing portlet " + portletName);
                 PortletDefinition portletDef = portletWebApp.getPortletDefinition(portletName);
@@ -185,22 +184,21 @@ public class PortletServlet extends HttpServlet
                     portlet.init(portletConfig);
                     portletConfigHash.put(portletName, portletConfig);
                 } catch (Exception e) {
+                    appPortlet.setApplicationPortletStatus(PortletStatus.Failure);
+                    StringWriter sw = new StringWriter();
+                    PrintWriter pout = new PrintWriter(sw);
+                    e.printStackTrace(pout);
+                    appPortlet.setApplicationPortletStatusMessage("Unable to initialize portlet " + portletName + "\n\n" + sw.getBuffer());
                     log.error("in PortletServlet: service(): Unable to INIT portlet " + portletName, e);
                     // PLT.5.5.2.1 Portlet that fails to initialize must not be placed in active service
                     it.remove();
+                    portletWebApp.setWebApplicationStatus(PortletStatus.Failure);
+                    portletWebApp.setWebApplicationStatusMessage("Failed to initialize one or more portlets");
                 }
             }
-            try {
-                PortletManagerService manager = (PortletManagerService)PortletServiceFactory.createPortletService(PortletManagerService.class, true);
-                manager.addPortletWebApplication(portletWebApp);
-            } catch (PortletServiceException e) {
-                log.error("Unable to create instance of PortletManagerService", e);
-            }
-            try {
-                registryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
-            } catch (PortletServiceException e) {
-                log.error("Unable to create instance of PortletRegistryService", e);
-            }
+
+            PortletManagerService manager = (PortletManagerService)PortletServiceFactory.createPortletService(PortletManagerService.class, true);
+            manager.addPortletWebApplication(portletWebApp);
             return;
         } else if (method.equals(SportletProperties.INIT_CONCRETE)) {
             // do nothing for concrete portlets

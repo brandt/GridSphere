@@ -38,4 +38,8 @@ public interface PortletWebApplication {
      */
     public Collection getAllApplicationPortlets();
 
+    public PortletStatus getWebApplicationStatus();
+
+    public String getWebApplicationStatusMessage();
+
 }

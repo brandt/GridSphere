@@ -79,4 +79,10 @@ public interface ApplicationPortlet {
 
     public String toString();
 
+    public PortletStatus getApplicationPortletStatus();
+
+    public String getApplicationPortletStatusMessage();
+
+
+
 }

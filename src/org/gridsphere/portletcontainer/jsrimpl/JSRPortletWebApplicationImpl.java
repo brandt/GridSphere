@@ -10,6 +10,7 @@ import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.PortletWebApplication;
+import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.impl.BasePortletWebApplicationImpl;
 import org.gridsphere.portletcontainer.jsrimpl.descriptor.*;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
@@ -33,10 +34,7 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
     protected Map portletDefinitions = new Hashtable();
     protected RequestDispatcher rd = null;
 
-    // PortletLayout engine handles layout.xml
-    //private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
-
-    public JSRPortletWebApplicationImpl(ServletContext context, ClassLoader loader) throws PortletException {
+    public JSRPortletWebApplicationImpl(ServletContext context, ClassLoader loader) {
         super(context);
 
         // Make all jsr portlets have only one concrete instance
@@ -45,15 +43,16 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
         webApplicationName = realPath.substring(l + 1);
 
         this.webAppDescription = context.getServletContextName();
+        try {
+            // load portlet.xml
+            loadPortlets(context, loader);
 
-        // load portlet.xml
-        loadPortlets(context, loader);
-
-        // load services.xml
-        loadServices(context, loader);
-
-        // load layout.xml
-        loadLayout(context);
+            // load services.xml
+            loadServices(context, loader);
+        } catch (PortletException e) {
+            status = PortletStatus.Failure;
+            statusMessage = e.getMessage();
+        }
     }
 
 
@@ -70,8 +69,9 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
         try {
             pdd = new PortletDeploymentDescriptor2(portletXMLfile);
         } catch (Exception e) {
-            log.error("Mapping Error! " + webApplicationName, e);
-            throw new PortletException("Unable to load portlets from: " + webApplicationName + " + due to mapping error", e);
+            status = PortletStatus.Failure;
+            statusMessage = "Unable to load portlets from: " + webApplicationName + " due to mapping error";
+            throw new PortletException(statusMessage, e);
         }
 
         this.portletWebApp = pdd.getPortletWebApplication();
@@ -109,6 +109,7 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
         portletDefinitions = null;
         rd = null;
     }
+
 
     public CustomPortletMode[] getCustomPortletModes() {
         return portletWebApp.getCustomPortletMode();

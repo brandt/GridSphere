@@ -65,8 +65,7 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
         loadPortlets(ctx, Thread.currentThread().getContextClassLoader());
         // load services xml
         if (!isJSR) loadServices(ctx, Thread.currentThread().getContextClassLoader());
-        // load layout.xml
-        if (!isJSR) loadLayout(ctx);
+
     }
 
     /**

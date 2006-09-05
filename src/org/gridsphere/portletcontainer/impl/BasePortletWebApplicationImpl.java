@@ -11,6 +11,7 @@ import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceCollection;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portletcontainer.PortletWebApplication;
+import org.gridsphere.portletcontainer.PortletStatus;
 
 import javax.servlet.ServletContext;
 import java.io.File;
@@ -32,13 +33,16 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
     protected String webApplicationName = "Unknown portlet web application";
     protected String webAppDescription = "Unknown portlet web application description";
 
+    protected PortletStatus status = PortletStatus.Success;
+    protected String statusMessage = "Portlet web application loaded successfully";
+
     /**
      * Constructs an instance of a BasePortletWebApplicationImpl from a supplied
      * <code>ServletContext</code>
      *
      * @param context the <code>ServletContext</code>
      */
-    public BasePortletWebApplicationImpl(ServletContext context) throws PortletException {
+    public BasePortletWebApplicationImpl(ServletContext context) {
     }
 
     public abstract void init();
@@ -56,31 +60,6 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
     protected abstract void loadPortlets(ServletContext ctx, ClassLoader loader) throws PortletException;
 
     /**
-     * Loads in a layout descriptor file from the associated servlet context
-     *
-     * @param ctx the <code>ServletContext</code>
-     */
-    protected void loadLayout(ServletContext ctx) throws PortletException {
-        // load in the portlet.xml file
-        String layoutXMLfile = ctx.getRealPath("/WEB-INF/layout.xml");
-        File fin = new File(layoutXMLfile);
-        String pgroupName = "unknown group";
-        /*
-        if (fin.exists()) {
-            try {
-                PortletPageFactory pageFactory = PortletPageFactory.getInstance();
-                pageFactory.copyFile(fin, webApplicationName);
-                log.info("Loaded a layout descriptor " + pgroupName);
-            } catch (Exception e) {
-                throw new PortletException("Unable to deserialize layout.xml for: " + pgroupName + "!", e);
-            }
-        } else {
-            log.debug("Did not find layout.xml for: " + ctx.getServletContextName());
-        }
-        */
-    }
-
-    /**
      * Loads in a service descriptor file from the associated servlet context
      *
      * @param ctx the <code>ServletContext</code>
@@ -96,7 +75,9 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
                 descriptor = new PortletServiceDescriptor(descriptorPath);
             } catch (Exception e) {
                 //log.error("error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
-                throw new PortletServiceException("error unmarshalling " + descriptorPath, e);
+                status = PortletStatus.Failure;
+                statusMessage = "Error unmarshalling " + descriptorPath;
+                throw new PortletServiceException(statusMessage, e);
             }
             SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
             PortletServiceFactory.addServices(webApplicationName, ctx, serviceCollection, loader);
@@ -114,7 +95,8 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
                         System.err.println("loading from: " + servicePaths[i]);
                         descriptor = new PortletServiceDescriptor(servicePaths[i]);
                     } catch (Exception e) {
-                        //log.error("error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
+                        status = PortletStatus.Failure;
+                        statusMessage = "Error unmarshalling " + servicePaths[i];
                         throw new PortletServiceException("error unmarshalling " + servicePaths[i], e);
                     }
                     SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
@@ -151,6 +133,22 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
      */
     public Collection getAllApplicationPortlets() {
         return ((appPortlets != null ? appPortlets.values() : new ArrayList()));
+    }
+
+    public void setWebApplicationStatus(PortletStatus status) {
+        this.status = status;
+    }
+
+    public void setWebApplicationStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
+    }
+
+    public PortletStatus getWebApplicationStatus() {
+        return status;
+    }
+
+    public String getWebApplicationStatusMessage() {
+        return statusMessage;
     }
 
 }

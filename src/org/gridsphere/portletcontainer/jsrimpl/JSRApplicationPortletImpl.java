@@ -8,10 +8,7 @@ import org.gridsphere.portlet.PortletLog;
 import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.jsrimpl.PortalContextImpl;
-import org.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridsphere.portletcontainer.ApplicationPortletConfig;
-import org.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridsphere.portletcontainer.PortletDispatcher;
+import org.gridsphere.portletcontainer.*;
 import org.gridsphere.portletcontainer.impl.SportletDispatcher;
 import org.gridsphere.portletcontainer.jsrimpl.descriptor.*;
 
@@ -44,6 +41,9 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
     private ServletContext context = null;
     private PortalContext portalContext = null;
     private javax.portlet.PreferencesValidator prefsValidator = null;
+
+    protected PortletStatus status = PortletStatus.Success;
+    protected String statusMessage = "JSR Portlet loaded successfully";
 
     /**
      * Default constructor is private
@@ -332,6 +332,22 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
 
     public Portlet getPortletInstance() {
         return portletInstance;
+    }
+
+    public void setApplicationPortletStatus(PortletStatus status) {
+        this.status = status;
+    }
+
+    public void setApplicationPortletStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
+    }
+
+    public PortletStatus getApplicationPortletStatus() {
+        return status;
+    }
+
+    public String getApplicationPortletStatusMessage() {
+        return statusMessage;
     }
 
     public String toString() {

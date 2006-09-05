@@ -9,10 +9,7 @@ import org.gridsphere.portlet.PortletLog;
 import org.gridsphere.portlet.PortletRequest;
 import org.gridsphere.portlet.PortletResponse;
 import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridsphere.portletcontainer.ApplicationPortletConfig;
-import org.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridsphere.portletcontainer.PortletDispatcher;
+import org.gridsphere.portletcontainer.*;
 import org.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
 import org.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition;
 import org.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
@@ -43,6 +40,9 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     private ApplicationSportletConfig appPortletConfig = null;
     private String webAppName = null;
     private PortletDispatcher portletDispatcher = null;
+
+    protected PortletStatus status = PortletStatus.Success;
+    protected String statusMessage = "GridSphere Portlet loaded successfully";
 
     /**
      * Default constructor is private
@@ -178,6 +178,22 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         return portletClass;
     }
 
+    public void setApplicationPortletStatus(PortletStatus status) {
+        this.status = status;
+    }
+
+    public void setApplicationPortletStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
+    }
+
+    public PortletStatus getApplicationPortletStatus() {
+        return status;
+    }
+
+    public String getApplicationPortletStatusMessage() {
+        return statusMessage;
+    }
+    
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("\t Application Portlet:\n");
