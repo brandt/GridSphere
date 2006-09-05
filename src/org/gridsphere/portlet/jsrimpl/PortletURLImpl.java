@@ -5,6 +5,8 @@
 package org.gridsphere.portlet.jsrimpl;
 
 import org.gridsphere.portlet.PortletWindow;
+import org.gridsphere.portlet.PortletAction;
+import org.gridsphere.portlet.DefaultPortletAction;
 import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.*;
@@ -47,16 +49,9 @@ public class PortletURLImpl implements PortletURL {
     private boolean redirect = true;
     private PortalContext context = null;
 
-    private String action = null;
-    private String cid = null;
-    private PortletMode mode = null;
-    private WindowState state = null;
-
     private boolean isRender = false;
 
-    private PortletURLImpl() {
-        this.store = new HashMap();
-    }
+    private PortletURLImpl() { }
 
     /**
      * Constructs a PortletURL from a servlet request and response
@@ -65,7 +60,7 @@ public class PortletURLImpl implements PortletURL {
      * @param res the servlet response
      */
     public PortletURLImpl(HttpServletRequest req, HttpServletResponse res, PortalContext context, boolean isRender) {
-        this();
+        this.store = new HashMap();
         this.res = res;
         this.req = req;
         this.context = context;
@@ -74,12 +69,9 @@ public class PortletURLImpl implements PortletURL {
     }
 
     public void setAction(String action) {
-        this.action = action;
+        store.put(SportletProperties.DEFAULT_PORTLET_ACTION, action);
     }
 
-    public void setComponentID(String cid) {
-        this.cid = cid;
-    }
 
     /**
      * Indicates the window state the portlet should be in, if this
@@ -112,7 +104,7 @@ public class PortletURLImpl implements PortletURL {
         }
         if (windowState.equals(WindowState.NORMAL)) windowState = new WindowState(PortletWindow.State.RESIZING.toString());
         if (isSupported) {
-            state = windowState;
+            store.put(SportletProperties.PORTLET_WINDOW, windowState);
         } else {
             throw new WindowStateException("Illegal window state", windowState);
         }
@@ -141,9 +133,9 @@ public class PortletURLImpl implements PortletURL {
         if (portletMode == null) throw new IllegalArgumentException("Portlet mode cannot be null");
         List allowedModes = (List) req.getAttribute(SportletProperties.ALLOWED_MODES);
         if (allowedModes.contains(portletMode.toString())) {
-            mode = portletMode;
             // hack to handle config mode
-            if (mode.toString().equals("config")) mode = new PortletMode("configure");
+            if (portletMode.toString().equals("config")) portletMode = new PortletMode("configure");
+            store.put(SportletProperties.PORTLET_MODE, portletMode);
         } else {
             throw new PortletModeException("Illegal portlet mode", portletMode);
         }
@@ -289,49 +281,50 @@ public class PortletURLImpl implements PortletURL {
         s.append(":");
         s.append((!port.equals("")) ? port : String.valueOf(req.getServerPort()));
 
+        // if underlying window state is floating then set it in the URI
+        if (req.getAttribute(SportletProperties.FLOAT_STATE) != null) store.put(SportletProperties.PORTLET_WINDOW, PortletWindow.State.FLOATING.toString());
+
         String contextPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.deploy"); // contextPath;
         String servletPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.context");
 
         String url = contextPath;
+        url = contextPath + servletPath;
 
         //System.err.println("\n\n\nContext path=" + contextPath);
-        String newURL;
+
+        ///////////  JASON ADDED BELOW
+        String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
+        if (layoutId != null) {
+            url += "/" + layoutId;
+            String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+            if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+            String cid = (String)req.getAttribute(compVar);
+            if (cid != null) {
+                store.remove(SportletProperties.COMPONENT_ID);
+                url += "/" + cid;
+                String action = (String)store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
+                if (action != null) {
+                    store.remove(SportletProperties.DEFAULT_PORTLET_ACTION);
+                    url += "/" + action;
+                }
+            }
+        }
+        ///////////// JASON ADDED ABOVE
 
         Set set = store.keySet();
 
-
-        url = contextPath + servletPath + "?";
-
-        if (cid != null) {
-            url += "cid=" + cid;
-        }
-
-        if (mode != null) {
-            url += "&" + SportletProperties.PORTLET_MODE + "=" + mode.toString();
-        }
-
-        // if underlying window state is floating then set it in the URI
-        if (req.getAttribute(SportletProperties.FLOAT_STATE) != null) state = new WindowState(PortletWindow.State.FLOATING.toString());
-
-        if (state != null) {
-            url += "&" + SportletProperties.PORTLET_WINDOW + "=" + state.toString();
-        }
-        if (action != null) {
-            try {
-                //System.out.println("Encoding action " + action);
-                String enaction = URLEncoder.encode(action, "UTF-8");
-                //System.out.println("Encoded action = " + enaction);
-                url += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + enaction;
-            } catch (UnsupportedEncodingException e) {
-                System.err.println("Unable to support UTF-8 encoding!");
-                url += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
-            }
+        if (!set.isEmpty()) {
+            // add question mark
+            url += "?";
+        } else {
+            return s.append(url).toString();
         }
 
         Iterator it = set.iterator();
+        boolean firstParam = true;
         try {
             while (it.hasNext()) {
-                url += "&";
+                if (!firstParam) url += "&";
                 String name = (String) it.next();
 
                 String encname = null;
@@ -355,11 +348,13 @@ public class PortletURLImpl implements PortletURL {
                         url += encname;
                     }
                 }
+                firstParam = false;
             }
 
         } catch (UnsupportedEncodingException e) {
             System.err.println("Unable to support UTF-8 encoding!");
         }
+        String newURL;
         if (redirect) {
             newURL = res.encodeRedirectURL(url);
         } else {

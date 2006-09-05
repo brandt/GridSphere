@@ -14,6 +14,24 @@ public class StoredPortletResponseImpl extends SportletResponse {
 
     private PrintWriter writer;
 
+    private class StoredServletOutputStreamImpl extends ServletOutputStream {
+
+        protected Writer writer;
+
+        public StoredServletOutputStreamImpl(Writer writer) {
+            this.writer = writer;
+        }
+
+        public void write(int b) throws IOException {
+            writer.write(b);
+        }
+
+        public String toString() {
+            return writer.toString();
+        }
+
+    }
+
     public StoredPortletResponseImpl(HttpServletResponse response, Writer writer) {
         super(response);
         this.writer = new PrintWriter(writer);

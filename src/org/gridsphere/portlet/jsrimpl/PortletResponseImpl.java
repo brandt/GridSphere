@@ -33,6 +33,10 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
 
     protected PortalContext portalContext = null;
 
+    public PortletResponseImpl(HttpServletResponse res) {
+        super(res);
+    }
+
     /**
      * Constructs an instance of SportletResponse using an
      * <code>HttpServletResponse</code> as a proxy
