@@ -1049,21 +1049,6 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
-        <attribute>
-            <name>paneId</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>width</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>height</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
     </tag>
 
     <tag>
@@ -1084,7 +1069,7 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>width</name>
+            <name>label</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
