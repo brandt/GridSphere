@@ -1,12 +1,8 @@
 package org.gridsphere.portlets.core.admin.config;
 
-import org.gridsphere.portlet.PortletConfig;
-import org.gridsphere.portlet.PortletException;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletSettings;
-import org.gridsphere.portlet.service.PortletServiceException;
-import org.gridsphere.provider.event.FormEvent;
-import org.gridsphere.provider.portlet.ActionPortlet;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridsphere.services.core.portal.PortalConfigService;
@@ -16,10 +12,12 @@ import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridsphere.tmf.services.TMService;
 import org.gridsphere.tmf.services.TextMessageServiceConfig;
-import org.gridsphere.tmf.services.config.BaseConfig;
 import org.gridsphere.tmf.TextMessagingException;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 
-import javax.servlet.UnavailableException;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -39,27 +37,22 @@ public class ConfigPortlet extends ActionPortlet {
     public static final String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
     public static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
 
-    public static final String DO_CONFIGURE = "admin/config/config.jsp"; //configure login
+    public static final String DO_VIEW = "admin/config/view.jsp"; //configure login
 
     private PortalConfigService portalConfigService = null;
     private LoginService loginService = null;
     private TextMessagingService tms = null;
 
-    public void init(PortletConfig config) throws UnavailableException {
+    public void init(PortletConfig config) throws PortletException {
         super.init(config);
-        portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
-        loginService = (LoginService) getPortletConfig().getContext().getService(LoginService.class);
-        tms = (TextMessagingService) config.getContext().getService(TextMessagingService.class);
+        portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+        loginService = (LoginService) PortletServiceFactory.createPortletService(LoginService.class, true);
+        tms = (TextMessagingService) PortletServiceFactory.createPortletService(TextMessagingService.class, true);
         DEFAULT_VIEW_PAGE = "showConfigure";
     }
 
-    public void initConcrete(PortletSettings settings) throws UnavailableException {
-        super.initConcrete(settings);
-    }
-
-
-    public void showConfigure(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
+    public void showConfigure(RenderFormEvent event) {
+        PortletRequest req = event.getRenderRequest();
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
         boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty("CAN_USER_CREATE_ACCOUNT")).booleanValue();
 
@@ -95,12 +88,13 @@ public class ConfigPortlet extends ActionPortlet {
 
         doViewMessaging(event);
 
-        setNextState(req, DO_CONFIGURE);
+        setNextState(req, DO_VIEW);
     }
 
-    public void setLoginSettings(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-        if (!req.getRoles().contains(PortletRole.ADMIN.getName())) return;
+    public void setLoginSettings(ActionFormEvent event) throws PortletException {
+        PortletRequest req = event.getActionRequest();
+
+        if (!req.isUserInRole(PortletRole.ADMIN.getName())) return;
 
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
 
@@ -146,12 +140,14 @@ public class ConfigPortlet extends ActionPortlet {
         } catch (IOException e) {
             log.error("unable to save gridsphere.properties", e);
         }
-        showConfigure(event);
+        setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
-    public void configAccountSettings(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-        if (!req.getRoles().contains(PortletRole.ADMIN.getName())) return;
+    public void configAccountSettings(ActionFormEvent event) throws PortletException {
+        PortletRequest req = event.getActionRequest();
+
+        if (!req.isUserInRole(PortletRole.ADMIN.getName())) return;
+
         TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
         String numTries = numTriesTF.getValue();
         int numtries = -1;
@@ -164,12 +160,12 @@ public class ConfigPortlet extends ActionPortlet {
         } catch (IOException e) {
             log.error("Unable to save gridsphere.properties", e);
         }
-        showConfigure(event);
+        setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
-    public void configErrorSettings(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-        if (!req.getRoles().contains(PortletRole.ADMIN.getName())) return;
+    public void configErrorSettings(ActionFormEvent event) throws PortletException {
+        PortletRequest req = event.getActionRequest();
+        if (!req.isUserInRole(PortletRole.ADMIN.getName())) return;
 
         RadioButtonBean errorRB = event.getRadioButtonBean("errorRB");
 
@@ -181,12 +177,12 @@ public class ConfigPortlet extends ActionPortlet {
         } catch (IOException e) {
             log.error("Unable to save gridsphere.properties", e);
         }
-        showConfigure(event);
+        setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
-    public void doSaveAuthModules(FormEvent event) {
+    public void doSaveAuthModules(ActionFormEvent event) {
 
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getActionRequest();
         CheckBoxBean cb = event.getCheckBoxBean("authModCB");
 
         List activeAuthMods = cb.getSelectedValues();
@@ -209,10 +205,10 @@ public class ConfigPortlet extends ActionPortlet {
             loginService.saveAuthModule(authMod);
         }
 
-        showConfigure(event);
+        setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
-    private DefaultTableModel getMessagingService(FormEvent event) {
+    private DefaultTableModel getMessagingService(RenderFormEvent event) {
 
         DefaultTableModel configTable = new DefaultTableModel();
 
@@ -261,14 +257,14 @@ public class ConfigPortlet extends ActionPortlet {
 
     }
 
-    public void doViewMessaging(FormEvent event)  {
+    public void doViewMessaging(RenderFormEvent event)  {
         FrameBean serviceFrame = event.getFrameBean("serviceframe");
         serviceFrame.setTableModel(getMessagingService(event));
         Set services = tms.getServices();
-        event.getPortletRequest().setAttribute("services", ""+services.size());
+        event.getRenderRequest().setAttribute("services", ""+services.size());
     }
 
-    public void doSaveValues(FormEvent event) {
+    public void doSaveValues(ActionFormEvent event) {
         Set services = tms.getServices();
         for (Iterator iterator = services.iterator(); iterator.hasNext();) {
             // get the service
@@ -296,12 +292,12 @@ public class ConfigPortlet extends ActionPortlet {
                         config.saveConfig();
                         service.shutdown();
                         service.startup();
-                        String msg = this.getLocalizedText(event.getPortletRequest(), "MESSAGING_SERVICE_SERVICERESTARTED");
+                        String msg = this.getLocalizedText(event.getActionRequest(), "MESSAGING_SERVICE_SERVICERESTARTED");
                         createSuccessMessage(event, msg + ": "+config.getProperty(TextMessagingService.SERVICE_NAME));
                     } catch (IOException e) {
-                        createErrorMessage(event, this.getLocalizedText(event.getPortletRequest(), "MESSAGING_SERVICE_SAVEFAILURE"));
+                        createErrorMessage(event, this.getLocalizedText(event.getActionRequest(), "MESSAGING_SERVICE_SAVEFAILURE"));
                     } catch (TextMessagingException e) {
-                        String msg = this.getLocalizedText(event.getPortletRequest(), "MESSAGING_SERVICE_RESTARTFAILURE");
+                        String msg = this.getLocalizedText(event.getActionRequest(), "MESSAGING_SERVICE_RESTARTFAILURE");
                         createErrorMessage(event, msg+" : "+config.getProperty(TextMessagingService.SERVICE_NAME));
                     }
                 }
@@ -309,13 +305,13 @@ public class ConfigPortlet extends ActionPortlet {
         }
 
 
-    private void createErrorMessage(FormEvent evt, String text) {
+    private void createErrorMessage(ActionFormEvent evt, String text) {
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
         msg.setValue(text);
         msg.setMessageType(MessageStyle.MSG_ERROR);
     }
 
-    private void createSuccessMessage(FormEvent evt, String text) {
+    private void createSuccessMessage(ActionFormEvent evt, String text) {
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
         msg.setValue(text);
         msg.setMessageType(MessageStyle.MSG_SUCCESS);
