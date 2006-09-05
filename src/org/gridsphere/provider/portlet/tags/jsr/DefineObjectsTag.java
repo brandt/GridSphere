@@ -28,7 +28,7 @@ public class DefineObjectsTag extends TagSupport {
     public static class TEI extends TagExtraInfo {
 
         public VariableInfo[] getVariableInfo(TagData tagData) {
-            VariableInfo[] info = new VariableInfo[]{
+            return new VariableInfo[]{
                 new VariableInfo("renderRequest",
                         "javax.portlet.RenderRequest",
                         true,
@@ -42,8 +42,6 @@ public class DefineObjectsTag extends TagSupport {
                         true,
                         VariableInfo.AT_BEGIN)
             };
-
-            return info;
         }
     }
 
@@ -51,23 +49,18 @@ public class DefineObjectsTag extends TagSupport {
         ServletRequest req = pageContext.getRequest();
         RenderRequest renderRequest = null;
         HttpServletRequest hReq = null;
-        HttpServletResponse hRes = null;
         if (req instanceof HttpServletRequest) {
             hReq = (HttpServletRequest) req;
             renderRequest = (RenderRequest) hReq.getAttribute(SportletProperties.RENDER_REQUEST);
-            //new RenderRequestImpl(hReq, portalContext);
             pageContext.setAttribute("renderRequest", renderRequest);
         }
         ServletResponse res = pageContext.getResponse();
         if (res instanceof HttpServletResponse) {
-            hRes = (HttpServletResponse) res;
             RenderResponse renderResponse = (RenderResponse) hReq.getAttribute(SportletProperties.RENDER_RESPONSE);
             renderResponse.setContentType("text/html");
-            //new RenderResponseImpl(hReq, hRes);
             pageContext.setAttribute("renderResponse", renderResponse);
         }
         PortletConfig portletConfig = (PortletConfig) hReq.getAttribute(SportletProperties.PORTLET_CONFIG);
-        //new PortletConfigImpl(pageContext.getServletConfig());
         pageContext.setAttribute("portletConfig", portletConfig);
 
         return SKIP_BODY;
