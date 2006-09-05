@@ -1,13 +1,14 @@
 <%@ page import="java.util.List,
                  java.util.Iterator,
-                 org.gridsphere.services.core.security.auth.modules.LoginAuthModule,
-                 org.gridsphere.portlet.PortletRequest" %>
+                 org.gridsphere.services.core.security.auth.modules.LoginAuthModule"%>
+<%@ page import="javax.portlet.RenderRequest"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
-<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
-<portletAPI:init/>
+<%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
+
+<portlet:defineObjects/>
 <jsp:useBean id="services" class="java.lang.String" scope="request"/>
 
-<% PortletRequest pReq = (PortletRequest) pageContext.getAttribute("portletRequest"); %>
+<% RenderRequest pReq = (RenderRequest) pageContext.getAttribute("renderRequest"); %>
 <% List authModules = (List) request.getAttribute("authModules"); %>
 
 <ui:form>
