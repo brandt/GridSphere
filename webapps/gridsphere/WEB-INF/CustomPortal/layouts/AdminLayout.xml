@@ -29,7 +29,7 @@
                             <column-layout width="100%">
                                 <portlet-frame label="config">
                                     <portlet-class>
-                                        org.gridsphere.portlets.core.admin.config.ConfigPortlet.1
+                                        org.gridsphere.portlets.core.admin.config.ConfigPortlet
                                     </portlet-class>
                                 </portlet-frame>
                             </column-layout>
