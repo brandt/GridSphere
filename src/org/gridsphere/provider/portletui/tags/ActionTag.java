@@ -278,19 +278,9 @@ public abstract class ActionTag extends BaseComponentTag {
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
         //RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
         // action is a required attribute except for FormTag
-        /*
-        if (windowState == null) {
-            windowState = req.getWindowState().toString();
-            System.err.println("windowState " + windowState);
-        }
-        if (portletMode == null) {
-            portletMode = req.getPortletMode().toString();
-            System.err.println("portletMode " + portletMode);
-        }
-        */
         if ((label != null)  && (url instanceof PortletURLImpl)) {
             res.setProperty("label", label);
-            ((PortletURLImpl)url).setComponentID(label);
+            ((PortletURLImpl)url).setLabel(label);
         }
 
         if (windowState != null) {
