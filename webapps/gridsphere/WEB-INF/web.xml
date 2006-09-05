@@ -34,6 +34,10 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>PortletServlet</servlet-name>
+        <servlet-class>org.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>
+    </servlet>
 
     <servlet>
         <servlet-name>jcaptcha</servlet-name>
@@ -132,6 +136,11 @@
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
         <url-pattern>/@GRIDSPHERE_CONTEXT@/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PortletServlet</servlet-name>
+        <url-pattern>/jsr/@GRIDSPHERE_DEPLOY@</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
