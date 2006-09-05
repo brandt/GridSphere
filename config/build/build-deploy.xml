@@ -108,6 +108,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         <!-- change web.xml if precompiled jsps are available -->
 
         <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
+        <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
         <filter token="PRECOMPILED-JSP" value=""/>
 
         <if>
