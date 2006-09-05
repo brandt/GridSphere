@@ -10,6 +10,7 @@ public class TabBean extends BeanContainer {
     protected String jspPage;
     protected boolean isActive = false;
     protected String title = "";
+    protected String label = "";
 
     /**
      * Constructs a default table row bean
@@ -32,6 +33,14 @@ public class TabBean extends BeanContainer {
 
     public boolean getActive() {
         return isActive;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public String getTitle() {
