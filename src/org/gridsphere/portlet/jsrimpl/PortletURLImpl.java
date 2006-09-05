@@ -48,7 +48,7 @@ public class PortletURLImpl implements PortletURL {
     private Map store = new HashMap();
     private boolean redirect = true;
     private PortalContext context = null;
-
+    private String label = null;
     private boolean isRender = false;
 
     private PortletURLImpl() { }
@@ -259,6 +259,15 @@ public class PortletURLImpl implements PortletURL {
     }
 
     /**
+     * Sets a label for this link, which will overwrite the component id
+     *
+     * @param label
+     */
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    /**
      * Returns the portlet URL string representation to be embedded in the
      * markup.<br>
      * Note that the returned String may not be a valid URL, as it may
@@ -299,8 +308,9 @@ public class PortletURLImpl implements PortletURL {
             String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
             if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
             String cid = (String)req.getAttribute(compVar);
+            // if a label exists, use it instead
+            if (label != null) cid = label;
             if (cid != null) {
-                store.remove(SportletProperties.COMPONENT_ID);
                 url += "/" + cid;
                 String action = (String)store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
                 if (action != null) {
