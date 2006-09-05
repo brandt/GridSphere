@@ -4,19 +4,21 @@
  */
 package org.gridsphere.provider.portletui.tags;
 
+
 import org.gridsphere.provider.portletui.beans.TabBean;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  * The <code>TableRowTag</code> represents a table row element that is conatined within a <code>TableTag</code>
  * and itself may contain <code>TableCellTag</code>s
  */
-public class TabTag extends BaseComponentTag {
+public class TabTag extends TagSupport {
 
-    protected TabBean tabBean = null;
     protected boolean isActive = false;
     protected String title = "";
+    protected String label = "";
     protected String page = null;
 
     public void setActive(boolean isActive) {
@@ -25,6 +27,14 @@ public class TabTag extends BaseComponentTag {
 
     public boolean getActive() {
         return isActive;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
     public String getTitle() {
@@ -44,34 +54,22 @@ public class TabTag extends BaseComponentTag {
     }
 
     public void release() {
-        tabBean = null;
         super.release();
     }
 
     public int doStartTag() throws JspException {
-        System.err.println("tabtag in doStartTag");
         TabbedPaneTag tabbedPaneTag = (TabbedPaneTag) findAncestorWithClass(this, TabbedPaneTag.class);
         if (tabbedPaneTag != null) {
-
-            // need to determine which rows to display
-            if (!beanId.equals("")) {
-                tabBean = (TabBean) getTagBean();
-                if (tabBean == null) tabBean = new TabBean();
-            } else {
-                tabBean = new TabBean();
-            }
-            tabBean.setActive(isActive);
-            tabBean.setTitle(title);
-            tabBean.setPage(page);
-            tabbedPaneTag.addTab(tabBean);
+            TabBean tab = new TabBean();
+            tab.setPage(page);
+            tab.setTitle(title);
+            tab.setLabel(label);
+            tabbedPaneTag.addTabBean(tab);
         }
-
         return SKIP_BODY;
     }
 
     public int doEndTag() throws JspException {
-        System.err.println("tabtag in doEndTag");
-        super.doEndTag();
         return EVAL_PAGE;
     }
 }
