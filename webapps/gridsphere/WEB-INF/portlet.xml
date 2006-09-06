@@ -47,7 +47,7 @@
         <supported-locale>nl</supported-locale>
         <resource-bundle>Date.Portlet</resource-bundle>
     </portlet>
-
+    
 
     <custom-portlet-mode>
         <description xml:lang="en">Pre-defined custom portlet mode CONFIGURE</description>
