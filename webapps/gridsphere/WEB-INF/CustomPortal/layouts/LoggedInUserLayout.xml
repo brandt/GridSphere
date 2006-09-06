@@ -47,7 +47,7 @@ $Id$
             <row-layout>
                 <column-layout width="50%">
                     <portlet-frame transparent="true" outer-padding="0" label="date">
-                        <portlet-class>org.gridsphere.portlets.core.date.DatePortlet.1</portlet-class>
+                        <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
                     </portlet-frame>
                 </column-layout>
                 <column-layout width="50%">
