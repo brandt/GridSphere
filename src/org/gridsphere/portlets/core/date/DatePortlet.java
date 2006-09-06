@@ -1,29 +1,24 @@
 
 package org.gridsphere.portlets.core.date;
 
-import org.gridsphere.portlet.*;
-import org.gridsphere.portlet.PortletException;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.impl.AbstractPortlet;
-
+import javax.portlet.*;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.Locale;
+import java.util.Map;
 import java.text.DateFormat;
 
 
-public class DatePortlet extends AbstractPortlet {
+public class DatePortlet extends GenericPortlet {
 
-    public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+    public void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         Locale locale;
         TimeZone tz;
         String tzStr = null;
-        User user = request.getUser();
-        if (user != null) {
-            tzStr = (String)user.getAttribute(User.TIMEZONE);
-        }
+        Map userInfo = (Map) request.getAttribute(PortletRequest.USER_INFO);
+        tzStr = (userInfo!=null) ? (String) userInfo.get("user.timezone") : null;
+
         if (tzStr != null) {
             tz = TimeZone.getTimeZone(tzStr);
         } else {
@@ -37,7 +32,7 @@ public class DatePortlet extends AbstractPortlet {
         DateFormat uformater = DateFormat.getDateInstance(DateFormat.LONG, locale);
         uformater.setCalendar(date);
         request.setAttribute("date", uformater.format(date.getTime()));
-        getPortletConfig().getContext().include("/jsp/date/date.jsp", request, response);
+        getPortletContext().getRequestDispatcher("/jsp/date/date.jsp").include(request, response);
     }
 
 }
