@@ -56,11 +56,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>ConfigPortlet</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.admin.config.ConfigPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>UserManagerPortlet</servlet-name>
         <servlet-class>org.gridsphere.portlets.core.admin.users.UserManagerPortlet</servlet-class>
     </servlet>
@@ -111,11 +106,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>DatePortlet</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.date.DatePortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>RSSPortlet</servlet-name>
         <servlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</servlet-class>
     </servlet>
@@ -159,11 +149,6 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>ConfigPortlet</servlet-name>
-        <url-pattern>/admin/config</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
         <servlet-name>UserManagerPortlet</servlet-name>
         <url-pattern>/admin/users</url-pattern>
     </servlet-mapping>
@@ -196,16 +181,6 @@
     <servlet-mapping>
         <servlet-name>ProfileManagerPortlet</servlet-name>
         <url-pattern>/users/profile</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>ServletRedirector</servlet-name>
-        <url-pattern>/ServletRedirector</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>ServletTestRunner</servlet-name>
-        <url-pattern>/ServletTestRunner</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

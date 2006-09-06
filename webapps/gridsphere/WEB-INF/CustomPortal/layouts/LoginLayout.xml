@@ -36,13 +36,11 @@
                     <title lang="en">Home</title>
                     <table-layout>
                         <row-layout>
-                            <column-layout width="25%"/>
-                            <column-layout width="50%">
-                                <portlet-frame label="login">
+                            <column-layout width="100%">
+                                <portlet-frame label="login" outer-padding="50">
                                     <portlet-class>org.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
                                 </portlet-frame>
                             </column-layout>
-                            <column-layout width="25%"/>
                         </row-layout>
                     </table-layout>
                 </portlet-tab>

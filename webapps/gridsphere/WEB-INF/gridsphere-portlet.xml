@@ -658,57 +658,6 @@
     </portlet-app-def>
 
     <portlet-app-def>
-        <portlet-app id="org.gridsphere.portlets.core.date.DatePortlet">
-            <portlet-name>DatePortlet</portlet-name>
-            <servlet-name>DatePortlet</servlet-name>
-
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridsphere.portlets.core.date.DatePortlet.1">
-            <concrete-portlet>
-                <portlet-name>DatePortlet</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>Date</title>
-                    <title-short>Date</title-short>
-                    <description>Portlet provides date capabilities</description>
-                    <keywords>portlet date</keywords>
-                </language>
-                <language locale="es">
-                    <title>Fecha</title>
-                    <title-short>Fecha</title-short>
-                    <description>Portlet proporciona las capacidades de la fecha</description>
-                    <keywords>portlet Fecha</keywords>
-                </language>
-                <language locale="ar">
-                    <title>التاريخ</title>
-                    <title-short>التاريخ</title-short>
-                    <description>برنامج يزود خدمة التاريخ</description>
-                    <keywords>برنامج التاريخ</keywords>
-                </language>
-                <language locale="nl">
-                    <title>Datum</title>
-                    <title-short>Datum</title-short>
-                    <description>Portlet biedt datum functionaliteiten</description>
-                    <keywords>portlet datum</keywords>
-                </language>
-                <language locale="hr">
-                    <title>Datum</title>
-                    <title-short>Datum</title-short>
-                    <description>Portlet ostvaruje funkcionalnost dohvata datuma</description>
-                    <keywords>datum</keywords>
-                </language>
-                <language locale="ja">
-                    <title>日時</title>
-                    <title-short>日時</title-short>
-                    <description>Portletは日時機能を提供します</description>
-                    <keywords>portlet 日時</keywords>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
-
-    <portlet-app-def>
         <portlet-app id="org.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet">
             <portlet-name>SessionManagerPortlet</portlet-name>
             <servlet-name>SessionManagerPortlet</servlet-name>
