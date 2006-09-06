@@ -47,8 +47,49 @@
         <supported-locale>nl</supported-locale>
         <resource-bundle>Date.Portlet</resource-bundle>
     </portlet>
+    <portlet>
+        <!-- place portlet description here -->
+        <description xml:lang="ar">البرنامج الذي يمكن من الدخول للنظام</description>
+        <description xml:lang="cs">Portlet pro přihlášení uživatele do systému</description>
+        <description xml:lang="de">Anmelden Portlet ermöglicht das Anmelden</description>
+        <description xml:lang="en">Portlet provides login capabilities</description>
+        <description xml:lang="es">Portlet proporciona capacidades de conexión</description>
+        <description xml:lang="fr">Ce Portlet permet de faire un login</description>
+        <description xml:lang="hr">Portlet ostvaruje funkcionalnosti ulaza korisnika u portal</description>
+        <description xml:lang="hu">A portlet a portálba való bejelentkezésre szolgál</description>
+        <description xml:lang="it">La Portlet fornisce funzionalità di login</description>
+        <description xml:lang="ja"></description>
+        <description xml:lang="nl">Portlet biedt login mogelijkheden</description>
+        <description xml:lang="pl">Portlet umożliwia zalogowanie się</description>
+        <description xml:lang="zh">门件提供了登录功能</description>
 
+        <!-- place unique portlet name here -->
+        <portlet-name>Login</portlet-name>
+        <display-name xml:lang="en">Login</display-name>
 
+        <!-- place your portlet class name here -->
+        <portlet-class>org.gridsphere.portlets.login.LoginPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <!-- place supported modes here -->
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>help</portlet-mode>
+        </supports>
+        <supported-locale>ar</supported-locale>
+        <supported-locale>cs</supported-locale>
+        <supported-locale>de</supported-locale>
+        <supported-locale>en</supported-locale>
+        <supported-locale>es</supported-locale>
+        <supported-locale>fr</supported-locale>
+        <supported-locale>hr</supported-locale>
+        <supported-locale>hu</supported-locale>
+        <supported-locale>it</supported-locale>
+        <supported-locale>ja</supported-locale>
+        <supported-locale>nl</supported-locale>
+        <supported-locale>pl</supported-locale>
+        <supported-locale>zh</supported-locale>
+        <resource-bundle>Login.Portlet</resource-bundle>
+    </portlet>
     <custom-portlet-mode>
         <description xml:lang="en">Pre-defined custom portlet mode CONFIGURE</description>
         <portlet-mode>config</portlet-mode>
