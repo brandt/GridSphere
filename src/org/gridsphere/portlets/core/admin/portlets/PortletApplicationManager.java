@@ -15,6 +15,7 @@ import org.gridsphere.provider.portlet.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.security.group.GroupManagerService;
+import org.gridsphere.portlets.core.BaseGridSpherePortlet;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
@@ -29,7 +30,7 @@ import java.util.Iterator;
  * ui application management and hence dynamic portlet management. This class needs to be adapted for
  * other servlet containers.
  */
-public class PortletApplicationManager extends ActionPortlet {
+public class PortletApplicationManager extends BaseGridSpherePortlet {
 
     public static final String VIEW_JSP = "admin/portlets/view.jsp";
     public static final String HELP_JSP = "admin/portlets/help.jsp";
@@ -262,16 +263,4 @@ public class PortletApplicationManager extends ActionPortlet {
         return l;
     }
 
-
-    private void createErrorMessage(FormEvent event, String msg) {
-        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(MessageStyle.MSG_ERROR);
-        msgBox.setValue(msg);
-    }
-
-    private void createSuccessMessage(FormEvent event, String msg) {
-        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(MessageStyle.MSG_SUCCESS);
-        msgBox.setValue(msg);
-    }
 }

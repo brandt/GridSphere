@@ -11,13 +11,14 @@ import org.gridsphere.provider.portlet.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
+import org.gridsphere.portlets.core.BaseGridSpherePortlet;
 
 import javax.servlet.UnavailableException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
-public class RoleManagerPortlet extends ActionPortlet {
+public class RoleManagerPortlet extends BaseGridSpherePortlet {
 
     // JSP pages used by this portlet
     public static final String ROLES_LIST = "admin/roles/doViewRolesList.jsp";
@@ -125,19 +126,5 @@ public class RoleManagerPortlet extends ActionPortlet {
         roleManagerService.saveRole(role);
         createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG") + ": " + role.getName());
     }
-
-    private void createErrorMessage(FormEvent event, String msg) {
-        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(MessageStyle.MSG_ERROR);
-        String msgOld = msgBox.getValue();
-        msgBox.setValue((msgOld!=null?msgOld:"")+msg);
-    }
-
-    private void createSuccessMessage(FormEvent event, String msg) {
-        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(MessageStyle.MSG_SUCCESS);
-        msgBox.setValue(msg);
-    }
-
 
 }

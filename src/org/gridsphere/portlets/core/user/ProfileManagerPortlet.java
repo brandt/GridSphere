@@ -23,6 +23,7 @@ import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.services.core.utils.DateUtil;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.portlets.core.login.LoginPortlet;
+import org.gridsphere.portlets.core.BaseGridSpherePortlet;
 import org.gridsphere.tmf.services.TextMessageService;
 import org.gridsphere.tmf.services.TextMessageServiceConfig;
 import org.gridsphere.layout.PortletPageFactory;
@@ -33,7 +34,7 @@ import java.util.*;
 import java.io.File;
 import java.io.IOException;
 
-public class ProfileManagerPortlet extends ActionPortlet {
+public class ProfileManagerPortlet extends BaseGridSpherePortlet {
 
     // JSP pages used by this portlet
     public static final String VIEW_USER_JSP = "profile/viewuser.jsp";
@@ -428,15 +429,4 @@ public class ProfileManagerPortlet extends ActionPortlet {
         return bean;
     }
 
-    private void createErrorMessage(FormEvent event, String msg) {
-        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(MessageStyle.MSG_ERROR);
-        msgBox.appendText(msg);
-    }
-
-    private void createSuccessMessage(FormEvent event, String msg) {
-        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(MessageStyle.MSG_SUCCESS);
-        msgBox.appendText(msg);
-    }
 }

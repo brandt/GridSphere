@@ -17,13 +17,14 @@ import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.content.ContentManagerService;
 import org.gridsphere.services.core.content.ContentFile;
 import org.gridsphere.services.core.registry.PortletRegistryService;
+import org.gridsphere.portlets.core.BaseGridSpherePortlet;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.File;
 import java.util.*;
 
-public class LayoutManagerPortlet extends ActionPortlet {
+public class LayoutManagerPortlet extends BaseGridSpherePortlet {
 
 
     public static final String VIEW_JSP = "admin/layout/view.jsp";
@@ -893,16 +894,5 @@ public class LayoutManagerPortlet extends ActionPortlet {
         colsLB.addBean(six);
     }
 
-    private void createErrorMessage(FormEvent event, String msg) {
-        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(MessageStyle.MSG_ERROR);
-        msgBox.setValue(msg);
-    }
-
-    private void createSuccessMessage(FormEvent event, String msg) {
-        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(MessageStyle.MSG_SUCCESS);
-        msgBox.setValue(msg);
-    }
 
 }

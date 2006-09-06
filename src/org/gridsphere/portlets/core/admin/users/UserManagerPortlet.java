@@ -16,12 +16,13 @@ import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.portlets.core.login.LoginPortlet;
+import org.gridsphere.portlets.core.BaseGridSpherePortlet;
 
 import javax.servlet.UnavailableException;
 import java.util.Iterator;
 import java.util.List;
 
-public class UserManagerPortlet extends ActionPortlet {
+public class UserManagerPortlet extends BaseGridSpherePortlet {
 
     // JSP pages used by this portlet
     public static final String DO_VIEW_USER_LIST = "admin/users/doViewUserList.jsp";
@@ -473,19 +474,4 @@ public class UserManagerPortlet extends ActionPortlet {
             log.debug("Exiting saveUserRole()");
         }
     }
-
-    private void createErrorMessage(FormEvent event, String msg) {
-        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(MessageStyle.MSG_ERROR);
-        String msgOld = msgBox.getValue();
-        msgBox.setValue((msgOld!=null?msgOld:"")+msg);
-    }
-
-    private void createSuccessMessage(FormEvent event, String msg) {
-        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(MessageStyle.MSG_SUCCESS);
-        msgBox.setValue(msg);
-    }
-
-
 }

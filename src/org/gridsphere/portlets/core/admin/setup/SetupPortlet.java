@@ -17,11 +17,12 @@ import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.layout.PortletPageFactory;
+import org.gridsphere.portlets.core.BaseGridSpherePortlet;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 
-public class SetupPortlet extends ActionPortlet {
+public class SetupPortlet extends BaseGridSpherePortlet {
 
     // Portlet services
     private UserManagerService userManagerService = null;
@@ -160,13 +161,6 @@ public class SetupPortlet extends ActionPortlet {
             }
         }
         return false;
-    }
-
-    private void createErrorMessage(FormEvent event, String msg) {
-           MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-           msgBox.setMessageType(MessageStyle.MSG_ERROR);
-           String msgOld = msgBox.getValue();
-           msgBox.setValue((msgOld!=null?msgOld:"")+msg);
     }
 
 }

@@ -7,6 +7,7 @@ import org.gridsphere.provider.portletui.beans.MessageStyle;
 import org.gridsphere.portlet.*;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.services.core.rss.RssService;
+import org.gridsphere.portlets.core.BaseGridSpherePortlet;
 
 import javax.servlet.UnavailableException;
 
@@ -16,7 +17,7 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import java.net.MalformedURLException;
 import java.io.IOException;
 
-public class RSSPortlet extends ActionPortlet {
+public class RSSPortlet extends BaseGridSpherePortlet {
 
     public final static String VIEW_RSS_JSP = "rss/viewRSS.jsp";
     private RssService rssService = null;
@@ -53,18 +54,6 @@ public class RSSPortlet extends ActionPortlet {
         }
         event.getPortletRequest().setAttribute("rssfeed", feed);
         setNextState(event.getPortletRequest(), VIEW_RSS_JSP);
-    }
-
-    private void createErrorMessage(FormEvent event, String msg) {
-        MessageBoxBean msgBox = event.getMessageBoxBean("errormsg");
-        msgBox.setMessageType(MessageStyle.MSG_ERROR);
-        msgBox.appendText(msg);
-    }
-
-    private void createSuccessMessage(FormEvent event, String msg) {
-        MessageBoxBean msgBox = event.getMessageBoxBean("successmsg");
-        msgBox.setMessageType(MessageStyle.MSG_SUCCESS);
-        msgBox.appendText(msg);
     }
 
 }

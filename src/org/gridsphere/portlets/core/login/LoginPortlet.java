@@ -20,6 +20,7 @@ import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.services.core.captcha.impl.CaptchaServiceSingleton;
 import org.gridsphere.tmf.TextMessagingException;
 import org.gridsphere.tmf.message.MailMessage;
+import org.gridsphere.portlets.core.BaseGridSpherePortlet;
 
 import javax.servlet.UnavailableException;
 import java.security.cert.X509Certificate;
@@ -27,7 +28,7 @@ import java.util.*;
 
 import com.octo.captcha.service.CaptchaServiceException;
 
-public class LoginPortlet extends ActionPortlet {
+public class LoginPortlet extends BaseGridSpherePortlet {
 
     private static String FORGOT_PASSWORD_LABEL = "forgotpassword";
     private static String ACTIVATE_ACCOUNT_LABEL = "activateaccount";
@@ -524,17 +525,6 @@ public class LoginPortlet extends ActionPortlet {
 
     }
 
-    private void createErrorMessage(FormEvent evt, String text) {
-        MessageBoxBean msg = evt.getMessageBoxBean("msg");
-        msg.setValue(text);
-        msg.setMessageType(MessageStyle.MSG_ERROR);
-    }
-
-    private void createSuccessMessage(FormEvent evt, String text) {
-        MessageBoxBean msg = evt.getMessageBoxBean("msg");
-        msg.setValue(text);
-        msg.setMessageType(MessageStyle.MSG_SUCCESS);
-    }
 
     public void newpassword(FormEvent evt) {
         PortletRequest req = evt.getPortletRequest();
