@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
+    version="1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
+    <portlet>
+        <description xml:lang="en">GridSphere Configuration</description>
+        <portlet-name>ConfigPortlet</portlet-name>
+        <display-name xml:lang="en">GridSphere Configuration</display-name>
+        <portlet-class>org.gridsphere.portlets.core.admin.config.ConfigPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>help</portlet-mode>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <portlet-info>
+            <title>GridSphere Configuration</title>
+            <short-title>Configuration</short-title>
+            <keywords>gridsphere configuration</keywords>
+        </portlet-info>
+    </portlet>
+    <portlet>
+        <!-- place portlet description here -->
+        <description xml:lang="ar">برنامج يزود خدمة التاريخ</description>
+        <description xml:lang="en">Portlet provides date capabilities</description>
+        <description xml:lang="es">Portlet proporciona las capacidades de la fecha</description>
+        <description xml:lang="hr">Portlet ostvaruje funkcionalnost dohvata datuma</description>
+        <description xml:lang="ja">Portletは日時機能を提供します</description>
+        <description xml:lang="nl">Portlet biedt datum functionaliteiten</description>
+        <!-- place unique portlet name here -->
+        <portlet-name>DatePortlet</portlet-name>
+        <display-name xml:lang="en">DatePortlet</display-name>
+        <!-- place your portlet class name here -->
+        <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <!-- place supported modes here -->
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>help</portlet-mode>
+        </supports>
+        <supported-locale>ar</supported-locale>
+        <supported-locale>en</supported-locale>
+        <supported-locale>es</supported-locale>
+        <supported-locale>hr</supported-locale>
+        <supported-locale>ja</supported-locale>
+        <supported-locale>nl</supported-locale>
+        <resource-bundle>Date.Portlet</resource-bundle>
+    </portlet>
+
+
+    <custom-portlet-mode>
+        <description xml:lang="en">Pre-defined custom portlet mode CONFIGURE</description>
+        <portlet-mode>config</portlet-mode>
+    </custom-portlet-mode>
+    <user-attribute>
+        <description xml:lang="en">User Name</description>
+        <name>user.name</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">User Id</description>
+        <name>user.id</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">User Full Name</description>
+        <name>user.name.full</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">User E-Mail</description>
+        <name>user.email</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">Company Organization</description>
+        <name>user.organization</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">Last Login Time</description>
+        <name>user.lastlogintime</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">Timezone</description>
+        <name>user.timezone</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">Preferred Locale</description>
+        <name>user.locale</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">Preferred Theme</description>
+        <name>user.theme</name>
+    </user-attribute>
+</portlet-app>
