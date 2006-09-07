@@ -115,7 +115,8 @@ public class ListBoxItemTag extends BaseComponentTag {
             if (key != null) {
                 Locale locale = pageContext.getRequest().getLocale();
                 ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
-                listboxitem.setValue(bundle.getString(key));
+                value = bundle.getString(key);
+                listboxitem.setValue(value);
             }
             this.setBaseComponentBean(listboxitem);
             // check that item doesn't already exist
