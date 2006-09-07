@@ -4,21 +4,22 @@
  */
 package org.gridsphere.portlets.core.admin.roles;
 
-import org.gridsphere.portlet.*;
-import org.gridsphere.portlet.service.PortletServiceException;
-import org.gridsphere.provider.event.FormEvent;
-import org.gridsphere.provider.portlet.ActionPortlet;
+import org.gridsphere.portlet.User;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
-import org.gridsphere.portlets.core.BaseGridSpherePortlet;
 
-import javax.servlet.UnavailableException;
+import javax.portlet.PortletException;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
-public class RoleManagerPortlet extends BaseGridSpherePortlet {
+public class RoleManagerPortlet extends ActionPortlet {
 
     // JSP pages used by this portlet
     public static final String ROLES_LIST = "admin/roles/doViewRolesList.jsp";
@@ -28,26 +29,16 @@ public class RoleManagerPortlet extends BaseGridSpherePortlet {
     // Portlet services
     private RoleManagerService roleManagerService = null;
 
-    public void init(PortletConfig config) throws UnavailableException {
+    public void init(PortletConfig config) throws PortletException {
         super.init(config);
-        log.debug("Entering initServices()");
-        try {
-            this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
-        } catch (PortletServiceException e) {
-            log.error("Unable to initialize services!", e);
-        }
-        log.debug("Exiting initServices()");
+        roleManagerService = (RoleManagerService) createPortletService(RoleManagerService.class);
         DEFAULT_HELP_PAGE = "admin/roles/help.jsp";
         DEFAULT_VIEW_PAGE = "doListRoles";
     }
 
-    public void initConcrete(PortletSettings settings) throws UnavailableException {
-        super.initConcrete(settings);
-    }
-
-    public void doListRoles(FormEvent evt)
+    public void doListRoles(RenderFormEvent evt)
             throws PortletException {
-        PortletRequest req = evt.getPortletRequest();
+        PortletRequest req = evt.getRenderRequest();
         List roleList = this.roleManagerService.getRoles();
         req.setAttribute("roleList", roleList);
         List coreRolesList = new ArrayList();
@@ -58,8 +49,8 @@ public class RoleManagerPortlet extends BaseGridSpherePortlet {
         setNextState(req, ROLES_LIST);
     }
 
-    public void doEditRole(FormEvent evt) {
-        PortletRequest req = evt.getPortletRequest();
+    public void doEditRole(ActionFormEvent evt) {
+        PortletRequest req = evt.getActionRequest();
         String roleName = evt.getAction().getParameter("roleName");
 
         PortletRole role = null;
@@ -78,8 +69,8 @@ public class RoleManagerPortlet extends BaseGridSpherePortlet {
         setNextState(req, ROLES_EDIT);
     }
 
-    public void doDeleteRole(FormEvent evt) {
-        PortletRequest req = evt.getPortletRequest();
+    public void doDeleteRole(ActionFormEvent evt) {
+        PortletRequest req = evt.getActionRequest();
         String roleName = evt.getAction().getParameter("roleName");
         PortletRole role = roleManagerService.getRole(roleName);
         if (roleName != null) {
@@ -99,8 +90,8 @@ public class RoleManagerPortlet extends BaseGridSpherePortlet {
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
-    public void doSaveRole(FormEvent evt) {
-        PortletRequest req = evt.getPortletRequest();
+    public void doSaveRole(ActionFormEvent evt) {
+        PortletRequest req = evt.getActionRequest();
         boolean isNewRole = false;
         HiddenFieldBean isNewRoleHF = evt.getHiddenFieldBean("isNewRoleHF");
         if (isNewRoleHF.getValue().equals("true")) isNewRole = true;
