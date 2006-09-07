@@ -64,7 +64,7 @@
                             <column-layout width="50%">
                                 <portlet-frame label="usermanager">
                                     <portlet-class>
-                                        org.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
+                                        org.gridsphere.portlets.core.admin.users.UserManagerPortlet</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                             <column-layout width="50%"/>
@@ -78,7 +78,7 @@
                             <column-layout width="50%">
                                 <portlet-frame label="rolemanager">
                                     <portlet-class>
-                                        org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet.1</portlet-class>
+                                        org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                             <column-layout width="50%"/>
