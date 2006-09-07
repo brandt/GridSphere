@@ -174,6 +174,42 @@
             </preference>
         </portlet-preferences>
     </portlet>
+    <portlet>
+        <description xml:lang="ar">يمكن مدير النظام من إدارة حسابات المستخدمين</description>
+        <description xml:lang="cs">Umožňuje správcům portálu spravovat uživatelské účty</description>
+        <description xml:lang="de">Ermöglicht das Administrieren von Nutzerkonten</description>
+        <description xml:lang="en">Enables portal administrators to administer user accounts</description>
+        <description xml:lang="es">Permite a administradores del portal, administrar cuentas de usuario</description>
+        <description xml:lang="fr">Permet à l'administrateur du portail d'aministrer les comptes usagers</description>
+        <description xml:lang="hr">Portlet omogućava administriranje korisnika</description>
+        <description xml:lang="hu">Lehetővé teszi a portal adminisztrátorok számára, a felhasználók adminisztrációját</description>
+        <description xml:lang="it">Permette agli gestire del portale di amministrare gli account utente</description>
+        <description xml:lang="pl">Umożliwia administratorowi portalu administrowanie kontami użytkowników</description>
+        <description xml:lang="zh">使门户网站管理者能够管理用户帐号</description>
+        <portlet-name>UserAccountManager</portlet-name>
+        <display-name xml:lang="en">User Account Manager</display-name>
+        <portlet-class>org.gridsphere.portlets.admin.users.UserManagerPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <!-- place supported modes here -->
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>help</portlet-mode>
+        </supports>
+        <supported-locale>ar</supported-locale>
+        <supported-locale>cs</supported-locale>
+        <supported-locale>de</supported-locale>
+        <supported-locale>en</supported-locale>
+        <supported-locale>es</supported-locale>
+        <supported-locale>fr</supported-locale>
+        <supported-locale>hr</supported-locale>
+        <supported-locale>hu</supported-locale>
+        <supported-locale>it</supported-locale>
+        <supported-locale>ja</supported-locale>
+        <supported-locale>nl</supported-locale>
+        <supported-locale>pl</supported-locale>
+        <supported-locale>zh</supported-locale>
+        <resource-bundle>UserManager.Portlet</resource-bundle>
+    </portlet>
 
     <custom-portlet-mode>
         <description xml:lang="en">Pre-defined custom portlet mode CONFIGURE</description>
