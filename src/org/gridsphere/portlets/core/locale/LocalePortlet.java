@@ -4,16 +4,18 @@
  */
 package org.gridsphere.portlets.core.locale;
 
-import org.gridsphere.portlet.*;
-import org.gridsphere.portlet.service.PortletServiceException;
-import org.gridsphere.provider.event.FormEvent;
-import org.gridsphere.provider.portlet.ActionPortlet;
+import org.gridsphere.portlet.User;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridsphere.provider.portletui.beans.ListBoxItemBean;
 import org.gridsphere.services.core.cache.CacheService;
 import org.gridsphere.services.core.locale.LocaleService;
 
-import javax.servlet.UnavailableException;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
 import java.util.Locale;
 
 public class LocalePortlet extends ActionPortlet {
@@ -21,13 +23,9 @@ public class LocalePortlet extends ActionPortlet {
     public static final String VIEW_JSP = "/jsp/locale/view.jsp";
     private LocaleService localeService = null;
 
-    public void init(PortletConfig config) throws UnavailableException {
-        super.init(config);
-        try {
-            this.localeService = (LocaleService) config.getContext().getService(LocaleService.class);
-        } catch (PortletServiceException e) {
-            log.error("Unable to initialize services!", e);
-        }
+    public void init(PortletConfig config) throws PortletException {
+        super.init(config);    
+        this.localeService = (LocaleService) createPortletService(LocaleService.class);
         DEFAULT_VIEW_PAGE = "showLocale";
     }
 
@@ -46,8 +44,8 @@ public class LocalePortlet extends ActionPortlet {
         return bean;
     }
 
-    public void showLocale(FormEvent event) throws PortletException {
-        PortletRequest request = event.getPortletRequest();
+    public void showLocale(RenderFormEvent event) throws PortletException {
+        PortletRequest request = event.getRenderRequest();
         Locale locale = request.getLocale();
 
         request.setAttribute("locale", locale);
@@ -70,9 +68,9 @@ public class LocalePortlet extends ActionPortlet {
         setNextState(request, "locale/viewlocale.jsp");
     }
 
-    public void selectLang(FormEvent event) throws PortletException {
+    public void selectLang(RenderFormEvent event) throws PortletException {
         ListBoxBean localeSelector = event.getListBoxBean("localeLB");
-        PortletSession session = event.getPortletRequest().getPortletSession(true);
+        PortletSession session = event.getRenderRequest().getPortletSession(true);
         String loc = localeSelector.getSelectedValue();
         if (loc != null) {
             Locale locale = new Locale(loc, "", "");

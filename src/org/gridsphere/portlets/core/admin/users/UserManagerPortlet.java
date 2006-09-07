@@ -4,9 +4,9 @@
  */
 package org.gridsphere.portlets.core.admin.users;
 
-import org.gridsphere.portlet.*;
-import org.gridsphere.provider.event.FormEvent;
-import org.gridsphere.provider.portlet.ActionPortlet;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridsphere.services.core.portal.PortalConfigService;
@@ -16,13 +16,15 @@ import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.portlets.core.login.LoginPortlet;
-import org.gridsphere.portlets.core.BaseGridSpherePortlet;
+import org.gridsphere.portlet.User;
 
-import javax.servlet.UnavailableException;
+import javax.portlet.PortletException;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletRequest;
 import java.util.Iterator;
 import java.util.List;
 
-public class UserManagerPortlet extends BaseGridSpherePortlet {
+public class UserManagerPortlet extends ActionPortlet {
 
     // JSP pages used by this portlet
     public static final String DO_VIEW_USER_LIST = "admin/users/doViewUserList.jsp";
@@ -37,24 +39,19 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
     private PortalConfigService portalConfigService = null;
 
 
-    public void init(PortletConfig config) throws UnavailableException {
+    public void init(PortletConfig config) throws PortletException {
         super.init(config);
-        this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
-        this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
-        this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
-        this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
+        this.userManagerService = (UserManagerService) createPortletService(UserManagerService.class);
+        this.roleManagerService = (RoleManagerService) createPortletService(RoleManagerService.class);
+        this.passwordManagerService = (PasswordManagerService) createPortletService(PasswordManagerService.class);
+        this.portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
         DEFAULT_HELP_PAGE = "admin/users/help.jsp";
         DEFAULT_VIEW_PAGE = "doListUsers";
     }
 
-    public void initConcrete(PortletSettings settings) throws UnavailableException {
-        super.initConcrete(settings);
-    }
-
-    public void doListUsers(FormEvent evt)
+    public void doListUsers(RenderFormEvent evt)
             throws PortletException {
-        PortletRequest req = evt.getPortletRequest();
-        //List userList = this.userManagerService.getUsers();
+        PortletRequest req = evt.getRenderRequest();
         int numusers = this.userManagerService.getNumUsers();
         List userList = this.userManagerService.getUsersByUserName(getQueryFilter(req, 20));
         req.setAttribute("userList", userList);
@@ -62,9 +59,9 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
         setNextState(req, DO_VIEW_USER_LIST);
     }
 
-    public void doViewUser(FormEvent evt)
+    public void doViewUser(ActionFormEvent evt)
             throws PortletException {
-        PortletRequest req = evt.getPortletRequest();
+        PortletRequest req = evt.getActionRequest();
 
         String userID = evt.getAction().getParameter("userID");
         User user = this.userManagerService.getUser(userID);
@@ -97,10 +94,10 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
         }
     }
 
-    public void doNewUser(FormEvent evt)
+    public void doNewUser(ActionFormEvent evt)
             throws PortletException {
 
-        PortletRequest req = evt.getPortletRequest();
+        PortletRequest req = evt.getActionRequest();
 
         // indicate to edit JSP this is a new user
         HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
@@ -111,7 +108,6 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
             req.setAttribute("savePass", "true");
         }
 
-        //setSelectedUserRole(evt, PortletRole.USER);
         FrameBean roleFrame = evt.getFrameBean("roleFrame");
 
         DefaultTableModel model = new DefaultTableModel();
@@ -155,10 +151,10 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
         log.debug("in doViewNewUser");
     }
 
-    public void doEditUser(FormEvent evt)
+    public void doEditUser(ActionFormEvent evt)
             throws PortletException {
 
-        PortletRequest req = evt.getPortletRequest();
+        PortletRequest req = evt.getActionRequest();
 
         // indicate to edit JSP this is an existing user
         HiddenFieldBean newuserHF = evt.getHiddenFieldBean("newuser");
@@ -235,10 +231,10 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
         setNextState(req, DO_VIEW_USER_EDIT);
     }
 
-    public void doConfirmEditUser(FormEvent evt)
+    public void doConfirmEditUser(ActionFormEvent evt)
             throws PortletException {
 
-        PortletRequest req = evt.getPortletRequest();
+        PortletRequest req = evt.getActionRequest();
 
         HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
         String newuser = hf.getValue();
@@ -278,10 +274,10 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
         }
     }
 
-    public void doDeleteUser(FormEvent evt)
+    public void doDeleteUser(ActionFormEvent evt)
             throws PortletException {
 
-        PortletRequest req = evt.getPortletRequest();
+        PortletRequest req = evt.getActionRequest();
         HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
         String userId = hf.getValue();
         User user = this.userManagerService.getUser(userId);
@@ -301,7 +297,7 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
     }
 
 
-    private void setUserValues(FormEvent event, User user) {
+    private void setUserValues(ActionFormEvent event, User user) {
         event.getTextFieldBean("userName").setValue(user.getUserName());
         event.getTextFieldBean("familyName").setValue(user.getFamilyName());
         event.getTextFieldBean("givenName").setValue(user.getGivenName());
@@ -312,10 +308,10 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
         event.getTextFieldBean("certificate").setValue((String)user.getAttribute("user.certificate"));
     }
 
-    private void validateUser(FormEvent event, boolean newuser)
+    private void validateUser(ActionFormEvent event, boolean newuser)
             throws PortletException {
         log.debug("Entering validateUser()");
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getActionRequest();
         StringBuffer message = new StringBuffer();
         boolean isInvalid = false;
         // Validate user name
@@ -364,9 +360,9 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
         log.debug("Exiting validateUser()");
     }
 
-    private boolean isInvalidPassword(FormEvent event, boolean newuser) {
+    private boolean isInvalidPassword(ActionFormEvent event, boolean newuser) {
         // Validate password
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getActionRequest();
         String passwordValue = event.getPasswordBean("password").getValue();
         String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
 
@@ -397,7 +393,7 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
         return false;
     }
 
-    private User saveUser(FormEvent event, User user) {
+    private User saveUser(ActionFormEvent event, User user) {
         log.debug("Entering saveUser()");
         // Account request
 
@@ -414,7 +410,7 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
             String password = event.getPasswordBean("password").getValue();
             boolean isgood = this.isInvalidPassword(event, newuserflag);
             if (isgood) {
-                setNextState(event.getPortletRequest(), DO_VIEW_USER_EDIT);
+                setNextState(event.getActionRequest(), DO_VIEW_USER_EDIT);
                 return user;
             } else {
                 if (!password.equals("")) {
@@ -437,7 +433,7 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
         return user;
     }
 
-    private void editAccountRequest(FormEvent event, User accountRequest) {
+    private void editAccountRequest(ActionFormEvent event, User accountRequest) {
         log.debug("Entering editAccountRequest()");
         accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
         accountRequest.setFullName(event.getTextFieldBean("fullName").getValue());
@@ -452,7 +448,7 @@ public class UserManagerPortlet extends BaseGridSpherePortlet {
         if (certval != null) accountRequest.setAttribute("user.certificate", certval);
     }
 
-    private void saveUserRole(FormEvent event, User user) {
+    private void saveUserRole(ActionFormEvent event, User user) {
         log.debug("Entering saveUserRole()");
 
         List roles = roleManagerService.getRoles();

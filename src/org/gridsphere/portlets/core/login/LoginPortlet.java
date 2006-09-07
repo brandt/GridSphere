@@ -436,10 +436,7 @@ public class LoginPortlet extends ActionPortlet {
         StringBuffer body = new StringBuffer();
 
         body.append(getLocalizedText(req, "LOGIN_FORGOT_MAIL") + "\n\n");
-
-
-
-
+        
         body.append(newpasswordURL + "&reqid=" + request.getOid());
         mailToUser.setBody(body.toString());
         mailToUser.setServiceid("mail");

@@ -4,54 +4,42 @@
  */
 package org.gridsphere.portlets.core.admin.setup;
 
-import org.gridsphere.portlet.*;
 import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.portlet.service.PortletServiceException;
-import org.gridsphere.provider.event.FormEvent;
-import org.gridsphere.provider.portlet.ActionPortlet;
-import org.gridsphere.provider.portletui.beans.MessageBoxBean;
-import org.gridsphere.provider.portletui.beans.MessageStyle;
+import org.gridsphere.portlet.User;
+import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.layout.PortletPageFactory;
-import org.gridsphere.portlets.core.BaseGridSpherePortlet;
 
-import javax.servlet.UnavailableException;
-import java.io.IOException;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
 
-public class SetupPortlet extends BaseGridSpherePortlet {
+
+public class SetupPortlet extends ActionPortlet {
 
     // Portlet services
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
     private RoleManagerService roleManagerService = null;
 
-    public void init(PortletConfig config) throws UnavailableException {
+    public void init(PortletConfig config) throws PortletException {
         super.init(config);
-        log.debug("Entering initServices()");
-        try {
-            this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
-            this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
-            this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
-        } catch (PortletServiceException e) {
-            throw new UnavailableException("Unable to get services required");
-        }
-        log.debug("Exiting initServices()");
+        this.userManagerService = (UserManagerService) createPortletService(UserManagerService.class);
+        this.roleManagerService = (RoleManagerService) createPortletService(RoleManagerService.class);
+        this.passwordManagerService = (PasswordManagerService) createPortletService(PasswordManagerService.class);
         DEFAULT_HELP_PAGE = "admin/setup/help.jsp";
         DEFAULT_VIEW_PAGE = "admin/setup/doView.jsp";
     }
 
-    public void initConcrete(PortletSettings settings) throws UnavailableException {
-        super.initConcrete(settings);
-    }
-
-    private void validateUser(FormEvent event, boolean newuser)
+    private void validateUser(ActionFormEvent event, boolean newuser)
             throws PortletException {
         log.debug("Entering validateUser()");
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getActionRequest();
 
         boolean isInvalid = false;
         // Validate user name
@@ -102,7 +90,7 @@ public class SetupPortlet extends BaseGridSpherePortlet {
         log.debug("Exiting validateUser()");
     }
 
-    public void doSavePortalAdmin(FormEvent event) {
+    public void doSavePortalAdmin(ActionFormEvent event) {
         try {
             validateUser(event, true);
         } catch (PortletException e) {
@@ -127,12 +115,12 @@ public class SetupPortlet extends BaseGridSpherePortlet {
         roleManagerService.addUserToRole(accountRequest, PortletRole.ADMIN);
         roleManagerService.addUserToRole(accountRequest, PortletRole.USER);
 
-        event.getPortletRequest().setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
+        event.getActionRequest().setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
     }
 
-    private boolean isInvalidPassword(FormEvent event, boolean newuser) {
+    private boolean isInvalidPassword(ActionFormEvent event, boolean newuser) {
         // Validate password
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getActionRequest();
         String passwordValue = event.getPasswordBean("password").getValue();
         String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
 
