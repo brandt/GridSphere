@@ -46,11 +46,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>RoleManagerPortlet</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>LayoutManagerPortlet</servlet-name>
         <servlet-class>org.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet</servlet-class>
     </servlet>
@@ -101,11 +96,6 @@
     <servlet-mapping>
         <servlet-name>jcaptcha</servlet-name>
         <url-pattern>/jcaptcha</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>RoleManagerPortlet</servlet-name>
-        <url-pattern>/admin/roles</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

@@ -25,56 +25,6 @@
     </portlet-app-def>
 
     <portlet-app-def>
-        <portlet-app id="org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet">
-            <portlet-name>Role Manager</portlet-name>
-            <servlet-name>RoleManagerPortlet</servlet-name>
-            <allows>
-                <minimized/>
-                <maximized/>
-                <resizing/>
-            </allows>
-            <supports>
-                <markup name="html">
-                    <view/>
-                    <help/>
-                </markup>
-            </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet.1">
-            <concrete-portlet>
-                <portlet-name>Role Manager</portlet-name>
-                <access-restrictions role="SUPER"/>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>Role Manager</title>
-                    <title-short>Role Manager</title-short>
-                    <description>Enables portal administrators to administer security roles</description>
-                    <keywords>role administration</keywords>
-                </language>
-                <language locale="es">
-                    <title>Administrador de Roles</title>
-                    <title-short>Administrador de Roles</title-short>
-                    <description> Les permite a administradores del portal que administren los Roles de seguridad </description>
-                    <keywords>Administracion de roles</keywords>
-                </language>
-                <language locale="hr">
-                    <title>Upravitelj uloga</title>
-                    <title-short>Upravitelj uloga</title-short>
-                    <description>Portlet omogućava administriranje uloga</description>
-                    <keywords>administriranje uloga</keywords>
-                </language>
-                <language locale="ja">
-                    <title>役割(Role)管理</title>
-                    <title-short>役割(Role)管理</title-short>
-                    <description>ポータル管理者にセキュリティ権限管理機能を提供します</description>
-                    <keywords>役割 管理</keywords>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
-
-    <portlet-app-def>
         <portlet-app id="org.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet">
             <portlet-name>Layout Manager Portlet</portlet-name>
             <servlet-name>LayoutManagerPortlet</servlet-name>

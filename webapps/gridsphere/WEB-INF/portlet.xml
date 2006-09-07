@@ -211,6 +211,32 @@
         <resource-bundle>UserManager.Portlet</resource-bundle>
     </portlet>
 
+    <portlet>
+        <!-- place portlet description here -->
+        <description xml:lang="en">Enables portal administrators to manage security roles</description>
+        <description xml:lang="es">Les permite a administradores del portal que administren los Roles de seguridad</description>
+        <description xml:lang="hr">Portlet omogućava administriranje uloga</description>
+        <description xml:lang="ja">ポータル管理者にセキュリティ権限管理機能を提供します</description>
+
+        <!-- place unique portlet name here -->
+        <portlet-name>RoleManager</portlet-name>
+        <display-name xml:lang="en">Role Manager</display-name>
+
+        <!-- place your portlet class name here -->
+        <portlet-class>org.gridsphere.portlets.admin.roles.RoleManagerPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <!-- place supported modes here -->
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>help</portlet-mode>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <supported-locale>es</supported-locale>
+        <supported-locale>hr</supported-locale>
+        <supported-locale>ja</supported-locale>
+        <resource-bundle>RoleManager.Portlet</resource-bundle>
+    </portlet>
+
     <custom-portlet-mode>
         <description xml:lang="en">Pre-defined custom portlet mode CONFIGURE</description>
         <portlet-mode>config</portlet-mode>
