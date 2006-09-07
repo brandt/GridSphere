@@ -1,11 +1,10 @@
 <%@ page import="java.util.Iterator, java.util.List" %>
-<%@ page import="org.gridsphere.portlet.PortletRequest" %>
 <%@ page import="org.gridsphere.services.core.security.role.PortletRole"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
-<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
-<portletAPI:init/>
+<%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
-<% PortletRequest pReq = (PortletRequest) pageContext.getAttribute("portletRequest"); %>
+<portlet:defineObjects/>
+
 
 <ui:messagebox beanId="msg"/>
 
