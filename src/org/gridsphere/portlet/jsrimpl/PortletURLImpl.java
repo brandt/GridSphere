@@ -46,7 +46,7 @@ public class PortletURLImpl implements PortletURL {
     private HttpServletRequest req = null;
     private boolean isSecure = false;
     private Map store = new HashMap();
-    private boolean redirect = true;
+    private boolean redirect = false;
     private PortalContext context = null;
     private String label = null;
     private boolean isRender = false;
@@ -295,9 +295,7 @@ public class PortletURLImpl implements PortletURL {
 
         String contextPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.deploy"); // contextPath;
         String servletPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.context");
-
-        String url = contextPath;
-        url = contextPath + servletPath;
+        String url = contextPath + servletPath;
 
         //System.err.println("\n\n\nContext path=" + contextPath);
 
