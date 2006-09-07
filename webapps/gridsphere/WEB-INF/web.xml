@@ -46,11 +46,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>LoginPortlet</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.login.LoginPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>SetupPortlet</servlet-name>
         <servlet-class>org.gridsphere.portlets.core.admin.setup.SetupPortlet</servlet-class>
     </servlet>
@@ -136,11 +131,6 @@
     <servlet-mapping>
         <servlet-name>jcaptcha</servlet-name>
         <url-pattern>/jcaptcha</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>LoginPortlet</servlet-name>
-        <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

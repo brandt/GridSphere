@@ -51,7 +51,7 @@ $Id$
                     </portlet-frame>
                 </column-layout>
                 <column-layout width="50%">
-                <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
+                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
                 </column-layout>
             </row-layout>
         </table-layout>

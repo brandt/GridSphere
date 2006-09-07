@@ -1,8 +1,8 @@
 <%@ page import="org.gridsphere.portlet.impl.SportletProperties" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
-<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+<%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
-<portletAPI:init/>
+<portlet:defineObjects/>
 
 <jsp:useBean id="certificate" class="java.lang.String" scope="request"/>
 <jsp:useBean id="useSecureLogin" class="java.lang.String" scope="request"/>

@@ -1,7 +1,7 @@
 <%@ taglib uri="/portletUI" prefix="ui" %>
-<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+<%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
-<portletAPI:init/>
+<portlet:defineObjects/>
 
 <ui:messagebox beanId="msg"/>
 
@@ -27,7 +27,7 @@
                 <ui:actionsubmit action="notifyUser" key="OK"/>
             </ui:tablecell>
             <ui:tablecell width="100">
-                <ui:actionsubmit action="doViewUser" key="CANCEL"/>
+                <ui:actionsubmit action="doCancel" key="CANCEL"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:table>
