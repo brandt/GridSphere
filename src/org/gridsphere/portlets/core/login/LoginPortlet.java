@@ -4,31 +4,35 @@
  */
 package org.gridsphere.portlets.core.login;
 
-import org.gridsphere.portlet.*;
-import org.gridsphere.provider.event.FormEvent;
-import org.gridsphere.provider.portlet.ActionPortlet;
-import org.gridsphere.provider.portletui.beans.*;
-import org.gridsphere.services.core.messaging.TextMessagingService;
+import com.octo.captcha.service.CaptchaServiceException;
+import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.services.core.portal.PortalConfigService;
-import org.gridsphere.services.core.request.GenericRequest;
-import org.gridsphere.services.core.request.RequestService;
-import org.gridsphere.services.core.security.password.PasswordEditor;
-import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
-import org.gridsphere.services.core.user.UserManagerService;
+import org.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridsphere.services.core.security.password.PasswordEditor;
+import org.gridsphere.services.core.messaging.TextMessagingService;
+import org.gridsphere.services.core.request.RequestService;
+import org.gridsphere.services.core.request.GenericRequest;
 import org.gridsphere.services.core.captcha.impl.CaptchaServiceSingleton;
+import org.gridsphere.provider.portlet.jsr.ActionPortlet;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.portletui.beans.MessageBoxBean;
+import org.gridsphere.provider.portletui.beans.PasswordBean;
+import org.gridsphere.provider.portletui.beans.TextFieldBean;
+import org.gridsphere.provider.portletui.beans.HiddenFieldBean;
 import org.gridsphere.tmf.TextMessagingException;
 import org.gridsphere.tmf.message.MailMessage;
-import org.gridsphere.portlets.core.BaseGridSpherePortlet;
+import org.gridsphere.portlet.User;
+import org.gridsphere.portlet.jsrimpl.PortletURLImpl;
+import org.gridsphere.portlet.impl.SportletProperties;
 
-import javax.servlet.UnavailableException;
+import javax.portlet.*;
 import java.security.cert.X509Certificate;
 import java.util.*;
 
-import com.octo.captcha.service.CaptchaServiceException;
-
-public class LoginPortlet extends BaseGridSpherePortlet {
+public class LoginPortlet extends ActionPortlet {
 
     private static String FORGOT_PASSWORD_LABEL = "forgotpassword";
     private static String ACTIVATE_ACCOUNT_LABEL = "activateaccount";
@@ -56,30 +60,46 @@ public class LoginPortlet extends BaseGridSpherePortlet {
     private RequestService requestService = null;
     private TextMessagingService tms = null;
 
-    public void init(PortletConfig config) throws UnavailableException {
+    private String  notificationURL = null;
+    private String newpasswordURL = null;
+    private String activateAccountURL = null;
+    private String denyAccountURL = null;
+
+    public void init(PortletConfig config) throws PortletException {
 
         super.init(config);
 
-        userManagerService = (UserManagerService) getPortletConfig().getContext().getService(UserManagerService.class);
-        roleService = (RoleManagerService) getPortletConfig().getContext().getService(RoleManagerService.class);
-        passwordManagerService = (PasswordManagerService) getPortletConfig().getContext().getService(PasswordManagerService.class);
-        requestService = (RequestService) getPortletConfig().getContext().getService(RequestService.class);
-        tms = (TextMessagingService) getPortletConfig().getContext().getService(TextMessagingService.class);
-        portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
+        userManagerService = (UserManagerService) createPortletService(UserManagerService.class);
+        roleService = (RoleManagerService) createPortletService(RoleManagerService.class);
+        passwordManagerService = (PasswordManagerService) createPortletService(PasswordManagerService.class);
+        requestService = (RequestService) createPortletService(RequestService.class);
+        tms = (TextMessagingService) createPortletService(TextMessagingService.class);
+        portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
         DEFAULT_VIEW_PAGE = "doViewUser";
     }
 
-    public void initConcrete(PortletSettings settings) throws UnavailableException {
-        super.initConcrete(settings);
-    }
-
-    public void doViewUser(FormEvent event) throws PortletException {
+    public void doViewUser(RenderFormEvent event) throws PortletException {
         log.debug("in LoginPortlet: doViewUser");
-        PortletRequest request = event.getPortletRequest();
-        User user = request.getUser();
+        PortletRequest request = event.getRenderRequest();
+        RenderResponse response = event.getRenderResponse();
+        if (notificationURL == null) notificationURL = response.createActionURL().toString();
+
+        if (newpasswordURL == null) {
+            PortletURL url = response.createActionURL();
+            ((PortletURLImpl)url).setAction("newpassword");
+            newpasswordURL = url.toString();
+        }
+
+        if (activateAccountURL == null) {
+            PortletURL url = response.createActionURL();
+            ((PortletURLImpl)url).setAction("approveAccount");
+        }
+        if (denyAccountURL == null) {
+            PortletURL url = response.createActionURL();
+            ((PortletURLImpl)url).setAction("denyAccount");
+        }
         PasswordBean pass = event.getPasswordBean("password");
         pass.setValue("");
-        request.setAttribute("user", user);
 
         // Check certificates
         String x509supported = portalConfigService.getProperty("SUPPORT_X509_AUTH");
@@ -103,26 +123,29 @@ public class LoginPortlet extends BaseGridSpherePortlet {
         boolean dispUser = Boolean.valueOf(portalConfigService.getProperty(SEND_USER_FORGET_PASSWORD)).booleanValue();
         if (dispUser) request.setAttribute("dispPass", "true");
         setNextState(request, "login/login.jsp");
-
     }
 
-    public void gs_login(FormEvent event) throws PortletException {
+    public void doCancel(ActionFormEvent event) throws PortletException {
+        setNextState(event.getActionRequest(), DEFAULT_VIEW_PAGE);
+    }
+
+    public void gs_login(ActionFormEvent event) throws PortletException {
         log.debug("in LoginPortlet: gs_login");
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getActionRequest();
 
         String errorMsg = (String) req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
 
         if (errorMsg != null) {
-            Integer numTries = (Integer) req.getSession(true).getAttribute(LoginPortlet.LOGIN_NUMTRIES);
-            String loginname = (String) req.getSession(true).getAttribute(LoginPortlet.LOGIN_NAME);
+            Integer numTries = (Integer) req.getPortletSession(true).getAttribute(LoginPortlet.LOGIN_NUMTRIES);
+            String loginname = (String) req.getPortletSession(true).getAttribute(LoginPortlet.LOGIN_NAME);
             int i = 1;
             if (numTries != null) {
                 i = numTries.intValue();
                 i++;
             }
             numTries = new Integer(i);
-            req.getSession(true).setAttribute(LoginPortlet.LOGIN_NUMTRIES, numTries);
-            req.getSession(true).setAttribute(LoginPortlet.LOGIN_NAME, req.getParameter("username"));
+            req.getPortletSession(true).setAttribute(LoginPortlet.LOGIN_NUMTRIES, numTries);
+            req.getPortletSession(true).setAttribute(LoginPortlet.LOGIN_NAME, req.getParameter("username"));
             System.err.println("num tries = " + i);
             // tried one to many times using same name
 
@@ -132,8 +155,8 @@ public class LoginPortlet extends BaseGridSpherePortlet {
                 if ((i >= defaultNumTries) && (defaultNumTries != -1)) {
                     disableAccount(event);
                     errorMsg = this.getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS");
-                    req.getSession(true).removeAttribute(LoginPortlet.LOGIN_NUMTRIES);
-                    req.getSession(true).removeAttribute(LoginPortlet.LOGIN_NAME);
+                    req.getPortletSession(true).removeAttribute(LoginPortlet.LOGIN_NUMTRIES);
+                    req.getPortletSession(true).removeAttribute(LoginPortlet.LOGIN_NAME);
                 }
             }
             createErrorMessage(event, errorMsg);
@@ -143,8 +166,8 @@ public class LoginPortlet extends BaseGridSpherePortlet {
         setNextState(req, "doViewUser");
     }
 
-    public void disableAccount(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
+    public void disableAccount(ActionFormEvent event) {
+        PortletRequest req = event.getActionRequest();
         String loginName = req.getParameter("username");
         User user = userManagerService.getUserByUserName(loginName);
         if (user != null) {
@@ -179,13 +202,13 @@ public class LoginPortlet extends BaseGridSpherePortlet {
         }
     }
 
-    public void doNewUser(FormEvent evt)
+    public void doNewUser(ActionFormEvent evt)
             throws PortletException {
 
         boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty("CAN_USER_CREATE_ACCOUNT")).booleanValue();
         if (!canUserCreateAccount) return;
 
-        PortletRequest req = evt.getPortletRequest();
+        PortletRequest req = evt.getActionRequest();
 
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
 
@@ -204,9 +227,9 @@ public class LoginPortlet extends BaseGridSpherePortlet {
         log.debug("in doViewNewUser");
     }
 
-    public void doConfirmEditUser(FormEvent evt)
+    public void doConfirmEditUser(ActionFormEvent evt)
             throws PortletException {
-        PortletRequest req = evt.getPortletRequest();
+        PortletRequest req = evt.getActionRequest();
 
         String savePasswds = portalConfigService.getProperty("SAVE_PASSWORDS");
         if (savePasswds.equals(Boolean.TRUE.toString())) {
@@ -230,10 +253,10 @@ public class LoginPortlet extends BaseGridSpherePortlet {
         }
     }
 
-    private void validateUser(FormEvent event)
+    private void validateUser(ActionFormEvent event)
             throws PortletException {
         log.debug("Entering validateUser()");
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getActionRequest();
         StringBuffer message = new StringBuffer();
         boolean isInvalid = false;
         // Validate user name
@@ -280,7 +303,7 @@ public class LoginPortlet extends BaseGridSpherePortlet {
 
 
         //remenber that we need an id to validate!
-        String captchaId = req.getSession().getId();
+        String captchaId = req.getPortletSession().getId();
         //retrieve the response
         String response = event.getTextFieldBean("captchaTF").getValue();
         // Call the Service method
@@ -302,8 +325,8 @@ public class LoginPortlet extends BaseGridSpherePortlet {
         log.debug("Exiting validateUser()");
     }
 
-    private boolean isInvalidPassword(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
+    private boolean isInvalidPassword(ActionFormEvent event) {
+        PortletRequest req = event.getActionRequest();
         // Validate password
         String passwordValue = event.getPasswordBean("password").getValue();
         String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
@@ -373,17 +396,17 @@ public class LoginPortlet extends BaseGridSpherePortlet {
 
 
 
-    public void displayForgotPassword(FormEvent event) {
+    public void displayForgotPassword(ActionFormEvent event) {
         boolean sendMail = Boolean.valueOf(portalConfigService.getProperty(SEND_USER_FORGET_PASSWORD)).booleanValue();
         if (sendMail) {
-            PortletRequest req = event.getPortletRequest();
+            PortletRequest req = event.getActionRequest();
             setNextState(req, DO_FORGOT_PASSWORD);
         }
     }
 
-    public void notifyUser(FormEvent evt) {
-        PortletRequest req = evt.getPortletRequest();
-        PortletResponse res = evt.getPortletResponse();
+    public void notifyUser(ActionFormEvent evt) {
+        PortletRequest req = evt.getActionRequest();
+        PortletResponse res = evt.getActionResponse();
 
         User user;
         TextFieldBean emailTF = evt.getTextFieldBean("emailTF");
@@ -414,12 +437,10 @@ public class LoginPortlet extends BaseGridSpherePortlet {
 
         body.append(getLocalizedText(req, "LOGIN_FORGOT_MAIL") + "\n\n");
 
-        PortletURI uri = res.createURI();
 
-        uri.addAction("newpassword");
-        uri.addParameter("reqid", request.getOid());
 
-        body.append(uri.toString());
+
+        body.append(newpasswordURL + "&reqid=" + request.getOid());
         mailToUser.setBody(body.toString());
         mailToUser.setServiceid("mail");
 
@@ -434,9 +455,9 @@ public class LoginPortlet extends BaseGridSpherePortlet {
 
     }
 
-    public void notifyNewUser(FormEvent evt) {
-        PortletRequest req = evt.getPortletRequest();
-        PortletResponse res = evt.getPortletResponse();
+    public void notifyNewUser(ActionFormEvent evt) {
+        PortletRequest req = evt.getActionRequest();
+        PortletResponse res = evt.getActionResponse();
 
 
         TextFieldBean emailTF = evt.getTextFieldBean("emailAddress");
@@ -472,13 +493,9 @@ public class LoginPortlet extends BaseGridSpherePortlet {
         MailMessage mailToUser = tms.getMailMessage();
         StringBuffer body = new StringBuffer();
 
-        PortletURI activateAccountUri = res.createURI();
-        activateAccountUri.addAction("approveAccount");
-        activateAccountUri.addParameter("reqid", request.getOid());
+        String activateURL = activateAccountURL + "&reqid=" + request.getOid();
 
-        PortletURI denyAccountUri = res.createURI();
-        denyAccountUri.addAction("denyAccount");
-        denyAccountUri.addParameter("reqid", request.getOid());
+        String denyURL = denyAccountURL + "&reqid=" + request.getOid();
 
         // check if this account request should be approved by an administrator
         boolean accountApproval = Boolean.valueOf(portalConfigService.getProperty(ADMIN_ACCOUNT_APPROVAL)).booleanValue();
@@ -493,14 +510,14 @@ public class LoginPortlet extends BaseGridSpherePortlet {
             body.append(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ADMIN_MAIL")).append("\n\n");
             mailToUser.setSubject(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ADMIN_MAILSUBJECT"));
             body.append(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ALLOW")).append("\n\n");
-            body.append(activateAccountUri.toString()).append("\n\n");
+            body.append(activateURL).append("\n\n");
             body.append(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_DENY")).append("\n\n");
-            body.append(denyAccountUri.toString()).append("\n\n");
+            body.append(denyURL).append("\n\n");
         } else {
             mailToUser.setTo(emailTF.getValue());
             mailToUser.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
             body.append(getLocalizedText(req, "LOGIN_ACTIVATE_MAIL")).append("\n\n");
-            body.append(activateAccountUri.toString()).append("\n\n");
+            body.append(activateURL).append("\n\n");
         }
 
         body.append(getLocalizedText(req, "USERNAME"));
@@ -526,8 +543,8 @@ public class LoginPortlet extends BaseGridSpherePortlet {
     }
 
 
-    public void newpassword(FormEvent evt) {
-        PortletRequest req = evt.getPortletRequest();
+    public void newpassword(ActionFormEvent evt) {
+        PortletRequest req = evt.getActionRequest();
         String id = req.getParameter("reqid");
         GenericRequest request = requestService.getRequest(id, FORGOT_PASSWORD_LABEL);
         if (request != null) {
@@ -539,8 +556,8 @@ public class LoginPortlet extends BaseGridSpherePortlet {
         }
     }
 
-    private void doEmailAction(FormEvent event, String msg, boolean createAccount) {
-        PortletRequest req = event.getPortletRequest();
+    private void doEmailAction(ActionFormEvent event, String msg, boolean createAccount) {
+        PortletRequest req = event.getActionRequest();
         String id = req.getParameter("reqid");
         User user = null;
         GenericRequest request = requestService.getRequest(id, ACTIVATE_ACCOUNT_LABEL);
@@ -552,15 +569,12 @@ public class LoginPortlet extends BaseGridSpherePortlet {
 
                 // send the user an email
 
-                PortletResponse res = event.getPortletResponse();
-                PortletURI portalURI = res.createURI();
-
                 MailMessage mailToUser = tms.getMailMessage();
                 mailToUser.setTo(user.getEmailAddress());
                 mailToUser.setSubject(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED"));
                 StringBuffer body = new StringBuffer();
                 body.append(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED")).append("\n\n");
-                body.append(portalURI.toString());
+                body.append(notificationURL);
                 mailToUser.setBody(body.toString());
                 mailToUser.setServiceid("mail");
 
@@ -578,29 +592,29 @@ public class LoginPortlet extends BaseGridSpherePortlet {
 
     }
 
-    public void activate(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
+    public void activate(ActionFormEvent event) {
+        PortletRequest req = event.getActionRequest();
         String msg = this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
                 "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN");
         doEmailAction(event, msg, true);
     }
 
-    public void approveAccount(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
+    public void approveAccount(ActionFormEvent event) {
+        PortletRequest req = event.getActionRequest();
         String msg = this.getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
         doEmailAction(event, msg, true);
     }
 
-    public void denyAccount(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
+    public void denyAccount(ActionFormEvent event) {
+        PortletRequest req = event.getActionRequest();
         String msg = this.getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_DENY");
         doEmailAction(event, msg, false);
     }
 
 
-    public void doSavePass(FormEvent event) {
+    public void doSavePass(ActionFormEvent event) {
 
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getActionRequest();
 
         HiddenFieldBean reqid = event.getHiddenFieldBean("reqid");
         String id = reqid.getValue();
