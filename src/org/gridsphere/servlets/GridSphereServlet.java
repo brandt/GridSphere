@@ -539,7 +539,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         req.removeAttribute(SportletProperties.PORTLET_USER);
         req.removeAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
         //System.err.println("in logout of GS, calling invalidate on s=" + session.getId());
-        session.invalidate();
+        try {
+            session.invalidate();
+        } catch (IllegalStateException e) {
+            log.error("Session already invalidated!");
+        }
         try {
             PortletResponse res = event.getPortletResponse();
             res.sendRedirect(res.createURI().toString());
