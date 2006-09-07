@@ -3,10 +3,11 @@
 <%@ page import="com.sun.syndication.feed.synd.SyndFeed" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.Iterator" %>
-<%@ taglib uri="/portletUI" prefix="ui" %>
-<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
-<portletAPI:init/>
+<%@ taglib uri="/portletUI" prefix="ui" %>
+<%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
+
+<portlet:defineObjects/>
 
 
 <ui:messagebox beanId="msg"/>

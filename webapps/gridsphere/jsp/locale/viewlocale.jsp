@@ -1,8 +1,8 @@
 <%@ page import="java.util.Locale" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
-<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+<%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
-<portletAPI:init/>
+<portlet:defineObjects/>
 
 <% Locale locale = (Locale) request.getAttribute("locale"); %>
 

@@ -90,6 +90,91 @@
         <supported-locale>zh</supported-locale>
         <resource-bundle>Login.Portlet</resource-bundle>
     </portlet>
+    <portlet>
+        <description xml:lang="en">GridSphere Setup</description>
+        <portlet-name>SetupPortlet</portlet-name>
+        <display-name xml:lang="en">GridSphere Setup</display-name>
+        <portlet-class>org.gridsphere.portlets.core.admin.setup.SetupPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>help</portlet-mode>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <portlet-info>
+            <title>GridSphere Setup</title>
+            <short-title>Setup</short-title>
+            <keywords>gridsphere setup</keywords>
+        </portlet-info>
+    </portlet>
+     <portlet>
+        <!-- place portlet description here -->
+        <description xml:lang="ar">إختيار اللغة</description>
+        <description xml:lang="cs">Vybírá místní nastavení</description>
+        <description xml:lang="de">Wählt eine Spracheinstellungen</description>
+        <description xml:lang="en">Selects a locale</description>
+        <description xml:lang="es">Seleccione un lugar</description>
+        <description xml:lang="fr">Sélectionne un locale</description>
+        <description xml:lang="hr">Portlet omogućava administriranje jezika</description>
+        <description xml:lang="hu">Nyelv választása</description>
+        <description xml:lang="it">Seleziona una localizzazione</description>
+        <description xml:lang="ja">言語を選択して下さい</description>
+        <description xml:lang="nl">Selecteer een landinstelling</description>
+        <description xml:lang="pl">Wybór lokalizacji</description>
+        <description xml:lang="zh">选择一门语言</description>
+
+        <!-- place unique portlet name here -->
+        <portlet-name>LocalePortlet</portlet-name>
+        <display-name xml:lang="en">Locale Portlet</display-name>
+
+        <!-- place your portlet class name here -->
+        <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <!-- place supported modes here -->
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>help</portlet-mode>
+        </supports>
+        <supported-locale>ar</supported-locale>
+        <supported-locale>cs</supported-locale>
+        <supported-locale>de</supported-locale>
+        <supported-locale>en</supported-locale>
+        <supported-locale>es</supported-locale>
+        <supported-locale>fr</supported-locale>
+        <supported-locale>hr</supported-locale>
+        <supported-locale>hu</supported-locale>
+        <supported-locale>it</supported-locale>
+        <supported-locale>ja</supported-locale>
+        <supported-locale>nl</supported-locale>
+        <supported-locale>pl</supported-locale>
+        <supported-locale>zh</supported-locale>
+        <resource-bundle>Locale.Portlet</resource-bundle>
+    </portlet>
+    <portlet>
+        <description xml:lang="en">Shows RSS information</description>
+        <portlet-name>RSSPortlet</portlet-name>
+        <display-name xml:lang="en">RSS Portlet</display-name>
+        <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>help</portlet-mode>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <portlet-info>
+            <title>RSS News</title>
+            <short-title>RSS News</short-title>
+            <keywords>RSS</keywords>
+        </portlet-info>
+        <portlet-preferences>
+            <preference>
+            <name>feedurl</name>
+            <value>http://rss.cnn.com/rss/cnn_topstories.rss</value>
+            <read-only>true</read-only>
+            </preference>
+        </portlet-preferences>
+    </portlet>
+
     <custom-portlet-mode>
         <description xml:lang="en">Pre-defined custom portlet mode CONFIGURE</description>
         <portlet-mode>config</portlet-mode>

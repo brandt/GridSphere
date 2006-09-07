@@ -318,37 +318,6 @@
     </portlet-app-def>
 
     <portlet-app-def>
-        <portlet-app id="org.gridsphere.portlets.core.admin.setup.SetupPortlet">
-            <portlet-name>Setup</portlet-name>
-            <servlet-name>SetupPortlet</servlet-name>
-            <allows>
-                <minimized/>
-                <maximized/>
-                <resizing/>
-            </allows>
-            <supports>
-                <markup name="html">
-                    <view/>
-                    <help/>
-                </markup>
-            </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridsphere.portlets.core.admin.setup.SetupPortlet.1">
-            <concrete-portlet>
-                <portlet-name>Setup</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>GridSphere Setup</title>
-                    <title-short>Setup</title-short>
-                    <description>GridSphere setup</description>
-                    <keywords>portlet gridsphere setup</keywords>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
-
-    <portlet-app-def>
         <portlet-app id="org.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet">
             <portlet-name>Tracker Statistics</portlet-name>
             <servlet-name>TrackerStatisticsPortlet</servlet-name>
@@ -478,79 +447,6 @@
     </portlet-app-def>
 
     <portlet-app-def>
-        <portlet-app id="org.gridsphere.portlets.core.locale.LocalePortlet">
-            <portlet-name>Locale Portlet</portlet-name>
-            <servlet-name>LocalePortlet</servlet-name>
-            <supports>
-                <markup name="html">
-                    <view/>
-                </markup>
-            </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridsphere.portlets.core.locale.LocalePortlet.1">
-            <concrete-portlet>
-                <portlet-name>Locale Portlet</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="zh">
-                    <title>语言</title>
-                    <description>选择一门语言</description>
-                </language>
-                <language locale="en">
-                    <title>Locale</title>
-                    <description>Selects a locale</description>
-                </language>
-                <language locale="es">
-                    <title>Lugar</title>
-                    <description>Seleccione un lugar</description>
-                </language>
-                <language locale="de">
-                    <title>Spracheinstellungen</title>
-                    <description>Wählt eine Spracheinstellungen</description>
-                </language>
-                <language locale="fr">
-                    <title>Locale</title>
-                    <description>Sélectionne un locale</description>
-                </language>
-                <language locale="it">
-                    <title>Localizzazione</title>
-                    <description>Seleziona una localizzazione</description>
-                </language>
-                <language locale="cs">
-                    <title>Jazykové nastavení</title>
-                    <description>Vybírá místní nastavení</description>
-                </language>
-                <language locale="hu">
-                    <title>Nyelvválasztás</title>
-                    <description>Nyelv választása</description>
-                </language>
-                <language locale="pl">
-                    <title>Lokalizacja</title>
-                    <description>Wybór lokalizacji</description>
-                </language>
-				<language locale="ar">
-                    <title>اللغة</title>
-                    <description>إختيار اللغة</description>
-                </language>
-                 <language locale="nl">
-                    <title>Landinstelling</title>
-                    <description>Selecteer een landinstelling</description>
-                </language>
-                <language locale="hr">
-                    <title>Upravitelj jezika</title>
-                    <title-short>Upravitelj jezika</title-short>
-                    <description>Portlet omogućava administriranje jezika</description>
-                    <keywords>administriranje jezika</keywords>
-                </language>
-                <language locale="ja">
-                    <title>言語</title>
-                    <description>言語を選択して下さい</description>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
-
-    <portlet-app-def>
         <portlet-app id="org.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet">
             <portlet-name>SessionManagerPortlet</portlet-name>
             <servlet-name>SessionManagerPortlet</servlet-name>
@@ -622,44 +518,6 @@
         </concrete-portlet-app>
     </portlet-app-def>
 
-    <portlet-app-def>
-        <portlet-app id="org.gridsphere.portlets.core.rss.RSSPortlet">
-            <portlet-name>RSSPortlet</portlet-name>
-            <servlet-name>RSSPortlet</servlet-name>
-            <allows>
-                <minimized/>
-                <maximized/>
-                <resizing/>
-            </allows>
-            <supports>
-                <markup name="html">
-                    <view/>
-                </markup>
-            </supports>
-
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridsphere.portlets.core.rss.RSSPortlet.1">
-            <context-param>
-                <param-name>feedurl</param-name>
-                <param-value>http://rss.cnn.com/rss/cnn_topstories.rss</param-value>
-            </context-param>
-
-            <concrete-portlet>
-
-                <portlet-name>RSSPortlet</portlet-name>
-                <default-locale>en</default-locale>
-
-                <language locale="en">
-                    <title>RSS Portlet</title>
-                    <title-short>RSS Portlet</title-short>
-                    <description>Shows RSS information</description>
-                    <keywords>rss</keywords>
-                </language>
-
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
 
 </portlet-app-collection>
 

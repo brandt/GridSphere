@@ -1,7 +1,8 @@
 <%@ page import="org.gridsphere.portlet.User" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
-<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
-<portletAPI:init/>
+<%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
+
+<portlet:defineObjects/>
 
 <jsp:useBean id="role" class="java.lang.String" scope="request"/>
 

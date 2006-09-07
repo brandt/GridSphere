@@ -21,7 +21,7 @@
                 </column-layout>
                 <column-layout width="30%">
                     <portlet-frame transparent="true" outer-padding="0" label="locale">
-                        <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet.1</portlet-class>
+                        <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet</portlet-class>
                     </portlet-frame>
                 </column-layout>
             </row-layout>
@@ -35,8 +35,7 @@
                         <row-layout>
                             <column-layout width="70%">
                                 <portlet-frame label="setup">
-                                    <portlet-class>
-                                        org.gridsphere.portlets.core.admin.setup.SetupPortlet.1</portlet-class>
+                                    <portlet-class>org.gridsphere.portlets.core.admin.setup.SetupPortlet</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                             <column-layout width="30%"/>

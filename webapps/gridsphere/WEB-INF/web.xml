@@ -46,16 +46,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>SetupPortlet</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.admin.setup.SetupPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>UserManagerPortlet</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.admin.users.UserManagerPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>RoleManagerPortlet</servlet-name>
         <servlet-class>org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet</servlet-class>
     </servlet>
@@ -83,26 +73,6 @@
     <servlet>
         <servlet-name>TrackerStatisticsPortlet</servlet-name>
         <servlet-class>org.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>LocalePortlet</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.locale.LocalePortlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>ServletRedirector</servlet-name>
-        <servlet-class>org.apache.cactus.server.ServletTestRedirector</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>ServletTestRunner</servlet-name>
-        <servlet-class>org.apache.cactus.server.runner.ServletTestRunner</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>RSSPortlet</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -134,16 +104,6 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>SetupPortlet</servlet-name>
-        <url-pattern>/admin/setup</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>UserManagerPortlet</servlet-name>
-        <url-pattern>/admin/users</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
         <servlet-name>RoleManagerPortlet</servlet-name>
         <url-pattern>/admin/roles</url-pattern>
     </servlet-mapping>
@@ -171,11 +131,6 @@
     <servlet-mapping>
         <servlet-name>ProfileManagerPortlet</servlet-name>
         <url-pattern>/users/profile</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>LocalePortlet</servlet-name>
-        <url-pattern>/locale</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
