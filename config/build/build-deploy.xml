@@ -44,6 +44,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         <pathconvert targetos="windows" dirsep="/" property="cathome">
             <path location="${appserver.home}"/>
         </pathconvert>
+
         <filter token="GRIDSPHERE_DB" value="${cathome}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/database/gridsphere"/>
         <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/database/hibernate.properties"
               file="${gswebapp.dir}/WEB-INF/CustomPortal/database/hibernate.properties"
@@ -60,7 +61,7 @@ Build include file for the GridSphere Portal source code, see build.xml
               file="${gswebapp.dir}/WEB-INF/web.xml"
               filtering="true"/>
 
-       <copy tofile="${build.webapps}/${gridsphere.deploy}/index.html"
+        <copy tofile="${build.webapps}/${gridsphere.deploy}/index.html"
               file="${gswebapp.dir}/index.html"
               filtering="true"/>
 
@@ -96,11 +97,22 @@ Build include file for the GridSphere Portal source code, see build.xml
             </then>
         </if>
 
-
         <!-- copy webappsdir to deployed location -->
         <copy todir="${appserver.home}/webapps">
-            <fileset dir="${build.webapps}"/>
+            <fileset dir="${build.webapps}">
+                <exclude name="**/CustomPortal/**"/>
+            </fileset>
         </copy>
+
+        <!-- only copy over the portal properties if not there already -->
+        <if>
+            <available file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"/>
+            <then/>
+            <else>
+                <copy file="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"
+                      todir="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/"/>
+            </else>
+        </if>
 
     </target>
 
