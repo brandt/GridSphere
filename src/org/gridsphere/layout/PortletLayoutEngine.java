@@ -91,7 +91,7 @@ public class PortletLayoutEngine {
      * @param event the gridsphere event
      * @throws IOException if an I/O error occcurs during processing
      */
-    public void service(GridSphereEvent event) throws IOException {
+    public void service(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         PortletPage page = getPortletPage(event);
@@ -160,13 +160,8 @@ public class PortletLayoutEngine {
      */
     public void loginPortlets(GridSphereEvent event) {
         log.debug("in loginPortlets()");
-        PortletRequest req = event.getPortletRequest();
-        try {
-            PortletPage page = getPortletPage(event);
-            page.loginPortlets(event);
-        } catch (Exception e) {
-            log.error("Unable to loadUserLayout for user: " + req.getUser().getUserName(), e);
-        }
+        PortletPage page = getPortletPage(event);
+        page.loginPortlets(event);
     }
 
     /**
@@ -177,15 +172,10 @@ public class PortletLayoutEngine {
      */
     public void logoutPortlets(GridSphereEvent event) {
         log.debug("in logoutPortlets()");
-
-        try {
-            PortletPage page = getPortletPage(event);
-            page.logoutPortlets(event);
-            registry.removeAllPortletFrames(event);
-            pageFactory.logStatistics();
-        } catch (Exception e) {
-            log.error("Unable to logout portlets", e);
-        }
+        PortletPage page = getPortletPage(event);
+        page.logoutPortlets(event);
+        registry.removeAllPortletFrames(event);
+        pageFactory.logStatistics();
     }
 
     public void destroy() {
@@ -213,7 +203,7 @@ public class PortletLayoutEngine {
      * @param event a gridsphere event
      * @throws IOException if an I/O error occurs during rendering
      */
-    public void actionPerformed(GridSphereEvent event) throws IOException {
+    public void actionPerformed(GridSphereEvent event) {
         log.debug("in actionPerformed()");
         PortletPage page = getPortletPage(event);
         //int numcomps = page.getComponentIdentifierList().size();
@@ -230,7 +220,13 @@ public class PortletLayoutEngine {
                 log.info("\n\n\n\n\nreiniting and saving page!!!!!\n\n\n\n\n\n");
                 page.init(event.getPortletRequest(), new Vector());
                 PortletTabbedPane pane = pageFactory.getUserTabbedPane(event.getPortletRequest());
-                if (pane != null) pane.save(event.getPortletContext());
+                if (pane != null) {
+                    try {
+                        pane.save(event.getPortletContext());
+                    } catch (IOException e) {
+                        log.error("Unable to save tab pane", e);
+                    }
+                }
             }
         }
 

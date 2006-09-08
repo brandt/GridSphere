@@ -11,6 +11,7 @@ import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridsphere.portletcontainer.PortletDispatcherException;
 import org.gridsphere.portletcontainer.impl.PortletInvoker;
 import org.gridsphere.services.core.cache.CacheService;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
@@ -45,7 +46,6 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     protected int refresh = 0;
     protected boolean editable = true;
 
-    //private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
     private String layoutDescriptor = null;
 
     private Hashtable labelsHash = new Hashtable();
@@ -317,7 +317,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      * @throws PortletException if an error occurs while invoking login on the portlets
      * @see <a href="org.gridsphere.portlet.Portlet#login">Portlet.login(PortletRequest)</a>
      */
-    public void loginPortlets(GridSphereEvent event) throws PortletException, IOException {
+    public void loginPortlets(GridSphereEvent event) {
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid;
         PortletFrame f;
@@ -332,7 +332,11 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
                 // remove any cached portlet
                 cacheService.removeCached(f.getComponentID() + pid + id);
                 //portlets.add(f.getPortletID());
-                portletInvoker.login(pid, event.getPortletRequest(), event.getPortletResponse());
+                try {
+                    portletInvoker.login(pid, event.getPortletRequest(), event.getPortletResponse());
+                } catch (PortletDispatcherException e) {
+                    log.error("Unable to invoke login method of portlet: " + pid, e);
+                }
             }
         }
     }
@@ -345,7 +349,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      * @throws PortletException if an error occurs while invoking login on the portlets
      * @see <a href="org.gridsphere.portlet.Portlet#logout">Portlet.logout(PortletSession)</a>
      */
-    public void logoutPortlets(GridSphereEvent event) throws IOException, PortletException {
+    public void logoutPortlets(GridSphereEvent event) {
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid;
         PortletFrame f;
@@ -360,7 +364,11 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
                 // remove any cached portlet
                 cacheService.removeCached(f.getComponentID() + pid + id);
-                portletInvoker.logout(pid, req, res);
+                try {
+                    portletInvoker.logout(pid, req, res);
+                } catch (PortletDispatcherException e) {
+                    log.error("Unable to invoke logout method of portlet: " + pid, e);
+                }
             }
         }
     }
