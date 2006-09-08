@@ -15,6 +15,8 @@ import org.gridsphere.portletcontainer.jsrimpl.descriptor.*;
 import javax.portlet.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
 import java.util.*;
 import java.io.UnsupportedEncodingException;
@@ -174,7 +176,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
      *
      * @return PortletDispatcher the proxy portlet for this ApplicationPortlet
      */
-    public PortletDispatcher getPortletDispatcher(org.gridsphere.portlet.PortletRequest req, org.gridsphere.portlet.PortletResponse res) {
+    public PortletDispatcher getPortletDispatcher(HttpServletRequest req, HttpServletResponse res) {
 
         //System.err.println("in getPortletDispatcher: cid=" + req.getAttribute(SportletProperties.COMPONENT_ID));
         String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);

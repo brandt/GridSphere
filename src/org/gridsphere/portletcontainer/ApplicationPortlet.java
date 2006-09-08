@@ -7,6 +7,8 @@ package org.gridsphere.portletcontainer;
 import org.gridsphere.portlet.PortletRequest;
 import org.gridsphere.portlet.PortletResponse;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -68,7 +70,7 @@ public interface ApplicationPortlet {
      *
      * @return PortletDispatcher the proxy portlet for this ApplicationPortlet
      */
-    public PortletDispatcher getPortletDispatcher(PortletRequest req, PortletResponse res);
+    public PortletDispatcher getPortletDispatcher(HttpServletRequest req, HttpServletResponse res);
 
     /**
      * Return the PortletApplication, the portlet descriptor class that defines the portlet application

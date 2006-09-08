@@ -13,7 +13,10 @@ import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.portletcontainer.PortletDispatcher;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridsphere.portletcontainer.PortletDispatcherException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -43,12 +46,11 @@ public class PortletInvoker {
      * Initializes an application portlet
      *
      * @param concretePortletID the concrete portlet id
-     * @param req               the <code>PortletRequest</code>
-     * @param res               the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req               the <code>HttpServletRequest</code>
+     * @param res               the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void init(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void init(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         log.debug("in init " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -67,12 +69,11 @@ public class PortletInvoker {
      * Initializes a concrete portlet
      *
      * @param concretePortletID the concrete portlet id
-     * @param req               the <code>PortletRequest</code>
-     * @param res               the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req               the <code>HttpServletRequest</code>
+     * @param res               the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void initConcrete(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void initConcrete(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         log.debug("in initConcrete " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -95,12 +96,11 @@ public class PortletInvoker {
      * Shuts down an application portlet
      *
      * @param concretePortletID the concrete portlet id
-     * @param req               the <code>PortletRequest</code>
-     * @param res               the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req               the <code>HttpServletRequest</code>
+     * @param res               the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void destroy(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void destroy(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         log.debug("in destroy " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -117,12 +117,11 @@ public class PortletInvoker {
      * Shuts down a concrete portlet
      *
      * @param concretePortletID the concrete portlet id
-     * @param req               the <code>PortletRequest</code>
-     * @param res               the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req               the <code>HttpServletRequest</code>
+     * @param res               the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void destroyConcrete(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void destroyConcrete(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         log.debug("in destroyConcrete " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -145,12 +144,11 @@ public class PortletInvoker {
      * Initializes a concrete portlet instance for a user
      *
      * @param concretePortletID the concrete portlet id
-     * @param req               the <code>PortletRequest</code>
-     * @param res               the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req               the <code>HttpServletRequest</code>
+     * @param res               the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void login(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void login(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         log.debug("in login " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -166,12 +164,11 @@ public class PortletInvoker {
      * Shutds down a concrete portlet instance for a user
      *
      * @param concretePortletID the concrete portlet id
-     * @param req               the <code>PortletRequest</code>
-     * @param res               the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req               the <code>HttpServletRequest</code>
+     * @param res               the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void logout(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void logout(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         log.info("in logout " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -187,12 +184,11 @@ public class PortletInvoker {
      * Performs service method on a concrete portlet instance
      *
      * @param concretePortletID the concrete portlet id
-     * @param req               the <code>PortletRequest</code>
-     * @param res               the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req               the <code>HttpServletRequest</code>
+     * @param res               the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void service(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void service(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletDispatcherException {
         log.debug("in service " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -208,12 +204,11 @@ public class PortletInvoker {
      * Performs action performed method on a concrete portlet instance
      *
      * @param concretePortletID the concrete portlet id
-     * @param req               the <code>PortletRequest</code>
-     * @param res               the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req               the <code>HttpServletRequest</code>
+     * @param res               the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void actionPerformed(String concretePortletID, DefaultPortletAction action, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void actionPerformed(String concretePortletID, DefaultPortletAction action, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         log.debug("in actionPerformed " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -229,12 +224,11 @@ public class PortletInvoker {
      * Performs doTitle method on a concrete portlet instance
      *
      * @param concretePortletID the concrete portlet id
-     * @param req               the <code>PortletRequest</code>
-     * @param res               the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req               the <code>HttpServletRequest</code>
+     * @param res               the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void doTitle(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void doTitle(String concretePortletID, HttpServletRequest req, PortletResponse res) throws PortletDispatcherException {
         log.debug("in doTitle " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -242,7 +236,7 @@ public class PortletInvoker {
             PortletDispatcher dispatcher = appPortlet.getPortletDispatcher(req, res);
             dispatcher.doTitle(req, res);
         } else {
-            throw new PortletException("Unable to find portlet in registry: " + concretePortletID);
+            log.info("in actionPerformed: Unable to find portlet in registry: " + concretePortletID);
         }
     }
 
@@ -250,12 +244,11 @@ public class PortletInvoker {
      * Performs window event method on a concrete portlet instance
      *
      * @param concretePortletID the concrete portlet id
-     * @param req               the <code>PortletRequest</code>
-     * @param res               the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req               the <code>HttpServletRequest</code>
+     * @param res               the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void windowEvent(String concretePortletID, WindowEvent winEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void windowEvent(String concretePortletID, WindowEvent winEvent, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         log.debug("in windowEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -271,12 +264,11 @@ public class PortletInvoker {
      * Performs message event method on a concrete portlet instance
      *
      * @param concretePortletID the concrete portlet id
-     * @param req               the <code>PortletRequest</code>
-     * @param res               the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req               the <code>HttpServletRequest</code>
+     * @param res               the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void messageEvent(String concretePortletID, PortletMessage msgEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void messageEvent(String concretePortletID, PortletMessage msgEvent, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         log.debug("in messageEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -291,18 +283,17 @@ public class PortletInvoker {
     /**
      * Initializes all application portlets
      *
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req the <code>HttpServletRequest</code>
+     * @param res the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public synchronized void initPortlet(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public synchronized void initPortlet(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         // Initialize all concrete portlets for each application portlet
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(concretePortletID);
         PortletDispatcher portletDispatcher = null;
         portletDispatcher = appPortlet.getPortletDispatcher(req, res);
         if (portletDispatcher == null) {
-            throw new PortletException("Unable to get a dispatcher for application portlet: " + appPortlet);
+            throw new PortletDispatcherException("Unable to get a dispatcher for application portlet: " + appPortlet);
         }
         List concPortlets = appPortlet.getConcretePortlets();
         Iterator concIt = concPortlets.iterator();
@@ -328,12 +319,11 @@ public class PortletInvoker {
     /**
      * Initializes all application portlets
      *
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req the <code>HttpServletRequest</code>
+     * @param res the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public synchronized void initAllPortlets(PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public synchronized void initAllPortlets(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         // Initialize all concrete portlets for each application portlet
         Collection appPortlets = registry.getAllApplicationPortlets();
         PortletDispatcher portletDispatcher = null;
@@ -348,7 +338,7 @@ public class PortletInvoker {
             ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
             portletDispatcher = appPortlet.getPortletDispatcher(req, res);
             if (portletDispatcher == null) {
-                throw new PortletException("Unable to get a dispatcher for application portlet: " + appPortlet);
+                throw new PortletDispatcherException("Unable to get a dispatcher for application portlet: " + appPortlet);
             }
             List concPortlets = appPortlet.getConcretePortlets();
             Iterator concIt = concPortlets.iterator();
@@ -375,12 +365,11 @@ public class PortletInvoker {
      * Initializes all application portlets in a portlet web application
      *
      * @param webApplicationName the name of the portlet web application
-     * @param req                the <code>PortletRequest</code>
-     * @param res                the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req                the <code>HttpServletRequest</code>
+     * @param res                the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void initPortletWebApp(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void initPortletWebApp(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         // Initialize all concrete portlets for each application portlet
         Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
         PortletDispatcher portletDispatcher = null;
@@ -411,12 +400,11 @@ public class PortletInvoker {
     /**
      * Shuts down all application portlets
      *
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req the <code>HttpServletRequest</code>
+     * @param res the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void destroyAllPortlets(PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void destroyAllPortlets(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         // First destroy all concrete portlets for each application portlet
         Collection appPortlets = registry.getAllApplicationPortlets();
         PortletDispatcher portletDispatcher = null;
@@ -448,12 +436,11 @@ public class PortletInvoker {
      * Shuts down all application portlets in a portlet web application
      *
      * @param webApplicationName the name of the portlet web application
-     * @param req                the <code>PortletRequest</code>
-     * @param res                the <code>PortletResponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req                the <code>HttpServletRequest</code>
+     * @param res                the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void destroyPortletWebApp(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public void destroyPortletWebApp(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         // First destroy all concrete portlets for each application portlet
         log.debug("in destroyPortletWebApp " + webApplicationName);
         List appPortlets = registry.getApplicationPortlets(webApplicationName);

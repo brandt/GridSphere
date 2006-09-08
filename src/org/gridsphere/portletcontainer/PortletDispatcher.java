@@ -30,11 +30,9 @@ public interface PortletDispatcher {
      *
      * @param req the servlet request
      * @param res the servlet response
-     * @throws java.io.IOException if an I/O errors occurs
-     * @throws org.gridsphere.portlet.PortletException
-     *                             if an exception has occurrred during dispatching
+     * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void init(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException;
+    public void init(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Called by the portlet container to indicate to this portlet that it is taken out of service.
@@ -45,10 +43,11 @@ public interface PortletDispatcher {
      * This method gives the portlet an opportunity to clean up any resources that are
      * being held (for example, memory, file handles, threads).
      *
-     * @param req the portlet request
-     * @param res the portlet response
+     * @param req the servlet request
+     * @param res the servlet response
+     * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void destroy(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException;
+    public void destroy(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Called by the portlet container to indicate that the concrete portlet is put into service.
@@ -62,8 +61,11 @@ public interface PortletDispatcher {
      * 2. does not return within a time period defined by the portlet container.
      *
      * @param settings the portlet settings
+     * @param req the servlet request
+     * @param res the servlet response
+     * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void initConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException;
+    public void initConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Called by the portlet container to indicate that the concrete portlet is taken out of service.
@@ -75,8 +77,11 @@ public interface PortletDispatcher {
      * held (for example, memory, file handles, threads).
      *
      * @param settings the portlet settings
+     * @param req the servlet request
+     * @param res the servlet response
+     * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void destroyConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException;
+    public void destroyConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Called by the portlet container to ask this portlet to generate its markup using the given
@@ -84,35 +89,29 @@ public interface PortletDispatcher {
      * the markup will be different. Also, the portlet can take language preferences and/or
      * personalized settings into account.
      *
-     * @param req the portlet request
-     * @param res the portlet response
-     * @throws org.gridsphere.portlet.PortletException
-     *                             if the portlet has trouble fulfilling the rendering request
-     * @throws java.io.IOException if the streaming causes an I/O problem
+     * @param req the servlet request
+     * @param res the servlet response
+     * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException;
+    public void service(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Performs a portlet login dispatch request.
      *
-     * @param req the portlet request
-     * @param res the portlet response
-     * @throws java.io.IOException if an I/O error occurs
-     * @throws org.gridsphere.portlet.PortletException
-     *                             is an error occurs dispatching the request
+     * @param req the servlet request
+     * @param res the servlet response
+     * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void login(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException;
+    public void login(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Performs a portlet logout dispatch request.
      *
-     * @param req the portlet request
-     * @param res the portlet response
-     * @throws java.io.IOException if an I/O error occurs
-     * @throws org.gridsphere.portlet.PortletException
-     *                             is an error occurs dispatching the request
+     * @param req the servlet request
+     * @param res the servlet response
+     * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void logout(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException;
+    public void logout(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Called by the portlet container to ask this portlet to perform the required operational logic
@@ -122,11 +121,9 @@ public interface PortletDispatcher {
      * @param action the default portlet action
      * @param req    the servlet request
      * @param res    the servlet response
-     * @throws java.io.IOException if an I/O error occurs
-     * @throws org.gridsphere.portlet.PortletException
-     *                             if the listener has trouble fulfilling the request
+     * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void actionPerformed(PortletAction action, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException;
+    public void actionPerformed(PortletAction action, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Notifies this listener that the message which the listener is watching for has been performed.
@@ -135,11 +132,9 @@ public interface PortletDispatcher {
      * @param message    the default portlet message
      * @param req        the servlet request
      * @param res        the servlet response
-     * @throws java.io.IOException if an I/O error occurs during dispatching
-     * @throws org.gridsphere.portlet.PortletException
-     *                             if the listener has trouble fulfilling the request
+     * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void messageEvent(String concreteID, PortletMessage message, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException;
+    public void messageEvent(String concreteID, PortletMessage message, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Called by the portlet container to render the portlet title.
@@ -153,11 +148,9 @@ public interface PortletDispatcher {
      *
      * @param req the servlet request
      * @param res the servlet response
-     * @throws java.io.IOException if an I/O error occurs during dispatching
-     * @throws org.gridsphere.portlet.PortletException
-     *                             if the portlet title has trouble fulfilling the rendering request
+     * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void doTitle(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException;
+    public void doTitle(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Notifies this listener that a portlet window has been maximized.
@@ -165,8 +158,8 @@ public interface PortletDispatcher {
      * @param event the window event
      * @param req   the servlet request
      * @param res   the servlet response
-     * @throws java.io.IOException if an
+     * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void windowEvent(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException;
+    public void windowEvent(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
 }

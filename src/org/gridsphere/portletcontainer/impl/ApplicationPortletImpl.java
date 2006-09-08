@@ -17,6 +17,8 @@ import org.gridsphere.portletcontainer.impl.descriptor.SportletDefinition;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -120,7 +122,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      *
      * @return PortletDispatcher the proxy portlet for this ApplicationPortlet
      */
-    public PortletDispatcher getPortletDispatcher(PortletRequest req, PortletResponse res) {
+    public PortletDispatcher getPortletDispatcher(HttpServletRequest req, HttpServletResponse res) {
         return portletDispatcher;
     }
 
