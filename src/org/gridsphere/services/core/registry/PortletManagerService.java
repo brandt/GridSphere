@@ -5,12 +5,12 @@
 package org.gridsphere.services.core.registry;
 
 import org.gridsphere.portlet.PortletException;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletResponse;
 import org.gridsphere.portlet.service.PortletService;
 import org.gridsphere.portletcontainer.PortletWebApplication;
+import org.gridsphere.portletcontainer.PortletDispatcherException;
 
-import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -22,34 +22,33 @@ public interface PortletManagerService extends PortletService {
     /**
      * Initializes all known portlet web applications in order
      *
-     * @param req                the portlet request
-     * @param res                the portlet response
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet exception occurs
+     * @param req                the <code>HttpServletRequest</code>
+     * @param res                the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException      if a dispatching error occurs
+     * @throws PortletException if an exception occurs initializing the portlet web application
      */
-    public void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException;
+    public void initAllPortletWebApplications(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException;
 
     /**
      * Initializes a portlet web application
      *
      * @param webApplicationName the name of the portlet web application
-     * @param req                the <code>PortletRequest</code>
-     * @param res                the <code>Portletresponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req                the <code>HttpServletRequest</code>
+     * @param res                the <code>HttpServletresponse</code>
+     * @throws PortletDispatcherException      if a dispatching error occurs
+     * @throws PortletException if an exception occurs initializing the portlet web application
      */
-    public void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException;
+    public void initPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException;
 
     /**
      * Shuts down a currently active portlet web application from the portlet container
      *
      * @param webApplicationName the name of the portlet web application
-     * @param req                the <code>PortletRequest</code>
-     * @param res                the <code>Portletresponse</code>
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
+     * @param req                the <code>HttpServletRequest</code>
+     * @param res                the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException      if a dispatching error occurs
      */
-    public void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException;
+    public void destroyPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Lists all the portlet web applications known to the portlet container

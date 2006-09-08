@@ -6,14 +6,11 @@ package org.gridsphere.services.core.registry.impl;
 
 import org.gridsphere.portlet.PortletException;
 import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletResponse;
 import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.*;
 import org.gridsphere.portletcontainer.impl.PortletWebApplicationImpl;
@@ -23,6 +20,8 @@ import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.services.core.registry.impl.tomcat.TomcatManagerWrapper;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -247,12 +246,12 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     /**
      * Initializes all known portlet web applications in order
      *
-     * @param req                the portlet request
-     * @param res                the portlet response
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet exception occurs
+     * @param req                the <code>HttpServletRequest</code>
+     * @param res                the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException      if a dispatching error occurs
+     * @throws PortletException if an exception occurs initializing the portlet web application
      */
-    public synchronized void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public synchronized void initAllPortletWebApplications(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException {
         for (int i = 0; i < webappFiles.length; i++) {
             if (webappFiles[i].startsWith("README")) continue;
             initPortletWebApplication(webappFiles[i], req, res);
@@ -260,15 +259,15 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     }
 
     /**
-     * Initializes the portlet application
+     * Initializes a portlet web application
      *
-     * @param webApplicationName the name of the portlet application
-     * @param req                the portlet request
-     * @param res                the portlet response
-     * @throws IOException      if an I/O error occurs
-     * @throws PortletException if a portlet exception occurs
+     * @param webApplicationName the name of the portlet web application
+     * @param req                the <code>HttpServletRequest</code>
+     * @param res                the <code>HttpServletresponse</code>
+     * @throws PortletDispatcherException      if a dispatching error occurs
+     * @throws PortletException if an exception occurs initializing the portlet web application
      */
-    public synchronized void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public synchronized void initPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException {
         log.debug("initing web app " + webApplicationName);
         PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webApplicationName, context);
         addPortletWebApplication(portletWebApp);
@@ -276,24 +275,23 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     }
 
     /**
-     * Destroys the portlet web application and removes from registry
+     * Shuts down a currently active portlet web application from the portlet container
      *
-     * @param webApplicationName the portlet application name
-     * @param req                the portlet request
-     * @param res                the portlet response
-     * @throws IOException
-     * @throws PortletException
+     * @param webApplicationName the name of the portlet web application
+     * @param req                the <code>HttpServletRequest</code>
+     * @param res                the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException      if a dispatching error occurs
      */
-    public synchronized void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public synchronized void destroyPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException  {
         log.debug("in destroyPortletWebApplication: " + webApplicationName);
         portletInvoker.destroyPortletWebApp(webApplicationName, req, res);
         removePortletWebApplication(webApplicationName);
     }
 
     /**
-     * Returns the deployed web application names
+     * Lists all the portlet web applications known to the portlet container
      *
-     * @return the known web application names
+     * @return the list of web application names as <code>String</code> elements
      */
     public List getPortletWebApplicationNames() {
         List l = new Vector();

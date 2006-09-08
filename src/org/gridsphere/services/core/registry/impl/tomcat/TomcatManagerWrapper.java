@@ -4,21 +4,16 @@
  */
 package org.gridsphere.services.core.registry.impl.tomcat;
 
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.services.core.registry.impl.PortletManagerServiceImpl;
-import org.gridsphere.services.core.registry.PortletManagerService;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.gridsphere.portlet.impl.SportletLog;
+import org.gridsphere.portlet.PortletLog;
 
+import javax.portlet.PortletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class TomcatManagerWrapper {
