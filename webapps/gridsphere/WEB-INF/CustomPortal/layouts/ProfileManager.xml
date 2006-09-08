@@ -25,7 +25,7 @@
                         <row-layout>
                             <column-layout width="100%">
                                 <portlet-frame label="profilemanager">
-                                    <portlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
+                                    <portlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                         </row-layout>

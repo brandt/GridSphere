@@ -25,9 +25,8 @@ $Id$
                 <table-layout>
                     <row-layout>
                         <column-layout width="70%">
-                            <portlet-content include="/WEB-INF/CustomPortal/content/main.html"/>
                             <portlet-frame transparent="true" outer-padding="0" label="rss">
-                                <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet.1</portlet-class>
+                                <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>

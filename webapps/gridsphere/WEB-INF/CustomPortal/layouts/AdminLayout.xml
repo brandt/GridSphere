@@ -43,7 +43,7 @@
                             <column-layout width="100%">
                                 <portlet-frame label="portletmanager">
                                     <portlet-class>
-                                        org.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
+                                        org.gridsphere.portlets.core.admin.portlets.PortletApplicationManager</portlet-class>
                                 </portlet-frame>
                                 <portlet-frame label="sessionmanager">
                                     <portlet-class>
