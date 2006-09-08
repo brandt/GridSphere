@@ -1,17 +1,17 @@
-<%@ page import="org.gridsphere.portlet.PortletRequest,
-                 org.gridsphere.services.core.security.role.PortletRole,
-                 java.util.Locale" %>
+<%@ page import="java.util.Locale"%>
+<%@ page import="org.gridsphere.services.core.security.role.PortletRole"%>
+<%@ page import="javax.portlet.RenderRequest"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
-<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+<%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
-<portletAPI:init/>
+<portlet:defineObjects/>
 
 <jsp:useBean id="logintime" class="java.lang.String" scope="request"/>
 <jsp:useBean id="username" class="java.lang.String" scope="request"/>
 
 <% Locale locale = (Locale) request.getAttribute("locale"); %>
-<% PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest"); %>
-<% String flag = request.getContextPath() + "/images/flags/" + locale.getLanguage() + ".gif"; %>
+<% RenderRequest req = (RenderRequest) pageContext.findAttribute("renderRequest"); %>
+<% String flag = req.getContextPath() + "/images/flags/" + locale.getLanguage() + ".gif"; %>
 
 <ui:messagebox beanId="msg"/>
 
@@ -32,7 +32,7 @@
                         <ui:tablerow>
                             <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
                             <ui:tablecell>
-                                <% if (req.getRoles().contains(PortletRole.ADMIN.getName())) { %>
+                                <% if (req.isUserInRole(PortletRole.ADMIN.getName())) { %>
                                 <ui:textfield beanId="userNameTF">
                                     <ui:validator type="checkNotEmpty" key="USER_NAME_BLANK"/>
                                 </ui:textfield>
