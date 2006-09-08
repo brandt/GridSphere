@@ -266,18 +266,25 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @throws org.gridsphere.portlet.PortletException
      */
     public void downloadFile(HttpServletRequest req, HttpServletResponse res) throws PortletException, IOException {
+
+        String fileName = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
+        if (fileName == null) return;
+        String path = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
+        Boolean deleteFile = (Boolean)req.getAttribute(SportletProperties.FILE_DELETE);
+        File file = (File) req.getAttribute(SportletProperties.FILE_DOWNLOAD_BINARY);
+
+        req.removeAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
+        req.removeAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
+        req.removeAttribute(SportletProperties.FILE_DELETE);
+        req.removeAttribute(SportletProperties.FILE_DOWNLOAD_BINARY);
+
         try {
-            String fileName = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
-            String path = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
-            Boolean deleteFile = (Boolean)req.getAttribute(SportletProperties.FILE_DELETE);
-            if (deleteFile == null) deleteFile = Boolean.FALSE;
-            if (fileName == null) return;
-            log.debug("in downloadFile");
-            log.debug("filename: " + fileName + " filepath= " + path);
-            File file = (File) req.getAttribute(SportletProperties.FILE_DOWNLOAD_BINARY);
             if (file == null) {
                 file = new File(path + fileName);
             }
+            if (deleteFile == null) deleteFile = Boolean.FALSE;
+            log.debug("in downloadFile");
+            log.debug("filename: " + fileName + " filepath= " + path);
             FileDataSource fds = new FileDataSource(file);
             log.debug("filename: " + fileName + " filepath= " + path + " content type=" + fds.getContentType());
             res.setContentType(fds.getContentType());
@@ -295,11 +302,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             throw new PortletException("A security error occurred!", e);
         } catch (SocketException e) {
             throw new PortletException("A socket error occurred!", e);
-        } finally {
-            req.removeAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
-            req.removeAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
-            req.removeAttribute(SportletProperties.FILE_DELETE);
-            req.removeAttribute(SportletProperties.FILE_DOWNLOAD_BINARY);
         }
     }
 
