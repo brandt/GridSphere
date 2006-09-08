@@ -250,6 +250,10 @@ public class PortletServlet extends HttpServlet
         } else {
             portletName = (String)portletclasses.get(pid);
         }
+        if (portletName == null) {
+            log.debug("Check the layout descriptors to make sure the portlet identified as " + pid + " matches with the class and/or portlet name of the portlet.xml");
+            return;
+        }
         portlet = (Portlet) portlets.get(portletName);
         request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(portletName));
 
@@ -533,6 +537,11 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
                 log.debug("redirecting to location= " + location);
                 redirectResponse.sendRedirect(location);
             }
+
+            // TODO
+            // redirect as a GET render url back to the portal
+
+            
         }
     }
 
