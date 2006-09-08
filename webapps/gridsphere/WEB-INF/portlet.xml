@@ -188,7 +188,7 @@
         <description xml:lang="zh">使门户网站管理者能够管理用户帐号</description>
         <portlet-name>UserAccountManager</portlet-name>
         <display-name xml:lang="en">User Account Manager</display-name>
-        <portlet-class>org.gridsphere.portlets.admin.users.UserManagerPortlet</portlet-class>
+        <portlet-class>org.gridsphere.portlets.core.admin.users.UserManagerPortlet</portlet-class>
         <expiration-cache>0</expiration-cache>
         <!-- place supported modes here -->
         <supports>
@@ -223,7 +223,7 @@
         <display-name xml:lang="en">Role Manager</display-name>
 
         <!-- place your portlet class name here -->
-        <portlet-class>org.gridsphere.portlets.admin.roles.RoleManagerPortlet</portlet-class>
+        <portlet-class>org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet</portlet-class>
         <expiration-cache>0</expiration-cache>
         <!-- place supported modes here -->
         <supports>
@@ -236,6 +236,94 @@
         <supported-locale>ja</supported-locale>
         <resource-bundle>RoleManager.Portlet</resource-bundle>
     </portlet>
+
+    <portlet>
+        <!-- place portlet description here -->
+        <description xml:lang="ar">تعديل ملف المستخدمين</description>
+        <description xml:lang="cs">Nastavuje profily uživatelů</description>
+        <description xml:lang="de">Anpassung der Benutzerprofile</description>
+        <description xml:lang="en">Customizes users profile</description>
+        <description xml:lang="es">Personalizacion de Perfiles de Usuarios</description>
+        <description xml:lang="fr">Permet de gérer les profiles</description>
+        <description xml:lang="hr">Portlet omogućava administriranje profila</description>
+        <description xml:lang="hu">Lehetővé teszi a felhasználók számára, saját beállításaik szerkesztését</description>
+        <description xml:lang="it">Personalizza il profilo utente</description>
+        <description xml:lang="ja">ユーザープロファイルをカスタマイズ</description>
+        <description xml:lang="nl">Beheer gebruikersprofielen</description>
+        <description xml:lang="pl">Dostosowywanie profili użytkownika</description>
+        <description xml:lang="zh">定制用户成形</description>
+
+        <!-- place unique portlet name here -->
+        <portlet-name>ProfileManager</portlet-name>
+        <display-name xml:lang="en">Profile Manager</display-name>
+
+        <!-- place your portlet class name here -->
+        <portlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <!-- place supported modes here -->
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>help</portlet-mode>
+        </supports>
+        <supported-locale>ar</supported-locale>
+        <supported-locale>cs</supported-locale>
+        <supported-locale>de</supported-locale>
+        <supported-locale>en</supported-locale>
+        <supported-locale>es</supported-locale>
+        <supported-locale>fr</supported-locale>
+        <supported-locale>hr</supported-locale>
+        <supported-locale>hu</supported-locale>
+        <supported-locale>it</supported-locale>
+        <supported-locale>ja</supported-locale>
+        <supported-locale>nl</supported-locale>
+        <supported-locale>pl</supported-locale>
+        <supported-locale>zh</supported-locale>
+        <resource-bundle>ProfileManager.Portlet</resource-bundle>
+    </portlet>
+    <portlet>
+        <!-- place portlet description here -->
+        <description xml:lang="ar">يمكن مدير النظام لإدارة البرامج</description>
+        <description xml:lang="cs">Umožňuje správcům portálu spravovat portlety</description>
+        <description xml:lang="de">Ermöglicht Portal-Administratoren Portlets zu verwalten</description>
+        <description xml:lang="en">Enables portal administrators to manage portlets</description>
+        <description xml:lang="es">Les permite a administradores del portal que administren el portlets</description>
+        <description xml:lang="fr">Permet à l'administrateur du portail d'aministrer les applications</description>
+        <description xml:lang="hr">Portlet omogućava administriranje portleta</description>
+        <description xml:lang="hu">Lehetővé teszi a portal adminisztrátorok számára, portletek kezelését</description>
+        <description xml:lang="it">Consente agli amministratori del portale di gestire le portlet</description>
+        <description xml:lang="ja">ポータル管理者にportletの管理機能を提供する</description>
+        <description xml:lang="nl">Portal administratoren kunnen portlets beheren</description>
+        <description xml:lang="pl">Umożliwia administratorowi portalu administrowanie portletami</description>
+        <description xml:lang="zh">使门户网站管理者管理门件</description>
+
+        <!-- place unique portlet name here -->
+        <portlet-name>Portlet Application Manager</portlet-name>
+        <display-name xml:lang="en">Portlet Application Manager</display-name>
+
+        <!-- place your portlet class name here -->
+        <portlet-class>org.gridsphere.portlets.core.admin.portlets.PortletApplicationManager</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <!-- place supported modes here -->
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>help</portlet-mode>
+        </supports>
+        <supported-locale>ar</supported-locale>
+        <supported-locale>cs</supported-locale>
+        <supported-locale>de</supported-locale>
+        <supported-locale>en</supported-locale>
+        <supported-locale>es</supported-locale>
+        <supported-locale>fr</supported-locale>
+        <supported-locale>hr</supported-locale>
+        <supported-locale>hu</supported-locale>
+        <supported-locale>it</supported-locale>
+        <supported-locale>ja</supported-locale>
+        <supported-locale>nl</supported-locale>
+        <supported-locale>pl</supported-locale>
+        <supported-locale>zh</supported-locale>
+        <resource-bundle>PortletApplicationManager.Portlet</resource-bundle>
+    </portlet>
+
 
     <custom-portlet-mode>
         <description xml:lang="en">Pre-defined custom portlet mode CONFIGURE</description>

@@ -51,16 +51,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>PortletApplicationManager</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.admin.portlets.PortletApplicationManager</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>ProfileManagerPortlet</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>SessionManagerPortlet</servlet-name>
         <servlet-class>org.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet</servlet-class>
     </servlet>
@@ -109,18 +99,8 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>PortletApplicationManager</servlet-name>
-        <url-pattern>/admin/portlets</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
         <servlet-name>TrackerStatisticsPortlet</servlet-name>
         <url-pattern>/admin/tracker</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>ProfileManagerPortlet</servlet-name>
-        <url-pattern>/users/profile</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
