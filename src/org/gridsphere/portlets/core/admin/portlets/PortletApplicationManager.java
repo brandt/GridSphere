@@ -4,21 +4,23 @@
  */
 package org.gridsphere.portlets.core.admin.portlets;
 
-import org.gridsphere.portlet.*;
-import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.services.core.registry.impl.tomcat.TomcatManagerException;
 import org.gridsphere.services.core.registry.impl.tomcat.TomcatManagerWrapper;
 import org.gridsphere.services.core.registry.impl.tomcat.TomcatWebAppResult;
 import org.gridsphere.services.core.registry.impl.tomcat.TomcatWebAppDescription;
-import org.gridsphere.provider.event.FormEvent;
-import org.gridsphere.provider.portlet.ActionPortlet;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.registry.PortletManagerService;
-import org.gridsphere.services.core.security.group.GroupManagerService;
-import org.gridsphere.portlets.core.BaseGridSpherePortlet;
+import org.gridsphere.portlet.DefaultPortletAction;
 
-import javax.servlet.UnavailableException;
-import java.io.IOException;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,60 +32,53 @@ import java.util.Iterator;
  * ui application management and hence dynamic portlet management. This class needs to be adapted for
  * other servlet containers.
  */
-public class PortletApplicationManager extends BaseGridSpherePortlet {
+public class PortletApplicationManager extends ActionPortlet {
 
     public static final String VIEW_JSP = "admin/portlets/view.jsp";
     public static final String HELP_JSP = "admin/portlets/help.jsp";
 
     private TomcatManagerWrapper tomcat = TomcatManagerWrapper.getInstance();
     private PortletManagerService portletManager = null;
-    private GroupManagerService groupManagerService = null;
 
-    public void init(PortletConfig config) throws UnavailableException {
+    public void init(PortletConfig config) throws PortletException {
         super.init(config);
-        try {
-            portletManager = (PortletManagerService) getConfig().getContext().getService(PortletManagerService.class);
-            groupManagerService = (GroupManagerService) getConfig().getContext().getService(GroupManagerService.class);
-        } catch (PortletServiceException e) {
-            log.error("Unable to get portlet manager instance", e);
-        }
+        portletManager = (PortletManagerService) createPortletService(PortletManagerService.class);
         DEFAULT_VIEW_PAGE = "listPortlets";
         DEFAULT_HELP_PAGE = HELP_JSP;
     }
 
-    public void initConcrete(PortletSettings settings) throws UnavailableException {
-        super.initConcrete(settings);
-    }
-
-    public void listPortlets(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
+    public void listPortlets(RenderFormEvent event) throws PortletException {
+        PortletRequest req = event.getRenderRequest();
         List portletapps = new ArrayList();
         List otherapps = new ArrayList();
 
         try {
             portletapps = getPortletAppList(req);
             otherapps = getNonPortletAppList(req);
-            event.getPortletRequest().setAttribute("result", portletapps);
-            event.getPortletRequest().setAttribute("others", otherapps);
+            event.getRenderRequest().setAttribute("result", portletapps);
+            event.getRenderRequest().setAttribute("others", otherapps);
             log.info("result is OK");
         } catch (TomcatManagerException e) {
             log.error("Unable to retrieve list of portlets. Make sure tomcat-users.xml has been edited according to the UserGuide.");
-            event.getPortletRequest().setAttribute("result", portletapps);
-            event.getPortletRequest().setAttribute("others", otherapps);
+            event.getRenderRequest().setAttribute("result", portletapps);
+            event.getRenderRequest().setAttribute("others", otherapps);
             MessageBoxBean msg = event.getMessageBoxBean("msg");
             msg.setKey("PORTLET_ERR_LIST");
             msg.setMessageType(MessageStyle.MSG_ERROR);
         }
 
         //if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
-        setNextState(event.getPortletRequest(), VIEW_JSP);
+        setNextState(req, VIEW_JSP);
     }
 
-    public void doPortletManager(FormEvent event) throws PortletException {
+    public void doPortletManager(ActionFormEvent event) throws PortletException {
         log.debug("In doPortletManager");
         DefaultPortletAction action = event.getAction();
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getActionRequest();
+        PortletResponse res = event.getActionResponse();
+
+        HttpServletRequest hReq = (HttpServletRequest)req;
+        HttpServletResponse hRes = (HttpServletResponse)res;
 
         MessageBoxBean msg = event.getMessageBoxBean("msg");
 
@@ -98,19 +93,19 @@ public class PortletApplicationManager extends BaseGridSpherePortlet {
                 if (operation.equals("start")) {
                     result = tomcat.startWebApp(req, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
-                    portletManager.initPortletWebApplication(appName, req, res);
+                    portletManager.initPortletWebApplication(appName, hReq, hRes);
                 } else if (operation.equals("stop")) {
-                    portletManager.destroyPortletWebApplication(appName, req, res);
+                    portletManager.destroyPortletWebApplication(appName, hReq, hRes);
                     result = tomcat.stopWebApp(req, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                 } else if (operation.equals("reload")) {
-                    portletManager.destroyPortletWebApplication(appName, req, res);
+                    portletManager.destroyPortletWebApplication(appName, hReq, hRes);
                     result = tomcat.stopWebApp(req, appName);
                     result = tomcat.startWebApp(req, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
-                    portletManager.initPortletWebApplication(appName, req, res);
+                    portletManager.initPortletWebApplication(appName, hReq, hRes);
                 } else if (operation.equals("remove")) {
-                    portletManager.destroyPortletWebApplication(appName, req, res);
+                    portletManager.destroyPortletWebApplication(appName, hReq, hRes);
                     result = tomcat.removeWebApp(req, appName);
                     log.debug("removing application tab :" + appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
@@ -118,21 +113,17 @@ public class PortletApplicationManager extends BaseGridSpherePortlet {
                     result = tomcat.deployWebApp(req, appName);
                     result = tomcat.startWebApp(req, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
-                    portletManager.initPortletWebApplication(appName, req, res);
+                    portletManager.initPortletWebApplication(appName, hReq, hRes);
                 } else if (operation.equals("undeploy")) {
                     result = tomcat.undeployWebApp(req, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
-                    portletManager.destroyPortletWebApplication(appName, req, res);
+                    portletManager.destroyPortletWebApplication(appName, hReq, hRes);
                 }
 
             }
-        } catch (IOException e) {
-            log.error("Caught IOException!", e);
-            msg.setKey("PORTLET_ERR_IO");
-            msg.setMessageType(MessageStyle.MSG_ERROR);
-        } catch (TomcatManagerException e) {
-            log.error("Caught TomcatmanagerException!", e);
-            msg.setKey("PORTLET_ERR_TOMCAT");
+        } catch (Exception e) {
+            log.error("Portlet Manager error", e);
+            msg.setKey("PORTLET_ERR_MANAGER");
             msg.setMessageType(MessageStyle.MSG_ERROR);
         }
         req.setAttribute("result", result);
@@ -140,11 +131,13 @@ public class PortletApplicationManager extends BaseGridSpherePortlet {
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
-    public void uploadPortletWAR(FormEvent event) throws PortletException {
+    public void uploadPortletWAR(ActionFormEvent event) throws PortletException {
 
         log.debug("in FileManagerPortlet: doUploadFile");
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getActionRequest();
+        PortletResponse res = event.getActionResponse();
+        HttpServletRequest hReq = (HttpServletRequest)req;
+        HttpServletResponse hRes = (HttpServletResponse)res;
 
         try {
             FileInputBean fi = event.getFileInputBean("userfile");
@@ -156,7 +149,7 @@ public class PortletApplicationManager extends BaseGridSpherePortlet {
 
             log.info("filename = " + fileName);
 
-            String webappPath = this.getPortletConfig().getContext().getRealPath("");
+            String webappPath = getPortletContext().getRealPath("");
             int idx = webappPath.lastIndexOf("webapps");
 
 
@@ -177,10 +170,10 @@ public class PortletApplicationManager extends BaseGridSpherePortlet {
                 System.err.println(webappPath + appName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
                 if (pfile.exists()) {
                     //System.err.println("file exists");
-                    portletManager.initPortletWebApplication(appName, req, res);
+                    portletManager.initPortletWebApplication(appName, hReq, hRes);
                 }
                  // add portlet app to gridsphere portlet app directory
-                String portletAppFile = this.getPortletConfig().getContext().getRealPath("/WEB-INF/CustomPortal/portlets/" + appName);
+                String portletAppFile = getPortletContext().getRealPath("/WEB-INF/CustomPortal/portlets/" + appName);
                 File portletFile = new File(portletAppFile);
                 portletFile.createNewFile();
                 System.err.println(portletAppFile);
@@ -194,18 +187,20 @@ public class PortletApplicationManager extends BaseGridSpherePortlet {
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
-    public void deployWebapp(FormEvent event) throws PortletException {
+    public void deployWebapp(ActionFormEvent event) throws PortletException {
 
         log.debug("in PortletApplicationManager: deployWebapp");
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getActionRequest();
+        PortletResponse res = event.getActionResponse();
+        HttpServletRequest hReq = (HttpServletRequest)req;
+        HttpServletResponse hRes = (HttpServletResponse)res;
 
         try {
             TextFieldBean tf = event.getTextFieldBean("webappNameTF");
 
             String webappName = tf.getValue();
             if (webappName == null) return;
-            String webappPath = this.getConfig().getContext().getRealPath("");
+            String webappPath = getPortletContext().getRealPath("");
             int idx = webappPath.lastIndexOf(File.separator);
             webappPath = webappPath.substring(0, idx+1);
             tomcat.installWebApp(req, webappName);
@@ -213,7 +208,7 @@ public class PortletApplicationManager extends BaseGridSpherePortlet {
             File pfile = new File(webappPath + webappName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
             System.err.println(webappPath + webappName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
             if (pfile.exists()) {
-                portletManager.initPortletWebApplication(webappName, req, res);
+                portletManager.initPortletWebApplication(webappName, hReq, hRes);
             }
 
             createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_DEPLOY") + " " + webappName);

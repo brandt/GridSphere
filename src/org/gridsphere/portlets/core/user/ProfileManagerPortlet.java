@@ -4,11 +4,11 @@
  */
 package org.gridsphere.portlets.core.user;
 
-import org.gridsphere.portlet.*;
 import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.portlet.service.PortletServiceException;
-import org.gridsphere.provider.event.FormEvent;
-import org.gridsphere.provider.portlet.ActionPortlet;
+import org.gridsphere.portlet.User;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridsphere.services.core.cache.CacheService;
@@ -23,18 +23,17 @@ import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.services.core.utils.DateUtil;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.portlets.core.login.LoginPortlet;
-import org.gridsphere.portlets.core.BaseGridSpherePortlet;
 import org.gridsphere.tmf.services.TextMessageService;
 import org.gridsphere.tmf.services.TextMessageServiceConfig;
-import org.gridsphere.layout.PortletPageFactory;
 
-import javax.servlet.UnavailableException;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
 import java.text.DateFormat;
 import java.util.*;
 import java.io.File;
-import java.io.IOException;
 
-public class ProfileManagerPortlet extends BaseGridSpherePortlet {
+public class ProfileManagerPortlet extends ActionPortlet {
 
     // JSP pages used by this portlet
     public static final String VIEW_USER_JSP = "profile/viewuser.jsp";
@@ -50,30 +49,22 @@ public class ProfileManagerPortlet extends BaseGridSpherePortlet {
     private TextMessagingService tms = null;
     private PortalConfigService portalConfigService = null;
 
-    public void init(PortletConfig config) throws UnavailableException {
+    public void init(PortletConfig config) throws PortletException {
         super.init(config);
-        try {
-            this.userManagerService = (UserManagerService) config.getContext().getService(UserManagerService.class);
-            this.roleManagerService = (RoleManagerService) config.getContext().getService(RoleManagerService.class);
-            this.passwordManagerService = (PasswordManagerService) config.getContext().getService(PasswordManagerService.class);
-            this.localeService = (LocaleService) config.getContext().getService(LocaleService.class);
-            this.tms = (TextMessagingService) config.getContext().getService(TextMessagingService.class);
-            this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
-        } catch (PortletServiceException e) {
-            log.error("Unable to initialize services!", e);
-        }
-
-    }
-
-    public void initConcrete(PortletSettings settings) throws UnavailableException {
-        super.initConcrete(settings);
+        this.userManagerService = (UserManagerService) createPortletService(UserManagerService.class);
+        this.roleManagerService = (RoleManagerService) createPortletService(RoleManagerService.class);
+        this.passwordManagerService = (PasswordManagerService) createPortletService(PasswordManagerService.class);
+        this.localeService = (LocaleService) createPortletService(LocaleService.class);
+        this.tms = (TextMessagingService) createPortletService(TextMessagingService.class);
+        this.portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
         DEFAULT_VIEW_PAGE = "doViewUser";
         DEFAULT_HELP_PAGE = HELP_JSP;
         DEFAULT_CONFIGURE_PAGE = "doConfigureSettings";
     }
 
-    public void doViewUser(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
+
+    public void doViewUser(RenderFormEvent event) {
+        PortletRequest req = event.getRenderRequest();
         setUserTable(event, false);
         DefaultTableModel messaging = getMessagingFrame(event, false);
         FrameBean messagingFrame = event.getFrameBean("messagingFrame");
@@ -92,7 +83,7 @@ public class ProfileManagerPortlet extends BaseGridSpherePortlet {
         String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
         themeLB.clear();
 
-        String themesPath = getPortletConfig().getContext().getRealPath("themes");
+        String themesPath = getPortletContext().getRealPath("themes");
         /// retrieve the current renderkit
         themesPath += File.separator + renderkit;
 
@@ -111,12 +102,14 @@ public class ProfileManagerPortlet extends BaseGridSpherePortlet {
         setNextState(req, VIEW_USER_JSP);
     }
 
-    public void saveTheme(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
+    public void saveTheme(ActionFormEvent event) {
+        PortletRequest req = event.getActionRequest();
         ListBoxBean themeLB = event.getListBoxBean("themeLB");
         String theme = themeLB.getSelectedValue();
 
-        User user = req.getUser();
+        String loginName = req.getRemoteUser();
+
+        User user = userManagerService.getUser(loginName);
         if (user != null) {
             user.setAttribute(User.THEME, theme);
             userManagerService.saveUser(user);
@@ -124,17 +117,10 @@ public class ProfileManagerPortlet extends BaseGridSpherePortlet {
         }
     }
 
-    public void doConfigureSettings(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-        String locales = getPortletSettings().getAttribute("supported-locales");
-        TextFieldBean localesTF = event.getTextFieldBean("localesTF");
-        localesTF.setValue(locales);
-        setNextState(req, CONFIGURE_JSP);
-    }
+    public void setUserTable(RenderFormEvent event, boolean disable) {
+        PortletRequest req = event.getRenderRequest();
 
-    public void setUserTable(FormEvent event, boolean disable) {
-        PortletRequest req = event.getPortletRequest();
-        User user = req.getUser();
+        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
 
         //String logintime = DateFormat.getDateTimeInstance().format(new Date(user.getLastLoginTime()));
         req.setAttribute("logintime", DateUtil.getLocalizedDate(user,
@@ -142,7 +128,7 @@ public class ProfileManagerPortlet extends BaseGridSpherePortlet {
                 user.getLastLoginTime(), DateFormat.FULL, DateFormat.FULL));
         req.setAttribute("username", user.getUserName());
 
-        if (req.getRoles().contains(PortletRole.ADMIN.getName())) {
+        if (req.isUserInRole(PortletRole.ADMIN.getName())) {
             TextFieldBean userName = event.getTextFieldBean("userNameTF");
             userName.setValue(user.getUserName());
         }   else {
@@ -216,10 +202,10 @@ public class ProfileManagerPortlet extends BaseGridSpherePortlet {
     }
 
 
-    private DefaultTableModel getMessagingFrame(FormEvent event, boolean readonly) {
+    private DefaultTableModel getMessagingFrame(RenderFormEvent event, boolean readonly) {
         DefaultTableModel model = new DefaultTableModel();
 
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getRenderRequest();
 
         Set services = tms.getServices();
 
@@ -266,9 +252,10 @@ public class ProfileManagerPortlet extends BaseGridSpherePortlet {
 
                 if (!textmessageService.getServiceConfig().getProperty(TextMessagingService.SERVICE_ID).equals("mail")) {
                     servicename_input.setValue(tms.getServiceUserID(textmessageService.getServiceConfig().getProperty(TextMessagingService.SERVICE_ID),
-                        req.getUser().getUserID()));
+                        req.getRemoteUser()));
                 } else {
-                    servicename_input.setValue(req.getUser().getEmailAddress());
+                    User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
+                    servicename_input.setValue(user.getEmailAddress());
                 }
 
                 servicename_input.setDisabled(readonly);
@@ -284,10 +271,10 @@ public class ProfileManagerPortlet extends BaseGridSpherePortlet {
 
     }
 
-    public void doSavePass(FormEvent event) {
+    public void doSavePass(ActionFormEvent event) {
 
-        PortletRequest req = event.getPortletRequest();
-        User user = req.getUser();
+        PortletRequest req = event.getActionRequest();
+        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
 
         String origPasswd = event.getPasswordBean("origPassword").getValue();
         try {
@@ -321,10 +308,10 @@ public class ProfileManagerPortlet extends BaseGridSpherePortlet {
     }
 
 
-    public void doSaveUser(FormEvent event) {
+    public void doSaveUser(ActionFormEvent event) {
 
-        PortletRequest req = event.getPortletRequest();
-        User user = req.getUser();
+        PortletRequest req = event.getActionRequest();
+        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
 
         // validate user entries to create an account request
         User acctReq = validateUser(event);
@@ -341,16 +328,17 @@ public class ProfileManagerPortlet extends BaseGridSpherePortlet {
         for (Iterator iterator = services.iterator(); iterator.hasNext();) {
             TextMessageService textmessageService = (TextMessageService) iterator.next();
             TextFieldBean tfb = event.getTextFieldBean("TFSERVICENAME" + textmessageService.getServiceConfig().getProperty(TextMessagingService.SERVICE_ID));
-            tms.setServiceUserID(textmessageService.getServiceConfig().getProperty(TextMessagingService.SERVICE_ID), req.getUser().getUserID(), tfb.getValue());
+            tms.setServiceUserID(textmessageService.getServiceConfig().getProperty(TextMessagingService.SERVICE_ID), user.getUserID(), tfb.getValue());
         }
 
     }
 
 
-    private User validateUser(FormEvent event) {
+    private User validateUser(ActionFormEvent event) {
         log.debug("Entering validateUser()");
-        PortletRequest req = event.getPortletRequest();
-        User user = req.getUser();
+        PortletRequest req = event.getActionRequest();
+        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
+
         StringBuffer message = new StringBuffer();
         boolean isInvalid = false;
 
@@ -362,7 +350,7 @@ public class ProfileManagerPortlet extends BaseGridSpherePortlet {
 
         // Validate user name
         String userName = "";
-        if (req.getRoles().contains(PortletRole.ADMIN.getName())) {
+        if (req.isUserInRole(PortletRole.ADMIN.getName())) {
             userName = event.getTextFieldBean("userNameTF").getValue();
             if (userName.equals("")) {
                 message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br />");
