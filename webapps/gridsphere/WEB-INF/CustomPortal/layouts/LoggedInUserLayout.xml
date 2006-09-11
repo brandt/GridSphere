@@ -25,7 +25,7 @@ $Id$
                 <table-layout>
                     <row-layout>
                         <column-layout width="70%">
-                            <portlet-frame transparent="true" outer-padding="0" label="rss">
+                            <portlet-frame transparent="true" outer-padding="0px" label="rss">
                                 <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</portlet-class>
                             </portlet-frame>
                         </column-layout>
@@ -45,7 +45,7 @@ $Id$
         <table-layout style="footer">
             <row-layout>
                 <column-layout width="50%">
-                    <portlet-frame transparent="true" outer-padding="0" label="date">
+                    <portlet-frame transparent="true" outer-padding="0px" label="date">
                         <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
                     </portlet-frame>
                 </column-layout>

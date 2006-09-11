@@ -94,7 +94,12 @@
     <portlet-footer>
         <table-layout style="footer">
             <row-layout>
-                <column-layout>
+                <column-layout width="50%">
+                    <portlet-frame transparent="true" outer-padding="0px" label="date">
+                        <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
+                    </portlet-frame>
+                </column-layout>
+                <column-layout width="50%">
                     <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
                 </column-layout>
             </row-layout>

@@ -19,7 +19,7 @@
                     <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
                 </column-layout>
                 <column-layout width="30%">
-                    <portlet-frame transparent="true" outer-padding="0" label="locale">
+                    <portlet-frame transparent="true" outer-padding="0px" label="locale">
                         <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet</portlet-class>
                     </portlet-frame>
                 </column-layout>
@@ -45,12 +45,23 @@
             </portlet-tabbed-pane>
         </portlet-tab>
         <portlet-tab label="login" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/login/loginnav.jsp"/>
-
+        <portlet-tab label="login" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/login/registernav.jsp"/>
     </portlet-tabbed-pane>
 
     <!-- Footer components (if any) -->
     <portlet-footer>
-        <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
+        <table-layout style="footer">
+            <row-layout>
+                <column-layout width="50%">
+                    <portlet-frame transparent="true" outer-padding="0px" label="date">
+                        <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
+                    </portlet-frame>
+                </column-layout>
+                <column-layout width="50%">
+                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
+                </column-layout>
+            </row-layout>
+        </table-layout>
     </portlet-footer>
 
 </page-layout>

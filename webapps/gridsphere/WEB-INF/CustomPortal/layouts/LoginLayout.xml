@@ -19,7 +19,7 @@
                     <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
                 </column-layout>
                 <column-layout width="30%">
-                    <portlet-frame transparent="true" outer-padding="0" label="locale">
+                    <portlet-frame transparent="true" outer-padding="0px" label="locale">
                         <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet</portlet-class>
                     </portlet-frame>
                 </column-layout>
@@ -37,7 +37,7 @@
                     <table-layout>
                         <row-layout>
                             <column-layout width="100%">
-                                <portlet-frame label="login" outer-padding="50">
+                                <portlet-frame label="login" outer-padding="5% 20% 5% 20%">
                                     <portlet-class>org.gridsphere.portlets.core.login.LoginPortlet</portlet-class>
                                 </portlet-frame>
                             </column-layout>
@@ -54,7 +54,7 @@
         <table-layout style="footer">
             <row-layout>
                 <column-layout width="50%">
-                    <portlet-frame transparent="true" outer-padding="0" label="date">
+                    <portlet-frame transparent="true" outer-padding="0px" label="date">
                         <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
                     </portlet-frame>
                 </column-layout>
