@@ -115,7 +115,7 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
      *                     if the configuration was wrong
      * @throws IOException if an I/O error occurs
      */
-    public void save(Object object) throws PersistenceManagerException, IOException {
+    public void save(Object object) throws PersistenceManagerException {
         try {
             Writer w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(descriptorPath), "UTF-8"));
             FileWriter filewriter = new FileWriter(descriptorPath);
@@ -137,15 +137,13 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
             Class cl = object.getClass();
             log.debug("Wrote object of type " + cl.getName() + " to XMLFile " + descriptorPath);
         } catch (ValidationException e) {
-            log.error("Unable to marshal object: ", e);
             throw new PersistenceManagerException("Validation Error", e);
         } catch (MarshalException e) {
-            log.error("Unable to marshal object: ", e);
             throw new PersistenceManagerException("Marshal Error: ", e);
         } catch (MappingException e) {
-            log.error("Unable to marshal object: ", e.getException());
-            e.printStackTrace();
             throw new PersistenceManagerException("Mapping Error", e);
+        } catch (IOException e) {
+            throw new PersistenceManagerException("I/O Error", e);
         }
     }
 
@@ -156,7 +154,7 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
      * @throws PersistenceManagerException if restore was not succsessful
      * @throws IOException                 if there was a configurationerror
      */
-    public Object load() throws IOException, PersistenceManagerException {
+    public Object load() throws PersistenceManagerException {
         Object object;
         try {
             log.debug("Using getConnectionURL() " + descriptorPath);

@@ -10,7 +10,6 @@ import org.gridsphere.portletcontainer.impl.JavaXMLBindingFactory;
 import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +31,7 @@ public class PortletDeploymentDescriptor {
      * @param portletFilePath location of the portlet.xml
      * @throws PersistenceManagerException if the PortletDeploymentPersistenceManager cannot be created
      */
-    public PortletDeploymentDescriptor(String portletFilePath) throws IOException, PersistenceManagerException {
+    public PortletDeploymentDescriptor(String portletFilePath) throws PersistenceManagerException {
         URL portletMappingURL = this.getClass().getResource("/org/gridsphere/portletcontainer/impl/descriptor/portlet-mapping.xml");
         PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(portletFilePath, portletMappingURL);
         sportletCollection = (SportletCollection) pmXML.load();
@@ -83,7 +82,7 @@ public class PortletDeploymentDescriptor {
         }
     }
 
-    public void save() throws IOException, PersistenceManagerException {
+    public void save() throws PersistenceManagerException {
         pmXML.save(sportletCollection);
     }
 }

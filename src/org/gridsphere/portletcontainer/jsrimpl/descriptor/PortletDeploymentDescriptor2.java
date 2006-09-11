@@ -9,7 +9,6 @@ import org.gridsphere.portletcontainer.impl.JavaXMLBindingFactory;
 import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 
-import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -28,7 +27,7 @@ public class PortletDeploymentDescriptor2 {
      * @param portletFilePath location of the portlet.xml
      * @throws PersistenceManagerException if the PortletDeploymentPersistenceManager cannot be created
      */
-    public PortletDeploymentDescriptor2(String portletFilePath) throws IOException, PersistenceManagerException {
+    public PortletDeploymentDescriptor2(String portletFilePath) throws PersistenceManagerException {
         URL portletMappingStream = this.getClass().getResource("/org/gridsphere/portletcontainer/jsrimpl/descriptor/portlet-jsr-mapping.xml");
         pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(portletFilePath, portletMappingStream);
         portletApp = (PortletApp) pmXML.load();
@@ -57,7 +56,7 @@ public class PortletDeploymentDescriptor2 {
     }
 
 
-    public void save() throws IOException, PersistenceManagerException {
+    public void save() throws PersistenceManagerException {
         pmXML.save(portletApp);
     }
 }

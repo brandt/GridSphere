@@ -9,7 +9,6 @@ import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinit
 import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.net.URL;
@@ -32,7 +31,7 @@ public class PortletServiceDescriptor {
      */
     private PortletServiceDescriptor() {}
 
-    public PortletServiceDescriptor(String descriptorFile) throws IOException, PersistenceManagerException {
+    public PortletServiceDescriptor(String descriptorFile) throws PersistenceManagerException {
         PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorFile, servicesMappingStream);
         services = (SportletServiceCollection) pmXML.load();
     }
@@ -74,10 +73,9 @@ public class PortletServiceDescriptor {
     /**
      * Saves the portlet service descriptor
      *
-     * @throws IOException                 if an I/O error occurs
      * @throws PersistenceManagerException if a Castor error occurs during the marshalling
      */
-    public void save() throws IOException, PersistenceManagerException {
+    public void save() throws PersistenceManagerException {
         pmXML.save(services);
     }
 
