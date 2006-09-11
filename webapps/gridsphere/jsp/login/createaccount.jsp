@@ -87,20 +87,22 @@
         <% } %>
 
         <ui:tablerow>
+
             <ui:tablecell width="200">
-                <img src="jcaptcha"/>
+                <ui:image src="<%= request.getContextPath() + "/jcaptcha" %>"/>
             </ui:tablecell>
         </ui:tablerow>
+
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:textfield beanId="captchaTF"/>   
+                <ui:text key="CAPTCHA_TEXT"/>
+            </ui:tablecell>
+            <ui:tablecell width="200">
+                <ui:textfield beanId="captchaTF"/>
             </ui:tablecell>
         </ui:tablerow>
 
     </ui:frame>
-
-
-
 
     <ui:frame>
         <ui:tablerow>
