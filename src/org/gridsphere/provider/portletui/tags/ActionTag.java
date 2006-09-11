@@ -280,7 +280,7 @@ public abstract class ActionTag extends BaseComponentTag {
         // action is a required attribute except for FormTag
         if ((label != null)  && (url instanceof PortletURLImpl)) {
             res.setProperty("label", label);
-            ((PortletURLImpl)url).setLabel(label);
+            ((PortletURLImpl)url).setParameter(SportletProperties.COMPONENT_LABEL, label);
         }
 
         if (windowState != null) {
@@ -308,10 +308,10 @@ public abstract class ActionTag extends BaseComponentTag {
         if (action != null) {
             if (url instanceof PortletURLImpl) {
                 if (compId == null) {
-                    ((PortletURLImpl)url).setAction(action);
+                    ((PortletURLImpl)url).setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, action);
                     portletAction = new DefaultPortletAction(action);
                 } else {
-                    ((PortletURLImpl)url).setAction(compId + "%" + action);
+                    ((PortletURLImpl)url).setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, compId + "%" + action);
                     portletAction = new DefaultPortletAction(compId + "%" + action);
                 }
             } else {

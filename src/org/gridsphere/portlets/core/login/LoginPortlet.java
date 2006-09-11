@@ -86,17 +86,17 @@ public class LoginPortlet extends ActionPortlet {
 
         if (newpasswordURL == null) {
             PortletURL url = response.createActionURL();
-            ((PortletURLImpl)url).setAction("newpassword");
+            url.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, "newpassword");
             newpasswordURL = url.toString();
         }
 
         if (activateAccountURL == null) {
             PortletURL url = response.createActionURL();
-            ((PortletURLImpl)url).setAction("approveAccount");
+            url.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, "approveAccount");
         }
         if (denyAccountURL == null) {
             PortletURL url = response.createActionURL();
-            ((PortletURLImpl)url).setAction("denyAccount");
+            url.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, "denyAccount");
         }
         PasswordBean pass = event.getPasswordBean("password");
         pass.setValue("");
@@ -208,7 +208,8 @@ public class LoginPortlet extends ActionPortlet {
         boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty("CAN_USER_CREATE_ACCOUNT")).booleanValue();
         if (!canUserCreateAccount) return;
 
-        PortletRequest req = evt.getActionRequest();
+        ActionRequest req = evt.getActionRequest();
+        ActionResponse res = evt.getActionResponse();
 
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
 

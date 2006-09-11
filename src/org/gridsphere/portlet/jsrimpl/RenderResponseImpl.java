@@ -108,7 +108,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      */
     public PortletURL createActionURL() {
         PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse) super.getResponse(), portalContext, false);
-        portletURL.setAction("");
+        portletURL.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, "");
         return portletURL;
     }
 

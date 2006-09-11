@@ -86,7 +86,11 @@ public class ConfigPortlet extends ActionPortlet {
         List authModules = loginService.getAuthModules();
         req.setAttribute("authModules", authModules);
 
-        doViewMessaging(event);
+        // display messaging services
+        FrameBean serviceFrame = event.getFrameBean("serviceframe");
+        serviceFrame.setTableModel(getMessagingService(event));
+        Set services = tms.getServices();
+        event.getRenderRequest().setAttribute("services", ""+services.size());
 
         setNextState(req, DO_VIEW);
     }
@@ -257,12 +261,7 @@ public class ConfigPortlet extends ActionPortlet {
 
     }
 
-    public void doViewMessaging(RenderFormEvent event)  {
-        FrameBean serviceFrame = event.getFrameBean("serviceframe");
-        serviceFrame.setTableModel(getMessagingService(event));
-        Set services = tms.getServices();
-        event.getRenderRequest().setAttribute("services", ""+services.size());
-    }
+
 
     public void doSaveValues(ActionFormEvent event) {
         Set services = tms.getServices();

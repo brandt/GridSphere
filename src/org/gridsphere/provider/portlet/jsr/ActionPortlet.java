@@ -804,7 +804,7 @@ public class ActionPortlet extends GenericPortlet {
         MessageBoxBean msgBox = evt.getMessageBoxBean("msg");
         msgBox.setMessageType(MessageStyle.MSG_ERROR);
         String msgOld = msgBox.getValue();
-        msgBox.setValue((msgOld!=null?msgOld:"")+text);
+        msgBox.setValue((msgOld != null ? msgOld : "") + "\n" + text);
     }
 
     protected void createSuccessMessage(FormEvent evt, String text) {
