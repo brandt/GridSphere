@@ -25,7 +25,6 @@ import org.gridsphere.provider.portletui.beans.HiddenFieldBean;
 import org.gridsphere.tmf.TextMessagingException;
 import org.gridsphere.tmf.message.MailMessage;
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.jsrimpl.PortletURLImpl;
 import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.*;
@@ -93,10 +92,12 @@ public class LoginPortlet extends ActionPortlet {
         if (activateAccountURL == null) {
             PortletURL url = response.createActionURL();
             url.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, "approveAccount");
+            activateAccountURL = url.toString();
         }
         if (denyAccountURL == null) {
             PortletURL url = response.createActionURL();
             url.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, "denyAccount");
+            denyAccountURL = url.toString();
         }
         PasswordBean pass = event.getPasswordBean("password");
         pass.setValue("");
@@ -209,7 +210,6 @@ public class LoginPortlet extends ActionPortlet {
         if (!canUserCreateAccount) return;
 
         ActionRequest req = evt.getActionRequest();
-        ActionResponse res = evt.getActionResponse();
 
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
 
@@ -250,6 +250,7 @@ public class LoginPortlet extends ActionPortlet {
         } catch (PortletException e) {
             //invalid user, an exception was thrown
             //back to edit
+            log.error("Could not creat account: ", e);
             setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
         }
     }
@@ -259,17 +260,17 @@ public class LoginPortlet extends ActionPortlet {
         log.debug("Entering validateUser()");
         PortletRequest req = event.getActionRequest();
         StringBuffer message = new StringBuffer();
-        boolean isInvalid = false;
+
         // Validate user name
         String userName = event.getTextFieldBean("userName").getValue();
         if (userName.equals("")) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_NAME_BLANK") + "<br />");
-            isInvalid = true;
+            throw new PortletException("user name is blank!");
         }
 
         if (this.userManagerService.existsUserName(userName)) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_EXISTS") + "<br />");
-            isInvalid = true;
+            throw new PortletException("user exists already");
         }
 
         // Validate full name
@@ -277,29 +278,27 @@ public class LoginPortlet extends ActionPortlet {
         String familyName = event.getTextFieldBean("fullName").getValue();
         if (familyName.equals("")) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br />");
-            isInvalid = true;
+            throw new PortletException("full name is blank");
         }
 
         // Validate e-mail
         String eMail = event.getTextFieldBean("emailAddress").getValue();
         if (eMail.equals("")) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
-            isInvalid = true;
+            throw new PortletException("email is blank");
         } else if ((eMail.indexOf("@") < 0)) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
-            isInvalid = true;
+            throw new PortletException("email address invalid");
         } else if ((eMail.indexOf(".") < 0)) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
-            isInvalid = true;
+            throw new PortletException("email address invalid");
         }
 
         //Validate password
 
         String savePasswds = portalConfigService.getProperty(SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
-            if (!isInvalid) {
-                isInvalid = isInvalidPassword(event);
-            }
+            if (isInvalidPassword(event)) throw new PortletException("password no good!");
         }
 
 
@@ -308,21 +307,17 @@ public class LoginPortlet extends ActionPortlet {
         //retrieve the response
         String response = event.getTextFieldBean("captchaTF").getValue();
         // Call the Service method
+        boolean isInvalid = false;
         try {
-            isInvalid = CaptchaServiceSingleton.getInstance().validateResponseForID(captchaId,
-                    response);
+            isInvalid = CaptchaServiceSingleton.getInstance().validateResponseForID(captchaId, response);
         } catch (CaptchaServiceException e) {
             //should not happen, may be thrown if the id is not valid
         }
         if (!isInvalid) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_CAPTCHA_MISMATCH"));
+            throw new PortletException("captcha challenge mismatch!");
         }
 
-
-        // Throw exception if error was found
-        if (isInvalid) {
-            throw new PortletException(message.toString());
-        }
         log.debug("Exiting validateUser()");
     }
 
@@ -343,7 +338,6 @@ public class LoginPortlet extends ActionPortlet {
             return true;
             // If they do match, then validate password with our service
         } else {
-
             passwordValue = passwordValue.trim();
             if (passwordValue.length() == 0) {
                 createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
@@ -407,7 +401,6 @@ public class LoginPortlet extends ActionPortlet {
 
     public void notifyUser(ActionFormEvent evt) {
         PortletRequest req = evt.getActionRequest();
-        PortletResponse res = evt.getActionResponse();
 
         User user;
         TextFieldBean emailTF = evt.getTextFieldBean("emailTF");
@@ -453,17 +446,11 @@ public class LoginPortlet extends ActionPortlet {
 
     }
 
-    public void notifyNewUser(ActionFormEvent evt) {
+    public void notifyNewUser(ActionFormEvent evt) throws PortletException {
         PortletRequest req = evt.getActionRequest();
-        PortletResponse res = evt.getActionResponse();
-
 
         TextFieldBean emailTF = evt.getTextFieldBean("emailAddress");
 
-        if (emailTF.getValue().equals("")) {
-            createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_NO_EMAIL"));
-            return;
-        }
 
         // create a request
         GenericRequest request = requestService.createRequest(ACTIVATE_ACCOUNT_LABEL);
@@ -513,8 +500,20 @@ public class LoginPortlet extends ActionPortlet {
             body.append(denyURL).append("\n\n");
         } else {
             mailToUser.setTo(emailTF.getValue());
-            mailToUser.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
-            body.append(getLocalizedText(req, "LOGIN_ACTIVATE_MAIL")).append("\n\n");
+
+            String mailSubjectHeader = portalConfigService.getProperty("MAIL_SUBJECT_HEADER");
+            String loginActivateMail = portalConfigService.getProperty("LOGIN_ACTIVATE_MAIL");
+
+            if (mailSubjectHeader == null) {
+                mailToUser.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
+            } else {
+                mailToUser.setSubject(mailSubjectHeader);
+            }
+            if (loginActivateMail == null) {
+                body.append(getLocalizedText(req, "LOGIN_ACTIVATE_MAIL")).append("\n\n");
+            } else {
+                body.append(loginActivateMail);
+            }
             body.append(activateURL).append("\n\n");
         }
 
@@ -523,7 +522,9 @@ public class LoginPortlet extends ActionPortlet {
         body.append(getLocalizedText(req, "FULLNAME"));
         body.append(evt.getTextFieldBean("fullName").getValue()).append("\n");
         body.append(getLocalizedText(req, "EMAILADDRESS"));
-        body.append(evt.getTextFieldBean("emailAddress").getValue()).append("\n\n");
+        body.append(evt.getTextFieldBean("emailAddress").getValue()).append("\n");
+        body.append(getLocalizedText(req, "ORGANIZATION"));
+        body.append(evt.getTextFieldBean("organization").getValue()).append("\n");
 
         mailToUser.setBody(body.toString());
         mailToUser.setServiceid("mail");
@@ -531,9 +532,8 @@ public class LoginPortlet extends ActionPortlet {
         try {
             tms.send(mailToUser);
         } catch (TextMessagingException e) {
-            log.error("Unable to send mail message!", e);
             createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
-            return;
+            throw new PortletException("Unable to send mail message!", e);
         }
 
         createSuccessMessage(evt, this.getLocalizedText(req, "LOGIN_ACCT_MAIL"));
