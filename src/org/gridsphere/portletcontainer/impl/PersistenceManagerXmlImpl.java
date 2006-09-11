@@ -176,14 +176,13 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
             unmarshal.setIgnoreExtraAttributes(true);
             object = unmarshal.unmarshal(xmlSource);
         } catch (MappingException e) {
-            log.error("MappingException using " + descriptorPath, e);
-            throw new PersistenceManagerException("Mapping Error" + e.getException().toString());
+            throw new PersistenceManagerException("Mapping Error", e);
         } catch (MarshalException e) {
-            log.error("MarshalException " + descriptorPath, e);
-            throw new PersistenceManagerException("Marshal Error" + e.getMessage());
+            throw new PersistenceManagerException("Marshal Error", e);
         } catch (ValidationException e) {
-            log.error("ValidationException " + descriptorPath, e);
-            throw new PersistenceManagerException("Validation Error" + e.getMessage());
+            throw new PersistenceManagerException("Validation Error", e);
+        } catch (IOException e) {
+            throw new PersistenceManagerException("IO Error", e);
         }
         return object;
     }
