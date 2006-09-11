@@ -18,7 +18,7 @@ public interface PersistenceManagerXml {
 
     public String getDescriptorPath();
 
-    public void save(Object object) throws PersistenceManagerException, IOException;
+    public void save(Object object) throws PersistenceManagerException;
 
-    public Object load() throws IOException, PersistenceManagerException;
+    public Object load() throws PersistenceManagerException;
 }

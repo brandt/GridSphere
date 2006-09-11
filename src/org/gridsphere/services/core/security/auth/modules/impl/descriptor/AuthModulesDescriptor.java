@@ -8,7 +8,6 @@ import org.gridsphere.portletcontainer.impl.JavaXMLBindingFactory;
 import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.net.URL;
@@ -27,7 +26,7 @@ public class AuthModulesDescriptor {
     private AuthModulesDescriptor() {
     }
 
-    public AuthModulesDescriptor(String descriptorFile, URL mappingFile) throws IOException, PersistenceManagerException {
+    public AuthModulesDescriptor(String descriptorFile, URL mappingFile) throws PersistenceManagerException {
         pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorFile, mappingFile);
         authModules = (AuthModuleCollection) pmXML.load();
     }
@@ -69,10 +68,9 @@ public class AuthModulesDescriptor {
     /**
      * Saves the auth module descriptor
      *
-     * @throws IOException                 if an I/O error occurs
      * @throws PersistenceManagerException if a Castor error occurs during the marshalling
      */
-    public void save() throws IOException, PersistenceManagerException {
+    public void save() throws PersistenceManagerException {
         pmXML.save(authModules);
     }
 
