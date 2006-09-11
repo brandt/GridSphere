@@ -40,7 +40,7 @@ public class Frame extends BaseRender implements FrameView {
         if (frame.getOuterPadding().equals("")) {
             frameBuffer.append(" class=\"gridsphere-window-portlet\"");
         } else {
-            frameBuffer.append(" style=\"padding:").append(frame.getOuterPadding()).append("px\" class=\"gridsphere-window-portlet\" "); // this is the main div around one portlet
+            frameBuffer.append(" style=\"padding: ").append(frame.getOuterPadding()).append(";\" class=\"gridsphere-window-portlet\" "); // this is the main div around one portlet
         }
         frameBuffer.append(">\n");
         return frameBuffer;
@@ -53,7 +53,7 @@ public class Frame extends BaseRender implements FrameView {
         if (!frame.getTransparent()) {
             postframe.append("\n<div ");      // now the portlet content begins
             if (!frame.getInnerPadding().equals("")) {
-                postframe.append("style=\"padding:").append(frame.getInnerPadding()).append("px\"");
+                postframe.append("style=\"padding: ").append(frame.getInnerPadding()).append(";\"");
             }
             postframe.append(" class=\"gridsphere-window-content\"> \n");
         } else {

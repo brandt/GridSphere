@@ -10,13 +10,15 @@ import org.gridsphere.layout.event.PortletFrameListener;
 import org.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridsphere.layout.event.impl.PortletFrameEventImpl;
 import org.gridsphere.layout.view.FrameView;
-import org.gridsphere.portlet.*;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.portletcontainer.*;
+import org.gridsphere.portlet.*;
 import org.gridsphere.portletcontainer.impl.PortletInvoker;
+import org.gridsphere.portletcontainer.ApplicationPortletConfig;
+import org.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.services.core.cache.CacheService;
 import org.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridsphere.services.core.portal.PortalConfigService;
@@ -26,8 +28,8 @@ import org.gridsphere.services.core.tracker.TrackerService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.tmf.message.MailMessage;
 
-import javax.portlet.RenderResponse;
 import javax.servlet.RequestDispatcher;
+import javax.portlet.RenderResponse;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
@@ -78,7 +80,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private transient FrameView frameView = null;
 
     private String lastFrame = "";
-
 
     private String portletName = "Untitled";
 

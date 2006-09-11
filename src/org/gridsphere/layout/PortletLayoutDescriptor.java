@@ -9,7 +9,6 @@ import org.gridsphere.portletcontainer.impl.JavaXMLBindingFactory;
 import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 
-import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -31,10 +30,9 @@ public class PortletLayoutDescriptor {
      * @param layoutDescriptorPath location of the layout.xml
      * @param layoutMappingPath    location of the mapping file
      * @return the portlet container
-     * @throws IOException                 if an I/O error occurs
      * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static PortletPage loadPortletPage(String layoutDescriptorPath, URL layoutMappingPath) throws IOException, PersistenceManagerException {
+    public static PortletPage loadPortletPage(String layoutDescriptorPath, URL layoutMappingPath) throws PersistenceManagerException {
         PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(layoutDescriptorPath, layoutMappingPath);
         PortletPage page = (PortletPage) pmXML.load();
         page.setLayoutDescriptor(layoutDescriptorPath);
@@ -47,10 +45,9 @@ public class PortletLayoutDescriptor {
      * @param descriptorPath location of the layout.xml
      * @param mappingPath    location of the mapping file
      * @return the portlet tab
-     * @throws IOException                 if an I/O error occurs
      * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static PortletTabbedPane loadPortletTabs(String descriptorPath, URL mappingPath) throws IOException, PersistenceManagerException {
+    public static PortletTabbedPane loadPortletTabs(String descriptorPath, URL mappingPath) throws PersistenceManagerException {
         PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
         return (PortletTabbedPane) pmXML.load();
     }
@@ -61,10 +58,9 @@ public class PortletLayoutDescriptor {
      * @param pc             the portlet container to load
      * @param descriptorPath location of the layout.xml
      * @param mappingPath    location of the mapping file
-     * @throws IOException                 if an I/O error occurs
      * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static void savePortletPage(PortletPage pc, String descriptorPath, URL mappingPath) throws IOException, PersistenceManagerException {
+    public static void savePortletPage(PortletPage pc, String descriptorPath, URL mappingPath) throws PersistenceManagerException {
         PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
         pmXML.save(pc);
     }
@@ -75,10 +71,9 @@ public class PortletLayoutDescriptor {
      * @param pane           the list of portlet tabs to save
      * @param descriptorPath location of the layout.xml
      * @param mappingPath    location of the mapping file
-     * @throws IOException                 if an I/O error occurs
      * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static void savePortletTabbedPane(PortletTabbedPane pane, String descriptorPath, URL mappingPath) throws IOException, PersistenceManagerException {
+    public static void savePortletTabbedPane(PortletTabbedPane pane, String descriptorPath, URL mappingPath) throws PersistenceManagerException {
         PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
         pmXML.save(pane);
     }
