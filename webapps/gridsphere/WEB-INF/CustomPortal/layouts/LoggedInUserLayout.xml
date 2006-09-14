@@ -25,7 +25,7 @@ $Id$
                 <table-layout>
                     <row-layout>
                         <column-layout width="70%">
-                            <portlet-frame transparent="true" outer-padding="0px" label="rss">
+                            <portlet-frame transparent="true" outer-padding="0px 20px" label="rss">
                                 <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</portlet-class>
                             </portlet-frame>
                         </column-layout>
