@@ -100,8 +100,8 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
                 log.error("Unable to get service from portlet service factory: " + loginClassName, e);
             }
             log.debug("Created a login module service: " + loginClassName);
-            String authModulesPath = config.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
-            loadAuthModules(authModulesPath, Thread.currentThread().getContextClassLoader());
+            //String authModulesPath = config.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
+            //loadAuthModules(authModulesPath, Thread.currentThread().getContextClassLoader());
             userManagerService = (UserManagerService)PortletServiceFactory.createPortletService(UserManagerService.class, true);
             inited = true;
         }
