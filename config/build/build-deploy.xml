@@ -100,7 +100,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         <!-- copy webappsdir to deployed location -->
         <copy todir="${appserver.home}/webapps">
             <fileset dir="${build.webapps}">
-                <exclude name="**/CustomPortal/**"/>
+                <exclude name="**/gridsphere.properties"/>
             </fileset>
         </copy>
 
