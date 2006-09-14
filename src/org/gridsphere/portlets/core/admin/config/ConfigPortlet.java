@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Enumeration;
 
 public class ConfigPortlet extends ActionPortlet {
 
@@ -91,6 +92,52 @@ public class ConfigPortlet extends ActionPortlet {
         serviceFrame.setTableModel(getMessagingService(event));
         Set services = tms.getServices();
         event.getRenderRequest().setAttribute("services", ""+services.size());
+
+        // Customized mail messages
+
+        // Portal emails to user  subject for forgotten password
+        String subjectHeader = portalConfigService.getProperty("LOGIN_FORGOT_SUBJECT");
+        if (subjectHeader == null) subjectHeader = getLocalizedText(req, "MAIL_SUBJECT_HEADER");
+        TextFieldBean forgotHeaderTF = event.getTextFieldBean("forgotHeaderTF");
+        forgotHeaderTF.setValue(subjectHeader);
+
+        String forgotMail = portalConfigService.getProperty("LOGIN_FORGOT_BODY");
+        if (forgotMail == null) forgotMail = getLocalizedText(req, "LOGIN_FORGOT_MAIL");
+        TextAreaBean forgotBodyTA = event.getTextAreaBean("forgotBodyTA");
+        forgotBodyTA.setValue(forgotMail);
+
+        // Portal emails to user  subject for account activation
+        String activateHeader = portalConfigService.getProperty("LOGIN_ACTIVATE_SUBJECT");
+        if (activateHeader == null) activateHeader = getLocalizedText(req, "LOGIN_ACTIVATE_SUBJECT");
+        TextFieldBean activateHeaderTF = event.getTextFieldBean("activateHeaderTF");
+        activateHeaderTF.setValue(activateHeader);
+
+        String activateMail = portalConfigService.getProperty("LOGIN_ACTIVATE_BODY");
+        if (activateMail == null) activateMail = getLocalizedText(req, "LOGIN_ACTIVATE_MAIL");
+        TextAreaBean activateBodyTA = event.getTextAreaBean("activateBodyTA");
+        activateBodyTA.setValue(activateMail);
+
+        // Email to user when their account has been approved
+        String approvedSubject = portalConfigService.getProperty("LOGIN_APPROVED_SUBJECT");
+        if (approvedSubject == null) approvedSubject = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
+        TextFieldBean approvedHeaderTF = event.getTextFieldBean("approvedHeaderTF");
+        approvedHeaderTF.setValue(approvedSubject);
+
+        String approvedBody = portalConfigService.getProperty("LOGIN_APPROVED_BODY");
+        if (approvedBody == null) approvedBody = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
+        TextAreaBean approvedBodyTA = event.getTextAreaBean("approvedBodyTA");
+        approvedBodyTA.setValue(approvedBody);
+
+        // Email to user when their account has been denied
+        String subject = portalConfigService.getProperty("LOGIN_DENIED_SUBJECT");
+        if (subject == null) subject = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_DENY");
+        TextFieldBean deniedHeaderTF = event.getTextFieldBean("deniedHeaderTF");
+        deniedHeaderTF.setValue(subject);
+
+        String  body = portalConfigService.getProperty("LOGIN_DENIED_BODY");
+        if (body == null) body = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_DENY");
+        TextAreaBean deniedBodyTA = event.getTextAreaBean("deniedBodyTA");
+        deniedBodyTA.setValue(body);
 
         setNextState(req, DO_VIEW);
     }
@@ -268,40 +315,69 @@ public class ConfigPortlet extends ActionPortlet {
         for (Iterator iterator = services.iterator(); iterator.hasNext();) {
             // get the service
             TMService service = (TMService) iterator.next();
-                TextMessageServiceConfig config = service.getServiceConfig();
+            TextMessageServiceConfig config = service.getServiceConfig();
 
-                List params = config.getConfigPropertyKeys();
+            List params = config.getConfigPropertyKeys();
 
-                boolean isDirty = false;
-                for (int j=0;j<params.size();j++) {
-                    String propKey = (String)params.get(j);
-                    String propValue = config.getProperty(propKey);
+            boolean isDirty = false;
+            for (int j=0;j<params.size();j++) {
+                String propKey = (String)params.get(j);
+                String propValue = config.getProperty(propKey);
 
-                    TextFieldBean paramValue = event.getTextFieldBean(service.getClass().getName()+"paramValue"+propKey);
-                    String propTextBeanValue = paramValue.getValue();
+                TextFieldBean paramValue = event.getTextFieldBean(service.getClass().getName()+"paramValue"+propKey);
+                String propTextBeanValue = paramValue.getValue();
 
-                    // if a parameter changed, restart the service....
-                    if (!propTextBeanValue.equals(propValue)) {
-                        config.setProperty((String)params.get(j), paramValue.getValue());
-                        isDirty = true;
-                    }
+                // if a parameter changed, restart the service....
+                if (!propTextBeanValue.equals(propValue)) {
+                    config.setProperty((String)params.get(j), paramValue.getValue());
+                    isDirty = true;
                 }
-                if (isDirty) {
-                    try {
-                        config.saveConfig();
-                        service.shutdown();
-                        service.startup();
-                        String msg = this.getLocalizedText(event.getActionRequest(), "MESSAGING_SERVICE_SERVICERESTARTED");
-                        createSuccessMessage(event, msg + ": "+config.getProperty(TextMessagingService.SERVICE_NAME));
-                    } catch (IOException e) {
-                        createErrorMessage(event, this.getLocalizedText(event.getActionRequest(), "MESSAGING_SERVICE_SAVEFAILURE"));
-                    } catch (TextMessagingException e) {
-                        String msg = this.getLocalizedText(event.getActionRequest(), "MESSAGING_SERVICE_RESTARTFAILURE");
-                        createErrorMessage(event, msg+" : "+config.getProperty(TextMessagingService.SERVICE_NAME));
-                    }
+            }
+            if (isDirty) {
+                try {
+                    config.saveConfig();
+                    service.shutdown();
+                    service.startup();
+                    String msg = this.getLocalizedText(event.getActionRequest(), "MESSAGING_SERVICE_SERVICERESTARTED");
+                    createSuccessMessage(event, msg + ": "+config.getProperty(TextMessagingService.SERVICE_NAME));
+                } catch (IOException e) {
+                    createErrorMessage(event, this.getLocalizedText(event.getActionRequest(), "MESSAGING_SERVICE_SAVEFAILURE"));
+                } catch (TextMessagingException e) {
+                    String msg = this.getLocalizedText(event.getActionRequest(), "MESSAGING_SERVICE_RESTARTFAILURE");
+                    createErrorMessage(event, msg+" : "+config.getProperty(TextMessagingService.SERVICE_NAME));
                 }
             }
         }
+
+        Enumeration en = event.getActionRequest().getParameterNames();
+        while (en.hasMoreElements()) {
+            String val = (String)en.nextElement();
+            System.err.println("name= " + val + " val=" + event.getActionRequest().getParameter(val));
+        }
+
+        //System.err.println("param= " + event.getActionRequest().getParameter("ui.tab.label"));
+
+       // event.getActionResponse().setRenderParameter("ui.tab.label", );
+    }
+
+
+    public void doSaveMailMessage(ActionFormEvent event) {
+        String type = event.getAction().getParameter("type");
+        if (type != null) {
+            System.err.println("/n/n/n" + type + "/n/n/n");
+            TextFieldBean subjectTF = event.getTextFieldBean(type + "HeaderTF");
+            if (!subjectTF.getValue().equals("")) portalConfigService.setProperty("LOGIN_" + type.toUpperCase() + "_SUBJECT", subjectTF.getValue());
+            System.err.println("tf=" + subjectTF.getValue());
+            TextAreaBean bodyTA = event.getTextAreaBean(type + "BodyTA");
+            if (!bodyTA.getValue().equals("")) portalConfigService.setProperty("LOGIN_" + type.toUpperCase() + "_BODY", bodyTA.getValue());
+            System.err.println("ta=" + bodyTA.getValue());
+            try {
+                portalConfigService.storeProperties();
+            } catch (IOException e) {
+                log.error("Unable to save gridsphere.properties!", e);
+            }
+        }
+    }
 
 
     private void createErrorMessage(ActionFormEvent evt, String text) {

@@ -2,6 +2,9 @@ package org.gridsphere.portlets.core.rss;
 
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.portletui.beans.ListBoxBean;
+import org.gridsphere.provider.portletui.beans.ListBoxItemBean;
 import org.gridsphere.services.core.rss.RssService;
 
 import javax.portlet.PortletConfig;
@@ -29,21 +32,48 @@ public class RSSPortlet extends ActionPortlet {
     public void doView(RenderFormEvent event) throws PortletException {
         SyndFeed feed = null;
         PortletPreferences prefs = event.getRenderRequest().getPreferences();
-        String feedURL = prefs.getValue("feedurl", "");
-
+        String[] feedURL = prefs.getValues("feedurl", new String[]{null});
         //  todo localize the errormessages
         if (feedURL.equals("")) return;
-        try {
-            feed = rssService.getFeed(feedURL);
-        } catch (FeedException e) {
-            createErrorMessage(event, "Could not create Feed.");
-        } catch (MalformedURLException e) {
-            createErrorMessage(event, "RSS URL " + feedURL + " is not valid.");
-        } catch (IOException e) {
-            createErrorMessage(event, "Could not read RSS feed from " + feedURL);
+
+        ListBoxBean feedsLB = event.getListBoxBean("feedsLB");
+        feedsLB.clear();
+        //feedsLB.setOnChange("GridSphere_SelectSubmit( this.form )");
+        feedsLB.setSize(1);
+
+        SyndFeed selectedFeed = null;
+        String feedurl = (String)event.getRenderRequest().getPortletSession(true).getAttribute("selectedfeed");
+        if (feedurl == null) feedurl = feedURL[0];
+        for (int i = 0; i < feedURL.length; i++) {
+            try {
+                feed = rssService.getFeed(feedURL[i]);
+                ListBoxItemBean item = new ListBoxItemBean();
+                item.setName(feedURL[i]);
+                item.setValue(feed.getTitle());
+                if (feedurl.equals(feedURL[i])) {
+                    selectedFeed = feed;
+                    item.setSelected(true);
+                }
+                feedsLB.addBean(item);
+            } catch (FeedException e) {
+                log.error("Could not create Feed.", e);
+                createErrorMessage(event, "Could not create Feed.");
+            } catch (MalformedURLException e) {
+                log.error("RSS URL " + feedURL + " is not valid.", e);
+                createErrorMessage(event, "RSS URL " + feedURL + " is not valid.");
+            } catch (IOException e) {
+                log.error("Could not read RSS feed from " + feedURL, e);
+                createErrorMessage(event, "Could not read RSS feed from " + feedURL);
+            }
         }
-        event.getRenderRequest().setAttribute("rssfeed", feed);
+        event.getRenderRequest().setAttribute("rssfeed", selectedFeed);
         setNextState(event.getRenderRequest(), VIEW_RSS_JSP);
+    }
+
+    public void selectFeed(ActionFormEvent event) {
+        ListBoxBean feedsLB = event.getListBoxBean("feedsLB");
+        String selectedFeed = feedsLB.getSelectedValue();
+        event.getActionRequest().getPortletSession(true).setAttribute("selectedfeed", selectedFeed);
     }
 
 }

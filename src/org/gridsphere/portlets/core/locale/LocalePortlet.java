@@ -6,6 +6,7 @@ package org.gridsphere.portlets.core.locale;
 
 import org.gridsphere.portlet.User;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridsphere.provider.portletui.beans.ListBoxItemBean;
@@ -64,13 +65,12 @@ public class LocalePortlet extends ActionPortlet {
             localeSelector.addBean(localeBean);
         }
 
-        request.setAttribute(CacheService.NO_CACHE, CacheService.NO_CACHE);
         setNextState(request, "locale/viewlocale.jsp");
     }
 
-    public void selectLang(RenderFormEvent event) throws PortletException {
+    public void selectLang(ActionFormEvent event) throws PortletException {
         ListBoxBean localeSelector = event.getListBoxBean("localeLB");
-        PortletSession session = event.getRenderRequest().getPortletSession(true);
+        PortletSession session = event.getActionRequest().getPortletSession(true);
         String loc = localeSelector.getSelectedValue();
         if (loc != null) {
             Locale locale = new Locale(loc, "", "");

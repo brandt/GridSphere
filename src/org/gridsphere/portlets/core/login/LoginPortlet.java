@@ -25,6 +25,7 @@ import org.gridsphere.provider.portletui.beans.HiddenFieldBean;
 import org.gridsphere.tmf.TextMessagingException;
 import org.gridsphere.tmf.message.MailMessage;
 import org.gridsphere.portlet.User;
+import org.gridsphere.portlet.jsrimpl.PortletURLImpl;
 import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.*;
@@ -85,18 +86,18 @@ public class LoginPortlet extends ActionPortlet {
 
         if (newpasswordURL == null) {
             PortletURL url = response.createActionURL();
-            url.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, "newpassword");
+            ((PortletURLImpl)url).setAction("newpassword");
             newpasswordURL = url.toString();
         }
 
         if (activateAccountURL == null) {
             PortletURL url = response.createActionURL();
-            url.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, "approveAccount");
+            ((PortletURLImpl)url).setAction("approveAccount");
             activateAccountURL = url.toString();
         }
         if (denyAccountURL == null) {
             PortletURL url = response.createActionURL();
-            url.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, "denyAccount");
+            ((PortletURLImpl)url).setAction("denyAccount");
             denyAccountURL = url.toString();
         }
         PasswordBean pass = event.getPasswordBean("password");
@@ -426,10 +427,14 @@ public class LoginPortlet extends ActionPortlet {
 
         org.gridsphere.tmf.message.MailMessage mailToUser = tms.getMailMessage();
         mailToUser.setTo(emailTF.getValue());
-        mailToUser.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
+        String subjectHeader = portalConfigService.getProperty("LOGIN_FORGOT_SUBJECT");
+        if (subjectHeader == null) subjectHeader = getLocalizedText(req, "MAIL_SUBJECT_HEADER");
+        mailToUser.setSubject(subjectHeader);
         StringBuffer body = new StringBuffer();
 
-        body.append(getLocalizedText(req, "LOGIN_FORGOT_MAIL") + "\n\n");
+        String forgotMail = portalConfigService.getProperty("LOGIN_FORGOT_BODY");
+        if (forgotMail == null) forgotMail = getLocalizedText(req, "LOGIN_FORGOT_MAIL");
+        body.append(forgotMail + "\n\n");
         
         body.append(newpasswordURL + "&reqid=" + request.getOid());
         mailToUser.setBody(body.toString());
@@ -492,8 +497,12 @@ public class LoginPortlet extends ActionPortlet {
                 admins.add(u.getEmailAddress());
             }
             mailToUser.setTo(admins);
-            body.append(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ADMIN_MAIL")).append("\n\n");
-            mailToUser.setSubject(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ADMIN_MAILSUBJECT"));
+            String mailSubject = portalConfigService.getProperty("LOGIN_ACCOUNT_APPROVAL_ADMIN_MAILSUBJECT");
+            if (mailSubject == null) mailSubject = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ADMIN_MAILSUBJECT");
+            mailToUser.setSubject(mailSubject);
+            String adminBody = portalConfigService.getProperty("LOGIN_ACCOUNT_APPROVAL_ADMIN_MAIL");
+            if (adminBody == null) adminBody = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ADMIN_MAIL");
+            body.append(adminBody).append("\n\n");
             body.append(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ALLOW")).append("\n\n");
             body.append(activateURL).append("\n\n");
             body.append(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_DENY")).append("\n\n");
@@ -501,19 +510,14 @@ public class LoginPortlet extends ActionPortlet {
         } else {
             mailToUser.setTo(emailTF.getValue());
 
-            String mailSubjectHeader = portalConfigService.getProperty("MAIL_SUBJECT_HEADER");
-            String loginActivateMail = portalConfigService.getProperty("LOGIN_ACTIVATE_MAIL");
+            String mailSubjectHeader = portalConfigService.getProperty("LOGIN_ACTIVATE_SUBJECT");
+            String loginActivateMail = portalConfigService.getProperty("LOGIN_ACTIVATE_BODY");
 
-            if (mailSubjectHeader == null) {
-                mailToUser.setSubject(getLocalizedText(req, "MAIL_SUBJECT_HEADER"));
-            } else {
-                mailToUser.setSubject(mailSubjectHeader);
-            }
-            if (loginActivateMail == null) {
-                body.append(getLocalizedText(req, "LOGIN_ACTIVATE_MAIL")).append("\n\n");
-            } else {
-                body.append(loginActivateMail);
-            }
+            if (mailSubjectHeader == null) mailSubjectHeader = getLocalizedText(req, "LOGIN_ACTIVATE_SUBJECT");
+            mailToUser.setSubject(mailSubjectHeader);
+
+            if (loginActivateMail == null) loginActivateMail = getLocalizedText(req, "LOGIN_ACTIVATE_MAIL");
+            body.append(loginActivateMail).append("\n\n");
             body.append(activateURL).append("\n\n");
         }
 
@@ -536,7 +540,12 @@ public class LoginPortlet extends ActionPortlet {
             throw new PortletException("Unable to send mail message!", e);
         }
 
-        createSuccessMessage(evt, this.getLocalizedText(req, "LOGIN_ACCT_MAIL"));
+        boolean adminRequired = Boolean.valueOf(portalConfigService.getProperty(ADMIN_ACCOUNT_APPROVAL));
+        if (adminRequired) {
+            createSuccessMessage(evt, this.getLocalizedText(req, "LOGIN_ACCT_ADMIN_MAIL"));
+        } else {
+            createSuccessMessage(evt, this.getLocalizedText(req, "LOGIN_ACCT_MAIL"));
+        }
 
     }
 
@@ -561,30 +570,46 @@ public class LoginPortlet extends ActionPortlet {
         GenericRequest request = requestService.getRequest(id, ACTIVATE_ACCOUNT_LABEL);
         if (request != null) {
             requestService.deleteRequest(request);
+
+            String subject = "";
+            String body = "";
             if (createAccount) {
                 user = saveUser(request);
                 createSuccessMessage(event, msg + " " + user.getUserName());
 
                 // send the user an email
-
-                MailMessage mailToUser = tms.getMailMessage();
-                mailToUser.setTo(user.getEmailAddress());
-                mailToUser.setSubject(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED"));
-                StringBuffer body = new StringBuffer();
-                body.append(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED")).append("\n\n");
-                body.append(notificationURL);
-                mailToUser.setBody(body.toString());
-                mailToUser.setServiceid("mail");
-
-                try {
-                    tms.send(mailToUser);
-                } catch (TextMessagingException e) {
-                    log.error("Error: " + e.getMessage());
-                    createErrorMessage(event, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
-                }
+                subject = portalConfigService.getProperty("LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
+                if (subject == null) subject = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
+                body = portalConfigService.getProperty("LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED_BODY");
+                if (body == null) body = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
             } else {
                 createSuccessMessage(event, msg);
+
+                // send the user an email
+                subject = portalConfigService.getProperty("LOGIN_ACCOUNT_APPROVAL_ACCOUNT_DENY");
+                if (subject == null) subject = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_DENY");
+                body = portalConfigService.getProperty("LOGIN_ACCOUNT_APPROVAL_ACCOUNT_DENY_BODY");
+                if (body == null) body = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_DENY");
             }
+
+            MailMessage mailToUser = tms.getMailMessage();
+            mailToUser.setTo(user.getEmailAddress());
+
+            mailToUser.setSubject(subject);
+            StringBuffer msgbody = new StringBuffer();
+
+            msgbody.append(body).append("\n\n");
+            msgbody.append(notificationURL);
+            mailToUser.setBody(body.toString());
+            mailToUser.setServiceid("mail");
+
+            try {
+                tms.send(mailToUser);
+            } catch (TextMessagingException e) {
+                log.error("Error: " + e.getMessage());
+                createErrorMessage(event, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
+            }
+
         }
         setNextState(req, "doViewUser");
 

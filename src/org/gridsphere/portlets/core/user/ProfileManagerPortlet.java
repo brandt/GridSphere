@@ -29,11 +29,14 @@ import org.gridsphere.tmf.services.TextMessageServiceConfig;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
+import javax.portlet.ActionRequest;
 import java.text.DateFormat;
 import java.util.*;
 import java.io.File;
 
 public class ProfileManagerPortlet extends ActionPortlet {
+
+    public static String USER_PROFILE_PUBLIC = "user.publicprofile";
 
     // JSP pages used by this portlet
     public static final String VIEW_USER_JSP = "profile/viewuser.jsp";
@@ -65,15 +68,28 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
     public void doViewUser(RenderFormEvent event) {
         PortletRequest req = event.getRenderRequest();
-        setUserTable(event, false);
-        DefaultTableModel messaging = getMessagingFrame(event, false);
-        FrameBean messagingFrame = event.getFrameBean("messagingFrame");
+        setUserTable(event);
+        //DefaultTableModel messaging = getMessagingFrame(event, false);
+        //FrameBean messagingFrame = event.getFrameBean("messagingFrame");
 
-        messagingFrame.setTableModel(messaging);
-        messagingFrame.setValign("top");
+        //messagingFrame.setTableModel(messaging);
+        //messagingFrame.setValign("top");
 
         if (portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
+        }
+
+        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
+
+        String email = user.getEmailAddress();
+        TextFieldBean emailTF = event.getTextFieldBean("emailTF");
+        emailTF.setValue(email);
+
+        CheckBoxBean privacyCB = event.getCheckBoxBean("privacyCB");
+        if ((user.getAttribute(USER_PROFILE_PUBLIC) != null) && (user.getAttribute(USER_PROFILE_PUBLIC).equals("true"))) {
+            privacyCB.setSelected(true);
+        }  else {
+            privacyCB.setSelected(false);
         }
 
         ListBoxBean themeLB = event.getListBoxBean("themeLB");
@@ -117,7 +133,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         }
     }
 
-    public void setUserTable(RenderFormEvent event, boolean disable) {
+    public void setUserTable(RenderFormEvent event) {
         PortletRequest req = event.getRenderRequest();
 
         User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
@@ -139,11 +155,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         TextFieldBean fullName = event.getTextFieldBean("fullName");
         fullName.setValue(user.getFullName());
-        fullName.setDisabled(disable);
 
         TextFieldBean organization = event.getTextFieldBean("organization");
         organization.setValue(user.getOrganization());
-        organization.setDisabled(disable);
 
         TextBean userRolesTB = event.getTextBean("userRoles");
         List userRoles = roleManagerService.getRolesForUser(user);
@@ -165,7 +179,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         ListBoxBean localeSelector = event.getListBoxBean("userlocale");
         localeSelector.clear();
         localeSelector.setSize(1);
-        localeSelector.setDisabled(disable);
 
         Locale[] locales = localeService.getSupportedLocales();
 
@@ -174,7 +187,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
             ListBoxItemBean localeBean = makeLocaleBean(displayLocale.getDisplayLanguage(displayLocale), displayLocale.getLanguage(), locale);
             localeSelector.addBean(localeBean);
         }
-        req.setAttribute(CacheService.NO_CACHE, CacheService.NO_CACHE);
 
         ListBoxBean timezoneList = event.getListBoxBean("timezones");
         Map zones = DateUtil.getLocalizedTimeZoneNames();
@@ -195,13 +207,12 @@ public class ProfileManagerPortlet extends ActionPortlet {
             }
             timezoneList.addBean(item);
         }
-        timezoneList.setSize(6);
+        timezoneList.setSize(4);
         timezoneList.sortByValue();
-        timezoneList.setDisabled(disable);
         timezoneList.setMultipleSelection(false);
     }
 
-
+   /*
     private DefaultTableModel getMessagingFrame(RenderFormEvent event, boolean readonly) {
         DefaultTableModel model = new DefaultTableModel();
 
@@ -251,9 +262,11 @@ public class ProfileManagerPortlet extends ActionPortlet {
                         textmessageService.getServiceConfig().getProperty(TextMessagingService.SERVICE_ID));
 
                 if (!textmessageService.getServiceConfig().getProperty(TextMessagingService.SERVICE_ID).equals("mail")) {
+                    System.err.println("i'm herre   1");
                     servicename_input.setValue(tms.getServiceUserID(textmessageService.getServiceConfig().getProperty(TextMessagingService.SERVICE_ID),
                         req.getRemoteUser()));
                 } else {
+                    System.err.println("i'm herre   2");
                     User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
                     servicename_input.setValue(user.getEmailAddress());
                 }
@@ -270,6 +283,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         return model;
 
     }
+    */
 
     public void doSavePass(ActionFormEvent event) {
 
@@ -401,6 +415,18 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         log.debug("Exiting validateUser()");
         return user;
+    }
+
+    public void savePrivacy(ActionFormEvent event) {
+        CheckBoxBean privacyCB = event.getCheckBoxBean("privacyCB");
+        ActionRequest req = event.getActionRequest();
+        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
+        if (privacyCB.isSelected()) {
+            user.setAttribute(USER_PROFILE_PUBLIC, "true");
+        }  else {
+            user.setAttribute(USER_PROFILE_PUBLIC, "false");
+        }
+        userManagerService.saveUser(user);
     }
 
     private ListBoxItemBean makeLocaleBean(String language, String name, Locale locale) {
