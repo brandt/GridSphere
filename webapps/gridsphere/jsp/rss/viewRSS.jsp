@@ -15,11 +15,10 @@
 <% SyndFeed feed = (SyndFeed) request.getAttribute("rssfeed");
 
     if (feed != null) {
-        String feedTitle = feed.getTitle();
-
 %>
-<h2><%=feedTitle%>
-</h2>
+
+<h2><ui:form action="selectFeed">Select your RSS feed: <ui:listbox submitOnChange="true" beanId="feedsLB"/></ui:form></h2>
+
 <ul>
     <%
 
@@ -31,6 +30,7 @@
             Date entryDate = entry.getPublishedDate();
             SyndContent content = entry.getDescription();
             String value = content.getValue();
+
 
     %>
     <li><a href="<%=entryLink%>"><%=entryTitle%>

@@ -32,7 +32,7 @@
             </ui:tablecell>
             <ui:tablecell width="60">
                 <ui:text var="userkey" key="USER_NAME_BLANK"/>
-                <input class="checkNotEmpty#" type="text" name="username" size="20" maxlength="50"/>
+                <input class="checkNotEmpty#" type="text" name="username" size="15" maxlength="50"/>
                 <input type="hidden" name="username#checkNotEmpty" value="<%= userkey %>"/>
             </ui:tablecell>
             <ui:tablecell/>
@@ -44,7 +44,7 @@
             </ui:tablecell>
             <ui:tablecell width="60">
                 <ui:text var="passkey" key="USER_PASSWORD_BLANK"/>
-                <input class="checkNotEmpty#" type="password" name="password" size="20" maxlength="50"/>
+                <input class="checkNotEmpty#" type="password" name="password" size="15" maxlength="50"/>
                 <input type="hidden" name="password#checkNotEmpty" value="<%= passkey %>"/>
             </ui:tablecell>
             <ui:tablecell/>
@@ -59,30 +59,22 @@
 
     <% } %>
 
-    <ui:table>
-        <ui:tablerow>
-            <ui:tablecell width="100">
-                <ui:actionsubmit action="<%= SportletProperties.LOGIN %>" key="LOGIN_ACTION">
-                    <% if (request.getParameter("cid") != null) { %>
-                    <ui:actionparam name="queryString" value="<%= request.getParameter("cid") %>"/>
-                    <% } %>
-                </ui:actionsubmit>
-            </ui:tablecell>
-            <ui:tablecell/>
-        </ui:tablerow>
-    </ui:table>
 
-    <p>
-        <% if (request.getAttribute("canUserCreateAcct") != null) { %>
-        <ui:actionlink action="doNewUser" key="LOGIN_SIGNUP"/>
-    </p>
-
-    <p>
+    <ui:actionsubmit cssStyle="margin-right: 30px;" action="<%= SportletProperties.LOGIN %>" key="LOGIN_ACTION">
+        <% if (request.getParameter("cid") != null) { %>
+        <ui:actionparam name="queryString" value="<%= request.getParameter("cid") %>"/>
         <% } %>
+    </ui:actionsubmit>
 
-        <% if ((request.getAttribute("dispPass") != null) && ((request.getAttribute("certificate") == null) || ((String) request.getAttribute("certificate")).length() == 0)) { %>
-        <ui:actionlink action="displayForgotPassword" key="LOGIN_FORGOT_PASSWORD"/>
-    </p>
+    <%--
+     <% if (request.getAttribute("canUserCreateAcct") != null) { %>
+     <ui:actionlink action="doNewUser" key="LOGIN_SIGNUP"/>
+     <% } %>
+    --%>
+    <% if ((request.getAttribute("dispPass") != null) && ((request.getAttribute("certificate") == null) || ((String) request.getAttribute("certificate")).length() == 0)) { %>
+    <ui:actionlink action="displayForgotPassword" key="LOGIN_FORGOT_PASSWORD"/>
     <% } %>
 
 </ui:form>
+
+

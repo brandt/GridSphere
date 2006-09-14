@@ -14,36 +14,17 @@
                 <ui:text key="USERNAME"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:textfield beanId="userName"/>
+                <ui:textfield size="15" beanId="userName"/>
             </ui:tablecell>
         </ui:tablerow>
 
-        <%--
-        <ui:tablerow>
-            <ui:tablecell width="200">
-                <ui:text key="FAMILYNAME"/>
-            </ui:tablecell>
-            <ui:tablecell>
-                <ui:textfield beanId="familyName"/>
-            </ui:tablecell>
-        </ui:tablerow>
-
-        <ui:tablerow>
-            <ui:tablecell width="200">
-                <ui:text key="GIVENNAME"/>
-            </ui:tablecell>
-            <ui:tablecell>
-                <ui:textfield beanId="givenName"/>
-            </ui:tablecell>
-        </ui:tablerow>
-        --%>
 
         <ui:tablerow>
             <ui:tablecell width="200">
                 <ui:text key="FULLNAME"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:textfield beanId="fullName"/>
+                <ui:textfield size="15" beanId="fullName"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -52,7 +33,7 @@
                 <ui:text key="EMAILADDRESS"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:textfield beanId="emailAddress"/>
+                <ui:textfield size="15" beanId="emailAddress"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -61,7 +42,7 @@
                 <ui:text key="ORGANIZATION"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:textfield beanId="organization"/>
+                <ui:textfield size="15" beanId="organization"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -72,7 +53,7 @@
                 <ui:text key="PASSWORD"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:password beanId="password"/>
+                <ui:password size="15" beanId="password"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -81,13 +62,12 @@
                 <ui:text key="CONFIRM_PASS"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:password beanId="confirmPassword"/>
+                <ui:password size="15" beanId="confirmPassword"/>
             </ui:tablecell>
         </ui:tablerow>
         <% } %>
-
+  <%--
         <ui:tablerow>
-
             <ui:tablecell width="200">
                 <ui:image src="<%= request.getContextPath() + "/jcaptcha" %>"/>
             </ui:tablecell>
@@ -101,9 +81,16 @@
                 <ui:textfield beanId="captchaTF"/>
             </ui:tablecell>
         </ui:tablerow>
-
+   --%>
     </ui:frame>
 
+          <ui:image src="<%= request.getContextPath() + "/jcaptcha" %>"/>
+    <p/>
+
+                <ui:text key="CAPTCHA_TEXT"/>
+         <p/>
+                <ui:textfield size="10" beanId="captchaTF"/>
+    <p/>
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
