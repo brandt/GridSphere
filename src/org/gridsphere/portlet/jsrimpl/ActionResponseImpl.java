@@ -32,7 +32,7 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
     boolean isRedirectAllowed = true;
 
     private boolean redirected = false;
-    private String redirectLocation;
+    private String redirectLocation = null;
     protected Map renderParams = null;
 
     /**

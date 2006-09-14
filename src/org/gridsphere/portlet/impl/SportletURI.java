@@ -23,7 +23,7 @@ public class SportletURI implements PortletURI {
     private HttpServletRequest req = null;
     private Map store = new HashMap();
     private boolean isSecure = false;
-    private boolean redirect = true;
+    private boolean redirect = false;
     private Map actionParams = new HashMap();
     private Set sportletProps = null;
 
@@ -243,9 +243,6 @@ public class SportletURI implements PortletURI {
                 if (!firstParam) url += "&";
                 String name = (String) it.next();
                 String encname = URLEncoder.encode(name, "UTF-8");
-
-
-
                 String val = (String) store.get(name);
                 if (val != null) {
                     String encvalue = URLEncoder.encode(val, "UTF-8");

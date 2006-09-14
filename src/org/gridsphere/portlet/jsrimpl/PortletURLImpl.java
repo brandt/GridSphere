@@ -49,6 +49,7 @@ public class PortletURLImpl implements PortletURL {
     private boolean redirect = false;
     private PortalContext context = null;
     private boolean isRender = false;
+    private String label = null;
 
     private PortletURLImpl() { }
 
@@ -232,6 +233,18 @@ public class PortletURLImpl implements PortletURL {
         }
     }
 
+    public void setAction(String action) {
+        store.put(SportletProperties.DEFAULT_PORTLET_ACTION, action);
+    }
+
+    /**
+     * Sets a label for this link, which will overwrite the component id
+     *
+     * @param label
+     */
+    public void setLabel(String label) {
+        this.label = label;
+    }
 
     /**
      * Indicated the security setting for this URL.
@@ -293,10 +306,7 @@ public class PortletURLImpl implements PortletURL {
             String cid = (String)req.getAttribute(compVar);
             // if a label exists, use it instead
             String label = (String)store.get(SportletProperties.COMPONENT_LABEL);
-            if (label != null) {
-                store.remove(SportletProperties.COMPONENT_LABEL);
-                cid = label;
-            }
+            if (label != null) cid = label;
             if (cid != null) {
                 url += "/" + cid;
                 String action = (String)store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
