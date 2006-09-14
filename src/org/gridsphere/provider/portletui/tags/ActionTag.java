@@ -6,8 +6,8 @@ package org.gridsphere.provider.portletui.tags;
 
 import org.gridsphere.portlet.*;
 import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.jsrimpl.PortletURLImpl;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.ActionParamBean;
 import org.gridsphere.provider.portletui.beans.ImageBean;
 
@@ -278,9 +278,9 @@ public abstract class ActionTag extends BaseComponentTag {
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
         //RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
         // action is a required attribute except for FormTag
-        if ((label != null)  && (url instanceof PortletURLImpl)) {
+        if (label != null) {
             res.setProperty("label", label);
-            ((PortletURLImpl)url).setParameter(SportletProperties.COMPONENT_LABEL, label);
+            ((PortletURLImpl)url).setLabel(label);
         }
 
         if (windowState != null) {
@@ -306,25 +306,13 @@ public abstract class ActionTag extends BaseComponentTag {
         String compId = (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
 
         if (action != null) {
-            if (url instanceof PortletURLImpl) {
-                if (compId == null) {
-                    ((PortletURLImpl)url).setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, action);
-                    portletAction = new DefaultPortletAction(action);
-                } else {
-                    ((PortletURLImpl)url).setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, compId + "%" + action);
-                    portletAction = new DefaultPortletAction(compId + "%" + action);
-                }
+            if (compId == null) {
+                ((PortletURLImpl)url).setAction(action);
+                portletAction = new DefaultPortletAction(action);
             } else {
-                // this is code for non-GS containers
-                if (compId == null) {
-                    url.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, action);
-                    portletAction = new DefaultPortletAction(action);
-                } else {
-                    url.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, compId + "%" + action);
-                    portletAction = new DefaultPortletAction(compId + "%" + action);
-                }
+                ((PortletURLImpl)url).setAction(compId + "%" + action);
+                portletAction = new DefaultPortletAction(compId + "%" + action);
             }
-
         } else {
             if (compId == null) {
                 // since action is NULL at this point, make it an empty string

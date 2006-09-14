@@ -18,6 +18,7 @@ public class RadioButtonTag extends BaseComponentTag {
 
     protected RadioButtonBean radiobutton = null;
     protected boolean selected = false;
+    protected String onClick = null;
 
     /**
      * Sets the selected status of the bean
@@ -37,6 +38,14 @@ public class RadioButtonTag extends BaseComponentTag {
         return selected;
     }
 
+    public String getOnClick() {
+        return onClick;
+    }
+
+    public void setOnClick(String onClick) {
+        this.onClick = onClick;
+    }
+
     public int doStartTag() throws JspException {
 
         if (!beanId.equals("")) {
@@ -45,8 +54,9 @@ public class RadioButtonTag extends BaseComponentTag {
                 radiobutton = new RadioButtonBean();
                 this.setBaseComponentBean(radiobutton);
             } else {
+                this.setBaseComponentBean(radiobutton);
                 //this.updateBaseComponentBean(radiobutton);
-                this.overrideBaseComponentBean(radiobutton);
+                //this.overrideBaseComponentBean(radiobutton);
             }
             List vals = radiobutton.getSelectedValues();
             if (vals.contains(value)) {
@@ -61,6 +71,8 @@ public class RadioButtonTag extends BaseComponentTag {
             radiobutton.setSelected(selected);
             this.setBaseComponentBean(radiobutton);
         }
+
+        if (onClick !=null) radiobutton.setOnClick(onClick);
 
         //debug();
 

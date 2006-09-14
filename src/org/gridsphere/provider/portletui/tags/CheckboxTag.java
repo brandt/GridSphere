@@ -19,6 +19,7 @@ public class CheckboxTag extends BaseComponentTag {
     protected CheckBoxBean checkbox = null;
     protected boolean selected = false;
     protected boolean selectSet = false;
+    protected String onClick = null;
 
     /**
      * Sets the selected status of the bean
@@ -39,7 +40,16 @@ public class CheckboxTag extends BaseComponentTag {
         return selected;
     }
 
+    public String getOnClick() {
+        return onClick;
+    }
+
+    public void setOnClick(String onClick) {
+        this.onClick = onClick;
+    }
+
     public int doStartTag() throws JspException {
+        System.err.println("id=" + id);
         if (!beanId.equals("")) {
             checkbox = (CheckBoxBean) getTagBean();
             if (checkbox == null) {
@@ -47,14 +57,15 @@ public class CheckboxTag extends BaseComponentTag {
                 checkbox.setSelected(selected);
                 this.setBaseComponentBean(checkbox);
             } else {
-                this.overrideBaseComponentBean(checkbox);
+                this.setBaseComponentBean(checkbox);
             }
         } else {
             checkbox = new CheckBoxBean();
             this.setBaseComponentBean(checkbox);
         }
         if (selectSet) checkbox.setSelected(selected);
-
+        if (onClick != null) checkbox.setOnClick(onClick);
+       
         Tag parent = getParent();
         if (parent instanceof DataGridColumnTag) {
             DataGridColumnTag dataGridColumnTag = (DataGridColumnTag) parent;

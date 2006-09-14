@@ -9,7 +9,6 @@ public class TabBean extends BeanContainer {
 
     protected String jspPage;
     protected boolean isActive = false;
-    protected String title = "";
     protected String label = "";
 
     /**
@@ -41,14 +40,6 @@ public class TabBean extends BeanContainer {
 
     public void setLabel(String label) {
         this.label = label;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public void setPage(String jspPage) {

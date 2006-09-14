@@ -15,6 +15,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.portlet.RenderResponse;
 import javax.portlet.PortletURL;
+import javax.portlet.RenderRequest;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.StringWriter;
@@ -55,24 +56,29 @@ public class TabbedPaneTag extends BaseComponentTag {
         if (tabBeans.isEmpty()) return EVAL_PAGE;
 
         try {
-            currentTabLabel = pageContext.getRequest().getParameter(TAB_LABEL_PARAM);
-            if (currentTabLabel == null) currentTabLabel = "";
-            ServletRequest request = pageContext.getRequest();
+            RenderResponse res = (RenderResponse)pageContext.getAttribute("renderResponse");
+            RenderRequest req = (RenderRequest)pageContext.getAttribute("renderRequest");
 
-            String compVar = (String)request.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+            currentTabLabel = req.getParameter(TAB_LABEL_PARAM);
+            if (currentTabLabel == null) {
+                currentTabLabel = (String)req.getPortletSession(true).getAttribute(getClass().getName());
+            }
+
+            /*
+            String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
             if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-            String cid = (String) request.getAttribute(compVar);
-            String pid = (String) request.getAttribute(SportletProperties.PORTLETID);
+            String cid = (String) req.getAttribute(compVar);
+            String pid = (String) req.getAttribute(SportletProperties.PORTLETID);
+            */
 
             JspWriter out = pageContext.getOut();
             out.println("<ul class=\"basictab\">");
             // if this tab is not set, then use this tab (the first tab in the sequence)
-            if (currentTabLabel.equals("")) {
+            if (currentTabLabel == null) {
                 currentTabLabel = ((TabBean)tabBeans.get(0)).getLabel();
             }
 
             //PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
-            RenderResponse res = (RenderResponse)pageContext.getAttribute("renderResponse");
 
             // print out all tabs
             for (int i = 0; i < tabBeans.size(); i++) {
@@ -87,12 +93,13 @@ public class TabbedPaneTag extends BaseComponentTag {
 
 
                 if (tabBean.getLabel().equals(currentTabLabel)) {
+                    req.getPortletSession(true).setAttribute(getClass().getName(), currentTabLabel);
                     currentPage = tabBean.getPage();
                     out.println("<li class=\"selected\">");
                 } else {
                     out.println("<li>");
                 }
-                out.println("<a href=\"" + href + "\">" + tabBean.getTitle() + "</a>");
+                out.println("<a href=\"" + href + "\">" + tabBean.getValue() + "</a>");
                 out.println("</li>");
             }
 
@@ -101,23 +108,15 @@ public class TabbedPaneTag extends BaseComponentTag {
 
             System.err.println("jsp page=" + currentPage);
 
-            /*
-            Map renderParams = (Map)request.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
-            if (renderParams == null) renderParams = new HashMap();
-            renderParams.put(TAB_LABEL_PARAM, currentTabLabel);
-            request.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid, renderParams);
-            */
-
             StringWriter writer = new StringWriter();
             ServletResponse sres = pageContext.getResponse();
             if (res instanceof HttpServletResponse) {
                 HttpServletResponse hres = (HttpServletResponse)sres;
                 StoredPortletResponseImpl resWrapper = new StoredPortletResponseImpl(hres, writer);
-                pageContext.getServletContext().getRequestDispatcher(currentPage).include(request, resWrapper);
+                pageContext.getServletContext().getRequestDispatcher(currentPage).include(pageContext.getRequest(), resWrapper);
                 out.println(writer.getBuffer());
             }
             tabBeans.clear();
-            request.removeAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
         } catch (Exception e) {
             throw new JspException(e);
         }

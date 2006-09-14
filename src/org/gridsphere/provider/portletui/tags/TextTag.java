@@ -132,8 +132,8 @@ public class TextTag extends BaseComponentTag {
                 textBean = new TextBean();
                 this.setBaseComponentBean(textBean);
             } else {
-                //this.updateBaseComponentBean(textBean);
-                this.overrideBaseComponentBean(textBean);
+                //this.overrideBaseComponentBean(textBean);
+                this.setBaseComponentBean(textBean);
                 textBean.setStyle(style);
                 key = textBean.getValue();
             }

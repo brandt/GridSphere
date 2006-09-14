@@ -20,8 +20,6 @@ public abstract class BaseBean implements TagBean {
 
     protected String beanId = "";
     protected String vbName = "undefined";
-    //protected HttpServletRequest request = null;
-    //protected PortletRequest portletRequest = null;
     protected Locale locale = null;
     protected Map params = new HashMap();
 

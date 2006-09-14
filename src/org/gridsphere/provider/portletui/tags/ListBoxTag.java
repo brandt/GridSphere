@@ -22,7 +22,7 @@ public class ListBoxTag extends ContainerTag {
     protected boolean isMultiple = false;
     protected int size = 1;
     protected String onChange = null;
-
+    protected boolean submitOnChange = false;
 
     /**
      * Returns the (html) size of the field.
@@ -40,6 +40,24 @@ public class ListBoxTag extends ContainerTag {
      */
     public void setSize(int size) {
         this.size = size;
+    }
+
+    /**
+     * Returns true if this listbox should invoke a form submission if the selection is changed
+     *
+     * @return true if this listbox should invoke a form submission if the selection is changed
+     */
+    public boolean getSubmitOnChange() {
+        return submitOnChange;
+    }
+
+    /**
+     * Sets whether this listbox should invoke a form submission if the selection is changed
+     *
+     * @param submitOnChange if true a form submission is invoked if selection changes
+     */
+    public void setSubmitOnChange(boolean submitOnChange) {
+        this.submitOnChange = submitOnChange;
     }
 
     /**
@@ -90,6 +108,7 @@ public class ListBoxTag extends ContainerTag {
     public int doStartTag() throws JspException {
         list = new Vector();
 
+        if (submitOnChange) onChange="GridSphere_SelectSubmit( this.form )";
         if (!beanId.equals("")) {
             listbox = (ListBoxBean) getTagBean();
             if (listbox == null) {
@@ -110,6 +129,7 @@ public class ListBoxTag extends ContainerTag {
             listbox.setMultipleSelection(isMultiple);
             this.setBaseComponentBean(listbox);
         }
+
         try {
             JspWriter out = pageContext.getOut();
             out.print(listbox.toStartString());

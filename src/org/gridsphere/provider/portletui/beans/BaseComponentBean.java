@@ -24,6 +24,22 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     protected String id = null;
 
     /**
+     * Constructs a default base component bean
+     */
+    public BaseComponentBean() {
+        super();
+    }
+
+    /**
+     * Constructs a base component bean using the supplied visual bean type identifier
+     *
+     * @param vbName the supplied visual bean type identifier
+     */
+    public BaseComponentBean(String vbName) {
+        super(vbName);
+    }
+
+    /**
      * Sets the id of the bean  (not to be confused with beanId)
      *
      * @param id the id of the bean
@@ -39,22 +55,6 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
      */
     public String getId() {
         return this.id;
-    }
-
-    /**
-     * Constructs a default base component bean
-     */
-    public BaseComponentBean() {
-        super();
-    }
-
-    /**
-     * Constructs a base component bean using the supplied visual bean type identifier
-     *
-     * @param vbName the supplied visual bean type identifier
-     */
-    public BaseComponentBean(String vbName) {
-        super(vbName);
     }
 
     /**
@@ -267,7 +267,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
             result = " style=\"" + this.cssStyle + "\"";
         }
         if (this.cssClass != null) {
-            result = " class=\"" + this.cssClass + "\"";
+            result += " class=\"" + this.cssClass + "\"";
         }
         return result;
     }

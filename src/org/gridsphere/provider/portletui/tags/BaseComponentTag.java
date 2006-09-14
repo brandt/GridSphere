@@ -196,6 +196,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
      */
     protected void setBaseComponentBean(BaseComponentBean componentBean) {
         componentBean.setBeanId(beanId);
+        if (id != null) componentBean.setId(id);
         componentBean.setLocale(getLocale());
         componentBean.addParam(SportletProperties.COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.COMPONENT_ID));
         componentBean.addParam(SportletProperties.GP_COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID));
@@ -222,6 +223,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
      */
     protected void updateBaseComponentBean(BaseComponentBean componentBean) {
         componentBean.setLocale(getLocale());
+        if (id != null) componentBean.setId(id);
         componentBean.addParam(SportletProperties.COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.COMPONENT_ID));
         componentBean.addParam(SportletProperties.GP_COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID));
         if ((cssClass != null) && componentBean.getCssClass() == null) {
@@ -236,36 +238,6 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         if ((value != null) && (componentBean.getValue() == null)) {
             componentBean.setValue(value);
         }
-        /*
-        if (supportsJavaScript()) {
-            supportsJS = true;
-        } else {
-            supportsJS = false;
-        }
-        */
-    }
-
-    protected void overrideBaseComponentBean(BaseComponentBean componentBean) {
-        if (cssClass != null) {
-            componentBean.setCssClass(cssClass);
-        }
-        if (cssStyle != null) {
-            componentBean.setCssClass(cssStyle);
-        }
-        if (name != null) {
-            componentBean.setName(name);
-        }
-        if (value != null) {
-            componentBean.setValue(value);
-        }
-        /*
-        if (supportsJavaScript()) {
-            supportsJS = true;
-        } else {
-            supportsJS = false;
-        }
-        */
-
     }
 
     protected String getLocalizedText(String key) {

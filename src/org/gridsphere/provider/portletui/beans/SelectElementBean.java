@@ -16,6 +16,16 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
 
     protected boolean selected = false;
     protected List results = new ArrayList();
+    protected String onClick = null;
+
+
+    public String getOnClick() {
+        return onClick;
+    }
+
+    public void setOnClick(String onClick) {
+        this.onClick = onClick;
+    }
 
     /**
      * Constructs a default select element bean
@@ -116,18 +126,20 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
     }
 
     public String toStartString(String type) {
-
+        System.err.println("start string id=" + id);
         String sname = createTagName(name);
-        return "<input " + getFormattedCss() + " type='"
-                + type
-                + "' name='"
-                + sname
-                + "' value='"
-                + value + "' "
-                + checkDisabled()
-                + " "
-                + checkSelected("checked=\"checked\"") // 'checked' replaced by 'checked="checked"' for XHTML 1.0 Strict compliance
-                + "/>";
+        StringBuffer sb = new StringBuffer();
+        sb.append("<input ");
+        if (id != null) sb.append("id=" + id + " ");
+        sb.append(getFormattedCss());
+        sb.append(" type='").append(type).append("' name='");
+        sb.append(sname).append("' value='").append(value);
+        sb.append("' ").append(checkDisabled()).append(" ");
+        sb.append(checkSelected("checked=\"checked\""));
+
+        if (onClick != null) sb.append(" onclick=\"" + onClick + "\"");
+        sb.append(" />");
+        return sb.toString();
     }
 
     public String toEndString() {
