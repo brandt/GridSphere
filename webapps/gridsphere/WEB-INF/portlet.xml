@@ -168,8 +168,11 @@
         </portlet-info>
         <portlet-preferences>
             <preference>
-            <name>feedurl</name>
-            <value>http://rss.cnn.com/rss/cnn_topstories.rss</value>
+                <name>feedurl</name>
+                <value>http://rss.cnn.com/rss/cnn_topstories.rss</value>
+                <value>http://rss.news.yahoo.com/rss/topstories</value>
+                <value>http://digg.com/rss/index.xml</value>
+                <value>http://www.theserverside.com/rss/theserverside-rss2.xml</value>
             <read-only>true</read-only>
             </preference>
         </portlet-preferences>
