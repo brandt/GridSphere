@@ -23,17 +23,16 @@ import java.util.Map;
  * This implementation of <code>SportletUserImpl</code> uses Castor for Java to SQL
  * bindings
  */
-public class SportletUserImpl implements User, HttpSessionBindingListener {
-
+public class SportletUserImpl implements User {
 
     private String oid = null;
     // store used to maintain user attributes
     private Map attributes = new HashMap();
 
     private String UserID = "";
-    private String FamilyName = "";
+    private String LastName = "";
     private String FullName = "";
-    private String GivenName = "";
+    private String FirstName = "";
     private String EmailAddress = "";
     private String Organization = "";
     private long LastLoginTime = 0;
@@ -103,21 +102,21 @@ public class SportletUserImpl implements User, HttpSessionBindingListener {
     }
 
     /**
-     * Returns the family (aka last) name of the user.
+     * Returns the last name of the user.
      *
-     * @return the family name
+     * @return the last name
      */
-    public String getFamilyName() {
-        return FamilyName;
+    public String getLastName() {
+        return LastName;
     }
 
     /**
-     * Sets the family (aka last) name of the user.
+     * Sets the last name of the user.
      *
-     * @param familyName the family name
+     * @param lastName the last name
      */
-    public void setFamilyName(String familyName) {
-        this.FamilyName = familyName;
+    public void setLastName(String lastName) {
+        this.LastName = lastName;
     }
 
     /**
@@ -143,21 +142,21 @@ public class SportletUserImpl implements User, HttpSessionBindingListener {
     }
 
     /**
-     * Returns the given (aka first) name of the user, or  if the given name is not available.
+     * Returns the first name of the user
      *
-     * @return the given name
+     * @return the first name
      */
-    public String getGivenName() {
-        return GivenName;
+    public String getFirstName() {
+        return FirstName;
     }
 
     /**
-     * Sets the given (aka first) name of the user, or  if the given name is not available.
+     * Sets the first) name of the user, or  if the given name is not available.
      *
-     * @param givenName the given name
+     * @param firstName the first name
      */
-    public void setGivenName(String givenName) {
-        this.GivenName = givenName;
+    public void setFirstName(String firstName) {
+        this.FirstName = firstName;
     }
 
     /**
@@ -269,15 +268,6 @@ public class SportletUserImpl implements User, HttpSessionBindingListener {
         return new Hashtable(attributes).elements();
     }
 
-
-    public void valueBound(HttpSessionBindingEvent event) {
-        //System.err.println("valueBound of SportletUserImpl invoked");
-    }
-
-    public void valueUnbound(HttpSessionBindingEvent event) {
-        //System.err.println("valueUnbound of SportletUserImpl invoked");
-    }
-
     /**
      * Returns a string representaation of the User
      *
@@ -285,9 +275,9 @@ public class SportletUserImpl implements User, HttpSessionBindingListener {
      */
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("FamilyName: " + FamilyName + "\n");
+        sb.append("LastName: " + LastName + "\n");
         sb.append("FullName: " + FullName + "\n");
-        sb.append("GivenName: " + GivenName + "\n");
+        sb.append("GivenName: " + FirstName + "\n");
         sb.append("EmailAddress: " + EmailAddress + "\n");
         sb.append("Id: " + getOid() + "\n");
         sb.append("UserID: " + UserID + "\n");
@@ -299,8 +289,8 @@ public class SportletUserImpl implements User, HttpSessionBindingListener {
         boolean b = true;
         if ((obj != null) && (obj.getClass().equals(this.getClass()))) {
             b = (((SportletUserImpl) obj).EmailAddress == this.EmailAddress);
-            b &= (((SportletUserImpl) obj).FamilyName == this.FamilyName);
-            b &= (((SportletUserImpl) obj).GivenName == this.GivenName);
+            b &= (((SportletUserImpl) obj).LastName == this.LastName);
+            b &= (((SportletUserImpl) obj).FirstName == this.FirstName);
             b &= (((SportletUserImpl) obj).FullName == this.FullName);
             b &= (((SportletUserImpl) obj).FullName == this.FullName);
             b &= (((SportletUserImpl) obj).UserID == this.UserID);

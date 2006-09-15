@@ -112,6 +112,27 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         return selectUsers("order by uzer.FullName", queryFilter);
     }
 
+    public List getUsersByFullName(String likeEmail, String likeOrg, QueryFilter queryFilter) {
+        String query = "";
+        String equery = "";
+        String oquery = "";
+        if (!likeEmail.equals("") || !likeOrg.equals("")) {
+            query += "where ";
+            if (!likeEmail.equals("")) {
+                equery = "upper(uzer.EmailAddress) like '%" + likeEmail.toUpperCase() + "%' ";
+            }
+            if (!likeOrg.equals("")) {
+                oquery  = "upper(uzer.Organization) like '%" + likeOrg.toUpperCase() + "%' ";
+            }
+            if (!equery.equals("") && !oquery.equals("")) {
+                query += equery + " and " + oquery;
+            } else {
+                query += equery + oquery;
+            }
+        }
+        return selectUsers(query + " order by uzer.FullName", queryFilter);
+    }
+
     public List getUsersByEmail(QueryFilter queryFilter) {
         return selectUsers("order by uzer.EmailAddress", queryFilter);
     }

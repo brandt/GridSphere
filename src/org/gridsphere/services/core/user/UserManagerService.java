@@ -54,6 +54,8 @@ public interface UserManagerService extends LoginUserModule {
 
     public List getUsersByFullName(QueryFilter queryFilter);
 
+    public List getUsersByFullName(String likeEmail, String likeOrg, QueryFilter queryFilter);
+
     public List getUsersByEmail(QueryFilter queryFilter);
 
     /**

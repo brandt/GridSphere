@@ -52,18 +52,32 @@ public interface User {
     public Enumeration getAttributeNames();
 
     /**
+     * Returns the last name of the user.
+     *
+     * @return the last name
+     */
+    public String getLastName();
+
+    /**
+     * Sets the last name of the user.
+     *
+     * @param lastName the last name
+     */
+    public void setLastName(String lastName);
+
+    /**
      * Returns the family (aka last) name of the user.
      *
      * @return the family name
      */
-    public String getFamilyName();
+    public String getFirstName();
 
     /**
-     * Sets the family (aka last) name of the user.
+     * Sets the first name of the user.
      *
-     * @param familyName the family name
+     * @param firstName the first name
      */
-    public void setFamilyName(String familyName);
+    public void setFirstName(String firstName);
 
 
     /**
@@ -84,22 +98,6 @@ public interface User {
      * @param fullName the full name
      */
     public void setFullName(String fullName);
-
-    /**
-     * Returns the given (aka first) name of the user, or null if the given
-     * name is not available.
-     *
-     * @return the given name
-     */
-    public String getGivenName();
-
-    /**
-     * Sets the given (aka first) name of the user, or  if the given name is not available.
-     *
-     * @param givenName the given name
-     */
-    public void setGivenName(String givenName);
-
 
     /**
      * Returns the organization affiliation association of the user

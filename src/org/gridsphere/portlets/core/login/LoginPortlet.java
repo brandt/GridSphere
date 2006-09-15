@@ -260,7 +260,6 @@ public class LoginPortlet extends ActionPortlet {
             throws PortletException {
         log.debug("Entering validateUser()");
         PortletRequest req = event.getActionRequest();
-        StringBuffer message = new StringBuffer();
 
         // Validate user name
         String userName = event.getTextFieldBean("userName").getValue();
@@ -276,10 +275,16 @@ public class LoginPortlet extends ActionPortlet {
 
         // Validate full name
 
-        String familyName = event.getTextFieldBean("fullName").getValue();
-        if (familyName.equals("")) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br />");
-            throw new PortletException("full name is blank");
+        String firstName = event.getTextFieldBean("firstName").getValue();
+        if (firstName.equals("")) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_GIVENNAME_BLANK") + "<br />");
+            throw new PortletException("first name is blank");
+        }
+
+        String lastName = event.getTextFieldBean("lastName").getValue();
+        if (lastName.equals("")) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br />");
+            throw new PortletException("last name is blank");
         }
 
         // Validate e-mail
@@ -362,7 +367,9 @@ public class LoginPortlet extends ActionPortlet {
 
         // Edit account attributes
         newuser.setUserName(request.getAttribute("userName"));
-        newuser.setFullName(request.getAttribute("fullName"));
+        newuser.setFirstName(request.getAttribute("firstName"));
+        newuser.setLastName(request.getAttribute("lastName"));
+        newuser.setFullName(request.getAttribute("lastName") + ", " + request.getAttribute("firstName"));
         newuser.setEmailAddress(request.getAttribute("emailAddress"));
         newuser.setOrganization(request.getAttribute("organization"));
 
@@ -466,7 +473,8 @@ public class LoginPortlet extends ActionPortlet {
         // request.setUserID(user.getID());
 
         request.setAttribute("userName", evt.getTextFieldBean("userName").getValue());
-        request.setAttribute("fullName", evt.getTextFieldBean("fullName").getValue());
+        request.setAttribute("firstName", evt.getTextFieldBean("firstName").getValue());
+        request.setAttribute("lastName", evt.getTextFieldBean("lastName").getValue());
         request.setAttribute("emailAddress", evt.getTextFieldBean("emailAddress").getValue());
         request.setAttribute("organization", evt.getTextFieldBean("organization").getValue());
 
@@ -523,8 +531,10 @@ public class LoginPortlet extends ActionPortlet {
 
         body.append(getLocalizedText(req, "USERNAME"));
         body.append(evt.getTextFieldBean("userName").getValue()).append("\n");
-        body.append(getLocalizedText(req, "FULLNAME"));
-        body.append(evt.getTextFieldBean("fullName").getValue()).append("\n");
+        body.append(getLocalizedText(req, "GIVENNAME"));
+        body.append(evt.getTextFieldBean("firstName").getValue()).append("\n");
+        body.append(getLocalizedText(req, "FAMILYNAME"));
+        body.append(evt.getTextFieldBean("lastName").getValue()).append("\n");
         body.append(getLocalizedText(req, "EMAILADDRESS"));
         body.append(evt.getTextFieldBean("emailAddress").getValue()).append("\n");
         body.append(getLocalizedText(req, "ORGANIZATION"));

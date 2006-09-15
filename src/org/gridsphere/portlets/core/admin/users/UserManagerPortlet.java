@@ -38,6 +38,9 @@ public class UserManagerPortlet extends ActionPortlet {
     private RoleManagerService roleManagerService = null;
     private PortalConfigService portalConfigService = null;
 
+    private String NUM_PAGES = getClass() + ".NUM_PAGES";
+    private String EMAIL_QUERY = getClass() + ".EMAIL_QUERY";
+    private String ORG_QUERY = getClass() + ".ORG_QUERY";
 
     public void init(PortletConfig config) throws PortletException {
         super.init(config);
@@ -53,9 +56,20 @@ public class UserManagerPortlet extends ActionPortlet {
             throws PortletException {
         PortletRequest req = evt.getRenderRequest();
         int numusers = this.userManagerService.getNumUsers();
-        List userList = this.userManagerService.getUsersByUserName(getQueryFilter(req, 20));
+
+
+        String numPages = (String)req.getPortletSession().getAttribute(NUM_PAGES);
+        numPages = (numPages != null) ? numPages : "10";
+
+        String likeEmail = (String)req.getPortletSession().getAttribute(EMAIL_QUERY);
+        likeEmail = (likeEmail != null) ? likeEmail : "";
+        String likeOrganization = (String)req.getPortletSession().getAttribute(ORG_QUERY);
+        likeOrganization = (likeOrganization != null) ? likeOrganization : "";
+
+        List userList = userManagerService.getUsersByFullName(likeEmail, likeOrganization, getQueryFilter(req, Integer.parseInt(numPages)));
         req.setAttribute("userList", userList);
-        req.setAttribute("numUsers", new Integer(numusers));
+        req.setAttribute("numUsers", Integer.valueOf(numusers));
+
         setNextState(req, DO_VIEW_USER_LIST);
     }
 
@@ -299,9 +313,11 @@ public class UserManagerPortlet extends ActionPortlet {
 
     private void setUserValues(ActionFormEvent event, User user) {
         event.getTextFieldBean("userName").setValue(user.getUserName());
-        event.getTextFieldBean("familyName").setValue(user.getFamilyName());
-        event.getTextFieldBean("givenName").setValue(user.getGivenName());
-        event.getTextFieldBean("fullName").setValue(user.getFullName());
+        event.getTextFieldBean("lastName").setValue(user.getLastName());
+        event.getTextFieldBean("firstName").setValue(user.getFirstName());
+
+        //event.getTextFieldBean("fullName").setValue(user.getFullName());
+
         event.getTextFieldBean("emailAddress").setValue(user.getEmailAddress());
         event.getTextFieldBean("organization").setValue(user.getOrganization());
         event.getPasswordBean("password").setValue("");
@@ -326,11 +342,18 @@ public class UserManagerPortlet extends ActionPortlet {
             }
         }
 
-        // Validate given name
-        String givenName = event.getTextFieldBean("fullName").getValue();
+        // Validate first and last name
+        String firstName = event.getTextFieldBean("firstName").getValue();
 
-        if (givenName.equals("")) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br />");
+        if (firstName.equals("")) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_GIVENNAME_BLANK") + "<br />");
+            isInvalid = true;
+        }
+
+        String lastName = event.getTextFieldBean("lastName").getValue();
+
+        if (lastName.equals("")) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br />");
             isInvalid = true;
         }
 
@@ -436,7 +459,9 @@ public class UserManagerPortlet extends ActionPortlet {
     private void editAccountRequest(ActionFormEvent event, User accountRequest) {
         log.debug("Entering editAccountRequest()");
         accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
-        accountRequest.setFullName(event.getTextFieldBean("fullName").getValue());
+        accountRequest.setFirstName(event.getTextFieldBean("firstName").getValue());
+        accountRequest.setLastName(event.getTextFieldBean("lastName").getValue());
+        accountRequest.setFullName(event.getTextFieldBean("lastName").getValue() + ", " + event.getTextFieldBean("firstName").getValue());
         accountRequest.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
         accountRequest.setOrganization(event.getTextFieldBean("organization").getValue());
         if (event.getCheckBoxBean("accountCB").isSelected()) {
@@ -470,4 +495,24 @@ public class UserManagerPortlet extends ActionPortlet {
             log.debug("Exiting saveUserRole()");
         }
     }
+
+    public void filterUserList(ActionFormEvent event) {
+        PortletRequest req = event.getActionRequest();
+        ListBoxBean usersPageLB = event.getListBoxBean("usersPageLB");
+        String numPages = usersPageLB.getSelectedValue();
+        try {
+            Integer.parseInt(numPages);
+        } catch (Exception e) {
+            numPages = "10";
+        }
+
+        TextFieldBean userEmailTF = event.getTextFieldBean("userEmailTF");
+        TextFieldBean userOrgTF = event.getTextFieldBean("userOrgTF");
+
+        req.getPortletSession().setAttribute(NUM_PAGES, numPages);
+        req.getPortletSession().setAttribute(EMAIL_QUERY, userEmailTF.getValue());
+        req.getPortletSession().setAttribute(ORG_QUERY, userOrgTF.getValue());
+
+    }
+
 }

@@ -153,8 +153,11 @@ public class ProfileManagerPortlet extends ActionPortlet {
         }
         //userName.setDisabled(disable);
 
-        TextFieldBean fullName = event.getTextFieldBean("fullName");
-        fullName.setValue(user.getFullName());
+        TextFieldBean firstName = event.getTextFieldBean("firstName");
+        firstName.setValue(user.getFirstName());
+
+        TextFieldBean lastName = event.getTextFieldBean("lastName");
+        lastName.setValue(user.getLastName());
 
         TextFieldBean organization = event.getTextFieldBean("organization");
         organization.setValue(user.getOrganization());
@@ -372,13 +375,19 @@ public class ProfileManagerPortlet extends ActionPortlet {
             }
         }
 
-        // Validate full name
-        String fullName = event.getTextFieldBean("fullName").getValue();
-        if (fullName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br />");
+        // Validate first name
+        String firstName = event.getTextFieldBean("firstName").getValue();
+        if (firstName.equals("")) {
+            message.append(this.getLocalizedText(req, "USER_GIVENNAME_BLANK") + "<br />");
             isInvalid = true;
         }
-        // Validate given name
+        // Validate last name
+        String lastName = event.getTextFieldBean("lastName").getValue();
+        if (lastName.equals("")) {
+            message.append(this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br />");
+            isInvalid = true;
+        }
+
         String organization = event.getTextFieldBean("organization").getValue();
 
         // Validate e-mail
@@ -403,7 +412,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
         log.debug("creating account request for user: " + user.getID());
         user.setEmailAddress(eMail);
         if (!userName.equals("")) user.setUserName(userName);
-        user.setFullName(fullName);
+
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setFullName(lastName + ", " + firstName);
         if (locale != null) {
             Locale loc = new Locale(locale, "", "");
             user.setAttribute(User.LOCALE, locale);

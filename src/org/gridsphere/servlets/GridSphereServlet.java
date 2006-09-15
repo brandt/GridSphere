@@ -677,6 +677,22 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
     public void updateDatabase() {
-
+        // loop thru users make sure first and last name are created from full name
+        List users = userManagerService.getUsers();
+        Iterator it = users.iterator();
+        while (it.hasNext()){
+            User user = (User)it.next();
+            if (user.getFirstName().equals("") && user.getLastName().equals("")) {
+                String full =  user.getFullName();
+                int idx = full.lastIndexOf(" ");
+                if (idx > 0) {
+                    user.setFirstName(full.substring(0, idx));
+                    user.setLastName(full.substring(idx+1));
+                } else {
+                    user.setFirstName(full);
+                }
+                userManagerService.saveUser(user);
+            }
+        }
     }
 }
