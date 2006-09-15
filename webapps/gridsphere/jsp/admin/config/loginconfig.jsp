@@ -60,7 +60,7 @@ function checkSavePass( elem, id ) {
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell>
-                    <ui:actionsubmit action="setLoginSettings" key="APPLY"/>
+                    <ui:actionsubmit action="setLoginSettings" key="SAVE"/>
                 </ui:tablecell>
             </ui:tablerow>
         </ui:frame>
@@ -82,7 +82,7 @@ function checkSavePass( elem, id ) {
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell>
-                    <ui:actionsubmit action="configAccountSettings" key="APPLY"/>
+                    <ui:actionsubmit action="configAccountSettings" key="SAVE"/>
                 </ui:tablecell>
             </ui:tablerow>
         </ui:frame>

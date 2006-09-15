@@ -18,7 +18,7 @@
             </ui:tablerow>
             <ui:tablerow>
                 <ui:tablecell>
-                <ui:actionsubmit action="doSaveMailMessage" key="APPLY">
+                <ui:actionsubmit action="doSaveMailMessage" key="SAVE">
                         <ui:actionparam name="type" value="forgot"/>
                 </ui:actionsubmit>
                 </ui:tablecell>
@@ -40,7 +40,7 @@
             </ui:tablerow>
             <ui:tablerow>
                 <ui:tablecell>
-                    <ui:actionsubmit action="doSaveMailMessage" key="APPLY">
+                    <ui:actionsubmit action="doSaveMailMessage" key="SAVE">
                         <ui:actionparam name="type" value="activate"/>
                     </ui:actionsubmit>
                 </ui:tablecell>
@@ -63,7 +63,7 @@
             </ui:tablerow>
             <ui:tablerow>
                 <ui:tablecell>
-                    <ui:actionsubmit action="doSaveMailMessage" key="APPLY">
+                    <ui:actionsubmit action="doSaveMailMessage" key="SAVE">
                         <ui:actionparam name="type" value="approved"/>
                     </ui:actionsubmit>
                 </ui:tablecell>
@@ -86,7 +86,7 @@
             </ui:tablerow>
             <ui:tablerow>
                 <ui:tablecell>
-                    <ui:actionsubmit action="doSaveMailMessage" key="APPLY">
+                    <ui:actionsubmit action="doSaveMailMessage" key="SAVE">
                         <ui:actionparam name="type" value="denied"/>
                     </ui:actionsubmit>
                 </ui:tablecell>

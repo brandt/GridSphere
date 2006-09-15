@@ -11,7 +11,7 @@
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell>
-                    <ui:actionsubmit action="doSaveValues" key="APPLY"/>
+                    <ui:actionsubmit action="doSaveValues" key="SAVE"/>
                 </ui:tablecell>
             </ui:tablerow>
         </ui:frame>

@@ -16,7 +16,7 @@
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell>
-                    <ui:actionsubmit action="configErrorSettings" key="APPLY"/>
+                    <ui:actionsubmit action="configErrorSettings" key="SAVE"/>
                 </ui:tablecell>
             </ui:tablerow>
         </ui:frame>

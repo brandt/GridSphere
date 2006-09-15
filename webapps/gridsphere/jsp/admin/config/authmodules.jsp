@@ -68,7 +68,7 @@
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell>
-                    <ui:actionsubmit action="doSaveAuthModules" key="APPLY"/>
+                    <ui:actionsubmit action="doSaveAuthModules" key="SAVE"/>
                 </ui:tablecell>
             </ui:tablerow>
         </ui:frame>
