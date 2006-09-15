@@ -34,10 +34,18 @@
                     </ui:tablecell>
                 </ui:tablerow>
                 <ui:tablerow>
-                    <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
+                    <ui:tablecell><ui:text key="GIVENNAME"/></ui:tablecell>
                     <ui:tablecell>
-                        <ui:textfield beanId="fullName">
-                            <ui:validator type="checkNotEmpty" key="USER_FULLNAME_BLANK"/>
+                        <ui:textfield beanId="firstName">
+                            <ui:validator type="checkNotEmpty" key="USER_GIVENNAME_BLANK"/>
+                        </ui:textfield>
+                    </ui:tablecell>
+                </ui:tablerow>
+                <ui:tablerow>
+                    <ui:tablecell><ui:text key="FAMILYNAME"/></ui:tablecell>
+                    <ui:tablecell>
+                        <ui:textfield beanId="lastName">
+                            <ui:validator type="checkNotEmpty" key="USER_FAMILYNAME_BLANK"/>
                         </ui:textfield>
                     </ui:tablecell>
                 </ui:tablerow>

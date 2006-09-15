@@ -20,10 +20,19 @@
 
     <ui:tablerow>
         <ui:tablecell width="100">
-            <ui:text key="FULLNAME"/>
+            <ui:text key="GIVENNAME"/>
         </ui:tablecell>
         <ui:tablecell>
-            <ui:text value="<%= user.getFullName() %>" style="plain"/>
+            <ui:text value="<%= user.getFirstName() %>" style="plain"/>
+        </ui:tablecell>
+    </ui:tablerow>
+
+    <ui:tablerow>
+        <ui:tablecell width="100">
+            <ui:text key="FAMILYNAME"/>
+        </ui:tablecell>
+        <ui:tablecell>
+            <ui:text value="<%= user.getLastName() %>" style="plain"/>
         </ui:tablecell>
     </ui:tablerow>
 

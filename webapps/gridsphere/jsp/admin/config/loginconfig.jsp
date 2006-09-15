@@ -18,6 +18,13 @@ function checkAllowUsers( elem, id ) {
     }
 }
 
+function checkSavePass( elem, id ) {
+    if (elem == true) {
+        document.getElementById(id).checked = true;
+    } else {
+        document.getElementById(id).checked = false;
+    }
+}
 //  End -->
 </script>
 <ui:form>
@@ -44,10 +51,10 @@ function checkAllowUsers( elem, id ) {
                 <ui:text key="LOGIN_REMUSER"/>
             </li>
             <li>
-                <ui:checkbox id="savePassCB" onClick="checkUserCreate( this.checked, 'notifyCB' )" beanId="savepassCB" value="TRUE"/>
+                <ui:checkbox id="savePassCB" onClick="checkSavePass( this.checked, 'notifyCB' )" beanId="savepassCB" value="TRUE"/>
                 <ui:text key="LOGIN_CONFIG_PASSWD"/>
                 <br/>
-                <ui:text style="alert" key="LOGIN_CONFIG_PASSWD2"/>
+                <ui:text style="alert" key="LOGIN_CONFIG_PASSWD1"/>
             </li>
         </ul>
         <ui:frame>
@@ -56,7 +63,6 @@ function checkAllowUsers( elem, id ) {
                     <ui:actionsubmit action="setLoginSettings" key="APPLY"/>
                 </ui:tablecell>
             </ui:tablerow>
-
         </ui:frame>
     </ui:group>
 </ui:form>
