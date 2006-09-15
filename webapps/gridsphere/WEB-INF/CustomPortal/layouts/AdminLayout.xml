@@ -61,13 +61,13 @@
                     <title lang="en">Users</title>
                     <table-layout>
                         <row-layout>
-                            <column-layout width="50%">
+                            <column-layout width="80%">
                                 <portlet-frame label="usermanager">
                                     <portlet-class>
                                         org.gridsphere.portlets.core.admin.users.UserManagerPortlet</portlet-class>
                                 </portlet-frame>
                             </column-layout>
-                            <column-layout width="50%"/>
+                            <column-layout width="20%"/>
                         </row-layout>
                     </table-layout>
                 </portlet-tab>
