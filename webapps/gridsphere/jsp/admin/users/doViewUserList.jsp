@@ -17,9 +17,6 @@
 
 <ui:actionlink cssStyle="text-decoration: underline; font-weight: bold;" action="doNewUser" key="USER_CREATE_USER"/>
 
-<p/>
-Displaying users 1 to 10 of 133
-
 <ui:group>
 <ui:form>
 
