@@ -21,9 +21,9 @@
         </id>
 
         <property name="UserID" type="string" column="userid"/>
-        <property name="FamilyName" type="string" column="familyname"/>
+        <property name="LastName" type="string" column="familyname"/>
         <property name="FullName" type="string" column="fullname"/>
-        <property name="GivenName" type="string" column="givenname"/>
+        <property name="FirstName" type="string" column="givenname"/>
         <property name="EmailAddress" type="string" column="emailaddress"/>
         <property name="Organization" type="string" column="organization"/>
         <property name="LastLoginTime" column="lastlogintime"/>
