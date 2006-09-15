@@ -38,7 +38,7 @@ $Id$
         <portlet-tab label="logout" outline="false" align="right"  include="/jsp/logout/logoutnav.jsp"/>
         <portlet-tab label="profile" outline="false" align="right"  include="/jsp/profile/profilenav.jsp"/>
         <portlet-tab required-role="ADMIN" label="layout" outline="false" align="right"  include="/jsp/admin/layout/layoutnav.jsp"/>
-        <portlet-tab label="admin" outline="false" align="right"  include="/jsp/admin/adminnav.jsp"/>
+        <portlet-tab required-role="ADMIN" label="admin" outline="false" align="right"  include="/jsp/admin/adminnav.jsp"/>
     </portlet-tabbed-pane>
 
     <portlet-footer>
