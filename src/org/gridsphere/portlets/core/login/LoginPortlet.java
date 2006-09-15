@@ -529,16 +529,16 @@ public class LoginPortlet extends ActionPortlet {
             body.append(activateURL).append("\n\n");
         }
 
-        body.append(getLocalizedText(req, "USERNAME"));
+        body.append(getLocalizedText(req, "USERNAME")).append("\t");
         body.append(evt.getTextFieldBean("userName").getValue()).append("\n");
-        body.append(getLocalizedText(req, "GIVENNAME"));
+        body.append(getLocalizedText(req, "GIVENNAME")).append("\t");
         body.append(evt.getTextFieldBean("firstName").getValue()).append("\n");
-        body.append(getLocalizedText(req, "FAMILYNAME"));
+        body.append(getLocalizedText(req, "FAMILYNAME")).append("\t");
         body.append(evt.getTextFieldBean("lastName").getValue()).append("\n");
-        body.append(getLocalizedText(req, "EMAILADDRESS"));
-        body.append(evt.getTextFieldBean("emailAddress").getValue()).append("\n");
-        body.append(getLocalizedText(req, "ORGANIZATION"));
+        body.append(getLocalizedText(req, "ORGANIZATION")).append("\t");
         body.append(evt.getTextFieldBean("organization").getValue()).append("\n");
+        body.append(getLocalizedText(req, "EMAILADDRESS")).append("\t");
+        body.append(evt.getTextFieldBean("emailAddress").getValue()).append("\n");
 
         mailToUser.setBody(body.toString());
         mailToUser.setServiceid("mail");

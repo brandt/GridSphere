@@ -275,10 +275,10 @@ public class SportletUserImpl implements User {
      */
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("LastName: " + LastName + "\n");
-        sb.append("FullName: " + FullName + "\n");
-        sb.append("GivenName: " + FirstName + "\n");
-        sb.append("EmailAddress: " + EmailAddress + "\n");
+        sb.append("Last Name: " + LastName + "\n");
+        sb.append("Full Name: " + FullName + "\n");
+        sb.append("First Name: " + FirstName + "\n");
+        sb.append("Email Address: " + EmailAddress + "\n");
         sb.append("Id: " + getOid() + "\n");
         sb.append("UserID: " + UserID + "\n");
         sb.append("LastLoginTime: " + LastLoginTime + "\n");
