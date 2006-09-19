@@ -7,14 +7,17 @@ package org.gridsphere.portlets.core.admin.roles;
 import org.gridsphere.portlet.User;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.event.jsr.FormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
+import org.gridsphere.services.core.user.UserManagerService;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
@@ -28,10 +31,12 @@ public class RoleManagerPortlet extends ActionPortlet {
 
     // Portlet services
     private RoleManagerService roleManagerService = null;
+   private UserManagerService userManagerService = null;
 
     public void init(PortletConfig config) throws PortletException {
         super.init(config);
         roleManagerService = (RoleManagerService) createPortletService(RoleManagerService.class);
+        userManagerService = (UserManagerService) createPortletService(UserManagerService.class);
         DEFAULT_HELP_PAGE = "admin/roles/help.jsp";
         DEFAULT_VIEW_PAGE = "doListRoles";
     }
@@ -49,23 +54,61 @@ public class RoleManagerPortlet extends ActionPortlet {
         setNextState(req, ROLES_LIST);
     }
 
-    public void doEditRole(ActionFormEvent evt) {
-        PortletRequest req = evt.getActionRequest();
-        String roleName = evt.getAction().getParameter("roleName");
+    public void doReturn(ActionFormEvent event) {
+        setNextState(event.getActionRequest(), DEFAULT_VIEW_PAGE);
+    }
 
+    public void doShowRole(RenderFormEvent event) {
+        HiddenFieldBean roleHF = event.getHiddenFieldBean("roleHF");
+        String roleName = roleHF.getValue();
+        doPrepareRole(event, event.getRenderRequest(), event.getRenderResponse(), roleName);
+    }
+
+    public void doEditRole(ActionFormEvent event) {
+        String roleName = event.getAction().getParameter("roleName");
+        doPrepareRole(event, event.getActionRequest(), event.getActionResponse(), roleName);
+    }
+
+    public void doPrepareRole(FormEvent event, PortletRequest req, PortletResponse res, String roleName) {
+        HiddenFieldBean roleHF = event.getHiddenFieldBean("roleHF");
         PortletRole role = null;
         if (roleName != null) {
             role = roleManagerService.getRole(roleName);
-            HiddenFieldBean roleHF = evt.getHiddenFieldBean("roleHF");
+            roleHF = event.getHiddenFieldBean("roleHF");
             roleHF.setValue(roleName);
-            TextFieldBean roleNameTF = evt.getTextFieldBean("roleNameTF");
+            TextFieldBean roleNameTF = event.getTextFieldBean("roleNameTF");
             roleNameTF.setValue(role.getName());
-            TextFieldBean roleDescTF = evt.getTextFieldBean("roleDescTF");
+            TextFieldBean roleDescTF = event.getTextFieldBean("roleDescTF");
             roleDescTF.setValue(role.getDescription());
+            List users = roleManagerService.getUsersInRole(role);
+            req.setAttribute("userList", users);
+
+            List notusers = userManagerService.getUsers();
+            for(int i = 0; i < users.size(); i++) {
+                User u = (User)users.get(i);
+                if (notusers.contains(u)) notusers.remove(u);
+            }
+
+            ListBoxBean addUsersLB = event.getListBoxBean("addusersLB");
+            addUsersLB.clear();
+            if (notusers.isEmpty()) {
+                req.setAttribute("nousers", "true");
+            }
+            for (int i = 0; i < notusers.size(); i++) {
+                User user = (User)notusers.get(i);
+                ListBoxItemBean item = new ListBoxItemBean();
+                item.setName(user.getUserName());
+                item.setValue(user.getFullName());
+                addUsersLB.addBean(item);
+            }
+
+
         } else {
-            HiddenFieldBean isNewRoleHF = evt.getHiddenFieldBean("isNewRoleHF");
+            HiddenFieldBean isNewRoleHF = event.getHiddenFieldBean("isNewRoleHF");
             isNewRoleHF.setValue("true");
         }
+
+
         setNextState(req, ROLES_EDIT);
     }
 
@@ -116,6 +159,38 @@ public class RoleManagerPortlet extends ActionPortlet {
         }
         roleManagerService.saveRole(role);
         createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG") + ": " + role.getName());
+    }
+
+    public void doAddUser(ActionFormEvent event) {
+        PortletRequest req = event.getActionRequest();
+        ListBoxBean addusersLB = event.getListBoxBean("addusersLB");
+        String userid = addusersLB.getSelectedName();
+        System.err.println("user id = " + userid);
+        HiddenFieldBean roleHF = event.getHiddenFieldBean("roleHF");
+        PortletRole role = roleManagerService.getRole(roleHF.getValue());
+        System.err.println("role = " + role);
+        User user = userManagerService.getUser(userid);
+        System.err.println("user = " + user);
+        if ((user != null) && (role != null)) {
+            System.err.println("ADD USER to role" + user + role);
+            roleManagerService.addUserToRole(user, role);
+        }
+        setNextState(req, "doShowRole");
+    }
+
+    public void doRemoveUser(ActionFormEvent event) {
+        PortletRequest req = event.getActionRequest();
+        HiddenFieldBean roleHF = event.getHiddenFieldBean("roleHF");
+        PortletRole role = roleManagerService.getRole(roleHF.getValue());
+        String[] users = req.getParameterValues("userCB");
+        if ((users != null) && (role != null)) {
+            for (int i = 0; i < users.length; i++) {
+                User user = userManagerService.getUser(users[i]);
+                roleManagerService.deleteUserInRole(user, role);
+            }
+
+        }
+        setNextState(req, "doShowRole");
     }
 
 }

@@ -15,14 +15,19 @@ import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.user.UserManagerService;
+import org.gridsphere.services.core.messaging.TextMessagingService;
+import org.gridsphere.services.core.persistence.QueryFilter;
 import org.gridsphere.portlets.core.login.LoginPortlet;
 import org.gridsphere.portlet.User;
+import org.gridsphere.tmf.message.MailMessage;
+import org.gridsphere.tmf.TextMessagingException;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletRequest;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 
 public class UserManagerPortlet extends ActionPortlet {
 
@@ -37,6 +42,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
     private RoleManagerService roleManagerService = null;
     private PortalConfigService portalConfigService = null;
+    private TextMessagingService tms = null;
 
     private String NUM_PAGES = getClass() + ".NUM_PAGES";
     private String EMAIL_QUERY = getClass() + ".EMAIL_QUERY";
@@ -47,6 +53,7 @@ public class UserManagerPortlet extends ActionPortlet {
         this.userManagerService = (UserManagerService) createPortletService(UserManagerService.class);
         this.roleManagerService = (RoleManagerService) createPortletService(RoleManagerService.class);
         this.passwordManagerService = (PasswordManagerService) createPortletService(PasswordManagerService.class);
+        tms = (TextMessagingService) createPortletService(TextMessagingService.class);
         this.portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
         DEFAULT_HELP_PAGE = "admin/users/help.jsp";
         DEFAULT_VIEW_PAGE = "doListUsers";
@@ -55,8 +62,6 @@ public class UserManagerPortlet extends ActionPortlet {
     public void doListUsers(RenderFormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getRenderRequest();
-        int numusers = this.userManagerService.getNumUsers();
-
 
         String numPages = (String)req.getPortletSession().getAttribute(NUM_PAGES);
         numPages = (numPages != null) ? numPages : "10";
@@ -66,11 +71,31 @@ public class UserManagerPortlet extends ActionPortlet {
         String likeOrganization = (String)req.getPortletSession().getAttribute(ORG_QUERY);
         likeOrganization = (likeOrganization != null) ? likeOrganization : "";
 
-        List userList = userManagerService.getUsersByFullName(likeEmail, likeOrganization, getQueryFilter(req, Integer.parseInt(numPages)));
+        Integer maxRows = Integer.parseInt(numPages);
+
+        int numUsers = userManagerService.getNumUsers();
+
+        QueryFilter filter = evt.getQueryFilter(maxRows, numUsers);
+
+        List userList = userManagerService.getUsersByFullName(likeEmail, likeOrganization, filter);
+
         req.setAttribute("userList", userList);
-        req.setAttribute("numUsers", Integer.valueOf(numusers));
+
+        //System.err.println("sizeof users=" + userList.size());
+        //req.setAttribute("numUsers", Integer.valueOf(numUsers));
+        //req.setAttribute("maxRows", Integer.valueOf(maxRows));
+
+        TableBean userTable = evt.getTableBean("userTable");
+        userTable.setQueryFilter(filter);
+        //userTable.setMaxRows(maxRows);
+        //userTable.setNumEntries(numUsers);
+
 
         setNextState(req, DO_VIEW_USER_LIST);
+    }
+
+    public void doReturn(ActionFormEvent event) {
+        setNextState(event.getActionRequest(), "doListUsers");
     }
 
     public void doViewUser(ActionFormEvent evt)
@@ -78,7 +103,7 @@ public class UserManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getActionRequest();
 
         String userID = evt.getAction().getParameter("userID");
-        User user = this.userManagerService.getUser(userID);
+        User user = userManagerService.getUser(userID);
         if (user != null) {
             // should check for non-null user !
             req.setAttribute("user", user);
@@ -112,7 +137,7 @@ public class UserManagerPortlet extends ActionPortlet {
             throws PortletException {
 
         PortletRequest req = evt.getActionRequest();
-
+        req.setAttribute("newuser", "true");
         // indicate to edit JSP this is a new user
         HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
         hf.setValue("true");
@@ -122,6 +147,19 @@ public class UserManagerPortlet extends ActionPortlet {
             req.setAttribute("savePass", "true");
         }
 
+        makeRoleFrame(evt, null);
+
+        setNextState(req, DO_VIEW_USER_EDIT);
+        log.debug("in doViewNewUser");
+    }
+
+    /**
+     * Creates the role table
+     *
+     * @param evt
+     * @param user the user if this is editing an existing user, null if a new user
+     */
+    private void makeRoleFrame(ActionFormEvent evt, User user) {
         FrameBean roleFrame = evt.getFrameBean("roleFrame");
 
         DefaultTableModel model = new DefaultTableModel();
@@ -130,24 +168,33 @@ public class UserManagerPortlet extends ActionPortlet {
         tr.setHeader(true);
         TableCellBean tc = new TableCellBean();
         TextBean text = new TextBean();
-        text.setValue("Select Roles");
+        text.setKey("USER_SELECT_ROLES");
         tc.addBean(text);
+        tc.setWidth("100");
         tr.addBean(tc);
         tc = new TableCellBean();
         text = new TextBean();
-        text.setValue("Role name");
+        text.setKey("USER_ROLE_NAME");
+        tc.setWidth("200");
         tc.addBean(text);
         tr.addBean(tc);
 
         model.addTableRowBean(tr);
 
         List roles = roleManagerService.getRoles();
+        List myroles = new ArrayList();
+        if (user != null)  myroles = roleManagerService.getRolesForUser(user);
+
         Iterator it = roles.iterator();
         while (it.hasNext()) {
             PortletRole role = (PortletRole)it.next();
             tr = new TableRowBean();
             tc = new TableCellBean();
             CheckBoxBean cb = new CheckBoxBean();
+            if (myroles.contains(role)) {
+                cb.setSelected(true);
+            }
+            if ((user == null) && (role.equals(PortletRole.USER))) cb.setSelected(true);
             cb.setBeanId(role.getName() + "CB");
             tc.addBean(cb);
             tr.addBean(tc);
@@ -158,11 +205,7 @@ public class UserManagerPortlet extends ActionPortlet {
             tr.addBean(tc);
             model.addTableRowBean(tr);
         }
-
         roleFrame.setTableModel(model);
-
-        setNextState(req, DO_VIEW_USER_EDIT);
-        log.debug("in doViewNewUser");
     }
 
     public void doEditUser(ActionFormEvent evt)
@@ -180,50 +223,12 @@ public class UserManagerPortlet extends ActionPortlet {
 
         // get user
         User user = this.userManagerService.getUser(userID);
-        if (user == null) doNewUser(evt);
-
-        FrameBean roleFrame = evt.getFrameBean("roleFrame");
-
-        DefaultTableModel model = new DefaultTableModel();
-
-        TableRowBean tr = new TableRowBean();
-        tr.setHeader(true);
-        TableCellBean tc = new TableCellBean();
-        TextBean text = new TextBean();
-        text.setValue("Select Roles");
-        tc.addBean(text);
-        tr.addBean(tc);
-        tc = new TableCellBean();
-        text = new TextBean();
-        text.setValue("Role name");
-        tc.addBean(text);
-        tr.addBean(tc);
-
-        model.addTableRowBean(tr);
-
-        List roles = roleManagerService.getRoles();
-        List myroles = roleManagerService.getRolesForUser(user);
-        Iterator it = roles.iterator();
-        while (it.hasNext()) {
-            PortletRole role = (PortletRole)it.next();
-            tr = new TableRowBean();
-            tc = new TableCellBean();
-            CheckBoxBean cb = new CheckBoxBean();
-            if (myroles.contains(role)) {
-                cb.setSelected(true);
-            }
-            cb.setBeanId(role.getName() + "CB");
-            tc.addBean(cb);
-            tr.addBean(tc);
-            tc = new TableCellBean();
-            text = new TextBean();
-            text.setValue(role.getName());
-            tc.addBean(text);
-            tr.addBean(tc);
-            model.addTableRowBean(tr);
+        if (user == null) {
+            doReturn(evt);
+            return;
         }
 
-        roleFrame.setTableModel(model);
+        makeRoleFrame(evt, user);
 
         setUserValues(evt, user);
         String savePasswds = portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS);
@@ -261,6 +266,8 @@ public class UserManagerPortlet extends ActionPortlet {
                 user = saveUser(evt, null);
                 HiddenFieldBean userHF = evt.getHiddenFieldBean("userID");
                 userHF.setValue(user.getID());
+                CheckBoxBean cb = evt.getCheckBoxBean("emailUserCB");
+                if (cb.isSelected()) mailUserConfirmation(evt, user);
                 createSuccessMessage(evt, this.getLocalizedText(req, "USER_NEW_SUCCESS"));
             } else {
                 validateUser(evt, false);
@@ -515,4 +522,38 @@ public class UserManagerPortlet extends ActionPortlet {
 
     }
 
+    private void mailUserConfirmation(ActionFormEvent evt, User user) {
+        PortletRequest req = evt.getActionRequest();
+        MailMessage mailToUser = tms.getMailMessage();
+        String body = portalConfigService.getProperty("LOGIN_APPROVED_BODY");
+        if (body == null) body = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
+        StringBuffer message = new StringBuffer(body);
+        String subject = portalConfigService.getProperty("LOGIN_APPROVED_SUBJECT");
+        if (subject == null) subject = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
+        mailToUser.setSubject(subject);
+
+        message.append(getLocalizedText(req, "USERNAME")).append("\t");
+        message.append(user.getUserName()).append("\n");
+        message.append(getLocalizedText(req, "GIVENNAME")).append("\t");
+        message.append(user.getFirstName()).append("\n");
+        message.append(getLocalizedText(req, "FAMILYNAME")).append("\t");
+        message.append(user.getLastName()).append("\n");
+        message.append(getLocalizedText(req, "ORGANIZATION")).append("\t");
+        message.append(user.getOrganization()).append("\n");
+        message.append(getLocalizedText(req, "EMAILADDRESS")).append("\t");
+        message.append(user.getEmailAddress()).append("\n");
+        message.append("\n");
+        message.append(getLocalizedText(req, "USER_PASSWD_MSG"));
+        message.append("\t").append(evt.getPasswordBean("password"));
+        mailToUser.setBody(message.toString());
+        mailToUser.setTo(user.getEmailAddress());
+        mailToUser.setServiceid("mail");
+        try {
+            tms.send(mailToUser);
+        } catch (TextMessagingException e) {
+            log.error("Unable to send mail message!", e);
+            createErrorMessage(evt, getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
+        }
+
+    }
 }

@@ -199,7 +199,6 @@ public class LoginPortlet extends ActionPortlet {
             } catch (TextMessagingException e) {
                 log.error("Unable to send mail message!", e);
                 createErrorMessage(event, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
-                return;
             }
         }
     }
