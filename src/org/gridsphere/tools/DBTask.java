@@ -4,12 +4,12 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.gridsphere.portlet.PortletLog;
 import org.gridsphere.portlet.impl.SportletLog;
-import net.sf.hibernate.cfg.Configuration;
-import net.sf.hibernate.tool.hbm2ddl.SchemaUpdate;
-import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.MappingException;
-import net.sf.hibernate.connection.DriverManagerConnectionProvider;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.tool.hbm2ddl.SchemaUpdate;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.HibernateException;
+import org.hibernate.MappingException;
+import org.hibernate.connection.DriverManagerConnectionProvider;
 
 import java.io.*;
 import java.sql.Connection;
