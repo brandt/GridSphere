@@ -211,6 +211,7 @@ public class PortletServlet extends HttpServlet
                 log.debug("in PortletServlet: service(): Destroying portlet " + portletName);
                 try {
                     portlet.destroy();
+                    it.remove();
                 } catch (RuntimeException e) {
                     log.error("Caught exception during portlet destroy", e);
                 }
