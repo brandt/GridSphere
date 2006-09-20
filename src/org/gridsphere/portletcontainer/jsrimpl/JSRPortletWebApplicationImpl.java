@@ -100,10 +100,10 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
     public void init() {}
 
     public void destroy() {
-        log.debug("unloading portlet services for : " + webApplicationName);
-        PortletServiceFactory.shutdownServices(webApplicationName);
-        PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
-        pmservice.destroyPersistenceManagerRdbms(webApplicationName);
+        //log.debug("unloading portlet services for : " + webApplicationName);
+        //PortletServiceFactory.shutdownServices(webApplicationName);
+        //PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+        //pmservice.destroyPersistenceManagerRdbms(webApplicationName);
         portletWebApp = null;
         appPortlets = null;
         portletDefinitions = null;

@@ -121,9 +121,9 @@ public class PortletWebApplicationImpl extends BasePortletWebApplicationImpl imp
      * Under development. A portlet web application can unregister itself from the application server
      */
     public void destroy() {
+        PortletServiceFactory.shutdownServices(webApplicationName);
         PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
         pmservice.destroyPersistenceManagerRdbms(webApplicationName);
-        PortletServiceFactory.shutdownServices(webApplicationName);
         appPortlets = null;
     }
 

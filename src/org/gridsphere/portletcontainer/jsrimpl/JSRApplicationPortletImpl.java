@@ -96,10 +96,10 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
 
         //portletDef.getSupports();
 
-        log.debug("creating JSRConcretePortletConfigImpl");
+        //log.debug("creating JSRConcretePortletConfigImpl");
         JSRConcretePortletConfigImpl concConfig = new JSRConcretePortletConfigImpl(portletDef);
 
-        log.debug("creating JSRConcretePortletImpl");
+        //log.debug("creating JSRConcretePortletImpl");
         JSRConcretePortletImpl concPortlet = new JSRConcretePortletImpl(pdd, portletDef, concConfig, webAppName);
         concPortlets.add(concPortlet);
 
