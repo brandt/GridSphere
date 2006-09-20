@@ -61,11 +61,13 @@ public class PersistenceManagerServiceImpl implements PersistenceManagerService,
         if (databases.containsKey(webappname)) {
             try {
                 PersistenceManagerRdbms pm = (PersistenceManagerRdbms)databases.get(webappname);
+                log.info("Shutdown persistence manager for " + webappname);
                 pm.destroy();
             } catch (PersistenceManagerException e) {
                 log.error("Unable to destroy pm manager for: " + webappname, e);
+            } finally {
+                databases.remove(webappname);
             }
-            databases.remove(webappname);       
         }
     }
 
@@ -81,6 +83,8 @@ public class PersistenceManagerServiceImpl implements PersistenceManagerService,
                 pm.destroy();
             } catch (PersistenceManagerException e) {
                 log.debug("Could not shutdown PersistenceManager " + pmname);
+            } finally {
+                it.remove();
             }
         }
     }

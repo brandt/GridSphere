@@ -9,18 +9,16 @@ import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.QueryFilter;
-import net.sf.hibernate.*;
-import net.sf.hibernate.cfg.Configuration;
+import org.hibernate.*;
+import org.hibernate.stat.Statistics;
+import org.hibernate.cfg.Configuration;
 
 import javax.servlet.ServletContext;
 import java.io.*;
 import java.util.*;
 
-/**
- *
- */
 public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
-    private static transient PortletLog log = SportletLog.getInstance(PersistenceManagerRdbmsImpl.class);
+    private transient PortletLog log = SportletLog.getInstance(PersistenceManagerRdbmsImpl.class);
 
     private SessionFactory factory = null;
     private final static int CMD_DELETE = 1;
@@ -32,13 +30,11 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private final static int CMD_SAVEORUPDATE = 7;
     private final static int CMD_COUNT = 8;
 
-    private static Properties prop = new Properties();
-
-    private static final ThreadLocal threadSession = new ThreadLocal();
-    private static final ThreadLocal threadTransaction = new ThreadLocal();
-
+    private String pm = null;
 
     public PersistenceManagerRdbmsImpl(ServletContext context) {
+        Properties prop = new Properties();
+        pm = "gridsphere";
         String mappingPath = context.getRealPath("/WEB-INF/persistence");
         try {
             prop.load(context.getResourceAsStream("/WEB-INF/CustomPortal/database/hibernate.properties"));
@@ -54,7 +50,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public PersistenceManagerRdbmsImpl(String persistenceConfigDir) {
         log.info("Creating Hibernate RDBMS Impl using config in " + persistenceConfigDir);
-
+        pm = persistenceConfigDir;
         String filename = persistenceConfigDir + File.separator + "hibernate.properties";
         File file = new File(filename);
 
@@ -109,34 +105,6 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         }
 
         return cfg;
-    }
-
-
-    /**
-     * Creates a session to conduct operations on database
-     *
-     * @return session  Session to conduction operations on database
-     * @throws PersistenceManagerException
-     */
-
-    public org.gridsphere.services.core.persistence.Session getSession() throws PersistenceManagerException {
-        try {
-            org.gridsphere.services.core.persistence.Session s = (org.gridsphere.services.core.persistence.Session)threadSession.get();
-            if (s == null) {
-                Session session = factory.openSession();
-                org.gridsphere.services.core.persistence.Session gsSession = new SessionImpl(session);
-                threadSession.set(gsSession);
-            }
-            return (org.gridsphere.services.core.persistence.Session)threadSession.get();
-        } catch (HibernateException e) {
-            throw new PersistenceManagerException(e);
-        }
-    }
-
-    public void closeSession() throws PersistenceManagerException {
-        org.gridsphere.services.core.persistence.Session s = (org.gridsphere.services.core.persistence.Session) threadSession.get();
-        threadSession.set(null);
-        if (s != null && s.isOpen()) s.close();
     }
 
     public void create(Object object) throws PersistenceManagerException {
@@ -211,42 +179,6 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         }
     }
 
-    public void beginTransaction() throws PersistenceManagerException {
-        org.gridsphere.services.core.persistence.Transaction tx = (org.gridsphere.services.core.persistence.Transaction) threadTransaction.get();
-        if (tx == null) {
-            tx = getSession().beginTransaction();
-            threadTransaction.set(tx);
-        }
-    }
-
-    public void commitTransaction() throws PersistenceManagerException {
-        org.gridsphere.services.core.persistence.Transaction tx = (org.gridsphere.services.core.persistence.Transaction) threadTransaction.get();
-        try {
-            if ( tx != null && !tx.wasCommitted()
-                    && !tx.wasRolledBack() )
-                tx.commit();
-            threadTransaction.set(null);
-        } catch (Exception ex) {
-            rollbackTransaction();
-            throw new PersistenceManagerException(ex);
-        }
-    }
-
-    public void rollbackTransaction() throws PersistenceManagerException {
-        org.gridsphere.services.core.persistence.Transaction tx = (org.gridsphere.services.core.persistence.Transaction) threadTransaction.get();
-        try {
-            threadTransaction.set(null);
-            if ( tx != null && !tx.wasCommitted()
-                    && !tx.wasRolledBack() ) {
-                tx.rollback();
-            }
-        } catch (Exception ex) {
-            throw new PersistenceManagerException(ex);
-        } finally {
-            closeSession();
-        }
-    }
-
     private Object doTransaction(Object object, String query, int command, QueryFilter queryFilter) throws HibernateException {
         Session session = null;
         Transaction tx = null;
@@ -304,12 +236,14 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     }
 
     public void destroy() throws PersistenceManagerException {
-        try {
-            closeSession();
-            factory.close();
-        } catch (HibernateException e) {
-            throw new PersistenceManagerException(e);
-        }
+        //try {
+            System.err.println("destroying pm! " + pm);
+            Statistics stats = factory.getStatistics();
+            stats.logSummary();
+        factory.close();
+        //} catch (HibernateException e) {
+         //   throw new PersistenceManagerException(e);
+        //}
     }
 
 }
