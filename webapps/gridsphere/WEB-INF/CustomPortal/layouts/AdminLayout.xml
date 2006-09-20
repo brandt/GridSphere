@@ -75,13 +75,13 @@
                     <title lang="en">Roles</title>
                     <table-layout>
                         <row-layout>
-                            <column-layout width="50%">
+                            <column-layout width="80%">
                                 <portlet-frame label="rolemanager">
                                     <portlet-class>
                                         org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet</portlet-class>
                                 </portlet-frame>
                             </column-layout>
-                            <column-layout width="50%"/>
+                            <column-layout width="20%"/>
                         </row-layout>
                     </table-layout>
                 </portlet-tab>
