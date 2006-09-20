@@ -63,19 +63,6 @@ public class ActionPortlet extends AbstractPortlet {
         req.setAttribute(SportletProperties.FILE_DELETE, Boolean.valueOf(deleteFile));
     }
 
-    public QueryFilter getQueryFilter(PortletRequest req, int maxResults) {
-        if (req.getParameter(TableBean.SHOW_ALL) != null) return null;
-        int firstResult = 0;
-        QueryFilter queryFilter = new QueryFilter();
-        String curPage = req.getParameter(TableBean.CURRENT_PAGE);
-        if (curPage != null) {
-            firstResult = Integer.valueOf(curPage).intValue() * maxResults;
-        }
-        queryFilter.setFirstResult(firstResult);
-        queryFilter.setMaxResults(maxResults);
-        return queryFilter;
-    }
-
     /**
      * Sets the next display state. The state specified may be either a JSP or it can
      * be another method name to invoke.
