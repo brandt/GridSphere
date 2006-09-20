@@ -41,6 +41,7 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
         String key = appPortlet.getApplicationPortletID();
         if (key.indexOf("#") < 0) {
             key = appPortlet.getWebApplicationName() + "#" + appPortlet.getApplicationPortletID();
+            log.debug("adding application portlet key to registry: " + key);
         }
         if (allApplicationPortlets.get(key) != null) {
             log.debug("Replacing existing app portlet: " + key);

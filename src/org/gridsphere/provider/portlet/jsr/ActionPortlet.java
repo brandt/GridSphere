@@ -16,11 +16,9 @@ import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.event.jsr.impl.ActionFormEventImpl;
 import org.gridsphere.provider.event.jsr.impl.RenderFormEventImpl;
 import org.gridsphere.provider.event.jsr.FormEvent;
-import org.gridsphere.provider.portletui.beans.TableBean;
 import org.gridsphere.provider.portletui.beans.MessageBoxBean;
 import org.gridsphere.provider.portletui.beans.MessageStyle;
 import org.gridsphere.portletcontainer.impl.GridSphereEventImpl;
-import org.gridsphere.services.core.persistence.QueryFilter;
 
 import javax.portlet.*;
 import javax.portlet.PortletConfig;
@@ -255,26 +253,26 @@ public class ActionPortlet extends GenericPortlet {
             log.info(sb.toString());
         } catch (NoSuchMethodException e) {
             String error = "No such method: " + methodName + "\n" + e.getMessage();
-            log.error(error, e);
+            //log.error(error, e);
             // If action is not illegal do error undefined action
             //doErrorInvalidAction(request, error);
-            throw new PortletException(e);
+            throw new PortletException(error, e);
         } catch (IllegalAccessException e) {
             String error = "Error accessing action method: " + methodName + "\n" + e.getMessage();
-            log.error(error, e);
+            //log.error(error, e);
             // If action is not illegal do error undefined action
             //doErrorInvalidAction(request, error);
-            throw new PortletException(e);
+            throw new PortletException(error, e);
         } catch (InvocationTargetException e) {
             String error = "Error invoking action method: " + methodName;
-            log.error(error, e);
+            //log.error(error, e.getTargetException());
 
             // JN request.setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e.getTargetException());
             request.getPortletSession(true).setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e.getTargetException());
 
             // If action is not illegal do error undefined action
             //doErrorInvalidAction(request, error);
-            throw new PortletException(e.getTargetException());
+            throw new PortletException(error, e.getTargetException());
         }
 
     }

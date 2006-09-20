@@ -198,7 +198,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
 
         while (it.hasNext()) {
             PortletWebApplication webApp = (PortletWebApplication) it.next();
-
+            log.debug("webapp=" + webApp.getWebApplicationName());
             if (webApp.getWebApplicationName().equalsIgnoreCase(webApplicationName)) {
                 webApp.destroy();
                 Collection appPortlets = webApp.getAllApplicationPortlets();
