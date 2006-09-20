@@ -1,16 +1,17 @@
+/*
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
+ */
 package org.gridsphere.services.core.persistence;
 
 /**
- * Created by IntelliJ IDEA.
- * User: novotny
- * Date: May 15, 2006
- * Time: 10:36:21 PM
- * To change this template use File | Settings | File Templates.
+ * A <code>QueryFilter</code> is used to provide support for table pagination
  */
 public class QueryFilter {
 
     private int maxResults = 0;
     private int firstResult = 0;
+    private int totalItems = 0;
 
     public QueryFilter() {}
 
@@ -29,5 +30,15 @@ public class QueryFilter {
     public int getFirstResult() {
         return firstResult;
     }
+
+    public void setTotalItems(int totalItems) {
+        this.totalItems = totalItems;
+    }
+    public int getTotalItems() {
+        return totalItems;
+    }
+
+
+
 
 }

@@ -10,6 +10,7 @@ package org.gridsphere.services.core.security.role;
 
 import org.gridsphere.portlet.User;
 import org.gridsphere.portlet.service.PortletService;
+import org.gridsphere.services.core.persistence.QueryFilter;
 
 import java.util.List;
 
@@ -27,7 +28,11 @@ public interface RoleManagerService extends PortletService {
 
     public List getRolesForUser(User user);
 
+    public int getNumUsersInRole(PortletRole role);
+
     public List getUsersInRole(PortletRole role);
+
+    public List getUsersInRole(PortletRole role, QueryFilter filter);
 
     public void addUserToRole(User user, PortletRole role);
 

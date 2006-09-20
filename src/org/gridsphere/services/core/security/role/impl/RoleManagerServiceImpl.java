@@ -15,6 +15,7 @@ import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridsphere.services.core.persistence.QueryFilter;
 
 import java.util.*;
 
@@ -59,6 +60,21 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
         return (getUserRole(user, role) != null);
     }
 
+    public int getNumUsersInRole(PortletRole role) {
+        if (role == null) throw new IllegalArgumentException("role cannot be null!");
+        try {
+            String oql = "select count(user) from "
+                + this.jdoUserRoles
+                + " userRole ";
+            return pm.count(oql);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving num users";
+            log.error(msg, e);
+            return 0;
+        }
+    }
+
+
     public List getRolesForUser(User user) {
         if (user == null) throw new IllegalArgumentException("user can't be null");
         List roles = null;
@@ -91,6 +107,24 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
         }
         return users;
     }
+
+
+    public List getUsersInRole(PortletRole role, QueryFilter filter) {
+        if (role == null) throw new IllegalArgumentException("role cannot be null!");
+        if (filter == null) throw new IllegalArgumentException("query filter cannot be null!");
+        List users = null;
+        String oql = "select userRole.user from "
+                + jdoUserRoles
+                + " userRole where userRole.role.Name='" + role.getName() + "'";
+        try {
+            users = (List)pm.restoreList(oql, filter);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error retrieving user role";
+            log.error(msg, e);
+        }
+        return users;
+    }
+
 
     public void addUserToRole(User user, PortletRole role) {
         if (user == null) throw new IllegalArgumentException("user cannot be null!");

@@ -109,7 +109,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     public List getUsersByFullName(QueryFilter queryFilter) {
-        return selectUsers("order by uzer.FullName", queryFilter);
+        return selectUsers("order by upper(uzer.FullName)", queryFilter);
     }
 
     public List getUsersByFullName(String likeEmail, String likeOrg, QueryFilter queryFilter) {
@@ -130,7 +130,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 query += equery + oquery;
             }
         }
-        return selectUsers(query + " order by uzer.FullName", queryFilter);
+        return selectUsers(query + " order by upper(uzer.FullName)", queryFilter);
     }
 
     public List getUsersByEmail(QueryFilter queryFilter) {
