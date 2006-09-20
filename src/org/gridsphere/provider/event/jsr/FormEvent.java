@@ -5,6 +5,7 @@
 package org.gridsphere.provider.event.jsr;
 
 import org.gridsphere.provider.portletui.beans.*;
+import org.gridsphere.services.core.persistence.QueryFilter;
 
 import java.io.IOException;
 import java.util.Map;
@@ -203,6 +204,8 @@ public interface FormEvent {
      * @return a mesage box bean
      */
     public MessageBoxBean getMessageBoxBean(String beanId);
+
+    public QueryFilter getQueryFilter(int maxResults, int totalItems);
 
     /**
      * Stores any created beans into the request

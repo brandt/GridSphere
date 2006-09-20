@@ -126,13 +126,13 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
     }
 
     public String toStartString(String type) {
-        System.err.println("start string id=" + id);
         String sname = createTagName(name);
         StringBuffer sb = new StringBuffer();
         sb.append("<input ");
         if (id != null) sb.append("id=" + id + " ");
         sb.append(getFormattedCss());
         sb.append(" type='").append(type).append("' name='");
+        if (value == null) value = "";
         sb.append(sname).append("' value='").append(value);
         sb.append("' ").append(checkDisabled()).append(" ");
         sb.append(checkSelected("checked=\"checked\""));

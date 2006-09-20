@@ -309,9 +309,11 @@ public class TableTag extends BaseComponentTag {
                 tableBean = new TableBean();
                 setBaseComponentBean(tableBean);
             } else {
-                includeBody = false;
+                //includeBody = false;
             }
-
+            maxRows = tableBean.getMaxRows();
+            numEntries = tableBean.getNumEntries();
+            filter = tableBean.getFilter();
         } else {
             tableBean = new TableBean();
             this.setBaseComponentBean(tableBean);
@@ -346,9 +348,10 @@ public class TableTag extends BaseComponentTag {
             tableBean.setSortableID("td" + this.getUniqueId("gs_tableNum"));
         }
         if (title != null) tableBean.setTitle(title);
+
+        tableBean.setRowCount(0);
         tableBean.setMaxRows(maxRows);
         tableBean.setZebra(isZebra);
-        tableBean.setRowCount(0);
         tableBean.setShowall(isShowAll);
         if (numEntries != 0) tableBean.setNumEntries(numEntries);
 
@@ -358,11 +361,11 @@ public class TableTag extends BaseComponentTag {
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
-        if (includeBody) {
+        //if (includeBody) {
             return EVAL_BODY_INCLUDE;
-        } else {
-            return SKIP_BODY;
-        }
+        //} else {
+        //    return SKIP_BODY;
+        //}
     }
 
     public int doEndTag() throws JspException {

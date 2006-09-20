@@ -16,6 +16,7 @@ import org.gridsphere.portlet.PortletLog;
 import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.*;
+import org.gridsphere.services.core.persistence.QueryFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -972,4 +973,17 @@ public abstract class BaseFormEventImpl {
         return am;
     }
 
+    public QueryFilter getQueryFilter(int maxResults, int totalItems) {
+        if (portletRequest.getParameter(TableBean.SHOW_ALL) != null) return null;
+        int firstResult = 0;
+        QueryFilter queryFilter = new QueryFilter();
+        String curPage = portletRequest.getParameter(TableBean.CURRENT_PAGE);
+        if (curPage != null) {
+            firstResult = Integer.valueOf(curPage).intValue() * maxResults;
+        }
+        queryFilter.setFirstResult(firstResult);
+        queryFilter.setMaxResults(maxResults);
+        queryFilter.setTotalItems(totalItems);
+        return queryFilter;
+    }
 }

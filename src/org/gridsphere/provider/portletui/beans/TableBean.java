@@ -6,6 +6,7 @@ package org.gridsphere.provider.portletui.beans;
 
 import org.gridsphere.portlet.PortletResponse;
 import org.gridsphere.provider.portletui.model.DefaultTableModel;
+import org.gridsphere.services.core.persistence.QueryFilter;
 
 /**
  * A <code>TableBean</code> provides a table element
@@ -15,6 +16,9 @@ public class TableBean extends BaseComponentBean implements TagBean {
     public static final String CURRENT_PAGE = "tablepage";
     public static final String SHOW_ALL = "showall";
     public static final String SHOW_PAGES = "showpages";
+
+    public static final String NEXT_PAGE = "nextpage";
+    public static final String PREV_PAGE = "prevpage";
 
     protected DefaultTableModel defaultModel = null;
     protected String cellSpacing = null;
@@ -37,7 +41,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     protected String uriString = "";
     protected String title = null;
     protected int numEntries = 0;
-
+    protected boolean filter = false;
 
     /**
      * Constructs a default table bean
@@ -53,6 +57,12 @@ public class TableBean extends BaseComponentBean implements TagBean {
      */
     public TableBean(String cssStyle) {
         this.cssClass = cssStyle;
+    }
+
+    public void setQueryFilter(QueryFilter filter) {
+        this.numEntries = filter.getTotalItems();
+        this.maxRows = filter.getMaxResults();
+        this.filter = true;
     }
 
     /**
@@ -71,6 +81,19 @@ public class TableBean extends BaseComponentBean implements TagBean {
      */
     public DefaultTableModel getTableModel() {
         return defaultModel;
+    }
+
+    /**
+     * Returns true if a query filter is associated with this table
+     *
+     * @return true if a query filter is associated with this table
+     */
+    public boolean getFilter() {
+        return filter;
+    }
+
+    public void setFilter(boolean filter) {
+        this.filter = filter;
     }
 
     public int getNumEntries() {
@@ -327,7 +350,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
                 numpages += rowCount % maxRows > 0 ? 1 : 0;
             }
 
-            System.err.println("numpages = " + numpages);
+            //System.err.println("numpages = " + numpages);
             int dispPage = currentPage + 1;
             if ((dispPage == numpages) && (numpages == 1)) return sb.toString();
             int c = 0;
@@ -350,11 +373,13 @@ public class TableBean extends BaseComponentBean implements TagBean {
                     sb.append(" | " + "<a href=\"" + uri + "\">" + c + "</a>");
                 }
             }
-            uri = uriString;
-            sb.append(" | ");
-            String showall = TableBean.SHOW_ALL;
-            if (isJSR) showall = "rp_" + TableBean.SHOW_ALL;
-            sb.append("<a href=\"" + uri + "&amp;" + showall + "\">" + this.getLocalizedText("SHOW_ALL") + "</a>");
+            if (!filter) {
+                uri = uriString;
+                sb.append(" | ");
+                String showall = TableBean.SHOW_ALL;
+                if (isJSR) showall = "rp_" + TableBean.SHOW_ALL;
+                sb.append("<a href=\"" + uri + "&amp;" + showall + "\">" + this.getLocalizedText("SHOW_ALL") + "</a>");
+            }
             sb.append("</p>"); // added for XHTML 1.0 Strict compliance
             rowCount = 0;
         }
