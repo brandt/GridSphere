@@ -37,17 +37,7 @@
                 requires the user have the minimum role specified  to display content
         </description>
         <attribute>
-            <name>exclusive</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
             <name>role</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>group</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
