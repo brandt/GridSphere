@@ -13,6 +13,7 @@ import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.user.UserManagerService;
+import org.gridsphere.services.core.persistence.QueryFilter;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletConfig;
@@ -80,7 +81,12 @@ public class RoleManagerPortlet extends ActionPortlet {
             roleNameTF.setValue(role.getName());
             TextFieldBean roleDescTF = event.getTextFieldBean("roleDescTF");
             roleDescTF.setValue(role.getDescription());
-            List users = roleManagerService.getUsersInRole(role);
+
+            int numUsers = roleManagerService.getNumUsersInRole(role);
+            QueryFilter filter = event.getQueryFilter(20, numUsers);
+
+            List users = roleManagerService.getUsersInRole(role, filter);
+
             req.setAttribute("userList", users);
 
             List notusers = userManagerService.getUsers();
@@ -88,6 +94,10 @@ public class RoleManagerPortlet extends ActionPortlet {
                 User u = (User)users.get(i);
                 if (notusers.contains(u)) notusers.remove(u);
             }
+
+            TableBean userTable = event.getTableBean("userTable");
+            userTable.setQueryFilter(filter);
+
 
             ListBoxBean addUsersLB = event.getListBoxBean("addusersLB");
             addUsersLB.clear();
@@ -97,7 +107,7 @@ public class RoleManagerPortlet extends ActionPortlet {
             for (int i = 0; i < notusers.size(); i++) {
                 User user = (User)notusers.get(i);
                 ListBoxItemBean item = new ListBoxItemBean();
-                item.setName(user.getUserName());
+                item.setName(user.getID());
                 item.setValue(user.getFullName());
                 addUsersLB.addBean(item);
             }
@@ -165,14 +175,10 @@ public class RoleManagerPortlet extends ActionPortlet {
         PortletRequest req = event.getActionRequest();
         ListBoxBean addusersLB = event.getListBoxBean("addusersLB");
         String userid = addusersLB.getSelectedName();
-        System.err.println("user id = " + userid);
         HiddenFieldBean roleHF = event.getHiddenFieldBean("roleHF");
         PortletRole role = roleManagerService.getRole(roleHF.getValue());
-        System.err.println("role = " + role);
         User user = userManagerService.getUser(userid);
-        System.err.println("user = " + user);
         if ((user != null) && (role != null)) {
-            System.err.println("ADD USER to role" + user + role);
             roleManagerService.addUserToRole(user, role);
         }
         setNextState(req, "doShowRole");
