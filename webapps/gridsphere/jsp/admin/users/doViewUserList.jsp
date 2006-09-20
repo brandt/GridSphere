@@ -10,13 +10,10 @@
 
 <% List userList = (List) request.getAttribute("userList"); %>
 
-<% Integer numUsers = (Integer)request.getAttribute("numUsers"); %>
-
 <h3><ui:text key="USER_SHOW_USERS" style="nostyle"/></h3>
 
-
 <ui:actionlink cssStyle="text-decoration: underline; font-weight: bold;" action="doNewUser" key="USER_CREATE_USER"/>
-
+ <p/>
 <ui:group>
 <ui:form>
 
@@ -47,10 +44,10 @@
 </ui:form>
 </ui:group>
 
+<%if (!userList.isEmpty()) { %>
 
 <ui:form>
-
-    <ui:table sortable="true" zebra="true" maxrows="20" numentries="<%= numUsers.intValue() %>" filter="true">
+    <ui:table beanId="userTable">
         <ui:tablerow header="true">
             <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
             <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
@@ -74,7 +71,6 @@
             </ui:tablecell>
             <ui:tablecell>
                 <a href="<%= "mailto:" + user.getEmailAddress() %>"><%= user.getEmailAddress() %></a>
-
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text value="<%= user.getOrganization() %>"/>
@@ -84,6 +80,8 @@
             }
         %>
     </ui:table>
-
-
 </ui:form>
+
+<% } else { %>
+  <ui:text style="alert" key="USER_NO_RESULTS"/>
+<% } %>

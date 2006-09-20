@@ -12,7 +12,7 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doListUsers" key="USER_LIST_USERS"/>
+                <ui:actionsubmit action="doReturn" key="USER_LIST_USERS"/>
                 <ui:actionsubmit action="doEditUser" key="USER_EDIT_USER"/>
                 <ui:actionsubmit action="doDeleteUser" key="USER_DELETE_USER"/>
             </ui:tablecell>

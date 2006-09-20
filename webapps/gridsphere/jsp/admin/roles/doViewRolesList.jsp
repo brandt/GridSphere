@@ -12,9 +12,13 @@
 <% List roleList = (List) request.getAttribute("roleList"); %>
 <h3><ui:text key="ROLE_SHOW_ROLES" style="nostyle"/></h3>
 
+<ui:actionlink cssStyle="text-decoration: underline; font-weight: bold;" action="doEditRole" key="ROLE_CREATE_ROLE"/>
+
+<p/>
+
 <ui:form>
 
-    <ui:table sortable="true" zebra="true" maxrows="25">
+    <ui:table sortable="true" zebra="true">
         <ui:tablerow header="true">
             <ui:tablecell><ui:text key="ROLENAME"/></ui:tablecell>
             <ui:tablecell><ui:text key="ROLEDESC"/></ui:tablecell>
@@ -28,13 +32,9 @@
         %>
         <ui:tablerow>
             <ui:tablecell>
-                <% if (!coreRoles.contains(role.getName().toUpperCase())) { %>
                 <ui:actionlink action="doEditRole" value="<%= role.getName() %>">
                     <ui:actionparam name="roleName" value="<%= role.getName() %>"/>
                 </ui:actionlink>
-                <% } else { %>
-                <ui:text value="<%= role.getName() %>"/>
-                <% } %>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text value="<%= role.getDescription() %>"/>
@@ -52,7 +52,6 @@
         %>
     </ui:table>
 
-    <h3><ui:actionlink action="doEditRole" key="ROLE_CREATE_ROLE"/></h3>
 
 
 </ui:form>

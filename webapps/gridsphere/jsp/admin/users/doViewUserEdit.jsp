@@ -4,10 +4,18 @@
 <portlet:defineObjects/>
 <ui:messagebox beanId="msg"/>
 
-<h3><ui:text key="USER_EDIT_USER_MSG" style="nostyle"/></h3>
+
+<h3>
+    <% if (request.getAttribute("newuser") != null) { %>
+    <ui:text key="USER_EDIT_USER_MSG" style="nostyle"/>
+<% } else { %>
+    <ui:text key="USER_NEW_USER_MSG" style="nostyle"/>
+    <% } %>
+
+</h3>
 
 <p>
-    <% if (request.getAttribute("savePass") != null) { %>
+    <% if ((request.getAttribute("savePass") != null) && (request.getAttribute("newuser") == null)) { %>
     <ui:text style="alert" key="USER_PASS_BLANK_MSG"/>
     <% } %>
 </p>
@@ -110,11 +118,15 @@
 </ui:frame>
 <% } %>
 
+<% if (request.getAttribute("newuser") != null) { %>
+<ui:checkbox beanId="emailUserCB"/><ui:text key="USER_EMAIL_USER"/>
+<% } %>
+<p/>
 <ui:frame>
     <ui:tablerow>
         <ui:tablecell>
             <ui:actionsubmit action="doConfirmEditUser" key="USER_SAVE"/>
-            <ui:actionsubmit action="doListUsers" key="CANCEL"/>
+            <ui:actionsubmit action="doReturn" key="CANCEL"/>
         </ui:tablecell>
     </ui:tablerow>
 </ui:frame>
