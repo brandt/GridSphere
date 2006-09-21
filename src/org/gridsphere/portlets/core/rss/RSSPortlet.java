@@ -38,7 +38,6 @@ public class RSSPortlet extends ActionPortlet {
 
         ListBoxBean feedsLB = event.getListBoxBean("feedsLB");
         feedsLB.clear();
-        //feedsLB.setOnChange("GridSphere_SelectSubmit( this.form )");
         feedsLB.setSize(1);
 
         SyndFeed selectedFeed = null;
@@ -47,24 +46,24 @@ public class RSSPortlet extends ActionPortlet {
         for (int i = 0; i < feedURL.length; i++) {
             try {
                 feed = rssService.getFeed(feedURL[i]);
-                ListBoxItemBean item = new ListBoxItemBean();
-                item.setName(feedURL[i]);
-                item.setValue(feed.getTitle());
-                if (feedurl.equals(feedURL[i])) {
-                    selectedFeed = feed;
-                    item.setSelected(true);
-                }
-                feedsLB.addBean(item);
             } catch (FeedException e) {
                 log.error("Could not create Feed.", e);
                 createErrorMessage(event, "Could not create Feed.");
             } catch (MalformedURLException e) {
                 log.error("RSS URL " + feedURL + " is not valid.", e);
-                createErrorMessage(event, "RSS URL " + feedURL + " is not valid.");
+                createErrorMessage(event, "RSS URL " + feedURL[i] + " is not valid.");
             } catch (IOException e) {
-                log.error("Could not read RSS feed from " + feedURL, e);
+                log.error("Could not read RSS feed from " + feedURL[i], e);
                 createErrorMessage(event, "Could not read RSS feed from " + feedURL);
             }
+            ListBoxItemBean item = new ListBoxItemBean();
+            item.setName(feedURL[i]);
+            item.setValue((feed.getTitle() != null) ? feed.getTitle() : feedURL[i]);
+            if (feedurl.equals(feedURL[i])) {
+                selectedFeed = feed;
+                item.setSelected(true);
+            }
+            feedsLB.addBean(item);
         }
         event.getRenderRequest().setAttribute("rssfeed", selectedFeed);
         setNextState(event.getRenderRequest(), VIEW_RSS_JSP);
