@@ -54,7 +54,7 @@ public class RSSPortlet extends ActionPortlet {
                 createErrorMessage(event, "RSS URL " + feedURL[i] + " is not valid.");
             } catch (IOException e) {
                 log.error("Could not read RSS feed from " + feedURL[i], e);
-                createErrorMessage(event, "Could not read RSS feed from " + feedURL);
+                createErrorMessage(event, "Could not read RSS feed from " + feedURL[i]);
             }
             ListBoxItemBean item = new ListBoxItemBean();
             item.setName(feedURL[i]);
