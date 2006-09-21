@@ -24,15 +24,6 @@
         <property name="Public" type="boolean" column="ispublic"/>
         <property name="Core" type="boolean" column="iscore"/>
 
-        <!-- deprecated -->
-        <property name="GroupType" type="integer" column="grouptype"/>
-
-        <set name="PortletRoleList" table="portletrolelist" cascade="all">
-            <cache usage="read-write"/>
-            <key column="role_oid"/>
-            <one-to-many class="org.gridsphere.portlet.impl.SportletRoleInfo"/>
-        </set>
-
     </class>
 
 </hibernate-mapping>
