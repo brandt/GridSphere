@@ -350,7 +350,7 @@ public class PortletPageFactory implements PortletSessionListener {
         // first check for layout id in request parameter
         // TODO potential security risk!!! MUST DO SOME ROLE CHECKING HERE!!
         if (setupNeeded) {
-            if (!(userManagerService.getNumUsers() == 0) || (roleService.getUsersInRole(PortletRole.ADMIN)).size() > 0) {
+            if ((roleService.getUsersInRole(PortletRole.ADMIN)).size() > 0) {
                 setupNeeded = false;
             } else {
                 req.setAttribute(SportletProperties.LAYOUT_PAGE, SETUP_PAGE);
