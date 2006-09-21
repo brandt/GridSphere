@@ -54,19 +54,18 @@ public class SetupPortlet extends ActionPortlet {
             }
         }
 
-        // Validate family name
-        /*
-        String familyName = event.getTextFieldBean("familyName").getValue();
-        if (familyName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br />");
+        // Validate first and last name
+        String firstName = event.getTextFieldBean("firstName").getValue();
+
+        if (firstName.equals("")) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_GIVENNAME_BLANK") + "<br />");
             isInvalid = true;
         }
-        */
-        // Validate given name
-        String givenName = event.getTextFieldBean("fullName").getValue();
 
-        if (givenName.equals("")) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br />");
+        String lastName = event.getTextFieldBean("lastName").getValue();
+
+        if (lastName.equals("")) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br />");
             isInvalid = true;
         }
 
@@ -104,7 +103,8 @@ public class SetupPortlet extends ActionPortlet {
 
         User  accountRequest = this.userManagerService.createUser();
         accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
-        accountRequest.setFullName(event.getTextFieldBean("fullName").getValue());
+        accountRequest.setFirstName(event.getTextFieldBean("firstName").getValue());
+        accountRequest.setLastName(event.getTextFieldBean("lastName").getValue());
         accountRequest.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
         accountRequest.setOrganization(event.getTextFieldBean("organization").getValue());
         PasswordEditor editor = passwordManagerService.editPassword(accountRequest);
