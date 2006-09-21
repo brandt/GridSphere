@@ -20,7 +20,6 @@
 
     <portlet-tabbed-pane selected="0" style="menu" theme="default">
         <portlet-tab label="admin" required-role="ADMIN">
-            <title lang="en">Administration</title>
             <portlet-tabbed-pane style="sub-menu">
                 <portlet-tab label="configTab" required-role="ADMIN">
                     <title lang="en">Configuration</title>
