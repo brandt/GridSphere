@@ -27,10 +27,19 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text key="FULLNAME"/>
+                <ui:text key="GIVENNAME"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:textfield beanId="fullName"/>
+                <ui:textfield beanId="firstName"/>
+            </ui:tablecell>
+        </ui:tablerow>
+
+        <ui:tablerow>
+            <ui:tablecell width="200">
+                <ui:text key="FAMILYNAME"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:textfield beanId="lastName"/>
             </ui:tablecell>
         </ui:tablerow>
 
