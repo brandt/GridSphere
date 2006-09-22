@@ -51,11 +51,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>SessionManagerPortlet</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>TrackerStatisticsPortlet</servlet-name>
         <servlet-class>org.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet</servlet-class>
     </servlet>
@@ -86,11 +81,6 @@
     <servlet-mapping>
         <servlet-name>jcaptcha</servlet-name>
         <url-pattern>/jcaptcha</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>SessionManagerPortlet</servlet-name>
-        <url-pattern>/admin/session</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
