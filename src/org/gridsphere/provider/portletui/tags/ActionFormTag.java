@@ -108,10 +108,10 @@ public class ActionFormTag extends ActionTag {
 
             out.println(">");
             // add JS info
-            out.println("<p>"); // added for XHTML 1.0 Strict compliance
+            //out.println("<p>"); // added for XHTML 1.0 Strict compliance
             // added the closing slash of tag for XHTML 1.0 Strict compliance
             //out.println("<input name=\"JavaScript\" value=\"\" type=\"hidden\" />");
-            out.println("</p>"); // added for XHTML 1.0 Strict compliance
+            //out.println("</p>"); // added for XHTML 1.0 Strict compliance
             // 'language="JavaScript"' replaced by 'type="text/javascript"' for XHTML 1.0 Strict compliance
 
             // these 3 lines add javascript to detect if js is supported
