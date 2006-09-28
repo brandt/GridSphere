@@ -23,11 +23,12 @@
                 <portlet-tab label="profile" display="false">
                     <table-layout>
                         <row-layout>
-                            <column-layout width="100%">
+                            <column-layout width="80%">
                                 <portlet-frame label="profilemanager">
                                     <portlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet</portlet-class>
                                 </portlet-frame>
                             </column-layout>
+                            <column-layout width="20%"/>
                         </row-layout>
                     </table-layout>
                 </portlet-tab>

@@ -44,6 +44,7 @@
                                     <portlet-class>
                                         org.gridsphere.portlets.core.admin.portlets.PortletApplicationManager</portlet-class>
                                 </portlet-frame>
+
                                 <portlet-frame label="trackingstats">
                                     <portlet-class>
                                         org.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet.1</portlet-class>
