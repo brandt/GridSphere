@@ -103,16 +103,10 @@ public class ActionURLTagImpl extends ActionTag {
             actionlink.setValue(imageBean.toStartString() + val);
         }
 
-        System.err.println("trackMe= " + trackMe);
-
         if (var == null) {
             try {
                 JspWriter out = pageContext.getOut();
-                if (trackMe != null) {
-                    out.println("?trackMe=" + trackMe + "&url=" + actionString);
-                } else {
-                    out.print(actionString);
-                }
+                out.print(actionString);
             } catch (Exception e) {
                 throw new JspException(e.getMessage());
             }

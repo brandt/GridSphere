@@ -7,16 +7,13 @@ package org.gridsphere.provider.portlet.jsr;
 import org.gridsphere.portlet.*;
 import org.gridsphere.portlet.jsrimpl.*;
 
-import org.gridsphere.portlet.PortletLog;
 import org.gridsphere.portlet.User;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 
-import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.impl.ClientImpl;
 
 import org.gridsphere.portletcontainer.ApplicationPortletConfig;
-import org.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
 import org.gridsphere.portletcontainer.jsrimpl.JSRPortletWebApplicationImpl;
@@ -25,6 +22,8 @@ import org.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuarant
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.services.core.security.auth.LoginService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.portlet.*;
 import javax.portlet.PortletMode;
@@ -51,7 +50,7 @@ public class PortletServlet extends HttpServlet
         implements Servlet, ServletConfig, 
         HttpSessionAttributeListener, HttpSessionListener, HttpSessionActivationListener {
 
-    private transient PortletLog log = SportletLog.getInstance(PortletServlet.class);
+    private transient Log log = LogFactory.getLog(PortletServlet.class);
 
     private transient PortletRegistryService registryService = null;
 
@@ -81,7 +80,8 @@ public class PortletServlet extends HttpServlet
         ServletContext ctx = this.getServletContext();
 
         portletWebApp = new JSRPortletWebApplicationImpl(ctx, Thread.currentThread().getContextClassLoader());
-        if (portletWebApp.getWebApplicationStatus().equals(PortletStatus.Failure)) return;
+        if (portletWebApp.getWebApplicationStatus().equals(PortletStatus.FAILURE)) return;
+
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
@@ -106,10 +106,12 @@ public class PortletServlet extends HttpServlet
             } catch (Exception e) {
                 String msg = "Unable to create jsr portlet instance: " + portletClass;
                 log.error(msg, e);
-                appPortlet.setApplicationPortletStatus(PortletStatus.Failure);
+                appPortlet.setApplicationPortletStatus(PortletStatus.FAILURE);
                 appPortlet.setApplicationPortletStatusMessage(msg);
-                portletWebApp.setWebApplicationStatusMessage("Failure to instantiate one or more portlet instances");
-                portletWebApp.setWebApplicationStatus(PortletStatus.Failure);
+                portletWebApp.setWebApplicationStatusMessage("FAILURE to instantiate one or more portlet instances");
+                portletWebApp.setWebApplicationStatus(PortletStatus.FAILURE);
+            } finally {
+                registryService.addWebApplication(portletWebApp);
             }
         }
 
@@ -170,7 +172,7 @@ public class PortletServlet extends HttpServlet
 
         if (method.equals(SportletProperties.INIT)) {
             initJSRPortletWebapp();
-            if (portletWebApp.getWebApplicationStatus().equals(PortletStatus.Failure)) return;
+            if (portletWebApp.getWebApplicationStatus().equals(PortletStatus.FAILURE)) return;
             Set set = portlets.keySet();
             Iterator it = set.iterator();
             while (it.hasNext()) {
@@ -184,7 +186,7 @@ public class PortletServlet extends HttpServlet
                     portlet.init(portletConfig);
                     portletConfigHash.put(portletName, portletConfig);
                 } catch (Exception e) {
-                    appPortlet.setApplicationPortletStatus(PortletStatus.Failure);
+                    appPortlet.setApplicationPortletStatus(PortletStatus.FAILURE);
                     StringWriter sw = new StringWriter();
                     PrintWriter pout = new PrintWriter(sw);
                     e.printStackTrace(pout);
@@ -192,7 +194,7 @@ public class PortletServlet extends HttpServlet
                     log.error("in PortletServlet: service(): Unable to INIT portlet " + portletName, e);
                     // PLT.5.5.2.1 Portlet that fails to initialize must not be placed in active service
                     it.remove();
-                    portletWebApp.setWebApplicationStatus(PortletStatus.Failure);
+                    portletWebApp.setWebApplicationStatus(PortletStatus.FAILURE);
                     portletWebApp.setWebApplicationStatusMessage("Failed to initialize one or more portlets");
                 }
             }
