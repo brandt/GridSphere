@@ -391,7 +391,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         String organization = event.getTextFieldBean("organization").getValue();
 
         // Validate e-mail
-        String eMail = event.getTextFieldBean("TFSERVICENAMEmail").getValue();
+        String eMail = event.getTextFieldBean("emailTF").getValue();
         if (eMail.equals("")) {
             message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
             isInvalid = true;

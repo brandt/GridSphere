@@ -58,7 +58,7 @@ public class RSSPortlet extends ActionPortlet {
             }
             ListBoxItemBean item = new ListBoxItemBean();
             item.setName(feedURL[i]);
-            item.setValue((feed.getTitle() != null) ? feed.getTitle() : feedURL[i]);
+            item.setValue((feed != null) ? feed.getTitle() : feedURL[i]);
             if (feedurl.equals(feedURL[i])) {
                 selectedFeed = feed;
                 item.setSelected(true);

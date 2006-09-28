@@ -165,7 +165,7 @@ public class LoginPortlet extends ActionPortlet {
             req.removeAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
         }
 
-        setNextState(req, "doViewUser");
+        setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
     public void disableAccount(ActionFormEvent event) {
@@ -246,11 +246,11 @@ public class LoginPortlet extends ActionPortlet {
             //new and valid user and will save it
             notifyNewUser(evt);
 
-            setNextState(req, "doViewUser");
+            setNextState(req, DEFAULT_VIEW_PAGE);
         } catch (PortletException e) {
             //invalid user, an exception was thrown
             //back to edit
-            log.error("Could not creat account: ", e);
+            log.error("Could not create account: ", e);
             setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
         }
     }
@@ -395,9 +395,6 @@ public class LoginPortlet extends ActionPortlet {
         roleService.addUserToRole(user, PortletRole.USER);
     }
 
-
-
-
     public void displayForgotPassword(ActionFormEvent event) {
         boolean sendMail = Boolean.valueOf(portalConfigService.getProperty(SEND_USER_FORGET_PASSWORD)).booleanValue();
         if (sendMail) {
@@ -448,13 +445,12 @@ public class LoginPortlet extends ActionPortlet {
 
         try {
             tms.send(mailToUser);
+            createSuccessMessage(evt, this.getLocalizedText(req, "LOGIN_SUCCESS_MAIL"));
         } catch (TextMessagingException e) {
             log.error("Unable to send mail message!", e);
             createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
-            return;
+            setNextState(req, DEFAULT_VIEW_PAGE);
         }
-        createSuccessMessage(evt, this.getLocalizedText(req, "LOGIN_SUCCESS_MAIL"));
-
     }
 
     public void notifyNewUser(ActionFormEvent evt) throws PortletException {

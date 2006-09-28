@@ -11,21 +11,22 @@ import org.gridsphere.services.core.registry.impl.tomcat.TomcatWebAppDescription
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
+import org.gridsphere.provider.portlet.jsr.PortletServlet;
 import org.gridsphere.provider.portletui.beans.*;
+import org.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridsphere.services.core.registry.PortletManagerService;
+import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.portlet.DefaultPortletAction;
+import org.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridsphere.portletcontainer.PortletStatus;
+import org.gridsphere.portletcontainer.PortletWebApplication;
 
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletException;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
+import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * The PortletApplicationManager is a wrapper for the Tomcat manager webapp in 4.1.X which allows dynamic
@@ -34,41 +35,49 @@ import java.util.Iterator;
  */
 public class PortletApplicationManager extends ActionPortlet {
 
-    public static final String VIEW_JSP = "admin/portlets/view.jsp";
+    public static final String LIST_APPS_JSP = "admin/portlets/listPortletApps.jsp";
+    public static final String VIEW_APP_JSP = "admin/portlets/viewPortletApp.jsp";
     public static final String HELP_JSP = "admin/portlets/help.jsp";
 
     private TomcatManagerWrapper tomcat = TomcatManagerWrapper.getInstance();
     private PortletManagerService portletManager = null;
+    private PortletRegistryService registry = null;
 
     public void init(PortletConfig config) throws PortletException {
         super.init(config);
         portletManager = (PortletManagerService) createPortletService(PortletManagerService.class);
+        registry = (PortletRegistryService) createPortletService(PortletRegistryService.class);
         DEFAULT_VIEW_PAGE = "listPortlets";
         DEFAULT_HELP_PAGE = HELP_JSP;
     }
 
-    public void listPortlets(RenderFormEvent event) throws PortletException {
+    public void listPortlets(ActionFormEvent event) {
+        //setNextState(event.getActionRequest(), DEFAULT_VIEW_PAGE);
+    }
+
+    public void listPortlets(RenderFormEvent event) {
         PortletRequest req = event.getRenderRequest();
+        PortletResponse res = event.getRenderResponse();
         List portletapps = new ArrayList();
         List otherapps = new ArrayList();
 
         try {
-            portletapps = getPortletAppList(req);
-            otherapps = getNonPortletAppList(req);
+            portletapps = getPortletAppList(req, res);
+            otherapps = getNonPortletAppList(req, res);
             event.getRenderRequest().setAttribute("result", portletapps);
             event.getRenderRequest().setAttribute("others", otherapps);
             log.info("result is OK");
         } catch (TomcatManagerException e) {
-            log.error("Unable to retrieve list of portlets. Make sure tomcat-users.xml has been edited according to the UserGuide.");
+            log.error("Unable to retrieve list of portlets.", e);
             event.getRenderRequest().setAttribute("result", portletapps);
             event.getRenderRequest().setAttribute("others", otherapps);
             MessageBoxBean msg = event.getMessageBoxBean("msg");
-            msg.setKey("PORTLET_ERR_LIST");
+            msg.setValue(e.getMessage());
             msg.setMessageType(MessageStyle.MSG_ERROR);
         }
 
         //if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
-        setNextState(req, VIEW_JSP);
+        setNextState(req, LIST_APPS_JSP);
     }
 
     public void doPortletManager(ActionFormEvent event) throws PortletException {
@@ -91,31 +100,31 @@ public class PortletApplicationManager extends ActionPortlet {
         try {
             if ((operation != null) && (appName != null)) {
                 if (operation.equals("start")) {
-                    result = tomcat.startWebApp(req, appName);
+                    result = tomcat.startWebApp(getPortletContext(), req, res, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                     portletManager.initPortletWebApplication(appName, hReq, hRes);
                 } else if (operation.equals("stop")) {
                     portletManager.destroyPortletWebApplication(appName, hReq, hRes);
-                    result = tomcat.stopWebApp(req, appName);
+                    result = tomcat.stopWebApp(getPortletContext(), req, res, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                 } else if (operation.equals("reload")) {
                     portletManager.destroyPortletWebApplication(appName, hReq, hRes);
-                    result = tomcat.stopWebApp(req, appName);
-                    result = tomcat.startWebApp(req, appName);
+                    result = tomcat.stopWebApp(getPortletContext(), req, res, appName);
+                    result = tomcat.startWebApp(getPortletContext(), req, res, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                     portletManager.initPortletWebApplication(appName, hReq, hRes);
                 } else if (operation.equals("remove")) {
                     portletManager.destroyPortletWebApplication(appName, hReq, hRes);
-                    result = tomcat.removeWebApp(req, appName);
+                    result = tomcat.removeWebApp(getPortletContext(), req, res, appName);
                     log.debug("removing application tab :" + appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                 } else if (operation.equals("deploy")) {
-                    result = tomcat.deployWebApp(req, appName);
-                    result = tomcat.startWebApp(req, appName);
+                    result = tomcat.deployWebApp(getPortletContext(), req, res, appName);
+                    result = tomcat.startWebApp(getPortletContext(), req, res, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                     portletManager.initPortletWebApplication(appName, hReq, hRes);
                 } else if (operation.equals("undeploy")) {
-                    result = tomcat.undeployWebApp(req, appName);
+                    result = tomcat.undeployWebApp(getPortletContext(), req, res, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                     portletManager.destroyPortletWebApplication(appName, hReq, hRes);
                 }
@@ -132,8 +141,6 @@ public class PortletApplicationManager extends ActionPortlet {
     }
 
     public void uploadPortletWAR(ActionFormEvent event) throws PortletException {
-
-        log.debug("in FileManagerPortlet: doUploadFile");
         PortletRequest req = event.getActionRequest();
         PortletResponse res = event.getActionResponse();
         HttpServletRequest hReq = (HttpServletRequest)req;
@@ -164,7 +171,7 @@ public class PortletApplicationManager extends ActionPortlet {
                 //System.err.println(webappPath + fileName);
                 fi.saveFile(webappPath + fileName);
 
-                tomcat.installWebApp(req, appName, fileName);
+                tomcat.installWebApp(getPortletContext(), req, res, appName, fileName);
 
                 File pfile = new File(webappPath + appName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
                 System.err.println(webappPath + appName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
@@ -203,7 +210,7 @@ public class PortletApplicationManager extends ActionPortlet {
             String webappPath = getPortletContext().getRealPath("");
             int idx = webappPath.lastIndexOf(File.separator);
             webappPath = webappPath.substring(0, idx+1);
-            tomcat.installWebApp(req, webappName);
+            tomcat.installWebApp(getPortletContext(), req, res, webappName);
 
             File pfile = new File(webappPath + webappName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
             System.err.println(webappPath + webappName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
@@ -219,11 +226,114 @@ public class PortletApplicationManager extends ActionPortlet {
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
-    public List getPortletAppList(PortletRequest req) throws TomcatManagerException {
+    public void displayWebapp(ActionFormEvent event) {
+
+        ActionRequest req = event.getActionRequest();
+
+        String webapp = event.getAction().getParameter("appname");
+
+        req.setAttribute("webappname", webapp);
+
+        PanelBean panel = event.getPanelBean("panel");
+        FrameBean frame = new FrameBean();
+        DefaultTableModel model = new DefaultTableModel();
+
+
+        TableRowBean tr = new TableRowBean();
+        tr.setHeader(true);
+        TableCellBean tc = new TableCellBean();
+        TextBean text = new TextBean();
+        text.setValue(portletManager.getPortletWebApplicationDescription(webapp));
+        tc.addBean(text);
+        tr.addBean(tc);
+        tc = new TableCellBean();
+        text = new TextBean();
+        text.setValue(this.getLocalizedText(req, "SUBSCRIPTION_DESC"));
+        tc.addBean(text);
+        tr.addBean(tc);
+
+        TableCellBean tc2 = new TableCellBean();
+        TextBean text2 = new TextBean();
+        text2.setValue(this.getLocalizedText(req, "PORTLET_STATUS"));
+        tc2.addBean(text2);
+        tr.addBean(tc2);
+        model.addTableRowBean(tr);
+
+        List appColl = registry.getApplicationPortlets(webapp);
+        if (appColl.isEmpty()) appColl = registry.getApplicationPortlets(webapp);
+        Iterator appIt = appColl.iterator();
+        while (appIt.hasNext()) {
+            ApplicationPortlet app = (ApplicationPortlet) appIt.next();
+
+            System.err.println("app portlet= \n" + app.toString());
+            System.err.println("app statusmsg = " + app.getApplicationPortletStatusMessage());
+            System.err.println("app status = " + app.getApplicationPortletStatus());
+            List concPortlets = app.getConcretePortlets();
+            Iterator cit = concPortlets.iterator();
+            while (cit.hasNext()) {
+                ConcretePortlet conc = (ConcretePortlet) cit.next();
+
+               // System.err.println("conc portlet= \n" + conc.toString());
+
+
+                String concID = conc.getConcretePortletID();
+
+                // we don't want to list PortletServlet loader!
+                if (concID.startsWith(PortletServlet.class.getName())) continue;
+
+                TableRowBean newtr = new TableRowBean();
+                TableCellBean newtc2 = new TableCellBean();
+                TextBean tb = new TextBean();
+
+                // set 2nd column to portlet display name from concrete portlet
+                Locale loc = req.getLocale();
+                String dispName = conc.getDisplayName(loc);
+                tb.setValue(dispName);
+                newtc2.addBean(tb);
+                newtr.addBean(newtc2);
+                TableCellBean newtc = new TableCellBean();
+                TextBean tb2 = new TextBean();
+
+                // set 3rd column to portlet description from concrete portlet
+
+                //tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
+                tb2.setValue(conc.getDescription(loc));
+                newtc.addBean(tb2);
+                newtr.addBean(newtc);
+
+                newtc = new TableCellBean();
+                //newtc.setAlign("center");
+                tb = new TextBean();
+
+
+
+                ImageBean img = new ImageBean();
+                if (app.getApplicationPortletStatus().equals(PortletStatus.FAILURE)) {
+                    img.setSrc(req.getContextPath() + "/themes/brush/default/images/msgicons/portlet-msg-error.gif");
+                    newtc.addBean(img);
+                    tb.setValue("&nbsp;&nbsp;&nbsp;" + getLocalizedText(req, "FAILURE"));
+                    newtc.addBean(tb);
+                } else {
+                    img.setSrc(req.getContextPath() + "/themes/brush/default/images/msgicons/portlet-msg-success.gif");
+                    newtc.addBean(img);
+                    tb.setValue("&nbsp;&nbsp;&nbsp;" + getLocalizedText(req, "SUCCESS"));
+                    newtc.addBean(tb);
+                }
+                newtr.addBean(newtc);
+                model.addTableRowBean(newtr);
+            }
+        }
+
+        frame.setTableModel(model);
+        panel.addBean(frame);
+        setNextState(req, VIEW_APP_JSP);
+    }
+
+    public List getPortletAppList(PortletRequest req, PortletResponse res) throws TomcatManagerException {
         List webapps = portletManager.getPortletWebApplicationNames();
 
         List l = new ArrayList();
-        TomcatWebAppResult result = tomcat.getWebAppList(req);
+        TomcatWebAppResult result = tomcat.getWebAppList(getPortletContext(), req, res);
         if (result != null) {
             Iterator it = result.getWebAppDescriptions().iterator();
             while (it.hasNext()) {
@@ -232,6 +342,11 @@ public class PortletApplicationManager extends ActionPortlet {
                 if (webapps.contains((webAppDesc.getContextPath()))) {
                     String desc = portletManager.getPortletWebApplicationDescription(webAppDesc.getContextPath());
                     webAppDesc.setDescription(desc);
+                    PortletWebApplication webapp = registry.getWebApplication(webAppDesc.getContextPath());
+                    if (webapp != null) {
+                        webAppDesc.setStatus(webapp.getWebApplicationStatus());
+                        webAppDesc.setStatusMessage(webapp.getWebApplicationStatusMessage());
+                    }
                     l.add(webAppDesc);
                 }
             }
@@ -239,10 +354,10 @@ public class PortletApplicationManager extends ActionPortlet {
         return l;
     }
 
-    public List getNonPortletAppList(PortletRequest req) throws TomcatManagerException {
+    public List getNonPortletAppList(PortletRequest req, PortletResponse res) throws TomcatManagerException {
         List webapps = portletManager.getPortletWebApplicationNames();
         List l = new ArrayList();
-        TomcatWebAppResult result = tomcat.getWebAppList(req);
+        TomcatWebAppResult result = tomcat.getWebAppList(getPortletContext(), req, res);
         if (result != null) {
             Iterator it = result.getWebAppDescriptions().iterator();
             while (it.hasNext()) {
