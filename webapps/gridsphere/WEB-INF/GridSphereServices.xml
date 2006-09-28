@@ -22,15 +22,6 @@
         <description lang="en">Provides Administration Capabilities for Portlet Web Applications</description>
         <interface>org.gridsphere.services.core.registry.PortletManagerService</interface>
         <implementation>org.gridsphere.services.core.registry.impl.PortletManagerServiceImpl</implementation>
-        <!-- this is the internal name and password used by Tomcat manager webapp -->
-        <service-config>
-            <param-name>username</param-name>
-            <param-value>gridsphere</param-value>
-        </service-config>
-        <service-config>
-            <param-name>password</param-name>
-            <param-value>gridsphere</param-value>
-        </service-config>
     </service>
 
     <service>
@@ -42,7 +33,6 @@
             <param-name>cache_time</param-name>
             <param-value>10</param-value>
         </service-config>
-
     </service>
 
     <service>
@@ -118,13 +108,6 @@
         <description lang="en">Provides Generic Request Capabilities</description>
         <interface>org.gridsphere.services.core.request.RequestService</interface>
         <implementation>org.gridsphere.services.core.request.impl.RequestServiceImpl</implementation>
-    </service>
-
-    <service>
-        <name>Tracker Service</name>
-        <description lang="en">Provides ActionLink/Form Tracking Capabilities</description>
-        <interface>org.gridsphere.services.core.tracker.TrackerService</interface>
-        <implementation>org.gridsphere.services.core.tracker.impl.TrackerServiceImpl</implementation>
     </service>
 
     <service>
