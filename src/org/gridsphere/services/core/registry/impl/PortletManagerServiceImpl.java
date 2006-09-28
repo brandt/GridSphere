@@ -5,8 +5,6 @@
 package org.gridsphere.services.core.registry.impl;
 
 import org.gridsphere.portlet.PortletException;
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
@@ -17,7 +15,8 @@ import org.gridsphere.portletcontainer.impl.PortletWebApplicationImpl;
 import org.gridsphere.portletcontainer.impl.PortletInvoker;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
-import org.gridsphere.services.core.registry.impl.tomcat.TomcatManagerWrapper;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +31,7 @@ import java.util.*;
  */
 public class PortletManagerServiceImpl implements PortletManagerService, PortletServiceProvider {
 
-    private PortletLog log = SportletLog.getInstance(PortletManagerServiceImpl.class);
+    private Log log = LogFactory.getLog(PortletManagerServiceImpl.class);
 
     private ServletContext context = null;
 
@@ -97,13 +96,8 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      * @param config the <code>PortletServiceConfig</code>
      */
     public  void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        log.debug("in init of PM");
 
-        try {
-            registryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
-        } catch (PortletServiceException e) {
-            throw new PortletServiceUnavailableException("Unable to create instance of PortletRegistryService");
-        }
+        registryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
 
         portletInvoker = new PortletInvoker();
 
@@ -130,9 +124,6 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
             log.error("Portlet application " + portletsPath + " does not exist!");
             throw new PortletServiceUnavailableException("Portlet application " + portletsPath + " does not exist!");
         }
-        String name = config.getInitParameter("username");
-        String pass = config.getInitParameter("password");
-        TomcatManagerWrapper.setCredentials(name, pass);
     }
 
     public void destroy() {}
@@ -286,6 +277,26 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
         log.debug("in destroyPortletWebApplication: " + webApplicationName);
         portletInvoker.destroyPortletWebApp(webApplicationName, req, res);
         removePortletWebApplication(webApplicationName);
+    }
+
+    /**
+     * Logs out a portlet web application
+     *
+     * @param webApplicationName the name of the portlet web application
+     * @param req                the <code>HttpServletRequest</code>
+     * @param res                the <code>HttpServletresponse</code>
+     * @throws PortletDispatcherException      if a dispatching error occurs
+     */
+    public synchronized void logoutPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
+        log.debug("logout web app " + webApplicationName);
+        portletInvoker.logoutPortletWebApp(webApplicationName, req, res);
+    }
+
+    public synchronized void logoutAllPortletWebApplications(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
+        for (int i = 0; i < webappFiles.length; i++) {
+            if (webappFiles[i].startsWith("README")) continue;
+            logoutPortletWebApplication(webappFiles[i], req, res);
+        }
     }
 
     /**

@@ -28,8 +28,9 @@ import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.services.core.request.RequestService;
 import org.gridsphere.services.core.request.GenericRequest;
-import org.gridsphere.services.core.tracker.TrackerService;
 import org.gridsphere.services.core.portal.PortalConfigService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -48,11 +49,9 @@ import java.net.SocketException;
  * All portlet requests get proccessed by the GridSphereServlet before they
  * are rendered.
  */
-public class GridSphereServlet extends HttpServlet implements ServletContextListener,
-        HttpSessionAttributeListener, HttpSessionListener {
+public class GridSphereServlet extends HttpServlet implements ServletContextListener, HttpSessionListener {
 
-    /* GridSphere logger */
-    private PortletLog log = SportletLog.getInstance(GridSphereServlet.class);
+    private Log log = LogFactory.getLog(GridSphereServlet.class);
 
     /* GridSphere Portlet Registry Service */
     private PortletManagerService portletManager = null;
@@ -66,8 +65,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private PortalConfigService portalConfigService = null;
 
     private LoginService loginService = null;
-
-    private TrackerService trackerService = null;
 
     private PortletMessageManager messageManager = SportletMessageManager.getInstance();
 
@@ -121,8 +118,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         loginService = (LoginService) PortletServiceFactory.createPortletService(LoginService.class, true);
         layoutEngine = PortletLayoutEngine.getInstance();
         portletManager = (PortletManagerService) PortletServiceFactory.createPortletService(PortletManagerService.class, true);
-        trackerService = (TrackerService) PortletServiceFactory.createPortletService(TrackerService.class, true);
-
     }
 
     /**
@@ -174,17 +169,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             userName = user.getUserName();
         }
 
-        String trackme = req.getParameter(TrackerService.TRACK_PARAM);
-        if (trackme != null) {
-            trackerService.trackURL(trackme, req.getHeader("user-agent"), userName);
-            String url = req.getParameter(TrackerService.REDIRECT_URL);
-            if (url != null) {
-                System.err.println("redirect: " + url);
-                res.sendRedirect(url);
-            }
-         }
-
-
         checkUserHasCookie(event);
 
         // Used for TCK tests
@@ -201,9 +185,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 long endTime = System.currentTimeMillis();
                 System.err.println("Page render time = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
                 return;
-            }
-            if (trackerService.hasTrackingAction(actionName)) {
-                trackerService.trackURL(actionName, req.getHeader("user-agent"), userName);
             }
         }
 
@@ -256,6 +237,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         //factory.logStatistics();
         long endTime = System.currentTimeMillis();
         System.err.println("Page render time = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
+        sessionManager.dumpSessions();
     }
 
     /**
@@ -482,6 +464,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
             String query = event.getAction().getParameter("queryString");
 
+
             String remme = req.getParameter("remlogin");
             if (remme != null) {
                 setUserCookie(event);
@@ -494,7 +477,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 uri.addParameter("cid", query);
             }
             req.setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
-            layoutEngine.loginPortlets(event);
 
             String realuri = uri.toString().substring("http".length());
             Boolean useSecureRedirect = Boolean.valueOf(portalConfigService.getProperty("use.https.redirect"));
@@ -533,25 +515,28 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event a <code>GridSphereEvent</code>
      */
     protected void logout(GridSphereEvent event) {
-        getServletContext().log("in logout of GridSphere Servlet");
+        log.debug("in logout of GridSphere Servlet");
         PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
         removeUserCookie(event);
-        PortletSession session = req.getPortletSession();
-        layoutEngine.logoutPortlets(event);
+
         req.removeAttribute(SportletProperties.PORTLET_USER);
         req.removeAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
-        //System.err.println("in logout of GS, calling invalidate on s=" + session.getId());
+
+        // invalidate session
+        //req.getPortletSession(true).invalidate();
         try {
-            session.invalidate();
-        } catch (IllegalStateException e) {
-            log.error("Session already invalidated!");
+            portletManager.logoutAllPortletWebApplications(req, res);
+        } catch (PortletDispatcherException e) {
+
         }
         try {
-            PortletResponse res = event.getPortletResponse();
+
             res.sendRedirect(res.createURI().toString());
         } catch (IOException e) {
             log.error("Unable to do a redirect!", e);
         }
+
     }
 
     /**
@@ -587,6 +572,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      *
      * @param event The session attribute event
      */
+    /*
     public void attributeAdded(HttpSessionBindingEvent event) {
         try {
             log.debug("attributeAdded('" + event.getSession().getId() + "', '" +
@@ -595,13 +581,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             // do nothing
         }
     }
-
+    */
 
     /**
      * Record the fact that a servlet context attribute was removed.
      *
      * @param event The session attribute event
      */
+    /*
     public void attributeRemoved(HttpSessionBindingEvent event) {
         try {
             log.debug("attributeRemoved('" + event.getSession().getId() + "', '" +
@@ -611,13 +598,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
     }
-
+    */
 
     /**
      * Record the fact that a servlet context attribute was replaced.
      *
      * @param event The session attribute event
      */
+    /*
     public void attributeReplaced(HttpSessionBindingEvent event) {
         try {
             log.debug("attributeReplaced('" + event.getSession().getId() + "', '" +
@@ -627,7 +615,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
     }
-
+    */
 
     /**
      * Record the fact that this ui application has been destroyed.

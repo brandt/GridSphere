@@ -10,6 +10,10 @@ import org.gridsphere.portlet.PortletContext;
 import org.gridsphere.portlet.PortletResponse;
 import org.gridsphere.portlet.DefaultPortletAction;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContext;
+
 /**
  * A <code>GridSphereEvent</code> represents a general portlet container
  * event. The <code>GridSphereEvent</code> is passed into components that
@@ -17,6 +21,11 @@ import org.gridsphere.portlet.DefaultPortletAction;
  * <code>PortletResponse</code> objects, such as the layout components.
  */
 public interface GridSphereEvent extends Event {
+
+    public HttpServletRequest getHttpServletRequest();
+
+    public HttpServletResponse getHttpServletResponse();
+
 
     /**
      * Return the portlet context associated with this event

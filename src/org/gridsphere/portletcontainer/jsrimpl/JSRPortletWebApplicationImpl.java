@@ -7,13 +7,11 @@ package org.gridsphere.portletcontainer.jsrimpl;
 import org.gridsphere.portlet.PortletException;
 import org.gridsphere.portlet.PortletLog;
 import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.impl.BasePortletWebApplicationImpl;
 import org.gridsphere.portletcontainer.jsrimpl.descriptor.*;
-import org.gridsphere.services.core.persistence.PersistenceManagerService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -50,7 +48,7 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
             // load services.xml
             loadServices(context, loader);
         } catch (PortletException e) {
-            status = PortletStatus.Failure;
+            status = PortletStatus.FAILURE;
             statusMessage = e.getMessage();
         }
     }
@@ -69,7 +67,7 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
         try {
             pdd = new PortletDeploymentDescriptor2(portletXMLfile);
         } catch (Exception e) {
-            status = PortletStatus.Failure;
+            status = PortletStatus.FAILURE;
             statusMessage = "Unable to load portlets from: " + webApplicationName + " due to mapping error";
             throw new PortletException(statusMessage, e);
         }
@@ -100,10 +98,6 @@ public class JSRPortletWebApplicationImpl extends BasePortletWebApplicationImpl 
     public void init() {}
 
     public void destroy() {
-        //log.debug("unloading portlet services for : " + webApplicationName);
-        //PortletServiceFactory.shutdownServices(webApplicationName);
-        //PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
-        //pmservice.destroyPersistenceManagerRdbms(webApplicationName);
         portletWebApp = null;
         appPortlets = null;
         portletDefinitions = null;

@@ -9,6 +9,7 @@ import org.gridsphere.portlet.PortletSettings;
 import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridsphere.portletcontainer.ConcretePortletConfig;
+import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
 import org.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDeploymentDescriptor2;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;

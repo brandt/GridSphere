@@ -8,6 +8,8 @@ import org.gridsphere.layout.event.PortletComponentEvent;
 import org.gridsphere.portlet.*;
 import org.gridsphere.portlet.impl.*;
 import org.gridsphere.portletcontainer.GridSphereEvent;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +25,10 @@ import java.util.*;
  */
 public class GridSphereEventImpl implements GridSphereEvent {
 
-    protected static PortletLog log = SportletLog.getInstance(GridSphereEventImpl.class);
+    protected Log log = LogFactory.getLog(GridSphereEventImpl.class);
+
+    protected HttpServletRequest req;
+    protected HttpServletResponse res;
     protected SportletRequest portletRequest;
     protected SportletResponse portletResponse;
     protected PortletContext portletContext;
@@ -38,9 +43,12 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
     public GridSphereEventImpl(PortletContext ctx, HttpServletRequest req, HttpServletResponse res) {
 
-        portletRequest = new SportletRequest(req);
-        portletResponse = new SportletResponse(res, portletRequest);
-        portletContext = ctx;
+        this.req = req;
+        this.res = res;
+
+        this.portletRequest = new SportletRequest(req);
+        this.portletResponse = new SportletResponse(res, portletRequest);
+        this.portletContext = ctx;
 
         events = new Stack();
 
@@ -140,7 +148,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
                             newname = "";
                         }
                         myaction = new DefaultPortletAction(newname);
-                        log.debug("Received " + myaction);
+                        //log.debug("Received " + myaction);
                         String paramName;
                         String paramVal = "";
                         Map tmpParams = new HashMap();
@@ -189,6 +197,14 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
     public PortletContext getPortletContext() {
         return portletContext;
+    }
+
+    public HttpServletRequest getHttpServletRequest() {
+        return req;
+    }
+
+    public HttpServletResponse getHttpServletResponse() {
+        return res;
     }
 
     public DefaultPortletAction getAction() {

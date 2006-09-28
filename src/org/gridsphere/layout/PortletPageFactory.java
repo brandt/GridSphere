@@ -357,11 +357,14 @@ public class PortletPageFactory implements PortletSessionListener {
             }
         }
         String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
+        //System.err.println("layoutId==" + layoutId);
         if (layoutId == null) {
             if (req.getUser() == null) {
                 // if no reference to a layout exists, return a guest layout
+                //System.err.println("guest page");
                 layoutId = GUEST_PAGE;
             } else {
+                //System.err.println("user page");
                 layoutId = USER_PAGE;
             }
             req.setAttribute(SportletProperties.LAYOUT_PAGE, layoutId);
@@ -403,6 +406,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 if (page == null) page = createPortletPage(req, layoutId);
                 req.setAttribute(SportletProperties.LAYOUT_PAGE, layoutId);
             }
+            //System.err.println("layoutId2==" + layoutId);
             usersLayouts.put(layoutId, page);
             log.debug("Creating new page " + layoutId + " placing in session " + session.getId());
             sessionManager.addSessionListener(session.getId(), this);

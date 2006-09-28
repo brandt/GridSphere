@@ -44,7 +44,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
     private PortalContext portalContext = null;
     private javax.portlet.PreferencesValidator prefsValidator = null;
 
-    protected PortletStatus status = PortletStatus.Success;
+    protected PortletStatus status = PortletStatus.SUCCESS;
     protected String statusMessage = "JSR Portlet loaded successfully";
 
     /**
@@ -357,6 +357,8 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         sb.append("\t JSR Application Portlet:\n");
         sb.append("\t JSR Portlet Name: " + portletName + "\n");
         sb.append("\t Web app name: " + webAppName + "\n");
+        sb.append("\t Status: " + status + "\n");
+        sb.append("\t Status message: " + statusMessage + "\n");
         /*
         if (portletDispatcher == null) {
             sb.append("\t Portlet dispatcher: NULL");

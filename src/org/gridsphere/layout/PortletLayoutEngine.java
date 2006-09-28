@@ -152,31 +152,6 @@ public class PortletLayoutEngine {
         }
     }
 
-    /**
-     * Invoked by the GridSphereServlet to perform portlet login of a users layout
-     *
-     * @param event the gridsphere event
-     * @see org.gridsphere.layout.PortletPage#loginPortlets
-     */
-    public void loginPortlets(GridSphereEvent event) {
-        log.debug("in loginPortlets()");
-        PortletPage page = getPortletPage(event);
-        page.loginPortlets(event);
-    }
-
-    /**
-     * Invoked by the GridSphereServlet to perform portlet logout of a users layout
-     *
-     * @param event the gridsphere event
-     * @see PortletPage#logoutPortlets
-     */
-    public void logoutPortlets(GridSphereEvent event) {
-        log.debug("in logoutPortlets()");
-        PortletPage page = getPortletPage(event);
-        page.logoutPortlets(event);
-        registry.removeAllPortletFrames(event);
-        pageFactory.logStatistics();
-    }
 
     public void destroy() {
         pageFactory.destroy();

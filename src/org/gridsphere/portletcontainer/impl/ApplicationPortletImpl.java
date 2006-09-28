@@ -6,8 +6,6 @@ package org.gridsphere.portletcontainer.impl;
 
 import org.gridsphere.portlet.PortletException;
 import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletResponse;
 import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portletcontainer.*;
 import org.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
@@ -43,7 +41,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     private String webAppName = null;
     private PortletDispatcher portletDispatcher = null;
 
-    protected PortletStatus status = PortletStatus.Success;
+    protected PortletStatus status = PortletStatus.SUCCESS;
     protected String statusMessage = "GridSphere Portlet loaded successfully";
 
     /**

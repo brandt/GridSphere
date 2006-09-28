@@ -50,6 +50,10 @@ public interface PortletManagerService extends PortletService {
      */
     public void destroyPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
+    public void logoutPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
+
+    public void logoutAllPortletWebApplications(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
+
     /**
      * Lists all the portlet web applications known to the portlet container
      *

@@ -1,5 +1,7 @@
 package org.gridsphere.services.core.registry.impl.tomcat;
 
+import org.gridsphere.portletcontainer.PortletStatus;
+
 import java.util.StringTokenizer;
 
 /**
@@ -18,6 +20,8 @@ public class TomcatWebAppDescription {
     private String sessions = "";
     private String actions = "";
     private String description = "";
+    private PortletStatus status = PortletStatus.SUCCESS;
+    private String statusMessage = "";
 
 
     public TomcatWebAppDescription(String line) {
@@ -26,6 +30,7 @@ public class TomcatWebAppDescription {
             contextPath = tokenizer.nextToken();
             // get rid of first slash
             contextPath = contextPath.substring(1);
+            if (contextPath.equals("")) contextPath = "/";
             running = tokenizer.nextToken();
             sessions = tokenizer.nextToken();
             if (running.trim().equalsIgnoreCase("running")) runningState = RUNNING;
@@ -62,6 +67,22 @@ public class TomcatWebAppDescription {
         this.description = description;
     }
 
+    public PortletStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PortletStatus status) {
+        this.status = status;
+    }
+
+    public String getStatusMessage() {
+        return statusMessage;
+    }
+
+    public void setStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
+    }
+
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("contextPath= " + contextPath);
@@ -70,6 +91,8 @@ public class TomcatWebAppDescription {
         sb.append("\nsessions= " + sessions);
         sb.append("\nactions= " + actions);
         sb.append("\ndescription= " + description);
+        sb.append("\nstatus= " + status);
+        sb.append("\nstatus message= " + statusMessage);
         return sb.toString();
     }
 }

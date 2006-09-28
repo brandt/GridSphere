@@ -85,6 +85,4 @@ public interface ApplicationPortlet {
 
     public String getApplicationPortletStatusMessage();
 
-
-
 }

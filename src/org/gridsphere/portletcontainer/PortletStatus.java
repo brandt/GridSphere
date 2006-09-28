@@ -6,9 +6,9 @@ package org.gridsphere.portletcontainer;
  */
 public class PortletStatus {
 
-    public static PortletStatus Success = new PortletStatus("success");
+    public static PortletStatus SUCCESS = new PortletStatus("success");
 
-    public static PortletStatus Failure = new PortletStatus("failure");
+    public static PortletStatus FAILURE = new PortletStatus("failure");
 
     private String status;
 
@@ -18,15 +18,14 @@ public class PortletStatus {
 
     public boolean equals(Object o) {
         if ((o != null) && (o instanceof PortletStatus)) {
-            return (this.status.equals(((PortletStatus) o).getStatus()));
+            return (this.status.equals(((PortletStatus) o).toString()));
         }
         return false;
     }
 
-    public String getStatus() {
+    public String toString() {
         return status;
     }
-
     public int hashCode() {
         return status.hashCode();
     }

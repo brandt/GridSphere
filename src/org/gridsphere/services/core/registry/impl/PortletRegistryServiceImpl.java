@@ -12,6 +12,7 @@ import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridsphere.portletcontainer.PortletWebApplication;
 
 import java.util.*;
 
@@ -25,12 +26,25 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
     private PortletLog log = SportletLog.getInstance(PortletRegistryServiceImpl.class);
 
     private static Map allApplicationPortlets = new Hashtable();
+    private static Map webApps = new Hashtable();
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
 
     }
 
-    public void destroy() {}
+    public void destroy() {
+        allApplicationPortlets = null;
+        webApps = null;
+    }
+
+    public void addWebApplication(PortletWebApplication webApp) {
+        webApps.put(webApp.getWebApplicationName(), webApp);
+    }
+
+    public PortletWebApplication getWebApplication(String webappName) {
+        return (PortletWebApplication)webApps.get(webappName);
+    }
+
 
     /**
      * Adds an application portlet to the registry

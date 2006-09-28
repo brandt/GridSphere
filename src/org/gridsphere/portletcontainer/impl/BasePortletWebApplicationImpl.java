@@ -33,7 +33,7 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
     protected String webApplicationName = "Unknown portlet web application";
     protected String webAppDescription = "Unknown portlet web application description";
 
-    protected PortletStatus status = PortletStatus.Success;
+    protected PortletStatus status = PortletStatus.SUCCESS;
     protected String statusMessage = "Portlet web application loaded successfully";
 
     /**
@@ -75,7 +75,7 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
                 descriptor = new PortletServiceDescriptor(descriptorPath);
             } catch (Exception e) {
                 //log.error("error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
-                status = PortletStatus.Failure;
+                status = PortletStatus.FAILURE;
                 statusMessage = "Error unmarshalling " + descriptorPath;
                 throw new PortletServiceException(statusMessage, e);
             }
@@ -95,7 +95,7 @@ public abstract class BasePortletWebApplicationImpl implements PortletWebApplica
                         System.err.println("loading from: " + servicePaths[i]);
                         descriptor = new PortletServiceDescriptor(servicePaths[i]);
                     } catch (Exception e) {
-                        status = PortletStatus.Failure;
+                        status = PortletStatus.FAILURE;
                         statusMessage = "Error unmarshalling " + servicePaths[i];
                         throw new PortletServiceException("error unmarshalling " + servicePaths[i], e);
                     }

@@ -24,7 +24,6 @@ import org.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
-import org.gridsphere.services.core.tracker.TrackerService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.tmf.message.MailMessage;
 
@@ -50,7 +49,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private transient CacheService cacheService = null;
 
     private transient PortalConfigService portalConfigService = null;
-    private transient TrackerService trackerService = null;
     private transient PortletRegistryService portletRegistryService = null;
 
     private transient PortletInvoker portletInvoker = null;
@@ -200,7 +198,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         try {
             cacheService = (CacheService)PortletServiceFactory.createPortletService(CacheService.class, true);
             portalConfigService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
-            trackerService = (TrackerService)PortletServiceFactory.createPortletService(TrackerService.class, true);
             portletRegistryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
         } catch (PortletServiceException e) {
             log.error("Unable to init services! ", e);
@@ -376,11 +373,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 renderParams.clear();
                 onlyRender = false;
                 String pid = (String)request.getAttribute(SportletProperties.PORTLETID);
-
-                String isCounterEnabled = portalConfigService.getProperty("ENABLE_PORTAL_COUNTER");
-                if ((isCounterEnabled != null) && (Boolean.valueOf(isCounterEnabled).booleanValue())) {
-                    trackerService.trackURL(portletClass, request.getClient().getUserAgent(), userName);
-                }
 
                 try {
                     portletInvoker.actionPerformed(pid, action, request, res);

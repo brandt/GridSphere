@@ -24,15 +24,15 @@
 package org.gridsphere.filters;
 
 import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.PortletLog;
 import org.gridsphere.portlet.PortletRequest;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.impl.SportletRequest;
 import org.gridsphere.portlet.impl.SportletResponse;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.layout.PortletLayoutEngine;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
@@ -46,7 +46,9 @@ import java.util.StringTokenizer;
 public class GridSphereFilter implements Filter {
 
     private static Boolean firstDoGet = Boolean.TRUE;
-    private PortletLog log = SportletLog.getInstance(GridSphereFilter.class);
+
+    private Log log = LogFactory.getLog(GridSphereFilter.class);
+
     private ServletContext context = null;
 
     public void init(FilterConfig filterConfig) {
@@ -60,35 +62,29 @@ public class GridSphereFilter implements Filter {
                          FilterChain chain)
             throws IOException, ServletException {
 
-        // If first time being called, instantiate all portlets
-        if (firstDoGet.equals(Boolean.TRUE)) {
-            firstDoGet = Boolean.FALSE;
-            PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
-            layoutEngine.init(context);
-            log.debug("Initializing portlets");
-            try {
-                // initialize needed services
-                PortletManagerService portletManager = (PortletManagerService)PortletServiceFactory.createPortletService(PortletManagerService.class, true);
-
-                // initialize all portlets
-                if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
-                    PortletRequest portletRequest = new SportletRequest((HttpServletRequest)request);
-                    PortletResponse portletResponse = new SportletResponse((HttpServletResponse)response, portletRequest);
-                    portletManager.initAllPortletWebApplications(portletRequest, portletResponse);
-                }
-            } catch (Exception e) {
-                log.error("GridSphere initialization failed!", e);
-                RequestDispatcher rd = request.getRequestDispatcher("/jsp/errors/init_error.jsp");
-                request.setAttribute("error", e);
-                rd.forward(request, response);
-                return;
-            }
-        }
-
-
         if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
             HttpServletRequest req = (HttpServletRequest)request;
             HttpServletResponse res = (HttpServletResponse)response;
+
+            // If first time being called, instantiate all portlets
+            if (firstDoGet.equals(Boolean.TRUE)) {
+                firstDoGet = Boolean.FALSE;
+                PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
+                layoutEngine.init(context);
+                log.debug("Initializing portlets");
+                try {
+                    // initialize all portlets
+                    PortletManagerService portletManager = (PortletManagerService)PortletServiceFactory.createPortletService(PortletManagerService.class, true);
+                    portletManager.initAllPortletWebApplications(req, res);
+                } catch (Exception e) {
+                    log.error("GridSphere initialization failed!", e);
+                    RequestDispatcher rd = request.getRequestDispatcher("/jsp/errors/init_error.jsp");
+                    request.setAttribute("error", e);
+                    rd.forward(request, response);
+                    return;
+                }
+            }
+
             String pathInfo = req.getPathInfo();
             StringBuffer requestURL = req.getRequestURL();
             String requestURI = req.getRequestURI();

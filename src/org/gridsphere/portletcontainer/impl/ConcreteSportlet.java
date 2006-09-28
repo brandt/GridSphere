@@ -12,6 +12,7 @@ import org.gridsphere.portlet.impl.SportletSettings;
 import org.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridsphere.portletcontainer.ConcretePortletConfig;
+import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig;
 import org.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition;
 import org.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;

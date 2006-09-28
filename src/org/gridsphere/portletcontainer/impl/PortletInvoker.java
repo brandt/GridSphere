@@ -398,6 +398,28 @@ public class PortletInvoker {
     }
 
     /**
+     * Initializes all application portlets in a portlet web application
+     *
+     * @param webApplicationName the name of the portlet web application
+     * @param req                the <code>HttpServletRequest</code>
+     * @param res                the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
+     */
+    public void logoutPortletWebApp(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
+        // Initialize all concrete portlets for each application portlet
+        Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
+        PortletDispatcher portletDispatcher = null;
+        Iterator it = appPortlets.iterator();
+        while (it.hasNext()) {
+            ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
+            portletDispatcher = appPortlet.getPortletDispatcher(req, res);
+            // initialize the application portlet
+            log.debug("logout application portlet " + appPortlet.getApplicationPortletID());
+            portletDispatcher.logout(req, res);
+        }
+    }
+
+    /**
      * Shuts down all application portlets
      *
      * @param req the <code>HttpServletRequest</code>

@@ -4,25 +4,21 @@
  */
 package org.gridsphere.services.core.registry.impl.tomcat;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.PortletLog;
+import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridsphere.portlet.jsrimpl.PortletContextImpl;
 
 import javax.portlet.PortletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.portlet.PortletContext;
+import javax.portlet.PortletResponse;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class TomcatManagerWrapper {
 
-    private static String USERNAME = "gridsphere";
-    private static String PASSWORD = "gridsphere";
-
     private static TomcatManagerWrapper instance = new TomcatManagerWrapper();
-    private static PortletLog log = SportletLog.getInstance(TomcatManagerWrapper.class);
 
     private TomcatManagerWrapper() {
     }
@@ -31,35 +27,25 @@ public class TomcatManagerWrapper {
         return instance;
     }
 
-    public static final void setCredentials(String name, String password) {
-        USERNAME = name;
-        PASSWORD = password;
-    }
-
-    public TomcatWebAppResult doCommand(PortletRequest req, String command) throws TomcatManagerException {
+    public TomcatWebAppResult doCommand(PortletContext ctx, PortletRequest req, PortletResponse res, String command) throws TomcatManagerException {
         TomcatWebAppResult result = null;
         try {
-            String serverName = req.getServerName();
-            String scheme = req.getScheme();
-            int serverPort = req.getServerPort();
+
+            StringWriter writer = new StringWriter();
+            StoredPortletResponseImpl storedResponse = new StoredPortletResponseImpl((HttpServletResponse)res, writer);
 
 
-            HttpClient client = new HttpClient();
-            client.getState().setCredentials(
-                    null,
-                    serverName,
-                    new UsernamePasswordCredentials(USERNAME, PASSWORD)
-            );
 
-            String cmdStr = scheme + "://" + serverName + ":" + serverPort + "/manager" + command;
-            GetMethod get = new GetMethod(cmdStr);
-            log.debug("connecting to URL " + cmdStr);
-            get.setDoAuthentication( true );
+            ServletContext servCtx = ((PortletContextImpl)ctx).getServletContext();
 
-            // execute the GET
-            int status = client.executeMethod( get );
+            ServletContext context = servCtx.getContext("/manager");
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(get.getResponseBodyAsStream()));
+            context.getRequestDispatcher(command).include((ServletRequest)req, storedResponse);
+
+            //System.err.println(writer.getBuffer());
+
+
+            LineNumberReader reader = new LineNumberReader(new StringReader(writer.getBuffer().toString()));
             // get first line
             // should be something like:
             // OK - some information text
@@ -77,13 +63,8 @@ public class TomcatManagerWrapper {
                 result.addWebAppDescriptor(line);
             }
             reader.close();
-
-            // release any connection resources used by the method
-            get.releaseConnection();
-
-
-        } catch (IOException e) {
-            throw new TomcatManagerException("Unable to perform command: ", e);
+        } catch (Exception e) {
+            throw new TomcatManagerException("Unable to perform command: " + command, e);
         }
         return result;
     }
@@ -91,48 +72,48 @@ public class TomcatManagerWrapper {
     /**
      * Return the list of ui applications.
      */
-    public TomcatWebAppResult getWebAppList(PortletRequest req) throws TomcatManagerException {
-        return doCommand(req, "/list");
+    public TomcatWebAppResult getWebAppList(PortletContext ctx, PortletRequest req, PortletResponse res) throws TomcatManagerException {
+        return doCommand(ctx, req, res, "/list");
     }
 
-    public TomcatWebAppResult reloadWebApp(PortletRequest req, String context) throws TomcatManagerException {
+    public TomcatWebAppResult reloadWebApp(PortletContext ctx, PortletRequest req, PortletResponse res, String context) throws TomcatManagerException {
         if (!context.startsWith("/")) context = "/" + context;
-        return doCommand(req, "/reload?path=" + context);
+        return doCommand(ctx, req, res, "/reload?path=" + context);
     }
 
-    public TomcatWebAppResult removeWebApp(PortletRequest req, String context) throws TomcatManagerException {
+    public TomcatWebAppResult removeWebApp(PortletContext ctx, PortletRequest req, PortletResponse res, String context) throws TomcatManagerException {
         if (!context.startsWith("/")) context = "/" + context;
-        return doCommand(req, "/remove?path=" + context);
+        return doCommand(ctx, req, res, "/remove?path=" + context);
     }
 
-    public TomcatWebAppResult startWebApp(PortletRequest req, String context) throws TomcatManagerException {
+    public TomcatWebAppResult startWebApp(PortletContext ctx, PortletRequest req, PortletResponse res, String context) throws TomcatManagerException {
         if (!context.startsWith("/")) context = "/" + context;
-        return doCommand(req, "/start?path=" + context);
+        return doCommand(ctx, req, res, "/start?path=" + context);
     }
 
-    public TomcatWebAppResult stopWebApp(PortletRequest req, String context) throws TomcatManagerException {
+    public TomcatWebAppResult stopWebApp(PortletContext ctx, PortletRequest req, PortletResponse res, String context) throws TomcatManagerException {
         if (!context.startsWith("/")) context = "/" + context;
-        return doCommand(req, "/stop?path=" + context);
+        return doCommand(ctx, req, res, "/stop?path=" + context);
     }
 
-    public TomcatWebAppResult deployWebApp(PortletRequest req, String context) throws TomcatManagerException {
+    public TomcatWebAppResult deployWebApp(PortletContext ctx, PortletRequest req, PortletResponse res, String context) throws TomcatManagerException {
         if (!context.startsWith("/")) context = "/" + context;
-        return doCommand(req, "/deploy?path=" + context);
+        return doCommand(ctx, req, res, "/deploy?path=" + context);
     }
 
-    public TomcatWebAppResult undeployWebApp(PortletRequest req, String context) throws TomcatManagerException {
+    public TomcatWebAppResult undeployWebApp(PortletContext ctx, PortletRequest req, PortletResponse res, String context) throws TomcatManagerException {
         if (!context.startsWith("/")) context = "/" + context;
-        return doCommand(req, "/undeploy?path=" + context);
+        return doCommand(ctx, req, res, "/undeploy?path=" + context);
     }
 
-    public TomcatWebAppResult installWebApp(PortletRequest req, String context, String warFile) throws TomcatManagerException {
+    public TomcatWebAppResult installWebApp(PortletContext ctx, PortletRequest req, PortletResponse res, String context, String warFile) throws TomcatManagerException {
         //install?path=/foo&war=file:/path/to/foo
         if (!context.startsWith("/")) context = "/" + context;
-	    return doCommand(req, "/deploy?war=" + warFile);
+	    return doCommand(ctx, req, res, "/deploy?war=" + warFile);
     }
 
-    public TomcatWebAppResult installWebApp(PortletRequest req, String warFile) throws TomcatManagerException {
+    public TomcatWebAppResult installWebApp(PortletContext ctx, PortletRequest req, PortletResponse res, String warFile) throws TomcatManagerException {
         //install?path=/foo&war=file:/path/to/foo
-        return doCommand(req, "/install?war=" + warFile);
+        return doCommand(ctx, req, res, "/install?war=" + warFile);
     }
 }
