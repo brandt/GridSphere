@@ -41,8 +41,7 @@ public abstract class ActionTag extends BaseComponentTag {
     protected DefaultPortletAction portletAction = null;
     protected List paramBeans = new ArrayList();
     protected String label = null;
-    protected String trackMe = null;
-    protected String extUrl = null;
+
     protected ImageBean imageBean = null;
     protected boolean paramPrefixing = true;
 
@@ -147,42 +146,6 @@ public abstract class ActionTag extends BaseComponentTag {
      */
     public void setOnSubmit(String onSubmit) {
         this.onSubmit = onSubmit;
-    }
-
-    /**
-     * Sets a label to track this action and persist in the DB
-     *
-     * @param trackMe a label for this action
-     */
-    public void setTrackme(String trackMe) {
-        this.trackMe = trackMe;
-    }
-
-    /**
-     * Returns the tracking label for this action
-     *
-     * @return the tracking label
-     */
-    public String getTrackme() {
-        return trackMe;
-    }
-
-    /**
-     * Sets the external url that this actionlink will redirect to
-     *
-     * @param extUrl the external url that this actionlink will redirect to
-     */
-    public void setExturl(String extUrl) {
-        this.extUrl = extUrl;
-    }
-
-    /**
-     * Returns the external url that this actionlink will redirect to
-     *
-     * @return the external url that this actionlink will redirect to
-     */
-    public String getExturl() {
-        return extUrl;
     }
 
     /**
@@ -413,8 +376,6 @@ public abstract class ActionTag extends BaseComponentTag {
         portletAction = null;
         paramBeans.clear();
         label = null;
-        trackMe = null;
-        extUrl = null;
         imageBean = null;
         paramPrefixing = true;
     }

@@ -49,7 +49,6 @@ public class CheckboxTag extends BaseComponentTag {
     }
 
     public int doStartTag() throws JspException {
-        System.err.println("id=" + id);
         if (!beanId.equals("")) {
             checkbox = (CheckBoxBean) getTagBean();
             if (checkbox == null) {

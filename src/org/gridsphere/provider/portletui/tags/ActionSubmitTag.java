@@ -65,7 +65,6 @@ public class ActionSubmitTag extends ActionTag {
         }
 
         if (action != null) actionSubmitBean.setAction(action);
-        if (trackMe != null) actionSubmitBean.setTrackme(trackMe);
 
         if (cssStyle != null) {
             actionSubmitBean.setCssStyle(cssStyle);

@@ -32,7 +32,7 @@ public class ValidatorBean extends BaseComponentBean implements TagBean {
     }
 
     public String toStartString() {
-        return "<input type=\"hidden\" name=\"" + name + "#" + type + "\" value=\"" + value + "\"/>";
+        return "<input type=\"hidden\" name=\"" + "val#" + name + "#" + type + "\" value=\"" + value + "\"/>";
     }
 
     public String toEndString() {

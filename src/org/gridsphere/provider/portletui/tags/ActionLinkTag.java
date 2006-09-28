@@ -127,8 +127,6 @@ public class ActionLinkTag extends ActionTag {
         if (anchor != null) actionlink.setAnchor(anchor);
         if (action != null) actionlink.setAction(action);
         if (value != null) actionlink.setValue(value);
-        if (trackMe != null) actionlink.setTrackme(trackMe);
-        if (extUrl != null) actionlink.setExturl(extUrl);
         if (onClick != null) actionlink.setOnClick(onClick);
         if (style != null) actionlink.setStyle(style);
         if (cssStyle != null) actionlink.setCssStyle(cssStyle);
@@ -155,8 +153,6 @@ public class ActionLinkTag extends ActionTag {
         if (!beanId.equals("")) {
             paramBeans = actionlink.getParamBeanList();
             label = actionlink.getLabel();
-            trackMe = actionlink.getTrackme();
-            extUrl = actionlink.getExturl();
             action = actionlink.getAction();
         }
 

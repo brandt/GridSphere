@@ -4,10 +4,6 @@
  */
 package org.gridsphere.provider.portletui.beans;
 
-import org.gridsphere.services.core.tracker.TrackerService;
-
-import java.net.URLEncoder;
-
 /**
  * An <code>ActionLinkBean</code> is a visual bean that represents a hyperlink containing a portlet action
  */
@@ -91,20 +87,10 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         StringBuffer sb = new StringBuffer();
         sb.append("<a");
         if (name != null) sb.append(" name=\"" + name + "\"");
-        if (trackMe != null) {
-            try {
-                if (extUrl != null) {
-                    sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=" + trackMe + "&amp;" + TrackerService.REDIRECT_URL + "=" + URLEncoder.encode(extUrl, "UTF-8") + "\"" + getFormattedCss() + "\">" + value);
-                } else {
-                    sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=" + trackMe + "&amp;" + TrackerService.REDIRECT_URL + "=" + URLEncoder.encode(action, "UTF-8") + "\"" + getFormattedCss() + "\">" + value);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            if (useAjax) action = "#";
-            sb.append(" href=\"" + action + "\"");
-        }
+
+        if (useAjax) action = "#";
+        sb.append(" href=\"" + action + "\"");
+
         sb.append(getFormattedCss());
         if (onClick != null) sb.append(" onclick=\"" + onClick + "\"");
         sb.append(">" + value + "</a>");

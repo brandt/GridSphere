@@ -6,7 +6,6 @@ package org.gridsphere.provider.portletui.tags;
 
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.jsrimpl.RenderResponseImpl;
-import org.gridsphere.services.core.tracker.TrackerService;
 
 import javax.portlet.RenderResponse;
 import javax.servlet.jsp.JspException;
@@ -119,12 +118,7 @@ public class ActionFormTag extends ActionTag {
             // elements accessed by 'getElementById' method instead of 'name' attribute for XHTML 1.0 Strict compliance
             //out.println("document.getElementById(\"" + name + "\").JavaScript.value = \"enabled\";");
             //out.println("</script>");
-            if (trackMe != null) {
-                out.println("<input name=\"" + TrackerService.TRACK_PARAM + "\" value=\"" + trackMe + "\" type=\"hidden\"/>");
-            }
-            if (extUrl != null) {
-                out.println("<input name=\"" + TrackerService.REDIRECT_URL + "\" value=\"" +extUrl + "\" type=\"hidden\"/>");
-            }
+
 
             // write out rest of body
             bodyContent.writeOut(getPreviousOut());

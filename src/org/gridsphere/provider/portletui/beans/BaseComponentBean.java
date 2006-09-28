@@ -251,6 +251,10 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
         if (cssClass != null) this.cssClass = cssClass;
     }
 
+    public void clearCssClass() {
+        this.cssClass = null;
+    }
+
     public void addCssClass(String cssClass) {
         if (this.cssClass == null) this.cssClass = "";
         if (cssClass != null) this.cssClass += " " + cssClass;
