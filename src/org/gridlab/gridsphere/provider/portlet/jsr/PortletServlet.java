@@ -345,15 +345,8 @@ public class PortletServlet extends HttpServlet
                 } else if (action.equals(SportletProperties.MESSAGE_RECEIVED)) {
                     // do nothing
                 } else if (action.equals(SportletProperties.ACTION_PERFORMED)) {
-                    PortletPreferencesManager prefsManager = new PortletPreferencesManager();
-                    javax.portlet.PreferencesValidator validator = appPortlet.getPreferencesValidator();
-                    prefsManager.setValidator(validator);
-                    prefsManager.setIsRender(false);
-                    if (user != null) {
-                        prefsManager.setUserId(user.getID());
-                    }
-                    prefsManager.setPortletId(appPortlet.getApplicationPortletID());
-                    prefsManager.setPreferencesDesc(appPortlet.getPreferencesDescriptor());
+                    // create portlet preferences manager
+                    PortletPreferencesManager prefsManager = new PortletPreferencesManager(appPortlet, user, false);
                     request.setAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER, prefsManager);
                     ActionRequestImpl actionRequest = new ActionRequestImpl(request, portalContext, portletContext, supports);
                     ActionResponse actionResponse = new ActionResponseImpl(request, response, portalContext);
@@ -371,15 +364,8 @@ public class PortletServlet extends HttpServlet
                     }
                 }
             } else {
-                PortletPreferencesManager prefsManager = new PortletPreferencesManager();
-                javax.portlet.PreferencesValidator validator = appPortlet.getPreferencesValidator();
-                prefsManager.setValidator(validator);
-                prefsManager.setIsRender(true);
-                if (user != null) {
-                    prefsManager.setUserId(user.getID());
-                }
-                prefsManager.setPortletId(appPortlet.getApplicationPortletID());
-                prefsManager.setPreferencesDesc(appPortlet.getPreferencesDescriptor());
+                // create portlet preferences manager
+                PortletPreferencesManager prefsManager = new PortletPreferencesManager(appPortlet, user, true);
                 request.setAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER, prefsManager);
                 RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
                 RenderResponse renderResponse = new RenderResponseImpl(request, response, portalContext);

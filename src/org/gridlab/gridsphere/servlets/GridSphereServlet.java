@@ -740,6 +740,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     }
                 }
             }
+
             groupService.saveGroup(group);
         }
         // eliminate GUEST role

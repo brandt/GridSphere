@@ -8,9 +8,12 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
 
 import javax.portlet.PreferencesValidator;
+import javax.portlet.PortletPreferences;
 
 /**
  * The <code>PortletPreferencesManager</code> provides a a singleton implementation of the <code>PortletDataManager</code>
@@ -25,52 +28,38 @@ public class PortletPreferencesManager {
     private String userId = null;
     private String portletId = null;
     private org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefsDesc = null;
-    /**
-     * Default instantiation is disallowed
-     */
-    public PortletPreferencesManager() {
-        pm = PersistenceManagerFactory.createGridSphereRdbms();    
-    }
+    private PortletPreferencesImpl prefs = null;
 
-    public void setPreferencesDesc(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefsDesc) {
-        this.prefsDesc = prefsDesc;
-    }
-
-    public void setValidator(PreferencesValidator validator) {
-        this.validator = validator;
-    }
-
-    public void setIsRender(boolean isRender) {
+    public PortletPreferencesManager(JSRApplicationPortletImpl appPortlet, User user, boolean isRender) {
+        pm = PersistenceManagerFactory.createGridSphereRdbms();
+        validator = appPortlet.getPreferencesValidator();
+        portletId = appPortlet.getApplicationPortletID();
+        this.prefsDesc = appPortlet.getPreferencesDescriptor();
         this.isRender = isRender;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public void setPortletId(String portletId) {
-        this.portletId = portletId;
+        if (user == null) {
+            userId = PortletPreferencesImpl.NO_USER;
+        } else {
+            userId = user.getID();
+        }
     }
 
     /**
      * Returns the users portlet data for the specified portlet
      *
-     * @param appPortlet the JSR application portlet
-     * @param user       the <code>User</code>
      * @return the PortletPreferences for this portlet or null if none exists.
      */
     public javax.portlet.PortletPreferences getPortletPreferences() {
-        PortletPreferencesImpl prefs = null;
+        if (prefs == null) {
+            prefs = createPortletPreferences();
+        }
+        return prefs;
+    }
 
+    private PortletPreferencesImpl createPortletPreferences() {
         try {
-            if (userId != null) {
-                String command =
-                        "select u from " + PortletPreferencesImpl.class.getName() + " u where u.userId='" + userId + "' and u.portletId='" + portletId + "'";
-                prefs = (PortletPreferencesImpl) pm.restore(command);
-            } else {
-                userId = PortletPreferencesImpl.NO_USER;
-            }
-
+            String command =
+                    "select u from " + PortletPreferencesImpl.class.getName() + " u where u.userId='" + userId + "' and u.portletId='" + portletId + "'";
+            prefs = (PortletPreferencesImpl) pm.restore(command);
             if (prefs == null) {
                 // we have no prefs in the db so create one from the xml...
                 log.debug("No prefs exist-- storing prefs for user: " + userId + " portlet: " + portletId);
@@ -81,10 +70,8 @@ public class PortletPreferencesManager {
                 log.debug("Retrieved prefs for user: " + userId + " portlet: " + portletId);
             }
             prefs.setPersistenceManager(pm);
-
             if (prefsDesc != null) prefs.setPreferencesDesc(prefsDesc);
             if (validator != null) prefs.setValidator(validator);
-
             prefs.setRender(isRender);
         } catch (Exception e) {
             log.error("Error attempting to restore persistent preferences: ", e);

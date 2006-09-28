@@ -223,18 +223,17 @@ public class PortletPreferencesImpl implements PortletPreferences {
      */
     public void setValue(String key, String value) throws ReadOnlyException {
         if (key == null) throw new IllegalArgumentException("key is NULL");
-
         PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute) attributes.get(key);
         if (ppa == null) {
             ppa = new PersistencePreferenceAttribute();
             ppa.setName(key);
             ppa.setReadOnly(false);
             ppa.setValue(value);
-            attributes.put(key, ppa);
         } else {
             if (ppa.isReadOnly()) throw new ReadOnlyException("PortletPreference is read-only!");
             ppa.setValue(value);
         }
+        attributes.put(key, ppa);
     }
 
 
@@ -266,11 +265,11 @@ public class PortletPreferencesImpl implements PortletPreferences {
             ppa.setName(key);
             ppa.setReadOnly(false);
             ppa.setAValues(values);
-            attributes.put(key, ppa);
         } else {
             if (ppa.isReadOnly()) throw new ReadOnlyException("PortletPreference is read-only!");
             ppa.setAValues(values);
         }
+        attributes.put(key, ppa);
     }
 
     /**
