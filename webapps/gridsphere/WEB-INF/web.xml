@@ -17,6 +17,10 @@
     <!-- this is needed for clustering of multiple Tomcats -->
     <distributable/>
 
+    <listener>
+        <listener-class>org.gridsphere.servlets.GridSphereServlet</listener-class>
+    </listener>
+
     <filter>
         <filter-name>GridSphere Filter</filter-name>
         <filter-class>org.gridsphere.filters.GridSphereFilter</filter-class>
@@ -26,7 +30,6 @@
         <filter-name>GridSphere Filter</filter-name>
         <url-pattern>/@GRIDSPHERE_CONTEXT@/*</url-pattern>
     </filter-mapping>
-
 
     <servlet>
         <servlet-name>gridsphere</servlet-name>
@@ -137,5 +140,9 @@
         <exception-type>java.lang.Throwable</exception-type>
         <location>/@GRIDSPHERE_CONTEXT@?gs_PageLayout=ErrorLayout&amp;errorPage=error.jsp</location>
     </error-page>
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+     </session-config>
 
 </web-app>
