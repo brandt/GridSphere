@@ -54,11 +54,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>TrackerStatisticsPortlet</servlet-name>
-        <servlet-class>org.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>SecureDirectory</servlet-name>
         <servlet-class>org.gridsphere.servlets.SecureDirectory</servlet-class>
         <init-param>
@@ -89,11 +84,6 @@
     <servlet-mapping>
         <servlet-name>LayoutManagerPortlet</servlet-name>
         <url-pattern>/admin/layout</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>TrackerStatisticsPortlet</servlet-name>
-        <url-pattern>/admin/tracker</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

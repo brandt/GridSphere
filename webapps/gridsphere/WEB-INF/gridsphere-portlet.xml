@@ -103,56 +103,6 @@
         </concrete-portlet-app>
     </portlet-app-def>
 
-    <portlet-app-def>
-        <portlet-app id="org.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet">
-            <portlet-name>Tracker Statistics</portlet-name>
-            <servlet-name>TrackerStatisticsPortlet</servlet-name>
-            <allows>
-                <minimized/>
-                <maximized/>
-                <resizing/>
-            </allows>
-            <supports>
-                <markup name="html">
-                    <view/>
-                    <help/>
-                </markup>
-            </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridsphere.portlets.core.admin.tracker.TrackerStatisticsPortlet.1">
-            <concrete-portlet>
-                <portlet-name>Tracker Statistics</portlet-name>
-                <access-restrictions role="SUPER"/>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>Tracker Statistics</title>
-                    <title-short>Tracker Statistics</title-short>
-                    <description>Displays portal tracking statistics</description>
-                    <keywords>tracking statistics</keywords>
-                </language>
-                <language locale="es">
-                    <title>Rastreador de Estadísticas</title>
-                    <title-short>Rastreador de Estadísticas</title-short>
-                    <description>Muestra portal Rastreador de Estadísticas</description>
-                    <keywords>Rastreador de Estadísticas</keywords>
-                </language>
-                <language locale="hr">
-                    <title>Upravitelj praćenja statistika</title>
-                    <title-short>Upravitelj praćenja statistika</title-short>
-                    <description>Portlet omogućava definiranje statistika koje se žele pratiti</description>
-                    <keywords>administriranje statistike</keywords>
-                </language>
-                <language locale="ja">
-                    <title>トラッカー統計</title>
-                    <title-short>トラッカー統計</title-short>
-                    <description>ポータルのトラッキング統計を表示します</description>
-                    <keywords>トラッキング 統計</keywords>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
-
 
 </portlet-app-collection>
 
