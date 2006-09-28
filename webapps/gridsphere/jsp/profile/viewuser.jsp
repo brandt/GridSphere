@@ -7,7 +7,6 @@
 <portlet:defineObjects/>
 
 <jsp:useBean id="logintime" class="java.lang.String" scope="request"/>
-<jsp:useBean id="username" class="java.lang.String" scope="request"/>
 
 <% Locale locale = (Locale) request.getAttribute("locale"); %>
 <% RenderRequest req = (RenderRequest) pageContext.findAttribute("renderRequest"); %>
@@ -37,7 +36,7 @@
                     <ui:tablecell><ui:text key="GIVENNAME"/></ui:tablecell>
                     <ui:tablecell>
                         <ui:textfield beanId="firstName">
-                            <ui:validator type="checkNotEmpty" key="USER_GIVENNAME_BLANK"/>
+                           <ui:validator type="checkNotEmpty" key="USER_GIVENNAME_BLANK"/>
                         </ui:textfield>
                     </ui:tablecell>
                 </ui:tablerow>
@@ -45,7 +44,7 @@
                     <ui:tablecell><ui:text key="FAMILYNAME"/></ui:tablecell>
                     <ui:tablecell>
                         <ui:textfield beanId="lastName">
-                            <ui:validator type="checkNotEmpty" key="USER_FAMILYNAME_BLANK"/>
+                            <ui:validator type="checkNotEmpty" key="USER_FAMILYNAME_BLANK"/> 
                         </ui:textfield>
                     </ui:tablecell>
                 </ui:tablerow>
