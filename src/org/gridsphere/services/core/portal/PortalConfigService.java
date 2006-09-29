@@ -13,6 +13,22 @@ import java.io.IOException;
  */
 public interface PortalConfigService {
 
+    public static String PORTAL_ADMIN_EMAIL = "PORTAL_ADMIN_EMAIL";
+    public static String USE_HTTPS_LOGIN = "USE_HTTPS_LOGIN";
+    public static String USE_HTTPS_REDIRECT = "USE_HTTPS_REDIRECT";
+    public static String MAIL_SERVER = "MAIL_SERVER";
+    public static String MAIL_PORT = "MAIL_PORT";
+    public static String MAIL_FROM = "MAIL_ADDRESS";
+    public static String ENABLE_ERROR_HANDLING = "ENABLE_ERROR_HANDLING";
+    public static String DEFAULT_THEME = "DEFAULT_THEME";
+    public static String SAVE_PASSWORDS = "SAVE_PASSWORDS";
+    public static String SUPPORT_X509_AUTH = "SUPPORT_X509_AUTH";
+    public static String SEND_USER_FORGET_PASSWORD = "SEND_USER_FORGET_PASSWD";
+    public static String REMEMBER_USER = "REMEMBER_USER";
+    public static String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
+    public static String CAN_USER_CREATE_ACCOUNT = "CAN_USER_CREATE_ACCOUNT";
+    public static String ADMIN_ACCOUNT_APPROVAL = "ADMIN_ACCOUNT_APPROVAL";
+    
     public String getProperty(String key);
 
     public void setProperty(String key, String value);
