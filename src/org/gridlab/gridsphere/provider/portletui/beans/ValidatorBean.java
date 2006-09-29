@@ -1,4 +1,4 @@
-package org.gridsphere.provider.portletui.beans;
+package org.gridlab.gridsphere.provider.portletui.beans;
 
 /**
  * The <code>TextBean</code> represents text to be displayed
