@@ -10,10 +10,7 @@ import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
-import org.gridsphere.provider.portletui.model.DefaultTableModel;
-import org.gridsphere.services.core.cache.CacheService;
 import org.gridsphere.services.core.locale.LocaleService;
-import org.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
@@ -23,8 +20,6 @@ import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.services.core.utils.DateUtil;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.portlets.core.login.LoginPortlet;
-import org.gridsphere.tmf.services.TextMessageService;
-import org.gridsphere.tmf.services.TextMessageServiceConfig;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
@@ -48,8 +43,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
     private PasswordManagerService passwordManagerService = null;
     private RoleManagerService roleManagerService = null;
     private LocaleService localeService = null;
-
-    private TextMessagingService tms = null;
     private PortalConfigService portalConfigService = null;
 
     public void init(PortletConfig config) throws PortletException {
@@ -58,7 +51,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         this.roleManagerService = (RoleManagerService) createPortletService(RoleManagerService.class);
         this.passwordManagerService = (PasswordManagerService) createPortletService(PasswordManagerService.class);
         this.localeService = (LocaleService) createPortletService(LocaleService.class);
-        this.tms = (TextMessagingService) createPortletService(TextMessagingService.class);
         this.portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
         DEFAULT_VIEW_PAGE = "doViewUser";
         DEFAULT_HELP_PAGE = HELP_JSP;
@@ -69,11 +61,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public void doViewUser(RenderFormEvent event) {
         PortletRequest req = event.getRenderRequest();
         setUserTable(event);
-        //DefaultTableModel messaging = getMessagingFrame(event, false);
-        //FrameBean messagingFrame = event.getFrameBean("messagingFrame");
-
-        //messagingFrame.setTableModel(messaging);
-        //messagingFrame.setValign("top");
 
         if (portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
@@ -215,79 +202,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         timezoneList.setMultipleSelection(false);
     }
 
-   /*
-    private DefaultTableModel getMessagingFrame(RenderFormEvent event, boolean readonly) {
-        DefaultTableModel model = new DefaultTableModel();
-
-        PortletRequest req = event.getRenderRequest();
-
-        Set services = tms.getServices();
-
-        if (services.size() == 0) {
-            TableRowBean noServiceRow = new TableRowBean();
-            TableCellBean noServiceCell1 = new TableCellBean();
-            TableCellBean noServiceCell2 = new TableCellBean();
-            String localeText = this.getLocalizedText(req, "PROFILE_MESSAGING_NO_SERVICE_CONFIGURED");
-            TextBean noServiceText = new TextBean();
-            noServiceText.setValue(localeText);
-            noServiceCell1.addBean(noServiceText);
-            TextBean noServiceText2 = new TextBean();
-            noServiceText2.setValue("&nbsp;");
-            noServiceCell2.addBean(noServiceText2);
-            noServiceRow.addBean(noServiceCell1);
-            noServiceRow.addBean(noServiceCell2);
-            model.addTableRowBean(noServiceRow);
-
-        } else {
-
-            for (Iterator iterator = services.iterator(); iterator.hasNext();) {
-                TextMessageService textmessageService =  (TextMessageService)iterator.next();
-                // tablerow
-                TableRowBean trService = new TableRowBean();
-
-
-                // NAME
-                TableCellBean tcServiceName = new TableCellBean();
-                // make text
-                TextBean servicename = new TextBean();
-
-                TextMessageServiceConfig tmsc = textmessageService.getServiceConfig();
-                servicename.setValue(tmsc.getProperty(TextMessagingService.SERVICE_NAME)+":");
-                tcServiceName.addBean(servicename);
-
-                trService.addBean(tcServiceName);
-
-                // INPUT
-                TableCellBean tcServiceInput = new TableCellBean();
-
-                // make inputfield
-                TextFieldBean servicename_input = event.getTextFieldBean("TFSERVICENAME" +
-                        textmessageService.getServiceConfig().getProperty(TextMessagingService.SERVICE_ID));
-
-                if (!textmessageService.getServiceConfig().getProperty(TextMessagingService.SERVICE_ID).equals("mail")) {
-                    System.err.println("i'm herre   1");
-                    servicename_input.setValue(tms.getServiceUserID(textmessageService.getServiceConfig().getProperty(TextMessagingService.SERVICE_ID),
-                        req.getRemoteUser()));
-                } else {
-                    System.err.println("i'm herre   2");
-                    User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
-                    servicename_input.setValue(user.getEmailAddress());
-                }
-
-                servicename_input.setDisabled(readonly);
-
-                tcServiceInput.addBean(servicename_input);
-                trService.addBean(tcServiceInput);
-
-
-                model.addTableRowBean(trService);
-            }
-        }
-        return model;
-
-    }
-    */
-
     public void doSavePass(ActionFormEvent event) {
 
         PortletRequest req = event.getActionRequest();
@@ -340,14 +254,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
             req.setAttribute(SportletProperties.PORTLET_USER, user);
             createSuccessMessage(event, this.getLocalizedText(req, "USER_UPDATE_SUCCESS"));
         }
-
-        Set services = tms.getServices();
-        for (Iterator iterator = services.iterator(); iterator.hasNext();) {
-            TextMessageService textmessageService = (TextMessageService) iterator.next();
-            TextFieldBean tfb = event.getTextFieldBean("TFSERVICENAME" + textmessageService.getServiceConfig().getProperty(TextMessagingService.SERVICE_ID));
-            tms.setServiceUserID(textmessageService.getServiceConfig().getProperty(TextMessagingService.SERVICE_ID), user.getUserID(), tfb.getValue());
-        }
-
     }
 
 

@@ -13,6 +13,7 @@ import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.user.UserManagerService;
+import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.layout.PortletPageFactory;
 
 import javax.portlet.PortletConfig;
@@ -26,12 +27,14 @@ public class SetupPortlet extends ActionPortlet {
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
     private RoleManagerService roleManagerService = null;
+    private PortalConfigService portalConfigService = null;
 
     public void init(PortletConfig config) throws PortletException {
         super.init(config);
         this.userManagerService = (UserManagerService) createPortletService(UserManagerService.class);
         this.roleManagerService = (RoleManagerService) createPortletService(RoleManagerService.class);
         this.passwordManagerService = (PasswordManagerService) createPortletService(PasswordManagerService.class);
+        this.portalConfigService = (PortalConfigService)createPortletService(PortalConfigService.class);
         DEFAULT_HELP_PAGE = "admin/setup/help.jsp";
         DEFAULT_VIEW_PAGE = "admin/setup/doView.jsp";
     }
@@ -109,6 +112,8 @@ public class SetupPortlet extends ActionPortlet {
         accountRequest.setOrganization(event.getTextFieldBean("organization").getValue());
         PasswordEditor editor = passwordManagerService.editPassword(accountRequest);
         editor.setValue(password);
+
+        portalConfigService.setProperty(PortalConfigService.PORTAL_ADMIN_EMAIL, accountRequest.getEmailAddress());
         passwordManagerService.savePassword(editor);
         userManagerService.saveUser(accountRequest);
 

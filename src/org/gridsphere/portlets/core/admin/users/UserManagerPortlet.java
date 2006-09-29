@@ -15,12 +15,12 @@ import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.user.UserManagerService;
-import org.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridsphere.services.core.persistence.QueryFilter;
+import org.gridsphere.services.core.mail.MailService;
+import org.gridsphere.services.core.mail.MailMessage;
 import org.gridsphere.portlets.core.login.LoginPortlet;
 import org.gridsphere.portlet.User;
-import org.gridsphere.tmf.message.MailMessage;
-import org.gridsphere.tmf.TextMessagingException;
+import org.gridsphere.portlet.service.PortletServiceException;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletConfig;
@@ -42,7 +42,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
     private RoleManagerService roleManagerService = null;
     private PortalConfigService portalConfigService = null;
-    private TextMessagingService tms = null;
+    private MailService mailService = null;
 
     private String NUM_PAGES = getClass() + ".NUM_PAGES";
     private String EMAIL_QUERY = getClass() + ".EMAIL_QUERY";
@@ -53,7 +53,7 @@ public class UserManagerPortlet extends ActionPortlet {
         this.userManagerService = (UserManagerService) createPortletService(UserManagerService.class);
         this.roleManagerService = (RoleManagerService) createPortletService(RoleManagerService.class);
         this.passwordManagerService = (PasswordManagerService) createPortletService(PasswordManagerService.class);
-        tms = (TextMessagingService) createPortletService(TextMessagingService.class);
+        this.mailService = (MailService) createPortletService(MailService.class);
         this.portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
         DEFAULT_HELP_PAGE = "admin/users/help.jsp";
         DEFAULT_VIEW_PAGE = "doListUsers";
@@ -524,7 +524,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
     private void mailUserConfirmation(ActionFormEvent evt, User user) {
         PortletRequest req = evt.getActionRequest();
-        MailMessage mailToUser = tms.getMailMessage();
+        MailMessage mailToUser = new MailMessage();
         String body = portalConfigService.getProperty("LOGIN_APPROVED_BODY");
         if (body == null) body = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
         StringBuffer message = new StringBuffer(body);
@@ -546,11 +546,11 @@ public class UserManagerPortlet extends ActionPortlet {
         message.append(getLocalizedText(req, "USER_PASSWD_MSG"));
         message.append("\t").append(evt.getPasswordBean("password"));
         mailToUser.setBody(message.toString());
-        mailToUser.setTo(user.getEmailAddress());
-        mailToUser.setServiceid("mail");
+        mailToUser.setEmailAddress(user.getEmailAddress());
+
         try {
-            tms.send(mailToUser);
-        } catch (TextMessagingException e) {
+            mailService.sendMail(mailToUser);
+        } catch (PortletServiceException e) {
             log.error("Unable to send mail message!", e);
             createErrorMessage(evt, getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
         }

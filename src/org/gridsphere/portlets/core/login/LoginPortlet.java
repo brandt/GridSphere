@@ -11,10 +11,11 @@ import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.password.PasswordEditor;
-import org.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridsphere.services.core.request.RequestService;
 import org.gridsphere.services.core.request.GenericRequest;
 import org.gridsphere.services.core.captcha.impl.CaptchaServiceSingleton;
+import org.gridsphere.services.core.mail.MailMessage;
+import org.gridsphere.services.core.mail.MailService;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
@@ -22,11 +23,9 @@ import org.gridsphere.provider.portletui.beans.MessageBoxBean;
 import org.gridsphere.provider.portletui.beans.PasswordBean;
 import org.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridsphere.provider.portletui.beans.HiddenFieldBean;
-import org.gridsphere.tmf.TextMessagingException;
-import org.gridsphere.tmf.message.MailMessage;
 import org.gridsphere.portlet.User;
+import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.jsrimpl.PortletURLImpl;
-import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.*;
 import java.security.cert.X509Certificate;
@@ -36,13 +35,8 @@ public class LoginPortlet extends ActionPortlet {
 
     private static String FORGOT_PASSWORD_LABEL = "forgotpassword";
     private static String ACTIVATE_ACCOUNT_LABEL = "activateaccount";
-    private static String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
-    private static String ADMIN_ACCOUNT_APPROVAL = "ADMIN_ACCOUNT_APPROVAL";
+
     private static String LOGIN_NAME = "LOGIN_NAME";
-    public static String SAVE_PASSWORDS = "SAVE_PASSWORDS";
-    public static String REMEMBER_USER = "REMEMBER_USER";
-    public static String SUPPORT_X509_AUTH = "SUPPORT_X509_AUTH";
-    public static String SEND_USER_FORGET_PASSWORD = "SEND_USER_FORGET_PASSWD";
 
     private static long REQUEST_LIFETIME = 1000 * 60 * 24 * 3; // 3 days
 
@@ -58,7 +52,7 @@ public class LoginPortlet extends ActionPortlet {
     private PasswordManagerService passwordManagerService = null;
     private PortalConfigService portalConfigService = null;
     private RequestService requestService = null;
-    private TextMessagingService tms = null;
+    private MailService mailService = null;
 
     private String  notificationURL = null;
     private String newpasswordURL = null;
@@ -73,7 +67,7 @@ public class LoginPortlet extends ActionPortlet {
         roleService = (RoleManagerService) createPortletService(RoleManagerService.class);
         passwordManagerService = (PasswordManagerService) createPortletService(PasswordManagerService.class);
         requestService = (RequestService) createPortletService(RequestService.class);
-        tms = (TextMessagingService) createPortletService(TextMessagingService.class);
+        mailService = (MailService) createPortletService(MailService.class);
         portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
         DEFAULT_VIEW_PAGE = "doViewUser";
     }
@@ -104,7 +98,7 @@ public class LoginPortlet extends ActionPortlet {
         pass.setValue("");
 
         // Check certificates
-        String x509supported = portalConfigService.getProperty("SUPPORT_X509_AUTH");
+        String x509supported = portalConfigService.getProperty(PortalConfigService.SUPPORT_X509_AUTH);
         if ((x509supported != null) && (x509supported.equalsIgnoreCase("true"))) {
             X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
             if (certs != null && certs.length > 0) {
@@ -112,17 +106,17 @@ public class LoginPortlet extends ActionPortlet {
             }
         }
 
-        String remUser = portalConfigService.getProperty(REMEMBER_USER);
+        String remUser = portalConfigService.getProperty(PortalConfigService.REMEMBER_USER);
         if ((remUser != null) && (remUser.equalsIgnoreCase("TRUE"))) {
             request.setAttribute("remUser", "true");
         }
 
-        Boolean useSecureLogin = Boolean.valueOf(portalConfigService.getProperty("use.https.login"));
+        Boolean useSecureLogin = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.USE_HTTPS_LOGIN));
 
         request.setAttribute("useSecureLogin", useSecureLogin.toString());
-        boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty("CAN_USER_CREATE_ACCOUNT")).booleanValue();
+        boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.CAN_USER_CREATE_ACCOUNT)).booleanValue();
         if (canUserCreateAccount) request.setAttribute("canUserCreateAcct", "true");
-        boolean dispUser = Boolean.valueOf(portalConfigService.getProperty(SEND_USER_FORGET_PASSWORD)).booleanValue();
+        boolean dispUser = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.SEND_USER_FORGET_PASSWORD)).booleanValue();
         if (dispUser) request.setAttribute("dispPass", "true");
         setNextState(request, "login/login.jsp");
     }
@@ -138,7 +132,7 @@ public class LoginPortlet extends ActionPortlet {
         String errorMsg = (String) req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
 
         if (errorMsg != null) {
-            Integer numTries = (Integer) req.getPortletSession(true).getAttribute(LoginPortlet.LOGIN_NUMTRIES);
+            Integer numTries = (Integer) req.getPortletSession(true).getAttribute(PortalConfigService.LOGIN_NUMTRIES);
             String loginname = (String) req.getPortletSession(true).getAttribute(LoginPortlet.LOGIN_NAME);
             int i = 1;
             if (numTries != null) {
@@ -146,18 +140,18 @@ public class LoginPortlet extends ActionPortlet {
                 i++;
             }
             numTries = new Integer(i);
-            req.getPortletSession(true).setAttribute(LoginPortlet.LOGIN_NUMTRIES, numTries);
+            req.getPortletSession(true).setAttribute(PortalConfigService.LOGIN_NUMTRIES, numTries);
             req.getPortletSession(true).setAttribute(LoginPortlet.LOGIN_NAME, req.getParameter("username"));
             System.err.println("num tries = " + i);
             // tried one to many times using same name
 
-            int defaultNumTries = Integer.valueOf(portalConfigService.getProperty(LOGIN_NUMTRIES)).intValue();
+            int defaultNumTries = Integer.valueOf(portalConfigService.getProperty(PortalConfigService.LOGIN_NUMTRIES)).intValue();
 
             if (req.getParameter("username") != null && req.getParameter("username").equals(loginname)) {
                 if ((i >= defaultNumTries) && (defaultNumTries != -1)) {
                     disableAccount(event);
                     errorMsg = this.getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS");
-                    req.getPortletSession(true).removeAttribute(LoginPortlet.LOGIN_NUMTRIES);
+                    req.getPortletSession(true).removeAttribute(PortalConfigService.LOGIN_NUMTRIES);
                     req.getPortletSession(true).removeAttribute(LoginPortlet.LOGIN_NAME);
                 }
             }
@@ -176,27 +170,25 @@ public class LoginPortlet extends ActionPortlet {
             user.setAttribute(User.DISABLED, "true");
             userManagerService.saveUser(user);
 
-            MailMessage mailToUser = tms.getMailMessage();
+            MailMessage mailToUser = new MailMessage();
             StringBuffer body = new StringBuffer();
             body.append(getLocalizedText(req, "LOGIN_DISABLED_MSG1") + " " + getLocalizedText(req, "LOGIN_DISABLED_MSG2") + "\n\n");
             mailToUser.setBody(body.toString());
             mailToUser.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT"));
-            mailToUser.setTo(user.getEmailAddress());
-            mailToUser.setServiceid("mail");
+            mailToUser.setEmailAddress(user.getEmailAddress());
 
-            MailMessage mailToAdmin = tms.getMailMessage();
+            MailMessage mailToAdmin = new MailMessage();
             StringBuffer body2 = new StringBuffer();
             body2.append(getLocalizedText(req, "LOGIN_DISABLED_ADMIN_MSG") + " " + user.getUserName());
             mailToAdmin.setBody(body2.toString());
             mailToAdmin.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT") + " " + user.getUserName());
-            mailToAdmin.setTo(tms.getServiceUserID("mail", "root"));
-            mailToUser.setServiceid("mail");
-
+            String portalAdminEmail = portalConfigService.getProperty(PortalConfigService.PORTAL_ADMIN_EMAIL);
+            mailToAdmin.setEmailAddress(portalAdminEmail);
 
             try {
-                tms.send(mailToUser);
-                tms.send(mailToAdmin);
-            } catch (TextMessagingException e) {
+                mailService.sendMail(mailToUser);
+                mailService.sendMail(mailToAdmin);
+            } catch (PortletServiceException e) {
                 log.error("Unable to send mail message!", e);
                 createErrorMessage(event, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
             }
@@ -206,14 +198,14 @@ public class LoginPortlet extends ActionPortlet {
     public void doNewUser(ActionFormEvent evt)
             throws PortletException {
 
-        boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty("CAN_USER_CREATE_ACCOUNT")).booleanValue();
+        boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.CAN_USER_CREATE_ACCOUNT)).booleanValue();
         if (!canUserCreateAccount) return;
 
         ActionRequest req = evt.getActionRequest();
 
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
 
-        String savePasswds = portalConfigService.getProperty("SAVE_PASSWORDS");
+        String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
         }
@@ -232,12 +224,12 @@ public class LoginPortlet extends ActionPortlet {
             throws PortletException {
         PortletRequest req = evt.getActionRequest();
 
-        String savePasswds = portalConfigService.getProperty("SAVE_PASSWORDS");
+        String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
         }
 
-        boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty("CAN_USER_CREATE_ACCOUNT")).booleanValue();
+        boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.CAN_USER_CREATE_ACCOUNT)).booleanValue();
         if (!canUserCreateAccount) return;
 
         try {
@@ -301,7 +293,7 @@ public class LoginPortlet extends ActionPortlet {
 
         //Validate password
 
-        String savePasswds = portalConfigService.getProperty(SAVE_PASSWORDS);
+        String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             if (isInvalidPassword(event)) throw new PortletException("password no good!");
         }
@@ -375,7 +367,7 @@ public class LoginPortlet extends ActionPortlet {
         // Submit changes
         this.userManagerService.saveUser(newuser);
 
-        String savePasswds = portalConfigService.getProperty("SAVE_PASSWORDS");
+        String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             PasswordEditor editor = passwordManagerService.editPassword(newuser);
             String password = request.getAttribute("password");
@@ -396,7 +388,7 @@ public class LoginPortlet extends ActionPortlet {
     }
 
     public void displayForgotPassword(ActionFormEvent event) {
-        boolean sendMail = Boolean.valueOf(portalConfigService.getProperty(SEND_USER_FORGET_PASSWORD)).booleanValue();
+        boolean sendMail = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.SEND_USER_FORGET_PASSWORD)).booleanValue();
         if (sendMail) {
             PortletRequest req = event.getActionRequest();
             setNextState(req, DO_FORGOT_PASSWORD);
@@ -428,8 +420,8 @@ public class LoginPortlet extends ActionPortlet {
         request.setUserID(user.getID());
         requestService.saveRequest(request);
 
-        org.gridsphere.tmf.message.MailMessage mailToUser = tms.getMailMessage();
-        mailToUser.setTo(emailTF.getValue());
+        MailMessage mailToUser = new MailMessage();
+        mailToUser.setEmailAddress(emailTF.getValue());
         String subjectHeader = portalConfigService.getProperty("LOGIN_FORGOT_SUBJECT");
         if (subjectHeader == null) subjectHeader = getLocalizedText(req, "MAIL_SUBJECT_HEADER");
         mailToUser.setSubject(subjectHeader);
@@ -441,12 +433,11 @@ public class LoginPortlet extends ActionPortlet {
         
         body.append(newpasswordURL + "&reqid=" + request.getOid());
         mailToUser.setBody(body.toString());
-        mailToUser.setServiceid("mail");
 
         try {
-            tms.send(mailToUser);
+            mailService.sendMail(mailToUser);
             createSuccessMessage(evt, this.getLocalizedText(req, "LOGIN_SUCCESS_MAIL"));
-        } catch (TextMessagingException e) {
+        } catch (PortletServiceException e) {
             log.error("Unable to send mail message!", e);
             createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
             setNextState(req, DEFAULT_VIEW_PAGE);
@@ -474,7 +465,7 @@ public class LoginPortlet extends ActionPortlet {
         request.setAttribute("organization", evt.getTextFieldBean("organization").getValue());
 
         // put hashed pass in request
-        String savePasswds = portalConfigService.getProperty("SAVE_PASSWORDS");
+        String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             String pass = evt.getPasswordBean("password").getValue();
             pass = passwordManagerService.getHashedPassword(pass);
@@ -483,7 +474,7 @@ public class LoginPortlet extends ActionPortlet {
 
         requestService.saveRequest(request);
 
-        MailMessage mailToUser = tms.getMailMessage();
+        MailMessage mailToUser = new MailMessage();
         StringBuffer body = new StringBuffer();
 
         String activateURL = activateAccountURL + "&reqid=" + request.getOid();
@@ -491,15 +482,10 @@ public class LoginPortlet extends ActionPortlet {
         String denyURL = denyAccountURL + "&reqid=" + request.getOid();
 
         // check if this account request should be approved by an administrator
-        boolean accountApproval = Boolean.valueOf(portalConfigService.getProperty(ADMIN_ACCOUNT_APPROVAL)).booleanValue();
+        boolean accountApproval = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.ADMIN_ACCOUNT_APPROVAL)).booleanValue();
         if (accountApproval) {
-            List usersToBeNotified = roleService.getUsersInRole(PortletRole.ADMIN);
-            Set admins = new HashSet();
-            for (int i = 0; i < usersToBeNotified.size(); i++) {
-                User u = (User) usersToBeNotified.get(i);
-                admins.add(u.getEmailAddress());
-            }
-            mailToUser.setTo(admins);
+            String admin = portalConfigService.getProperty(PortalConfigService.PORTAL_ADMIN_EMAIL);
+            mailToUser.setEmailAddress(admin);
             String mailSubject = portalConfigService.getProperty("LOGIN_ACCOUNT_APPROVAL_ADMIN_MAILSUBJECT");
             if (mailSubject == null) mailSubject = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ADMIN_MAILSUBJECT");
             mailToUser.setSubject(mailSubject);
@@ -511,7 +497,7 @@ public class LoginPortlet extends ActionPortlet {
             body.append(getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_DENY")).append("\n\n");
             body.append(denyURL).append("\n\n");
         } else {
-            mailToUser.setTo(emailTF.getValue());
+            mailToUser.setEmailAddress(emailTF.getValue());
 
             String mailSubjectHeader = portalConfigService.getProperty("LOGIN_ACTIVATE_SUBJECT");
             String loginActivateMail = portalConfigService.getProperty("LOGIN_ACTIVATE_BODY");
@@ -536,16 +522,15 @@ public class LoginPortlet extends ActionPortlet {
         body.append(evt.getTextFieldBean("emailAddress").getValue()).append("\n");
 
         mailToUser.setBody(body.toString());
-        mailToUser.setServiceid("mail");
 
         try {
-            tms.send(mailToUser);
-        } catch (TextMessagingException e) {
+            mailService.sendMail(mailToUser);
+        } catch (PortletServiceException e) {
             createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
             throw new PortletException("Unable to send mail message!", e);
         }
 
-        boolean adminRequired = Boolean.valueOf(portalConfigService.getProperty(ADMIN_ACCOUNT_APPROVAL));
+        boolean adminRequired = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.ADMIN_ACCOUNT_APPROVAL));
         if (adminRequired) {
             createSuccessMessage(evt, this.getLocalizedText(req, "LOGIN_ACCT_ADMIN_MAIL"));
         } else {
@@ -597,8 +582,8 @@ public class LoginPortlet extends ActionPortlet {
                 if (body == null) body = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_DENY");
             }
 
-            MailMessage mailToUser = tms.getMailMessage();
-            mailToUser.setTo(user.getEmailAddress());
+            MailMessage mailToUser = new MailMessage();
+            mailToUser.setEmailAddress(user.getEmailAddress());
 
             mailToUser.setSubject(subject);
             StringBuffer msgbody = new StringBuffer();
@@ -606,15 +591,13 @@ public class LoginPortlet extends ActionPortlet {
             msgbody.append(body).append("\n\n");
             msgbody.append(notificationURL);
             mailToUser.setBody(body.toString());
-            mailToUser.setServiceid("mail");
 
             try {
-                tms.send(mailToUser);
-            } catch (TextMessagingException e) {
+                mailService.sendMail(mailToUser);
+            } catch (PortletServiceException e) {
                 log.error("Error: " + e.getMessage());
                 createErrorMessage(event, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
             }
-
         }
         setNextState(req, "doViewUser");
 

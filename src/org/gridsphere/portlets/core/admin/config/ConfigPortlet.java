@@ -4,15 +4,10 @@ import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
-import org.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridsphere.services.core.security.auth.LoginService;
 import org.gridsphere.services.core.security.role.PortletRole;
-import org.gridsphere.services.core.messaging.TextMessagingService;
-import org.gridsphere.tmf.services.TMService;
-import org.gridsphere.tmf.services.TextMessageServiceConfig;
-import org.gridsphere.tmf.TextMessagingException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 
 import javax.portlet.PortletConfig;
@@ -21,63 +16,47 @@ import javax.portlet.PortletRequest;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.Enumeration;
 
 public class ConfigPortlet extends ActionPortlet {
-
-
-    private static String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
-    private static String ADMIN_ACCOUNT_APPROVAL = "ADMIN_ACCOUNT_APPROVAL";
-    private static String LOGIN_ERROR_HANDLING = "LOGIN_ERROR_HANDLING";
-    public static String SAVE_PASSWORDS = "SAVE_PASSWORDS";
-    public static String REMEMBER_USER = "REMEMBER_USER";
-    public static String SUPPORT_X509_AUTH = "SUPPORT_X509_AUTH";
-    public static String SEND_USER_FORGET_PASSWORD = "SEND_USER_FORGET_PASSWD";
-
-    public static final String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
-    public static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
 
     public static final String DO_VIEW = "admin/config/view.jsp"; //configure login
 
     private PortalConfigService portalConfigService = null;
     private LoginService loginService = null;
-    private TextMessagingService tms = null;
 
     public void init(PortletConfig config) throws PortletException {
         super.init(config);
         portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
         loginService = (LoginService) PortletServiceFactory.createPortletService(LoginService.class, true);
-        tms = (TextMessagingService) PortletServiceFactory.createPortletService(TextMessagingService.class, true);
         DEFAULT_VIEW_PAGE = "showConfigure";
     }
 
     public void showConfigure(RenderFormEvent event) {
         PortletRequest req = event.getRenderRequest();
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
-        boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty("CAN_USER_CREATE_ACCOUNT")).booleanValue();
+        boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.CAN_USER_CREATE_ACCOUNT)).booleanValue();
 
         acctCB.setSelected(canUserCreateAccount);
 
-        Boolean sendMail = Boolean.valueOf(portalConfigService.getProperty("ENABLE_ERROR_HANDLING"));
+        Boolean sendMail = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.ENABLE_ERROR_HANDLING));
         req.setAttribute("sendMail", sendMail);
 
         CheckBoxBean notifyCB = event.getCheckBoxBean("notifyCB");
-        notifyCB.setSelected(Boolean.valueOf(portalConfigService.getProperty(SEND_USER_FORGET_PASSWORD)).booleanValue());
+        notifyCB.setSelected(Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.SEND_USER_FORGET_PASSWORD)).booleanValue());
 
         CheckBoxBean savepassCB = event.getCheckBoxBean("savepassCB");
-        savepassCB.setSelected(Boolean.valueOf(portalConfigService.getProperty(SAVE_PASSWORDS)).booleanValue());
+        savepassCB.setSelected(Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS)).booleanValue());
 
         CheckBoxBean supportX509CB = event.getCheckBoxBean("supportx509CB");
-        supportX509CB.setSelected(Boolean.valueOf(portalConfigService.getProperty(SUPPORT_X509_AUTH)).booleanValue());
+        supportX509CB.setSelected(Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.SUPPORT_X509_AUTH)).booleanValue());
 
         CheckBoxBean accountApproval = event.getCheckBoxBean("acctApproval");
-        accountApproval.setSelected(Boolean.valueOf(portalConfigService.getProperty(ADMIN_ACCOUNT_APPROVAL)).booleanValue());
+        accountApproval.setSelected(Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.ADMIN_ACCOUNT_APPROVAL)).booleanValue());
 
         CheckBoxBean remUserCB = event.getCheckBoxBean("remUserCB");
-        remUserCB.setSelected(Boolean.valueOf(portalConfigService.getProperty(REMEMBER_USER)).booleanValue());
+        remUserCB.setSelected(Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.REMEMBER_USER)).booleanValue());
 
-        String numTries = portalConfigService.getProperty(LOGIN_NUMTRIES);
+        String numTries = portalConfigService.getProperty(PortalConfigService.LOGIN_NUMTRIES);
         TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
         if (numTries == null) {
             numTries = "-1";
@@ -87,13 +66,15 @@ public class ConfigPortlet extends ActionPortlet {
         List authModules = loginService.getAuthModules();
         req.setAttribute("authModules", authModules);
 
-        // display messaging services
-        FrameBean serviceFrame = event.getFrameBean("serviceframe");
-        serviceFrame.setTableModel(getMessagingService(event));
-        Set services = tms.getServices();
-        event.getRenderRequest().setAttribute("services", ""+services.size());
-
-        // Customized mail messages
+        // configure mail settings
+        TextFieldBean serverTF = event.getTextFieldBean("mailServerTF");
+        serverTF.setValue(portalConfigService.getProperty(PortalConfigService.MAIL_SERVER));
+        TextFieldBean portTF = event.getTextFieldBean("mailPortTF");
+        portTF.setValue(portalConfigService.getProperty(PortalConfigService.MAIL_PORT));
+        TextFieldBean fromTF = event.getTextFieldBean("mailFromTF");
+        fromTF.setValue(portalConfigService.getProperty(PortalConfigService.MAIL_FROM));
+        TextFieldBean adminTF = event.getTextFieldBean("adminTF");
+        adminTF.setValue(portalConfigService.getProperty(PortalConfigService.PORTAL_ADMIN_EMAIL));
 
         // Portal emails to user  subject for forgotten password
         String subjectHeader = portalConfigService.getProperty("LOGIN_FORGOT_SUBJECT");
@@ -153,7 +134,7 @@ public class ConfigPortlet extends ActionPortlet {
 
         boolean canUserCreateAccount = (useracct != null);
 
-        portalConfigService.setProperty("CAN_USER_CREATE_ACCOUNT", String.valueOf(canUserCreateAccount));
+        portalConfigService.setProperty(PortalConfigService.CAN_USER_CREATE_ACCOUNT, String.valueOf(canUserCreateAccount));
 
         CheckBoxBean notifyCB = event.getCheckBoxBean("notifyCB");
         String notify = notifyCB.getSelectedValue();
@@ -173,19 +154,19 @@ public class ConfigPortlet extends ActionPortlet {
         CheckBoxBean supportsx509CB = event.getCheckBoxBean("supportx509CB");
         String supportx509val = supportsx509CB.getSelectedValue();
         boolean supportx509 = (supportx509val != null);
-        portalConfigService.setProperty(SUPPORT_X509_AUTH, Boolean.toString(supportx509));
+        portalConfigService.setProperty(PortalConfigService.SUPPORT_X509_AUTH, Boolean.toString(supportx509));
 
         CheckBoxBean accountApproval = event.getCheckBoxBean("acctApproval");
         String accountApprovalval = accountApproval.getSelectedValue();
         boolean accountApprove = (accountApprovalval != null);
-        portalConfigService.setProperty(ADMIN_ACCOUNT_APPROVAL, Boolean.toString(accountApprove));
+        portalConfigService.setProperty(PortalConfigService.ADMIN_ACCOUNT_APPROVAL, Boolean.toString(accountApprove));
 
         CheckBoxBean remUserCB = event.getCheckBoxBean("remUserCB");
         boolean remUser = (remUserCB.getSelectedValue() != null);
-        portalConfigService.setProperty(REMEMBER_USER, Boolean.toString(remUser));
+        portalConfigService.setProperty(PortalConfigService.REMEMBER_USER, Boolean.toString(remUser));
 
-        portalConfigService.setProperty(SAVE_PASSWORDS, Boolean.toString(savePasswords));
-        portalConfigService.setProperty(SEND_USER_FORGET_PASSWORD, Boolean.toString(sendForget));
+        portalConfigService.setProperty(PortalConfigService.SAVE_PASSWORDS, Boolean.toString(savePasswords));
+        portalConfigService.setProperty(PortalConfigService.SEND_USER_FORGET_PASSWORD, Boolean.toString(sendForget));
         try {
             portalConfigService.storeProperties();
         } catch (IOException e) {
@@ -204,7 +185,7 @@ public class ConfigPortlet extends ActionPortlet {
         int numtries = -1;
         try {
             numtries = Integer.valueOf(numTries).intValue();
-            portalConfigService.setProperty(LOGIN_NUMTRIES, String.valueOf(numtries));
+            portalConfigService.setProperty(PortalConfigService.LOGIN_NUMTRIES, String.valueOf(numtries));
             portalConfigService.storeProperties();
         } catch (NumberFormatException e) {
             // do nothing
@@ -222,7 +203,7 @@ public class ConfigPortlet extends ActionPortlet {
 
         Boolean sendMail = Boolean.FALSE;
         if (errorRB.getSelectedValue().equals("MAIL")) sendMail = Boolean.TRUE;
-        portalConfigService.setProperty(LOGIN_ERROR_HANDLING, sendMail.toString());
+        portalConfigService.setProperty(PortalConfigService.ENABLE_ERROR_HANDLING, sendMail.toString());
         try {
             portalConfigService.storeProperties();
         } catch (IOException e) {
@@ -259,105 +240,25 @@ public class ConfigPortlet extends ActionPortlet {
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
-    private DefaultTableModel getMessagingService(RenderFormEvent event) {
 
-        DefaultTableModel configTable = new DefaultTableModel();
-
-        Set services = tms.getServices();
-
-        // get the mail service
-        TMService service = null;
-        Iterator it = services.iterator();
-        while (it.hasNext()) {
-            service  = (TMService)it.next();
+    public void doSaveMailConfig(ActionFormEvent event) {
+        TextFieldBean serverTF = event.getTextFieldBean("mailServerTF");
+        String mailServer = serverTF.getValue();
+        portalConfigService.setProperty(PortalConfigService.MAIL_SERVER, mailServer);
+        TextFieldBean portTF = event.getTextFieldBean("mailPortTF");
+        String mailPort = portTF.getValue();
+        portalConfigService.setProperty(PortalConfigService.MAIL_PORT, mailPort);
+        TextFieldBean fromTF = event.getTextFieldBean("mailFromTF");
+        String mailFrom = fromTF.getValue();
+        portalConfigService.setProperty(PortalConfigService.MAIL_FROM, mailFrom);
+        TextFieldBean adminTF = event.getTextFieldBean("adminTF");
+        String admin = adminTF.getValue();
+        portalConfigService.setProperty(PortalConfigService.PORTAL_ADMIN_EMAIL, admin);
+        try {
+            portalConfigService.storeProperties();
+        } catch (IOException e) {
+            log.error("Unable to save gridsphere.properties!", e);
         }
-        if (service == null) return configTable;
-
-        // description
-
-        TextMessageServiceConfig config = service.getServiceConfig();
-
-        // configuration
-        List params = config.getConfigPropertyKeys();
-
-        for (int j=0;j<params.size();j++) {
-
-            TableRowBean configRow = new TableRowBean();
-            TableCellBean configDescription = new TableCellBean();
-            TableCellBean configValue = new TableCellBean();
-
-            TextBean paramName = event.getTextBean(service.getClass().getName()+"paramKey"+params.get(j));
-            paramName.setValue((String)params.get(j));
-            configDescription.addBean(paramName);
-
-            TextFieldBean paramValue = event.getTextFieldBean(service.getClass().getName()+"paramValue"+params.get(j));
-            paramValue.setValue(config.getProperty((String)params.get(j)));
-            configValue.addBean(paramValue);
-
-            configRow.addBean(configDescription); configDescription.setAlign("top");
-            configRow.addBean(configValue);
-
-            configTable.addTableRowBean(configRow);
-        }
-
-        FrameBean frameConfig = new FrameBean();
-        frameConfig.setTableModel(configTable);
-
-
-        return configTable;
-
-    }
-
-
-
-    public void doSaveValues(ActionFormEvent event) {
-        Set services = tms.getServices();
-        for (Iterator iterator = services.iterator(); iterator.hasNext();) {
-            // get the service
-            TMService service = (TMService) iterator.next();
-            TextMessageServiceConfig config = service.getServiceConfig();
-
-            List params = config.getConfigPropertyKeys();
-
-            boolean isDirty = false;
-            for (int j=0;j<params.size();j++) {
-                String propKey = (String)params.get(j);
-                String propValue = config.getProperty(propKey);
-
-                TextFieldBean paramValue = event.getTextFieldBean(service.getClass().getName()+"paramValue"+propKey);
-                String propTextBeanValue = paramValue.getValue();
-
-                // if a parameter changed, restart the service....
-                if (!propTextBeanValue.equals(propValue)) {
-                    config.setProperty((String)params.get(j), paramValue.getValue());
-                    isDirty = true;
-                }
-            }
-            if (isDirty) {
-                try {
-                    config.saveConfig();
-                    service.shutdown();
-                    service.startup();
-                    String msg = this.getLocalizedText(event.getActionRequest(), "MESSAGING_SERVICE_SERVICERESTARTED");
-                    createSuccessMessage(event, msg + ": "+config.getProperty(TextMessagingService.SERVICE_NAME));
-                } catch (IOException e) {
-                    createErrorMessage(event, this.getLocalizedText(event.getActionRequest(), "MESSAGING_SERVICE_SAVEFAILURE"));
-                } catch (TextMessagingException e) {
-                    String msg = this.getLocalizedText(event.getActionRequest(), "MESSAGING_SERVICE_RESTARTFAILURE");
-                    createErrorMessage(event, msg+" : "+config.getProperty(TextMessagingService.SERVICE_NAME));
-                }
-            }
-        }
-
-        Enumeration en = event.getActionRequest().getParameterNames();
-        while (en.hasMoreElements()) {
-            String val = (String)en.nextElement();
-            System.err.println("name= " + val + " val=" + event.getActionRequest().getParameter(val));
-        }
-
-        //System.err.println("param= " + event.getActionRequest().getParameter("ui.tab.label"));
-
-       // event.getActionResponse().setRenderParameter("ui.tab.label", );
     }
 
 
@@ -377,19 +278,6 @@ public class ConfigPortlet extends ActionPortlet {
                 log.error("Unable to save gridsphere.properties!", e);
             }
         }
-    }
-
-
-    private void createErrorMessage(ActionFormEvent evt, String text) {
-        MessageBoxBean msg = evt.getMessageBoxBean("msg");
-        msg.setValue(text);
-        msg.setMessageType(MessageStyle.MSG_ERROR);
-    }
-
-    private void createSuccessMessage(ActionFormEvent evt, String text) {
-        MessageBoxBean msg = evt.getMessageBoxBean("msg");
-        msg.setValue(text);
-        msg.setMessageType(MessageStyle.MSG_SUCCESS);
     }
 
 }
