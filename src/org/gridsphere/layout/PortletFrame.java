@@ -20,12 +20,10 @@ import org.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.services.core.cache.CacheService;
-import org.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridsphere.services.core.portal.PortalConfigService;
-import org.gridsphere.services.core.security.role.RoleManagerService;
-import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.registry.PortletRegistryService;
-import org.gridsphere.tmf.message.MailMessage;
+import org.gridsphere.services.core.mail.MailService;
+import org.gridsphere.services.core.mail.MailMessage;
 
 import javax.servlet.RequestDispatcher;
 import javax.portlet.RenderResponse;
@@ -650,14 +648,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             cause = ex;
         }
         try {
-            TextMessagingService tms = (TextMessagingService)PortletServiceFactory.createPortletService(TextMessagingService.class, true);
-            RoleManagerService roleManagerService = (RoleManagerService)PortletServiceFactory.createPortletService(RoleManagerService.class, true);
-            Boolean sendMail = Boolean.valueOf(portalConfigService.getProperty("ENABLE_ERROR_HANDLING"));
+            MailService mailService = (MailService)PortletServiceFactory.createPortletService(MailService.class, true);
+            Boolean sendMail = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.ENABLE_ERROR_HANDLING));
             if (sendMail.booleanValue()) {
-                MailMessage mailToUser = tms.getMailMessage();
-                List superUsers = roleManagerService.getUsersInRole(PortletRole.ADMIN);
-                User superUser = (User)superUsers.get(0);
-                mailToUser.setTo(superUser.getEmailAddress());
+                MailMessage mailToUser = new MailMessage();
+                String portalAdmin = portalConfigService.getProperty(PortalConfigService.PORTAL_ADMIN_EMAIL);
+                mailToUser.setEmailAddress(portalAdmin);
                 mailToUser.setSubject(getLocalizedText(req, "PORTAL_ERROR_SUBJECT"));
                 StringBuffer body = new StringBuffer();
                 body.append(getLocalizedText(req, "PORTAL_ERROR_BODY"));
@@ -677,9 +673,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 cause.printStackTrace(pout);
                 body.append(sw.getBuffer());
                 mailToUser.setBody(body.toString());
-                mailToUser.setServiceid("mail");
+
                 try {
-                    tms.send(mailToUser);
+                    mailService.sendMail(mailToUser);
                     req.setAttribute("lastFrame", lastFrame);
                     RequestDispatcher dispatcher = ctx.getRequestDispatcher("/jsp/errors/custom_error.jsp");
                     dispatcher.include(req, res);

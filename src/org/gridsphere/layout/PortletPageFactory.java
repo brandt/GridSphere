@@ -233,7 +233,7 @@ public class PortletPageFactory implements PortletSessionListener {
     }
 
     public void setPageTheme(PortletPage page, PortletRequest req) {
-        String defaultTheme = portalConfigService.getProperty("DEFAULT_THEME");
+        String defaultTheme = portalConfigService.getProperty(PortalConfigService.DEFAULT_THEME);
         String theme = null;
         if (defaultTheme != null) theme = defaultTheme;
         User user = req.getUser();
