@@ -69,5 +69,14 @@ public class PersistencePreferenceAttribute {
         return (String) values.get(0);
     }
 
-
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("oid=" +oid);
+        sb.append("\nreadonly="+ readonly);
+        sb.append("\nname=" + name);
+        for (int i = 0; i < values.size(); i++) {
+            sb.append("\nval" + i + "=" + (String)values.get(i));
+        }
+        return sb.toString();
+    }
 }

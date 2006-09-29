@@ -51,7 +51,7 @@ public class PortletException extends java.lang.Exception {
      */
 
     public PortletException(String text, Throwable cause) {
-        super(text);
+        super(text, cause);
         _cause = cause;
         // change this when going to jdk1.4:    super (text, cause);
     }
@@ -65,6 +65,7 @@ public class PortletException extends java.lang.Exception {
      */
 
     public PortletException(Throwable cause) {
+        super(cause);
         _cause = cause;
         // change this when going to jdk1.4:        super (cause);
     }

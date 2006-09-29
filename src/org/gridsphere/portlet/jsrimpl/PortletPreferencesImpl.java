@@ -231,11 +231,11 @@ public class PortletPreferencesImpl implements PortletPreferences {
             ppa.setName(key);
             ppa.setReadOnly(false);
             ppa.setValue(value);
-            attributes.put(key, ppa);
         } else {
             if (ppa.isReadOnly()) throw new ReadOnlyException("PortletPreference is read-only!");
             ppa.setValue(value);
         }
+        attributes.put(key, ppa);
     }
 
 
@@ -267,11 +267,11 @@ public class PortletPreferencesImpl implements PortletPreferences {
             ppa.setName(key);
             ppa.setReadOnly(false);
             ppa.setAValues(values);
-            attributes.put(key, ppa);
         } else {
             if (ppa.isReadOnly()) throw new ReadOnlyException("PortletPreference is read-only!");
             ppa.setAValues(values);
         }
+        attributes.put(key, ppa);
     }
 
     /**

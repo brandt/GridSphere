@@ -114,7 +114,7 @@ public class ActionSubmitTag extends ActionTag {
             JspWriter out = pageContext.getOut();
             out.print(actionSubmitBean.toEndString());
         } catch (Exception e) {
-            throw new JspException(e.getMessage());
+            throw new JspException(e);
         }
 
         return EVAL_PAGE;
