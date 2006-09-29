@@ -1,18 +1,9 @@
 package org.gridsphere.services.core.mail;
 
-import javax.mail.MessagingException;
+import org.gridsphere.portlet.service.PortletServiceException;
 
-/**
- * @deprecated
- */
 public interface MailService {
 
-    public static String MAIL_SERVER_HOST = "gridsphere.mailserver.host";
-    public static String MAIL_SENDER = "gridsphere.mail.sender";
+    public void sendMail(MailMessage msg) throws PortletServiceException;
 
-    String getMailServiceHost();
-
-    void setMailServiceHost(String mailServiceHost);
-
-    void sendMail(MailMessage msg) throws MessagingException;
 }
