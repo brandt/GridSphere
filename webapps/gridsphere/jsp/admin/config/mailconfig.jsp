@@ -6,12 +6,37 @@
 
 <ui:form>
     <ui:group key="LOGIN_CONFIG_SMTP">
-        <ui:frame beanId="serviceframe"/>
+        <ui:frame>
+            <ui:tablerow>
+                <ui:tablecell>
+                    <ui:text key="CONFIG_MAILHOST"/>
+                    <ui:textfield beanId="mailServerTF"/>
+                </ui:tablecell>
+            </ui:tablerow>
+            <ui:tablerow>
+                <ui:tablecell>
+                    <ui:text key="CONFIG_MAILPORT"/>
+                    <ui:textfield beanId="mailPortTF"/>
+                </ui:tablecell>
+            </ui:tablerow>
+            <ui:tablerow>
+                <ui:tablecell>
+                    <ui:text key="CONFIG_MAILFROM"/>
+                    <ui:textfield beanId="mailFromTF"/>
+                </ui:tablecell>
+            </ui:tablerow>
+            <ui:tablerow>
+                <ui:tablecell>
+                    <ui:text key="CONFIG_MAILADMIN"/>
+                    <ui:textfield beanId="adminTF"/>
+                </ui:tablecell>
+            </ui:tablerow>
+        </ui:frame>
 
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell>
-                    <ui:actionsubmit action="doSaveValues" key="SAVE"/>
+                    <ui:actionsubmit action="doSaveMailConfig" key="SAVE"/>
                 </ui:tablecell>
             </ui:tablerow>
         </ui:frame>
