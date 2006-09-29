@@ -479,7 +479,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             req.setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
 
             String realuri = uri.toString().substring("http".length());
-            Boolean useSecureRedirect = Boolean.valueOf(portalConfigService.getProperty("use.https.redirect"));
+            Boolean useSecureRedirect = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.USE_HTTPS_REDIRECT));
             if (useSecureRedirect.booleanValue()) {
                 realuri = "https" + realuri;
             } else {
