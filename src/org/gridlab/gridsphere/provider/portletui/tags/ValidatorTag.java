@@ -1,9 +1,9 @@
-package org.gridlab.gridsphere.provider.portletui.tags;
+package org.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
-import org.gridlab.gridsphere.provider.portletui.beans.MessageStyle;
-import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
-import org.gridlab.gridsphere.provider.portletui.beans.ValidatorBean;
+import org.gridsphere.provider.portletui.beans.TextBean;
+import org.gridsphere.provider.portletui.beans.MessageStyle;
+import org.gridsphere.provider.portletui.beans.BaseComponentBean;
+import org.gridsphere.provider.portletui.beans.ValidatorBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
