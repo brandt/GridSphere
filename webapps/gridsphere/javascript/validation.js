@@ -183,7 +183,7 @@ function validate( myform ) {
                     var myfunc = checkFunc + "('" + inputFields[i].value + "')";
                     valid = eval(myfunc);
                     if (!valid) {
-                        var validateName = inputFields[i].name + "#" + checkFunc;
+                        var validateName = "val#" + inputFields[i].name + "#" + checkFunc;
                         var hiddenField = document.getElementById(myform.id).elements[validateName];
                         message = hiddenField.value;
                         displayError( myform, message);
