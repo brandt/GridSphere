@@ -293,6 +293,8 @@ public class PortletServlet extends HttpServlet
             if (userInfo.containsKey("user.organization")) userInfo.put("user.organization", user.getOrganization());
             if (userInfo.containsKey("user.lastlogintime")) userInfo.put("user.lastlogintime", new Long(user.getLastLoginTime()).toString());
             if (userInfo.containsKey("user.name.full")) userInfo.put("user.name.full", user.getFullName());
+            if (userInfo.containsKey("user.name.first")) userInfo.put("user.name.first", user.getFirstName());
+            if (userInfo.containsKey("user.name.last")) userInfo.put("user.name.last", user.getLastName());
             if (userInfo.containsKey("user.timezone")) userInfo.put("user.timezone", user.getAttribute(User.TIMEZONE));
             if (userInfo.containsKey("user.locale")) userInfo.put("user.locale", user.getAttribute(User.LOCALE));
             if (userInfo.containsKey("user.theme")) userInfo.put("user.theme", user.getAttribute(User.THEME));
