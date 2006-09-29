@@ -6,6 +6,9 @@ package org.gridsphere.provider.portlet;
 
 import org.gridsphere.event.ActionEvent;
 import org.gridsphere.portlet.*;
+import org.gridsphere.portlet.service.PortletService;
+import org.gridsphere.portlet.service.PortletServiceException;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.impl.AbstractPortlet;
 import org.gridsphere.provider.event.FormEvent;
@@ -728,5 +731,8 @@ public class ActionPortlet extends AbstractPortlet {
         return mapValues;
     }
 
+    public PortletService createPortletService(Class serviceClass) throws PortletServiceException {
+        return PortletServiceFactory.createPortletService(serviceClass, true);
+    }
 
 }

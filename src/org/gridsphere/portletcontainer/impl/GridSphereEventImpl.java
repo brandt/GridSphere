@@ -199,14 +199,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return portletContext;
     }
 
-    public HttpServletRequest getHttpServletRequest() {
-        return req;
-    }
-
-    public HttpServletResponse getHttpServletResponse() {
-        return res;
-    }
-
     public DefaultPortletAction getAction() {
         return action;
     }

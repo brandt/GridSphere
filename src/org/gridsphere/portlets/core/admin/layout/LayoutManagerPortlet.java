@@ -1,27 +1,27 @@
 package org.gridsphere.portlets.core.admin.layout;
 
-import org.gridsphere.provider.portlet.jsr.ActionPortlet;
+import org.gridsphere.provider.portlet.ActionPortlet;
 import org.gridsphere.provider.portlet.jsr.PortletServlet;
-import org.gridsphere.provider.event.jsr.ActionFormEvent;
-import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.event.FormEvent;
 import org.gridsphere.provider.portletui.beans.*;
-
-import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.layout.*;
-import org.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.content.ContentManagerService;
 import org.gridsphere.services.core.content.ContentFile;
 import org.gridsphere.services.core.registry.PortletRegistryService;
+import org.gridsphere.layout.*;
+import org.gridsphere.portlet.*;
+import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portletcontainer.impl.GridSphereEventImpl;
+import org.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridsphere.portletcontainer.ConcretePortlet;
 
-import javax.portlet.*;
+import javax.servlet.UnavailableException;
+import java.util.*;
 import java.io.IOException;
 import java.io.File;
-import java.util.*;
+
 
 public class LayoutManagerPortlet extends ActionPortlet {
 
@@ -37,7 +37,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     private static final String SELECTED_LAYOUT = LayoutManagerPortlet.class.getName() + ".SELECTED_LAYOUT";
 
-    public void init(PortletConfig config) throws javax.portlet.PortletException {
+    public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         roleManagerService = (RoleManagerService) createPortletService(RoleManagerService.class);
         contentManagerService = (ContentManagerService) createPortletService(ContentManagerService.class);
@@ -46,10 +46,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
         DEFAULT_VIEW_PAGE = "doShowLayout";
     }
 
-    public void addportlet(RenderFormEvent event) throws PortletException, IOException {
-        PortletRequest req = event.getRenderRequest();
-        PortletResponse res = event.getRenderResponse();
-        PortletContext context = getPortletConfig().getPortletContext();
+    public void addportlet(FormEvent event) throws PortletException, IOException {
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
+        PortletContext context = getPortletConfig().getContext();
 
         GridSphereEvent gsevent = new GridSphereEventImpl(context, req, res);
         PortletPage page = (PortletPage)pages.get(req.getPortletSession().getId());
@@ -59,10 +59,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
         pageFactory.savePortletPageMaster(page);
     }
 
-    public void editComponent(ActionFormEvent event) throws PortletException, IOException {
-        PortletRequest req = event.getActionRequest();
-        PortletResponse res = event.getActionResponse();
-        PortletContext context = getPortletConfig().getPortletContext();
+    public void editComponent(FormEvent event) throws PortletException, IOException {
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
+        PortletContext context = getPortletConfig().getContext();
         GridSphereEvent gsevent = new GridSphereEventImpl(context, req, res);
         String sessionId = req.getPortletSession().getId();
         PortletPage page = (PortletPage)pages.get(sessionId);
@@ -76,8 +76,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     }
 
-    public PortletPage createLayout(RenderFormEvent event) throws PortletException, IOException {
-        PortletRequest req = event.getRenderRequest();
+    public PortletPage createLayout(FormEvent event) throws PortletException, IOException {
+        PortletRequest req = event.getPortletRequest();
         //PortletPage guestPage = pageFactory.createPortletPageCopy(PortletPageFactory.GUEST_PAGE);
         PortletPage page = null;
         PortletSession session = event.getPortletRequest().getPortletSession();
@@ -100,8 +100,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
     }
     */
 
-    public void doSaveFrame(ActionFormEvent event) throws PortletException, IOException {
-        PortletRequest req = event.getActionRequest();
+    public void doSaveFrame(FormEvent event) throws PortletException, IOException {
+        PortletRequest req = event.getPortletRequest();
 
         String sessionId = req.getPortletSession().getId();
         PortletPage page = (PortletPage)pages.get(sessionId);
@@ -129,8 +129,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     }
 
-    public void doDeleteFrame(ActionFormEvent event) throws PortletException, IOException {
-        PortletRequest req = event.getActionRequest();
+    public void doDeleteFrame(FormEvent event) throws PortletException, IOException {
+        PortletRequest req = event.getPortletRequest();
         String sessionId = req.getPortletSession().getId();
         PortletPage page = (PortletPage)pages.get(sessionId);
 
@@ -149,8 +149,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     }
 
-    public void doSaveTab(ActionFormEvent event) throws PortletException, IOException {
-        PortletRequest req = event.getActionRequest();
+    public void doSaveTab(FormEvent event) throws PortletException, IOException {
+        PortletRequest req = event.getPortletRequest();
 
         String sessionId = req.getPortletSession().getId();
         PortletPage page = (PortletPage)pages.get(sessionId);
@@ -182,8 +182,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
         pageFactory.savePortletPageMaster(page);
     }
 
-    public void doSaveNewTab(ActionFormEvent event) throws PortletException, IOException {
-        PortletRequest req = event.getActionRequest();
+    public void doSaveNewTab(FormEvent event) throws PortletException, IOException {
+        PortletRequest req = event.getPortletRequest();
 
         String sessionId = req.getPortletSession().getId();
         PortletPage page = (PortletPage)pages.get(sessionId);
@@ -238,8 +238,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     }
 
-    public void doDeleteTab(ActionFormEvent event) throws PortletException, IOException {
-        PortletRequest req = event.getActionRequest();
+    public void doDeleteTab(FormEvent event) throws PortletException, IOException {
+        PortletRequest req = event.getPortletRequest();
         String sessionId = req.getPortletSession().getId();
         PortletPage page = (PortletPage)pages.get(sessionId);
 
@@ -268,8 +268,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
     }
 
 
-    public void doMoveTabLeft(ActionFormEvent event) throws PortletException, IOException {
-        PortletRequest req = event.getActionRequest();
+    public void doMoveTabLeft(FormEvent event) throws PortletException, IOException {
+        PortletRequest req = event.getPortletRequest();
         String sessionId = req.getPortletSession().getId();
         PortletPage page = (PortletPage)pages.get(sessionId);
 
@@ -292,8 +292,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     }
 
-    public void doMoveTabRight(ActionFormEvent event) throws PortletException, IOException {
-        PortletRequest req = event.getActionRequest();
+    public void doMoveTabRight(FormEvent event) throws PortletException, IOException {
+        PortletRequest req = event.getPortletRequest();
         String sessionId = req.getPortletSession().getId();
         PortletPage page = (PortletPage)pages.get(sessionId);
 
@@ -316,16 +316,16 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     }
 
-    public void doCancel(ActionFormEvent event) throws PortletException, IOException {
+    public void doCancel(FormEvent event) throws PortletException, IOException {
         // do nothing
     }
 
 
-    public void doShowLayout(RenderFormEvent event) throws PortletException, IOException {
+    public void doShowLayout(FormEvent event) throws PortletException, IOException {
 
-        PortletRequest req = event.getRenderRequest();
-        PortletResponse res = event.getRenderResponse();
-        PortletSession session = event.getRenderRequest().getPortletSession();
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
+        PortletSession session = event.getPortletRequest().getPortletSession();
 
         Set layoutIds = pageFactory.getEditableLayoutIds();
 
@@ -357,7 +357,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         themesLB.clear();
 
-        String themesPath = getPortletConfig().getPortletContext().getRealPath("/themes");
+        String themesPath = getPortletConfig().getContext().getRealPath("/themes");
         /// retrieve the current renderkit
         themesPath += "/" + renderkit;
 
@@ -379,7 +379,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         String sessionId = session.getId();
 
-        PortletContext context = getPortletConfig().getPortletContext();
+        PortletContext context = getPortletConfig().getContext();
         GridSphereEvent gsevent = new GridSphereEventImpl(context, req, res);
 
 
@@ -461,7 +461,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
                     item.setName(contentFile.getFile().getName());
                     item.setValue(contentFile.getFile().getName());
                     contentLB.addBean(item);
-                }                
+                }
             } else if (comp instanceof PortletTab) {
                 PortletTab tab = (PortletTab)comp;
                 PortletTabbedPane pane = (PortletTabbedPane)tab.getParentComponent();
@@ -565,9 +565,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     }
 
-    public void selectLayout(ActionFormEvent event) throws PortletException, IOException {
+    public void selectLayout(FormEvent event) throws PortletException, IOException {
         ListBoxBean layoutsLB = event.getListBoxBean("layoutsLB");
-        PortletSession session = event.getActionRequest().getPortletSession();
+        PortletSession session = event.getPortletRequest().getPortletSession();
         session.setAttribute(SELECTED_LAYOUT, layoutsLB.getSelectedValue());
         pages.remove(session.getId());
     }
@@ -820,7 +820,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
 
 
-    private void createColsListBox(RenderFormEvent event, PortletTab tab) {
+    private void createColsListBox(FormEvent event, PortletTab tab) {
         // TODO  deal with column layouts
         String colType = "one";
         PortletComponent c = tab.getPortletComponent();

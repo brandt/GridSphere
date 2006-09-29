@@ -18,7 +18,6 @@ import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.services.core.persistence.QueryFilter;
 import org.gridsphere.services.core.mail.MailService;
 import org.gridsphere.services.core.mail.MailMessage;
-import org.gridsphere.portlets.core.login.LoginPortlet;
 import org.gridsphere.portlet.User;
 import org.gridsphere.portlet.service.PortletServiceException;
 
@@ -142,7 +141,7 @@ public class UserManagerPortlet extends ActionPortlet {
         HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
         hf.setValue("true");
 
-        String savePasswd = portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS);
+        String savePasswd = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswd.equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
         }
@@ -231,12 +230,12 @@ public class UserManagerPortlet extends ActionPortlet {
         makeRoleFrame(evt, user);
 
         setUserValues(evt, user);
-        String savePasswds = portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS);
+        String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
         }
 
-        String supportX509 = portalConfigService.getProperty(LoginPortlet.SUPPORT_X509_AUTH);
+        String supportX509 = portalConfigService.getProperty(PortalConfigService.SUPPORT_X509_AUTH);
         if (supportX509.equals(Boolean.TRUE.toString())) {
             req.setAttribute("certSupport", "true");
         }
@@ -283,7 +282,7 @@ public class UserManagerPortlet extends ActionPortlet {
             setNextState(req, "doListUsers");
         } catch (PortletException e) {
             createErrorMessage(evt, e.getMessage());
-            String savePasswds = portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS);
+            String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
             if (savePasswds.equals(Boolean.TRUE.toString())) {
                 req.setAttribute("savePass", "true");
             }
@@ -377,7 +376,7 @@ public class UserManagerPortlet extends ActionPortlet {
             isInvalid = true;
         }
 
-        String savePasswds = portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS);
+        String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             if (isInvalidPassword(event, newuser)){
                 isInvalid = true;
@@ -434,7 +433,7 @@ public class UserManagerPortlet extends ActionPortlet {
             newuserflag = true;
         }
 
-        String savePasswds = portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS);
+        String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             PasswordEditor editor = passwordManagerService.editPassword(user);
             String password = event.getPasswordBean("password").getValue();

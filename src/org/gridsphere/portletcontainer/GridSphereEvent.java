@@ -22,11 +22,6 @@ import javax.servlet.ServletContext;
  */
 public interface GridSphereEvent extends Event {
 
-    public HttpServletRequest getHttpServletRequest();
-
-    public HttpServletResponse getHttpServletResponse();
-
-
     /**
      * Return the portlet context associated with this event
      *

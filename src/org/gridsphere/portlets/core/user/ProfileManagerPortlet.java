@@ -19,7 +19,6 @@ import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.services.core.utils.DateUtil;
 import org.gridsphere.services.core.portal.PortalConfigService;
-import org.gridsphere.portlets.core.login.LoginPortlet;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
@@ -62,7 +61,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         PortletRequest req = event.getRenderRequest();
         setUserTable(event);
 
-        if (portalConfigService.getProperty(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+        if (portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
         }
 
