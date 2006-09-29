@@ -118,21 +118,10 @@
     </service>
 
     <service>
-        <name>File Manager Service</name>
-        <description lang="en">Provides a temporary storage directory for user's files</description>
-        <interface>org.gridsphere.services.core.file.FileManagerService</interface>
-        <implementation>org.gridsphere.services.core.file.impl.FileManagerServiceImpl</implementation>
-        <service-config>
-            <param-name>tmp_dir</param-name>
-            <param-value>tempdir</param-value>
-        </service-config>
-    </service>
-
-    <service>
-        <name>Text Messaging Service</name>
-        <description lang="en">Provides the ability to send textmessages to different services</description>
-        <interface>org.gridsphere.services.core.messaging.TextMessagingService</interface>
-        <implementation>org.gridsphere.services.core.messaging.impl.TextMessagingServiceImpl</implementation>
+        <name>Mail Service</name>
+        <description lang="en">Simple e-mail service</description>
+        <interface>org.gridsphere.services.core.mail.MailService</interface>
+        <implementation>org.gridsphere.services.core.mail.impl.MailServiceImpl</implementation>
     </service>
 
     <service>
