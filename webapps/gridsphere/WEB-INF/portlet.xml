@@ -348,6 +348,14 @@
         <name>user.name.full</name>
     </user-attribute>
     <user-attribute>
+        <description xml:lang="en">User Last Name</description>
+        <name>user.name.last</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">User First Name</description>
+        <name>user.name.first</name>
+    </user-attribute>
+    <user-attribute>
         <description xml:lang="en">User E-Mail</description>
         <name>user.email</name>
     </user-attribute>
