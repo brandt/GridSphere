@@ -1515,6 +1515,34 @@
         </attribute>
     </tag>
 
+    <tag>
+        <name>tooltip</name>
+        <tag-class>org.gridsphere.provider.portletui.tags.TooltipTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+            Displays a javascript tooltip courtesy of Yahoo UI
+        </description>
+        <attribute>
+            <name>value</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>key</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 
     <tag>
         <name>actionpane</name>
