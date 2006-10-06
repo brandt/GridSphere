@@ -104,6 +104,14 @@
     </service>
 
     <service>
+        <name>JCR Service</name>
+        <description lang="en">Java Content Repository Service</description>
+        <interface>org.gridsphere.services.core.jcr.JCRService</interface>
+        <implementation>org.gridsphere.services.core.jcr.impl.JCRServiceImpl</implementation>
+        <load-on-startup>1</load-on-startup>
+    </service>
+
+    <service>
         <name>Generic Request Service</name>
         <description lang="en">Provides Generic Request Capabilities</description>
         <interface>org.gridsphere.services.core.request.RequestService</interface>
