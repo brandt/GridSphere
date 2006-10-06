@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
-    version="1.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
+             version="1.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
     <portlet>
         <description xml:lang="en">GridSphere Configuration</description>
         <portlet-name>ConfigPortlet</portlet-name>
@@ -107,7 +107,7 @@
             <keywords>gridsphere setup</keywords>
         </portlet-info>
     </portlet>
-     <portlet>
+    <portlet>
         <!-- place portlet description here -->
         <description xml:lang="ar">إختيار اللغة</description>
         <description xml:lang="cs">Vybírá místní nastavení</description>
@@ -170,13 +170,33 @@
             <preference>
                 <name>feedurl</name>
                 <value>http://rss.news.yahoo.com/rss/topstories</value>
-                <value>http://rss.cnn.com/rss/cnn_topstories.rss</value>                
+                <value>http://rss.cnn.com/rss/cnn_topstories.rss</value>
                 <value>http://digg.com/rss/index.xml</value>
                 <value>http://www.theserverside.com/rss/theserverside-rss2.xml</value>
-            <read-only>true</read-only>
+                <read-only>true</read-only>
             </preference>
         </portlet-preferences>
     </portlet>
+
+    <portlet>
+        <description xml:lang="en">Content Repository Management</description>
+        <portlet-name>CRManagement</portlet-name>
+        <display-name xml:lang="en">Content Repository Management</display-name>
+        <portlet-class>org.gridsphere.portlets.core.jcr.JCRManagementPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>help</portlet-mode>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <portlet-info>
+            <title>Content Management</title>
+            <short-title>JCR</short-title>
+            <keywords>jcr, content</keywords>
+        </portlet-info>
+    </portlet>
+
+
     <portlet>
         <description xml:lang="ar">يمكن مدير النظام من إدارة حسابات المستخدمين</description>
         <description xml:lang="cs">Umožňuje správcům portálu spravovat uživatelské účty</description>
@@ -185,7 +205,8 @@
         <description xml:lang="es">Permite a administradores del portal, administrar cuentas de usuario</description>
         <description xml:lang="fr">Permet à l'administrateur du portail d'aministrer les comptes usagers</description>
         <description xml:lang="hr">Portlet omogućava administriranje korisnika</description>
-        <description xml:lang="hu">Lehetővé teszi a portal adminisztrátorok számára, a felhasználók adminisztrációját</description>
+        <description xml:lang="hu">Lehetővé teszi a portal adminisztrátorok számára, a felhasználók adminisztrációját
+        </description>
         <description xml:lang="it">Permette agli gestire del portale di amministrare gli account utente</description>
         <description xml:lang="pl">Umożliwia administratorowi portalu administrowanie kontami użytkowników</description>
         <description xml:lang="zh">使门户网站管理者能够管理用户帐号</description>
@@ -217,7 +238,8 @@
     <portlet>
         <!-- place portlet description here -->
         <description xml:lang="en">Enables portal administrators to manage security roles</description>
-        <description xml:lang="es">Les permite a administradores del portal que administren los Roles de seguridad</description>
+        <description xml:lang="es">Les permite a administradores del portal que administren los Roles de seguridad
+        </description>
         <description xml:lang="hr">Portlet omogućava administriranje uloga</description>
         <description xml:lang="ja">ポータル管理者にセキュリティ権限管理機能を提供します</description>
 
