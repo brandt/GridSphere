@@ -8,10 +8,24 @@ import org.gridsphere.portlet.PortletException;
 import org.gridsphere.portlet.PortletRequest;
 import org.gridsphere.portlet.PortletResponse;
 import org.gridsphere.portlet.PortletURI;
-import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridsphere.services.core.jcr.JCRNode;
+import org.gridsphere.services.core.jcr.JCRService;
+import org.radeox.api.engine.RenderEngine;
+import org.radeox.api.engine.context.RenderContext;
+import org.radeox.engine.BaseRenderEngine;
+import org.radeox.engine.context.BaseRenderContext;
 
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Session;
+import javax.jcr.Workspace;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import java.io.Serializable;
@@ -91,7 +105,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
     }
 
     public String getFileName() {
-        return textFile.substring(textFile.lastIndexOf("/")+1);
+        return textFile.substring(textFile.lastIndexOf("/") + 1);
     }
 
     /**
@@ -107,9 +121,9 @@ public class PortletContent extends BasePortletComponent implements Serializable
         StringWriter writer = new StringWriter();
         StoredPortletResponseImpl sres = new StoredPortletResponseImpl(res, writer);
         StringBuffer content = new StringBuffer();
-        String textFileName = textFile.substring(textFile.lastIndexOf("/")+1);
+        String textFileName = textFile.substring(textFile.lastIndexOf("/") + 1);
         if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
-            String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
+            String extraQuery = (String) req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
             if (extraQuery != null) {
                 PortletURI portletURI = res.createURI();
                 String link = portletURI.toString() + extraQuery;
@@ -127,7 +141,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
         if (textFile != null) {
             RequestDispatcher rd = null;
             try {
-                if (!textFile.startsWith("http://")) {
+                if (!textFile.startsWith("http://") && !textFile.startsWith("jcr://")) {
                     rd = ctx.getRequestDispatcher(textFile);
                     if (rd != null) {
                         rd.include(req, sres);
@@ -135,17 +149,42 @@ public class PortletContent extends BasePortletComponent implements Serializable
                         throw new PortletException("Unable to include resource: RequestDispatcher is null");
                     }
                 } else {
-                    writer.write("<iframe border=\"0\" width=\"100%\" height=\"100%\" src=\"" + textFile + "\"></iframe>");
+                    if (textFile.startsWith("http://")) {
+                        writer.write("<iframe border=\"0\" width=\"100%\" height=\"100%\" src=\"" + textFile + "\"></iframe>");
+                    }
+                    if (textFile.startsWith("jcr://")) {
+                        JCRService jcrService = (JCRService) PortletServiceFactory.createPortletService(JCRService.class, true);
+                        Session session = jcrService.getSession();
+                        Workspace ws = session.getWorkspace();
+                        QueryManager qm = ws.getQueryManager();
+                        String nodename = textFile.substring(6, textFile.length()); // remove 'jcr://'
+                        String query = "select * from nt:base where " + JCRNode.GSID + "='" + nodename + "'";
+                        Query q = qm.createQuery(query, Query.SQL);
+                        QueryResult result = q.execute();
+                        NodeIterator it = result.getNodes();
+                        while (it.hasNext()) {
+                            Node n = it.nextNode();
+                            String output = n.getProperty(JCRNode.CONTENT).getString();
+                            String kit = n.getProperty(JCRNode.RENDERKIT).getString();
+                            if (kit.equals(JCRNode.RENDERKIT_RADEOX)) {
+                                RenderContext context = new BaseRenderContext();
+                                RenderEngine engine = new BaseRenderEngine();
+                                output = engine.render(output, context);
+                            }
+                            if (kit.equals(JCRNode.RENDERKIT_TEXT)) {
+                                output = "<pre>" + output + "</pre>";
+                            }
+                            writer.write(output);
+                        }
+                    }
                 }
                 content = writer.getBuffer();
             } catch (Exception e) {
-                log.error("Unable to include textfile: " + textFile, e);
-                content.append("Unable to include textfile: " + textFile);
+                log.error("Unable to include : " + textFile, e);
+                content.append("Unable to include : " + textFile);
             }
             setBufferedOutput(req, content);
         }
-
-
     }
 
     public Object clone() throws CloneNotSupportedException {
