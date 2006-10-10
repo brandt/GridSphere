@@ -1,5 +1,5 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: DefaultPortletAction.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.portlet;
@@ -13,7 +13,7 @@ import java.util.Map;
  * You can use this portlet action to pass parameters in your action or create your own portlet action.
  * This default implementation demonstrates how to implement it.
  */
-public final class DefaultPortletAction implements PortletAction, Serializable {
+public final class DefaultPortletAction implements Serializable {
 
     private Map store = new HashMap();
     private String name;
