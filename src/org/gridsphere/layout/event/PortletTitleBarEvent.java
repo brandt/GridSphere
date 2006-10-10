@@ -1,11 +1,11 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletTitleBarEvent.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.layout.event;
 
-import org.gridsphere.portlet.PortletWindow;
-import org.gridsphere.portlet.Mode;
+import javax.portlet.PortletMode;
+import javax.portlet.WindowState;
 
 /**
  * A <code>PortletTitleBarEvent</code> is created by a <code>PortletTitleBar</code>
@@ -42,14 +42,14 @@ public interface PortletTitleBarEvent extends PortletComponentEvent {
      *
      * @return mode the portlet title bar mode
      */
-    public Mode getMode();
+    public PortletMode getMode();
 
     /**
      * Returns the portlet title bar window state
      *
      * @return the portlet title bar window state
      */
-    public PortletWindow.State getState();
+    public WindowState getState();
 
     /**
      * Returns true if this title bar event signals a window state change

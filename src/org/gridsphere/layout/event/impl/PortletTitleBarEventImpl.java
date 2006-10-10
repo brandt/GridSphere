@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletTitleBarEventImpl.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.layout.event.impl;
@@ -8,12 +8,12 @@ import org.gridsphere.layout.PortletComponent;
 import org.gridsphere.layout.PortletTitleBar;
 import org.gridsphere.layout.event.ComponentAction;
 import org.gridsphere.layout.event.PortletTitleBarEvent;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletWindow;
-import org.gridsphere.portlet.Mode;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.PortletMode;
+import javax.portlet.WindowState;
 import java.security.Principal;
 
 
@@ -26,7 +26,7 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
     private ComponentAction action = null;
     private int id;
     private PortletTitleBar titleBar = null;
-    private PortletRequest request;
+    private ActionRequest request;
     private boolean hasStateAction = false;
     private boolean hasModeAction = false;
 
@@ -39,7 +39,7 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      */
     public PortletTitleBarEventImpl(PortletTitleBar titleBar, GridSphereEvent event, int id) {
         this.titleBar = titleBar;
-        this.request = event.getPortletRequest();
+        this.request = event.getActionRequest();
         //User user = request.getUser();
         //if (!(user instanceof GuestUser)) {
         Principal principal = request.getUserPrincipal();
@@ -56,7 +56,7 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
         }
     }
 
-    public PortletRequest getRequest() {
+    public ActionRequest getRequest() {
         return request;
     }
 
@@ -78,14 +78,14 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      *
      * @return mode the portlet title bar mode
      */
-    public Mode getMode() {
-        Mode mode;
+    public PortletMode getMode() {
+        PortletMode mode;
         String pMode = request.getParameter(SportletProperties.PORTLET_MODE);
         if (pMode != null) {
             try {
-                mode = Mode.toMode(pMode);
+                mode = new PortletMode(pMode);
             } catch (Exception e) {
-                mode = Mode.VIEW;
+                mode = PortletMode.VIEW;
             }
             return mode;
         }
@@ -97,14 +97,14 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      *
      * @return the portlet title bar window state
      */
-    public PortletWindow.State getState() {
-        PortletWindow.State state;
+    public WindowState getState() {
+        WindowState state;
         String s = request.getParameter(SportletProperties.PORTLET_WINDOW);
         if (s != null) {
             try {
-                state = PortletWindow.State.toState(s);
+                state = new WindowState(s);
             } catch (Exception e) {
-                state = PortletWindow.State.NORMAL;
+                state = WindowState.NORMAL;
             }
             return state;
         }

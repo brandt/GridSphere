@@ -1,11 +1,12 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletComponentEvent.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.layout.event;
 
 import org.gridsphere.layout.PortletComponent;
-import org.gridsphere.portlet.PortletRequest;
+
+import javax.portlet.PortletRequest;
 
 /**
  * A <code>PortletComponentEvent</code> is a general portlet render event

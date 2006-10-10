@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletTabEventImpl.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.layout.event.impl;
@@ -8,7 +8,8 @@ import org.gridsphere.layout.PortletComponent;
 import org.gridsphere.layout.PortletTab;
 import org.gridsphere.layout.event.ComponentAction;
 import org.gridsphere.layout.event.PortletTabEvent;
-import org.gridsphere.portlet.PortletRequest;
+
+import javax.portlet.ActionRequest;
 
 /**
  * A <code>PortletTabEventImpl</code> is the concrete implementation of
@@ -19,10 +20,8 @@ public class PortletTabEventImpl implements PortletTabEvent {
     private ComponentAction action;
     private PortletTab portletTab;
     private int id;
-    private PortletRequest request;
+    private ActionRequest request;
 
-    private PortletTabEventImpl() {
-    }
 
     /**
      * Constructs an instance of PortletTabEventImpl from a portlet tab, a
@@ -33,14 +32,14 @@ public class PortletTabEventImpl implements PortletTabEvent {
      * @param id         the portlet component id
      * @see PortletTab
      */
-    public PortletTabEventImpl(PortletTab portletTab, PortletRequest request, ComponentAction action, int id) {
+    public PortletTabEventImpl(PortletTab portletTab, ActionRequest request, ComponentAction action, int id) {
         this.action = action;
         this.portletTab = portletTab;
         this.id = id;
         this.request = request;
     }
 
-    public PortletRequest getRequest() {
+    public ActionRequest getRequest() {
         return request;
     }
 

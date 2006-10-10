@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletFrameEventImpl.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.layout.event.impl;
@@ -8,7 +8,8 @@ import org.gridsphere.layout.PortletComponent;
 import org.gridsphere.layout.PortletFrame;
 import org.gridsphere.layout.event.ComponentAction;
 import org.gridsphere.layout.event.PortletFrameEvent;
-import org.gridsphere.portlet.PortletRequest;
+
+import javax.portlet.PortletRequest;
 
 /**
  * A <code>PortletFrameEventImpl</code> is the concrete implementation of
