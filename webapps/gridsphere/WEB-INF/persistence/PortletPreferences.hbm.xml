@@ -6,7 +6,7 @@
 
 <hibernate-mapping default-lazy="false">
     <class
-        name="org.gridsphere.portlet.jsrimpl.PortletPreferencesImpl"
+        name="org.gridsphere.portlet.impl.PortletPreferencesImpl"
         table="portletpreferencesimpl"
         >
         <cache usage="read-write"/>
@@ -27,7 +27,7 @@
             <cache usage="read-write"/>
             <key column="attribute_oid"/>
             <index column="attribute_ndx" type="string"/>
-            <many-to-many column="attr_oid" class="org.gridsphere.portlet.jsrimpl.PersistencePreferenceAttribute"/>
+            <many-to-many column="attr_oid" class="org.gridsphere.portlet.impl.PersistencePreferenceAttribute"/>
         </map>
 
     </class>

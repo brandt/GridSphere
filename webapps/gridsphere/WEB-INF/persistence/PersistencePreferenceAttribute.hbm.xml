@@ -6,7 +6,7 @@
 
 <hibernate-mapping default-lazy="false">
     <class
-        name="org.gridsphere.portlet.jsrimpl.PersistencePreferenceAttribute"
+        name="org.gridsphere.portlet.impl.PersistencePreferenceAttribute"
         table="persistencepreferenceattribute"
         >
         <cache usage="read-write"/>
