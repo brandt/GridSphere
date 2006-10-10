@@ -1,17 +1,17 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: SportletServiceDescriptor.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.portletcontainer.impl;
 
 import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceCollection;
 import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition;
-import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 
+import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
-import java.net.URL;
 
 /**
  * The <code>SportletServiceDescriptor</code> provides the portlet service

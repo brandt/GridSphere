@@ -1,17 +1,13 @@
 package org.gridsphere.portletcontainer;
 
-import org.gridsphere.event.WindowEvent;
-import org.gridsphere.portlet.PortletAction;
-import org.gridsphere.portlet.PortletException;
-import org.gridsphere.portlet.PortletMessage;
-import org.gridsphere.portlet.PortletSettings;
+import org.gridsphere.layout.event.PortletWindowEvent;
+import org.gridsphere.portlet.DefaultPortletAction;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletDispatcher.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 public interface PortletDispatcher {
@@ -48,40 +44,6 @@ public interface PortletDispatcher {
      * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
     public void destroy(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
-
-    /**
-     * Called by the portlet container to indicate that the concrete portlet is put into service.
-     * The portlet container calls the initConcrete() method for the whole life-cycle of the portlet.
-     * The initConcrete() method must complete successfully before concrete portlet instances can be
-     * created through the login() method.
-     * <p/>
-     * The portlet container cannot place the portlet into service if the initConcrete() method
-     * <p/>
-     * 1. throws UnavailableException
-     * 2. does not return within a time period defined by the portlet container.
-     *
-     * @param settings the portlet settings
-     * @param req the servlet request
-     * @param res the servlet response
-     * @throws PortletDispatcherException if an exception has occurrred during dispatching
-     */
-    public void initConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
-
-    /**
-     * Called by the portlet container to indicate that the concrete portlet is taken out of service.
-     * This method is only called once all threads within the portlet's service() method have exited
-     * or after a timeout period has passed. After the portlet container calls this method,
-     * it will not call the service() method again on this portlet.
-     * <p/>
-     * This method gives the portlet an opportunity to clean up any resources that are being
-     * held (for example, memory, file handles, threads).
-     *
-     * @param settings the portlet settings
-     * @param req the servlet request
-     * @param res the servlet response
-     * @throws PortletDispatcherException if an exception has occurrred during dispatching
-     */
-    public void destroyConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Called by the portlet container to ask this portlet to generate its markup using the given
@@ -123,18 +85,7 @@ public interface PortletDispatcher {
      * @param res    the servlet response
      * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void actionPerformed(PortletAction action, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
-
-    /**
-     * Notifies this listener that the message which the listener is watching for has been performed.
-     *
-     * @param concreteID the concrete portlet id
-     * @param message    the default portlet message
-     * @param req        the servlet request
-     * @param res        the servlet response
-     * @throws PortletDispatcherException if an exception has occurrred during dispatching
-     */
-    public void messageEvent(String concreteID, PortletMessage message, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
+    public void actionPerformed(DefaultPortletAction action, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Called by the portlet container to render the portlet title.
@@ -160,6 +111,6 @@ public interface PortletDispatcher {
      * @param res   the servlet response
      * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void windowEvent(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
+    public void windowEvent(PortletWindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
 }

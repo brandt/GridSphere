@@ -1,18 +1,16 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: GridSphereEvent.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.portletcontainer;
 
-import org.gridsphere.event.Event;
 import org.gridsphere.layout.event.PortletComponentEvent;
-import org.gridsphere.portlet.PortletContext;
-import org.gridsphere.portlet.PortletResponse;
+import org.gridsphere.portletcontainer.Client;
 import org.gridsphere.portlet.DefaultPortletAction;
 
+import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletContext;
 
 /**
  * A <code>GridSphereEvent</code> represents a general portlet container
@@ -20,7 +18,7 @@ import javax.servlet.ServletContext;
  * need to access the <code>PortletRequest</code>
  * <code>PortletResponse</code> objects, such as the layout components.
  */
-public interface GridSphereEvent extends Event {
+public interface GridSphereEvent {
 
     /**
      * Return the portlet context associated with this event
@@ -29,12 +27,17 @@ public interface GridSphereEvent extends Event {
      */
     public PortletContext getPortletContext();
 
-    /**
-     * Return the portlet response associated with this event
-     *
-     * @return the portlet response associated with this event
-     */
-    public PortletResponse getPortletResponse();
+    public HttpServletRequest getHttpServletRequest();
+
+    public HttpServletResponse getHttpServletResponse();
+
+    public RenderRequest getRenderRequest();
+
+    public RenderResponse getRenderResponse();
+
+    public ActionRequest getActionRequest();
+
+    public ActionResponse getActionResponse();
 
     /**
      * Return the portlet action associated with this event
@@ -70,4 +73,11 @@ public interface GridSphereEvent extends Event {
 
     public PortletComponentEvent getLastRenderEvent();
 
+    /**
+     * Returns an object representing the client device that the user connects
+     * to the portal with.
+     *
+     * @return the client device
+     */
+    public Client getClient();
 }

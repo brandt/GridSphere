@@ -1,5 +1,5 @@
 /*
-* @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+* @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
 * @version $Id: PortletException.java 4670 2006-03-27 17:56:20Z novotny $
 */
 package org.gridsphere.portletcontainer;
@@ -7,8 +7,6 @@ package org.gridsphere.portletcontainer;
 import javax.servlet.ServletException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The <code>PortletException</code> class defines a general exception that a

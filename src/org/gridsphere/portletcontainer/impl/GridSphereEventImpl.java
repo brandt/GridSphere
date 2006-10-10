@@ -1,16 +1,18 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: GridSphereEventImpl.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.portletcontainer.impl;
 
-import org.gridsphere.layout.event.PortletComponentEvent;
-import org.gridsphere.portlet.*;
-import org.gridsphere.portlet.impl.*;
-import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.gridsphere.layout.event.PortletComponentEvent;
+import org.gridsphere.portletcontainer.Client;
+import org.gridsphere.portlet.DefaultPortletAction;
+import org.gridsphere.portlet.jsrimpl.*;
+import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -29,15 +31,18 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
     protected HttpServletRequest req;
     protected HttpServletResponse res;
-    protected SportletRequest portletRequest;
-    protected SportletResponse portletResponse;
+
     protected PortletContext portletContext;
+
+    protected RenderRequest renderRequest;
+    protected RenderResponse renderResponse;
+    protected ActionRequest actionRequest;
+    protected ActionResponse actionResponse;
 
     protected String componentID = null;
     protected String layoutID = null;
 
     protected DefaultPortletAction action = null;
-    protected PortletMessage message = null;
 
     protected Stack events = null;
 
@@ -45,10 +50,15 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
         this.req = req;
         this.res = res;
-
-        this.portletRequest = new SportletRequest(req);
-        this.portletResponse = new SportletResponse(res, portletRequest);
         this.portletContext = ctx;
+
+        this.renderRequest = new RenderRequestImpl(req, ctx);
+        this.renderResponse = new RenderResponseImpl(req, res);
+        this.actionRequest = new ActionRequestImpl(req, ctx);
+        this.actionResponse = new ActionResponseImpl(req, res);
+
+        renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
+        renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
 
         events = new Stack();
 
@@ -61,6 +71,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
         } else {
             log.debug("Received cid= " + componentID);
         }
+        //req.setAttribute(SportletProperties.COMPONENT_ID, componentID);
 
         layoutID = req.getParameter(SportletProperties.LAYOUT_PAGE_PARAM);
         if (layoutID == null) {
@@ -72,52 +83,45 @@ public class GridSphereEventImpl implements GridSphereEvent {
         }
 
 
-        action = createAction(portletRequest);
+        action = createAction(req);
 
         //log.debug("Received action=" + action);
         /* This is where a DefaultPortletMessage gets put together if one exists */
+        /*
         String messageStr = portletRequest.getParameter(SportletProperties.DEFAULT_PORTLET_MESSAGE);
         if (messageStr != null) {
             log.debug("Received message: " + messageStr);
             message = new DefaultPortletMessage(messageStr);
         }
+        */
     }
 
-    public static DefaultPortletAction createAction(Object request) {
+    public static DefaultPortletAction createAction(HttpServletRequest request) {
         /* This is where a DefaultPortletAction gets put together if one exists */
         DefaultPortletAction myaction = null;
         Enumeration e = null;
         String name, newname, value;
         String actionStr = null;
-        if (request instanceof PortletRequest) {
-            actionStr = ((PortletRequest)request).getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
-        }
-        if (request instanceof javax.portlet.PortletRequest) {
-            actionStr = ((javax.portlet.PortletRequest)request).getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
-        }
+
+        actionStr = request.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
+
+
         if (actionStr != null) {
             myaction = new DefaultPortletAction(actionStr);
             String prefix = null;
-            if (request instanceof PortletRequest) {
-                prefix = ((PortletRequest)request).getParameter(SportletProperties.PREFIX);
-                e =  ((PortletRequest)request).getParameterNames();
-            }
-            if (request instanceof javax.portlet.PortletRequest) {
-                prefix = ((javax.portlet.PortletRequest)request).getParameter(SportletProperties.PREFIX);
-                e = ((javax.portlet.PortletRequest)request).getParameterNames();
-            }
+
+            prefix = request.getParameter(SportletProperties.PREFIX);
+            e =  request.getParameterNames();
+
             if ((prefix != null) && (e != null)) {
                 while (e.hasMoreElements()) {
                     name = ((String) e.nextElement());
                     if (name.startsWith(prefix)) {
                         newname = name.substring(prefix.length() + 1);
-                        value = "";
-                        if (request instanceof PortletRequest) {
-                            value =  ((PortletRequest)request).getParameter(name);
-                        }
-                        if (request instanceof javax.portlet.PortletRequest) {
-                            value = ((javax.portlet.PortletRequest)request).getParameter(name);
-                        }
+
+                        value =  request.getParameter(name);
+
+
                         //newname = decodeUTF8(newname);
                         //value = decodeUTF8(newname);
                         myaction.addParameter(newname, value);
@@ -125,12 +129,10 @@ public class GridSphereEventImpl implements GridSphereEvent {
                 }
             }
         } else {
-            if (request instanceof PortletRequest) {
-                e =  ((PortletRequest)request).getParameterNames();
-            }
-            if (request instanceof javax.portlet.PortletRequest) {
-                e = ((javax.portlet.PortletRequest)request).getParameterNames();
-            }
+
+            e =  request.getParameterNames();
+
+
             if (e != null) {
 
                 /// Check to see if action is of form action_name generated by submit button
@@ -170,9 +172,8 @@ public class GridSphereEventImpl implements GridSphereEvent {
                             }
                         }
                         // put unprefixed params in action
-                        Iterator it = tmpParams.keySet().iterator();
-                        while (it.hasNext()) {
-                            String n = (String) it.next();
+                        for (Object o : tmpParams.keySet()) {
+                            String n = (String) o;
                             String v = (String) tmpParams.get(n);
                             if (!prefix.equals("")) {
                                 n = n.substring(prefix.length() + 1);
@@ -187,12 +188,42 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return myaction;
     }
 
-    public PortletRequest getPortletRequest() {
-        return portletRequest;
+    /**
+     * Returns an object representing the client device that the user connects to the portal with.
+     *
+     * @return the client device
+     */
+    public Client getClient() {
+        Client client = (Client) this.getHttpServletRequest().getSession().getAttribute(SportletProperties.CLIENT);
+        if (client == null) {
+            client = new ClientImpl(this.getHttpServletRequest());
+            this.getHttpServletRequest().getSession().setAttribute(SportletProperties.CLIENT, client);
+        }
+        return client;
     }
 
-    public PortletResponse getPortletResponse() {
-        return portletResponse;
+    public HttpServletRequest getHttpServletRequest() {
+        return req;
+    }
+
+    public HttpServletResponse getHttpServletResponse() {
+        return res;
+    }
+
+    public RenderRequest getRenderRequest() {
+        return renderRequest;
+    }
+
+    public RenderResponse getRenderResponse() {
+        return renderResponse;
+    }
+
+    public ActionRequest getActionRequest() {
+        return actionRequest;
+    }
+
+    public ActionResponse getActionResponse() {
+        return actionResponse;
     }
 
     public PortletContext getPortletContext() {
@@ -211,9 +242,11 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return false;
     }
 
+    /*
     public PortletMessage getMessage() {
         return message;
     }
+    */
 
     public String getComponentID() {
         return componentID;

@@ -1,34 +1,33 @@
 /*
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PersistenceManagerXmlImpl.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.portletcontainer.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.ValidationException;
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 import org.xml.sax.InputSource;
 
 import java.io.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The PersistenceManagerXmlImpl provides easy access to marshal/unmarshal Java objects to XML files
  */
 public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
 
-    protected PortletLog log = SportletLog.getInstance(PersistenceManagerXmlImpl.class);
+    protected Log log = LogFactory.getLog(PersistenceManagerXmlImpl.class);
 
     private List mappingPaths = new ArrayList();
     private String descriptorPath = null;
@@ -111,9 +110,8 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
      * Marshals the given object to an xml file
      *
      * @param object object to be marshalled
-     * @throws org.gridsphere.core.persistence.PersistenceManagerException
+     * @throws PersistenceManagerException
      *                     if the configuration was wrong
-     * @throws IOException if an I/O error occurs
      */
     public void save(Object object) throws PersistenceManagerException {
         try {
@@ -121,14 +119,12 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
             FileWriter filewriter = new FileWriter(descriptorPath);
             Marshaller marshal = new Marshaller(w);
             Mapping map = new Mapping();
-            Iterator iterMappingPaths = mappingPaths.iterator();
-            while (iterMappingPaths.hasNext()) {
-                Object mappingObj = iterMappingPaths.next();
+            for (Object mappingObj : mappingPaths) {
                 log.debug("Loading mapping path " + mappingObj);
-                if (mappingObj instanceof String) {         
-                    map.loadMapping((String)mappingObj);
+                if (mappingObj instanceof String) {
+                    map.loadMapping((String) mappingObj);
                 } else if (mappingObj instanceof URL) {
-                    map.loadMapping((URL)mappingObj);
+                    map.loadMapping((URL) mappingObj);
                 }
             }
             marshal.setMapping(map);
@@ -152,7 +148,6 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
      *
      * @return object which was unmarshalled
      * @throws PersistenceManagerException if restore was not succsessful
-     * @throws IOException                 if there was a configurationerror
      */
     public Object load() throws PersistenceManagerException {
         Object object;
@@ -160,14 +155,12 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
             log.debug("Using getConnectionURL() " + descriptorPath);
             InputSource xmlSource = new InputSource(descriptorPath);
             Mapping mapping = new Mapping();
-            Iterator iterMappingPaths = mappingPaths.iterator();
-            while (iterMappingPaths.hasNext()) {
-                Object mappingObj = iterMappingPaths.next();
+            for (Object mappingObj : mappingPaths) {
                 log.debug("Loading mapping path " + mappingObj);
                 if (mappingObj instanceof String) {
-                    mapping.loadMapping((String)mappingObj);
+                    mapping.loadMapping((String) mappingObj);
                 } else if (mappingObj instanceof URL) {
-                    mapping.loadMapping((URL)mappingObj);
+                    mapping.loadMapping((URL) mappingObj);
                 }
             }
             Unmarshaller unmarshal = new Unmarshaller(mapping);

@@ -1,25 +1,22 @@
 package org.gridsphere.portletcontainer.impl;
 
-import org.gridsphere.portlet.PortletException;
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.PortletSession;
-import org.gridsphere.portlet.PortletSessionListener;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.impl.SportletSession;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portletcontainer.PortletSessionListener;
 
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-import javax.servlet.http.HttpSession;
 import java.util.*;
 
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletSessionManager.java 4985 2006-08-04 09:54:28Z novotny $
  */
 public class PortletSessionManager implements HttpSessionListener {
 
     private static PortletSessionManager instance = new PortletSessionManager();
-    private static PortletLog log = SportletLog.getInstance(PortletSessionManager.class);
+    private Log log = LogFactory.getLog(PortletSessionManager.class);
 
     private Hashtable sessions = new Hashtable();
 
@@ -65,13 +62,10 @@ public class PortletSessionManager implements HttpSessionListener {
                 Iterator it = sessionListeners.iterator();
                 while (it.hasNext()) {
                     PortletSessionListener sessionListener = (PortletSessionListener) it.next();
-                    PortletSession session = new SportletSession(httpSession);
-                    try {
+
                         log.debug("logging a session listener out: " + sessionListener.getClass());
-                        sessionListener.logout(session);
-                    } catch (PortletException e) {
-                        log.error("Unable to invoke logout on session listener ", e);
-                    }
+                        sessionListener.logout(httpSession);
+                    
                 }
                 log.debug("Removing session: " + httpSession.getId());
                 sessions.remove(httpSession);
@@ -99,7 +93,7 @@ public class PortletSessionManager implements HttpSessionListener {
         //dumpSessions();
     }
 
-    public synchronized void dumpSessions() {
+    public void dumpSessions() {
         log.debug("PortletSessionManager Session information:");
         log.debug("# current sessions: " + sessions.size());
         Set keySet = sessions.keySet();

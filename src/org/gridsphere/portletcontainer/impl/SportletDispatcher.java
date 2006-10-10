@@ -1,16 +1,16 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: SportletDispatcher.java 4848 2006-06-10 18:06:15Z novotny $
  */
 package org.gridsphere.portletcontainer.impl;
 
-import org.gridsphere.event.WindowEvent;
-import org.gridsphere.portlet.*;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.gridsphere.layout.event.PortletWindowEvent;
+import org.gridsphere.portlet.DefaultPortletAction;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portletcontainer.PortletDispatcher;
 import org.gridsphere.portletcontainer.PortletDispatcherException;
-import org.gridsphere.portletcontainer.ApplicationPortletConfig;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -26,10 +26,9 @@ import java.io.IOException;
  */
 public class SportletDispatcher implements PortletDispatcher {
 
-    public static PortletLog log = SportletLog.getInstance(SportletDispatcher.class);
+    public static Log log = LogFactory.getLog(SportletDispatcher.class);
 
     private RequestDispatcher rd;
-    private ApplicationPortletConfig appPortletConfig = null;
 
     /**
      * Default constructor is kept private
@@ -41,20 +40,17 @@ public class SportletDispatcher implements PortletDispatcher {
      * Constructs a PortletDispatcher from a <code>RequestDispatcher</code> and an <code>ApplicationPortletConfig</code>
      *
      * @param rd               the <code>RequestDispatcher</code>
-     * @param appPortletConfig the <code>ApplicationPortletConfig</code>
      */
-    public SportletDispatcher(RequestDispatcher rd, ApplicationPortletConfig appPortletConfig) {
+    public SportletDispatcher(RequestDispatcher rd) {
         this.rd = rd;
-        this.appPortletConfig = appPortletConfig;
     }
 
     public void init(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
-        if (appPortletConfig != null) req.setAttribute(SportletProperties.PORTLET_APPLICATION, appPortletConfig);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.INIT);
         try {
             include(req, res);
         } catch (Exception e) {
-            throw new PortletDispatcherException("Unable to initialize portlet: " + appPortletConfig.getApplicationPortletID(), e);
+            throw new PortletDispatcherException("Unable to initialize portlet: ", e);
         }
     }
 
@@ -64,26 +60,6 @@ public class SportletDispatcher implements PortletDispatcher {
             include(req, res);
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform destroy: ", e);
-        }
-    }
-
-    public void initConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
-        req.setAttribute(SportletProperties.PORTLET_SETTINGS, settings);
-        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.INIT_CONCRETE);
-        try {
-            include(req, res);
-        } catch (Exception e) {
-            throw new PortletDispatcherException("Unable to perform initConcrete", e);
-        }
-    }
-
-    public void destroyConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
-        req.setAttribute(SportletProperties.PORTLET_SETTINGS, settings);
-        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.DESTROY_CONCRETE);
-        try {
-            include(req, res);
-        } catch (Exception e) {
-            throw new PortletDispatcherException("Unable to perform destroyConcrete", e);
         }
     }
 
@@ -114,7 +90,7 @@ public class SportletDispatcher implements PortletDispatcher {
         }
     }
 
-    public void actionPerformed(PortletAction action, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
+    public void actionPerformed(DefaultPortletAction action, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         req.setAttribute(SportletProperties.ACTION_EVENT, action);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.ACTION_PERFORMED);
@@ -122,17 +98,6 @@ public class SportletDispatcher implements PortletDispatcher {
             include(req, res);
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform actionPerformed", e);
-        }
-    }
-
-    public void messageEvent(String concreteID, PortletMessage message, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
-        req.setAttribute(SportletProperties.MESSAGE_EVENT, message);
-        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
-        req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.MESSAGE_RECEIVED);
-        try {
-            include(req, res);
-        } catch (Exception e) {
-            throw new PortletDispatcherException("Unable to perform messageEvent", e);
         }
     }
 
@@ -147,7 +112,7 @@ public class SportletDispatcher implements PortletDispatcher {
     }
 
 
-    public void windowEvent(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
+    public void windowEvent(PortletWindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         req.setAttribute(SportletProperties.WINDOW_EVENT, event);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.WINDOW_EVENT);
