@@ -41,12 +41,6 @@ Build include file for the GridSphere Portal source code, see build.xml
             doctitle="${gridsphere.api}"
             bottom="Copyright &#169; 2002-2006 GridSphere Project. All Rights Reserved.">
 
-            <!-- <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
-
-            <link href="http://jakarta.apache.org/log4j/docs/api/"/>
-
-            <link href="http://www.junit.org/junit/javadoc/3.8/index.htm"/>  -->
-
             <group title="GridSphere Framework API"
                 packages="org.gridsphere:org.gridsphere.*"/>
 
@@ -60,7 +54,7 @@ Build include file for the GridSphere Portal source code, see build.xml
             <group title="GridSphere JSR 168 Portlet API Implementation"
                 packages="org.gridsphere.portlet.impl:org.gridsphere.portlet.impl.*"/>
 
-            <group title="GridSphere Portal Component Library"
+            <group title="GridSphere Layout Component Library"
                 packages="org.gridsphere.layout:org.gridsphere.layout.*"/>
 
             <group title="GridSphere UI Tag Library"
