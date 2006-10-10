@@ -77,7 +77,6 @@
         </copy>
         <copy file="config/template/hibernate.properties" todir="${project.dir}/webapp/WEB-INF/persistence"/>
 
-        <copy overwrite="true" file="config/template/gridsphere-portlet-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/gridsphere-portlet.xml"/>
         <copy overwrite="true" file="config/template/portlet-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/portlet.xml"/>
         <copy overwrite="true" file="config/template/web-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/web.xml"/>
 

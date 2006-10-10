@@ -32,16 +32,13 @@ Build include file for the GridSphere Portal source code, see build.xml
         <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
 
         <copy overwrite="true" file="config/portlet.properties"
-              todir="${build.classes}/org/gridsphere/portlet/impl/"
+              todir="${build.classes}/org/gridsphere/portlet/jsrimpl/"
               filtering="true"/>
         <copy file="config/mapping/portlet-jsr-mapping.xml"
-              todir="${build.classes}/org/gridsphere/portletcontainer/jsrimpl/descriptor"/>
-        <copy file="config/mapping/portlet-mapping.xml"
               todir="${build.classes}/org/gridsphere/portletcontainer/impl/descriptor"/>
         <jar jarfile="${build.lib}/gridsphere-portal-${gridsphere.version}.jar" basedir="${build.classes}" defaultexcludes="yes">
             <include name="org/gridsphere/portletcontainer/impl/**"/>
             <include name="org/gridsphere/portletcontainer/jsrimpl/**"/>
-            <include name="org/gridsphere/portlet/impl/**"/>
             <include name="org/gridsphere/portlet/jsrimpl/**"/>
         </jar>
     </target>
@@ -52,12 +49,13 @@ Build include file for the GridSphere Portal source code, see build.xml
     <target name="gridsphere-core-jar" depends="compile" description="Create GridSphere Core JAR">
         <copy file="config/mapping/layout-mapping.xml"
               todir="${build.classes}/org/gridsphere/layout/"/>
+        <copy file="config/mapping/portal-filters-mapping.xml"
+              todir="${build.classes}/org/gridsphere/filters/"/>
         <jar jarfile="${build.lib}/gridsphere-core-${gridsphere.version}.jar" basedir="${build.classes}">
             <!-- core portlets, GS servlet & filter, event impl -->
             <include name="org/gridsphere/portlets/**"/>
             <include name="org/gridsphere/servlets/**"/>
             <include name="org/gridsphere/filters/**"/>
-            <include name="org/gridsphere/event/impl/**"/>
             <!-- layout impl classes -->
             <include name="org/gridsphere/layout/**"/>
             <include name="org/gridsphere/layout/event/impl/**"/>
@@ -96,15 +94,12 @@ Build include file for the GridSphere Portal source code, see build.xml
             <include name="org/gridsphere/layout/ComponentRender.class"/>
             <include name="org/gridsphere/layout/ComponentLifecycle.class"/>
             <include name="org/gridsphere/layout/event/**"/>
-            <!-- core event interfcaes -->
-            <include name="org/gridsphere/event/**"/>
             <!-- JSR 168 API -->
             <include name="javax/**"/>
             <!-- GS properties -->
             <include name="gridsphere/**"/>
             <!-- GS portlet API -->
             <include name="org/gridsphere/portlet/**"/>
-            <exclude name="**/impl/**"/>
             <exclude name="**/jsrimpl/**"/>
         </jar>
     </target>
