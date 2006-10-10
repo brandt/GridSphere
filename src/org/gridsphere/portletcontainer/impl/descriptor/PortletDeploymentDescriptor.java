@@ -28,7 +28,7 @@ public class PortletDeploymentDescriptor {
      * @throws PersistenceManagerException if the PortletDeploymentPersistenceManager cannot be created
      */
     public PortletDeploymentDescriptor(String portletFilePath) throws PersistenceManagerException {
-        URL portletMappingStream = this.getClass().getResource("/org/gridsphere/portletcontainer/impl/descriptor/portlet-jsr-mapping.xml");
+        URL portletMappingStream = this.getClass().getResource("/org/gridsphere/portletcontainer/impl/descriptor/portlet-mapping.xml");
         pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(portletFilePath, portletMappingStream);
         portletApp = (PortletApp) pmXML.load();
     }
