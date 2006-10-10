@@ -1,13 +1,13 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletPreferencesImpl.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.portlet.jsrimpl;
 
-import org.gridsphere.portletcontainer.jsrimpl.descriptor.Preference;
-import org.gridsphere.portletcontainer.jsrimpl.descriptor.Value;
-import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridsphere.portletcontainer.impl.descriptor.Preference;
+import org.gridsphere.portletcontainer.impl.descriptor.Value;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.PreferencesValidator;
@@ -71,7 +71,7 @@ public class PortletPreferencesImpl implements PortletPreferences {
     public PortletPreferencesImpl() {
     }
 
-    public void setPreferencesDesc(org.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences portletPrefs) {
+    public void setPreferencesDesc(org.gridsphere.portletcontainer.impl.descriptor.PortletPreferences portletPrefs) {
         if (portletPrefs != null) {
             Preference[] prefs = portletPrefs.getPreference();
             for (int i = 0; i < prefs.length; i++) {

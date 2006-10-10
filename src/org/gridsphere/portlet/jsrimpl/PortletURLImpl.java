@@ -1,13 +1,8 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletURLImpl.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.portlet.jsrimpl;
-
-import org.gridsphere.portlet.PortletWindow;
-import org.gridsphere.portlet.PortletAction;
-import org.gridsphere.portlet.DefaultPortletAction;
-import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +42,7 @@ public class PortletURLImpl implements PortletURL {
     private boolean isSecure = false;
     private Map store = new HashMap();
     private boolean redirect = false;
-    private PortalContext context = null;
+
     private boolean isRender = false;
     private String label = null;
 
@@ -59,11 +54,11 @@ public class PortletURLImpl implements PortletURL {
      * @param req the servlet request
      * @param res the servlet response
      */
-    public PortletURLImpl(HttpServletRequest req, HttpServletResponse res, PortalContext context, boolean isRender) {
+    public PortletURLImpl(HttpServletRequest req, HttpServletResponse res, boolean isRender) {
         this.store = new HashMap();
         this.res = res;
         this.req = req;
-        this.context = context;
+
         this.isSecure = req.isSecure();
         this.isRender = isRender;
     }
@@ -89,6 +84,7 @@ public class PortletURLImpl implements PortletURL {
             throws WindowStateException {
         if (windowState == null) throw new IllegalArgumentException("Window state cannot be null");
         boolean isSupported = false;
+        PortalContext context = (PortalContext)req.getAttribute(SportletProperties.PORTAL_CONTEXT);
         Enumeration e = context.getSupportedWindowStates();
         while (e.hasMoreElements()) {
             WindowState supported = (WindowState) e.nextElement();
@@ -97,7 +93,7 @@ public class PortletURLImpl implements PortletURL {
                 break;
             }
         }
-        if (windowState.equals(WindowState.NORMAL)) windowState = new WindowState(PortletWindow.State.RESIZING.toString());
+        if (windowState.equals(WindowState.NORMAL)) windowState = new WindowState("RESIZING");
         if (isSupported) {
             store.put(SportletProperties.PORTLET_WINDOW, windowState);
         } else {
@@ -215,9 +211,7 @@ public class PortletURLImpl implements PortletURL {
         if (parameters == null) {
             throw new IllegalArgumentException("parameters is NULL");
         }
-        Iterator it = parameters.keySet().iterator();
-        while (it.hasNext()) {
-            Object key = it.next();
+        for (Object key : parameters.keySet()) {
             if (key == null) throw new IllegalArgumentException("a parameters key is NULL");
             if (key instanceof String) {
                 Object values = parameters.get(key);
@@ -240,7 +234,7 @@ public class PortletURLImpl implements PortletURL {
     /**
      * Sets a label for this link, which will overwrite the component id
      *
-     * @param label
+     * @param label the link label
      */
     public void setLabel(String label) {
         this.label = label;
@@ -289,7 +283,7 @@ public class PortletURLImpl implements PortletURL {
         s.append((!port.equals("")) ? port : String.valueOf(req.getServerPort()));
 
         // if underlying window state is floating then set it in the URI
-        if (req.getAttribute(SportletProperties.FLOAT_STATE) != null) store.put(SportletProperties.PORTLET_WINDOW, PortletWindow.State.FLOATING.toString());
+        if (req.getAttribute(SportletProperties.FLOAT_STATE) != null) store.put(SportletProperties.PORTLET_WINDOW, "FLOATING");
 
         String contextPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.deploy"); // contextPath;
         String servletPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.context");
@@ -297,9 +291,25 @@ public class PortletURLImpl implements PortletURL {
 
         //System.err.println("\n\n\nContext path=" + contextPath);
 
-        ///////////  JASON ADDED BELOW
         String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
         if (layoutId != null) {
+            //System.err.println("layoutId=" + layoutId);
+            store.put(SportletProperties.LAYOUT_PAGE_PARAM, layoutId);
+        }
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+            if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+            String cid = (String)req.getAttribute(compVar);
+            store.put(compVar, cid);
+        String action = (String)store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
+                if (action != null) {
+                    store.put(SportletProperties.DEFAULT_PORTLET_ACTION, action);
+                }
+
+        ///////////  JASON ADDED BELOW
+        /*
+        String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
+        if (layoutId != null) {
+            //System.err.println("layoutId=" + layoutId);
             url += "/" + layoutId;
             String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
             if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
@@ -315,7 +325,9 @@ public class PortletURLImpl implements PortletURL {
                     url += "/" + action;
                 }
             }
-        }
+            //System.err.println("url=" + layoutId);
+       }
+       */
         ///////////// JASON ADDED ABOVE
 
         Set set = store.keySet();

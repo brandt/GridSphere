@@ -1,7 +1,5 @@
 package org.gridsphere.portlet.jsrimpl;
 
-import org.gridsphere.portlet.impl.SportletProperties;
-
 import javax.portlet.PortletContext;
 import javax.portlet.PortletRequestDispatcher;
 import javax.servlet.RequestDispatcher;

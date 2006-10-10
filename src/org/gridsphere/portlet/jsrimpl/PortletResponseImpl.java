@@ -1,12 +1,9 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletResponseImpl.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.portlet.jsrimpl;
 
-import org.gridsphere.portlet.impl.SportletProperties;
-
-import javax.portlet.PortalContext;
 import javax.portlet.PortletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,8 +28,6 @@ import java.util.Map;
 public abstract class PortletResponseImpl extends HttpServletResponseWrapper implements PortletResponse {
     protected HttpServletRequest req = null;
 
-    protected PortalContext portalContext = null;
-
     public PortletResponseImpl(HttpServletResponse res) {
         super(res);
     }
@@ -43,10 +38,9 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
      *
      * @param res the <code>HttpServletRequest</code>
      */
-    public PortletResponseImpl(HttpServletRequest req, HttpServletResponse res, PortalContext portalContext) {
+    public PortletResponseImpl(HttpServletRequest req, HttpServletResponse res) {
         super(res);
         this.req = req;
-        this.portalContext = portalContext;
         Map map = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (map == null) {
             req.setAttribute(SportletProperties.PORTAL_PROPERTIES, new HashMap());

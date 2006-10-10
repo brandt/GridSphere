@@ -1,18 +1,16 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: RenderResponseImpl.java 4988 2006-08-04 09:57:48Z novotny $
  */
 package org.gridsphere.portlet.jsrimpl;
 
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portletcontainer.impl.descriptor.Supports;
 
-import javax.portlet.PortalContext;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -39,9 +37,8 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      *
      * @param res the <code>HttpServletRequest</code>
      */
-    public RenderResponseImpl(HttpServletRequest req, HttpServletResponse res, PortalContext portalContext) {
-        super(req, res, portalContext);
-        //contentType = res.getContentType();
+    public RenderResponseImpl(HttpServletRequest req, HttpServletResponse res) {
+        super(req, res);
     }
 
     // Jakarta Pluto method
@@ -89,7 +86,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return a portlet render URL
      */
     public PortletURL createRenderURL() {
-        return new PortletURLImpl(req, (HttpServletResponse) super.getResponse(), portalContext, true);
+        return new PortletURLImpl(req, (HttpServletResponse) super.getResponse(), true);
     }
 
     /**
@@ -107,7 +104,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return a portlet action URL
      */
     public PortletURL createActionURL() {
-        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse) super.getResponse(), portalContext, false);
+        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse) super.getResponse(), false);
         portletURL.setAction("");
         return portletURL;
     }
@@ -157,9 +154,16 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     public void setContentType(String type) {
         if (type == null) throw new IllegalArgumentException("supplied content type is null!");
         String mimeType = stripCharacterEncoding(type);
-        List mimeTypes = (List)req.getAttribute(SportletProperties.MIME_TYPES);
-        if (!mimeTypes.contains(mimeType)) {
-            throw new IllegalArgumentException("Unsupported mimeType: " + type);
+        Supports[] supports = (Supports[])req.getAttribute(SportletProperties.PORTLET_MIMETYPES);
+        if (supports != null) {
+            boolean found = false;
+            for (int i = 0; i < supports.length; i++) {
+                Supports s = (Supports)supports[i];
+                if (s.getMimeType().getContent().equals(mimeType)) found = true;
+            }
+            if (!found) {
+                throw new IllegalArgumentException("Unsupported portlet mimeType: " + type);
+            }
         }
         this.getHttpServletResponse().setContentType(mimeType);
         this.contentType = mimeType;

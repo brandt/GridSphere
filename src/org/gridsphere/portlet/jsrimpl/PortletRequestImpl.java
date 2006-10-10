@@ -1,18 +1,14 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletRequestImpl.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.portlet.jsrimpl;
 
-import org.gridsphere.portlet.*;
-import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
+import org.gridsphere.portlet.User;
+import org.gridsphere.portlet.UserPrincipal;
+import org.gridsphere.portletcontainer.impl.descriptor.Supports;
 
 import javax.portlet.*;
-import javax.portlet.PortletContext;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
-import javax.portlet.PortletSession;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -38,14 +34,11 @@ import java.util.*;
 public abstract class PortletRequestImpl extends HttpServletRequestWrapper implements PortletRequest {
 
     protected PortletContext portletContext = null;
-    protected PortalContext portalContext = null;
-    protected Supports[] supports = null;
     protected String contextPath = "/";
     protected boolean hasReader = false;
     protected boolean included = false;
 
     private PortletSession portletSession = null;
-
     protected GridSphereParameters portalParameters = null;
 
     /**
@@ -54,9 +47,9 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *
      * @param req the HttpServletRequest
      */
-    public PortletRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext, Supports[] supports) {
+    public PortletRequestImpl(HttpServletRequest req, PortletContext portletContext) {
         super(req);
-        this.portalContext = portalContext;
+
         this.portletContext = portletContext;
         contextPath = this.portletContext.getRealPath("");
         int l = contextPath.lastIndexOf(File.separator);
@@ -65,8 +58,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         if (contextPath.indexOf("\\") != -1) {
             contextPath = contextPath.replace('\\', '/');
         }
-        
-        this.supports = supports;
+
         Map map = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (map == null) {
             req.setAttribute(SportletProperties.PORTAL_PROPERTIES, new HashMap());
@@ -153,7 +145,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *         given window state
      */
     public boolean isWindowStateAllowed(WindowState state) {
-        Enumeration statesEnum = portalContext.getSupportedWindowStates();
+        PortalContext context = (PortalContext)getAttribute(SportletProperties.PORTAL_CONTEXT);
+        Enumeration statesEnum = context.getSupportedWindowStates();
         while (statesEnum.hasMoreElements()) {
             WindowState s = (WindowState) statesEnum.nextElement();
             if (s.equals(state)) return true;
@@ -183,22 +176,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the portlet mode
      */
     public PortletMode getPortletMode() {
-
-        String modeStr = (String) getAttribute(SportletProperties.PORTLET_MODE);
-        Mode mode = Mode.toMode(modeStr);
-        PortletMode m = PortletMode.VIEW;
-        if (mode == Mode.VIEW) {
-            m = PortletMode.VIEW;
-        } else if (mode == Mode.EDIT) {
-            m = PortletMode.EDIT;
-        } else if (mode == Mode.HELP) {
-            m = PortletMode.HELP;
-        } else if (mode == Mode.CONFIGURE) {
-            m = new PortletMode("config");
-        } else {
-            m = new PortletMode(mode.toString());
-        }
-        return m;
+        return (PortletMode)getAttribute(SportletProperties.PORTLET_MODE);
     }
 
     /**
@@ -207,16 +185,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the window state
      */
     public WindowState getWindowState() {
-        PortletWindow.State state = (PortletWindow.State) getAttribute(SportletProperties.PORTLET_WINDOW);
-        WindowState ws = WindowState.NORMAL;
-        if (state == PortletWindow.State.MAXIMIZED) {
-            ws = WindowState.MAXIMIZED;
-        } else if (state == PortletWindow.State.MINIMIZED) {
-            ws = WindowState.MINIMIZED;
-        } else if (state == PortletWindow.State.NORMAL) {
-            ws = WindowState.NORMAL;
-        }
-        return ws;
+        return (WindowState) getAttribute(SportletProperties.PORTLET_WINDOW);
     }
 
     /**
@@ -369,7 +338,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the context of the calling portal
      */
     public PortalContext getPortalContext() {
-        return portalContext;
+        return (PortalContext)getAttribute(SportletProperties.PORTAL_CONTEXT);
     }
 
     /**
@@ -406,7 +375,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @see PortletResponse#encodeURL
      */
     public String getContextPath() {
-        return contextPath;
+        //return contextPath;
+        return this.getHttpServletRequest().getContextPath();
     }
 
     /**
@@ -698,13 +668,14 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return preferred MIME type of the response
      */
     public String getResponseContentType() {
-        String modeStr = (String) getAttribute(SportletProperties.PORTLET_MODE);
-        Mode mode = Mode.toMode(modeStr);
+        PortletMode mode = (PortletMode) getAttribute(SportletProperties.PORTLET_MODE);
+
+        Supports[] supports = (Supports[])getAttribute(SportletProperties.PORTLET_MIMETYPES);
         if (supports != null) {
             Supports s = supports[0];
-            org.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = s.getPortletMode();
+            org.gridsphere.portletcontainer.impl.descriptor.PortletMode[] modes = s.getPortletMode();
             for (int j = 0; j < modes.length; j++) {
-                org.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode m = modes[j];
+                org.gridsphere.portletcontainer.impl.descriptor.PortletMode m = modes[j];
                 //System.err.println("mode content= " + m.getContent());
                 if (m.getContent().equalsIgnoreCase(mode.toString())) {
                     return s.getMimeType().getContent();
@@ -733,17 +704,17 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public java.util.Enumeration getResponseContentTypes() {
         List types = new ArrayList();
-        String modeStr = (String) getAttribute(SportletProperties.PORTLET_MODE);
-        Mode mode = Mode.toMode(modeStr);
+        PortletMode mode = (PortletMode) getAttribute(SportletProperties.PORTLET_MODE);
+        Supports[] supports = (Supports[])getAttribute(SportletProperties.PORTLET_MIMETYPES);
         if (supports != null) {
             for (int i = 0; i < supports.length; i++) {
                 Supports s = supports[i];
-                org.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = s.getPortletMode();
+                org.gridsphere.portletcontainer.impl.descriptor.PortletMode[] modes = s.getPortletMode();
                 if (modes.length == 0) {
                     types.add(s.getMimeType().getContent());
                 } else {
                     for (int j = 0; j < modes.length; j++) {
-                        org.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode m = modes[j];
+                        org.gridsphere.portletcontainer.impl.descriptor.PortletMode m = modes[j];
                         if (m.getContent().equalsIgnoreCase(mode.toString())) {
                             types.add(s.getMimeType().getContent());
                         }
@@ -761,14 +732,14 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the prefered Locale in which the portal will accept content.
      */
     public java.util.Locale getLocale() {
-        Locale locale = (Locale) this.getPortletSession(true).getAttribute(User.LOCALE);
+        Locale locale = (Locale) this.getPortletSession(true).getAttribute(User.LOCALE, PortletSession.APPLICATION_SCOPE);
         if (locale != null) return locale;
         User user = (User) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_USER);
         if (user != null) {
             String loc = (String) user.getAttribute(User.LOCALE);
             if (loc != null) {
                 locale = new Locale(loc, "", "");
-                this.getPortletSession(true).setAttribute(User.LOCALE, locale);
+                this.getPortletSession(true).setAttribute(User.LOCALE, locale, PortletSession.APPLICATION_SCOPE);
                 return locale;
             }
         }
@@ -862,33 +833,38 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     }
 
     public String getQueryString() {
-        String attr = (String) super.getAttribute("javax.servlet.include.query_string");
-        return (attr != null) ? attr : super.getQueryString();
+        //String attr = (String) super.getAttribute("javax.servlet.include.query_string");
+        //return (attr != null) ? attr : super.getQueryString();
+        return super.getQueryString();
     }
 
     public String getPathInfo() {
-        String attr = (String) super.getAttribute("javax.servlet.include.path_info");
-        return (attr != null) ? attr : super.getPathInfo();
+        //String attr = (String) super.getAttribute("javax.servlet.include.path_info");
+        //return (attr != null) ? attr : super.getPathInfo();
+        String cmd = (String)getAttribute("org.gridsphere.tomcat_hack");
+        if (cmd != null) return cmd;
+        return super.getPathInfo();
     }
 
     public String getRequestURI() {
-        String attr = (String) super.getAttribute("javax.servlet.include.request_uri");
-        return (attr != null) ? attr : super.getRequestURI();
+        //String attr = (String) super.getAttribute("javax.servlet.include.request_uri");
+        //return (attr != null) ? attr : super.getRequestURI();
+        return super.getRequestURI();
     }
 
     public String getServletPath() {
-        String attr = (String) super.getAttribute("javax.servlet.include.servlet_path");
-        return (attr != null) ? attr : super.getServletPath();
+        //String attr = (String) super.getAttribute("javax.servlet.include.servlet_path");
+        //return (attr != null) ? attr : super.getServletPath();
+        return super.getServletPath();
     }
 
     public String getPathTranslated() {
-        return null;
+        return super.getPathTranslated();
     }
 
     public ServletInputStream getInputStream() throws IOException {
         if (included) return null;
-
-        javax.servlet.ServletInputStream stream = getHttpServletRequest().getInputStream();
+        ServletInputStream stream = getHttpServletRequest().getInputStream();
         hasReader = true;
         return stream;
 
@@ -896,13 +872,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
 
     public BufferedReader getReader() throws UnsupportedEncodingException, IOException {
         if (included) return null;
-
-        BufferedReader reader = getHttpServletRequest().getReader();
-
         hasReader = true;
-
-        return reader;
-
+        return getHttpServletRequest().getReader();
     }
 
     private HttpServletRequest getHttpServletRequest() {

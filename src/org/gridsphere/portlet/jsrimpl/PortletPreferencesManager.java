@@ -1,15 +1,14 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @version $Id: PortletPreferencesManager.java 5412 2006-09-28 23:44:53Z novotny $
  */
 package org.gridsphere.portlet.jsrimpl;
 
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.User;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
+import org.gridsphere.portletcontainer.impl.ApplicationPortletImpl;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
 
@@ -21,26 +20,26 @@ import javax.portlet.PreferencesValidator;
  */
 public class PortletPreferencesManager {
 
-    private static PortletLog log = SportletLog.getInstance(PortletPreferencesManager.class);
+    private static Log log = LogFactory.getLog(PortletPreferencesManager.class);
     private static PersistenceManagerRdbms pm = null;
     private PreferencesValidator validator = null;
     private boolean isRender = false;
     private String userId = null;
     private String portletId = null;
-    private org.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefsDesc = null;
+    private org.gridsphere.portletcontainer.impl.descriptor.PortletPreferences prefsDesc = null;
     private PortletPreferencesImpl prefs = null;
 
-    public PortletPreferencesManager(JSRApplicationPortletImpl appPortlet, User user, boolean isRender) {
+    public PortletPreferencesManager(ApplicationPortletImpl appPortlet, String userId, boolean isRender) {
         PersistenceManagerService pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
         pm = pms.createGridSphereRdbms();
         validator = appPortlet.getPreferencesValidator();
         portletId = appPortlet.getApplicationPortletID();
         this.prefsDesc = appPortlet.getPreferencesDescriptor();
         this.isRender = isRender;
-        if (user == null) {
-            userId = PortletPreferencesImpl.NO_USER;
+        if (userId == null) {
+            this.userId = PortletPreferencesImpl.NO_USER;
         } else {
-            userId = user.getID();
+            this.userId = userId;
         }
     }
 

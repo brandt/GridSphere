@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletRequestDispatcherImpl.java 4894 2006-06-28 22:57:23Z novotny $
  */
 package org.gridsphere.portlet.jsrimpl;

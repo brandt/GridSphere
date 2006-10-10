@@ -1,10 +1,8 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: GridSphereParameters.java 4988 2006-08-04 09:57:48Z novotny $
  */
 package org.gridsphere.portlet.jsrimpl;
-
-import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -156,6 +154,8 @@ public class GridSphereParameters {
         if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
         String mycid = (String) req.getAttribute(compVar);
 
+        if (mycid == null) return req.getParameterMap();
+
         Map map = new HashMap();
 
         // check for any query params from an included JSP
@@ -198,7 +198,6 @@ public class GridSphereParameters {
         }
 
         // this is a render triggered by a render URL or an action event
-
         if (mycid.equals(targetedCid)) {
 
             parsePersistParams();

@@ -1,13 +1,12 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortalContextImpl.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.portlet.jsrimpl;
 
-import org.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
-import org.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
-import org.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portletcontainer.impl.descriptor.CustomPortletMode;
+import org.gridsphere.portletcontainer.impl.descriptor.CustomWindowState;
+import org.gridsphere.portletcontainer.impl.descriptor.PortletApp;
 
 import javax.portlet.PortalContext;
 import javax.portlet.PortletMode;
@@ -26,7 +25,6 @@ import java.util.Map;
 public class PortalContextImpl implements PortalContext {
 
     private Map props = new HashMap();
-    //private PortletApp portletApp = null;
     private List windowStates = null;
     private List portletModes = null;
 

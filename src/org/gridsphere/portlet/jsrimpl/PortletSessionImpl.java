@@ -1,10 +1,8 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletSessionImpl.java 4939 2006-07-20 04:49:04Z novotny $
  */
 package org.gridsphere.portlet.jsrimpl;
-
-import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.PortletContext;
 import javax.portlet.PortletSession;

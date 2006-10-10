@@ -1,12 +1,13 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: ActionRequestImpl.java 4894 2006-06-28 22:57:23Z novotny $
  */
 package org.gridsphere.portlet.jsrimpl;
 
-import org.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
-
-import javax.portlet.*;
+import javax.portlet.ActionRequest;
+import javax.portlet.PortletContext;
+import javax.portlet.PortletRequest;
+import javax.portlet.RenderRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -31,8 +32,8 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      *
      * @param req the HttpServletRequest
      */
-    public ActionRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext, Supports[] supports) {
-        super(req, portalContext, portletContext, supports);
+    public ActionRequestImpl(HttpServletRequest req, PortletContext portletContext) {
+        super(req, portletContext);
     }
 
     /**

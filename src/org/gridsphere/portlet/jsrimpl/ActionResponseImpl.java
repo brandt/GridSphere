@@ -1,11 +1,8 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: ActionResponseImpl.java 4889 2006-06-28 18:36:43Z novotny $
  */
 package org.gridsphere.portlet.jsrimpl;
-
-import org.gridsphere.portlet.PortletWindow;
-import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -41,8 +38,8 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
      *
      * @param res the <code>HttpServletRequest</code>
      */
-    public ActionResponseImpl(HttpServletRequest req, HttpServletResponse res, PortalContext portalContext) {
-        super(req, res, portalContext);
+    public ActionResponseImpl(HttpServletRequest req, HttpServletResponse res) {
+        super(req, res);
         renderParams = new HashMap();
     }
 
@@ -70,28 +67,24 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         if (redirected) {
             throw new IllegalStateException("cannot invoke setWindowState after sendRedirect has been called");
         }
-        PortletWindow.State ws = PortletWindow.State.NORMAL;
-        if (windowState == WindowState.MAXIMIZED) {
-            ws = PortletWindow.State.MAXIMIZED;
-        } else if (windowState == WindowState.MINIMIZED) {
-            ws = PortletWindow.State.MINIMIZED;
-        } else if (windowState == WindowState.NORMAL) {
-            ws = PortletWindow.State.NORMAL;
-        } else {
+        PortalContext portalContext = (PortalContext)req.getAttribute(SportletProperties.PORTAL_CONTEXT);
+        if (portalContext != null) {
             Enumeration e = portalContext.getSupportedWindowStates();
             boolean found = false;
             while (e.hasMoreElements() && (!found)) {
                 WindowState s = (WindowState) e.nextElement();
                 if (s.toString().equalsIgnoreCase(windowState.toString())) {
-                    ws = PortletWindow.State.toState(s.toString());
                     found = true;
                 }
             }
             if (!found) throw new WindowStateException("Unsupported window state!", windowState);
+        } else {
+            throw new IllegalStateException("No PortalContext found!");
         }
+
         isRedirectAllowed = false;
 
-        req.setAttribute(SportletProperties.PORTLET_WINDOW, ws);
+        req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
     }
 
     /**
@@ -126,11 +119,12 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
             throw new IllegalStateException("it is not allowed to invoke setPortletMode after sendRedirect has been called");
         }
         List allowedModes = (List) req.getAttribute(SportletProperties.ALLOWED_MODES);
-
-        if (!allowedModes.contains(portletMode.toString())) throw new PortletModeException("Unsupported portlet mode!", portletMode);
-
-        req.setAttribute(SportletProperties.PORTLET_MODE, portletMode.toString());
-
+        if (allowedModes != null) {
+            if (!allowedModes.contains(portletMode.toString())) throw new PortletModeException("Unsupported portlet mode!", portletMode);
+            req.setAttribute(SportletProperties.PORTLET_MODE, portletMode);
+        } else {
+            throw new IllegalStateException("No list of supported modes has been provided!");
+        }
         isRedirectAllowed = false;
     }
 
@@ -176,7 +170,7 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
                 redirectLocation = location;
                 redirected = true;
                 req.setAttribute(SportletProperties.RESPONSE_COMMITTED, "true");
-                //res.sendRedirect(location);
+                res.sendRedirect(location);
             }
         } else {
             throw new IllegalStateException("Can't invoke sendRedirect() after certain methods have been called");
@@ -231,9 +225,7 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         }
         renderParams.clear();
         renderParams.putAll(params);
-
         isRedirectAllowed = false;
-
     }
 
 
@@ -259,13 +251,10 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         if (redirected) {
             throw new IllegalStateException("Can't invoke setRenderParameter() after sendRedirect() has been called");
         }
-
         if ((key == null) || (value == null)) {
             throw new IllegalArgumentException("Render parameter key or value must not be null.");
         }
-
         renderParams.put(SportletProperties.RENDER_PARAM_PREFIX + key, new String[]{value});
-
         isRedirectAllowed = false;
     }
 
@@ -291,13 +280,10 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         if (redirected) {
             throw new IllegalStateException("Can't invoke setRenderParameter() after sendRedirect() has been called");
         }
-
         if (key == null || values == null || values.length == 0) {
             throw new IllegalArgumentException("Render parameter key or value  must not be null or values be an empty array.");
         }
-
         renderParams.put(SportletProperties.RENDER_PARAM_PREFIX + key, values);
-
         isRedirectAllowed = false;
     }
 

@@ -1,9 +1,9 @@
 package org.gridsphere.portlet.jsrimpl;
 
-import org.gridsphere.portletcontainer.jsrimpl.descriptor.InitParam;
-import org.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
-import org.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo;
-import org.gridsphere.portletcontainer.jsrimpl.descriptor.SupportedLocale;
+import org.gridsphere.portletcontainer.impl.descriptor.InitParam;
+import org.gridsphere.portletcontainer.impl.descriptor.PortletDefinition;
+import org.gridsphere.portletcontainer.impl.descriptor.PortletInfo;
+import org.gridsphere.portletcontainer.impl.descriptor.SupportedLocale;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletConfig;
