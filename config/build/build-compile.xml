@@ -101,6 +101,7 @@ Build include file for the GridSphere Portal source code, see build.xml
             <!-- GS portlet API -->
             <include name="org/gridsphere/portlet/**"/>
             <exclude name="**/jsrimpl/**"/>
+            <exclude name="**/impl/**"/>
         </jar>
     </target>
 
