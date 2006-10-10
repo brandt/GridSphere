@@ -1,27 +1,26 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  *
  * @version $Id: BaseFormEventImpl.java 4709 2006-03-31 20:41:54Z novotny $
  */
 package org.gridsphere.provider.event.impl;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUpload;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.persistence.QueryFilter;
 
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.portlet.PortletResponse;
-import javax.portlet.PortletRequest;
 import java.io.IOException;
 import java.util.*;
 
@@ -31,7 +30,7 @@ import java.util.*;
  */
 public abstract class BaseFormEventImpl {
 
-    protected transient static PortletLog log = SportletLog.getInstance(BaseFormEventImpl.class);
+    protected transient static Log log = LogFactory.getLog(BaseFormEventImpl.class);
 
     protected HttpServletRequest request;
     protected HttpServletResponse response;
@@ -948,18 +947,6 @@ public abstract class BaseFormEventImpl {
         configureBean(ami);
         tagBeans.put(beanKey, ami);
         return ami;
-    }
-
-    public DataGridBean getDataGridBean(String beanId) {
-        String beanKey = getBeanKey(beanId);
-        if (tagBeans.containsKey(beanKey)) {
-            return (DataGridBean) tagBeans.get(beanKey);
-        }
-        DataGridBean dgBean = new DataGridBean(beanId);
-        dgBean.setHttpServletRequest(request);
-        configureBean(dgBean);
-        tagBeans.put(beanKey, dgBean);
-        return dgBean;
     }
 
     public ActionMenuBean getActionMenuBean(String beanId) {

@@ -1,33 +1,29 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: ActionPortlet.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.provider.portlet.jsr;
 
-import org.gridsphere.portlet.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portlet.DefaultPortletAction;
 import org.gridsphere.portlet.jsrimpl.ActionRequestImpl;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portlet.service.PortletService;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.event.jsr.FormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.event.jsr.impl.ActionFormEventImpl;
 import org.gridsphere.provider.event.jsr.impl.RenderFormEventImpl;
-import org.gridsphere.provider.event.jsr.FormEvent;
 import org.gridsphere.provider.portletui.beans.MessageBoxBean;
 import org.gridsphere.provider.portletui.beans.MessageStyle;
-import org.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 
 import javax.portlet.*;
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletException;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -38,7 +34,7 @@ import java.util.*;
  */
 public class ActionPortlet extends GenericPortlet {
 
-    public static PortletLog log = SportletLog.getInstance(ActionPortlet.class);
+    public static Log log = LogFactory.getLog(ActionPortlet.class);
 
     // Default error page
     protected String ERROR_PAGE = "doError";
@@ -199,8 +195,10 @@ public class ActionPortlet extends GenericPortlet {
 
         DefaultPortletAction action = (DefaultPortletAction) actionRequest.getAttribute(SportletProperties.ACTION_EVENT);
         // In non-GS container this will need to be created
+
+        // TODO
         if (!(actionRequest instanceof ActionRequestImpl))  {
-            action = GridSphereEventImpl.createAction(actionRequest);
+            //action = GridSphereEventImpl.createAction(actionRequest);
             //System.err.println("action name" + action.getName());
         }
         ActionFormEvent formEvent = new ActionFormEventImpl(action, actionRequest, actionResponse);

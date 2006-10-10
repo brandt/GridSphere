@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: FormEvent.java 4709 2006-03-31 20:41:54Z novotny $
  */
 package org.gridsphere.provider.event.jsr;
@@ -186,8 +186,6 @@ public interface FormEvent {
     public ActionMenuBean getActionMenuBean(String beanId);
 
     public ActionMenuItemBean getActionMenuItemBean(String beanId);
-
-    public DataGridBean getDataGridBean(String beanId);
 
     /**
      * Return an existing <code>IncludeBean</code> or create a new one

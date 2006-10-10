@@ -1,12 +1,12 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: ActionFormEventImpl.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.provider.event.jsr.impl;
 
 import org.gridsphere.portlet.DefaultPortletAction;
-import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.impl.BaseFormEventImpl;
+import org.gridsphere.provider.event.jsr.ActionFormEvent;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;

@@ -1,10 +1,10 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: DefineObjectsTag.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.provider.portlet.tags.jsr;
 
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.RenderRequest;
