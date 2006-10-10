@@ -1,19 +1,24 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletLayoutEngine.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.layout;
 
-import org.gridsphere.portlet.*;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
+import javax.portlet.RenderResponse;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Vector;
+import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -29,7 +34,7 @@ import java.util.zip.GZIPOutputStream;
  */
 public class PortletLayoutEngine {
 
-    protected static PortletLog log = SportletLog.getInstance(PortletLayoutEngine.class);
+    protected Log log = LogFactory.getLog(PortletLayoutEngine.class);
     private static PortletLayoutEngine instance = new PortletLayoutEngine();
 
     private PortletPageFactory pageFactory = PortletPageFactory.getInstance();
@@ -58,7 +63,7 @@ public class PortletLayoutEngine {
 
     public PortletPage getPortletPage(GridSphereEvent event) {
 
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getRenderRequest();
 
         // Check for framework errors
         Exception portletException = (Exception) req.getAttribute(SportletProperties.ERROR);
@@ -72,8 +77,8 @@ public class PortletLayoutEngine {
     }
 
     public void setHeaders(GridSphereEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
+        HttpServletRequest req = event.getHttpServletRequest();
+        HttpServletResponse res = event.getHttpServletResponse();
         res.setContentType("text/html; charset=utf-8"); // Necessary to display UTF-8 encoded characters
         res.setHeader("Cache-Control","no-cache"); //Forces caches to obtain a new copy of the page from the origin server
         res.setHeader("Cache-Control","no-store"); //Directs caches not to store the page under any circumstance
@@ -89,11 +94,10 @@ public class PortletLayoutEngine {
      * Services a portlet container instance by rendering its presentation
      *
      * @param event the gridsphere event
-     * @throws IOException if an I/O error occcurs during processing
      */
     public void service(GridSphereEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
+        HttpServletRequest req = event.getHttpServletRequest();
+        HttpServletResponse res = event.getHttpServletResponse();
         PortletPage page = getPortletPage(event);
         setHeaders(event);
         StringBuffer pageBuffer = new StringBuffer();
@@ -111,29 +115,29 @@ public class PortletLayoutEngine {
                 frame.setOuterPadding("");
                 frame.setTransparent(false);
 
-                req.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, "default");
-                req.getPortletSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, "standard");
+                req.getSession().setAttribute(SportletProperties.LAYOUT_THEME, "default");
+                req.getSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, "brush");
 
                 frame.doRender(event);
-                pageBuffer = frame.getBufferedOutput(req);
+                pageBuffer = frame.getBufferedOutput(event.getRenderRequest());
             } else {
                 PortletComponent comp = page.getActiveComponent(cid);
                 if (comp != null) {
                     String reqRole = comp.getRequiredRole();
-                    User user = req.getUser();
+                    Principal user = event.getRenderRequest().getUserPrincipal();
                     if (user != null) {
-                        if (req.getRoles().contains(reqRole)) comp.doRender(event);
+                        if (req.isUserInRole(reqRole)) comp.doRender(event);
                     } else {
                         if (reqRole.equals("")) comp.doRender(event);
                     }
-                    pageBuffer = comp.getBufferedOutput(req);
+                    pageBuffer = comp.getBufferedOutput(event.getRenderRequest());
                     res.setContentType("text/html");
                 }
             }
         } else {
             log.debug("rendering page");
             page.doRender(event);
-            pageBuffer = page.getBufferedOutput(req);
+            pageBuffer = page.getBufferedOutput(event.getRenderRequest());
         }
 
         try {
@@ -150,11 +154,6 @@ public class PortletLayoutEngine {
             // means the writer has already been obtained
             log.error("Error writing page!", e);
         }
-    }
-
-
-    public void destroy() {
-        pageFactory.destroy();
     }
 
     public void doAction(GridSphereEvent event) {
@@ -176,7 +175,6 @@ public class PortletLayoutEngine {
      * gridsphere event
      *
      * @param event a gridsphere event
-     * @throws IOException if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) {
         log.debug("in actionPerformed()");
@@ -191,13 +189,13 @@ public class PortletLayoutEngine {
             page.actionPerformed(event);
 
             // sometimes the page needs reinitializing
-            if (event.getPortletRequest().getAttribute(SportletProperties.INIT_PAGE) != null) {
+            if (event.getActionRequest().getAttribute(SportletProperties.INIT_PAGE) != null) {
                 log.info("\n\n\n\n\nreiniting and saving page!!!!!\n\n\n\n\n\n");
-                page.init(event.getPortletRequest(), new Vector());
-                PortletTabbedPane pane = pageFactory.getUserTabbedPane(event.getPortletRequest());
+                page.init(event.getActionRequest(), new Vector());
+                PortletTabbedPane pane = pageFactory.getUserTabbedPane(event.getActionRequest());
                 if (pane != null) {
                     try {
-                        pane.save(event.getPortletContext());
+                        pane.save();
                     } catch (IOException e) {
                         log.error("Unable to save tab pane", e);
                     }
@@ -208,7 +206,7 @@ public class PortletLayoutEngine {
         log.debug("Exiting actionPerformed()");
     }
 
-    public void doRenderError(PortletRequest req, PortletResponse res, Throwable t) {
+    public void doRenderError(RenderResponse res, Throwable t) {
         PrintWriter out = null;
         try {
             out = res.getWriter();
@@ -222,7 +220,7 @@ public class PortletLayoutEngine {
     }
 
     public void doRenderError(GridSphereEvent event, Throwable t) {
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getRenderRequest();
         PortletPage errorpage = pageFactory.createErrorPage();
         errorpage.init(req, new ArrayList());
         req.setAttribute("error", t);
@@ -242,6 +240,7 @@ public class PortletLayoutEngine {
      * @param msg           The message to deliver
      * @param event         The event associated with the delivery
      */
+    /*
     public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
         log.debug("in messageEvent()");
         PortletPage page = getPortletPage(event);
@@ -249,5 +248,5 @@ public class PortletLayoutEngine {
         log.debug("Exiting messageEvent()");
 
     }
-
+    */
 }

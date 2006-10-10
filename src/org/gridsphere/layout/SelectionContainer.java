@@ -1,8 +1,8 @@
 package org.gridsphere.layout;
 
-import org.gridsphere.portlet.PortletRequest;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,14 +104,14 @@ public class SelectionContainer extends BasePortletComponent implements
             p = (PortletComponent)components.get(i);
             if (p.getLabel().equals(activeLabel)) {
                 p.doRender(event);
-                setBufferedOutput(event.getPortletRequest(), p.getBufferedOutput(event.getPortletRequest()));
+                setBufferedOutput(event.getRenderRequest(), p.getBufferedOutput(event.getRenderRequest()));
                 return;
             }
         }
     }
 
     protected void updateActiveLabel(GridSphereEvent event) {
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getActionRequest();
         String selectedLabel = req.getParameter("select");
         if (selectedLabel != null) {
             PortletComponent comp = null;

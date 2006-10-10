@@ -1,24 +1,28 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletPage.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.layout;
 
 import org.gridsphere.layout.view.Render;
-import org.gridsphere.portlet.*;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridsphere.portletcontainer.PortletDispatcherException;
 import org.gridsphere.portletcontainer.impl.PortletInvoker;
 import org.gridsphere.services.core.cache.CacheService;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
+import javax.portlet.RenderRequest;
 import javax.servlet.ServletContext;
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * The <code>PortletPage</code> is the generic container for a collection of
@@ -27,15 +31,14 @@ import java.util.*;
  */
 public class PortletPage extends BasePortletComponent implements Serializable, Cloneable {
 
-    private transient PortletLog log = SportletLog.getInstance(PortletPage.class);
-
     protected transient CacheService cacheService = null;
 
     protected transient PortletInvoker portletInvoker = null;
 
     protected PortletContainer footerContainer = null;
     protected PortletContainer headerContainer = null;
-    protected PortletTabbedPane tabbedPane = null;
+    //protected PortletTabbedPane tabbedPane = null;
+    protected PortletComponent component = null;
 
     // The component ID's of each of the layout components
     protected List componentIdentifiers = new Vector();
@@ -53,7 +56,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
     private transient Render pageView = null;
 
-    private String renderKit = "standard";
+    private String renderKit = "brush";
 
     /**
      * Constructs an instance of PortletPage
@@ -213,13 +216,13 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         return footerContainer;
     }
 
-    public void setPortletTabbedPane(PortletTabbedPane tabbedPane) {
-        this.tabbedPane = tabbedPane;
+    public void setPortletComponent(PortletComponent component) {
+        this.component = component;
     }
 
 
-    public PortletTabbedPane getPortletTabbedPane() {
-        return tabbedPane;
+    public PortletComponent getPortletComponent() {
+        return component;
     }
 
     /**
@@ -270,7 +273,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         portletInvoker = new PortletInvoker();
         list = super.init(req, list);
         if (renderKit == null) renderKit = "standard";
-        req.getPortletSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, renderKit);
+        req.getPortletSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, renderKit, PortletSession.APPLICATION_SCOPE);
 
 
         pageView = (Render)getRenderClass(req, "Page");
@@ -279,8 +282,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             list = headerContainer.init(req, list);
         }
 
-        if (tabbedPane != null) {
-            list = tabbedPane.init(req, list);
+        if (component != null) {
+            list = component.init(req, list);
         }
 
 
@@ -310,75 +313,11 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     }
 
     /**
-     * Performs {@link org.gridsphere.portlet.Portlet#login(PortletRequest) login}
-     * on all the portlets conatined by this PortletPage
-     *
-     * @param event a gridsphere event
-     * @throws PortletException if an error occurs while invoking login on the portlets
-     * @see <a href="org.gridsphere.portlet.Portlet#login">Portlet.login(PortletRequest)</a>
-     */
-    public void loginPortlets(GridSphereEvent event) {
-        Iterator it = componentIdentifiers.iterator();
-        ComponentIdentifier cid;
-        PortletFrame f;
-        String id = event.getPortletRequest().getPortletSession(true).getId();
-        while (it.hasNext()) {
-            cid = (ComponentIdentifier) it.next();
-            PortletComponent pc = cid.getPortletComponent();
-            if (pc instanceof PortletFrame) {
-                f = (PortletFrame) pc;
-                String pid = f.getPortletClass();
-
-                // remove any cached portlet
-                cacheService.removeCached(f.getComponentID() + pid + id);
-                //portlets.add(f.getPortletID());
-                try {
-                    portletInvoker.login(pid, event.getPortletRequest(), event.getPortletResponse());
-                } catch (PortletDispatcherException e) {
-                    log.error("Unable to invoke login method of portlet: " + pid, e);
-                }
-            }
-        }
-    }
-
-    /**
-     * Performs {@link org.gridsphere.portlet.Portlet#logout}
-     * on all the portlets conatined by this PortletPage
-     *
-     * @param event a gridsphere event
-     * @throws PortletException if an error occurs while invoking login on the portlets
-     * @see <a href="org.gridsphere.portlet.Portlet#logout">Portlet.logout(PortletSession)</a>
-     */
-    public void logoutPortlets(GridSphereEvent event) {
-        Iterator it = componentIdentifiers.iterator();
-        ComponentIdentifier cid;
-        PortletFrame f;
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
-        String id = req.getPortletSession(true).getId();
-        while (it.hasNext()) {
-            cid = (ComponentIdentifier) it.next();
-            if (cid.getPortletComponent() instanceof PortletFrame) {
-                f = (PortletFrame) cid.getPortletComponent();
-                String pid = f.getPortletClass();
-
-                // remove any cached portlet
-                cacheService.removeCached(f.getComponentID() + pid + id);
-                try {
-                    portletInvoker.logout(pid, req, res);
-                } catch (PortletDispatcherException e) {
-                    log.error("Unable to invoke logout method of portlet: " + pid, e);
-                }
-            }
-        }
-    }
-
-    /**
      * Destroys this portlet container
      */
     public void destroy() {
         if (headerContainer != null) headerContainer.destroy();
-        if (tabbedPane != null) tabbedPane.destroy();
+        if (component != null) component.destroy();
         if (footerContainer != null) footerContainer.destroy();
     }
 
@@ -390,12 +329,12 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      */
     public void actionPerformed(GridSphereEvent event) {
         // if there is a layout action do it!
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getActionRequest();
         String cid = event.getComponentID();
         if (cid != null) {
             PortletComponent comp = getActiveComponent(cid);
             if (comp != null) {
-                System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+                System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName() + " label=" + comp.getLabel());
                 String reqRole = comp.getRequiredRole();
                 if (reqRole.equals("") || req.isUserInRole(reqRole)) comp.actionPerformed(event);
             }
@@ -445,74 +384,15 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      */
     public void doRender(GridSphereEvent event) {
         // handle any client logic to determin which markup to display
-        String markupName = event.getPortletRequest().getClient().getMarkupName();
-        if (markupName.equals("html")) {
-            doRenderHTML(event);
-        } else {
-            doRenderWML(event);
-        }
 
-
-    }
-
-    public void doRenderWML(GridSphereEvent event) {
-
-        PortletResponse res = event.getPortletResponse();
-        PortletRequest req = event.getPortletRequest();
-
-        PrintWriter out;
-
-        // set content to UTF-8 for il8n
-        //res.setContentType("text/vnd.wap.xhtml");
-        res.setContentType("text/wml");
-        try {
-            out = res.getWriter();
-        } catch (Exception e) {
-            // means the writer has already been obtained
-            return;
-        }
-
-        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
-
-        // page header
-        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        out.println("<!DOCTYPE html PUBLIC \"-//WAPFORUM//DTD XHTML Mobile 1.0//EN\" \"http://www.wapforum.org/DTD/xhtml-mobile10.dtd\">");
-        out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
-        out.println("  <link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + renderKit + "/" + theme + "/css/defaultwap.css\" rel=\"stylesheet\"/>");
-        //out.println("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-        //out.println("<wml>");
-        out.println("<head>");
-
-        out.println("<title>" + title + "</title>");
-        //out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
-        //out.println("<meta name=\"keywords\" content=\"" + keywords + "\"/>");
-        //out.println("<meta http-equiv=\"Pragma content=\"no-cache\"/>");
-        //out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
-        //        "/default.css\" rel=\"stylesheet\"/>");
-        //out.println("<link rel=\"icon\" href=\"images/favicon.ico\" type=\"imge/x-icon\">");
-        //out.println("<link rel=\"shortcut icon\" href=\"images/favicon.ico\" type=\"image/x-icon\">");
-        out.println("</head><body>");
-
-        // A Portal page in 3 lines -- voila!
-        //  -------- header ---------
-        //if (headerContainer != null) headerContainer.doRender(event);
-        // ..| tabs | here |....
-        if (tabbedPane != null) tabbedPane.doRender(event);
-        //.... the footer ..........
-        if (footerContainer != null) footerContainer.doRender(event);
-
-        out.println("</body></html>");
-    }
-
-    public void doRenderHTML(GridSphereEvent event) {
-
-        PortletRequest req = event.getPortletRequest();
+        super.doRender(event);
+        RenderRequest req = event.getRenderRequest();
 
         boolean floating = false;
         PortletFrame f = null;
         // In case the "floating" portlet state has been selected:
-        String wstate = event.getPortletRequest().getParameter(SportletProperties.PORTLET_WINDOW);
-        if ((wstate != null) && (wstate.equalsIgnoreCase(PortletWindow.State.FLOATING.toString()))) {
+        String wstate = req.getParameter(SportletProperties.PORTLET_WINDOW);
+        if ((wstate != null) && (wstate.equalsIgnoreCase("FLOATING"))) {
             String cid = event.getComponentID();
             PortletComponent comp = getActiveComponent(cid);
 
@@ -532,12 +412,11 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
                 req.setAttribute(SportletProperties.FLOAT_STATE, "true");
 
                 String reqRole = f.getRequiredRole();
-                User user = req.getUser();
-                if (user != null) {
-                    if (req.getRoles().contains(reqRole)) f.doRender(event);
-                } else {
-                    if (reqRole.equals("")) f.doRender(event);
+
+                if (req.isUserInRole(reqRole) || (reqRole.equals(""))) {
+                    f.doRender(event);
                 }
+
 
                 f.setTransparent(false);
                 floating = true;
@@ -555,9 +434,9 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             }
 
             // ..| tabs | here |....
-            if (tabbedPane != null) {
+            if (component != null) {
 
-                tabbedPane.doRender(event);
+                component.doRender(event);
                 //writer.println(tabbedPane.getBufferedOutput(req));
             }
             //.... the footer ..........
@@ -573,7 +452,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         page.append(pageView.doStart(event, this));
         if (floating) page.append(f.getBufferedOutput(req));
         if (headerContainer != null) page.append(headerContainer.getBufferedOutput(req));
-        if (tabbedPane != null) page.append(tabbedPane.getBufferedOutput(req));
+        if (component != null) page.append(component.getBufferedOutput(req));
         if (footerContainer != null) page.append(footerContainer.getBufferedOutput(req));
         page.append(pageView.doEnd(event, this));
 
@@ -595,25 +474,28 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         c.title = title;
         c.headerContainer = (this.headerContainer == null) ? null : (PortletContainer) this.headerContainer.clone();
         c.footerContainer = (this.footerContainer == null) ? null : (PortletContainer) this.footerContainer.clone();
-        c.tabbedPane = (this.tabbedPane == null) ? null : (PortletTabbedPane) this.tabbedPane.clone();
+        c.component = (this.component == null) ? null : (PortletTabbedPane) this.component.clone();
         return c;
     }
 
     public void save(ServletContext ctx) throws IOException {
-        try {
-            // save user tab
-            PortletTabbedPane myPane = new PortletTabbedPane();
-            for (int i = 0; i < tabbedPane.getTabCount(); i++) {
-                PortletTab tab = tabbedPane.getPortletTabAt(i);
-                if (tab.getCanModify()) {
-                    myPane.addTab(tab);
+        if (component instanceof PortletTabbedPane) {
+            PortletTabbedPane tabbedPane = (PortletTabbedPane)component;
+            try {
+                // save user tab
+                PortletTabbedPane myPane = new PortletTabbedPane();
+                for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+                    PortletTab tab = tabbedPane.getPortletTabAt(i);
+                    if (tab.getCanModify()) {
+                        myPane.addTab(tab);
+                    }
                 }
+                if (myPane.getTabCount() > 0) {
+                    PortletLayoutDescriptor.savePortletTabbedPane(myPane, layoutDescriptor, LAYOUT_MAPPING_PATH);
+                }
+            } catch (PersistenceManagerException e) {
+                throw new IOException("Unable to save user's tabbed pane: " + e.getMessage());
             }
-            if (myPane.getTabCount() > 0) {
-                PortletLayoutDescriptor.savePortletTabbedPane(myPane, layoutDescriptor, LAYOUT_MAPPING_PATH);
-            }
-        } catch (PersistenceManagerException e) {
-            throw new IOException("Unable to save user's tabbed pane: " + e.getMessage());
         }
     }
 
@@ -626,6 +508,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      * @param msg           The message to deliver
      * @param event         The GridsphereEvent associated with the message delivery
      */
+    /*
     public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
 
         // support for broadcast messages
@@ -678,6 +561,6 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             }
         }
     }
-
+    */
 }
 

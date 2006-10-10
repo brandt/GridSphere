@@ -1,13 +1,13 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @version $Id: PortletLayoutDescriptor.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.layout;
 
 import org.gridsphere.portletcontainer.impl.JavaXMLBindingFactory;
-import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 
 import java.net.URL;
 

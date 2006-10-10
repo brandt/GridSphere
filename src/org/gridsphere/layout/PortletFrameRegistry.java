@@ -18,7 +18,7 @@ public class PortletFrameRegistry {
     }
 
     public PortletFrame getPortletFrame(String label, String portletId, GridSphereEvent event) {
-        String sessionId = event.getPortletRequest().getPortletSession(true).getId();
+        String sessionId = event.getRenderRequest().getPortletSession(true).getId();
         Map map = (Map)portlets.get(sessionId);
         PortletFrame frame = null;
         if (map != null) {
@@ -31,14 +31,14 @@ public class PortletFrameRegistry {
         frame = new PortletFrame();
         frame.setPortletClass(portletId);
         frame.setLabel(label);
-        frame.init(event.getPortletRequest(), new ArrayList());
+        frame.init(event.getRenderRequest(), new ArrayList());
         map.put(label, frame);
         portlets.put(sessionId, map);
         return frame;
     }
 
     public void removeAllPortletFrames(GridSphereEvent event) {
-        String sessionId = event.getPortletRequest().getPortletSession(true).getId();
+        String sessionId = event.getRenderRequest().getPortletSession(true).getId();
         portlets.remove(sessionId);
     }
 }

@@ -8,13 +8,12 @@ import org.gridsphere.layout.PortletComponent;
 import org.gridsphere.layout.PortletFrame;
 import org.gridsphere.layout.view.BaseRender;
 import org.gridsphere.layout.view.FrameView;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.PortletURI;
-import org.gridsphere.portlet.PortletWindow;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletURL;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -76,12 +75,12 @@ public class Frame extends BaseRender implements FrameView {
 
     public StringBuffer doRenderCloseFrame(GridSphereEvent event, PortletFrame frame) {
         StringBuffer postframe = new StringBuffer();
-        PortletResponse res = event.getPortletResponse();
-        PortletRequest req = event.getPortletRequest();
+        RenderResponse res = event.getRenderResponse();
+        RenderRequest req = event.getRenderRequest();
 
-        PortletURI portletURI = res.createURI();
-        portletURI.addParameter(SportletProperties.COMPONENT_ID, String.valueOf(frame.getPortletTitleBar().getComponentID()));
-        portletURI.addParameter(SportletProperties.PORTLET_WINDOW, PortletWindow.State.CLOSED.toString());
+        PortletURL portletURI = res.createRenderURL();
+        portletURI.setParameter(SportletProperties.COMPONENT_ID, String.valueOf(frame.getPortletTitleBar().getComponentID()));
+        portletURI.setParameter(SportletProperties.PORTLET_WINDOW, "CLOSED");
         postframe.append("<form action=\"").append(portletURI.toString()).append("\" method=\"post\"");
         Locale locale = req.getLocale();
         ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
@@ -90,14 +89,14 @@ public class Frame extends BaseRender implements FrameView {
         String cancel = bundle.getString("CANCEL");
         postframe.append("<p><b>").append(value).append("</b></p>");
 
-        portletURI = res.createURI();
+        portletURI = res.createRenderURL();
 
-        portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.TRUE.toString());
+        portletURI.setParameter("CLOSED", Boolean.TRUE.toString());
 
         postframe.append("<p><input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + PortletFrame.FRAME_CLOSE_OK_ACTION + "\" value=\"").append(ok).append("\"");
-        portletURI = res.createURI();
+        portletURI = res.createRenderURL();
 
-        portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.FALSE.toString());
+        portletURI.setParameter("CLOSED", Boolean.FALSE.toString());
         postframe.append("<input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + PortletFrame.FRAME_CLOSE_CANCEL_ACTION + "\" value=\"").append(cancel).append("\"");
         postframe.append("</p></form>");
 

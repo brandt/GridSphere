@@ -1,24 +1,29 @@
 package org.gridsphere.layout;
 
-import org.gridsphere.portlet.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portletcontainer.PortletSessionListener;
+import org.gridsphere.portlet.User;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portletcontainer.impl.PortletSessionManager;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
-import org.gridsphere.services.core.security.group.GroupManagerService;
 import org.gridsphere.services.core.user.UserManagerService;
-import org.gridsphere.portletcontainer.impl.PortletSessionManager;
 
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.*;
-import java.net.URLEncoder;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletPageFactory.java 5032 2006-08-17 18:15:06Z novotny $
  */
 public class PortletPageFactory implements PortletSessionListener {
@@ -42,7 +47,7 @@ public class PortletPageFactory implements PortletSessionListener {
     private RoleManagerService roleService = null;
 
     private UserManagerService userManagerService = null;
-    private PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
+    private Log log = LogFactory.getLog(PortletPageFactory.class);
 
     protected URL LAYOUT_MAPPING_PATH = getClass().getResource("/org/gridsphere/layout/layout-mapping.xml");
 
@@ -108,11 +113,11 @@ public class PortletPageFactory implements PortletSessionListener {
         return instance;
     }
 
-    public void login(PortletRequest request) {
+    public void login(HttpServletRequest request) {
 
     }
 
-    public void logout(PortletSession session) {
+    public void logout(HttpSession session) {
         log.debug("in logout PortletPageFactory");
         String sessionId = session.getId();
 
@@ -133,13 +138,6 @@ public class PortletPageFactory implements PortletSessionListener {
 
     }
 
-    public synchronized void destroy() {
-        layouts.clear();
-        userLayouts.clear();
-        masterLayouts.clear();
-        editableLayoutIds.clear();
-    }
-
     public Set getEditableLayoutIds() {
         return editableLayoutIds;
     }
@@ -150,18 +148,15 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public PortletTabbedPane getUserTabbedPane(PortletRequest req) {
 
-
-        User user = req.getUser();
-
         String sessionId = req.getPortletSession(true).getId();
 
-        String userLayout = USER_LAYOUT_DIR + File.separator + user.getUserName();
+        String userLayout = USER_LAYOUT_DIR + File.separator + req.getUserPrincipal().getName();
 
         if (userLayouts.containsKey(sessionId)) {
             PortletPage page = (PortletPage)userLayouts.get(USER_PAGE);
             PortletTabbedPane pane = new PortletTabbedPane();
             pane.setLayoutDescriptor(userLayout);
-            PortletTabbedPane existPane = page.getPortletTabbedPane();
+            PortletTabbedPane existPane = (PortletTabbedPane)page.getPortletComponent();
             List tabs = existPane.getPortletTabs();
             Iterator it = tabs.iterator();
             while (it.hasNext()) {
@@ -195,7 +190,7 @@ public class PortletPageFactory implements PortletSessionListener {
         try {
             //tmpPage.setLayoutDescriptor(userLayout + ".tmp");
             PortletTabbedPane tmpPane = (PortletTabbedPane) deepCopy(pane);
-            tmpPage.setPortletTabbedPane(tmpPane);
+            tmpPage.setPortletComponent(tmpPane);
             this.setPageTheme(tmpPage, req);
             tmpPage.init(req, new ArrayList());
 
@@ -222,7 +217,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 i++;
             }
 
-            tmpPane.save(context);
+            tmpPane.save();
             return tmpPane;
         } catch (Exception e) {
             log.error("Unable to save user pane!", e);
@@ -236,12 +231,12 @@ public class PortletPageFactory implements PortletSessionListener {
         String defaultTheme = portalConfigService.getProperty(PortalConfigService.DEFAULT_THEME);
         String theme = null;
         if (defaultTheme != null) theme = defaultTheme;
-        User user = req.getUser();
-        if (user != null) {
-            theme = (String) user.getAttribute(User.THEME);
+        Map userAttrs = (Map)req.getAttribute(PortletRequest.USER_INFO);
+        if (userAttrs != null) {
+            theme = (String) userAttrs.get(User.THEME);
         }
         if (theme == null) theme = DEFAULT_THEME;
-        req.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, theme);
+        req.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, theme, PortletSession.APPLICATION_SCOPE);
     }
 
     public PortletTabbedPane createNewUserPane(PortletRequest req, int cols, String tabName) {
@@ -252,8 +247,7 @@ public class PortletPageFactory implements PortletSessionListener {
             int tabNum = PortletTab.DEFAULT_USERTAB_ORDER;
             if (pane == null) {
                 pane = new PortletTabbedPane();
-                User user = req.getUser();
-                String userLayout = USER_LAYOUT_DIR + File.separator + user.getUserName();
+                String userLayout = USER_LAYOUT_DIR + File.separator + req.getUserPrincipal().getName();
                 pane.setLayoutDescriptor(userLayout);
             } else {
                 tabNum = pane.getLastPortletTab().getTabOrder() + 1;
@@ -357,9 +351,9 @@ public class PortletPageFactory implements PortletSessionListener {
             }
         }
         String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
-        //System.err.println("layoutId==" + layoutId);
+        System.err.println("layoutId==" + layoutId);
         if (layoutId == null) {
-            if (req.getUser() == null) {
+            if (req.getUserPrincipal() == null) {
                 // if no reference to a layout exists, return a guest layout
                 //System.err.println("guest page");
                 layoutId = GUEST_PAGE;
@@ -381,12 +375,13 @@ public class PortletPageFactory implements PortletSessionListener {
     protected PortletPage getPortletPageFromHash(PortletRequest req, String layoutId) {
         PortletSession session = req.getPortletSession();
         PortletPage page = null;
-
+        System.err.println("layoutId==" + layoutId);
         Map usersLayouts = (Map)layouts.get(session.getId());
         if (usersLayouts == null) {
             usersLayouts = new HashMap();
             layouts.put(session.getId(), usersLayouts);
         }
+
         // now check for existing layout in hash
         page = (PortletPage)usersLayouts.get(layoutId);
         // only if no page exists, create a new one and place in hash
@@ -396,7 +391,7 @@ public class PortletPageFactory implements PortletSessionListener {
             if (!role.equals("") && !req.isUserInRole(role) && !setupNeeded) {
                 // use existing page
                 log.debug("User does not have proper permissions for layout=" + layoutId + "!!");
-                if (req.getUser() == null) {
+                if (req.getUserPrincipal() == null) {
                     // if no reference to a layout exists, return a guest layout
                     layoutId = GUEST_PAGE;
                 } else {
@@ -406,10 +401,12 @@ public class PortletPageFactory implements PortletSessionListener {
                 if (page == null) page = createPortletPage(req, layoutId);
                 req.setAttribute(SportletProperties.LAYOUT_PAGE, layoutId);
             }
-            //System.err.println("layoutId2==" + layoutId);
+            System.err.println("layoutId2==" + layoutId);
             usersLayouts.put(layoutId, page);
             log.debug("Creating new page " + layoutId + " placing in session " + session.getId());
             sessionManager.addSessionListener(session.getId(), this);
+        }  else {
+            System.err.println("page is in user layout hash!");
         }
         return page;
     }
@@ -423,7 +420,7 @@ public class PortletPageFactory implements PortletSessionListener {
             if (layoutId.equals(TCK_PAGE)) {
                 copy = createTCKPage(req);
             } else {
-              if (req.getUser() == null) {
+              if (req.getUserPrincipal() == null) {
                     // if no reference to a layout exists, return a guest layout
                     return getPortletPageFromHash(req, GUEST_PAGE);
                 } else {
@@ -510,7 +507,7 @@ public class PortletPageFactory implements PortletSessionListener {
         PortletPage page = null;
         // Sun TCK test uses Jakarta Commons-HttpClient/2.0beta1
 
-        if (req.getClient().getUserAgent().indexOf("HttpClient") > 0) {
+       // if (event.getClient().getUserAgent().indexOf("HttpClient") > 0) {
             if (portletNames != null) {
                 log.info("Creating TCK LAYOUT!");
                 String pageName = req.getParameter("pageName");
@@ -543,7 +540,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 tab.setPortletComponent(tableLayout);
                 PortletTabbedPane pane = new PortletTabbedPane();
                 pane.addTab(tab);
-                page.setPortletTabbedPane(pane);
+                page.setPortletComponent(pane);
                 page.setLayoutDescriptor("/tmp/test.xml");
                 try {
                     page.save(context);
@@ -553,7 +550,7 @@ public class PortletPageFactory implements PortletSessionListener {
                     log.error("Unable to save TCK page to /tmp/test.xml", e);
                 }
             }
-        }
+      //  }
         return page;
     }
 

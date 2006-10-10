@@ -5,12 +5,9 @@
 package org.gridsphere.layout;
 
 import org.gridsphere.layout.view.Render;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.PortletURI;
-import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
 import java.io.Serializable;
 import java.util.List;
 
@@ -36,7 +33,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
             row.append(rowView.doStartBorder(event, p));
             if (p.getVisible()) {
                 p.doRender(event);
-                row.append(p.getBufferedOutput(event.getPortletRequest()));
+                row.append(p.getBufferedOutput(event.getRenderRequest()));
             }
             row.append(rowView.doEndBorder(event, this));
         }
@@ -44,7 +41,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
         row.append(rowView.doEnd(event, this));
 
 
-        setBufferedOutput(event.getPortletRequest(), row);
+        setBufferedOutput(event.getRenderRequest(), row);
     }
 
 

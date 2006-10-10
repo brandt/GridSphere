@@ -1,12 +1,10 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletComponent.java 4986 2006-08-04 09:54:38Z novotny $
  */
 package org.gridsphere.layout;
 
-import org.gridsphere.portlet.PortletMessage;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portletcontainer.GridSphereEvent;
+import javax.portlet.PortletRequest;
 
 
 /**
@@ -100,13 +98,5 @@ public interface PortletComponent extends ComponentLifecycle {
     public void setBufferedOutput(PortletRequest req, StringBuffer sb);
 
     public StringBuffer getBufferedOutput(PortletRequest req);
-    
-    /**
-     * Delivers a message to the specified concrete portlet
-     *
-     * @param concPortletID
-     * @param msg
-     * @param event
-     */
-    public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event);
+
 }

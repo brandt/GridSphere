@@ -1,17 +1,16 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @author <a href="mailto:wehren@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id: PortletContainer.java 4986 2006-08-04 09:54:38Z novotny $
  */
 package org.gridsphere.layout;
 
 import org.gridsphere.layout.view.Render;
-import org.gridsphere.portlet.PortletRequest;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -87,7 +86,7 @@ public class PortletContainer extends BasePortletComponent implements
         super.doRender(event);
         StringBuffer container = new StringBuffer();
         container.append(containerView.doStartBorder(event, this));
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getRenderRequest();
 
         Iterator it = components.iterator();
         PortletComponent comp;

@@ -1,33 +1,36 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletContent.java 4993 2006-08-04 10:10:43Z novotny $
  */
 package org.gridsphere.layout;
 
-import org.gridsphere.portlet.PortletException;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.PortletURI;
-import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
-import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridsphere.services.core.jcr.JCRNode;
+import org.gridsphere.portlet.jsrimpl.PortletContextImpl;
+import org.gridsphere.portlet.jsrimpl.StoredPortletResponseImpl;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.services.core.jcr.JCRService;
+import org.gridsphere.services.core.jcr.JCRNode;
 import org.radeox.api.engine.RenderEngine;
 import org.radeox.api.engine.context.RenderContext;
-import org.radeox.engine.BaseRenderEngine;
 import org.radeox.engine.context.BaseRenderContext;
+import org.radeox.engine.BaseRenderEngine;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Session;
-import javax.jcr.Workspace;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.query.QueryResult;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.RenderResponse;
+import javax.portlet.PortletException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.jcr.Workspace;
+import javax.jcr.Session;
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryResult;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.List;
@@ -115,17 +118,18 @@ public class PortletContent extends BasePortletComponent implements Serializable
      */
     public void doRender(GridSphereEvent event) {
         super.doRender(event);
-        ServletContext ctx = event.getPortletContext();
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
+        PortletContextImpl ctext = (PortletContextImpl)event.getPortletContext();
+        ServletContext ctx = ctext.getServletContext();
+        PortletRequest req = event.getRenderRequest();
+        RenderResponse res = event.getRenderResponse();
         StringWriter writer = new StringWriter();
-        StoredPortletResponseImpl sres = new StoredPortletResponseImpl(res, writer);
+        StoredPortletResponseImpl sres = new StoredPortletResponseImpl((HttpServletRequest)req, (HttpServletResponse)res, writer);
         StringBuffer content = new StringBuffer();
         String textFileName = textFile.substring(textFile.lastIndexOf("/") + 1);
         if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
             String extraQuery = (String) req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
             if (extraQuery != null) {
-                PortletURI portletURI = res.createURI();
+                PortletURL portletURI = res.createRenderURL();
                 String link = portletURI.toString() + extraQuery;
                 content.append("<br><fieldset><a href=\"" + link + "\">" + textFileName + "</a></fieldset>");
                 setBufferedOutput(req, content);
@@ -144,7 +148,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
                 if (!textFile.startsWith("http://") && !textFile.startsWith("jcr://")) {
                     rd = ctx.getRequestDispatcher(textFile);
                     if (rd != null) {
-                        rd.include(req, sres);
+                        rd.include((HttpServletRequest)req, sres);
                     } else {
                         throw new PortletException("Unable to include resource: RequestDispatcher is null");
                     }

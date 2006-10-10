@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: ComponentIdentifier.java 4986 2006-08-04 09:54:38Z novotny $
  */
 package org.gridsphere.layout;

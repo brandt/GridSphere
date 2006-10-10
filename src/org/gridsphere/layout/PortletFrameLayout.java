@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @author <a href="mailto:wehren@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id: PortletFrameLayout.java 4986 2006-08-04 09:54:38Z novotny $
  */
@@ -7,9 +7,9 @@ package org.gridsphere.layout;
 
 import org.gridsphere.layout.event.PortletComponentEvent;
 import org.gridsphere.layout.event.PortletFrameEvent;
-import org.gridsphere.portlet.PortletRequest;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,11 +56,11 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         compId.setClassName(this.getClass().getName());
         list.add(compId);
         Iterator it = components.iterator();
-        List userRoles = req.getRoles();
+
         PortletComponent p;
         while (it.hasNext()) {
             p = (PortletComponent) it.next();
-            if (!p.getRequiredRole().equals("") && (!userRoles.contains(p.getRequiredRole()))) {
+            if (!p.getRequiredRole().equals("") && (!req.isUserInRole(p.getRequiredRole()))) {
                 it.remove();
             } else {
                 p.setCanModify(canModify);

@@ -8,10 +8,11 @@ import org.gridsphere.layout.PortletComponent;
 import org.gridsphere.layout.PortletTitleBar;
 import org.gridsphere.layout.view.BaseRender;
 import org.gridsphere.layout.view.Render;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,15 +36,15 @@ public class TitleBar extends BaseRender implements Render {
 
     public StringBuffer doEnd(GridSphereEvent event, PortletComponent comp) {
         PortletTitleBar titleBar = (PortletTitleBar) comp;
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getRenderRequest();
         StringBuffer titleBuffer = new StringBuffer();
         titleBuffer.append("</div>"); // close window title name
         // Output window state icons
         List windowLinks = titleBar.getWindowLinks();
         titleBuffer.append("<div class=\"gridsphere-window-title-icon-right\">");
         List modeLinks = titleBar.getModeLinks();
-        String renderKit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
-        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
+        String renderKit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
         // modes
         if (modeLinks != null) {
             Iterator modesIt = modeLinks.iterator();

@@ -5,9 +5,9 @@
 package org.gridsphere.layout;
 
 import org.gridsphere.layout.view.Render;
-import org.gridsphere.portlet.PortletRequest;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
 import java.io.Serializable;
 import java.util.List;
 
@@ -48,13 +48,13 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
                 col.append(colView.doStartBorder(event,this));
                 if (p.getVisible()) {
                     p.doRender(event);
-                    col.append(p.getBufferedOutput(event.getPortletRequest()));
+                    col.append(p.getBufferedOutput(event.getRenderRequest()));
                 }
                 col.append(colView.doEndBorder(event, this));
             }
             col.append(colView.doEnd(event, this));
         }
-        setBufferedOutput(event.getPortletRequest(), col);
+        setBufferedOutput(event.getRenderRequest(), col);
     }
 
     public Object clone() throws CloneNotSupportedException {

@@ -1,13 +1,14 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: BaseComponentLifecycle.java 4986 2006-08-04 09:54:38Z novotny $
  */
 package org.gridsphere.layout;
 
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.impl.SportletProperties;
+
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
 import java.io.IOException;
 import java.util.List;
 
@@ -68,7 +69,7 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
      * @param event a gridsphere event
      */
     public void actionPerformed(GridSphereEvent event) {
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getActionRequest();
         String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
         if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
         req.setAttribute(compVar, componentIDStr);

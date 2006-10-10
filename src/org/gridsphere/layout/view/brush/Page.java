@@ -8,10 +8,10 @@ import org.gridsphere.layout.PortletComponent;
 import org.gridsphere.layout.PortletPage;
 import org.gridsphere.layout.view.BaseRender;
 import org.gridsphere.layout.view.Render;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
 import java.awt.*;
 import java.util.Iterator;
 import java.util.List;
@@ -28,7 +28,7 @@ public class Page extends BaseRender implements Render {
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent component) {
 
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getRenderRequest();
 
         StringBuffer page = new StringBuffer();
 
@@ -45,7 +45,7 @@ public class Page extends BaseRender implements Render {
             page.append("\n<html dir=\"rtl\"");
         }
         page.append(" xmlns=\"http://www.w3.org/1999/xhtml\">");
-        page.append("\n<!-- GridSphere Release: " + event.getPortletContext().getReleaseInfo() + "-->");
+        page.append("\n<!-- GridSphere Release: " + SportletProperties.getInstance().getProperty("gridsphere.release") + "-->");
         page.append("\n\t<head>");
         page.append("\n\t<title>").append(portletPage.getTitle()).append("</title>");
 
@@ -54,7 +54,6 @@ public class Page extends BaseRender implements Render {
         if (portletPage.getRefresh() > 0)
             page.append("\n\t<meta http-equiv=\"refresh\" content=\"").append(portletPage.getRefresh()).append("\"/>");
         String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
-
         page.append("\n\t<link type=\"text/css\" href=\"").append(req.getContextPath()).append("/themes/").append(portletPage.getRenderKit()).append("/").append(theme).append("/css" + "/default.css\" rel=\"stylesheet\"/>");
         page.append("\n\t<link rel=\"stylesheet\" type=\"text/css\" href=\"").append(req.getContextPath()).append("/css/SimpleTextEditor.css\"/>");
         // Add portlet defined stylesheet if defined
@@ -80,8 +79,8 @@ public class Page extends BaseRender implements Render {
         // add calendar
         page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/scw.js\"></script>");
         page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/validation.js\"></script>");
-        page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/yahoo.js\"></script>");
-        page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/connection.js\"></script>");
+        page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/yahoo/yahoo.js\"></script>");
+        page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/yahoo/connection.js\"></script>");
         page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/gridsphere_ajax.js\"></script>");
 
         if (props != null) {

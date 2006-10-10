@@ -1,26 +1,30 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletTitleBar.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.layout;
 
-import org.gridsphere.event.WindowEvent;
-import org.gridsphere.event.impl.WindowEventImpl;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridsphere.layout.event.PortletTitleBarListener;
+import org.gridsphere.layout.event.PortletWindowEvent;
 import org.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
+import org.gridsphere.layout.event.impl.PortletWindowEventImpl;
 import org.gridsphere.layout.view.Render;
-import org.gridsphere.portlet.*;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.StoredPortletResponseImpl;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
-import org.gridsphere.portletcontainer.*;
+import org.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.portletcontainer.impl.PortletInvoker;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.services.core.security.role.PortletRole;
 
+import javax.portlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
@@ -34,7 +38,7 @@ import java.util.*;
  */
 public class PortletTitleBar extends BasePortletComponent implements Serializable, Cloneable {
 
-    private static PortletLog log = SportletLog.getInstance(PortletTitleBar.class);
+    private Log log = LogFactory.getLog(PortletTitleBar.class);
 
     private String title = "unknown title";
     private String portletClass = null;
@@ -42,11 +46,12 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private transient PortletRegistryService portletRegistryService = null;
     private transient PortletInvoker portletInvoker = null;
 
-    private transient PortletWindow.State windowState = PortletWindow.State.NORMAL;
+    private transient WindowState windowState = WindowState.NORMAL;
 
-    private transient Mode portletMode = Mode.VIEW;
-    private transient Mode previousMode = Mode.VIEW;
+    private transient PortletMode portletMode = PortletMode.VIEW;
+    private transient PortletMode previousMode = PortletMode.VIEW;
     private transient List allowedWindowStates = new ArrayList();
+
     private transient String errorMessage = "";
     private transient boolean hasError = false;
     private transient boolean isActive = false;
@@ -55,6 +60,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private transient List windowLinks = null;
 
     private transient Render titleView = null;
+
 
     /**
      * Link is an abstract representation of a hyperlink with an href, image and
@@ -131,9 +137,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
          */
         public String toString() {
             StringBuffer sb = new StringBuffer("\n");
-            sb.append("image src: " + imageSrc + "\n");
-            sb.append("href: " + href + "\n");
-            sb.append("alt tag: " + altTag + "\n");
+            sb.append("image src: ").append(imageSrc).append("\n");
+            sb.append("href: ").append(href).append("\n");
+            sb.append("alt tag: ").append(altTag).append("\n");
             return sb.toString();
         }
     }
@@ -157,28 +163,31 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
          * Constructs an instance of PortletModeLink with the supplied portlet mode
          *
          * @param mode the portlet mode
+         * @param locale the locale
+         * @throws IllegalArgumentException if the mode is not supported
          */
-        public PortletModeLink(Mode mode, Locale locale) throws IllegalArgumentException {
+        public PortletModeLink(PortletMode mode, Locale locale) throws IllegalArgumentException {
             if (mode == null) return;
 
-            altTag = mode.getText(locale);
-
+            ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+            String key = mode.toString().toUpperCase();
+            altTag = bundle.getString(key);
             // Set the image src
-            if (mode.equals(Mode.CONFIGURE)) {
+            if (mode.equals(new PortletMode("CONFIGURE"))) {
                 imageSrc = configImage;
                 symbol=configSymbol;//WAP 2.0
-            } else if (mode.equals(Mode.EDIT)) {
+            } else if (mode.equals(PortletMode.EDIT)) {
                 imageSrc = editImage;
                 symbol=editSymbol;//WAP 2.0
-            } else if (mode.equals(Mode.HELP)) {
+            } else if (mode.equals(PortletMode.HELP)) {
                 imageSrc = helpImage;
                 symbol=helpSymbol;//WAP 2.0
                 cursor = "help";
-            } else if (mode.equals(Mode.VIEW)) {
+            } else if (mode.equals(PortletMode.VIEW)) {
                 imageSrc = viewImage;
                 symbol=viewSymbol;//WAP 2.0
             } else {
-                throw new IllegalArgumentException("No matching Portlet.Mode found for received portlet mode: " + mode);
+                throw new IllegalArgumentException("Unsupported portlet mode: " + mode);
             }
         }
     }
@@ -205,31 +214,36 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
          * Constructs an instance of PortletStateLink with the supplied window state
          *
          * @param state the window state
+         * @param locale the client locale
+         * @throws IllegalArgumentException if the state is unsupported
          */
-        public PortletStateLink(PortletWindow.State state, Locale locale) throws IllegalArgumentException {
+        public PortletStateLink(WindowState state, Locale locale) throws IllegalArgumentException {
             if (state == null) return;
             // Set the image src
-            if (state.equals(PortletWindow.State.MINIMIZED)) {
+            if (state.equals(WindowState.MINIMIZED)) {
                 imageSrc = minimizeImage;
                 symbol = minimizeSymbol;
-            } else if (state.equals(PortletWindow.State.MAXIMIZED)) {
+            } else if (state.equals(WindowState.MAXIMIZED)) {
                 imageSrc = maximizeImage;
                 symbol = maximizeSymbol;
-            } else if (state.equals(PortletWindow.State.RESIZING)) {
-                imageSrc = resizeImage;
+            } else if (state.equals(new WindowState("resizing"))) {
+                 imageSrc = resizeImage;
                 symbol = resizeSymbol;
-            } else if (state.equals(PortletWindow.State.CLOSED)) {
+            } else if (state.equals(new WindowState("closed"))) {
                 imageSrc = closeImage;
                 symbol = closeSymbol;
-            } else if (state.equals(PortletWindow.State.FLOATING)) {
+            } else if (state.equals(new WindowState("floating"))) {
                 imageSrc = floatImage;
                 symbol = floatSymbol;
             } else {
-                throw new IllegalArgumentException("No matching PortletWindow.State found for received window mode: " + state);
+                throw new IllegalArgumentException("Unsupported window state window mode: " + state);
             }
-            altTag = state.getText(locale);
-
+            ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+            String key = state.toString().toUpperCase();
+            altTag = bundle.getString(key);
         }
+
+
     }
 
     /**
@@ -287,7 +301,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      *
      * @param state the portlet window state expressed as a string
      */
-    public void setWindowState(PortletWindow.State state) {
+    public void setWindowState(WindowState state) {
         if (state != null) this.windowState = state;
     }
 
@@ -296,7 +310,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      *
      * @return the portlet window state expressed as a string
      */
-    public PortletWindow.State getWindowState() {
+    public WindowState getWindowState() {
         return windowState;
     }
 
@@ -308,7 +322,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     public void setWindowStateAsString(String state) {
         if (state != null) {
             try {
-                this.windowState = PortletWindow.State.toState(state);
+                this.windowState = new WindowState(state);
             } catch (IllegalArgumentException e) {
                 // do nothing
             }
@@ -329,7 +343,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      *
      * @param mode the portlet mode expressed as a string
      */
-    public void setPortletMode(Mode mode) {
+    public void setPortletMode(PortletMode mode) {
         if (mode != null) this.portletMode = mode;
     }
 
@@ -338,7 +352,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      *
      * @return the portlet mode expressed as a string
      */
-    public Mode getPortletMode() {
+    public PortletMode getPortletMode() {
         return portletMode;
     }
 
@@ -347,7 +361,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      *
      * @param mode the portlet mode expressed as a string
      */
-    public void setPreviousMode(Mode mode) {
+    public void setPreviousMode(PortletMode mode) {
         if (mode != null) this.previousMode = mode;
     }
 
@@ -356,7 +370,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      *
      * @return the portlet mode expressed as a string
      */
-    public Mode getPreviousMode() {
+    public PortletMode getPreviousMode() {
         return previousMode;
     }
 
@@ -368,7 +382,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     public void setPortletModeAsString(String mode) {
         if (mode == null) return;
         try {
-            this.portletMode = Mode.toMode(mode);
+            this.portletMode = new PortletMode(mode);
         } catch (IllegalArgumentException e) {
             // do nothing
         }
@@ -436,11 +450,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         return list;
     }
 
-    /**
-     * Sets configuration information about the supported portlet modes,
-     * allowed window states and title bar and web app name obtained from {@link PortletSettings}.
-     * Information is queried from the {@link PortletRegistryService}
-     */
     protected void doConfig() {
         try {
             portletRegistryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
@@ -451,20 +460,18 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         String appID = portletRegistryService.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
-            if (appConfig != null) {
-                // get supported modes from application portlet config
-                //supportedModes = sort(appConfig.getSupportedModes());
+            // get supported modes from application portlet config
+            //supportedModes = sort(appConfig.getSupportedModes());
 
-                // get window states from application portlet config
+            // get window states from application portlet config
 
-                allowedWindowStates = new ArrayList(appConfig.getAllowedWindowStates());
-                allowedWindowStates = sort(allowedWindowStates);
+            allowedWindowStates = new ArrayList(appPortlet.getAllowedWindowStates());
+            allowedWindowStates = sort(allowedWindowStates);
 
-                if (canModify) {
-                    if (!allowedWindowStates.contains(PortletWindow.State.CLOSED)) {
-                        allowedWindowStates.add(PortletWindow.State.CLOSED);
-                    }
+
+            if (canModify) {
+                if (!allowedWindowStates.contains(new WindowState("CLOSED"))) {
+                    allowedWindowStates.add(new WindowState("CLOSED"));
                 }
             }
         }
@@ -478,19 +485,27 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * @return the sorted list
      */
     private List sort(List list) {
-        int n = list.size();
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - 1 - i; j++) {
-                Comparator c = (Comparator) list.get(j);
-                Comparator d = (Comparator) list.get(j + 1);
-                if (c.compare(c, d) == 1) {
-                    Object tmp = list.get(j);
-                    list.set(j, d);
-                    list.set(j + 1, tmp);
-                }
-            }
+
+        List tmp = new ArrayList();
+        if (list.contains(WindowState.NORMAL)) {
+            tmp.add(WindowState.NORMAL);
         }
-        return list;
+        if (list.contains(WindowState.MINIMIZED)) {
+            tmp.add(WindowState.MINIMIZED);
+        }
+        if (list.contains(new WindowState("RESIZING"))) {
+            tmp.add(new WindowState("RESIZING"));
+        }
+        if (list.contains(WindowState.MAXIMIZED)) {
+            tmp.add(WindowState.MAXIMIZED);
+        }
+        if (list.contains(new WindowState("CLOSED"))) {
+            tmp.add(new WindowState("CLOSED"));
+        }
+        if (list.contains(new WindowState("FLOATING"))) {
+            tmp.add(new WindowState("FLOATING"));
+        }
+        return tmp;
     }
 
     /**
@@ -500,9 +515,10 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * @return a list of window state hyperlinks
      */
     public List createWindowLinks(GridSphereEvent event) {
-        PortletURI portletURI;
-        PortletResponse res = event.getPortletResponse();
-        PortletWindow.State tmp;
+        super.doRender(event);
+        PortletURL portletURL;
+        RenderResponse res = event.getRenderResponse();
+        WindowState tmp;
 
         if (allowedWindowStates.isEmpty()) return null;
 
@@ -510,24 +526,26 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         List windowStates = new ArrayList();
         for (int i = 0; i < allowedWindowStates.size(); i++) {
 
-            tmp = (PortletWindow.State) allowedWindowStates.get(i);
+            tmp = (WindowState) allowedWindowStates.get(i);
             windowStates.add(tmp);
             // remove current state from list
-            if (tmp.equals(windowState) && (!windowState.equals(PortletWindow.State.CLOSED))) {
+            if (tmp.equals(windowState) && (!windowState.equals(new WindowState("closed")))) {
                 windowStates.remove(i);
             }
         }
-
         // get rid of resized if window state is normal
-        if (windowState.equals(PortletWindow.State.NORMAL) || windowState.equals(PortletWindow.State.CLOSED)) {
-            windowStates.remove(PortletWindow.State.RESIZING);
+        if (windowState.equals(WindowState.NORMAL) || windowState.equals(new WindowState("closed"))) {
+            windowStates.remove(new WindowState("resizing"));
         }
 
         // get rid of floating if window state is minimized
-        if (windowState.equals(PortletWindow.State.MINIMIZED)) windowStates.remove(PortletWindow.State.FLOATING);
+        if (windowState.equals(WindowState.MINIMIZED)) {
+            windowStates.remove(new WindowState("floating"));
+        }
+
 
         // Localize the window state names
-        PortletRequest req = event.getPortletRequest();
+        RenderRequest req = event.getRenderRequest();
 
         Locale locale = req.getLocale();
 
@@ -535,16 +553,16 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         PortletStateLink stateLink;
         List stateLinks = new Vector();
         for (int i = 0; i < windowStates.size(); i++) {
-            tmp = (PortletWindow.State) windowStates.get(i);
-            portletURI = res.createURI();
-            portletURI.addParameter(this.getComponentIDVar(req), this.componentIDStr);
+            tmp = (WindowState) windowStates.get(i);
+            portletURL = res.createActionURL();
+            //portletURL.setParameter(this.getComponentIDVar(req), this.componentIDStr);
 
             try {
                 stateLink = new PortletStateLink(tmp, locale);
-                portletURI.addParameter(SportletProperties.PORTLET_WINDOW, tmp.toString());
-                stateLink.setHref(portletURI.toString());
-                if (tmp.equals(PortletWindow.State.FLOATING)) {
-                    stateLink.setHref(portletURI.toString() + "\" onclick=\"return GridSphere_popup(this, 'notes')\"");
+                portletURL.setParameter(SportletProperties.PORTLET_WINDOW, tmp.toString());
+                stateLink.setHref(portletURL.toString());
+                if (tmp.equals(new WindowState("floating"))) {
+                    stateLink.setHref(portletURL.toString() + "\" onclick=\"return GridSphere_popup(this, 'notes')\"");
                 }
                 stateLinks.add(stateLink);
             } catch (IllegalArgumentException e) {
@@ -562,35 +580,22 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * @return a list of portlet mode hyperlinks
      */
     public List createModeLinks(GridSphereEvent event) {
+        super.doRender(event);
         int i;
-        PortletResponse res = event.getPortletResponse();
-        PortletRequest req = event.getPortletRequest();
+        RenderResponse res = event.getRenderResponse();
+        RenderRequest req = event.getRenderRequest();
         // make modes from supported modes
-        Client client = req.getClient();
-        List supportedModes = new ArrayList();
-        // set portlet modes
 
-        String appID = portletRegistryService.getApplicationPortletID(portletClass);
-
-        ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
-        if (appPortlet != null) {
-            ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
-            if (appConfig != null) {
-                // get supported modes from application portlet config
-                //supportedModes = sort(appConfig.getSupportedModes());
-                supportedModes = appConfig.getSupportedModes(client.getMimeType());
-                if (supportedModes.isEmpty()) return null;
-            }
-        }
+        List supportedModes = (List)req.getAttribute(SportletProperties.ALLOWED_MODES);
+        if (supportedModes == null) return null;
 
         // Unless user is admin they should not see configure mode
-        List userRoles = (List)req.getRoles();
-        boolean hasConfigurePermission = userRoles.contains(PortletRole.ADMIN.getName());
+        boolean hasConfigurePermission = req.isUserInRole(PortletRole.ADMIN.getName());
         List smodes = new ArrayList();
-        Mode mode;
+        String mode;
         for (i = 0; i < supportedModes.size(); i++) {
-            mode = (Mode) supportedModes.get(i);
-            if (mode.equals(Mode.CONFIGURE)) {
+            mode = (String) supportedModes.get(i);
+            if (mode.equalsIgnoreCase("configure")) {
                 if (hasConfigurePermission) {
                     smodes.add(mode);
                 }
@@ -599,7 +604,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             }
 
             // remove current mode from list
-            smodes.remove(portletMode);
+            smodes.remove(portletMode.toString());
         }
 
         // Localize the portlet mode names
@@ -608,16 +613,16 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         List portletLinks = new ArrayList();
         for (i = 0; i < smodes.size(); i++) {
             // create a URI for each of the portlet modes
-            PortletURI portletURI;
+            PortletURL portletURL;
             PortletModeLink modeLink;
-            mode = (Mode) smodes.get(i);
-            portletURI = res.createURI();
-            portletURI.addParameter(this.getComponentIDVar(req), this.componentIDStr);
+            mode = (String) smodes.get(i);
+            portletURL = res.createActionURL();
+            //portletURL.setParameter(this.getComponentIDVar(req), this.componentIDStr);
             //portletURI.addParameter(SportletProperties.PORTLETID, portletClass);
             try {
-                modeLink = new PortletModeLink(mode, locale);
-                portletURI.addParameter(SportletProperties.PORTLET_MODE, mode.toString());
-                modeLink.setHref(portletURI.toString());
+                modeLink = new PortletModeLink(new PortletMode(mode), locale);
+                portletURL.setParameter(SportletProperties.PORTLET_MODE, mode.toString());
+                modeLink.setHref(portletURL.toString());
                 portletLinks.add(modeLink);
             } catch (IllegalArgumentException e) {
                 //log.debug("Unable to get mode for : " + mode.toString());
@@ -636,45 +641,55 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         super.actionPerformed(event);
         isActive = true;
 
-        PortletRequest req = event.getPortletRequest();
+        ActionRequest req = event.getActionRequest();
+        ActionResponse res = event.getActionResponse();
 
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
+
+        // Render title bar
+        List supportedModes = null;
+        String appID = portletRegistryService.getApplicationPortletID(portletClass);
+        ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
+        if (appPortlet != null) {
+            supportedModes = appPortlet.getSupportedModes(event.getClient().getMimeType());
+        }
+        req.setAttribute(SportletProperties.ALLOWED_MODES, supportedModes);
 
         // pop last event off stack
         event.getLastRenderEvent();
 
         PortletTitleBarEvent titleBarEvent = new PortletTitleBarEventImpl(this, event, COMPONENT_ID);
+        System.err.println("in actionperf! " + req.getParameter(SportletProperties.PORTLET_WINDOW));
 
-        //User user = req.getUser();
-        //if (!(user instanceof GuestUser)) {
         Principal principal = req.getUserPrincipal();
         if (principal != null) {
             if (titleBarEvent.hasAction()) {
+                System.err.println("i have a titlebarevent action!");
 
                 if (titleBarEvent.hasWindowStateAction()) {
+                    System.err.println("i have a titlebar action!");
 
-                    PortletResponse res = event.getPortletResponse();
 
                     // don't set window state if it is floating
-                    if (!titleBarEvent.getState().equals(PortletWindow.State.FLOATING)) windowState = titleBarEvent.getState();
+                    if (!titleBarEvent.getState().equals(new WindowState("floating"))) windowState = titleBarEvent.getState();
 
-                    WindowEvent winEvent = null;
+                    PortletWindowEvent winEvent = null;
 
                     // if receive a window state that is not supported do nothing
                     if (!allowedWindowStates.contains(windowState)) return;
 
-                    if (windowState == PortletWindow.State.MAXIMIZED) {
-                        winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_MAXIMIZED);
-                    } else if (windowState == PortletWindow.State.MINIMIZED) {
-                        winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_MINIMIZED);
-                    } else if (windowState == PortletWindow.State.RESIZING) {
-                        winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_RESTORED);
-                    } else if (windowState == PortletWindow.State.CLOSED) {
-                        winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_CLOSED);
+                    if (windowState.equals(WindowState.MAXIMIZED)) {
+                        winEvent = new PortletWindowEventImpl(req, PortletWindowEvent.WINDOW_MAXIMIZED);
+                    } else if (windowState.equals(WindowState.MINIMIZED)) {
+                        winEvent = new PortletWindowEventImpl(req, PortletWindowEvent.WINDOW_MINIMIZED);
+                    } else if (windowState.equals(new WindowState("resizing"))) {
+                        winEvent = new PortletWindowEventImpl(req, PortletWindowEvent.WINDOW_RESTORED);
+                    } else if (windowState.equals("CLOSED")) {
+                        winEvent = new PortletWindowEventImpl(req, PortletWindowEvent.WINDOW_CLOSED);
                     }
                     if (winEvent != null) {
                         try {
-                            portletInvoker.windowEvent((String)req.getAttribute(SportletProperties.PORTLETID), winEvent, req, res);
+                            portletInvoker.windowEvent((String)req.getAttribute(SportletProperties.PORTLETID), winEvent, (HttpServletRequest)req, (HttpServletResponse) res);
                         } catch (Exception e) {
                             hasError = true;
                             errorMessage += "Failed to invoke window event method of portlet: " + portletClass;
@@ -698,7 +713,11 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         }
 
         req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
-        req.setMode(portletMode);
+        try {
+            res.setPortletMode(portletMode);
+        } catch (PortletModeException e) {
+            System.err.println("Unable to set mode to " + portletMode);
+        }
         req.setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
 
         Iterator it = listeners.iterator();
@@ -733,12 +752,12 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     }
 
     public void doRender(GridSphereEvent event) {
-
+        super.doRender(event);
         hasError = false;
 
         // title bar: configure, edit, help, title, min, max
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
+        RenderRequest req = event.getRenderRequest();
+        RenderResponse res = event.getRenderResponse();
 
         // get the appropriate title for this client
 
@@ -754,7 +773,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         //System.err.println("in title bar render portletclass=" + portletClass + ": setting prev mode= " + previousMode + " cur mode= " + portletMode);
 
-        req.setMode(portletMode);
+        req.setAttribute(SportletProperties.PORTLET_MODE, portletMode);
         req.setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
         req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
 
@@ -766,11 +785,11 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         StringWriter storedWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(storedWriter);
-        PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
+        PortletResponse wrappedResponse = new StoredPortletResponseImpl((HttpServletRequest)req, (HttpServletResponse)res, writer);
 
         try {
             //System.err.println("invoking  doTitle:" + title);
-            portletInvoker.doTitle((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
+            portletInvoker.doTitle((String)req.getAttribute(SportletProperties.PORTLETID), (HttpServletRequest)req, (HttpServletResponse)wrappedResponse);
             //out.println(" (" + portletMode.toString() + ") ");
             title = storedWriter.toString();
         } catch (Exception e) {
@@ -799,16 +818,13 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         PortletTitleBar t = (PortletTitleBar) super.clone();
         t.title = this.title;
         t.portletClass = this.portletClass;
-        t.portletMode = Mode.toMode(this.portletMode.toString());
-        t.windowState = PortletWindow.State.toState(this.windowState.toString());
+        t.portletMode = new PortletMode(this.portletMode.toString());
+        t.windowState = new WindowState(this.windowState.toString());
         t.previousMode = this.previousMode;
         t.errorMessage = this.errorMessage;
         t.hasError = this.hasError;
         t.allowedWindowStates = new ArrayList(this.allowedWindowStates.size());
-        for (int i = 0; i < this.allowedWindowStates.size(); i++) {
-            PortletWindow.State state = (PortletWindow.State) allowedWindowStates.get(i);
-            t.allowedWindowStates.add(state.clone());
-        }
+
         return t;
 
     }

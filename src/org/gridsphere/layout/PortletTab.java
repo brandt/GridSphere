@@ -1,18 +1,19 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletTab.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.layout;
 
 import org.gridsphere.layout.event.PortletTabEvent;
 import org.gridsphere.layout.event.impl.PortletTabEventImpl;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.PortletURI;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portlet.service.spi.impl.descriptor.Description;
-import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import java.io.Serializable;
 import java.util.*;
 
@@ -171,18 +172,20 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      * @param event the gridsphere event
      */
     public String createTabTitleLink(GridSphereEvent event) {
+        super.doRender(event);
         if (url != null) return url;
-        PortletResponse res = event.getPortletResponse();
-        PortletRequest req = event.getPortletRequest();
-        PortletURI portletURI = res.createURI();
+        RenderResponse res = event.getRenderResponse();
+        RenderRequest req = event.getRenderRequest();
+        PortletURL portletURL = res.createActionURL();
 
-        portletURI.addParameter(this.getComponentIDVar(req), componentIDStr);
+
+        //portletURL.setParameter(this.getComponentIDVar(req), componentIDStr);
 
         String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
         if (extraQuery != null) {
-            return portletURI.toString() + extraQuery;
+            return portletURL.toString() + extraQuery;
         }
-        return portletURI.toString();
+        return portletURL.toString();
     }
 
     /**
@@ -268,7 +271,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
 
         // pop last event from stack
         event.getLastRenderEvent();
-        PortletTabEvent tabEvent = new PortletTabEventImpl(this, event.getPortletRequest(), PortletTabEvent.TabAction.TAB_SELECTED, COMPONENT_ID);
+        PortletTabEvent tabEvent = new PortletTabEventImpl(this, event.getActionRequest(), PortletTabEvent.TabAction.TAB_SELECTED, COMPONENT_ID);
 
         Iterator it = listeners.iterator();
         PortletComponent comp;
@@ -287,11 +290,10 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      */
     public void doRender(GridSphereEvent event) {
         super.doRender(event);
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getRenderRequest();
         if (portletComponent == null) return;
-        List userRoles = req.getRoles();
         StringBuffer tab = new StringBuffer();
-        if ((requiredRoleName.equals("")) || (userRoles.contains(requiredRoleName))) {
+        if ((requiredRoleName.equals("")) || (req.isUserInRole(requiredRoleName))) {
             portletComponent.doRender(event);
             tab.append(portletComponent.getBufferedOutput(req));
         }
@@ -331,7 +333,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(super.toString());
         sb.append("\ntab order=").append(tabOrder);
         sb.append("\ntab selected=").append(selected);
         Iterator it = titles.iterator();

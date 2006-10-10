@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id: TableLayout.java 4496 2006-02-08 20:27:04Z wehrens $
  */
@@ -11,12 +11,12 @@ import org.gridsphere.layout.PortletRowLayout;
 import org.gridsphere.layout.PortletTableLayout;
 import org.gridsphere.layout.view.BaseRender;
 import org.gridsphere.layout.view.TableLayoutView;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.PortletURI;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.PortletURLImpl;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
+import javax.portlet.RenderResponse;
 import java.util.*;
 
 public class TableLayout extends BaseRender implements TableLayoutView {
@@ -62,7 +62,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
     }
 
     public StringBuffer doRenderUserSelects(GridSphereEvent event, PortletTableLayout tableLayout) {
-        event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, tableLayout.getLabel());
+        event.getRenderRequest().setAttribute(SportletProperties.COMPONENT_ID, tableLayout.getLabel());
         StringBuffer table = new StringBuffer();
         table.append("<div class=\"gridsphere-layout-row\">");
         List components = tableLayout.getPortletComponents();
@@ -98,19 +98,19 @@ public class TableLayout extends BaseRender implements TableLayoutView {
     public StringBuffer renderAddPortlets(GridSphereEvent event, int col, Map availPortlets) {
        StringBuffer table = new StringBuffer();
 
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getRenderRequest();
+        RenderResponse res = event.getRenderResponse();
         Locale locale = req.getLocale();
 
-        PortletURI uri = res.createURI();
+        PortletURLImpl url = (PortletURLImpl)res.createRenderURL();
 
-        uri.addAction(PortletTableLayout.PORTLET_ADD_ACTION);
+        url.setAction(PortletTableLayout.PORTLET_ADD_ACTION);
         String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
         if (extraQuery != null) {
-            uri.addParameter("usertable", "edit");
+            url.setParameter("usertable", "edit");
         }
 
-        table.append("<form action=\"" + uri.toString() + "\"  method=\"post\" name=\"addform\"><p>");
+        table.append("<form action=\"" + url.toString() + "\"  method=\"post\" name=\"addform\"><p>");
         table.append("<input type=\"hidden\" name=\"" + PortletTableLayout.PORTLET_COL + "\" value=\"" + col + "\"/>");
 
         ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);

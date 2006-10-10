@@ -1,18 +1,18 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletStaticContent.java 4986 2006-08-04 09:54:38Z novotny $
  */
 package org.gridsphere.layout;
 
-import org.gridsphere.portlet.Client;
-import org.gridsphere.portlet.PortletContext;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridsphere.portlet.jsrimpl.StoredPortletResponseImpl;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
+import javax.portlet.RenderResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Locale;
 
 /**
  * <code>PortletContent</code> is used to display the contents of an included
@@ -64,19 +64,15 @@ public class PortletStaticContent extends BasePortletComponent implements Serial
      */
     public void doRender(GridSphereEvent event) {
         super.doRender(event);
-        PortletContext ctx = event.getPortletContext();
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
+
+        PortletRequest req = event.getRenderRequest();
+        PortletResponse res = event.getRenderResponse();
         if (textFile != null) {
 
             // Try the localized version first
-
-            Client client = req.getClient();
-
             StringWriter writer = new StringWriter();
-            PortletResponse sres = new StoredPortletResponseImpl(res, writer);
-            Locale locale = req.getLocale();
-            InputStream resourceStream = ctx.getResourceAsStream(textFile, client, locale);
+            RenderResponse sres = new StoredPortletResponseImpl((HttpServletRequest)req, (HttpServletResponse)res, writer);
+            InputStream resourceStream = req.getPortletSession(true).getPortletContext().getResourceAsStream(textFile);
             if (resourceStream != null) {
                 try {
                     Reader reader;

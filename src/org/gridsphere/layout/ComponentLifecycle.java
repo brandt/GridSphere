@@ -1,12 +1,12 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: ComponentLifecycle.java 4986 2006-08-04 09:54:38Z novotny $
  */
 package org.gridsphere.layout;
 
-import org.gridsphere.portlet.PortletRequest;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
 import java.util.List;
 
 /**

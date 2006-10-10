@@ -1,21 +1,20 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: BasePortletComponent.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.layout;
 
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.PortletMessage;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
 import java.io.Serializable;
-import java.util.Iterator;
+import java.net.URL;
 import java.util.List;
 import java.util.Vector;
-import java.net.URL;
 
 /**
  * <code>BasePortletComponent</code> represents an abstract portlet component with a particular
@@ -39,7 +38,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
 
     protected boolean canModify = false;
 
-    protected static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
+    protected Log log = LogFactory.getLog(PortletPageFactory.class);
 
     /**
      * Initializes the portlet component. Since the components are isolated
@@ -217,7 +216,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      * @param event a gridsphere event
      */
     public void doRender(GridSphereEvent event) {
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getRenderRequest();
         String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
         if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
         req.setAttribute(compVar, componentIDStr);
@@ -251,6 +250,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     /* (non-Javadoc)
      * @see org.gridsphere.layout.PortletComponent#messageEvent(java.lang.String, org.gridsphere.portlet.PortletMessage, org.gridsphere.portletcontainer.GridSphereEvent)
      */
+    /*
     public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
         Iterator iter = listeners.iterator();
         while (iter.hasNext()) {
@@ -259,10 +259,11 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         }
 
     }
+    */
 
     protected Object getRenderClass(PortletRequest req, String renderClassName) {
         Object render= null;
-        String renderKit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
+        String renderKit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
         try {
              render = Class.forName("org.gridsphere.layout.view." + renderKit + "." + renderClassName).newInstance();
         } catch (Exception e) {

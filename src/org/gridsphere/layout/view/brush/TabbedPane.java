@@ -1,5 +1,5 @@
 /*
-* @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+* @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
 * @author <a href="mailto:wehrens@aei.mpg.de">Oliver Wehrens</a>
 * @version $Id: TabbedPane.java 4496 2006-02-08 20:27:04Z wehrens $
 */
@@ -11,18 +11,14 @@ import org.gridsphere.layout.PortletTab;
 import org.gridsphere.layout.PortletTabbedPane;
 import org.gridsphere.layout.view.BaseRender;
 import org.gridsphere.layout.view.TabbedPaneView;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.StoredPortletResponseImpl;
 import org.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletURI;
-import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
 
-import javax.servlet.ServletContext;
-import javax.servlet.RequestDispatcher;
+import javax.portlet.*;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.io.StringWriter;
 
 public class TabbedPane extends BaseRender implements TabbedPaneView {
 
@@ -127,11 +123,11 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         // this really creates the individual tabs
         StringBuffer pane = new StringBuffer();
         String link = tab.createTabTitleLink(event);
-        String lang = event.getPortletRequest().getLocale().getLanguage();
+        String lang = event.getRenderRequest().getLocale().getLanguage();
         String title = tab.getTitle(lang);
 
         if ((title == null) && (tab.getInclude() == null)) return pane;
-        if (event.getPortletRequest().getAttribute(SportletProperties.LAYOUT_EDIT_MODE) == null) {
+        if (event.getRenderRequest().getAttribute(SportletProperties.LAYOUT_EDIT_MODE) == null) {
             if ((!tab.getDisplay()) && (tab.getInclude() == null)) return pane;
         }
 
@@ -170,12 +166,11 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
                 pane.append(replaceBlanks(title));
             }
             if (tab.getInclude() != null) {
-                PortletRequest req = event.getPortletRequest();
-                PortletResponse res = event.getPortletResponse();
+                RenderRequest req = event.getRenderRequest();
                 StringWriter writer = new StringWriter();
-                StoredPortletResponseImpl sres = new StoredPortletResponseImpl(res, writer);
-                ServletContext ctx = event.getPortletContext();
-                RequestDispatcher rd = null;
+                StoredPortletResponseImpl sres = new StoredPortletResponseImpl(event.getHttpServletRequest(), event.getHttpServletResponse(), writer);
+                PortletContext ctx = event.getPortletContext();
+                PortletRequestDispatcher rd = null;
                 rd = ctx.getRequestDispatcher(tab.getInclude());
                 try {
                     rd.include(req, sres);
@@ -198,11 +193,11 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
     }
 
     public StringBuffer doRenderEditTab(GridSphereEvent event, PortletTabbedPane tabPane, boolean isSelected) {
-        PortletResponse res = event.getPortletResponse();
-        PortletRequest req = event.getPortletRequest();
-        PortletURI portletURI = res.createURI();
+        RenderResponse res = event.getRenderResponse();
+        RenderRequest req = event.getRenderRequest();
+        PortletURL portletURL = res.createRenderURL();
         String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
-        String link = portletURI.toString() + extraQuery;
+        String link = portletURL.toString() + extraQuery;
         StringBuffer pane = new StringBuffer();
 
         String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);

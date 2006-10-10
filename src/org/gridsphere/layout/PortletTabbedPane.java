@@ -1,5 +1,5 @@
 /*
-* @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+* @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
 * @author <a href="mailto:wehrens@aei.mpg.de">Oliver Wehrens</a>
 * @version $Id: PortletTabbedPane.java 5032 2006-08-17 18:15:06Z novotny $
 */
@@ -10,12 +10,12 @@ import org.gridsphere.layout.event.PortletComponentEvent;
 import org.gridsphere.layout.event.PortletTabEvent;
 import org.gridsphere.layout.event.PortletTabListener;
 import org.gridsphere.layout.view.TabbedPaneView;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 
-import javax.servlet.ServletContext;
+import javax.portlet.PortletRequest;
+import javax.portlet.RenderRequest;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -107,6 +107,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         for (int i = 0; i < tabs.size(); i++) {
             portletTab = (PortletTab) tabs.get(i);
             if (portletTab.getComponentID() == tab.getComponentID()) {
+                //System.err.println("set tab=" + portletTab.toString());
                 portletTab.setSelected(true);
             } else {
                 portletTab.setSelected(false);
@@ -277,7 +278,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      * @param event the portlet tab event
      */
     public void handlePortletTabEvent(PortletTabEvent event) {
-        if (event.getAction() == PortletTabEvent.TabAction.TAB_SELECTED) {
+        if (event.getAction().equals(PortletTabEvent.TabAction.TAB_SELECTED)) {
             PortletTab selectedTab = (PortletTab) event.getPortletComponent();
             this.setSelectedPortletTab(selectedTab);
         }
@@ -315,11 +316,10 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      * @param event a gridsphere event
      */
     public void doRender(GridSphereEvent event) {
-        super.doRender(event);
+        //super.doRender(event);
         StringBuffer pane = new StringBuffer();
-        PortletRequest req = event.getPortletRequest();
+        RenderRequest req = event.getRenderRequest();
 
-        List userRoles = req.getRoles();
 
         //log.debug("in tabbed pane: my comp is=" + componentIDStr);
         pane.append(tabbedPaneView.doStart(event, this));
@@ -329,7 +329,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         for (int i = 0; i < tabs.size(); i++) {
             tab = (PortletTab) tabs.get(i);
             String tabRole = tab.getRequiredRole();
-            if (tabRole.equals("") || (userRoles.contains(tabRole))) {
+            if (tabRole.equals("") || (req.isUserInRole(tabRole))) {
                 pane.append(tabbedPaneView.doRenderTab(event, this, tab));
             } else {
                 // if role is < required role we try selecting the next possible tab
@@ -355,6 +355,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         // render the selected tab
         if (!tabs.isEmpty()) {
             PortletTab selectedTab = getSelectedTab();
+            //System.err.println("selected tab= " + selectedTab.toString());
             if (selectedTab != null) {
                 selectedTab.doRender(event);
                 pane.append(selectedTab.getBufferedOutput(req));
@@ -373,7 +374,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         if (tabs.isEmpty()) parent.remove(this, req);
     }
 
-    public void save(ServletContext ctx) throws IOException {
+    public void save() throws IOException {
         try {
             PortletLayoutDescriptor.savePortletTabbedPane(this, layoutDescriptor, LAYOUT_MAPPING_PATH);
         } catch (PersistenceManagerException e) {
