@@ -50,23 +50,15 @@ Build include file for the GridSphere Portal source code, see build.xml
             <group title="GridSphere Framework API"
                 packages="org.gridsphere:org.gridsphere.*"/>
 
-            <group title="GridSphere Portlet API"
-                packages="org.gridsphere.event:org.gridsphere.event.*,
-                          org.gridsphere.portlet:org.gridsphere.portlet.*,
-                          org.gridsphere.portlet.service:org.gridsphere.portlet.service.*,
+            <group title="GridSphere Service API"
+                packages="org.gridsphere.portlet.service:org.gridsphere.portlet.service.*,
                           org.gridsphere.portlet.service.spi:org.gridsphere.portlet.service.spi.*"/>
 
             <group title="JSR 168 Portlet API"
                 packages="javax.portlet:javax.portlet.*"/>
 
-            <group title="GridSphere Portlet API Implementation"
-                packages="org.gridsphere.event.impl:org.gridsphere.event.impl.*,
-                          org.gridsphere.portlet.impl:org.gridsphere.portlet.impl.*,
-                          org.gridsphere.portlet.service.impl:org.gridsphere.portlet.service.impl.*,
-                          org.gridsphere.portlet.service.spi.impl:org.gridsphere.portlet.service.spi.impl.*"/>
-
             <group title="GridSphere JSR 168 Portlet API Implementation"
-                packages="org.gridsphere.portlet.jsrimpl:org.gridsphere.portlet.jsrimpl.*"/>
+                packages="org.gridsphere.portlet.impl:org.gridsphere.portlet.impl.*"/>
 
             <group title="GridSphere Portal Component Library"
                 packages="org.gridsphere.layout:org.gridsphere.layout.*"/>
