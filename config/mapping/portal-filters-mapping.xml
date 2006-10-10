@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<!--
+
+    Authentication modules mapping file
+
+    $Id: auth-modules-mapping.xml 5092 2006-08-19 04:17:21Z novotny $
+
+-->
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
+<mapping>
+
+    <class name="org.gridsphere.filters.impl.descriptor.PortalFilterCollection">
+        <map-to xml="portal-filters"/>
+        <field name="PortalFilterList" type="org.gridsphere.filters.impl.descriptor.PortalFilterDefinition" collection="vector">
+            <bind-xml name="filter"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.filters.impl.descriptor.PortalFilterDefinition">
+        <field name="Name" type="string">
+            <bind-xml name="name"/>
+        </field>
+        <field name="Descriptions" type="org.gridsphere.portlet.service.spi.impl.descriptor.Description" collection="vector">
+            <bind-xml name="description"/>
+        </field>
+        <field name="Implementation" type="string">
+            <bind-xml name="implementation"/>
+        </field>
+        <field name="ConfigParamList" type="org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="vector">
+            <bind-xml name="auth-config"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam">
+        <field name="ParamName" type="string">
+            <bind-xml name="param-name"/>
+        </field>
+        <field name="ParamValue" type="string">
+            <bind-xml name="param-value"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.portlet.service.spi.impl.descriptor.Description">
+        <map-to xml="description"/>
+        <field name="Lang" type="string">
+            <bind-xml name="lang" node="attribute"/>
+        </field>
+        <field name="Key" type="string">
+            <bind-xml name="key" node="attribute"/>
+        </field>
+        <field name="Text" type="string">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+
+</mapping>
