@@ -34,7 +34,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         <copy overwrite="true" file="config/portlet.properties"
               todir="${build.classes}/org/gridsphere/portlet/jsrimpl/"
               filtering="true"/>
-        <copy file="config/mapping/portlet-jsr-mapping.xml"
+        <copy file="config/mapping/portlet-mapping.xml"
               todir="${build.classes}/org/gridsphere/portletcontainer/impl/descriptor"/>
         <jar jarfile="${build.lib}/gridsphere-portal-${gridsphere.version}.jar" basedir="${build.classes}" defaultexcludes="yes">
             <include name="org/gridsphere/portletcontainer/impl/**"/>
