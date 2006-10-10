@@ -4,7 +4,7 @@
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.RenderRequest;
 import javax.servlet.jsp.JspException;

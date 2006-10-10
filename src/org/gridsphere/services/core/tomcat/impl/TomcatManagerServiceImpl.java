@@ -4,7 +4,7 @@
  */
 package org.gridsphere.services.core.tomcat.impl;
 
-import org.gridsphere.portlet.jsrimpl.StoredPortletResponseImpl;
+import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.services.core.tomcat.TomcatManagerException;

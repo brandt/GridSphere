@@ -6,7 +6,7 @@ package org.gridsphere.provider.portlet.jsr;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.portlet.jsrimpl.*;
+import org.gridsphere.portlet.impl.*;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.User;
 import org.gridsphere.portletcontainer.PortletStatus;

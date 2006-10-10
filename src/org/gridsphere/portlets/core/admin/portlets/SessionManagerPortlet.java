@@ -3,7 +3,7 @@
 package org.gridsphere.portlets.core.admin.portlets;
 
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portletcontainer.impl.PortletSessionManager;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;

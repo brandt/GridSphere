@@ -6,7 +6,7 @@ package org.gridsphere.provider.portletui.tags;
 
 import org.gridsphere.layout.PortletFrame;
 import org.gridsphere.layout.PortletFrameRegistry;
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 

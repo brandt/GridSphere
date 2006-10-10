@@ -4,7 +4,7 @@
  */
 package org.gridsphere.layout;
 
-import org.gridsphere.portlet.jsrimpl.StoredPortletResponseImpl;
+import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.portlet.PortletRequest;

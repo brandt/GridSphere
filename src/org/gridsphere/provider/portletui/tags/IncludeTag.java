@@ -2,7 +2,7 @@ package org.gridsphere.provider.portletui.tags;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.portlet.jsrimpl.StoredPortletResponseImpl;
+import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridsphere.provider.portletui.beans.IncludeBean;
 
 import javax.servlet.RequestDispatcher;

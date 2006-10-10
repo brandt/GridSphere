@@ -11,8 +11,8 @@ import org.gridsphere.layout.PortletTab;
 import org.gridsphere.layout.PortletTabbedPane;
 import org.gridsphere.layout.view.BaseRender;
 import org.gridsphere.layout.view.TabbedPaneView;
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
-import org.gridsphere.portlet.jsrimpl.StoredPortletResponseImpl;
+import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.portlet.*;

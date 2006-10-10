@@ -9,7 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.gridsphere.layout.event.PortletComponentEvent;
 import org.gridsphere.portletcontainer.Client;
 import org.gridsphere.portlet.DefaultPortletAction;
-import org.gridsphere.portlet.jsrimpl.*;
+import org.gridsphere.portlet.impl.*;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.portlet.*;

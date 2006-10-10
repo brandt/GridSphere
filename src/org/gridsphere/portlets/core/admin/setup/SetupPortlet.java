@@ -6,7 +6,7 @@ package org.gridsphere.portlets.core.admin.setup;
 
 import org.gridsphere.layout.PortletPageFactory;
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.services.core.portal.PortalConfigService;

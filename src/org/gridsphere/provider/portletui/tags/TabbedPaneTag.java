@@ -4,8 +4,8 @@
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
-import org.gridsphere.portlet.jsrimpl.StoredPortletResponseImpl;
+import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridsphere.provider.portletui.beans.TabBean;
 
 import javax.portlet.PortletURL;

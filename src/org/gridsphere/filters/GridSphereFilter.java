@@ -26,7 +26,7 @@ package org.gridsphere.filters;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gridsphere.layout.PortletLayoutEngine;
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.services.core.registry.PortletManagerService;
 

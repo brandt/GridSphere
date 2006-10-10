@@ -4,7 +4,7 @@
 package org.gridsphere.services.core.security.password.impl;
 
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.jsrimpl.SportletUserImpl;
+import org.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridsphere.services.core.security.password.PasswordEditor;
 
 import java.util.Date;

@@ -1,7 +1,7 @@
 package org.gridsphere.provider.portlet.jsr.impl;
 
 import org.apache.portals.bridges.common.ServletContextProvider;
-import org.gridsphere.portlet.jsrimpl.PortletContextImpl;
+import org.gridsphere.portlet.impl.PortletContextImpl;
 
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletRequest;

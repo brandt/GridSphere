@@ -5,9 +5,9 @@
 package org.gridsphere.layout;
 
 import org.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridsphere.portlet.jsrimpl.PortletContextImpl;
-import org.gridsphere.portlet.jsrimpl.StoredPortletResponseImpl;
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.PortletContextImpl;
+import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.services.core.jcr.JCRService;
 import org.gridsphere.services.core.jcr.JCRNode;

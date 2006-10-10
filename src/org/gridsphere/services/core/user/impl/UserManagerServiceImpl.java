@@ -7,7 +7,7 @@ package org.gridsphere.services.core.user.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.jsrimpl.SportletUserImpl;
+import org.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;

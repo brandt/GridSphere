@@ -6,7 +6,7 @@ package org.gridsphere.services.core.security.group.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.jsrimpl.SportletUserImpl;
+import org.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridsphere.services.core.security.group.PortletGroup;
 import org.gridsphere.services.core.security.role.PortletRole;
 

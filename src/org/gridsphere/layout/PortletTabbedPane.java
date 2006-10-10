@@ -10,7 +10,7 @@ import org.gridsphere.layout.event.PortletComponentEvent;
 import org.gridsphere.layout.event.PortletTabEvent;
 import org.gridsphere.layout.event.PortletTabListener;
 import org.gridsphere.layout.view.TabbedPaneView;
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 

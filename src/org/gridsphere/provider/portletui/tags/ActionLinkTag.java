@@ -4,7 +4,7 @@
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.ActionLinkBean;
 import org.gridsphere.provider.portletui.beans.ImageBean;
 import org.gridsphere.provider.portletui.beans.MessageStyle;

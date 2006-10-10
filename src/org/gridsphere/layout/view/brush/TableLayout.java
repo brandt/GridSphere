@@ -11,8 +11,8 @@ import org.gridsphere.layout.PortletRowLayout;
 import org.gridsphere.layout.PortletTableLayout;
 import org.gridsphere.layout.view.BaseRender;
 import org.gridsphere.layout.view.TableLayoutView;
-import org.gridsphere.portlet.jsrimpl.PortletURLImpl;
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.PortletURLImpl;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.portlet.PortletRequest;

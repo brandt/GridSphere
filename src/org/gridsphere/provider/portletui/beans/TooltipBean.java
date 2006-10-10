@@ -1,6 +1,6 @@
 package org.gridsphere.provider.portletui.beans;
 
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.RenderResponse;
 

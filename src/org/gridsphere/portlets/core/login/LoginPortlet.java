@@ -6,7 +6,7 @@ package org.gridsphere.portlets.core.login;
 
 import com.octo.captcha.service.CaptchaServiceException;
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.jsrimpl.PortletURLImpl;
+import org.gridsphere.portlet.impl.PortletURLImpl;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;

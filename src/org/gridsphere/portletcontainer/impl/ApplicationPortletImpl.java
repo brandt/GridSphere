@@ -6,8 +6,8 @@ package org.gridsphere.portletcontainer.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.portlet.jsrimpl.PortalContextImpl;
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.PortalContextImpl;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.*;
 import org.gridsphere.portletcontainer.impl.descriptor.*;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;

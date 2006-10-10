@@ -8,7 +8,7 @@ import org.gridsphere.layout.PortletComponent;
 import org.gridsphere.layout.PortletTitleBar;
 import org.gridsphere.layout.event.ComponentAction;
 import org.gridsphere.layout.event.PortletTitleBarEvent;
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.portlet.ActionRequest;

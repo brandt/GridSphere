@@ -8,7 +8,7 @@ import org.gridsphere.layout.PortletComponent;
 import org.gridsphere.layout.PortletPage;
 import org.gridsphere.layout.view.BaseRender;
 import org.gridsphere.layout.view.Render;
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.portlet.PortletRequest;

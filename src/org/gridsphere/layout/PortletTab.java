@@ -6,7 +6,7 @@ package org.gridsphere.layout;
 
 import org.gridsphere.layout.event.PortletTabEvent;
 import org.gridsphere.layout.event.impl.PortletTabEventImpl;
-import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.spi.impl.descriptor.Description;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
