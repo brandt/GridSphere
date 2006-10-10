@@ -351,7 +351,49 @@
         <supported-locale>zh</supported-locale>
         <resource-bundle>PortletApplicationManager.Portlet</resource-bundle>
     </portlet>
+    <portlet>
+        <!-- place portlet description here -->
+        <description xml:lang="ar">يمكن المستخدم لتعديل التنسيق</description>
+        <description xml:lang="cs">Poskytuje uživatelem nastavitelné umístění portletů</description>
+        <description xml:lang="de">Ermöglicht die benutzerspezifische Anpassung der Darstellung</description>
+        <description xml:lang="en">Provides administrative layout customization</description>
+        <description xml:lang="es">Proporciona la personalizacion del esquema administrativo</description>
+        <description xml:lang="fr">Permet a l'usager de modifier le layout</description>
+        <description xml:lang="hr">Portlet omogućava administriranje izgleda</description>
+        <description xml:lang="hu">Lehetővé teszi a portletekből egyéni weblapok felépítését</description>
+        <description xml:lang="it">Consente la personalizzazione del layout utente</description>
+        <description xml:lang="ja">管理上のレイアウトカスタマイズ</description>
+        <description xml:lang="nl">Gebruikers kunnen hun eigen layout bepalen</description>
+        <description xml:lang="pl">Udostępnia użytkownikowi dostosowywanie układów graficznych</description>
+        <description xml:lang="zh">提供了用户版面定制化功能</description>
 
+        <!-- place unique portlet name here -->
+        <portlet-name>Layout Manager</portlet-name>
+        <display-name xml:lang="en">Layout Manager</display-name>
+
+        <!-- place your portlet class name here -->
+        <portlet-class>org.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <!-- place supported modes here -->
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>help</portlet-mode>
+        </supports>
+        <supported-locale>ar</supported-locale>
+        <supported-locale>cs</supported-locale>
+        <supported-locale>de</supported-locale>
+        <supported-locale>en</supported-locale>
+        <supported-locale>es</supported-locale>
+        <supported-locale>fr</supported-locale>
+        <supported-locale>hr</supported-locale>
+        <supported-locale>hu</supported-locale>
+        <supported-locale>it</supported-locale>
+        <supported-locale>ja</supported-locale>
+        <supported-locale>nl</supported-locale>
+        <supported-locale>pl</supported-locale>
+        <supported-locale>zh</supported-locale>
+        <resource-bundle>LayoutManager.Portlet</resource-bundle>
+    </portlet>
 
     <custom-portlet-mode>
         <description xml:lang="en">Pre-defined custom portlet mode CONFIGURE</description>

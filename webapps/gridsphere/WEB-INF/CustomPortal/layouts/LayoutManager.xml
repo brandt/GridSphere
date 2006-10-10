@@ -25,7 +25,7 @@
                         <row-layout>
                             <column-layout width="100%">
                                 <portlet-frame label="layoutmanager">
-                                    <portlet-class>org.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet.1</portlet-class>
+                                    <portlet-class>org.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                         </row-layout>

@@ -45,7 +45,7 @@
             </portlet-tabbed-pane>
         </portlet-tab>
         <portlet-tab label="login" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/login/loginnav.jsp"/>
-        <portlet-tab label="login" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/login/registernav.jsp"/>
+        <portlet-tab label="register" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/login/registernav.jsp"/>
     </portlet-tabbed-pane>
 
     <!-- Footer components (if any) -->

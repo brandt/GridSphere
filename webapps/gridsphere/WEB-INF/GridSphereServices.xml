@@ -25,6 +25,13 @@
     </service>
 
     <service>
+        <name>Tomcat Manager Service</name>
+        <description lang="en">Provides Portlet Reloading Capabilities uisng Tomcat manager webapp</description>
+        <interface>org.gridsphere.services.core.tomcat.TomcatManagerService</interface>
+        <implementation>org.gridsphere.services.core.tomcat.impl.TomcatManagerServiceImpl</implementation>
+    </service>
+
+    <service>
         <name>RSS Service</name>
         <description lang="en">Provides RSS Service</description>
         <interface>org.gridsphere.services.core.rss.RssService</interface>
