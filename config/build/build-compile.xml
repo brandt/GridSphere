@@ -30,16 +30,14 @@ Build include file for the GridSphere Portal source code, see build.xml
         <filter token="GRIDSPHERE_RELEASE" value="${gridsphere.name}"/>
         <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
         <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
-
         <copy overwrite="true" file="config/portlet.properties"
-              todir="${build.classes}/org/gridsphere/portlet/jsrimpl/"
+              todir="${build.classes}/org/gridsphere/portlet/impl/"
               filtering="true"/>
         <copy file="config/mapping/portlet-mapping.xml"
               todir="${build.classes}/org/gridsphere/portletcontainer/impl/descriptor"/>
         <jar jarfile="${build.lib}/gridsphere-portal-${gridsphere.version}.jar" basedir="${build.classes}" defaultexcludes="yes">
             <include name="org/gridsphere/portletcontainer/impl/**"/>
-            <include name="org/gridsphere/portletcontainer/jsrimpl/**"/>
-            <include name="org/gridsphere/portlet/jsrimpl/**"/>
+            <include name="org/gridsphere/portlet/impl/**"/>
         </jar>
     </target>
 
@@ -100,7 +98,6 @@ Build include file for the GridSphere Portal source code, see build.xml
             <include name="gridsphere/**"/>
             <!-- GS portlet API -->
             <include name="org/gridsphere/portlet/**"/>
-            <exclude name="**/jsrimpl/**"/>
             <exclude name="**/impl/**"/>
         </jar>
     </target>
