@@ -23,20 +23,16 @@
 
 package org.gridsphere.filters;
 
-import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.portlet.impl.SportletRequest;
-import org.gridsphere.portlet.impl.SportletResponse;
-import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.services.core.registry.PortletManagerService;
-import org.gridsphere.layout.PortletLayoutEngine;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.gridsphere.layout.PortletLayoutEngine;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.services.core.registry.PortletManagerService;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
