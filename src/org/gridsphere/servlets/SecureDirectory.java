@@ -5,7 +5,7 @@
 package org.gridsphere.servlets;
 
 import org.apache.oro.text.perl.Perl5Util;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
