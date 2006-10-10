@@ -1,10 +1,10 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: BaseBeanTag.java 4688 2006-03-29 06:13:00Z novotny $
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.TagBean;
 
 import javax.servlet.jsp.PageContext;
@@ -104,7 +104,7 @@ public abstract class BaseBeanTag extends BodyTagSupport {
     protected boolean isJSR() {
         // simply check for existence of jsr portlet objects
         //Object o = pageContext.getRequest().getAttribute(SportletProperties.RENDER_REQUEST);
-        Object o = pageContext.getAttribute("renderRequest");
+        Object o = pageContext.getAttribute("renderRequest", PageContext.REQUEST_SCOPE);
         return (o != null);
     }
 }

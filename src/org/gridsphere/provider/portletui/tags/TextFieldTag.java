@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id: TextFieldTag.java 5032 2006-08-17 18:15:06Z novotny $
  */
@@ -11,7 +11,6 @@ import org.gridsphere.provider.portletui.beans.ValidatorBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.Tag;
 
 /**
  * A <code>TextFieldTag</code> represents a text field element
@@ -111,31 +110,26 @@ public class TextFieldTag extends InputTag {
         if (cssClass != null) textFieldBean.addCssClass(cssClass);
         if (cssStyle != null) textFieldBean.addCssStyle(cssStyle);
         //debug();
-        Tag parent = getParent();
         JspWriter out;
-        if (parent instanceof DataGridColumnTag) {
-            DataGridColumnTag dataGridColumnTag = (DataGridColumnTag) parent;
-            textFieldBean.setBeanIdSource(this.beanIdSource);
-            dataGridColumnTag.addTagBean(this.textFieldBean);
-        } else {
-            try {
-                out = pageContext.getOut();
-                out.print(textFieldBean.toStartString());
-                // print out validators, represented as hidden fields
-                if (!validatorBeans.isEmpty()) {
-                    ValidatorBean validatorBean = null;
-                    for (int i = 0; i < validatorBeans.size(); i++) {
-                        validatorBean = (ValidatorBean)validatorBeans.get(i);
-                        validatorBean.setName(textFieldBean.getEncodedName());
-                        out.print(validatorBean.toStartString());
-                    }
+
+        try {
+            out = pageContext.getOut();
+            out.print(textFieldBean.toStartString());
+            // print out validators, represented as hidden fields
+            if (!validatorBeans.isEmpty()) {
+                ValidatorBean validatorBean = null;
+                for (int i = 0; i < validatorBeans.size(); i++) {
+                    validatorBean = (ValidatorBean)validatorBeans.get(i);
+                    validatorBean.setName(textFieldBean.getEncodedName());
+                    out.print(validatorBean.toStartString());
                 }
-                validatorBeans.clear();
-                cssClass = null;
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
             }
+            validatorBeans.clear();
+            cssClass = null;
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
+
         return EVAL_PAGE;
     }
 

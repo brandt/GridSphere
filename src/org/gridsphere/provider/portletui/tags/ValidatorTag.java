@@ -1,15 +1,9 @@
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.provider.portletui.beans.TextBean;
-import org.gridsphere.provider.portletui.beans.MessageStyle;
-import org.gridsphere.provider.portletui.beans.BaseComponentBean;
 import org.gridsphere.provider.portletui.beans.ValidatorBean;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
-import java.util.Locale;
 
 /**
  * A <code>TextTag</code> represents text to be displayed

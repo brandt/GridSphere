@@ -1,24 +1,25 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: TabbedPaneTag.java 4666 2006-03-27 17:47:56Z novotny $
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.StoredPortletResponseImpl;
 import org.gridsphere.provider.portletui.beans.TabBean;
 
-import javax.servlet.ServletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.portlet.RenderResponse;
-import javax.portlet.PortletURL;
-import javax.portlet.RenderRequest;
-import java.util.List;
-import java.util.ArrayList;
+import javax.servlet.jsp.PageContext;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A <code>TabbedPaneTag</code> represents a tabbed pane</code>
@@ -56,8 +57,8 @@ public class TabbedPaneTag extends BaseComponentTag {
         if (tabBeans.isEmpty()) return EVAL_PAGE;
 
         try {
-            RenderResponse res = (RenderResponse)pageContext.getAttribute("renderResponse");
-            RenderRequest req = (RenderRequest)pageContext.getAttribute("renderRequest");
+
+            RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
 
             currentTabLabel = req.getParameter(TAB_LABEL_PARAM);
             if (currentTabLabel == null) {
@@ -78,8 +79,8 @@ public class TabbedPaneTag extends BaseComponentTag {
                 currentTabLabel = ((TabBean)tabBeans.get(0)).getLabel();
             }
 
-            //PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
-
+            RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+                    
             // print out all tabs
             for (int i = 0; i < tabBeans.size(); i++) {
                 TabBean tabBean = (TabBean) tabBeans.get(i);
@@ -112,7 +113,8 @@ public class TabbedPaneTag extends BaseComponentTag {
             ServletResponse sres = pageContext.getResponse();
             if (res instanceof HttpServletResponse) {
                 HttpServletResponse hres = (HttpServletResponse)sres;
-                StoredPortletResponseImpl resWrapper = new StoredPortletResponseImpl(hres, writer);
+                HttpServletRequest hreq = (HttpServletRequest)pageContext.getRequest();
+                StoredPortletResponseImpl resWrapper = new StoredPortletResponseImpl(hreq, hres, writer);
                 pageContext.getServletContext().getRequestDispatcher(currentPage).include(pageContext.getRequest(), resWrapper);
                 out.println(writer.getBuffer());
             }

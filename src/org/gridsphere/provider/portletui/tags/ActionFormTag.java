@@ -1,11 +1,11 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: ActionFormTag.java 4883 2006-06-26 23:52:13Z novotny $
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.jsrimpl.RenderResponseImpl;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 
 import javax.portlet.RenderResponse;
 import javax.servlet.jsp.JspException;

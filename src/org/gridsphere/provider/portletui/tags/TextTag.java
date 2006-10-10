@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id: TextTag.java 4883 2006-06-26 23:52:13Z novotny $
  */
@@ -13,7 +13,6 @@ import org.gridsphere.provider.portletui.beans.TextBean;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.Tag;
 import java.util.Locale;
 
 /**
@@ -157,23 +156,18 @@ public class TextTag extends BaseComponentTag {
             textBean.setValue(this.getBodyContent().getString());
         }
 
-        Tag parent = getParent();
-        if (parent instanceof DataGridColumnTag) {
-            DataGridColumnTag dataGridColumnTag = (DataGridColumnTag) parent;
-            dataGridColumnTag.addTagBean(this.textBean);
-        } else {
-            if (var == null) {
-                try {
-                    JspWriter out = pageContext.getOut();
-                    out.print(textBean.toEndString());
-                } catch (Exception e) {
-                    throw new JspException(e.getMessage());
-                }
-            } else {
-                if (key != null) value = getLocalizedText(key);
-                pageContext.setAttribute(var, value, PageContext.PAGE_SCOPE);
+        if (var == null) {
+            try {
+                JspWriter out = pageContext.getOut();
+                out.print(textBean.toEndString());
+            } catch (Exception e) {
+                throw new JspException(e.getMessage());
             }
+        } else {
+            if (key != null) value = getLocalizedText(key);
+            pageContext.setAttribute(var, value, PageContext.PAGE_SCOPE);
         }
+
         return EVAL_PAGE;
     }
 

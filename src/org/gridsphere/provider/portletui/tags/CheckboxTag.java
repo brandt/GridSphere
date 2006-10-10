@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id: CheckboxTag.java 4666 2006-03-27 17:47:56Z novotny $
  */
@@ -9,7 +9,6 @@ import org.gridsphere.provider.portletui.beans.CheckBoxBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.Tag;
 
 /**
  * A <code>CheckBoxTag</code> provides a checkbox element
@@ -64,19 +63,12 @@ public class CheckboxTag extends BaseComponentTag {
         }
         if (selectSet) checkbox.setSelected(selected);
         if (onClick != null) checkbox.setOnClick(onClick);
-       
-        Tag parent = getParent();
-        if (parent instanceof DataGridColumnTag) {
-            DataGridColumnTag dataGridColumnTag = (DataGridColumnTag) parent;
-            dataGridColumnTag.addTagBean(this.checkbox);
-        } else {
 
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(checkbox.toStartString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
-            }
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(checkbox.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
         return SKIP_BODY;
     }

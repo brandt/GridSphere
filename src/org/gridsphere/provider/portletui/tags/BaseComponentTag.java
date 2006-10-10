@@ -1,11 +1,10 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: BaseComponentTag.java 4883 2006-06-26 23:52:13Z novotny $
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.BaseComponentBean;
 
 import javax.portlet.RenderRequest;
@@ -246,13 +245,8 @@ public abstract class BaseComponentTag extends BaseBeanTag {
 
     protected Locale getLocale() {
         Locale locale = Locale.ENGLISH;
-        PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
-        if (req != null) {
-            locale = req.getLocale();
-        } else {
-            RenderRequest renderReq = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
-            if (renderReq != null) locale = renderReq.getLocale();
-        }
+        RenderRequest renderReq = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
+        if (renderReq != null) locale = renderReq.getLocale();
         return locale;
     }
 

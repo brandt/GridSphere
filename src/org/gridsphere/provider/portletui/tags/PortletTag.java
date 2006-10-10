@@ -1,18 +1,20 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletTag.java 4992 2006-08-04 10:03:27Z novotny $
  */
 package org.gridsphere.provider.portletui.tags;
 
 import org.gridsphere.layout.PortletFrame;
 import org.gridsphere.layout.PortletFrameRegistry;
-import org.gridsphere.portlet.PortletContext;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 
+import javax.portlet.PortletContext;
+import javax.portlet.PortletSession;
+import javax.portlet.RenderRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
@@ -119,10 +121,11 @@ public class PortletTag extends BodyTagSupport {
 
     public int doStartTag() throws JspException {
         PortletFrameRegistry registry = PortletFrameRegistry.getInstance();
-        PortletContext context = (PortletContext)pageContext.getAttribute("portletContext");
-        PortletRequest request = (PortletRequest)pageContext.getAttribute("portletRequest");
-        PortletResponse response = (PortletResponse)pageContext.getAttribute("portletResponse");
-        GridSphereEvent event = new GridSphereEventImpl(context, request, response);
+        RenderRequest request = (RenderRequest)pageContext.getAttribute("renderRequest");
+        PortletContext ctx = (PortletContext)pageContext.getAttribute("portletContext");
+        GridSphereEvent event = new GridSphereEventImpl(ctx,
+                (HttpServletRequest)pageContext.getRequest(),
+                (HttpServletResponse)pageContext.getResponse());
       
         // role check
         if ((!role.equals("")) && !request.isUserInRole(role)) return SKIP_BODY;
@@ -131,8 +134,8 @@ public class PortletTag extends BodyTagSupport {
         frame.setInnerPadding(innerPadding);
         frame.setOuterPadding(outerPadding);
         frame.setTransparent(transparent);
-        request.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, theme);
-        request.getPortletSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, renderKit);
+        request.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, theme, PortletSession.APPLICATION_SCOPE);
+        request.getPortletSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, renderKit, PortletSession.APPLICATION_SCOPE);
         frame.setRequiredRole(role);
         JspWriter out;
         try {

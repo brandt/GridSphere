@@ -1,10 +1,10 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: ActionLinkTag.java 4915 2006-07-10 20:51:49Z novotny $
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.ActionLinkBean;
 import org.gridsphere.provider.portletui.beans.ImageBean;
 import org.gridsphere.provider.portletui.beans.MessageStyle;
@@ -173,18 +173,11 @@ public class ActionLinkTag extends ActionTag {
             actionlink.setValue(imageBean.toStartString() + val);
         }
 
-        Tag parent = getParent();
-        if (parent instanceof DataGridColumnTag) {
-            DataGridColumnTag dataGridColumnTag = (DataGridColumnTag) parent;
-            dataGridColumnTag.addTagBean(this.actionlink);
-        } else {
-
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(actionlink.toEndString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
-            }
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(actionlink.toEndString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
         return EVAL_PAGE;
     }

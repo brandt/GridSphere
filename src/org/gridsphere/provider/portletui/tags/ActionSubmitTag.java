@@ -1,10 +1,10 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: ActionSubmitTag.java 4915 2006-07-10 20:51:49Z novotny $
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.ActionParamBean;
 import org.gridsphere.provider.portletui.beans.ActionSubmitBean;
 

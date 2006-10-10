@@ -1,8 +1,6 @@
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.provider.portletui.beans.TextAreaBean;
 import org.gridsphere.provider.portletui.beans.TextEditorBean;
-import org.gridsphere.provider.portletui.beans.ActionLinkBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;

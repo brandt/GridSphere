@@ -1,12 +1,14 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: HasRoleTag.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.PortletRequest;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 
+import javax.portlet.RenderRequest;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagSupport;
 
 /**
@@ -35,7 +37,7 @@ public class HasRoleTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
-        PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
+        RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
         if ((req.isUserInRole(role))) {
             return EVAL_BODY_INCLUDE;
         }

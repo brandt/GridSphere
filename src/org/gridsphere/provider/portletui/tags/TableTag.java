@@ -1,12 +1,9 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: TableTag.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.PortletURI;
 import org.gridsphere.provider.portletui.beans.TableBean;
 import org.gridsphere.provider.portletui.model.DefaultTableModel;
 
@@ -298,8 +295,7 @@ public class TableTag extends BaseComponentTag {
 
         super.doStartTag();
 
-        boolean includeBody = true;
-
+   
         // get any parameter values if data is divided
 
 
@@ -370,7 +366,7 @@ public class TableTag extends BaseComponentTag {
 
     public int doEndTag() throws JspException {
         tableBean.setRowCount(rowCount);
-        if (isJSR()) {
+
             RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse");
             RenderRequest req = (RenderRequest) pageContext.getAttribute("renderRequest");
             PortletURL url = res.createRenderURL();
@@ -379,15 +375,8 @@ public class TableTag extends BaseComponentTag {
             } catch (PortletModeException e) {
                 throw new JspException(e);
             }
-            tableBean.setJSR(true);
             tableBean.setURIString(url.toString());
-        } else {
-            PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
-            PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
-            PortletURI uri = res.createURI((org.gridsphere.portlet.Mode)req.getMode());
-            tableBean.setJSR(false);
-            tableBean.setURIString(uri.toString());
-        }
+
         try {
             JspWriter out = pageContext.getOut();
             out.print(tableBean.toEndString());

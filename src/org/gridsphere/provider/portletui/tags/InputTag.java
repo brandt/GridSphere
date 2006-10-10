@@ -3,8 +3,8 @@ package org.gridsphere.provider.portletui.tags;
 import org.gridsphere.provider.portletui.beans.ValidatorBean;
 
 import javax.servlet.jsp.JspException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A <code>TextFieldTag</code> represents a text field element

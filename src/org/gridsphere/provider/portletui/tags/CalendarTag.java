@@ -1,8 +1,6 @@
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.CalendarBean;
 
 import javax.servlet.jsp.JspException;
@@ -12,8 +10,6 @@ import javax.servlet.jsp.JspWriter;
  * A <code>TextFieldTag</code> represents a text field element
  */
 public class CalendarTag extends BaseComponentTag {
-
-    private transient static PortletLog log = SportletLog.getInstance(CalendarTag.class);
 
     protected CalendarBean calendarBean = null;
     protected int size = 0;

@@ -1,10 +1,10 @@
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.provider.portletui.beans.TooltipBean;
 
+import javax.portlet.RenderResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.portlet.RenderResponse;
 
 /**
  * The <code>TableRowTag</code> represents a table row element that is conatined within a <code>TableTag</code>
@@ -58,15 +58,13 @@ public class TooltipTag extends BaseComponentTag {
         if (key != null) value = getLocalizedText(key);
         try {
             out = pageContext.getOut();
-            RenderResponse renderResponse = (RenderResponse)pageContext.getAttribute("renderResponse");
-            String contextPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.deploy");
-            renderResponse.setProperty("CSS_HREF", contextPath + "/css/yahoo/container.css");
-            renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/dom.js");
-            renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/event.js");
-            renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/container.js");
-            out.println("<script type=\"text/javascript\">");
-            out.println("var " + id + " = new YAHOO.widget.Tooltip(\"" + id + "\", { context:\"" + name + "\", text:\"" + value + "\" } );");
-            out.println("</script>");
+            TooltipBean tooltip = new TooltipBean();
+            RenderResponse res = (RenderResponse)pageContext.getAttribute("renderResponse");
+            tooltip.setRenderResponse(res);
+            tooltip.setId(id);
+            tooltip.setName(name);
+            tooltip.setValue(value);
+            out.print(tooltip.toStartString());
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }

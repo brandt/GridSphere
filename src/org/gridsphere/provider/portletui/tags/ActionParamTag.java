@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: ActionParamTag.java 4666 2006-03-27 17:47:56Z novotny $
  */
 package org.gridsphere.provider.portletui.tags;

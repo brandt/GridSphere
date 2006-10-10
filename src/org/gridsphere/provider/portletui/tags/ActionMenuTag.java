@@ -1,8 +1,6 @@
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.PortletResponse;
-import org.gridsphere.portlet.PortletURI;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.ActionMenuBean;
 
 import javax.portlet.*;
@@ -129,17 +127,11 @@ public class ActionMenuTag extends ContainerTag {
         actionMenuBean.setCollapsed(this.collapsed);
         // if using JSR then create render link
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-        PortletURI uri = null;
-        if (res == null) {
-            PortletResponse gsres = (PortletResponse) pageContext.getAttribute("portletResponse");
-            if (gsres != null) {
-                uri = gsres.createURI();
-            }
-            actionMenuBean.setPortletURI(uri);
+        PortletURL uri = null;
 
-        } else {
-//            uri = new PortletJSRURIImpl(createJSRActionURI(res);
-        }
+            uri = res.createActionURL();
+
+        actionMenuBean.setPortletURL(uri);
 //        PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
 //        PortletURI uri = res.createURI();
         // locale stuff

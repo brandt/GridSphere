@@ -1,13 +1,12 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: ActionTag.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.*;
-import org.gridsphere.portlet.PortletResponse;
+import org.gridsphere.portlet.DefaultPortletAction;
 import org.gridsphere.portlet.jsrimpl.PortletURLImpl;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.ActionParamBean;
 import org.gridsphere.provider.portletui.beans.ImageBean;
 
@@ -17,9 +16,9 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagData;
 import javax.servlet.jsp.tagext.TagExtraInfo;
 import javax.servlet.jsp.tagext.VariableInfo;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * The abstract <code>ActionTag</code> is used by other Action tags to contain <code>DefaultPortletAction</code>s
@@ -310,55 +309,11 @@ public abstract class ActionTag extends BaseComponentTag {
     }
 
     public String createActionURI() throws JspException {
-        if (isJSR()) {
+        //if (isJSR()) {
             RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
             return createJSRActionURI(res.createActionURL());
-        }
-        return createGSActionURI();
-    }
-
-    public String createGSActionURI() throws JspException {
-        // Builds a URI containing the actin and associated params
-        PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
-        PortletURI actionURI = null;
-        // action is a required attribute except for FormTag
-        if (label != null) {
-            actionURI = res.createURI(label, isSecure);
-        } else if (windowState != null) {
-            PortletWindow.State state = PortletWindow.State.toState(windowState);
-            actionURI = res.createURI(state);
-        } else if (portletMode != null) {
-            Mode mode = Mode.toMode(portletMode);
-            actionURI = res.createURI(mode);
-        } else {
-            actionURI = res.createURI(isSecure);
-        }
-
-        if (action != null) {
-            String compId = (String) pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
-            if (compId == null) {
-                portletAction = new DefaultPortletAction(action);
-            } else {
-                portletAction = new DefaultPortletAction(compId + "%" + action);
-            }
-
-            Iterator it = paramBeans.iterator();
-
-            if (!paramBeans.isEmpty()) {
-                String id = createUniquePrefix(2);
-
-                portletAction.addParameter(SportletProperties.PREFIX, id);
-
-                while (it.hasNext()) {
-                    ActionParamBean pbean = (ActionParamBean) it.next();
-                    portletAction.addParameter(id + "_" + pbean.getName(), pbean.getValue());
-                }
-            }
-            actionURI.addAction(portletAction);
-        }
-
-        return actionURI.toString();
-
+        //}
+        //return createGSActionURI();
     }
 
     public void release() {

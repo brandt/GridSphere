@@ -1,14 +1,15 @@
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.StoredPortletResponseImpl;
 import org.gridsphere.provider.portletui.beans.ActionComponentBean;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 
@@ -21,7 +22,7 @@ import javax.servlet.jsp.PageContext;
 
 public class ActionComponentTag extends IncludeTag {
 
-    private static PortletLog log = SportletLog.getInstance(ActionComponentTag.class);
+    private static Log log = LogFactory.getLog(ActionComponentTag.class);
     private String activeCompId = "";
 
     protected String getActiveComponentId() {
@@ -68,7 +69,7 @@ public class ActionComponentTag extends IncludeTag {
             // Or else this include won't be contained within the parent content
             // but either before or after it.
             //rd.include(request, new ServletResponseWrapperInclude(response, pageContext.getOut()));
-            rd.include(request, new StoredPortletResponseImpl((HttpServletResponse) response, pageContext.getOut()));
+            rd.include(request, new StoredPortletResponseImpl((HttpServletRequest)request, (HttpServletResponse) response, pageContext.getOut()));
             //rd.include(pageContext.getRequest(), pageContext.getResponse());
         } catch (Exception e) {
             log.error("Unable to include page ", e);
