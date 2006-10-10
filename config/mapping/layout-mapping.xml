@@ -14,9 +14,13 @@
 
     <class name="org.gridsphere.layout.PortletPage" extends="org.gridsphere.layout.BasePortletComponent">
         <map-to xml="page-layout"/>
-        <field name="PortletTabbedPane" type="org.gridsphere.layout.PortletTabbedPane">
+        <field name="PortletComponent" type="org.gridsphere.layout.PortletComponent">
+            <bind-xml auto-naming="deriveByClass"/>
+        </field>
+    <!--    <field name="PortletTabbedPane" type="org.gridsphere.layout.PortletTabbedPane">
             <bind-xml name="portlet-tabbed-pane"/>
         </field>
+        -->
         <field name="PortletHeader" type="org.gridsphere.layout.PortletContainer">
             <bind-xml name="portlet-header"/>
         </field>
@@ -92,6 +96,10 @@
 
     <class name="org.gridsphere.layout.PortletColumnLayout" extends="org.gridsphere.layout.PortletFrameLayout">
         <map-to xml="column-layout"/>
+    </class>
+
+    <class name="org.gridsphere.layout.PortletBar" extends="org.gridsphere.layout.BasePortletComponent">
+        <map-to xml="bar"/>
     </class>
 
     <class name="org.gridsphere.layout.PortletFrame" extends="org.gridsphere.layout.BasePortletComponent">
