@@ -115,7 +115,6 @@
         <description lang="en">Java Content Repository Service</description>
         <interface>org.gridsphere.services.core.jcr.JCRService</interface>
         <implementation>org.gridsphere.services.core.jcr.impl.JCRServiceImpl</implementation>
-        <load-on-startup>1</load-on-startup>
     </service>
 
     <service>
