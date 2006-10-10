@@ -1,10 +1,9 @@
 package org.gridsphere.services.core.rss;
 
-import org.gridsphere.portlet.service.PortletService;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
+import org.gridsphere.portlet.service.PortletService;
 
-import java.net.MalformedURLException;
 import java.io.IOException;
 
 /**

@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:kisg@mailbox.hu">Gergely Kis</a>
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortalConfigService.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.services.core.portal;

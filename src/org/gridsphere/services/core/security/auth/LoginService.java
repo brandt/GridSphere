@@ -1,13 +1,14 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: LoginService.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.services.core.security.auth;
 
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.PortletRequest;
 import org.gridsphere.portlet.service.PortletService;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
+
+import javax.portlet.ActionRequest;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public interface LoginService extends PortletService {
      * @throws org.gridsphere.services.core.security.auth.AuthorizationException
      *          If login unsuccessful
      */
-    public User login(PortletRequest req)
+    public User login(ActionRequest req)
             throws AuthenticationException, AuthorizationException;
 
     public void saveAuthModule(LoginAuthModule authModule);

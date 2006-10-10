@@ -4,14 +4,14 @@
  */
 package org.gridsphere.services.core.secdir.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.oro.text.perl.Perl5Util;
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.services.core.secdir.FileInfo;
-import org.gridsphere.services.core.secdir.SecureDirectoryService;
 import org.gridsphere.services.core.secdir.FileLocationID;
+import org.gridsphere.services.core.secdir.SecureDirectoryService;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -23,7 +23,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
     private final static int BUFFER_SIZE = 8 * 1024; //8 kB
     private static String secureDirPath;
     private static final String SECURE_SERVLET_MAPPING = "secure";
-    protected PortletLog log = SportletLog.getInstance(SecureDirectoryServiceImpl.class);
+    protected Log log = LogFactory.getLog(SecureDirectoryServiceImpl.class);
 
     public void init(PortletServiceConfig config) {
         if (!inited) {

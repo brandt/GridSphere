@@ -1,18 +1,17 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletRegistry.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.services.core.registry.impl;
 
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.services.core.registry.PortletRegistryService;
+import org.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridsphere.portletcontainer.PortletWebApplication;
+import org.gridsphere.services.core.registry.PortletRegistryService;
 
 import java.util.*;
 
@@ -23,7 +22,7 @@ import java.util.*;
 public class PortletRegistryServiceImpl implements PortletRegistryService, PortletServiceProvider {
 
 
-    private PortletLog log = SportletLog.getInstance(PortletRegistryServiceImpl.class);
+    private Log log = LogFactory.getLog(PortletRegistryServiceImpl.class);
 
     private static Map allApplicationPortlets = new Hashtable();
     private static Map webApps = new Hashtable();
@@ -162,13 +161,6 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
             ApplicationPortlet appPortlet = (ApplicationPortlet) allApplicationPortlets.get(appID);
             log.debug("\tApplication portlet : " + appPortlet.getApplicationPortletID() + "\n");
             log.debug("\t" + appPortlet + "\n");
-            List concPortlets = appPortlet.getConcretePortlets();
-            Iterator concIt = concPortlets.iterator();
-            while (concIt.hasNext()) {
-                ConcretePortlet conc = (ConcretePortlet) concIt.next();
-                log.debug("\t\tConcrete portlet : " + conc.getConcretePortletID() + "\n");
-                log.debug("\t" + conc + "\n");
-            }
         }
 
 

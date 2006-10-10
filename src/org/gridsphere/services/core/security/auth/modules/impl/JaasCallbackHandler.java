@@ -3,23 +3,18 @@
  */
 package org.gridsphere.services.core.security.auth.modules.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import javax.security.auth.callback.*;
 import java.io.IOException;
-
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.NameCallback;
-import javax.security.auth.callback.PasswordCallback;
-import javax.security.auth.callback.UnsupportedCallbackException;
-
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
 
 public class JaasCallbackHandler implements CallbackHandler {
 
     protected String username = null;
     protected String password = null;
 
-    private PortletLog log = SportletLog.getInstance(JaasCallbackHandler.class);
+    private Log log = LogFactory.getLog(JaasCallbackHandler.class);
 
     public JaasCallbackHandler(String username, String password) {
         super();

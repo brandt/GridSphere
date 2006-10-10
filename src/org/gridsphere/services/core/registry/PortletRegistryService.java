@@ -1,14 +1,14 @@
 package org.gridsphere.services.core.registry;
 
+import org.gridsphere.portlet.service.PortletService;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.PortletWebApplication;
-import org.gridsphere.portlet.service.PortletService;
 
 import java.util.Collection;
 import java.util.List;
 
 /**
- * @author <a href="mailto:jnovotny@ucsd.edu">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id$
  */
 public interface PortletRegistryService extends PortletService {
@@ -23,9 +23,9 @@ public interface PortletRegistryService extends PortletService {
 
     public ApplicationPortlet getApplicationPortlet(String applicationPortletID);
 
-    public Collection getAllApplicationPortlets();
+    public Collection<ApplicationPortlet> getAllApplicationPortlets();
 
-    public List getApplicationPortlets(String webApplicationName);
+    public List<ApplicationPortlet> getApplicationPortlets(String webApplicationName);
 
     public String getApplicationPortletID(String concretePortletID);
 

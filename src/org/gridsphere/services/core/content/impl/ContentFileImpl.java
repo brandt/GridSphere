@@ -2,13 +2,13 @@ package org.gridsphere.services.core.content.impl;
 
 import org.gridsphere.services.core.content.ContentFile;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.BufferedReader;
 
 /**
- * @author <a href="mailto:jnovotny@ucsd.edu">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id$
  */
 public class ContentFileImpl implements ContentFile {

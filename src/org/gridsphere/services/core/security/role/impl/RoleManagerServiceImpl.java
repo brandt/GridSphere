@@ -4,26 +4,28 @@
  */
 package org.gridsphere.services.core.security.role.impl;
 
-import org.gridsphere.portlet.*;
-import org.gridsphere.portlet.impl.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portlet.User;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.services.core.security.role.RoleManagerService;
-import org.gridsphere.services.core.security.role.PortletRole;
+import org.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
-import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.QueryFilter;
+import org.gridsphere.services.core.security.role.PortletRole;
+import org.gridsphere.services.core.security.role.RoleManagerService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManagerService {
 
-    private static PortletLog log = SportletLog.getInstance(RoleManagerServiceImpl.class);
+    private Log log = LogFactory.getLog(RoleManagerServiceImpl.class);
 
-    private static PersistenceManagerRdbms pm = null;
+    private PersistenceManagerRdbms pm = null;
 
     private String jdoUserRoles = UserRole.class.getName();
 

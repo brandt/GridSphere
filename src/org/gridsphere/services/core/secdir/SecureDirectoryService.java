@@ -7,8 +7,8 @@ package org.gridsphere.services.core.secdir;
 import org.gridsphere.portlet.service.PortletService;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * The <code>SecureDirectoryService</code> manages a temporary secure directory used for the storage of

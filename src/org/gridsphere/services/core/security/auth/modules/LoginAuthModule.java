@@ -4,11 +4,11 @@ import org.gridsphere.portlet.User;
 import org.gridsphere.services.core.security.auth.AuthenticationException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 import java.util.Locale;
+import java.util.Map;
 
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: LoginAuthModule.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 public interface LoginAuthModule extends Comparable {

@@ -1,15 +1,15 @@
 package org.gridsphere.services.core.security.auth.modules.impl;
 
-import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
-import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
 import org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam;
 import org.gridsphere.portlet.service.spi.impl.descriptor.Description;
+import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
+import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: BaseAuthModule.java 5032 2006-08-17 18:15:06Z novotny $
  */
 public abstract class BaseAuthModule implements LoginAuthModule, Comparable {

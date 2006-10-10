@@ -1,13 +1,13 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @version $Id: PortletGroup.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.services.core.security.group;
 
-import java.util.Set;
-import java.util.HashSet;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**

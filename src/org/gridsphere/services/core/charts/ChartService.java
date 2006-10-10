@@ -2,8 +2,9 @@ package org.gridsphere.services.core.charts;
 
 import org.gridsphere.portlet.service.PortletService;
 import org.gridsphere.services.core.secdir.FileLocationID;
-import java.io.IOException;
+
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:tkucz@icis.pcz.pl">Tomasz Kuczynski</a>

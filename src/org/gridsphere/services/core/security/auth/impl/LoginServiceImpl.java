@@ -1,35 +1,36 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: LoginServiceImpl.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.services.core.security.auth.impl;
 
-import org.gridsphere.portlet.PortletLog;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.PortletRequest;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.services.core.security.auth.AuthorizationException;
+import org.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.security.auth.AuthenticationException;
+import org.gridsphere.services.core.security.auth.AuthorizationException;
+import org.gridsphere.services.core.security.auth.LoginService;
 import org.gridsphere.services.core.security.auth.LoginUserModule;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
-import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModulesDescriptor;
 import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleCollection;
 import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
-import org.gridsphere.services.core.security.auth.LoginService;
+import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModulesDescriptor;
 import org.gridsphere.services.core.user.UserManagerService;
-import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
-import org.gridsphere.services.core.persistence.PersistenceManagerException;
-import org.gridsphere.services.core.persistence.PersistenceManagerService;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.PortletRequest;
 import java.lang.reflect.Constructor;
-import java.util.*;
-import java.security.cert.X509Certificate;
 import java.net.URL;
+import java.security.cert.X509Certificate;
+import java.util.*;
 
 /**
  * The <code>LoginService</code> is the primary interface that defines the login method used to obtain a
@@ -40,7 +41,7 @@ import java.net.URL;
  */
 public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
-    private PortletLog log = SportletLog.getInstance(LoginServiceImpl.class);
+    private Log log = LogFactory.getLog(LoginServiceImpl.class);
     private UserManagerService userManagerService = null;
     private boolean inited = false;
     private List authModules = new ArrayList();
@@ -189,7 +190,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     public void destroy() {
     }
 
-    public User login(PortletRequest req)
+    public User login(ActionRequest req)
             throws AuthenticationException, AuthorizationException {
         String loginName = req.getParameter("username");
         String loginPassword = req.getParameter("password");
@@ -204,6 +205,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
         // if using client certificate, then don't use login modules
         if (certificate == null) {
+            System.err.println("name=" + loginName + " pass=" + loginPassword);
             if ((loginName == null) || (loginPassword == null)) {
                 throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_BLANK"));
             }

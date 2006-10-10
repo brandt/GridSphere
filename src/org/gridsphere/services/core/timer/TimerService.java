@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:kisg@mailbox.hu">Gergely Kis</a>
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: TimerService.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.services.core.timer;

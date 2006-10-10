@@ -1,16 +1,16 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: AuthModulesDescriptor.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.services.core.security.auth.modules.impl.descriptor;
 
 import org.gridsphere.portletcontainer.impl.JavaXMLBindingFactory;
-import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 
+import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
-import java.net.URL;
 
 /**
  * The <code>AuthModulesDescriptor</code> 

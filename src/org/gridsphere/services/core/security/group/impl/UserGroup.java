@@ -3,16 +3,16 @@
  */
 package org.gridsphere.services.core.security.group.impl;
 
-import org.gridsphere.portlet.PortletLog;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridsphere.portlet.jsrimpl.SportletUserImpl;
 import org.gridsphere.services.core.security.group.PortletGroup;
 import org.gridsphere.services.core.security.role.PortletRole;
 
 public class UserGroup {
 
-    protected transient static PortletLog log = SportletLog.getInstance(UserGroup.class);
+    protected transient static Log log = LogFactory.getLog(UserGroup.class);
 
     private String oid = null;
     private SportletUserImpl user = null;

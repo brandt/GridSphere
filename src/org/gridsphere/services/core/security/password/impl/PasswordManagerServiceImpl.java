@@ -3,19 +3,19 @@
  */
 package org.gridsphere.services.core.security.password.impl;
 
-import org.gridsphere.portlet.PortletLog;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridsphere.services.core.security.password.Password;
 import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
-import org.gridsphere.services.core.persistence.PersistenceManagerService;
-import org.gridsphere.services.core.persistence.PersistenceManagerException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -24,26 +24,22 @@ import java.util.Calendar;
 public class PasswordManagerServiceImpl
         implements PortletServiceProvider, PasswordManagerService {
 
-    private static PortletLog _log = SportletLog.getInstance(PasswordManagerServiceImpl.class);
-    private static PersistenceManagerRdbms pm = null;
+    private Log log = LogFactory.getLog(PasswordManagerServiceImpl.class);
+    private PersistenceManagerRdbms pm = null;
     private String userPasswordImpl = PasswordImpl.class.getName();
 
-    public PasswordManagerServiceImpl() {
-
-    }
+    public PasswordManagerServiceImpl() {}
 
     public void init(PortletServiceConfig config) {
         PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
         pm = pmservice.createGridSphereRdbms();
     }
 
-    public void destroy() {
-    }
+    public void destroy() {}
 
     public Password getPassword(User user) {
         return getPasswordImpl(user);
     }
-
 
     /**
      * This method returns the <code>PasswordImpl</code> associated with
@@ -57,7 +53,7 @@ public class PasswordManagerServiceImpl
         try {
             password = (PasswordImpl)pm.restore(query);
         } catch (PersistenceManagerException e) {
-            _log.error("Unable to retrieve password for user", e);
+            log.error("Unable to retrieve password for user", e);
         }
         return password;
     }
@@ -66,11 +62,11 @@ public class PasswordManagerServiceImpl
             throws InvalidPasswordException {
         PasswordImpl password = getPasswordImpl(user);
         if (password == null) {
-            _log.debug("No password found for user");
+            log.debug("No password found for user");
             throw new InvalidPasswordException("No password found for user!");
         }
-        //_log.debug("Stored value is " + password.getValue());
-        //_log.debug("Provided value is " + value);
+        //log.debug("Stored value is " + password.getValue());
+        //log.debug("Provided value is " + value);
 
         // MD5 hash of password value
         try {
@@ -78,12 +74,12 @@ public class PasswordManagerServiceImpl
             md5.update(value.getBytes());
             value = toHex(md5.digest());
 
-            //_log.debug("Hash of value is " + value);
+            //log.debug("Hash of value is " + value);
             if (!password.getValue().equals(value)) {
                 throw new InvalidPasswordException("Supplied password does not match user password!");
             }
         } catch (NoSuchAlgorithmException e) {
-            _log.error("No such algorithm: MD5", e);
+            log.error("No such algorithm: MD5", e);
         }
     }
 
@@ -102,7 +98,7 @@ public class PasswordManagerServiceImpl
                 pm.saveOrUpdate(pass);
             }
         } catch (PersistenceManagerException e) {
-            _log.error("Unable to create or update password for user", e);
+            log.error("Unable to create or update password for user", e);
         }
     }
 
@@ -112,7 +108,7 @@ public class PasswordManagerServiceImpl
             md5.update(pass.getBytes());
             return toHex(md5.digest());
         } catch (NoSuchAlgorithmException e) {
-            _log.error("NoSuchAlgorithm MD5!", e);    
+            log.error("NoSuchAlgorithm MD5!", e);
         }
         return null;
     }
@@ -124,7 +120,7 @@ public class PasswordManagerServiceImpl
                 pm.saveOrUpdate(pass);
             }
         } catch (PersistenceManagerException e) {
-            _log.error("Unable to create or update password for user", e);
+            log.error("Unable to create or update password for user", e);
         }
     }
 
@@ -139,7 +135,7 @@ public class PasswordManagerServiceImpl
         try {
             pm.delete(password);
         } catch (PersistenceManagerException e) {
-            _log.error("Unable to delete password", e);
+            log.error("Unable to delete password", e);
         }
     }
 

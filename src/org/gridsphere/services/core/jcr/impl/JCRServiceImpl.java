@@ -25,8 +25,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
     private String repositorybasepath = "";
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        repositorybasepath = config.getServletContext().getRealPath("WEB-INF") + File.separator + "CustomPortal" +
-                File.separator + "jcr" + File.separator;
+        repositorybasepath = config.getServletContext().getRealPath("WEB-INF/CustomPortal/jcr/");
         log.debug("JCR Path " + repositorybasepath);
     }
 
@@ -58,9 +57,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
         SimpleCredentials cred = new SimpleCredentials("userid",
                 "".toCharArray());
 
-        Session session = repository.login(cred, null);
-        return session;
-
+        return repository.login(cred, null);
     }
 
 

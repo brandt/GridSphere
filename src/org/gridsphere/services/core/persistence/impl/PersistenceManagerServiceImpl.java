@@ -1,17 +1,17 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @author <a href="mailto:wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id: PersistenceManagerFactory.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.services.core.persistence.impl;
 
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.services.core.persistence.PersistenceManagerService;
-import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridsphere.services.core.persistence.PersistenceManagerService;
 
 import javax.servlet.ServletContext;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import java.util.Set;
 
 public class PersistenceManagerServiceImpl implements PersistenceManagerService, PortletServiceProvider {
 
-    protected transient PortletLog log = SportletLog.getInstance(PersistenceManagerServiceImpl.class);
+    protected transient Log log = LogFactory.getLog(PersistenceManagerServiceImpl.class);
 
     public static final String GRIDSPHERE_DATABASE_NAME = "gridsphere";
 

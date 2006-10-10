@@ -5,7 +5,7 @@ import org.gridsphere.portlet.service.PortletService;
 import java.util.List;
 
 /**
- * @author <a href="mailto:jnovotny@ucsd.edu">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id$
  */
 public interface ContentManagerService  extends PortletService {

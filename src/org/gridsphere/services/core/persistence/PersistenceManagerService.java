@@ -3,7 +3,7 @@ package org.gridsphere.services.core.persistence;
 import org.gridsphere.portlet.service.PortletService;
 
 /**
- * @author <a href="mailto:jnovotny@ucsd.edu">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id$
  */
 public interface PersistenceManagerService extends PortletService {

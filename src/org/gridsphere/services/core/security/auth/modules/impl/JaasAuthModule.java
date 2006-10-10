@@ -3,24 +3,20 @@
  */
 package org.gridsphere.services.core.security.auth.modules.impl;
 
-import javax.security.auth.login.AccountExpiredException;
-import javax.security.auth.login.CredentialExpiredException;
-import javax.security.auth.login.FailedLoginException;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
-
-import org.gridsphere.portlet.PortletLog;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
+
+import javax.security.auth.login.*;
 
 public class JaasAuthModule extends BaseAuthModule implements LoginAuthModule {
 
     private String contextName = "Gridsphere";
     
-    private PortletLog log = SportletLog.getInstance(JaasAuthModule.class);
+    private Log log = LogFactory.getLog(JaasAuthModule.class);
 
     public JaasAuthModule(AuthModuleDefinition moduleDef) {
         super(moduleDef);

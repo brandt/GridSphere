@@ -1,17 +1,17 @@
 package org.gridsphere.services.core.content.impl;
 
-import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.services.core.content.ContentFile;
 import org.gridsphere.services.core.content.ContentManagerService;
 
 import javax.servlet.ServletContext;
-import java.util.List;
-import java.util.ArrayList;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @author <a href="mailto:jnovotny@ucsd.edu">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id$
  */
 public class ContentManagerServiceImpl implements ContentManagerService, PortletServiceProvider {

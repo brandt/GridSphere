@@ -4,23 +4,25 @@
  */
 package org.gridsphere.services.core.security.group.impl;
 
-import org.gridsphere.portlet.*;
-import org.gridsphere.portlet.impl.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portlet.User;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.security.group.GroupManagerService;
 import org.gridsphere.services.core.security.group.PortletGroup;
-import org.gridsphere.services.core.persistence.PersistenceManagerService;
-import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
-import org.gridsphere.services.core.persistence.PersistenceManagerException;
 
-import java.util.*;
+import java.util.List;
+import java.util.Vector;
 
 public class GroupManagerServiceImpl implements PortletServiceProvider, GroupManagerService {
 
-    private static PortletLog log = SportletLog.getInstance(GroupManagerServiceImpl.class);
+    private Log log = LogFactory.getLog(GroupManagerServiceImpl.class);
 
     private PersistenceManagerRdbms pm = null;
 

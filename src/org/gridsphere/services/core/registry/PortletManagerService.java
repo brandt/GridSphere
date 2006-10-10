@@ -1,14 +1,14 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletManagerService.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.services.core.registry;
 
-import org.gridsphere.portlet.PortletException;
 import org.gridsphere.portlet.service.PortletService;
-import org.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridsphere.portletcontainer.PortletDispatcherException;
+import org.gridsphere.portletcontainer.PortletWebApplication;
 
+import javax.portlet.PortletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;

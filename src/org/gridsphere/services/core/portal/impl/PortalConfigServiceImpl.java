@@ -1,30 +1,30 @@
 /**
  * @author <a href="mailto:kisg@mailbox.hu">Gergely Kis</a>
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortalConfigServiceImpl.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.services.core.portal.impl;
 
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.services.core.portal.PortalConfigService;
 
 import javax.servlet.ServletContext;
-import java.util.Properties;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * Portal configuration service is used to manage portal administrative settings
  */
 public class PortalConfigServiceImpl implements PortletServiceProvider, PortalConfigService {
 
-    private PortletLog log = SportletLog.getInstance(PortalConfigServiceImpl.class);
+    private Log log = LogFactory.getLog(PortalConfigServiceImpl.class);
 
 
     private String GRIDSPHERE_PROPERTIES = "/WEB-INF/CustomPortal/portal/gridsphere.properties";

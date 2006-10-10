@@ -3,7 +3,9 @@
  */
 package org.gridsphere.services.core.request;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GenericRequest {
 

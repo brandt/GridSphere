@@ -1,26 +1,27 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletManager.java 4733 2006-04-10 18:29:36Z novotny $
  */
 package org.gridsphere.services.core.registry.impl;
 
-import org.gridsphere.portlet.PortletException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.portletcontainer.*;
-import org.gridsphere.portletcontainer.impl.PortletWebApplicationImpl;
+import org.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridsphere.portletcontainer.PortletDispatcherException;
+import org.gridsphere.portletcontainer.PortletWebApplication;
+import org.gridsphere.portletcontainer.impl.PortletWebApplicationLoader;
 import org.gridsphere.portletcontainer.impl.PortletInvoker;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
 
+import javax.portlet.PortletException;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -41,6 +42,8 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
 
     // A multi-valued hashtable with a webapp key and a List value containing portletAppID's
     private List webapps = new Vector();
+
+    private Map webappLoaders = new HashMap();
 
     // An ordered list of known portlet webapps
     private String[] webappFiles = null;
@@ -183,6 +186,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      *
      * @param webApplicationName the portlet application name
      */
+    /*
     protected synchronized void removePortletWebApplication(String webApplicationName) {
         log.debug("in removePortletWebApplication: " + webApplicationName);
         Iterator it = webapps.iterator();
@@ -204,35 +208,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
         }
         //removePortletFile(webApplicationName);
     }
-
-    /**
-     * Removes the portlet application
-     *
-     * @param webApplication the portlet application name
-     */
-    public synchronized void removePortletWebApplication(PortletWebApplication webApplication) {
-        log.debug("in removePortletWebApplication: " + webApplication);
-        Iterator it = webapps.iterator();
-
-        while (it.hasNext()) {
-            PortletWebApplication webApp = (PortletWebApplication) it.next();
-
-            if (webApp.getWebApplicationName().equalsIgnoreCase(webApplication.getWebApplicationName())) {
-
-                Collection appPortlets = webApp.getAllApplicationPortlets();
-                Iterator appsit = appPortlets.iterator();
-                while (appsit.hasNext()) {
-                    ApplicationPortlet appPortlet = (ApplicationPortlet) appsit.next();
-                    registryService.removeApplicationPortlet(appPortlet);
-                }
-                log.debug("removing " + webApp.getWebApplicationName());
-
-                webApp.destroy();
-                it.remove();
-            }
-        }
-        removePortletFile(webApplication.getWebApplicationName());
-    }
+    */
 
     /**
      * Initializes all known portlet web applications in order
@@ -258,12 +234,38 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      * @throws PortletDispatcherException      if a dispatching error occurs
      * @throws PortletException if an exception occurs initializing the portlet web application
      */
+    /*
     public synchronized void initPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException {
         log.debug("initing web app " + webApplicationName);
         PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webApplicationName, context);
         addPortletWebApplication(portletWebApp);
         portletInvoker.initPortletWebApp(webApplicationName, req, res);
     }
+    */
+
+    public synchronized void initPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException {
+        log.debug("initing web app " + webApplicationName);
+        PortletWebApplicationLoader webAppLoader = new PortletWebApplicationLoader(webApplicationName, context);
+        webappLoaders.put(webApplicationName, webAppLoader);
+        portletInvoker.initPortletWebApp(webAppLoader, req, res);
+    }
+
+
+    /**
+     * Shuts down a currently active portlet web application from the portlet container
+     *
+     * @param webApplicationName the name of the portlet web application
+     * @param req                the <code>HttpServletRequest</code>
+     * @param res                the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException      if a dispatching error occurs
+     */
+    /*
+    public synchronized void destroyPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException  {
+        log.debug("in destroyPortletWebApplication: " + webApplicationName);
+        portletInvoker.destroyPortletWebApp(webApplicationName, req, res);
+        removePortletWebApplication(webApplicationName);
+    }
+    */
 
     /**
      * Shuts down a currently active portlet web application from the portlet container
@@ -275,8 +277,8 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      */
     public synchronized void destroyPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException  {
         log.debug("in destroyPortletWebApplication: " + webApplicationName);
-        portletInvoker.destroyPortletWebApp(webApplicationName, req, res);
-        removePortletWebApplication(webApplicationName);
+        PortletWebApplicationLoader webAppLoader = (PortletWebApplicationLoader)webappLoaders.get(webApplicationName);
+        portletInvoker.destroyPortletWebApp(webAppLoader, req, res);
     }
 
     /**

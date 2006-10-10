@@ -8,9 +8,6 @@
  */
 package org.gridsphere.services.core.security.auth;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 public class AuthenticationException extends RuntimeException {
 
     public AuthenticationException() {

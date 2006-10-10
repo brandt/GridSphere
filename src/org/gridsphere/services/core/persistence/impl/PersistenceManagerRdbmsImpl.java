@@ -4,21 +4,24 @@
  */
 package org.gridsphere.services.core.persistence.impl;
 
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.QueryFilter;
 import org.hibernate.*;
-import org.hibernate.stat.Statistics;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.stat.Statistics;
 
 import javax.servlet.ServletContext;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
-    private transient PortletLog log = SportletLog.getInstance(PersistenceManagerRdbmsImpl.class);
+    private transient Log log = LogFactory.getLog(PersistenceManagerRdbmsImpl.class);
 
     private SessionFactory factory = null;
     private final static int CMD_DELETE = 1;

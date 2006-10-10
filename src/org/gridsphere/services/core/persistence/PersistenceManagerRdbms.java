@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PersistenceManagerRdbms.java 4793 2006-05-17 20:35:20Z novotny $
  */
 package org.gridsphere.services.core.persistence;

@@ -1,29 +1,24 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PasswordAuthModule.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.services.core.security.auth.modules.impl;
 
-import org.gridsphere.portlet.PortletLog;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.impl.SportletLog;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
 import org.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class PasswordAuthModule extends BaseAuthModule implements LoginAuthModule {
 
     private PasswordManagerService passwordManager = null;
 
-    private PortletLog log = SportletLog.getInstance(PasswordAuthModule.class);
+    private Log log = LogFactory.getLog(PasswordAuthModule.class);
 
     public PasswordAuthModule(AuthModuleDefinition moduleDef) {
 

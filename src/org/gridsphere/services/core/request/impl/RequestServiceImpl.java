@@ -3,16 +3,16 @@
  */
 package org.gridsphere.services.core.request.impl;
 
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.services.core.request.GenericRequest;
-import org.gridsphere.services.core.request.RequestService;
+import org.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
-import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridsphere.services.core.request.GenericRequest;
+import org.gridsphere.services.core.request.RequestService;
 
 import java.util.*;
 
@@ -21,7 +21,7 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
     private static final long REQUEST_SWEEP_FREQUENCY =  5000 * 60; // 5 minute intervals
 
     private PersistenceManagerRdbms pm = null;
-    private static PortletLog log = SportletLog.getInstance(RequestServiceImpl.class);
+    private static Log log = LogFactory.getLog(RequestServiceImpl.class);
     private Timer timer = null;
 
     private class RequestSweeperTask extends TimerTask {

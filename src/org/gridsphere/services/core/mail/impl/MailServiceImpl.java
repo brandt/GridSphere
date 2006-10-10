@@ -1,13 +1,13 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: MailServiceImpl.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.services.core.mail.impl;
 
-import org.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.service.PortletServiceException;
+import org.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.services.core.mail.MailMessage;
 import org.gridsphere.services.core.mail.MailService;
 import org.gridsphere.services.core.portal.PortalConfigService;
