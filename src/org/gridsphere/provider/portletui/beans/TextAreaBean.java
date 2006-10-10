@@ -1,5 +1,5 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: TextAreaBean.java 5032 2006-08-17 18:15:06Z novotny $
  */
 
@@ -83,14 +83,14 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
         StringBuffer sb = new StringBuffer();
         sb.append("<textarea ");
         sb.append(getFormattedCss());
-
+        if (id != null) sb.append(" id=\"").append(id).append("\"");
         String sname = createTagName(name);
 
-        sb.append("name=\"" + sname + "\" ");
-        if (cols != 0) sb.append(" cols=\"" + cols + "\" ");
-        if (rows != 0) sb.append(" rows=\"" + rows + "\" ");
-        sb.append(" " + checkDisabled());
-        sb.append(" " + checkReadOnly());
+        sb.append("name=\"").append(sname).append("\" ");
+        if (cols != 0) sb.append(" cols=\"").append(cols).append("\" ");
+        if (rows != 0) sb.append(" rows=\"").append(rows).append("\" ");
+        sb.append(" ").append(checkDisabled());
+        sb.append(" ").append(checkReadOnly());
         sb.append(">");
         return sb.toString();
     }

@@ -1,9 +1,9 @@
 package org.gridsphere.provider.portletui.beans;
 
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.PortletURI;
-import org.gridsphere.portlet.impl.SportletLog;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
+import javax.portlet.PortletURL;
 import java.util.Iterator;
 
 /*
@@ -13,7 +13,7 @@ import java.util.Iterator;
 
 public class ActionMenuBean extends BeanContainer implements TagBean {
 
-    private transient static PortletLog log = SportletLog.getInstance(ActionMenuBean.class);
+    private transient static Log log = LogFactory.getLog(ActionMenuBean.class);
 
     public final static String TYPE_ACTIONBAR = "actionbar";
     public final static String TYPE_ACTIONTAB = "actiontab";
@@ -29,7 +29,7 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
     protected String menutype = TYPE_ACTIONBAR;
     protected boolean collapsible = false;
     protected boolean collapsed = false;
-    protected PortletURI portletURI = null;
+    protected PortletURL portletURL = null;
 
     protected boolean previousWasMenuItem = false;
     protected boolean hasMenuItems = false;
@@ -44,12 +44,12 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
         this.beanId = beanId;
     }
 
-    public PortletURI getPortletURI() {
-        return portletURI;
+    public PortletURL getPortletURL() {
+        return portletURL;
     }
 
-    public void setPortletURI(PortletURI portletURI) {
-        this.portletURI = portletURI;
+    public void setPortletURL(PortletURL portletURL) {
+        this.portletURL = portletURL;
     }
 
     public boolean isCollapsible() {

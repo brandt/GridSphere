@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: TextBean.java 4884 2006-06-26 23:52:48Z novotny $
  */
 
@@ -104,17 +104,16 @@ public class TextBean extends BaseComponentBean implements TagBean {
         } else if (style.equalsIgnoreCase("nostyle")) {
             return value;
         } else if (style.equalsIgnoreCase(MessageStyle.MSG_BOLD)) {
-            return "<b dir=\"" + dir + "\" >" + value + "</b>";
+            cssStyle = "font-weight: bold; ";
         } else if (style.equalsIgnoreCase(MessageStyle.MSG_ITALIC)) {
-            return "<i dir=\"" + dir + "\" >" + value + "</i>";
+            cssStyle = "font-style: italic; ";
         } else if (style.equalsIgnoreCase(MessageStyle.MSG_UNDERLINE)) {
-            return "<u dir=\"" + dir + "\" >" + value + "</u>";
+            cssStyle = "text-decoration: underline; ";
         }
-
-        text = "<span dir=\"" + dir + "\" " + getFormattedCss();
-
+        text = "<span ";
+        if (id != null) text+= "id=\"" + id + "\"";
+        text += " dir=\"" + dir + "\" " + getFormattedCss();
         text += ">" + value + "</span>";
-        
         return text;
     }
 }

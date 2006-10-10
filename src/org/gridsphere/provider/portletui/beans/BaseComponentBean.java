@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: BaseComponentBean.java 4884 2006-06-26 23:52:48Z novotny $
  */
 
@@ -227,7 +227,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     /**
      * Sets the css style of the element.
      *
-     * @param cssStyle
+     * @param cssStyle the css style
      */
     public void setCssStyle(String cssStyle) {
         if (cssStyle != null) this.cssStyle = cssStyle;
@@ -245,7 +245,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     /**
      * Sets the css class of the element. If null nothing will be changed.
      *
-     * @param cssClass
+     * @param cssClass the css class
      */
     public void setCssClass(String cssClass) {
         if (cssClass != null) this.cssClass = cssClass;

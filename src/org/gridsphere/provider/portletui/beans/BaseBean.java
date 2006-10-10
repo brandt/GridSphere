@@ -1,10 +1,10 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: BaseBean.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.provider.portletui.beans;
 
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 
 import java.util.HashMap;
 import java.util.Locale;

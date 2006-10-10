@@ -1,11 +1,8 @@
 /**
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: InputBean.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.provider.portletui.beans;
-
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
 
 /**
  * An abstract <code>InputBean</code> provides a generic input HTML element

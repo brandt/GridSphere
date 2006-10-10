@@ -1,10 +1,9 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: TableBean.java 4870 2006-06-23 15:36:06Z novotny $
  */
 package org.gridsphere.provider.portletui.beans;
 
-import org.gridsphere.portlet.PortletResponse;
 import org.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridsphere.services.core.persistence.QueryFilter;
 
@@ -35,8 +34,6 @@ public class TableBean extends BaseComponentBean implements TagBean {
     private int rowCount = 0;
     private int maxRows = -1;
     private boolean showall = false;
-    private boolean isJSR = true;
-    protected PortletResponse res = null;
     protected String uris = "";
     protected String uriString = "";
     protected String title = null;
@@ -298,10 +295,6 @@ public class TableBean extends BaseComponentBean implements TagBean {
         this.uriString = uriString;
     }
 
-    public void setJSR(boolean isJSR) {
-        this.isJSR = isJSR;
-    }
-
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         if (isSortable) {
@@ -334,7 +327,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
             uri = uriString;
             sb.append("<p>"); // added for XHTML 1.0 Strict compliance
             String showPages = TableBean.SHOW_PAGES;
-            if (isJSR) showPages = "rp_" + showPages;
+            showPages = "rp_" + showPages;
             sb.append("<a href=\"" + uri + "&amp;" + showPages + "\">" + this.getLocalizedText("SHOW_PAGES") + "</a>");
             sb.append("</p>"); // added for XHTML 1.0 Strict compliance
         }
@@ -368,7 +361,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
                     uris = uriString;
                     //System.err.println("uri = " + uris);
                     String curPage = TableBean.CURRENT_PAGE;
-                    if (isJSR) curPage = "rp_" + curPage;
+                    curPage = "rp_" + curPage;
                     uri = uris + "&amp;" + curPage + "=" + i;
                     sb.append(" | " + "<a href=\"" + uri + "\">" + c + "</a>");
                 }
@@ -377,7 +370,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
                 uri = uriString;
                 sb.append(" | ");
                 String showall = TableBean.SHOW_ALL;
-                if (isJSR) showall = "rp_" + TableBean.SHOW_ALL;
+                showall = "rp_" + TableBean.SHOW_ALL;
                 sb.append("<a href=\"" + uri + "&amp;" + showall + "\">" + this.getLocalizedText("SHOW_ALL") + "</a>");
             }
             sb.append("</p>"); // added for XHTML 1.0 Strict compliance

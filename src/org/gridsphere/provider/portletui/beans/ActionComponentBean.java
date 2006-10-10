@@ -1,7 +1,7 @@
 package org.gridsphere.provider.portletui.beans;
 
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /*
  * @author <a href="mailto:russell@aei.mpg.de">Michael Russell</a>
@@ -12,7 +12,7 @@ import org.gridsphere.portlet.impl.SportletLog;
 
 public class ActionComponentBean extends IncludeBean {
 
-    private transient static PortletLog log = SportletLog.getInstance(ActionComponentBean.class);
+    private transient static Log log = LogFactory.getLog(ActionComponentBean.class);
     protected String activeCompId = "";
 
     /**
