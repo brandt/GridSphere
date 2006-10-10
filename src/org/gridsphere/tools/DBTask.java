@@ -1,17 +1,20 @@
 package org.gridsphere.tools;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.gridsphere.portlet.PortletLog;
-import org.gridsphere.portlet.impl.SportletLog;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2ddl.SchemaUpdate;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.connection.DriverManagerConnectionProvider;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
@@ -26,7 +29,7 @@ import java.util.*;
  */
 public class DBTask extends Task {
 
-    private PortletLog log = SportletLog.getInstance(DBTask.class);
+    private Log log = LogFactory.getLog(DBTask.class);
 
     public final static String ACTION_CREATE = "CREATE";
     public final static String ACTION_UPDATE = "UPDATE";
@@ -62,7 +65,7 @@ public class DBTask extends Task {
      * @param configDir full path to the configuration directory
      */
     public void setConfigDir(String configDir) {
-        SportletLog.setConfigureURL(configDir + "/WEB-INF/classes/log4j.properties");
+        //SportletLog.setConfigureURL(configDir + "/WEB-INF/classes/log4j.properties");
         this.configDir = configDir;
     }
 
