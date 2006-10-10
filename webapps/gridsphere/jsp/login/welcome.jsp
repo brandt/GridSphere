@@ -1,13 +1,15 @@
-<%@ page import="org.gridsphere.portlet.PortletRequest"%>
-<%@ page import="org.gridsphere.portlet.User"%>
+<%@ page import="javax.portlet.RenderRequest"%>
+<%@ page import="javax.portlet.RenderRequest" %>
+<%@ page import="org.gridsphere.portlet.jsrimpl.SportletProperties" %>
+<%@ page import="org.gridsphere.portlet.User" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
-<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+<%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
-<portletAPI:init/>
+<portlet:defineObjects/>
 
-<% PortletRequest req = (PortletRequest)pageContext.getAttribute("portletRequest");
-   User user = req.getUser();
-   String username = user.getFirstName() + " " + user.getLastName(); %>
+<% RenderRequest req = (RenderRequest) pageContext.getAttribute("renderRequest");
+    User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
+    String username = user.getFirstName() + " " + user.getLastName(); %>
 
 <span style="text-align: right; margin: 10px 10px 0px 0px; float:right; ">
 <ui:text style="nostyle" key="LOGIN_SUCCESS"/>, <%= username %></span>

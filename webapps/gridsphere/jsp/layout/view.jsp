@@ -1,9 +1,9 @@
 <%@ page import="java.util.List,
                  org.gridsphere.layout.PortletTab" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
-<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+<%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
-<portletAPI:init/>
+<portlet:defineObjects/>
 
 <% String lang = (String) request.getAttribute("lang"); %>
 <% List tabs = (List) request.getAttribute("tabs"); %>

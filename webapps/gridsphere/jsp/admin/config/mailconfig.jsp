@@ -8,26 +8,34 @@
     <ui:group key="LOGIN_CONFIG_SMTP">
         <ui:frame>
             <ui:tablerow>
-                <ui:tablecell>
+                <ui:tablecell width="250">
                     <ui:text key="CONFIG_MAILHOST"/>
+                </ui:tablecell>
+                <ui:tablecell width="100">
                     <ui:textfield beanId="mailServerTF"/>
                 </ui:tablecell>
             </ui:tablerow>
             <ui:tablerow>
-                <ui:tablecell>
+                <ui:tablecell width="250">
                     <ui:text key="CONFIG_MAILPORT"/>
+                </ui:tablecell>
+                <ui:tablecell width="100">
                     <ui:textfield beanId="mailPortTF"/>
                 </ui:tablecell>
             </ui:tablerow>
             <ui:tablerow>
-                <ui:tablecell>
+                <ui:tablecell width="250">
                     <ui:text key="CONFIG_MAILFROM"/>
+                </ui:tablecell>
+                <ui:tablecell width="100">
                     <ui:textfield beanId="mailFromTF"/>
                 </ui:tablecell>
             </ui:tablerow>
             <ui:tablerow>
-                <ui:tablecell>
+                <ui:tablecell width="250">
                     <ui:text key="CONFIG_MAILADMIN"/>
+                </ui:tablecell>
+                <ui:tablecell width="100">
                     <ui:textfield beanId="adminTF"/>
                 </ui:tablecell>
             </ui:tablerow>

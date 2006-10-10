@@ -1,6 +1,3 @@
-<%@ taglib uri="/portletUI" prefix="ui" %>
-<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
-<portletAPI:init/>
 
 <jsp:useBean id="date" class="java.lang.String" scope="request"/>
 

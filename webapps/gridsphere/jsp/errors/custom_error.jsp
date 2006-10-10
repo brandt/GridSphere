@@ -1,7 +1,5 @@
 <%@ page import="org.gridsphere.provider.portletui.beans.MessageStyle"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
-<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
-<portletAPI:init/>
 
 
 <% Throwable error = (Throwable)request.getAttribute("error"); %>

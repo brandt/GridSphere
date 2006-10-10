@@ -1,4 +1,4 @@
-<%@ page import="org.gridsphere.portlet.impl.SportletProperties" %>
+<%@ page import="org.gridsphere.portlet.jsrimpl.SportletProperties" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
@@ -9,6 +9,8 @@
 
 <ui:form secure="<%= Boolean.valueOf(useSecureLogin).booleanValue() %>">
     <ui:messagebox beanId="msg"/>
+
+    <ui:dialoglink id="foo" name="bar" value="Click Me" header="This is a header" body="This is a body" footer="This is a footer" width="500"/>
 
     <% if (request.getAttribute("certificate") != null && ((String) request.getAttribute("certificate")).length() > 0)  { %>
     <ui:table>
@@ -44,7 +46,7 @@
             </ui:tablecell>
             <ui:tablecell width="60">
                 <ui:text var="passkey" key="USER_PASSWORD_BLANK"/>
-                <input class="checkNotEmpty#" type="password" name="password" size="15" maxlength="50"/>
+                <input validator="dildo" class="checkNotEmpty#" type="password" name="password" size="15" maxlength="50"/>
                 <input type="hidden" name="password#checkNotEmpty" value="<%= passkey %>"/>
             </ui:tablecell>
             <ui:tablecell/>
