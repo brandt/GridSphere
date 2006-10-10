@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletServiceException.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.portlet.service;

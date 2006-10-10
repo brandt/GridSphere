@@ -1,22 +1,22 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: PortletServiceFactory.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.portlet.service.spi;
 
-import org.gridsphere.portlet.service.PortletService;
-import org.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridsphere.portlet.service.PortletServiceException;
-import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceCollection;
-import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition;
-import org.gridsphere.portlet.service.spi.impl.SportletServiceConfig;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portlet.service.PortletService;
+import org.gridsphere.portlet.service.PortletServiceException;
+import org.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridsphere.portlet.service.spi.impl.SportletServiceConfig;
+import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceCollection;
+import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition;
 
 import javax.servlet.ServletContext;
-import java.util.*;
 import java.net.URL;
+import java.util.*;
 
 /**
  * The <code>PortletServiceFactory</code> provides a factory for the creation
@@ -85,7 +85,7 @@ public class PortletServiceFactory  {
             if (serviceDef.isLoadOnStartup()) {
                 log.debug("loading service : " + serviceDef.getServiceInterface());
                 try {
-                    createPortletService(Class.forName(serviceDef.getServiceInterface()), true);
+                    createPortletService(Class.forName(serviceDef.getServiceImplementation()), true);
                 } catch (ClassNotFoundException e) {
                     log.error("Unable to find class : " + serviceDef.getServiceImplementation());
                 }
@@ -110,7 +110,6 @@ public class PortletServiceFactory  {
         Iterator it = services.iterator();
         while (it.hasNext()) {
             SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
-
             allServices.put(serviceDef.getServiceInterface(), serviceDef);
             log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
@@ -124,7 +123,7 @@ public class PortletServiceFactory  {
             if (serviceDef.isLoadOnStartup()) {
                 log.debug("loading service : " + serviceDef.getServiceInterface());
                 try {
-                    createPortletService(Class.forName(serviceDef.getServiceInterface(), true, loader), true);
+                    createPortletService(Class.forName(serviceDef.getServiceImplementation(), true, loader), true);
                 } catch (ClassNotFoundException e) {
                     log.error("Unable to find class : " + serviceDef.getServiceImplementation());
                 }
