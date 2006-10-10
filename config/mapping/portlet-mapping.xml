@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping xmlns="http://castor.exolab.org/" xmlns:cst="http://castor.exolab.org/">
+    <description>Castor generated mapping file</description>
+
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.PortletDefinition">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.Portlet</description>
+        <map-to cst:xml="portlet" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="id" cst:type="java.lang.String">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field cst:name="description"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Description" cst:collection="array">
+            <bind-xml name="description" node="element"/>
+        </field>
+        <field cst:name="portletName"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.PortletName" cst:required="true">
+            <bind-xml name="portlet-name" node="element"/>
+        </field>
+        <field cst:name="displayName"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.DisplayName" cst:collection="array">
+            <bind-xml name="display-name" node="element"/>
+        </field>
+        <field cst:name="portletClass" cst:type="org.gridsphere.portletcontainer.impl.descriptor.PortletClass" cst:required="true">
+            <bind-xml name="portlet-class" node="element"/>
+        </field>
+        <field cst:name="initParam"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.InitParam" cst:collection="array">
+            <bind-xml name="init-param" node="element"/>
+        </field>
+        <field cst:name="expirationCache" cst:type="org.gridsphere.portletcontainer.impl.descriptor.ExpirationCache">
+            <bind-xml name="expiration-cache" node="element"/>
+        </field>
+        <field cst:name="supports"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Supports"
+            cst:required="true" cst:collection="array">
+            <bind-xml name="supports" node="element"/>
+        </field>
+        <field cst:name="supportedLocale"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.SupportedLocale" cst:collection="array">
+            <bind-xml name="supported-locale" node="element"/>
+        </field>
+        <field cst:name="resourceBundle"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.ResourceBundle">
+            <bind-xml name="resource-bundle" node="element"/>
+        </field>
+        <field cst:name="portletInfo" cst:type="org.gridsphere.portletcontainer.impl.descriptor.PortletInfo">
+            <bind-xml name="portlet-info" node="element"/>
+        </field>
+        <field cst:name="portletPreferences" cst:type="org.gridsphere.portletcontainer.impl.descriptor.PortletPreferences">
+            <bind-xml name="portlet-preferences" node="element"/>
+        </field>
+        <field cst:name="securityRoleRef"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.SecurityRoleRef" cst:collection="array">
+            <bind-xml name="security-role-ref" node="element"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.SecurityConstraint">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.SecurityConstraint</description>
+        <map-to cst:xml="security-constraint" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="id" cst:type="java.lang.String">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field cst:name="displayName"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.DisplayName" cst:collection="array">
+            <bind-xml name="display-name" node="element"/>
+        </field>
+        <field cst:name="portletCollection"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.PortletCollection" cst:required="true">
+            <bind-xml name="portlet-collection" node="element"/>
+        </field>
+        <field cst:name="userDataConstraint"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.UserDataConstraint" cst:required="true">
+            <bind-xml name="user-data-constraint" node="element"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.Description">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.Description</description>
+        <map-to cst:xml="description" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="lang" cst:type="java.lang.String">
+            <bind-xml name="xml:lang" node="attribute"/>
+        </field>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.Keywords">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.Keywords</description>
+        <map-to cst:xml="keywords" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.types.TransportGuaranteeType">
+        <description>Default mapping for class
+            org.gridsphere.portletcontainer.impl.descriptor.types.TransportGuaranteeType
+        </description>
+        <map-to cst:xml="transport-guarantee" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.SupportedLocale">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.SupportedLocale</description>
+        <map-to cst:xml="supported-locale" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.Supports">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.Supports</description>
+        <map-to cst:xml="supports" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="id" cst:type="java.lang.String">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field cst:name="mimeType"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.MimeType" cst:required="true">
+            <bind-xml name="mime-type" node="element"/>
+        </field>
+        <field cst:name="portletMode"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.PortletMode" cst:collection="array">
+            <bind-xml name="portlet-mode" node="element"/>
+        </field>
+        <field cst:name="windowState"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.WindowState" cst:collection="array">
+            <bind-xml name="window-state" node="element"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.ResourceBundle">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.ResourceBundle</description>
+        <map-to cst:xml="resource-bundle" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.UserAttribute">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.UserAttribute</description>
+        <map-to cst:xml="user-attribute" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="id" cst:type="java.lang.String">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field cst:name="description"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Description" cst:collection="array">
+            <bind-xml name="description" node="element"/>
+        </field>
+        <field cst:name="name"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Name" cst:required="true">
+            <bind-xml name="name" node="element"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.Value">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.Value</description>
+        <map-to cst:xml="value" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.CustomPortletMode">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.CustomPortletMode</description>
+        <map-to cst:xml="custom-portlet-mode" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="id" cst:type="java.lang.String">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field cst:name="description"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Description" cst:collection="array">
+            <bind-xml name="description" node="element"/>
+        </field>
+        <field cst:name="portletMode"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.PortletMode" cst:required="true">
+            <bind-xml name="portlet-mode" node="element"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.RoleLink">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.RoleLink</description>
+        <map-to cst:xml="role-link" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.RoleName">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.RoleName</description>
+        <map-to cst:xml="role-name" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.DisplayName">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.DisplayName</description>
+        <map-to cst:xml="display-name" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="lang" cst:type="java.lang.String">
+            <bind-xml name="xml:lang" node="attribute"/>
+        </field>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.MimeType">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.MimeType</description>
+        <map-to cst:xml="mime-type" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.ExpirationCache">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.ExpirationCache</description>
+        <map-to cst:xml="expiration-cache" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="int">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.PortletMode">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.PortletMode</description>
+        <map-to cst:xml="portlet-mode" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.ShortTitle">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.ShortTitle</description>
+        <map-to cst:xml="short-title" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.CustomWindowState">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.CustomWindowState</description>
+        <map-to cst:xml="custom-window-state" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="id" cst:type="java.lang.String">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field cst:name="description"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Description" cst:collection="array">
+            <bind-xml name="description" node="element"/>
+        </field>
+        <field cst:name="windowState"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.WindowState" cst:required="true">
+            <bind-xml name="window-state" node="element"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.Name">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.Name</description>
+        <map-to cst:xml="name" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.UserDataConstraint">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.UserDataConstraint</description>
+        <map-to cst:xml="user-data-constraint" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="id" cst:type="java.lang.String">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field cst:name="description"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Description" cst:collection="array">
+            <bind-xml name="description" node="element"/>
+        </field>
+        <field cst:name="transportGuarantee"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.types.TransportGuaranteeType" cst:required="true">
+            <bind-xml name="transport-guarantee" node="element"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.PortletCollection">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.PortletCollection</description>
+        <map-to cst:xml="portlet-collection" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="portletName"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.PortletName"
+            cst:required="true" cst:collection="array">
+            <bind-xml name="portlet-name" node="element"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.Title">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.Title</description>
+        <map-to cst:xml="title" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.WindowState">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.WindowState</description>
+        <map-to cst:xml="window-state" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.types.ReadOnlyType">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.types.ReadOnlyType</description>
+        <map-to cst:xml="read-only" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.PortletClass">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.PortletClass</description>
+        <map-to cst:xml="portlet-class" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.PortletName">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.PortletName</description>
+        <map-to cst:xml="portlet-name" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+<!--
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.PortletTypeChoice">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.PortletTypeChoice</description>
+        <map-to cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="portletTypeChoiceSequence"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.PortletTypeChoiceSequence" cst:required="true">
+            <bind-xml name="-error-if-this-is-used-" node="element"/>
+        </field>
+        <field cst:name="portletInfo"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.PortletInfo" cst:required="true">
+            <bind-xml name="portlet-info" node="element"/>
+        </field>
+    </class>
+-->
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.SecurityRoleRef">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.SecurityRoleRef</description>
+        <map-to cst:xml="security-role-ref" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="id" cst:type="java.lang.String">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field cst:name="description"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Description" cst:collection="array">
+            <bind-xml name="description" node="element"/>
+        </field>
+        <field cst:name="roleName" cst:type="org.gridsphere.portletcontainer.impl.descriptor.RoleName" cst:required="true">
+            <bind-xml name="role-name" node="element"/>
+        </field>
+        <field cst:name="roleLink" cst:type="org.gridsphere.portletcontainer.impl.descriptor.RoleLink">
+            <bind-xml name="role-link" node="element"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.PreferencesValidator">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.PreferencesValidator</description>
+        <map-to cst:xml="preferences-validator" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="content" cst:type="java.lang.String">
+            <bind-xml name="PCDATA" node="text"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.Preference">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.Preference</description>
+        <map-to cst:xml="preference" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="id" cst:type="java.lang.String">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field cst:name="name"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Name" cst:required="true">
+            <bind-xml name="name" node="element"/>
+        </field>
+        <field cst:name="value"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Value" cst:collection="array">
+            <bind-xml name="value" node="element"/>
+        </field>
+        <field cst:name="readOnly" cst:type="org.gridsphere.portletcontainer.impl.descriptor.types.ReadOnlyType">
+            <bind-xml name="read-only" node="element"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.PortletPreferences">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.PortletPreferences</description>
+        <map-to cst:xml="portlet-preferences" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="id" cst:type="java.lang.String">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field cst:name="preference"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Preference" cst:collection="array">
+            <bind-xml name="preference" node="element"/>
+        </field>
+        <field cst:name="preferencesValidator" cst:type="org.gridsphere.portletcontainer.impl.descriptor.PreferencesValidator">
+            <bind-xml name="preferences-validator" node="element"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.PortletApp">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.PortletApp</description>
+        <map-to cst:xml="portlet-app" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="version" cst:type="java.lang.String" cst:required="true">
+            <bind-xml name="version" node="attribute"/>
+        </field>
+        <field cst:name="id" cst:type="java.lang.String">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field cst:name="portlet"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.PortletDefinition"
+            cst:required="true" cst:collection="array">
+            <bind-xml name="portlet" node="element"/>
+        </field>
+        <field cst:name="customPortletMode"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.CustomPortletMode" cst:collection="array">
+            <bind-xml name="custom-portlet-mode" node="element"/>
+        </field>
+        <field cst:name="customWindowState"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.CustomWindowState" cst:collection="array">
+            <bind-xml name="custom-window-state" node="element"/>
+        </field>
+        <field cst:name="userAttribute"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.UserAttribute" cst:collection="array">
+            <bind-xml name="user-attribute" node="element"/>
+        </field>
+        <field cst:name="securityConstraint"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.SecurityConstraint" cst:collection="array">
+            <bind-xml name="security-constraint" node="element"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.InitParam">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.InitParam</description>
+        <map-to cst:xml="init-param" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="id" cst:type="java.lang.String">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field cst:name="description"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Description" cst:collection="array">
+            <bind-xml name="description" node="element"/>
+        </field>
+        <field cst:name="name"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Name" cst:required="true">
+            <bind-xml name="name" node="element"/>
+        </field>
+        <field cst:name="value"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Value" cst:required="true">
+            <bind-xml name="value" node="element"/>
+        </field>
+    </class>
+    <class cst:name="org.gridsphere.portletcontainer.impl.descriptor.PortletInfo">
+        <description>Default mapping for class org.gridsphere.portletcontainer.impl.descriptor.PortletInfo</description>
+        <map-to cst:xml="portlet-info" cst:ns-uri="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"/>
+        <field cst:name="id" cst:type="java.lang.String">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field cst:name="title"
+            cst:type="org.gridsphere.portletcontainer.impl.descriptor.Title" cst:required="true">
+            <bind-xml name="title" node="element"/>
+        </field>
+        <field cst:name="shortTitle" cst:type="org.gridsphere.portletcontainer.impl.descriptor.ShortTitle">
+            <bind-xml name="short-title" node="element"/>
+        </field>
+        <field cst:name="keywords" cst:type="org.gridsphere.portletcontainer.impl.descriptor.Keywords">
+            <bind-xml name="keywords" node="element"/>
+        </field>
+    </class>
+</mapping>
