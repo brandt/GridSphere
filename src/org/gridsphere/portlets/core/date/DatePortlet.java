@@ -3,11 +3,11 @@ package org.gridsphere.portlets.core.date;
 
 import javax.portlet.*;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.TimeZone;
 import java.util.Locale;
 import java.util.Map;
-import java.text.DateFormat;
+import java.util.TimeZone;
 
 
 public class DatePortlet extends GenericPortlet {

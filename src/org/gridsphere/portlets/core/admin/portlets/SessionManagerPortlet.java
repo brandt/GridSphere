@@ -2,19 +2,21 @@
 
 package org.gridsphere.portlets.core.admin.portlets;
 
-import org.gridsphere.portlet.*;
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.User;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.portlet.service.PortletServiceException;
-import org.gridsphere.provider.event.FormEvent;
-import org.gridsphere.provider.portlet.ActionPortlet;
-import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.portletcontainer.impl.PortletSessionManager;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.portlet.jsr.ActionPortlet;
+import org.gridsphere.services.core.user.UserManagerService;
 
-import javax.servlet.UnavailableException;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -25,10 +27,10 @@ public class SessionManagerPortlet extends ActionPortlet {
     private PortletSessionManager portletSessionMgr = PortletSessionManager.getInstance();
     private UserManagerService userManager = null;
 
-    public void init(PortletConfig config) throws UnavailableException {
+    public void init(PortletConfig config) throws PortletException {
         super.init(config);
         try {
-            userManager = (UserManagerService)getConfig().getContext().getService(UserManagerService.class);
+            userManager = (UserManagerService)createPortletService(UserManagerService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to get portlet manager instance", e);
         }
@@ -36,9 +38,9 @@ public class SessionManagerPortlet extends ActionPortlet {
     }
 
 
-    public void showSessions(FormEvent event) throws PortletException {
+    public void showSessions(RenderFormEvent event) throws PortletException {
 
-        PortletRequest req = event.getPortletRequest();
+        PortletRequest req = event.getRenderRequest();
         List names = new ArrayList();
 
         Set sessions = portletSessionMgr.getSessions();

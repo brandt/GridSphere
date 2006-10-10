@@ -1,35 +1,36 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: LoginPortlet.java 5087 2006-08-18 22:52:23Z novotny $
  */
 package org.gridsphere.portlets.core.login;
 
 import com.octo.captcha.service.CaptchaServiceException;
-import org.gridsphere.services.core.user.UserManagerService;
-import org.gridsphere.services.core.portal.PortalConfigService;
-import org.gridsphere.services.core.security.role.RoleManagerService;
-import org.gridsphere.services.core.security.role.PortletRole;
-import org.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridsphere.services.core.security.password.PasswordEditor;
-import org.gridsphere.services.core.request.RequestService;
-import org.gridsphere.services.core.request.GenericRequest;
-import org.gridsphere.services.core.captcha.impl.CaptchaServiceSingleton;
-import org.gridsphere.services.core.mail.MailMessage;
-import org.gridsphere.services.core.mail.MailService;
-import org.gridsphere.provider.portlet.jsr.ActionPortlet;
-import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.portlet.User;
+import org.gridsphere.portlet.jsrimpl.PortletURLImpl;
+import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.portlet.jsr.ActionPortlet;
+import org.gridsphere.provider.portletui.beans.HiddenFieldBean;
 import org.gridsphere.provider.portletui.beans.MessageBoxBean;
 import org.gridsphere.provider.portletui.beans.PasswordBean;
 import org.gridsphere.provider.portletui.beans.TextFieldBean;
-import org.gridsphere.provider.portletui.beans.HiddenFieldBean;
-import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.service.PortletServiceException;
-import org.gridsphere.portlet.jsrimpl.PortletURLImpl;
+import org.gridsphere.services.core.captcha.impl.CaptchaServiceSingleton;
+import org.gridsphere.services.core.mail.MailMessage;
+import org.gridsphere.services.core.mail.MailService;
+import org.gridsphere.services.core.portal.PortalConfigService;
+import org.gridsphere.services.core.request.GenericRequest;
+import org.gridsphere.services.core.request.RequestService;
+import org.gridsphere.services.core.security.password.PasswordEditor;
+import org.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridsphere.services.core.security.role.PortletRole;
+import org.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridsphere.services.core.user.UserManagerService;
 
 import javax.portlet.*;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
 
 public class LoginPortlet extends ActionPortlet {
 
@@ -129,6 +130,10 @@ public class LoginPortlet extends ActionPortlet {
         log.debug("in LoginPortlet: gs_login");
         PortletRequest req = event.getActionRequest();
 
+
+        String loginName = req.getParameter("username");
+        String loginPassword = req.getParameter("password");
+        
         String errorMsg = (String) req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
 
         if (errorMsg != null) {
@@ -172,14 +177,14 @@ public class LoginPortlet extends ActionPortlet {
 
             MailMessage mailToUser = new MailMessage();
             StringBuffer body = new StringBuffer();
-            body.append(getLocalizedText(req, "LOGIN_DISABLED_MSG1") + " " + getLocalizedText(req, "LOGIN_DISABLED_MSG2") + "\n\n");
+            body.append(getLocalizedText(req, "LOGIN_DISABLED_MSG1")).append(" ").append(getLocalizedText(req, "LOGIN_DISABLED_MSG2")).append("\n\n");
             mailToUser.setBody(body.toString());
             mailToUser.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT"));
             mailToUser.setEmailAddress(user.getEmailAddress());
 
             MailMessage mailToAdmin = new MailMessage();
             StringBuffer body2 = new StringBuffer();
-            body2.append(getLocalizedText(req, "LOGIN_DISABLED_ADMIN_MSG") + " " + user.getUserName());
+            body2.append(getLocalizedText(req, "LOGIN_DISABLED_ADMIN_MSG")).append(" ").append(user.getUserName());
             mailToAdmin.setBody(body2.toString());
             mailToAdmin.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT") + " " + user.getUserName());
             String portalAdminEmail = portalConfigService.getProperty(PortalConfigService.PORTAL_ADMIN_EMAIL);
@@ -429,9 +434,9 @@ public class LoginPortlet extends ActionPortlet {
 
         String forgotMail = portalConfigService.getProperty("LOGIN_FORGOT_BODY");
         if (forgotMail == null) forgotMail = getLocalizedText(req, "LOGIN_FORGOT_MAIL");
-        body.append(forgotMail + "\n\n");
+        body.append(forgotMail).append("\n\n");
         
-        body.append(newpasswordURL + "&reqid=" + request.getOid());
+        body.append(newpasswordURL).append("&reqid=").append(request.getOid());
         mailToUser.setBody(body.toString());
 
         try {

@@ -4,17 +4,17 @@
  */
 package org.gridsphere.portlets.core.admin.setup;
 
-import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.layout.PortletPageFactory;
 import org.gridsphere.portlet.User;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
+import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
+import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.user.UserManagerService;
-import org.gridsphere.services.core.portal.PortalConfigService;
-import org.gridsphere.layout.PortletPageFactory;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;

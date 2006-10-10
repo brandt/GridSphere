@@ -1,16 +1,15 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: LocalePortlet.java 4496 2006-02-08 20:27:04Z wehrens $
  */
 package org.gridsphere.portlets.core.locale;
 
 import org.gridsphere.portlet.User;
-import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridsphere.provider.portletui.beans.ListBoxItemBean;
-import org.gridsphere.services.core.cache.CacheService;
 import org.gridsphere.services.core.locale.LocaleService;
 
 import javax.portlet.PortletConfig;
@@ -51,6 +50,8 @@ public class LocalePortlet extends ActionPortlet {
 
         request.setAttribute("locale", locale);
 
+        System.err.println("locale=" + locale);
+        
         ListBoxBean localeSelector = event.getListBoxBean("localeLB");
         localeSelector.clear();
         localeSelector.setOnChange("GridSphere_SelectSubmit( this.form )");

@@ -4,29 +4,29 @@
  */
 package org.gridsphere.portlets.core.admin.users;
 
-import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.portlet.User;
+import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.provider.portletui.model.DefaultTableModel;
+import org.gridsphere.services.core.mail.MailMessage;
+import org.gridsphere.services.core.mail.MailService;
+import org.gridsphere.services.core.persistence.QueryFilter;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
+import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.user.UserManagerService;
-import org.gridsphere.services.core.persistence.QueryFilter;
-import org.gridsphere.services.core.mail.MailService;
-import org.gridsphere.services.core.mail.MailMessage;
-import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.service.PortletServiceException;
 
-import javax.portlet.PortletException;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 
 public class UserManagerPortlet extends ActionPortlet {
 

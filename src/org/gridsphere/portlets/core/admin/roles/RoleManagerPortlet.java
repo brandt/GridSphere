@@ -5,23 +5,23 @@
 package org.gridsphere.portlets.core.admin.roles;
 
 import org.gridsphere.portlet.User;
-import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.FormEvent;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
-import org.gridsphere.services.core.security.role.RoleManagerService;
-import org.gridsphere.services.core.security.role.PortletRole;
-import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.services.core.persistence.QueryFilter;
+import org.gridsphere.services.core.security.role.PortletRole;
+import org.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridsphere.services.core.user.UserManagerService;
 
-import javax.portlet.PortletException;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 public class RoleManagerPortlet extends ActionPortlet {
 
@@ -73,6 +73,7 @@ public class RoleManagerPortlet extends ActionPortlet {
     public void doPrepareRole(FormEvent event, PortletRequest req, PortletResponse res, String roleName) {
         HiddenFieldBean roleHF = event.getHiddenFieldBean("roleHF");
         PortletRole role = null;
+        List users = new ArrayList();
         if (roleName != null) {
             role = roleManagerService.getRole(roleName);
             roleHF = event.getHiddenFieldBean("roleHF");
@@ -85,9 +86,8 @@ public class RoleManagerPortlet extends ActionPortlet {
             int numUsers = roleManagerService.getNumUsersInRole(role);
             QueryFilter filter = event.getQueryFilter(20, numUsers);
 
-            List users = roleManagerService.getUsersInRole(role, filter);
+            users = roleManagerService.getUsersInRole(role, filter);
 
-            req.setAttribute("userList", users);
 
             List notusers = userManagerService.getUsers();
             for(int i = 0; i < users.size(); i++) {
@@ -116,8 +116,10 @@ public class RoleManagerPortlet extends ActionPortlet {
         } else {
             HiddenFieldBean isNewRoleHF = event.getHiddenFieldBean("isNewRoleHF");
             isNewRoleHF.setValue("true");
+            users = userManagerService.getUsers();
         }
 
+        req.setAttribute("userList", users);
 
         setNextState(req, ROLES_EDIT);
     }

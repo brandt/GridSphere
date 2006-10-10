@@ -1,8 +1,10 @@
 package org.gridsphere.portlets.core.rss;
 
-import org.gridsphere.provider.portlet.jsr.ActionPortlet;
-import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.io.FeedException;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridsphere.provider.portletui.beans.ListBoxItemBean;
 import org.gridsphere.services.core.rss.RssService;
@@ -10,12 +12,8 @@ import org.gridsphere.services.core.rss.RssService;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletPreferences;
-
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.feed.synd.SyndFeed;
-
-import java.net.MalformedURLException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class RSSPortlet extends ActionPortlet {
 

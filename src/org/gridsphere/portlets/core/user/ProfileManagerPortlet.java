@@ -4,29 +4,26 @@
  */
 package org.gridsphere.portlets.core.user;
 
-import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.User;
-import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.portlet.jsrimpl.SportletProperties;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.locale.LocaleService;
+import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
+import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.services.core.utils.DateUtil;
-import org.gridsphere.services.core.portal.PortalConfigService;
 
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletException;
-import javax.portlet.PortletRequest;
-import javax.portlet.ActionRequest;
+import javax.portlet.*;
+import java.io.File;
 import java.text.DateFormat;
 import java.util.*;
-import java.io.File;
 
 public class ProfileManagerPortlet extends ActionPortlet {
 
@@ -81,8 +78,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
         ListBoxBean themeLB = event.getListBoxBean("themeLB");
         String[] themes = null;
 
-        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
-        String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT);
+        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
+        String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
         themeLB.clear();
 
         String themesPath = getPortletContext().getRealPath("themes");
@@ -115,7 +112,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         if (user != null) {
             user.setAttribute(User.THEME, theme);
             userManagerService.saveUser(user);
-            req.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, theme);
+            req.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, theme, PortletSession.APPLICATION_SCOPE);
         }
     }
 
@@ -248,7 +245,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         if (acctReq != null) {
             log.debug("approve account request for user: " + user.getID());
             userManagerService.saveUser(acctReq);
-            String uid = (String) req.getPortletSession().getAttribute(SportletProperties.PORTLET_USER);
+            String uid = (String) req.getPortletSession().getAttribute(SportletProperties.PORTLET_USER, PortletSession.APPLICATION_SCOPE);
             user = userManagerService.getUser(uid);
             req.setAttribute(SportletProperties.PORTLET_USER, user);
             createSuccessMessage(event, this.getLocalizedText(req, "USER_UPDATE_SUCCESS"));
