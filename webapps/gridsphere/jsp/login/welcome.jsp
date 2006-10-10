@@ -1,6 +1,5 @@
 <%@ page import="javax.portlet.RenderRequest"%>
-<%@ page import="javax.portlet.RenderRequest" %>
-<%@ page import="org.gridsphere.portlet.jsrimpl.SportletProperties" %>
+<%@ page import="org.gridsphere.portlet.impl.SportletProperties" %>
 <%@ page import="org.gridsphere.portlet.User" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>

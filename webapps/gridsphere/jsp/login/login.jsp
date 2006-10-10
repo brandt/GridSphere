@@ -1,4 +1,4 @@
-<%@ page import="org.gridsphere.portlet.jsrimpl.SportletProperties" %>
+<%@ page import="org.gridsphere.portlet.impl.SportletProperties" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
