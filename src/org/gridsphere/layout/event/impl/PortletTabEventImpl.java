@@ -28,6 +28,7 @@ public class PortletTabEventImpl implements PortletTabEvent {
      * tab event action and the portlet tab component id
      *
      * @param portletTab the portlet tab
+     * @param request    the actionrquest
      * @param action     the portlet tab event action
      * @param id         the portlet component id
      * @see PortletTab
