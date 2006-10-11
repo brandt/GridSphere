@@ -9,7 +9,8 @@
     $Id: SetupLayout.xml 4633 2006-03-09 16:44:16Z wehrens $
 -->
 
-<page-layout label="profile" title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="USER">
+<page-layout label="profile" title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush"
+             editable="false" required-role="USER">
 
     <!-- Header components -->
     <portlet-header>
@@ -23,19 +24,21 @@
                 <portlet-tab label="profile" display="false">
                     <table-layout>
                         <row-layout>
-                            <column-layout width="80%">
+                            <column-layout width="100%">
                                 <portlet-frame label="profilemanager">
-                                    <portlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet</portlet-class>
+                                    <portlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet
+                                    </portlet-class>
                                 </portlet-frame>
                             </column-layout>
-                            <column-layout width="20%"/>
                         </row-layout>
                     </table-layout>
                 </portlet-tab>
             </portlet-tabbed-pane>
         </portlet-tab>
-        <portlet-tab label="logout" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/logout/logoutnav.jsp"/>
-        <portlet-tab label="portal" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/returnnav.jsp"/>
+        <portlet-tab label="logout" outline="false" align="right" padding="5px 5px 0px 5px"
+                     include="/jsp/logout/logoutnav.jsp"/>
+        <portlet-tab label="portal" outline="false" align="right" padding="5px 5px 0px 5px"
+                     include="/jsp/returnnav.jsp"/>
     </portlet-tabbed-pane>
 
     <!-- Footer components (if any) -->
