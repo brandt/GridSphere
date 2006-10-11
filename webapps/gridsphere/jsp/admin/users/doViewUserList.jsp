@@ -1,6 +1,6 @@
 <%@ page import="java.util.Iterator,
                  java.util.List,
-                 org.gridsphere.portlet.User" %>
+                 org.gridsphere.services.core.user.User" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 

@@ -1,4 +1,4 @@
-<%@ page import="java.util.Iterator, java.util.List, org.gridsphere.portlet.User" %>
+<%@ page import="java.util.Iterator, java.util.List, org.gridsphere.services.core.user.User" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
@@ -31,7 +31,7 @@
 
             </ui:tablerow>
 
-            <%  Iterator usersIterator = usersInGroup.iterator();
+            <% Iterator usersIterator = usersInGroup.iterator();
                 while (usersIterator.hasNext()) {
                     User user = (User) usersIterator.next();
             %>
