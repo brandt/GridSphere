@@ -64,13 +64,6 @@ public class TabbedPaneTag extends BaseComponentTag {
                 currentTabLabel = (String)req.getPortletSession(true).getAttribute(getClass().getName());
             }
 
-            /*
-            String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-            if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-            String cid = (String) req.getAttribute(compVar);
-            String pid = (String) req.getAttribute(SportletProperties.PORTLETID);
-            */
-
             JspWriter out = pageContext.getOut();
             out.println("<ul class=\"basictab\">");
             // if this tab is not set, then use this tab (the first tab in the sequence)
@@ -83,10 +76,6 @@ public class TabbedPaneTag extends BaseComponentTag {
             // print out all tabs
             for (int i = 0; i < tabBeans.size(); i++) {
                 TabBean tabBean = (TabBean) tabBeans.get(i);
-
-                //PortletURI uri = res.createURI();
-                //uri.addParameter(TAB_LABEL_PARAM, tabBean.getLabel());
-                //String href = uri.toString();
                 PortletURL url = res.createRenderURL();
                 url.setParameter(TAB_LABEL_PARAM, tabBean.getLabel());
                 String href = url.toString();
@@ -104,9 +93,6 @@ public class TabbedPaneTag extends BaseComponentTag {
             }
 
             out.println("</ul>");
-
-
-            System.err.println("jsp page=" + currentPage);
 
             StringWriter writer = new StringWriter();
             ServletResponse sres = pageContext.getResponse();
