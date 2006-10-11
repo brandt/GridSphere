@@ -4,9 +4,9 @@
  */
 package org.gridsphere.portlets.core.user;
 
-import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.event.jsr.FormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
@@ -17,10 +17,14 @@ import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.services.core.utils.DateUtil;
 
-import javax.portlet.*;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
 import java.io.File;
 import java.text.DateFormat;
 import java.util.*;
@@ -56,7 +60,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
     public void doViewUser(RenderFormEvent event) {
         PortletRequest req = event.getRenderRequest();
-        setUserTable(event);
+        setUserTable(event, req);
 
         if (portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
@@ -97,9 +101,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
             if (themes[i].trim().equalsIgnoreCase(theme)) lb.setSelected(true);
             themeLB.addBean(lb);
         }
-
         setNextState(req, VIEW_USER_JSP);
     }
+
 
     public void saveTheme(ActionFormEvent event) {
         PortletRequest req = event.getActionRequest();
@@ -116,10 +120,11 @@ public class ProfileManagerPortlet extends ActionPortlet {
         }
     }
 
-    public void setUserTable(RenderFormEvent event) {
-        PortletRequest req = event.getRenderRequest();
+    public void setUserTable(FormEvent event, PortletRequest req) {
 
         User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
+        //String uid = (String) req.getPortletSession().getAttribute(SportletProperties.PORTLET_USER, PortletSession.APPLICATION_SCOPE);
+        //User user = userManagerService.getUser(uid);
 
         //String logintime = DateFormat.getDateTimeInstance().format(new Date(user.getLastLoginTime()));
         req.setAttribute("logintime", DateUtil.getLocalizedDate(user,
@@ -138,6 +143,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         TextFieldBean firstName = event.getTextFieldBean("firstName");
         firstName.setValue(user.getFirstName());
+
 
         TextFieldBean lastName = event.getTextFieldBean("lastName");
         lastName.setValue(user.getLastName());
@@ -204,6 +210,11 @@ public class ProfileManagerPortlet extends ActionPortlet {
         User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
 
         String origPasswd = event.getPasswordBean("origPassword").getValue();
+        String passwordValue = event.getPasswordBean("password").getValue();
+        String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
+
+        if (origPasswd.equals("") && passwordValue.equals("") && confirmPasswordValue.equals("")) return;
+
         try {
             passwordManagerService.validateSuppliedPassword(user, origPasswd);
         } catch (InvalidPasswordException e) {
@@ -211,8 +222,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
             return;
         }
 
-        String passwordValue = event.getPasswordBean("password").getValue();
-        String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
         if (passwordValue == null) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
         } else
@@ -321,7 +330,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         if (locale != null) {
             Locale loc = new Locale(locale, "", "");
             user.setAttribute(User.LOCALE, locale);
-            req.getPortletSession(true).setAttribute(User.LOCALE, loc);
+            req.getPortletSession(true).setAttribute(User.LOCALE, loc, PortletSession.APPLICATION_SCOPE);
         }
 
         if (timeZone != null) user.setAttribute(User.TIMEZONE, timeZone);
@@ -331,7 +340,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         return user;
     }
 
-    public void savePrivacy(ActionFormEvent event) {
+/*    public void savePrivacy(ActionFormEvent event) {
         CheckBoxBean privacyCB = event.getCheckBoxBean("privacyCB");
         ActionRequest req = event.getActionRequest();
         User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
@@ -341,7 +350,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             user.setAttribute(USER_PROFILE_PUBLIC, "false");
         }
         userManagerService.saveUser(user);
-    }
+    }  */
 
     private ListBoxItemBean makeLocaleBean(String language, String name, Locale locale) {
         ListBoxItemBean bean = new ListBoxItemBean();
@@ -355,6 +364,13 @@ public class ProfileManagerPortlet extends ActionPortlet {
             bean.setSelected(true);
         }
         return bean;
+    }
+
+    public void doSaveAll(ActionFormEvent event) {
+        doSaveUser(event);
+        doSavePass(event);
+        saveTheme(event);
+//        savePrivacy(event);
     }
 
 }
