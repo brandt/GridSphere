@@ -3,7 +3,6 @@
  */
 package org.gridsphere.services.core.user;
 
-import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.persistence.QueryFilter;
 import org.gridsphere.services.core.security.auth.LoginUserModule;
 
@@ -86,6 +85,16 @@ public interface UserManagerService extends LoginUserModule {
      * @return list of users
      */
     public List getUsersByEmail(QueryFilter queryFilter);
+
+    /**
+     * Returns a list of users by Email and Organization
+     *
+     * @param likeEmail   email
+     * @param likeOrg     organization
+     * @param queryFilter queryFilter
+     * @return List of users
+     */
+    public List getUsersByFullName(String likeEmail, String likeOrg, QueryFilter queryFilter);
 
     /**
      * Retrieves a user object with the oid of the user.
