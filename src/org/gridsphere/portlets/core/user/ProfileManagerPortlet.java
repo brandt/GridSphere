@@ -62,7 +62,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             req.setAttribute("savePass", "true");
         }
 
-        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
+        User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
 
         String email = user.getEmailAddress();
         TextFieldBean emailTF = event.getTextFieldBean("emailTF");
@@ -71,15 +71,15 @@ public class ProfileManagerPortlet extends ActionPortlet {
         CheckBoxBean privacyCB = event.getCheckBoxBean("privacyCB");
         if ((user.getAttribute(USER_PROFILE_PUBLIC) != null) && (user.getAttribute(USER_PROFILE_PUBLIC).equals("true"))) {
             privacyCB.setSelected(true);
-        }  else {
+        } else {
             privacyCB.setSelected(false);
         }
 
         ListBoxBean themeLB = event.getListBoxBean("themeLB");
-        String[] themes = null;
+        String[] themes = new String[]{};
 
-        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
-        String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
+        String theme = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
+        String renderkit = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
         themeLB.clear();
 
         String themesPath = getPortletContext().getRealPath("themes");
@@ -108,7 +108,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         String loginName = req.getRemoteUser();
 
-        User user = userManagerService.getUser(loginName);
+        User user = userManagerService.getUserByUserName(loginName);
         if (user != null) {
             user.setAttribute(User.THEME, theme);
             userManagerService.saveUser(user);
@@ -119,7 +119,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public void setUserTable(RenderFormEvent event) {
         PortletRequest req = event.getRenderRequest();
 
-        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
+        User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
 
         //String logintime = DateFormat.getDateTimeInstance().format(new Date(user.getLastLoginTime()));
         req.setAttribute("logintime", DateUtil.getLocalizedDate(user,
@@ -130,7 +130,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         if (req.isUserInRole(PortletRole.ADMIN.getName())) {
             TextFieldBean userName = event.getTextFieldBean("userNameTF");
             userName.setValue(user.getUserName());
-        }   else {
+        } else {
             TextBean userName = event.getTextBean("userName");
             userName.setValue(user.getUserName());
         }
@@ -150,10 +150,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
         Iterator it = userRoles.iterator();
         String userRole = "";
         while (it.hasNext()) {
-            userRole += ((PortletRole)it.next()).getName() + ", ";
+            userRole += ((PortletRole) it.next()).getName() + ", ";
         }
         if (userRole.length() > 2) {
-            userRolesTB.setValue(userRole.substring(0, userRole.length()-2));
+            userRolesTB.setValue(userRole.substring(0, userRole.length() - 2));
         } else {
             userRolesTB.setValue(this.getLocalizedText(req, "ROLES_HASNOROLES"));
         }
@@ -201,7 +201,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public void doSavePass(ActionFormEvent event) {
 
         PortletRequest req = event.getActionRequest();
-        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
+        User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
 
         String origPasswd = event.getPasswordBean("origPassword").getValue();
         try {
@@ -216,29 +216,29 @@ public class ProfileManagerPortlet extends ActionPortlet {
         if (passwordValue == null) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
         } else
-        // Otherwise, password must match confirmation
-        if (!passwordValue.equals(confirmPasswordValue)) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_MISMATCH"));
-            // If they do match, then validate password with our service
-        } else if (passwordValue.length() == 0) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
-        } else if (passwordValue.length() < 5) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT"));
-        } else {
-            // save password
-            PasswordEditor editPasswd = passwordManagerService.editPassword(user);
-            editPasswd.setValue(passwordValue);
-            editPasswd.setDateLastModified(Calendar.getInstance().getTime());
-            passwordManagerService.savePassword(editPasswd);
-            createSuccessMessage(event, this.getLocalizedText(req, "USER_PASSWORD_SUCCESS"));
-        }
+            // Otherwise, password must match confirmation
+            if (!passwordValue.equals(confirmPasswordValue)) {
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_MISMATCH"));
+                // If they do match, then validate password with our service
+            } else if (passwordValue.length() == 0) {
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
+            } else if (passwordValue.length() < 5) {
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT"));
+            } else {
+                // save password
+                PasswordEditor editPasswd = passwordManagerService.editPassword(user);
+                editPasswd.setValue(passwordValue);
+                editPasswd.setDateLastModified(Calendar.getInstance().getTime());
+                passwordManagerService.savePassword(editPasswd);
+                createSuccessMessage(event, this.getLocalizedText(req, "USER_PASSWORD_SUCCESS"));
+            }
     }
 
 
     public void doSaveUser(ActionFormEvent event) {
 
         PortletRequest req = event.getActionRequest();
-        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
+        User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
 
         // validate user entries to create an account request
         User acctReq = validateUser(event);
@@ -256,7 +256,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
     private User validateUser(ActionFormEvent event) {
         log.debug("Entering validateUser()");
         PortletRequest req = event.getActionRequest();
-        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
+        User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
 
         StringBuffer message = new StringBuffer();
         boolean isInvalid = false;
@@ -272,7 +272,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         if (req.isUserInRole(PortletRole.ADMIN.getName())) {
             userName = event.getTextFieldBean("userNameTF").getValue();
             if (userName.equals("")) {
-                message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br />");
+                message.append(this.getLocalizedText(req, "USER_NAME_BLANK")).append("<br />");
                 isInvalid = true;
             }
         }
@@ -280,13 +280,13 @@ public class ProfileManagerPortlet extends ActionPortlet {
         // Validate first name
         String firstName = event.getTextFieldBean("firstName").getValue();
         if (firstName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_GIVENNAME_BLANK") + "<br />");
+            message.append(this.getLocalizedText(req, "USER_GIVENNAME_BLANK")).append("<br />");
             isInvalid = true;
         }
         // Validate last name
         String lastName = event.getTextFieldBean("lastName").getValue();
         if (lastName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br />");
+            message.append(this.getLocalizedText(req, "USER_FAMILYNAME_BLANK")).append("<br />");
             isInvalid = true;
         }
 
@@ -295,13 +295,13 @@ public class ProfileManagerPortlet extends ActionPortlet {
         // Validate e-mail
         String eMail = event.getTextFieldBean("emailTF").getValue();
         if (eMail.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL")).append("<br />");
             isInvalid = true;
         } else if ((eMail.indexOf("@") < 0)) {
-            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL")).append("<br />");
             isInvalid = true;
         } else if ((eMail.indexOf(".") < 0)) {
-            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL")).append("<br />");
             isInvalid = true;
         }
 
@@ -334,10 +334,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public void savePrivacy(ActionFormEvent event) {
         CheckBoxBean privacyCB = event.getCheckBoxBean("privacyCB");
         ActionRequest req = event.getActionRequest();
-        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
+        User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
         if (privacyCB.isSelected()) {
             user.setAttribute(USER_PROFILE_PUBLIC, "true");
-        }  else {
+        } else {
             user.setAttribute(USER_PROFILE_PUBLIC, "false");
         }
         userManagerService.saveUser(user);

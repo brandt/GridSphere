@@ -35,10 +35,16 @@ public interface UserManagerService extends LoginUserModule {
     /**
      * Return the list of users in an unsorted list
      *
+     * @param queryFilter queryFilter
      * @return a list of users
      */
     public List getUsers(QueryFilter queryFilter);
 
+    /**
+     * Returns the number of users.
+     *
+     * @return number of users.
+     */
     public int getNumUsers();
 
     /**
@@ -48,35 +54,62 @@ public interface UserManagerService extends LoginUserModule {
      */
     public List getUsers();
 
+    /**
+     * Returns a list of users by name.
+     *
+     * @param queryFilter QueryFilter
+     * @return list of users
+     */
     public List getUsersByUserName(QueryFilter queryFilter);
 
+    /**
+     * Returns a list of users by organization.
+     *
+     * @param queryFilter QueryFilter
+     * @return list of users
+     */
     public List getUsersByOrganization(QueryFilter queryFilter);
 
+    /**
+     * Returns a list of users by full name.
+     *
+     * @param queryFilter QueryFilter
+     * @return list of users
+     */
     public List getUsersByFullName(QueryFilter queryFilter);
 
-    public List getUsersByFullName(String likeEmail, String likeOrg, QueryFilter queryFilter);
 
+    /**
+     * Returns a list of users by Email.
+     *
+     * @param queryFilter QueryFilter
+     * @return list of users
+     */
     public List getUsersByEmail(QueryFilter queryFilter);
 
     /**
-     * Retrieves a user object with the given user name from this service.
+     * Retrieves a user object with the oid of the user.
      *
-     * @param userName the user name or login id of the user in question
+     * @param oid the objectid of the user in question
+     * @return userobject in question
      */
-    public User getUser(String userName);
+    public User getUser(String oid);
 
     /**
      * Retrieves a user object with the given username from this service.
      *
      * @param loginName the user name or login id of the user in question
+     * @return userobject in question
      */
     public User getUserByUserName(String loginName);
 
     /**
      * Retrieves users based on attribute criteria
      *
-     * @param attrName the attribute name
-     * @param attrValue the attribute value
+     * @param attrName    the attribute name
+     * @param attrValue   the attribute value
+     * @param queryFilter queryFilter
+     * @return List of users matching the query
      */
     public List getUsersByAttribute(String attrName, String attrValue, QueryFilter queryFilter);
 
@@ -84,6 +117,7 @@ public interface UserManagerService extends LoginUserModule {
      * Retrieves a user object with the given email from this service.
      *
      * @param email the user's email address
+     * @return User in question
      */
     public User getUserByEmail(String email);
 
