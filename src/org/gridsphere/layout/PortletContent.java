@@ -148,7 +148,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
                 if (!textFile.startsWith("http://") && !textFile.startsWith("jcr://")) {
                     rd = ctx.getRequestDispatcher(textFile);
                     if (rd != null) {
-                        rd.include((HttpServletRequest)req, sres);
+                        rd.include(event.getHttpServletRequest(), sres);
                     } else {
                         throw new PortletException("Unable to include resource: RequestDispatcher is null");
                     }

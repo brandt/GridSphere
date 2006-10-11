@@ -14,7 +14,6 @@ import org.gridsphere.layout.event.impl.PortletWindowEventImpl;
 import org.gridsphere.layout.view.Render;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
-import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.GridSphereEvent;
@@ -446,35 +445,19 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
-        doConfig();
-        return list;
-    }
-
-    protected void doConfig() {
-        try {
-            portletRegistryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
-        } catch (PortletServiceException e) {
-            log.error("Unable to init services! ", e);
-        }
-
+        portletRegistryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
         String appID = portletRegistryService.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            // get supported modes from application portlet config
-            //supportedModes = sort(appConfig.getSupportedModes());
-
-            // get window states from application portlet config
-
             allowedWindowStates = new ArrayList(appPortlet.getAllowedWindowStates());
             allowedWindowStates = sort(allowedWindowStates);
-
-
             if (canModify) {
                 if (!allowedWindowStates.contains(new WindowState("CLOSED"))) {
                     allowedWindowStates.add(new WindowState("CLOSED"));
                 }
             }
         }
+        return list;
     }
 
     /**
@@ -641,7 +624,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         super.actionPerformed(event);
         isActive = true;
 
-        ActionRequest req = event.getActionRequest();
+        HttpServletRequest req = event.getHttpServletRequest();
         ActionResponse res = event.getActionResponse();
 
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
@@ -659,16 +642,13 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         event.getLastRenderEvent();
 
         PortletTitleBarEvent titleBarEvent = new PortletTitleBarEventImpl(this, event, COMPONENT_ID);
-        System.err.println("in actionperf! " + req.getParameter(SportletProperties.PORTLET_WINDOW));
 
-        Principal principal = req.getUserPrincipal();
+        Principal principal = event.getActionRequest().getUserPrincipal();
         if (principal != null) {
+
             if (titleBarEvent.hasAction()) {
-                System.err.println("i have a titlebarevent action!");
 
                 if (titleBarEvent.hasWindowStateAction()) {
-                    System.err.println("i have a titlebar action!");
-
 
                     // don't set window state if it is floating
                     if (!titleBarEvent.getState().equals(new WindowState("floating"))) windowState = titleBarEvent.getState();
@@ -689,7 +669,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                     }
                     if (winEvent != null) {
                         try {
-                            portletInvoker.windowEvent((String)req.getAttribute(SportletProperties.PORTLETID), winEvent, (HttpServletRequest)req, (HttpServletResponse) res);
+                            portletInvoker.windowEvent((String)req.getAttribute(SportletProperties.PORTLETID), winEvent, req, (HttpServletResponse)res);
                         } catch (Exception e) {
                             hasError = true;
                             errorMessage += "Failed to invoke window event method of portlet: " + portletClass;

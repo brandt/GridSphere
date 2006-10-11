@@ -9,7 +9,6 @@ import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.portlet.PortletRequest;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -79,8 +78,6 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
      * Renders the portlet component
      *
      * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException            if an I/O error occurs during rendering
      */
     public abstract void doRender(GridSphereEvent event);
 

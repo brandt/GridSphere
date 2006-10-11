@@ -275,8 +275,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     public void actionPerformed(GridSphereEvent event) {
         super.actionPerformed(event);
 
-        ActionRequest request = event.getActionRequest();
-        String id = request.getPortletSession(true).getId();
+        HttpServletRequest request = event.getHttpServletRequest();
+        String id = request.getSession(true).getId();
 
         // remove cached output
         cacheService.removeCached(this.getComponentID() + portletClass + id);
@@ -295,14 +295,14 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 PortletFrameEventImpl frameEvent = null;
                 if (state.equals(WindowState.MINIMIZED)) {
                     renderPortlet = false;
-                    frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_MINIMIZED, COMPONENT_ID);
+                    frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_MINIMIZED, COMPONENT_ID);
                 } else if (state.equals(new WindowState("RESIZING"))) {
                     renderPortlet = true;
-                    frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_RESTORED, COMPONENT_ID);
+                    frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_RESTORED, COMPONENT_ID);
                     frameEvent.setOriginalWidth(originalWidth);
                 } else if (state.equals(WindowState.MAXIMIZED)) {
                     renderPortlet = true;
-                    frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);
+                    frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);
                 } else if (state.equals(new WindowState("CLOSE"))) {
                     renderPortlet = true;
                     isClosing = true;
@@ -311,7 +311,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     if (event.hasAction()) {
                         if (event.getAction().getName().equals(FRAME_CLOSE_OK_ACTION)) {
                             isClosing = false;
-                            frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_CLOSED, COMPONENT_ID);
+                            frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_CLOSED, COMPONENT_ID);
                             request.setAttribute(SportletProperties.INIT_PAGE, "true");
                         }
                         if (event.getAction().getName().equals(FRAME_CLOSE_CANCEL_ACTION)) {
@@ -335,7 +335,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         } else {
             // now perform actionPerformed on Portlet if it has an action
             titleBar.actionPerformed(event);
-            String compVar = this.getComponentIDVar(request);
+            String compVar = this.getComponentIDVar(event.getActionRequest());
             request.setAttribute(compVar, componentIDStr);
 
 	        request.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
@@ -345,7 +345,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             request.setAttribute(SportletProperties.PORTLETID, portletClass);
 
             // Override if user is a guest
-            Principal principal = request.getUserPrincipal();
+            Principal principal = event.getActionRequest().getUserPrincipal();
             // String userName = "";
             try {
                 if (principal == null) {
@@ -359,7 +359,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             } catch (PortletModeException e) {
                 System.err.println("unsupported mode ");
             }
-            titleBar.setPortletMode(request.getPortletMode());
+            titleBar.setPortletMode(event.getActionRequest().getPortletMode());
 
             //System.err.println("in PortletFrame action invoked for " + portletClass);
             if (event.hasAction()
@@ -370,13 +370,14 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 renderParams.clear();
                 onlyRender = false;
                 String pid = (String)request.getAttribute(SportletProperties.PORTLETID);
-
+                //request.removeAttribute(SportletProperties.IGNORE_PARAM_PARSING);
                 try {
                     portletInvoker.actionPerformed(pid, action, event.getHttpServletRequest(), event.getHttpServletResponse());
                 } catch (Exception e) {
                     log.error("An error occured performing action on: " + pid, e);
                     // catch it and keep processing
                 }
+                //request.setAttribute(SportletProperties.IGNORE_PARAM_PARSING, "true");
 
                 // see if mode has been set
                 PortletMode mymode = (PortletMode)request.getAttribute(SportletProperties.PORTLET_MODE);
@@ -397,11 +398,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                         renderPortlet = false;
                     } else if ((mystate.equals(new WindowState("RESIZING"))) || (mystate.equals(WindowState.NORMAL))) {
                         renderPortlet = true;
-                        frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_RESTORED, COMPONENT_ID);
+                        frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_RESTORED, COMPONENT_ID);
                         frameEvent.setOriginalWidth(originalWidth);
                     } else if (mystate.equals(WindowState.MAXIMIZED)) {
                         renderPortlet = true;
-                        frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);
+                        frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);
                     }
 
 
@@ -421,7 +422,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             Map tmpParams = (Map)request.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
             if (tmpParams != null) renderParams = tmpParams;
 
-            addRenderParams(request);
+            addRenderParams(event.getHttpServletRequest());
 
             Iterator it = listeners.iterator();
             PortletComponent comp;
@@ -435,7 +436,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     }
 
-    private void addRenderParams(PortletRequest req) {
+    private void addRenderParams(HttpServletRequest req) {
         // first get rid of existing render params
         Iterator it;
         if (onlyRender) {
@@ -500,12 +501,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         // check for render params
         if (onlyRender)  {
             if ((event.getComponentID().equals(componentIDStr))) {
-                addRenderParams(req);
+                addRenderParams(event.getHttpServletRequest());
             }
         }
         onlyRender = true;
 
-        String id = event.getRenderRequest().getPortletSession(true).getId();
+        String id = req.getPortletSession(true).getId();
 
         StringBuffer frame = (StringBuffer) cacheService.getCached(this.getComponentID() + portletClass + id);
         String nocache = (String) req.getAttribute(CacheService.NO_CACHE);
@@ -572,7 +573,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                             //System.err.println("in render " + portletClass + " there are render params in the frame setting in request! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
                             req.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr, renderParams);
                         }
+                        //req.removeAttribute(SportletProperties.IGNORE_PARAM_PARSING);
                         portletInvoker.service((String)req.getAttribute(SportletProperties.PORTLETID), (HttpServletRequest)req, (HttpServletResponse)wrappedResponse);
+                        //req.setAttribute(SportletProperties.IGNORE_PARAM_PARSING, "true");
                         lastFrame = storedWriter.toString();
                         postframe.append(lastFrame);
                     } catch (Exception e) {
@@ -630,11 +633,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 cacheService.cache(this.getComponentID() + portletClass + id, frame, cacheExpiration);
             }
         }
-    }
-
-    public boolean isTargetedPortlet(PortletRequest req) {
-        String compVar = this.getComponentIDVar(req);
-        return (req.getParameter(compVar).equals(req.getAttribute(compVar)));
     }
 
     public boolean hasError(PortletRequest req) {

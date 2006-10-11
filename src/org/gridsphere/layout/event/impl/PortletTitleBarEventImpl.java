@@ -11,10 +11,9 @@ import org.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
-import javax.portlet.ActionRequest;
 import javax.portlet.PortletMode;
 import javax.portlet.WindowState;
-import java.security.Principal;
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -26,38 +25,45 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
     private ComponentAction action = null;
     private int id;
     private PortletTitleBar titleBar = null;
-    private ActionRequest request;
     private boolean hasStateAction = false;
     private boolean hasModeAction = false;
+    private PortletMode portletMode;
+    private WindowState windowState;
 
     /**
      * Constructs an instance of a PortletTitleBarEventImpl from a general
      * portal event and the portlet title bar component id
      *
+     * @param titleBar the portlet title bar
      * @param event the GridSphereEvent
      * @param id    the portlet title bar component id
      */
     public PortletTitleBarEventImpl(PortletTitleBar titleBar, GridSphereEvent event, int id) {
         this.titleBar = titleBar;
-        this.request = event.getActionRequest();
-        //User user = request.getUser();
-        //if (!(user instanceof GuestUser)) {
-        Principal principal = request.getUserPrincipal();
-        if (principal != null) {
-            this.id = id;
-            if (request.getParameter(SportletProperties.PORTLET_MODE) != null) {
-                action = PortletTitleBarEvent.TitleBarAction.MODE_MODIFY;
-                hasModeAction = true;
-            }
-            if (request.getParameter(SportletProperties.PORTLET_WINDOW) != null) {
-                action = PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY;
-                hasStateAction = true;
+        HttpServletRequest request = event.getHttpServletRequest();
+        this.id = id;
+        String pMode = request.getParameter(SportletProperties.PORTLET_MODE);
+        if (pMode != null) {
+            action = PortletTitleBarEvent.TitleBarAction.MODE_MODIFY;
+            hasModeAction = true;
+            try {
+                portletMode = new PortletMode(pMode);
+            } catch (Exception e) {
+                portletMode = PortletMode.VIEW;
             }
         }
-    }
-
-    public ActionRequest getRequest() {
-        return request;
+        String wState = request.getParameter(SportletProperties.PORTLET_WINDOW);
+        if (wState != null) {
+            action = PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY;
+            hasStateAction = true;
+            if (wState != null) {
+                try {
+                    windowState = new WindowState(wState);
+                } catch (Exception e) {
+                    windowState = WindowState.NORMAL;
+                }
+            }
+        }
     }
 
     public boolean hasAction() {
@@ -79,17 +85,7 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      * @return mode the portlet title bar mode
      */
     public PortletMode getMode() {
-        PortletMode mode;
-        String pMode = request.getParameter(SportletProperties.PORTLET_MODE);
-        if (pMode != null) {
-            try {
-                mode = new PortletMode(pMode);
-            } catch (Exception e) {
-                mode = PortletMode.VIEW;
-            }
-            return mode;
-        }
-        return null;
+        return portletMode;
     }
 
     /**
@@ -98,17 +94,7 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      * @return the portlet title bar window state
      */
     public WindowState getState() {
-        WindowState state;
-        String s = request.getParameter(SportletProperties.PORTLET_WINDOW);
-        if (s != null) {
-            try {
-                state = new WindowState(s);
-            } catch (Exception e) {
-                state = WindowState.NORMAL;
-            }
-            return state;
-        }
-        return null;
+        return windowState;
     }
 
     /**

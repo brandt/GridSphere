@@ -10,6 +10,7 @@ import org.gridsphere.layout.event.ComponentAction;
 import org.gridsphere.layout.event.PortletFrameEvent;
 
 import javax.portlet.PortletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * A <code>PortletFrameEventImpl</code> is the concrete implementation of
@@ -21,7 +22,6 @@ public class PortletFrameEventImpl implements PortletFrameEvent {
     private int id;
     private String width = "";
     private PortletFrame frame = null;
-    private PortletRequest request = null;
 
     /**
      * Constructs an instance of PortletFrameEventImpl from an action
@@ -30,19 +30,14 @@ public class PortletFrameEventImpl implements PortletFrameEvent {
      * @param action a window action
      * @param id     the component id of the PortletFrame
      */
-    public PortletFrameEventImpl(PortletFrame frame, PortletRequest request, ComponentAction action, int id) {
+    public PortletFrameEventImpl(PortletFrame frame, ComponentAction action, int id) {
         this.frame = frame;
         this.action = action;
         this.id = id;
-        this.request = request;
     }
 
     public boolean hasAction() {
         return (action != null);
-    }
-
-    public PortletRequest getRequest() {
-        return request;
     }
 
     /**

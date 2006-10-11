@@ -7,6 +7,7 @@ package org.gridsphere.layout.event.impl;
 import org.gridsphere.layout.event.PortletWindowEvent;
 
 import javax.portlet.ActionRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.EventObject;
 
 /**
@@ -17,7 +18,6 @@ import java.util.EventObject;
 public class PortletWindowEventImpl extends EventObject implements PortletWindowEvent {
 
     private int event = -1;
-    private ActionRequest req;
 
     /**
      * Constructs an instance of <code>WindowEventImpl</code> with a provided
@@ -26,9 +26,8 @@ public class PortletWindowEventImpl extends EventObject implements PortletWindow
      * @param req         the <code>PortletRequests</code>
      * @param windowEvent the window event id
      */
-    public PortletWindowEventImpl(ActionRequest req, int windowEvent) {
+    public PortletWindowEventImpl(HttpServletRequest req, int windowEvent) {
         super(req);
-        this.req = req;
         this.event = windowEvent;
     }
 
@@ -39,16 +38,6 @@ public class PortletWindowEventImpl extends EventObject implements PortletWindow
      */
     public int getEventId() {
         return event;
-    }
-
-    /**
-     * Returns the portlet request that has caused this event. If this event is not triggered by a request,
-     * this methods returns null
-     *
-     * @return the <code>PortletRequest</code>
-     */
-    public ActionRequest getActionRequest() {
-        return req;
     }
 
 }

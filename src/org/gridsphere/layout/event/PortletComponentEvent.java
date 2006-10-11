@@ -20,8 +20,6 @@ public interface PortletComponentEvent {
      */
     public ComponentAction getAction();
 
-    public PortletRequest getRequest();
-
     /**
      * Returns true if this event actually triggered an action
      *

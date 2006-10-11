@@ -13,9 +13,12 @@ import org.gridsphere.layout.view.BaseRender;
 import org.gridsphere.layout.view.TabbedPaneView;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridsphere.portlet.impl.PortletContextImpl;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.portlet.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -166,14 +169,13 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
                 pane.append(replaceBlanks(title));
             }
             if (tab.getInclude() != null) {
-                RenderRequest req = event.getRenderRequest();
                 StringWriter writer = new StringWriter();
                 StoredPortletResponseImpl sres = new StoredPortletResponseImpl(event.getHttpServletRequest(), event.getHttpServletResponse(), writer);
-                PortletContext ctx = event.getPortletContext();
-                PortletRequestDispatcher rd = null;
+                ServletContext ctx = ((PortletContextImpl)event.getPortletContext()).getServletContext();
+                RequestDispatcher rd = null;
                 rd = ctx.getRequestDispatcher(tab.getInclude());
                 try {
-                    rd.include(req, sres);
+                    rd.include(event.getHttpServletRequest(), sres);
                     pane.append(writer.getBuffer());
                 } catch (Exception e) {
                     e.printStackTrace();
