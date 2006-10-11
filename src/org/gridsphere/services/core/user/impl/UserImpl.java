@@ -13,13 +13,10 @@ import java.util.Hashtable;
 import java.util.Map;
 
 /**
- * The <code>SportletUserImpl</code> implements the <code>User</code> interface
+ * The <code>UserImpl</code> implements the <code>User</code> interface
  * and is an abstract view on the user-specific data.
  * Apart from a set of pre-defined, fixed set of attributes,
  * the interface gives access to user profile data.
- * <p/>
- * This implementation of <code>SportletUserImpl</code> uses Castor for Java to SQL
- * bindings
  */
 public class UserImpl implements User {
 
