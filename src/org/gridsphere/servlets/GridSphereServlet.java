@@ -11,11 +11,11 @@ import org.gridsphere.filters.PortalFilter;
 import org.gridsphere.filters.impl.descriptor.PortalFilterDescriptor;
 import org.gridsphere.layout.PortletLayoutEngine;
 import org.gridsphere.layout.PortletPageFactory;
-import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.UserPrincipal;
+import org.gridsphere.services.core.user.User;
+import org.gridsphere.services.core.user.UserPrincipal;
 import org.gridsphere.portlet.impl.PortletContextImpl;
 import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridsphere.services.core.user.impl.UserImpl;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceCollection;
@@ -269,7 +269,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public void setTCKUser(HttpServletRequest req) {
         log.info("Setting a TCK user");
-        SportletUserImpl u = new SportletUserImpl();
+        UserImpl u = new UserImpl();
         u.setUserName("tckuser");
         u.setUserID("tckuser");
         u.setID("500");

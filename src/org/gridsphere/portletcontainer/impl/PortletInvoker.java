@@ -7,7 +7,7 @@ package org.gridsphere.portletcontainer.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gridsphere.layout.event.PortletWindowEvent;
-import org.gridsphere.portlet.DefaultPortletAction;
+import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.ApplicationPortlet;

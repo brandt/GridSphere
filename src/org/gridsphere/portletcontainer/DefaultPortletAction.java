@@ -2,7 +2,7 @@
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: DefaultPortletAction.java 5032 2006-08-17 18:15:06Z novotny $
  */
-package org.gridsphere.portlet;
+package org.gridsphere.portletcontainer;
 
 import java.io.Serializable;
 import java.util.HashMap;

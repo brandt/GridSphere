@@ -8,7 +8,7 @@
  */
 package org.gridsphere.services.core.security.password;
 
-import org.gridsphere.portlet.User;
+import org.gridsphere.services.core.user.User;
 
 import java.util.Date;
 

@@ -8,7 +8,7 @@
  */
 package org.gridsphere.services.core.security.role;
 
-import org.gridsphere.portlet.User;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.service.PortletService;
 import org.gridsphere.services.core.persistence.QueryFilter;
 

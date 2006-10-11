@@ -3,8 +3,8 @@
  */
 package org.gridsphere.services.core.security.password.impl;
 
-import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridsphere.services.core.user.User;
+import org.gridsphere.services.core.user.impl.UserImpl;
 import org.gridsphere.services.core.security.password.PasswordEditor;
 
 import java.util.Date;
@@ -12,7 +12,7 @@ import java.util.Date;
 public class PasswordImpl implements PasswordEditor {
 
     private String oid = null;
-    private SportletUserImpl user;
+    private UserImpl user;
     // used for JSR/Tomcat/Realm
     //private String userName;
     private String value = "";
@@ -83,7 +83,7 @@ public class PasswordImpl implements PasswordEditor {
     }
 
     public void setUser(User user) {
-        this.user = (SportletUserImpl) user;
+        this.user = (UserImpl) user;
         //this.userName = user.getUserName();
     }
 
@@ -100,14 +100,14 @@ public class PasswordImpl implements PasswordEditor {
     /**
      * Castor method for setting user object.
      */
-    public void setSportletUser(SportletUserImpl user) {
+    public void setSportletUser(UserImpl user) {
         this.user = user;
     }
 
     /**
      * Castor method for getting user object.
      */
-    public SportletUserImpl getSportletUser() {
+    public UserImpl getSportletUser() {
         return this.user;
     }
 

@@ -4,7 +4,7 @@
  */
 package org.gridsphere.portlets.core.locale;
 
-import org.gridsphere.portlet.User;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;

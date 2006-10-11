@@ -4,7 +4,7 @@
  */
 package org.gridsphere.portlet.impl;
 
-import org.gridsphere.portlet.User;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.portletcontainer.impl.descriptor.Supports;
 
 import javax.portlet.PortletURL;

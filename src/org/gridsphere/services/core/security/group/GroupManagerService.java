@@ -8,7 +8,7 @@
  */
 package org.gridsphere.services.core.security.group;
 
-import org.gridsphere.portlet.User;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.service.PortletService;
 
 import java.util.List;

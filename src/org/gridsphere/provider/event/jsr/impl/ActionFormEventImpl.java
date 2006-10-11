@@ -4,7 +4,7 @@
  */
 package org.gridsphere.provider.event.jsr.impl;
 
-import org.gridsphere.portlet.DefaultPortletAction;
+import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.provider.event.impl.BaseFormEventImpl;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 

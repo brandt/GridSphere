@@ -2,7 +2,7 @@ package org.gridsphere.filters.impl;
 
 import org.gridsphere.filters.PortalFilter;
 import org.gridsphere.filters.PortalFilterConfig;
-import org.gridsphere.portlet.User;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.services.core.request.GenericRequest;

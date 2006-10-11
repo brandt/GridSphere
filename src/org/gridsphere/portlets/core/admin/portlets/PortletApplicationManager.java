@@ -4,7 +4,7 @@
  */
 package org.gridsphere.portlets.core.admin.portlets;
 
-import org.gridsphere.portlet.DefaultPortletAction;
+import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.PortletWebApplication;

@@ -6,8 +6,8 @@ package org.gridsphere.services.core.user.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridsphere.services.core.user.User;
+import org.gridsphere.services.core.user.impl.UserImpl;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
@@ -28,7 +28,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     private static PersistenceManagerRdbms pm = null;
 
-    private String jdoUser = SportletUserImpl.class.getName();
+    private String jdoUser = UserImpl.class.getName();
 
     public UserManagerServiceImpl() {
     }
@@ -48,7 +48,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @return a blank user
      */
     public User createUser() {
-        SportletUserImpl user = new SportletUserImpl();
+        UserImpl user = new UserImpl();
         saveSportletUserImpl(user);
         return user;
     }
@@ -59,8 +59,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param user a supplied User object
      */
     public void saveUser(User user) {
-        if (user instanceof SportletUserImpl) {
-            SportletUserImpl impl = (SportletUserImpl) user;
+        if (user instanceof UserImpl) {
+            UserImpl impl = (UserImpl) user;
             saveSportletUserImpl(impl);
         }
 
@@ -68,9 +68,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
 
     public void deleteUser(User user) {
-        if (user instanceof SportletUserImpl) {
+        if (user instanceof UserImpl) {
             // delete user object
-            deleteSportletUserImpl((SportletUserImpl) user);
+            deleteSportletUserImpl((UserImpl) user);
             // Send message if not null
         }
     }
@@ -152,7 +152,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     public User getLoggedInUser(String loginName) {
-        SportletUserImpl user = getSportletUserImplByLoginName(loginName);
+        UserImpl user = getSportletUserImplByLoginName(loginName);
         if (user != null) {
             long now = Calendar.getInstance().getTime().getTime();
             String lastlogin = (String) user.getAttribute("lastlogin");
@@ -192,21 +192,21 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         return selectUsers(criteria, queryFilter);
     }
 
-    private SportletUserImpl getSportletUserImpl(String id) {
+    private UserImpl getSportletUserImpl(String id) {
         return selectSportletUserImpl("where uzer.oid='" + id + "'");
     }
 
-    private SportletUserImpl getSportletUserImplByLoginName(String loginName) {
+    private UserImpl getSportletUserImplByLoginName(String loginName) {
         return selectSportletUserImpl("where uzer.UserID='" + loginName + "'");
     }
 
-    private SportletUserImpl selectSportletUserImpl(String criteria) {
+    private UserImpl selectSportletUserImpl(String criteria) {
         String oql = "select uzer from "
                 + jdoUser
                 + " uzer "
                 + criteria;
         try {
-            return (SportletUserImpl) pm.restore(oql);
+            return (UserImpl) pm.restore(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving user with criteria " + criteria;
             log.error(msg, e);
@@ -214,7 +214,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         }
     }
 
-    private void saveSportletUserImpl(SportletUserImpl user) {
+    private void saveSportletUserImpl(UserImpl user) {
         // Create or update user
         try {
             pm.saveOrUpdate(user);
@@ -225,7 +225,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     }
 
-    private void deleteSportletUserImpl(SportletUserImpl user) {
+    private void deleteSportletUserImpl(UserImpl user) {
         try {
             pm.delete(user);
         } catch (PersistenceManagerException e) {
@@ -250,7 +250,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 + " uzer "
                 + criteria;
         try {
-            SportletUserImpl sui = (SportletUserImpl) pm.restore(oql);
+            UserImpl sui = (UserImpl) pm.restore(oql);
             if (sui == null) {
                 log.debug("User does not exist!");
             }

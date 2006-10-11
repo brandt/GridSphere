@@ -4,8 +4,8 @@
  */
 package org.gridsphere.portlet.impl;
 
-import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.UserPrincipal;
+import org.gridsphere.services.core.user.User;
+import org.gridsphere.services.core.user.UserPrincipal;
 import org.gridsphere.portletcontainer.impl.descriptor.Supports;
 
 import javax.portlet.*;

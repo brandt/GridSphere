@@ -1,6 +1,6 @@
 package org.gridsphere.services.core.utils;
 
-import org.gridsphere.portlet.User;
+import org.gridsphere.services.core.user.User;
 
 import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequest;

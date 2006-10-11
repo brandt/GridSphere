@@ -80,7 +80,6 @@ public class TabbedPaneTag extends BaseComponentTag {
                 url.setParameter(TAB_LABEL_PARAM, tabBean.getLabel());
                 String href = url.toString();
 
-
                 if (tabBean.getLabel().equals(currentTabLabel)) {
                     req.getPortletSession(true).setAttribute(getClass().getName(), currentTabLabel);
                     currentPage = tabBean.getPage();

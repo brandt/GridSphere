@@ -5,8 +5,8 @@ package org.gridsphere.services.core.security.role.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridsphere.services.core.user.User;
+import org.gridsphere.services.core.user.impl.UserImpl;
 import org.gridsphere.services.core.security.role.PortletRole;
 
 public class UserRole {
@@ -14,7 +14,7 @@ public class UserRole {
     protected transient static Log log = LogFactory.getLog(UserRole.class);
 
     private String oid = null;
-    private SportletUserImpl user = null;
+    private UserImpl user = null;
     private PortletRole portletRole;
 
     public UserRole() {
@@ -45,7 +45,7 @@ public class UserRole {
     }
 
     public void setUser(User user) {
-        this.user = (SportletUserImpl) user;
+        this.user = (UserImpl) user;
     }
 
 }

@@ -1,7 +1,7 @@
 package org.gridsphere.portletcontainer;
 
 import org.gridsphere.layout.event.PortletWindowEvent;
-import org.gridsphere.portlet.DefaultPortletAction;
+import org.gridsphere.portletcontainer.DefaultPortletAction;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

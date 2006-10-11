@@ -2,7 +2,7 @@
 
 package org.gridsphere.portlets.core.admin.portlets;
 
-import org.gridsphere.portlet.User;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portletcontainer.impl.PortletSessionManager;

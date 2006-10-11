@@ -5,8 +5,8 @@ package org.gridsphere.services.core.security.group.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.portlet.User;
-import org.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridsphere.services.core.user.User;
+import org.gridsphere.services.core.user.impl.UserImpl;
 import org.gridsphere.services.core.security.group.PortletGroup;
 import org.gridsphere.services.core.security.role.PortletRole;
 
@@ -15,7 +15,7 @@ public class UserGroup {
     protected transient static Log log = LogFactory.getLog(UserGroup.class);
 
     private String oid = null;
-    private SportletUserImpl user = null;
+    private UserImpl user = null;
     private PortletGroup sgroup = null;
     // deprecated
     private String role = "";
@@ -81,7 +81,7 @@ public class UserGroup {
     }
 
     public void setUser(User user) {
-        this.user = (SportletUserImpl) user;
+        this.user = (UserImpl) user;
     }
 
 }

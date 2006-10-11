@@ -4,7 +4,7 @@
  */
 package org.gridsphere.provider.event.jsr;
 
-import org.gridsphere.portlet.DefaultPortletAction;
+import org.gridsphere.portletcontainer.DefaultPortletAction;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;

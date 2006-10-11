@@ -3,9 +3,9 @@
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @version $Id: SportletUserImpl.java 5032 2006-08-17 18:15:06Z novotny $
  */
-package org.gridsphere.portlet.impl;
+package org.gridsphere.services.core.user.impl;
 
-import org.gridsphere.portlet.User;
+import org.gridsphere.services.core.user.User;
 
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import java.util.Map;
  * This implementation of <code>SportletUserImpl</code> uses Castor for Java to SQL
  * bindings
  */
-public class SportletUserImpl implements User {
+public class UserImpl implements User {
 
     private String oid = null;
     // store used to maintain user attributes
@@ -286,14 +286,14 @@ public class SportletUserImpl implements User {
     public boolean equals(Object obj) {
         boolean b = true;
         if ((obj != null) && (obj.getClass().equals(this.getClass()))) {
-            b = (((SportletUserImpl) obj).EmailAddress == this.EmailAddress);
-            b &= (((SportletUserImpl) obj).LastName == this.LastName);
-            b &= (((SportletUserImpl) obj).FirstName == this.FirstName);
-            b &= (((SportletUserImpl) obj).FullName == this.FullName);
-            b &= (((SportletUserImpl) obj).FullName == this.FullName);
-            b &= (((SportletUserImpl) obj).UserID == this.UserID);
-            b &= (((SportletUserImpl) obj).LastLoginTime == this.LastLoginTime);
-            b &= (((SportletUserImpl) obj).Organization == this.Organization);
+            b = (((UserImpl) obj).EmailAddress == this.EmailAddress);
+            b &= (((UserImpl) obj).LastName == this.LastName);
+            b &= (((UserImpl) obj).FirstName == this.FirstName);
+            b &= (((UserImpl) obj).FullName == this.FullName);
+            b &= (((UserImpl) obj).FullName == this.FullName);
+            b &= (((UserImpl) obj).UserID == this.UserID);
+            b &= (((UserImpl) obj).LastLoginTime == this.LastLoginTime);
+            b &= (((UserImpl) obj).Organization == this.Organization);
         }
         return b;
     }

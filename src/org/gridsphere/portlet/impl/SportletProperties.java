@@ -139,7 +139,7 @@ public class SportletProperties {
 
     public static final String PREFIX = "up";
 
-    public static final String PORTLET_USER = "org.gridsphere.portlet.User";
+    public static final String PORTLET_USER = "org.gridsphere.services.core.user.User";
 
     /**
      * The variable name of the PortletConfig object
@@ -194,7 +194,7 @@ public class SportletProperties {
 
     public static final String SSL_REQUIRED = "javax.portlet.SSL_REQUIRED";
 
-    public static final String PORTLET_USER_PRINCIPAL = "org.gridsphere.portlet.UserPrincipal";
+    public static final String PORTLET_USER_PRINCIPAL = "org.gridsphere.services.core.user.UserPrincipal";
 
     public static final String EXTRA_QUERY_INFO = "org.gridsphere.layout.EXTRA_QUERY_INFO";
 

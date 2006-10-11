@@ -3,7 +3,7 @@
  */
 package org.gridsphere.services.core.security.password;
 
-import org.gridsphere.portlet.User;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.service.PortletService;
 
 public interface PasswordManagerService extends PortletService {

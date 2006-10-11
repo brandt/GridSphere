@@ -1,7 +1,7 @@
 /*
  * Created by Dmitry Gavrilov 05.04.2005
  */
-package org.gridsphere.portlet;
+package org.gridsphere.services.core.user;
 
 import java.io.Serializable;
 import java.security.Principal;

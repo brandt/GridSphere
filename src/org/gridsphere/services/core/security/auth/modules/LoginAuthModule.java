@@ -1,6 +1,6 @@
 package org.gridsphere.services.core.security.auth.modules;
 
-import org.gridsphere.portlet.User;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.security.auth.AuthenticationException;
 
 import javax.servlet.http.HttpServletRequest;

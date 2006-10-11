@@ -3,7 +3,7 @@
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @version $Id: User.java 4496 2006-02-08 20:27:04Z wehrens $
  */
-package org.gridsphere.portlet;
+package org.gridsphere.services.core.user;
 
 import java.util.Enumeration;
 

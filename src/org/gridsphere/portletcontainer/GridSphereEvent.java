@@ -6,7 +6,7 @@ package org.gridsphere.portletcontainer;
 
 import org.gridsphere.layout.event.PortletComponentEvent;
 import org.gridsphere.portletcontainer.Client;
-import org.gridsphere.portlet.DefaultPortletAction;
+import org.gridsphere.portletcontainer.DefaultPortletAction;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
