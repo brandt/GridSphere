@@ -20,28 +20,20 @@ public class PortletTabEventImpl implements PortletTabEvent {
     private ComponentAction action;
     private PortletTab portletTab;
     private int id;
-    private ActionRequest request;
-
 
     /**
      * Constructs an instance of PortletTabEventImpl from a portlet tab, a
      * tab event action and the portlet tab component id
      *
      * @param portletTab the portlet tab
-     * @param request    the actionrquest
      * @param action     the portlet tab event action
      * @param id         the portlet component id
      * @see PortletTab
      */
-    public PortletTabEventImpl(PortletTab portletTab, ActionRequest request, ComponentAction action, int id) {
+    public PortletTabEventImpl(PortletTab portletTab, ComponentAction action, int id) {
         this.action = action;
         this.portletTab = portletTab;
         this.id = id;
-        this.request = request;
-    }
-
-    public ActionRequest getRequest() {
-        return request;
     }
 
     /**

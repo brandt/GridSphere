@@ -271,7 +271,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
 
         // pop last event from stack
         event.getLastRenderEvent();
-        PortletTabEvent tabEvent = new PortletTabEventImpl(this, event.getActionRequest(), PortletTabEvent.TabAction.TAB_SELECTED, COMPONENT_ID);
+        PortletTabEvent tabEvent = new PortletTabEventImpl(this, PortletTabEvent.TabAction.TAB_SELECTED, COMPONENT_ID);
 
         Iterator it = listeners.iterator();
         PortletComponent comp;
