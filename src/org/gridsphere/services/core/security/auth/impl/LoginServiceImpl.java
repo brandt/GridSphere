@@ -25,8 +25,7 @@ import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthMo
 import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModulesDescriptor;
 import org.gridsphere.services.core.user.UserManagerService;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.PortletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.security.cert.X509Certificate;
@@ -190,7 +189,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     public void destroy() {
     }
 
-    public User login(ActionRequest req)
+    public User login(HttpServletRequest req)
             throws AuthenticationException, AuthorizationException {
         String loginName = req.getParameter("username");
         String loginPassword = req.getParameter("password");
@@ -278,7 +277,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         return res.toString();
     }
 
-    protected String getLocalizedText(PortletRequest req, String key) {
+    protected String getLocalizedText(HttpServletRequest req, String key) {
         Locale locale = req.getLocale();
         ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
         return bundle.getString(key);

@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * The <code>PortletInvoker</code> provides static lifecycle routines for performing portlet operations on
@@ -47,6 +46,7 @@ public class PortletInvoker {
      * @param req               the <code>HttpServletRequest</code>
      * @param res               the <code>HttpServletResponse</code>
      * @throws PortletDispatcherException if a dispatching error occurs
+     * @throws IOException if an I/O error occurs
      */
     public void service(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletDispatcherException {
         log.debug("in service " + concretePortletID);
@@ -64,6 +64,7 @@ public class PortletInvoker {
      * Performs action performed method on a concrete portlet instance
      *
      * @param concretePortletID the concrete portlet id
+     * @param action            the default portlet action
      * @param req               the <code>HttpServletRequest</code>
      * @param res               the <code>HttpServletResponse</code>
      * @throws PortletDispatcherException if a dispatching error occurs
@@ -104,6 +105,7 @@ public class PortletInvoker {
      * Performs window event method on a concrete portlet instance
      *
      * @param concretePortletID the concrete portlet id
+     * @param winEvent          the window event
      * @param req               the <code>HttpServletRequest</code>
      * @param res               the <code>HttpServletResponse</code>
      * @throws PortletDispatcherException if a dispatching error occurs
@@ -141,9 +143,8 @@ public class PortletInvoker {
         // Initialize all concrete portlets for each application portlet
         Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
         PortletDispatcher portletDispatcher = null;
-        Iterator it = appPortlets.iterator();
-        while (it.hasNext()) {
-            ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
+        for (Object appPortlet1 : appPortlets) {
+            ApplicationPortlet appPortlet = (ApplicationPortlet) appPortlet1;
             portletDispatcher = appPortlet.getPortletDispatcher(req, res);
             // initialize the application portlet
             log.debug("logout application portlet " + appPortlet.getApplicationPortletID());

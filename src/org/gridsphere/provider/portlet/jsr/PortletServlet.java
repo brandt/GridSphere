@@ -187,9 +187,6 @@ public class PortletServlet extends HttpServlet
             PortletManagerService manager = (PortletManagerService)PortletServiceFactory.createPortletService(PortletManagerService.class, true);
             manager.addPortletWebApplication(portletWebApp);
             return;
-        } else if (method.equals(SportletProperties.INIT_CONCRETE)) {
-            // do nothing for concrete portlets
-            return;
         } else if (method.equals(SportletProperties.DESTROY)) {
             Iterator it = portlets.keySet().iterator();
             while (it.hasNext()) {
@@ -203,9 +200,6 @@ public class PortletServlet extends HttpServlet
                     log.error("Caught exception during portlet destroy", e);
                 }
             }
-            return;
-        } else if (method.equals(SportletProperties.DESTROY_CONCRETE)) {
-            // do nothing for concrete portlets
             return;
         } else if (method.equals(SportletProperties.LOGIN)) {
 
@@ -360,8 +354,6 @@ public class PortletServlet extends HttpServlet
                     }
                 } else if (action.equals(SportletProperties.WINDOW_EVENT)) {
                     // do nothing
-                } else if (action.equals(SportletProperties.MESSAGE_RECEIVED)) {
-                    // do nothing
                 } else if (action.equals(SportletProperties.ACTION_PERFORMED)) {
                     // create portlet preferences manager
                     PortletPreferencesManager prefsManager = new PortletPreferencesManager(appPortlet, userId, false);
@@ -411,32 +403,10 @@ public class PortletServlet extends HttpServlet
                     }
                 }
             }
-            request.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         } else {
             log.error("in PortletServlet: service(): No " + SportletProperties.PORTLET_LIFECYCLE_METHOD + " found in request!");
         }
-        request.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }
-
-/*
-protected void setGroupAndRole(PortletRequest request, PortletResponse response) {
-String ctxPath = this.getServletContext().getRealPath("");
-int i = ctxPath.lastIndexOf(File.separator);
-String groupName = ctxPath.substring(i+1);
-
-PortletGroup group = aclService.getGroup(groupName);
-if (group == null)
-group = PortletGroupFactory.createPortletGroup(groupName);
-
-PortletRole role = aclService.getRoleInGroup(request.getUser(), group);
-
-log.debug("Setting Group: " + group.toString() + " Role: " + role.toString());
-
-request.setAttribute(SportletProperties.PORTLET_GROUP, group);
-request.setAttribute(SportletProperties.PORTLET_ROLE, role);
-}
-*/
-
 
     protected void doTitle(Portlet portlet, RenderRequest request, RenderResponse response) throws IOException, PortletException {
         Portlet por = (Portlet)portlet;

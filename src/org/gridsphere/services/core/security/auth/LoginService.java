@@ -8,7 +8,7 @@ import org.gridsphere.portlet.User;
 import org.gridsphere.portlet.service.PortletService;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 
-import javax.portlet.ActionRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -34,11 +34,11 @@ public interface LoginService extends PortletService {
      *
      * @param req the portlet request
      *
-     * @return User The associated user.
-     * @throws org.gridsphere.services.core.security.auth.AuthorizationException
-     *          If login unsuccessful
+     * @return User The associated user
+     * @throws  AuthorizationException if login unsuccessful
+     * @throws  AuthenticationException if login unsuccessful
      */
-    public User login(ActionRequest req)
+    public User login(HttpServletRequest req)
             throws AuthenticationException, AuthorizationException;
 
     public void saveAuthModule(LoginAuthModule authModule);

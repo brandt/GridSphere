@@ -59,8 +59,9 @@ public class TabbedPaneTag extends BaseComponentTag {
         try {
 
             RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
-
+             System.err.println("\n\nA\n\n");
             currentTabLabel = req.getParameter(TAB_LABEL_PARAM);
+             System.err.println("\n\nB\n\n" + currentTabLabel);
             if (currentTabLabel == null) {
                 currentTabLabel = (String)req.getPortletSession(true).getAttribute(getClass().getName());
             }

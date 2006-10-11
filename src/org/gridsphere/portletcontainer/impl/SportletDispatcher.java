@@ -51,6 +51,8 @@ public class SportletDispatcher implements PortletDispatcher {
             include(req, res);
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to initialize portlet: ", e);
+        } finally {
+            req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         }
     }
 
@@ -60,6 +62,8 @@ public class SportletDispatcher implements PortletDispatcher {
             include(req, res);
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform destroy: ", e);
+        } finally {
+            req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         }
     }
 
@@ -69,6 +73,8 @@ public class SportletDispatcher implements PortletDispatcher {
             include(req, res);
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform service", e);
+        } finally {
+            req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         }
     }
 
@@ -78,6 +84,8 @@ public class SportletDispatcher implements PortletDispatcher {
             include(req, res);
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform login", e);
+        } finally {
+            req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         }
     }
 
@@ -87,6 +95,8 @@ public class SportletDispatcher implements PortletDispatcher {
             include(req, res);
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform logout", e);
+        } finally {
+            req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         }
     }
 
@@ -98,6 +108,10 @@ public class SportletDispatcher implements PortletDispatcher {
             include(req, res);
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform actionPerformed", e);
+        } finally {
+            req.removeAttribute(SportletProperties.ACTION_EVENT);
+            req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
+            req.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         }
     }
 
@@ -108,6 +122,9 @@ public class SportletDispatcher implements PortletDispatcher {
             include(req, res);
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform doTitle", e);
+        } finally {
+            req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
+            req.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         }
     }
 
@@ -120,6 +137,10 @@ public class SportletDispatcher implements PortletDispatcher {
             include(req, res);
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform windowEvent", e);
+        } finally {
+            req.removeAttribute(SportletProperties.WINDOW_EVENT);
+            req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
+            req.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         }
     }
 

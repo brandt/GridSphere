@@ -337,13 +337,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         System.err.println("in login of GS servlet!!");
 
         String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
-        ActionRequest req = event.getActionRequest();
+        HttpServletRequest req = event.getHttpServletRequest();
         RenderResponse res = event.getRenderResponse();
         try {
             User user = loginService.login(req);
             System.err.println("user= " + user.toString());
             req.setAttribute(SportletProperties.PORTLET_USER, user);
-            req.getPortletSession(true).setAttribute(SportletProperties.PORTLET_USER, user.getID(), PortletSession.APPLICATION_SCOPE);
+            req.getSession(true).setAttribute(SportletProperties.PORTLET_USER, user.getID());
 
             String query = event.getAction().getParameter("queryString");
 

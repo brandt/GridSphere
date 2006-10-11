@@ -87,7 +87,7 @@ public class RenderURLTagImpl extends ActionTag {
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
 
         String actionString = createJSRActionURI(res.createRenderURL());
-        actionlink.setAction(actionString);
+        //actionlink.setAction(actionString);
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
         }
