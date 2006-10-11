@@ -96,9 +96,6 @@ Build include file for the GridSphere Portal source code, see build.xml
             <include name="javax/**"/>
             <!-- GS properties -->
             <include name="gridsphere/**"/>
-            <!-- GS portlet API -->
-            <include name="org/gridsphere/portlet/**"/>
-            <exclude name="**/impl/**"/>
         </jar>
     </target>
 
