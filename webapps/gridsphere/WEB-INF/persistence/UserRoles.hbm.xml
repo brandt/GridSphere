@@ -23,7 +23,7 @@
         <many-to-one
             name="user"
             column="sportletuser"
-            class="org.gridsphere.portlet.impl.SportletUserImpl">
+            class="org.gridsphere.services.core.user.impl.UserImpl">
         </many-to-one>
         <many-to-one
             name="role"

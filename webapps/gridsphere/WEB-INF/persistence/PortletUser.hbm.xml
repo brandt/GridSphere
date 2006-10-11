@@ -6,7 +6,7 @@
 
 <hibernate-mapping default-lazy="false">
     <class
-        name="org.gridsphere.portlet.impl.SportletUserImpl"
+        name="org.gridsphere.services.core.user.impl.UserImpl"
         table="sportletuserimpl"
         >
         <cache usage="read-write"/>
