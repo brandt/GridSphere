@@ -41,6 +41,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     private PortletSession portletSession = null;
     protected GridSphereParameters portalParameters = null;
 
+    private Map origParams = null;
     /**
      * Constructor creates a proxy for a HttpServletRequest
      * All PortletRequest objects come from request or session attributes
@@ -49,7 +50,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public PortletRequestImpl(HttpServletRequest req, PortletContext portletContext) {
         super(req);
-
+        this.origParams = new HashMap();
         this.portletContext = portletContext;
         contextPath = this.portletContext.getRealPath("");
         int l = contextPath.lastIndexOf(File.separator);
@@ -59,16 +60,16 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             contextPath = contextPath.replace('\\', '/');
         }
 
-        Map map = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map map = (Map)getHttpServletRequest().getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (map == null) {
-            req.setAttribute(SportletProperties.PORTAL_PROPERTIES, new HashMap());
+            getHttpServletRequest().setAttribute(SportletProperties.PORTAL_PROPERTIES, new HashMap());
         }
-        map = (Map)(Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        map = (Map)(Map)getHttpServletRequest().getAttribute(SportletProperties.PORTAL_PROPERTIES);
 
-        Enumeration e = req.getHeaderNames();
+        Enumeration e = getHttpServletRequest().getHeaderNames();
         while (e.hasMoreElements()) {
             String name = (String)e.nextElement();
-            Enumeration headersEnum = req.getHeaders(name);
+            Enumeration headersEnum = getHttpServletRequest().getHeaders(name);
             List vals = new ArrayList();
             while (headersEnum.hasMoreElements()) {
                 String val = (String)headersEnum.nextElement();
@@ -76,11 +77,20 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             }
             map.put(name, vals);
         }
-        req.setAttribute(SportletProperties.PORTAL_PROPERTIES, map);
+        getHttpServletRequest().setAttribute(SportletProperties.PORTAL_PROPERTIES, map);
 
-        portalParameters = new GridSphereParameters(req);
+        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
 
-        /*
+        portalParameters = new GridSphereParameters();
+
+        for (Enumeration parameters = super.getParameterNames(); parameters.hasMoreElements();) {
+            String   paramName   = (String)parameters.nextElement();
+            String[] paramValues = (String[])super.getParameterValues(paramName);
+            origParams.put(paramName, paramValues);
+        }
+
+       /*
         System.err.println("============================= PortletRequestImpl =====================================");
         if (getAttribute(SportletProperties.PORTLET_ACTION_METHOD) != null) {
             System.err.println("in action");
@@ -93,6 +103,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         for (Enumeration parameters = super.getParameterNames(); parameters.hasMoreElements();) {
             String   paramName   = (String)parameters.nextElement();
             String[] paramValues = (String[])super.getParameterValues(paramName);
+            origParams.put(paramName, paramValues);
             System.err.println("\nname=" + paramName + "\nvalues=");
             for (int i = 0; i < paramValues.length; i++) {
                 System.err.print("  " + paramValues[i]);
@@ -494,7 +505,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     public String getParameter(String name) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
         hasReader = true;
-        Object val = this.getParameterMap().get(name);
+        Map map = this.getParameterMap();
+        Object val = map.get(name);
         if (val != null) {
             if (val instanceof String) return (String) val;
             if (val instanceof String[]) {
@@ -545,7 +557,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     public String[] getParameterValues(String name) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
         hasReader = true;
-        return (String[]) this.getParameterMap().get(name);
+        Map map = this.getParameterMap();
+        return (String[]) map.get(name);
     }
 
     /**
@@ -566,7 +579,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public java.util.Map getParameterMap() {
         hasReader = true;
-        return portalParameters.getParameterMap();
+        Map map =  portalParameters.getParameterMap(getHttpServletRequest(), origParams, getQueryString());
+        return map;
     }
 
     /**
@@ -833,27 +847,29 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     }
 
     public String getQueryString() {
-        //String attr = (String) super.getAttribute("javax.servlet.include.query_string");
-        //return (attr != null) ? attr : super.getQueryString();
+        if (included) {
+            return (String) super.getAttribute("javax.servlet.include.query_string");
+        }
         return super.getQueryString();
     }
 
     public String getPathInfo() {
-        //String attr = (String) super.getAttribute("javax.servlet.include.path_info");
-        //return (attr != null) ? attr : super.getPathInfo();
         String cmd = (String)getAttribute("org.gridsphere.tomcat_hack");
         if (cmd != null) return cmd;
+        if (included) {
+            return (String) super.getAttribute("javax.servlet.include.path_info");
+        }
         return super.getPathInfo();
     }
 
     public String getRequestURI() {
-        //String attr = (String) super.getAttribute("javax.servlet.include.request_uri");
+        if (included) return (String) super.getAttribute("javax.servlet.include.request_uri");
         //return (attr != null) ? attr : super.getRequestURI();
         return super.getRequestURI();
     }
 
     public String getServletPath() {
-        //String attr = (String) super.getAttribute("javax.servlet.include.servlet_path");
+        if (included) return (String) super.getAttribute("javax.servlet.include.servlet_path");
         //return (attr != null) ? attr : super.getServletPath();
         return super.getServletPath();
     }
@@ -870,7 +886,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
 
     }
 
-    public BufferedReader getReader() throws UnsupportedEncodingException, IOException {
+    public BufferedReader getReader() throws IOException {
         if (included) return null;
         hasReader = true;
         return getHttpServletRequest().getReader();

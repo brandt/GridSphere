@@ -46,16 +46,6 @@ public class SportletProperties {
     public static final String DESTROY = "org.gridsphere.portlet.lifecycle.destroy";
 
     /**
-     * Command to perform the init concrete method on a portlet
-     */
-    public static final String INIT_CONCRETE = "org.gridsphere.portlet.lifecycle.initConcrete";
-
-    /**
-     * Command to perform the destroy concrete method on a portlet
-     */
-    public static final String DESTROY_CONCRETE = "org.gridsphere.portlet.lifecycle.destroyConcrete";
-
-    /**
      * Command to perform the login method on a portlet
      */
     public static final String LOGIN = "gs_login";
@@ -70,27 +60,12 @@ public class SportletProperties {
      */
     public static final String SERVICE = "org.gridsphere.portlet.lifecycle.service";
 
-    // Portlet obects
-    /**
-     * The variable name of the PortletApplication object
-     */
-    public static final String PORTLET_APPLICATION = "org.gridsphere.portletcontainer.PortletApplication";
-
-    /**
-     * The variable name of the PortletSettings object
-     */
-    public static final String PORTLET_SETTINGS = "org.gridsphere.portlet.PortletSettings";
 
     // Portlet events
     /**
      * The variable name of the ActionEvent object
      */
     public static final String ACTION_EVENT = "org.gridsphere.event.ActionEvent";
-
-    /**
-     * The variable name of the MessageEvent object
-     */
-    public static final String MESSAGE_EVENT = "org.gridsphere.event.MessageEvent";
 
     /**
      * The variable name of the WindowEvent object
@@ -106,38 +81,6 @@ public class SportletProperties {
      * Command to perform the actionPerformed method on a portlet
      */
     public static final String ACTION_PERFORMED = "org.gridsphere.portlet.lifecycle.actionPerformed";
-
-    /**
-     * Command to perform the messageReceived method on a portlet
-     */
-    public static final String MESSAGE_RECEIVED = "org.gridsphere.portlet.lifecycle.messageReceived";
-
-    /**
-     * Command to perform the windowDetached method on a portlet
-     */
-    public static final String WINDOW_DETACHED = "org.gridsphere.portlet.lifecycle.windowDetached";
-
-    /**
-     * Command to perform the windowMinimized method on a portlet
-     */
-    public static final String WINDOW_MINIMIZED = "org.gridsphere.portlet.lifecycle.windowMinimized";
-
-    /**
-     * Command to perform the windowMaximized method on a portlet
-     */
-    public static final String WINDOW_MAXIMIZED = "org.gridsphere.portlet.lifecycle.windowMaximized";
-
-    /**
-     * Command to perform the windowClosing method on a portlet
-     * <p/>
-     * *NOT IMPLEMENTED*
-     */
-    public static final String WINDOW_CLOSING = "org.gridsphere.portlet.lifecycle.windowClosing";
-
-    /**
-     * Command to perform the windowRestored method on a portlet
-     */
-    public static final String WINDOW_RESTORED = "org.gridsphere.portlet.lifecycle.windowRestored";
 
     public static final String INIT_PAGE = "org.gridsphere.layout.INIT_PAGE";
     /**

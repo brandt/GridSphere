@@ -15,38 +15,14 @@ import java.util.*;
  */
 public class GridSphereParameters {
 
-    private HttpServletRequest req = null;
+    private Map origParams = null;
     private Map renderParams = null;
     private Map persistParams = null;
     private Map params = null;
-    private String targetedCid = null;
     private List reservedParams = null;
 
-    public GridSphereParameters(HttpServletRequest request) {
-        this.req = request;
 
-        // check request string for action
-        String queryString = req.getQueryString();
-
-        params = new HashMap();
-        renderParams = new HashMap();
-        persistParams = new HashMap();
-
-        // create reserved params list
-        reservedParams = new ArrayList();
-
-        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-
-        reservedParams.add(compVar);
-        reservedParams.add(SportletProperties.DEFAULT_PORTLET_ACTION);
-        reservedParams.add(SportletProperties.PORTLET_MODE);
-        reservedParams.add(SportletProperties.PORTLET_WINDOW);
-
-        renderParams.putAll(parseQueryString(queryString, true));
-        params.putAll(parseQueryString(queryString, false));
-
-        this.targetedCid = request.getParameter(compVar);
+    public GridSphereParameters() {
     }
 
     public void addRenderParams(Map params) {
@@ -110,9 +86,11 @@ public class GridSphereParameters {
     }
 
     private void parseRequestParams() {
-        for (Enumeration parameters = req.getParameterNames(); parameters.hasMoreElements();) {
-            String paramName = (String) parameters.nextElement();
-            String[] paramValues = (String[]) req.getParameterValues(paramName);
+        //System.err.println("GP: parse req parms");
+        Iterator it = origParams.keySet().iterator();
+        while (it.hasNext()) {
+            String paramName = (String)it.next();
+            String[] paramValues = (String[]) origParams.get(paramName);
             if (!reservedParams.contains(paramName)) {
                 if (paramName.startsWith("pr_" + SportletProperties.RENDER_PARAM_PREFIX)) continue;
                 if (paramName.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
@@ -134,9 +112,11 @@ public class GridSphereParameters {
      * using JSRApplicationPortletImpl to get its dispatcher.
      */
     private void parsePersistParams() {
-        for (Enumeration parameters = req.getParameterNames(); parameters.hasMoreElements();) {
-            String paramName = (String) parameters.nextElement();
-            String[] paramValues = (String[]) req.getParameterValues(paramName);
+        //System.err.println("GP: parse persist parms");
+        Iterator it = origParams.keySet().iterator();
+        while (it.hasNext()) {
+            String paramName = (String)it.next();
+            String[] paramValues = (String[]) origParams.get(paramName);
             if (!reservedParams.contains(paramName)) {
                 if (paramName.startsWith("pr_" + SportletProperties.RENDER_PARAM_PREFIX)) {
                     String name = paramName.substring(6);
@@ -148,19 +128,47 @@ public class GridSphereParameters {
         }
     }
 
-    public Map getParameterMap() {
+    public Map getParameterMap(HttpServletRequest req, Map origParams, String queryString) {
+        this.origParams = origParams;
+        // check request string for action
+
+        params = new HashMap();
+        renderParams = new HashMap();
+        persistParams = new HashMap();
+
+        // create reserved params list
+        reservedParams = new ArrayList();
 
         String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
         if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+
+        reservedParams.add(compVar);
+        reservedParams.add(SportletProperties.DEFAULT_PORTLET_ACTION);
+        reservedParams.add(SportletProperties.PORTLET_MODE);
+        reservedParams.add(SportletProperties.PORTLET_WINDOW);
+
+        renderParams.putAll(parseQueryString(queryString, true));
+        params.putAll(parseQueryString(queryString, false));
+
+        String targetedCid = null;
+        String[] tCid = (String[]) origParams.get(compVar);
+        if (tCid != null) targetedCid = tCid[0];
+      
+
+        //System.err.println("target cid= " + targetedCid);
+
         String mycid = (String) req.getAttribute(compVar);
-
-        if (mycid == null) return req.getParameterMap();
-
+        if (mycid == null) {
+            //System.err.println("mycid is null");
+            return origParams;
+        }
+        
         Map map = new HashMap();
 
         // check for any query params from an included JSP
-        String queryString = (String)req.getAttribute("javax.servlet.include.query_string");
+        queryString = (String)req.getAttribute("javax.servlet.include.query_string");
         if (queryString != null) {
+            //System.err.println("found query string");
             map.putAll(parseQueryString(queryString, false));
         }
 
@@ -168,19 +176,19 @@ public class GridSphereParameters {
         // In the first case, all params are returned. In the second case, params in action method
         // must not be returned
 
-        //System.err.println("GP: in parameters  mycid= " + mycid + " targetid= " + targetedCid);
+        //System.err.println("\nGP: in parameters  mycid= " + mycid + " targetid= " + targetedCid);
 
         // this is a render event (meaning params are being queried in a render method)
         if (req.getAttribute(SportletProperties.PORTLET_ACTION_METHOD) == null) {
 
             // this is a render that has occured after an action
-            if (req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION) != null) {
+            if (origParams.containsKey(SportletProperties.DEFAULT_PORTLET_ACTION)) {
 
                 //System.err.println("GP: default action not null");
 
                 // this is the portlet that was being targeted, now during a render
                 if (mycid.equals(targetedCid)) {
-                    //System.err.println("GP: in render event, have an action, this is the target portlet: " + pid);
+                    //System.err.println("\nGP: in render event, have an action, this is the target portlet: ");
                     parseRequestParams();
 
                     parsePersistParams();
@@ -188,7 +196,7 @@ public class GridSphereParameters {
                     map.putAll(renderParams);
 
                 } else {
-                    //System.err.println("GP: in render event, have an action, this portlet is not targeted");
+                    //System.err.println("\nGP: in render event, have an action, this portlet is not targeted");
                     parsePersistParams();
                     map.putAll(persistParams);
 
@@ -204,14 +212,13 @@ public class GridSphereParameters {
 
             map.putAll(persistParams);
 
-            //System.err.println("GP: in render, no action this IS the targeted portlet ");
+            //System.err.println("\nGP: in render, no action this IS the targeted portlet ");
 
             parseRequestParams();
 
             // replace any persist params with render params
-            Iterator it = renderParams.keySet().iterator();
-            while (it.hasNext()) {
-                String key = (String) it.next();
+            for (Object o : renderParams.keySet()) {
+                String key = (String) o;
                 String[] paramVals = (String[]) renderParams.get(key);
 
                 if (map.containsKey(key)) {
@@ -220,12 +227,10 @@ public class GridSphereParameters {
 
             }
 
-
             // a param of the same name should take precedence over a render/persist param
             // and new render params of the same name should be added to the array
-            it = params.keySet().iterator();
-            while (it.hasNext()) {
-                String key = (String) it.next();
+            for (Object o1 : params.keySet()) {
+                String key = (String) o1;
                 String[] paramVals = (String[]) params.get(key);
                 if (map.containsKey(key)) {
                     String[] vals = (String[]) map.get(key);
@@ -251,41 +256,36 @@ public class GridSphereParameters {
 
     private void printAllParams(Map map) {
         System.err.println("normal params");
-        Iterator it = params.keySet().iterator();
-        while (it.hasNext()) {
-            String key = (String)it.next();
-            String[] vals = (String[])params.get(key);
+        for (Object o : params.keySet()) {
+            String key = (String) o;
+            String[] vals = (String[]) params.get(key);
             System.err.print("name= " + key + " values= ");
             for (int c = 0; c < vals.length; c++) {
                 System.err.print(vals[c] + " ");
             }
         }
         System.err.println("\nrender params");
-        it = renderParams.keySet().iterator();
-        while (it.hasNext()) {
-            String key = (String)it.next();
-            String[] vals = (String[])renderParams.get(key);
+        for (Object o1 : renderParams.keySet()) {
+            String key = (String) o1;
+            String[] vals = (String[]) renderParams.get(key);
             System.err.print("name= " + key + " values= ");
             for (int c = 0; c < vals.length; c++) {
                 System.err.print(vals[c] + " ");
             }
         }
         System.err.println("\npersist params");
-        it = persistParams.keySet().iterator();
-        while (it.hasNext()) {
-            String key = (String)it.next();
-            String[] vals = (String[])persistParams.get(key);
+        for (Object o2 : persistParams.keySet()) {
+            String key = (String) o2;
+            String[] vals = (String[]) persistParams.get(key);
             System.err.print("name= " + key + " values= ");
             for (int c = 0; c < vals.length; c++) {
                 System.err.print(vals[c] + " ");
             }
         }
         System.err.println("\ngetParamaterMap: returning params for this portlet");
-
-        it = map.keySet().iterator();
-        while (it.hasNext()) {
-            String key = (String)it.next();
-            String[] vals = (String[])map.get(key);
+        for (Object o3 : map.keySet()) {
+            String key = (String) o3;
+            String[] vals = (String[]) map.get(key);
             System.err.print("name= " + key + " values= ");
             for (int c = 0; c < vals.length; c++) {
                 System.err.print(vals[c] + " ");
