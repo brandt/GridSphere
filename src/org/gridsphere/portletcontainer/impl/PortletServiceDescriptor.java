@@ -4,13 +4,12 @@
  */
 package org.gridsphere.portletcontainer.impl;
 
-import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceCollection;
-import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition;
+import org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceCollection;
+import org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceDefinition;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 
 import java.net.URL;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ import java.util.List;
  */
 public class PortletServiceDescriptor {
 
-    private SportletServiceCollection services = null;
+    private PortletServiceCollection services = null;
     private PersistenceManagerXml pmXML = null;
 
 
@@ -33,7 +32,7 @@ public class PortletServiceDescriptor {
 
     public PortletServiceDescriptor(String descriptorFile) throws PersistenceManagerException {
         PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorFile, servicesMappingStream);
-        services = (SportletServiceCollection) pmXML.load();
+        services = (PortletServiceCollection) pmXML.load();
     }
 
     /**
@@ -41,7 +40,7 @@ public class PortletServiceDescriptor {
      *
      * @return the collection of portlet service definitions
      */
-    public SportletServiceCollection getServiceCollection() {
+    public PortletServiceCollection getServiceCollection() {
         return services;
     }
 
@@ -50,7 +49,7 @@ public class PortletServiceDescriptor {
      *
      * @param services the collection of portlet service definitions
      */
-    public void setServiceCollection(SportletServiceCollection services) {
+    public void setServiceCollection(PortletServiceCollection services) {
         this.services = services;
     }
 
@@ -59,11 +58,9 @@ public class PortletServiceDescriptor {
      *
      * @param definition the service definition
      */
-    public void setServiceDefinition(SportletServiceDefinition definition) {
-        List serviceDefs = services.getPortletServicesList();
-        Iterator it = serviceDefs.iterator();
-        while (it.hasNext()) {
-            SportletServiceDefinition def = (SportletServiceDefinition) it.next();
+    public void setServiceDefinition(PortletServiceDefinition definition) {
+        List<PortletServiceDefinition> serviceDefs = services.getPortletServicesList();
+        for (PortletServiceDefinition def : serviceDefs) {
             if (definition.getServiceName().equals(def.getServiceName())) {
                 def.setConfigParamList(definition.getConfigParamList());
             }
