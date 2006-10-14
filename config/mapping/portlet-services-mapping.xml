@@ -10,14 +10,14 @@
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
 <mapping>
 
-    <class name="org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceCollection">
+    <class name="org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceCollection">
         <map-to xml="portlet-services"/>
-        <field name="PortletServicesList" type="org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition" collection="vector">
+        <field name="PortletServicesList" type="org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceDefinition" collection="vector">
             <bind-xml name="service"/>
         </field>
     </class>
 
-    <class name="org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition">
+    <class name="org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceDefinition">
         <field name="ServiceName" type="string">
             <bind-xml name="name"/>
         </field>
