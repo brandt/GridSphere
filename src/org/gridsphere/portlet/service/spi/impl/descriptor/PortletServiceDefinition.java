@@ -10,14 +10,14 @@ import java.util.*;
  * The <code>SportletServiceDefinition</code> defines a portlet service
  * definition that is defined in the portlet service descripor.
  */
-public class SportletServiceDefinition {
+public class PortletServiceDefinition {
 
     protected String serviceName = "";
     protected List serviceDescriptions = new Vector();
     protected String serviceInterface = "";
     protected String serviceImplementation = "";
     protected boolean userRequired = false;
-    protected Vector configParamList = new Vector();
+    protected List<ConfigParam> configParamList = new Vector<ConfigParam>();
     protected Properties configProps = null;
     protected boolean loadOnStartup = false;
 
@@ -118,7 +118,7 @@ public class SportletServiceDefinition {
      *
      * @param configParamList the configuration parameter list
      */
-    public void setConfigParamList(Vector configParamList) {
+    public void setConfigParamList(Vector<ConfigParam> configParamList) {
         this.configParamList = configParamList;
     }
 
@@ -127,7 +127,7 @@ public class SportletServiceDefinition {
      *
      * @return the configuration parameter list
      */
-    public Vector getConfigParamList() {
+    public List<ConfigParam> getConfigParamList() {
         return this.configParamList;
     }
 
@@ -165,7 +165,7 @@ public class SportletServiceDefinition {
     public void setConfigProperties(Properties props) {
         Enumeration e = props.keys();
         if (!props.isEmpty()) {
-            configParamList = new Vector();
+            configParamList = new Vector<ConfigParam>();
         }
         while (e.hasMoreElements()) {
             String key = (String) e.nextElement();
@@ -200,18 +200,18 @@ public class SportletServiceDefinition {
      */
     public String toString() {
         StringBuffer sb = new StringBuffer("\n");
-        sb.append("service name: " + this.serviceName + "\n");
-        sb.append("service description: " + this.serviceDescriptions.get(0) + "\n");
-        sb.append("service interface: " + this.serviceInterface + "\n");
-        sb.append("service implementation: " + this.serviceImplementation + "\n");
-        sb.append("user required: " + this.userRequired + "\n");
-        sb.append("load on startup: " + this.loadOnStartup + "\n");
+        sb.append("service name: ").append(serviceName).append("\n");
+        sb.append("service description: ").append(this.serviceDescriptions.get(0)).append("\n");
+        sb.append("service interface: ").append(this.serviceInterface).append("\n");
+        sb.append("service implementation: ").append(this.serviceImplementation).append("\n");
+        sb.append("user required: ").append(this.userRequired).append("\n");
+        sb.append("load on startup: ").append(this.loadOnStartup).append("\n");
         sb.append("config properties: ");
         Iterator it = this.configParamList.iterator();
         ConfigParam c;
         while (it.hasNext()) {
             c = (ConfigParam) it.next();
-            sb.append("\tname: " + c.getParamName() + "\tvalue: " + c.getParamValue());
+            sb.append("\tname: ").append(c.getParamName()).append("\tvalue: ").append(c.getParamValue());
         }
         return sb.toString();
     }

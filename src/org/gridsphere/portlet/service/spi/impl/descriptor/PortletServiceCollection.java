@@ -11,18 +11,18 @@ import java.util.Vector;
  * The <code>SportletServiceCollection</code> provides a list of
  * <code>SportletServiceDefinition</code> entries.
  */
-public class SportletServiceCollection {
+public class PortletServiceCollection {
 
-    private List servicesList = new Vector();
+    private List<PortletServiceDefinition> servicesList = new Vector<PortletServiceDefinition>();
 
     /**
      * Sets the list of portlet service definitions
      *
      * @param servicesList a <code>Vector</code> containing
      *                     portlet service definitions
-     * @see SportletServiceDefinition
+     * @see PortletServiceDefinition
      */
-    public void setPortletServicesList(Vector servicesList) {
+    public void setPortletServicesList(Vector<PortletServiceDefinition> servicesList) {
         this.servicesList = servicesList;
     }
 
@@ -30,9 +30,9 @@ public class SportletServiceCollection {
      * Returns the list of portlet service definitions
      *
      * @return a list containing the portlet service definitions
-     * @see SportletServiceDefinition
+     * @see PortletServiceDefinition
      */
-    public List getPortletServicesList() {
+    public List<PortletServiceDefinition> getPortletServicesList() {
         return servicesList;
     }
 

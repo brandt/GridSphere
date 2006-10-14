@@ -5,7 +5,7 @@
 package org.gridsphere.portlet.service.spi.impl;
 
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition;
+import org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceDefinition;
 
 import javax.servlet.ServletContext;
 import java.util.Enumeration;
@@ -17,7 +17,7 @@ import java.util.Properties;
  * portlet services access the configuration settings from the services
  * descriptor file.
  */
-public class SportletServiceConfig implements PortletServiceConfig {
+public class PortletServiceConfigImpl implements PortletServiceConfig {
 
     private Properties configProperties;
     private ServletContext servletContext;
@@ -25,7 +25,7 @@ public class SportletServiceConfig implements PortletServiceConfig {
     /**
      * Constructor disallows non-argument instantiation
      */
-    private SportletServiceConfig() {
+    private PortletServiceConfigImpl() {
     }
 
     /**
@@ -35,7 +35,7 @@ public class SportletServiceConfig implements PortletServiceConfig {
      * @param def            the sportlet service definition
      * @param servletContext the <code>ServletConfig</code>
      */
-    public SportletServiceConfig(SportletServiceDefinition def,
+    public PortletServiceConfigImpl(PortletServiceDefinition def,
                                  ServletContext servletContext) {
         this.configProperties = def.getConfigProperties();
         this.servletContext = servletContext;

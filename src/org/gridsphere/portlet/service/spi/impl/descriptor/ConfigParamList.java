@@ -9,37 +9,39 @@ import java.util.*;
 
 /**
  * A <code>ConfigParamList</code> is a container for <code>ConfigParam</code>
- * elemts that provies a <code>Hashtable</code> view.
+ * elements that provides a <code>Hashtable</code> view.
  */
 public class ConfigParamList {
 
-    private List configList = new ArrayList();
-    private Hashtable configHash = new Hashtable();
+    private List<ConfigParam> configList = new ArrayList<ConfigParam>();
+    private Hashtable<String, String> configHash = new Hashtable<String, String>();
 
     public ConfigParamList() {
     }
 
     /**
      * Constructs an instance of ConfigParamList
+     *
+     * @param configList the list of configuration parameters
      */
-    public ConfigParamList(List configList) {
+    public ConfigParamList(List<ConfigParam> configList) {
         this.configList = configList;
     }
 
-    public void setConfigParamList(ArrayList configList) {
+    public void setConfigParamList(ArrayList<ConfigParam> configList) {
         this.configList = configList;
     }
 
-    public List getConfigParamList() {
+    public List<ConfigParam> getConfigParamList() {
         return configList;
     }
 
-    public void setConfigParams(Hashtable configHash) {
+    public void setConfigParams(Hashtable<String, String> configHash) {
         this.configHash = configHash;
         this.createConfigList();
     }
 
-    public Hashtable getConfigParams() {
+    public Hashtable<String, String> getConfigParams() {
         this.createConfigHash();
         return configHash;
     }
@@ -49,10 +51,8 @@ public class ConfigParamList {
      * a <code>Hashtable</code> used by clients
      */
     protected void createConfigHash() {
-        configHash = new Hashtable();
-        Iterator it = configList.iterator();
-        while (it.hasNext()) {
-            ConfigParam configParam = (ConfigParam) it.next();
+        configHash = new Hashtable<String, String>();
+        for (ConfigParam configParam : configList) {
             configHash.put(configParam.getParamName(), configParam.getParamValue());
         }
     }
@@ -62,7 +62,7 @@ public class ConfigParamList {
      * a <code>ConfigParam</code> list used by Castor
      */
     protected void createConfigList() {
-        configList = new ArrayList();
+        configList = new ArrayList<ConfigParam>();
         Enumeration e = configHash.keys();
         ConfigParam configParam = null;
         String paramName = null;

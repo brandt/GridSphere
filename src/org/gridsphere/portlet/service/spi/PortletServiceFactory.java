@@ -10,9 +10,9 @@ import org.gridsphere.portlet.service.PortletService;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridsphere.portlet.service.spi.impl.SportletServiceConfig;
-import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceCollection;
-import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition;
+import org.gridsphere.portlet.service.spi.impl.PortletServiceConfigImpl;
+import org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceCollection;
+import org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceDefinition;
 
 import javax.servlet.ServletContext;
 import java.net.URL;
@@ -30,18 +30,18 @@ public class PortletServiceFactory  {
 
     // Maintain a single copy of each service instantiated
     // as a classname and PortletServiceProvider pair
-    private static Hashtable initServices = new Hashtable();
+    private static Hashtable<String, PortletServiceProvider> initServices = new Hashtable<String, PortletServiceProvider>();
 
     // Hash of all services key = service interface name, value = SportletServiceDefinition
-    private static Hashtable allServices = new Hashtable();
+    private static Hashtable<String, PortletServiceDefinition> allServices = new Hashtable<String, PortletServiceDefinition>();
 
     // Hash of all user services
-    private static Hashtable serviceContexts = new Hashtable();
+    private static Hashtable<String, ServletContext> serviceContexts = new Hashtable<String, ServletContext>();
 
     // Hash of all user services
-    private static Hashtable classLoaders = new Hashtable();
+    private static Hashtable<String, ClassLoader> classLoaders = new Hashtable<String, ClassLoader>();
 
-    private static Hashtable webappServices = new Hashtable();
+    private static Hashtable<String, List<String>> webappServices = new Hashtable<String, List<String>>();
 
     //public static String servicesMappingPath = null;
 
@@ -62,26 +62,22 @@ public class PortletServiceFactory  {
     }
 
     /**
-     * Umarshalls services from the descriptor file found in servicesPath
-     * using the mapping file specified
+     * Adds services to the portlet service factory
      *
      * @param ctx the servlet context
-     * @param servicesPath the path to the portlet services descriptor file
+     * @param serviceCollection the portlet service collection
+     * @throws PortletServiceException if an error occurs instantiating the service class
      */
-    public static void addServices(ServletContext ctx, SportletServiceCollection serviceCollection) throws PortletServiceException {
+    public static void addServices(ServletContext ctx, PortletServiceCollection serviceCollection) throws PortletServiceException {
         // check if services path represents a single file or a directory
         Log log = LogFactory.getLog(PortletServiceFactory.class);
-        List services = serviceCollection.getPortletServicesList();
-        Iterator it = services.iterator();
-        while (it.hasNext()) {
-            SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
+        List<PortletServiceDefinition> services = serviceCollection.getPortletServicesList();
+        for (PortletServiceDefinition serviceDef : services) {
             allServices.put(serviceDef.getServiceInterface(), serviceDef);
             log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
         }
-        it = services.iterator();
-        while (it.hasNext()) {
-            SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
+        for (PortletServiceDefinition serviceDef : services) {
             if (serviceDef.isLoadOnStartup()) {
                 log.debug("loading service : " + serviceDef.getServiceInterface());
                 try {
@@ -99,17 +95,17 @@ public class PortletServiceFactory  {
      *
      * @param webappName the name of the web application
      * @param ctx the servlet context
-     * @param servicesPath the path to the portlet services descriptor file
+     * @param serviceCollection the collection of portlet service definitions
      * @param loader the class loader
+     * @throws PortletServiceException if an error occurs instantiating the service class
      */
-    public static void addServices(String webappName, ServletContext ctx, SportletServiceCollection serviceCollection, ClassLoader loader) throws PortletServiceException {
+    public static void addServices(String webappName, ServletContext ctx, PortletServiceCollection serviceCollection, ClassLoader loader) throws PortletServiceException {
         Log log = LogFactory.getLog(PortletServiceFactory.class);
 
-        List services = serviceCollection.getPortletServicesList();
-        List webapplist = new ArrayList();
-        Iterator it = services.iterator();
-        while (it.hasNext()) {
-            SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
+        List<PortletServiceDefinition> services = serviceCollection.getPortletServicesList();
+        List<String> webapplist = new ArrayList<String>();
+
+        for (PortletServiceDefinition serviceDef : services) {
             allServices.put(serviceDef.getServiceInterface(), serviceDef);
             log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
@@ -117,9 +113,8 @@ public class PortletServiceFactory  {
             webapplist.add(serviceDef.getServiceInterface());
         }
         webappServices.put(webappName, webapplist);
-        it = services.iterator();
-        while (it.hasNext()) {
-            SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
+
+        for (PortletServiceDefinition serviceDef : services) {
             if (serviceDef.isLoadOnStartup()) {
                 log.debug("loading service : " + serviceDef.getServiceInterface());
                 try {
@@ -134,7 +129,8 @@ public class PortletServiceFactory  {
     /**
      * createPortletServiceFactory instantiates the given class and initializes it.
      *
-     * @param service        the class of the service
+     * @param service the class of the service
+     * @param useCachedService if true will us an existing service instance if one exists, false will create a new instance
      * @return the instantiated portlet service
      * @throws PortletServiceUnavailableException
      *          if the portlet service is unavailable
@@ -157,11 +153,11 @@ public class PortletServiceFactory  {
         String serviceName = service.getName();
         // if init'ed service exists then use it
         if (useCachedService) {
-            psp = (PortletServiceProvider) initServices.get(serviceName);
+            psp = initServices.get(serviceName);
             if (psp != null) return psp;
         }
 
-        SportletServiceDefinition def = (SportletServiceDefinition) allServices.get(serviceName);
+        PortletServiceDefinition def = allServices.get(serviceName);
         if (def == null) {
             log.error("Unable to find portlet service interface: " + serviceName +
                     " . Please check PortletServices.xml file for proper service entry");
@@ -176,11 +172,11 @@ public class PortletServiceFactory  {
             throw new PortletServiceNotFoundException("Unable to find implementing portlet service for interface: " + serviceName);
         }
 
-        ServletContext ctx = (ServletContext) serviceContexts.get(serviceName);
-        PortletServiceConfig portletServiceConfig = new SportletServiceConfig(def, ctx);
+        ServletContext ctx = serviceContexts.get(serviceName);
+        PortletServiceConfig portletServiceConfig = new PortletServiceConfigImpl(def, ctx);
 
         try {
-            ClassLoader loader = (ClassLoader) classLoaders.get(serviceName);
+            ClassLoader loader = classLoaders.get(serviceName);
             if (loader != null) {
                 psp = (PortletServiceProvider) Class.forName(serviceImpl, true, loader).newInstance();
             } else {
@@ -224,10 +220,9 @@ public class PortletServiceFactory  {
      */
     public static void shutdownService(Class service) {
         Log log = LogFactory.getLog(PortletServiceFactory.class);
-
         if (initServices.containsKey(service.getName())) {
             log.info("Shutting down service: " + service.getName());
-            PortletServiceProvider psp = (PortletServiceProvider) initServices.get(service);
+            PortletServiceProvider psp = initServices.get(service.getName());
             psp.destroy();
         }
     }
@@ -240,10 +235,10 @@ public class PortletServiceFactory  {
 
         // Calls destroy() on all services we know about
         log.info("Shutting down all portlet services:");
-        Enumeration keys = initServices.keys();
+        Enumeration<String> keys = initServices.keys();
         while (keys.hasMoreElements()) {
-            String serviceName = (String) keys.nextElement();
-            PortletServiceProvider psp = (PortletServiceProvider) initServices.get(serviceName);
+            String serviceName = keys.nextElement();
+            PortletServiceProvider psp = initServices.get(serviceName);
             log.info("Shutting down service: " + serviceName + " impl: " + psp.getClass().getName());
             psp.destroy();
         }
@@ -251,24 +246,24 @@ public class PortletServiceFactory  {
 
     /**
      * Shuts down portlet services for a given webapp managed by this factory
+     *
+     * @param webappName containing the services to shutdown
      */
     public static void shutdownServices(String webappName) {
         Log log = LogFactory.getLog(PortletServiceFactory.class);
 
         // Calls destroy() on all services we know about
-        List services = (List) webappServices.get(webappName);
+        List<String> services = webappServices.get(webappName);
         if (services == null) return;
         log.info("Shutting down  portlet services for webapp: " + webappName);
-        List remServices = new ArrayList();
-        Iterator it = services.iterator();
-        while (it.hasNext()) {
-            String iface = (String) it.next();
+        List<String> remServices = new ArrayList<String>();
+        for (String iface : services) {
             // Check standard portlet services that belong to this webapp
-            Enumeration keys = initServices.keys();
+            Enumeration<String> keys = initServices.keys();
             while (keys.hasMoreElements()) {
-                String serviceName = (String) keys.nextElement();
+                String serviceName = keys.nextElement();
                 if (serviceName.equals(iface)) {
-                    PortletServiceProvider psp = (PortletServiceProvider) initServices.get(serviceName);
+                    PortletServiceProvider psp = initServices.get(serviceName);
                     if (psp != null) {
                         log.info("Shutting down service: " + serviceName + " impl: " + psp.getClass().getName());
                         psp.destroy();
@@ -278,9 +273,7 @@ public class PortletServiceFactory  {
             }
         }
 
-        it = remServices.iterator();
-        while (it.hasNext()) {
-            String serviceName = (String) it.next();
+        for (String serviceName : remServices) {
             initServices.remove(serviceName);
             allServices.remove(serviceName);
             classLoaders.remove(serviceName);
