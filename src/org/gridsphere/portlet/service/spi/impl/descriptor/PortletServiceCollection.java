@@ -22,7 +22,7 @@ public class PortletServiceCollection {
      *                     portlet service definitions
      * @see PortletServiceDefinition
      */
-    public void setPortletServicesList(Vector<PortletServiceDefinition> servicesList) {
+    public void setPortletServicesList(List<PortletServiceDefinition> servicesList) {
         this.servicesList = servicesList;
     }
 

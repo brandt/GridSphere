@@ -118,7 +118,7 @@ public class PortletServiceDefinition {
      *
      * @param configParamList the configuration parameter list
      */
-    public void setConfigParamList(Vector<ConfigParam> configParamList) {
+    public void setConfigParamList(List<ConfigParam> configParamList) {
         this.configParamList = configParamList;
     }
 
