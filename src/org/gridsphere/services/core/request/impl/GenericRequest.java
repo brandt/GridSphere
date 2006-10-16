@@ -1,13 +1,15 @@
 /*
  * @version: $Id: GenericRequest.java 4496 2006-02-08 20:27:04Z wehrens $
  */
-package org.gridsphere.services.core.request;
+package org.gridsphere.services.core.request.impl;
+
+import org.gridsphere.services.core.request.Request;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GenericRequest {
+public class GenericRequest implements Request {
 
     private String oid = null;
     private String userID = "";

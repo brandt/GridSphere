@@ -11,8 +11,9 @@ import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
-import org.gridsphere.services.core.request.GenericRequest;
+import org.gridsphere.services.core.request.impl.GenericRequest;
 import org.gridsphere.services.core.request.RequestService;
+import org.gridsphere.services.core.request.Request;
 
 import java.util.*;
 
@@ -43,27 +44,27 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
         timer = null;
     }
 
-    public GenericRequest getRequest(String requestId, String label) {
-        GenericRequest request = null;
+    public Request getRequest(String requestId, String label) {
+        Request request = null;
         String query = "select gsreq from "
                 + GenericRequest.class.getName()
                 + " gsreq where gsreq.oid='" + requestId + "' and gsreq.label='"+ label + "'";
         try {
-            request = (GenericRequest) this.pm.restore(query);
+            request = (Request) this.pm.restore(query);
         } catch (PersistenceManagerException e) {
             log.error("Unable to retrieve request: " + requestId, e);
         }
         return request;
     }
 
-    public GenericRequest createRequest(String label) {
-        GenericRequest request = new GenericRequest();
+    public Request createRequest(String label) {
+        Request request = new GenericRequest();
         request.setLabel(label);
         saveRequest(request);
         return request;
     }
 
-    public void saveRequest(GenericRequest request) {
+    public void saveRequest(Request request) {
         try {
             if (request.getOid() != null) {
                 pm.update(request);
@@ -81,7 +82,7 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
         List reqs = getAllRequests();
         Iterator it = reqs.iterator();
         while (it.hasNext()) {
-            GenericRequest req = (GenericRequest)it.next();
+            Request req = (Request)it.next();
             if (req.getLifetime() == null) {
                 log.debug("deleting request with no lifetime specified " + req.getOid());
                 deleteRequest(req);
@@ -92,7 +93,7 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
         }
     }
 
-    public void deleteRequest(GenericRequest request) {
+    public void deleteRequest(Request request) {
         try {
             pm.delete(request);
         } catch (PersistenceManagerException e) {
