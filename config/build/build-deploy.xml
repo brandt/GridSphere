@@ -56,15 +56,9 @@ Build include file for the GridSphere Portal source code, see build.xml
         <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
         <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
 
-
         <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/web.xml"
               file="${gswebapp.dir}/WEB-INF/web.xml"
               filtering="true"/>
-
-        <copy tofile="${build.webapps}/${gridsphere.deploy}/index.html"
-              file="${gswebapp.dir}/index.html"
-              filtering="true"/>
-
 
         <copy todir="${build.webapps}/${gridsphere.deploy}">
             <fileset dir="${gswebapp.dir}">
@@ -73,7 +67,6 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <exclude name="WEB-INF/web.xml"/>
             </fileset>
         </copy>
-
 
         <copy overwrite="true" todir="${build.webapps}/${gridsphere.deploy}/WEB-INF/lib">
             <fileset dir="lib">
@@ -86,8 +79,6 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <include name="gridsphere-provider-${gridsphere.version}.jar"/>
             </fileset>
         </copy>
-
-        <touch file="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portlets/${gridsphere.deploy}.1"/>
 
         <!-- only copy if it is there -->
         <if>
