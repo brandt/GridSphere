@@ -1,5 +1,5 @@
 
-GridSphereAjaxHandler = {
+var GridSphereAjaxHandler = {
 
     handleSuccess:function(o) {
         var cid = o.argument[0];
@@ -12,7 +12,7 @@ GridSphereAjaxHandler = {
             serverResponse.innerHTML = o.responseText;
             //alert(o.responseText);
             // create a collection of all the div elements returned
-            tempPageElements = serverResponse.getElementsByTagName("div");
+            var tempPageElements = serverResponse.getElementsByTagName("div");
             // replace existing component with new one
             document.getElementById(cid).innerHTML = tempPageElements[0].innerHTML;
         }
@@ -30,8 +30,8 @@ GridSphereAjaxHandler = {
     startRequest:function(mycid, action) {
         // argument formId can be the id or name attribute value of the
         // HTML form, or an HTML form object.
-        pageElements = document.getElementById(mycid);
-        formElements = pageElements.getElementsByTagName("form");
+        var pageElements = document.getElementById(mycid);
+        var formElements = pageElements.getElementsByTagName("form");
 
         YAHOO.util.Connect.setForm(formElements[0]);
 
@@ -49,8 +49,8 @@ GridSphereAjaxHandler = {
     returnPortlet:function(portlet) {
         // argument formId can be the id or name attribute value of the
         // HTML form, or an HTML form object.
-        pageElements = document.getElementById("portlet#" + portlet);
-        formElements = pageElements.getElementsByTagName("form");
+        var pageElements = document.getElementById("portlet#" + portlet);
+        var formElements = pageElements.getElementsByTagName("form");
         if (formElements) YAHOO.util.Connect.setForm(formElements[0]);
 
         var sUrl = "/gridsphere/gridsphere" + "?ajax=true&portlet=" + encodeURIComponent(portlet) + "&" + YAHOO.util.Connect._sFormData;
@@ -68,7 +68,7 @@ GridSphereAjaxHandler = {
     loadPortlets:function() {
         var portlets = [];
         var j = 0;
-        divElements = document.getElementsByTagName("div");
+        var divElements = document.getElementsByTagName("div");
         for (var i = 0; i < divElements.length; i++) {
             var anid = divElements[i].id;
             var startIdx = anid.indexOf("portlet");

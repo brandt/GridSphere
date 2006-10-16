@@ -42,7 +42,7 @@
 
   function GridSphere_CheckBoxList_checkAll(list) {
 
-      if (list[0].checked == true) {
+      if (list[0].checked) {
 
         // alert("GridSphere CheckBoxList Check All True");
 
@@ -102,7 +102,7 @@
   {
     // alert("GridSphere CheckBoxList On Click");
 
-      if (newSelection.checked == true) {
+      if (newSelection.checked) {
 
         // Save selection only if none made yet
         if (list[0].value == "") {
@@ -120,7 +120,7 @@
           // Set selection to first checked item other than this
           for (i = 1; i < list.length && !found; i++) {
 
-            if (list[i].checked == true) {
+            if (list[i].checked) {
 
               if (list[i].value != item.value) {
 
