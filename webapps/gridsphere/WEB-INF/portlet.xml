@@ -91,23 +91,6 @@
         <resource-bundle>Login.Portlet</resource-bundle>
     </portlet>
     <portlet>
-        <description xml:lang="en">GridSphere Setup</description>
-        <portlet-name>SetupPortlet</portlet-name>
-        <display-name xml:lang="en">GridSphere Setup</display-name>
-        <portlet-class>org.gridsphere.portlets.core.admin.setup.SetupPortlet</portlet-class>
-        <expiration-cache>0</expiration-cache>
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>help</portlet-mode>
-        </supports>
-        <supported-locale>en</supported-locale>
-        <portlet-info>
-            <title>GridSphere Setup</title>
-            <short-title>Setup</short-title>
-            <keywords>gridsphere setup</keywords>
-        </portlet-info>
-    </portlet>
-    <portlet>
         <!-- place portlet description here -->
         <description xml:lang="ar">إختيار اللغة</description>
         <description xml:lang="cs">Vybírá místní nastavení</description>
