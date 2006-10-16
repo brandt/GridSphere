@@ -11,7 +11,7 @@ import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridsphere.portletcontainer.impl.descriptor.*;
 import org.gridsphere.portlet.service.PortletServiceException;
-import org.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceCollection;
+import org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceCollection;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 
 import javax.portlet.PortletException;
@@ -33,18 +33,16 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     private Log log = LogFactory.getLog(PortletWebApplicationImpl.class);
     private PortletApp portletWebApp = null;
 
-    protected Map portletDefinitions = new Hashtable();
-    protected RequestDispatcher rd = null;
-
-    protected Map appPortlets = new Hashtable();
-
-    protected boolean isJSR = false;
+    protected Map<String, PortletDefinition> portletDefinitions = new Hashtable<String, PortletDefinition>();
+    protected Map<String, ApplicationPortlet> appPortlets = new Hashtable<String, ApplicationPortlet>();
 
     protected String webApplicationName = "Unknown portlet web application";
     protected String webAppDescription = "Unknown portlet web application description";
 
     protected PortletStatus status = PortletStatus.SUCCESS;
     protected String statusMessage = "Portlet web application loaded successfully";
+
+    protected RequestDispatcher rd = null;
 
     public PortletWebApplicationImpl(ServletContext context, ClassLoader loader) {
 
@@ -71,6 +69,8 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      * Loads collection of portlets from portlet descriptor file using the associated <code>ServletContext</code>
      *
      * @param ctx the <code>ServletContext</code>
+     * @param loader the classloader of the web application
+     * @throws PortletException if an error occurs loading the portlets
      */
     protected void loadPortlets(ServletContext ctx, ClassLoader loader) throws PortletException {
         // load in the portlet.xml file
@@ -105,7 +105,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     }
 
     public PortletDefinition getPortletDefinition(String portletName) {
-        return (PortletDefinition) portletDefinitions.get(portletName);
+        return portletDefinitions.get(portletName);
     }
 
     public void init() {}
@@ -138,6 +138,8 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      * Loads in a service descriptor file from the associated servlet context
      *
      * @param ctx the <code>ServletContext</code>
+     * @param loader the classloader of the web application
+     * @throws PortletException if an error occurs loading the portlets
      */
     protected void loadServices(ServletContext ctx, ClassLoader loader) throws PortletException {
         // load in the portlet-services.xml file
@@ -154,7 +156,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
                 statusMessage = "Error unmarshalling " + descriptorPath;
                 throw new PortletServiceException(statusMessage, e);
             }
-            SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
+            PortletServiceCollection serviceCollection = descriptor.getServiceCollection();
             PortletServiceFactory.addServices(webApplicationName, ctx, serviceCollection, loader);
         } else {
             descriptorPath = ctx.getRealPath("/WEB-INF/portlet-services");
@@ -174,7 +176,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
                         statusMessage = "Error unmarshalling " + servicePaths[i];
                         throw new PortletServiceException("error unmarshalling " + servicePaths[i], e);
                     }
-                    SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
+                    PortletServiceCollection serviceCollection = descriptor.getServiceCollection();
                     PortletServiceFactory.addServices(webApplicationName, ctx, serviceCollection, loader);
                 }
             } else {
@@ -206,8 +208,8 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      *
      * @return the collection of application portlets
      */
-    public Collection getAllApplicationPortlets() {
-        return ((appPortlets != null ? appPortlets.values() : new ArrayList()));
+    public Collection<ApplicationPortlet> getAllApplicationPortlets() {
+        return (appPortlets != null ? appPortlets.values() : new ArrayList<ApplicationPortlet>());
     }
 
     public void setWebApplicationStatus(PortletStatus status) {

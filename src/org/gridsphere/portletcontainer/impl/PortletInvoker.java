@@ -18,13 +18,12 @@ import org.gridsphere.services.core.registry.PortletRegistryService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
 
 /**
  * The <code>PortletInvoker</code> provides static lifecycle routines for performing portlet operations on
  * concrete portlets.
  *
- * @see org.gridsphere.portletcontainer.impl.SportletDispatcher
+ * @see org.gridsphere.portletcontainer.impl.PortletDispatcherImpl
  */
 public class PortletInvoker {
 
@@ -132,30 +131,22 @@ public class PortletInvoker {
     }
 
     /**
-     * Initializes all application portlets in a portlet web application
+     * Lohgout a portlet web application
      *
-     * @param webApplicationName the name of the portlet web application
+     * @param appLoader          the web application loader
      * @param req                the <code>HttpServletRequest</code>
      * @param res                the <code>HttpServletResponse</code>
      * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public void logoutPortletWebApp(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
-        // Initialize all concrete portlets for each application portlet
-        Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
-        PortletDispatcher portletDispatcher = null;
-        for (Object appPortlet1 : appPortlets) {
-            ApplicationPortlet appPortlet = (ApplicationPortlet) appPortlet1;
-            portletDispatcher = appPortlet.getPortletDispatcher(req, res);
-            // initialize the application portlet
-            log.debug("logout application portlet " + appPortlet.getApplicationPortletID());
-            portletDispatcher.logout(req, res);
-        }
+    public void logoutPortletWebApp(PortletWebApplicationLoader appLoader, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
+        PortletDispatcher portletDispatcher = appLoader.getPortletDispatcher();
+        portletDispatcher.logout(req, res);
     }
 
 
 
     /**
-     * Shuts down all application portlets in a portlet web application
+     * Shuts down a portlet web application
      *
      * @param webAppLoader the name of the JSR portlet web application loader
      * @param req                the <code>HttpServletRequest</code>

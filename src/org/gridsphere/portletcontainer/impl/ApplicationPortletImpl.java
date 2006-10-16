@@ -294,7 +294,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
             msg += "Make sure the servlet mapping: /jsr/" + webAppName + " is defined in web.xml";
             log.error(msg);
         }
-        portletDispatcher = new SportletDispatcher(rd);
+        portletDispatcher = new PortletDispatcherImpl(rd);
 
         return portletDispatcher;
     }

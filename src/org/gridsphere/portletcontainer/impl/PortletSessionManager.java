@@ -19,6 +19,7 @@ public class PortletSessionManager implements HttpSessionListener {
     private Log log = LogFactory.getLog(PortletSessionManager.class);
 
     private Hashtable sessions = new Hashtable();
+    private Hashtable sessionListeners = new Hashtable();
 
     private PortletSessionManager() {
 
@@ -43,8 +44,9 @@ public class PortletSessionManager implements HttpSessionListener {
      */
     public void sessionCreated(HttpSessionEvent event) {
         log.debug("sessionCreated('" + event.getSession().getId() + "')");
-        sessions.put(event.getSession(), new ArrayList());
-        //dumpSessions();
+        String id = event.getSession().getId();
+        sessions.put(id, event.getSession());
+        dumpSessions();
     }
 
 
@@ -54,53 +56,51 @@ public class PortletSessionManager implements HttpSessionListener {
      * @param event The session event
      */
     public void sessionDestroyed(HttpSessionEvent event) {
-        log.debug("sessionDestroyed('" + event.getSession().getId() + "')");
+        log.info("sessionDestroyed('" + event.getSession().getId() + "')");
         HttpSession httpSession = event.getSession();
         if (httpSession != null) {
-            List sessionListeners = (List) sessions.get(httpSession);
-            if (sessionListeners != null) {
-                Iterator it = sessionListeners.iterator();
+            String id = event.getSession().getId();
+
+            List listeners = (List) sessionListeners.get(id);
+            if (listeners != null) {
+                Iterator it = listeners.iterator();
                 while (it.hasNext()) {
                     PortletSessionListener sessionListener = (PortletSessionListener) it.next();
 
-                        log.debug("logging a session listener out: " + sessionListener.getClass());
+                        log.info("logging a session listener out: " + sessionListener.getClass());
                         sessionListener.logout(httpSession);
                     
                 }
-                log.debug("Removing session: " + httpSession.getId());
-                sessions.remove(httpSession);
+                log.info("Removing session: " + httpSession.getId());
+                sessions.remove(id);
+                sessionListeners.remove(id);
             }
         } else {
             log.info("Not sure why sessionDestroyed listener provides null session id!");
         }
-        //dumpSessions();
+        dumpSessions();
     }
 
     public void addSessionListener(String sessionId, PortletSessionListener sessionListener) {
-        log.debug("adding session listener for : " + sessionId + " " + sessionListener.getClass());
-        Iterator it = sessions.keySet().iterator();
-        while (it.hasNext()) {
-            HttpSession session = (HttpSession)it.next();
-            if (session.getId().equals(sessionId)) {
-                System.err.println("adding session listener for : " + sessionId + " " + sessionListener.getClass());
-                List sessionListeners = (List) sessions.get(session);
-                if (sessionListeners == null) sessionListeners = new ArrayList();
-                sessionListeners.add(sessionListener);
-                sessions.put(session, sessionListeners);
-                break;
-            }
+        log.info("adding session listener for : " + sessionId + " " + sessionListener.getClass());
+        HttpSession session = (HttpSession)sessions.get(sessionId);
+        if (session != null) {
+            List listeners = (List) sessionListeners.get(sessionId);
+            if (listeners == null) listeners = new ArrayList();
+            listeners.add(sessionListener);
+            System.err.println("adding session listener for : " + sessionId + " " + sessionListener.getClass());
+            sessionListeners.put(sessionId, listeners);
         }
-        //dumpSessions();
+        dumpSessions();
     }
 
     public void dumpSessions() {
-        log.debug("PortletSessionManager Session information:");
-        log.debug("# current sessions: " + sessions.size());
+        log.info("PortletSessionManager Session information:");
+        log.info("# current sessions: " + sessions.size());
         Set keySet = sessions.keySet();
         Iterator it = keySet.iterator();
         while (it.hasNext()) {
-            HttpSession session = (HttpSession)it.next();
-            log.debug("session #id: " + session.getId());
+            log.info("session #id: " + (String)it.next());
         }
     }
 

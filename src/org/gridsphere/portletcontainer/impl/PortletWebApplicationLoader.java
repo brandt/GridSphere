@@ -10,8 +10,6 @@ import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import javax.portlet.PortletException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
-import java.util.Hashtable;
-import java.util.Map;
 
 /**
  * The <code>PortletWebApplicationImpl</code> is an implementation of a <code>PortletWebApplication</code> that
@@ -21,8 +19,6 @@ import java.util.Map;
 public class PortletWebApplicationLoader {
 
     private Log log = LogFactory.getLog(PortletWebApplicationLoader.class);
-
-    protected Map appPortlets = new Hashtable();
 
     protected String webApplicationName = "Unknown portlet web application";
     protected String webAppDescription = "Unknown portlet web application description";
@@ -38,6 +34,7 @@ public class PortletWebApplicationLoader {
      *
      * @param webApplicationName the the web application name
      * @param context            the <code>ServletContext</code>
+     * @throws PortletException if an initialization exception occurs
      */
     public PortletWebApplicationLoader(String webApplicationName, ServletContext context) throws PortletException {
 
@@ -72,7 +69,7 @@ public class PortletWebApplicationLoader {
             msg += "Make sure the servletName: " + servletName + " is the servlet-name defined in web.xml";
             throw new PortletException(msg);
         }
-        portletDispatcher = new SportletDispatcher(rd);
+        portletDispatcher = new PortletDispatcherImpl(rd);
 
     }
 
@@ -83,7 +80,6 @@ public class PortletWebApplicationLoader {
         PortletServiceFactory.shutdownServices(webApplicationName);
         PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
         pmservice.destroyPersistenceManagerRdbms(webApplicationName);
-        appPortlets = null;
     }
 
 

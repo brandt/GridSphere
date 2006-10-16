@@ -24,16 +24,16 @@ import java.io.IOException;
  *
  * @see <code>PortletInvoker</code>
  */
-public class SportletDispatcher implements PortletDispatcher {
+public class PortletDispatcherImpl implements PortletDispatcher {
 
-    public static Log log = LogFactory.getLog(SportletDispatcher.class);
+    public static Log log = LogFactory.getLog(PortletDispatcherImpl.class);
 
     private RequestDispatcher rd;
 
     /**
      * Default constructor is kept private
      */
-    private SportletDispatcher() {
+    private PortletDispatcherImpl() {
     }
 
     /**
@@ -41,7 +41,7 @@ public class SportletDispatcher implements PortletDispatcher {
      *
      * @param rd               the <code>RequestDispatcher</code>
      */
-    public SportletDispatcher(RequestDispatcher rd) {
+    public PortletDispatcherImpl(RequestDispatcher rd) {
         this.rd = rd;
     }
 

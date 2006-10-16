@@ -74,14 +74,15 @@ public class GridSphereEventImpl implements GridSphereEvent {
         //req.setAttribute(SportletProperties.COMPONENT_ID, componentID);
 
         layoutID = req.getParameter(SportletProperties.LAYOUT_PAGE_PARAM);
+        /*
         if (layoutID == null) {
             log.debug("Received a null layout ID");
             layoutID = "";
         } else {
             log.debug("Received layout id= " + layoutID);
-            req.setAttribute(SportletProperties.LAYOUT_PAGE, layoutID);
+            //req.setAttribute(SportletProperties.LAYOUT_PAGE, layoutID);
         }
-
+        */
 
         action = createAction(req);
 
