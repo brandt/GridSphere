@@ -36,7 +36,7 @@ public interface PortletWebApplication {
      *
      * @return the collection of application portlets
      */
-    public Collection getAllApplicationPortlets();
+    public Collection<ApplicationPortlet> getAllApplicationPortlets();
 
     public PortletStatus getWebApplicationStatus();
 
