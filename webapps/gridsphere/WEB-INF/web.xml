@@ -23,7 +23,7 @@
 
     <filter>
         <filter-name>GridSphere Filter</filter-name>
-        <filter-class>org.gridsphere.filters.GridSphereFilter</filter-class>
+        <filter-class>org.gridsphere.servlets.GridSphereFilter</filter-class>
     </filter>
 
     <filter-mapping>
@@ -35,6 +35,11 @@
         <servlet-name>gridsphere</servlet-name>
         <servlet-class>org.gridsphere.servlets.GridSphereServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>setup</servlet-name>
+        <servlet-class>org.gridsphere.servlets.SetupServlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -64,6 +69,11 @@
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
         <url-pattern>/@GRIDSPHERE_CONTEXT@/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>setup</servlet-name>
+        <url-pattern>/setup/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
