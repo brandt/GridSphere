@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -41,6 +42,7 @@ public class PortletLayoutEngine {
 
     private PortletFrameRegistry registry = PortletFrameRegistry.getInstance();
 
+    private boolean inited = false;
 
     /**
      * Constructs a concrete instance of the PortletLayoutEngine
@@ -49,7 +51,10 @@ public class PortletLayoutEngine {
     }
 
     public void init(ServletContext ctx) {
-        pageFactory.init(ctx);
+        if (!inited) {
+            pageFactory.init(ctx);
+            inited = true;
+        }
     }
 
     /**
@@ -73,7 +78,7 @@ public class PortletLayoutEngine {
             return errorPage;
         }
 
-        return pageFactory.getPortletPage(req);
+        return pageFactory.getPortletPage(event);
     }
 
     public void setHeaders(GridSphereEvent event) {
@@ -98,6 +103,12 @@ public class PortletLayoutEngine {
     public void service(GridSphereEvent event) {
         HttpServletRequest req = event.getHttpServletRequest();
         HttpServletResponse res = event.getHttpServletResponse();
+        // set content to UTF-8 for il8n and compression if supported
+        try {
+            req.setCharacterEncoding("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            log.error("UTF-8 is unsupported?!?", e);
+        }
         PortletPage page = getPortletPage(event);
         setHeaders(event);
         StringBuffer pageBuffer = new StringBuffer();
@@ -219,34 +230,5 @@ public class PortletLayoutEngine {
         out.println("</body></html>");
     }
 
-    public void doRenderError(GridSphereEvent event, Throwable t) {
-        PortletRequest req = event.getRenderRequest();
-        PortletPage errorpage = pageFactory.createErrorPage();
-        errorpage.init(req, new ArrayList());
-        req.setAttribute("error", t);
-        try {
-            errorpage.doRender(event);
-        } catch (Exception e) {
-            log.error("in doRenderError: ", e);
-        }
 
-    }
-
-    /**
-     * Delivers a message to a specified concrete portlet on the current portlet page.
-     * The method delegates the message delivery to the PortletPage implementation.
-     *
-     * @param concPortletID The concrete portlet ID of the target portlet
-     * @param msg           The message to deliver
-     * @param event         The event associated with the delivery
-     */
-    /*
-    public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
-        log.debug("in messageEvent()");
-        PortletPage page = getPortletPage(event);
-        page.messageEvent(concPortletID, msg, event);
-        log.debug("Exiting messageEvent()");
-
-    }
-    */
 }
