@@ -59,11 +59,12 @@ public interface PortletManagerService extends PortletService {
      *
      * @return the list of web application names as <code>String</code> elements
      */
-    public List getPortletWebApplicationNames();
+    public List<String> getPortletWebApplicationNames();
 
     /**
      * Returns the portlet web application description for the supplied web application name
      *
+     * @param webApplicationName the name of the portlet web application
      * @return the portlet web application description
      */
     public String getPortletWebApplicationDescription(String webApplicationName);
