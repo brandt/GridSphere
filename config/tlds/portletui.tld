@@ -347,6 +347,11 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>resizable</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>header</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -407,6 +412,11 @@
         </attribute>
         <attribute>
             <name>draggable</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>resizable</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
