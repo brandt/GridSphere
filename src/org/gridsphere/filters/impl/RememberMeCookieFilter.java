@@ -5,8 +5,8 @@ import org.gridsphere.filters.PortalFilterConfig;
 import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.services.core.request.GenericRequest;
 import org.gridsphere.services.core.request.RequestService;
+import org.gridsphere.services.core.request.Request;
 import org.gridsphere.services.core.user.UserManagerService;
 
 import javax.servlet.http.Cookie;
@@ -71,7 +71,7 @@ public class RememberMeCookieFilter implements PortalFilter {
             if (c.getName().equals("gridsphere")) {
                 String reqId = c.getValue();
                 System.err.println("reqid = " + reqId);
-                GenericRequest genreq = requestService.getRequest(reqId, COOKIE_REQUEST);
+                Request genreq = requestService.getRequest(reqId, COOKIE_REQUEST);
                 if (genreq != null) {
                     String remoteAddr = genreq.getAttribute("ipaddress");
                     if ((remoteAddr != null) && (!remoteAddr.equals(((HttpServletRequest)req).getRemoteAddr()))) {
@@ -93,7 +93,7 @@ public class RememberMeCookieFilter implements PortalFilter {
 
     protected void setUserCookie(HttpServletRequest req, HttpServletResponse res) {
         User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
-        GenericRequest request = requestService.createRequest(COOKIE_REQUEST);
+        Request request = requestService.createRequest(COOKIE_REQUEST);
         Cookie cookie = new Cookie("gridsphere", request.getOid());
         request.setUserID(user.getID());
         long time = Calendar.getInstance().getTime().getTime() + COOKIE_EXPIRATION_TIME * 1000;
@@ -116,7 +116,7 @@ public class RememberMeCookieFilter implements PortalFilter {
                 if (c.getName().equals("gridsphere")) {
                     String reqid = c.getValue();
                     //System.err.println("reqid= " + reqid);
-                    GenericRequest request = requestService.getRequest(reqid, COOKIE_REQUEST);
+                    Request request = requestService.getRequest(reqid, COOKIE_REQUEST);
                     if (request != null) requestService.deleteRequest(request);
                     c.setMaxAge(0);
                     res.addCookie(c);
