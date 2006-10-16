@@ -13,8 +13,6 @@ import java.util.Set;
 /**
  * The <code>PortletGroup</code> interface describes portlet group used by the
  * portal.
- *
- * @see org.gridsphere.portlet.PortletRole
  */
 public class PortletGroup implements Serializable, Cloneable {
 

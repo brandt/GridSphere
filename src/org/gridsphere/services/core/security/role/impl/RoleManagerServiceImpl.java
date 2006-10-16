@@ -124,7 +124,7 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
             String msg = "Error retrieving user role";
             log.error(msg, e);
         }
-        return users;
+        return (users != null) ? users : new ArrayList();
     }
 
 

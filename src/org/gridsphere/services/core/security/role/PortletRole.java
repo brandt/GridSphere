@@ -9,12 +9,8 @@ import java.io.Serializable;
 
 /**
  * The <code>PortletRole</code> describes the supported portlet roles used
- * by the portal. In general, <code>Group</code>s contain <code>User</codes
- * with a single <code>PortleRole</code>
- * <p/>
- * Over time, we plan on allowing users to have more than one role
+ * by the portal.
  *
- * @see org.gridsphere.portlet.PortletGroup
  */
 public class PortletRole implements Serializable, Cloneable {
 
@@ -33,6 +29,8 @@ public class PortletRole implements Serializable, Cloneable {
 
     /**
      * Constructs an instance of PortletRole
+     *
+     * @param roleName the role name
      */
     public PortletRole(String roleName) {
         this.roleName = roleName;
@@ -55,21 +53,21 @@ public class PortletRole implements Serializable, Cloneable {
         return roleName;
     }
 
+    /**
+     * Sets the role name
+     *
+     * @param roleName the role name
+     */
+    public void setName(String roleName) {
+        this.roleName = roleName;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * Sets the role name
-     *
-     * @param roleName
-     */
-    public void setName(String roleName) {
-        this.roleName = roleName;
     }
 
     public String toString() {
