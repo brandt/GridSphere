@@ -246,7 +246,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     protected Locale getLocale() {
         Locale locale = Locale.ENGLISH;
         RenderRequest renderReq = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
-        if (renderReq != null) locale = renderReq.getLocale();
+        locale = renderReq.getLocale();
         return locale;
     }
 
