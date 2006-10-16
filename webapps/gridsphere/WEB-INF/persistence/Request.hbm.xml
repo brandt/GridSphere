@@ -4,9 +4,9 @@
     "-//Hibernate/Hibernate Mapping DTD 1.1//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping default-lazy="false">
+<hibernate-mapping>
     <class
-        name="org.gridsphere.services.core.request.GenericRequest"
+        name="org.gridsphere.services.core.request.impl.GenericRequest"
         table="gsrequest"
         >
         <cache usage="read-write"/>
