@@ -19,8 +19,8 @@ import org.gridsphere.services.core.captcha.impl.CaptchaServiceSingleton;
 import org.gridsphere.services.core.mail.MailMessage;
 import org.gridsphere.services.core.mail.MailService;
 import org.gridsphere.services.core.portal.PortalConfigService;
-import org.gridsphere.services.core.request.GenericRequest;
 import org.gridsphere.services.core.request.RequestService;
+import org.gridsphere.services.core.request.Request;
 import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
@@ -353,7 +353,7 @@ public class LoginPortlet extends ActionPortlet {
         return false;
     }
 
-    private User saveUser(GenericRequest request) {
+    private User saveUser(Request request) {
         log.debug("Entering saveUser()");
         // Account request
 
@@ -418,7 +418,7 @@ public class LoginPortlet extends ActionPortlet {
         }
 
         // create a request
-        GenericRequest request = requestService.createRequest(FORGOT_PASSWORD_LABEL);
+        Request request = requestService.createRequest(FORGOT_PASSWORD_LABEL);
         long now = Calendar.getInstance().getTime().getTime();
 
         request.setLifetime(new Date(now + REQUEST_LIFETIME));
@@ -456,7 +456,7 @@ public class LoginPortlet extends ActionPortlet {
 
 
         // create a request
-        GenericRequest request = requestService.createRequest(ACTIVATE_ACCOUNT_LABEL);
+        Request request = requestService.createRequest(ACTIVATE_ACCOUNT_LABEL);
         long now = Calendar.getInstance().getTime().getTime();
 
         request.setLifetime(new Date(now + REQUEST_LIFETIME));
@@ -548,7 +548,7 @@ public class LoginPortlet extends ActionPortlet {
     public void newpassword(ActionFormEvent evt) {
         PortletRequest req = evt.getActionRequest();
         String id = req.getParameter("reqid");
-        GenericRequest request = requestService.getRequest(id, FORGOT_PASSWORD_LABEL);
+        Request request = requestService.getRequest(id, FORGOT_PASSWORD_LABEL);
         if (request != null) {
             HiddenFieldBean reqid = evt.getHiddenFieldBean("reqid");
             reqid.setValue(id);
@@ -562,7 +562,7 @@ public class LoginPortlet extends ActionPortlet {
         PortletRequest req = event.getActionRequest();
         String id = req.getParameter("reqid");
         User user = null;
-        GenericRequest request = requestService.getRequest(id, ACTIVATE_ACCOUNT_LABEL);
+        Request request = requestService.getRequest(id, ACTIVATE_ACCOUNT_LABEL);
         if (request != null) {
             requestService.deleteRequest(request);
 
@@ -634,7 +634,7 @@ public class LoginPortlet extends ActionPortlet {
 
         HiddenFieldBean reqid = event.getHiddenFieldBean("reqid");
         String id = reqid.getValue();
-        GenericRequest request = requestService.getRequest(id, FORGOT_PASSWORD_LABEL);
+        Request request = requestService.getRequest(id, FORGOT_PASSWORD_LABEL);
         if (request != null) {
             String uid = request.getUserID();
             User user = userManagerService.getUser(uid);
