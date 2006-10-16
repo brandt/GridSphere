@@ -204,7 +204,6 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
         // if using client certificate, then don't use login modules
         if (certificate == null) {
-            System.err.println("name=" + loginName + " pass=" + loginPassword);
             if ((loginName == null) || (loginPassword == null)) {
                 throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_BLANK"));
             }
