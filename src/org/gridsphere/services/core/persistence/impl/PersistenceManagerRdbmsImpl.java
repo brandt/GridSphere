@@ -23,6 +23,9 @@ import java.util.*;
 public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private transient Log log = LogFactory.getLog(PersistenceManagerRdbmsImpl.class);
 
+    public static final ThreadLocal sessionThread = new ThreadLocal();
+
+    
     private SessionFactory factory = null;
     private final static int CMD_DELETE = 1;
     private final static int CMD_DELETE_LIST = 2;
@@ -184,15 +187,19 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     private Object doTransaction(Object object, String query, int command, QueryFilter queryFilter) throws HibernateException {
         Session session = null;
-        Transaction tx = null;
+        //Transaction tx = null;
         Object result = null;
         Query q = null;
 
-        try {
-            session = factory.openSession();
+        //try {
+            //session = factory.openSession();
+
+            session = currentSession();
+
+
             // Open a new Session, if this thread has none yet
-            tx = null;
-            tx = session.beginTransaction();
+            //tx = null;
+            //tx = session.beginTransaction();
             switch (command) {
                 case CMD_CREATE:
                     session.save(object);
@@ -226,7 +233,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                     result = new Integer(q.list().size());
                     break;
             }
-            tx.commit();
+            /*tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
@@ -234,8 +241,36 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             throw e;
         } finally {
             session.close();
-        }
+        } */
         return result;
+    }
+
+
+    public Session currentSession() throws HibernateException {
+
+        Session s = (Session) sessionThread.get();
+
+        // Open a new Session, if this Thread has none yet
+        if (s == null) {
+            s = factory.openSession();
+            sessionThread.set(s);
+        }
+        return s;
+    }
+
+    public void beginTransaction() {
+        currentSession().beginTransaction();
+    }
+
+    public void endTransaction() {
+        currentSession().getTransaction().commit();
+    }
+
+    public void rollbackTransaction() {
+        if (currentSession().getTransaction().isActive()) {
+            log.debug("Trying to rollback database transaction after exception");
+            currentSession().getTransaction().rollback();
+        }
     }
 
     public void destroy() throws PersistenceManagerException {
@@ -244,6 +279,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             Statistics stats = factory.getStatistics();
             stats.logSummary();
         factory.close();
+
         //} catch (HibernateException e) {
          //   throw new PersistenceManagerException(e);
         //}

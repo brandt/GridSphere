@@ -9,6 +9,13 @@ import java.util.List;
 
 public interface PersistenceManagerRdbms {
 
+
+    public void beginTransaction();
+
+    public void endTransaction();
+
+    public void rollbackTransaction();
+
     /**
      * Creates the given object in the permanent storage.
      *

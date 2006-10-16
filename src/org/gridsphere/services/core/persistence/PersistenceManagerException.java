@@ -36,7 +36,7 @@ public class PersistenceManagerException extends Exception {
      * @param cause the root cause
      */
     public PersistenceManagerException(String text, Throwable cause) {
-        super(text);
+        super(text, cause);
         this.rootCause = cause;
     }
 
