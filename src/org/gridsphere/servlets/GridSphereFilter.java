@@ -33,6 +33,8 @@ import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridsphere.services.core.portal.PortalConfigService;
+import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.hibernate.StaleObjectStateException;
 
 import javax.servlet.*;
@@ -41,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.File;
 import java.util.StringTokenizer;
+import java.util.Collection;
 
 /**
  * GridSphereFilter is used for first time portal initialization including portlets
@@ -51,6 +54,8 @@ public class GridSphereFilter implements Filter {
 
     private Log log = LogFactory.getLog(GridSphereFilter.class);
     private RoleManagerService roleService = null;
+    private PortalConfigService configService = null;
+
     private ServletContext context = null;
 
     public void init(FilterConfig filterConfig) {
@@ -64,9 +69,12 @@ public class GridSphereFilter implements Filter {
                          FilterChain chain)
             throws IOException, ServletException {
 
+        System.err.println("in doFilter!!");
         if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
             HttpServletRequest req = (HttpServletRequest)request;
             HttpServletResponse res = (HttpServletResponse)response;
+
+            //req.setAttribute(SportletProperties.SERVLET_PATH, req.getServletPath());
 
             PersistenceManagerService pms = null;
 
@@ -74,11 +82,14 @@ public class GridSphereFilter implements Filter {
             if (firstDoGet.equals(Boolean.TRUE)) {
 
                 
-
+                configService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+                String ctxPath = req.getContextPath();
+                if (ctxPath.equals("ROOT")) ctxPath = "";
+                configService.setProperty("gridsphere.deploy", ctxPath);
+                configService.storeProperties();
+                
                 // check if database file exists
-                PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
-                layoutEngine.init(context);
-
+                
                 String release = SportletProperties.getInstance().getProperty("gridsphere.release");
                 int idx = release.lastIndexOf(" ");
                 String gsversion = release.substring(idx+1);
@@ -122,17 +133,13 @@ public class GridSphereFilter implements Filter {
 
             }
 
-            System.err.println("created a PM!!!");
-                           log.debug("created a PM!!!");
-                           log.info("created a PM!!!");
-
             String pathInfo = req.getPathInfo();
             StringBuffer requestURL = req.getRequestURL();
             String requestURI = req.getRequestURI();
             String query = req.getQueryString();
-
-            log.info("\n pathInfo= " + pathInfo + " query= " + query);
-            log.info(" requestURL= " + requestURL + " requestURI= " + requestURI + "\n");
+            log.debug("\ncontext path = " + req.getContextPath() + " servlet path=" + req.getServletPath());
+            log.debug("\n pathInfo= " + pathInfo + " query= " + query);
+            log.debug(" requestURL= " + requestURL + " requestURI= " + requestURI + "\n");
             if (query == null) {
                 query = "";
             } else {
@@ -161,24 +168,36 @@ public class GridSphereFilter implements Filter {
 
                 //String ctxPath = hreq.getContextPath();
                 //String ctxPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.context");
-                String ctxPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.context");
+                String ctxPath = "/" + configService.getProperty("gridsphere.context");
+
+                //String ctxPath = req.getServletPath();
+
                 log.info("forwarded URL: " + ctxPath + extraInfo);
                 context.getRequestDispatcher(ctxPath + extraInfo).forward(req, res);
 
+                //redirect(req, res);
+
             } else {
 
-                pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+               pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
 
-                PersistenceManagerRdbms pm = pms.createGridSphereRdbms();
-
+                Collection<PersistenceManagerRdbms> allPms = pms.getAllPersistenceManagerRdbms();
+                //PersistenceManagerRdbms pm = pms.createGridSphereRdbms();
                 try {
                     log.info("Starting a database transaction");
-                    pm.beginTransaction();
 
+                    for (PersistenceManagerRdbms pm : allPms) {
+                        pm.beginTransaction();
+
+                    }
+                    //pm.beginTransaction();
                     chain.doFilter(request, response);
                     // Commit and cleanup
                     log.info("Committing the database transaction");
-                    pm.endTransaction();
+
+                    for (PersistenceManagerRdbms pm : allPms) {
+                        pm.endTransaction();
+                    }
                 } catch (StaleObjectStateException staleEx) {
                     log.error("This interceptor does not implement optimistic concurrency control!");
                     log.error("Your application will not work until you add compensation actions!");
@@ -186,15 +205,16 @@ public class GridSphereFilter implements Filter {
                     // during the conversation, and finally restart business conversation. Maybe
                     // give the user of the application a chance to merge some of his work with
                     // fresh data... what you do here depends on your applications design.
-                    throw staleEx;
+                    //throw staleEx;
                 } catch (Throwable ex) {
-
-                    try {
-                        pm.rollbackTransaction();
-                    } catch (Throwable rbEx) {
-                        log.error("Could not rollback transaction after exception!", rbEx);
+                    for (PersistenceManagerRdbms pm : allPms) {
+                        pm.endTransaction();
+                        try {
+                            pm.rollbackTransaction();
+                        } catch (Throwable rbEx) {
+                            log.error("Could not rollback transaction after exception!", rbEx);
+                        }
                     }
-
                     // Let others handle it... maybe another interceptor for exceptions?
                     //throw new ServletException(ex);
                 }
@@ -203,4 +223,7 @@ public class GridSphereFilter implements Filter {
 
         }
     }
+
+
+
 }
