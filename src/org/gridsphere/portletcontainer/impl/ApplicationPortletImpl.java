@@ -73,6 +73,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
     /**
      * Constructs an instance of ApplicationPortletImpl
      *
+     * @param loader         the class loader
      * @param pdd            the <code>PortletDeploymentDescriptor</code>
      * @param portletDef     the portlet definition
      * @param webApplication the ui application name for this application portlet

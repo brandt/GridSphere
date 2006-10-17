@@ -292,6 +292,7 @@ public class PortletURLImpl implements PortletURL {
         if (req.getAttribute(SportletProperties.FLOAT_STATE) != null) store.put(SportletProperties.PORTLET_WINDOW, "FLOATING");
 
         String contextPath = "/" + configService.getProperty("gridsphere.deploy");
+        // handle ROOT context
         if (contextPath.equals("/")) contextPath = "";
         String servletPath = "/" + configService.getProperty("gridsphere.context");
         //String servletPath = req.getServletPath();

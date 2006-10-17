@@ -198,6 +198,10 @@ public class SportletProperties {
 
     public static final String EXTRA_QUERY_INFO = "org.gridsphere.layout.EXTRA_QUERY_INFO";
 
+    public static final String CONTEXT_PATH = "org.gridsphere.CONTEXT_PATH";
+
+    public static final String SERVLET_PATH = "org.gridsphere.SERVLET_PATH";
+
     private SportletProperties() {
         if (props == null) {
             InputStream propsStream = getClass().getResourceAsStream("/org/gridsphere/portlet/impl/portlet.properties");

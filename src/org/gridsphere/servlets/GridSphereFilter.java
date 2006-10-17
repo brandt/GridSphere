@@ -84,9 +84,9 @@ public class GridSphereFilter implements Filter {
                 
                 configService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
                 String ctxPath = req.getContextPath();
-                if (ctxPath.equals("ROOT")) ctxPath = "";
-                configService.setProperty("gridsphere.deploy", ctxPath);
-                configService.storeProperties();
+                //if (ctxPath.equals("ROOT")) ctxPath = "";
+                //configService.setProperty("gridsphere.deploy", ctxPath);
+                //configService.storeProperties();
                 
                 // check if database file exists
                 
@@ -148,78 +148,75 @@ public class GridSphereFilter implements Filter {
 
             String extraInfo = "";
 
-            if (pathInfo != null) {
-                extraInfo = "?";
-                StringTokenizer st = new StringTokenizer(pathInfo, "/");
+            pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
 
-                if (st.hasMoreTokens()) {
-                    String layoutId = (String)st.nextElement();
-                    extraInfo += SportletProperties.LAYOUT_PAGE_PARAM + "=" + layoutId;
-                }
-                if (st.hasMoreTokens()) {
-                    String cid = (String)st.nextElement();
-                    extraInfo += "&" + SportletProperties.COMPONENT_ID+ "=" + cid;
-                }
-                if (st.hasMoreTokens()) {
-                    String action = (String)st.nextElement();
-                    extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
-                }
-                extraInfo +=  query;
+            Collection<PersistenceManagerRdbms> allPms = pms.getAllPersistenceManagerRdbms();
 
-                //String ctxPath = hreq.getContextPath();
-                //String ctxPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.context");
+            try {
+                log.info("Starting a database transaction");
+
+                for (PersistenceManagerRdbms pm : allPms) {
+                    pm.beginTransaction();
+
+                }
+
+                if (pathInfo != null) {
+                    extraInfo = "?";
+
+                    StringTokenizer st = new StringTokenizer(pathInfo, "/");
+
+                    if (st.hasMoreTokens()) {
+                        String layoutId = (String)st.nextElement();
+                        extraInfo += SportletProperties.LAYOUT_PAGE_PARAM + "=" + layoutId;
+                    }
+                    if (st.hasMoreTokens()) {
+                        String cid = (String)st.nextElement();
+                        extraInfo += "&" + SportletProperties.COMPONENT_ID+ "=" + cid;
+                    }
+                    if (st.hasMoreTokens()) {
+                        String action = (String)st.nextElement();
+                        extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
+                    }
+                    extraInfo +=  query;
+                }
+
                 String ctxPath = "/" + configService.getProperty("gridsphere.context");
 
-                //String ctxPath = req.getServletPath();
 
                 log.info("forwarded URL: " + ctxPath + extraInfo);
                 context.getRequestDispatcher(ctxPath + extraInfo).forward(req, res);
 
-                //redirect(req, res);
+                chain.doFilter(request, response);
 
-            } else {
+                // Commit and cleanup
+                log.info("Committing the database transaction");
 
-               pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
-
-                Collection<PersistenceManagerRdbms> allPms = pms.getAllPersistenceManagerRdbms();
-                //PersistenceManagerRdbms pm = pms.createGridSphereRdbms();
-                try {
-                    log.info("Starting a database transaction");
-
-                    for (PersistenceManagerRdbms pm : allPms) {
-                        pm.beginTransaction();
-
-                    }
-                    //pm.beginTransaction();
-                    chain.doFilter(request, response);
-                    // Commit and cleanup
-                    log.info("Committing the database transaction");
-
-                    for (PersistenceManagerRdbms pm : allPms) {
-                        pm.endTransaction();
-                    }
-                } catch (StaleObjectStateException staleEx) {
-                    log.error("This interceptor does not implement optimistic concurrency control!");
-                    log.error("Your application will not work until you add compensation actions!");
-                    // Rollback, close everything, possibly compensate for any permanent changes
-                    // during the conversation, and finally restart business conversation. Maybe
-                    // give the user of the application a chance to merge some of his work with
-                    // fresh data... what you do here depends on your applications design.
-                    //throw staleEx;
-                } catch (Throwable ex) {
-                    for (PersistenceManagerRdbms pm : allPms) {
-                        pm.endTransaction();
-                        try {
-                            pm.rollbackTransaction();
-                        } catch (Throwable rbEx) {
-                            log.error("Could not rollback transaction after exception!", rbEx);
-                        }
-                    }
-                    // Let others handle it... maybe another interceptor for exceptions?
-                    //throw new ServletException(ex);
+                for (PersistenceManagerRdbms pm : allPms) {
+                    pm.endTransaction();
                 }
-
+            } catch (StaleObjectStateException staleEx) {
+                log.error("This interceptor does not implement optimistic concurrency control!");
+                log.error("Your application will not work until you add compensation actions!");
+                // Rollback, close everything, possibly compensate for any permanent changes
+                // during the conversation, and finally restart business conversation. Maybe
+                // give the user of the application a chance to merge some of his work with
+                // fresh data... what you do here depends on your applications design.
+                //throw staleEx;
+            } catch (Throwable ex) {
+                ex.printStackTrace();
+                for (PersistenceManagerRdbms pm : allPms) {
+                    pm.endTransaction();
+                    try {
+                        pm.rollbackTransaction();
+                    } catch (Throwable rbEx) {
+                        log.error("Could not rollback transaction after exception!", rbEx);
+                    }
+                }
+                // Let others handle it... maybe another interceptor for exceptions?
+                //throw new ServletException(ex);
             }
+
+
 
         }
     }

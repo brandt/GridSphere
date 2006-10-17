@@ -1,6 +1,8 @@
 package org.gridsphere.provider.portletui.beans;
 
 import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.services.core.portal.PortalConfigService;
 
 import javax.portlet.RenderResponse;
 
@@ -63,7 +65,8 @@ public class TooltipBean extends BaseComponentBean {
         StringBuffer sb = new StringBuffer();
         if (key != null) value = getLocalizedText(key);
         value = value.replaceAll("\n", "<br>");
-        String contextPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.deploy");
+        PortalConfigService configService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+        String contextPath = "/" + configService.getProperty("gridsphere.deploy");
         renderResponse.setProperty("CSS_HREF", contextPath + "/css/yahoo/container.css");
         renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/dom.js");
         renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/event.js");

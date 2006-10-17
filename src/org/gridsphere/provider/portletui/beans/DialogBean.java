@@ -1,6 +1,8 @@
 package org.gridsphere.provider.portletui.beans;
 
 import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.services.core.portal.PortalConfigService;
 
 import javax.portlet.RenderResponse;
 
@@ -17,6 +19,7 @@ public class DialogBean extends BaseComponentBean {
     public Boolean isModal = false;
     public Boolean isClose = true;
     public Boolean isDraggable = true;
+    public Boolean isResizable = false;
     public Boolean isLink = false;
     public RenderResponse renderResponse;
 
@@ -57,6 +60,14 @@ public class DialogBean extends BaseComponentBean {
 
     public void setModal(Boolean modal) {
         isModal = modal;
+    }
+
+    public Boolean getResizable() {
+        return isResizable;
+    }
+
+    public void setResizable(Boolean resizable) {
+        isResizable = resizable;
     }
 
     public Boolean getDraggable() {
@@ -135,18 +146,28 @@ public class DialogBean extends BaseComponentBean {
         StringBuffer sb = new StringBuffer();
         if (key != null) value = getLocalizedText(key);
         value = value.replaceAll("\n", "<br>");
-        String contextPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.deploy");
+        PortalConfigService configService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+        // deal with ROOT context case
+        String contextPath = configService.getProperty("gridsphere.deploy");
+        if (!contextPath.equals("")) contextPath = "/" + contextPath;
         renderResponse.setProperty("CSS_HREF", contextPath + "/css/yahoo/container.css");
-        renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/dom.js");
+        if (isResizable) renderResponse.setProperty("CSS_HREF", contextPath + "/css/yahoo/ResizePanel.css");
+        if (isResizable) renderResponse.setProperty("CSS_HREF", contextPath + "/css/yahoo/example.css");
+        
         renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/event.js");
+        renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/dom.js");
+        renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/fonts.js");
         renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/container.js");
         renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/animation.js");
         renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/dragdrop.js");
+        if (isResizable) renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/ResizePanel.js");
         sb.append("<script type=\"text/javascript\">\n");
         sb.append("YAHOO.namespace(\"" + name + "\");\n");
         sb.append("function init() {\n");
         if (!width.endsWith("px")) width = width + "px";
-        sb.append("YAHOO." + name + ".panel  = new YAHOO.widget.Panel(\"" + name + "\", { width:\"" + width + "\", fixedcenter: true, constraintoviewport: true, underlay:\"shadow\", close:" + isClose + ", modal:" + isModal + ", visible:false, draggable:" + isDraggable + "} );\n");
+        String resizable = "";
+        if (isResizable.booleanValue()) resizable = "Resize";
+        sb.append("YAHOO." + name + ".panel  = new YAHOO.widget." + resizable + "Panel(\"" + name + "\", { width:\"" + width + "\", fixedcenter: true, constraintoviewport: true, underlay:\"shadow\", close:" + isClose + ", modal:" + isModal + ", visible:false, draggable:" + isDraggable + "} );\n");
         sb.append("YAHOO." + name + ".panel.render();\n");
         sb.append("YAHOO." + name + ".panel.setHeader(\"" + header + "\");\n");
         sb.append("YAHOO." + name + ".panel.setBody(\"" + body + "\");\n");

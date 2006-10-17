@@ -1,10 +1,12 @@
 package org.gridsphere.provider.portletui.tags;
 
 import org.gridsphere.provider.portletui.beans.DialogBean;
+import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.RenderResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 
 /**
  * The <code>TableRowTag</code> represents a table row element that is conatined within a <code>TableTag</code>
@@ -12,18 +14,19 @@ import javax.servlet.jsp.JspWriter;
  */
 public class DialogTag extends BaseComponentTag {
 
-    public String name = null;
-    public String key = null;
-    public String value = "";
-    public String id = null;
-    public String body = "";
-    public String header = "";
-    public String footer = "";
-    public String width = "";
-    public Boolean isModal = false;
-    public Boolean isClose = true;
-    public Boolean isDraggable = true;
-    public Boolean isLink = false;
+    protected String name = null;
+    protected String key = null;
+    protected String value = "";
+    protected String id = null;
+    protected String body = "";
+    protected String header = "";
+    protected String footer = "";
+    protected String width = "";
+    protected Boolean isModal = false;
+    protected Boolean isClose = true;
+    protected Boolean isDraggable = true;
+    protected Boolean isResizable = false;
+    protected Boolean isLink = false;
 
     public String getWidth() {
         return width;
@@ -55,6 +58,14 @@ public class DialogTag extends BaseComponentTag {
 
     public void setClose(Boolean close) {
         isClose = close;
+    }
+
+    public Boolean getResizable() {
+        return isResizable;
+    }
+
+    public void setResizable(Boolean resizable) {
+        isResizable = resizable;
     }
 
     public Boolean getDraggable() {
@@ -123,7 +134,7 @@ public class DialogTag extends BaseComponentTag {
         try {
             out = pageContext.getOut();
             DialogBean dialog = new DialogBean();
-            RenderResponse res = (RenderResponse)pageContext.getAttribute("renderResponse");
+            RenderResponse res = (RenderResponse)pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
             dialog.setRenderResponse(res);
             dialog.setId(id);
             dialog.setWidth(width);
@@ -133,12 +144,13 @@ public class DialogTag extends BaseComponentTag {
             dialog.setClose(isClose);
             dialog.setModal(isModal);
             dialog.setDraggable(isDraggable);
+            dialog.setResizable(isResizable);
             dialog.setName(name);
             dialog.setLink(isLink);
             dialog.setValue(value);
             out.print(dialog.toStartString());
         } catch (Exception e) {
-            throw new JspException(e.getMessage());
+            throw new JspException(e);
         }
         return SKIP_BODY;
     }

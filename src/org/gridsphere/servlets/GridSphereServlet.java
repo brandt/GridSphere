@@ -106,18 +106,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
         PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
         layoutEngine.init(config.getServletContext());
-        String realPath = config.getServletContext().getRealPath("");
-        int l = realPath.lastIndexOf(File.separator);
-        String webApplicationName = realPath.substring(l + 1);
-        System.err.println("webapp name=" + webApplicationName);
     }
 
     private void initializeServices() throws PortletServiceException {
         roleService = (RoleManagerService) PortletServiceFactory.createPortletService(RoleManagerService.class, true);
         userManagerService = (UserManagerService) PortletServiceFactory.createPortletService(UserManagerService.class, true);
-        portalConfigService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
         loginService = (LoginService) PortletServiceFactory.createPortletService(LoginService.class, true);
         portletManager = (PortletManagerService) PortletServiceFactory.createPortletService(PortletManagerService.class, true);
+        portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
         String filterDescriptorPath = getServletContext().getRealPath("/WEB-INF/filters.xml");
         try {
             PortalFilterDescriptor filterDescriptor = new PortalFilterDescriptor(getServletConfig(), filterDescriptorPath);
@@ -139,13 +135,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 
         if (firstDoGet) {
-            req.getSession(true).invalidate();
             initializeServices();
             updateDatabase();
             firstDoGet = false;
         }
 
-        
         long startTime = System.currentTimeMillis();
 
         PortletContext ctx = new PortletContextImpl(getServletContext());
@@ -180,7 +174,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 logout(event);
                 long endTime = System.currentTimeMillis();
                 System.err.println("Page render time = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
-                //return;
+                return;
             }
         }
 
@@ -425,13 +419,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             filter.doAfterLogout(event.getHttpServletRequest(), event.getHttpServletResponse());
         }
         //pageFactory.
-        /*
+
         try {
             event.getActionResponse().sendRedirect(res.createRenderURL().toString());
         } catch (IOException e) {
             log.error("Unable to do a redirect!", e);
         }
-        */
+
     }
 
     /**
