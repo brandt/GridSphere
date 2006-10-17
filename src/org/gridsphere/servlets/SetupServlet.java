@@ -350,24 +350,25 @@ public class SetupServlet extends HttpServlet {
         }
     }
 
-
     private void redirect(GridSphereEvent event) {
         HttpServletRequest req = event.getHttpServletRequest();
         HttpServletResponse res = event.getHttpServletResponse();
+        PortalConfigService configService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
         StringBuffer s = new StringBuffer();
         String port;
         if (req.isSecure()) {
             s.append("https://");
-            port = SportletProperties.getInstance().getProperty("gridsphere.port.https");
+            port = configService.getProperty("gridsphere.port.https");
         } else {
             s.append("http://");
-            port = SportletProperties.getInstance().getProperty("gridsphere.port.http");
+            port = configService.getProperty("gridsphere.port.http");
         }
         s.append(req.getServerName());
         s.append(":");
         s.append((!port.equals("")) ? port : String.valueOf(req.getServerPort()));
-        String contextPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.deploy");
-        String servletPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.context");
+        String contextPath = "/" + configService.getProperty("gridsphere.deploy");
+        String servletPath = "/" + configService.getProperty("gridsphere.context");
+        if (contextPath.equals("/")) contextPath = "";
         String url = contextPath + servletPath;
         url = s.append(url).toString();
         try {
