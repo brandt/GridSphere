@@ -9,8 +9,6 @@ import org.gridsphere.layout.PortletTab;
 import org.gridsphere.layout.event.ComponentAction;
 import org.gridsphere.layout.event.PortletTabEvent;
 
-import javax.portlet.ActionRequest;
-
 /**
  * A <code>PortletTabEventImpl</code> is the concrete implementation of
  * <code>PortletTabEvent</code>

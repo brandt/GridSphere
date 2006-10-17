@@ -9,8 +9,6 @@ import org.gridsphere.layout.PortletFrame;
 import org.gridsphere.layout.event.ComponentAction;
 import org.gridsphere.layout.event.PortletFrameEvent;
 
-import javax.portlet.PortletRequest;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * A <code>PortletFrameEventImpl</code> is the concrete implementation of
@@ -27,6 +25,7 @@ public class PortletFrameEventImpl implements PortletFrameEvent {
      * Constructs an instance of PortletFrameEventImpl from an action
      * and the component id of teh PortletFrame
      *
+     * @param frame the portlet frame
      * @param action a window action
      * @param id     the component id of the PortletFrame
      */

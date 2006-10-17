@@ -6,7 +6,6 @@ package org.gridsphere.layout.event.impl;
 
 import org.gridsphere.layout.event.PortletWindowEvent;
 
-import javax.portlet.ActionRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.util.EventObject;
 
