@@ -4,6 +4,9 @@
  */
 package org.gridsphere.portlet.impl;
 
+import org.gridsphere.services.core.portal.PortalConfigService;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +49,8 @@ public class PortletURLImpl implements PortletURL {
     private boolean isRender = false;
     private String label = null;
 
+    private PortalConfigService configService = null;
+
     private PortletURLImpl() { }
 
     /**
@@ -61,6 +66,7 @@ public class PortletURLImpl implements PortletURL {
 
         this.isSecure = req.isSecure();
         this.isRender = isRender;
+        configService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
     }
 
     /**
@@ -273,10 +279,10 @@ public class PortletURLImpl implements PortletURL {
         String port = null;
         if (req.isSecure() || isSecure || (req.getAttribute(SportletProperties.SSL_REQUIRED) != null)) {
             s.append("https://");
-            port = SportletProperties.getInstance().getProperty("gridsphere.port.https");
+            port = configService.getProperty("gridsphere.port.https");
         } else {
             s.append("http://");
-            port = SportletProperties.getInstance().getProperty("gridsphere.port.http");
+            port = configService.getProperty("gridsphere.port.http");
         }
         s.append(req.getServerName());
         s.append(":");
@@ -285,12 +291,16 @@ public class PortletURLImpl implements PortletURL {
         // if underlying window state is floating then set it in the URI
         if (req.getAttribute(SportletProperties.FLOAT_STATE) != null) store.put(SportletProperties.PORTLET_WINDOW, "FLOATING");
 
-        String contextPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.deploy"); // contextPath;
-        String servletPath = "/" + SportletProperties.getInstance().getProperty("gridsphere.context");
+        String contextPath = "/" + configService.getProperty("gridsphere.deploy");
+        if (contextPath.equals("/")) contextPath = "";
+        String servletPath = "/" + configService.getProperty("gridsphere.context");
+        //String servletPath = req.getServletPath();
         String url = contextPath + servletPath;
 
-        //System.err.println("\n\n\nContext path=" + contextPath);
+        
 
+        //System.err.println("\n\n\nContext path=" + contextPath);
+       /*
         String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
         if (layoutId != null) {
             //System.err.println("layoutId=" + layoutId);
@@ -304,9 +314,9 @@ public class PortletURLImpl implements PortletURL {
                 if (action != null) {
                     store.put(SportletProperties.DEFAULT_PORTLET_ACTION, action);
                 }
-
+       */
         ///////////  JASON ADDED BELOW
-        /*
+
         String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
         if (layoutId != null) {
             //System.err.println("layoutId=" + layoutId);
@@ -327,7 +337,7 @@ public class PortletURLImpl implements PortletURL {
             }
             //System.err.println("url=" + layoutId);
        }
-       */
+
         ///////////// JASON ADDED ABOVE
 
         Set set = store.keySet();
