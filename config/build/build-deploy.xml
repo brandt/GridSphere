@@ -60,6 +60,10 @@ Build include file for the GridSphere Portal source code, see build.xml
               file="${gswebapp.dir}/WEB-INF/web.xml"
               filtering="true"/>
 
+        <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"
+              file="${gswebapp.dir}/WEB-INF/CustomPortal/portal/gridsphere.properties"
+              filtering="true"/>
+
         <copy todir="${build.webapps}/${gridsphere.deploy}">
             <fileset dir="${gswebapp.dir}">
                 <exclude name="**/tlds/**"/>
