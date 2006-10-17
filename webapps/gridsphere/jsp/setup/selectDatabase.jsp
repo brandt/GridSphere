@@ -27,10 +27,11 @@ function SelectDriver() {
     document.dbform.databaseURL.value = connURL;
     document.dbform.driverClass.value = driver;
     document.dbform.dialect.value = dialect;
+
     //alert(dbtype);
 }
 
-function DisplayWait() {
+function DisplayWait( formName ) {
 
     var waitDiv = document.getElementById("content");
 
@@ -38,6 +39,7 @@ function DisplayWait() {
 
     document.dbform.custom.disabled = true;
     document.simple.standard.disabled = true;
+    document[formName].submit();
 }
 
 // -->
@@ -78,7 +80,7 @@ function DisplayWait() {
         <form method="POST" name="simple" action="<%= request.getContextPath() %>/setup?install=default">
 
 
-            <input type="submit" name="standard" value="Embedded Database >>" onclick="DisplayWait()"/>
+            <input type="submit" name="standard" value="Embedded Database >>" onclick="DisplayWait( this.form.name )"/>
 
         </form>
 
@@ -156,7 +158,7 @@ function DisplayWait() {
                 </tr>
             </table>
             <p/>
-            <input type="submit" name="custom" value="External Database >>" onclick="DisplayWait()"/>
+            <input type="submit" name="custom" value="External Database >>" onsubmit="DisplayWait( this.form.name )"/>
         </form>
 
     </fieldset>
