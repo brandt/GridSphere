@@ -1,1 +1,9 @@
 <Context path="/@GRIDSPHERE_DEPLOY@" debug="0" reloadable="false" crossContext="true"/>
+
+<!-- 
+
+<Context path="/@GRIDSPHERE_DEPLOY@" debug="0" reloadable="false" crossContext="true">
+        <Manager className="org.apache.catalina.session.StandardManager" pathname=""/>
+</Context>
+
+-->
