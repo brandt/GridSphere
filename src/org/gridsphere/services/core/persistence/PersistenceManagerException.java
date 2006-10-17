@@ -8,17 +8,7 @@
 
 package org.gridsphere.services.core.persistence;
 
-
-public class PersistenceManagerException extends Exception {
-
-    private Throwable rootCause;
-
-    /**
-     * Constructs a new persistence exception with the given text.
-     */
-    public PersistenceManagerException() {
-        super();
-    }
+public class PersistenceManagerException extends RuntimeException {
 
     /**
      * Constructs a new persistence exception with the given text.
@@ -37,7 +27,6 @@ public class PersistenceManagerException extends Exception {
      */
     public PersistenceManagerException(String text, Throwable cause) {
         super(text, cause);
-        this.rootCause = cause;
     }
 
     /**
@@ -47,7 +36,8 @@ public class PersistenceManagerException extends Exception {
      * @param cause the root cause
      */
     public PersistenceManagerException(Throwable cause) {
-        this.rootCause = cause;
+        super(cause);
     }
+
 }
 

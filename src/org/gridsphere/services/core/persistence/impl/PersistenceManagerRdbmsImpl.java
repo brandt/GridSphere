@@ -23,10 +23,11 @@ import java.util.*;
 public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private transient Log log = LogFactory.getLog(PersistenceManagerRdbmsImpl.class);
 
-    public static final ThreadLocal sessionThread = new ThreadLocal();
+    public static final ThreadLocal<Session> sessionThread = new ThreadLocal<Session>();
 
     
     private SessionFactory factory = null;
+
     private final static int CMD_DELETE = 1;
     private final static int CMD_DELETE_LIST = 2;
     private final static int CMD_RESTORE = 3;
@@ -248,7 +249,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public Session currentSession() throws HibernateException {
 
-        Session s = (Session) sessionThread.get();
+        Session s = sessionThread.get();
 
         // Open a new Session, if this Thread has none yet
         if (s == null) {
@@ -273,16 +274,11 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         }
     }
 
-    public void destroy() throws PersistenceManagerException {
-        //try {
-            System.err.println("destroying pm! " + pm);
-            Statistics stats = factory.getStatistics();
-            stats.logSummary();
+    public void destroy() {
+        System.err.println("destroying pm! " + pm);
+        Statistics stats = factory.getStatistics();
+        stats.logSummary();
         factory.close();
-
-        //} catch (HibernateException e) {
-         //   throw new PersistenceManagerException(e);
-        //}
     }
 
 }

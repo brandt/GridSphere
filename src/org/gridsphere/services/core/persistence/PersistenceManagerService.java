@@ -2,6 +2,8 @@ package org.gridsphere.services.core.persistence;
 
 import org.gridsphere.portlet.service.PortletService;
 
+import java.util.Collection;
+
 /**
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id$
@@ -29,5 +31,12 @@ public interface PersistenceManagerService extends PortletService {
      * @param webappname the webapp identifier for this PersistenceManager
      */
     public void destroyPersistenceManagerRdbms(String webappname);
+
+    /**
+     * Returns all persistence managers.
+     *
+     * @return all persistence managers.
+     */
+    public Collection<PersistenceManagerRdbms> getAllPersistenceManagerRdbms();
 
 }

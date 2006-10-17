@@ -99,5 +99,5 @@ public interface PersistenceManagerRdbms {
      *
      * @throws PersistenceManagerException
      */
-    public void destroy() throws PersistenceManagerException;
+    public void destroy();
 }
