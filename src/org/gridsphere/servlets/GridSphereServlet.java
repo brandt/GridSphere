@@ -104,6 +104,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             //log.error("error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
             throw new PortletServiceException("error unmarshalling " + descriptorPath, e);
         }
+        PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
+        layoutEngine.init(config.getServletContext());
+        String realPath = config.getServletContext().getRealPath("");
+        int l = realPath.lastIndexOf(File.separator);
+        String webApplicationName = realPath.substring(l + 1);
+        System.err.println("webapp name=" + webApplicationName);
     }
 
     private void initializeServices() throws PortletServiceException {
@@ -334,6 +340,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * Handles login requests
      *
      * @param event a <code>GridSphereEvent</code>
+     * @throw AuthenticationException if auth fails
+     * @throw AuthorizationException if authz fails
      */
     protected void login(GridSphereEvent event) throws AuthenticationException, AuthorizationException {
 
