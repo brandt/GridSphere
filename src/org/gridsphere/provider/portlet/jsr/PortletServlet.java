@@ -17,6 +17,7 @@ import org.gridsphere.portletcontainer.impl.descriptor.types.TransportGuaranteeT
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.services.core.security.auth.LoginService;
+import org.gridsphere.services.core.portal.PortalConfigService;
 
 import javax.portlet.*;
 import javax.servlet.Servlet;
@@ -38,6 +39,7 @@ public class PortletServlet extends HttpServlet
     private transient Log log = LogFactory.getLog(PortletServlet.class);
 
     private transient PortletRegistryService registryService = null;
+    private transient PortalConfigService configService = null;
 
     private PortletWebApplicationImpl portletWebApp = null;
 
@@ -53,7 +55,7 @@ public class PortletServlet extends HttpServlet
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        log.debug("in init of PortletServlet");
+        log.info("in init of PortletServlet");
         portlets = new Hashtable();
         portletclasses = new Hashtable();
         portletApps = new Hashtable();
@@ -62,6 +64,7 @@ public class PortletServlet extends HttpServlet
 
     public void initJSRPortletWebapp() {
         registryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
+        configService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
         ServletContext ctx = this.getServletContext();
 
         portletWebApp = new PortletWebApplicationImpl(ctx, Thread.currentThread().getContextClassLoader());
@@ -149,8 +152,8 @@ public class PortletServlet extends HttpServlet
         // if no lifecycle method exists, redirect to error page!
         String method = (String) request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         if (method == null) {
-            response.sendRedirect("/" + SportletProperties.getInstance().getProperty("gridsphere.deploy") +
-                    "/" + SportletProperties.getInstance().getProperty("gridsphere.context") +
+            response.sendRedirect("/" + configService.getProperty("gridsphere.deploy") +
+                    "/" + configService.getProperty("gridsphere.context") +
                     "?" + SportletProperties.LAYOUT_PAGE_PARAM + "=" + "ErrorLayout" + "&" + "errorPage=unauthorized.jsp");
             return;
         }
