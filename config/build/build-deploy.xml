@@ -8,7 +8,7 @@ Build include file for the GridSphere Portal source code, see build.xml
 
 <project name="GridSphere Deploy">
 
-    <target name="deploy" depends="jar">
+    <target name="deploy">
 
         <echo message="GridSphere AppServer: ${gridsphere.appserver}"/>
 
@@ -37,8 +37,29 @@ Build include file for the GridSphere Portal source code, see build.xml
         </if>
     </target>
 
+    <target name="war" depends="deploy-common" description="Creates a GridSphere WAR distribution">
 
-    <target name="deploy-common">
+        <delete file="${gridsphere.build}/${gridsphere.deploy}.war"/>
+
+        <copy todir="${gridsphere.build}/${gridsphere.deploy}">
+            <fileset dir="${build.webapps}/${gridsphere.deploy}"/>
+        </copy>
+
+        <copy todir="${gridsphere.build}/${gridsphere.deploy}/WEB-INF/lib">
+            <fileset dir="${build.lib}">
+                <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
+                <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
+            </fileset>
+        </copy>
+
+        <jar destfile="${gridsphere.build}/${gridsphere.deploy}.war"
+             basedir="${gridsphere.build}/${gridsphere.deploy}"/>
+     
+        <delete dir="${gridsphere.build}/${gridsphere.deploy}"/>
+
+    </target>
+
+    <target name="deploy-common" depends="jar" description="Filters and copies all necessary files to build directory">
 
         <!-- Copy the gridsphere web app to build directory -->
         <pathconvert targetos="windows" dirsep="/" property="cathome">
@@ -92,23 +113,6 @@ Build include file for the GridSphere Portal source code, see build.xml
             </then>
         </if>
 
-        <!-- copy webappsdir to deployed location -->
-        <copy todir="${appserver.home}/webapps">
-            <fileset dir="${build.webapps}">
-                <exclude name="**/gridsphere.properties"/>
-            </fileset>
-        </copy>
-
-        <!-- only copy over the portal properties if not there already -->
-        <if>
-            <available file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"/>
-            <then/>
-            <else>
-                <copy file="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"
-                      todir="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/"/>
-            </else>
-        </if>
-
     </target>
 
     <target name="modify-webxml">
@@ -137,6 +141,24 @@ Build include file for the GridSphere Portal source code, see build.xml
                       filtering="true"/>
     </target>
 
+    <target name="deploy-copy" depends="deploy-common" description="Performs deploy-common and deploys build directory to app server">
+        <!-- copy webappsdir to deployed location -->
+        <copy todir="${appserver.home}/webapps">
+            <fileset dir="${build.webapps}">
+                <exclude name="**/gridsphere.properties"/>
+            </fileset>
+        </copy>
+
+        <!-- only copy over the portal properties if not there already -->
+        <if>
+            <available file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"/>
+            <then/>
+            <else>
+                <copy file="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"
+                      todir="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/"/>
+            </else>
+        </if>
+    </target>
 
     <!-- ========================================================= -->
     <!-- =          JETTY                                        = -->
@@ -144,7 +166,7 @@ Build include file for the GridSphere Portal source code, see build.xml
 
 
     <!-- deploys gridsphere to jetty -->
-    <target name="deploy-jetty" depends="deploy-common">
+    <target name="deploy-jetty" depends="deploy-copy">
 
         <copy overwrite="true" todir="${appserver.home}/ext">
             <fileset dir="${build.lib}">
@@ -161,7 +183,7 @@ Build include file for the GridSphere Portal source code, see build.xml
 
 
     <!-- deploys gridsphere to jetty -->
-    <target name="deploy-jetty6" depends="deploy-common">
+    <target name="deploy-jetty6" depends="deploy-copy">
 
         <copy overwrite="true" todir="${appserver.home}/lib">
             <fileset dir="${build.lib}">
@@ -182,7 +204,7 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- =          TOMCAT                                       = -->
     <!-- ========================================================= -->
 
-    <target name="deploy-tomcat" depends="deploy-common">
+    <target name="deploy-tomcat" depends="deploy-copy">
         <!-- Copy context file -->
         <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
         <if>
