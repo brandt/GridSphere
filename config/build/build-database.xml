@@ -25,6 +25,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         <dbtask
             configdir="${appserver.home}/webapps/${gridsphere.deploy}"
             action="CREATE"/>
+        <touch file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/database/GS_${version.release}"/>
     </target>
 
     <target name="update-database" depends="setenv">
