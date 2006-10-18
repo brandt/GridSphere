@@ -4,6 +4,6 @@
 
 <table>
     <tr><td align="center">
-        <ui:text value="<%= date %>"/>
+        <%= date %>
     </td></tr>
 </table>
