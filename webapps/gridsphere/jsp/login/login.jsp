@@ -46,7 +46,7 @@
             </ui:tablecell>
             <ui:tablecell width="60">
                 <ui:text var="passkey" key="USER_PASSWORD_BLANK"/>
-                <input validator="dildo" class="checkNotEmpty#" type="password" name="password" size="15" maxlength="50"/>
+                <input class="checkNotEmpty#" type="password" name="password" size="15" maxlength="50"/>
                 <input type="hidden" name="password#checkNotEmpty" value="<%= passkey %>"/>
             </ui:tablecell>
             <ui:tablecell/>
