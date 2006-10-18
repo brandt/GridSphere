@@ -106,6 +106,18 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
         PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
         layoutEngine.init(config.getServletContext());
+        String realPath = config.getServletContext().getRealPath("");
+        int l = realPath.lastIndexOf(File.separator);
+        String ctxPath = realPath.substring(l + 1);
+        System.err.println("ctx path=" + ctxPath);
+        portalConfigService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+        if (ctxPath.equals("ROOT")) ctxPath = "";
+        portalConfigService.setProperty("gridsphere.deploy", ctxPath);
+        try {
+            portalConfigService.storeProperties();
+        } catch (IOException e) {
+            log.error("Unable to write to properties file!");
+        }
     }
 
     private void initializeServices() throws PortletServiceException {
@@ -113,7 +125,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         userManagerService = (UserManagerService) PortletServiceFactory.createPortletService(UserManagerService.class, true);
         loginService = (LoginService) PortletServiceFactory.createPortletService(LoginService.class, true);
         portletManager = (PortletManagerService) PortletServiceFactory.createPortletService(PortletManagerService.class, true);
-        portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
         String filterDescriptorPath = getServletContext().getRealPath("/WEB-INF/filters.xml");
         try {
             PortalFilterDescriptor filterDescriptor = new PortalFilterDescriptor(getServletConfig(), filterDescriptorPath);
