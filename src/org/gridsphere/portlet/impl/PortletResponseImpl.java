@@ -64,10 +64,8 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
         if (key == null) throw new IllegalArgumentException("key is NULL");
         Map properties = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         List vals = (List) properties.get(key);
-        if (vals == null) {
-            vals = new ArrayList();
-        }
-        vals.add(value);
+        if (vals == null) vals = new ArrayList();
+        if (!vals.contains(value)) vals.add(value);
         properties.put(key, vals);
     }
 
