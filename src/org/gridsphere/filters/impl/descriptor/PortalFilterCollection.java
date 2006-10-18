@@ -9,13 +9,13 @@ import java.util.Vector;
  */
 public class PortalFilterCollection {
 
-    private List portalFilterList = new Vector();
+    private List<PortalFilterDefinition> portalFilterList = new Vector<PortalFilterDefinition>();
 
-    public List getPortalFilterList() {
+    public List<PortalFilterDefinition> getPortalFilterList() {
         return portalFilterList;
     }
 
-    public void setPortalFilterList(List portalFilterList) {
+    public void setPortalFilterList(List<PortalFilterDefinition> portalFilterList) {
         this.portalFilterList = portalFilterList;
     }
 

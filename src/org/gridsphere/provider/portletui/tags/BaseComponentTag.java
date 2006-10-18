@@ -8,6 +8,7 @@ import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.BaseComponentBean;
 
 import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
@@ -307,5 +308,13 @@ public abstract class BaseComponentTag extends BaseBeanTag {
             }
         }
         return super.doEndTag();
+    }
+
+    public void updatePageEndBuffer(StringBuffer buffer) {
+        RenderRequest req = (RenderRequest)pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
+        StringBuffer pagebuffer = (StringBuffer)req.getAttribute(SportletProperties.PAGE_BUFFER);
+        if (pagebuffer == null) pagebuffer = new StringBuffer();
+        pagebuffer.append(buffer);
+        req.setAttribute(SportletProperties.PAGE_BUFFER, pagebuffer);
     }
 }

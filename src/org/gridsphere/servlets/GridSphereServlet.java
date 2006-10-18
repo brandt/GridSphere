@@ -75,7 +75,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     private PortletSessionManager sessionManager = PortletSessionManager.getInstance();
 
-    private List portalFilters = null;
+    private List<PortalFilter> portalFilters = null;
 
     //private static PortletRegistry registry = PortletRegistry.getInstance();
     private boolean firstDoGet = true;
@@ -89,8 +89,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @throws ServletException if an error occurs during initialization
      */
     public final void init(ServletConfig config) throws ServletException {
-        log.debug("in init of GridSphereServlet");
         super.init(config);
+        log.debug("in init of GridSphereServlet");
         String descriptorPath = config.getServletContext().getRealPath("/WEB-INF/GridSphereServices.xml");
         // add core gridsphere services to ServiceFactory
         PortletServiceDescriptor descriptor = null;
@@ -159,9 +159,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         // check to see if user has been authorized by means of container managed authorization
         checkWebContainerAuthorization(event);
 
-        Iterator it = portalFilters.iterator();
-        while (it.hasNext()) {
-            PortalFilter filter = (PortalFilter)it.next();
+        for (PortalFilter filter : portalFilters) {
             filter.doBeforeEveryRequest(req, res);
         }
 
@@ -214,10 +212,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         layoutEngine.service(event);
 
-
-        it = portalFilters.iterator();
-        while (it.hasNext()) {
-            PortalFilter filter = (PortalFilter)it.next();
+        for (PortalFilter portalFilter : portalFilters) {
+            PortalFilter filter = (PortalFilter) portalFilter;
             filter.doAfterEveryRequest(req, res);
         }
 
@@ -305,10 +301,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         if (user != null) {
             UserPrincipal userPrincipal = new UserPrincipal(user.getUserName());
             req.setAttribute(SportletProperties.PORTLET_USER_PRINCIPAL, userPrincipal);
-            List proles = roleService.getRolesForUser(user);
-            Iterator it = proles.iterator();
-            while (it.hasNext()) {
-                roles.add(((PortletRole)it.next()).getName());
+            List<PortletRole> proles = roleService.getRolesForUser(user);
+            for (PortletRole prole : proles) {
+                roles.add(prole.getName());
             }
         }
 

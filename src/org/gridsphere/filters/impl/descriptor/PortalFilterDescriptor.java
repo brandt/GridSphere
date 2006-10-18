@@ -12,7 +12,6 @@ import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 import javax.servlet.ServletConfig;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -23,8 +22,7 @@ import java.util.List;
 public class PortalFilterDescriptor {
 
     private Log log = LogFactory.getLog(PortalFilterDescriptor.class);
-    private List portalFilters = new ArrayList();
-    private PersistenceManagerXml pmXML = null;
+    private List<PortalFilter> portalFilters = new ArrayList<PortalFilter>();
     private URL FILTER_MAPPING_PATH = getClass().getResource("/org/gridsphere/filters/portal-filters-mapping.xml");
 
     /**
@@ -34,15 +32,13 @@ public class PortalFilterDescriptor {
     }
 
     public PortalFilterDescriptor(ServletConfig config, String descriptorFile) throws PersistenceManagerException {
-        pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorFile, FILTER_MAPPING_PATH);
+        PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorFile, FILTER_MAPPING_PATH);
         PortalFilterCollection portalFilterCollection = (PortalFilterCollection) pmXML.load();
-        List portalFilterList = portalFilterCollection.getPortalFilterList();
-        Iterator it = portalFilterList.iterator();
-        while (it.hasNext()) {
-            PortalFilterDefinition def = (PortalFilterDefinition)it.next();
+        List<PortalFilterDefinition> portalFilterList = portalFilterCollection.getPortalFilterList();
+        for (PortalFilterDefinition def : portalFilterList) {
             String filterImpl = def.getImplementation();
             try {
-                PortalFilter filterClass = (PortalFilter)Class.forName(filterImpl).newInstance();
+                PortalFilter filterClass = (PortalFilter) Class.forName(filterImpl).newInstance();
                 PortalFilterConfig filterConfig = new PortalFilterConfigImpl(config, def.getConfigProperties());
                 filterClass.init(filterConfig);
                 portalFilters.add(filterClass);
@@ -51,12 +47,12 @@ public class PortalFilterDescriptor {
             } catch (InstantiationException e) {
                 log.error("Unable to instantiate filter class: " + filterImpl, e);
             } catch (IllegalAccessException e) {
-               log.error("Illegal access on filter class: " + filterImpl, e);
+                log.error("Illegal access on filter class: " + filterImpl, e);
             }
         }
     }
 
-    public List getPortalFilters() {
+    public List<PortalFilter> getPortalFilters() {
         return portalFilters;
     }
 

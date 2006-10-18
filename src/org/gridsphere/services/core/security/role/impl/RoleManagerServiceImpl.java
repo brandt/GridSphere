@@ -77,54 +77,51 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
     }
 
 
-    public List getRolesForUser(User user) {
+    public List<PortletRole> getRolesForUser(User user) {
         if (user == null) throw new IllegalArgumentException("user can't be null");
-        List roles = null;
+        List<PortletRole> roles = null;
         String oql = "select userRole.role from "
                 + jdoUserRoles
                 + " userRole where userRole.user.oid='" + user.getID() + "'";
         try {
-            roles = (List)pm.restoreList(oql);
+            roles = pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving user role";
             log.error(msg, e);
         }
-        if (roles == null) {
-            roles = new ArrayList();
-        }
-        return roles;
+        return (roles != null) ? roles : new ArrayList<PortletRole>();
     }
 
-    public List getUsersInRole(PortletRole role) {
+    public List<User> getUsersInRole(PortletRole role) {
         if (role == null) throw new IllegalArgumentException("role cannot be null!");
-        List users = null;
+        List<User> users = null;
         String oql = "select userRole.user from "
                 + jdoUserRoles
                 + " userRole where userRole.role.Name='" + role.getName() + "'";
         try {
-            users = (List)pm.restoreList(oql);
+            users = pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving user role";
             log.error(msg, e);
         }
-        return users;
+        return (users != null) ? users : new ArrayList<User>();
     }
 
 
-    public List getUsersInRole(PortletRole role, QueryFilter filter) {
+    public List<User> getUsersInRole(PortletRole role, QueryFilter filter) {
         if (role == null) throw new IllegalArgumentException("role cannot be null!");
         if (filter == null) throw new IllegalArgumentException("query filter cannot be null!");
-        List users = null;
+        List<User> users = null;
         String oql = "select userRole.user from "
                 + jdoUserRoles
                 + " userRole where userRole.role.Name='" + role.getName() + "'";
         try {
-            users = (List)pm.restoreList(oql, filter);
+            users = (List<User>)pm.restoreList(oql, filter);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving user role";
             log.error(msg, e);
         }
-        return (users != null) ? users : new ArrayList();
+        return (users != null) ? users : new ArrayList<User>();
     }
 
 
@@ -172,14 +169,14 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
         return userRole;
     }
 
-    public List getRoles() {
-        List roles = null;
+    public List<PortletRole> getRoles() {
+        List<PortletRole> roles = null;
         try {
             roles = pm.restoreList("select prole from " + PortletRole.class.getName() + " prole");
         } catch (PersistenceManagerException e) {
             log.error("Error deleting role", e);
         }
-        return roles;
+        return (roles != null) ? roles : new ArrayList<PortletRole>();
     }
 
     public void deleteRole(PortletRole role) {

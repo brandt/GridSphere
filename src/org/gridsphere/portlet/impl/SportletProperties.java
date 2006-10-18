@@ -202,6 +202,8 @@ public class SportletProperties {
 
     public static final String SERVLET_PATH = "org.gridsphere.SERVLET_PATH";
 
+    public static final String PAGE_BUFFER = "org.gridsphere.PAGE_BUFFER";
+
     private SportletProperties() {
         if (props == null) {
             InputStream propsStream = getClass().getResourceAsStream("/org/gridsphere/portlet/impl/portlet.properties");

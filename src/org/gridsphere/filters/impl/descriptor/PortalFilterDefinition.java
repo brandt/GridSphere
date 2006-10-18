@@ -1,6 +1,7 @@
 package org.gridsphere.filters.impl.descriptor;
 
 import org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam;
+import org.gridsphere.portlet.service.spi.impl.descriptor.Description;
 
 import java.util.Iterator;
 import java.util.List;
@@ -14,9 +15,9 @@ import java.util.Vector;
 public class PortalFilterDefinition {
 
     private String name = "";
-    private List descriptions = new Vector();
+    private List<Description> descriptions = new Vector<Description>();
     private String implementation = "";
-    private List configParamList = new Vector();
+    private List<ConfigParam> configParamList = new Vector<ConfigParam>();
     private Properties configProps;
 
     public String getName() {
@@ -27,11 +28,11 @@ public class PortalFilterDefinition {
         this.name = name;
     }
 
-    public List getDescriptions() {
+    public List<Description> getDescriptions() {
         return descriptions;
     }
 
-    public void setDescriptions(List descriptions) {
+    public void setDescriptions(List<Description> descriptions) {
         this.descriptions = descriptions;
     }
 
@@ -43,11 +44,11 @@ public class PortalFilterDefinition {
         this.implementation = implementation;
     }
 
-    public List getConfigParamList() {
+    public List<ConfigParam> getConfigParamList() {
         return configParamList;
     }
 
-    public void setConfigParamList(List configParamList) {
+    public void setConfigParamList(List<ConfigParam> configParamList) {
         this.configParamList = configParamList;
     }
 

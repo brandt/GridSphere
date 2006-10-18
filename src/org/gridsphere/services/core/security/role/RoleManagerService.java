@@ -16,7 +16,7 @@ import java.util.List;
 
 public interface RoleManagerService extends PortletService {
 
-    public List getRoles();
+    public List<PortletRole> getRoles();
 
     public void deleteRole(PortletRole role);
 
@@ -26,13 +26,13 @@ public interface RoleManagerService extends PortletService {
 
     public boolean isUserInRole(User user, PortletRole role);
 
-    public List getRolesForUser(User user);
+    public List<PortletRole> getRolesForUser(User user);
 
     public int getNumUsersInRole(PortletRole role);
 
-    public List getUsersInRole(PortletRole role);
+    public List<User> getUsersInRole(PortletRole role);
 
-    public List getUsersInRole(PortletRole role, QueryFilter filter);
+    public List<User> getUsersInRole(PortletRole role, QueryFilter filter);
 
     public void addUserToRole(User user, PortletRole role);
 

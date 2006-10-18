@@ -175,7 +175,6 @@ public class DialogBean extends BaseComponentBean {
         sb.append("}\n");
         sb.append("YAHOO.util.Event.addListener(window, \"load\", init);");
         sb.append("</script>");
-        sb.append("<div id=\"" + name + "\"><div class=\"hd\"></div><div class=\"bd\"></div><div class=\"ft\"></div></div>");
         if (isLink) {
             sb.append("<a href=\"#\" onclick=\"YAHOO." + name + ".panel.show();\">" + value + "</a>\n");
         } else {
@@ -188,4 +187,7 @@ public class DialogBean extends BaseComponentBean {
         return "";
     }
 
+    public StringBuffer getDialogPopup() {
+        return new StringBuffer("<div id=\"" + name + "\"><div class=\"hd\"></div><div class=\"bd\"></div><div class=\"ft\"></div></div>");
+    }
 }

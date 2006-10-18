@@ -149,6 +149,7 @@ public class DialogTag extends BaseComponentTag {
             dialog.setLink(isLink);
             dialog.setValue(value);
             out.print(dialog.toStartString());
+            this.updatePageEndBuffer(dialog.getDialogPopup());
         } catch (Exception e) {
             throw new JspException(e);
         }
