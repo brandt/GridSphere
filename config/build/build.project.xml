@@ -215,8 +215,12 @@ Copyright:
     <target name="create-database" depends="setenv, deploy">
         <echo message="Creating database"/>
         <taskdef name="dbtask"
-                 classname="org.gridsphere.tools.DBTask"
-                 classpathref="classpath"/>
+                  classname="org.gridsphere.tools.DBTask"
+                  classpathref="classpath">
+            <classpath id="hib.classpth">
+                <pathelement location="webapp/WEB-INF/classes/"/>
+            </classpath>
+        </taskdef>
         <dbtask
                 configdir="${appserver.home}/webapps/${project.name}"
                 action="CREATE"/>
