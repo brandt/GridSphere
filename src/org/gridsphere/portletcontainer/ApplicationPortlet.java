@@ -14,61 +14,61 @@ import java.io.IOException;
  */
 public interface ApplicationPortlet {
 
-    String getWebApplicationName();
+    public String getWebApplicationName();
 
-    String getApplicationPortletID();
+    public String getApplicationPortletID();
 
-    PortletDispatcher getPortletDispatcher(HttpServletRequest req, HttpServletResponse res);
+    public PortletDispatcher getPortletDispatcher(HttpServletRequest req, HttpServletResponse res);
 
-    String getApplicationPortletName();
+    public String getApplicationPortletName();
 
-    String getApplicationPortletClassName();
+    public String getApplicationPortletClassName();
 
-    PortalContext getPortalContext();
+    public PortalContext getPortalContext();
 
-    String getPortletDescription(Locale locale);
+    public String getPortletDescription(Locale locale);
 
-    String getPortletDisplayName(Locale locale);
+    public String getPortletDisplayName(Locale locale);
 
-    int getExpirationCache();
+    public int getExpirationCache();
 
-    Locale[] getSupportedLocales();
+    public Locale[] getSupportedLocales();
 
-    javax.portlet.PreferencesValidator getPreferencesValidator();
+    public javax.portlet.PreferencesValidator getPreferencesValidator();
 
-    org.gridsphere.portletcontainer.impl.descriptor.PortletPreferences getPreferencesDescriptor();
+    public org.gridsphere.portletcontainer.impl.descriptor.PortletPreferences getPreferencesDescriptor();
 
-    Portlet getPortletInstance();
+    public Portlet getPortletInstance();
 
-    void setApplicationPortletStatus(PortletStatus status);
+    public void setApplicationPortletStatus(PortletStatus status);
 
-    void setApplicationPortletStatusMessage(String statusMessage);
+    public void setApplicationPortletStatusMessage(String statusMessage);
 
-    PortletStatus getApplicationPortletStatus();
+    public PortletStatus getApplicationPortletStatus();
 
-    String getApplicationPortletStatusMessage();
+    public String getApplicationPortletStatusMessage();
 
-    String getPortletName();
+    public String getPortletName();
 
-    void setPortletName(String portletName);
+    public void setPortletName(String portletName);
 
-    List getAllowedWindowStates();
+    public List getAllowedWindowStates();
 
-    List getSupportedModes(String markup);
+    public List getSupportedModes(String markup);
 
-    long getCacheExpires();
+    public long getCacheExpires();
 
-    String getConcretePortletID();
+    public String getConcretePortletID();
 
-    String getDefaultLocale();
+    public String getDefaultLocale();
 
-    String getDescription(Locale loc);
+    public String getDescription(Locale loc);
 
-    String getDisplayName(Locale loc);
+    public String getDisplayName(Locale loc);
 
-    String getRequiredRole();
+    public String getRequiredRole();
 
-    void setRequiredRole(String role);
+    public void setRequiredRole(String role);
 
-    void save() throws IOException;
+    public void save() throws IOException;
 }
