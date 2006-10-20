@@ -146,11 +146,11 @@ public class PortletLayoutEngine {
                 }
             }
         } else {
-            log.debug("rendering page");
             page.doRender(event);
             pageBuffer = page.getBufferedOutput(event.getRenderRequest());
         }
 
+        log.info("\twriting page to output");
         try {
             String ae = req.getHeader("accept-encoding");
             if (ae != null && ae.indexOf("gzip") != -1) {
@@ -188,7 +188,7 @@ public class PortletLayoutEngine {
      * @param event a gridsphere event
      */
     public void actionPerformed(GridSphereEvent event) {
-        log.debug("in actionPerformed()");
+        log.info("\tstart actionPerformed");
         PortletPage page = getPortletPage(event);
         //int numcomps = page.getComponentIdentifierList().size();
         /*
@@ -213,8 +213,7 @@ public class PortletLayoutEngine {
                 }
             }
         }
-
-        log.debug("Exiting actionPerformed()");
+        log.info("\tend actionPerformed");
     }
 
     public void doRenderError(RenderResponse res, Throwable t) {

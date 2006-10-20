@@ -336,7 +336,7 @@ public class PortletPageFactory implements PortletSessionListener {
         // first check for layout id in request parameter
         PortletRequest req = event.getRenderRequest();
         String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
-        System.err.println("layoutId==" + layoutId);
+        //System.err.println("layoutId==" + layoutId);
         if (layoutId == null) {
             if (req.getUserPrincipal() == null) {
                 // if no reference to a layout exists, return a guest layout
@@ -361,7 +361,6 @@ public class PortletPageFactory implements PortletSessionListener {
     protected PortletPage getPortletPageFromHash(PortletRequest req, String layoutId) {
         PortletSession session = req.getPortletSession();
         PortletPage page = null;
-        System.err.println("layoutId==" + layoutId);
         Map usersLayouts = (Map)layouts.get(session.getId());
         if (usersLayouts == null) {
             usersLayouts = new HashMap();
@@ -387,19 +386,16 @@ public class PortletPageFactory implements PortletSessionListener {
                 if (page == null) page = createPortletPage(req, layoutId);
                 req.setAttribute(SportletProperties.LAYOUT_PAGE, layoutId);
             }
-            System.err.println("layoutId2==" + layoutId);
             usersLayouts.put(layoutId, page);
             log.debug("Creating new page " + layoutId + " placing in session " + session.getId());
             sessionManager.addSessionListener(session.getId(), this);
-        }  else {
-            System.err.println("page is in user layout hash!");
         }
         return page;
     }
 
     public PortletPage createPortletPage(PortletRequest req, String layoutId) {
         // get the master copy of the page
-        System.err.println("layoutId3==" + layoutId);
+
         PortletPage masterPage = (PortletPage)masterLayouts.get(layoutId);
         PortletPage copy = null;
         // there are two cases where a master may not be there, TCK case and logged in  user
