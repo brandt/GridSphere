@@ -220,6 +220,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
         if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
         req.setAttribute(compVar, componentIDStr);
+        req.setAttribute(SportletProperties.COMPONENT_ID_NUM, String.valueOf(COMPONENT_ID));
     }
 
     public void setBufferedOutput(PortletRequest req, StringBuffer sb) {
