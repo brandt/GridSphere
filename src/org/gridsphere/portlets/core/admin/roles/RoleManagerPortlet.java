@@ -170,7 +170,11 @@ public class RoleManagerPortlet extends ActionPortlet {
             role.setDescription(roleDescTF.getValue());
         }
         roleManagerService.saveRole(role);
+        if (isNewRole) {
         createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG") + ": " + role.getName());
+        } else {
+            createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_UPDATE_MSG") + ": " + role.getName());            
+        }
     }
 
     public void doAddUser(ActionFormEvent event) {

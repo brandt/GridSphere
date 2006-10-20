@@ -168,32 +168,20 @@ public class ConfigPortlet extends ActionPortlet {
         boolean remUser = (remUserCB.getSelectedValue() != null);
         portalConfigService.setProperty(PortalConfigService.REMEMBER_USER, Boolean.toString(remUser));
 
-        portalConfigService.setProperty(PortalConfigService.SAVE_PASSWORDS, Boolean.toString(savePasswords));
-        portalConfigService.setProperty(PortalConfigService.SEND_USER_FORGET_PASSWORD, Boolean.toString(sendForget));
-        try {
-            portalConfigService.storeProperties();
-        } catch (IOException e) {
-            log.error("unable to save gridsphere.properties", e);
-        }
-        setNextState(req, DEFAULT_VIEW_PAGE);
-    }
-
-    public void configAccountSettings(ActionFormEvent event) throws PortletException {
-        PortletRequest req = event.getActionRequest();
-
-        if (!req.isUserInRole(PortletRole.ADMIN.getName())) return;
-
         TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
         String numTries = numTriesTF.getValue();
         int numtries = -1;
         try {
             numtries = Integer.valueOf(numTries).intValue();
             portalConfigService.setProperty(PortalConfigService.LOGIN_NUMTRIES, String.valueOf(numtries));
+
+            portalConfigService.setProperty(PortalConfigService.SAVE_PASSWORDS, Boolean.toString(savePasswords));
+            portalConfigService.setProperty(PortalConfigService.SEND_USER_FORGET_PASSWORD, Boolean.toString(sendForget));
             portalConfigService.storeProperties();
+        } catch (IOException e) {
+            log.error("unable to save gridsphere.properties", e);
         } catch (NumberFormatException e) {
             // do nothing
-        } catch (IOException e) {
-            log.error("Unable to save gridsphere.properties", e);
         }
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
