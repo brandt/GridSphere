@@ -92,6 +92,8 @@ public class SportletProperties {
 
     public static final String COMPONENT_ID_VAR = "org.gridsphere.layout.COMPONENT_ID_VAR";
 
+    public static final String COMPONENT_ID_NUM = "org.gridsphere.layout.COMPONENT_ID_NUM";
+
     public static final String COMPONENT_LABEL = "org.gridsphere.layout.COMPONENT_LABEL";
 
     public static final String LAYOUT_EDIT_MODE = "org.gridsphere.layout.LAYOUT_EDIT_MODE";
