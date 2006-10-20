@@ -83,6 +83,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         <jar jarfile="${build.lib}/gridsphere-portal-api-${gridsphere.version}.jar" basedir="${build.classes}">
             <!-- portlet container interfaces -->
             <include name="org/gridsphere/portletcontainer/**"/>
+	    <exclude name="**/impl/**"/>
             <!-- core services interfaces -->
             <include name="org/gridsphere/services/**"/>
             <!-- core layout interfaces -->
