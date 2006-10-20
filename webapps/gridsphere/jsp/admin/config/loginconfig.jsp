@@ -5,21 +5,21 @@
 <portlet:defineObjects/>
 <jsp:useBean id="services" class="java.lang.String" scope="request"/>
 
-<SCRIPT LANGUAGE="JavaScript">
+<script type="text/javascript">
 function checkUserCreate( elem, id ) {
-    if (elem == true) {
+    if (elem ) {
         document.getElementById(id).checked = true;
     }
 }
 
 function checkAllowUsers( elem, id ) {
-    if (elem != true) {
+    if (!elem) {
         document.getElementById(id).checked = false;
     }
 }
 
 function checkSavePass( elem, id ) {
-    if (elem == true) {
+    if (elem) {
         document.getElementById(id).checked = true;
     } else {
         document.getElementById(id).checked = false;
@@ -56,6 +56,10 @@ function checkSavePass( elem, id ) {
                 <br/>
                 <ui:text style="alert" key="LOGIN_CONFIG_PASSWD1"/>
             </li>
+           <li>
+            <ui:text key="LOGIN_TRIES_MSG"/>
+            <ui:textfield beanId="numTriesTF"/>
+            </li>
         </ul>
         <ui:frame>
             <ui:tablerow>
@@ -64,11 +68,11 @@ function checkSavePass( elem, id ) {
                 </ui:tablecell>
             </ui:tablerow>
         </ui:frame>
-    </ui:group>
+     </ui:group>
 </ui:form>
 
 
-
+<%--
 <ui:form>
     <ui:group key="LOGIN_TRIES_CONFIG_MSG">
 
@@ -88,3 +92,4 @@ function checkSavePass( elem, id ) {
         </ui:frame>
     </ui:group>
 </ui:form>
+--%>
