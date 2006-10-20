@@ -20,8 +20,8 @@ import javax.portlet.PreferencesValidator;
  */
 public class PortletPreferencesManager {
 
-    private static Log log = LogFactory.getLog(PortletPreferencesManager.class);
-    private static PersistenceManagerRdbms pm = null;
+    private Log log = LogFactory.getLog(PortletPreferencesManager.class);
+    private PersistenceManagerRdbms pm = null;
     private PreferencesValidator validator = null;
     private boolean isRender = false;
     private String userId = null;
