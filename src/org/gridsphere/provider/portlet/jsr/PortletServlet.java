@@ -9,7 +9,10 @@ import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.impl.*;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.services.core.user.User;
+import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.portletcontainer.PortletStatus;
+import org.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridsphere.portletcontainer.PortletPreferencesManager;
 import org.gridsphere.portletcontainer.impl.ApplicationPortletImpl;
 import org.gridsphere.portletcontainer.impl.PortletWebApplicationImpl;
 import org.gridsphere.portletcontainer.impl.descriptor.*;
@@ -65,6 +68,7 @@ public class PortletServlet extends HttpServlet
     public void initJSRPortletWebapp() {
         registryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
         configService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+
         ServletContext ctx = this.getServletContext();
 
         portletWebApp = new PortletWebApplicationImpl(ctx, Thread.currentThread().getContextClassLoader());
@@ -73,7 +77,7 @@ public class PortletServlet extends HttpServlet
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
-            ApplicationPortletImpl appPortlet = (ApplicationPortletImpl) it.next();
+            ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
             String portletClass = appPortlet.getApplicationPortletClassName();
             String portletName = appPortlet.getApplicationPortletName();
             try {
@@ -242,8 +246,8 @@ public class PortletServlet extends HttpServlet
         portlet = (Portlet) portlets.get(portletName);
         request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(portletName));
 
-        ApplicationPortletImpl appPortlet =
-                (ApplicationPortletImpl) registryService.getApplicationPortlet(pid);
+        ApplicationPortlet appPortlet =
+                (ApplicationPortlet) registryService.getApplicationPortlet(pid);
 
         if (appPortlet == null) {
             log.error("Unable to get portlet from registry identified by: " + pid);
@@ -359,7 +363,7 @@ public class PortletServlet extends HttpServlet
                     // do nothing
                 } else if (action.equals(SportletProperties.ACTION_PERFORMED)) {
                     // create portlet preferences manager
-                    PortletPreferencesManager prefsManager = new PortletPreferencesManager(appPortlet, userId, false);
+                    PortletPreferencesManager prefsManager = appPortlet.getPortletPreferencesManager(pid, userId, false);
                     request.setAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER, prefsManager);
                     ActionRequestImpl actionRequest = new ActionRequestImpl(request, portletContext);
                     ActionResponse actionResponse = new ActionResponseImpl(request, response);
@@ -379,8 +383,9 @@ public class PortletServlet extends HttpServlet
                 }
             } else {
                 // create portlet preferences manager
-                PortletPreferencesManager prefsManager = new PortletPreferencesManager(appPortlet, userId, true);
+                PortletPreferencesManager prefsManager = appPortlet.getPortletPreferencesManager(pid, userId, true);
                 request.setAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER, prefsManager);
+
                 RenderRequest renderRequest = new RenderRequestImpl(request, portletContext);
                 RenderResponse renderResponse = new RenderResponseImpl(request, response);
 
