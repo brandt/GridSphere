@@ -34,10 +34,8 @@ public interface ApplicationPortlet {
 
     public Locale[] getSupportedLocales();
 
-    public javax.portlet.PreferencesValidator getPreferencesValidator();
-
-    public org.gridsphere.portletcontainer.impl.descriptor.PortletPreferences getPreferencesDescriptor();
-
+    public PortletPreferencesManager getPortletPreferencesManager(String portletId, String userId, boolean isRender);
+    
     public Portlet getPortletInstance();
 
     public void setApplicationPortletStatus(PortletStatus status);

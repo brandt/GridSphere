@@ -34,12 +34,11 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
 
     private Log log = LogFactory.getLog(ApplicationPortletImpl.class);
     private PortletDefinition portletDef = null;
-    private PortletApp portletApp = null;
 
     private String portletClassName = null;
     private String webAppName = null;
 
-    private PortletDispatcher portletDispatcher = null;
+
     private Portlet portletInstance = null;
 
     private ServletContext context = null;
@@ -64,6 +63,8 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
     protected PortletStatus status = PortletStatus.SUCCESS;
     protected String statusMessage = "JSR Portlet loaded successfully";
 
+    protected PortletPreferencesManager prefsManager = null;
+
     /**
      * Default constructor is private
      */
@@ -73,19 +74,18 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
     /**
      * Constructs an instance of ApplicationPortletImpl
      *
-     * @param loader         the class loader
      * @param pdd            the <code>PortletDeploymentDescriptor</code>
      * @param portletDef     the portlet definition
      * @param webApplication the ui application name for this application portlet
      * @param context        the <code>ServletContext</code> containing this application portlet
      */
-    public ApplicationPortletImpl(ClassLoader loader, PortletDeploymentDescriptor pdd, PortletDefinition portletDef, String webApplication, ServletContext context)  {
+    public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, PortletDefinition portletDef, String webApplication, ServletContext context)  {
         this.portletDef = portletDef;
         this.webAppName = webApplication;
         this.portletClassName = portletDef.getPortletClass().getContent();
         this.portletName = portletDef.getPortletName().getContent();
         this.context = context;
-        this.portletApp = pdd.getPortletWebApplication();
+        PortletApp portletApp = pdd.getPortletWebApplication();
 
         SupportedLocale[] locales = portletDef.getSupportedLocale();
         supportedLocales = new Locale[locales.length];
@@ -182,13 +182,16 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
                 String validatorClass = validator.getContent();
                 if (validatorClass != null) {
                     try {
-                        prefsValidator = (javax.portlet.PreferencesValidator) Class.forName(validatorClass, true, loader).newInstance();
+                        prefsValidator = (javax.portlet.PreferencesValidator) Class.forName(validatorClass).newInstance();
                     } catch (Exception e) {
                         log.error("Unable to create validator: " + validatorClass + "! ",  e);
                     }
                 }
             }
         }
+
+        prefsManager = new PortletPreferencesManagerImpl(prefDesc, prefsValidator);
+
     }
 
     /**
@@ -295,9 +298,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
             msg += "Make sure the servlet mapping: /jsr/" + webAppName + " is defined in web.xml";
             log.error(msg);
         }
-        portletDispatcher = new PortletDispatcherImpl(rd);
-
-        return portletDispatcher;
+        return new PortletDispatcherImpl(rd);
     }
 
     /**
@@ -353,12 +354,11 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
         return portletDef.getSecurityRoleRef();
     }
 
-    public javax.portlet.PreferencesValidator getPreferencesValidator() {
-        return prefsValidator;
-    }
-
-    public org.gridsphere.portletcontainer.impl.descriptor.PortletPreferences getPreferencesDescriptor() {
-        return portletDef.getPortletPreferences();
+    public PortletPreferencesManager getPortletPreferencesManager(String portletId, String userId, boolean isRender) {
+        prefsManager.setPortletId(portletId);
+        prefsManager.setUserId(userId);
+        prefsManager.setRender(isRender);
+        return prefsManager;
     }
 
     public Portlet getPortletInstance() {
