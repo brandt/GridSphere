@@ -154,7 +154,7 @@ public class SportletProperties {
 
     public static final String PORTLET_PREFERENCES = "javax.portlet.preferences";
 
-    public static final String PORTLET_PREFERENCES_MANAGER = "org.gridsphere.portlet.impl.PortletPreferencesManager";
+    public static final String PORTLET_PREFERENCES_MANAGER = "org.gridsphere.portletcontainer.impl.PortletPreferencesManager";
 
     public static final String PORTLET_GROUP = "org.gridsphere.portlet.PortletGroup";
 

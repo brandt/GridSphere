@@ -7,6 +7,7 @@ package org.gridsphere.portlet.impl;
 import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserPrincipal;
 import org.gridsphere.portletcontainer.impl.descriptor.Supports;
+import org.gridsphere.portletcontainer.PortletPreferencesManager;
 
 import javax.portlet.*;
 import javax.servlet.ServletInputStream;
@@ -204,8 +205,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *
      * @return the portlet preferences
      */
-    public PortletPreferences getPreferences() {
-        PortletPreferencesManager prefsManager = (PortletPreferencesManager) getAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER);
+    public PortletPreferences getPreferences() {        
+        PortletPreferencesManager prefsManager =  (PortletPreferencesManager)getAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER);
         return prefsManager.getPortletPreferences();
     }
 
