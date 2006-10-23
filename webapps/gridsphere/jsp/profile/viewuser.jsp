@@ -106,6 +106,8 @@
             </ui:tablerow>
         </ui:frame>
     </div>
+    <div style="clear: both;"></div>
+
 </ui:group>
 
 
