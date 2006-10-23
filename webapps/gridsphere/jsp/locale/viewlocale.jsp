@@ -6,7 +6,7 @@
 
 <% Locale locale = (Locale) request.getAttribute("locale"); %>
 
-<ui:form action="selectLang"> <!-- removed 'name="localeform"' for XHTML 1.0 Strict compliance -->
+<ui:form action="selectLang">
 
     <% String flag =  request.getContextPath() + "/images/flags/" + locale.getLanguage() + ".gif"; %>
     <table>
