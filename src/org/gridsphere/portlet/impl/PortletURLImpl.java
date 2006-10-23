@@ -49,6 +49,8 @@ public class PortletURLImpl implements PortletURL {
     private boolean isRender = false;
     private String label = null;
 
+    private String layout = null;
+
     private PortalConfigService configService = null;
 
     private PortletURLImpl() { }
@@ -247,6 +249,15 @@ public class PortletURLImpl implements PortletURL {
     }
 
     /**
+     * Sets the layout id that identifies a layout descriptor to target
+     *
+     * @param layout the layout id that identifies a layout descriptor to target
+     */
+    public void setLayout(String layout ) {
+        this.layout = layout;
+    }
+
+    /**
      * Indicated the security setting for this URL.
      * <p/>
      * Secure set to <code>true</code> indicates that the portlet requests
@@ -317,8 +328,10 @@ public class PortletURLImpl implements PortletURL {
                 }
        */
         ///////////  JASON ADDED BELOW
-
-        String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
+        String layoutId  = layout;
+        if (layoutId == null) {
+            layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
+        }
         if (layoutId != null) {
             //System.err.println("layoutId=" + layoutId);
             url += "/" + layoutId;
@@ -328,6 +341,7 @@ public class PortletURLImpl implements PortletURL {
             // if a label exists, use it instead
             String label = (String)store.get(SportletProperties.COMPONENT_LABEL);
             if (label != null) cid = label;
+            if (layout != null) cid = null;
             if (cid != null) {
                 url += "/" + cid;
                 String action = (String)store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
