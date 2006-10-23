@@ -542,11 +542,11 @@ public class LayoutManagerPortlet extends ActionPortlet {
             req.setAttribute("controlUI", controlUI);
         }
 
-        PortletComponent pane = page.getPortletComponent();
-        pane.doRender(gsevent);
+        StringBuffer pageBuffer = new StringBuffer();
+        PortletComponent comp = page.getPortletComponent();
+        comp.doRender(gsevent);
+       
 
-
-        StringBuffer pageBuffer = pane.getBufferedOutput(req);
         req.setAttribute(SportletProperties.COMPONENT_ID_VAR, SportletProperties.COMPONENT_ID);
         req.setAttribute("pane", pageBuffer.toString());
         pages.put(sessionId, page);

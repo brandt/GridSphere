@@ -20,12 +20,11 @@ import java.util.Locale;
 
 public class LocalePortlet extends ActionPortlet {
 
-    public static final String VIEW_JSP = "/jsp/locale/view.jsp";
     private LocaleService localeService = null;
 
     public void init(PortletConfig config) throws PortletException {
         super.init(config);    
-        this.localeService = (LocaleService) createPortletService(LocaleService.class);
+        localeService = (LocaleService) createPortletService(LocaleService.class);
         DEFAULT_VIEW_PAGE = "showLocale";
     }
 
@@ -47,16 +46,12 @@ public class LocalePortlet extends ActionPortlet {
     public void showLocale(RenderFormEvent event) throws PortletException {
         PortletRequest request = event.getRenderRequest();
         Locale locale = request.getLocale();
-
         request.setAttribute("locale", locale);
 
-        System.err.println("locale=" + locale);
-        
         ListBoxBean localeSelector = event.getListBoxBean("localeLB");
         localeSelector.clear();
-        localeSelector.setOnChange("GridSphere_SelectSubmit( this.form )");
+        localeSelector.setOnChange("this.form.submit()");
         localeSelector.setSize(1);
-
 
         Locale[] locales = localeService.getSupportedLocales();
 
@@ -65,7 +60,6 @@ public class LocalePortlet extends ActionPortlet {
             ListBoxItemBean localeBean = makeLocaleBean(displayLocale.getDisplayLanguage(displayLocale), displayLocale.getLanguage(), locale);
             localeSelector.addBean(localeBean);
         }
-
         setNextState(request, "locale/viewlocale.jsp");
     }
 
@@ -75,8 +69,7 @@ public class LocalePortlet extends ActionPortlet {
         String loc = localeSelector.getSelectedValue();
         if (loc != null) {
             Locale locale = new Locale(loc, "", "");
-            session.setAttribute(User.LOCALE, locale);
-
+            session.setAttribute(User.LOCALE, locale, PortletSession.APPLICATION_SCOPE);
         }
     }
 
