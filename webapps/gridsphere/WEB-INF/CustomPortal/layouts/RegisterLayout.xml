@@ -15,13 +15,16 @@
     <portlet-header>
         <table-layout style="header">
             <row-layout>
-                <column-layout width="70%">
+                <column-layout width="60%">
                     <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
                 </column-layout>
                 <column-layout width="30%">
                     <portlet-frame transparent="true" outer-padding="0px" label="locale">
                         <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet</portlet-class>
                     </portlet-frame>
+                </column-layout>
+                <column-layout width="10%">
+                    <portlet-content include="/jsp/returnguestnav.jsp"/>
                 </column-layout>
             </row-layout>
         </table-layout>
@@ -46,7 +49,6 @@
                 </portlet-tab>
             </portlet-tabbed-pane>
         </portlet-tab>
-        <portlet-tab label="portal" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/returnguestnav.jsp"/>
     </portlet-tabbed-pane>
 
     <!-- Footer components (if any) -->

@@ -15,7 +15,7 @@
     <portlet-header>
         <table-layout style="header">
             <row-layout>
-                <column-layout width="70%">
+                <column-layout width="60%">
                     <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
                 </column-layout>
                 <column-layout width="30%">
@@ -23,11 +23,19 @@
                         <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet</portlet-class>
                     </portlet-frame>
                 </column-layout>
+                <column-layout width="10%">
+                    <portlet-content include="/jsp/loginnav.jsp"/>
+                </column-layout>
             </row-layout>
         </table-layout>
     </portlet-header>
 
     <!-- Tabbed Panes -->
+
+    <bar>
+        <portlet-content include="/WEB-INF/CustomPortal/content/main.html"/>
+    </bar>
+    <!-- 
     <portlet-tabbed-pane selected="0" style="menu">
         <portlet-tab label="gridsphere" display="false">
             <title lang="en">GridSphere</title>
@@ -44,10 +52,8 @@
                 </portlet-tab>
             </portlet-tabbed-pane>
         </portlet-tab>
-        <portlet-tab label="login" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/login/loginnav.jsp"/>
-        <portlet-tab label="register" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/login/registernav.jsp"/>
     </portlet-tabbed-pane>
-
+    -->
     <!-- Footer components (if any) -->
     <portlet-footer>
         <table-layout style="footer">

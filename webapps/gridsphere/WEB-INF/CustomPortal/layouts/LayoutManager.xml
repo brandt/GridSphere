@@ -14,7 +14,7 @@
     <!-- Header components -->
     <portlet-header>
         <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
-        <portlet-content include="/jsp/login/welcome.jsp"/>
+        <portlet-content include="/jsp/returnnav.jsp"/>
     </portlet-header>
 
     <portlet-tabbed-pane selected="0" style="menu" theme="default">
@@ -33,7 +33,6 @@
                 </portlet-tab>
             </portlet-tabbed-pane>
         </portlet-tab>
-        <portlet-tab label="portal" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/returnnav.jsp"/>
     </portlet-tabbed-pane>
 
     <portlet-footer>

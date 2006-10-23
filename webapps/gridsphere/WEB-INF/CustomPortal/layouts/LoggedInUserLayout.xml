@@ -14,12 +14,11 @@ $Id$
 
     <portlet-header>
         <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
-        <portlet-content include="/jsp/login/welcome.jsp"/>
+        <portlet-content include="/jsp/returnnav.jsp"/>
     </portlet-header>
 
     <portlet-tabbed-pane style="menu">
-        <portlet-tab label="gridsphere" display="false">
-            <title lang="en">GridSphere</title>
+        <portlet-tab label="gridsphere">
             <portlet-tabbed-pane selected="0" style="sub-menu">
                 <portlet-tab label="home">
                     <title lang="en">Home</title>
@@ -45,16 +44,8 @@ $Id$
                         </row-layout>
                     </table-layout>
                 </portlet-tab>
-
-
             </portlet-tabbed-pane>
         </portlet-tab>
-        <portlet-tab label="logout" outline="false" align="right" include="/jsp/logout/logoutnav.jsp"/>
-        <portlet-tab label="profile" outline="false" align="right" include="/jsp/profile/profilenav.jsp"/>
-        <portlet-tab required-role="ADMIN" label="layout" outline="false" align="right"
-                     include="/jsp/admin/layout/layoutnav.jsp"/>
-        <portlet-tab required-role="ADMIN" label="admin" outline="false" align="right"
-                     include="/jsp/admin/adminnav.jsp"/>
     </portlet-tabbed-pane>
 
     <portlet-footer>
