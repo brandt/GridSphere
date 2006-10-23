@@ -25,6 +25,8 @@ import org.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridsphere.portletcontainer.impl.PortletServiceDescriptor;
 import org.gridsphere.portletcontainer.impl.PortletSessionManager;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.security.auth.AuthenticationException;
@@ -33,6 +35,7 @@ import org.gridsphere.services.core.security.auth.LoginService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.user.UserManagerService;
+import org.hibernate.StaleObjectStateException;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -47,6 +50,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Enumeration;
 
 
 /**
@@ -77,7 +81,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     private List<PortalFilter> portalFilters = null;
 
-    //private static PortletRegistry registry = PortletRegistry.getInstance();
     private boolean firstDoGet = true;
 
     private boolean isTCK = false;
@@ -90,7 +93,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
-        log.debug("in init of GridSphereServlet");
+        log.info("in init of GridSphereServlet");
         String descriptorPath = config.getServletContext().getRealPath("/WEB-INF/GridSphereServices.xml");
         // add core gridsphere services to ServiceFactory
         PortletServiceDescriptor descriptor = null;
@@ -99,13 +102,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             descriptor = new PortletServiceDescriptor(descriptorPath);
             PortletServiceCollection serviceCollection = descriptor.getServiceCollection();
             PortletServiceFactory.addServices("gridsphere", config.getServletContext(), serviceCollection, Thread.currentThread().getContextClassLoader());
-
         } catch (PersistenceManagerException e) {
             //log.error("error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
             throw new PortletServiceException("error unmarshalling " + descriptorPath, e);
         }
         PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
         layoutEngine.init(config.getServletContext());
+
+        /*
         String realPath = config.getServletContext().getRealPath("");
         int l = realPath.lastIndexOf(File.separator);
         String ctxPath = realPath.substring(l + 1);
@@ -118,11 +122,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         } catch (IOException e) {
             log.error("Unable to write to properties file!");
         }
+        */
     }
 
     private void initializeServices() throws PortletServiceException {
         roleService = (RoleManagerService) PortletServiceFactory.createPortletService(RoleManagerService.class, true);
         userManagerService = (UserManagerService) PortletServiceFactory.createPortletService(UserManagerService.class, true);
+        portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+
         loginService = (LoginService) PortletServiceFactory.createPortletService(LoginService.class, true);
         portletManager = (PortletManagerService) PortletServiceFactory.createPortletService(PortletManagerService.class, true);
         String filterDescriptorPath = getServletContext().getRealPath("/WEB-INF/filters.xml");
@@ -132,6 +139,49 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         } catch (PersistenceManagerException e) {
             //log.error("error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
             throw new PortletServiceException("error unmarshalling " + filterDescriptorPath, e);
+        }
+
+    }
+
+
+    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+
+        PersistenceManagerService pms = null;
+
+        pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+
+        //Collection<PersistenceManagerRdbms> allPms = pms.getAllPersistenceManagerRdbms();
+
+        PersistenceManagerRdbms pm = null;
+        try {
+            log.info("Starting a database transaction");
+
+            pm = pms.createGridSphereRdbms();
+            pm.beginTransaction();
+
+            processRequest(req, res);
+            // Commit and cleanup
+            log.info("Committing the database transaction");
+
+            pm.endTransaction();
+        } catch (
+                StaleObjectStateException staleEx) {
+            log.error("This interceptor does not implement optimistic concurrency control!");
+            log.error("Your application will not work until you add compensation actions!");
+            // Rollback, close everything, possibly compensate for any permanent changes
+            // during the conversation, and finally restart business conversation. Maybe
+            // give the user of the application a chance to merge some of his work with
+            // fresh data... what you do here depends on your applications design.
+            //throw staleEx;
+        } catch (Throwable ex) {
+            pm.endTransaction();
+            try {
+                pm.rollbackTransaction();
+            } catch (Throwable rbEx) {
+                log.error("Could not rollback transaction after exception!", rbEx);
+            }
+            // Let others handle it... maybe another interceptor for exceptions?
+            //throw new ServletException(ex);
         }
     }
 
@@ -143,7 +193,17 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @throws IOException      if an I/O error occurs
      * @throws ServletException if a servlet error occurs
      */
-    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+    public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+
+        Enumeration en = req.getAttributeNames();
+        while (en.hasMoreElements()) {
+            String key = (String)en.nextElement();
+            System.err.println("key= " + key);
+            Object val = req.getAttribute(key);
+            if (val instanceof String) {
+                System.err.println("val= " + val);
+            }
+        }
 
         if (firstDoGet) {
             initializeServices();

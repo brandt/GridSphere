@@ -34,8 +34,6 @@ import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.portal.PortalConfigService;
-import org.gridsphere.portletcontainer.GridSphereEvent;
-import org.hibernate.StaleObjectStateException;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +41,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.File;
 import java.util.StringTokenizer;
-import java.util.Collection;
 
 /**
  * GridSphereFilter is used for first time portal initialization including portlets
@@ -54,7 +51,6 @@ public class GridSphereFilter implements Filter {
 
     private Log log = LogFactory.getLog(GridSphereFilter.class);
     private RoleManagerService roleService = null;
-    private PortalConfigService configService = null;
 
     private ServletContext context = null;
 
@@ -69,27 +65,27 @@ public class GridSphereFilter implements Filter {
                          FilterChain chain)
             throws IOException, ServletException {
 
-        System.err.println("in doFilter!!");
+        log.info("START");
         if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
             HttpServletRequest req = (HttpServletRequest)request;
             HttpServletResponse res = (HttpServletResponse)response;
 
             //req.setAttribute(SportletProperties.SERVLET_PATH, req.getServletPath());
 
-            PersistenceManagerService pms = null;
+            //PersistenceManagerService pms = null;
 
             // If first time being called, instantiate all portlets
+
             if (firstDoGet.equals(Boolean.TRUE)) {
 
-                
-                configService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
-                String ctxPath = req.getContextPath();
+
+                //String ctxPath = req.getContextPath();
                 //if (ctxPath.equals("ROOT")) ctxPath = "";
                 //configService.setProperty("gridsphere.deploy", ctxPath);
                 //configService.storeProperties();
-                
+
                 // check if database file exists
-                
+
                 String release = SportletProperties.getInstance().getProperty("gridsphere.release");
                 int idx = release.lastIndexOf(" ");
                 String gsversion = release.substring(idx+1);
@@ -106,7 +102,7 @@ public class GridSphereFilter implements Filter {
                     rd.forward(request, response);
                     return;
                 }
-                
+
                 roleService = (RoleManagerService) PortletServiceFactory.createPortletService(RoleManagerService.class, true);
                 if ((roleService.getUsersInRole(PortletRole.ADMIN)).isEmpty()) {
                     request.setAttribute("setup", "true");
@@ -125,9 +121,9 @@ public class GridSphereFilter implements Filter {
                 } catch (Exception e) {
                     e.printStackTrace();
                     log.error("GridSphere initialization failed!", e);
-                    RequestDispatcher rd = request.getRequestDispatcher("/jsp/errors/init_error.jsp");
-                    request.setAttribute("error", e);
-                    rd.forward(request, response);
+                    RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/init_error.jsp");
+                    req.setAttribute("error", e);
+                    rd.forward(req, res);
                     return;
                 }
 
@@ -137,88 +133,56 @@ public class GridSphereFilter implements Filter {
             StringBuffer requestURL = req.getRequestURL();
             String requestURI = req.getRequestURI();
             String query = req.getQueryString();
-            log.debug("\ncontext path = " + req.getContextPath() + " servlet path=" + req.getServletPath());
-            log.debug("\n pathInfo= " + pathInfo + " query= " + query);
-            log.debug(" requestURL= " + requestURL + " requestURI= " + requestURI + "\n");
-            if (query == null) {
-                query = "";
-            } else {
-                query = "&" + query;
-            }
-
+            log.info("\ncontext path = " + req.getContextPath() + " servlet path=" + req.getServletPath());
+            log.info("\n pathInfo= " + pathInfo + " query= " + query);
+            log.info(" requestURL= " + requestURL + " requestURI= " + requestURI + "\n");
+            
             String extraInfo = "";
 
-            pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+            // use the servlet path to determine where to forward
+            // expect servlet path = /servletpath/XXXX
 
-            Collection<PersistenceManagerRdbms> allPms = pms.getAllPersistenceManagerRdbms();
+            String path = req.getServletPath();
+            int start = path.indexOf("/", 1);
 
-            try {
-                log.info("Starting a database transaction");
+            if ((start > 0) && (path.length()-1) > start) {
 
-                for (PersistenceManagerRdbms pm : allPms) {
-                    pm.beginTransaction();
+                String parsePath = path.substring(start+1);
+                //System.err.println(parsePath);
+                extraInfo = "?";
 
+                StringTokenizer st = new StringTokenizer(parsePath, "/");
+
+                if (st.hasMoreTokens()) {
+                    String layoutId = (String)st.nextElement();
+                    extraInfo += SportletProperties.LAYOUT_PAGE_PARAM + "=" + layoutId;
                 }
-
-                if (pathInfo != null) {
-                    extraInfo = "?";
-
-                    StringTokenizer st = new StringTokenizer(pathInfo, "/");
-
-                    if (st.hasMoreTokens()) {
-                        String layoutId = (String)st.nextElement();
-                        extraInfo += SportletProperties.LAYOUT_PAGE_PARAM + "=" + layoutId;
-                    }
-                    if (st.hasMoreTokens()) {
-                        String cid = (String)st.nextElement();
-                        extraInfo += "&" + SportletProperties.COMPONENT_ID+ "=" + cid;
-                    }
-                    if (st.hasMoreTokens()) {
-                        String action = (String)st.nextElement();
-                        extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
-                    }
-                    extraInfo +=  query;
+                if (st.hasMoreTokens()) {
+                    String cid = (String)st.nextElement();
+                    extraInfo += "&" + SportletProperties.COMPONENT_ID+ "=" + cid;
                 }
-
-                String ctxPath = "/" + configService.getProperty("gridsphere.context");
-
-
-                log.info("forwarded URL: " + ctxPath + extraInfo);
-                context.getRequestDispatcher(ctxPath + extraInfo).forward(req, res);
-
-                chain.doFilter(request, response);
-
-                // Commit and cleanup
-                log.info("Committing the database transaction");
-
-                for (PersistenceManagerRdbms pm : allPms) {
-                    pm.endTransaction();
+                if (st.hasMoreTokens()) {
+                    String action = (String)st.nextElement();
+                    extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
                 }
-            } catch (StaleObjectStateException staleEx) {
-                log.error("This interceptor does not implement optimistic concurrency control!");
-                log.error("Your application will not work until you add compensation actions!");
-                // Rollback, close everything, possibly compensate for any permanent changes
-                // during the conversation, and finally restart business conversation. Maybe
-                // give the user of the application a chance to merge some of his work with
-                // fresh data... what you do here depends on your applications design.
-                //throw staleEx;
-            } catch (Throwable ex) {
-                ex.printStackTrace();
-                for (PersistenceManagerRdbms pm : allPms) {
-                    pm.endTransaction();
-                    try {
-                        pm.rollbackTransaction();
-                    } catch (Throwable rbEx) {
-                        log.error("Could not rollback transaction after exception!", rbEx);
-                    }
+                if (query != null) {
+                    extraInfo += "&" + query;
                 }
-                // Let others handle it... maybe another interceptor for exceptions?
-                //throw new ServletException(ex);
+                //String ctxPath = "/" + configService.getProperty("gridsphere.context");
             }
 
 
+            //chain.doFilter(request, response);
+
+            String ctxPath = "/gs";
+
+            log.info("forwarded URL: " + ctxPath + extraInfo);
+            context.getRequestDispatcher(ctxPath + extraInfo).forward(req, res);
+            return;
+            // log.info("END");
 
         }
+
     }
 
 
