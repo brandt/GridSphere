@@ -25,6 +25,7 @@
 /* layout for navigation */
 #gridsphere-layout-navigation {
     overflow: hidden;
+    background-color: #ebebeb;
 }
 
 /* ... for portlet body */
