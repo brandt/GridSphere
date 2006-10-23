@@ -30,7 +30,7 @@ public class RememberMeCookieFilter implements PortalFilter {
     public void init(PortalFilterConfig config) {
         userManagerService = (UserManagerService) PortletServiceFactory.createPortletService(UserManagerService.class, true);
         requestService = (RequestService) PortletServiceFactory.createPortletService(RequestService.class, true);
-        System.err.println(config.getInitParameter("COOKIE_EXPIRATION_TIME"));
+        //System.err.println(config.getInitParameter("COOKIE_EXPIRATION_TIME"));
         //COOKIE_EXPIRATION_TIME = Integer.parseInt(config.getInitParameter("COOKIE_EXPIRATION_TIME"));
     }
 
@@ -61,27 +61,27 @@ public class RememberMeCookieFilter implements PortalFilter {
         if (user != null) return;
         Cookie[] cookies = req.getCookies();
         if (cookies == null) return;
-        System.err.println("cookie length=" + cookies.length);
+        //System.err.println("cookie length=" + cookies.length);
         Cookie c = null;
         for (int i = 0; i < cookies.length; i++) {
             c = cookies[i];
-            System.err.println("found a cookie:");
-            System.err.println("name=" + c.getName());
-            System.err.println("value=" + c.getValue());
+            //System.err.println("found a cookie:");
+            //System.err.println("name=" + c.getName());
+            //System.err.println("value=" + c.getValue());
             if (c.getName().equals("gridsphere")) {
                 String reqId = c.getValue();
-                System.err.println("reqid = " + reqId);
+                //System.err.println("reqid = " + reqId);
                 Request genreq = requestService.getRequest(reqId, COOKIE_REQUEST);
                 if (genreq != null) {
                     String remoteAddr = genreq.getAttribute("ipaddress");
                     if ((remoteAddr != null) && (!remoteAddr.equals(((HttpServletRequest)req).getRemoteAddr()))) {
-                        System.err.println("ip address of host and cookie did not match!!");
+                        //System.err.println("ip address of host and cookie did not match!!");
                         return;
                     }
                     String uid = genreq.getUserID();
                     User newuser = userManagerService.getUser(uid);
                     if (newuser != null) {
-                        System.err.println("in checkUserHasCookie-- seting user settings!!");
+                        //System.err.println("in checkUserHasCookie-- seting user settings!!");
                         req.setAttribute(SportletProperties.PORTLET_USER, user);
                         req.getSession(true).setAttribute(SportletProperties.PORTLET_USER, user.getID());
                     }
