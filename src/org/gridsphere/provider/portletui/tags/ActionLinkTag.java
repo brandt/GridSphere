@@ -131,6 +131,7 @@ public class ActionLinkTag extends ActionTag {
         if (style != null) actionlink.setStyle(style);
         if (cssStyle != null) actionlink.setCssStyle(cssStyle);
         if (cssClass != null) actionlink.setCssClass(cssClass);
+        if (layout != null) actionlink.setLayout(label);
 
         Tag parent = getParent();
         if (parent instanceof ActionMenuTag) {
@@ -156,7 +157,11 @@ public class ActionLinkTag extends ActionTag {
             action = actionlink.getAction();
         }
 
-        actionlink.setPortletURI(createActionURI());
+        if (action != null) {
+            actionlink.setPortletURI(createActionURI());
+        }  else {
+            actionlink.setPortletURI(createRenderURI());
+        }
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
         }
@@ -179,6 +184,7 @@ public class ActionLinkTag extends ActionTag {
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
+        release();
         return EVAL_PAGE;
     }
 }

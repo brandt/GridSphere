@@ -19,6 +19,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     protected String portletURI = null;
     protected List paramBeanList = new ArrayList();
     protected String label = null;
+    protected String layout = null;
     protected String anchor = null;
     protected String trackMe = null;
     protected String extUrl = null;
@@ -113,6 +114,24 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
         return label;
     }
 
+    /**
+     * Returns the layout id that identifies a layout descriptor to target
+     *
+     * @return the layout id that identifies a layout descriptor to target
+     */
+    public String getLayout() {
+        return layout;
+    }
+
+    /**
+     * Sets the layout id that identifies a layout descriptor to target
+     *
+     * @param layout the layout id that identifies a layout descriptor to target
+     */
+    public void setLayout(String layout) {
+        this.layout = layout;
+    }
+    
     /**
      * Sets a label to track this action and persist in the DB
      *

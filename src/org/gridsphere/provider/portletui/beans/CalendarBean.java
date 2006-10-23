@@ -1,5 +1,10 @@
 package org.gridsphere.provider.portletui.beans;
 
+import org.gridsphere.services.core.portal.PortalConfigService;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+
+import javax.portlet.RenderResponse;
+
 
 /**
  * The <code>TextBean</code> represents text to be displayed
@@ -7,6 +12,8 @@ package org.gridsphere.provider.portletui.beans;
 public class CalendarBean extends InputBean implements TagBean {
 
     public static final String NAME = "ca";
+
+    public RenderResponse renderResponse;
 
     /**
      * Constructs a default text bean
@@ -27,7 +34,22 @@ public class CalendarBean extends InputBean implements TagBean {
         this.inputtype = "text";
     }
 
+    public RenderResponse getRenderResponse() {
+        return renderResponse;
+    }
+
+    public void setRenderResponse(RenderResponse renderResponse) {
+        this.renderResponse = renderResponse;
+    }
+
+
     public String toStartString() {
+
+        PortalConfigService configService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+        // deal with ROOT context case
+        String contextPath = configService.getProperty("gridsphere.deploy");
+        if (!contextPath.equals("")) contextPath = "/" + contextPath;
+        renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/scw.js");
         StringBuffer sb = new StringBuffer();
         sb.append("<input " + getFormattedCss() + " ");
         sb.append("id=\"" + id + "\" ");

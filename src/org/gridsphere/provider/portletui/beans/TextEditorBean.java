@@ -1,5 +1,10 @@
 package org.gridsphere.provider.portletui.beans;
 
+import org.gridsphere.services.core.portal.PortalConfigService;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+
+import javax.portlet.RenderResponse;
+
 /**
  * The <code>TextEditorBean</code> represents a text editor provided
  * by Cezary Tomczak at http://gosu.pl/dhtml/SimpleTextEditor.html
@@ -13,6 +18,8 @@ public class TextEditorBean extends BaseComponentBean implements TagBean {
     private String value = null;
     private String action = null;
     private boolean viewsource = true;
+
+    public RenderResponse renderResponse;
 
     /**
      * Constructs a default text area bean
@@ -29,6 +36,14 @@ public class TextEditorBean extends BaseComponentBean implements TagBean {
     public TextEditorBean(String beanId) {
         super(TextEditorBean.NAME);
         this.beanId = beanId;
+    }
+
+    public RenderResponse getRenderResponse() {
+        return renderResponse;
+    }
+
+    public void setRenderResponse(RenderResponse renderResponse) {
+        this.renderResponse = renderResponse;
     }
 
     /**
@@ -113,6 +128,12 @@ public class TextEditorBean extends BaseComponentBean implements TagBean {
 
 
     public String toStartString() {
+        PortalConfigService configService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+        // deal with ROOT context case
+        String contextPath = configService.getProperty("gridsphere.deploy");
+        if (!contextPath.equals("")) contextPath = "/" + contextPath;
+        renderResponse.setProperty("CSS_HREF", contextPath + "/css/SimpleTextEditor.css");
+        renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/SimpleTextEditor.js");
         StringBuffer sb = new StringBuffer();
         sb.append("<form action=\"" + action + "\" method=\"post\">");
         String sname = createTagName(name);

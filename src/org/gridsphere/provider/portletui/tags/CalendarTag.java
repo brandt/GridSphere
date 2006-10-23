@@ -5,6 +5,8 @@ import org.gridsphere.provider.portletui.beans.CalendarBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
+import javax.portlet.RenderResponse;
 
 /**
  * A <code>TextFieldTag</code> represents a text field element
@@ -72,7 +74,8 @@ public class CalendarTag extends BaseComponentTag {
             if (size != 0) calendarBean.setSize(size);
             this.setBaseComponentBean(calendarBean);
         }
-
+        RenderResponse res = (RenderResponse)pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+        calendarBean.setRenderResponse(res);
         calendarBean.setId("cal_" + pageContext.findAttribute(SportletProperties.COMPONENT_ID));
         try {
             JspWriter out = pageContext.getOut();

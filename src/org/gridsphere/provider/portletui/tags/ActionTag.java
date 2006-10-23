@@ -40,7 +40,7 @@ public abstract class ActionTag extends BaseComponentTag {
     protected DefaultPortletAction portletAction = null;
     protected List paramBeans = new ArrayList();
     protected String label = null;
-
+    protected String layout = null;
     protected ImageBean imageBean = null;
     protected boolean paramPrefixing = true;
 
@@ -166,16 +166,34 @@ public abstract class ActionTag extends BaseComponentTag {
     }
 
     /**
+     * Returns the layout id that identifies a layout descriptor to target
+     *
+     * @return the layout id that identifies a layout descriptor to target
+     */
+    public String getLayout() {
+        return layout;
+    }
+
+    /**
+     * Sets the layout id that identifies a layout descriptor to target
+     *
+     * @param layout the layout id that identifies a layout descriptor to target
+     */
+    public void setLayout(String layout) {
+        this.layout = layout;
+    }
+
+    /**
      * If secure is true, then use https, otherwise use http
      *
-     * @param isSecure
+     * @param isSecure true if this actiontag is secure e.g. https, false otherwise
      */
     public void setSecure(boolean isSecure) {
         this.isSecure = isSecure;
     }
 
     /**
-     * Returns true if this actiontag is secure e.g. https, flase otherwise
+     * Returns true if this actiontag is secure e.g. https, false otherwise
      *
      * @return true if this actiontag is secure, false otherwise
      */
@@ -235,7 +253,7 @@ public abstract class ActionTag extends BaseComponentTag {
         this.useAjax = useAjax;
     }
 
-    protected String createJSRActionURI(PortletURL url) throws JspException {
+    protected String createURI(PortletURL url) throws JspException {
         // Builds a URI containing the actin and associated params
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
         //RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
@@ -243,6 +261,9 @@ public abstract class ActionTag extends BaseComponentTag {
         if (label != null) {
             res.setProperty("label", label);
             ((PortletURLImpl)url).setLabel(label);
+        }
+        if (layout != null) {
+            ((PortletURLImpl)url).setLayout(layout);
         }
 
         if (windowState != null) {
@@ -309,11 +330,13 @@ public abstract class ActionTag extends BaseComponentTag {
     }
 
     public String createActionURI() throws JspException {
-        //if (isJSR()) {
-            RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-            return createJSRActionURI(res.createActionURL());
-        //}
-        //return createGSActionURI();
+        RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+        return createURI(res.createActionURL());
+    }
+    
+    public String createRenderURI() throws JspException {
+        RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+        return createURI(res.createRenderURL());
     }
 
     public void release() {
@@ -331,6 +354,7 @@ public abstract class ActionTag extends BaseComponentTag {
         portletAction = null;
         paramBeans.clear();
         label = null;
+        layout = null;
         imageBean = null;
         paramPrefixing = true;
     }

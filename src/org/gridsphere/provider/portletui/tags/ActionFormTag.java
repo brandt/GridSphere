@@ -79,10 +79,10 @@ public class ActionFormTag extends ActionTag {
             String actionStr;
             if (res != null) {
                 if (res instanceof RenderResponseImpl) {
-                    actionStr = createJSRActionURI(res.createRenderURL());
+                    actionStr = createRenderURI();
                 } else {
                     // if non-GS container this will have to be an ActionURL
-                    actionStr = createJSRActionURI(res.createActionURL());
+                    actionStr = createActionURI();
                 }
             } else {
                 actionStr = createActionURI();

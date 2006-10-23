@@ -288,6 +288,18 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         return EVAL_BODY_INCLUDE;
     }
 
+    public void release() {
+        name = null;
+        value = null;
+        readonly = false;
+        disabled = false;
+        cssStyle = null;
+        cssClass = null;
+        isVisible = true;
+        locale = null;
+        id = null;
+    }
+
     public int doEndTag() throws JspException {
         Tag parent = getParent();
         if (parent instanceof PanelTag) {
