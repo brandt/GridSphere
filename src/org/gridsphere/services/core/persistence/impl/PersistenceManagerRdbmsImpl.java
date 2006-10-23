@@ -23,8 +23,7 @@ import java.util.*;
 public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private transient Log log = LogFactory.getLog(PersistenceManagerRdbmsImpl.class);
 
-    public static final ThreadLocal<Session> sessionThread = new ThreadLocal<Session>();
-
+    private Session session = null;
     
     private SessionFactory factory = null;
 
@@ -187,76 +186,51 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     }
 
     private Object doTransaction(Object object, String query, int command, QueryFilter queryFilter) throws HibernateException {
-        Session session = null;
-        //Transaction tx = null;
         Object result = null;
         Query q = null;
-
-        //try {
-            //session = factory.openSession();
-
-            session = currentSession();
-
-
-            // Open a new Session, if this thread has none yet
-            //tx = null;
-            //tx = session.beginTransaction();
-            switch (command) {
-                case CMD_CREATE:
-                    session.save(object);
-                    break;
-                case CMD_DELETE:
-                    session.delete(object);
-                    break;
-                case CMD_DELETE_LIST:
-                    session.delete(query);
-                    break;
-                case CMD_UPDATE:
-                    session.update(object);
-                    break;
-                case CMD_SAVEORUPDATE:
-                    session.saveOrUpdate(object);
-                    break;
-                case CMD_RESTORE_LIST:
-                    q = session.createQuery(query);
-                    if (queryFilter != null) {
-                        q.setFirstResult(queryFilter.getFirstResult());
-                        q.setMaxResults(queryFilter.getMaxResults());
-                    }
-                    result = q.list();
-                    break;
-                case CMD_RESTORE:
-                    q = session.createQuery(query);
-                    result = q.list().get(0);
-                    break;
-                case CMD_COUNT:
-                    q = session.createQuery(query);
-                    result = new Integer(q.list().size());
-                    break;
-            }
-            /*tx.commit();
-        } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            throw e;
-        } finally {
-            session.close();
-        } */
+        Session session = currentSession();
+        switch (command) {
+            case CMD_CREATE:
+                session.save(object);
+                break;
+            case CMD_DELETE:
+                session.delete(object);
+                break;
+            case CMD_DELETE_LIST:
+                session.delete(query);
+                break;
+            case CMD_UPDATE:
+                session.update(object);
+                break;
+            case CMD_SAVEORUPDATE:
+                session.saveOrUpdate(object);
+                break;
+            case CMD_RESTORE_LIST:
+                q = session.createQuery(query);
+                if (queryFilter != null) {
+                    q.setFirstResult(queryFilter.getFirstResult());
+                    q.setMaxResults(queryFilter.getMaxResults());
+                }
+                result = q.list();
+                break;
+            case CMD_RESTORE:
+                q = session.createQuery(query);
+                result = q.list().get(0);
+                break;
+            case CMD_COUNT:
+                q = session.createQuery(query);
+                result = new Integer(q.list().size());
+                break;
+        }
         return result;
     }
 
 
     public Session currentSession() throws HibernateException {
-
-        Session s = sessionThread.get();
-
-        // Open a new Session, if this Thread has none yet
-        if (s == null) {
-            s = factory.openSession();
-            sessionThread.set(s);
+        if (session == null) {
+            session = factory.openSession();
         }
-        return s;
+        return session;
     }
 
     public void beginTransaction() {
@@ -265,6 +239,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public void endTransaction() {
         currentSession().getTransaction().commit();
+        session = null;
     }
 
     public void rollbackTransaction() {
@@ -279,6 +254,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         Statistics stats = factory.getStatistics();
         stats.logSummary();
         factory.close();
+        session = null;
     }
 
 }
