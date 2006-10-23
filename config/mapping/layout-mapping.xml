@@ -100,6 +100,9 @@
 
     <class name="org.gridsphere.layout.PortletBar" extends="org.gridsphere.layout.BasePortletComponent">
         <map-to xml="bar"/>
+        <field name="PortletComponents" type="org.gridsphere.layout.PortletComponent" collection="arraylist">
+            <bind-xml auto-naming="deriveByClass"/>
+        </field>
     </class>
 
     <class name="org.gridsphere.layout.PortletFrame" extends="org.gridsphere.layout.BasePortletComponent">
@@ -169,14 +172,8 @@
         <field name="TabOrder" type="integer">
             <bind-xml name="order" node="attribute"/>
         </field>
-        <field name="Display" type="boolean">
-            <bind-xml name="display" node="attribute"/>
-        </field>
         <field name="Outline" type="boolean">
             <bind-xml name="outline" node="attribute"/>
-        </field>
-        <field name="Include" type="string">
-            <bind-xml name="include" node="attribute"/>
         </field>
         <field name="Align" type="string">
             <bind-xml name="align" node="attribute"/>
