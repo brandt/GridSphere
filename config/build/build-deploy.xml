@@ -81,6 +81,10 @@ Build include file for the GridSphere Portal source code, see build.xml
               file="${gswebapp.dir}/WEB-INF/web.xml"
               filtering="true"/>
 
+        <copy tofile="${build.webapps}/${gridsphere.deploy}/META-INF/context.xml"
+              file="${gswebapp.dir}/META-INF/context.xml"
+              filtering="true"/>
+
         <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"
               file="${gswebapp.dir}/WEB-INF/CustomPortal/portal/gridsphere.properties"
               filtering="true"/>
@@ -90,6 +94,7 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <exclude name="**/tlds/**"/>
                 <exclude name="index.html"/>
                 <exclude name="WEB-INF/web.xml"/>
+                <exclude name="META-INF/context.xml"/>
             </fileset>
         </copy>
 
@@ -210,32 +215,11 @@ Build include file for the GridSphere Portal source code, see build.xml
         <if>
             <available file="${appserver.home}/conf/Catalina" type="dir" property="tomcat5"/>
             <then>
-
-                <copy file="webapps/gridsphere-context.xml"
-                      tofile="${appserver.home}/conf/Catalina/localhost/${gridsphere.deploy}.xml" filtering="true"/>
-                <if>
-                    <available classname="org.apache.catalina.valves.FastCommonAccessLogValve">
-                        <classpath>
-                            <fileset dir="${appserver.home}/server/lib/">
-                                <include name="*.jar"/>
-                            </fileset>
-                            <fileset dir="${appserver.home}/bin/">
-                                <include name="*.jar"/>
-                            </fileset>
-                        </classpath>
-                    </available>
-                    <then>
-                        <echo message="Detected Tomcat 5.5"/>
-                  <!--      <copy file="${env.ANT_HOME}/lib/ant.jar" tofile="${appserver.home}/shared/lib/ant.jar"/> -->
-                    </then>
-                    <else>
-                        <echo message="Detected Tomcat 5"/>
-                    </else>
-                </if>
+                <echo message="Detected Tomcat 5"/>
             </then>
             <else>
                 <echo message="Detected Tomcat 4"/>
-                <copy file="webapps/gridsphere-context.xml" tofile="${appserver.home}/webapps/${gridsphere.deploy}.xml" filtering="true"/>
+                <copy file="webapps/gridsphere/META-INF/context.xml" tofile="${appserver.home}/webapps/${gridsphere.deploy}.xml" filtering="true"/>
             </else>
         </if>
 
