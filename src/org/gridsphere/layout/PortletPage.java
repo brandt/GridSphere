@@ -286,7 +286,6 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             list = component.init(req, list);
         }
 
-
         if (footerContainer != null) {
             list = footerContainer.init(req, list);
         }

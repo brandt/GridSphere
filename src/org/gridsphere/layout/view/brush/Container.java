@@ -17,6 +17,7 @@ public class Container extends BaseRender implements Render {
         StringBuffer buffer = new StringBuffer();
         PortletContainer pc = (PortletContainer) comp;
         String style = pc.getStyle();
+        if (style == null) return buffer;
         if (style.equals(PortletContainer.STYLE_HEADER)) {
             buffer.append("\n   <b class=\"rtop\"><b class=\"r1\"></b><b class=\"r2\"></b><b class=\"r3\"></b><b class=\"r4\"></b></b>\n");
             buffer.append("\n   <div id=\"gridsphere-layout-head\">\n");
@@ -31,6 +32,7 @@ public class Container extends BaseRender implements Render {
         StringBuffer buffer = new StringBuffer();
         PortletContainer pc = (PortletContainer) comp;
         String style = pc.getStyle();
+        if (style == null) return buffer;
         buffer.append("\n   </div> <!-- END gridsphere-layout-{header|footer}  -->\n");
         if (style.equals(PortletContainer.STYLE_FOOTER)) {
             buffer.append("\n   <b class=\"rbottom\"><b class=\"r4\"></b><b class=\"r3\"></b><b class=\"r2\"></b><b class=\"r1\"></b></b>\n");

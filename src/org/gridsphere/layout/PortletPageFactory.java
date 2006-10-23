@@ -84,7 +84,7 @@ public class PortletPageFactory implements PortletSessionListener {
                     if (page.getEditable()) editableLayoutIds.add(layoutId);
                     masterLayouts.put(layoutId, page);
                 } catch (Exception e) {
-                    log.error("Unable to load portlet page: " + layoutFileName);
+                    log.error("Unable to load portlet page: " + layoutFileName, e);
                 }
             }
         }
@@ -148,7 +148,8 @@ public class PortletPageFactory implements PortletSessionListener {
             PortletPage page = (PortletPage)userLayouts.get(USER_PAGE);
             PortletTabbedPane pane = new PortletTabbedPane();
             pane.setLayoutDescriptor(userLayout);
-            PortletTabbedPane existPane = (PortletTabbedPane)page.getPortletComponent();
+            PortletComponent comp = (PortletComponent)page.getPortletComponent();
+            PortletTabbedPane existPane = (PortletTabbedPane)comp;
             List tabs = existPane.getPortletTabs();
             Iterator it = tabs.iterator();
             while (it.hasNext()) {

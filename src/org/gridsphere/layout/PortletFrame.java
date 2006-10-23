@@ -713,49 +713,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         return f;
     }
 
-
-    /* (non-Javadoc)
-    * @see org.gridsphere.layout.PortletComponent#messageEvent(java.lang.String, org.gridsphere.portlet.PortletMessage, org.gridsphere.portletcontainer.GridSphereEvent)
-    */
-    /*
-    public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
-
-        if (portletClass.equals(concPortletID)) {
-            PortletRequest req = event.getPortletRequest();
-
-
-            PortletResponse res = event.getPortletResponse();
-
-
-            req.setAttribute(SportletProperties.PORTLETID, portletClass);
-
-
-            // Override if user is a guest
-            Principal principal = req.getUserPrincipal();
-            if (principal == null) {
-                req.setMode(Mode.VIEW);
-            } else {
-                if (titleBar != null) {
-                    Mode mode = titleBar.getPortletMode();
-                    //System.err.println("setting mode in " + portletClass + " to " + mode.toString());
-                    req.setMode(mode);
-                } else {
-                    req.setMode(Mode.VIEW);
-                }
-            }
-
-            try {
-                portletInvoker.messageEvent(portletClass, msg, req, res);
-            } catch (Exception ioex) {
-                // do nothing the render will take care of displaying the error
-            }
-
-        } else {
-            super.messageEvent(concPortletID, msg, event);
-        }
-    }
-     */
-
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(super.toString());

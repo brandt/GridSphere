@@ -129,10 +129,8 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         String lang = event.getRenderRequest().getLocale().getLanguage();
         String title = tab.getTitle(lang);
 
-        if ((title == null) && (tab.getInclude() == null)) return pane;
-        if (event.getRenderRequest().getAttribute(SportletProperties.LAYOUT_EDIT_MODE) == null) {
-            if ((!tab.getDisplay()) && (tab.getInclude() == null)) return pane;
-        }
+        if (title == null) return pane;
+
 
         if (tabPane.getStyle().equalsIgnoreCase(TAB_STYLE_SUBMENU)) {
             pane.append("\n<li");
@@ -168,19 +166,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             if (title != null) {
                 pane.append(replaceBlanks(title));
             }
-            if (tab.getInclude() != null) {
-                StringWriter writer = new StringWriter();
-                StoredPortletResponseImpl sres = new StoredPortletResponseImpl(event.getHttpServletRequest(), event.getHttpServletResponse(), writer);
-                ServletContext ctx = ((PortletContextImpl)event.getPortletContext()).getServletContext();
-                RequestDispatcher rd = null;
-                rd = ctx.getRequestDispatcher(tab.getInclude());
-                try {
-                    rd.include(event.getHttpServletRequest(), sres);
-                    pane.append(writer.getBuffer());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+
             pane.append("</span></a></li>");
         }
         if (tabPane.getStyle().equalsIgnoreCase(TAB_STYLE_SIDEMENU)) {

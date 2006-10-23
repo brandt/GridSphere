@@ -118,7 +118,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     /**
      * Sets the selected portlet tab in this tabbed pane
      *
-     * @param tab the selected portlet tab
+     * @param index tab the selected portlet tab index
      */
     public void setSelectedPortletTabIndex(int index) {
         PortletTab portletTab;

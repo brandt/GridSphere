@@ -55,7 +55,6 @@ public class Page extends BaseRender implements Render {
             page.append("\n\t<meta http-equiv=\"refresh\" content=\"").append(portletPage.getRefresh()).append("\"/>");
         String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
         page.append("\n\t<link type=\"text/css\" href=\"").append(req.getContextPath()).append("/themes/").append(portletPage.getRenderKit()).append("/").append(theme).append("/css" + "/default.css\" rel=\"stylesheet\"/>");
-        page.append("\n\t<link rel=\"stylesheet\" type=\"text/css\" href=\"").append(req.getContextPath()).append("/css/SimpleTextEditor.css\"/>");
         // Add portlet defined stylesheet if defined
         Map props = (Map) req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (props != null) {
@@ -74,10 +73,7 @@ public class Page extends BaseRender implements Render {
         page.append("\n\t<link rel=\"icon\" href=\"").append(req.getContextPath()).append("/").append(portletPage.getIcon()).append("\" type=\"imge/x-icon\"/>");
         page.append("\n\t<link rel=\"shortcut icon\" href=\"").append(req.getContextPath()).append("/").append(portletPage.getIcon()).append("\" type=\"image/x-icon\"/>");
         page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/gridsphere.js\"></script>");
-        // add editor
-        page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/SimpleTextEditor.js\"></script>");
-        // add calendar
-        page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/scw.js\"></script>");
+
         page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/validation.js\"></script>");
         page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/yahoo/yahoo.js\"></script>");
         page.append("\n\t<script type=\"text/javascript\" src=\"").append(req.getContextPath()).append("/javascript/yahoo/connection.js\"></script>");
