@@ -68,7 +68,7 @@
 
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
-        <url-pattern>/@GRIDSPHERE_CONTEXT@/*</url-pattern>
+        <url-pattern>/gs/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -126,11 +126,13 @@
 
 
     <!-- for internal errors -->
+    <!--
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
         <location>/@GRIDSPHERE_CONTEXT@?gs_PageLayout=ErrorLayout&amp;errorPage=error.jsp</location>
     </error-page>
-
+    -->
+    
     <session-config>
         <session-timeout>30</session-timeout>
      </session-config>
