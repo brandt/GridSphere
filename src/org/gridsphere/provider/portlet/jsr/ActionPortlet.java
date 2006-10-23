@@ -80,8 +80,8 @@ public class ActionPortlet extends GenericPortlet {
     protected void setNextState(PortletRequest request, String state) {
         String id = getUniqueId();
         // JN request.setAttribute(id + ".state", state);
-        request.getPortletSession(true).setAttribute(id + ".state", state);
-        //log.debug("in ActionPortlet in setNextState: setting state to " + state);
+        request.getPortletSession(true).setAttribute(id + ".state", state, PortletSession.PORTLET_SCOPE);
+        log.debug("in ActionPortlet in setNextState: setting state to " + state);
     }
 
     /**
@@ -93,13 +93,13 @@ public class ActionPortlet extends GenericPortlet {
      */
     protected String getNextState(PortletRequest request) {
         String id = getUniqueId();
-        return (String)request.getPortletSession(true).getAttribute(id+".state");
+        return (String)request.getPortletSession(true).getAttribute(id+".state", PortletSession.PORTLET_SCOPE);
     }
 
     protected void removeNextState(PortletRequest request) {
         String id = getUniqueId();
         // JN String state = (String)request.getAttribute(id+".state");
-        request.getPortletSession(true).removeAttribute(id+".state");
+        request.getPortletSession(true).removeAttribute(id+".state", PortletSession.PORTLET_SCOPE);
     }
 
     /**
@@ -113,14 +113,14 @@ public class ActionPortlet extends GenericPortlet {
         String id = getUniqueId();
         //log.debug("ActionPortlet in getNextTitle: setting title attribute " + id + ".title");
         // JN String title = (String) request.getAttribute(id + ".title");
-        String title = (String) request.getPortletSession(true).getAttribute(id + ".title");
+        String title = (String) request.getAttribute(id + ".title");
         if (title == null) {
             Locale locale = request.getLocale();
             ResourceBundle rb = this.getPortletConfig().getResourceBundle(locale);
             title = rb.getString("java.portlet.title");
             log.debug("Printing default title: " + title);
         }
-        log.debug("next title= " + title);
+        //log.debug("next title= " + title);
         return title;
     }
 
@@ -132,7 +132,7 @@ public class ActionPortlet extends GenericPortlet {
      * @param title   the title display in the portlet
      */
     public void setNextTitle(PortletRequest request, String title) {
-        log.debug("Setting title to " + title);
+        //log.debug("Setting title to " + title);
         String id = getUniqueId();
         //System.err.println("in setNextT: in attribute " + id + ".title");
         request.setAttribute(id + ".title", title);
@@ -154,14 +154,14 @@ public class ActionPortlet extends GenericPortlet {
         String id = getUniqueId();
         // JN request.setAttribute(id + ".form", tagBeans);
         log.debug("saving tag beans in session " + id + ".beans");
-        request.getPortletSession(true).setAttribute(id + ".beans", tagBeans);
+        request.getPortletSession(true).setAttribute(id + ".beans", tagBeans, PortletSession.PORTLET_SCOPE);
     }
 
     protected void removeTagBeans(PortletRequest request) {
         String id = getUniqueId();
         // JN request.setAttribute(id + ".form", tagBeans);
         log.debug("removing tag beans from session " + id + ".beans");
-        request.getPortletSession(true).removeAttribute(id + ".beans");
+        request.getPortletSession(true).removeAttribute(id + ".beans", PortletSession.PORTLET_SCOPE);
     }
 
     /**
@@ -175,7 +175,7 @@ public class ActionPortlet extends GenericPortlet {
         String id = getUniqueId();
         //JN Map tagBeans = (Map) request.getAttribute(id + ".form");
         log.debug("getting tag beans from session " + id + ".beans");
-        return (Map) request.getPortletSession(true).getAttribute(id + ".beans");
+        return (Map) request.getPortletSession(true).getAttribute(id + ".beans", PortletSession.PORTLET_SCOPE);
     }
 
     /**
@@ -281,6 +281,7 @@ public class ActionPortlet extends GenericPortlet {
      * @param request  the portlet request
      * @param response the portlet response
      * @param jsp      the JSP page to include
+     * @throws PortletException    if a portlet exception occurs
      */
     public void doViewJSP(RenderRequest request, RenderResponse response, String jsp) throws PortletException {
         log.debug("Including JSP page:" + jsp);
@@ -308,7 +309,7 @@ public class ActionPortlet extends GenericPortlet {
      * @param request  the portlet request
      * @param response the portlet response
      * @throws PortletException    if a portlet exception occurs
-     * @throws java.io.IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     public void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         String next = getNextState(request);
@@ -370,6 +371,7 @@ public class ActionPortlet extends GenericPortlet {
         if (cid == null) request.setAttribute(SportletProperties.COMPONENT_ID, getUniqueId());
 
         WindowState state = request.getWindowState();
+
         try {
             super.doDispatch(request, response);
         } catch (PortletException e) {

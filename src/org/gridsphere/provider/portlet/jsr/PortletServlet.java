@@ -9,7 +9,6 @@ import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.impl.*;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.services.core.user.User;
-import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.PortletPreferencesManager;
@@ -48,21 +47,21 @@ public class PortletServlet extends HttpServlet
 
     private PortletContext portletContext = null;
 
-    private Map portlets = null;
-    private Map portletclasses = null;
-    private Map portletApps = null;
-    private Map portletConfigHash = null;
+    private Map<String, Portlet> portlets = null;
+    private Map<String, String> portletclasses = null;
+    private Map<String, ApplicationPortlet> portletApps = null;
+    private Map<String, PortletConfig> portletConfigHash = null;
 
-    private Map userKeys = new HashMap();
-    private List securePortlets = new ArrayList();
+    private Map<String, String> userKeys = new HashMap<String, String>();
+    private List<String> securePortlets = new ArrayList<String>();
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         log.info("in init of PortletServlet");
-        portlets = new Hashtable();
-        portletclasses = new Hashtable();
-        portletApps = new Hashtable();
-        portletConfigHash = new Hashtable();
+        portlets = new Hashtable<String, Portlet>();
+        portletclasses = new Hashtable<String, String>();
+        portletApps = new Hashtable<String, ApplicationPortlet>();
+        portletConfigHash = new Hashtable<String, PortletConfig>();
     }
 
     public void initJSRPortletWebapp() {
@@ -74,10 +73,8 @@ public class PortletServlet extends HttpServlet
         portletWebApp = new PortletWebApplicationImpl(ctx, Thread.currentThread().getContextClassLoader());
         if (portletWebApp.getWebApplicationStatus().equals(PortletStatus.FAILURE)) return;
 
-        Collection appPortlets = portletWebApp.getAllApplicationPortlets();
-        Iterator it = appPortlets.iterator();
-        while (it.hasNext()) {
-            ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
+        Collection<ApplicationPortlet> appPortlets = portletWebApp.getAllApplicationPortlets();
+        for (ApplicationPortlet appPortlet : appPortlets) {
             String portletClass = appPortlet.getApplicationPortletClassName();
             String portletName = appPortlet.getApplicationPortletName();
             try {
@@ -254,49 +251,10 @@ public class PortletServlet extends HttpServlet
             return;
         }
 
-        // set the supported mime types
-        /*
-        Supports[] supports = appPortlet.getSupports();
-
-        request.setAttribute(SportletProperties.PORTLET_MIMETYPES, supports);
-
-
-        ApplicationPortletConfig appPortletConfig = appPortlet.getApplicationPortletConfig();
-
-        Client client = (Client)request.getSession().getAttribute(SportletProperties.CLIENT);
-        if (client == null) {
-            client = new ClientImpl(request);
-            request.getSession().setAttribute(SportletProperties.CLIENT, client);
-        }
-
-        List appModes = appPortletConfig.getSupportedModes(client.getMimeType());
-        // convert modes from GridSphere type to JSR
-        Iterator it = appModes.iterator();
-        List myModes = new ArrayList();
-        PortletMode m = PortletMode.VIEW;
-        while (it.hasNext()) {
-            org.gridsphere.portlet.Mode mode = (org.gridsphere.portlet.Mode)it.next();
-            if (mode == org.gridsphere.portlet.Mode.VIEW) {
-                m = PortletMode.VIEW;
-            } else if (mode == org.gridsphere.portlet.Mode.EDIT) {
-                m = PortletMode.EDIT;
-            } else if (mode == org.gridsphere.portlet.Mode.HELP) {
-                m = PortletMode.HELP;
-            } else if (mode == org.gridsphere.portlet.Mode.CONFIGURE) {
-                m = new PortletMode("config");
-            } else {
-                m = new PortletMode(mode.toString());
-            }
-            myModes.add(m.toString());
-        }
-
-        request.setAttribute(SportletProperties.ALLOWED_MODES, myModes);
-        */
-
 
         // perform user conversion from gridsphere to JSR model
         User user = (User) request.getAttribute(SportletProperties.PORTLET_USER);
-        Map userInfo = new HashMap();;
+        Map<String, String> userInfo = new HashMap<String, String>();;
         String userId = null;
         if (user != null) {
             userId = user.getID();
@@ -309,16 +267,16 @@ public class PortletServlet extends HttpServlet
             if (userInfo.containsKey("user.name.full")) userInfo.put("user.name.full", user.getFullName());
             if (userInfo.containsKey("user.name.first")) userInfo.put("user.name.first", user.getFirstName());
             if (userInfo.containsKey("user.name.last")) userInfo.put("user.name.last", user.getLastName());
-            if (userInfo.containsKey("user.timezone")) userInfo.put("user.timezone", user.getAttribute(User.TIMEZONE));
-            if (userInfo.containsKey("user.locale")) userInfo.put("user.locale", user.getAttribute(User.LOCALE));
-            if (userInfo.containsKey("user.theme")) userInfo.put("user.theme", user.getAttribute(User.THEME));
+            if (userInfo.containsKey("user.timezone")) userInfo.put("user.timezone", (String)user.getAttribute(User.TIMEZONE));
+            if (userInfo.containsKey("user.locale")) userInfo.put("user.locale", (String)user.getAttribute(User.LOCALE));
+            if (userInfo.containsKey("user.theme")) userInfo.put("user.theme", (String)user.getAttribute(User.THEME));
 
             if (userInfo.containsKey("user.login.id")) userInfo.put("user.login.id", user.getUserName());
 
             Enumeration e = user.getAttributeNames();
             while (e.hasMoreElements()) {
                 String key = (String)e.nextElement();
-                if (userInfo.containsKey(key)) userInfo.put(key, user.getAttribute(key));
+                if (userInfo.containsKey(key)) userInfo.put(key, (String)user.getAttribute(key));
             }
 
             UserAttribute[] userAttrs = portletWebApp.getUserAttributes();
@@ -344,6 +302,7 @@ public class PortletServlet extends HttpServlet
         }
 
         if (method.equals(SportletProperties.SERVICE)) {
+            
             String action = (String) request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
             if (action != null) {
                 log.debug("in PortletServlet: action is not NULL");

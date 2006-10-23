@@ -4,12 +4,10 @@
  */
 package org.gridsphere.provider.portlet.tags.jsr;
 
-import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.ActionLinkBean;
 import org.gridsphere.provider.portletui.beans.MessageStyle;
 import org.gridsphere.provider.portletui.tags.ActionTag;
 
-import javax.portlet.RenderResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
@@ -84,9 +82,8 @@ public class RenderURLTagImpl extends ActionTag {
 
     public int doEndTag() throws JspException {
         paramPrefixing = false;
-        RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
 
-        String actionString = createJSRActionURI(res.createRenderURL());
+        String actionString = createRenderURI();
         //actionlink.setAction(actionString);
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
