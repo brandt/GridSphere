@@ -1,39 +1,27 @@
-/*
-* @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
-* @author <a href="mailto:wehrens@aei.mpg.de">Oliver Wehrens</a>
-* @version $Id: PortletTabbedPane.java 5032 2006-08-17 18:15:06Z novotny $
-*/
-
 package org.gridsphere.layout;
 
-import org.gridsphere.layout.event.PortletComponentEvent;
-import org.gridsphere.layout.event.PortletTabEvent;
 import org.gridsphere.layout.event.PortletTabListener;
 import org.gridsphere.layout.view.TabbedPaneView;
-import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridsphere.services.core.persistence.PersistenceManagerException;
-
+import org.gridsphere.portlet.impl.SportletProperties;
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * The <code>PortletTabbedPane</code> represents the visual portlet tabbed pane interface
- * and is a container for a {@link PortletTab}.
+ * and is a container for a {@link org.gridsphere.layout.PortletTab}.
  */
-public class PortletTabbedPane extends PortletNavMenu implements Serializable, PortletTabListener, Cloneable {
+public class PortletMenu extends PortletNavMenu implements Serializable, PortletTabListener, Cloneable {
 
-    private transient TabbedPaneView tabbedPaneView = null;
+
+    private transient TabbedPaneView menuView = null;
 
     /**
      * Constructs an instance of PortletTabbedPane
      */
-    public PortletTabbedPane() {
+    public PortletMenu() {
     }
 
 
@@ -44,10 +32,12 @@ public class PortletTabbedPane extends PortletNavMenu implements Serializable, P
      *
      * @param list a list of component identifiers
      * @return a list of updated component identifiers
-     * @see ComponentIdentifier
+     * @see org.gridsphere.layout.ComponentIdentifier
      */
     public List init(PortletRequest req, List list) {
-        tabbedPaneView = (TabbedPaneView)getRenderClass(req, "TabbedPane");
+
+        menuView = (TabbedPaneView)getRenderClass(req, "Menu");
+
         return super.init(req, list);
     }
 
@@ -63,7 +53,7 @@ public class PortletTabbedPane extends PortletNavMenu implements Serializable, P
 
 
         //log.debug("in tabbed pane: my comp is=" + componentIDStr);
-        pane.append(tabbedPaneView.doStart(event, this));
+        pane.append(menuView.doStart(event, this));
 
         PortletTab tab;
         List tabs = getPortletTabs();
@@ -71,7 +61,7 @@ public class PortletTabbedPane extends PortletNavMenu implements Serializable, P
             tab = (PortletTab) tabs.get(i);
             String tabRole = tab.getRequiredRole();
             if (tabRole.equals("") || (req.isUserInRole(tabRole))) {
-                pane.append(tabbedPaneView.doRenderTab(event, this, tab));
+                pane.append(menuView.doRenderTab(event, this, tab));
             } else {
                 // if role is < required role we try selecting the next possible tab
                 //System.err.println("in PortletTabbedPane menu: role is < required role we try selecting the next possible tab");
@@ -87,11 +77,11 @@ public class PortletTabbedPane extends PortletNavMenu implements Serializable, P
 
 
         if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
-            pane.append(tabbedPaneView.doRenderEditTab(event, this, false));
+            pane.append(menuView.doRenderEditTab(event, this, false));
         }
 
+        pane.append(menuView.doEndBorder(event, this));
 
-        pane.append(tabbedPaneView.doEndBorder(event, this));
 
         // render the selected tab
         if (!tabs.isEmpty()) {
@@ -103,15 +93,16 @@ public class PortletTabbedPane extends PortletNavMenu implements Serializable, P
             }
         }
 
-        pane.append(tabbedPaneView.doEnd(event, this));
+        pane.append(menuView.doEnd(event, this));
+        
+
         setBufferedOutput(req, pane);
 
     }
 
 
-
     public Object clone() throws CloneNotSupportedException {
-        return (PortletTabbedPane) super.clone();
+        return (PortletMenu) super.clone();
     }
 
 }

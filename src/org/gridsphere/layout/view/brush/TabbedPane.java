@@ -9,6 +9,7 @@ package org.gridsphere.layout.view.brush;
 import org.gridsphere.layout.PortletComponent;
 import org.gridsphere.layout.PortletTab;
 import org.gridsphere.layout.PortletTabbedPane;
+import org.gridsphere.layout.PortletNavMenu;
 import org.gridsphere.layout.view.BaseRender;
 import org.gridsphere.layout.view.TabbedPaneView;
 import org.gridsphere.portlet.impl.SportletProperties;
@@ -75,7 +76,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
      *
      * @param event the gridsphere event
      */
-    protected static String[] createTabLinks(GridSphereEvent event, PortletTabbedPane pane) {
+    protected static String[] createTabLinks(GridSphereEvent event, PortletNavMenu pane) {
         // Make tab links
         String[] tabLinks = new String[pane.getPortletTabs().size()];
         List tabs = pane.getPortletTabs();
@@ -122,7 +123,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         return result;
     }
 
-    public StringBuffer doRenderTab(GridSphereEvent event, PortletTabbedPane tabPane, PortletTab tab) {
+    public StringBuffer doRenderTab(GridSphereEvent event, PortletNavMenu tabPane, PortletTab tab) {
         // this really creates the individual tabs
         StringBuffer pane = new StringBuffer();
         String link = tab.createTabTitleLink(event);
@@ -180,7 +181,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         return pane;
     }
 
-    public StringBuffer doRenderEditTab(GridSphereEvent event, PortletTabbedPane tabPane, boolean isSelected) {
+    public StringBuffer doRenderEditTab(GridSphereEvent event, PortletNavMenu tabPane, boolean isSelected) {
         RenderResponse res = event.getRenderResponse();
         RenderRequest req = event.getRenderRequest();
         PortletURL portletURL = res.createRenderURL();

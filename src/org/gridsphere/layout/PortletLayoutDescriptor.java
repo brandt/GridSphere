@@ -60,22 +60,9 @@ public class PortletLayoutDescriptor {
      * @param mappingPath    location of the mapping file
      * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static void savePortletPage(PortletPage pc, String descriptorPath, URL mappingPath) throws PersistenceManagerException {
+    public static void saveLayoutComponent(Object pc, String descriptorPath, URL mappingPath) throws PersistenceManagerException {
         PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
         pmXML.save(pc);
-    }
-
-    /**
-     * Saves the portlet tab associated with this descriptor
-     *
-     * @param pane           the list of portlet tabs to save
-     * @param descriptorPath location of the layout.xml
-     * @param mappingPath    location of the mapping file
-     * @throws PersistenceManagerException if a descriptor error occurs
-     */
-    public static void savePortletTabbedPane(PortletTabbedPane pane, String descriptorPath, URL mappingPath) throws PersistenceManagerException {
-        PersistenceManagerXml pmXML = JavaXMLBindingFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
-        pmXML.save(pane);
     }
 
 }

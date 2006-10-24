@@ -102,7 +102,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
         RenderResponse res = event.getRenderResponse();
         Locale locale = req.getLocale();
 
-        PortletURLImpl url = (PortletURLImpl)res.createRenderURL();
+        PortletURLImpl url = (PortletURLImpl)res.createActionURL();
 
         url.setAction(PortletTableLayout.PORTLET_ADD_ACTION);
         String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);

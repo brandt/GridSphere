@@ -310,7 +310,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
 
         try {
-            PortletLayoutDescriptor.savePortletPage(page, layoutDesc, LAYOUT_MAPPING_PATH);
+            PortletLayoutDescriptor.saveLayoutComponent(page, layoutDesc, LAYOUT_MAPPING_PATH);
             masterLayouts.put(layoutId, page);
         } catch (Exception e) {
             log.error("Unable to save layout descriptor: " + layoutDesc, e);

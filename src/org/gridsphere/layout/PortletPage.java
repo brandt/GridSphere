@@ -490,7 +490,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
                     }
                 }
                 if (myPane.getTabCount() > 0) {
-                    PortletLayoutDescriptor.savePortletTabbedPane(myPane, layoutDescriptor, LAYOUT_MAPPING_PATH);
+                    PortletLayoutDescriptor.saveLayoutComponent(myPane, layoutDescriptor, LAYOUT_MAPPING_PATH);
                 }
             } catch (PersistenceManagerException e) {
                 throw new IOException("Unable to save user's tabbed pane: " + e.getMessage());
