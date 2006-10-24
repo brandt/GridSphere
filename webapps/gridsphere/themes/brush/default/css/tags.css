@@ -5,68 +5,6 @@ Author: Oliver Wehrens (wehrens@aei.mpg.de)
 Version: $Id: ui.css 4736 2006-04-10 22:10:44Z novotny $
 */
 
-.ui-datagrid {
-    background: #e6e6e6;
-    border-top: 1px solid #848484;
-    border-right: 1px solid white;
-    border-bottom: 1px solid white;
-    border-left: 1px solid #848484;
-    margin: 2px;
-    padding: 2px;
-}
-
-.ui-datagrid-title {
-    padding: 2px;
-}
-
-.ui-datagrid-controls {
-    border: 1px solid #bbbdb6;
-    color: #808080;
-}
-
-.ui-datagrid-controls-element-inactive {
-    color: #bbbdb6;
-    border-right: 1px solid #bbbdb6;
-    padding-right: 5px;
-}
-
-a.ui-datagrid-controls-element-active {
-    border-right: 1px solid #bbbdb6;
-    color: #bbbdb6;
-    padding-right: 5px;
-}
-
-a.ui-datagrid-controls-element-active:link {
-    color: black;
-}
-
-
-.ui-datagrid-header {
-    background-color: blue;
-    color: white;
-    margin: 3px;
-    padding: 3px;
-
-}
-
-.ui-datagrid-content {
-    border: 1px solid black;
-    width: 100%;
-}
-
-.ui-datagrid-row-even {
-}
-
-.ui-datagrid-row-odd {
-    background-color: #BDBBB6;
-    border: 1px solid #000000;
-}
-
-.ui-datagrid-cell {
-    margin: 0px;
-    padding: 0px;
-}
-
 .ui-messagebox-portlet-msg-alert {
     border: 1px solid black;
     margin: 5px;

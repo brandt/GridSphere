@@ -18,9 +18,7 @@
         <portlet-content include="/jsp/returnnav.jsp"/>
     </portlet-header>
 
-    <portlet-tabbed-pane selected="0" style="menu" theme="default">
-        <portlet-tab label="admin" required-role="ADMIN">
-            <portlet-tabbed-pane style="sub-menu">
+    <portlet-menu>
                 <portlet-tab label="configTab" required-role="ADMIN">
                     <title lang="en">Configuration</title>
                     <table-layout label="configTL">
@@ -76,11 +74,8 @@
                         </row-layout>
                     </table-layout>
                 </portlet-tab>
-            </portlet-tabbed-pane>
-        </portlet-tab>
-   <!--     <portlet-tab label="portal" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/returnnav.jsp"/> -->
-    </portlet-tabbed-pane>
-
+        </portlet-menu>
+    
     <!-- Footer components (if any) -->
     <portlet-footer>
         <table-layout style="footer">

@@ -4,7 +4,7 @@
 
 <portlet:defineObjects/>
 
-<div id="navbar">
+<div class="navbar">
     <ul>
         <li>
             <ui:actionlink layout="GuestUserLayout" value="Home"/>

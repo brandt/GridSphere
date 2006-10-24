@@ -24,7 +24,7 @@
                     </portlet-frame>
                 </column-layout>
                 <column-layout width="10%">
-                    <portlet-content include="/jsp/loginnav.jsp"/>
+                    <portlet-content include="/jsp/login/loginnav.jsp"/>
                 </column-layout>
             </row-layout>
         </table-layout>

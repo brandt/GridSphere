@@ -17,36 +17,33 @@ $Id$
         <portlet-content include="/jsp/returnnav.jsp"/>
     </portlet-header>
 
-    <portlet-tabbed-pane style="menu">
-        <portlet-tab label="gridsphere">
-            <portlet-tabbed-pane selected="0" style="sub-menu">
-                <portlet-tab label="home">
-                    <title lang="en">Home</title>
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="70%">
-                                <portlet-frame transparent="true" outer-padding="0px 20px" label="rss">
-                                    <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                        </row-layout>
-                    </table-layout>
-                </portlet-tab>
-                <portlet-tab label="jcr">
-                    <title lang="en">CM</title>
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="100%">
-                                <portlet-frame label="jcr">
-                                    <portlet-class>org.gridsphere.portlets.core.jcr.JCRManagementPortlet</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                        </row-layout>
-                    </table-layout>
-                </portlet-tab>
-            </portlet-tabbed-pane>
+    <portlet-menu>
+        <portlet-tab label="home">
+            <title lang="en">Home</title>
+            <table-layout>
+                <row-layout>
+                    <column-layout width="70%">
+                        <portlet-frame transparent="true" outer-padding="0px 20px" label="rss">
+                            <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</portlet-class>
+                        </portlet-frame>
+                    </column-layout>
+                </row-layout>
+            </table-layout>
         </portlet-tab>
-    </portlet-tabbed-pane>
+        <portlet-tab label="jcr">
+            <title lang="en">CM</title>
+            <table-layout>
+                <row-layout>
+                    <column-layout width="100%">
+                        <portlet-frame label="jcr">
+                            <portlet-class>org.gridsphere.portlets.core.jcr.JCRManagementPortlet</portlet-class>
+                        </portlet-frame>
+                    </column-layout>
+                </row-layout>
+            </table-layout>
+        </portlet-tab>
+    </portlet-menu>
+
 
     <portlet-footer>
         <table-layout style="footer">
