@@ -337,18 +337,28 @@ public class PortletURLImpl implements PortletURL {
             url += "/" + layoutId;
             String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
             if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+
             String cid = (String)req.getAttribute(compVar);
             // if a label exists, use it instead
             String label = (String)store.get(SportletProperties.COMPONENT_LABEL);
             if (label != null) cid = label;
             if (layout != null) cid = null;
             if (cid != null) {
-                url += "/" + cid;
+
+                if (req.getAttribute(SportletProperties.COMPONENT_ID_VAR) != null) {
+                    url += "/?" + compVar + "=" + cid;
+                    store.remove(SportletProperties.DEFAULT_PORTLET_ACTION);
+                } else {
+                    url += "/" + cid;
+
+
                 String action = (String)store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
                 if (action != null) {
                     store.remove(SportletProperties.DEFAULT_PORTLET_ACTION);
                     url += "/" + action;
+                } 
                 }
+
             }
             //System.err.println("url=" + layoutId);
        }

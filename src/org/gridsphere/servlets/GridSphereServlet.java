@@ -150,8 +150,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
 
-        //Collection<PersistenceManagerRdbms> allPms = pms.getAllPersistenceManagerRdbms();
-
         PersistenceManagerRdbms pm = null;
         try {
             log.info("Starting a database transaction");
