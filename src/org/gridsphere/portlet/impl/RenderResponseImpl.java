@@ -5,13 +5,13 @@
 package org.gridsphere.portlet.impl;
 
 import org.gridsphere.services.core.user.User;
-import org.gridsphere.portletcontainer.impl.descriptor.Supports;
 
 import javax.portlet.PortletURL;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
+import java.util.SortedSet;
 
 
 /**
@@ -35,7 +35,8 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * Constructs an instance of SportletResponse using an
      * <code>HttpServletResponse</code> as a proxy
      *
-     * @param res the <code>HttpServletRequest</code>
+     * @param req the <code>HttpServletRequest</code>
+     * @param res the <code>HttpServletResponse</code>
      */
     public RenderResponseImpl(HttpServletRequest req, HttpServletResponse res) {
         super(req, res);
@@ -119,9 +120,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     public String getNamespace() {
         // this is done due to an issue with MyFaces using getNamespace
         String pid = ((String)req.getAttribute(SportletProperties.PORTLETID)).replace('#', '_');
-        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-        return "gridsphere_" + pid + "_" + (String)req.getAttribute(compVar);
+        return "gridsphere_" + pid + "_" + (String)req.getAttribute(SportletProperties.COMPONENT_ID);
     }
 
     /**
@@ -152,18 +151,11 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see #getContentType
      */
     public void setContentType(String type) {
-        if (type == null) throw new IllegalArgumentException("supplied content type is null!");
+        if (type == null) throw new IllegalArgumentException("supplied MIME type is null!");
         String mimeType = stripCharacterEncoding(type);
-        Supports[] supports = (Supports[])req.getAttribute(SportletProperties.PORTLET_MIMETYPES);
-        if (supports != null) {
-            boolean found = false;
-            for (int i = 0; i < supports.length; i++) {
-                Supports s = (Supports)supports[i];
-                if (s.getMimeType().getContent().equals(mimeType)) found = true;
-            }
-            if (!found) {
-                throw new IllegalArgumentException("Unsupported portlet mimeType: " + type);
-            }
+        SortedSet<String> types = (SortedSet<String>)req.getAttribute(SportletProperties.PORTLET_MIMETYPES);
+        if (types != null) {
+            if (!types.contains(type)) throw new IllegalArgumentException("Unsupported portlet mimeType: " + type);
         }
         this.getHttpServletResponse().setContentType(mimeType);
         this.contentType = mimeType;

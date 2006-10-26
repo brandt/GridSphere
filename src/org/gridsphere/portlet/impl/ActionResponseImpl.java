@@ -30,17 +30,18 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
 
     private boolean redirected = false;
     private String redirectLocation = null;
-    protected Map renderParams = null;
+    protected Map<String, String[]> renderParams = null;
 
     /**
      * Constructs an instance of SportletResponse using an
      * <code>HttpServletResponse</code> as a proxy
      *
-     * @param res the <code>HttpServletRequest</code>
+     * @param req the <code>HttpServletRequest</code>
+     * @param res the <code>HttpServletResponse</code>
      */
     public ActionResponseImpl(HttpServletRequest req, HttpServletResponse res) {
         super(req, res);
-        renderParams = new HashMap();
+        renderParams = new HashMap<String, String[]>();
     }
 
     /**
@@ -118,7 +119,7 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         if (redirected) {
             throw new IllegalStateException("it is not allowed to invoke setPortletMode after sendRedirect has been called");
         }
-        List allowedModes = (List) req.getAttribute(SportletProperties.ALLOWED_MODES);
+        Set allowedModes = (Set) req.getAttribute(SportletProperties.ALLOWED_MODES);
         if (allowedModes != null) {
             if (!allowedModes.contains(portletMode.toString())) throw new PortletModeException("Unsupported portlet mode!", portletMode);
             req.setAttribute(SportletProperties.PORTLET_MODE, portletMode);
@@ -210,18 +211,18 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         if (parameters == null) {
             throw new IllegalArgumentException("Render parameters must not be null.");
         }
-        Map params = new HashMap();
-        Iterator iter = parameters.keySet().iterator();
-        while (iter.hasNext()) {
-            Object obj = iter.next();
-            if (!(obj instanceof String)) throw new IllegalArgumentException("Key must not be null and of type java.lang.String.");
+        Map<String, String[]> params = new HashMap<String, String[]>();
+        for (Object obj : parameters.keySet()) {
+            if (!(obj instanceof String))
+                throw new IllegalArgumentException("Key must not be null and of type java.lang.String.");
             String key = (String) obj;
 
             Object vals = parameters.get(key);
 
-            if (!(vals instanceof String[])) throw new IllegalArgumentException("Value must not be null and of type java.lang.String[].");
+            if (!(vals instanceof String[]))
+                throw new IllegalArgumentException("Value must not be null and of type java.lang.String[].");
             String newkey = SportletProperties.RENDER_PARAM_PREFIX + key;
-            params.put(newkey, vals);
+            params.put(newkey, (String[])vals);
         }
         renderParams.clear();
         renderParams.putAll(params);

@@ -6,7 +6,6 @@ package org.gridsphere.portlet.impl;
 
 import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserPrincipal;
-import org.gridsphere.portletcontainer.impl.descriptor.Supports;
 import org.gridsphere.portletcontainer.PortletPreferencesManager;
 
 import javax.portlet.*;
@@ -42,16 +41,16 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     private PortletSession portletSession = null;
     protected GridSphereParameters portalParameters = null;
 
-    private Map origParams = null;
     /**
      * Constructor creates a proxy for a HttpServletRequest
      * All PortletRequest objects come from request or session attributes
      *
      * @param req the HttpServletRequest
+     * @param portletContext the portlet context
      */
     public PortletRequestImpl(HttpServletRequest req, PortletContext portletContext) {
         super(req);
-        this.origParams = new HashMap();
+        Map<String, String[]> origParams = new HashMap<String, String[]>();
         this.portletContext = portletContext;
         contextPath = this.portletContext.getRealPath("");
         int l = contextPath.lastIndexOf(File.separator);
@@ -61,17 +60,17 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             contextPath = contextPath.replace('\\', '/');
         }
 
-        Map map = (Map)getHttpServletRequest().getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map<String, List> map = (Map<String, List>)getHttpServletRequest().getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (map == null) {
+            map = new HashMap<String, List>();
             getHttpServletRequest().setAttribute(SportletProperties.PORTAL_PROPERTIES, new HashMap());
         }
-        map = (Map)(Map)getHttpServletRequest().getAttribute(SportletProperties.PORTAL_PROPERTIES);
 
         Enumeration e = getHttpServletRequest().getHeaderNames();
         while (e.hasMoreElements()) {
             String name = (String)e.nextElement();
             Enumeration headersEnum = getHttpServletRequest().getHeaders(name);
-            List vals = new ArrayList();
+            List<String> vals = new ArrayList<String>();
             while (headersEnum.hasMoreElements()) {
                 String val = (String)headersEnum.nextElement();
                 vals.add(val);
@@ -80,18 +79,15 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         }
         getHttpServletRequest().setAttribute(SportletProperties.PORTAL_PROPERTIES, map);
 
-        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-
-        portalParameters = new GridSphereParameters();
-
         for (Enumeration parameters = super.getParameterNames(); parameters.hasMoreElements();) {
             String   paramName   = (String)parameters.nextElement();
             String[] paramValues = (String[])super.getParameterValues(paramName);
             origParams.put(paramName, paramValues);
         }
 
-       /*
+        portalParameters = new GridSphereParameters(origParams);
+
+        /*
         System.err.println("============================= PortletRequestImpl =====================================");
         if (getAttribute(SportletProperties.PORTLET_ACTION_METHOD) != null) {
             System.err.println("in action");
@@ -101,10 +97,12 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         System.err.println("query string=" + super.getQueryString());
 
         System.err.println("Actual HTTP parameters");
-        for (Enumeration parameters = super.getParameterNames(); parameters.hasMoreElements();) {
-            String   paramName   = (String)parameters.nextElement();
-            String[] paramValues = (String[])super.getParameterValues(paramName);
-            origParams.put(paramName, paramValues);
+        Iterator it = origParams.keySet().iterator();
+        while (it.hasNext()) {
+
+            String   paramName   = (String)it.next();
+            String[] paramValues = (String[])origParams.get(paramName);
+
             System.err.println("\nname=" + paramName + "\nvalues=");
             for (int i = 0; i < paramValues.length; i++) {
                 System.err.print("  " + paramValues[i]);
@@ -122,7 +120,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         }
 
         System.err.println("\n===================================================================");
-        */
+       */
+
     }
 
 
@@ -141,6 +140,9 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     /**
      * Is this attribute name a reserved name (by the J2EE spec)?.
      * Reserved names begin with "java." or "javax.".
+     *
+     * @param name the attribute name to test
+     * @return true if the supplied name is reserved
      */
     private boolean isNameReserved(String name) {
         return name.startsWith("java.") || name.startsWith("javax.");
@@ -177,7 +179,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *         given portlet mode
      */
     public boolean isPortletModeAllowed(PortletMode mode) {
-        List modesAllowed = (List)this.getHttpServletRequest().getAttribute(SportletProperties.ALLOWED_MODES);
+        Set modesAllowed = (Set)this.getHttpServletRequest().getAttribute(SportletProperties.ALLOWED_MODES);
         if (modesAllowed.contains(mode.toString())) return true;
         return false;
     }
@@ -580,8 +582,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public java.util.Map getParameterMap() {
         hasReader = true;
-        Map map =  portalParameters.getParameterMap(getHttpServletRequest(), origParams, getQueryString());
-        return map;
+        return portalParameters.getParameterMap(getHttpServletRequest(), getQueryString());
     }
 
     /**
@@ -683,23 +684,9 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return preferred MIME type of the response
      */
     public String getResponseContentType() {
-        PortletMode mode = (PortletMode) getAttribute(SportletProperties.PORTLET_MODE);
-
-        Supports[] supports = (Supports[])getAttribute(SportletProperties.PORTLET_MIMETYPES);
-        if (supports != null) {
-            Supports s = supports[0];
-            org.gridsphere.portletcontainer.impl.descriptor.PortletMode[] modes = s.getPortletMode();
-            for (int j = 0; j < modes.length; j++) {
-                org.gridsphere.portletcontainer.impl.descriptor.PortletMode m = modes[j];
-                //System.err.println("mode content= " + m.getContent());
-                if (m.getContent().equalsIgnoreCase(mode.toString())) {
-                    return s.getMimeType().getContent();
-                }
-            }
-            //System.err.println("handing back = " + s.getMimeType().getContent());
-            return s.getMimeType().getContent();
-        }
-        return "";
+        SortedSet  types = (SortedSet)getAttribute(SportletProperties.PORTLET_MIMETYPES);
+        if ((types == null) || (types.isEmpty())) return null;
+        return (String)types.first();
     }
 
     /**
@@ -717,26 +704,9 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *
      * @return ordered list of MIME types for the response
      */
-    public java.util.Enumeration getResponseContentTypes() {
-        List types = new ArrayList();
-        PortletMode mode = (PortletMode) getAttribute(SportletProperties.PORTLET_MODE);
-        Supports[] supports = (Supports[])getAttribute(SportletProperties.PORTLET_MIMETYPES);
-        if (supports != null) {
-            for (int i = 0; i < supports.length; i++) {
-                Supports s = supports[i];
-                org.gridsphere.portletcontainer.impl.descriptor.PortletMode[] modes = s.getPortletMode();
-                if (modes.length == 0) {
-                    types.add(s.getMimeType().getContent());
-                } else {
-                    for (int j = 0; j < modes.length; j++) {
-                        org.gridsphere.portletcontainer.impl.descriptor.PortletMode m = modes[j];
-                        if (m.getContent().equalsIgnoreCase(mode.toString())) {
-                            types.add(s.getMimeType().getContent());
-                        }
-                    }
-                }
-            }
-        }
+    public java.util.Enumeration getResponseContentTypes() {     
+        SortedSet  types = (SortedSet)getAttribute(SportletProperties.PORTLET_MIMETYPES);
+        if (types == null) types = new TreeSet();
         return new Enumerator(types);
     }
 

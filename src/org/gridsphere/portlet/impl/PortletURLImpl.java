@@ -130,7 +130,7 @@ public class PortletURLImpl implements PortletURL {
     public void setPortletMode(PortletMode portletMode)
             throws PortletModeException {
         if (portletMode == null) throw new IllegalArgumentException("Portlet mode cannot be null");
-        List allowedModes = (List) req.getAttribute(SportletProperties.ALLOWED_MODES);
+        Set allowedModes = (Set) req.getAttribute(SportletProperties.ALLOWED_MODES);
         if (allowedModes.contains(portletMode.toString())) {
             // hack to handle config mode
             if (portletMode.toString().equals("config")) portletMode = new PortletMode("configure");
@@ -328,6 +328,31 @@ public class PortletURLImpl implements PortletURL {
                 }
        */
         ///////////  JASON ADDED BELOW
+        String cid = (String)req.getAttribute(SportletProperties.COMPONENT_ID);
+        /*
+          This bit of jiggery is here only for the LayoutManager portlet currently.
+          A special param SportletProperties.EXTRA_QUERY_INFO can be used to stuff
+          some extra params into every portal generated url
+         */
+        String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
+        if (extraQuery != null) {
+            StringTokenizer st = new StringTokenizer(extraQuery, "&");
+            while (st.hasMoreTokens()) {
+                String cmd = (String)st.nextElement();
+                //System.err.println("cmd= " + cmd);
+
+                if (cmd.startsWith(SportletProperties.COMPONENT_ID)) {
+                    store.put(SportletProperties.COMPONENT_ID_2, cid);
+                    cid = cmd.substring(SportletProperties.COMPONENT_ID.length()+1);
+                } else if (cmd.startsWith(SportletProperties.DEFAULT_PORTLET_ACTION)) {
+                    String action = (String)store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
+                    store.put(SportletProperties.DEFAULT_PORTLET_ACTION_2, action);
+                    store.put(SportletProperties.DEFAULT_PORTLET_ACTION, cmd.substring(SportletProperties.DEFAULT_PORTLET_ACTION.length()+1));
+
+                }
+            }
+        }
+
         String layoutId  = layout;
         if (layoutId == null) {
             layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
@@ -335,33 +360,24 @@ public class PortletURLImpl implements PortletURL {
         if (layoutId != null) {
             //System.err.println("layoutId=" + layoutId);
             url += "/" + layoutId;
-            String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-            if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+            //String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+            //if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
 
-            String cid = (String)req.getAttribute(compVar);
+
             // if a label exists, use it instead
             String label = (String)store.get(SportletProperties.COMPONENT_LABEL);
             if (label != null) cid = label;
             if (layout != null) cid = null;
             if (cid != null) {
-
-                if (req.getAttribute(SportletProperties.COMPONENT_ID_VAR) != null) {
-                    url += "/?" + compVar + "=" + cid;
-                    store.remove(SportletProperties.DEFAULT_PORTLET_ACTION);
-                } else {
-                    url += "/" + cid;
-
-
+                url += "/" + cid;
                 String action = (String)store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
                 if (action != null) {
                     store.remove(SportletProperties.DEFAULT_PORTLET_ACTION);
                     url += "/" + action;
-                } 
                 }
-
             }
             //System.err.println("url=" + layoutId);
-       }
+        }
 
         ///////////// JASON ADDED ABOVE
 
@@ -370,9 +386,7 @@ public class PortletURLImpl implements PortletURL {
         if (!set.isEmpty()) {
             // add question mark
             url += "?";
-        } else {
-            return s.append(url).toString();
-        }
+
 
         Iterator it = set.iterator();
         boolean firstParam = true;
@@ -408,13 +422,15 @@ public class PortletURLImpl implements PortletURL {
         } catch (UnsupportedEncodingException e) {
             System.err.println("Unable to support UTF-8 encoding!");
         }
-        String newURL;
+
         if (redirect) {
-            newURL = res.encodeRedirectURL(url);
+            url = res.encodeRedirectURL(url);
         } else {
-            newURL = res.encodeURL(url);
+            url = res.encodeURL(url);
         }
-        s.append(newURL);
+        }
+
+        s.append(url);
         //System.err.println("created URL= " + s.toString());
         return s.toString();
     }

@@ -36,7 +36,8 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
      * Constructs an instance of SportletResponse using an
      * <code>HttpServletResponse</code> as a proxy
      *
-     * @param res the <code>HttpServletRequest</code>
+     * @param req the <code>HttpServletRequest</code>
+     * @param res the <code>HttpServletResponse</code>
      */
     public PortletResponseImpl(HttpServletRequest req, HttpServletResponse res) {
         super(res);
@@ -62,9 +63,9 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
      */
     public void addProperty(String key, String value) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
-        Map properties = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
-        List vals = (List) properties.get(key);
-        if (vals == null) vals = new ArrayList();
+        Map<String, List<String>> properties = (Map<String, List<String>>)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        List<String> vals = (List<String>) properties.get(key);
+        if (vals == null) vals = new ArrayList<String>();
         if (!vals.contains(value)) vals.add(value);
         properties.put(key, vals);
     }
@@ -84,8 +85,8 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
      */
     public void setProperty(String key, String value) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
-        Map properties = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
-        List vals = new ArrayList();
+        Map<String, List<String>> properties = (Map<String, List<String>>)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        List<String> vals = new ArrayList<String>();
         vals.add(value);
         properties.put(key, vals);
     }

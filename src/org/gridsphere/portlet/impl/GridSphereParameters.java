@@ -22,7 +22,8 @@ public class GridSphereParameters {
     private List reservedParams = null;
 
 
-    public GridSphereParameters() {
+    public GridSphereParameters(Map origParams) {
+        this.origParams = origParams;
     }
 
     public void addRenderParams(Map params) {
@@ -128,8 +129,10 @@ public class GridSphereParameters {
         }
     }
 
-    public Map getParameterMap(HttpServletRequest req, Map origParams, String queryString) {
-        this.origParams = origParams;
+    public Map getParameterMap(HttpServletRequest req, String queryString) {
+        // A Magic parameter to ignore the special parsing required for JSR 168
+        if (req.getAttribute(SportletProperties.IGNORE_PARSING) != null) return origParams;
+        
         // check request string for action
 
         params = new HashMap();
@@ -139,10 +142,8 @@ public class GridSphereParameters {
         // create reserved params list
         reservedParams = new ArrayList();
 
-        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
 
-        reservedParams.add(compVar);
+        reservedParams.add(SportletProperties.COMPONENT_ID);
         reservedParams.add(SportletProperties.DEFAULT_PORTLET_ACTION);
         reservedParams.add(SportletProperties.PORTLET_MODE);
         reservedParams.add(SportletProperties.PORTLET_WINDOW);
@@ -151,13 +152,13 @@ public class GridSphereParameters {
         params.putAll(parseQueryString(queryString, false));
 
         String targetedCid = null;
-        String[] tCid = (String[]) origParams.get(compVar);
+        String[] tCid = (String[]) origParams.get(SportletProperties.COMPONENT_ID);
         if (tCid != null) targetedCid = tCid[0];
       
 
         //System.err.println("target cid= " + targetedCid);
 
-        String mycid = (String) req.getAttribute(compVar);
+        String mycid = (String) req.getAttribute(SportletProperties.COMPONENT_ID);
         if (mycid == null) {
             //System.err.println("mycid is null");
             return origParams;

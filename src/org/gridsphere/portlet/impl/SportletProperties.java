@@ -90,6 +90,8 @@ public class SportletProperties {
 
     public static final String COMPONENT_ID = "cid";
 
+    public static final String COMPONENT_ID_2 = "cid2";
+
     public static final String COMPONENT_ID_VAR = "org.gridsphere.layout.COMPONENT_ID_VAR";
 
     public static final String COMPONENT_ID_NUM = "org.gridsphere.layout.COMPONENT_ID_NUM";
@@ -108,11 +110,16 @@ public class SportletProperties {
 
     public static final String LAYOUT_PAGE = "org.gridsphere.layout.PAGE";
 
+    public static final String IGNORE_PARSING = "org.gridsphere.portlet.impl.IGNORE_PARSING";
 
     // Used for "action component model" in grid portlets currently
     public static final String GP_COMPONENT_ID = "gpcompid";
 
+    public static final String DEFAULT_PORTLET_ACTION_VAR = "org.gridsphere.DEFAULT_PORTLET_ACTION_VAR";
+
     public static final String DEFAULT_PORTLET_ACTION = "gs_action";
+
+    public static final String DEFAULT_PORTLET_ACTION_2 = "gs_action2";
 
     public static final String DEFAULT_PORTLET_MESSAGE = "message";
 
