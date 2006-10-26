@@ -268,7 +268,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         if (comp instanceof PortletTab) {
             PortletTab tab = (PortletTab)comp;
-            PortletTabbedPane pane = (PortletTabbedPane)tab.getParentComponent();
+            PortletNavMenu pane = (PortletNavMenu)tab.getParentComponent();
             int index = pane.getIndexOfTab(tab);
             pane.removeTab(tab);
             pane.insertTab(tab, index-1);
@@ -292,7 +292,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         if (comp instanceof PortletTab) {
             PortletTab tab = (PortletTab)comp;
-            PortletTabbedPane pane = (PortletTabbedPane)tab.getParentComponent();
+            PortletNavMenu pane = (PortletNavMenu)tab.getParentComponent();
             int index = pane.getIndexOfTab(tab);
             pane.removeTab(tab);
             pane.insertTab(tab, index+1);
