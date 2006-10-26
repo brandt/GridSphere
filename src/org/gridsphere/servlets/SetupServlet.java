@@ -90,7 +90,39 @@ public class SetupServlet extends HttpServlet {
             passwordService = (PasswordManagerService) PortletServiceFactory.createPortletService(PasswordManagerService.class, true);
             portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
 
-            if ((roleService.getUsersInRole(PortletRole.ADMIN)).isEmpty()) {
+            PersistenceManagerService pms = null;
+
+            pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+            List admins = null;
+            PersistenceManagerRdbms pm = null;
+            try {
+                log.info("Starting a database transaction");
+
+                pm = pms.createGridSphereRdbms();
+                pm.beginTransaction();
+
+                admins = roleService.getUsersInRole(PortletRole.ADMIN);
+
+
+                log.info("Committing the database transaction");
+
+                pm.endTransaction();
+            } catch (StaleObjectStateException staleEx) {
+                log.error("This interceptor does not implement optimistic concurrency control!");
+                log.error("Your application will not work until you add compensation actions!");
+
+            } catch (Throwable ex) {
+                ex.printStackTrace();
+                pm.endTransaction();
+                try {
+                    pm.rollbackTransaction();
+                } catch (Throwable rbEx) {
+                    log.error("Could not rollback transaction after exception!", rbEx);
+                }
+            }
+
+
+            if (admins.isEmpty()) {
                 req.setAttribute(SportletProperties.LAYOUT_PAGE, "SetupAdmin");
             } else {
                 redirect(event);
@@ -317,7 +349,7 @@ public class SetupServlet extends HttpServlet {
             accountRequest.setOrganization(org);
             PasswordEditor editor = passwordService.editPassword(accountRequest);
             editor.setValue(passwd);
-
+            log.debug("Saving the admin account in the DB");
             portalConfigService.setProperty(PortalConfigService.PORTAL_ADMIN_EMAIL, accountRequest.getEmailAddress());
             passwordService.savePassword(editor);
             userManagerService.saveUser(accountRequest);
