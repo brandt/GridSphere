@@ -2,8 +2,10 @@ package org.gridsphere.portlets.core.admin.layout;
 
 import org.gridsphere.layout.*;
 import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.impl.PortletRequestImpl;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
@@ -47,18 +49,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         DEFAULT_VIEW_PAGE = "doShowLayout";
     }
 
-    public void addportlet(FormEvent event, PortletRequest req, PortletResponse res) throws PortletException, IOException {
-
-        PortletContext context = getPortletConfig().getPortletContext();
-
-        GridSphereEvent gsevent = new GridSphereEventImpl(context, (HttpServletRequest)req, (HttpServletResponse)res);
-        PortletPage page = (PortletPage)pages.get(req.getPortletSession().getId());
-        if (page == null) page = createLayout(event, req);
-        page.actionPerformed(gsevent);
-        page.init(req, new ArrayList());
-        pageFactory.savePortletPageMaster(page);
-    }
-
     public void editComponent(RenderFormEvent event) throws PortletException, IOException {
         PortletRequest req = event.getRenderRequest();
         PortletResponse res = event.getRenderResponse();
@@ -85,6 +75,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         pageFactory.setPageTheme(page, req);
 
         page.init(req, new ArrayList());
+
         return page;
     }
 
@@ -349,8 +340,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
             layoutsLB.addBean(item);
         }
 
-
-
         String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
 
         String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
@@ -376,47 +365,54 @@ public class LayoutManagerPortlet extends ActionPortlet {
             themesLB.addBean(lb);
         }
 
-
-        req.setAttribute(SportletProperties.COMPONENT_ID_VAR, "compid");
-
-        String sessionId = session.getId();
-
         PortletContext context = getPortletConfig().getPortletContext();
-        GridSphereEvent gsevent = new GridSphereEventImpl(context, (HttpServletRequest)req, (HttpServletResponse)res);
+
+
+
 
 
         // theme has to be set before it is inited
         req.setAttribute(SportletProperties.LAYOUT_EDIT_MODE, "true");
-
-        String actionURI = "?" + SportletProperties.LAYOUT_PAGE_PARAM + "=" + PortletPageFactory.USER_PAGE;
-        req.setAttribute("actionURI", actionURI);
-
         String cid = (String)req.getAttribute(SportletProperties.COMPONENT_ID);
 
-        
-
+        String sessionId = session.getId();
         String extraURI = "&" + SportletProperties.COMPONENT_ID + "=" + cid +
-                "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=doShowLayout";
+                        "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=doShowLayout";
 
+        log.debug("extraURI= " + extraURI);
         req.setAttribute(SportletProperties.EXTRA_QUERY_INFO, extraURI);
 
         PortletPage page = (PortletPage)pages.get(sessionId);
         if (page == null) page = createLayout(event, req);
 
+
+        GridSphereEventImpl gsevent = new GridSphereEventImpl(context, (HttpServletRequest)req, (HttpServletResponse)res);
+        req.setAttribute(SportletProperties.IGNORE_PARSING, "true");
+
+                
+
+        String controlUI = "";
+        String compid = req.getParameter(SportletProperties.COMPONENT_ID_2);
+        // put new cid in before render is called
+        if (compid != null) {
+            gsevent.setComponentID(compid);
+            System.err.println("\n\n\nfound compid2 = " + compid);
+        }
+        String action = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION_2);
+        if (action != null) {
+            gsevent.setAction(new DefaultPortletAction(action));
+            System.err.println("found action2 = " + action);
+        }
+        
         if (req.getParameter("usertable") != null) {
-            addportlet(event, req, res);
+            page.init(req, new ArrayList());
+            page.actionPerformed(gsevent);
+            pageFactory.savePortletPageMaster(page);
+            page.init(req, new ArrayList());
         }
 
 
-
-        String controlUI = "";
-        String compid = req.getParameter("compid");
-        if (compid == null) compid = cid;
-
-        if (compid == null) log.debug("component is null beeatch!!");
         if (compid != null) {
-
-
 
             PortletComponent comp = page.getActiveComponent(compid);
 
@@ -431,18 +427,14 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 }
 
                 ListBoxBean portletsLB = event.getListBoxBean("portletsLB");
-                Collection appColl = portletRegistryService.getAllApplicationPortlets();
+                Collection<ApplicationPortlet> appColl = portletRegistryService.getAllApplicationPortlets();
                 Locale loc = req.getLocale();
-                Iterator appIt = appColl.iterator();
-                while (appIt.hasNext()) {
-                    ApplicationPortlet app = (ApplicationPortlet) appIt.next();
 
-
+                for (ApplicationPortlet app : appColl) {
+                    
                     String concID = app.getConcretePortletID();
-
                     // we don't want to list PortletServlet loader!
                     // if (concID.startsWith(PortletServlet.class.getName())) continue;
-
 
                     String dispName = app.getDisplayName(loc);
                     String descName = app.getDescription(loc);
@@ -489,6 +481,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
                     moveRightButton.setDisabled(true);
                 }
                 log.debug("invoking action on tab/subtab");
+
                 page.actionPerformed(gsevent);
             }
             boolean itsanewtab = false;
@@ -552,16 +545,21 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletComponent comp = page.getPortletComponent();
 
         log.debug("rendering the comnponent");
+
+
         comp.doRender(gsevent);
 
+
+        //log.debug(req.getAttribute(SportletProperties.EXTRA_QUERY_INFO));
         pageBuffer = comp.getBufferedOutput(req);
 
         //System.err.println(pageBuffer);
 
-        req.setAttribute(SportletProperties.COMPONENT_ID_VAR, SportletProperties.COMPONENT_ID);
+   
         req.setAttribute("pane", pageBuffer.toString());
         pages.put(sessionId, page);
 
+        
         // put old cid back so beans/tags work!!
         req.setAttribute(SportletProperties.COMPONENT_ID, cid);
         // remove special layout attributes so the rest of "real" layout after this portlet renders properly
