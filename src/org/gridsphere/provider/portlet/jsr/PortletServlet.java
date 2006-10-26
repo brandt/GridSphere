@@ -20,6 +20,10 @@ import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.services.core.security.auth.LoginService;
 import org.gridsphere.services.core.portal.PortalConfigService;
+import org.gridsphere.services.core.persistence.PersistenceManagerService;
+import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.hibernate.StaleObjectStateException;
+import org.exolab.castor.jdo.PersistenceException;
 
 import javax.portlet.*;
 import javax.servlet.Servlet;
@@ -54,6 +58,10 @@ public class PortletServlet extends HttpServlet
 
     private Map<String, String> userKeys = new HashMap<String, String>();
     private List<String> securePortlets = new ArrayList<String>();
+
+    private transient PersistenceManagerService pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+
+    private transient PersistenceManagerRdbms pm = null;
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -243,8 +251,7 @@ public class PortletServlet extends HttpServlet
         portlet = (Portlet) portlets.get(portletName);
         request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(portletName));
 
-        ApplicationPortlet appPortlet =
-                (ApplicationPortlet) registryService.getApplicationPortlet(pid);
+        ApplicationPortlet appPortlet = registryService.getApplicationPortlet(pid);
 
         if (appPortlet == null) {
             log.error("Unable to get portlet from registry identified by: " + pid);
@@ -302,7 +309,7 @@ public class PortletServlet extends HttpServlet
         }
 
         if (method.equals(SportletProperties.SERVICE)) {
-            
+
             String action = (String) request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
             if (action != null) {
                 log.debug("in PortletServlet: action is not NULL");
@@ -322,56 +329,116 @@ public class PortletServlet extends HttpServlet
                     // do nothing
                 } else if (action.equals(SportletProperties.ACTION_PERFORMED)) {
                     // create portlet preferences manager
+                    log.debug("in PortletServlet: do processAction " + pid);
                     PortletPreferencesManager prefsManager = appPortlet.getPortletPreferencesManager(pid, userId, false);
                     request.setAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER, prefsManager);
-                    ActionRequestImpl actionRequest = new ActionRequestImpl(request, portletContext);
-                    ActionResponse actionResponse = new ActionResponseImpl(request, response);
 
-                    log.debug("in PortletServlet: action handling portlet " + pid);
-                    try {
-                        // INVOKE PORTLET ACTION
-                        portlet.processAction(actionRequest, actionResponse);
-                        Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
-                        actionRequest.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid, params);
-                        log.debug("placing render params in attribute: key= " + SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
-                        redirect(request, response, actionRequest, actionResponse, portalContext);
-                    } catch (Exception e) {
-                        log.error("Error during processAction:", e);
-                        request.setAttribute(SportletProperties.PORTLETERROR + pid, new PortletException(e));
-                    }
+                    processAction(portlet, portalContext, request, response, cid, pid);
+
+                    log.debug("in PortletServlet: do processAction2 " + pid);
                 }
             } else {
                 // create portlet preferences manager
                 PortletPreferencesManager prefsManager = appPortlet.getPortletPreferencesManager(pid, userId, true);
                 request.setAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER, prefsManager);
 
-                RenderRequest renderRequest = new RenderRequestImpl(request, portletContext);
-                RenderResponse renderResponse = new RenderResponseImpl(request, response);
+                render(portlet, request, response, pid);
 
-                renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
-                renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
-
-                log.debug("in PortletServlet: rendering  portlet " + pid);
-                if (renderRequest.getAttribute(SportletProperties.RESPONSE_COMMITTED) == null) {
-                    try {
-                        portlet.render(renderRequest, renderResponse);
-                    } catch (UnavailableException e) {
-                        log.error("in PortletServlet(): doRender() caught unavailable exception: ");
-                        try {                                   
-                            portlet.destroy();
-                        } catch (Exception d) {
-                            log.error("in PortletServlet(): destroy caught unavailable exception: ", d);
-                        }
-                    } catch (Exception e) {
-                        if (request.getAttribute(SportletProperties.PORTLETERROR + pid) == null) {
-                            request.setAttribute(SportletProperties.PORTLETERROR + pid, e);
-                        }
-                        throw new ServletException(e);
-                    }
-                }
             }
         } else {
             log.error("in PortletServlet: service(): No " + SportletProperties.PORTLET_LIFECYCLE_METHOD + " found in request!");
+        }
+    }
+
+    protected void processAction(Portlet portlet, PortalContext portalContext, HttpServletRequest request, HttpServletResponse response, String cid, String pid) {
+
+        ActionRequestImpl actionRequest = new ActionRequestImpl(request, portletContext);
+        ActionResponse actionResponse = new ActionResponseImpl(request, response);
+
+        try {
+            String webappname = portletWebApp.getWebApplicationName();
+            pm = pms.getPersistenceManagerRdbms(webappname);
+            if (pm != null) {
+                log.info("Starting a database transaction for webapp: " + webappname);
+                pm.beginTransaction();
+            }
+
+            log.debug("in PortletServlet: action handling portlet " + pid);
+          //  try {
+                // INVOKE PORTLET ACTION
+                portlet.processAction(actionRequest, actionResponse);
+                Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
+                actionRequest.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid, params);
+                log.debug("placing render params in attribute: key= " + SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
+        /*    } catch (Exception e) {
+                log.error("Error during processAction:", e.getCause());
+                request.setAttribute(SportletProperties.PORTLETERROR + pid, new PortletException(e.getCause()));
+            }   */
+
+            // Commit and cleanup
+            log.info("Committing the database transaction");
+
+            if (pm != null) pm.endTransaction();
+
+            redirect(request, response, actionRequest, actionResponse, portalContext);
+        } catch (Throwable ex) {
+            log.error("Error during processAction:", ex);
+            request.setAttribute(SportletProperties.PORTLETERROR + pid, new PortletException(ex));
+
+            ex.printStackTrace();
+            if (pm != null) {
+                pm.endTransaction();
+                try {
+                    if (pm != null) pm.rollbackTransaction();
+                } catch (Throwable rbEx) {
+                    log.error("Could not rollback transaction after exception!", rbEx.getCause());
+                }
+            }
+            // Let others handle it... maybe another interceptor for exceptions?
+            //throw new ServletException(ex.getCause());
+        }
+
+
+    }
+
+
+    protected void render(Portlet portlet, HttpServletRequest request, HttpServletResponse response, String pid) throws ServletException {
+        RenderRequest renderRequest = new RenderRequestImpl(request, portletContext);
+        RenderResponse renderResponse = new RenderResponseImpl(request, response);
+
+        renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
+        renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
+
+
+        log.debug("in PortletServlet: rendering  portlet " + pid);
+        if (renderRequest.getAttribute(SportletProperties.RESPONSE_COMMITTED) == null) {
+            try {
+                if (pm != null) pm.beginTransaction();
+                portlet.render(renderRequest, renderResponse);
+                if (pm != null)  {
+                    log.info("Committing database transaction for webapp: " + portletWebApp.getWebApplicationName());
+                    pm.endTransaction();
+                }
+            } catch (UnavailableException e) {
+                log.error("in PortletServlet(): doRender() caught unavailable exception: ");
+                try {
+                    portlet.destroy();
+                } catch (Exception d) {
+                    log.error("in PortletServlet(): destroy caught unavailable exception: ", d);
+                }
+            } catch (Throwable e) {
+
+                e.printStackTrace();
+                try {
+                    if (pm != null) pm.rollbackTransaction();
+                } catch (Throwable rbEx) {
+                    log.error("Could not rollback transaction after exception!", rbEx);
+                }
+                if (request.getAttribute(SportletProperties.PORTLETERROR + pid) == null) {
+                    request.setAttribute(SportletProperties.PORTLETERROR + pid, e.getCause());
+                }
+                //throw new ServletException(e);
+            }
         }
     }
 
@@ -534,6 +601,8 @@ public class PortletServlet extends HttpServlet
         //engine.removeUser(user);
         //engine.logoutPortlets(event);
     }
+
+
 }
 
 

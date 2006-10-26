@@ -39,8 +39,8 @@ public abstract class BaseFormEventImpl {
     protected PortletResponse portletResponse;
     protected Locale locale = null;
 
-    protected Map tagBeans = null;
-    protected List fileItems = null;
+    protected Map<String, TagBean> tagBeans = null;
+    protected List<FileItem> fileItems = null;
 
     protected String cid = null;
     protected String compId = null;
@@ -267,6 +267,7 @@ public abstract class BaseFormEventImpl {
      *
      * @param beanId the bean identifier
      * @return a FileInputBean
+     * @throws IOException if an error occurs
      */
     public FileInputBean getFileInputBean(String beanId) throws IOException {
         String beanKey = getBeanKey(beanId);
@@ -521,7 +522,7 @@ public abstract class BaseFormEventImpl {
         if (e != null) {
             while (e.hasMoreElements()) {
                 String name = (String) e.nextElement();
-                sb.append("\t\tname :" + name);
+                sb.append("\t\tname :").append(name);
                 String values[] = null;
                 if (request!= null) {
                     values = request.getParameterValues(name);
@@ -532,11 +533,13 @@ public abstract class BaseFormEventImpl {
                 if (values != null) {
                     if (values.length == 1) {
                         String pval = values[0];
-                        if (!name.startsWith("ui_pb")) sb.append("\t\t value : " + pval);
+                        if (!name.startsWith("ui_pb")) {
+                            sb.append("\t\t value : ").append(pval);
+                        }
                     } else {
                         sb.append("\t\t value :");
                         for (int i = 0; i < values.length; i++) {
-                            sb.append("\t\t  - " + values[i]);
+                            sb.append("\t\t  - ").append(values[i]);
                         }
                     }
                 }
@@ -562,7 +565,7 @@ public abstract class BaseFormEventImpl {
         if (e != null) {
             while (e.hasMoreElements()) {
                 String name = (String) e.nextElement();
-                sb.append("name :" + name);
+                sb.append("name :").append(name);
             }
         }
         sb.append("--------------------\n");
@@ -579,8 +582,8 @@ public abstract class BaseFormEventImpl {
      * @param req the PortletRequest
      */
     protected void createTagBeans(Object req) {
-        if (tagBeans == null) tagBeans = new HashMap();
-        Map paramsMap;
+        if (tagBeans == null) tagBeans = new HashMap<String, TagBean>();
+        Map<String, String[]> paramsMap;
         // check for file upload
         paramsMap = parseFileUpload(req);
         Enumeration e = null;
@@ -604,12 +607,9 @@ public abstract class BaseFormEventImpl {
             }
         }
         //Enumeration enum = request.getParameterNames();
+        for (String s : paramsMap.keySet()) {
 
-        Iterator it = paramsMap.keySet().iterator();
-
-        while (it.hasNext()) {
-
-            String uiname = (String) it.next();
+            String uiname = (String) s;
             String vb = "";
             String name;
             String beanId = "";
@@ -652,7 +652,6 @@ public abstract class BaseFormEventImpl {
             //log.debug("vbname: " + name);
 
             String[] vals = (String[]) paramsMap.get(uiname);
-            
 
             //log.debug("Adding bean " + beanId + " with bean key " + beanKey);
 
@@ -805,9 +804,9 @@ public abstract class BaseFormEventImpl {
         }
     }
 
-    protected Map parseFileUpload(Object req) {
+    protected Map<String, String[]> parseFileUpload(Object req) {
         //log.debug("parseFileUpload");
-        Map parameters = new Hashtable();
+        Map<String, String[]> parameters = new Hashtable<String, String[]>();
         if (req instanceof HttpServletRequest) {
             HttpServletRequest hreq = (HttpServletRequest)req;
             //logRequestParameters();
@@ -931,9 +930,7 @@ public abstract class BaseFormEventImpl {
      */
     public void logTagBeans() {
         //log.debug("in print tag beans:");
-        Iterator it = tagBeans.values().iterator();
-        while (it.hasNext()) {
-            TagBean tagBean = (TagBean) it.next();
+        for (TagBean tagBean : tagBeans.values()) {
             log.debug("tag bean id: " + tagBean.getBeanId());
         }
     }

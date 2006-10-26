@@ -7,6 +7,7 @@ package org.gridsphere.provider.event.jsr.impl;
 import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.provider.event.impl.BaseFormEventImpl;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
+import org.gridsphere.provider.portletui.beans.TagBean;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -36,7 +37,7 @@ public class ActionFormEventImpl extends BaseFormEventImpl implements ActionForm
         this.response = response;
         // Unless tagBeans is null, don't recreate them
         if (tagBeans == null) {
-            tagBeans = new HashMap();
+            tagBeans = new HashMap<String, TagBean>();
             createTagBeans(request);
         }
         //logRequestParameters();
