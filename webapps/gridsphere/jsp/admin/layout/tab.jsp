@@ -6,7 +6,6 @@
 
 <portlet:defineObjects/>
 
-<jsp:useBean id="actionURI"  class="java.lang.String" scope="request"/>
 <jsp:useBean id="controlUI"  class="java.lang.String" scope="request"/>
 
 <% PortletTab tab = (PortletTab)request.getAttribute("portletComp"); %>
