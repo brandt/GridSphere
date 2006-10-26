@@ -30,7 +30,7 @@ $Id$
                 </row-layout>
             </table-layout>
         </portlet-tab>
-        <portlet-tab label="jcr">
+        <portlet-tab label="jcrtab">
             <title lang="en">CM</title>
             <table-layout>
                 <row-layout>
