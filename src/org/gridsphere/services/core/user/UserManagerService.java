@@ -37,7 +37,7 @@ public interface UserManagerService extends LoginUserModule {
      * @param queryFilter queryFilter
      * @return a list of users
      */
-    public List getUsers(QueryFilter queryFilter);
+    public List<User> getUsers(QueryFilter queryFilter);
 
     /**
      * Returns the number of users.
@@ -51,7 +51,7 @@ public interface UserManagerService extends LoginUserModule {
      *
      * @return a list of users
      */
-    public List getUsers();
+    public List<User> getUsers();
 
     /**
      * Returns a list of users by name.
@@ -59,7 +59,7 @@ public interface UserManagerService extends LoginUserModule {
      * @param queryFilter QueryFilter
      * @return list of users
      */
-    public List getUsersByUserName(QueryFilter queryFilter);
+    public List<User> getUsersByUserName(QueryFilter queryFilter);
 
     /**
      * Returns a list of users by organization.
@@ -67,7 +67,7 @@ public interface UserManagerService extends LoginUserModule {
      * @param queryFilter QueryFilter
      * @return list of users
      */
-    public List getUsersByOrganization(QueryFilter queryFilter);
+    public List<User> getUsersByOrganization(QueryFilter queryFilter);
 
     /**
      * Returns a list of users by full name.
@@ -75,7 +75,7 @@ public interface UserManagerService extends LoginUserModule {
      * @param queryFilter QueryFilter
      * @return list of users
      */
-    public List getUsersByFullName(QueryFilter queryFilter);
+    public List<User> getUsersByFullName(QueryFilter queryFilter);
 
 
     /**
@@ -84,7 +84,7 @@ public interface UserManagerService extends LoginUserModule {
      * @param queryFilter QueryFilter
      * @return list of users
      */
-    public List getUsersByEmail(QueryFilter queryFilter);
+    public List<User> getUsersByEmail(QueryFilter queryFilter);
 
     /**
      * Returns a list of users by Email and Organization
@@ -94,7 +94,7 @@ public interface UserManagerService extends LoginUserModule {
      * @param queryFilter queryFilter
      * @return List of users
      */
-    public List getUsersByFullName(String likeEmail, String likeOrg, QueryFilter queryFilter);
+    public List<User> getUsersByFullName(String likeEmail, String likeOrg, QueryFilter queryFilter);
 
     /**
      * Retrieves a user object with the oid of the user.
@@ -120,7 +120,7 @@ public interface UserManagerService extends LoginUserModule {
      * @param queryFilter queryFilter
      * @return List of users matching the query
      */
-    public List getUsersByAttribute(String attrName, String attrValue, QueryFilter queryFilter);
+    public List<User> getUsersByAttribute(String attrName, String attrValue, QueryFilter queryFilter);
 
     /**
      * Retrieves a user object with the given email from this service.

@@ -7,7 +7,6 @@ package org.gridsphere.services.core.user.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gridsphere.services.core.user.User;
-import org.gridsphere.services.core.user.impl.UserImpl;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
@@ -88,33 +87,33 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         }
     }
 
-    public List selectUsers(String criteria, QueryFilter queryFilter) {
+    public List<User> selectUsers(String criteria, QueryFilter queryFilter) {
         String oql = "select uzer from "
                 + this.jdoUser
                 + " uzer "
                 + criteria;
         try {
-            return pm.restoreList(oql, queryFilter);
+            return (List<User>)pm.restoreList(oql, queryFilter);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving users with criteria " + criteria;
             log.error(msg, e);
-            return new ArrayList();
+            return new ArrayList<User>();
         }
     }
 
-    public List getUsersByUserName(QueryFilter queryFilter) {
+    public List<User> getUsersByUserName(QueryFilter queryFilter) {
         return selectUsers("order by uzer.UserID", queryFilter);
     }
 
-    public List getUsersByOrganization(QueryFilter queryFilter) {
+    public List<User> getUsersByOrganization(QueryFilter queryFilter) {
         return selectUsers("order by uzer.Organization", queryFilter);
     }
 
-    public List getUsersByFullName(QueryFilter queryFilter) {
+    public List<User> getUsersByFullName(QueryFilter queryFilter) {
         return selectUsers("order by upper(uzer.FullName)", queryFilter);
     }
 
-    public List getUsersByFullName(String likeEmail, String likeOrg, QueryFilter queryFilter) {
+    public List<User> getUsersByFullName(String likeEmail, String likeOrg, QueryFilter queryFilter) {
         String query = "";
         String equery = "";
         String oquery = "";
@@ -135,15 +134,15 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         return selectUsers(query + " order by upper(uzer.FullName)", queryFilter);
     }
 
-    public List getUsersByEmail(QueryFilter queryFilter) {
+    public List<User> getUsersByEmail(QueryFilter queryFilter) {
         return selectUsers("order by uzer.EmailAddress", queryFilter);
     }
 
-    public List getUsers(QueryFilter queryFilter) {
+    public List<User> getUsers(QueryFilter queryFilter) {
         return selectUsers("", queryFilter);
     }
 
-    public List getUsers() {
+    public List<User> getUsers() {
         return selectUsers("", null);
     }
 
@@ -155,13 +154,13 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         UserImpl user = getSportletUserImplByLoginName(loginName);
         if (user != null) {
             long now = Calendar.getInstance().getTime().getTime();
-            String lastlogin = (String) user.getAttribute("lastlogin");
+            String lastlogin = (String) user.getAttribute(User.LASTLOGINDATE);
             if (lastlogin != null) {
                 user.setLastLoginTime(Long.parseLong(lastlogin));
             } else {
                 user.setLastLoginTime(now);
             }
-            user.setAttribute("lastlogin", Long.toString(now));
+            user.setAttribute(User.LASTLOGINDATE, Long.toString(now));
             saveSportletUserImpl(user);
         }
         return user;
@@ -187,7 +186,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param attrName the attribute name
      * @param attrValue the attribute value
      */
-    public List getUsersByAttribute(String attrName, String attrValue, QueryFilter queryFilter) {
+    public List<User> getUsersByAttribute(String attrName, String attrValue, QueryFilter queryFilter) {
         String criteria = "where uzer.attributes['user." + attrName + "'] = '" + attrValue + "'";
         return selectUsers(criteria, queryFilter);
     }
