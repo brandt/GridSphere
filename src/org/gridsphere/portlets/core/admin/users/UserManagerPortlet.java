@@ -123,7 +123,7 @@ public class UserManagerPortlet extends ActionPortlet {
                 req.setAttribute("role", this.getLocalizedText(req, "ROLES_HASNOROLES"));
             }
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d yyyy hh:mm a");
             String createtime = (String)user.getAttribute(User.CREATEDATE);
             String createdate;
             if (createtime == null) {
