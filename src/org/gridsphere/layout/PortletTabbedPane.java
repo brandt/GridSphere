@@ -6,20 +6,13 @@
 
 package org.gridsphere.layout;
 
-import org.gridsphere.layout.event.PortletComponentEvent;
-import org.gridsphere.layout.event.PortletTabEvent;
 import org.gridsphere.layout.event.PortletTabListener;
 import org.gridsphere.layout.view.TabbedPaneView;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridsphere.services.core.persistence.PersistenceManagerException;
-
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -46,7 +39,7 @@ public class PortletTabbedPane extends PortletNavMenu implements Serializable, P
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         tabbedPaneView = (TabbedPaneView)getRenderClass(req, "TabbedPane");
         return super.init(req, list);
     }

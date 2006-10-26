@@ -19,10 +19,7 @@ import javax.portlet.RenderRequest;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * The <code>PortletPage</code> is the generic container for a collection of
@@ -37,11 +34,11 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
     protected PortletContainer footerContainer = null;
     protected PortletContainer headerContainer = null;
-    //protected PortletTabbedPane tabbedPane = null;
+
     protected PortletComponent component = null;
 
     // The component ID's of each of the layout components
-    protected List componentIdentifiers = new Vector();
+    protected List<ComponentIdentifier> componentIdentifiers = new ArrayList<ComponentIdentifier>();
 
     protected String keywords = "";
     protected String title = "";
@@ -51,8 +48,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
     private String layoutDescriptor = null;
 
-    private Hashtable labelsHash = new Hashtable();
-    private Hashtable portletHash = new Hashtable();
+    private Map<String, Integer> labelsHash = new HashMap<String, Integer>();
 
     private transient Render pageView = null;
 
@@ -231,7 +227,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      * @return the list of portlet component identifiers
      * @see ComponentIdentifier
      */
-    public List getComponentIdentifierList() {
+    public List<ComponentIdentifier> getComponentIdentifierList() {
         return componentIdentifiers;
     }
 
@@ -241,7 +237,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      * @param componentIdentifiers a list of portlet component identifiers
      * @see ComponentIdentifier
      */
-    public void setComponentIdentifierList(List componentIdentifiers) {
+    public void setComponentIdentifierList(List<ComponentIdentifier> componentIdentifiers) {
         this.componentIdentifiers = componentIdentifiers;
     }
 
@@ -263,7 +259,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
 
         try {
             cacheService = (CacheService) PortletServiceFactory.createPortletService(CacheService.class, true);
@@ -294,14 +290,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
         // Now go thru and create a labels hash
 
-        Iterator it = componentIdentifiers.iterator();
-        while (it.hasNext()) {
-            ComponentIdentifier cid = (ComponentIdentifier) it.next();
+        for (ComponentIdentifier cid : componentIdentifiers) {
             String compLabel = cid.getComponentLabel();
-            if (cid.hasPortlet()) {
-                String portletClass = cid.getPortletClass();
-                portletHash.put(portletClass, new Integer(cid.getComponentID()));
-            }
             if (!compLabel.equals("")) {
                 // create a labels to integer component id mapping
                 labelsHash.put(compLabel, new Integer(cid.getComponentID()));
@@ -329,6 +319,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     public void actionPerformed(GridSphereEvent event) {
         // if there is a layout action do it!
         PortletRequest req = event.getActionRequest();
+
         String cid = event.getComponentID();
         if (cid != null) {
             PortletComponent comp = getActiveComponent(cid);
@@ -343,14 +334,6 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     public PortletComponent getActiveComponent(String cid) {
         // the component id determines where in the list the portlet component is
         // first check the hash
-
-        /*
-        List compList = getComponentIdentifierList();
-        for (int i = 0; i < compList.size(); i++)  {
-            ComponentIdentifier compid = (ComponentIdentifier)compList.get(i);
-            System.err.println(compid.toString());
-        }
-        */
 
         ComponentIdentifier compId = null;
         int compIntId;
@@ -464,7 +447,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         PortletPage c = (PortletPage) super.clone();
         c.COMPONENT_ID = this.COMPONENT_ID;
         c.renderKit = this.renderKit;
-        List compList = new Vector(this.componentIdentifiers.size());
+        List<ComponentIdentifier> compList = new ArrayList<ComponentIdentifier>(this.componentIdentifiers.size());
         for (i = 0; i < this.componentIdentifiers.size(); i++) {
             ComponentIdentifier cid = (ComponentIdentifier) this.componentIdentifiers.get(i);
             compList.add(new ComponentIdentifier(cid));

@@ -85,7 +85,7 @@ public class PortletStaticContent extends BasePortletComponent implements Serial
                     content = writer.getBuffer();
                 } catch (IOException e) {
                     log.error("Unable to render static content from file: " + textFile, e);
-                    content.append("Unable to render static content from file: " + textFile);
+                    content.append("Unable to render static content from file: ").append(textFile);
                 }
             }
 

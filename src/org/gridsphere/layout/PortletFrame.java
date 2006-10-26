@@ -19,8 +19,6 @@ import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.portletcontainer.impl.PortletInvoker;
-import org.gridsphere.portletcontainer.impl.ApplicationPortletImpl;
-import org.gridsphere.portletcontainer.impl.descriptor.Supports;
 import org.gridsphere.services.core.cache.CacheService;
 import org.gridsphere.services.core.mail.MailMessage;
 import org.gridsphere.services.core.mail.MailService;
@@ -84,7 +82,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private String windowId = "unknown";
 
-    private Supports[] supports = null;
+    //private Supports[] supports = null;
 
     /**
      * Constructs an instance of PortletFrame
@@ -197,7 +195,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @return a <code>List</code> of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         try {
             cacheService = (CacheService)PortletServiceFactory.createPortletService(CacheService.class, true);
             portalConfigService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
@@ -240,9 +238,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
 	    if (windowId == null) windowId = componentIDStr;
         String appID = portletRegistryService.getApplicationPortletID(portletClass);
-        ApplicationPortletImpl appPortlet = (ApplicationPortletImpl)portletRegistryService.getApplicationPortlet(appID);
+        ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            supports = appPortlet.getSupports();
+            //supports = appPortlet.getSupports();
             portletName = appPortlet.getPortletName();
             cacheExpiration = appPortlet.getCacheExpires();
         }
@@ -335,8 +333,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         } else {
             // now perform actionPerformed on Portlet if it has an action
             titleBar.actionPerformed(event);
-            String compVar = this.getComponentIDVar(event.getActionRequest());
-            request.setAttribute(compVar, componentIDStr);
+
+            request.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
 	        request.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
 
@@ -465,8 +463,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
     }
 
-
-
     /**
      * Renders the portlet frame component
      *
@@ -488,13 +484,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         req.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
         if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
             StringBuffer content = new StringBuffer();
-            String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
-            if (extraQuery != null) {
+
                 PortletURL portletURI = res.createRenderURL();
-                String link = portletURI.toString() + extraQuery;
+                String link = portletURI.toString();
                 content.append("<br/><fieldset><a href=\"" + link + "\">" + portletName + "</a></fieldset>");
                 setBufferedOutput(req, content);
-            }
+           
             return;
         }
 
@@ -522,15 +517,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         StringBuffer preframe = frameView.doStart(event, this);
         StringBuffer postframe = new StringBuffer();
 
+
+
         // Render title bar
-        List supportedModes = null;
-        String appID = portletRegistryService.getApplicationPortletID(portletClass);
-        ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
-        if (appPortlet != null) {
-            supportedModes = appPortlet.getSupportedModes(event.getClient().getMimeType());
-        }
-        req.setAttribute(SportletProperties.ALLOWED_MODES, supportedModes);
-        req.setAttribute(SportletProperties.PORTLET_MIMETYPES, supports);
 
         if (!transparent) {
             titleBar.doRender(event);
@@ -544,7 +533,16 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             renderPortlet = false;
         }
 
-	    req.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
+        String appID = portletRegistryService.getApplicationPortletID(portletClass);
+        ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
+        if (appPortlet != null) {
+            Set<String> supportedModes = appPortlet.getSupportedModes(event.getClient().getMimeType());
+            SortedSet<String> mimeTypes = appPortlet.getSupportedMimeTypes(req.getPortletMode());
+            req.setAttribute(SportletProperties.ALLOWED_MODES, supportedModes);
+            req.setAttribute(SportletProperties.MIME_TYPES, mimeTypes);
+        }
+
+        req.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
 
         StringWriter storedWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(storedWriter);

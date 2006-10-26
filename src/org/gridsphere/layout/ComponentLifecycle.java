@@ -20,11 +20,12 @@ public interface ComponentLifecycle extends ComponentRender {
      * after Castor unmarshalls from XML, the ordering is determined by a
      * passed in List containing the previous portlet components in the tree.
      *
+     * @param req the portlet request
      * @param list a list of component identifiers
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(PortletRequest req, List list);
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list);
 
     /**
      * Performs an action on this portlet component
@@ -45,11 +46,4 @@ public interface ComponentLifecycle extends ComponentRender {
      */
     public int getComponentID();
 
-    /**
-     * Returns the associated portlet component id variable
-     *
-     * @param the portlet request
-     * @return the portlet component id variable
-     */
-    public String getComponentIDVar(PortletRequest req);
 }

@@ -6,10 +6,8 @@ import org.gridsphere.layout.PortletNavMenu;
 import org.gridsphere.layout.PortletTab;
 import org.gridsphere.layout.PortletComponent;
 import org.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.RenderResponse;
-import javax.portlet.RenderRequest;
 import javax.portlet.PortletURL;
 import java.util.StringTokenizer;
 
@@ -64,16 +62,15 @@ public class Menu extends BaseRender implements TabbedPaneView {
 
     public StringBuffer doRenderEditTab(GridSphereEvent event, PortletNavMenu tabPane, boolean isSelected) {
         RenderResponse res = event.getRenderResponse();
-        RenderRequest req = event.getRenderRequest();
+        
         PortletURL portletURL = res.createRenderURL();
-        String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
-        String link = portletURL.toString() + extraQuery;
+        portletURL.setParameter("newtab", "true");
+
+        String link = portletURL.toString();
         StringBuffer pane = new StringBuffer();
 
-        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
 
-        pane.append("<li><a href=\"").append(link).append("&newtab=true").append("\">");
+        pane.append("<li><a href=\"").append(link).append("\">");
         pane.append(replaceBlanks("New Tab"));
         pane.append("</a></li>");
         return pane;

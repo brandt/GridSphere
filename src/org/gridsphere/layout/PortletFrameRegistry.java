@@ -9,7 +9,7 @@ import java.util.Map;
 public class PortletFrameRegistry {
 
     private static PortletFrameRegistry instance = new PortletFrameRegistry();
-    private static HashMap portlets = new HashMap();;
+    private static Map<String, Map<String, PortletFrame>> portlets = new HashMap<String, Map<String, PortletFrame>>();
 
     private PortletFrameRegistry() {}
 
@@ -19,19 +19,19 @@ public class PortletFrameRegistry {
 
     public PortletFrame getPortletFrame(String label, String portletId, GridSphereEvent event) {
         String sessionId = event.getRenderRequest().getPortletSession(true).getId();
-        Map map = (Map)portlets.get(sessionId);
+        Map<String, PortletFrame> map = (Map<String, PortletFrame>)portlets.get(sessionId);
         PortletFrame frame = null;
         if (map != null) {
             frame = (PortletFrame)map.get(label);
             if (frame != null) return frame;
         } else {
-            map = new HashMap();
+            map = new HashMap<String, PortletFrame>();
         }
         if (portletId == null) return null;
         frame = new PortletFrame();
         frame.setPortletClass(portletId);
         frame.setLabel(label);
-        frame.init(event.getRenderRequest(), new ArrayList());
+        frame.init(event.getRenderRequest(), new ArrayList<ComponentIdentifier>());
         map.put(label, frame);
         portlets.put(sessionId, map);
         return frame;

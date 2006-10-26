@@ -30,7 +30,7 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         this.COMPONENT_ID = list.size();
         componentIDStr = String.valueOf(COMPONENT_ID);
         return list;
@@ -52,26 +52,13 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
     }
 
     /**
-     * Returns the associated portlet component id variable
-     *
-     * @return the portlet component id variable
-     */
-    public String getComponentIDVar(PortletRequest req) {
-        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-        return compVar;
-    }
-
-    /**
      * Performs an action on this portlet component
      *
      * @param event a gridsphere event
      */
     public void actionPerformed(GridSphereEvent event) {
         PortletRequest req = event.getActionRequest();
-        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-        req.setAttribute(compVar, componentIDStr);
+        req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
     }
 
     /**

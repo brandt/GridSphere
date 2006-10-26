@@ -228,7 +228,7 @@ public abstract class PortletNavMenu extends BasePortletComponent implements Ser
      * @return a list of updated component identifiers
      * @see org.gridsphere.layout.ComponentIdentifier
      */
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
 
         list = super.init(req, list);
 

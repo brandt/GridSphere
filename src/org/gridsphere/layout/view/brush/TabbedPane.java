@@ -185,13 +185,11 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         RenderResponse res = event.getRenderResponse();
         RenderRequest req = event.getRenderRequest();
         PortletURL portletURL = res.createRenderURL();
-        String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
-        String link = portletURL.toString() + extraQuery;
+
+        String link = portletURL.toString();
         StringBuffer pane = new StringBuffer();
 
-        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-
+        
         if (tabPane.getStyle().equals(TAB_STYLE_SUBMENU)) {
             pane.append("\n<li");
             if (isSelected) {

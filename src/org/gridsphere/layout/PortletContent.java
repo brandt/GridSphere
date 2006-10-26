@@ -127,13 +127,10 @@ public class PortletContent extends BasePortletComponent implements Serializable
         StringBuffer content = new StringBuffer();
         String textFileName = textFile.substring(textFile.lastIndexOf("/") + 1);
         if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
-            String extraQuery = (String) req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
-            if (extraQuery != null) {
                 PortletURL portletURI = res.createRenderURL();
-                String link = portletURI.toString() + extraQuery;
+                String link = portletURI.toString();
                 content.append("<br><fieldset><a href=\"" + link + "\">" + textFileName + "</a></fieldset>");
                 setBufferedOutput(req, content);
-            }
             return;
         }
         if (context != null) {

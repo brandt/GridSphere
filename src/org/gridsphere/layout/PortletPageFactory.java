@@ -422,7 +422,6 @@ public class PortletPageFactory implements PortletSessionListener {
             }
         }
         setPageTheme(copy, req);
-        req.setAttribute(SportletProperties.COMPONENT_ID_VAR, SportletProperties.COMPONENT_ID);
         copy.init(req, new ArrayList());
         return copy;
     }

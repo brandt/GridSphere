@@ -18,7 +18,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
 
     private transient Render rowView = null;
 
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         list = super.init(req, list);
         rowView = (Render)getRenderClass(req, "RowLayout");
         return list;

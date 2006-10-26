@@ -64,7 +64,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         this.style = style;
     }
 
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         try {
             registryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
         } catch (PortletServiceException e) {
@@ -93,7 +93,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
 
     protected void addPortlet(GridSphereEvent event) {
 
-        PortletRequest req = event.getRenderRequest();
+        PortletRequest req = event.getActionRequest();
 
         String portletId = req.getParameter(PORTLET_ADD_ACTION);
 
@@ -137,12 +137,10 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
     public Map getAllPortletsToAdd(GridSphereEvent event) {
         PortletRequest req = event.getRenderRequest();
 
-        Map allPortlets = new HashMap();
-        Collection appColl = registryService.getAllApplicationPortlets();
+        Map<String, String> allPortlets = new HashMap<String, String>();
+        Collection<ApplicationPortlet> appColl = registryService.getAllApplicationPortlets();
         Locale locale = req.getLocale();
-        Iterator appIt = appColl.iterator();
-        while (appIt.hasNext()) {
-            ApplicationPortlet appPortlet = (ApplicationPortlet) appIt.next();
+        for (ApplicationPortlet appPortlet : appColl) {
             String concID = appPortlet.getConcretePortletID();
             // we don't want to list PortletServlet loader!
             if (concID.startsWith(PortletServlet.class.getName())) continue;
@@ -237,10 +235,8 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
             table.append(tableView.doEndBorder(event, this));
         }
 
-        // you have to make sure the component id is reset again to current component
-        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-        req.setAttribute(compVar, componentIDStr);
+        
+        req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
         /** setup bottom add portlet listbox */
         if (((canModify) && (!hasFrameMaximized)) || (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null)) {

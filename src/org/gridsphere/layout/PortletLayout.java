@@ -4,7 +4,6 @@
  */
 package org.gridsphere.layout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,14 +23,14 @@ public interface PortletLayout extends PortletComponent {
      *
      * @param components an ArrayList of portlet components
      */
-    public void setPortletComponents(ArrayList components);
+    public void setPortletComponents(List<PortletComponent> components);
 
     /**
      * Returns a list containing the portlet components in this layout
      *
      * @return a list of portlet components
      */
-    public List getPortletComponents();
+    public List<PortletComponent> getPortletComponents();
 
     /**
      * Adds a new portlet component to the layout

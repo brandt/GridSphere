@@ -6,13 +6,11 @@ package org.gridsphere.layout;
 
 import org.gridsphere.layout.event.PortletTabEvent;
 import org.gridsphere.layout.event.impl.PortletTabEventImpl;
-import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.spi.impl.descriptor.Description;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
-import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import java.io.Serializable;
 import java.util.*;
@@ -26,7 +24,7 @@ import java.util.*;
 public class PortletTab extends BasePortletComponent implements Serializable, Cloneable, Comparator {
 
     public static final int DEFAULT_USERTAB_ORDER = 20;
-    private List titles = new ArrayList();
+    private List<Description> titles = new ArrayList<Description>();
     private transient boolean selected = false;
     private String url = null;
     private PortletComponent portletComponent = null;
@@ -49,7 +47,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      * @param titles           the titles of the portlet tab
      * @param portletComponent any portlet component to represent beneath the tab
      */
-    public PortletTab(List titles, PortletComponent portletComponent) {
+    public PortletTab(List<Description> titles, PortletComponent portletComponent) {
         this.titles = titles;
         this.portletComponent = portletComponent;
     }
@@ -99,7 +97,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      *
      * @return the portlet tab title
      */
-    public List getTitles() {
+    public List<Description> getTitles() {
         return titles;
     }
 
@@ -108,7 +106,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      *
      * @param titles the portlet tab title
      */
-    public void setTitles(List titles) {
+    public void setTitles(List<Description> titles) {
         this.titles = titles;
     }
 
@@ -152,21 +150,15 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      * {@link PortletTabbedPane}
      *
      * @param event the gridsphere event
+     * @return the tab title hyperlink
      */
     public String createTabTitleLink(GridSphereEvent event) {
         super.doRender(event);
         if (url != null) return url;
         RenderResponse res = event.getRenderResponse();
-        RenderRequest req = event.getRenderRequest();
+
         PortletURL portletURL = res.createActionURL();
-
-
-        //portletURL.setParameter(this.getComponentIDVar(req), componentIDStr);
-
-        String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
-        if (extraQuery != null) {
-            return portletURL.toString() + extraQuery;
-        }
+        
         return portletURL.toString();
     }
 
@@ -221,7 +213,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         list = super.init(req, list);
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
@@ -305,10 +297,10 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         t.url = this.url;
         t.portletComponent = (this.portletComponent == null) ? null : (PortletComponent) this.portletComponent.clone();
         t.selected = this.selected;
-        t.titles = new ArrayList(titles.size());
+        t.titles = new ArrayList<Description>(titles.size());
         for (int i = 0; i < titles.size(); i++) {
             Description title = (Description) titles.get(i);
-            t.titles.add(title.clone());
+            t.titles.add((Description)title.clone());
         }
         return t;
     }
@@ -317,9 +309,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         StringBuffer sb = new StringBuffer();
         sb.append("\ntab order=").append(tabOrder);
         sb.append("\ntab selected=").append(selected);
-        Iterator it = titles.iterator();
-        while (it.hasNext()) {
-            Description desc = (Description)it.next();
+        for (Description desc : titles) {
             sb.append("\nlang=").append(desc.getLang());
             sb.append("\ntitle=").append(desc.getText());
         }

@@ -62,7 +62,8 @@ public class TableLayout extends BaseRender implements TableLayoutView {
     }
 
     public StringBuffer doRenderUserSelects(GridSphereEvent event, PortletTableLayout tableLayout) {
-        event.getRenderRequest().setAttribute(SportletProperties.COMPONENT_ID, tableLayout.getLabel());
+        event.getRenderRequest().setAttribute(SportletProperties.COMPONENT_ID, String.valueOf(tableLayout.getComponentID()));
+        System.err.println("in doRenderSel cid=" + (String)event.getRenderRequest().getAttribute(SportletProperties.COMPONENT_ID));
         StringBuffer table = new StringBuffer();
         table.append("<div class=\"gridsphere-layout-row\">");
         List components = tableLayout.getPortletComponents();
@@ -96,7 +97,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
     }
 
     public StringBuffer renderAddPortlets(GridSphereEvent event, int col, Map availPortlets) {
-       StringBuffer table = new StringBuffer();
+        StringBuffer table = new StringBuffer();
 
         PortletRequest req = event.getRenderRequest();
         RenderResponse res = event.getRenderResponse();
@@ -104,9 +105,11 @@ public class TableLayout extends BaseRender implements TableLayoutView {
 
         PortletURLImpl url = (PortletURLImpl)res.createActionURL();
 
+        System.err.println("in doRenderSel cid=" + (String)event.getRenderRequest().getAttribute(SportletProperties.COMPONENT_ID));
+
         url.setAction(PortletTableLayout.PORTLET_ADD_ACTION);
-        String extraQuery = (String)req.getAttribute(SportletProperties.EXTRA_QUERY_INFO);
-        if (extraQuery != null) {
+        String extraMode = (String)req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE);
+        if (extraMode != null) {
             url.setParameter("usertable", "edit");
         }
 
@@ -134,7 +137,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
 
         table.append("</select>");
 
-        String action = "gs_action=addportlet";
+        String action = SportletProperties.DEFAULT_PORTLET_ACTION + "=addportlet";
 
         table.append("&nbsp;&nbsp;<input type=\"submit\" name=\"" + action + "\" value=\"" + addButton + "\">");
         table.append("</p></form>");

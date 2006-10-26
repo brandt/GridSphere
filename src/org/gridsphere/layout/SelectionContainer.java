@@ -13,7 +13,7 @@ import java.util.List;
 public class SelectionContainer extends BasePortletComponent implements
         Serializable, Cloneable {
 
-    protected List components = new ArrayList();
+    protected List<PortletComponent> components = new ArrayList<PortletComponent>();
     protected String activeLabel = null;
     protected String defaultLabel = null;
 
@@ -26,7 +26,7 @@ public class SelectionContainer extends BasePortletComponent implements
      * @return a list of updated component identifiers
      * @see org.gridsphere.layout.ComponentIdentifier
      */
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         list = super.init(req, list);
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
@@ -54,7 +54,7 @@ public class SelectionContainer extends BasePortletComponent implements
      *
      * @param components an ArrayList of portlet components
      */
-    public void setPortletComponents(List components) {
+    public void setPortletComponents(List<PortletComponent> components) {
         this.components = components;
     }
 
@@ -63,7 +63,7 @@ public class SelectionContainer extends BasePortletComponent implements
      *
      * @return a list of portlet components
      */
-    public List getPortletComponents() {
+    public List<PortletComponent> getPortletComponents() {
         return components;
     }
 
@@ -129,10 +129,10 @@ public class SelectionContainer extends BasePortletComponent implements
     public Object clone() throws CloneNotSupportedException {
         SelectionContainer f = (SelectionContainer) super.clone();
 
-        f.components = new ArrayList(components.size());
+        f.components = new ArrayList<PortletComponent>(components.size());
         for (int i = 0; i < components.size(); i++) {
             PortletComponent comp = (PortletComponent) components.get(i);
-            f.components.add(comp.clone());
+            f.components.add((PortletComponent)comp.clone());
         }
         return f;
     }

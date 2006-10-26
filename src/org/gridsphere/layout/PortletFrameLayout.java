@@ -30,7 +30,7 @@ import java.util.List;
 public abstract class PortletFrameLayout extends BasePortletComponent implements
         Serializable, PortletLayout, Cloneable {
 
-    protected List components = new ArrayList();
+    protected List<PortletComponent> components = new ArrayList<PortletComponent>();
 
     protected boolean hasFrameMaximized = false;
 
@@ -47,7 +47,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         list = super.init(req, list);
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
@@ -121,20 +121,17 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      */
     public void handleFrameMaximized(PortletFrameEvent event) {
         //System.err.println("in frame layout: frame has been maximized");
-        List scomponents = Collections.synchronizedList(components);
-        synchronized (scomponents) {
-            Iterator it = scomponents.iterator();
-            PortletComponent p;
-            int id = event.getID();
-            while (it.hasNext()) {
-                p = (PortletComponent) it.next();
-                // check for the frame that has been maximized
-                if (p.getComponentID() == id) {
-                    p.setWidth("100%");
-                } else {
-                    // If this is not the right frame, make it invisible
-                    p.setVisible(false);
-                }
+        Iterator it = components.iterator();
+        PortletComponent p;
+        int id = event.getID();
+        while (it.hasNext()) {
+            p = (PortletComponent) it.next();
+            // check for the frame that has been maximized
+            if (p.getComponentID() == id) {
+                p.setWidth("100%");
+            } else {
+                // If this is not the right frame, make it invisible
+                p.setVisible(false);
             }
         }
     }
@@ -261,7 +258,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      *
      * @param components an ArrayList of portlet components
      */
-    public void setPortletComponents(ArrayList components) {
+    public void setPortletComponents(List<PortletComponent> components) {
         this.components = components;
     }
 
@@ -270,7 +267,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      *
      * @return a list of portlet components
      */
-    public List getPortletComponents() {
+    public List<PortletComponent> getPortletComponents() {
         return components;
     }
 
@@ -278,10 +275,10 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         PortletFrameLayout f = (PortletFrameLayout) super.clone();
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
-            f.components = new ArrayList(scomponents.size());
+            f.components = new ArrayList<PortletComponent>(scomponents.size());
             for (int i = 0; i < scomponents.size(); i++) {
                 PortletComponent comp = (PortletComponent) scomponents.get(i);
-                f.components.add(comp.clone());
+                f.components.add((PortletComponent)comp.clone());
             }
         }
         return f;

@@ -45,7 +45,7 @@ public class PortletBar extends BasePortletComponent implements Serializable, Cl
      * @return a list of updated component identifiers
      * @see org.gridsphere.layout.ComponentIdentifier
      */
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         barView = (Render)getRenderClass(req, "Bar");
         list = super.init(req, list);
 
@@ -91,8 +91,7 @@ public class PortletBar extends BasePortletComponent implements Serializable, Cl
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletBar t = (PortletBar) super.clone();
-        return t;
+        return super.clone();
     }
 
 

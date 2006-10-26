@@ -22,7 +22,7 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
     public PortletColumnLayout() {
     }
 
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         list = super.init(req, list);
         colView = (Render)getRenderClass(req, "ColumnLayout");
         return list;
@@ -58,8 +58,7 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletColumnLayout g = (PortletColumnLayout) super.clone();
-        return g;
+        return (PortletColumnLayout) super.clone();
     }
 
 }

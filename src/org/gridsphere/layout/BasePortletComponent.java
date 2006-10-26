@@ -34,7 +34,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected boolean isVisible = true;
     protected String requiredRoleName = "";
 
-    protected List listeners = null;
+    protected List<PortletComponent> listeners = null;
 
     protected boolean canModify = false;
 
@@ -49,8 +49,8 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(PortletRequest req, List list) {
-        listeners = new Vector();
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
+        listeners = new Vector<PortletComponent>();
         defaultWidth = width;
 
         if ((label == null) || label.equals("")) {
@@ -217,9 +217,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public void doRender(GridSphereEvent event) {
         PortletRequest req = event.getRenderRequest();
-        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-        req.setAttribute(compVar, componentIDStr);
+        req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
         req.setAttribute(SportletProperties.COMPONENT_ID_NUM, String.valueOf(COMPONENT_ID));
     }
 

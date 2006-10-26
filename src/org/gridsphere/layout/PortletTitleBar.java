@@ -49,7 +49,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
     private transient PortletMode portletMode = PortletMode.VIEW;
     private transient PortletMode previousMode = PortletMode.VIEW;
-    private transient List allowedWindowStates = new ArrayList();
+    private transient List<javax.portlet.WindowState> allowedWindowStates = new ArrayList<javax.portlet.WindowState>();
 
     private transient String errorMessage = "";
     private transient boolean hasError = false;
@@ -397,16 +397,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     }
 
     /**
-     * Adds a title bar listener to be notified of title bar events
-     *
-     * @param listener a title bar listener
-     * @see PortletTitleBarEvent
-     */
-    public void addTitleBarListener(PortletTitleBarListener listener) {
-        listeners.add(listener);
-    }
-
-    /**
      * Indicates an error ocurred suring the processing of this title bar
      *
      * @return <code>true</code> if an error occured during rendering,
@@ -434,7 +424,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         list = super.init(req, list);
         titleView = (Render)getRenderClass(req, "TitleBar");
         portletInvoker = new PortletInvoker();
@@ -449,7 +439,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         String appID = portletRegistryService.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            allowedWindowStates = new ArrayList(appPortlet.getAllowedWindowStates());
+            allowedWindowStates = appPortlet.getAllowedWindowStates();
             allowedWindowStates = sort(allowedWindowStates);
             if (canModify) {
                 if (!allowedWindowStates.contains(new WindowState("CLOSED"))) {
@@ -467,9 +457,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * @param list a <code>List</code> to be sorted
      * @return the sorted list
      */
-    private List sort(List list) {
+    private List<javax.portlet.WindowState> sort(List<javax.portlet.WindowState> list) {
 
-        List tmp = new ArrayList();
+        List<javax.portlet.WindowState> tmp = new ArrayList<javax.portlet.WindowState>();
         if (list.contains(WindowState.NORMAL)) {
             tmp.add(WindowState.NORMAL);
         }
@@ -506,7 +496,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         if (allowedWindowStates.isEmpty()) return null;
 
         //String[] windowStates = new String[allowedWindowStates.size()];
-        List windowStates = new ArrayList();
+        List<javax.portlet.WindowState> windowStates = new ArrayList<javax.portlet.WindowState>();
         for (int i = 0; i < allowedWindowStates.size(); i++) {
 
             tmp = (WindowState) allowedWindowStates.get(i);
@@ -534,7 +524,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         // create a URI for each of the window states
         PortletStateLink stateLink;
-        List stateLinks = new Vector();
+        List<PortletStateLink> stateLinks = new ArrayList<PortletStateLink>();
         for (int i = 0; i < windowStates.size(); i++) {
             tmp = (WindowState) windowStates.get(i);
             portletURL = res.createActionURL();
@@ -569,15 +559,16 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         RenderRequest req = event.getRenderRequest();
         // make modes from supported modes
 
-        List supportedModes = (List)req.getAttribute(SportletProperties.ALLOWED_MODES);
+        Set<String> supportedModes = (Set<String>)req.getAttribute(SportletProperties.ALLOWED_MODES);
         if (supportedModes == null) return null;
 
         // Unless user is admin they should not see configure mode
         boolean hasConfigurePermission = req.isUserInRole(PortletRole.ADMIN.getName());
-        List smodes = new ArrayList();
+        List<String> smodes = new ArrayList<String>();
         String mode;
-        for (i = 0; i < supportedModes.size(); i++) {
-            mode = (String) supportedModes.get(i);
+
+        for (String supportedMode : supportedModes) {
+            mode = (String) supportedMode;
             if (mode.equalsIgnoreCase("configure")) {
                 if (hasConfigurePermission) {
                     smodes.add(mode);
@@ -593,15 +584,13 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // Localize the portlet mode names
         Locale locale = req.getLocale();
 
-        List portletLinks = new ArrayList();
+        List<PortletModeLink> portletLinks = new ArrayList<PortletModeLink>();
         for (i = 0; i < smodes.size(); i++) {
             // create a URI for each of the portlet modes
-            PortletURL portletURL;
             PortletModeLink modeLink;
             mode = (String) smodes.get(i);
-            portletURL = res.createActionURL();
-            //portletURL.setParameter(this.getComponentIDVar(req), this.componentIDStr);
-            //portletURI.addParameter(SportletProperties.PORTLETID, portletClass);
+            PortletURL portletURL = res.createActionURL();
+
             try {
                 modeLink = new PortletModeLink(new PortletMode(mode), locale);
                 portletURL.setParameter(SportletProperties.PORTLET_MODE, mode.toString());
@@ -630,7 +619,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
         // Render title bar
-        List supportedModes = null;
+        Set supportedModes = null;
         String appID = portletRegistryService.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -803,7 +792,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         t.previousMode = this.previousMode;
         t.errorMessage = this.errorMessage;
         t.hasError = this.hasError;
-        t.allowedWindowStates = new ArrayList(this.allowedWindowStates.size());
+        t.allowedWindowStates = new ArrayList<javax.portlet.WindowState>(this.allowedWindowStates.size());
 
         return t;
 

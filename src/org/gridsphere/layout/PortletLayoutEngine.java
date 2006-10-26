@@ -19,7 +19,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Vector;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -74,7 +73,7 @@ public class PortletLayoutEngine {
         Exception portletException = (Exception) req.getAttribute(SportletProperties.ERROR);
         if (portletException != null) {
             PortletPage errorPage = pageFactory.createErrorPage();
-            errorPage.init(req, new ArrayList());
+            errorPage.init(req, new ArrayList<ComponentIdentifier>());
             return errorPage;
         }
 
@@ -202,7 +201,7 @@ public class PortletLayoutEngine {
             // sometimes the page needs reinitializing
             if (event.getActionRequest().getAttribute(SportletProperties.INIT_PAGE) != null) {
                 log.info("\n\n\n\n\nreiniting and saving page!!!!!\n\n\n\n\n\n");
-                page.init(event.getActionRequest(), new Vector());
+                page.init(event.getActionRequest(), new ArrayList<ComponentIdentifier>());
                 PortletTabbedPane pane = pageFactory.getUserTabbedPane(event.getActionRequest());
                 if (pane != null) {
                     try {
