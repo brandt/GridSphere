@@ -4,8 +4,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.portlet.PortalContext;
 import javax.portlet.Portlet;
+import javax.portlet.PortletMode;
 import java.util.Locale;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.Set;
 import java.io.IOException;
 
 /**
@@ -35,7 +38,7 @@ public interface ApplicationPortlet {
     public Locale[] getSupportedLocales();
 
     public PortletPreferencesManager getPortletPreferencesManager(String portletId, String userId, boolean isRender);
-    
+
     public Portlet getPortletInstance();
 
     public void setApplicationPortletStatus(PortletStatus status);
@@ -48,11 +51,11 @@ public interface ApplicationPortlet {
 
     public String getPortletName();
 
-    public void setPortletName(String portletName);
+    public List<javax.portlet.WindowState> getAllowedWindowStates();
 
-    public List getAllowedWindowStates();
+    public Set<String> getSupportedModes(String markup);
 
-    public List getSupportedModes(String markup);
+    public SortedSet<String> getSupportedMimeTypes(PortletMode mode);
 
     public long getCacheExpires();
 

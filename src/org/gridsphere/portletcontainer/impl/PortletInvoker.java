@@ -7,12 +7,13 @@ package org.gridsphere.portletcontainer.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gridsphere.layout.event.PortletWindowEvent;
-import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.PortletDispatcher;
 import org.gridsphere.portletcontainer.PortletDispatcherException;
+import org.gridsphere.portletcontainer.DefaultPortletAction;
+import org.gridsphere.portletcontainer.impl.PortletWebApplicationLoader;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 
 import javax.servlet.http.HttpServletRequest;

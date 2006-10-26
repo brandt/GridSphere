@@ -44,20 +44,19 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
     private ServletContext context = null;
     private PortalContext portalContext = null;
     private javax.portlet.PreferencesValidator prefsValidator = null;
-    private String id = "";
 
     private int expiration = 0;
 
-    private Map markupModes = new HashMap();
-    private List states = new ArrayList();
+    private Map<String, Set<String>> markupModes = new HashMap<String, Set<String>>();
+    private List<javax.portlet.WindowState> states = new ArrayList<javax.portlet.WindowState>();
 
     private PortletDeploymentDescriptor portletDD = null;
     private String concreteID = null;
     private String portletName = null;
 
     private Locale[] supportedLocales = null;
-    private Map descsMap = null;
-    private Map dispsMap = null;
+    private Map<String, String> descsMap = null;
+    private Map<String, String> dispsMap = null;
     private String requiredRole = "";
 
     protected PortletStatus status = PortletStatus.SUCCESS;
@@ -68,7 +67,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
     /**
      * Default constructor is private
      */
-    private ApplicationPortletImpl() {
+    protected ApplicationPortletImpl() {
     }
 
     /**
@@ -108,14 +107,14 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
 
         // portlet descriptions
         Description[] descs = portletDef.getDescription();
-        descsMap = new HashMap();
+        descsMap = new HashMap<String, String>();
         for (int i = 0; i < descs.length; i++) {
             descsMap.put(descs[i].getLang(), descs[i].getContent());
         }
 
         // portlet display names
         DisplayName[] disps = portletDef.getDisplayName();
-        dispsMap = new HashMap();
+        dispsMap = new HashMap<String, String>();
         for (int i = 0; i < disps.length; i++) {
             dispsMap.put(disps[i].getLang(), disps[i].getContent());
         }
@@ -123,11 +122,10 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
         // get required role
         SecurityRoleRef[] secRoleRef = portletDef.getSecurityRoleRef();
         for (int i = 0; i < secRoleRef.length; i++) {
-            String roleStr = secRoleRef[i].getRoleName().getContent();
-            requiredRole = roleStr;
+            requiredRole = secRoleRef[i].getRoleName().getContent();
         }
 
-        this.id = portletDef.getPortletClass().getContent();
+        //String id = portletDef.getPortletClass().getContent();
         this.portletName = portletDef.getPortletName().getContent();
         if (portletDef.getExpirationCache() != null) {
             expiration = portletDef.getExpirationCache().getContent();
@@ -136,7 +134,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
         Supports[] supports = portletDef.getSupports();
         // defined portlet modes
         for (int i = 0; i < supports.length; i++) {
-            List modesAllowed = new ArrayList();
+            Set<String> modesAllowed = new HashSet<String>();
             Supports s = (Supports) supports[i];
             org.gridsphere.portletcontainer.impl.descriptor.PortletMode[] modes = (org.gridsphere.portletcontainer.impl.descriptor.PortletMode[]) s.getPortletMode();
             for (int j = 0; j < modes.length; j++) {
@@ -145,11 +143,12 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
             }
             modesAllowed.add(javax.portlet.PortletMode.VIEW.toString());
             String mimeType = (String) s.getMimeType().getContent();
-            //modesAllowed.addAll(cModes);
+
             markupModes.put(mimeType, modesAllowed);
+
         }
 
-        List customStatesList = new ArrayList();
+        List<String> customStatesList = new ArrayList<String>();
         CustomWindowState[] customStates = portletApp.getCustomWindowState();
         if (customStates != null) {
             for (int i = 0; i < customStates.length; i++) {
@@ -220,9 +219,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
     public PortletDispatcher getPortletDispatcher(HttpServletRequest req, HttpServletResponse res) {
 
         //System.err.println("in getPortletDispatcher: cid=" + req.getAttribute(SportletProperties.COMPONENT_ID));
-        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-        String cid = (String) req.getAttribute(compVar);
+        String cid = (String) req.getAttribute(SportletProperties.COMPONENT_ID);
         String pid = (String) req.getAttribute(SportletProperties.PORTLETID);
         // TODO fix my hack to get any render params and pass them as queryInfo to the portlet
         Map params = (Map) req.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
@@ -319,6 +316,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
     }
 
     public String getPortletDescription(Locale locale) {
+        if (locale == null) throw new IllegalArgumentException("supplied locale cannot be null!");        
         Description[] descs = portletDef.getDescription();
         for (int i = 0; i < descs.length; i++) {
             if (descs[i].getLang().equals(locale.getLanguage())) {
@@ -329,6 +327,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
     }
 
     public String getPortletDisplayName(Locale locale) {
+        if (locale == null) throw new IllegalArgumentException("supplied locale cannot be null!");
         DisplayName[] dispNames = portletDef.getDisplayName();
         for (int i = 0; i < dispNames.length; i++) {
             if (dispNames[i].getLang().equals(locale.getLanguage())) {
@@ -344,10 +343,6 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
 
     public Locale[] getSupportedLocales() {
         return supportedLocales;
-    }
-
-    public Supports[] getSupports() {
-        return portletDef.getSupports();
     }
 
     public SecurityRoleRef[] getSecurityRoleRefs() {
@@ -403,9 +398,9 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
      * Returns the allowed window states supported by this portlet
      *
      * @return the <code>List</code> of
-     *         <code>PortletWindow.State</code> elements allowed for this portlet
+     *         <code>WindowState</code> elements allowed for this portlet
      */
-    public List getAllowedWindowStates() {
+    public List<javax.portlet.WindowState> getAllowedWindowStates() {
         return Collections.unmodifiableList(states);
     }
 
@@ -414,17 +409,28 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
      *
      * @return the supported modes for this portlet
      */
-    public List getSupportedModes(String markup) {
-        Iterator it = markupModes.keySet().iterator();
-        while (it.hasNext()) {
-            String mimeType = (String) it.next();
+    public Set<String> getSupportedModes(String markup) {
+        if (markup == null) throw new IllegalArgumentException("Supplied markup cannot be null!");
+        for (String mimeType : markupModes.keySet()) {
             int idx1 = mimeType.indexOf(markup);
             int idx2 = markup.indexOf(mimeType);
             if ((idx1 > 0) || (idx2 > 0) || (mimeType.equalsIgnoreCase(markup))) {
-                return (List) markupModes.get(mimeType);
+                return markupModes.get(mimeType);
             }
         }
-        return new ArrayList();
+        return new TreeSet<String>();
+    }
+
+    public SortedSet<String> getSupportedMimeTypes(javax.portlet.PortletMode mode) {
+        if (mode == null) throw new IllegalArgumentException("Supplied mode cannot be null!");
+        SortedSet<String> mimeTypes = new TreeSet<String>();
+        for (String mimeType : markupModes.keySet()) {
+            Set modes = markupModes.get(mimeType);
+            if (modes.contains(mode.toString())) {
+                mimeTypes.add(mimeType);
+            }
+        }
+        return mimeTypes;
     }
 
     /**
@@ -505,11 +511,11 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("\t JSR Application Portlet:\n");
-        sb.append("\t JSR Portlet Name: " + portletName + "\n");
-        sb.append("\t Web app name: " + webAppName + "\n");
-        sb.append("\t concrete ID: " + concreteID + "\n");
-        sb.append("\t Status: " + status + "\n");
-        sb.append("\t Status message: " + statusMessage + "\n");
+        sb.append("\t JSR Portlet Name: ").append(portletName).append("\n");
+        sb.append("\t Web app name: ").append(webAppName).append("\n");
+        sb.append("\t concrete ID: ").append(concreteID).append("\n");
+        sb.append("\t Status: ").append(status).append("\n");
+        sb.append("\t Status message: ").append(statusMessage).append("\n");
         /*
         if (portletDispatcher == null) {
             sb.append("\t Portlet dispatcher: NULL");

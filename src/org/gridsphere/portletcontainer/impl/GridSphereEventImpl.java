@@ -44,6 +44,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
     protected DefaultPortletAction action = null;
 
+
     protected Stack events = null;
 
     public GridSphereEventImpl(PortletContext ctx, HttpServletRequest req, HttpServletResponse res) {
@@ -62,42 +63,25 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
         events = new Stack();
 
-        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-        if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-        componentID = req.getParameter(compVar);
+        //req.setAttribute(SportletProperties.COMPONENT_ID, componentID);
+
+        componentID = req.getParameter(SportletProperties.COMPONENT_ID);
         if (componentID == null) {
             log.debug("Received a null component ID");
             componentID = "";
         } else {
             log.debug("Received cid= " + componentID);
         }
-        //req.setAttribute(SportletProperties.COMPONENT_ID, componentID);
 
         layoutID = req.getParameter(SportletProperties.LAYOUT_PAGE_PARAM);
-        /*
-        if (layoutID == null) {
-            log.debug("Received a null layout ID");
-            layoutID = "";
-        } else {
-            log.debug("Received layout id= " + layoutID);
-            //req.setAttribute(SportletProperties.LAYOUT_PAGE, layoutID);
-        }
-        */
 
         action = createAction(req);
 
-        //log.debug("Received action=" + action);
-        /* This is where a DefaultPortletMessage gets put together if one exists */
-        /*
-        String messageStr = portletRequest.getParameter(SportletProperties.DEFAULT_PORTLET_MESSAGE);
-        if (messageStr != null) {
-            log.debug("Received message: " + messageStr);
-            message = new DefaultPortletMessage(messageStr);
-        }
-        */
+        if (action != null) log.debug("Received action=" + action.getName());
+
     }
 
-    public static DefaultPortletAction createAction(HttpServletRequest request) {
+    public DefaultPortletAction createAction(HttpServletRequest request) {
         /* This is where a DefaultPortletAction gets put together if one exists */
         DefaultPortletAction myaction = null;
         Enumeration e = null;
@@ -121,10 +105,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
                         newname = name.substring(prefix.length() + 1);
 
                         value =  request.getParameter(name);
-
-
-                        //newname = decodeUTF8(newname);
-                        //value = decodeUTF8(newname);
                         myaction.addParameter(newname, value);
                     }
                 }
@@ -235,6 +215,11 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return action;
     }
 
+    public void setAction(DefaultPortletAction action) {
+        this.action = action;
+        //req.setAttribute(SportletProperties.DEFAULT_PORTLET_ACTION, action);
+    }
+
     public boolean hasAction() {
         return (action != null);
     }
@@ -243,11 +228,9 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return false;
     }
 
-    /*
-    public PortletMessage getMessage() {
-        return message;
+    public void setComponentID(String componentID) {
+        this.componentID = componentID;
     }
-    */
 
     public String getComponentID() {
         return componentID;
