@@ -20,9 +20,9 @@ public class PersistenceManagerServiceImpl implements PersistenceManagerService,
 
     protected transient Log log = LogFactory.getLog(PersistenceManagerServiceImpl.class);
 
-    public static final String GRIDSPHERE_DATABASE_NAME = "gridsphere";
+    protected Map<String, PersistenceManagerRdbms> databases = new HashMap<String, PersistenceManagerRdbms>();
 
-    protected static final Map<String, PersistenceManagerRdbms> databases = new HashMap<String, PersistenceManagerRdbms>();
+    protected PersistenceManagerRdbms gsDB = null;
 
     protected ServletContext context;
 
@@ -36,12 +36,10 @@ public class PersistenceManagerServiceImpl implements PersistenceManagerService,
      * @return the core GS PersistenceManager
      */
     public PersistenceManagerRdbms createGridSphereRdbms() {
-        String databaseName = GRIDSPHERE_DATABASE_NAME;
-        if (!databases.containsKey(databaseName)) {
-            PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(context);
-            databases.put(databaseName, pm);
+        if (gsDB == null) {
+            gsDB = new PersistenceManagerRdbmsImpl(context);
         }
-        return databases.get(databaseName);
+        return gsDB;
     }
 
     /**
@@ -67,6 +65,16 @@ public class PersistenceManagerServiceImpl implements PersistenceManagerService,
      */
     public Collection<PersistenceManagerRdbms> getAllPersistenceManagerRdbms() {
         return databases.values();
+    }
+
+    /**
+     * Return the persistence manager for the supplied webapp name
+     *
+     * @param webappname the webapp identifier for this PersistenceManager
+     * @return the persistence manager for the supplied webapp name
+     */
+    public PersistenceManagerRdbms getPersistenceManagerRdbms(String webappname) {
+        return databases.get(webappname);
     }
 
     /**
@@ -107,6 +115,7 @@ public class PersistenceManagerServiceImpl implements PersistenceManagerService,
                 it.remove();
             }
         }
+        gsDB.destroy();
     }
 
 }

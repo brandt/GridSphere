@@ -39,4 +39,12 @@ public interface PersistenceManagerService extends PortletService {
      */
     public Collection<PersistenceManagerRdbms> getAllPersistenceManagerRdbms();
 
+    /**
+     * Return the persistence manager for the supplied webapp name
+     *
+     * @param webappname the webapp identifier for this PersistenceManager
+     * @return the persistence manager for the supplied webapp name
+     */
+    public PersistenceManagerRdbms getPersistenceManagerRdbms(String webappname);
+
 }
