@@ -5,6 +5,7 @@
 <portlet:defineObjects/>
 
 <jsp:useBean id="role" class="java.lang.String" scope="request"/>
+<jsp:useBean id="createdate" class="java.lang.String" scope="request"/>
 
 <% User user = (User) request.getAttribute("user"); %>
 
@@ -60,6 +61,15 @@
         </ui:tablecell>
         <ui:tablecell>
             <ui:text value="<%= role %>" style="plain"/>
+        </ui:tablecell>
+    </ui:tablerow>
+
+    <ui:tablerow>
+        <ui:tablecell width="100">
+            <ui:text key="USER_CREATEDATE"/>
+        </ui:tablecell>
+        <ui:tablecell>
+            <ui:text value="<%= createdate %>" style="plain"/>
         </ui:tablecell>
     </ui:tablerow>
 
