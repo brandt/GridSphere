@@ -41,6 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.File;
 import java.util.StringTokenizer;
+import java.util.Enumeration;
 
 /**
  * GridSphereFilter is used for first time portal initialization including portlets
@@ -177,6 +178,17 @@ public class GridSphereFilter implements Filter {
             String ctxPath = "/gs";
 
             log.info("forwarded URL: " + ctxPath + extraInfo);
+
+
+
+
+
+
+
+
+            
+
+
             context.getRequestDispatcher(ctxPath + extraInfo).forward(req, res);
             return;
             // log.info("END");

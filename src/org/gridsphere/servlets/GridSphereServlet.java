@@ -48,9 +48,7 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Enumeration;
 
 
 /**
@@ -162,8 +160,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             log.info("Committing the database transaction");
 
             pm.endTransaction();
-        } catch (
-                StaleObjectStateException staleEx) {
+        } catch (StaleObjectStateException staleEx) {
             log.error("This interceptor does not implement optimistic concurrency control!");
             log.error("Your application will not work until you add compensation actions!");
             // Rollback, close everything, possibly compensate for any permanent changes
@@ -172,6 +169,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             // fresh data... what you do here depends on your applications design.
             //throw staleEx;
         } catch (Throwable ex) {
+            ex.printStackTrace();
             pm.endTransaction();
             try {
                 pm.rollbackTransaction();
@@ -192,16 +190,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @throws ServletException if a servlet error occurs
      */
     public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-
-        Enumeration en = req.getAttributeNames();
-        while (en.hasMoreElements()) {
-            String key = (String)en.nextElement();
-            System.err.println("key= " + key);
-            Object val = req.getAttribute(key);
-            if (val instanceof String) {
-                System.err.println("val= " + val);
-            }
-        }
 
         if (firstDoGet) {
             initializeServices();
@@ -288,8 +276,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      *
      * @param req the HttpServletRequest
      * @param res the HttpServletResponse
-     * @throw PortletException
-     * @throw IOException
+     * @throws PortletException if a portlet exception occurs
+     * @throws IOException if an IO error occurs
      */
     public void downloadFile(HttpServletRequest req, HttpServletResponse res) throws PortletException, IOException {
 
@@ -355,7 +343,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         if (uid != null) {
             user = userManagerService.getUser(uid);
         }
-        List roles = new ArrayList();
+        List<String> roles = new ArrayList<String>();
         if (user != null) {
             UserPrincipal userPrincipal = new UserPrincipal(user.getUserName());
             req.setAttribute(SportletProperties.PORTLET_USER_PRINCIPAL, userPrincipal);
@@ -398,8 +386,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * Handles login requests
      *
      * @param event a <code>GridSphereEvent</code>
-     * @throw AuthenticationException if auth fails
-     * @throw AuthorizationException if authz fails
+     * @throws AuthenticationException if auth fails
+     * @throws AuthorizationException if authz fails
      */
     protected void login(GridSphereEvent event) throws AuthenticationException, AuthorizationException {
 
@@ -438,9 +426,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             } else {
                 realuri = "http" + realuri;
             }
-            Iterator it = portalFilters.iterator();
-            while (it.hasNext()) {
-                PortalFilter filter = (PortalFilter)it.next();
+
+            for (PortalFilter filter : portalFilters) {
                 filter.doAfterLogin(event.getHttpServletRequest(), event.getHttpServletResponse());
             }
             event.getActionResponse().sendRedirect(realuri.toString());
@@ -476,10 +463,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
         //req.getPortletSession(true).invalidate();
-        
-        Iterator it = portalFilters.iterator();
-        while (it.hasNext()) {
-            PortalFilter filter = (PortalFilter)it.next();
+
+        for (PortalFilter filter : portalFilters) {
             filter.doAfterLogout(event.getHttpServletRequest(), event.getHttpServletResponse());
         }
         //pageFactory.
@@ -612,16 +597,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public void updateDatabase() {
         // loop thru users make sure first and last name are created from full name
-        List users = userManagerService.getUsers();
-        Iterator it = users.iterator();
-        while (it.hasNext()){
-            User user = (User)it.next();
+        List<User> users = userManagerService.getUsers();     
+        for (User user : users) {
             if (user.getFirstName().equals("") && user.getLastName().equals("")) {
-                String full =  user.getFullName();
+                String full = user.getFullName();
                 int idx = full.lastIndexOf(" ");
                 if (idx > 0) {
                     user.setFirstName(full.substring(0, idx));
-                    user.setLastName(full.substring(idx+1));
+                    user.setLastName(full.substring(idx + 1));
                 } else {
                     user.setFirstName(full);
                 }
