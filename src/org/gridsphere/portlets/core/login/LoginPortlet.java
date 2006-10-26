@@ -31,6 +31,7 @@ import javax.portlet.*;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class LoginPortlet extends ActionPortlet {
 
@@ -368,6 +369,9 @@ public class LoginPortlet extends ActionPortlet {
         newuser.setFullName(request.getAttribute("lastName") + ", " + request.getAttribute("firstName"));
         newuser.setEmailAddress(request.getAttribute("emailAddress"));
         newuser.setOrganization(request.getAttribute("organization"));
+
+        long now = Calendar.getInstance().getTime().getTime();
+        newuser.setAttribute(User.CREATEDATE, String.valueOf(now));
 
         // Submit changes
         this.userManagerService.saveUser(newuser);

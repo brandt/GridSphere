@@ -27,6 +27,8 @@ import javax.portlet.PortletRequest;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 public class UserManagerPortlet extends ActionPortlet {
 
@@ -120,6 +122,16 @@ public class UserManagerPortlet extends ActionPortlet {
             } else {
                 req.setAttribute("role", this.getLocalizedText(req, "ROLES_HASNOROLES"));
             }
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+            String createtime = (String)user.getAttribute(User.CREATEDATE);
+            String createdate;
+            if (createtime == null) {
+                createdate = "Unknown";
+            } else {
+                createdate = dateFormat.format(Long.valueOf(createtime));
+            }
+            req.setAttribute("createdate", createdate);
             CheckBoxBean accountCB = evt.getCheckBoxBean("accountCB");
             String disabled = (String)user.getAttribute(User.DISABLED);
             if ((disabled != null) && ("TRUE".equalsIgnoreCase(disabled))) {
@@ -149,7 +161,7 @@ public class UserManagerPortlet extends ActionPortlet {
         makeRoleFrame(evt, null);
 
         setNextState(req, DO_VIEW_USER_EDIT);
-        log.debug("in doViewNewUser");
+        log.debug("in doNewUser");
     }
 
     /**
@@ -430,6 +442,8 @@ public class UserManagerPortlet extends ActionPortlet {
         // Create edit account request
         if (user == null) {
             user = this.userManagerService.createUser();
+            long now = Calendar.getInstance().getTime().getTime();
+            user.setAttribute(User.CREATEDATE, String.valueOf(now));            
             newuserflag = true;
         }
 
