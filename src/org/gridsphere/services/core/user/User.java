@@ -25,6 +25,10 @@ public interface User {
 
     public static final String DISABLED = "gridsphere.user.disabled";
 
+    public static final String CREATEDATE = "gridsphere.user.createdate";
+
+    public static final String LASTLOGINDATE = "gridsphere.user.lastlogindate";
+
     /**
      * Returns the value of the attribute with the given name,
      * or null if no attribute with the given name exists.
