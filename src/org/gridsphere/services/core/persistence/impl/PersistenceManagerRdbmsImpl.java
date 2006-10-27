@@ -23,8 +23,8 @@ import java.util.*;
 public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private transient Log log = LogFactory.getLog(PersistenceManagerRdbmsImpl.class);
 
-    private Session session = null;
-    
+    private static ThreadLocal sessionThread = new ThreadLocal();
+
     private SessionFactory factory = null;
 
     private final static int CMD_DELETE = 1;
@@ -227,8 +227,10 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
 
     public Session currentSession() throws HibernateException {
+        Session session = (Session)sessionThread.get();
         if (session == null) {
             session = factory.openSession();
+            sessionThread.set(session);
         }
         return session;
     }
@@ -239,7 +241,8 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public void endTransaction() {
         currentSession().getTransaction().commit();
-        session = null;
+        currentSession().close();
+        sessionThread.set(null);
     }
 
     public void rollbackTransaction() {
@@ -254,7 +257,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         Statistics stats = factory.getStatistics();
         stats.logSummary();
         factory.close();
-        session = null;
+        //session = null;
     }
 
 }
