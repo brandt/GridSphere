@@ -31,7 +31,11 @@ Build include file for the GridSphere Portal source code, see build.xml
     <target name="update-database" depends="setenv">
         <taskdef name="dbtask"
             classname="org.gridsphere.tools.DBTask"
-            classpathref="classpath"/>
+            classpathref="classpath">
+            <classpath id="hib.classpth">
+                <pathelement location="config"/>
+            </classpath>
+        </taskdef>
         <dbtask
             configdir="${appserver.home}/webapps/${gridsphere.deploy}"
             action="UPDATE"/>
