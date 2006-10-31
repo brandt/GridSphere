@@ -14,7 +14,7 @@ import javax.servlet.jsp.JspWriter;
 /**
  * A <code>PasswordTag</code> provides a password tag for represnting HTML password input elements
  */
-public class PasswordTag extends BaseComponentTag {
+public class PasswordTag extends InputTag {
 
     protected PasswordBean passwordBean = null;
 
@@ -58,7 +58,10 @@ public class PasswordTag extends BaseComponentTag {
     }
 
     public int doStartTag() throws JspException {
+        return EVAL_BODY_INCLUDE;
+    }
 
+    public int doEndTag() throws JspException {
         if (!beanId.equals("")) {
             passwordBean = (PasswordBean) getTagBean();
             if (passwordBean == null) {
@@ -73,6 +76,17 @@ public class PasswordTag extends BaseComponentTag {
             passwordBean.setSize(size);
             this.setBaseComponentBean(passwordBean);
         }
+
+        if (maxlength != 0) passwordBean.setMaxLength(maxlength);
+        if (size != 0) passwordBean.setSize(size);
+        if (onFocus != null) passwordBean.setOnFocus(onFocus);
+        if (onClick != null) passwordBean.setOnClick(onClick);
+        if (onChange != null) passwordBean.setOnChange(onChange);
+        if (onBlur != null) passwordBean.setOnBlur(onBlur);
+        if (onSelect != null) passwordBean.setOnSelect(onBlur);
+
+        if (cssClass != null) passwordBean.addCssClass(cssClass);
+        if (cssStyle != null) passwordBean.addCssStyle(cssStyle);
 
         try {
             JspWriter out = pageContext.getOut();
