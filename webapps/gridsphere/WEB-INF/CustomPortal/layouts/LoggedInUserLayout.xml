@@ -9,8 +9,13 @@ This descriptor defines the user's portal layout upon logging into the portal
 $Id$
 -->
 
-<page-layout label="user" title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush"
-             editable="true" required-role="USER">
+<page-layout label="user"
+             title="GridSphere Portal"
+             keywords="gridsphere"
+             icon="images/favicon.ico"
+             renderkit="brush"
+             editable="true"
+             required-role="USER">
 
     <portlet-header>
         <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>

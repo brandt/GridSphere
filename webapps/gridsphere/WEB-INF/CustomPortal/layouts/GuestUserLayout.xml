@@ -35,25 +35,7 @@
     <bar>
         <portlet-content include="/WEB-INF/CustomPortal/content/main.html"/>
     </bar>
-    <!-- 
-    <portlet-tabbed-pane selected="0" style="menu">
-        <portlet-tab label="gridsphere" display="false">
-            <title lang="en">GridSphere</title>
-            <portlet-tabbed-pane selected="0" style="sub-menu">
-                <portlet-tab label="home" display="false">
-                    <title lang="en">Home</title>
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="70%">
-                                <portlet-content include="/WEB-INF/CustomPortal/content/main.html"/>
-                            </column-layout>
-                        </row-layout>
-                    </table-layout>
-                </portlet-tab>
-            </portlet-tabbed-pane>
-        </portlet-tab>
-    </portlet-tabbed-pane>
-    -->
+
     <!-- Footer components (if any) -->
     <portlet-footer>
         <table-layout style="footer">

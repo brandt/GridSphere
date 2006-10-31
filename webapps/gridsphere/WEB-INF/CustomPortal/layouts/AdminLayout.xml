@@ -18,7 +18,7 @@
         <portlet-content include="/jsp/returnnav.jsp"/>
     </portlet-header>
 
-    <portlet-menu>
+    <portlet-menu style="yahoo">
                 <portlet-tab label="configTab" required-role="ADMIN">
                     <title lang="en">Configuration</title>
                     <table-layout label="configTL">
@@ -50,13 +50,12 @@
                     <title lang="en">Users</title>
                     <table-layout>
                         <row-layout>
-                            <column-layout width="80%">
+                            <column-layout width="100%">
                                 <portlet-frame label="usermanager">
                                     <portlet-class>
                                         org.gridsphere.portlets.core.admin.users.UserManagerPortlet</portlet-class>
                                 </portlet-frame>
                             </column-layout>
-                            <column-layout width="20%"/>
                         </row-layout>
                     </table-layout>
                 </portlet-tab>
