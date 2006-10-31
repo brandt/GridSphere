@@ -26,6 +26,8 @@ import java.util.*;
  */
 public class PortletPageFactory implements PortletSessionListener {
 
+    private Log log = LogFactory.getLog(PortletPageFactory.class);
+
     public static final String TCK_PAGE = "TCK";
     //public static final String SETUP_PAGE = "SetupLayout";
     public static final String ERROR_PAGE = "ErrorLayout";
@@ -43,19 +45,17 @@ public class PortletPageFactory implements PortletSessionListener {
     private PortletSessionManager sessionManager = PortletSessionManager.getInstance();
     private PortalConfigService portalConfigService = null;
 
-    private Log log = LogFactory.getLog(PortletPageFactory.class);
-
     protected URL LAYOUT_MAPPING_PATH = getClass().getResource("/org/gridsphere/layout/layout-mapping.xml");
 
     // Store user layouts in a hash
-    private static Map userLayouts = new HashMap();
+    private static Map<String, PortletPage> userLayouts = new HashMap<String, PortletPage>();
 
     // a hash of hashes to contain all the users layouts
-    private static Map layouts = new HashMap();
+    private static Map<String, Map<String, PortletPage>> layouts = new HashMap<String, Map<String, PortletPage>>();
 
     // a hash of loaded master layouts used to make copies
-    private static Map masterLayouts = new HashMap();
-    private static Set editableLayoutIds = new HashSet();
+    private static Map<String, PortletPage> masterLayouts = new HashMap<String, PortletPage>();
+    private static Set<String> editableLayoutIds = new HashSet<String>();
 
     private ServletContext context;
 
@@ -150,10 +150,8 @@ public class PortletPageFactory implements PortletSessionListener {
             pane.setLayoutDescriptor(userLayout);
             PortletComponent comp = (PortletComponent)page.getPortletComponent();
             PortletTabbedPane existPane = (PortletTabbedPane)comp;
-            List tabs = existPane.getPortletTabs();
-            Iterator it = tabs.iterator();
-            while (it.hasNext()) {
-                PortletTab tab = (PortletTab) it.next();
+            List<PortletTab> tabs = existPane.getPortletTabs();
+            for (PortletTab tab : tabs) {
                 if (tab.getCanModify()) {
                     pane.addTab(tab);
                 }
@@ -185,31 +183,7 @@ public class PortletPageFactory implements PortletSessionListener {
             PortletTabbedPane tmpPane = (PortletTabbedPane) deepCopy(pane);
             tmpPage.setPortletComponent(tmpPane);
             this.setPageTheme(tmpPage, req);
-            tmpPage.init(req, new ArrayList());
-
-            // when deleting must reinit everytime
-            int i = 0;
-            boolean found;
-            List allowedPortlets = new ArrayList();
-            while (i < tmpPage.getComponentIdentifierList().size()) {
-                found = false;
-                Iterator it = tmpPage.getComponentIdentifierList().iterator();
-                while (it.hasNext() && (!found)) {
-                    found = false;
-                    ComponentIdentifier cid = (ComponentIdentifier) it.next();
-                    if (cid.getPortletComponent() instanceof PortletFrame) {
-                        if (!allowedPortlets.contains(cid.getPortletClass())) {
-                            PortletComponent pc = cid.getPortletComponent();
-                            PortletComponent parent = pc.getParentComponent();
-                            parent.remove(pc, req);
-                            tmpPage.init(req, new ArrayList());
-                            found = true;
-                        }
-                    }
-                }
-                i++;
-            }
-
+            tmpPage.init(req, new ArrayList<ComponentIdentifier>());
             tmpPane.save();
             return tmpPane;
         } catch (Exception e) {
@@ -317,9 +291,8 @@ public class PortletPageFactory implements PortletSessionListener {
         }
 
         // remove any active layouts with this layoutId
-        Iterator it = layouts.values().iterator();
-        while (it.hasNext()) {
-            Map userLayouts = (Map)it.next();
+        for (Map<String, PortletPage> map : layouts.values()) {
+            Map userLayouts = (Map) map;
             userLayouts.remove(layoutId);
             log.debug("removing a layout: " + layoutId);
         }
@@ -355,16 +328,17 @@ public class PortletPageFactory implements PortletSessionListener {
 
     /**
      * This returns the page from the hashtable or creates a new one if necessary
-     * @param req
-     * @param layoutId
+     *
+     * @param req the portlet request
+     * @param layoutId the layout id
      * @return the page
      */
     protected PortletPage getPortletPageFromHash(PortletRequest req, String layoutId) {
         PortletSession session = req.getPortletSession();
         PortletPage page = null;
-        Map usersLayouts = (Map)layouts.get(session.getId());
+        Map<String, PortletPage> usersLayouts = (Map<String, PortletPage>)layouts.get(session.getId());
         if (usersLayouts == null) {
-            usersLayouts = new HashMap();
+            usersLayouts = new HashMap<String, PortletPage>();
             layouts.put(session.getId(), usersLayouts);
         }
 
@@ -422,7 +396,7 @@ public class PortletPageFactory implements PortletSessionListener {
             }
         }
         setPageTheme(copy, req);
-        copy.init(req, new ArrayList());
+        copy.init(req, new ArrayList<ComponentIdentifier>());
         return copy;
     }
 
@@ -482,8 +456,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     // TODO
     public PortletPage createErrorPage() {
-        PortletPage errorPage = createPortletPageCopy(ERROR_PAGE);
-        return errorPage;
+        return createPortletPageCopy(ERROR_PAGE);
     }
 
     public PortletPage createTCKPage(PortletRequest req) {
@@ -529,7 +502,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 try {
                     page.save(context);
                     this.setPageTheme(page, req);
-                    page.init(req, new ArrayList());
+                    page.init(req, new ArrayList<ComponentIdentifier>());
                 } catch (IOException e) {
                     log.error("Unable to save TCK page to /tmp/test.xml", e);
                 }

@@ -5,14 +5,16 @@ import org.gridsphere.layout.view.TabbedPaneView;
 import org.gridsphere.layout.PortletNavMenu;
 import org.gridsphere.layout.PortletTab;
 import org.gridsphere.layout.PortletComponent;
+import org.gridsphere.layout.PortletMenu;
 import org.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.RenderResponse;
 import javax.portlet.PortletURL;
+import javax.portlet.RenderRequest;
 import java.util.StringTokenizer;
 
 public class Menu extends BaseRender implements TabbedPaneView {
-
 
     /**
      * Constructs an instance of PortletTabbedPane
@@ -37,7 +39,8 @@ public class Menu extends BaseRender implements TabbedPaneView {
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
         StringBuffer result = new StringBuffer();
-        result.append("<div class=\"menu\"><ul>");
+        result.append("<div class=\"menu\">");
+        result.append("<ul>");
         return result;
     }
 
@@ -48,7 +51,7 @@ public class Menu extends BaseRender implements TabbedPaneView {
         String lang = event.getRenderRequest().getLocale().getLanguage();
         String title = tab.getTitle(lang);
         if (tab.isSelected()) {
-            pane.append("<li class=\"selected\">");    
+            pane.append("<li class=\"selected\">");
         } else {
             pane.append("<li>");
         }
@@ -60,12 +63,13 @@ public class Menu extends BaseRender implements TabbedPaneView {
         return pane;
     }
 
-    public StringBuffer doRenderEditTab(GridSphereEvent event, PortletNavMenu tabPane, boolean isSelected) {
+    public StringBuffer doRenderEditTab(GridSphereEvent event, PortletNavMenu menu, boolean isSelected) {
         RenderResponse res = event.getRenderResponse();
-        
-        PortletURL portletURL = res.createRenderURL();
-        portletURL.setParameter("newtab", "true");
-
+        RenderRequest req = event.getRenderRequest();
+     
+        PortletURL portletURL = res.createActionURL();
+        portletURL.setParameter("newmenutab", "true");
+        req.setAttribute(SportletProperties.COMPONENT_ID, String.valueOf(menu.getComponentID()));
         String link = portletURL.toString();
         StringBuffer pane = new StringBuffer();
 
@@ -78,8 +82,14 @@ public class Menu extends BaseRender implements TabbedPaneView {
 
 
     public StringBuffer doEndBorder(GridSphereEvent event, PortletComponent comp) {
+        PortletMenu menu = (PortletMenu)comp;
         StringBuffer buffer = new StringBuffer();
-        buffer.append("\n</div><div style=\"clear: both;\"></div><!--  END LAYOUT NAVIGATION -->\n<div id=\"gridsphere-layout-body\"> <!-- start the main portlets -->\n");
+
+        buffer.append("\n</ul>");
+        buffer.append("</div><!--  END LAYOUT NAVIGATION -->");
+        buffer.append("<div style=\"clear: both;\"></div>");
+        buffer.append("<div id=\"gridsphere-layout-body\"> <!-- start the main portlets -->\n");
+
         return buffer;
     }
 

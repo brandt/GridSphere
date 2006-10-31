@@ -112,6 +112,16 @@ public class PortletLayoutEngine {
         setHeaders(event);
         StringBuffer pageBuffer = new StringBuffer();
         if (req.getParameter("ajax") != null) {
+
+           /*
+
+            try {
+            res.sendRedirect("http://www.yahoo.com");
+                return;
+            } catch (Exception e) {
+                    e.printStackTrace();
+                }
+           */
             String portlet = req.getParameter("portlet");
             System.err.println("it's ajax: " + portlet);
             String cid = event.getComponentID();
@@ -120,7 +130,9 @@ public class PortletLayoutEngine {
             }
             if (portlet != null) {
                 PortletFrameRegistry registry = PortletFrameRegistry.getInstance();
-                PortletFrame frame = registry.getPortletFrame("portlet#" + portlet, portlet, event);
+                int idx = portlet.indexOf("#");
+                String portletName = portlet.substring(idx+1, portlet.length());
+                PortletFrame frame = registry.getPortletFrame(portletName, portlet, event);
                 frame.setInnerPadding("");
                 frame.setOuterPadding("");
                 frame.setTransparent(false);
@@ -128,6 +140,17 @@ public class PortletLayoutEngine {
                 req.getSession().setAttribute(SportletProperties.LAYOUT_THEME, "default");
                 req.getSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, "brush");
 
+                req.setAttribute(SportletProperties.USE_AJAX, "true");
+                req.setAttribute("org.gridsphere.PORTLET_NAME", portlet);
+                String compName = req.getParameter("compname");
+
+                System.err.println("compname= "+ compName);
+
+                req.setAttribute("org.gridsphere.COMP_NAME", compName);
+
+                if (event.hasAction()) {
+                    frame.actionPerformed(event);
+                }
                 frame.doRender(event);
                 pageBuffer = frame.getBufferedOutput(event.getRenderRequest());
             } else {

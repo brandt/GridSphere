@@ -11,12 +11,14 @@ import org.gridsphere.portletcontainer.GridSphereEvent;
  */
 public class Bar extends BaseRender implements Render {
 
-    private static StringBuffer START_BAR = new StringBuffer("<div id=\"gridsphere-layout-navigation\"><ul id=\"gridsphere-nav\">" +
-            "<li id=\"gridsphere-nav-border-right\">&nbsp;</li></ul>" +
-            "<ul id=\"gridsphere-sub-nav\">" +
-            "<li id=\"gridsphere-sub-nav-border-right\">&nbsp;</li></ul>");
+    private static StringBuffer START_BAR = new StringBuffer()
+            .append("<!-- START BAR -->")
+            .append("<div id=\"gridsphere-layout-navigation\">")
+            .append("<ul id=\"gridsphere-nav\"></ul>")
+            .append("<ul id=\"gridsphere-sub-nav\">")
+            .append("<li id=\"gridsphere-sub-nav-border-right\">&nbsp;</li></ul>");
 
-    private static StringBuffer END_BAR = new StringBuffer("\n</div> <!-- END gridsphere-layout-body -->\n");
+    private static StringBuffer END_BAR = new StringBuffer("\n</div> <!-- END BAR -->\n");
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
         return START_BAR;
@@ -25,6 +27,9 @@ public class Bar extends BaseRender implements Render {
     public StringBuffer doEnd(GridSphereEvent event, PortletComponent comp) {
         return END_BAR;
     }
+
+    
+
 }
 
 

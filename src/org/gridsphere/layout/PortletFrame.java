@@ -485,7 +485,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
             StringBuffer content = new StringBuffer();
 
-                PortletURL portletURI = res.createRenderURL();
+                PortletURL portletURI = res.createActionURL();
                 String link = portletURI.toString();
                 content.append("<br/><fieldset><a href=\"" + link + "\">" + portletName + "</a></fieldset>");
                 setBufferedOutput(req, content);

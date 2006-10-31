@@ -34,7 +34,7 @@ public class PortletMenu extends PortletNavMenu implements Serializable, Portlet
      * @return a list of updated component identifiers
      * @see org.gridsphere.layout.ComponentIdentifier
      */
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
 
         menuView = (TabbedPaneView)getRenderClass(req, "Menu");
 

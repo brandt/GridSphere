@@ -55,6 +55,7 @@ public class Page extends BaseRender implements Render {
             page.append("\n\t<meta http-equiv=\"refresh\" content=\"").append(portletPage.getRefresh()).append("\"/>");
         String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
         page.append("\n\t<link type=\"text/css\" href=\"").append(req.getContextPath()).append("/themes/").append(portletPage.getRenderKit()).append("/").append(theme).append("/css" + "/default.css\" rel=\"stylesheet\"/>");
+
         // Add portlet defined stylesheet if defined
         Map props = (Map) req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (props != null) {
@@ -114,10 +115,12 @@ public class Page extends BaseRender implements Render {
 
     public StringBuffer doEnd(GridSphereEvent event, PortletComponent comp) {
         StringBuffer end = new StringBuffer("\n</div> <!-- gridsphere-layout-page -->\n");
+        /*
         StringBuffer pagebuffer = (StringBuffer)event.getRenderRequest().getAttribute(SportletProperties.PAGE_BUFFER);
         if (pagebuffer != null) {
             end.append(pagebuffer);
         }
+        */
         end.append("</body>\n</html>\n");
         return end;
     }
