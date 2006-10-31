@@ -23,7 +23,7 @@ import java.util.*;
 public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private transient Log log = LogFactory.getLog(PersistenceManagerRdbmsImpl.class);
 
-    private static ThreadLocal sessionThread = new ThreadLocal();
+    private ThreadLocal sessionThread = new ThreadLocal();
 
     private SessionFactory factory = null;
 

@@ -213,6 +213,8 @@ public class SportletProperties {
 
     public static final String PAGE_BUFFER = "org.gridsphere.PAGE_BUFFER";
 
+    public static final String USE_AJAX = "org.gridsphere.USE_AJAX";
+
     private SportletProperties() {
         if (props == null) {
             InputStream propsStream = getClass().getResourceAsStream("/org/gridsphere/portlet/impl/portlet.properties");

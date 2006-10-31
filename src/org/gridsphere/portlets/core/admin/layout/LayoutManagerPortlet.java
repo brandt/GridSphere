@@ -2,7 +2,6 @@ package org.gridsphere.portlets.core.admin.layout;
 
 import org.gridsphere.layout.*;
 import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.portlet.impl.PortletRequestImpl;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.portletcontainer.DefaultPortletAction;
@@ -182,6 +181,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
         String name = event.getTextFieldBean("nameTF").getValue();
         String label = event.getTextFieldBean("labelTF").getValue();
         PortletComponent comp = page.getActiveComponent(activeComp);
+
+        log.debug("compHF=" + activeComp);
+        log.debug("active comp = " + comp.getComponentID());
         if (comp instanceof PortletTabbedPane) {
             PortletTabbedPane pane = (PortletTabbedPane)comp;
             //System.err.println("tab name " + thistab.getTitle("en"));
@@ -221,6 +223,28 @@ public class LayoutManagerPortlet extends ActionPortlet {
             page.init(req, new ArrayList());
 
             pages.put(sessionId, page);
+        } else if (comp instanceof PortletMenu) {
+            PortletMenu menu = (PortletMenu)comp;
+            //System.err.println("tab name " + thistab.getTitle("en"));
+            //PortletTabbedPane pane = (PortletTabbedPane)thistab.getParentComponent();
+            log.debug("creating new menu tab!");
+            PortletTab tab = new PortletTab();
+            tab.setTitle("en", name);
+            if (reqRole.equalsIgnoreCase("NONE")) reqRole = "";
+            tab.setRequiredRole(reqRole);
+            tab.setLabel(label);
+            ListBoxBean colsLB = event.getListBoxBean("colsLB");
+            String colTemplateNum = colsLB.getSelectedName();
+            tab = createLayoutStrategy(colTemplateNum, tab);
+            menu.addTab(tab);
+            menu.setSelectedPortletTab(tab);
+
+            pageFactory.savePortletPageMaster(page);
+
+
+            page.init(req, new ArrayList());
+
+            pages.put(sessionId, page);
         }
 
 
@@ -238,16 +262,16 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         if (comp instanceof PortletTab) {
             PortletTab tab = (PortletTab)comp;
-            PortletTabbedPane pane = (PortletTabbedPane)tab.getParentComponent();
+            PortletNavMenu menu = (PortletNavMenu)tab.getParentComponent();
 
-            int index = pane.getIndexOfTab(tab);
+            int index = menu.getIndexOfTab(tab);
 
-            if (index < (pane.getTabCount() - 1)) {
-                pane.setSelectedPortletTabIndex(index+1);
+            if (index < (menu.getTabCount() - 1)) {
+                menu.setSelectedPortletTabIndex(index+1);
             } else if (index > 0) {
-                pane.setSelectedPortletTabIndex(index - 1);
+                menu.setSelectedPortletTabIndex(index - 1);
             }
-            pane.removeTab(tab);
+            menu.removeTab(tab);
 
         }
 
@@ -405,10 +429,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
         }
         
         if (req.getParameter("usertable") != null) {
-            page.init(req, new ArrayList());
+            page.init(req, new ArrayList<ComponentIdentifier>());
             page.actionPerformed(gsevent);
             pageFactory.savePortletPageMaster(page);
-            page.init(req, new ArrayList());
+            page.init(req, new ArrayList<ComponentIdentifier>());
         }
 
 
@@ -492,10 +516,18 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 itsanewtab = true;
                 PortletTab tab = new PortletTab();
                 comp = tab;
-            }  else if (req.getParameter("newsubtab") != null) {
+            } else if (req.getParameter("newsubtab") != null) {
                 controlUI = "subtab";
                 TextFieldBean nameTF = event.getTextFieldBean("nameTF");
                 nameTF.setValue("New subtab");
+                itsanewtab = true;
+                PortletTab tab = new PortletTab();
+                createColsListBox(event, tab);
+                comp = tab;
+            } else if (req.getParameter("newmenutab") != null) {
+                controlUI = "menu";
+                TextFieldBean nameTF = event.getTextFieldBean("nameTF");
+                nameTF.setValue("New menu tab");
                 itsanewtab = true;
                 PortletTab tab = new PortletTab();
                 createColsListBox(event, tab);
@@ -544,7 +576,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         StringBuffer pageBuffer = new StringBuffer();
         PortletComponent comp = page.getPortletComponent();
 
-        log.debug("rendering the comnponent");
+        log.debug("rendering the component");
 
 
         comp.doRender(gsevent);

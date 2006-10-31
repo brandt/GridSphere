@@ -20,8 +20,8 @@ import java.util.Map;
 public class RssServiceImpl implements RssService, PortletServiceProvider {
 
     private long CACHE_TIME = 20 * 60 * 1000; // in minutes
-    private Map cachedStore = new HashMap();
-    private Map cachedTime = new HashMap();
+    private Map<String, SyndFeed> cachedStore = new HashMap<String, SyndFeed>();
+    private Map<String, Long> cachedTime = new HashMap<String, Long>();
 
     public SyndFeed getFeed(String url) throws FeedException, IOException {
         SyndFeedInput input = new SyndFeedInput();

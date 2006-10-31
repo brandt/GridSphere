@@ -131,10 +131,6 @@ public class LoginPortlet extends ActionPortlet {
         log.debug("in LoginPortlet: gs_login");
         PortletRequest req = event.getActionRequest();
 
-
-        String loginName = req.getParameter("username");
-        String loginPassword = req.getParameter("password");
-        
         String errorMsg = (String) req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
 
         if (errorMsg != null) {

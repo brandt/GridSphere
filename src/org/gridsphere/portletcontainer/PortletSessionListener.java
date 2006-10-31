@@ -9,8 +9,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * The <code>PortletSessionListener</code> provides an interface for performing
- * user login and logout functionality. <code>bPortletSessionListener</code> is
- * implemented by the {@link org.gridsphere.portlet.PortletAdapter}.
+ * login and logout functionality.
  */
 public interface PortletSessionListener {
 
@@ -21,7 +20,6 @@ public interface PortletSessionListener {
      * instance, for example, to store attributes in the session.
      *
      * @param request the portlet request
-     * @throws PortletException if a portlet error occurs during processing
      */
     public void login(HttpServletRequest request);
 
@@ -32,7 +30,6 @@ public interface PortletSessionListener {
      * This happens if the user logs out, or decides to remove this portlet from a page.
      *
      * @param session the portlet session
-     * @throws PortletException if a portlet error occurs during processing
      */
     public void logout(HttpSession session);
 
