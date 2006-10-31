@@ -26,6 +26,7 @@
         <property name="FirstName" type="string" column="givenname"/>
         <property name="EmailAddress" type="string" column="emailaddress"/>
         <property name="Organization" type="string" column="organization"/>
+        <property name="NumLogins" type="integer" column="numlogins"/>
         <property name="LastLoginTime" column="lastlogintime"/>
         <map name="attributes" table="sportletuserattributes">
             <cache usage="read-write"/>
