@@ -57,6 +57,8 @@
             <jsp:include page="tab.jsp"/>
          <% } else if (controlUI.equals("subtab")) { %>
             <jsp:include page="subtab.jsp"/>
+         <% } else if (controlUI.equals("menu")) { %>
+            <jsp:include page="menu.jsp"/>
          <% } %>
       </ui:tablecell>
     </ui:tablerow>

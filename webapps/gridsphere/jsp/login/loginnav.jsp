@@ -8,7 +8,9 @@
 <div class="navbar">
     <ul>
         <li>
-            <ui:actionlink layout="LoginLayout" value="Login"/>
+    <%--        <ui:portletlink resizable="true" portletId="gridsphere#Login" titleColor="green" name="bar"  width="300"/> --%>
+
+         <ui:actionlink layout="LoginLayout" value="Login"/>
         </li>
         <% PortalConfigService portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
     if (Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.CAN_USER_CREATE_ACCOUNT)).booleanValue()) {

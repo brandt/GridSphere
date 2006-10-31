@@ -9,7 +9,6 @@
 
 <portlet:defineObjects/>
 
-
 <ui:messagebox beanId="msg"/>
 
 <% SyndFeed feed = (SyndFeed) request.getAttribute("rssfeed");
