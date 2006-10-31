@@ -43,7 +43,7 @@ public class PortletURLImpl implements PortletURL {
     private HttpServletResponse res = null;
     private HttpServletRequest req = null;
     private boolean isSecure = false;
-    private Map store = new HashMap();
+    private Map<String, Object> store = null;
     private boolean redirect = false;
 
     private boolean isRender = false;
@@ -53,16 +53,17 @@ public class PortletURLImpl implements PortletURL {
 
     private PortalConfigService configService = null;
 
-    private PortletURLImpl() { }
+    protected PortletURLImpl() { }
 
     /**
      * Constructs a PortletURL from a servlet request and response
      *
      * @param req the servlet request
      * @param res the servlet response
+     * @param isRender true if this is a render url, false if an action url
      */
     public PortletURLImpl(HttpServletRequest req, HttpServletResponse res, boolean isRender) {
-        this.store = new HashMap();
+        this.store = new HashMap<String, Object>();
         this.res = res;
         this.req = req;
 
@@ -363,11 +364,18 @@ public class PortletURLImpl implements PortletURL {
             //String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
             //if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
 
-
+              /*
+             // if a label exists, use it instead
+            if (label != null) {
+                cid = label;
+            } else{
+                cid = (String)req.getAttribute(SportletProperties.COMPONENT_ID);
+            }
+            */
             // if a label exists, use it instead
-            String label = (String)store.get(SportletProperties.COMPONENT_LABEL);
             if (label != null) cid = label;
-            if (layout != null) cid = null;
+            //if (layout != null) cid = null;
+
             if (cid != null) {
                 url += "/" + cid;
                 String action = (String)store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
