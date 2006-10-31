@@ -70,6 +70,14 @@ public interface UserManagerService extends LoginUserModule {
     public List<User> getUsersByOrganization(QueryFilter queryFilter);
 
     /**
+     * Returns a list of users sorted by number of login occurences
+     *
+     * @param queryFilter QueryFilter
+     * @return list of users
+     */
+    public List<User> getUsersByNumLogins(QueryFilter queryFilter);
+
+    /**
      * Returns a list of users by full name.
      *
      * @param queryFilter QueryFilter

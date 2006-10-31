@@ -113,6 +113,10 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         return selectUsers("order by upper(uzer.FullName)", queryFilter);
     }
 
+    public List<User> getUsersByNumLogins(QueryFilter queryFilter) {
+        return selectUsers("order by uzer.NumLogins", queryFilter);
+    }
+
     public List<User> getUsersByFullName(String likeEmail, String likeOrg, QueryFilter queryFilter) {
         String query = "";
         String equery = "";
@@ -151,19 +155,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     public User getLoggedInUser(String loginName) {
-        UserImpl user = getSportletUserImplByLoginName(loginName);
-        if (user != null) {
-            long now = Calendar.getInstance().getTime().getTime();
-            String lastlogin = (String) user.getAttribute(User.LASTLOGINDATE);
-            if (lastlogin != null) {
-                user.setLastLoginTime(Long.parseLong(lastlogin));
-            } else {
-                user.setLastLoginTime(now);
-            }
-            user.setAttribute(User.LASTLOGINDATE, Long.toString(now));
-            saveSportletUserImpl(user);
-        }
-        return user;
+        return getSportletUserImplByLoginName(loginName);
     }
 
     public User getUserByUserName(String loginName) {

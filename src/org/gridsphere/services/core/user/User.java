@@ -27,8 +27,6 @@ public interface User {
 
     public static final String CREATEDATE = "gridsphere.user.createdate";
 
-    public static final String LASTLOGINDATE = "gridsphere.user.lastlogindate";
-
     /**
      * Returns the value of the attribute with the given name,
      * or null if no attribute with the given name exists.
@@ -190,7 +188,7 @@ public interface User {
      *
      * @return the last login time
      */
-    public long getLastLoginTime();
+    public Long getLastLoginTime();
 
     /**
      * Sets the point of time that this user was last logged in, or null if this
@@ -199,8 +197,21 @@ public interface User {
      *
      * @param lastLoginTime the last login time
      */
-    public void setLastLoginTime(long lastLoginTime);
+    public void setLastLoginTime(Long lastLoginTime);
 
+    /**
+     * Returns the number of login occurences for this user
+     *
+     * @return the number of login occurences
+     */
+    public Integer getNumLogins();
+
+    /**
+     * Sets the number of logins occurences for this user
+     *
+     * @param numLogins the last login time
+     */
+    public void setNumLogins(Integer numLogins);
 
     /**
      * Returns a <code>String</code> representation of the User

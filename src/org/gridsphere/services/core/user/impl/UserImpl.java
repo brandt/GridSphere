@@ -22,7 +22,7 @@ public class UserImpl implements User {
 
     private String oid = null;
     // store used to maintain user attributes
-    private Map attributes = new HashMap();
+    private Map<String, String> attributes = new HashMap<String, String>();
 
     private String UserID = "";
     private String LastName = "";
@@ -30,7 +30,8 @@ public class UserImpl implements User {
     private String FirstName = "";
     private String EmailAddress = "";
     private String Organization = "";
-    private long LastLoginTime = 0;
+    private Long LastLoginTime = null;
+    private Integer numLogins = 0;
 
     public String getOid() {
         return oid;
@@ -184,7 +185,7 @@ public class UserImpl implements User {
     /**
      * Sets the organization the user belongs to
      *
-     * @param organization
+     * @param organization the organization name
      */
     public void setOrganization(String organization) {
         this.Organization = organization;
@@ -197,7 +198,7 @@ public class UserImpl implements User {
      *
      * @return the last login time
      */
-    public long getLastLoginTime() {
+    public Long getLastLoginTime() {
         return LastLoginTime;
     }
 
@@ -208,7 +209,7 @@ public class UserImpl implements User {
      *
      * @param lastLoginTime the last login time
      */
-    public void setLastLoginTime(long lastLoginTime) {
+    public void setLastLoginTime(Long lastLoginTime) {
         this.LastLoginTime = lastLoginTime;
     }
 
@@ -217,7 +218,7 @@ public class UserImpl implements User {
         return attributes;
     }
 
-    public void setAttributes(Map attributes) {
+    public void setAttributes(Map<String, String> attributes) {
         this.attributes = attributes;
     }
 
@@ -250,7 +251,7 @@ public class UserImpl implements User {
      * @return an enumeration of attribute names
      */
     public Enumeration getAttributeNames() {
-        return new Hashtable(attributes).keys();
+        return new Hashtable<String, String>(attributes).keys();
     }
 
     /**
@@ -260,7 +261,25 @@ public class UserImpl implements User {
      * @return an enumeration of attribute names
      */
     public Enumeration getAttributeValues() {
-        return new Hashtable(attributes).elements();
+        return new Hashtable<String, String>(attributes).elements();
+    }
+
+    /**
+     * Returns the number of login occurences for this user
+     *
+     * @return the number of login occurences
+     */
+    public Integer getNumLogins() {
+        return numLogins;
+    }
+
+    /**
+     * Sets the number of logins occurences for this user
+     *
+     * @param numLogins the last login time
+     */
+    public void setNumLogins(Integer numLogins) {
+        this.numLogins = numLogins;
     }
 
     /**
@@ -270,13 +289,13 @@ public class UserImpl implements User {
      */
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("Last Name: " + LastName + "\n");
-        sb.append("Full Name: " + FullName + "\n");
-        sb.append("First Name: " + FirstName + "\n");
-        sb.append("Email Address: " + EmailAddress + "\n");
-        sb.append("Id: " + getOid() + "\n");
-        sb.append("UserID: " + UserID + "\n");
-        sb.append("LastLoginTime: " + LastLoginTime + "\n");
+        sb.append("Last Name: ").append(LastName).append("\n");
+        sb.append("Full Name: ").append(FullName).append("\n");
+        sb.append("First Name: ").append(FirstName).append("\n");
+        sb.append("Email Address: ").append(EmailAddress).append("\n");
+        sb.append("Id: ").append(getOid()).append("\n");
+        sb.append("UserID: ").append(UserID).append("\n");
+        sb.append("LastLoginTime: ").append(LastLoginTime).append("\n");
         return sb.toString();
     }
 
