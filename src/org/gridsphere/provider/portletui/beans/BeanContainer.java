@@ -12,7 +12,7 @@ import java.util.*;
  */
 public abstract class BeanContainer extends BaseComponentBean {
 
-    public List container = new Vector();
+    public List<BaseComponentBean> container = new Vector<BaseComponentBean>();
 
     /**
      * Constructs a default bean container
@@ -41,6 +41,7 @@ public abstract class BeanContainer extends BaseComponentBean {
     /**
      * Adds a visual bean to the bean container
      *
+     * @param index the position in the container to insert the bean
      * @param bean a base component bean
      */
     public void setBean(int index, BaseComponentBean bean) {
@@ -78,14 +79,13 @@ public abstract class BeanContainer extends BaseComponentBean {
      * @see BaseComponentBean
      */
     public void sortByValue() {
-        SortedSet sorted = new TreeSet();
+        SortedSet<BaseComponentBean> sorted = new TreeSet<BaseComponentBean>();
         for (int i = 0; i < container.size(); i++) {
             sorted.add(container.get(i));
         }
-        Vector result = new Vector();
-        Iterator i = sorted.iterator();
-        while (i.hasNext()) {
-            result.add(i.next());
+        List<BaseComponentBean> result = new Vector<BaseComponentBean>();
+        for (BaseComponentBean aSorted : sorted) {
+            result.add(aSorted);
         }
         container = result;
     }

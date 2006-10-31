@@ -34,14 +34,18 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     }
 
     public String toStartString() {
-        String inputType = "submit";
-        if (useAjax) inputType = "button";
-        return "<input " + getFormattedCss() + " type=\"" + inputType + "\" " + checkDisabled();
+        return "";
     }
 
     public String toEndString() {
         String sname = (name == null) ? "" : name;
         StringBuffer sb = new StringBuffer();
+
+        String inputType = "submit";
+        if (useAjax) inputType = "button";
+        sb.append("<input " + getFormattedCss() + " type=\"" + inputType + "\" " + checkDisabled());
+
+
         if (action != null) sname = action;
         if (anchor != null) sname += "#" + anchor;
         if (onClick != null) {

@@ -18,7 +18,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     protected boolean disabled = false;
     protected String key = null;
     protected boolean visible = true;
-    protected boolean supportsJS = false;
+
     protected String cssStyle = null;
     protected String cssClass = null;
     protected String id = null;
@@ -190,24 +190,6 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
      */
     public boolean getVisible() {
         return visible;
-    }
-
-    /**
-     * Indicates if JavaScript is supported in the client's browser
-     *
-     * @return true if JavaScript is supported in the client's browser, false otherwise
-     */
-    public boolean supportsJS() {
-        return supportsJS;
-    }
-
-    /**
-     * Indicates if JavaScript is supported in the client's browser
-     *
-     * @param supportsJS is true if JavaScript is supported in the client's browser, false otherwise
-     */
-    public void setSupportsJS(boolean supportsJS) {
-        this.supportsJS = supportsJS;
     }
 
     public int compareTo(Object o) {

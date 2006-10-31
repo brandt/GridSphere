@@ -17,14 +17,17 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     protected String action = null;
     protected boolean isSecure = false;
     protected String portletURI = null;
-    protected List paramBeanList = new ArrayList();
+    protected List<ActionParamBean> paramBeanList = new ArrayList<ActionParamBean>();
     protected String label = null;
     protected String layout = null;
     protected String anchor = null;
     protected String trackMe = null;
     protected String extUrl = null;
     protected String onClick = null;
+    protected String onMouseOver = null;
+    protected String onMouseOut = null;
     protected String onSubmit = null;
+    protected String onReset= null;
     protected boolean useAjax = false;
 
     /**
@@ -58,6 +61,60 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      */
     public void setOnClick(String onClick) {
         this.onClick = onClick;
+    }
+
+    /**
+     * Returns the action specified by the onReset attribute
+     *
+     * @return the action specified by the onReset attribute
+     */
+    public String getOnReset() {
+        return onReset;
+    }
+
+    /**
+     * Sets the action specified by the onReset attribute
+     *
+     * @param onReset the javascript action to perform
+     */
+    public void setOnReset(String onReset) {
+        this.onReset = onReset;
+    }
+
+    /**
+     * Returns the action specified by the onMouseOver attribute
+     *
+     * @return onMouseOver the javascript onMouseOver event
+     */
+    public String getOnMouseOver() {
+        return onMouseOver;
+    }
+
+    /**
+     * Sets the action specified by the onMouseOver event
+     *
+     * @param onMouseOver the javascript onMouseOver event
+     */
+    public void setOnMouseOver(String onMouseOver) {
+        this.onMouseOver = onMouseOver;
+    }
+
+    /**
+     * Returns the action specified by the onMouseOut attribute
+     *
+     * @return onMouseOver the javascript onMouseOut event
+     */
+    public String getOnMouseOut() {
+        return onMouseOut;
+    }
+
+    /**
+     * Sets the action specified by the onMouseOut event
+     *
+     * @param onMouseOut the javascript onMouseOut event
+     */
+    public void setOnMouseOut(String onMouseOut) {
+        this.onMouseOut = onMouseOut;
     }
 
     /**
@@ -207,7 +264,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     /**
      * If secure is true, then use https, otherwise use http
      *
-     * @param isSecure
+     * @param isSecure if true use https, otherwise use http
      */
     public void setSecure(boolean isSecure) {
         this.isSecure = isSecure;
@@ -263,7 +320,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      *
      * @param paramBeanList a list containing <code>ActionParamBean</code>s
      */
-    public void setParamBeanList(List paramBeanList) {
+    public void setParamBeanList(List<ActionParamBean> paramBeanList) {
         this.paramBeanList = paramBeanList;
     }
 
@@ -272,7 +329,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      *
      * @return the list containing <code>ActionParamBean</code>s
      */
-    public List getParamBeanList() {
+    public List<ActionParamBean> getParamBeanList() {
         return paramBeanList;
     }
 

@@ -17,6 +17,9 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
     private String beanIdSource = null;
     protected String onFocus = null;
     protected String onClick = null;
+    protected String onChange = null;
+    protected String onBlur = null;
+    protected String onSelect = null;
 
     /**
      * Constructs a default input bean
@@ -36,18 +39,92 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
         this.cssClass = INPUT_STYLE;
     }
 
-    public void setOnfocus(String onFocus) {
+    /**
+     * Returns the onChange JavaScript function
+     *
+     * @return onChange JavaScript function
+     */
+    public String getOnChange() {
+        return onChange;
+    }
+
+    /**
+     * Sets the onChange JavaScript function
+     *
+     * @param onChange the onChange JavaScript function
+     */
+    public void setOnChange(String onChange) {
+        this.onChange = onChange;
+    }
+
+    /**
+     * Returns the onBlur JavaScript function
+     *
+     * @return onBlur JavaScript function
+     */
+    public String getOnBlur() {
+        return onBlur;
+    }
+
+    /**
+     * Sets the onBlur JavaScript function
+     *
+     * @param onBlur the onBlur JavaScript function
+     */
+    public void setOnBlur(String onBlur) {
+        this.onBlur = onBlur;
+    }
+
+    /**
+     * Returns the onSelect JavaScript function
+     *
+     * @return onSelect JavaScript function
+     */
+    public String getOnSelect() {
+        return onSelect;
+    }
+
+    /**
+     * Sets the onSelect JavaScript function
+     *
+     * @param onSelect the onSelect JavaScript function
+     */
+    public void setOnSelect(String onSelect) {
+        this.onSelect = onSelect;
+    }
+
+    /**
+     * Sets the onFocus JavaScript function
+     *
+     * @param onFocus the onFocus JavaScript function
+     */
+    public void setOnFocus(String onFocus) {
         this.onFocus = onFocus;
     }
 
-    public String getOnfocus() {
+    /**
+     * Returns the onFocus JavaScript function
+     *
+     * @return onFocus JavaScript function
+     */
+    public String getOnFocus() {
         return onFocus;
     }
 
+    /**
+     * Returns the onClick javascript function
+     *
+     * @return the onClick javascript function
+     */
     public String getOnClick() {
         return onClick;
     }
 
+    /**
+     * Sets the onClick JavaScript function
+     *
+     * @param onClick the onFocus JavaScript function
+     */
     public void setOnClick(String onClick) {
         this.onClick = onClick;
     }
@@ -111,31 +188,15 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
         sb.append("name=\"");
         sb.append(sname);
         sb.append("\" ");
-        if (value != null) {
-            sb.append("value=\"");
-            sb.append(value);
-            sb.append("\" ");
-        }
-        if (size != 0) {
-            sb.append("size=\"");
-            sb.append(size);
-            sb.append("\" ");
-        }
-        if (maxlength != 0) {
-            sb.append("maxlength=\"");
-            sb.append(maxlength);
-            sb.append("\" ");
-        }
-        if (onFocus != null) {
-            sb.append("onfocus=\"");
-            sb.append(onFocus);
-            sb.append("\"");
-        }
-        if (onClick != null) {
-            sb.append("onclick=\"");
-            sb.append(onClick);
-            sb.append("\"");
-        }
+        if (value != null) sb.append("value=\"").append(value).append("\" ");
+        if (size != 0) sb.append("size=\"").append(size).append("\" ");
+        if (maxlength != 0) sb.append("maxlength=\"").append(maxlength).append("\" ");
+        if (onFocus != null) sb.append("onfocus=\"").append(onFocus).append("\"");
+        if (onClick != null) sb.append("onclick=\"").append(onClick).append("\"");
+        if (onChange != null) sb.append("onchange=\"").append(onChange).append("\"");
+        if (onBlur != null) sb.append("onblur=\"").append(onBlur).append("\"");
+        if (onSelect != null) sb.append("onselect=\"").append(onSelect).append("\"");
+
         sb.append(checkReadOnly());
         sb.append(checkDisabled());
         sb.append("/>");

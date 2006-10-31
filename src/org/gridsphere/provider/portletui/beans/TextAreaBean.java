@@ -8,13 +8,12 @@ package org.gridsphere.provider.portletui.beans;
 /**
  * The <code>TextAreaBean</code> represents a text area element
  */
-public class TextAreaBean extends BaseComponentBean implements TagBean {
+public class TextAreaBean extends InputBean implements TagBean {
 
     public static final String NAME = "ta";
 
     private int cols = 0;
     private int rows = 0;
-    protected String onFocus = null;
 
     /**
      * Constructs a default text area bean
@@ -71,14 +70,6 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
         this.rows = rows;
     }
 
-    public void setOnfocus(String onFocus) {
-        this.onFocus = onFocus;
-    }
-
-    public String getOnfocus() {
-        return onFocus;
-    }
-
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<textarea ");
@@ -91,6 +82,12 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
         if (rows != 0) sb.append(" rows=\"").append(rows).append("\" ");
         sb.append(" ").append(checkDisabled());
         sb.append(" ").append(checkReadOnly());
+        if (onFocus != null) sb.append("onfocus=\"").append(onFocus).append("\"");
+        if (onClick != null) sb.append("onclick=\"").append(onClick).append("\"");
+        if (onChange != null) sb.append("onchange=\"").append(onChange).append("\"");
+        if (onBlur != null) sb.append("onblur=\"").append(onBlur).append("\"");
+        if (onSelect != null) sb.append("onselect=\"").append(onSelect).append("\"");
+
         sb.append(">");
         return sb.toString();
     }

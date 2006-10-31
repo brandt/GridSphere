@@ -19,6 +19,8 @@ public class ActionLinkBean extends ActionBean implements TagBean {
 
     /**
      * Constructs an action link bean from a portlet request and supplied bean identifier
+     *
+     * @param beanId the bean id used to reference this ActionLinkBean
      */
     public ActionLinkBean(String beanId) {
         this.beanId = beanId;
@@ -86,14 +88,16 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         }
         StringBuffer sb = new StringBuffer();
         sb.append("<a");
-        if (name != null) sb.append(" name=\"" + name + "\"");
+        if (name != null) sb.append(" name=\"").append(name).append("\"");
 
         if (useAjax) action = "#";
-        sb.append(" href=\"" + action + "\"");
+        sb.append(" href=\"").append(action).append("\"");
 
         sb.append(getFormattedCss());
-        if (onClick != null) sb.append(" onclick=\"" + onClick + "\"");
-        sb.append(">" + value + "</a>");
+        if (onClick != null) sb.append(" onclick=\"").append(onClick).append("\"");
+        if (onMouseOut != null) sb.append(" onMouseOut=\"").append(onMouseOut).append("\"");
+        if (onMouseOver != null) sb.append(" onMouseOver=\"").append(onMouseOver).append("\"");
+        sb.append(">").append(value).append("</a>");
         return sb.toString();
     }
 

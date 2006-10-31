@@ -20,6 +20,8 @@ public class ListBoxBean extends BeanContainer implements TagBean {
     protected int size = 0;
     protected boolean isMultiple = false;
     protected String onChange = null;
+    protected String onBlur = null;
+    protected String onFocus = null;
 
     /**
      * Constructs a default list box bean
@@ -80,12 +82,48 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         this.onChange = onChange;
     }
 
+    /**
+     * Returns the onBlur JavaScript function
+     *
+     * @return onBlur JavaScript function
+     */
+    public String getOnBlur() {
+        return onBlur;
+    }
+
+    /**
+     * Sets the onBlur JavaScript function
+     *
+     * @param onBlur the onBlur JavaScript function
+     */
+    public void setOnBlur(String onBlur) {
+        this.onBlur = onBlur;
+    }
+
+    /**
+     * Returns the onFocus JavaScript function
+     *
+     * @return onFocus JavaScript function
+     */
+    public String getOnFocus() {
+        return onChange;
+    }
+
+    /**
+     * Sets the onFocus JavaScript function
+     *
+     * @param onFocus the onFocus JavaScript function
+     */
+    public void setOnFocus(String onFocus) {
+        this.onFocus = onFocus;
+    }
+
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
 
         String sname = createTagName(name);
-        
-        sb.append("<select " + getFormattedCss() + " name='" + sname + "' size='" + size + "'");
+
+        sb.append("<select ").append(getFormattedCss()).append(" name='").append(sname).append("' size='").append(size).append("'");
         if (isMultiple) {
             sb.append(" multiple='multiple'");
         }
@@ -94,9 +132,15 @@ public class ListBoxBean extends BeanContainer implements TagBean {
             sb.append(" disabled=\"disabled\" ");
         }
         if (onChange != null) {
-            // 'onChange' replaced by 'onchange' for XHTML 1.0 Strict compliance
-            sb.append(" onchange='" + onChange + "'");
+            sb.append(" onchange='").append(onChange).append("'");
         }
+        if (onBlur != null) {
+            sb.append(" onblur='").append(onBlur).append("'");
+        }
+        if (onFocus != null) {
+            sb.append(" onfocus='").append(onFocus).append("'");
+        }
+
         sb.append(">");
         return sb.toString();
     }
