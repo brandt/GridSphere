@@ -21,10 +21,7 @@ import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
 import org.gridsphere.services.core.utils.DateUtil;
 
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletException;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletSession;
+import javax.portlet.*;
 import java.io.File;
 import java.text.DateFormat;
 import java.util.*;
@@ -37,6 +34,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public static final String VIEW_USER_JSP = "profile/viewuser.jsp";
     public static final String CONFIGURE_JSP = "profile/configure.jsp";
     public static final String HELP_JSP = "profile/help.jsp";
+    public static final String EDIT_PASSWD_JSP = "profile/editpassword.jsp";
 
     // Portlet services
     private UserManagerService userManagerService = null;
@@ -104,6 +102,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
         setNextState(req, VIEW_USER_JSP);
     }
 
+    public void doEditPassword(ActionFormEvent event) {
+        ActionRequest req = event.getActionRequest();
+        setNextState(req, EDIT_PASSWD_JSP);
+    }
 
     public void saveTheme(ActionFormEvent event) {
         PortletRequest req = event.getActionRequest();
@@ -199,7 +201,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             }
             timezoneList.addBean(item);
         }
-        timezoneList.setSize(4);
+        timezoneList.setSize(1);
         timezoneList.sortByValue();
         timezoneList.setMultipleSelection(false);
     }
@@ -366,11 +368,18 @@ public class ProfileManagerPortlet extends ActionPortlet {
         return bean;
     }
 
+    public void doCancel(ActionFormEvent event) {
+        ActionRequest req = event.getActionRequest();
+        setNextState(req, DEFAULT_VIEW_PAGE);
+    }
+
     public void doSaveAll(ActionFormEvent event) {
         doSaveUser(event);
-        doSavePass(event);
+        //doSavePass(event);
         saveTheme(event);
 //        savePrivacy(event);
     }
+
+
 
 }
