@@ -34,6 +34,7 @@ import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.portal.PortalConfigService;
+import org.hibernate.StaleObjectStateException;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -71,8 +72,6 @@ public class GridSphereFilter implements Filter {
             HttpServletRequest req = (HttpServletRequest)request;
             HttpServletResponse res = (HttpServletResponse)response;
 
-            //req.setAttribute(SportletProperties.SERVLET_PATH, req.getServletPath());
-
             //PersistenceManagerService pms = null;
 
             // If first time being called, instantiate all portlets
@@ -80,13 +79,7 @@ public class GridSphereFilter implements Filter {
             if (firstDoGet.equals(Boolean.TRUE)) {
 
 
-                //String ctxPath = req.getContextPath();
-                //if (ctxPath.equals("ROOT")) ctxPath = "";
-                //configService.setProperty("gridsphere.deploy", ctxPath);
-                //configService.storeProperties();
-
                 // check if database file exists
-
                 String release = SportletProperties.getInstance().getProperty("gridsphere.release");
                 int idx = release.lastIndexOf(" ");
                 String gsversion = release.substring(idx+1);
@@ -104,8 +97,32 @@ public class GridSphereFilter implements Filter {
                     return;
                 }
 
-                roleService = (RoleManagerService) PortletServiceFactory.createPortletService(RoleManagerService.class, true);
-                if ((roleService.getUsersInRole(PortletRole.ADMIN)).isEmpty()) {
+                PersistenceManagerService pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+                PersistenceManagerRdbms pm = null;
+                boolean noAdmin = true;
+                try {
+                    log.info("Starting a database transaction");
+                    pm = pms.createGridSphereRdbms();
+                    pm.beginTransaction();
+
+                    roleService = (RoleManagerService) PortletServiceFactory.createPortletService(RoleManagerService.class, true);
+                    noAdmin = roleService.getUsersInRole(PortletRole.ADMIN).isEmpty();
+
+                    pm.endTransaction();
+                } catch (StaleObjectStateException staleEx) {
+                    log.error("This interceptor does not implement optimistic concurrency control!");
+                    log.error("Your application will not work until you add compensation actions!");
+                } catch (Throwable ex) {
+                    ex.printStackTrace();
+                    pm.endTransaction();
+                    try {
+                        pm.rollbackTransaction();
+                    } catch (Throwable rbEx) {
+                        log.error("Could not rollback transaction after exception!", rbEx);
+                    }
+                }
+
+                if (noAdmin) {
                     request.setAttribute("setup", "true");
                     RequestDispatcher rd = request.getRequestDispatcher("/setup");
                     rd.forward(request, response);
@@ -120,7 +137,6 @@ public class GridSphereFilter implements Filter {
                     portletManager.initAllPortletWebApplications(req, res);
                     firstDoGet = Boolean.FALSE;
                 } catch (Exception e) {
-                    e.printStackTrace();
                     log.error("GridSphere initialization failed!", e);
                     RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/init_error.jsp");
                     req.setAttribute("error", e);
@@ -179,19 +195,9 @@ public class GridSphereFilter implements Filter {
 
             log.info("forwarded URL: " + ctxPath + extraInfo);
 
-
-
-
-
-
-
-
-            
-
-
             context.getRequestDispatcher(ctxPath + extraInfo).forward(req, res);
-            return;
-            // log.info("END");
+
+            log.info("END");
 
         }
 
