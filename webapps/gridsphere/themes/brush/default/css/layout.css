@@ -6,11 +6,22 @@
 /* overall page styling, gs controled */
 #gridsphere-layout-page {
     width: 96%;
+
     margin-left: 2%;
     margin-right: 2%;
     font-family: "Lucida Grande", sans-serif;
     padding: 0px;
     border: 0px;
+}
+
+
+#gridsphere-layout-logo {
+    float: left;
+    padding-top: 3px;
+    margin: 0px 0px 0px 10px;
+    padding-left: 8px;
+    padding-right: 5px;
+    padding-bottom: 1px;
 }
 
 /* layout for the head */
