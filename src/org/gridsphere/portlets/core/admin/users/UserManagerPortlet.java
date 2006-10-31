@@ -82,6 +82,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
         req.setAttribute("userList", userList);
 
+
         //System.err.println("sizeof users=" + userList.size());
         //req.setAttribute("numUsers", Integer.valueOf(numUsers));
         //req.setAttribute("maxRows", Integer.valueOf(maxRows));
@@ -90,7 +91,6 @@ public class UserManagerPortlet extends ActionPortlet {
         userTable.setQueryFilter(filter);
         //userTable.setMaxRows(maxRows);
         //userTable.setNumEntries(numUsers);
-
 
         setNextState(req, DO_VIEW_USER_LIST);
     }
@@ -167,7 +167,7 @@ public class UserManagerPortlet extends ActionPortlet {
     /**
      * Creates the role table
      *
-     * @param evt
+     * @param evt the action form event
      * @param user the user if this is editing an existing user, null if a new user
      */
     private void makeRoleFrame(ActionFormEvent evt, User user) {
@@ -192,13 +192,11 @@ public class UserManagerPortlet extends ActionPortlet {
 
         model.addTableRowBean(tr);
 
-        List roles = roleManagerService.getRoles();
-        List myroles = new ArrayList();
+        List<PortletRole> roles = roleManagerService.getRoles();
+        List myroles = new ArrayList<PortletRole>();
         if (user != null)  myroles = roleManagerService.getRolesForUser(user);
 
-        Iterator it = roles.iterator();
-        while (it.hasNext()) {
-            PortletRole role = (PortletRole)it.next();
+        for (PortletRole role : roles) {
             tr = new TableRowBean();
             tc = new TableCellBean();
             CheckBoxBean cb = new CheckBoxBean();
@@ -316,11 +314,9 @@ public class UserManagerPortlet extends ActionPortlet {
         if (user != null) {
             req.setAttribute("user", user);
             this.passwordManagerService.deletePassword(user);
-            List userRoles = this.roleManagerService.getRolesForUser(user);
-            Iterator ur = userRoles.iterator();
-            while (ur.hasNext()) {
-                PortletRole pr = (PortletRole)ur.next();
-                this.roleManagerService.deleteUserInRole(user, pr);
+            List<PortletRole> userRoles = this.roleManagerService.getRolesForUser(user);
+            for (PortletRole role : userRoles) {
+                this.roleManagerService.deleteUserInRole(user, role);
             }
             this.userManagerService.deleteUser(user);
             createSuccessMessage(evt, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
@@ -496,16 +492,14 @@ public class UserManagerPortlet extends ActionPortlet {
     private void saveUserRole(ActionFormEvent event, User user) {
         log.debug("Entering saveUserRole()");
 
-        List roles = roleManagerService.getRoles();
-        Iterator it = roles.iterator();
-        while (it.hasNext()) {
-            PortletRole role = (PortletRole)it.next();
+        List<PortletRole> roles = roleManagerService.getRoles();
+        for (PortletRole role : roles) {
             CheckBoxBean cb = event.getCheckBoxBean(role.getName() + "CB");
             if (cb.isSelected()) {
                 roleManagerService.addUserToRole(user, role);
             } else {
                 if (roleManagerService.isUserInRole(user, role))
-                    if((!role.equals(PortletRole.ADMIN)) || (roleManagerService.getUsersInRole(PortletRole.ADMIN).size() > 1)) {
+                    if ((!role.equals(PortletRole.ADMIN)) || (roleManagerService.getUsersInRole(PortletRole.ADMIN).size() > 1)) {
                         roleManagerService.deleteUserInRole(user, role);
                     } else {
                         log.warn("Can't delete user, one user in role ADMIN necessary");
