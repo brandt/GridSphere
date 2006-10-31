@@ -345,6 +345,7 @@ public class SetupServlet extends HttpServlet {
             accountRequest.setUserName(username);
             accountRequest.setFirstName(firstname);
             accountRequest.setLastName(lastname);
+            accountRequest.setFullName(lastname + ", " + firstname);
             accountRequest.setEmailAddress(email);
             accountRequest.setOrganization(org);
             PasswordEditor editor = passwordService.editPassword(accountRequest);
