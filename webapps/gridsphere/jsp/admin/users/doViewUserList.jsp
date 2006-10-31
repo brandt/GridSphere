@@ -1,6 +1,6 @@
-<%@ page import="java.util.Iterator,
-                 java.util.List,
+<%@ page import="java.util.List,
                  org.gridsphere.services.core.user.User" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
@@ -8,7 +8,7 @@
 
 <ui:messagebox beanId="msg"/>
 
-<% List userList = (List) request.getAttribute("userList"); %>
+<% List<User> userList = (List<User>) request.getAttribute("userList"); %>
 
 <h3><ui:text key="USER_SHOW_USERS" style="nostyle"/></h3>
 
@@ -53,16 +53,17 @@
             <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
             <ui:tablecell><ui:text key="EMAILADDRESS"/></ui:tablecell>
             <ui:tablecell><ui:text key="ORGANIZATION"/></ui:tablecell>
+            <ui:tablecell><ui:text key="NUMLOGINS"/></ui:tablecell>
+            <ui:tablecell><ui:text key="LASTLOGINDATE"/></ui:tablecell>
         </ui:tablerow>
         <%
-            Iterator userIterator = userList.iterator();
-            while (userIterator.hasNext()) {
-                // Get next user
-                User user = (User) userIterator.next();
+            for (User user : userList) {
+
         %>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionlink cssStyle="text-decoration: underline;" action="doViewUser" value="<%= user.getFullName() %>">
+                <ui:actionlink cssStyle="text-decoration: underline;" action="doViewUser"
+                               value="<%= user.getFullName() %>">
                     <ui:actionparam name="userID" value="<%= user.getID() %>"/>
                 </ui:actionlink>
             </ui:tablecell>
@@ -70,10 +71,17 @@
                 <ui:text value="<%= user.getUserName() %>"/>
             </ui:tablecell>
             <ui:tablecell>
-                <a href="<%= "mailto:" + user.getEmailAddress() %>"><%= user.getEmailAddress() %></a>
+                <a href="<%= "mailto:" + user.getEmailAddress() %>"><%= user.getEmailAddress() %>
+                </a>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text value="<%= user.getOrganization() %>"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:text value="<%= (user.getNumLogins()).toString() %>"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:text value="<%= new SimpleDateFormat("MMM d yyyy hh:mm a").format(user.getLastLoginTime()).toString() %>"/>
             </ui:tablecell>
         </ui:tablerow>
         <%
