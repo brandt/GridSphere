@@ -23,7 +23,6 @@ public class HiddenFieldTag extends BaseComponentTag {
             hidden = (HiddenFieldBean) getTagBean();
             if (hidden == null) {
                 hidden = new HiddenFieldBean(beanId);
-
                 this.setBaseComponentBean(hidden);
             } else {
                 this.updateBaseComponentBean(hidden);

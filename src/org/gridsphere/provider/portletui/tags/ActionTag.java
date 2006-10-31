@@ -31,6 +31,9 @@ public abstract class ActionTag extends BaseComponentTag {
     protected String var = null;
     protected String onClick = null;
     protected String onSubmit = null;
+    protected String onMouseOver = null;
+    protected String onMouseOut = null;
+    protected String onReset = null;
     protected boolean useAjax = false;
     protected String key = null;
     protected boolean isSecure = false;
@@ -38,7 +41,7 @@ public abstract class ActionTag extends BaseComponentTag {
     protected String windowState = null;
     protected String portletMode = null;
     protected DefaultPortletAction portletAction = null;
-    protected List paramBeans = new ArrayList();
+    protected List<ActionParamBean> paramBeans = new ArrayList<ActionParamBean>();
     protected String label = null;
     protected String layout = null;
     protected ImageBean imageBean = null;
@@ -127,6 +130,60 @@ public abstract class ActionTag extends BaseComponentTag {
      */
     public void setOnClick(String onClick) {
         this.onClick = onClick;
+    }
+
+    /**
+     * Returns the action specified by the onReset attribute
+     *
+     * @return the action specified by the onReset attribute
+     */
+    public String getOnReset() {
+        return onReset;
+    }
+
+    /**
+     * Sets the action specified by the onReset attribute
+     *
+     * @param onReset the javascript action to perform
+     */
+    public void setOnReset(String onReset) {
+        this.onReset = onReset;
+    }
+
+    /**
+     * Returns the action specified by the onMouseOver attribute
+     *
+     * @return onMouseOver the javascript onMouseOver event
+     */
+    public String getOnMouseOver() {
+        return onMouseOver;
+    }
+
+    /**
+     * Sets the action specified by the onMouseOver event
+     *
+     * @param onMouseOver the javascript onMouseOver event
+     */
+    public void setOnMouseOver(String onMouseOver) {
+        this.onMouseOver = onMouseOver;
+    }
+
+    /**
+     * Returns the action specified by the onMouseOut attribute
+     *
+     * @return onMouseOver the javascript onMouseOut event
+     */
+    public String getOnMouseOut() {
+        return onMouseOut;
+    }
+
+    /**
+     * Sets the action specified by the onMouseOut event
+     *
+     * @param onMouseOut the javascript onMouseOut event
+     */
+    public void setOnMouseOut(String onMouseOut) {
+        this.onMouseOut = onMouseOut;
     }
 
     /**
@@ -346,6 +403,8 @@ public abstract class ActionTag extends BaseComponentTag {
         var = null;
         onClick = null;
         onSubmit = null;
+        onMouseOut = null;
+        onMouseOver = null;
         useAjax = false;
         key = null;
         isSecure = false;

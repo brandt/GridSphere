@@ -33,7 +33,7 @@ public class PortletTag extends BodyTagSupport {
     protected String innerPadding = "";
     protected String outerPadding = "";
     protected String theme = "default";
-    protected String renderKit = "standard";
+    protected String renderKit = "brush";
     protected String role = "";
 
     public String getTheme() {

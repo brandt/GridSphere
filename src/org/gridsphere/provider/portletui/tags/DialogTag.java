@@ -19,6 +19,7 @@ public class DialogTag extends BaseComponentTag {
     protected String value = "";
     protected String id = null;
     protected String body = "";
+    protected String titleColor = null;
     protected String header = "";
     protected String footer = "";
     protected String width = "";
@@ -26,6 +27,7 @@ public class DialogTag extends BaseComponentTag {
     protected Boolean isClose = true;
     protected Boolean isDraggable = true;
     protected Boolean isResizable = false;
+    protected String onClick = null;
     protected Boolean isLink = false;
 
     public String getWidth() {
@@ -92,6 +94,14 @@ public class DialogTag extends BaseComponentTag {
         this.value = value;
     }
 
+    public String getTitleColor() {
+        return titleColor;
+    }
+
+    public void setTitleColor(String titleColor) {
+        this.titleColor = titleColor;
+    }
+
     public String getBody() {
         return body;
     }
@@ -128,28 +138,36 @@ public class DialogTag extends BaseComponentTag {
         super.release();
     }
 
-    public int doStartTag() throws JspException {
-        JspWriter out;
+    protected void setProperties(DialogBean dialog) {
         if (key != null) value = getLocalizedText(key);
+        RenderResponse res = (RenderResponse)pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+        dialog.setRenderResponse(res);
+        dialog.setId(id);
+        dialog.setWidth(width);
+        dialog.setHeader(header);
+        dialog.setBody(body);
+        dialog.setOnClick(onClick);
+        dialog.setFooter(footer);
+        dialog.setClose(isClose);
+        dialog.setModal(isModal);
+        dialog.setDraggable(isDraggable);
+        dialog.setResizable(isResizable);
+        dialog.setName(name);
+        dialog.setTitleColor(titleColor);
+        dialog.setLink(isLink);
+        dialog.setValue(value);
+    }
+
+    public int doStartTag() throws JspException {
+
+        DialogBean dialog = new DialogBean();
+        onClick = "YAHOO." + name + ".panel.show();";
+        setProperties(dialog);
+
+        JspWriter out;
         try {
             out = pageContext.getOut();
-            DialogBean dialog = new DialogBean();
-            RenderResponse res = (RenderResponse)pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-            dialog.setRenderResponse(res);
-            dialog.setId(id);
-            dialog.setWidth(width);
-            dialog.setHeader(header);
-            dialog.setBody(body);
-            dialog.setFooter(footer);
-            dialog.setClose(isClose);
-            dialog.setModal(isModal);
-            dialog.setDraggable(isDraggable);
-            dialog.setResizable(isResizable);
-            dialog.setName(name);
-            dialog.setLink(isLink);
-            dialog.setValue(value);
             out.print(dialog.toStartString());
-            this.updatePageEndBuffer(dialog.getDialogPopup());
         } catch (Exception e) {
             throw new JspException(e);
         }

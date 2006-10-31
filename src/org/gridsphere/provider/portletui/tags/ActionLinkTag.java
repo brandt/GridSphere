@@ -132,6 +132,8 @@ public class ActionLinkTag extends ActionTag {
         if (cssStyle != null) actionlink.setCssStyle(cssStyle);
         if (cssClass != null) actionlink.setCssClass(cssClass);
         if (layout != null) actionlink.setLayout(label);
+        if (onMouseOut != null) actionlink.setOnMouseOut(onMouseOut);
+        if (onMouseOver != null) actionlink.setOnMouseOver(onMouseOver);
 
         Tag parent = getParent();
         if (parent instanceof ActionMenuTag) {
@@ -164,6 +166,14 @@ public class ActionLinkTag extends ActionTag {
         }
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
+        }
+
+        if (pageContext.getRequest().getAttribute(SportletProperties.USE_AJAX) != null) {
+            String paction = ((!action.equals("")) ? "&" + portletAction.toString() : "");
+            String portlet = (String)pageContext.getRequest().getAttribute("org.gridsphere.PORTLET_NAME");
+            String compname = (String)pageContext.getRequest().getAttribute("org.gridsphere.COMP_NAME");
+            actionlink.setUseAjax(true);
+            actionlink.setOnClick("GridSphereAjaxHandler2.startRequest('" + portlet + "', '" + compname + "', '" + paction + "');");
         }
 
         if (useAjax) {

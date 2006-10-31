@@ -21,8 +21,6 @@ public class TextFieldTag extends InputTag {
     protected int size = 0;
     protected int maxlength = 0;
     protected String beanIdSource = null;
-    protected String onFocus = null;
-    protected String onClick = null;
 
     public String getBeanidsource() {
         return beanIdSource;
@@ -68,22 +66,6 @@ public class TextFieldTag extends InputTag {
         this.maxlength = maxlength;
     }
 
-    public void setOnfocus(String onFocus) {
-        this.onFocus = onFocus;
-    }
-
-    public String getOnfocus() {
-        return onFocus;
-    }
-
-    public String getOnClick() {
-        return onClick;
-    }
-
-    public void setOnClick(String onClick) {
-        this.onClick = onClick;
-    }
-
     public int doStartTag() throws JspException {
         return EVAL_BODY_INCLUDE;
     }
@@ -105,8 +87,12 @@ public class TextFieldTag extends InputTag {
         }
         if (maxlength != 0) textFieldBean.setMaxLength(maxlength);
         if (size != 0) textFieldBean.setSize(size);
-        if (onFocus != null) textFieldBean.setOnfocus(onFocus);
+        if (onFocus != null) textFieldBean.setOnFocus(onFocus);
         if (onClick != null) textFieldBean.setOnClick(onClick);
+        if (onChange != null) textFieldBean.setOnChange(onChange);
+        if (onBlur != null) textFieldBean.setOnBlur(onBlur);
+        if (onSelect != null) textFieldBean.setOnSelect(onBlur);
+
         if (cssClass != null) textFieldBean.addCssClass(cssClass);
         if (cssStyle != null) textFieldBean.addCssStyle(cssStyle);
         //debug();

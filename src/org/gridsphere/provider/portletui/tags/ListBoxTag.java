@@ -22,6 +22,8 @@ public class ListBoxTag extends ContainerTag {
     protected boolean isMultiple = false;
     protected int size = 1;
     protected String onChange = null;
+    protected String onBlur = null;
+    protected String onFocus = null;
     protected boolean submitOnChange = false;
 
     /**
@@ -78,9 +80,44 @@ public class ListBoxTag extends ContainerTag {
         this.onChange = onChange;
     }
 
+    /**
+     * Returns the onBlur JavaScript function
+     *
+     * @return onBlur JavaScript function
+     */
+    public String getOnBlur() {
+        return onBlur;
+    }
 
     /**
-     * Sets m  ultiple selection
+     * Sets the onBlur JavaScript function
+     *
+     * @param onBlur the onBlur JavaScript function
+     */
+    public void setOnBlur(String onBlur) {
+        this.onBlur = onBlur;
+    }
+
+    /**
+     * Returns the onFocus JavaScript function
+     *
+     * @return onFocus JavaScript function
+     */
+    public String getOnFocus() {
+        return onChange;
+    }
+
+    /**
+     * Sets the onFocus JavaScript function
+     *
+     * @param onFocus the onFocus JavaScript function
+     */
+    public void setOnFocus(String onFocus) {
+        this.onFocus = onFocus;
+    }
+    
+    /**
+     * Sets multiple selection
      *
      * @param isMultiple is true if listbox provides multiple selections, false otherwise
      */
@@ -115,20 +152,21 @@ public class ListBoxTag extends ContainerTag {
                 listbox = new ListBoxBean();
                 listbox.setSize(size);
                 listbox.setMultipleSelection(isMultiple);
-                listbox.setOnChange(onChange);
                 this.setBaseComponentBean(listbox);
             } else {
                 if (size != 1) listbox.setSize(size);
                 this.updateBaseComponentBean(listbox);
-                if (onChange != null) listbox.setOnChange(onChange);
             }
         } else {
             listbox = new ListBoxBean();
             listbox.setSize(size);
-            listbox.setOnChange(onChange);
             listbox.setMultipleSelection(isMultiple);
             this.setBaseComponentBean(listbox);
         }
+
+        if (onChange != null) listbox.setOnChange(onChange);
+        if (onBlur != null) listbox.setOnBlur(onBlur);
+        if (onFocus != null) listbox.setOnFocus(onFocus);
 
         try {
             JspWriter out = pageContext.getOut();

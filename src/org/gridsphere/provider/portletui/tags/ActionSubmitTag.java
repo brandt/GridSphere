@@ -77,13 +77,7 @@ public class ActionSubmitTag extends ActionTag {
         if (parentTag instanceof ContainerTag) {
             ContainerTag containerTag = (ContainerTag) parentTag;
             containerTag.addTagBean(actionSubmitBean);
-        }
-        try {
-            JspWriter out = pageContext.getOut();
-            out.print(actionSubmitBean.toStartString());
-        } catch (Exception e) {
-            throw new JspException(e.getMessage());
-        }
+        }        
         return EVAL_BODY_INCLUDE;
     }
 
@@ -99,6 +93,14 @@ public class ActionSubmitTag extends ActionTag {
         actionSubmitBean.setName(actionURI);
 
         if (portletAction != null) actionSubmitBean.setAction(portletAction.toString());
+
+        if (pageContext.getRequest().getAttribute(SportletProperties.USE_AJAX) != null) {
+            String paction = ((!action.equals("")) ? "&" + portletAction.toString() : "");
+            String portlet = (String)pageContext.getRequest().getAttribute("org.gridsphere.PORTLET_NAME");
+            String compname = (String)pageContext.getRequest().getAttribute("org.gridsphere.COMP_NAME");
+            actionSubmitBean.setUseAjax(true);
+            actionSubmitBean.setOnClick("GridSphereAjaxHandler2.startRequest('" + portlet + "', '" + compname + "', '" + paction + "');");
+        }
 
         if (useAjax) {
             String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);

@@ -201,17 +201,11 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         componentBean.addParam(SportletProperties.COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.COMPONENT_ID));
         componentBean.addParam(SportletProperties.GP_COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID));
         if (cssStyle != null) componentBean.setCssStyle(cssStyle);
+        if (cssClass != null) componentBean.setCssClass(cssStyle);
         componentBean.setDisabled(disabled);
         componentBean.setReadOnly(readonly);
         if (name != null) componentBean.setName(name);
         if (value != null) componentBean.setValue(value);
-        /*
-        if (supportsJavaScript()) {
-            supportsJS = true;
-        } else {
-            supportsJS = false;
-        }
-        */
         //componentBean.setSupportsJS(supportsJS);
         componentBean.setReadOnly(readonly);
     }
@@ -322,6 +316,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         return super.doEndTag();
     }
 
+    /*
     public void updatePageEndBuffer(StringBuffer buffer) {
         RenderRequest req = (RenderRequest)pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
         StringBuffer pagebuffer = (StringBuffer)req.getAttribute(SportletProperties.PAGE_BUFFER);
@@ -329,4 +324,5 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         pagebuffer.append(buffer);
         req.setAttribute(SportletProperties.PAGE_BUFFER, pagebuffer);
     }
+    */
 }

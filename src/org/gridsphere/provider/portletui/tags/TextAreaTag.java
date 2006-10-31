@@ -12,7 +12,7 @@ import javax.servlet.jsp.JspWriter;
 /**
  * A <code>TextAreaTag</code> represents a text area element
  */
-public class TextAreaTag extends BaseComponentTag {
+public class TextAreaTag extends InputTag {
 
     protected TextAreaBean textAreaBean = null;
     protected int cols = 0;
@@ -87,6 +87,11 @@ public class TextAreaTag extends BaseComponentTag {
             this.setBaseComponentBean(textAreaBean);
         }
 
+        if (onFocus != null) textAreaBean.setOnFocus(onFocus);
+        if (onClick != null) textAreaBean.setOnClick(onClick);
+        if (onChange != null) textAreaBean.setOnChange(onChange);
+        if (onBlur != null) textAreaBean.setOnBlur(onBlur);
+        if (onSelect != null) textAreaBean.setOnSelect(onBlur);
         //debug();
 
         try {

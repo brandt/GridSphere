@@ -10,7 +10,6 @@ import org.gridsphere.provider.portletui.beans.TagBean;
 
 import javax.servlet.jsp.JspException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ import java.util.List;
 public abstract class ContainerTag extends BaseComponentTag {
 
     // make sure it is initalized, otherwise adding a tag throws NPE
-    protected List list = new ArrayList();
+    protected List<TagBean> list = new ArrayList<TagBean>();
 
     /**
      * Adds a tag bean to the container
@@ -45,7 +44,7 @@ public abstract class ContainerTag extends BaseComponentTag {
      *
      * @return a list of tag beans
      */
-    public List getTagBeans() {
+    public List<TagBean> getTagBeans() {
         return list;
     }
 
@@ -54,9 +53,8 @@ public abstract class ContainerTag extends BaseComponentTag {
     public abstract int doEndTag() throws JspException;
 
     public void doEndTag(BeanContainer beanContainer) throws JspException {
-        Iterator it = list.iterator();
-        while (it.hasNext()) {
-            BaseComponentBean bc = (BaseComponentBean) it.next();
+        for (TagBean tagBean : list) {
+            BaseComponentBean bc = (BaseComponentBean)tagBean;
             beanContainer.addBean(bc);
         }
     }
