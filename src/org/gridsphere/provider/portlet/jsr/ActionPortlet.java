@@ -322,7 +322,7 @@ public class ActionPortlet extends GenericPortlet {
 
     protected void doMode(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         String next = getNextState(request);
-        log.debug("in ActionPortlet: portlet id= " + getUniqueId() + " doView next page is= " + next);
+        log.debug("in ActionPortlet: portlet id= " + getUniqueId() + "  next page is= " + next);
 
         // if cid is null (true in non-GS portlet container) then use the portlet name
         String cid = (String)request.getAttribute(SportletProperties.COMPONENT_ID);

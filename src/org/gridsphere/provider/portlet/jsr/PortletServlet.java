@@ -270,7 +270,7 @@ public class PortletServlet extends HttpServlet
             if (userInfo.containsKey("user.id")) userInfo.put("user.id", user.getID());
             if (userInfo.containsKey("user.email")) userInfo.put("user.email", user.getEmailAddress());
             if (userInfo.containsKey("user.organization")) userInfo.put("user.organization", user.getOrganization());
-            if (userInfo.containsKey("user.lastlogintime")) userInfo.put("user.lastlogintime", new Long(user.getLastLoginTime()).toString());
+            if (userInfo.containsKey("user.lastlogintime")) userInfo.put("user.lastlogintime", String.valueOf(user.getLastLoginTime()));
             if (userInfo.containsKey("user.name.full")) userInfo.put("user.name.full", user.getFullName());
             if (userInfo.containsKey("user.name.first")) userInfo.put("user.name.first", user.getFirstName());
             if (userInfo.containsKey("user.name.last")) userInfo.put("user.name.last", user.getLastName());
