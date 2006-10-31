@@ -49,6 +49,7 @@ import java.net.SocketException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Calendar;
 
 
 /**
@@ -223,7 +224,18 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         if (event.hasAction()) {
             String actionName = event.getAction().getName();
             if (actionName.equals(SportletProperties.LOGIN)) {
-                login(event);
+                String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
+                try {
+                    login(event);
+                    setUserAndRoles(event);
+                    return;
+                } catch (AuthorizationException err) {
+                    log.debug(err.getMessage());
+                    req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
+                } catch (AuthenticationException err) {
+                    log.debug(err.getMessage());
+                    req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
+                }
             }
             if (actionName.equals(SportletProperties.LOGOUT)) {
                 logout(event);
@@ -393,50 +405,56 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         System.err.println("in login of GS servlet!!");
 
-        String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
+
         HttpServletRequest req = event.getHttpServletRequest();
         RenderResponse res = event.getRenderResponse();
+
+        User user = loginService.login(req);
+        Long now = Calendar.getInstance().getTime().getTime();
+        user.setLastLoginTime(now);
+        Integer numLogins = user.getNumLogins();
+        if (numLogins == null) numLogins = 0;
+        numLogins++;
+        System.err.println("add +1 to LOGIN! " + numLogins);
+        user.setNumLogins(numLogins);
+        userManagerService.saveUser(user);
+
+        req.setAttribute(SportletProperties.PORTLET_USER, user);
+        req.getSession(true).setAttribute(SportletProperties.PORTLET_USER, user.getID());
+
+        String query = event.getAction().getParameter("queryString");
+
+        /*
+        String remme = req.getParameter("remlogin");
+        if (remme != null) {
+            setUserCookie(event);
+        } else {
+            removeUserCookie(event);
+        }
+        */
+
+        PortletURL uri = res.createActionURL();
+        if (query != null) {
+            uri.setParameter("cid", query);
+        }
+        req.setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
+
+        String realuri = uri.toString().substring("http".length());
+        Boolean useSecureRedirect = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.USE_HTTPS_REDIRECT));
+        if (useSecureRedirect.booleanValue()) {
+            realuri = "https" + realuri;
+        } else {
+            realuri = "http" + realuri;
+        }
+
+        for (PortalFilter filter : portalFilters) {
+            filter.doAfterLogin(event.getHttpServletRequest(), event.getHttpServletResponse());
+        }
+
+        
+        log.debug("in login redirecting to portal: " + realuri.toString());
         try {
-            User user = loginService.login(req);
-            
-            req.setAttribute(SportletProperties.PORTLET_USER, user);
-            req.getSession(true).setAttribute(SportletProperties.PORTLET_USER, user.getID());
-
-            String query = event.getAction().getParameter("queryString");
-
-            /*
-            String remme = req.getParameter("remlogin");
-            if (remme != null) {
-                setUserCookie(event);
-            } else {
-                removeUserCookie(event);
-            }
-            */
-
-            PortletURL uri = res.createActionURL();
-            if (query != null) {
-                uri.setParameter("cid", query);
-            }
-            req.setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
-
-            String realuri = uri.toString().substring("http".length());
-            Boolean useSecureRedirect = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.USE_HTTPS_REDIRECT));
-            if (useSecureRedirect.booleanValue()) {
-                realuri = "https" + realuri;
-            } else {
-                realuri = "http" + realuri;
-            }
-
-            for (PortalFilter filter : portalFilters) {
-                filter.doAfterLogin(event.getHttpServletRequest(), event.getHttpServletResponse());
-            }
-            event.getActionResponse().sendRedirect(realuri.toString());
-        } catch (AuthorizationException err) {
-            log.debug(err.getMessage());
-            req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
-        } catch (AuthenticationException err) {
-            log.debug(err.getMessage());
-            req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
+            event.getHttpServletResponse().sendRedirect(realuri.toString());
         } catch (IOException e) {
             log.error("Unable to perform a redirect!", e);
         }
@@ -608,6 +626,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 } else {
                     user.setFirstName(full);
                 }
+                Integer numLogins = user.getNumLogins();
+                if (numLogins == null) numLogins = 0;
+                user.setNumLogins(numLogins++);
                 userManagerService.saveUser(user);
             }
         }
