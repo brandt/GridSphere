@@ -215,6 +215,8 @@ public class SportletProperties {
 
     public static final String USE_AJAX = "org.gridsphere.USE_AJAX";
 
+    public static final String PORTAL_REDIRECT_PATH = "org.gridsphere.PORTAL_REDIRECT_PATH";
+
     private SportletProperties() {
         if (props == null) {
             InputStream propsStream = getClass().getResourceAsStream("/org/gridsphere/portlet/impl/portlet.properties");
