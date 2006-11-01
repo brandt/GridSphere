@@ -9,48 +9,41 @@
     $Id$
 -->
 
-<page-layout label="error" title="GridSphere Error" editable="false" renderkit="brush">
+<page label="error"
+      title="GridSphere Error"
+      editable="false"
+      renderkit="brush">
 
-    <portlet-header>
-        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
-    </portlet-header>
+    <header>
+        <table>
+            <row>
+                <column width="80%">
+                    <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
+                </column>
+                <column width="20%">
+                    <content include="/jsp/returnnav.jsp"/>
+                </column>
+            </row>
+        </table>
+    </header>
 
-    <!-- Tabbed Panes -->
-    <portlet-tabbed-pane selected="0" style="menu">
-        <portlet-tab label="gridsphere" display="false">
-            <title lang="en">GridSphere</title>
-            <portlet-tabbed-pane selected="0" style="sub-menu">
-                <portlet-tab label="home" display="false">
-                    <title lang="en">Home</title>
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="25%"/>
-                            <column-layout width="70%">
-                                <portlet-content include="/jsp/errors/error.jsp"/>
-                            </column-layout>
-                            <column-layout width="25%"/>
-                        </row-layout>
-                    </table-layout>
-                </portlet-tab>
-            </portlet-tabbed-pane>
-        </portlet-tab>
-        <portlet-tab label="portal" outline="false" align="right" padding="5px 5px 0px 5px" include="/jsp/returnnav.jsp"/>
-    </portlet-tabbed-pane>
+    <bar>
+        <content include="/jsp/errors/error.jsp"/>
+    </bar>
 
-    <portlet-footer>
-        <table-layout style="footer">
-            <row-layout>
-                <column-layout width="50%">
-                    <portlet-frame transparent="true" outer-padding="0px" label="date">
+    <footer>
+        <table>
+            <row>
+                <column width="50%">
+                    <frame transparent="true" outer-padding="0px" label="date">
                         <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
-                    </portlet-frame>
-                </column-layout>
-                <column-layout width="50%">
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
-                </column-layout>
-            </row-layout>
-        </table-layout>
-    </portlet-footer>
+                    </frame>
+                </column>
+                <column width="50%">
+                    <content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
+                </column>
+            </row>
+        </table>
+    </footer>
 
-
-</page-layout>
+</page>

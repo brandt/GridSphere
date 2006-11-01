@@ -9,7 +9,7 @@ This descriptor defines the user's portal layout upon logging into the portal
 $Id$
 -->
 
-<page-layout label="user"
+<page label="user"
              title="GridSphere Portal"
              keywords="gridsphere"
              icon="images/favicon.ico"
@@ -17,53 +17,53 @@ $Id$
              editable="true"
              required-role="USER">
 
-    <portlet-header>
-        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
-        <portlet-content include="/jsp/returnnav.jsp"/>
-    </portlet-header>
+    <header>
+        <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
+        <content include="/jsp/returnnav.jsp"/>
+    </header>
 
-    <portlet-menu>
-        <portlet-tab label="home">
+    <menu>
+        <tab label="home">
             <title lang="en">Home</title>
-            <table-layout>
-                <row-layout>
-                    <column-layout width="70%">
-                        <portlet-frame transparent="true" outer-padding="0px 20px" label="rss">
+            <table>
+                <row>
+                    <column width="70%">
+                        <frame transparent="true" outer-padding="0px 20px" label="rss">
                             <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</portlet-class>
-                        </portlet-frame>
-                    </column-layout>
-                </row-layout>
-            </table-layout>
-        </portlet-tab>
-        <portlet-tab label="jcrtab">
+                        </frame>
+                    </column>
+                </row>
+            </table>
+        </tab>
+        <tab label="jcrtab">
             <title lang="en">CM</title>
-            <table-layout>
-                <row-layout>
-                    <column-layout width="100%">
-                        <portlet-frame label="jcr">
+            <table>
+                <row>
+                    <column width="100%">
+                        <frame label="jcr">
                             <portlet-class>org.gridsphere.portlets.core.jcr.JCRManagementPortlet</portlet-class>
-                        </portlet-frame>
-                    </column-layout>
-                </row-layout>
-            </table-layout>
-        </portlet-tab>
-    </portlet-menu>
+                        </frame>
+                    </column>
+                </row>
+            </table>
+        </tab>
+    </menu>
 
 
-    <portlet-footer>
-        <table-layout style="footer">
-            <row-layout>
-                <column-layout width="50%">
-                    <portlet-frame transparent="true" outer-padding="0px" label="date">
+    <footer>
+        <table>
+            <row>
+                <column width="50%">
+                    <frame transparent="true" outer-padding="0px" label="date">
                         <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
-                    </portlet-frame>
-                </column-layout>
-                <column-layout width="50%">
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
-                </column-layout>
-            </row-layout>
-        </table-layout>
-    </portlet-footer>
+                    </frame>
+                </column>
+                <column width="50%">
+                    <content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
+                </column>
+            </row>
+        </table>
+    </footer>
 
-</page-layout>
+</page>
 

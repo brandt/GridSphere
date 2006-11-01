@@ -9,62 +9,61 @@
     $Id: GuestUserLayout.xml 5189 2006-08-29 16:54:53Z novotny $
 -->
 
-<page-layout label="register" title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" editable="false" renderkit="brush">
+<page label="register"
+      title="GridSphere Portal"
+      keywords="gridsphere"
+      icon="images/favicon.ico"
+      editable="false"
+      renderkit="brush">
 
     <!-- Header components -->
-    <portlet-header>
-        <table-layout style="header">
-            <row-layout>
-                <column-layout width="60%">
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
-                </column-layout>
-                <column-layout width="30%">
-                    <portlet-frame transparent="true" outer-padding="0px" label="locale">
+    <header>
+        <table>
+            <row>
+                <column width="60%">
+                    <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
+                </column>
+              
+                <column width="40%">
+                    <frame transparent="true" outer-padding="0px" label="locale">
                         <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet</portlet-class>
-                    </portlet-frame>
-                </column-layout>
-                <column-layout width="10%">
-                    <portlet-content include="/jsp/returnguestnav.jsp"/>
-                </column-layout>
-            </row-layout>
-        </table-layout>
-    </portlet-header>
+                    </frame>
+                    <content include="/jsp/returnguestnav.jsp"/>
+                </column>
+            </row>
+        </table>
+    </header>
 
     <!-- Tabbed Panes -->
-    <portlet-tabbed-pane selected="0" style="menu">
-        <portlet-tab label="gridsphere" display="false">
-            <title lang="en">GridSphere</title>
-            <portlet-tabbed-pane selected="0" style="sub-menu">
-                <portlet-tab label="home" display="false">
-                    <title lang="en">Home</title>
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="100%">
-                                <portlet-frame label="login" outer-padding="5% 30%">
-                                    <portlet-class>org.gridsphere.portlets.core.login.LoginPortlet</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                        </row-layout>
-                    </table-layout>
-                </portlet-tab>
-            </portlet-tabbed-pane>
-        </portlet-tab>
-    </portlet-tabbed-pane>
+    <menu>
+        <tab>
+            <title lang="en">Registration</title>
+            <table>
+                <row>
+                    <column width="100%">
+                        <frame label="login" outer-padding="5% 30%">
+                            <portlet-class>org.gridsphere.portlets.core.login.LoginPortlet</portlet-class>
+                        </frame>
+                    </column>
+                </row>
+            </table>
+        </tab>
+    </menu>
 
     <!-- Footer components (if any) -->
-    <portlet-footer>
-        <table-layout style="footer">
-            <row-layout>
-                <column-layout width="50%">
-                    <portlet-frame transparent="true" outer-padding="0px" label="date">
+    <footer>
+        <table>
+            <row>
+                <column width="50%">
+                    <frame transparent="true" outer-padding="0px" label="date">
                         <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
-                    </portlet-frame>
-                </column-layout>
-                <column-layout width="50%">
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
-                </column-layout>
-            </row-layout>
-        </table-layout>
-    </portlet-footer>
+                    </frame>
+                </column>
+                <column width="50%">
+                    <content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
+                </column>
+            </row>
+        </table>
+    </footer>
 
-</page-layout>
+</page>

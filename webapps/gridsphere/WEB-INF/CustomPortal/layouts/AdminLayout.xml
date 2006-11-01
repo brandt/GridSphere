@@ -9,87 +9,96 @@
     $Id: SetupLayout.xml 5092 2006-08-19 04:17:21Z novotny $
 -->
 
-<page-layout label="admin" title="GridSphere Administration" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="ADMIN">
-
+<page label="admin"
+      title="GridSphere Administration"
+      keywords="gridsphere"
+      icon="images/favicon.ico"
+      renderkit="brush"
+      editable="false"
+      required-role="ADMIN">
 
     <!-- Header components -->
-    <portlet-header>
-        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
-        <portlet-content include="/jsp/returnnav.jsp"/>
-    </portlet-header>
+    <header>
+        <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
+        <content include="/jsp/returnnav.jsp"/>
+    </header>
 
-    <portlet-menu style="yahoo">
-                <portlet-tab label="configTab" required-role="ADMIN">
-                    <title lang="en">Configuration</title>
-                    <table-layout label="configTL">
-                        <row-layout>
-                            <column-layout width="100%">
-                                <portlet-frame label="config">
-                                    <portlet-class>
-                                        org.gridsphere.portlets.core.admin.config.ConfigPortlet
-                                    </portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                        </row-layout>
-                    </table-layout>
-                </portlet-tab>
-                <portlet-tab label="portlets" required-role="ADMIN">
-                    <title lang="en">Portlets</title>
-                    <table-layout label="portletTL">
-                        <row-layout>
-                            <column-layout width="100%">
-                                <portlet-frame label="portletmanager">
-                                    <portlet-class>
-                                        org.gridsphere.portlets.core.admin.portlets.PortletApplicationManager</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                        </row-layout>
-                    </table-layout>
-                </portlet-tab>
-                <portlet-tab label="users" required-role="ADMIN">
-                    <title lang="en">Users</title>
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="100%">
-                                <portlet-frame label="usermanager">
-                                    <portlet-class>
-                                        org.gridsphere.portlets.core.admin.users.UserManagerPortlet</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                        </row-layout>
-                    </table-layout>
-                </portlet-tab>
-                <portlet-tab label="roles" required-role="ADMIN">
-                    <title lang="en">Roles</title>
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="80%">
-                                <portlet-frame label="rolemanager">
-                                    <portlet-class>
-                                        org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                            <column-layout width="20%"/>
-                        </row-layout>
-                    </table-layout>
-                </portlet-tab>
-        </portlet-menu>
-    
+    <menu>
+        <tab label="configTab" required-role="ADMIN">
+            <title lang="en">Configuration</title>
+            <table label="configTL">
+                <row>
+                    <column width="100%">
+                        <frame label="config">
+                            <portlet-class>
+                                org.gridsphere.portlets.core.admin.config.ConfigPortlet
+                            </portlet-class>
+                        </frame>
+                    </column>
+                </row>
+            </table>
+        </tab>
+        <tab label="portlets" required-role="ADMIN">
+            <title lang="en">Portlets</title>
+            <table label="portletTL">
+                <row>
+                    <column width="100%">
+                        <frame label="portletmanager">
+                            <portlet-class>
+                                org.gridsphere.portlets.core.admin.portlets.PortletApplicationManager
+                            </portlet-class>
+                        </frame>
+                    </column>
+                </row>
+            </table>
+        </tab>
+        <tab label="users" required-role="ADMIN">
+            <title lang="en">Users</title>
+            <table>
+                <row>
+                    <column width="100%">
+                        <frame label="usermanager">
+                            <portlet-class>
+                                org.gridsphere.portlets.core.admin.users.UserManagerPortlet
+                            </portlet-class>
+                        </frame>
+                    </column>
+                </row>
+            </table>
+        </tab>
+        <tab label="roles" required-role="ADMIN">
+            <title lang="en">Roles</title>
+            <table>
+                <row>
+                    <column width="80%">
+                        <frame label="rolemanager">
+                            <portlet-class>
+                                org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet
+                            </portlet-class>
+                        </frame>
+                    </column>
+                    <column width="20%"/>
+                </row>
+            </table>
+        </tab>
+    </menu>
+
     <!-- Footer components (if any) -->
-    <portlet-footer>
-        <table-layout style="footer">
-            <row-layout>
-                <column-layout width="50%">
-                    <portlet-frame transparent="true" outer-padding="0px" label="date">
-                        <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
-                    </portlet-frame>
-                </column-layout>
-                <column-layout width="50%">
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
-                </column-layout>
-            </row-layout>
-        </table-layout>
-    </portlet-footer>
+    <footer>
+        <table>
+            <row>
+                <column width="50%">
+                    <frame transparent="true" outer-padding="0px" label="date">
+                        <portlet-class>
+                            org.gridsphere.portlets.core.date.DatePortlet
+                        </portlet-class>
+                    </frame>
+                </column>
+                <column width="50%">
+                    <content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
+                </column>
+            </row>
+        </table>
+    </footer>
 
-
-</page-layout>
+</page>

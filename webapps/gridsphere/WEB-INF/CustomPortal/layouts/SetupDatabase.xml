@@ -9,44 +9,45 @@
     $Id: SetupLayout.xml 5319 2006-09-11 21:04:47Z novotny $
 -->
 
-<page-layout label="db" title="GridSphere Portal Setup" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush" editable="false" required-role="setup">
-
+<page label="setupdb"
+      title="GridSphere Portal Setup"
+      keywords="gridsphere"
+      icon="images/favicon.ico"
+      renderkit="brush"
+      editable="false"
+      required-role="setup">
 
     <!-- Header components -->
-    <portlet-header>
-        <table-layout style="header">
-            <row-layout>
-                <column-layout width="70%">
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
-                </column-layout>
-            </row-layout>
-        </table-layout>
-    </portlet-header>
-    <portlet-tabbed-pane selected="0" style="menu" theme="default">
-        <portlet-tab label="gridsphere">
-            <portlet-tabbed-pane selected="0" style="sub-menu">
-                <portlet-tab label="setup">
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="70%">
-                                <portlet-content label="setup" include="/jsp/setup/selectDatabase.jsp"/>
-                            </column-layout>
-                            <column-layout width="30%"/>
-                        </row-layout>
-                    </table-layout>
-                </portlet-tab>
-            </portlet-tabbed-pane>
-        </portlet-tab>
-    </portlet-tabbed-pane>
-    <!-- Footer components (if any) -->
-    <portlet-footer>
-        <table-layout style="footer">
-            <row-layout>
-                <column-layout width="50%">
-                <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
-                </column-layout>
-            </row-layout>
-        </table-layout>
-    </portlet-footer>
+    <header>
+        <table>
+            <row>
+                <column width="70%">
+                    <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
+                </column>
+            </row>
+        </table>
+    </header>
 
-</page-layout>
+    <bar>
+        <table>
+            <row>
+                <column width="70%">
+                    <content label="setup" include="/jsp/setup/selectDatabase.jsp"/>
+                </column>
+                <column width="30%"/>
+            </row>
+        </table>
+    </bar>
+
+    <!-- Footer components (if any) -->
+    <footer>
+        <table>
+            <row>
+                <column width="50%">
+                    <content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
+                </column>
+            </row>
+        </table>
+    </footer>
+
+</page>

@@ -9,48 +9,48 @@
     $Id: SetupLayout.xml 4633 2006-03-09 16:44:16Z wehrens $
 -->
 
-<page-layout label="profile" title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush"
-             editable="false" required-role="USER">
+<page label="profile"
+             title="GridSphere Portal"
+             keywords="gridsphere"
+             icon="images/favicon.ico"
+             renderkit="brush"
+             editable="false"
+             required-role="USER">
 
     <!-- Header components -->
-    <portlet-header>
-        <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
-        <portlet-content include="/jsp/returnnav.jsp"/>
-    </portlet-header>
+    <header>
+        <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
+        <content include="/jsp/returnnav.jsp"/>
+    </header>
 
-    <portlet-tabbed-pane selected="0" style="menu" theme="default">
-        <portlet-tab label="gridsphere" display="false">
-            <portlet-tabbed-pane selected="0" style="sub-menu">
-                <portlet-tab label="profile" display="false">
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="100%">
-                                <portlet-frame label="profilemanager">
-                                    <portlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet
-                                    </portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                        </row-layout>
-                    </table-layout>
-                </portlet-tab>
-            </portlet-tabbed-pane>
-        </portlet-tab>
-    </portlet-tabbed-pane>
+    <menu>
+        <tab label="profile">
+        <title lang="en">Profile</title>
+            <table>
+                <row>
+                    <column width="100%">
+                        <frame label="profilemanager">
+                            <portlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet</portlet-class>
+                        </frame>
+                    </column>
+                </row>
+            </table>
+        </tab>
+    </menu>
 
     <!-- Footer components (if any) -->
-    <portlet-footer>
-        <table-layout style="footer">
-            <row-layout>
-                <column-layout width="50%">
-                    <portlet-frame transparent="true" outer-padding="0px" label="date">
+    <footer>
+        <table style="footer">
+            <row>
+                <column width="50%">
+                    <frame transparent="true" outer-padding="0px" label="date">
                         <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
-                    </portlet-frame>
-                </column-layout>
-                <column-layout width="50%">
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
-                </column-layout>
-            </row-layout>
-        </table-layout>
-    </portlet-footer>
-
-</page-layout>
+                    </frame>
+                </column>
+                <column width="50%">
+                    <content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
+                </column>
+            </row>
+        </table>
+    </footer>
+</page>

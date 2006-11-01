@@ -9,47 +9,57 @@
     $Id$
 -->
 
-<page-layout label="guest" title="GridSphere Portal" keywords="gridsphere" icon="images/favicon.ico" renderkit="brush">
+<page label="guest"
+      title="GridSphere Portal"
+      keywords="gridsphere"
+      icon="images/favicon.ico"
+      renderkit="brush">
 
     <!-- Header components -->
-    <portlet-header>
-        <table-layout style="header">
-            <row-layout>
-                <column-layout width="60%">
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
-                </column-layout>
-                <column-layout width="30%">
-                    <portlet-frame transparent="true" outer-padding="0px" label="locale">
+    <header>
+        <table>
+            <row>
+                <column width="60%">
+                    <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
+                </column>
+                <column width="20%">
+                    <frame transparent="true" outer-padding="0px" label="locale">
                         <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet</portlet-class>
-                    </portlet-frame>
-                </column-layout>
-                <column-layout width="10%">
-                    <portlet-content include="/jsp/login/loginnav.jsp"/>
-                </column-layout>
-            </row-layout>
-        </table-layout>
-    </portlet-header>
+                    </frame>
+                </column>
+                <column width="20%">
+                    <content include="/jsp/login/loginnav.jsp"/>
+                </column>
+            </row>
+        </table>
+    </header>
 
     <!-- Tabbed Panes -->
 
     <bar>
-        <portlet-content include="/WEB-INF/CustomPortal/content/main.html"/>
+        <table>
+            <row>
+                <column width="100%">
+                    <content include="/WEB-INF/CustomPortal/content/main.html"/>
+                </column>
+            </row>
+        </table>
     </bar>
 
     <!-- Footer components (if any) -->
-    <portlet-footer>
-        <table-layout style="footer">
-            <row-layout>
-                <column-layout width="50%">
-                    <portlet-frame transparent="true" outer-padding="0px" label="date">
+    <footer>
+        <table>
+            <row>
+                <column width="50%">
+                    <frame transparent="true" outer-padding="0px" label="date">
                         <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
-                    </portlet-frame>
-                </column-layout>
-                <column-layout width="50%">
-                    <portlet-content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
-                </column-layout>
-            </row-layout>
-        </table-layout>
-    </portlet-footer>
+                    </frame>
+                </column>
+                <column width="50%">
+                    <content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
+                </column>
+            </row>
+        </table>
+    </footer>
 
-</page-layout>
+</page>
