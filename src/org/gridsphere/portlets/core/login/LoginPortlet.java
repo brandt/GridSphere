@@ -218,6 +218,7 @@ public class LoginPortlet extends ActionPortlet {
             msg.setKey("LOGIN_CREATE_ACCT");
         }
 
+        setNextTitle(req, "Create Account");
         setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
         log.debug("in doViewNewUser");
     }
