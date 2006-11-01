@@ -10,7 +10,7 @@
 <ui:form secure="<%= Boolean.valueOf(useSecureLogin).booleanValue() %>">
     <ui:messagebox beanId="msg"/>
 
- <%--   <ui:dialoglink titleColor="green" id="foo" name="bar" value="Click Me" header="This is a header" body="This is a body" footer="This is a footer" width="500"/> --%>
+  <%-- <ui:dialoglink titleColor="green" id="foo" name="bar" value="Click Me" header="This is a header" body="This is a body" footer="This is a footer" width="200"/> --%>
  
     
     <% if (request.getAttribute("certificate") != null && ((String) request.getAttribute("certificate")).length() > 0)  { %>

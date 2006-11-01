@@ -24,12 +24,30 @@
             <ui:tablecell>
                 Select default theme for new users:
                 <ui:listbox beanId="themesLB"/>
-                <ui:actionsubmit action="selectTheme" value="Save"/>
+                <ui:actionsubmit action="selectTheme" key="SAVE"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
 </ui:form>
 
+
+
+
+
+<h3>Edit layout properties by selecting components below:</h3>
+
+<ui:group>
+  <ui:form>
+    <ui:frame>
+        <ui:tablerow>
+            <ui:tablecell>
+                Select top-level navigation:
+                <ui:listbox beanId="navigationLB"/>
+                <ui:actionsubmit action="doSaveNav" key="SAVE"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
+</ui:form>
 
 
 <ui:frame>
@@ -59,13 +77,15 @@
             <jsp:include page="subtab.jsp"/>
          <% } else if (controlUI.equals("menu")) { %>
             <jsp:include page="menu.jsp"/>
+         <% } else if (controlUI.equals("bar")) { %>
+            <jsp:include page="bar.jsp"/>
          <% } %>
       </ui:tablecell>
     </ui:tablerow>
     </ui:frame>
 
   </ui:form>
-
+</ui:group>
 
 <hr/>
 
