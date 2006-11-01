@@ -130,11 +130,11 @@ public class PortletPageFactory implements PortletSessionListener {
 
     }
 
-    public Set getEditableLayoutIds() {
+    public Set<String> getEditableLayoutIds() {
         return editableLayoutIds;
     }
 
-    public Set getLayoutIds() {
+    public Set<String> getLayoutIds() {
         return masterLayouts.keySet();
     }
 

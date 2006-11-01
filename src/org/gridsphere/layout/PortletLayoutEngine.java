@@ -235,6 +235,7 @@ public class PortletLayoutEngine {
                 }
             }
         }
+
         log.info("\tend actionPerformed");
     }
 

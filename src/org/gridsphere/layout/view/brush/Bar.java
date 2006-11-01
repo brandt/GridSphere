@@ -16,12 +16,18 @@ public class Bar extends BaseRender implements Render {
             .append("<div id=\"gridsphere-layout-navigation\">")
             .append("<ul id=\"gridsphere-nav\"></ul>")
             .append("<ul id=\"gridsphere-sub-nav\">")
-            .append("<li id=\"gridsphere-sub-nav-border-right\">&nbsp;</li></ul>");
+            .append("<li id=\"gridsphere-sub-nav-border-right\">");
 
-    private static StringBuffer END_BAR = new StringBuffer("\n</div> <!-- END BAR -->\n");
+    private static StringBuffer END_BORDER_BAR = new StringBuffer("&nbsp;</li></ul>");
+
+    private static StringBuffer END_BAR = new StringBuffer("</div> <!-- END BAR -->\n");
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
         return START_BAR;
+    }
+
+    public StringBuffer doEndBorder(GridSphereEvent event, PortletComponent comp) {
+        return END_BORDER_BAR;
     }
 
     public StringBuffer doEnd(GridSphereEvent event, PortletComponent comp) {

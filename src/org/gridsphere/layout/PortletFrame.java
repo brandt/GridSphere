@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.io.IOException;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.util.*;
@@ -368,14 +369,13 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 renderParams.clear();
                 onlyRender = false;
                 String pid = (String)request.getAttribute(SportletProperties.PORTLETID);
-                //request.removeAttribute(SportletProperties.IGNORE_PARAM_PARSING);
+
                 try {
                     portletInvoker.actionPerformed(pid, action, event.getHttpServletRequest(), event.getHttpServletResponse());
                 } catch (Exception e) {
                     log.error("An error occured performing action on: " + pid, e);
                     // catch it and keep processing
                 }
-                //request.setAttribute(SportletProperties.IGNORE_PARAM_PARSING, "true");
 
                 // see if mode has been set
                 PortletMode mymode = (PortletMode)request.getAttribute(SportletProperties.PORTLET_MODE);
@@ -413,6 +413,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     }
 
                 }
+
+            
 
             }
 

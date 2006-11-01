@@ -59,7 +59,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
      */
-    public List init(PortletRequest req, List list) {
+    public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         list = super.init(req, list);
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
@@ -182,7 +182,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
                 content = writer.getBuffer();
             } catch (Exception e) {
                 log.error("Unable to include : " + textFile, e);
-                content.append("Unable to include : " + textFile);
+                content.append("Unable to include : ").append(textFile);
             }
             setBufferedOutput(req, content);
         }

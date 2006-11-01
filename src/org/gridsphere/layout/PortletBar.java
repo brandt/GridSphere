@@ -3,12 +3,13 @@ package org.gridsphere.layout;
 
 import org.gridsphere.layout.view.Render;
 import org.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.RenderResponse;
 import java.io.Serializable;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * A <code>PortletTab</code> represents the visual tab graphical interface and is contained
@@ -19,7 +20,7 @@ import java.util.Iterator;
 public class PortletBar extends BasePortletComponent implements Serializable, Cloneable {
 
     private transient Render barView = null;
-    protected List components = new ArrayList();
+    protected PortletComponent component = null;
 
     //protected StringBuffer tab = new StringBuffer();
     /**
@@ -28,12 +29,12 @@ public class PortletBar extends BasePortletComponent implements Serializable, Cl
     public PortletBar() {
     }
 
-    public void setPortletComponents(List components) {
-        this.components = components;
+    public void setPortletComponent(PortletComponent component) {
+        this.component = component;
     }
 
-    public List getPortletComponents() {
-        return components;
+    public PortletComponent getPortletComponent() {
+        return component;
     }
 
     /**
@@ -56,14 +57,10 @@ public class PortletBar extends BasePortletComponent implements Serializable, Cl
         compId.setClassName(this.getClass().getName());
         list.add(compId);
 
-        Iterator it = components.iterator();
-        PortletComponent comp;
-        while (it.hasNext()) {
-            comp = (PortletComponent) it.next();
-            list = comp.init(req, list);
-            comp.addComponentListener(this);
-            comp.setParentComponent(this);
-        }
+        list = component.init(req, list);
+        component.addComponentListener(this);
+        component.setParentComponent(this);
+
         return list;
     }
 
@@ -75,16 +72,23 @@ public class PortletBar extends BasePortletComponent implements Serializable, Cl
     public void doRender(GridSphereEvent event) {
         super.doRender(event);
         PortletRequest req = event.getRenderRequest();
+        RenderResponse res = event.getRenderResponse();
         StringBuffer bar = new StringBuffer();
+
+
         bar.append(barView.doStart(event, this));
 
-        Iterator it = components.iterator();
-        PortletComponent comp;
-        while (it.hasNext()) {
-            comp = (PortletComponent) it.next();
-            comp.doRender(event);
-            bar.append(comp.getBufferedOutput(req));
+        if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
+            PortletURL url = res.createActionURL();
+            //url.setParameter("eatme", "yeah");
+            bar.append("<a style=\"text-decoration: underline;\" href=\"" + url.toString() + "\">Edit column layout</a>");
         }
+        bar.append(barView.doEndBorder(event, this));
+
+
+        component.doRender(event);
+        bar.append(component.getBufferedOutput(req));
+
         bar.append(barView.doEnd(event, this));
 
         setBufferedOutput(req, bar);
