@@ -13,19 +13,15 @@
 <mapping>
 
     <class name="org.gridsphere.layout.PortletPage" extends="org.gridsphere.layout.BasePortletComponent">
-        <map-to xml="page-layout"/>
+        <map-to xml="page"/>
         <field name="PortletComponent" type="org.gridsphere.layout.PortletComponent">
             <bind-xml auto-naming="deriveByClass"/>
         </field>
-    <!--    <field name="PortletTabbedPane" type="org.gridsphere.layout.PortletTabbedPane">
-            <bind-xml name="portlet-tabbed-pane"/>
-        </field>
-        -->
         <field name="PortletHeader" type="org.gridsphere.layout.PortletContainer">
-            <bind-xml name="portlet-header"/>
+            <bind-xml name="header"/>
         </field>
         <field name="PortletFooter" type="org.gridsphere.layout.PortletContainer">
-            <bind-xml name="portlet-footer"/>
+            <bind-xml name="footer"/>
         </field>
         <field name="Editable" type="boolean">
             <bind-xml name="editable" node="attribute"/>
@@ -84,29 +80,29 @@
     </class>
 
     <class name="org.gridsphere.layout.PortletTableLayout" extends="org.gridsphere.layout.PortletFrameLayout">
-        <map-to xml="table-layout"/>
+        <map-to xml="table"/>
         <field name="Style" type="string">
             <bind-xml name="style" node="attribute"/>
         </field>
     </class>
 
     <class name="org.gridsphere.layout.PortletRowLayout" extends="org.gridsphere.layout.PortletFrameLayout">
-        <map-to xml="row-layout"/>
+        <map-to xml="row"/>
     </class>
 
     <class name="org.gridsphere.layout.PortletColumnLayout" extends="org.gridsphere.layout.PortletFrameLayout">
-        <map-to xml="column-layout"/>
+        <map-to xml="column"/>
     </class>
 
     <class name="org.gridsphere.layout.PortletBar" extends="org.gridsphere.layout.BasePortletComponent">
         <map-to xml="bar"/>
-        <field name="PortletComponents" type="org.gridsphere.layout.PortletComponent" collection="arraylist">
+        <field name="PortletComponent" type="org.gridsphere.layout.PortletComponent">
             <bind-xml auto-naming="deriveByClass"/>
         </field>
     </class>
 
     <class name="org.gridsphere.layout.PortletFrame" extends="org.gridsphere.layout.BasePortletComponent">
-        <map-to xml="portlet-frame"/>
+        <map-to xml="frame"/>
         <field name="PortletClass" type="string">
             <bind-xml name="portlet-class"/>
         </field>
@@ -122,7 +118,7 @@
     </class>
 
     <class name="org.gridsphere.layout.PortletContent" extends="org.gridsphere.layout.BasePortletComponent">
-        <map-to xml="portlet-content"/>
+        <map-to xml="content"/>
         <field name="Include" type="string">
             <bind-xml name="include" node="attribute"/>
         </field>
@@ -132,7 +128,7 @@
     </class>
 
     <class name="org.gridsphere.layout.PortletStaticContent" extends="org.gridsphere.layout.BasePortletComponent">
-        <map-to xml="portlet-static-content"/>
+        <map-to xml="static-content"/>
         <field name="Include" type="string">
             <bind-xml name="include" node="attribute"/>
         </field>
@@ -152,9 +148,9 @@
     </class>
 
     <class name="org.gridsphere.layout.PortletTabbedPane" extends="org.gridsphere.layout.BasePortletComponent">
-        <map-to xml="portlet-tabbed-pane"/>
+        <map-to xml="tabbed-pane"/>
         <field name="PortletTabs" type="org.gridsphere.layout.PortletTab" collection="arraylist">
-            <bind-xml name="portlet-tab"/>
+            <bind-xml name="tab"/>
         </field>
         <field name="Style" type="string">
             <bind-xml name="style" node="attribute"/>
@@ -162,9 +158,9 @@
     </class>
 
     <class name="org.gridsphere.layout.PortletMenu" extends="org.gridsphere.layout.BasePortletComponent">
-        <map-to xml="portlet-menu"/>
+        <map-to xml="menu"/>
         <field name="PortletTabs" type="org.gridsphere.layout.PortletTab" collection="arraylist">
-            <bind-xml name="portlet-tab"/>
+            <bind-xml name="tab"/>
         </field>
         <field name="Style" type="string">
             <bind-xml name="style" node="attribute"/>
@@ -172,7 +168,7 @@
     </class>
 
     <class name="org.gridsphere.layout.PortletTab" extends="org.gridsphere.layout.BasePortletComponent">
-        <map-to xml="portlet-tab"/>
+        <map-to xml="tab"/>
         <field name="Titles" type="org.gridsphere.portlet.service.spi.impl.descriptor.Description" collection="arraylist">
             <bind-xml name="title"/>
         </field>
@@ -195,15 +191,6 @@
             <bind-xml auto-naming="deriveByClass"/>
         </field>
     </class>
-
-    <!--
-    <class name="org.gridsphere.layout.PortletTabTitle" extends="org.gridsphere.portlet.service.spi.impl.descriptor.Description">
-        <map-to xml="portlet-tab-title"/>
-        <field name="Include" type="string">
-            <bind-xml name="include" node="attribute"/>
-        </field>
-    </class>
-    -->
 
     <class name="org.gridsphere.layout.SelectionContainer" extends="org.gridsphere.layout.BasePortletComponent">
         <map-to xml="selection-container"/>
