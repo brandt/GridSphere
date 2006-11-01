@@ -203,6 +203,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletContext ctx = new PortletContextImpl(getServletContext());
         GridSphereEvent event = new GridSphereEventImpl(ctx, req, res);
 
+
+
+
         // check to see if user has been authorized by means of container managed authorization
         checkWebContainerAuthorization(event);
 
@@ -218,7 +221,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         } else {
             setUserAndRoles(event);
         }
-
 
         // Handle user login and logout
         if (event.hasAction()) {
@@ -245,8 +247,16 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
         }
 
+
         layoutEngine.actionPerformed(event);
 
+        // perform a redirect-after-POST!
+        if (event.hasAction() && req.getMethod().equalsIgnoreCase("POST")) {
+            String requestURL = (String)req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
+            log.debug("redirect after POST to: " + requestURL);
+            res.sendRedirect(requestURL.toString());
+            return;
+        }
 
         // is this a file download operation?
         if (isDownload(req)) {
@@ -281,6 +291,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         System.err.println("Page render time = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
         sessionManager.dumpSessions();
         System.err.println("after dump");
+
+        //event.getRenderResponse().createRenderURL();
     }
 
     /**
@@ -415,7 +427,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         Integer numLogins = user.getNumLogins();
         if (numLogins == null) numLogins = 0;
         numLogins++;
-        System.err.println("add +1 to LOGIN! " + numLogins);
+
         user.setNumLogins(numLogins);
         userManagerService.saveUser(user);
 
@@ -423,15 +435,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         req.getSession(true).setAttribute(SportletProperties.PORTLET_USER, user.getID());
 
         String query = event.getAction().getParameter("queryString");
-
-        /*
-        String remme = req.getParameter("remlogin");
-        if (remme != null) {
-            setUserCookie(event);
-        } else {
-            removeUserCookie(event);
-        }
-        */
 
         PortletURL uri = res.createActionURL();
         if (query != null) {
@@ -500,6 +503,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public final void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         System.err.println("do post!!");
+        
         doGet(req, res);
     }
 
