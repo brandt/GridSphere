@@ -40,21 +40,19 @@ public class RSSPortlet extends ActionPortlet {
         SyndFeed selectedFeed = null;
         String feedurl = (String)event.getRenderRequest().getPortletSession(true).getAttribute("selectedfeed");
         if (feedurl == null) feedurl = feedURL[0];
-
-        try {
-            feed = rssService.getFeed(feedurl);
-        } catch (FeedException e) {
-            log.error("Could not create Feed.", e);
-            createErrorMessage(event, "Could not create Feed.");
-        } catch (MalformedURLException e) {
-            log.error("RSS URL " + feedURL + " is not valid.", e);
-            createErrorMessage(event, "RSS URL " + feedurl + " is not valid.");
-        } catch (IOException e) {
-            log.error("Could not read RSS feed from " + feedurl, e);
-            createErrorMessage(event, "Could not read RSS feed from " + feedurl);
-        }
-
         for (int i = 0; i < feedURL.length; i++) {
+            try {
+                feed = rssService.getFeed(feedURL[i]);
+            } catch (FeedException e) {
+                log.error("Could not create Feed.", e);
+                createErrorMessage(event, "Could not create Feed.");
+            } catch (MalformedURLException e) {
+                log.error("RSS URL " + feedURL + " is not valid.", e);
+                createErrorMessage(event, "RSS URL " + feedURL[i] + " is not valid.");
+            } catch (IOException e) {
+                log.error("Could not read RSS feed from " + feedURL[i], e);
+                createErrorMessage(event, "Could not read RSS feed from " + feedURL[i]);
+            }
             ListBoxItemBean item = new ListBoxItemBean();
             item.setName(feedURL[i]);
             item.setValue((feed != null) ? feed.getTitle() : feedURL[i]);
