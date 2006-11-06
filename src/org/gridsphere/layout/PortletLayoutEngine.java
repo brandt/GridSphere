@@ -141,18 +141,19 @@ public class PortletLayoutEngine {
                 req.getSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, "brush");
 
                 req.setAttribute(SportletProperties.USE_AJAX, "true");
-                req.setAttribute("org.gridsphere.PORTLET_NAME", portlet);
+                req.setAttribute(SportletProperties.PORTLET_NAME, portlet);
                 String compName = req.getParameter("compname");
 
                 System.err.println("compname= "+ compName);
 
-                req.setAttribute("org.gridsphere.COMP_NAME", compName);
+                req.setAttribute(SportletProperties.COMPONENT_NAME, compName);
 
                 if (event.hasAction()) {
                     frame.actionPerformed(event);
                 }
                 frame.doRender(event);
                 pageBuffer = frame.getBufferedOutput(event.getRenderRequest());
+                res.setContentType("text/html");
             } else {
                 PortletComponent comp = page.getActiveComponent(cid);
                 if (comp != null) {

@@ -57,6 +57,7 @@ public class PortletPageFactory implements PortletSessionListener {
     private static Map<String, PortletPage> masterLayouts = new HashMap<String, PortletPage>();
     private static Set<String> editableLayoutIds = new HashSet<String>();
 
+
     private ServletContext context;
 
     private PortletPageFactory() {
@@ -509,6 +510,33 @@ public class PortletPageFactory implements PortletSessionListener {
             }
       //  }
         return page;
+    }
+
+    // TODO
+    public void renameRole(PortletRequest req, String oldRole, String newRole) {
+        List<PortletPage> pages = new ArrayList<PortletPage>();
+        pages.add(masterLayouts.get("GuestUserLayout"));
+        pages.add(masterLayouts.get("LoggedInUserLayout"));
+        try {
+            for (PortletPage p : pages) {
+                PortletPage page = (PortletPage)deepCopy(p);
+                page.init(req, new ArrayList<ComponentIdentifier>());
+                List<ComponentIdentifier> compList = page.getComponentIdentifierList();
+                boolean resetLayout = false;
+                for (ComponentIdentifier compId : compList) {
+                    PortletComponent comp = compId.getPortletComponent();
+                    String reqRole = comp.getRequiredRole();
+                    if (reqRole.equalsIgnoreCase(oldRole)) {
+                        resetLayout = true;
+                        comp.setRequiredRole(newRole);
+                    }
+                }
+                if (resetLayout) savePortletPageMaster(page);
+            }
+        } catch (Exception e) {
+            log.error("Unable to load/save descriptor", e);
+        }
+
     }
 
 
