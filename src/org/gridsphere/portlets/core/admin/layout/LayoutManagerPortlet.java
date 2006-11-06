@@ -55,8 +55,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         GridSphereEvent gsevent = new GridSphereEventImpl(context, (HttpServletRequest)req, (HttpServletResponse)res);
         String sessionId = req.getPortletSession().getId();
         PortletPage page = (PortletPage)pages.get(sessionId);
-
-
         page.actionPerformed(gsevent);
         pages.put(sessionId, page);
 
@@ -180,7 +178,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             if (reqRole.equalsIgnoreCase("NONE")) reqRole = "";
             tab.setRequiredRole(reqRole);
             tab.setLabel(label);
-            tab.setTitle("en", name);
+            tab.setTitle(req.getLocale().getLanguage(), name);
 
 
             ListBoxBean colsLB = event.getListBoxBean("colsLB");
@@ -217,7 +215,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             //PortletTabbedPane pane = (PortletTabbedPane)thistab.getParentComponent();
 
             PortletTab tab = new PortletTab();
-            tab.setTitle("en", name);
+            tab.setTitle(req.getLocale().getLanguage(), name);
             if (reqRole.equalsIgnoreCase("NONE")) reqRole = "";
             tab.setRequiredRole(reqRole);
             tab.setLabel(label);
@@ -257,7 +255,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             //PortletTabbedPane pane = (PortletTabbedPane)thistab.getParentComponent();
             log.debug("creating new menu tab!");
             PortletTab tab = new PortletTab();
-            tab.setTitle("en", name);
+            tab.setTitle(req.getLocale().getLanguage(), name);
             if (reqRole.equalsIgnoreCase("NONE")) reqRole = "";
             tab.setRequiredRole(reqRole);
             tab.setLabel(label);
@@ -519,7 +517,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
                     controlUI = "subtab";
                     createColsListBox(event, tab.getPortletComponent());
                 }
-                log.debug("tab name=" + tab.getTitle("en"));
+                log.debug("tab name=" + tab.getTitle(req.getLocale().getLanguage()));
 
                 // if selected tab is first tab disable 'move left' button
                 if ((pane.getIndexOfTab(tab) == 0)) {
@@ -705,7 +703,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             if (navComp instanceof PortletBar) {
                 PortletBar bar = (PortletBar)navComp;
                 PortletTab tab = new PortletTab();
-                tab.setTitle("en", "Default");
+                tab.setTitle(req.getLocale().getLanguage(), "Default");
                 tab.setPortletComponent(bar.getPortletComponent());
                 menu.addTab(tab);
             }
@@ -713,9 +711,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
             if (navComp instanceof PortletTabbedPane) {
                 PortletTabbedPane pane = (PortletTabbedPane)navComp;
                 List<PortletTab> tabs = pane.getPortletTabs();
+                for (PortletTab atab : tabs) {
+                    PortletTabbedPane subpane = (PortletTabbedPane)atab.getPortletComponent();
+                    List<PortletTab> subtabs = subpane.getPortletTabs();
+                    menu.addTab(subtabs.get(0));
 
-                menu.setPortletTabs(tabs);
-
+                }
             }
             page.setPortletComponent(menu);
         } else if (name.equals("pane")) {
@@ -723,10 +724,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 return;
             }
             PortletTabbedPane pane = new PortletTabbedPane();
+            pane.setStyle("menu");
             if (navComp instanceof PortletBar) {
-                pane.setStyle("menu");
                 PortletTab newtab = new PortletTab();
-                newtab.setTitle("en", "Default");
+                newtab.setTitle(req.getLocale().getLanguage(), "Default");
                 pane.addTab(newtab);
                 PortletTabbedPane subpane = new PortletTabbedPane();
                 subpane.setStyle("sub-menu");
@@ -735,10 +736,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 PortletMenu menu = (PortletMenu)navComp;
                 List<PortletTab> tabs = menu.getPortletTabs();
                 for (PortletTab atab : tabs)  {
-                    PortletTabbedPane newsubpane = new PortletTabbedPane();
-                    newsubpane.setStyle("sub-menu");
-                    atab.setPortletComponent(newsubpane);
-                    pane.addTab(atab);
+                    PortletTab newtab = new PortletTab();
+                    newtab.setTitle(req.getLocale().getLanguage(), atab.getTitle(req.getLocale().getLanguage()));
+                    pane.addTab(newtab);
+                    PortletTabbedPane subpane = new PortletTabbedPane();
+                    subpane.setStyle("sub-menu");
+                    newtab.setPortletComponent(subpane);
+                    subpane.addTab(atab);
                 }
             }
             page.setPortletComponent(pane);
