@@ -131,7 +131,7 @@ public class LoginPortlet extends ActionPortlet {
         log.debug("in LoginPortlet: gs_login");
         PortletRequest req = event.getActionRequest();
 
-        String errorMsg = (String) req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
+        String errorMsg = (String) req.getPortletSession(true).getAttribute(LoginPortlet.LOGIN_ERROR_FLAG, PortletSession.APPLICATION_SCOPE);
 
         if (errorMsg != null) {
             Integer numTries = (Integer) req.getPortletSession(true).getAttribute(PortalConfigService.LOGIN_NUMTRIES);
@@ -158,7 +158,7 @@ public class LoginPortlet extends ActionPortlet {
                 }
             }
             createErrorMessage(event, errorMsg);
-            req.removeAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
+            req.getPortletSession(true).removeAttribute(LoginPortlet.LOGIN_ERROR_FLAG, PortletSession.APPLICATION_SCOPE);
         }
 
         setNextState(req, DEFAULT_VIEW_PAGE);
