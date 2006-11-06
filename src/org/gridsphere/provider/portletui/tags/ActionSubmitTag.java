@@ -96,8 +96,8 @@ public class ActionSubmitTag extends ActionTag {
 
         if (pageContext.getRequest().getAttribute(SportletProperties.USE_AJAX) != null) {
             String paction = ((!action.equals("")) ? "&" + portletAction.toString() : "");
-            String portlet = (String)pageContext.getRequest().getAttribute("org.gridsphere.PORTLET_NAME");
-            String compname = (String)pageContext.getRequest().getAttribute("org.gridsphere.COMP_NAME");
+            String portlet = (String)pageContext.getRequest().getAttribute(SportletProperties.PORTLET_NAME);
+            String compname = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_NAME);
             actionSubmitBean.setUseAjax(true);
             actionSubmitBean.setOnClick("GridSphereAjaxHandler2.startRequest('" + portlet + "', '" + compname + "', '" + paction + "');");
         }
