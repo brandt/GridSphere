@@ -204,8 +204,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         GridSphereEvent event = new GridSphereEventImpl(ctx, req, res);
 
 
-
-
         // check to see if user has been authorized by means of container managed authorization
         checkWebContainerAuthorization(event);
 
@@ -233,10 +231,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     return;
                 } catch (AuthorizationException err) {
                     log.debug(err.getMessage());
-                    req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
+                    req.getSession(true).setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
                 } catch (AuthenticationException err) {
                     log.debug(err.getMessage());
-                    req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
+                    req.getSession(true).setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
                 }
             }
             if (actionName.equals(SportletProperties.LOGOUT)) {
@@ -254,8 +252,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         if (event.hasAction() && req.getMethod().equalsIgnoreCase("POST")) {
             String requestURL = (String)req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
             log.debug("redirect after POST to: " + requestURL);
-            res.sendRedirect(requestURL.toString());
-            return;
+            if (req.getParameter("ajax") == null) {
+                res.sendRedirect(requestURL.toString());
+                return;
+            }           
         }
 
         // is this a file download operation?
@@ -457,7 +457,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         
         log.debug("in login redirecting to portal: " + realuri.toString());
         try {
-            event.getHttpServletResponse().sendRedirect(realuri.toString());
+            if (req.getParameter("ajax") != null) {
+                res.setContentType("text/html");
+                res.getWriter().print(realuri.toString());    
+            } else {
+                event.getHttpServletResponse().sendRedirect(realuri.toString());
+            }
         } catch (IOException e) {
             log.error("Unable to perform a redirect!", e);
         }
