@@ -215,6 +215,10 @@ public class SportletProperties {
 
     public static final String USE_AJAX = "org.gridsphere.USE_AJAX";
 
+    public static final String COMPONENT_NAME = "org.gridsphere.layout.COMP_NAME";
+
+    public static final String PORTLET_NAME = "org.gridsphere.PORTLET_NAME";
+
     public static final String PORTAL_REDIRECT_PATH = "org.gridsphere.PORTAL_REDIRECT_PATH";
 
     private SportletProperties() {
