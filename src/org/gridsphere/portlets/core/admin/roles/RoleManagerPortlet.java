@@ -14,6 +14,7 @@ import org.gridsphere.services.core.persistence.QueryFilter;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.user.UserManagerService;
+import org.gridsphere.layout.PortletPageFactory;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
@@ -76,6 +77,8 @@ public class RoleManagerPortlet extends ActionPortlet {
         List users = new ArrayList();
         if (roleName != null) {
             role = roleManagerService.getRole(roleName);
+
+            if (role.equals(PortletRole.ADMIN) || role.equals(PortletRole.USER)) req.setAttribute("canEdit", "false");
             roleHF = event.getHiddenFieldBean("roleHF");
             roleHF.setValue(roleName);
             TextFieldBean roleNameTF = event.getTextFieldBean("roleNameTF");
@@ -139,8 +142,10 @@ public class RoleManagerPortlet extends ActionPortlet {
                 }
             }
             roleManagerService.deleteRole(role);
+            // if role has been used in layouts, rename it to empty role
+            PortletPageFactory pageFactory = PortletPageFactory.getInstance();
+            pageFactory.renameRole(req, role.getName(), "");
             createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_DELETE_MSG") + ": " + role.getName());
-
         }
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
@@ -171,10 +176,18 @@ public class RoleManagerPortlet extends ActionPortlet {
         }
         roleManagerService.saveRole(role);
         if (isNewRole) {
-        createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG") + ": " + role.getName());
+            createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG") + ": " + role.getName());
         } else {
             createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_UPDATE_MSG") + ": " + role.getName());            
+            PortletPageFactory pageFactory = PortletPageFactory.getInstance();
+            String oldRole = roleHF.getValue();
+            String newRole = roleNameTF.getValue();
+            //might need to rename role in page layouts
+            if (oldRole.equalsIgnoreCase(newRole)) {
+                pageFactory.renameRole(req, oldRole, newRole);
+            }
         }
+
     }
 
     public void doAddUser(ActionFormEvent event) {
