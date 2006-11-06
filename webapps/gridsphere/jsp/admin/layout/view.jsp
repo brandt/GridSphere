@@ -31,9 +31,6 @@
 </ui:form>
 
 
-
-
-
 <h3>Edit layout properties by selecting components below:</h3>
 
 <ui:group>
@@ -89,3 +86,4 @@
 
 <hr/>
 
+* To refine the layout further, please hand edit <b>$CATALINA_HOME/webapps<%= request.getContextPath() %>/WEB-INF/CustomPortal/layouts/{GuestUserLayout.xml, LoggedInUserLayout.xml}</b>

@@ -10,7 +10,7 @@
 
 <ui:messagebox beanId="msg"/>
 
-
+<% if (request.getAttribute("canEdit") != null) { %>
 <ui:group key="ROLE_EDIT_MSG">
 <ui:form>
     <ui:hiddenfield beanId="roleHF"/>
@@ -36,6 +36,8 @@
 </ui:form>
 </ui:group>
 
+<% } %>
+
 <ui:group key="ROLE_EDITUSER_MSG">
 <ui:form>
    <ui:hiddenfield beanId="roleHF"/>
@@ -50,7 +52,7 @@
     <% } %>
     <p/>
     <% if (!userList.isEmpty()) { %>
-    <ui:table beanId="userTable">
+    <ui:table beanId="userTable" cellpadding="10">
         <ui:tablerow header="true">
             <ui:tablecell><ui:text key="ROLE_REMOVE_USER"/></ui:tablecell>
             <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
