@@ -23,26 +23,24 @@
         <content include="/jsp/returnnav.jsp"/>
     </header>
 
-    <menu>
-        <tab label="profile">
+    <bar>
         <title lang="en">Profile</title>
-            <table>
-                <row>
-                    <column width="100%">
-                        <frame label="profilemanager">
-                            <portlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet</portlet-class>
-                        </frame>
-                    </column>
-                </row>
-            </table>
-        </tab>
-    </menu>
+        <table>
+            <row>
+                <column width="100%">
+                    <frame label="profilemanager">
+                        <portlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet</portlet-class>
+                    </frame>
+                </column>
+            </row>
+        </table>
+    </bar>
 
     <!-- Footer components (if any) -->
     <footer>
         <table style="footer">
             <row>
-                <column width="50%">
+            <column width="50%">
                     <frame transparent="true" outer-padding="0px" label="date">
                         <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
                     </frame>
