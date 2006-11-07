@@ -46,9 +46,5 @@ public interface TagBean {
      */
     public String toEndString();
 
-    /**
-     * Stores this bean in the portlet request
-     */
-    //public void store();
 
 }

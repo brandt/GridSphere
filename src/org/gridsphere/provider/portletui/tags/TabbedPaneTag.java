@@ -31,7 +31,7 @@ public class TabbedPaneTag extends BaseComponentTag {
     protected String currentPage = "";
     protected String currentTabLabel = "";
 
-    protected List tabBeans = new ArrayList();
+    protected List<TabBean> tabBeans = new ArrayList<TabBean>();
 
     public void addTabBean(TabBean tabBean) {
         tabBeans.add(tabBean);

@@ -14,7 +14,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
     protected String inputtype = "";
     protected int size = 0;
     protected int maxlength = 0;
-    private String beanIdSource = null;
+
     protected String onFocus = null;
     protected String onClick = null;
     protected String onChange = null;
@@ -163,14 +163,6 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
      */
     public void setMaxLength(int maxlength) {
         this.maxlength = maxlength;
-    }
-
-    public String getBeanIdSource() {
-        return beanIdSource;
-    }
-
-    public void setBeanIdSource(String beanIdSource) {
-        this.beanIdSource = beanIdSource;
     }
 
     public String getEncodedName() {

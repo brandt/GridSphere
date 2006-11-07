@@ -8,7 +8,6 @@ import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.BaseComponentBean;
 
 import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;

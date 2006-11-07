@@ -63,7 +63,7 @@ public class GroupTag extends BaseComponentTag {
             JspWriter out = pageContext.getOut();
             out.print(groupBean.toStartString());
         } catch (Exception e) {
-            throw new JspException(e.getMessage());
+            throw new JspException(e);
         }
         return EVAL_BODY_INCLUDE;
     }
@@ -73,7 +73,7 @@ public class GroupTag extends BaseComponentTag {
             JspWriter out = pageContext.getOut();
             out.print(groupBean.toEndString());
         } catch (Exception e) {
-            throw new JspException(e.getMessage());
+            throw new JspException(e);
         }
         return EVAL_PAGE;
     }
