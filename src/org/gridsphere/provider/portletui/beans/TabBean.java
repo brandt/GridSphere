@@ -5,7 +5,7 @@
 
 package org.gridsphere.provider.portletui.beans;
 
-public class TabBean extends BeanContainer {
+public class TabBean extends BaseComponentBean {
 
     protected String jspPage;
     protected boolean isActive = false;
@@ -16,14 +16,6 @@ public class TabBean extends BeanContainer {
      */
     public TabBean() {
         super();
-    }
-
-    /**
-     * Constructs a default table row bean
-     */
-    public TabBean(BaseComponentBean compBean) {
-        super();
-        this.addBean(compBean);
     }
 
     public void setActive(boolean isActive) {
