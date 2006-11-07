@@ -3,7 +3,7 @@ package org.gridsphere.provider.portletui.beans;
 /**
  * The <code>GroupBean</code> provides a way to visually group elements with an optional label.
  */
-public class GroupBean extends BeanContainer implements TagBean {
+public class GroupBean extends BaseComponentBean implements TagBean {
 
     private String label = null;
     private String height = null;
