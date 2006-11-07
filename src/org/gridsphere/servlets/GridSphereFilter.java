@@ -195,7 +195,6 @@ public class GridSphereFilter implements Filter {
 
             log.info("forwarded URL: " + ctxPath + extraInfo);
 
-            req.setAttribute(SportletProperties.PORTAL_REDIRECT_PATH, requestURI );
             context.getRequestDispatcher(ctxPath + extraInfo).forward(req, res);
 
             log.info("END");
