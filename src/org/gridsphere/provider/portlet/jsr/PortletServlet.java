@@ -334,8 +334,6 @@ public class PortletServlet extends HttpServlet
                     request.setAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER, prefsManager);
 
                     processAction(portlet, portalContext, request, response, cid, pid);
-
-                    log.debug("in PortletServlet: do processAction2 " + pid);
                 }
             } else {
                 // create portlet preferences manager
@@ -497,13 +495,16 @@ public class PortletServlet extends HttpServlet
                 }
 
                 log.debug("redirecting to location= " + location);
-                redirectResponse.sendRedirect(location);
+
+                servletRequest.setAttribute(SportletProperties.PORTAL_REDIRECT_PATH, location);
+                //redirectResponse.sendRedirect(location);
+
+            } else {
+
+                // redirect as a GET render url back to the portal
+                PortletURL url = new PortletURLImpl(servletRequest, servletResponse, true);
+                servletRequest.setAttribute(SportletProperties.PORTAL_REDIRECT_PATH, url.toString());
             }
-
-            // TODO
-            // redirect as a GET render url back to the portal
-
-            
         }
     }
 
