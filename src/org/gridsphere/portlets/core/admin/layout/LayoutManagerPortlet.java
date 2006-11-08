@@ -220,12 +220,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
             tab.setRequiredRole(reqRole);
             tab.setLabel(label);
             if (pane.getStyle().equals("menu")) {
-                RadioButtonBean addSubTab = event.getRadioButtonBean("subcompRB");
-                if (addSubTab.getSelectedValue().equals("double")) {
+                //RadioButtonBean addSubTab = event.getRadioButtonBean("subcompRB");
+                //if (addSubTab.getSelectedValue().equals("double")) {
                     PortletTabbedPane newpane = new PortletTabbedPane();
                     newpane.setStyle("sub-menu");
                     tab.setPortletComponent(newpane);
-                } else {
+                /*} else {
                     PortletRowLayout row = new PortletRowLayout();
                     PortletColumnLayout col = new PortletColumnLayout();
                     col.setWidth("100%");
@@ -233,7 +233,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
                     PortletTableLayout table = new PortletTableLayout();
                     table.addPortletComponent(row);
                     tab.setPortletComponent(table);
-                }
+                }*/
             } else if (pane.getStyle().equals("sub-menu")) {
                 ListBoxBean colsLB = event.getListBoxBean("colsLB");
                 String colTemplateNum = colsLB.getSelectedName();
@@ -570,15 +570,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 ActionSubmitBean moveRightButton = event.getActionSubmitBean("moveRightButton");
                 moveRightButton.setDisabled(true);
                 req.setAttribute("isnewtab","true");
-
             }
-
 
             ListBoxBean rolesLB = event.getListBoxBean("rolesLB");
             ListBoxItemBean item = new ListBoxItemBean();
             item.setValue("None required");
             item.setName("NONE");
-
 
             rolesLB.addBean(item);
             List<PortletRole> roles = roleManagerService.getRoles();
@@ -596,7 +593,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
             compHF.setValue(compid);
 
             req.setAttribute("portletComp", comp);
-
             req.setAttribute("controlUI", controlUI);
         }
 
@@ -608,8 +604,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         comp.doRender(gsevent);
 
-
-        //log.debug(req.getAttribute(SportletProperties.EXTRA_QUERY_INFO));
         pageBuffer = comp.getBufferedOutput(req);
 
         //System.err.println(pageBuffer);
@@ -732,6 +726,16 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 PortletTabbedPane subpane = new PortletTabbedPane();
                 subpane.setStyle("sub-menu");
                 newtab.setPortletComponent(subpane);
+                PortletTab subtab = new PortletTab();
+                subtab.setTitle(req.getLocale().getLanguage(), "Default");
+
+                PortletTableLayout table = new PortletTableLayout();
+                PortletRowLayout row = new PortletRowLayout();
+                PortletColumnLayout col = new PortletColumnLayout();
+                col.setWidth("100%");
+                row.addPortletComponent(col);
+                table.addPortletComponent(row);
+                subtab.setPortletComponent(table);
             } else if (navComp instanceof PortletMenu) {
                 PortletMenu menu = (PortletMenu)navComp;
                 List<PortletTab> tabs = menu.getPortletTabs();
@@ -744,6 +748,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
                     newtab.setPortletComponent(subpane);
                     subpane.addTab(atab);
                 }
+
             }
             page.setPortletComponent(pane);
         }
