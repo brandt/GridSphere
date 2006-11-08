@@ -58,6 +58,7 @@
             </ui:tablecell>
         </ui:tablerow>
         <% } %>
+        <%--
         <% if (request.getAttribute("isnewtab") != null) { %>
         <ui:tablerow>
             <ui:tablecell>
@@ -68,6 +69,7 @@
             </ui:tablecell>
         </ui:tablerow>
         <% } %>
+        --%>
     </ui:table>
     <ui:table>
         <ui:tablerow>
