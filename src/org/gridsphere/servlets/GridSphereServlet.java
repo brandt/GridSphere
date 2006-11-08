@@ -248,6 +248,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         layoutEngine.actionPerformed(event);
 
         // perform a redirect-after-POST!
+        /*
         if (event.hasAction() && req.getMethod().equalsIgnoreCase("POST")) {
 
             String requestURL = (String)req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
@@ -257,7 +258,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 return;
             }           
         }
-
+        */
+        
         // is this a file download operation?
         if (isDownload(req)) {
             try {
