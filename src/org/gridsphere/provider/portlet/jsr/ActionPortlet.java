@@ -34,7 +34,7 @@ import java.util.*;
  */
 public class ActionPortlet extends GenericPortlet {
 
-    public static Log log = LogFactory.getLog(ActionPortlet.class);
+    public Log log = LogFactory.getLog(ActionPortlet.class);
 
     // Default error page
     protected String ERROR_PAGE = "doError";
@@ -207,9 +207,13 @@ public class ActionPortlet extends GenericPortlet {
         Object[] arguments = new Object[]{formEvent};
 
         String methodName = formEvent.getAction().getName();
-
+        // reset next state
+        removeNextState(actionRequest);
+        
         doAction(actionRequest, actionResponse, methodName, parameterTypes, arguments);
         //System.err.println("in processAction: befoire store cid=" + actionRequest.getAttribute(SportletProperties.COMPONENT_ID));
+
+        removeNextState(actionRequest);
 
         setTagBeans(actionRequest, formEvent.getTagBeans());
     }
@@ -229,8 +233,6 @@ public class ActionPortlet extends GenericPortlet {
                             Class[] parameterTypes,
                             Object[] arguments) throws PortletException {
 
-        // reset next state
-        removeNextState(request);
 
         // Get object and class references
         Class thisClass = this.getClass();
