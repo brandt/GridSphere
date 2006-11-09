@@ -81,7 +81,11 @@
                 <ui:text value="<%= (user.getNumLogins()).toString() %>"/>
             </ui:tablecell>
             <ui:tablecell>
+                <% if (user.getLastLoginTime() == null) { %>
+                <ui:text value="--"/>
+                <% } else { %>
                 <ui:text value="<%= new SimpleDateFormat("MMM d yyyy hh:mm a").format(user.getLastLoginTime()).toString() %>"/>
+                <% } %>
             </ui:tablecell>
         </ui:tablerow>
         <%
