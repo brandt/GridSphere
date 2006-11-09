@@ -241,6 +241,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 logout(event);
                 long endTime = System.currentTimeMillis();
                 System.err.println("Page render time = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
+
                 return;
             }
         }
@@ -494,7 +495,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         //pageFactory.
 
         try {
-            event.getActionResponse().sendRedirect(res.createRenderURL().toString());
+            String url = res.createRenderURL().toString();
+            log.error("Post logout redirect to " + url);
+            event.getHttpServletResponse().sendRedirect(url);
         } catch (IOException e) {
             log.error("Unable to do a redirect!", e);
         }
