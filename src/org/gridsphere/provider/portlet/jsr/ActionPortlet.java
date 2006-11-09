@@ -214,7 +214,7 @@ public class ActionPortlet extends GenericPortlet {
         //System.err.println("in processAction: befoire store cid=" + actionRequest.getAttribute(SportletProperties.COMPONENT_ID));
 
         // If it's a POST then remove state
-        if (actionRequest.getScheme().equals("POST")) {
+        if (actionRequest.getScheme().equalsIgnoreCase("POST")) {
             removeNextState(actionRequest);
             removeTagBeans(actionRequest);
             removeNextTitle(actionRequest);
@@ -231,12 +231,11 @@ public class ActionPortlet extends GenericPortlet {
      * @param methodName     the method name to invoke
      * @param parameterTypes the method parameters
      * @param arguments      the method arguments
-     * @throws PortletException if an error occurs during the method invocation
      */
     protected void doAction(PortletRequest request, PortletResponse response,
                             String methodName,
                             Class[] parameterTypes,
-                            Object[] arguments) throws PortletException {
+                            Object[] arguments) {
 
 
         // Get object and class references
@@ -258,26 +257,26 @@ public class ActionPortlet extends GenericPortlet {
             log.info(sb.toString());
         } catch (NoSuchMethodException e) {
             String error = "No such method: " + methodName + "\n" + e.getMessage();
-            //log.error(error, e);
+            log.error(error, e);
             // If action is not illegal do error undefined action
             //doErrorInvalidAction(request, error);
-            throw new PortletException(error, e);
+            //throw new PortletException(error, e);
         } catch (IllegalAccessException e) {
             String error = "Error accessing action method: " + methodName + "\n" + e.getMessage();
-            //log.error(error, e);
+            log.error(error, e);
             // If action is not illegal do error undefined action
             //doErrorInvalidAction(request, error);
-            throw new PortletException(error, e);
+            //throw new PortletException(error, e);
         } catch (InvocationTargetException e) {
             String error = "Error invoking action method: " + methodName;
-            //log.error(error, e.getTargetException());
+            log.error(error, e.getTargetException());
 
             // JN request.setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e.getTargetException());
             request.getPortletSession(true).setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e.getTargetException());
 
             // If action is not illegal do error undefined action
             //doErrorInvalidAction(request, error);
-            throw new PortletException(error, e.getTargetException());
+            //throw new PortletException(error, e.getTargetException());
         }
 
     }
@@ -288,9 +287,8 @@ public class ActionPortlet extends GenericPortlet {
      * @param request  the portlet request
      * @param response the portlet response
      * @param jsp      the JSP page to include
-     * @throws PortletException    if a portlet exception occurs
      */
-    public void doViewJSP(RenderRequest request, RenderResponse response, String jsp) throws PortletException {
+    public void doViewJSP(RenderRequest request, RenderResponse response, String jsp) {
         log.debug("Including JSP page:" + jsp);
         response.setContentType("text/html; charset=utf-8");
         try {
@@ -303,11 +301,10 @@ public class ActionPortlet extends GenericPortlet {
             // JN request.setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e);
             request.getPortletSession(true).setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e);
 
-            //log.error("Unable to include resource : " + e.getMessage());
+            log.error("Unable to include resource : ", e);
             //setNextError(request, "Unable to include resource " + jsp);
-            throw new PortletException(e);
+            //throw new PortletException(e);
         }
-
     }
 
     /**
@@ -327,7 +324,7 @@ public class ActionPortlet extends GenericPortlet {
         doMode(request, response);
     }
 
-    protected void doMode(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+    protected void doMode(RenderRequest request, RenderResponse response) {
         String next = getNextState(request);
         log.debug("in ActionPortlet: portlet id= " + getUniqueId() + "  next page is= " + next);
 
