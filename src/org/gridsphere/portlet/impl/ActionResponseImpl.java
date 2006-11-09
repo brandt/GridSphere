@@ -171,7 +171,8 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
                 redirectLocation = location;
                 redirected = true;
                 req.setAttribute(SportletProperties.RESPONSE_COMMITTED, "true");
-                res.sendRedirect(location);
+                // Don't do actual redirect this will be done by PortletServlet
+                // res.sendRedirect(location);
             }
         } else {
             throw new IllegalStateException("Can't invoke sendRedirect() after certain methods have been called");
