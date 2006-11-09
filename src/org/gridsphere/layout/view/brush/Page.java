@@ -45,14 +45,15 @@ public class Page extends BaseRender implements Render {
             page.append("\n<html dir=\"rtl\"");
         }
         page.append(" xmlns=\"http://www.w3.org/1999/xhtml\">");
-        page.append("\n<!-- GridSphere Release: " + SportletProperties.getInstance().getProperty("gridsphere.release") + "-->");
+        page.append("\n<!-- GridSphere Release: ").append(SportletProperties.getInstance().getProperty("gridsphere.release")).append("-->");
         page.append("\n\t<head>");
         page.append("\n\t<title>").append(portletPage.getTitle()).append("</title>");
 
         page.append("\n\t<meta name='keywords' content='").append(portletPage.getKeywords()).append("' />");
         page.append("\n\t<meta http-equiv=\"Pragma\" content=\"no-cache\" />");
-        if (portletPage.getRefresh() > 0)
-            page.append("\n\t<meta http-equiv=\"refresh\" content=\"").append(portletPage.getRefresh()).append("\"/>");
+        page.append("\n\t<meta http-equiv=\"Expires\" content=\"-1\"/>");
+
+        if (portletPage.getRefresh() > 0) page.append("\n\t<meta http-equiv=\"refresh\" content=\"").append(portletPage.getRefresh()).append("\"/>");
         String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
         page.append("\n\t<link type=\"text/css\" href=\"").append(req.getContextPath()).append("/themes/").append(portletPage.getRenderKit()).append("/").append(theme).append("/css" + "/default.css\" rel=\"stylesheet\"/>");
 
