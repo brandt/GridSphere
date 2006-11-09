@@ -22,8 +22,6 @@ import org.gridsphere.services.core.security.auth.LoginService;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
-import org.hibernate.StaleObjectStateException;
-import org.exolab.castor.jdo.PersistenceException;
 
 import javax.portlet.*;
 import javax.servlet.Servlet;
@@ -362,16 +360,12 @@ public class PortletServlet extends HttpServlet
             }
 
             log.debug("in PortletServlet: action handling portlet " + pid);
-          //  try {
-                // INVOKE PORTLET ACTION
-                portlet.processAction(actionRequest, actionResponse);
-                Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
-                actionRequest.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid, params);
-                log.debug("placing render params in attribute: key= " + SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
-        /*    } catch (Exception e) {
-                log.error("Error during processAction:", e.getCause());
-                request.setAttribute(SportletProperties.PORTLETERROR + pid, new PortletException(e.getCause()));
-            }   */
+
+            // INVOKE PORTLET ACTION
+            portlet.processAction(actionRequest, actionResponse);
+            Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
+            request.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid, params);
+            log.debug("placing render params in session : key= " + SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
 
             // Commit and cleanup
             log.info("Committing the database transaction");
@@ -395,7 +389,6 @@ public class PortletServlet extends HttpServlet
             // Let others handle it... maybe another interceptor for exceptions?
             //throw new ServletException(ex.getCause());
         }
-
 
     }
 
@@ -497,14 +490,18 @@ public class PortletServlet extends HttpServlet
                 log.debug("redirecting to location= " + location);
 
                 servletRequest.setAttribute(SportletProperties.PORTAL_REDIRECT_PATH, location);
-                //redirectResponse.sendRedirect(location);
+                redirectResponse.sendRedirect(location);
 
             } else {
 
                 // redirect as a GET render url back to the portal
                 PortletURL url = new PortletURLImpl(servletRequest, servletResponse, true);
+                Map params = aResponse.getRenderParameters();
+                url.setParameters(params);
                 servletRequest.setAttribute(SportletProperties.PORTAL_REDIRECT_PATH, url.toString());
             }
+
+            
         }
     }
 
