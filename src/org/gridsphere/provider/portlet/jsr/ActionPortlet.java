@@ -213,7 +213,12 @@ public class ActionPortlet extends GenericPortlet {
         doAction(actionRequest, actionResponse, methodName, parameterTypes, arguments);
         //System.err.println("in processAction: befoire store cid=" + actionRequest.getAttribute(SportletProperties.COMPONENT_ID));
 
-        removeNextState(actionRequest);
+        // If it's a POST then remove state
+        if (actionRequest.getScheme().equals("POST")) {
+            removeNextState(actionRequest);
+            removeTagBeans(actionRequest);
+            removeNextTitle(actionRequest);
+        }
 
         setTagBeans(actionRequest, formEvent.getTagBeans());
     }
