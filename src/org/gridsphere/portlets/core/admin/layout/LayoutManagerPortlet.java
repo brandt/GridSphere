@@ -416,10 +416,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         PortletContext context = getPortletConfig().getPortletContext();
 
-
-
-
-
         // theme has to be set before it is inited
         req.setAttribute(SportletProperties.LAYOUT_EDIT_MODE, "true");
         String cid = (String)req.getAttribute(SportletProperties.COMPONENT_ID);
