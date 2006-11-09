@@ -754,9 +754,9 @@ public class ActionPortlet extends GenericPortlet {
         }
     }
 
-    public List getParameterValuesAsList(PortletRequest request, String param) {
+    public List<String> getParameterValuesAsList(PortletRequest request, String param) {
         // Create list for values
-        List listValues = new Vector();
+        List<String> listValues = new ArrayList<String>();
         // Get parameter values
         String paramValues[] = getParameterValues(request, param);
         for (int ii = 0; ii < paramValues.length; ++ii) {
@@ -767,7 +767,7 @@ public class ActionPortlet extends GenericPortlet {
 
     public Map getParameterValuesAsMap(PortletRequest request, String param) {
         // Create list for values
-        HashMap mapValues = new HashMap();
+        Map<String, String> mapValues = new HashMap<String, String>();
         // Get parameter values
         String paramValues[] = getParameterValues(request, param);
         for (int ii = 0; ii < paramValues.length; ++ii) {
