@@ -104,7 +104,11 @@ public class ActionFormTag extends ActionTag {
 
             out.print(" id=\"" + name + "\"");
             out.print(" name=\"" + name + "\"");
-            if (onSubmit == null) out.print(" onsubmit=\"return validate( " + name + " );\" ");
+            if (onSubmit == null) {
+                out.print(" onsubmit=\"return validate( " + name + " );\" ");
+            } else {
+                out.print(" onsubmit=\"" + onSubmit + "\" ");
+            }
 
             out.println(">");
             // add JS info
