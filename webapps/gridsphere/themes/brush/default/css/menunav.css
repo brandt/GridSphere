@@ -1,7 +1,7 @@
 
 
 
-.navbar {
+.gridsphere-navbar {
     /*
     height: 30px;
 	width: 100%;
@@ -12,7 +12,7 @@
     float: right;
 }
 
-.navbar ul {
+.gridsphere-navbar ul {
 	margin: 0;
 	padding: 0;
 	font-family: Arial, Helvetica, sans-serif;
@@ -22,12 +22,12 @@
     white-space: nowrap;
 }
 
-.navbar li {
+.gridsphere-navbar li {
 	list-style-type: none;
 	display: inline;
 }
 
-.navbar li a {
+.gridsphere-navbar li a {
     font-size: 12px;
     text-decoration: underline;
 	padding: 7px 5px;
@@ -37,7 +37,7 @@
 
 /* Validating drop-down menu */
 /* common styling */
-.menu {
+.gridsphere-menu {
     font-family: Verdana, Arial, Helvetica, sans-serif;
   /*  width:770px; */
 /*    position:relative;  */
@@ -45,7 +45,7 @@
     background-color: #2D5B89;
 }
 
-.menu ul li a, .menu ul li a:visited {
+.gridsphere-menu ul li a, .menu ul li a:visited {
     display:block;
     text-decoration:none;
     width:109px;
@@ -60,19 +60,19 @@
     background-color: #2D5B89;
     font-weight: bold;
 }
-.menu ul {
+.gridsphere-menu ul {
     padding:0;
     margin:0;
     list-style-type: none;
 }
-.menu ul li {
+.gridsphere-menu ul li {
     float:left;
     margin-right:1px;
     position:relative;
 
 }
 
-.menu ul li.selected a {
+.gridsphere-menu ul li.selected a {
     float:left;
     margin-right:1px;
     position:relative;
@@ -80,19 +80,19 @@
     background:#b4bfcc;
 }
 
-.menu ul li ul {
+.gridsphere-menu ul li ul {
     display: none;
 }
 
 /* specific to non IE browsers */
-.menu ul li:hover a {
+.gridsphere-menu ul li:hover a {
 /*color of main hover text*/
     color:#2D5B89;
 /* main nav hover color */
     background:#b4bfcc;
 }
 
-.menu ul li:hover ul {
+.gridsphere-menu ul li:hover ul {
     display:block;
     position:absolute;
     top:20px; left:0;

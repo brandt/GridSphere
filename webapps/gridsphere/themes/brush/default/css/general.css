@@ -6,7 +6,7 @@
 /* Do not set width 100% in the body, safari does not like it, we get a 1 pixel layover on the upper right side */
 
 body {
-    padding: 20px 0 0 0;
+    padding: 10px;
     margin: 0px;
     font-size: small;
 

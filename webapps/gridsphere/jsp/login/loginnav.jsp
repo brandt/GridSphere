@@ -5,7 +5,7 @@
 
 <portlet:defineObjects/>
 
-<div class="navbar">
+<div class="gridsphere-navbar">
     <ul>
         <li>
     <%--        <ui:portletlink resizable="true" portletId="gridsphere#Login" titleColor="green" name="bar"  width="300"/> --%>

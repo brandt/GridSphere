@@ -10,7 +10,7 @@
     User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
     String username = user.getFirstName() + " " + user.getLastName(); %>
 
-<div class="navbar">
+<div class="gridsphere-navbar">
     <ul>
         <li>
 <ui:text style="nostyle" key="LOGIN_SUCCESS"/>, <%= username %>

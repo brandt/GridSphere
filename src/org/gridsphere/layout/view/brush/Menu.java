@@ -39,8 +39,8 @@ public class Menu extends BaseRender implements TabbedPaneView {
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
         StringBuffer result = new StringBuffer();
-        result.append("<div class=\"menu\">");
-        result.append("<ul>");
+        result.append("<div class=\"gridsphere-menu\">\n");
+        result.append("<ul>\n");
         return result;
     }
 
@@ -51,15 +51,15 @@ public class Menu extends BaseRender implements TabbedPaneView {
         String lang = event.getRenderRequest().getLocale().getLanguage();
         String title = tab.getTitle(lang);
         if (tab.isSelected()) {
-            pane.append("<li class=\"selected\">");
+            pane.append("\n<li class=\"selected\">");
         } else {
-            pane.append("<li>");
+            pane.append("\n<li>");
         }
         pane.append("<a href=\"").append(link).append("\">");
         if (title != null) {
             pane.append(replaceBlanks(title));
         }
-        pane.append("</a></li>");
+        pane.append("</a></li>\n");
         return pane;
     }
 
@@ -85,7 +85,7 @@ public class Menu extends BaseRender implements TabbedPaneView {
         PortletMenu menu = (PortletMenu)comp;
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("\n</ul>");
+        buffer.append("\n</ul>\n");
         buffer.append("</div><!--  END LAYOUT NAVIGATION -->");
         buffer.append("<div style=\"clear: both;\"></div>");
         buffer.append("<div id=\"gridsphere-layout-body\"> <!-- start the main portlets -->\n");
