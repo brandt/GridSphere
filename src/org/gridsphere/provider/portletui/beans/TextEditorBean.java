@@ -19,8 +19,6 @@ public class TextEditorBean extends BaseComponentBean implements TagBean {
     private String action = null;
     private boolean viewsource = true;
 
-    public RenderResponse renderResponse;
-
     /**
      * Constructs a default text area bean
      */
@@ -38,14 +36,6 @@ public class TextEditorBean extends BaseComponentBean implements TagBean {
         this.beanId = beanId;
     }
 
-    public RenderResponse getRenderResponse() {
-        return renderResponse;
-    }
-
-    public void setRenderResponse(RenderResponse renderResponse) {
-        this.renderResponse = renderResponse;
-    }
-
     /**
      * Returns true if text editor should allow users to edit/view HTML source
      *
@@ -58,7 +48,7 @@ public class TextEditorBean extends BaseComponentBean implements TagBean {
     /**
      * Set to true if text editor should allow users to edit/view HTML source
      *
-     * @return true if text editor should allow users to edit/view HTML source
+     * @param viewsource is true if text editor should allow users to edit/view HTML source
      */
     public void setViewsource(boolean viewsource) {
         this.viewsource = viewsource;

@@ -8,6 +8,7 @@ import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.provider.portletui.beans.BaseComponentBean;
 
 import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
@@ -207,6 +208,8 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         if (value != null) componentBean.setValue(value);
         //componentBean.setSupportsJS(supportsJS);
         componentBean.setReadOnly(readonly);
+        RenderResponse res = (RenderResponse)pageContext.getAttribute("renderResponse");
+        componentBean.setRenderResponse(res);
     }
 
     /**

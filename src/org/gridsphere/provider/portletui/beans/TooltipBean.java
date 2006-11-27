@@ -12,7 +12,6 @@ public class TooltipBean extends BaseComponentBean {
     public String key = null;
     public String value = "";
     public String id = null;
-    public RenderResponse renderResponse;
 
     /**
      * Constructs a default table row bean
@@ -27,14 +26,6 @@ public class TooltipBean extends BaseComponentBean {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public RenderResponse getRenderResponse() {
-        return renderResponse;
-    }
-
-    public void setRenderResponse(RenderResponse renderResponse) {
-        this.renderResponse = renderResponse;
     }
 
     public String getKey() {

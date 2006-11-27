@@ -17,7 +17,6 @@ public class DialogBean extends BaseComponentBean {
     protected Boolean isDraggable = true;
     protected Boolean isResizable = false;
     protected Boolean isLink = false;
-    protected RenderResponse renderResponse;
     protected String onClick = "";
 
     /**
@@ -25,14 +24,6 @@ public class DialogBean extends BaseComponentBean {
      */
     public DialogBean() {
         super();
-    }
-
-    public RenderResponse getRenderResponse() {
-        return renderResponse;
-    }
-
-    public void setRenderResponse(RenderResponse renderResponse) {
-        this.renderResponse = renderResponse;
     }
 
     public Boolean getClose() {
@@ -133,6 +124,8 @@ public class DialogBean extends BaseComponentBean {
         // deal with ROOT context case
         String contextPath = configService.getProperty("gridsphere.deploy");
         if (!contextPath.equals("")) contextPath = "/" + contextPath;
+        //renderResponse.addProperty("CSS_HREF", contextPath + "/css/yahoo/reset.css");
+        //renderResponse.addProperty("CSS_HREF", contextPath + "/css/yahoo/fonts.css");
         renderResponse.addProperty("CSS_HREF", contextPath + "/css/yahoo/container.css");
         if (isResizable) renderResponse.addProperty("CSS_HREF", contextPath + "/css/yahoo/ResizePanel.css");
 

@@ -4,6 +4,7 @@ import org.gridsphere.provider.portletui.beans.TextEditorBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.portlet.RenderResponse;
 
 /**
  * The <code>TextEditorTag</code> uses the SimpleTextEditor javscript provided
@@ -29,7 +30,7 @@ public class TextEditorTag extends ActionTag {
     /**
      * Set to true if text editor should allow users to edit/view HTML source
      *
-     * @return true if text editor should allow users to edit/view HTML source
+     * @param viewsource is true if text editor should allow users to edit/view HTML source
      */
     public void setViewsource(boolean viewsource) {
         this.viewsource = viewsource;
@@ -97,9 +98,8 @@ public class TextEditorTag extends ActionTag {
             textEditorBean.setViewsource(viewsource);
             this.setBaseComponentBean(textEditorBean);
         }
-
+      
         textEditorBean.setAction(createActionURI());
-
 
         //debug();
 

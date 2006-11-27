@@ -6,6 +6,7 @@ package org.gridsphere.provider.portletui.beans;
 
 import org.gridsphere.portlet.impl.SportletProperties;
 
+import javax.portlet.RenderResponse;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -22,6 +23,15 @@ public abstract class BaseBean implements TagBean {
     protected String vbName = "undefined";
     protected Locale locale = null;
     protected Map params = new HashMap();
+    public RenderResponse renderResponse;
+
+    public RenderResponse getRenderResponse() {
+        return renderResponse;
+    }
+
+    public void setRenderResponse(RenderResponse renderResponse) {
+        this.renderResponse = renderResponse;
+    }
 
     /**
      * Constructs default base bean
