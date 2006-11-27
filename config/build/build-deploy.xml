@@ -147,7 +147,6 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <if>        <!-- to avoid errormsg if not found -->
                     <available file="${gridsphere.build}/jsp/web.inc"/>
                     <then>
-                        <echo message="${web.inc}"/>
                         <loadfile property="web.inc" srcfile="${gridsphere.build}/jsp/web.inc" failonerror="false"/>
                         <filter token="PRECOMPILED-JSP" value="${web.inc}"/>
                     </then>
