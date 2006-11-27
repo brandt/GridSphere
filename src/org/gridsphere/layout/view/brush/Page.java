@@ -50,6 +50,7 @@ public class Page extends BaseRender implements Render {
         page.append("\n\t<title>").append(portletPage.getTitle()).append("</title>");
 
         page.append("\n\t<meta name='keywords' content='").append(portletPage.getKeywords()).append("' />");
+        page.append("\n\t<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">");
         page.append("\n\t<meta http-equiv=\"Pragma\" content=\"no-cache\" />");
         page.append("\n\t<meta http-equiv=\"Expires\" content=\"-1\"/>");
 
