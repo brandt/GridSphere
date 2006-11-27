@@ -131,6 +131,7 @@ Invoke "ant help"
             <fileset dir="${env.ANT_HOME}/lib">
                 <include name="*.jar"/>
             </fileset>
+            <pathelement location="config"/>
             <path refid="servletpath"/>
         </path>
 
