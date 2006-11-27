@@ -18,9 +18,6 @@ Build include file for the GridSphere Portal source code, see build.xml
         <taskdef name="dbtask"
             classname="org.gridsphere.tools.DBTask"
             classpathref="classpath">
-            <classpath id="hib.classpth">
-                <pathelement location="config"/>
-            </classpath>
         </taskdef>
         <dbtask
             configdir="${appserver.home}/webapps/${gridsphere.deploy}"
@@ -32,9 +29,6 @@ Build include file for the GridSphere Portal source code, see build.xml
         <taskdef name="dbtask"
             classname="org.gridsphere.tools.DBTask"
             classpathref="classpath">
-            <classpath id="hib.classpth">
-                <pathelement location="config"/>
-            </classpath>
         </taskdef>
         <dbtask
             configdir="${appserver.home}/webapps/${gridsphere.deploy}"
