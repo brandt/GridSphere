@@ -31,6 +31,7 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      * All PortletRequest objects come from request or session attributes
      *
      * @param req the HttpServletRequest
+     * @param portletContext the PortletContext
      */
     public ActionRequestImpl(HttpServletRequest req, PortletContext portletContext) {
         super(req, portletContext);
@@ -55,7 +56,7 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
     public java.io.InputStream getPortletInputStream() throws IOException, IllegalStateException {
         HttpServletRequest req = (HttpServletRequest) super.getRequest();
         // 'POST' replaced by 'post' for XHTML 1.0 Strict compliance
-        if (req.getMethod().equals("post")) {
+        if (req.getMethod().toUpperCase().equals("POST")) {
             String contentType = req.getContentType();
             if (contentType == null || contentType.equals("application/x-www-form-urlencoded")) {
                 throw new IllegalStateException("User request HTTP POST data is of type application/x-www-form-urlencoded. This data has been already processed by the portal/portlet-container and is available as request parameters.");
@@ -113,7 +114,7 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      * @see #getPortletInputStream
      */
     public java.io.BufferedReader getReader()
-            throws java.io.UnsupportedEncodingException, java.io.IOException {
+            throws java.io.IOException {
         hasReader = true;
         return super.getRequest().getReader();
     }
