@@ -249,10 +249,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         layoutEngine.actionPerformed(event);
 
         // perform a redirect-after-POST!
-        if (event.hasAction() && req.getMethod().equalsIgnoreCase("POST")) {
+        if (event.hasAction() && req.getMethod().toUpperCase().equals("POST")) {
             String requestURL = (String)req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
-            log.debug("redirect after POST to: " + requestURL);
             if (req.getParameter("ajax") == null) {
+                log.debug("redirect after POST to: " + requestURL);
                 res.sendRedirect(requestURL.toString());
                 return;
             }           
