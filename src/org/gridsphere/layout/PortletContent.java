@@ -142,41 +142,41 @@ public class PortletContent extends BasePortletComponent implements Serializable
         if (textFile != null) {
             RequestDispatcher rd = null;
             try {
-                if (!textFile.startsWith("http://") && !textFile.startsWith("jcr://")) {
+                // put a URL in an iframe
+                if (textFile.startsWith("http://")) {
+                    writer.write("<iframe border=\"0\" width=\"100%\" height=\"100%\" src=\"" + textFile + "\"></iframe>");
+                } else if (textFile.startsWith("jcr://")) {
+                    // handle content management
+                    JCRService jcrService = (JCRService) PortletServiceFactory.createPortletService(JCRService.class, true);
+                    Session session = jcrService.getSession();
+                    Workspace ws = session.getWorkspace();
+                    QueryManager qm = ws.getQueryManager();
+                    String nodename = textFile.substring(6, textFile.length()); // remove 'jcr://'
+                    String query = "select * from nt:base where " + JCRNode.GSID + "='" + nodename + "'";
+                    Query q = qm.createQuery(query, Query.SQL);
+                    QueryResult result = q.execute();
+                    NodeIterator it = result.getNodes();
+                    while (it.hasNext()) {
+                        Node n = it.nextNode();
+                        String output = n.getProperty(JCRNode.CONTENT).getString();
+                        String kit = n.getProperty(JCRNode.RENDERKIT).getString();
+                        if (kit.equals(JCRNode.RENDERKIT_RADEOX)) {
+                            RenderContext context = new BaseRenderContext();
+                            RenderEngine engine = new BaseRenderEngine();
+                            output = engine.render(output, context);
+                        }
+                        if (kit.equals(JCRNode.RENDERKIT_TEXT)) {
+                            output = "<pre>" + output + "</pre>";
+                        }
+                        writer.write(output);
+                    }
+                } else {
+                    // do a normal dispatch
                     rd = ctx.getRequestDispatcher(textFile);
                     if (rd != null) {
                         rd.include(event.getHttpServletRequest(), sres);
                     } else {
                         throw new PortletException("Unable to include resource: RequestDispatcher is null");
-                    }
-                } else {
-                    if (textFile.startsWith("http://")) {
-                        writer.write("<iframe border=\"0\" width=\"100%\" height=\"100%\" src=\"" + textFile + "\"></iframe>");
-                    }
-                    if (textFile.startsWith("jcr://")) {
-                        JCRService jcrService = (JCRService) PortletServiceFactory.createPortletService(JCRService.class, true);
-                        Session session = jcrService.getSession();
-                        Workspace ws = session.getWorkspace();
-                        QueryManager qm = ws.getQueryManager();
-                        String nodename = textFile.substring(6, textFile.length()); // remove 'jcr://'
-                        String query = "select * from nt:base where " + JCRNode.GSID + "='" + nodename + "'";
-                        Query q = qm.createQuery(query, Query.SQL);
-                        QueryResult result = q.execute();
-                        NodeIterator it = result.getNodes();
-                        while (it.hasNext()) {
-                            Node n = it.nextNode();
-                            String output = n.getProperty(JCRNode.CONTENT).getString();
-                            String kit = n.getProperty(JCRNode.RENDERKIT).getString();
-                            if (kit.equals(JCRNode.RENDERKIT_RADEOX)) {
-                                RenderContext context = new BaseRenderContext();
-                                RenderEngine engine = new BaseRenderEngine();
-                                output = engine.render(output, context);
-                            }
-                            if (kit.equals(JCRNode.RENDERKIT_TEXT)) {
-                                output = "<pre>" + output + "</pre>";
-                            }
-                            writer.write(output);
-                        }
                     }
                 }
                 content = writer.getBuffer();
