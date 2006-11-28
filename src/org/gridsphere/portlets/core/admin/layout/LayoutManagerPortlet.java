@@ -100,14 +100,16 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         if (comp instanceof PortletFrame) {
             PortletFrame frame = (PortletFrame)comp;
+            if (reqRole.toUpperCase().equals("NONE")) reqRole = "";
             frame.setRequiredRole(reqRole);
             frame.setLabel(label);
             frame.setPortletClass(portletClass);
-
+            log.debug("setting frame class to " + portletClass);
             RadioButtonBean istitleRB = event.getRadioButtonBean("istitleRB");
             if (!istitleRB.getSelectedValue().equalsIgnoreCase("yes")) {
                 frame.setTransparent(true);
             }
+            page.init(req, new ArrayList<ComponentIdentifier>());
         }
 
         pageFactory.savePortletPageMaster(page);
@@ -640,7 +642,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         req.removeAttribute(SportletProperties.LAYOUT_EDIT_MODE);
 
         setNextState(req, VIEW_JSP);
-
     }
 
     public void selectLayout(ActionFormEvent event) throws PortletException, IOException {
