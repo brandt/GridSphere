@@ -210,6 +210,8 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         componentBean.setReadOnly(readonly);
         RenderResponse res = (RenderResponse)pageContext.getAttribute("renderResponse");
         componentBean.setRenderResponse(res);
+        RenderRequest req = (RenderRequest)pageContext.getAttribute("renderRequest");
+        componentBean.setRenderResponse(res);
     }
 
     /**

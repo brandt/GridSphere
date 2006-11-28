@@ -7,6 +7,7 @@ package org.gridsphere.provider.portletui.beans;
 import org.gridsphere.portlet.impl.SportletProperties;
 
 import javax.portlet.RenderResponse;
+import javax.portlet.RenderRequest;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -24,6 +25,7 @@ public abstract class BaseBean implements TagBean {
     protected Locale locale = null;
     protected Map params = new HashMap();
     public RenderResponse renderResponse;
+    public RenderRequest renderRequest;
 
     public RenderResponse getRenderResponse() {
         return renderResponse;
@@ -31,6 +33,15 @@ public abstract class BaseBean implements TagBean {
 
     public void setRenderResponse(RenderResponse renderResponse) {
         this.renderResponse = renderResponse;
+    }
+
+
+    public RenderRequest getRenderRequest() {
+        return renderRequest;
+    }
+
+    public void setRenderRequest(RenderRequest renderRequest) {
+        this.renderRequest = renderRequest;
     }
 
     /**
