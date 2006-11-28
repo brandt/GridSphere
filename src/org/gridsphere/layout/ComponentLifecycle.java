@@ -46,4 +46,11 @@ public interface ComponentLifecycle extends ComponentRender {
      */
     public int getComponentID();
 
+    /**
+     * Sets the associated portlet component id
+     *
+     * @param compId the portlet component id
+     */
+    public void setComponentID(int compId);
+    
 }

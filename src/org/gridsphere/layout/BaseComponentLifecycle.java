@@ -52,6 +52,15 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
     }
 
     /**
+     * Sets the associated portlet component id
+     *
+     * @param compId the portlet component id
+     */
+    public void setComponentID(int compId) {
+       this.COMPONENT_ID = compId;
+    }
+
+    /**
      * Performs an action on this portlet component
      *
      * @param event a gridsphere event
