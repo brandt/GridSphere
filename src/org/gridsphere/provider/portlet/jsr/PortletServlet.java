@@ -418,7 +418,6 @@ public class PortletServlet extends HttpServlet
                     log.error("in PortletServlet(): destroy caught unavailable exception: ", d);
                 }
             } catch (Throwable e) {
-
                 e.printStackTrace();
                 try {
                     if (pm != null) pm.rollbackTransaction();

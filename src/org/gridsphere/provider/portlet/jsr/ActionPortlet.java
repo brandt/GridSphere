@@ -22,6 +22,7 @@ import org.gridsphere.provider.portletui.beans.MessageStyle;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -214,7 +215,7 @@ public class ActionPortlet extends GenericPortlet {
         //System.err.println("in processAction: befoire store cid=" + actionRequest.getAttribute(SportletProperties.COMPONENT_ID));
 
         // If it's a POST then remove state
-        if (actionRequest.getScheme().equalsIgnoreCase("POST")) {
+        if (((HttpServletRequest)actionRequest).getMethod().toUpperCase().equals("POST")) {
             removeNextState(actionRequest);
             removeTagBeans(actionRequest);
             removeNextTitle(actionRequest);
@@ -350,16 +351,8 @@ public class ActionPortlet extends GenericPortlet {
             formEvent.store();
             next = getNextState(request);
             if ((next != null) && (next.endsWith(".jsp"))) {
-                log.debug("in doView: next page is= " + next);
+                log.debug("in doMode: next page is= " + next);
                 doViewJSP(request, response, next);
-               /*
-                if (hasError(request)) {
-                    PrintWriter out = response.getWriter();
-                    log.debug("hasError = true");
-                    String message = getNextError(request);
-                    out.println(message);
-                }
-                */
             }
         }
         removeTagBeans(request);
