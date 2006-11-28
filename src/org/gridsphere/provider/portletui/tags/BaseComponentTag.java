@@ -211,7 +211,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         RenderResponse res = (RenderResponse)pageContext.getAttribute("renderResponse");
         componentBean.setRenderResponse(res);
         RenderRequest req = (RenderRequest)pageContext.getAttribute("renderRequest");
-        componentBean.setRenderResponse(res);
+        componentBean.setRenderRequest(req);
     }
 
     /**
