@@ -236,6 +236,10 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         if ((value != null) && (componentBean.getValue() == null)) {
             componentBean.setValue(value);
         }
+        RenderResponse res = (RenderResponse)pageContext.getAttribute("renderResponse");
+        componentBean.setRenderResponse(res);
+        RenderRequest req = (RenderRequest)pageContext.getAttribute("renderRequest");
+        componentBean.setRenderRequest(req);
     }
 
     protected String getLocalizedText(String key) {

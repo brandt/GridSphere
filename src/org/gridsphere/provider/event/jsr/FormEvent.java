@@ -7,6 +7,8 @@ package org.gridsphere.provider.event.jsr;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.persistence.QueryFilter;
 
+import javax.portlet.PortletResponse;
+import javax.portlet.PortletRequest;
 import java.io.IOException;
 import java.util.Map;
 
@@ -95,6 +97,15 @@ public interface FormEvent {
      * @return a TextEditorBean
      */
     public TextEditorBean getTextEditorBean(String beanId);
+
+
+    /**
+     * Return an existing <code>RichTextEditroBean</code> or cerate a new one.
+     *
+     * @param beanId the bean identifier
+     * @return a RichTextEditorBean
+     */
+    public RichTextEditorBean getRichTextEditorBean(String beanId);
 
     /**
      * Return an existing <code>HiddenFieldBean</code> or create a new one

@@ -246,6 +246,23 @@ public abstract class BaseFormEventImpl {
     }
 
     /**
+     * Return an existing <code>RichTextEditorBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a RichTextEditorBean
+     */
+    public RichTextEditorBean getRichTextEditorBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (RichTextEditorBean) tagBeans.get(beanKey);
+        }
+        RichTextEditorBean rt = new RichTextEditorBean(beanId);
+        configureBean(rt);
+        tagBeans.put(beanKey, rt);
+        return rt;
+    }
+
+    /**
      * Return an existing <code>HiddenFieldBean</code> or create a new one
      *
      * @param beanId the bean identifier
