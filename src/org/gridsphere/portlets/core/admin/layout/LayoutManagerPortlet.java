@@ -363,10 +363,14 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     public void doShowLayout(ActionFormEvent event) throws PortletException, IOException {
         doShowLayout(event.getActionRequest(), event.getActionResponse(), event);
+        //setNextState(event.getActionRequest(), VIEW_JSP);
     }
 
     public void doShowLayout(RenderFormEvent event) throws PortletException, IOException {
-        doShowLayout(event.getRenderRequest(), event.getRenderResponse(), event);
+        RenderRequest req = event.getRenderRequest();
+        RenderResponse res = event.getRenderResponse();
+        doShowLayout(req, res, event);
+        setNextState(event.getRenderRequest(), VIEW_JSP);
     }
 
     public void doShowLayout(PortletRequest req, PortletResponse res, FormEvent event) throws PortletException, IOException {
@@ -641,7 +645,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         req.removeAttribute(SportletProperties.EXTRA_QUERY_INFO);
         req.removeAttribute(SportletProperties.LAYOUT_EDIT_MODE);
 
-        setNextState(req, VIEW_JSP);
+        //setNextState(req, VIEW_JSP);
     }
 
     public void selectLayout(ActionFormEvent event) throws PortletException, IOException {

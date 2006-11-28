@@ -21,7 +21,6 @@ import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class RoleManagerPortlet extends ActionPortlet {
@@ -101,7 +100,6 @@ public class RoleManagerPortlet extends ActionPortlet {
             TableBean userTable = event.getTableBean("userTable");
             userTable.setQueryFilter(filter);
 
-
             ListBoxBean addUsersLB = event.getListBoxBean("addusersLB");
             addUsersLB.clear();
             if (notusers.isEmpty()) {
@@ -114,12 +112,11 @@ public class RoleManagerPortlet extends ActionPortlet {
                 item.setValue(user.getFullName());
                 addUsersLB.addBean(item);
             }
-
-
         } else {
             HiddenFieldBean isNewRoleHF = event.getHiddenFieldBean("isNewRoleHF");
             isNewRoleHF.setValue("true");
             users = userManagerService.getUsers();
+            req.setAttribute("newrole", "true");
         }
 
         req.setAttribute("userList", users);
@@ -133,11 +130,9 @@ public class RoleManagerPortlet extends ActionPortlet {
         PortletRole role = roleManagerService.getRole(roleName);
         if (roleName != null) {
             // remove users in role first
-            List users = roleManagerService.getUsersInRole(role);
+            List<User> users = roleManagerService.getUsersInRole(role);
             if (!users.isEmpty()) {
-                Iterator it = users.iterator();
-                while (it.hasNext()) {
-                    User user = (User)it.next();
+                for (User user : users) {
                     roleManagerService.deleteUserInRole(user, role);
                 }
             }
@@ -195,7 +190,8 @@ public class RoleManagerPortlet extends ActionPortlet {
         ListBoxBean addusersLB = event.getListBoxBean("addusersLB");
         String userid = addusersLB.getSelectedName();
         HiddenFieldBean roleHF = event.getHiddenFieldBean("roleHF");
-        PortletRole role = roleManagerService.getRole(roleHF.getValue());
+        String roleName = roleHF.getValue();
+        PortletRole role = roleManagerService.getRole(roleName);
         User user = userManagerService.getUser(userid);
         if ((user != null) && (role != null)) {
             roleManagerService.addUserToRole(user, role);
