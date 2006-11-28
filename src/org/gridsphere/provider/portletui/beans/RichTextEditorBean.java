@@ -17,7 +17,7 @@ public class RichTextEditorBean extends BaseComponentBean implements TagBean {
     private int rows = 0;
     private String value = null;
     private String action = null;
-    public RenderResponse renderResponse;
+
 
     /**
      * Constructs a default text area bean
@@ -32,18 +32,10 @@ public class RichTextEditorBean extends BaseComponentBean implements TagBean {
      * @param beanId the bean identifier
      */
     public RichTextEditorBean(String beanId) {
-        super(TextEditorBean.NAME);
+        super(RichTextEditorBean.NAME);
         this.beanId = beanId;
     }
 
-
-    public RenderResponse getRenderResponse() {
-        return renderResponse;
-    }
-
-    public void setRenderResponse(RenderResponse renderResponse) {
-        this.renderResponse = renderResponse;
-    }
 
     public String getAction() {
         return action;

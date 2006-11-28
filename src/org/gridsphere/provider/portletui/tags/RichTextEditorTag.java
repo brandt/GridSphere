@@ -1,6 +1,7 @@
 package org.gridsphere.provider.portletui.tags;
 
 import org.gridsphere.provider.portletui.beans.RichTextEditorBean;
+import org.gridsphere.provider.portletui.beans.TextEditorBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -11,7 +12,8 @@ import javax.servlet.jsp.JspWriter;
 */
 public class RichTextEditorTag extends ActionTag {
 
-    protected RichTextEditorBean richTextEditorBean = null;
+
+    protected RichTextEditorBean textEditorBean = null;
     private int cols = 0;
     private int rows = 0;
     private String value = null;
@@ -55,36 +57,36 @@ public class RichTextEditorTag extends ActionTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            richTextEditorBean = (RichTextEditorBean) getTagBean();
-            if (richTextEditorBean == null) {
-                richTextEditorBean = new RichTextEditorBean();
-                richTextEditorBean.setRows(rows);
-                richTextEditorBean.setCols(cols);
-                this.setBaseComponentBean(richTextEditorBean);
+            textEditorBean = (RichTextEditorBean) getTagBean();
+            if (textEditorBean == null) {
+                textEditorBean = new RichTextEditorBean();
+                textEditorBean.setRows(rows);
+                textEditorBean.setCols(cols);
+                this.setBaseComponentBean(textEditorBean);
             } else {
-                if ((richTextEditorBean.getCols() == 0) && (cols != 0)) {
-                    richTextEditorBean.setCols(cols);
+                if ((textEditorBean.getCols() == 0) && (cols != 0)) {
+                    textEditorBean.setCols(cols);
                 }
-                if ((richTextEditorBean.getRows() == 0) && (rows != 0)) {
-                    richTextEditorBean.setRows(rows);
+                if ((textEditorBean.getRows() == 0) && (rows != 0)) {
+                    textEditorBean.setRows(rows);
                 }
-                this.updateBaseComponentBean(richTextEditorBean);
+                this.updateBaseComponentBean(textEditorBean);
+
             }
         } else {
-            richTextEditorBean = new RichTextEditorBean();
-            richTextEditorBean.setRows(rows);
-            richTextEditorBean.setCols(cols);
-            this.setBaseComponentBean(richTextEditorBean);
+            textEditorBean = new RichTextEditorBean();
+            textEditorBean.setRows(rows);
+            textEditorBean.setCols(cols);
+            this.setBaseComponentBean(textEditorBean);
         }
 
-        richTextEditorBean.setAction(createActionURI());
-
+        textEditorBean.setAction(createActionURI());
 
         //debug();
 
         try {
             JspWriter out = pageContext.getOut();
-            out.print(richTextEditorBean.toStartString());
+            out.print(textEditorBean.toStartString());
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
@@ -95,12 +97,12 @@ public class RichTextEditorTag extends ActionTag {
     public int doEndTag() throws JspException {
 
         if ((bodyContent != null) && (value == null)) {
-            richTextEditorBean.setValue(bodyContent.getString());
+            textEditorBean.setValue(bodyContent.getString());
         }
 
         try {
             JspWriter out = pageContext.getOut();
-            out.print(richTextEditorBean.toEndString());
+            out.print(textEditorBean.toEndString());
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
