@@ -1,0 +1,20 @@
+/*
+  Author: Oliver Wehrens (wehrens@gridsphere.org)
+  Main css file. Uh.
+  $Id$
+*/
+
+@import url( general.css );
+/* general html settings */
+@import url( layout.css );
+/* layout of the overall portlet design */
+@import url( window.css );
+/* styling for the portlet window */
+@import url( navigation.css );
+/* styling for the tabbed pane navigation */
+@import url( portlet.css );
+/* portal navigation & single menu tab */
+@import url( menunav.css );
+/* JSR 168 css */
+@import url( tags.css );
+/* GS UI tags css */

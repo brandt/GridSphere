@@ -1,0 +1,57 @@
+/*
+  Author: Oliver Wehrens (wehrens@gridsphere.org)
+  $Id$
+*/
+
+.gridsphere-window-portlet {
+    padding: 4px 4px 0px 4px;
+}
+
+.gridsphere-window-title {
+    height: 1.5em;
+    text-align: center;
+    background-color: #F1B900;
+}
+
+.gridsphere-window-title-name {
+    border: 0px;
+    float: left;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    text-align: left;
+    white-space: nowrap;
+    color: #FFFFFF;
+    width: 70%;
+    font-weight: bold;
+}
+
+.gridsphere-window-title-icon-right {
+    background-color: inherit;
+    float: right;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    width: 29%; /* do not make it 100% (with window-title-name), IE will do strange things */
+    text-align: right;
+}
+
+/* not used */
+.gridsphere-window-icon-left {
+    background-color: inherit;
+    float: left;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    text-align: left;
+    width: 20%;
+}
+
+.gridsphere-window-content {
+    border-right: 1px solid #F1B900;
+    border-bottom: 1px solid #F1B900;
+    border-left: 1px solid #F1B900;
+    clear: both;
+    padding: 5px;
+    background-color: #FFFFFF;
+}

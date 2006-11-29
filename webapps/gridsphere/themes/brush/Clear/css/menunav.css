@@ -1,0 +1,103 @@
+
+
+
+.gridsphere-navbar {
+    /*
+    height: 30px;
+	width: 100%;
+	border-top: solid #000 1px;
+	border-bottom: solid #000 1px;
+	background-color: #336699;
+	*/
+    float: right;
+}
+
+.gridsphere-navbar ul {
+	margin: 0;
+	padding: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: small;
+	/* color: #FFF; */
+	line-height: 30px;
+    white-space: nowrap;
+}
+
+.gridsphere-navbar li {
+	list-style-type: none;
+	display: inline;
+}
+
+.gridsphere-navbar li a {
+    font-size: 12px;
+    text-decoration: underline;
+	padding: 7px 5px;
+	/* color: blue; */
+}
+
+
+/* Validating drop-down menu */
+/* common styling */
+.gridsphere-menu {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+  /*  width:770px; */
+/*    position:relative;  */
+    margin:0;
+    background-color: #2D5B89;
+}
+
+.gridsphere-menu ul li a, .menu ul li a:visited {
+    display:block;
+    text-decoration:none;
+    width:109px;
+    height:20px;
+    text-align:center;
+/* color determines text color for main menu */
+    color:#FFFFFF;
+    border-bottom:1px solid #b4bfcc;
+    line-height:20px;
+    font-size:12px;
+    overflow:hidden;
+    background-color: #2D5B89;
+    font-weight: bold;
+}
+.gridsphere-menu ul {
+    padding:0;
+    margin:0;
+    list-style-type: none;
+}
+.gridsphere-menu ul li {
+    float:left;
+    margin-right:1px;
+    position:relative;
+
+}
+
+.gridsphere-menu ul li.selected a {
+    float:left;
+    margin-right:1px;
+    position:relative;
+    color:#2D5B89;
+    background:#b4bfcc;
+}
+
+.gridsphere-menu ul li ul {
+    display: none;
+}
+
+/* specific to non IE browsers */
+.gridsphere-menu ul li:hover a {
+/*color of main hover text*/
+    color:#2D5B89;
+/* main nav hover color */
+    background:#b4bfcc;
+}
+
+.gridsphere-menu ul li:hover ul {
+    display:block;
+    position:absolute;
+    top:20px; left:0;
+    width:109px;
+}
+
+
+
