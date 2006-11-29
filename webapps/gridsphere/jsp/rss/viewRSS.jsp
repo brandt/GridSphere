@@ -16,9 +16,9 @@
     if (feed != null) {
 %>
 
-<h2><ui:form action="selectFeed">Select your RSS feed: <ui:listbox submitOnChange="true" beanId="feedsLB"/></ui:form></h2>
+<ui:form action="selectFeed">Select your RSS feed: <ui:listbox submitOnChange="true" beanId="feedsLB"/></ui:form>
 
-<ul>
+
     <%
 
         Iterator entryIter = feed.getEntries().iterator();
@@ -32,17 +32,19 @@
 
 
     %>
-    <li><a href="<%=entryLink%>"><%=entryTitle%>
-    </a>, <%=entryDate%><br/>
-        <%=value%>
-    </li>
+    <ui:group label="<%=entryTitle%>" cssStyle="border: 1px dashed #c7c7c7;">
+    <ui:text cssStyle="font-size: x-small;  font-weight: italic"><%=entryDate%><br/></ui:text><p/>
+    <%=value%>
+    <p/>
+    <ui:text cssStyle="font-size: x-small;"> <a href="<%=entryLink%>">Read full story</a></ui:text>
+    </ui:group>
 
     <%
 
 
         }
     %>
-</ul>
+
 <%
 
     }
