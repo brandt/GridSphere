@@ -57,6 +57,8 @@ public class GroupTag extends BaseComponentTag {
         groupBean.setLabel(label);
         if (key!=null) {
             groupBean.setLabel(getLocalizedText(key));
+            groupBean.setCssClass(cssClass);
+            groupBean.setCssStyle(cssStyle);
         }
 
         try {
