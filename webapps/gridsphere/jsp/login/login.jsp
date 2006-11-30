@@ -37,7 +37,7 @@
             <ui:tablecell width="60">
                 <ui:text var="userkey" key="USER_NAME_BLANK"/>
                 <input class="checkNotEmpty#" type="text" name="username" size="15" maxlength="50"/>
-                <input type="hidden" name="username#checkNotEmpty" value="<%= userkey %>"/>
+                <input type="hidden" name="val#username#checkNotEmpty" value="<%= userkey %>"/>
             </ui:tablecell>
             <ui:tablecell/>
         </ui:tablerow>
@@ -51,7 +51,7 @@
             <ui:tablecell width="60">
                 <ui:text var="emailkey" key="USER_EMAIL_BLANK"/>
                 <input class="checkNotEmpty#" type="text" name="username" size="25" maxlength="50"/>
-                <input type="hidden" name="username#checkNotEmpty" value="<%= emailkey %>"/>
+                <input type="hidden" name="val#username#checkNotEmpty" value="<%= emailkey %>"/>
             </ui:tablecell>
             <ui:tablecell/>
         </ui:tablerow>
@@ -68,7 +68,7 @@
                 <% } else { %>
                 <input class="checkNotEmpty#" type="password" name="password" size="25" maxlength="50"/>
                 <% } %>
-                <input type="hidden" name="password#checkNotEmpty" value="<%= passkey %>"/>
+                <input type="hidden" name="val#password#checkNotEmpty" value="<%= passkey %>"/>
             </ui:tablecell>
             <ui:tablecell/>
         </ui:tablerow>
