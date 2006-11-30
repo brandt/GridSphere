@@ -153,10 +153,6 @@ Build include file for the GridSphere Portal source code, see build.xml
         <copy overwrite="true" tofile="${build.webapps}/${gridsphere.deploy}/META-INF/context.xml"
               file="${gswebapp.dir}/META-INF/context.xml" filtering="true"/>
 
-        <!-- copy gridsphere.props and replace context and deploy -->
-        <copy overwrite="true"
-              tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"
-              file="${gswebapp.dir}/WEB-INF/CustomPortal/portal/gridsphere.properties" filtering="true"/>
 
     </target>
     <!-- ++++++++++++++++++++++ -->
@@ -178,8 +174,10 @@ Build include file for the GridSphere Portal source code, see build.xml
                     file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"/>
             <then/>
             <else>
+                <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
+                <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
                 <copy file="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"
-                      todir="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/"/>
+                      todir="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/" filtering="true"/>
             </else>
         </if>
     </target>
