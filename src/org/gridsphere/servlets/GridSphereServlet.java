@@ -7,8 +7,8 @@ package org.gridsphere.servlets;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.filters.PortalFilter;
-import org.gridsphere.filters.impl.descriptor.PortalFilterDescriptor;
+import org.gridsphere.services.core.filter.PortalFilter;
+import org.gridsphere.services.core.filter.PortalFilterService;
 import org.gridsphere.layout.PortletLayoutEngine;
 import org.gridsphere.layout.PortletPageFactory;
 import org.gridsphere.services.core.user.User;
@@ -27,11 +27,7 @@ import org.gridsphere.portletcontainer.impl.PortletSessionManager;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
-import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.registry.PortletManagerService;
-import org.gridsphere.services.core.security.auth.AuthenticationException;
-import org.gridsphere.services.core.security.auth.AuthorizationException;
-import org.gridsphere.services.core.security.auth.LoginService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.user.UserManagerService;
@@ -47,9 +43,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.SocketException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Calendar;
+import java.util.*;
 
 
 /**
@@ -69,16 +63,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     private UserManagerService userManagerService = null;
 
-    private PortalConfigService portalConfigService = null;
-
-    private LoginService loginService = null;
 
     /* GridSphere Portlet layout Engine handles rendering */
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
 
     private PortletSessionManager sessionManager = PortletSessionManager.getInstance();
 
-    private List<PortalFilter> portalFilters = null;
+    private PortalFilterService portalFilterService = null;
 
     private boolean firstDoGet = true;
 
@@ -107,38 +98,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
         PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
         layoutEngine.init(config.getServletContext());
-
-        /*
-        String realPath = config.getServletContext().getRealPath("");
-        int l = realPath.lastIndexOf(File.separator);
-        String ctxPath = realPath.substring(l + 1);
-        System.err.println("ctx path=" + ctxPath);
-        portalConfigService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
-        if (ctxPath.equals("ROOT")) ctxPath = "";
-        portalConfigService.setProperty("gridsphere.deploy", ctxPath);
-        try {
-            portalConfigService.storeProperties();
-        } catch (IOException e) {
-            log.error("Unable to write to properties file!");
-        }
-        */
     }
 
     private void initializeServices() throws PortletServiceException {
         roleService = (RoleManagerService) PortletServiceFactory.createPortletService(RoleManagerService.class, true);
         userManagerService = (UserManagerService) PortletServiceFactory.createPortletService(UserManagerService.class, true);
-        portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
-
-        loginService = (LoginService) PortletServiceFactory.createPortletService(LoginService.class, true);
         portletManager = (PortletManagerService) PortletServiceFactory.createPortletService(PortletManagerService.class, true);
-        String filterDescriptorPath = getServletContext().getRealPath("/WEB-INF/filters.xml");
-        try {
-            PortalFilterDescriptor filterDescriptor = new PortalFilterDescriptor(getServletConfig(), filterDescriptorPath);
-            portalFilters = filterDescriptor.getPortalFilters();
-        } catch (PersistenceManagerException e) {
-            //log.error("error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
-            throw new PortletServiceException("error unmarshalling " + filterDescriptorPath, e);
-        }
+        portalFilterService = (PortalFilterService) PortletServiceFactory.createPortletService(PortalFilterService.class, true);
 
     }
 
@@ -207,6 +173,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         // check to see if user has been authorized by means of container managed authorization
         checkWebContainerAuthorization(event);
 
+        List<PortalFilter> portalFilters = portalFilterService.getPortalFilters();
         for (PortalFilter filter : portalFilters) {
             filter.doBeforeEveryRequest(req, res);
         }
@@ -223,25 +190,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         // Handle user login and logout
         if (event.hasAction()) {
             String actionName = event.getAction().getName();
-            if (actionName.equals(SportletProperties.LOGIN)) {
-                String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
-                try {
-                    login(event);
-                    setUserAndRoles(event);
-                    return;
-                } catch (AuthorizationException err) {
-                    log.debug(err.getMessage());
-                    req.getSession(true).setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
-                } catch (AuthenticationException err) {
-                    log.debug(err.getMessage());
-                    req.getSession(true).setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
-                }
-            }
             if (actionName.equals(SportletProperties.LOGOUT)) {
                 logout(event);
                 long endTime = System.currentTimeMillis();
                 System.err.println("Page render time = " + (endTime - startTime) + " (ms) request= " + req.getQueryString());
-
                 return;
             }
         }
@@ -253,7 +205,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             String requestURL = (String)req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
             if (req.getParameter("ajax") == null) {
                 log.debug("redirect after POST to: " + requestURL);
-                res.sendRedirect(requestURL.toString());
+                res.sendRedirect(requestURL);
                 return;
             }           
         }
@@ -268,7 +220,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 req.setAttribute(SportletProperties.FILE_DOWNLOAD_ERROR, e);
             }
         }
-
 
         // Used for TCK tests
         if (isTCK) {
@@ -371,12 +322,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             UserPrincipal userPrincipal = new UserPrincipal(user.getUserName());
             req.setAttribute(SportletProperties.PORTLET_USER_PRINCIPAL, userPrincipal);
             List<PortletRole> proles = roleService.getRolesForUser(user);
-            for (PortletRole prole : proles) {
-                roles.add(prole.getName());
+            for (PortletRole  role : proles) {
+                roles.add(role.getName());
             }
         }
-
-        
 
         // set user, role and groups in request
         req.setAttribute(SportletProperties.PORTLET_USER, user);
@@ -396,74 +345,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 int indeDelimeter = principal.getName().lastIndexOf('/');
                 indeDelimeter = (indeDelimeter > 0) ? (indeDelimeter + 1) : 0;
                 String login = principal.getName().substring(indeDelimeter);
-                User user = userManagerService.getLoggedInUser(login);
+                User user = userManagerService.getUserByUserName(login);
                 if (user != null) {
                     request.setAttribute(SportletProperties.PORTLET_USER, user);
                     session.setAttribute(SportletProperties.PORTLET_USER, user.getID(), PortletSession.APPLICATION_SCOPE);
                 }
             }
-        }
-    }
-
-    /**
-     * Handles login requests
-     *
-     * @param event a <code>GridSphereEvent</code>
-     * @throws AuthenticationException if auth fails
-     * @throws AuthorizationException if authz fails
-     */
-    protected void login(GridSphereEvent event) throws AuthenticationException, AuthorizationException {
-
-        System.err.println("in login of GS servlet!!");
-
-
-        HttpServletRequest req = event.getHttpServletRequest();
-        RenderResponse res = event.getRenderResponse();
-
-        User user = loginService.login(req);
-        Long now = Calendar.getInstance().getTime().getTime();
-        user.setLastLoginTime(now);
-        Integer numLogins = user.getNumLogins();
-        if (numLogins == null) numLogins = 0;
-        numLogins++;
-
-        user.setNumLogins(numLogins);
-        userManagerService.saveUser(user);
-
-        req.setAttribute(SportletProperties.PORTLET_USER, user);
-        req.getSession(true).setAttribute(SportletProperties.PORTLET_USER, user.getID());
-
-        String query = event.getAction().getParameter("queryString");
-
-        PortletURL uri = res.createActionURL();
-        if (query != null) {
-            uri.setParameter("cid", query);
-        }
-        req.setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
-
-        String realuri = uri.toString().substring("http".length());
-        Boolean useSecureRedirect = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.USE_HTTPS_REDIRECT));
-        if (useSecureRedirect.booleanValue()) {
-            realuri = "https" + realuri;
-        } else {
-            realuri = "http" + realuri;
-        }
-
-        for (PortalFilter filter : portalFilters) {
-            filter.doAfterLogin(event.getHttpServletRequest(), event.getHttpServletResponse());
-        }
-
-        
-        log.debug("in login redirecting to portal: " + realuri.toString());
-        try {
-            if (req.getParameter("ajax") != null) {
-                res.setContentType("text/html");
-                res.getWriter().print(realuri.toString());    
-            } else {
-                event.getHttpServletResponse().sendRedirect(realuri.toString());
-            }
-        } catch (IOException e) {
-            log.error("Unable to perform a redirect!", e);
         }
     }
 
@@ -487,12 +374,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             log.error("Failed to logout portlets!", e);
         }
 
-        //req.getPortletSession(true).invalidate();
 
+        List<PortalFilter> portalFilters = portalFilterService.getPortalFilters();
         for (PortalFilter filter : portalFilters) {
             filter.doAfterLogout(event.getHttpServletRequest(), event.getHttpServletResponse());
         }
-        //pageFactory.
+        
 
         try {
             String url = res.createRenderURL().toString();
@@ -501,7 +388,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         } catch (IOException e) {
             log.error("Unable to do a redirect!", e);
         }
-
     }
 
     /**
