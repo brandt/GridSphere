@@ -9,7 +9,7 @@ import org.gridsphere.provider.portletui.beans.RadioButtonBean;
 import org.gridsphere.provider.portletui.beans.TextAreaBean;
 import org.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridsphere.services.core.portal.PortalConfigService;
-import org.gridsphere.services.core.security.auth.LoginService;
+import org.gridsphere.services.core.security.auth.AuthModuleService;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridsphere.services.core.security.role.PortletRole;
 
@@ -25,12 +25,12 @@ public class ConfigPortlet extends ActionPortlet {
     public static final String DO_VIEW = "admin/config/view.jsp"; //configure login
 
     private PortalConfigService portalConfigService = null;
-    private LoginService loginService = null;
+    private AuthModuleService authModuleService = null;
 
     public void init(PortletConfig config) throws PortletException {
         super.init(config);
         portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
-        loginService = (LoginService) PortletServiceFactory.createPortletService(LoginService.class, true);
+        authModuleService = (AuthModuleService) PortletServiceFactory.createPortletService(AuthModuleService.class, true);
         DEFAULT_VIEW_PAGE = "showConfigure";
     }
 
@@ -66,7 +66,11 @@ public class ConfigPortlet extends ActionPortlet {
         }
         numTriesTF.setValue(numTries);
 
-        List authModules = loginService.getAuthModules();
+
+        Boolean isUsernameLogin = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.USE_USERNAME_FOR_LOGIN));
+        req.setAttribute("isUsernameLogin", isUsernameLogin);
+
+        List authModules = authModuleService.getAuthModules();
         req.setAttribute("authModules", authModules);
 
         // configure mail settings
@@ -171,6 +175,10 @@ public class ConfigPortlet extends ActionPortlet {
         TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
         String numTries = numTriesTF.getValue();
         int numtries = -1;
+
+
+        RadioButtonBean isUsernameLogin = event.getRadioButtonBean("loginRB");
+        portalConfigService.setProperty(PortalConfigService.USE_USERNAME_FOR_LOGIN, isUsernameLogin.getValue());
         try {
             numtries = Integer.valueOf(numTries).intValue();
             portalConfigService.setProperty(PortalConfigService.LOGIN_NUMTRIES, String.valueOf(numtries));
@@ -213,7 +221,7 @@ public class ConfigPortlet extends ActionPortlet {
             System.err.println("active auth mod: " + (String) activeAuthMods.get(i));
         }
 
-        List authModules = loginService.getAuthModules();
+        List authModules = authModuleService.getAuthModules();
         Iterator it = authModules.iterator();
         while (it.hasNext()) {
             LoginAuthModule authMod = (LoginAuthModule) it.next();
@@ -225,7 +233,7 @@ public class ConfigPortlet extends ActionPortlet {
             }
             String priority = req.getParameter(authMod.getModuleName());
             authMod.setModulePriority(Integer.valueOf(priority).intValue());
-            loginService.saveAuthModule(authMod);
+            authModuleService.saveAuthModule(authMod);
         }
 
         setNextState(req, DEFAULT_VIEW_PAGE);
