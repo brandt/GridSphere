@@ -363,7 +363,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     public void doShowLayout(ActionFormEvent event) throws PortletException, IOException {
         doShowLayout(event.getActionRequest(), event.getActionResponse(), event);
-        //setNextState(event.getActionRequest(), VIEW_JSP);
     }
 
     public void doShowLayout(RenderFormEvent event) throws PortletException, IOException {
