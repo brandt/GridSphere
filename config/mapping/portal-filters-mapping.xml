@@ -9,14 +9,14 @@
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
 <mapping>
 
-    <class name="org.gridsphere.filters.impl.descriptor.PortalFilterCollection">
+    <class name="org.gridsphere.services.core.filter.impl.descriptor.PortalFilterCollection">
         <map-to xml="portal-filters"/>
-        <field name="PortalFilterList" type="org.gridsphere.filters.impl.descriptor.PortalFilterDefinition" collection="vector">
+        <field name="PortalFilterList" type="org.gridsphere.services.core.filter.impl.descriptor.PortalFilterDefinition" collection="vector">
             <bind-xml name="filter"/>
         </field>
     </class>
 
-    <class name="org.gridsphere.filters.impl.descriptor.PortalFilterDefinition">
+    <class name="org.gridsphere.services.core.filter.impl.descriptor.PortalFilterDefinition">
         <field name="Name" type="string">
             <bind-xml name="name"/>
         </field>
