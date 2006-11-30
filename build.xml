@@ -61,6 +61,7 @@ Invoke "ant help"
     <import file="config/build/build-deploy.xml"/>
     <import file="config/build/build-server-tomcat.xml"/>
     <import file="config/build/build-update.xml"/>
+    <import file="config/build/build-jsp-compile.xml"/>
 
     <!-- ============================= Targets ===================================================== -->
 
@@ -98,11 +99,15 @@ Invoke "ant help"
                 <echo message="Installing for Jetty"/>
                 <property name="appserver.home" value="${env.APPSERVER_HOME}"/>
                 <path id="servletpath">
-                    <fileset file="${appserver.home}/lib/javax.servlet.jar"/>
-                    <fileset dir="${appserver.home}/ext/">
+                    <fileset dir="${appserver.home}/lib/">
                         <exclude name="*.LICENSE"/>
                         <include name="*.jar"/>
                     </fileset>
+                    <fileset dir="${appserver.home}/lib/jsp-api-2.1">
+                        <exclude name="*.LICENSE"/>
+                        <include name="*.jar"/>
+                    </fileset>
+
                 </path>
             </then>
         </if>
@@ -113,9 +118,8 @@ Invoke "ant help"
                 <echo message="Installing for Jetty6"/>
                 <property name="appserver.home" value="${env.APPSERVER_HOME}"/>
                 <path id="servletpath">
-                    <fileset file="${appserver.home}/lib/servlet-api-2.5-6.0.0rc3.jar"/>
+                    <fileset file="${appserver.home}/lib/servlet-*.jar"/>
                     <fileset dir="${appserver.home}/lib/jsp-2.0/">
-                        <exclude name="*.LICENSE"/>
                         <include name="*.jar"/>
                     </fileset>
                 </path>
@@ -138,7 +142,6 @@ Invoke "ant help"
         <echo message="GridSphere Webserver is ${gridsphere.appserver}"/>
         <echo message="GridSphere will be deployed to ${appserver.home} as the ${gridsphere.deploy} web application"/>
     </target>
-
 
 
     <!-- =================================================================== -->
@@ -182,11 +185,10 @@ Invoke "ant help"
 
     <target name="deploy-tck" depends="jar">
         <taskdef name="deploytck"
-            classname="org.gridsphere.tools.DeployGridSphereTCK"
-            classpathref="classpath"/>
+                 classname="org.gridsphere.tools.DeployGridSphereTCK"
+                 classpathref="classpath"/>
         <deploytck builddir="${gridsphere.build}" wardir="webapps/tck" server="${appserver.home}"/>
     </target>
-
 
 
     <!-- =================================================================== -->
@@ -204,11 +206,11 @@ Invoke "ant help"
 
     <target name="install" depends="clean, license" description="Build and deploy GridSphere">
         <echo>------------------------------------------------------------</echo>
-        <echo>-- Installing GridSphere documentation is recommended  --</echo>
+        <echo>-- Installing GridSphere documentation is recommended --</echo>
         <echo>------------------------------------------------------------</echo>
         <echo>Answering 'y' below will deploy GridSphere javadoc API.</echo>
-        <echo>If you answer 'n' you can deploy the javadoc API documentation at a later time </echo>
-        <echo>with 'ant docs'.                                     </echo>
+        <echo>If you answer 'n' you can deploy the javadoc API documentation at a later time</echo>
+        <echo>with 'ant docs'.</echo>
         <echo>------------------------------------------------------------</echo>
         <input message="Do you want to install GridSphere JavaDoc API? "
                validargs="y,n" defaultvalue="y" addProperty="install.docs.agreed"/>

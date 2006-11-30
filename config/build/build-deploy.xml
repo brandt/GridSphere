@@ -60,7 +60,7 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <jar destfile="${gridsphere.build}/${gridsphere.deploy}.war"
              basedir="${gridsphere.build}/${gridsphere.deploy}"/>
-     
+
         <delete dir="${gridsphere.build}/${gridsphere.deploy}"/>
 
     </target>
@@ -68,18 +68,9 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- ++++++++++++++++++++++ -->
     <!-- deploy-common -->
 
-    <target name="deploy-common" depends="jar" description="Filters and copies all necessary files to build directory">
+    <target name="copy-buildwebapp" depends="jar" description="Copies jars and webapp to the build.deploy directory">
 
-        <!-- Copy the gridsphere web app to build directory -->
-        <pathconvert targetos="windows" dirsep="/" property="cathome">
-            <path location="${appserver.home}"/>
-        </pathconvert>
-
-        <filter token="GRIDSPHERE_DB" value="${cathome}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/database/gridsphere"/>
-        <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/database/hibernate.properties"
-              file="${gswebapp.dir}/WEB-INF/CustomPortal/database/hibernate.properties"
-              filtering="true"/>
-
+        <!-- copy libs & gs jars to build dir -->
         <copy overwrite="true" todir="${build.webapps}/${gridsphere.deploy}/WEB-INF/lib">
             <fileset dir="lib">
                 <exclude name="licenses/**"/>
@@ -91,7 +82,36 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <include name="gridsphere-provider-${gridsphere.version}.jar"/>
             </fileset>
         </copy>
-                
+
+        <!-- copy webapp to build dir excluding files which need special handling-->
+        <copy todir="${build.webapps}/${gridsphere.deploy}">
+            <fileset dir="${gswebapp.dir}">
+                <exclude name="**/tlds/**"/>
+                <exclude name="index.html"/>
+                <exclude name="WEB-INF/web.xml"/>
+                <exclude name="META-INF/context.xml"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="deploy-common" depends="jar" description="Filters and copies all necessary files to build directory">
+
+        <!-- Copy the gridsphere web app to build directory -->
+        <pathconvert targetos="windows" dirsep="/" property="cathome">
+            <path location="${appserver.home}"/>
+        </pathconvert>
+
+        <!-- copy the hibernate properties to the build.lib and replace the @GRIDSPHERE_DB@ with the path -->
+        <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/database/hibernate.properties"
+              file="${gswebapp.dir}/WEB-INF/CustomPortal/database/hibernate.properties"
+              filtering="true">
+            <filterset>
+                <filter token="GRIDSPHERE_DB"
+                        value="${cathome}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/database/gridsphere"/>
+            </filterset>
+        </copy>
+
+        <!-- copy the rest of the webapps dir to -->
         <copy todir="${build.webapps}/${gridsphere.deploy}">
             <fileset dir="${gswebapp.dir}">
                 <exclude name="**/tlds/**"/>
@@ -101,69 +121,51 @@ Build include file for the GridSphere Portal source code, see build.xml
             </fileset>
         </copy>
 
-        <antcall target="gridsphere-jsp-jar"/>
-        <antcall target="modify-webxml"/>
-
-        <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/web.xml"
-              file="${gswebapp.dir}/WEB-INF/web.xml"
-              filtering="true"/>
-
-        <copy tofile="${build.webapps}/${gridsphere.deploy}/META-INF/context.xml"
-              file="${gswebapp.dir}/META-INF/context.xml"
-              filtering="true"/>
-
-        <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"
-              file="${gswebapp.dir}/WEB-INF/CustomPortal/portal/gridsphere.properties"
-              filtering="true"/>
-
-
-
-
-        <!-- only copy if it is there -->
-        <if>
-
-            <available file="${build.lib}/gridsphere-jsp-${gridsphere.version}.jar"/>
-            <then>
-                <copy overwrite="true" file="${build.lib}/gridsphere-jsp-${gridsphere.version}.jar" todir="${build.webapps}/${gridsphere.deploy}/WEB-INF/lib"/>
-            </then>
-        </if>
-
-    </target>
-
-    <!-- ++++++++++++++++++++++ -->
-    <!-- modify-webxml -->
-
-    <target name="modify-webxml">
-        <!-- change web.xml if precompiled jsps are available -->
-
-        <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
-        <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
+        <!-- define empty filter to replace the mark in web.xml -->
         <filter token="PRECOMPILED-JSP" value=""/>
 
         <if>
+            <!-- if we use procompiled jsp's use the content of web.inc if it exists -->
             <equals arg1="${gridsphere.useprecompiledjsp}" arg2="true"/>
             <then>
-
                 <if>        <!-- to avoid errormsg if not found -->
                     <available file="${gridsphere.build}/jsp/web.inc"/>
                     <then>
                         <loadfile property="web.inc" srcfile="${gridsphere.build}/jsp/web.inc" failonerror="false"/>
+                        <!-- redefine the filter to include web.inc -->
                         <filter token="PRECOMPILED-JSP" value="${web.inc}"/>
                     </then>
                 </if>
             </then>
         </if>
 
-        <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/web.xml"
-                      file="${gswebapp.dir}/WEB-INF/web.xml"
-                      filtering="true"/>
-    </target>
+        <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
+        <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
 
+        <!-- overwrite the following files in the build.dir again with files from the source
+             but parsed and with replaced text -->
+
+        <!-- copy web.xml and make modifications -->
+        <copy overwrite="true" tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/web.xml"
+              file="${gswebapp.dir}/WEB-INF/web.xml" filtering="true"/>
+
+        <!-- copy context.xml and replace context and deploy -->
+        <copy overwrite="true" tofile="${build.webapps}/${gridsphere.deploy}/META-INF/context.xml"
+              file="${gswebapp.dir}/META-INF/context.xml" filtering="true"/>
+
+        <!-- copy gridsphere.props and replace context and deploy -->
+        <copy overwrite="true"
+              tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"
+              file="${gswebapp.dir}/WEB-INF/CustomPortal/portal/gridsphere.properties" filtering="true"/>
+
+    </target>
     <!-- ++++++++++++++++++++++ -->
     <!-- deploy-copy -->
 
-    <target name="deploy-copy" depends="deploy-common" description="Performs deploy-common and deploys build directory to app server">
-        <!-- copy webappsdir to deployed location -->
+    <target name="deploy-copy" depends="copy-buildwebapp, deploy-common, gridsphere-jsp-jar"
+            description="Performs deploy-common and deploys build directory to app server">
+
+        <!-- copy build.webappsdir to deployed location -->
         <copy todir="${appserver.home}/webapps">
             <fileset dir="${build.webapps}">
                 <exclude name="**/gridsphere.properties"/>
@@ -172,7 +174,8 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <!-- only copy over the portal properties if not there already -->
         <if>
-            <available file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"/>
+            <available
+                    file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"/>
             <then/>
             <else>
                 <copy file="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"
@@ -191,8 +194,8 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <copy overwrite="true" todir="${appserver.home}/ext">
             <fileset dir="${build.lib}">
-               <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
-               <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
+                <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
+                <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
             </fileset>
         </copy>
 
@@ -208,8 +211,8 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <copy overwrite="true" todir="${appserver.home}/lib">
             <fileset dir="${build.lib}">
-               <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
-               <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
+                <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
+                <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
             </fileset>
         </copy>
         <copy overwrite="true" todir="${appserver.home}/lib">
@@ -235,7 +238,8 @@ Build include file for the GridSphere Portal source code, see build.xml
             </then>
             <else>
                 <echo message="Detected Tomcat 4"/>
-                <copy file="webapps/gridsphere/META-INF/context.xml" tofile="${appserver.home}/webapps/${gridsphere.deploy}.xml" filtering="true"/>
+                <copy file="webapps/gridsphere/META-INF/context.xml"
+                      tofile="${appserver.home}/webapps/${gridsphere.deploy}.xml" filtering="true"/>
             </else>
         </if>
 

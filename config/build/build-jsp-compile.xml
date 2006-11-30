@@ -1,0 +1,67 @@
+<project name="GridSphere JSP compile">
+
+
+    <!-- =================================================================== -->
+    <!-- Precompile JSP Pages                                                -->
+    <!-- =================================================================== -->
+
+    <!-- prolems here:
+        jspc: seems to ignore the exclude tag, so even for jsp includes java code is generated, even the web.inc
+              mapping is done
+        javac: if **/include/** is excluded from compiling, everything works in tomcat, jetty will complain about
+              missing servlets which where generatedin web.inc from jspc
+
+    -->
+
+    <target name="jsp-precompile" depends="gridsphere-provider-jar">
+
+        <taskdef name="jspc50" classname="org.apache.jasper.JspC" classpathref="classpath">
+        </taskdef>
+
+
+        <mkdir dir="${gridsphere.build}/jsp/source"/>
+        <mkdir dir="${gridsphere.build}/jsp/classes"/>
+        <if>
+            <equals arg1="${gridsphere.useprecompiledjsp}" arg2="true"/>
+            <then>
+
+                <jspc50 outputDir="${gridsphere.build}/jsp/source"
+                        uriroot="${gridsphere.build}/webapps/gridsphere/"
+                        webXmlFragment="${gridsphere.build}/jsp/web.inc"
+                        validateXml="false">
+                </jspc50>
+            </then>
+        </if>
+
+    </target>
+
+    <target name="jsp-compile" depends="jsp-precompile">
+        <javac srcdir="${gridsphere.build}/jsp/source"
+               destdir="${gridsphere.build}/jsp/classes"
+               debug="true"
+               optimize="false"
+               includes="**/*.java"
+               classpath="${build.lib}/gridsphere-provider-${gridsphere.version}.jar"
+               classpathref="classpath">
+        </javac>
+
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Put JSP pages in a jar                                              -->
+    <!-- =================================================================== -->
+
+    <target name="gridsphere-jsp-jar" depends="copy-buildwebapp, jsp-compile">
+        <if>
+            <equals arg1="${gridsphere.useprecompiledjsp}" arg2="true"/>
+            <then>
+                <!-- create the jar and copy it in the webapp -->
+                <jar jarfile="${build.webapps}/${gridsphere.deploy}/WEB-INF/lib/gridsphere-jsp-${gridsphere.version}.jar"
+                     basedir="${gridsphere.build}/jsp/classes/">
+                    <include name="**"/>
+                </jar>
+            </then>
+        </if>
+    </target>
+
+</project>
