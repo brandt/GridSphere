@@ -28,7 +28,8 @@ public interface PortalConfigService {
     public static String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
     public static String CAN_USER_CREATE_ACCOUNT = "CAN_USER_CREATE_ACCOUNT";
     public static String ADMIN_ACCOUNT_APPROVAL = "ADMIN_ACCOUNT_APPROVAL";
-    
+    public static String USE_USERNAME_FOR_LOGIN = "USE_USERNAME_FOR_LOGIN";
+
     public String getProperty(String key);
 
     public void setProperty(String key, String value);
