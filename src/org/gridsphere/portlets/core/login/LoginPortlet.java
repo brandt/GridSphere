@@ -7,7 +7,9 @@ package org.gridsphere.portlets.core.login;
 import com.octo.captcha.service.CaptchaServiceException;
 import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.impl.PortletURLImpl;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.PortletServiceException;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
@@ -25,13 +27,22 @@ import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridsphere.services.core.security.auth.AuthenticationException;
+import org.gridsphere.services.core.security.auth.AuthorizationException;
+import org.gridsphere.services.core.security.auth.AuthModuleService;
+import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridsphere.services.core.user.UserManagerService;
+import org.gridsphere.layout.PortletPageFactory;
+import org.gridsphere.services.core.filter.PortalFilter;
+import org.gridsphere.services.core.filter.PortalFilterService;
+import org.gridsphere.services.core.registry.PortletManagerService;
 
 import javax.portlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.cert.X509Certificate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
+import java.io.IOException;
 
 public class LoginPortlet extends ActionPortlet {
 
@@ -55,11 +66,16 @@ public class LoginPortlet extends ActionPortlet {
     private PortalConfigService portalConfigService = null;
     private RequestService requestService = null;
     private MailService mailService = null;
+    private AuthModuleService authModuleService = null;
+
+    private PortalFilterService portalFilterService = null;
 
     private String  notificationURL = null;
     private String newpasswordURL = null;
     private String activateAccountURL = null;
     private String denyAccountURL = null;
+    private String redirectURL = null;
+    private String logoutURL = null;
 
     public void init(PortletConfig config) throws PortletException {
 
@@ -71,6 +87,9 @@ public class LoginPortlet extends ActionPortlet {
         requestService = (RequestService) createPortletService(RequestService.class);
         mailService = (MailService) createPortletService(MailService.class);
         portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
+        portalFilterService = (PortalFilterService)createPortletService(PortalFilterService.class);
+        authModuleService = (AuthModuleService) createPortletService(AuthModuleService.class);
+
         DEFAULT_VIEW_PAGE = "doViewUser";
     }
 
@@ -84,6 +103,17 @@ public class LoginPortlet extends ActionPortlet {
             PortletURL url = response.createActionURL();
             ((PortletURLImpl)url).setAction("newpassword");
             newpasswordURL = url.toString();
+        }
+
+        if (redirectURL == null) {
+            PortletURL url = response.createRenderURL();
+            ((PortletURLImpl)url).setLayout(PortletPageFactory.USER_PAGE);
+            redirectURL = url.toString();
+        }
+
+        if (logoutURL == null) {
+            PortletURL url = response.createRenderURL();
+            logoutURL = url.toString();
         }
 
         if (activateAccountURL == null) {
@@ -120,6 +150,40 @@ public class LoginPortlet extends ActionPortlet {
         if (canUserCreateAccount) request.setAttribute("canUserCreateAcct", "true");
         boolean dispUser = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.SEND_USER_FORGET_PASSWORD)).booleanValue();
         if (dispUser) request.setAttribute("dispPass", "true");
+
+        String errorMsg = (String) request.getPortletSession(true).getAttribute(LOGIN_ERROR_FLAG);
+
+        if (errorMsg != null) {
+            Integer numTries = (Integer) request.getPortletSession(true).getAttribute(PortalConfigService.LOGIN_NUMTRIES);
+            String loginname = (String) request.getPortletSession(true).getAttribute(LOGIN_NAME);
+            int i = 1;
+            if (numTries != null) {
+                i = numTries.intValue();
+                i++;
+            }
+            numTries = new Integer(i);
+            request.getPortletSession(true).setAttribute(PortalConfigService.LOGIN_NUMTRIES, numTries);
+            request.getPortletSession(true).setAttribute(LoginPortlet.LOGIN_NAME, request.getParameter("username"));
+            System.err.println("num tries = " + i);
+            // tried one to many times using same name
+
+            int defaultNumTries = Integer.valueOf(portalConfigService.getProperty(PortalConfigService.LOGIN_NUMTRIES)).intValue();
+
+            if (request.getParameter("username") != null && request.getParameter("username").equals(loginname)) {
+                if ((i >= defaultNumTries) && (defaultNumTries != -1)) {
+                    disableAccount(event);
+                    errorMsg = this.getLocalizedText(request, "LOGIN_TOOMANY_ATTEMPTS");
+                    request.getPortletSession(true).removeAttribute(PortalConfigService.LOGIN_NUMTRIES);
+                    request.getPortletSession(true).removeAttribute(LOGIN_NAME);
+                }
+            }
+            createErrorMessage(event, errorMsg);
+            request.getPortletSession(true).removeAttribute(LOGIN_ERROR_FLAG);
+        }
+
+        Boolean useUserName = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.USE_USERNAME_FOR_LOGIN));
+        if (useUserName) request.setAttribute("useUserName", "true");
+
         setNextState(request, "login/login.jsp");
     }
 
@@ -131,41 +195,185 @@ public class LoginPortlet extends ActionPortlet {
         log.debug("in LoginPortlet: gs_login");
         PortletRequest req = event.getActionRequest();
 
-        String errorMsg = (String) req.getPortletSession(true).getAttribute(LoginPortlet.LOGIN_ERROR_FLAG, PortletSession.APPLICATION_SCOPE);
-
-        if (errorMsg != null) {
-            Integer numTries = (Integer) req.getPortletSession(true).getAttribute(PortalConfigService.LOGIN_NUMTRIES);
-            String loginname = (String) req.getPortletSession(true).getAttribute(LoginPortlet.LOGIN_NAME);
-            int i = 1;
-            if (numTries != null) {
-                i = numTries.intValue();
-                i++;
-            }
-            numTries = new Integer(i);
-            req.getPortletSession(true).setAttribute(PortalConfigService.LOGIN_NUMTRIES, numTries);
-            req.getPortletSession(true).setAttribute(LoginPortlet.LOGIN_NAME, req.getParameter("username"));
-            System.err.println("num tries = " + i);
-            // tried one to many times using same name
-
-            int defaultNumTries = Integer.valueOf(portalConfigService.getProperty(PortalConfigService.LOGIN_NUMTRIES)).intValue();
-
-            if (req.getParameter("username") != null && req.getParameter("username").equals(loginname)) {
-                if ((i >= defaultNumTries) && (defaultNumTries != -1)) {
-                    disableAccount(event);
-                    errorMsg = this.getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS");
-                    req.getPortletSession(true).removeAttribute(PortalConfigService.LOGIN_NUMTRIES);
-                    req.getPortletSession(true).removeAttribute(LoginPortlet.LOGIN_NAME);
-                }
-            }
-            createErrorMessage(event, errorMsg);
-            req.getPortletSession(true).removeAttribute(LoginPortlet.LOGIN_ERROR_FLAG, PortletSession.APPLICATION_SCOPE);
+        try {
+            login(event);
+        } catch (AuthorizationException err) {
+            log.debug(err.getMessage());
+            req.getPortletSession(true).setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
+        } catch (AuthenticationException err) {
+            log.debug(err.getMessage());
+            req.getPortletSession(true).setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
         }
 
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
-    public void disableAccount(ActionFormEvent event) {
-        PortletRequest req = event.getActionRequest();
+
+
+    /**
+     * Handles login requests
+     *
+     * @param event a <code>GridSphereEvent</code>
+     * @throws org.gridsphere.services.core.security.auth.AuthenticationException if auth fails
+     * @throws org.gridsphere.services.core.security.auth.AuthorizationException if authz fails
+     */
+    protected void login(ActionFormEvent event) throws AuthenticationException, AuthorizationException {
+
+        ActionRequest req = event.getActionRequest();
+        ActionResponse res = event.getActionResponse();
+
+        User user = login(req);
+        Long now = Calendar.getInstance().getTime().getTime();
+        user.setLastLoginTime(now);
+        Integer numLogins = user.getNumLogins();
+        if (numLogins == null) numLogins = 0;
+        numLogins++;
+
+        user.setNumLogins(numLogins);
+        userManagerService.saveUser(user);
+
+        req.setAttribute(SportletProperties.PORTLET_USER, user);
+        req.getPortletSession(true).setAttribute(SportletProperties.PORTLET_USER, user.getID(), PortletSession.APPLICATION_SCOPE);
+
+        String query = event.getAction().getParameter("queryString");
+
+        if (query != null) {
+            //redirectURL.setParameter("cid", query);
+        }
+        //req.setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
+
+
+        String realuri = redirectURL.toString().substring("http".length());
+        Boolean useSecureRedirect = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.USE_HTTPS_REDIRECT));
+        if (useSecureRedirect.booleanValue()) {
+            realuri = "https" + realuri;
+        } else {
+            realuri = "http" + realuri;
+        }
+
+        List<PortalFilter> portalFilters = portalFilterService.getPortalFilters();
+        for (PortalFilter filter : portalFilters) {
+            filter.doAfterLogin((HttpServletRequest)req, (HttpServletResponse)res);
+        }
+
+        log.debug("in login redirecting to portal: " + realuri.toString());
+        try {
+            if (req.getParameter("ajax") != null) {
+                //res.setContentType("text/html");
+                //res.getWriter().print(realuri.toString());
+            } else {
+                res.sendRedirect(realuri.toString());
+            }
+        } catch (IOException e) {
+            log.error("Unable to perform a redirect!", e);
+        }
+    }
+
+    
+
+    public User login(PortletRequest req)
+            throws AuthenticationException, AuthorizationException {
+
+        String loginName = req.getParameter("username");
+        String loginPassword = req.getParameter("password");
+        String certificate = null;
+
+        X509Certificate[] certs = (X509Certificate[]) req.getAttribute("javax.servlet.request.X509Certificate");
+        if (certs != null && certs.length > 0) {
+            certificate = certificateTransform(certs[0].getSubjectDN().toString());
+        }
+
+        User user = null;
+
+        // if using client certificate, then don't use login modules
+        if (certificate == null) {
+            if ((loginName == null) || (loginPassword == null)) {
+                throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_BLANK"));
+            }
+            // first get user
+            Boolean useUserName = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.USE_USERNAME_FOR_LOGIN));
+            if (useUserName) {
+
+                user = userManagerService.getUserByUserName(loginName);
+            } else {
+                user = userManagerService.getUserByEmail(loginName);
+            }
+
+        } else {
+
+            log.debug("Using certificate for login :" + certificate);
+            List userList = userManagerService.getUsersByAttribute("certificate", certificate, null);
+            if (!userList.isEmpty()) {
+                user = (User)userList.get(0);
+            }
+        }
+
+        if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
+
+        String accountStatus = (String)user.getAttribute(User.DISABLED);
+        if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
+            throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
+
+        // If authorized via certificates no other authorization needed
+        if (certificate != null) return user;
+
+        // second invoke the appropriate auth module
+        List<LoginAuthModule> modules = authModuleService.getActiveAuthModules();
+
+        Collections.sort(modules);
+        AuthenticationException authEx = null;
+
+        Iterator it = modules.iterator();
+        log.debug("in login: Active modules are: ");
+        boolean success = false;
+        while (it.hasNext()) {
+            success = false;
+            LoginAuthModule mod = (LoginAuthModule) it.next();
+            log.debug(mod.getModuleName());
+            try {
+                mod.checkAuthentication(user, loginPassword);
+                success = true;
+            } catch (AuthenticationException e) {
+                String errMsg = mod.getModuleError(e.getMessage(), req.getLocale());
+                if (errMsg != null) {
+                    authEx = new AuthenticationException(errMsg);
+                } else {
+                    authEx = e;
+                }
+            }
+            if (success) break;
+        }
+        if (!success) throw authEx;
+
+        return user;
+    }
+
+    /**
+     *  Transform certificate subject from :
+     *  CN=Engbert Heupers, O=sara, O=users, O=dutchgrid
+     *  to :
+     *  /O=dutchgrid/O=users/O=sara/CN=Engbert Heupers
+     * @param certificate string
+     * @return certificate string
+     */
+    private String certificateTransform(String certificate) {
+        String ls[] = certificate.split(", ");
+        StringBuffer res = new StringBuffer();
+        for(int i = ls.length - 1; i >= 0; i--) {
+            res.append("/");
+            res.append(ls[i]);
+        }
+        return res.toString();
+    }
+
+    protected String getLocalizedText(HttpServletRequest req, String key) {
+        Locale locale = req.getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+        return bundle.getString(key);
+    }
+
+    public void disableAccount(RenderFormEvent event) {
+        PortletRequest req = event.getRenderRequest();
         String loginName = req.getParameter("username");
         User user = userManagerService.getUserByUserName(loginName);
         if (user != null) {
