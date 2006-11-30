@@ -18,7 +18,7 @@ import org.gridsphere.portletcontainer.impl.descriptor.*;
 import org.gridsphere.portletcontainer.impl.descriptor.types.TransportGuaranteeType;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
-import org.gridsphere.services.core.security.auth.LoginService;
+import org.gridsphere.services.core.security.auth.AuthModuleService;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
@@ -143,11 +143,11 @@ public class PortletServlet extends HttpServlet
 
         // load in any authentication modules if found-- this is a GridSphere extension
 
-        LoginService loginService = (LoginService)PortletServiceFactory.createPortletService(LoginService.class, true);
+        AuthModuleService authModuleService = (AuthModuleService)PortletServiceFactory.createPortletService(AuthModuleService.class, true);
         InputStream is = getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
         if (is != null) {
             String authModulePath = this.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
-            loginService.loadAuthModules(authModulePath, Thread.currentThread().getContextClassLoader());
+            authModuleService.loadAuthModules(authModulePath, Thread.currentThread().getContextClassLoader());
             log.info("loading authentication modules from: " + authModulePath);
         } else {
             log.debug("no auth module descriptor found");
@@ -351,6 +351,8 @@ public class PortletServlet extends HttpServlet
         ActionRequestImpl actionRequest = new ActionRequestImpl(request, portletContext);
         ActionResponse actionResponse = new ActionResponseImpl(request, response);
 
+
+
         try {
             String webappname = portletWebApp.getWebApplicationName();
             pm = pms.getPersistenceManagerRdbms(webappname);
@@ -489,7 +491,7 @@ public class PortletServlet extends HttpServlet
                 log.debug("redirecting to location= " + location);
 
                 servletRequest.setAttribute(SportletProperties.PORTAL_REDIRECT_PATH, location);
-                redirectResponse.sendRedirect(location);
+                //redirectResponse.sendRedirect(location);
 
             } else {
 
