@@ -40,46 +40,46 @@ Version: $Id: ui.css 4736 2006-04-10 22:10:44Z novotny $
 
 
 .basictab {
-padding: 3px 0;
-margin-left: 0;
-font: bold 12px Verdana;
-border-bottom: 1px solid gray;
-list-style-type: none;
-text-align: left; /*set to left, center, or right to align the menu as desired*/
+    padding: 3px 0;
+    margin-left: 0;
+    font: bold 12px Verdana;
+    border-bottom: 1px solid gray;
+    list-style-type: none;
+    text-align: left; /*set to left, center, or right to align the menu as desired*/
 }
 
 .basictab li {
-display: inline;
-margin: 0;
+    display: inline;
+    margin: 0;
 }
 
 .basictab li a {
-text-decoration: none;
-padding: 3px 7px;
-margin-right: 3px;
-border: 1px solid gray;
-border-bottom: none;
-background-color: #f6ffd5;
-color: #2d2b2b;
+    text-decoration: none;
+    padding: 3px 7px;
+    margin-right: 3px;
+    border: 1px solid gray;
+    border-bottom: none;
+    background-color: #f6ffd5;
+    color: #2d2b2b;
 }
 
 .basictab li a:visited {
-color: #2d2b2b;
+    color: #2d2b2b;
 }
 
 .basictab li a:hover {
-background-color: #DBFF6C;
-color: black;
+    background-color: #DBFF6C;
+    color: black;
 }
 
 .basictab li a:active{
-color: black;
+    color: black;
 }
 
 .basictab li.selected a{ /*selected tab effect*/
-position: relative;
-top: 1px;
-padding-top: 4px;
-background-color: #DBFF6C;
-color: black;
+    position: relative;
+    top: 1px;
+    padding-top: 4px;
+    background-color: #DBFF6C;
+    color: black;
 }
