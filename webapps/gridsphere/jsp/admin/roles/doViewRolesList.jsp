@@ -20,9 +20,9 @@
 
     <ui:table sortable="true" zebra="true">
         <ui:tablerow header="true">
-            <ui:tablecell><ui:text key="ROLENAME"/></ui:tablecell>
-            <ui:tablecell><ui:text key="ROLEDESC"/></ui:tablecell>
-            <ui:tablecell><ui:text key="ROLEDEL"/></ui:tablecell>
+            <ui:tablecell><ui:text cssStyle="font-weight: bold;" key="ROLENAME"/></ui:tablecell>
+            <ui:tablecell><ui:text cssStyle="font-weight: bold;" style="bold" key="ROLEDESC"/></ui:tablecell>
+            <ui:tablecell><ui:text cssStyle="font-weight: bold;" style="bold" key="ROLEDEL"/></ui:tablecell>
         </ui:tablerow>
         <%
             Iterator roleIterator = roleList.iterator();

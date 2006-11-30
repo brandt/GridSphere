@@ -1,16 +1,15 @@
 <%@ page import="org.gridsphere.services.core.user.User"%>
-<%@ page import="java.util.Iterator"%>
 <%@ page import="java.util.List"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
 <portlet:defineObjects/>
-<% List userList = (List) request.getAttribute("userList"); %>
+<% List<User> userList = (List<User>)request.getAttribute("userList"); %>
 
 
 <ui:messagebox beanId="msg"/>
 
-<% if (request.getAttribute("canEdit") != null) { %>
+<% if (request.getAttribute("canEdit") == null) { %>
 <ui:group key="ROLE_EDIT_MSG">
 <ui:form>
     <ui:hiddenfield beanId="roleHF"/>
@@ -37,6 +36,7 @@
 </ui:group>
 
 <% } %>
+<% if (request.getAttribute("newrole") == null) { %>
 
 <ui:group key="ROLE_EDITUSER_MSG">
 <ui:form>
@@ -61,10 +61,9 @@
             <ui:tablecell><ui:text key="ORGANIZATION"/></ui:tablecell>
         </ui:tablerow>
         <%
-            Iterator userIterator = userList.iterator();
-            while (userIterator.hasNext()) {
+            for (User user : userList) {
                 // Get next user
-                User user = (User) userIterator.next();
+
         %>
         <ui:tablerow>
             <ui:tablecell>
@@ -77,7 +76,8 @@
                 <ui:text value="<%= user.getUserName() %>"/>
             </ui:tablecell>
             <ui:tablecell>
-                <a href="<%= "mailto:" + user.getEmailAddress() %>"><%= user.getEmailAddress() %></a>
+                <a href="<%= "mailto:" + user.getEmailAddress() %>"><%= user.getEmailAddress() %>
+                </a>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text value="<%= user.getOrganization() %>"/>
@@ -94,3 +94,5 @@
 </ui:form>
 
 </ui:group>
+
+<% } %>

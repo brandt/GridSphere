@@ -8,7 +8,7 @@
 <div class="gridsphere-navbar">
     <ul>
         <li>
-    <%--        <ui:portletlink resizable="true" portletId="gridsphere#Login" titleColor="green" name="bar"  width="300"/> --%>
+      <%--     <ui:portletlink close="true" resizable="true" portletId="gridsphere#Login" titleColor="green" name="bar" value="Login" width="300"/> --%>
 
          <ui:actionlink layout="LoginLayout" value="Login"/>
         </li>

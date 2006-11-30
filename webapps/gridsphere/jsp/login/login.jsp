@@ -29,6 +29,7 @@
     <% } else { %>
 
     <ui:table>
+        <% if (request.getAttribute("useUserName") != null) { %>
         <ui:tablerow>
             <ui:tablecell width="100">
                 <ui:text key="LOGIN_NAME"/>
@@ -41,13 +42,32 @@
             <ui:tablecell/>
         </ui:tablerow>
 
+       <% } else { %>
+
+        <ui:tablerow>
+            <ui:tablecell width="100">
+                <ui:text key="LOGIN_EMAIL_NAME"/>
+            </ui:tablecell>
+            <ui:tablecell width="60">
+                <ui:text var="emailkey" key="USER_EMAIL_BLANK"/>
+                <input class="checkNotEmpty#" type="text" name="username" size="25" maxlength="50"/>
+                <input type="hidden" name="username#checkNotEmpty" value="<%= emailkey %>"/>
+            </ui:tablecell>
+            <ui:tablecell/>
+        </ui:tablerow>
+        <% } %>
+
         <ui:tablerow>
             <ui:tablecell width="100">
                 <ui:text key="LOGIN_PASS"/>
             </ui:tablecell>
             <ui:tablecell width="60">
                 <ui:text var="passkey" key="USER_PASSWORD_BLANK"/>
+                <% if (request.getAttribute("useUserName") != null) { %>
                 <input class="checkNotEmpty#" type="password" name="password" size="15" maxlength="50"/>
+                <% } else { %>
+                <input class="checkNotEmpty#" type="password" name="password" size="25" maxlength="50"/>
+                <% } %>
                 <input type="hidden" name="password#checkNotEmpty" value="<%= passkey %>"/>
             </ui:tablecell>
             <ui:tablecell/>

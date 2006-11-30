@@ -60,6 +60,11 @@ function checkSavePass( elem, id ) {
             <ui:text key="LOGIN_TRIES_MSG"/>
             <ui:textfield beanId="numTriesTF"/>
             </li>
+            <li>
+                <% Boolean isUsernameLogin = (Boolean)request.getAttribute("isUsernameLogin"); %>
+                <ui:radiobutton beanId="loginRB" value="TRUE" selected="<%= (isUsernameLogin == Boolean.TRUE) %>"/><ui:text key="LOGIN_USERNAME"/>
+                <ui:radiobutton beanId="loginRB" value="FALSE" selected="<%= (isUsernameLogin == Boolean.FALSE) %>"/><ui:text key="LOGIN_EMAIL"/>
+            </li>
         </ul>
         <ui:frame>
             <ui:tablerow>

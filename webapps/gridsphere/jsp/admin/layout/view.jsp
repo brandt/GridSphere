@@ -9,7 +9,7 @@
 <jsp:useBean id="layoutlabel"  class="java.lang.String" scope="request"/>
 
 
-<% String guestPane = (String)request.getAttribute("pane"); %>
+<% String pane = (String)request.getAttribute("pane"); %>
 
 <ui:messagebox beanId="msg"/>
 
@@ -51,7 +51,7 @@
   <ui:tablerow>
     <ui:tablecell width="60%">
     <%--     <ui:group label="<%= layoutlabel %>">  --%>
-        <%= guestPane %>
+        <%= pane %>
     <%--     </ui:group>  --%>
     </ui:tablecell>
          </ui:tablerow>
