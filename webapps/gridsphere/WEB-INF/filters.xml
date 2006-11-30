@@ -13,7 +13,7 @@
     <filter>
         <name>GridSphere Cookie Filter</name>
         <description lang="en">GridSphere "Remember Me" functionality used in Login Portlet</description>
-        <implementation>org.gridsphere.filters.impl.RememberMeCookieFilter</implementation>
+        <implementation>org.gridsphere.services.core.filter.impl.RememberMeCookieFilter</implementation>
         <active>true</active>
         <!-- configure cookie expiration time in seconds -->
         <filter-param>
