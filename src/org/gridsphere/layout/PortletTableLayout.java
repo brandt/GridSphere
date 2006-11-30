@@ -150,61 +150,13 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         return allPortlets;
     }
 
-    /*
-    public Map getAvailablePortletsToAdd(GridSphereEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) return getAllPortletsToAdd(event);
-        PortletRegistry registry = PortletRegistry.getInstance();
-        Locale locale = req.getLocale();
-        List groups = (List) req.getGroups();
-        Map availPortlets = new HashMap();
-        Iterator it = groups.iterator();
-        while (it.hasNext()) {
-            String group = (String) it.next();
-            PortletGroup g = groupService.getGroup(group);
-            //System.err.println("group= " + g.getName());
-
-            if ((req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) == null) && (g.equals(req.getAttribute(SportletProperties.PORTLET_GROUP)))) continue;
-            Iterator sit = g.getPortletRoleList().iterator();
-            //PortletRole role = (PortletRole) groups.get(g);
-            while (sit.hasNext()) {
-                SportletRoleInfo info = (SportletRoleInfo) sit.next();
-                String appID = PortletRegistry.getApplicationPortletID(info.getPortletClass());
-                //System.err.println("info class= " + info.getPortletClass());
-                PortletRole reqRole = info.getSportletRole();
-                //System.err.println("role= " + info.getSportletRole());
-                if (req.getRoles().contains(reqRole.getName()))
-                    if (!availPortlets.containsKey(appID)) {
-                        ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-                        if (appPortlet != null) {
-                            //System.err.println("appID= " + appID);
-                            ConcretePortlet concPortlet = appPortlet.getConcretePortlet(appID);
-                            if (concPortlet != null) {
-                                String dispName = concPortlet.getDisplayName(locale);
-                                //System.err.println("show portlet = " + dispName);
-                                availPortlets.put(appID, dispName);
-                            }
-                        } else {
-                            //System.err.println("app portlet was null for " + appID);
-                        }
-                    }
-
-            }
-        }
-        return availPortlets;
-    }
-    */
-
     public void doRender(GridSphereEvent event) {
         super.doRender(event);
         PortletRequest req = event.getRenderRequest();
         StringBuffer table = new StringBuffer();
         PortletComponent p;
 
-
-
         // check if one window is maximized
-
         for (int i = 0; i < components.size(); i++) {
             p = (PortletComponent) components.get(i);
             if (p instanceof PortletLayout) {
@@ -234,7 +186,6 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
             }
             table.append(tableView.doEndBorder(event, this));
         }
-
         
         req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 

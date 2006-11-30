@@ -113,15 +113,7 @@ public class PortletLayoutEngine {
         StringBuffer pageBuffer = new StringBuffer();
         if (req.getParameter("ajax") != null) {
 
-           /*
-
-            try {
-            res.sendRedirect("http://www.yahoo.com");
-                return;
-            } catch (Exception e) {
-                    e.printStackTrace();
-                }
-           */
+           
             String portlet = req.getParameter("portlet");
             System.err.println("it's ajax: " + portlet);
             String cid = event.getComponentID();
@@ -213,12 +205,7 @@ public class PortletLayoutEngine {
     public void actionPerformed(GridSphereEvent event) {
         log.info("\tstart actionPerformed");
         PortletPage page = getPortletPage(event);
-        //int numcomps = page.getComponentIdentifierList().size();
-        /*
-        if (event.getComponentID() < 0 || event.getComponentID() > numcomps) {
-        event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
-        }
-        */
+
         if (!event.getComponentID().equals("")) {
             page.actionPerformed(event);
 
