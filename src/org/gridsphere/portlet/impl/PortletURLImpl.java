@@ -310,24 +310,24 @@ public class PortletURLImpl implements PortletURL {
         //String servletPath = req.getServletPath();
         String url = contextPath + servletPath;
 
-        
+
 
         //System.err.println("\n\n\nContext path=" + contextPath);
-       /*
-        String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
-        if (layoutId != null) {
-            //System.err.println("layoutId=" + layoutId);
-            store.put(SportletProperties.LAYOUT_PAGE_PARAM, layoutId);
-        }
-        String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-            if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-            String cid = (String)req.getAttribute(compVar);
-            store.put(compVar, cid);
-        String action = (String)store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
-                if (action != null) {
-                    store.put(SportletProperties.DEFAULT_PORTLET_ACTION, action);
-                }
-       */
+        /*
+         String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
+         if (layoutId != null) {
+             //System.err.println("layoutId=" + layoutId);
+             store.put(SportletProperties.LAYOUT_PAGE_PARAM, layoutId);
+         }
+         String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
+             if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
+             String cid = (String)req.getAttribute(compVar);
+             store.put(compVar, cid);
+         String action = (String)store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
+                 if (action != null) {
+                     store.put(SportletProperties.DEFAULT_PORTLET_ACTION, action);
+                 }
+        */
         ///////////  JASON ADDED BELOW
         String cid = (String)req.getAttribute(SportletProperties.COMPONENT_ID);
         /*
@@ -364,7 +364,7 @@ public class PortletURLImpl implements PortletURL {
             //String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
             //if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
 
-              /*
+            /*
              // if a label exists, use it instead
             if (label != null) {
                 cid = label;
@@ -396,46 +396,46 @@ public class PortletURLImpl implements PortletURL {
             url += "?";
 
 
-        Iterator it = set.iterator();
-        boolean firstParam = true;
-        try {
-            while (it.hasNext()) {
-                if (!firstParam) url += "&";
-                String name = (String) it.next();
+            Iterator it = set.iterator();
+            boolean firstParam = true;
+            try {
+                while (it.hasNext()) {
+                    if (!firstParam) url += "&";
+                    String name = (String) it.next();
 
-                String encname = null;
-                encname = URLEncoder.encode(name, "UTF-8");
+                    String encname = null;
+                    encname = URLEncoder.encode(name, "UTF-8");
 
-                Object val = store.get(name);
-                if (val instanceof String[]) {
-                    String[] vals = (String[]) val;
-                    for (int j = 0; j < vals.length - 1; j++) {
-                        String encvalue = URLEncoder.encode(vals[j], "UTF-8");
-                        url += encname + "=" + encvalue + "&";
-                    }
-                    String encvalue = URLEncoder.encode(vals[vals.length - 1], "UTF-8");
-                    url += encname + "=" + encvalue;
-                } else if (val instanceof String) {
-                    String aval = (String) store.get(name);
-                    if ((aval != null) && (!aval.equals(""))) {
-                        String encvalue = URLEncoder.encode(aval, "UTF-8");
+                    Object val = store.get(name);
+                    if (val instanceof String[]) {
+                        String[] vals = (String[]) val;
+                        for (int j = 0; j < vals.length - 1; j++) {
+                            String encvalue = URLEncoder.encode(vals[j], "UTF-8");
+                            url += encname + "=" + encvalue + "&";
+                        }
+                        String encvalue = URLEncoder.encode(vals[vals.length - 1], "UTF-8");
                         url += encname + "=" + encvalue;
-                    } else {
-                        url += encname;
+                    } else if (val instanceof String) {
+                        String aval = (String) store.get(name);
+                        if ((aval != null) && (!aval.equals(""))) {
+                            String encvalue = URLEncoder.encode(aval, "UTF-8");
+                            url += encname + "=" + encvalue;
+                        } else {
+                            url += encname;
+                        }
                     }
+                    firstParam = false;
                 }
-                firstParam = false;
+
+            } catch (UnsupportedEncodingException e) {
+                System.err.println("Unable to support UTF-8 encoding!");
             }
 
-        } catch (UnsupportedEncodingException e) {
-            System.err.println("Unable to support UTF-8 encoding!");
-        }
-
-        if (redirect) {
-            url = res.encodeRedirectURL(url);
-        } else {
-            url = res.encodeURL(url);
-        }
+            if (redirect) {
+                url = res.encodeRedirectURL(url);
+            } else {
+                url = res.encodeURL(url);
+            }
         }
 
         s.append(url);

@@ -438,10 +438,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         // As specified in PLT-20-3, the <security-role-ref> mapping in portlet.xml must be used.
         if (role.equals("")) return true;
         List roles = (List)getAttribute(SportletProperties.PORTLET_ROLE);
-        if (roles == null) return false;
-        if (roles.contains(role)) return true;
-        if (getUserPrincipal() == null) return false;
-        return this.getHttpServletRequest().isUserInRole(role);
+        return (roles != null) && (roles.contains(role) || (getUserPrincipal() != null) && this.getHttpServletRequest().isUserInRole(role));
     }
 
     /**
