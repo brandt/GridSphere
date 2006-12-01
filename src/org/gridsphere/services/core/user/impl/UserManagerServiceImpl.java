@@ -6,7 +6,6 @@ package org.gridsphere.services.core.user.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
@@ -15,10 +14,10 @@ import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.persistence.QueryFilter;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class UserManagerServiceImpl implements PortletServiceProvider, UserManagerService {
@@ -62,9 +61,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             UserImpl impl = (UserImpl) user;
             saveSportletUserImpl(impl);
         }
-
     }
-
 
     public void deleteUser(User user) {
         if (user instanceof UserImpl) {
@@ -76,9 +73,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     public int getNumUsers() {
         try {
-            String oql = "select count(UserID) from "
-                + this.jdoUser
-                + " uzer ";
+            String oql = "select count(*) from "
+                    + this.jdoUser;
             return pm.count(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving num users";
@@ -93,7 +89,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 + " uzer "
                 + criteria;
         try {
-            return (List<User>)pm.restoreList(oql, queryFilter);
+            return (List<User>) pm.restoreList(oql, queryFilter);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving users with criteria " + criteria;
             log.error(msg, e);
@@ -127,7 +123,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 equery = "upper(uzer.EmailAddress) like '%" + likeEmail.toUpperCase() + "%' ";
             }
             if (!likeOrg.equals("")) {
-                oquery  = "upper(uzer.Organization) like '%" + likeOrg.toUpperCase() + "%' ";
+                oquery = "upper(uzer.Organization) like '%" + likeOrg.toUpperCase() + "%' ";
             }
             if (!equery.equals("") && !oquery.equals("")) {
                 query += equery + " and " + oquery;
@@ -154,10 +150,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         return getSportletUserImpl(id);
     }
 
-    public User getLoggedInUser(String loginName) {
-        return getSportletUserImplByLoginName(loginName);
-    }
-
     public User getUserByUserName(String loginName) {
         return getSportletUserImplByLoginName(loginName);
     }
@@ -175,7 +167,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     /**
      * Retrieves users based on attribute criteria
      *
-     * @param attrName the attribute name
+     * @param attrName  the attribute name
      * @param attrValue the attribute value
      */
     public List<User> getUsersByAttribute(String attrName, String attrValue, QueryFilter queryFilter) {

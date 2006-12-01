@@ -3,12 +3,12 @@
  */
 package org.gridsphere.services.core.user;
 
+import org.gridsphere.portlet.service.PortletService;
 import org.gridsphere.services.core.persistence.QueryFilter;
-import org.gridsphere.services.core.security.auth.LoginUserModule;
 
 import java.util.List;
 
-public interface UserManagerService extends LoginUserModule {
+public interface UserManagerService extends PortletService {
 
     /**
      * Creates a new user
