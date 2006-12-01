@@ -196,6 +196,7 @@ function validate( myform ) {
             if (startIdx >= endIdx - 5) done = true;
         } while (!done)
     }
+    return true;
 }
 
 function displayError( myform, message) {
