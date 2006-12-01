@@ -4,7 +4,6 @@
  */
 package org.gridsphere.portlets.core.admin.users;
 
-import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
@@ -19,16 +18,17 @@ import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Calendar;
-import java.text.SimpleDateFormat;
 
 public class UserManagerPortlet extends ActionPortlet {
 
@@ -64,12 +64,23 @@ public class UserManagerPortlet extends ActionPortlet {
             throws PortletException {
         PortletRequest req = evt.getRenderRequest();
 
-        String numPages = (String)req.getPortletSession().getAttribute(NUM_PAGES);
+        String numPages = (String) req.getPortletSession().getAttribute(NUM_PAGES);
         numPages = (numPages != null) ? numPages : "10";
 
-        String likeEmail = (String)req.getPortletSession().getAttribute(EMAIL_QUERY);
+        String[] itemList = {"10", "20", "50", "100"};
+        ListBoxBean usersPageLB = evt.getListBoxBean("usersPageLB");
+        usersPageLB.clear();
+        for (int i = 0; i < itemList.length; i++) {
+            ListBoxItemBean item = new ListBoxItemBean();
+            item.setName(itemList[i]);
+            item.setValue(itemList[i]);
+            if (numPages.equals(itemList[i])) item.setSelected(true);
+            usersPageLB.addBean(item);
+        }
+
+        String likeEmail = (String) req.getPortletSession().getAttribute(EMAIL_QUERY);
         likeEmail = (likeEmail != null) ? likeEmail : "";
-        String likeOrganization = (String)req.getPortletSession().getAttribute(ORG_QUERY);
+        String likeOrganization = (String) req.getPortletSession().getAttribute(ORG_QUERY);
         likeOrganization = (likeOrganization != null) ? likeOrganization : "";
 
         Integer maxRows = Integer.parseInt(numPages);
@@ -82,6 +93,9 @@ public class UserManagerPortlet extends ActionPortlet {
 
         req.setAttribute("userList", userList);
 
+        int dispPages = (numUsers / Integer.valueOf(numPages).intValue());
+        //System.err.println("numUsers= " + numUsers + " numPages= " + numPages + " dispPages= " + dispPages);
+        req.setAttribute("dispPages", Integer.valueOf(dispPages));
 
         //System.err.println("sizeof users=" + userList.size());
         //req.setAttribute("numUsers", Integer.valueOf(numUsers));
@@ -115,7 +129,7 @@ public class UserManagerPortlet extends ActionPortlet {
             Iterator it = userRoles.iterator();
             String userRole = "";
             while (it.hasNext()) {
-                userRole += ((PortletRole)it.next()).getName() + ", ";
+                userRole += ((PortletRole) it.next()).getName() + ", ";
             }
             if (userRole.length() > 2) {
                 req.setAttribute("role", userRole.substring(0, userRole.length() - 2));
@@ -124,7 +138,7 @@ public class UserManagerPortlet extends ActionPortlet {
             }
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d yyyy hh:mm a");
-            String createtime = (String)user.getAttribute(User.CREATEDATE);
+            String createtime = (String) user.getAttribute(User.CREATEDATE);
             String createdate;
             if (createtime == null) {
                 createdate = "Unknown";
@@ -133,7 +147,7 @@ public class UserManagerPortlet extends ActionPortlet {
             }
             req.setAttribute("createdate", createdate);
             CheckBoxBean accountCB = evt.getCheckBoxBean("accountCB");
-            String disabled = (String)user.getAttribute(User.DISABLED);
+            String disabled = (String) user.getAttribute(User.DISABLED);
             if ((disabled != null) && ("TRUE".equalsIgnoreCase(disabled))) {
                 accountCB.setSelected(true);
             }
@@ -167,7 +181,7 @@ public class UserManagerPortlet extends ActionPortlet {
     /**
      * Creates the role table
      *
-     * @param evt the action form event
+     * @param evt  the action form event
      * @param user the user if this is editing an existing user, null if a new user
      */
     private void makeRoleFrame(ActionFormEvent evt, User user) {
@@ -194,7 +208,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
         List<PortletRole> roles = roleManagerService.getRoles();
         List myroles = new ArrayList<PortletRole>();
-        if (user != null)  myroles = roleManagerService.getRolesForUser(user);
+        if (user != null) myroles = roleManagerService.getRolesForUser(user);
 
         for (PortletRole role : roles) {
             tr = new TableRowBean();
@@ -251,7 +265,7 @@ public class UserManagerPortlet extends ActionPortlet {
         }
 
         CheckBoxBean accountCB = evt.getCheckBoxBean("accountCB");
-        String disabled = (String)user.getAttribute(User.DISABLED);
+        String disabled = (String) user.getAttribute(User.DISABLED);
         if ((disabled != null) && ("TRUE".equalsIgnoreCase(disabled))) {
             accountCB.setSelected(true);
         }
@@ -297,10 +311,11 @@ public class UserManagerPortlet extends ActionPortlet {
                 req.setAttribute("savePass", "true");
             }
             if (newuser.equals("true")) {
-                setNextState(req, "doNewUser");
+                // setNextState(req, "doNewUser");
             } else {
-                setNextState(req, DO_VIEW_USER_EDIT);
+
             }
+            setNextState(req, DO_VIEW_USER_EDIT);
         }
     }
 
@@ -335,7 +350,7 @@ public class UserManagerPortlet extends ActionPortlet {
         event.getTextFieldBean("emailAddress").setValue(user.getEmailAddress());
         event.getTextFieldBean("organization").setValue(user.getOrganization());
         event.getPasswordBean("password").setValue("");
-        event.getTextFieldBean("certificate").setValue((String)user.getAttribute("user.certificate"));
+        event.getTextFieldBean("certificate").setValue((String) user.getAttribute("user.certificate"));
     }
 
     private void validateUser(ActionFormEvent event, boolean newuser)
@@ -386,7 +401,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
         String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
-            if (isInvalidPassword(event, newuser)){
+            if (isInvalidPassword(event, newuser)) {
                 isInvalid = true;
             }
         }
@@ -439,7 +454,7 @@ public class UserManagerPortlet extends ActionPortlet {
         if (user == null) {
             user = this.userManagerService.createUser();
             long now = Calendar.getInstance().getTime().getTime();
-            user.setAttribute(User.CREATEDATE, String.valueOf(now));            
+            user.setAttribute(User.CREATEDATE, String.valueOf(now));
             newuserflag = true;
         }
 
@@ -464,7 +479,6 @@ public class UserManagerPortlet extends ActionPortlet {
 
         // Submit changes
         this.userManagerService.saveUser(user);
-
 
         // Save user role
         saveUserRole(event, user);
