@@ -162,7 +162,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public int count(String query) throws PersistenceManagerException {
         try {
-            Integer i = (Integer)doTransaction(null, query, CMD_COUNT, null);
+            Long i = (Long)doTransaction(null, query, CMD_COUNT, null);
             return i.intValue();
         } catch (HibernateException e) {
             throw new PersistenceManagerException(e);
@@ -219,7 +219,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                 break;
             case CMD_COUNT:
                 q = session.createQuery(query);
-                result = new Integer(q.list().size());
+                result = (Long)q.uniqueResult();
                 break;
         }
         return result;
