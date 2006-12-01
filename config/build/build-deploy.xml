@@ -102,7 +102,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         </pathconvert>
 
         <!-- copy the hibernate properties to the build.lib and replace the @GRIDSPHERE_DB@ with the path -->
-        <copy tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/database/hibernate.properties"
+        <copy overwrite="true" tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/database/hibernate.properties"
               file="${gswebapp.dir}/WEB-INF/CustomPortal/database/hibernate.properties"
               filtering="true">
             <filterset>
