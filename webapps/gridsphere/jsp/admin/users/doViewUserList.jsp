@@ -1,6 +1,6 @@
-<%@ page import="java.util.List,
-                 org.gridsphere.services.core.user.User" %>
-<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="org.gridsphere.services.core.user.User,
+                 java.text.SimpleDateFormat" %>
+<%@ page import="java.util.List" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
@@ -10,38 +10,35 @@
 
 <% List<User> userList = (List<User>) request.getAttribute("userList"); %>
 
-<h3><ui:text key="USER_SHOW_USERS" style="nostyle"/></h3>
+<h3>
+    <ui:text key="USER_SHOW_USERS" style="nostyle"/>
+</h3>
 
 <ui:actionlink cssStyle="text-decoration: underline; font-weight: bold;" action="doNewUser" key="USER_CREATE_USER"/>
- <p/>
+<p/>
 <ui:group>
-<ui:form>
+    <ui:form>
 
-    <ui:table>
-        <ui:tablerow>
-            <ui:tablecell>
-                <ui:text key="USER_PER_PAGE"/>
-                <ui:listbox beanId="usersPageLB">
-                    <ui:listboxitem name="10" value="10"/>
-                    <ui:listboxitem name="20" value="20"/>
-                    <ui:listboxitem name="50" value="50"/>
-                    <ui:listboxitem name="100" value="100"/>
-                </ui:listbox>
-            </ui:tablecell>
-            <ui:tablecell>
-                <ui:text key="USER_SEARCH_EMAIL"/>
-                <ui:textfield size="15" beanId="userEmailTF"/>
-            </ui:tablecell>
-            <ui:tablecell>
-                <ui:text key="USER_SEARCH_ORGANIZATION"/>
-                <ui:textfield size="10" beanId="userOrgTF"/>
-            </ui:tablecell>
-            <ui:tablecell>
-                <ui:actionsubmit action="filterUserList" key="USER_VIEW"/>
-            </ui:tablecell>
-        </ui:tablerow>
-    </ui:table>
-</ui:form>
+        <ui:table>
+            <ui:tablerow>
+                <ui:tablecell>
+                    <ui:text key="USER_PER_PAGE"/>
+                    <ui:listbox beanId="usersPageLB"/>
+                </ui:tablecell>
+                <ui:tablecell>
+                    <ui:text key="USER_SEARCH_EMAIL"/>
+                    <ui:textfield size="15" beanId="userEmailTF"/>
+                </ui:tablecell>
+                <ui:tablecell>
+                    <ui:text key="USER_SEARCH_ORGANIZATION"/>
+                    <ui:textfield size="10" beanId="userOrgTF"/>
+                </ui:tablecell>
+                <ui:tablecell>
+                    <ui:actionsubmit action="filterUserList" key="USER_VIEW"/>
+                </ui:tablecell>
+            </ui:tablerow>
+        </ui:table>
+    </ui:form>
 </ui:group>
 
 <%if (!userList.isEmpty()) { %>
@@ -49,12 +46,24 @@
 <ui:form>
     <ui:table beanId="userTable">
         <ui:tablerow header="true">
-            <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
-            <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
-            <ui:tablecell><ui:text key="EMAILADDRESS"/></ui:tablecell>
-            <ui:tablecell><ui:text key="ORGANIZATION"/></ui:tablecell>
-            <ui:tablecell><ui:text key="NUMLOGINS"/></ui:tablecell>
-            <ui:tablecell><ui:text key="LASTLOGINDATE"/></ui:tablecell>
+            <ui:tablecell>
+                <ui:text key="FULLNAME"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:text key="USERNAME"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:text key="EMAILADDRESS"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:text key="ORGANIZATION"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:text key="NUMLOGINS"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:text key="LASTLOGINDATE"/>
+            </ui:tablecell>
         </ui:tablerow>
         <%
             for (User user : userList) {
@@ -84,7 +93,8 @@
                 <% if (user.getLastLoginTime() == null) { %>
                 <ui:text value="--"/>
                 <% } else { %>
-                <ui:text value="<%= new SimpleDateFormat("MMM d yyyy hh:mm a").format(user.getLastLoginTime()).toString() %>"/>
+                <ui:text
+                        value="<%= new SimpleDateFormat("MMM d yyyy hh:mm a").format(user.getLastLoginTime()).toString() %>"/>
                 <% } %>
             </ui:tablecell>
         </ui:tablerow>
@@ -92,8 +102,9 @@
             }
         %>
     </ui:table>
+
 </ui:form>
 
 <% } else { %>
-  <ui:text style="alert" key="USER_NO_RESULTS"/>
+<ui:text style="alert" key="USER_NO_RESULTS"/>
 <% } %>
