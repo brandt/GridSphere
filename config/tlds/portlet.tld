@@ -8,7 +8,7 @@
     <short-name>portlet</short-name>
     <uri>http://java.sun.com/portlet</uri>
     <display-name>Portlet API</display-name>
-    <description>GridSphere Portlet API Tag library</description>
+    <description>GridSphere JSR-168 Portlet API Tag library</description>
 
     <tag>
         <name>defineObjects</name>

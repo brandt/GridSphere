@@ -15,7 +15,7 @@
         <tag-class>org.gridsphere.provider.portletui.tags.HasRoleTag</tag-class>
         <body-content>JSP</body-content>
         <description>
-                requires the user have the minimum role specified  to display content
+           requires the user have the minimum role specified  to display content
         </description>
         <attribute>
             <name>role</name>
@@ -1862,7 +1862,7 @@
         <tag-class>org.gridsphere.provider.portletui.tags.GroupTag</tag-class>
         <body-content>JSP</body-content>
         <description>
-            Creates an group around other items
+            Creates a grouping around other items
         </description>
         <attribute>
             <name>id</name>
