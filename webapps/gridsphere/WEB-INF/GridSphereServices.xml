@@ -111,10 +111,6 @@
         <description lang="en">Provides Password Management Capabilities</description>
         <interface>org.gridsphere.services.core.security.password.PasswordManagerService</interface>
         <implementation>org.gridsphere.services.core.security.password.impl.PasswordManagerServiceImpl</implementation>
-        <service-config>
-            <param-name>PasswordCheckStrategy</param-name>
-            <param-value>org.gridsphere.services.core.security.password.impl.PasswordCheckStrategy</param-value>
-        </service-config>
     </service>
 
     <service>
