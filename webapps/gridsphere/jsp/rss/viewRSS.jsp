@@ -9,6 +9,8 @@
 
 <portlet:defineObjects/>
 
+<br>
+
 <ui:messagebox beanId="msg"/>
 
 <% SyndFeed feed = (SyndFeed) request.getAttribute("rssfeed");
@@ -18,6 +20,7 @@
 
 <ui:form action="selectFeed">Select your RSS feed: <ui:listbox submitOnChange="true" beanId="feedsLB"/></ui:form>
 
+<br>
 
     <%
 
