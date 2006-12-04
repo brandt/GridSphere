@@ -9,10 +9,14 @@ package org.gridsphere.services.core.mail;
  */
 public class MailMessage {
 
-    public String subject = "";
-    public String body = "";
-    public String emailAddress = "";
-    public String sender = "";
+    private String subject = "";
+    private String body = "";
+    private String emailAddress = "";
+    private String sender = "";
+    private String recType = TO;
+
+    public static String TO = "to";
+    public static String BCC = "bcc";
 
     /**
      * Constructs an empty mail message
@@ -107,4 +111,21 @@ public class MailMessage {
         return sender;
     }
 
+    /**
+     * Return the recipient type either BCC or TO
+     *
+     * @return the recipient type
+     */
+    public String getRecipientType() {
+        return recType;
+    }
+
+    /**
+     * Sets the recipient type
+     *
+     * @param recType the recipient type either BCC or TO
+     */
+    public void setRecipientType(String recType) {
+        this.recType = recType;
+    }
 }
