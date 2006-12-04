@@ -37,8 +37,11 @@
   }
 
   /**************************************************************************
-   * GridSpehre Check Box List Functions
+   * GridSphere Check Box List Functions
    **************************************************************************/
+  function GridSphere_CheckAll(checkname, exby) {
+    for (i = 0; i < checkname.length; i++) checkname[i].checked = exby.checked;
+  }
 
   function GridSphere_CheckBoxList_checkAll(list) {
 
