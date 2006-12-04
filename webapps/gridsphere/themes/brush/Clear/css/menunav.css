@@ -1,6 +1,3 @@
-
-
-
 .gridsphere-navbar {
     /*
     height: 30px;
@@ -13,34 +10,28 @@
 }
 
 .gridsphere-navbar ul {
-	margin: 0;
-	padding: 0;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: small;
-	/* color: #FFF; */
-	line-height: 30px;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: small; /* color: #FFF; */
+    line-height: 30px;
     white-space: nowrap;
 }
 
 .gridsphere-navbar li {
-	list-style-type: none;
-	display: inline;
+    list-style-type: none;
+    display: inline;
 }
 
 .gridsphere-navbar li a {
     font-size: 12px;
     text-decoration: underline;
-	padding: 7px 5px;
-	/* color: blue; */
+    padding: 7px 5px; /* color: blue; */
 }
 
-
-/* Validating drop-down menu */
-/* common styling */
+/*
 .gridsphere-menu {
     font-family: Verdana, Arial, Helvetica, sans-serif;
-  /*  width:770px; */
-/*    position:relative;  */
     margin:0;
     background-color: #2D5B89;
 }
@@ -51,7 +42,6 @@
     width:109px;
     height:20px;
     text-align:center;
-/* color determines text color for main menu */
     color:#FFFFFF;
     border-bottom:1px solid #b4bfcc;
     line-height:20px;
@@ -84,11 +74,8 @@
     display: none;
 }
 
-/* specific to non IE browsers */
 .gridsphere-menu ul li:hover a {
-/*color of main hover text*/
     color:#2D5B89;
-/* main nav hover color */
     background:#b4bfcc;
 }
 
@@ -98,6 +85,65 @@
     top:20px; left:0;
     width:109px;
 }
+*/
+
+#gridsphere-menu {
+    float: left;
+    width: 100%;
+    margin: 0;
+    padding: 10px 0 0 0;
+    list-style: none;
+    background: #FFFFFF url( ../images/navr_bg.gif ) repeat-x bottom left;
+    text-decoration: none;
+}
+
+#gridsphere-menu li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    font-family: "Lucida Grande", sans-serif;
+}
+
+#gridsphere-menu .gridsphere-menu-nonsel a {
+    padding-bottom: 3px;
+    padding-left: 5px;
+    background: url( ../images/tab-inactive-left.gif ) no-repeat top left;
+}
+
+#gridsphere-menu .gridsphere-menu-nonsel a span {
+    color: #000;
+    padding: 4px 10px 3px 5px;
+    text-decoration: none;
+    background: url( ../images/tab-inactive-right.gif ) no-repeat top right;
+}
+
+#gridsphere-menu .gridsphere-menu-nonsel a:hover span {
+    color: #000;
+    text-decoration: none;
+}
+
+#gridsphere-menu .gridsphere-menu-sel a {
+    padding-bottom: 4px;
+    font-weight: bold;
+    padding-left: 5px;
+    background: url( ../images/tab-active-left.gif ) no-repeat top left;
+}
+
+#gridsphere-menu .gridsphere-menu-sel a span {
+    color: #000;
+    padding: 4px 10px 4px 5px;
+    background: url( ../images/tab-active-right.gif ) no-repeat top right;
+}
+
+#gridsphere-menu a {
+    float: left;
+    display: block;
+    margin: 0 0px 0 0;
+    padding: 4px 2px;
+    border-bottom: none;
+    text-decoration: none;
+}
+
 
 
 

@@ -14,7 +14,6 @@
     border: 0px;
 }
 
-
 #gridsphere-layout-logo {
     float: left;
     padding-top: 3px;
@@ -26,7 +25,7 @@
 
 /* layout for the head */
 #gridsphere-layout-head {
-    background-color: #D9F1FF;
+    background-color: #FFFFFF;
     overflow: hidden;
     margin: 0px;
     padding: 0px;
@@ -50,7 +49,7 @@
 
 /* ... for the footer */
 #gridsphere-layout-footer {
-    background-color: #D9F1FF;
+    background-color: #ffffff;
     text-align: center;
     overflow: hidden;
     padding: 10px 0 0 0;
@@ -80,14 +79,14 @@ div.gridsphere-layout-column {
 
 b.rtop, b.rbottom {
     display: block;
-    background: #52A5F2
+    background: #52A5F2;
 }
 
 b.rtop b, b.rbottom b {
     display: block;
     height: 1px;
     overflow: hidden;
-    background: #D9F1FF
+    background: #ffffff;
 }
 
 b.r1 {
