@@ -18,21 +18,23 @@
 <p/>
 <ui:group>
     <ui:form>
-
         <ui:table>
             <ui:tablerow>
                 <ui:tablecell>
                     <ui:text key="USER_PER_PAGE"/>
                     <ui:listbox beanId="usersPageLB"/>
                 </ui:tablecell>
+                &nbsp;&nbsp;
                 <ui:tablecell>
                     <ui:text key="USER_SEARCH_EMAIL"/>
                     <ui:textfield size="15" beanId="userEmailTF"/>
                 </ui:tablecell>
+                &nbsp;&nbsp;
                 <ui:tablecell>
                     <ui:text key="USER_SEARCH_ORGANIZATION"/>
                     <ui:textfield size="10" beanId="userOrgTF"/>
                 </ui:tablecell>
+                &nbsp;&nbsp;
                 <ui:tablecell>
                     <ui:actionsubmit action="filterUserList" key="USER_VIEW"/>
                 </ui:tablecell>
@@ -43,11 +45,16 @@
 
 <%if (!userList.isEmpty()) { %>
 
-<ui:form>
+<ui:form name="myform">
     <ui:table beanId="userTable">
         <ui:tablerow header="true">
             <ui:tablecell>
-                <ui:text key="FULLNAME"/>
+                <ui:checkbox name="all" onClick="GridSphere_CheckAll(document.myform.usersCB, this)"/>
+                <ui:text value="Select"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:image src="<%= request.getContextPath() + "/images/editor.png" %>" alt="Edit"/>
+                <ui:text key="USER_EDIT_USER"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text key="USERNAME"/>
@@ -71,7 +78,10 @@
         %>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionlink cssStyle="text-decoration: underline;" action="doViewUser"
+                <ui:checkbox name="usersCB" value="<%= user.getID() %>"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:actionlink cssStyle="text-decoration: underline;" action="doEditUser"
                                value="<%= user.getFullName() %>">
                     <ui:actionparam name="userID" value="<%= user.getID() %>"/>
                 </ui:actionlink>
@@ -102,7 +112,8 @@
             }
         %>
     </ui:table>
-
+    <ui:actionsubmit action="doDeleteUser" key="USER_DELETE_USER"/>
+    <ui:actionsubmit action="doComposeEmail" value="Send Email"/>
 </ui:form>
 
 <% } else { %>
