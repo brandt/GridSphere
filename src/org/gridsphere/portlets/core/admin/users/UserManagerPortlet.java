@@ -21,9 +21,7 @@ import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
 
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletException;
-import javax.portlet.PortletRequest;
+import javax.portlet.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,6 +34,8 @@ public class UserManagerPortlet extends ActionPortlet {
     public static final String DO_VIEW_USER_LIST = "admin/users/doViewUserList.jsp";
     public static final String DO_VIEW_USER_VIEW = "admin/users/doViewUserView.jsp";
     public static final String DO_VIEW_USER_EDIT = "admin/users/doViewUserEdit.jsp";
+
+    public static final String DO_SEND_EMAIL = "admin/users/doSendEmail.jsp";
 
     // Portlet services
     private UserManagerService userManagerService = null;
@@ -58,6 +58,11 @@ public class UserManagerPortlet extends ActionPortlet {
         this.portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
         DEFAULT_HELP_PAGE = "admin/users/help.jsp";
         DEFAULT_VIEW_PAGE = "doListUsers";
+    }
+
+    public void doListUsers(ActionFormEvent evt)
+            throws PortletException {
+        setNextState(evt.getActionRequest(), DEFAULT_VIEW_PAGE);
     }
 
     public void doListUsers(RenderFormEvent evt)
@@ -319,10 +324,23 @@ public class UserManagerPortlet extends ActionPortlet {
         }
     }
 
-    public void doDeleteUser(ActionFormEvent evt)
+    public void doDeleteUser(ActionFormEvent event)
             throws PortletException {
 
-        PortletRequest req = evt.getActionRequest();
+        ActionRequest req = event.getActionRequest();
+        String[] users = req.getParameterValues("usersCB");
+        for (int i = 0; i < users.length; i++) {
+            User user = this.userManagerService.getUser(users[i]);
+            this.passwordManagerService.deletePassword(user);
+            List<PortletRole> userRoles = this.roleManagerService.getRolesForUser(user);
+            for (PortletRole role : userRoles) {
+                this.roleManagerService.deleteUserInRole(user, role);
+            }
+            this.userManagerService.deleteUser(user);
+        }
+        createSuccessMessage(event, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
+
+      /*
         HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
         String userId = hf.getValue();
         User user = this.userManagerService.getUser(userId);
@@ -337,8 +355,62 @@ public class UserManagerPortlet extends ActionPortlet {
             createSuccessMessage(evt, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
         }
         setNextState(req, "doListUsers");
+        */
     }
 
+    public void doComposeEmail(ActionFormEvent event) {
+        ActionRequest req = event.getActionRequest();
+        String[] users = req.getParameterValues("usersCB");
+        if (users == null) return;
+        req.getPortletSession().setAttribute("emails", users);
+        setNextState(req, "doComposeEmail");
+    }
+
+    public void doComposeEmail(RenderFormEvent event) {
+        RenderRequest req = event.getRenderRequest();
+        String[] users = (String[])req.getPortletSession().getAttribute("emails");
+        StringBuffer emails = new StringBuffer();
+        for (int i = 0; i < users.length; i++) {
+            User user = this.userManagerService.getUser(users[i]);
+            System.err.println(user.getEmailAddress());
+            emails.append(user.getEmailAddress()).append(", ");
+        }
+
+        String mailFrom = portalConfigService.getProperty(PortalConfigService.MAIL_FROM);
+        TextFieldBean senderTF = event.getTextFieldBean("senderTF");
+        senderTF.setValue(mailFrom);
+
+        TextFieldBean emailAddressTF = event.getTextFieldBean("emailAddressTF");
+        // chop off last , from emails CSV
+        emailAddressTF.setValue(emails.substring(0, emails.length()-2));
+        req.getPortletSession().removeAttribute("emails");
+        setNextState(req, DO_SEND_EMAIL);
+    }
+
+    public void doSendEmail(ActionFormEvent event) {
+        ActionRequest req = event.getActionRequest();
+        MailMessage msg = new MailMessage();
+        msg.setEmailAddress(event.getTextFieldBean("emailAddressTF").getValue());
+        msg.setSender(event.getTextFieldBean("senderTF").getValue());
+        msg.setSubject(event.getTextFieldBean("subjectTF").getValue());
+        msg.setBody(event.getTextAreaBean("bodyTA").getValue());
+
+        RadioButtonBean toRB = event.getRadioButtonBean("toRB");
+        if (toRB.getValue().equals("TO")) {
+            msg.setRecipientType(MailMessage.TO);
+        } else {
+            msg.setRecipientType(MailMessage.BCC);
+        }
+        try {
+            mailService.sendMail(msg);
+            createErrorMessage(event, "Succesfully sent message");
+            setNextState(req, "doListUsers");
+        } catch (PortletServiceException e) {
+            log.error("Unable to send mail message!", e);
+            createErrorMessage(event, getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
+            setNextState(req, "doSendEmail");
+        }
+    }
 
     private void setUserValues(ActionFormEvent event, User user) {
         event.getTextFieldBean("userName").setValue(user.getUserName());
