@@ -1,17 +1,17 @@
 package org.gridsphere.layout.view.brush;
 
-import org.gridsphere.layout.view.BaseRender;
-import org.gridsphere.layout.view.TabbedPaneView;
-import org.gridsphere.layout.PortletNavMenu;
-import org.gridsphere.layout.PortletTab;
 import org.gridsphere.layout.PortletComponent;
 import org.gridsphere.layout.PortletMenu;
-import org.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridsphere.layout.PortletNavMenu;
+import org.gridsphere.layout.PortletTab;
+import org.gridsphere.layout.view.BaseRender;
+import org.gridsphere.layout.view.TabbedPaneView;
 import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portletcontainer.GridSphereEvent;
 
-import javax.portlet.RenderResponse;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import java.util.StringTokenizer;
 
 public class Menu extends BaseRender implements TabbedPaneView {
@@ -39,8 +39,10 @@ public class Menu extends BaseRender implements TabbedPaneView {
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
         StringBuffer result = new StringBuffer();
-        result.append("<div class=\"gridsphere-menu\">\n");
-        result.append("<ul>\n");
+
+        result.append("\n<!-- LAYOUT NAVIGATION -->\n <div id=\"gridsphere-layout-navigation\"> \n<ul id=\"gridsphere-menu\">\n");
+        result.append("<li id=\"gridsphere-menu-border-left\">&nbsp;</li>");
+
         return result;
     }
 
@@ -50,23 +52,35 @@ public class Menu extends BaseRender implements TabbedPaneView {
         String link = tab.createTabTitleLink(event);
         String lang = event.getRenderRequest().getLocale().getLanguage();
         String title = tab.getTitle(lang);
+
+        String selected = "gridsphere-menu-nonsel";
         if (tab.isSelected()) {
-            pane.append("\n<li class=\"selected\">");
-        } else {
-            pane.append("\n<li>");
+            selected = "gridsphere-menu-sel";
         }
-        pane.append("<a href=\"").append(link).append("\">");
+        pane.append("<li class=\"").append(selected);
+        pane.append("\"><a href=\"").append(link).append("\"><span>");
         if (title != null) {
             pane.append(replaceBlanks(title));
         }
-        pane.append("</a></li>\n");
+        pane.append("</span></a></li>");
+
+//        if (tab.isSelected()) {
+//            pane.append("\n<li class=\"selected\">");
+//        } else {
+//            pane.append("\n<li>");
+//        }
+//        pane.append("<a href=\"").append(link).append("\">");
+//        if (title != null) {
+//            pane.append(replaceBlanks(title));
+//        }
+//        pane.append("</a></li>\n");
         return pane;
     }
 
     public StringBuffer doRenderEditTab(GridSphereEvent event, PortletNavMenu menu, boolean isSelected) {
         RenderResponse res = event.getRenderResponse();
         RenderRequest req = event.getRenderRequest();
-     
+
         PortletURL portletURL = res.createActionURL();
         portletURL.setParameter("newmenutab", "true");
         req.setAttribute(SportletProperties.COMPONENT_ID, String.valueOf(menu.getComponentID()));
@@ -82,12 +96,14 @@ public class Menu extends BaseRender implements TabbedPaneView {
 
 
     public StringBuffer doEndBorder(GridSphereEvent event, PortletComponent comp) {
-        PortletMenu menu = (PortletMenu)comp;
+        PortletMenu menu = (PortletMenu) comp;
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("\n</ul>\n");
+        buffer.append("<li id=\"gridsphere-menu-border-right\">&nbsp;</li>");
+        buffer.append("\n</ul> <!-- END NAVIGATION (SUB) MENU -->\n");
         buffer.append("</div><!--  END LAYOUT NAVIGATION -->");
-        buffer.append("<div style=\"clear: both;\"></div>");
+        buffer.append("<div id=\"gridsphere-menu-bottom-line\">&nbsp;</div>");
+//        buffer.append("<div style=\"clear: both;\"></div>");
         buffer.append("<div id=\"gridsphere-layout-body\"> <!-- start the main portlets -->\n");
 
         return buffer;
