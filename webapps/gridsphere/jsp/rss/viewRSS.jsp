@@ -18,7 +18,7 @@
     if (feed != null) {
 %>
 
-<ui:form action="selectFeed">Select your RSS feed: <ui:listbox submitOnChange="true" beanId="feedsLB"/></ui:form>
+<ui:form action="selectFeed"><ui:text key="RSS_SELECT_FEED"/> <ui:listbox submitOnChange="true" beanId="feedsLB"/></ui:form>
 
 <br>
 
@@ -39,7 +39,7 @@
     <ui:text cssStyle="font-size: x-small;  font-weight: italic"><%=entryDate%><br/></ui:text><p/>
     <%=value%>
     <p/>
-    <ui:text cssStyle="font-size: x-small;"> <a href="<%=entryLink%>">Read full story</a></ui:text>
+    <ui:text cssStyle="font-size: x-small;"> <a href="<%=entryLink%>"><ui:text key="RSS_FULL_STORY"/></a></ui:text>
     </ui:group>
 
     <%
