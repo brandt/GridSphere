@@ -664,8 +664,7 @@ public abstract class BaseFormEventImpl {
                 beanKey = getBeanKey(beanId);
 
             }
-            //name = vbname.substring(0,idx);
-
+            // todo this is always "" ??
             name = vbname.substring(idx + 1);
             //log.debug("vbname: " + name);
 
@@ -804,6 +803,7 @@ public abstract class BaseFormEventImpl {
                 bean.setValue(vals[0]);
                 bean.setName(name);
                 configureBean(bean);
+                tagBeans.put(beanKey, bean);
             } else {
                 log.error("unable to find suitable bean type for : " + uiname);
             }
