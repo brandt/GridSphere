@@ -10,16 +10,20 @@ $Id$
 -->
 
 <page label="user"
-             title="GridSphere Portal"
-             keywords="gridsphere"
-             icon="images/favicon.ico"
-             renderkit="brush"
-             editable="true"
-             required-role="USER">
+      title="GridSphere Portal"
+      keywords="gridsphere"
+      icon="images/favicon.ico"
+      renderkit="brush"
+      editable="true"
+      required-role="USER">
 
     <header>
-        <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
-        <content include="/jsp/returnnav.jsp"/>
+        <table>
+            <row>
+                <column width="60%"><content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/></column>
+                <column width="39%"><content include="/jsp/returnnav.jsp"/></column>
+            </row>
+        </table>
     </header>
 
     <menu>
@@ -35,12 +39,12 @@ $Id$
                 </row>
             </table>
         </tab>
-        <tab label="jcrtab">
+        <tab label="contentmanagement">
             <title lang="en">CM</title>
             <table>
                 <row>
                     <column width="100%">
-                        <frame label="jcr">
+                        <frame label="contentmanagement">
                             <portlet-class>org.gridsphere.portlets.core.jcr.JCRManagementPortlet</portlet-class>
                         </frame>
                     </column>

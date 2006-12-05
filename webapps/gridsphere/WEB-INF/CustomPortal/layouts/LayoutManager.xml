@@ -19,8 +19,12 @@
 
     <!-- Header components -->
     <header>
-        <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
-        <content include="/jsp/returnnav.jsp"/>
+        <table>
+            <row>
+                <column width="60%"><content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/></column>
+                <column width="39%"><content include="/jsp/returnnav.jsp"/></column>
+            </row>
+        </table>
     </header>
 
     <bar>
