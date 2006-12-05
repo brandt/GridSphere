@@ -18,35 +18,41 @@
     if (feed != null) {
 %>
 
-<ui:form action="selectFeed"><ui:text key="RSS_SELECT_FEED"/> <ui:listbox submitOnChange="true" beanId="feedsLB"/></ui:form>
+<ui:form action="selectFeed">
+    <ui:text key="RSS_SELECT_FEED"/>
+    <ui:listbox submitOnChange="true" beanId="feedsLB"/>
+</ui:form>
 
 <br>
 
-    <%
+<%
 
-        Iterator entryIter = feed.getEntries().iterator();
-        while (entryIter.hasNext()) {
-            SyndEntry entry = (SyndEntry) entryIter.next();
-            String entryLink = entry.getLink();
-            String entryTitle = entry.getTitle();
-            Date entryDate = entry.getPublishedDate();
-            SyndContent content = entry.getDescription();
-            String value = content.getValue();
+    Iterator entryIter = feed.getEntries().iterator();
+    while (entryIter.hasNext()) {
+        SyndEntry entry = (SyndEntry) entryIter.next();
+        String entryLink = entry.getLink();
+        String entryTitle = entry.getTitle();
+        Date entryDate = entry.getPublishedDate();
+        SyndContent content = entry.getDescription();
+        String value = content.getValue();
 
 
-    %>
-    <ui:group label="<%=entryTitle%>" cssStyle="border: 1px dashed #c7c7c7;">
-    <ui:text cssStyle="font-size: x-small;  font-weight: italic"><%=entryDate%><br/></ui:text><p/>
+%>
+<ui:group label="<%=entryTitle%>" cssStyle="border: 1px dashed #c7c7c7;">
+    <ui:text cssStyle="font-size: x-small;  font-weight: italic"><%=entryDate%><br/></ui:text>
+    <p/>
     <%=value%>
     <p/>
-    <ui:text cssStyle="font-size: x-small;"> <a href="<%=entryLink%>"><ui:text key="RSS_FULL_STORY"/></a></ui:text>
-    </ui:group>
+    <ui:text cssStyle="font-size: x-small;"><a href="<%=entryLink%>">
+        <ui:text key="RSS_READ_FULL_STORY"/>
+    </a></ui:text>
+</ui:group>
 
-    <%
+<%
 
 
-        }
-    %>
+    }
+%>
 
 <%
 
