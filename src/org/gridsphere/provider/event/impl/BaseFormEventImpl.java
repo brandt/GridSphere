@@ -55,8 +55,8 @@ public abstract class BaseFormEventImpl {
         locale = (Locale) request.getSession(true).getAttribute(SportletProperties.LOCALE);
         if (locale == null) locale = request.getLocale();
         if (locale == null) locale = Locale.ENGLISH;
-        cid = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
-        compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
+        cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
+        compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
     }
 
     public BaseFormEventImpl(PortletRequest request, PortletResponse response) {
@@ -65,8 +65,8 @@ public abstract class BaseFormEventImpl {
         locale = (Locale) portletRequest.getPortletSession(true).getAttribute(SportletProperties.LOCALE);
         if (locale == null) locale = portletRequest.getLocale();
         if (locale == null) locale = Locale.ENGLISH;
-        cid = (String)portletRequest.getAttribute(SportletProperties.COMPONENT_ID);
-        compId = (String)portletRequest.getAttribute(SportletProperties.GP_COMPONENT_ID);
+        cid = (String) portletRequest.getAttribute(SportletProperties.COMPONENT_ID);
+        compId = (String) portletRequest.getAttribute(SportletProperties.GP_COMPONENT_ID);
     }
 
     /**
@@ -541,7 +541,7 @@ public abstract class BaseFormEventImpl {
                 String name = (String) e.nextElement();
                 sb.append("\t\tname :").append(name);
                 String values[] = null;
-                if (request!= null) {
+                if (request != null) {
                     values = request.getParameterValues(name);
                 }
                 if (portletRequest != null) {
@@ -664,6 +664,7 @@ public abstract class BaseFormEventImpl {
                 beanKey = getBeanKey(beanId);
 
             }
+            //name = vbname.substring(0,idx);
 
             name = vbname.substring(idx + 1);
             //log.debug("vbname: " + name);
@@ -798,6 +799,11 @@ public abstract class BaseFormEventImpl {
                 configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
+            } else if (vb.equals(RichTextEditorBean.NAME)) {
+                RichTextEditorBean bean = new RichTextEditorBean(beanId);
+                bean.setValue(vals[0]);
+                bean.setName(name);
+                configureBean(bean);
             } else {
                 log.error("unable to find suitable bean type for : " + uiname);
             }
@@ -825,7 +831,7 @@ public abstract class BaseFormEventImpl {
         //log.debug("parseFileUpload");
         Map<String, String[]> parameters = new Hashtable<String, String[]>();
         if (req instanceof HttpServletRequest) {
-            HttpServletRequest hreq = (HttpServletRequest)req;
+            HttpServletRequest hreq = (HttpServletRequest) req;
             //logRequestParameters();
             //logRequestAttributes();
             ServletRequestContext ctx = new ServletRequestContext(hreq);
@@ -933,8 +939,8 @@ public abstract class BaseFormEventImpl {
         Iterator it = tagBeans.keySet().iterator();
         TagBean tagBean;
         while (it.hasNext()) {
-            String beanKey = (String)it.next();
-            tagBean = (TagBean)tagBeans.get(beanKey);
+            String beanKey = (String) it.next();
+            tagBean = (TagBean) tagBeans.get(beanKey);
             //log.debug("storing bean in attribute: " + beanKey);
             if (request != null) request.setAttribute(beanKey, tagBean);
             if (portletRequest != null) portletRequest.setAttribute(beanKey, tagBean);
