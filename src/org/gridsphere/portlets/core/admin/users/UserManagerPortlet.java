@@ -245,9 +245,7 @@ public class UserManagerPortlet extends ActionPortlet {
         HiddenFieldBean newuserHF = evt.getHiddenFieldBean("newuser");
         newuserHF.setValue("false");
 
-        // load in User values
-        HiddenFieldBean userHF = evt.getHiddenFieldBean("userID");
-        String userID = userHF.getValue();
+        String userID = evt.getAction().getParameter("userID");
 
         // get user
         User user = this.userManagerService.getUser(userID);
