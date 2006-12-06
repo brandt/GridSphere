@@ -163,9 +163,9 @@
 
     <portlet>
         <description xml:lang="en">Content Repository Management</description>
-        <portlet-name>CRManagement</portlet-name>
+        <portlet-name>ContentManagement</portlet-name>
         <display-name xml:lang="en">Content Repository Management</display-name>
-        <portlet-class>org.gridsphere.portlets.core.jcr.JCRManagementPortlet</portlet-class>
+        <portlet-class>org.gridsphere.portlets.core.content.ContentManagementPortlet</portlet-class>
         <expiration-cache>0</expiration-cache>
         <supports>
             <mime-type>text/html</mime-type>
@@ -174,8 +174,8 @@
         <supported-locale>en</supported-locale>
         <portlet-info>
             <title>Content Management</title>
-            <short-title>JCR</short-title>
-            <keywords>jcr, content</keywords>
+            <short-title>Content Mgmnt</short-title>
+            <keywords>jcr, content, jsr170</keywords>
         </portlet-info>
     </portlet>
 
