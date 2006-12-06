@@ -20,6 +20,9 @@
             <ui:actionlink layout="AdminLayout" value="Administration"/>
         </li>
         <li>
+            <ui:actionlink layout="ContentManager" value="Content"/>
+        </li>
+        <li>
             <ui:actionlink layout="LayoutManager" value="Layout"/>
         </li>
          </ui:hasrole>
