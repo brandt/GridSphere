@@ -14,5 +14,5 @@
 </ui:form>
 
 <ui:form method="GET">
-    <ui:actionsubmit action="listPortlets" key="PORTLET_LIST_APPS"/>
+    <h3><ui:actionlink action="listPortlets" key="PORTLET_LIST_APPS"/></h3>
 </ui:form>

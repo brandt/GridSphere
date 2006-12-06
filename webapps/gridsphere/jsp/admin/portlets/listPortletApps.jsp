@@ -15,7 +15,7 @@
     <ui:frame>
         <ui:tablerow header="true">
             <ui:tablecell>
-                <ui:text key="PORTLET_WEBAPP"/>
+                <ui:text key="PORTLET_VIEW_DETAILS"/>
             </ui:tablecell>
             <ui:tablecell width="250">
                 <ui:text key="PORTLET_DESC"/>
@@ -172,15 +172,12 @@
 <ui:group key="PORTLET_DEPLOY_MSG">
 
     <ui:form>
-        <ui:frame>
-            <ui:tablerow>
-                <ui:tablecell width="100%">
-                    <ui:text key="PORTLET_WEBAPP_MSG"/>&nbsp;
+
+                    <h3></h3><ui:text key="PORTLET_WEBAPP_MSG"/>&nbsp; </h3>
                     <ui:textfield beanId="webappNameTF" size="20" maxlength="20"/>
+        <br>
                     <ui:actionsubmit action="deployWebapp" key="PORTLET_DEPLOY"/>
-                </ui:tablecell>
-            </ui:tablerow>
-        </ui:frame>
+
     </ui:form>
 </ui:group>
 

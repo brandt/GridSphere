@@ -50,7 +50,7 @@
         <ui:tablerow header="true">
             <ui:tablecell>
                 <ui:checkbox name="all" onClick="GridSphere_CheckAll(document.myform.usersCB, this)"/>
-                <ui:text value="Select"/>
+                <ui:text key="SELECT"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:image src="<%= request.getContextPath() + "/images/editor.png" %>" alt="Edit"/>
@@ -103,8 +103,7 @@
                 <% if (user.getLastLoginTime() == null) { %>
                 <ui:text value="--"/>
                 <% } else { %>
-                <ui:text
-                        value="<%= new SimpleDateFormat("MMM d yyyy hh:mm a").format(user.getLastLoginTime()).toString() %>"/>
+                <ui:text value="<%= new SimpleDateFormat("MMM d yyyy hh:mm a").format(user.getLastLoginTime()).toString() %>"/>
                 <% } %>
             </ui:tablecell>
         </ui:tablerow>
@@ -113,7 +112,7 @@
         %>
     </ui:table>
     <ui:actionsubmit action="doDeleteUser" key="USER_DELETE_USER"/>
-    <ui:actionsubmit action="doComposeEmail" value="Send Email"/>
+    <ui:actionsubmit action="doComposeEmail" key="USER_SEND_EMAIL"/>
 </ui:form>
 
 <% } else { %>

@@ -52,19 +52,15 @@
     <% } %>
     <p/>
     <% if (!userList.isEmpty()) { %>
-    <ui:table beanId="userTable" cellpadding="10">
+    <ui:table beanId="userTable">
         <ui:tablerow header="true">
-            <ui:tablecell><ui:text key="ROLE_REMOVE_USER"/></ui:tablecell>
+            <ui:tablecell><ui:text key="SELECT"/></ui:tablecell>
             <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
             <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
             <ui:tablecell><ui:text key="EMAILADDRESS"/></ui:tablecell>
             <ui:tablecell><ui:text key="ORGANIZATION"/></ui:tablecell>
         </ui:tablerow>
-        <%
-            for (User user : userList) {
-                // Get next user
-
-        %>
+        <% for (User user : userList) { %>
         <ui:tablerow>
             <ui:tablecell>
                 <ui:checkbox name="userCB" value="<%= user.getID() %>"/>
@@ -83,9 +79,7 @@
                 <ui:text value="<%= user.getOrganization() %>"/>
             </ui:tablecell>
         </ui:tablerow>
-        <%
-            }
-        %>
+        <% } %>
     </ui:table>
 
     <ui:actionsubmit action="doRemoveUser" key="ROLE_REMOVE_USER"/>
