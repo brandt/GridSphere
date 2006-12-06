@@ -6,17 +6,17 @@ package org.gridsphere.services.core.security.role.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.persistence.QueryFilter;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridsphere.services.core.user.User;
+import org.gridsphere.services.core.user.impl.UserImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,7 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
     private PersistenceManagerRdbms pm = null;
 
     private String jdoUserRoles = UserRole.class.getName();
+    private String jdoUser = UserImpl.class.getName();
 
     public RoleManagerServiceImpl() {}
 
@@ -64,18 +65,11 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
 
     public int getNumUsersInRole(PortletRole role) {
         if (role == null) throw new IllegalArgumentException("role cannot be null!");
-        try {
-            String oql = "select count(user) from "
-                + this.jdoUserRoles
-                + " userRole ";
-            return pm.count(oql);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving num users";
-            log.error(msg, e);
-            return 0;
-        }
-    }
+        String oql = "select count(*) from "
+                + this.jdoUserRoles;
+        return pm.count(oql);
 
+    }
 
     public List<PortletRole> getRolesForUser(User user) {
         if (user == null) throw new IllegalArgumentException("user can't be null");
@@ -83,12 +77,7 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
         String oql = "select userRole.role from "
                 + jdoUserRoles
                 + " userRole where userRole.user.oid='" + user.getID() + "'";
-        try {
-            roles = pm.restoreList(oql);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving user role";
-            log.error(msg, e);
-        }
+        roles = pm.restoreList(oql);
         return (roles != null) ? roles : new ArrayList<PortletRole>();
     }
 
@@ -98,12 +87,7 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
         String oql = "select userRole.user from "
                 + jdoUserRoles
                 + " userRole where userRole.role.Name='" + role.getName() + "'";
-        try {
-            users = pm.restoreList(oql);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving user role";
-            log.error(msg, e);
-        }
+        users = pm.restoreList(oql);
         return (users != null) ? users : new ArrayList<User>();
     }
 
@@ -115,15 +99,22 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
         String oql = "select userRole.user from "
                 + jdoUserRoles
                 + " userRole where userRole.role.Name='" + role.getName() + "'";
-        try {
-            users = (List<User>)pm.restoreList(oql, filter);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving user role";
-            log.error(msg, e);
-        }
+
+        users = (List<User>)pm.restoreList(oql, filter);
         return (users != null) ? users : new ArrayList<User>();
     }
 
+    public List<User> getUsersNotInRole(PortletRole role, QueryFilter filter) {
+        if (role == null) throw new IllegalArgumentException("role cannot be null!");
+        if (filter == null) throw new IllegalArgumentException("query filter cannot be null!");
+        List<User> users = null;
+
+        String oql = "select uzer from "
+                + this.jdoUser
+                + " uzer left join fetch userRole.user where userRole.role.Name!='" + role.getName() + "'";
+        users = (List<User>)pm.restoreList(oql, filter);
+        return (users != null) ? users : new ArrayList<User>();
+    }
 
     public void addUserToRole(User user, PortletRole role) {
         if (user == null) throw new IllegalArgumentException("user cannot be null!");
@@ -133,23 +124,13 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
         if (!isUserInRole(user, role)) {
             userRole.setRole(role);
             userRole.setUser(user);
-            try {
-                pm.saveOrUpdate(userRole);
-            } catch (PersistenceManagerException e) {
-                String msg = "Error saving user role";
-                log.error(msg, e);
-            }
+            pm.saveOrUpdate(userRole);
         }
     }
 
     public void deleteUserInRole(User user, PortletRole role) {
         UserRole userRole = getUserRole(user, role);
-        try {
-            if (userRole != null) pm.delete(userRole);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error saving user role";
-            log.error(msg, e);
-        }
+        if (userRole != null) pm.delete(userRole);
     }
 
     private UserRole getUserRole(User user, PortletRole role) {
@@ -160,53 +141,29 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
                 + jdoUserRoles
                 + " userRole where userRole.user.oid='" + user.getID() + "'"
                 + " and userRole.role.Name='" + role.getName() + "'";
-        try {
-            userRole = (UserRole)pm.restore(oql);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error saving user role";
-            log.error(msg, e);
-        }
+        userRole = (UserRole)pm.restore(oql);
         return userRole;
     }
 
     public List<PortletRole> getRoles() {
         List<PortletRole> roles = null;
-        try {
-            roles = pm.restoreList("select prole from " + PortletRole.class.getName() + " prole");
-        } catch (PersistenceManagerException e) {
-            log.error("Error deleting role", e);
-        }
+        roles = pm.restoreList("select prole from " + PortletRole.class.getName() + " prole");
         return (roles != null) ? roles : new ArrayList<PortletRole>();
     }
 
     public void deleteRole(PortletRole role) {
         if (role == null) throw new IllegalArgumentException("role cannot be null!");
-        try {
-            pm.delete(role);
-        } catch (PersistenceManagerException e) {
-            log.error("Error deleting role", e);
-        }
+        pm.delete(role);
     }
 
     public PortletRole getRole(String roleName) {
         if (roleName == null) throw new IllegalArgumentException("role name cannot be null!");
-        PortletRole role = null;
-        try {
-            role = (PortletRole)pm.restore("select prole from " + PortletRole.class.getName() + " prole where prole.Name='" + roleName + "'");
-        } catch (PersistenceManagerException e) {
-            log.error("Error retrieving role " + roleName, e);
-        }
-        return role;
+        return (PortletRole)pm.restore("select prole from " + PortletRole.class.getName() + " prole where prole.Name='" + roleName + "'");
     }
 
     public void saveRole(PortletRole role) {
         if (role == null) throw new IllegalArgumentException("role cannot be null!");
-        try {
-            pm.saveOrUpdate(role);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error saving portlet role: ";
-            log.error(msg, e);
-        }
+        pm.saveOrUpdate(role);
     }
 
 }
