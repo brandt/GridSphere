@@ -10,13 +10,12 @@ import org.gridsphere.layout.event.PortletFrameListener;
 import org.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridsphere.layout.event.impl.PortletFrameEventImpl;
 import org.gridsphere.layout.view.FrameView;
-import org.gridsphere.portletcontainer.DefaultPortletAction;
-import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.portletcontainer.impl.PortletInvoker;
 import org.gridsphere.services.core.cache.CacheService;
@@ -24,6 +23,7 @@ import org.gridsphere.services.core.mail.MailMessage;
 import org.gridsphere.services.core.mail.MailService;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
+import org.gridsphere.services.core.user.User;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.io.IOException;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.util.*;
@@ -515,14 +514,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
-
         StringBuffer preframe = frameView.doStart(event, this);
         StringBuffer postframe = new StringBuffer();
 
-
-
         // Render title bar
-
         if (!transparent) {
             titleBar.doRender(event);
         } else {
@@ -561,8 +556,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 postframe.append(frameView.doRenderCloseFrame(event, this));
             } else {
                 //System.err.println("in portlet frame render: class= " + portletClass + " setting prev mode= " + req.getPreviousMode() + " cur mode= " + req.getMode());
-                if (hasError(req)) {
-                    doRenderError(req, wrappedResponse);
+                Throwable ex = getError(req);
+                if (ex != null) {
+                    doRenderError(req, wrappedResponse, ex);
                     postframe.append(storedWriter.toString());
                 } else if ((titleBar != null) && (titleBar.hasRenderError())) {
                     postframe.append(titleBar.getErrorMessage());
@@ -573,13 +569,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                             //System.err.println("in render " + portletClass + " there are render params in the frame setting in request! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
                             req.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr, renderParams);
                         }
-                        //req.removeAttribute(SportletProperties.IGNORE_PARAM_PARSING);
                         portletInvoker.service((String)req.getAttribute(SportletProperties.PORTLETID), (HttpServletRequest)req, (HttpServletResponse)wrappedResponse);
-                        //req.setAttribute(SportletProperties.IGNORE_PARAM_PARSING, "true");
                         lastFrame = storedWriter.toString();
                         postframe.append(lastFrame);
                     } catch (Exception e) {
-                        doRenderError(req, wrappedResponse);
+                        doRenderError(req, wrappedResponse, e);
                         postframe.append(storedWriter.toString());
                     }
                 }
@@ -635,8 +629,18 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
     }
 
-    public boolean hasError(PortletRequest req) {
-        return (req.getAttribute(SportletProperties.PORTLETERROR + portletClass) != null);
+    public void setError(PortletRequest req, Throwable ex) {
+        req.getPortletSession(true).setAttribute(SportletProperties.PORTLETERROR + portletClass, ex, PortletSession.APPLICATION_SCOPE);
+    }
+
+    public Throwable getError(PortletRequest req) {
+        Throwable ex = (Throwable)req.getPortletSession(true).getAttribute(SportletProperties.PORTLETERROR + portletClass, PortletSession.APPLICATION_SCOPE);
+        removeError(req);
+        return ex;
+    }
+
+    public void removeError(PortletRequest req) {
+        req.getPortletSession(true).removeAttribute(SportletProperties.PORTLETERROR + portletClass, PortletSession.APPLICATION_SCOPE);
     }
 
     protected String getLocalizedText(PortletRequest req, String key) {
@@ -645,9 +649,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         return bundle.getString(key);
     }
 
-    public void doRenderError(RenderRequest req, RenderResponse res) {
-        Throwable ex = (Throwable)req.getAttribute(SportletProperties.PORTLETERROR + portletClass);
-        if (ex == null) return;
+    public void doRenderError(RenderRequest req, RenderResponse res, Throwable ex) {
+        //Throwable ex = (Throwable)req.getPortletSession(true).getAttribute(SportletProperties.PORTLETERROR + portletClass, PortletSession.APPLICATION_SCOPE);
+        //req.getPortletSession(true).removeAttribute(SportletProperties.PORTLETERROR + portletClass, PortletSession.APPLICATION_SCOPE);
+
+        //if (ex == null) return;
         Throwable cause = ex.getCause();
         if (cause == null) {
             cause = ex;
