@@ -165,7 +165,7 @@
         <description xml:lang="en">Content Repository Management</description>
         <portlet-name>ContentManagement</portlet-name>
         <display-name xml:lang="en">Content Repository Management</display-name>
-        <portlet-class>org.gridsphere.portlets.core.content.ContentManagementPortlet</portlet-class>
+        <portlet-class>org.gridsphere.portlets.core.admin.content.ContentManagementPortlet</portlet-class>
         <expiration-cache>0</expiration-cache>
         <supports>
             <mime-type>text/html</mime-type>
