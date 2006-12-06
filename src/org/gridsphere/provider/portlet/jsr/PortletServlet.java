@@ -321,7 +321,7 @@ public class PortletServlet extends HttpServlet
                         doTitle(portlet, renderRequest, renderResponse);
                     } catch (Exception e) {
                         log.error("Error during doTitle:", e);
-                        request.setAttribute(SportletProperties.PORTLETERROR + pid, new PortletException(e));
+                        request.getSession(true).setAttribute(SportletProperties.PORTLETERROR + pid, new PortletException(e));
                     }
                 } else if (action.equals(SportletProperties.WINDOW_EVENT)) {
                     // do nothing
@@ -346,7 +346,7 @@ public class PortletServlet extends HttpServlet
         }
     }
 
-    protected void processAction(Portlet portlet, PortalContext portalContext, HttpServletRequest request, HttpServletResponse response, String cid, String pid) {
+    protected void processAction(Portlet portlet, PortalContext portalContext, HttpServletRequest request, HttpServletResponse response, String cid, String pid) throws ServletException {
 
         ActionRequestImpl actionRequest = new ActionRequestImpl(request, portletContext);
         ActionResponse actionResponse = new ActionResponseImpl(request, response);
@@ -357,7 +357,7 @@ public class PortletServlet extends HttpServlet
             String webappname = portletWebApp.getWebApplicationName();
             pm = pms.getPersistenceManagerRdbms(webappname);
             if (pm != null) {
-                log.info("Starting a database transaction for webapp: " + webappname);
+                log.debug("Starting a database transaction for webapp: " + webappname);
                 pm.beginTransaction();
             }
 
@@ -377,9 +377,9 @@ public class PortletServlet extends HttpServlet
             redirect(request, response, actionRequest, actionResponse, portalContext);
         } catch (Throwable ex) {
             log.error("Error during processAction:", ex);
-            request.setAttribute(SportletProperties.PORTLETERROR + pid, new PortletException(ex));
+            //request.getSession(true).setAttribute(SportletProperties.PORTLETERROR + pid, new PortletException(ex));
 
-            ex.printStackTrace();
+            //ex.printStackTrace();
             if (pm != null) {
                 pm.endTransaction();
                 try {
@@ -389,7 +389,7 @@ public class PortletServlet extends HttpServlet
                 }
             }
             // Let others handle it... maybe another interceptor for exceptions?
-            //throw new ServletException(ex.getCause());
+            throw new ServletException(ex.getCause());
         }
 
     }
@@ -402,34 +402,29 @@ public class PortletServlet extends HttpServlet
         renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
         renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
 
-
         log.debug("in PortletServlet: rendering  portlet " + pid);
         if (renderRequest.getAttribute(SportletProperties.RESPONSE_COMMITTED) == null) {
             try {
                 if (pm != null) pm.beginTransaction();
                 portlet.render(renderRequest, renderResponse);
-                if (pm != null)  {
-                    log.info("Committing database transaction for webapp: " + portletWebApp.getWebApplicationName());
-                    pm.endTransaction();
-                }
+                if (pm != null) pm.endTransaction();
             } catch (UnavailableException e) {
-                log.error("in PortletServlet(): doRender() caught unavailable exception: ");
                 try {
                     portlet.destroy();
                 } catch (Exception d) {
-                    log.error("in PortletServlet(): destroy caught unavailable exception: ", d);
+                    log.error("in PortletServlet(): destroy caught exception: ", d);
                 }
-            } catch (Throwable e) {
-                e.printStackTrace();
+            } catch (Throwable ex) {
                 try {
-                    if (pm != null) pm.rollbackTransaction();
+                    if (pm != null)  {
+                        log.info("Committing database transaction for webapp: " + portletWebApp.getWebApplicationName());
+                        pm.endTransaction();
+                        pm.rollbackTransaction();
+                    }
                 } catch (Throwable rbEx) {
-                    log.error("Could not rollback transaction after exception!", rbEx);
+                    throw new ServletException("Could not rollback transaction after exception!", rbEx);
                 }
-                if (request.getAttribute(SportletProperties.PORTLETERROR + pid) == null) {
-                    request.setAttribute(SportletProperties.PORTLETERROR + pid, e.getCause());
-                }
-                //throw new ServletException(e);
+                throw new ServletException(ex.getCause());
             }
         }
     }
