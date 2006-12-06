@@ -21,8 +21,12 @@
     <header>
         <table>
             <row>
-                <column width="60%"><content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/></column>
-                <column width="39%"><content include="/jsp/returnnav.jsp"/></column>
+                <column width="400px">
+                    <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
+                </column>
+                <column width="500px">
+                    <content include="/jsp/returnnav.jsp"/>
+                </column>
             </row>
         </table>
     </header>
