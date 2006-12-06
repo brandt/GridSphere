@@ -10,7 +10,6 @@ import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.persistence.QueryFilter;
@@ -72,15 +71,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     public int getNumUsers() {
-        try {
             String oql = "select count(*) from "
                     + this.jdoUser;
             return pm.count(oql);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving num users";
-            log.error(msg, e);
-            return 0;
-        }
     }
 
     public List<User> selectUsers(String criteria, QueryFilter queryFilter) {
@@ -88,14 +81,12 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 + this.jdoUser
                 + " uzer "
                 + criteria;
-        try {
-            return (List<User>) pm.restoreList(oql, queryFilter);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving users with criteria " + criteria;
-            log.error(msg, e);
-            return new ArrayList<User>();
-        }
+
+        List<User> userList = (List<User>) pm.restoreList(oql, queryFilter);
+        if (userList == null) userList = new ArrayList<User>();
+        return userList;
     }
+
 
     public List<User> getUsersByUserName(QueryFilter queryFilter) {
         return selectUsers("order by uzer.UserID", queryFilter);
@@ -188,33 +179,17 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 + jdoUser
                 + " uzer "
                 + criteria;
-        try {
-            return (UserImpl) pm.restore(oql);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving user with criteria " + criteria;
-            log.error(msg, e);
-            return null;
-        }
+
+        return (UserImpl) pm.restore(oql);
     }
 
     private void saveSportletUserImpl(UserImpl user) {
         // Create or update user
-        try {
-            pm.saveOrUpdate(user);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error updating user";
-            log.error(msg, e);
-        }
-
+        pm.saveOrUpdate(user);
     }
 
     private void deleteSportletUserImpl(UserImpl user) {
-        try {
-            pm.delete(user);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error deleting user";
-            log.error(msg, e);
-        }
+        pm.delete(user);
     }
 
     public boolean existsUserWithID(String userID) {
@@ -232,17 +207,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 + jdoUser
                 + " uzer "
                 + criteria;
-        try {
-            UserImpl sui = (UserImpl) pm.restore(oql);
-            if (sui == null) {
-                log.debug("User does not exist!");
-            }
-            return (sui != null);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving account request";
-            log.error(msg, e);
-        }
-        return false;
+        UserImpl sui = (UserImpl) pm.restore(oql);
+        return (sui != null);
     }
 
 }
