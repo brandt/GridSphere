@@ -36,7 +36,7 @@
             <row>
                 <column width="100%">
                     <frame label="contentmanager">
-                        <portlet-class>org.gridsphere.portlets.core.content.ContentManagementPortlet</portlet-class>
+                        <portlet-class>org.gridsphere.portlets.core.admin.content.ContentManagementPortlet</portlet-class>
                     </frame>
                 </column>
             </row>
