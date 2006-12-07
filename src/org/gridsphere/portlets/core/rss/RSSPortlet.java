@@ -22,7 +22,7 @@ public class RSSPortlet extends ActionPortlet {
 
     public void init(PortletConfig config) throws PortletException {
         super.init(config);
-        rssService = (RssService)createPortletService(RssService.class);
+        rssService = (RssService) createPortletService(RssService.class);
         DEFAULT_VIEW_PAGE = "doView";
     }
 
@@ -30,7 +30,6 @@ public class RSSPortlet extends ActionPortlet {
         SyndFeed feed = null;
         PortletPreferences prefs = event.getRenderRequest().getPreferences();
         String[] feedURL = prefs.getValues("feedurl", new String[]{null});
-        //  todo localize the errormessages
         if (feedURL.equals("")) return;
 
         ListBoxBean feedsLB = event.getListBoxBean("feedsLB");
@@ -38,20 +37,20 @@ public class RSSPortlet extends ActionPortlet {
         feedsLB.setSize(1);
 
         SyndFeed selectedFeed = null;
-        String feedurl = (String)event.getRenderRequest().getPortletSession(true).getAttribute("selectedfeed");
+        String feedurl = (String) event.getRenderRequest().getPortletSession(true).getAttribute("selectedfeed");
         if (feedurl == null) feedurl = feedURL[0];
         for (int i = 0; i < feedURL.length; i++) {
             try {
                 feed = rssService.getFeed(feedURL[i]);
             } catch (FeedException e) {
                 log.error("Could not create Feed.", e);
-                createErrorMessage(event, "Could not create Feed.");
+                createErrorMessage(event, getLocalizedText(event.getRenderRequest(), "RSS_ERR_COULDNOTCREATEFEED"));
             } catch (MalformedURLException e) {
                 log.error("RSS URL " + feedURL + " is not valid.", e);
-                createErrorMessage(event, "RSS URL " + feedURL[i] + " is not valid.");
+                createErrorMessage(event, getLocalizedText(event.getRenderRequest(), "RSS_ERR_RSSURLNOTVALID") + feedURL[i]);
             } catch (IOException e) {
                 log.error("Could not read RSS feed from " + feedURL[i], e);
-                createErrorMessage(event, "Could not read RSS feed from " + feedURL[i]);
+                createErrorMessage(event, getLocalizedText(event.getRenderRequest(), "RSS_ERR_COULDNOTREADURL") + feedURL[i]);
             }
             ListBoxItemBean item = new ListBoxItemBean();
             item.setName(feedURL[i]);
