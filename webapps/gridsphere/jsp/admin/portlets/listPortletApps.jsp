@@ -97,6 +97,8 @@
     </ui:frame>
 </ui:group>
 
+<%-- @TODO do we really need to show non-portlet webapps here?
+
 <ui:group key="PORTLET_NON">
 
     <ui:frame>
@@ -165,10 +167,10 @@
 
     </ui:frame>
 </ui:group>
-<!-- Table commented out
-<table><tr><td height="10px"></td></tr></table>
--->
 
+--%>
+
+<%-- @TODO@ This doesn't quite work either
 <ui:group key="PORTLET_DEPLOY_MSG">
 
     <ui:form>
@@ -180,6 +182,7 @@
 
     </ui:form>
 </ui:group>
+--%>
 
 <%-- uploading portlet WAR files TBD
 
