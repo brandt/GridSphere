@@ -371,8 +371,13 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
                 try {
                     portletInvoker.actionPerformed(pid, action, event.getHttpServletRequest(), event.getHttpServletResponse());
+                    Throwable e = (Throwable)request.getAttribute(SportletProperties.PORTLETERROR + pid);
+                    if (e != null) {
+                        setError(event.getActionRequest(), e);
+                    }
                 } catch (Exception e) {
-                    log.error("An error occured performing action on: " + pid, e);
+                    log.error("An error occured performing action on: " + pid, e.getCause());
+                    this.setError(event.getActionRequest(), e.getCause());
                     // catch it and keep processing
                 }
 
@@ -412,8 +417,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     }
 
                 }
-
-
 
             }
 
@@ -650,10 +653,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     }
 
     public void doRenderError(RenderRequest req, RenderResponse res, Throwable ex) {
-        //Throwable ex = (Throwable)req.getPortletSession(true).getAttribute(SportletProperties.PORTLETERROR + portletClass, PortletSession.APPLICATION_SCOPE);
-        //req.getPortletSession(true).removeAttribute(SportletProperties.PORTLETERROR + portletClass, PortletSession.APPLICATION_SCOPE);
-
-        //if (ex == null) return;
         Throwable cause = ex.getCause();
         if (cause == null) {
             cause = ex;
