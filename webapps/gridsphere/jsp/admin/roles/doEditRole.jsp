@@ -37,7 +37,7 @@
 <% if (request.getAttribute("newrole") == null) { %>
 
 <ui:group key="ROLE_EDITUSER_MSG">
-<ui:form>
+<ui:form name="roleform">
    <ui:hiddenfield beanId="roleHF"/>
     <% if (request.getAttribute("nousers") == null) { %>
     <ui:frame>
@@ -52,7 +52,10 @@
     <% if (!userList.isEmpty()) { %>
     <ui:table beanId="userTable">
         <ui:tablerow header="true">
-            <ui:tablecell><ui:text key="SELECT"/></ui:tablecell>
+            <ui:tablecell>
+                <ui:checkbox name="all" onClick="GridSphere_CheckAll(document.roleform.userCB, this)"/>
+                <ui:text key="SELECT"/>
+            </ui:tablecell>
             <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
             <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
             <ui:tablecell><ui:text key="EMAILADDRESS"/></ui:tablecell>
