@@ -7,8 +7,6 @@ package org.gridsphere.provider.event.jsr;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.persistence.QueryFilter;
 
-import javax.portlet.PortletResponse;
-import javax.portlet.PortletRequest;
 import java.io.IOException;
 import java.util.Map;
 
@@ -27,12 +25,12 @@ public interface FormEvent {
     public ActionLinkBean getActionLinkBean(String beanId);
 
     /**
-     * Return an existing <code>ActionParamBean</code> or create a new one
+     * Return an existing <code>ParamBean</code> or create a new one
      *
      * @param beanId the bean identifier
-     * @return a ActionParamBean
+     * @return a ParamBean
      */
-    public ActionParamBean getActionParamBean(String beanId);
+    public ParamBean getParamBean(String beanId);
 
     /**
      * Return an existing <code>ActionSubmitBean</code> or create a new one
@@ -55,6 +53,7 @@ public interface FormEvent {
      *
      * @param beanId the bean identifier
      * @return a FileInputBean
+     * @throws IOException if an I/O error occurs
      */
     public FileInputBean getFileInputBean(String beanId) throws IOException;
 
@@ -201,7 +200,7 @@ public interface FormEvent {
     /**
      * Return an existing <code>IncludeBean</code> or create a new one
      *
-     * @param beanId
+     * @param beanId the bean identifier
      * @return an include bean
      */
     public IncludeBean getIncludeBean(String beanId);
@@ -209,7 +208,7 @@ public interface FormEvent {
     /**
      * Return an existing <code>MessageBoxBean</code> or create a new one
      *
-     * @param beanId
+     * @param beanId bean identifier
      * @return a mesage box bean
      */
     public MessageBoxBean getMessageBoxBean(String beanId);

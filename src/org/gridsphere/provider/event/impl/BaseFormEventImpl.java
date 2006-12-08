@@ -108,17 +108,17 @@ public abstract class BaseFormEventImpl {
     }
 
     /**
-     * Return an existing <code>ActionParamBean</code> or create a new one
+     * Return an existing <code>ParamBean</code> or create a new one
      *
      * @param beanId the bean identifier
-     * @return a ActionParamBean
+     * @return a ParamBean
      */
-    public ActionParamBean getActionParamBean(String beanId) {
+    public ParamBean getParamBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (ActionParamBean) tagBeans.get(beanKey);
+            return (ParamBean) tagBeans.get(beanKey);
         }
-        ActionParamBean ap = new ActionParamBean(beanId);
+        ParamBean ap = new ParamBean(beanId);
         configureBean(ap);
         tagBeans.put(beanKey, ap);
         return ap;
@@ -664,7 +664,7 @@ public abstract class BaseFormEventImpl {
                 beanKey = getBeanKey(beanId);
 
             }
-            // todo this is always "" ??
+
             name = vbname.substring(idx + 1);
             //log.debug("vbname: " + name);
 
@@ -797,12 +797,6 @@ public abstract class BaseFormEventImpl {
                 bean.setName(name);
                 configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
-                tagBeans.put(beanKey, bean);
-            } else if (vb.equals(RichTextEditorBean.NAME)) {
-                RichTextEditorBean bean = new RichTextEditorBean(beanId);
-                bean.setValue(vals[0]);
-                bean.setName(name);
-                configureBean(bean);
                 tagBeans.put(beanKey, bean);
             } else {
                 log.error("unable to find suitable bean type for : " + uiname);
