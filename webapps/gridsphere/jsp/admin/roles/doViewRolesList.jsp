@@ -9,28 +9,33 @@
 <ui:messagebox beanId="msg"/>
 
 <% List coreRoles = (List) request.getAttribute("coreRoleList"); %>
-<% List roleList = (List) request.getAttribute("roleList"); %>
+<% List<PortletRole> roleList = (List<PortletRole>) request.getAttribute("roleList"); %>
 <h3><ui:text key="ROLE_SHOW_ROLES" style="nostyle"/></h3>
 
 <ui:actionlink cssStyle="text-decoration: underline; font-weight: bold;" action="doEditRole" key="ROLE_CREATE_ROLE"/>
 
 <p/>
 
-<ui:form>
-
-    <ui:table sortable="true" zebra="true">
+<ui:form name="roleform">
+    <ui:table zebra="true">
         <ui:tablerow header="true">
-            <ui:tablecell><ui:text cssStyle="font-weight: bold;" key="ROLENAME"/></ui:tablecell>
-            <ui:tablecell><ui:text cssStyle="font-weight: bold;" style="bold" key="ROLEDESC"/></ui:tablecell>
-            <ui:tablecell><ui:text cssStyle="font-weight: bold;" style="bold" key="ROLEDEL"/></ui:tablecell>
+            <ui:tablecell>
+                <% if (roleList.size() > 3) { %>
+                <ui:checkbox name="all" onClick="GridSphere_CheckAll(document.roleform.rolesCB, this)"/>
+                <% } %>
+                <ui:text key="SELECT"/>
+            </ui:tablecell>
+            <ui:tablecell><ui:text key="ROLE_EDIT_USERS"/></ui:tablecell>
+            <ui:tablecell><ui:text style="bold" key="ROLEDESC"/></ui:tablecell>
         </ui:tablerow>
-        <%
-            Iterator roleIterator = roleList.iterator();
-            while (roleIterator.hasNext()) {
-                // Get next user
-                PortletRole role = (PortletRole) roleIterator.next();
-        %>
+
+        <% for (PortletRole role : roleList) { %>
         <ui:tablerow>
+            <% if (!coreRoles.contains(role.getName().toUpperCase())) { %>
+            <ui:tablecell>
+                <ui:checkbox name="rolesCB" value="<%= role.getName() %>"/>
+            </ui:tablecell>
+            <% } %>
             <ui:tablecell>
                 <ui:actionlink action="doEditRole" value="<%= role.getName() %>">
                     <ui:actionparam name="roleName" value="<%= role.getName() %>"/>
@@ -39,19 +44,12 @@
             <ui:tablecell>
                 <ui:text value="<%= role.getDescription() %>"/>
             </ui:tablecell>
-            <ui:tablecell>
-                <% if (!coreRoles.contains(role.getName().toUpperCase())) { %>
-                <ui:actionsubmit action="doDeleteRole" key="DELETE">
-                    <ui:actionparam name="roleName" value="<%= role.getName() %>"/>
-                </ui:actionsubmit>
-                <% } %>
-            </ui:tablecell>
+
         </ui:tablerow>
-        <%
-            }
-        %>
+        <% } %>
     </ui:table>
 
+    <ui:actionsubmit action="doDeleteRole" key="DELETE"/>
 
 
 </ui:form>

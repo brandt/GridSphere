@@ -14,8 +14,7 @@
 <ui:form>
     <ui:hiddenfield beanId="roleHF"/>
     <ui:hiddenfield beanId="isNewRoleHF"/>
-    <ui:frame>
-
+    <ui:table>
         <ui:tablerow>
             <ui:tablecell>
                 <ui:text key="ROLENAME"/>
@@ -30,8 +29,7 @@
                 <ui:actionsubmit action="doSaveRole" key="ROLE_SAVE"/>
             </ui:tablecell>
         </ui:tablerow>
-    </ui:frame>
-
+    </ui:table>
 </ui:form>
 </ui:group>
 
@@ -84,9 +82,11 @@
 
     <ui:actionsubmit action="doRemoveUser" key="ROLE_REMOVE_USER"/>
     <% } %>
-    <ui:actionsubmit action="doReturn" key="CANCEL"/>
+
 </ui:form>
 
 </ui:group>
 
 <% } %>
+
+<h3><ui:actionlink action="doReturn" key="ROLE_SHOW_ROLES"/></h3>
