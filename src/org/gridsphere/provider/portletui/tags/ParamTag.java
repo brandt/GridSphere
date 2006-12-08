@@ -4,7 +4,7 @@
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.provider.portletui.beans.ActionParamBean;
+import org.gridsphere.provider.portletui.beans.ParamBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -12,14 +12,14 @@ import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 /**
- * The <code>ActionParamTag</code> is used to specify action paramters (name value pairs) inside of an
- * <code>ActionLinkTag</code> or an <code>ActionSubmitTag</code>
+ * The <code>ParamTag</code> is used to specify action paramters (name value pairs) inside of an
+ * <code>ActionLinkTag</code>, <code>RenderLinkTag</code> or an <code>ActionSubmitTag</code>, <code>RenderSubmitTag</code>
  */
 public class ParamTag extends TagSupport {
 
     protected String name = "";
     protected String value = "";
-    protected ActionParamBean paramBean = null;
+    protected ParamBean paramBean = null;
     protected String beanId = "";
 
     /**
@@ -81,7 +81,7 @@ public class ParamTag extends TagSupport {
      *
      * @param paramBean the action parameter bean
      */
-    public void setParamBean(ActionParamBean paramBean) {
+    public void setParamBean(ParamBean paramBean) {
         this.paramBean = paramBean;
     }
 
@@ -90,7 +90,7 @@ public class ParamTag extends TagSupport {
      *
      * @return the action parameter bean
      */
-    public ActionParamBean getParamBean() {
+    public ParamBean getParamBean() {
         return paramBean;
     }
 
@@ -98,7 +98,7 @@ public class ParamTag extends TagSupport {
         Tag tag = getParent();
         if (tag instanceof ActionTag) {
             ActionTag actionTag = (ActionTag) tag;
-            paramBean = new ActionParamBean(name, value);
+            paramBean = new ParamBean(name, value);
             actionTag.addParamBean(paramBean);
         }
         return SKIP_BODY;

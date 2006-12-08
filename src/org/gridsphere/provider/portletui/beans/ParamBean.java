@@ -5,9 +5,9 @@
 package org.gridsphere.provider.portletui.beans;
 
 /**
- * An <code>ActionParamBean</code> is a visual bean that represents action parameters associated with a portlet action
+ * An <code>ParamBean</code> is a visual bean that represents parameters associated with a render or action link/button
  */
-public class ActionParamBean extends BaseBean {
+public class ParamBean extends BaseBean {
 
     private String name = "";
     private String value = "";
@@ -15,7 +15,7 @@ public class ActionParamBean extends BaseBean {
     /**
      * Constructs a default action param bean
      */
-    public ActionParamBean() {
+    public ParamBean() {
     }
 
     /**
@@ -24,7 +24,7 @@ public class ActionParamBean extends BaseBean {
      * @param name  the action param name
      * @param value the action param value
      */
-    public ActionParamBean(String name, String value) {
+    public ParamBean(String name, String value) {
         this.name = name;
         this.value = value;
     }
@@ -34,7 +34,7 @@ public class ActionParamBean extends BaseBean {
      *
      * @param beanId the bean identifier
      */
-    public ActionParamBean(String beanId) {
+    public ParamBean(String beanId) {
         this.beanId = beanId;
     }
 
