@@ -149,6 +149,8 @@ public class PortletDispatcherImpl implements PortletDispatcher {
      *
      * @param req a <code>HttpServletRequest</code>
      * @param res a <code>HttpServletResponse</code>
+     * @throws IOException if an I/O error occurs
+     * @throws ServletException if a servlet exception occurs
      */
     protected synchronized void include(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         rd.include(req, res);
