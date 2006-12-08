@@ -15,7 +15,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  * The <code>ActionParamTag</code> is used to specify action paramters (name value pairs) inside of an
  * <code>ActionLinkTag</code> or an <code>ActionSubmitTag</code>
  */
-public class ActionParamTag extends TagSupport {
+public class ParamTag extends TagSupport {
 
     protected String name = "";
     protected String value = "";
@@ -95,9 +95,9 @@ public class ActionParamTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
-        Tag tag =  getParent();
+        Tag tag = getParent();
         if (tag instanceof ActionTag) {
-            ActionTag actionTag = (ActionTag)tag;
+            ActionTag actionTag = (ActionTag) tag;
             paramBean = new ActionParamBean(name, value);
             actionTag.addParamBean(paramBean);
         }
