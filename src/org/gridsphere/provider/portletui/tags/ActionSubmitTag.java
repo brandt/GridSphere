@@ -10,7 +10,6 @@ import org.gridsphere.provider.portletui.beans.ActionSubmitBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import java.util.Iterator;
 
 /**
  * An <code>ActionSubmitTag</code> provides a button element that includes a <code>DefaultPortletAction</code> and may
@@ -83,9 +82,8 @@ public class ActionSubmitTag extends ActionTag {
 
     public int doEndTag() throws JspException {
 
-        Iterator it = paramBeans.iterator();
-        while (it.hasNext()) {
-            ActionParamBean pbean = (ActionParamBean) it.next();
+        for (ActionParamBean paramBean : paramBeans) {
+            ActionParamBean pbean = (ActionParamBean) paramBean;
             portletAction.addParameter(pbean.getName(), pbean.getValue());
         }
 
