@@ -24,9 +24,34 @@
         </attribute>
     </tag>
 
+    <!-- @DEPRECATED@ -->
     <tag>
         <name>actionparam</name>
-        <tag-class>org.gridsphere.provider.portletui.tags.ActionParamTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ParamTag</tag-class>
+        <body-content>empty</body-content>
+        <description>
+            Creates a portlet action parameter
+        </description>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>param</name>
+        <tag-class>org.gridsphere.provider.portletui.tags.ParamTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Creates a portlet action parameter
@@ -392,6 +417,11 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>height</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>width</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -462,6 +492,11 @@
         </attribute>
         <attribute>
             <name>footer</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>height</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

@@ -90,7 +90,7 @@
     </tag>
     <tag>
         <name>param</name>
-        <tag-class>org.gridsphere.provider.portletui.tags.ActionParamTag</tag-class>
+        <tag-class>org.gridsphere.provider.portletui.tags.ParamTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Creates a portlet action parameter
