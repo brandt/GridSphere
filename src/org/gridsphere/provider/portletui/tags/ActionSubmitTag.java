@@ -5,15 +5,15 @@
 package org.gridsphere.provider.portletui.tags;
 
 import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.provider.portletui.beans.ActionParamBean;
 import org.gridsphere.provider.portletui.beans.ActionSubmitBean;
+import org.gridsphere.provider.portletui.beans.ParamBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 
 /**
  * An <code>ActionSubmitTag</code> provides a button element that includes a <code>DefaultPortletAction</code> and may
- * also include nested <code>ActionParamTag</code>s
+ * also include nested <code>ParamTag</code>s
  */
 public class ActionSubmitTag extends ActionTag {
 
@@ -76,14 +76,14 @@ public class ActionSubmitTag extends ActionTag {
         if (parentTag instanceof ContainerTag) {
             ContainerTag containerTag = (ContainerTag) parentTag;
             containerTag.addTagBean(actionSubmitBean);
-        }        
+        }
         return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspException {
 
-        for (ActionParamBean paramBean : paramBeans) {
-            ActionParamBean pbean = (ActionParamBean) paramBean;
+        for (ParamBean paramBean : paramBeans) {
+            ParamBean pbean = (ParamBean) paramBean;
             portletAction.addParameter(pbean.getName(), pbean.getValue());
         }
 
@@ -94,14 +94,14 @@ public class ActionSubmitTag extends ActionTag {
 
         if (pageContext.getRequest().getAttribute(SportletProperties.USE_AJAX) != null) {
             String paction = ((!action.equals("")) ? "&" + portletAction.toString() : "");
-            String portlet = (String)pageContext.getRequest().getAttribute(SportletProperties.PORTLET_NAME);
-            String compname = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_NAME);
+            String portlet = (String) pageContext.getRequest().getAttribute(SportletProperties.PORTLET_NAME);
+            String compname = (String) pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_NAME);
             actionSubmitBean.setUseAjax(true);
             actionSubmitBean.setOnClick("GridSphereAjaxHandler2.startRequest('" + portlet + "', '" + compname + "', '" + paction + "');");
         }
 
         if (useAjax) {
-            String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
+            String cid = (String) pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
             String paction = ((!action.equals("")) ? "&" + portletAction.toString() : "");
             actionSubmitBean.setOnClick("GridSphereAjaxHandler.startRequest('" + cid + "', '" + paction + "');");
         }

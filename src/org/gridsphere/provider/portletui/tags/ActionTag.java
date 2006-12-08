@@ -4,11 +4,11 @@
  */
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.portlet.impl.PortletURLImpl;
 import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.provider.portletui.beans.ActionParamBean;
+import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.provider.portletui.beans.ImageBean;
+import org.gridsphere.provider.portletui.beans.ParamBean;
 
 import javax.portlet.*;
 import javax.servlet.jsp.JspException;
@@ -41,7 +41,7 @@ public abstract class ActionTag extends BaseComponentTag {
     protected String windowState = null;
     protected String portletMode = null;
     protected DefaultPortletAction portletAction = null;
-    protected List<ActionParamBean> paramBeans = new ArrayList<ActionParamBean>();
+    protected List<ParamBean> paramBeans = new ArrayList<ParamBean>();
     protected String label = null;
     protected String layout = null;
     protected ImageBean imageBean = null;
@@ -282,6 +282,7 @@ public abstract class ActionTag extends BaseComponentTag {
         return action;
     }
 
+    /*
     public void setPortletAction(DefaultPortletAction portletAction) {
         this.portletAction = portletAction;
     }
@@ -289,12 +290,13 @@ public abstract class ActionTag extends BaseComponentTag {
     public DefaultPortletAction getPortletAction() {
         return portletAction;
     }
+    */
 
-    public void addParamBean(ActionParamBean paramBean) {
+    public void addParamBean(ParamBean paramBean) {
         paramBeans.add(paramBean);
     }
 
-    public void removeParamBean(ActionParamBean paramBean) {
+    public void removeParamBean(ParamBean paramBean) {
         paramBeans.remove(paramBean);
     }
 
@@ -317,10 +319,10 @@ public abstract class ActionTag extends BaseComponentTag {
         // action is a required attribute except for FormTag
         if (label != null) {
             res.setProperty("label", label);
-            ((PortletURLImpl)url).setLabel(label);
+            ((PortletURLImpl) url).setLabel(label);
         }
         if (layout != null) {
-            ((PortletURLImpl)url).setLayout(layout);
+            ((PortletURLImpl) url).setLayout(layout);
         }
 
         if (windowState != null) {
@@ -343,14 +345,14 @@ public abstract class ActionTag extends BaseComponentTag {
             }
         }
 
-        String compId = (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
+        String compId = (String) pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
 
         if (action != null) {
             if (compId == null) {
-                ((PortletURLImpl)url).setAction(action);
+                ((PortletURLImpl) url).setAction(action);
                 portletAction = new DefaultPortletAction(action);
             } else {
-                ((PortletURLImpl)url).setAction(compId + "%" + action);
+                ((PortletURLImpl) url).setAction(compId + "%" + action);
                 portletAction = new DefaultPortletAction(compId + "%" + action);
             }
         } else {
@@ -371,7 +373,7 @@ public abstract class ActionTag extends BaseComponentTag {
                 portletAction.addParameter(SportletProperties.PREFIX, id);
             }
             while (it.hasNext()) {
-                ActionParamBean pbean = (ActionParamBean) it.next();
+                ParamBean pbean = (ParamBean) it.next();
                 //System.err.println("have param bean name= " + pbean.getName() + " value= " + pbean.getValue());
                 if (paramPrefixing) {
                     url.setParameter(id + "_" + pbean.getName(), pbean.getValue());
@@ -390,7 +392,7 @@ public abstract class ActionTag extends BaseComponentTag {
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
         return createURI(res.createActionURL());
     }
-    
+
     public String createRenderURI() throws JspException {
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
         return createURI(res.createRenderURL());

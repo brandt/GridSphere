@@ -17,7 +17,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     protected String action = null;
     protected boolean isSecure = false;
     protected String portletURI = null;
-    protected List<ActionParamBean> paramBeanList = new ArrayList<ActionParamBean>();
+    protected List<ParamBean> paramBeanList = new ArrayList<ParamBean>();
     protected String label = null;
     protected String layout = null;
     protected String anchor = null;
@@ -27,7 +27,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     protected String onMouseOver = null;
     protected String onMouseOut = null;
     protected String onSubmit = null;
-    protected String onReset= null;
+    protected String onReset = null;
     protected boolean useAjax = false;
 
     /**
@@ -146,7 +146,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
 
     /**
      * If true this action should only retrieve the portlet fragment using AJAX (XmlHttpRequest)
-     * 
+     *
      * @param useAjax true if this action should only retrieve the portlet fragment using AJAX (XmlHttpRequest)
      */
     public void setUseAjax(boolean useAjax) {
@@ -188,7 +188,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     public void setLayout(String layout) {
         this.layout = layout;
     }
-    
+
     /**
      * Sets a label to track this action and persist in the DB
      *
@@ -320,7 +320,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      *
      * @param paramBeanList a list containing <code>ActionParamBean</code>s
      */
-    public void setParamBeanList(List<ActionParamBean> paramBeanList) {
+    public void setParamBeanList(List<ParamBean> paramBeanList) {
         this.paramBeanList = paramBeanList;
     }
 
@@ -329,7 +329,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      *
      * @return the list containing <code>ActionParamBean</code>s
      */
-    public List<ActionParamBean> getParamBeanList() {
+    public List<ParamBean> getParamBeanList() {
         return paramBeanList;
     }
 
@@ -338,7 +338,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      *
      * @param paramBean an action parameter bean
      */
-    public void addParamBean(ActionParamBean paramBean) {
+    public void addParamBean(ParamBean paramBean) {
         paramBeanList.add(paramBean);
     }
 
@@ -349,7 +349,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      * @param paramValue the parameter value
      */
     public void addParamBean(String paramName, String paramValue) {
-        ActionParamBean paramBean = new ActionParamBean(paramName, paramValue);
+        ParamBean paramBean = new ParamBean(paramName, paramValue);
         paramBeanList.add(paramBean);
     }
 
@@ -358,7 +358,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      *
      * @param paramBean the action parameter bean
      */
-    public void removeParamBean(ActionParamBean paramBean) {
+    public void removeParamBean(ParamBean paramBean) {
         paramBeanList.remove(paramBean);
     }
 
