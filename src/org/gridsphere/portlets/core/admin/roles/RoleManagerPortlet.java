@@ -126,21 +126,26 @@ public class RoleManagerPortlet extends ActionPortlet {
 
     public void doDeleteRole(ActionFormEvent evt) {
         PortletRequest req = evt.getActionRequest();
-        String roleName = evt.getAction().getParameter("roleName");
-        PortletRole role = roleManagerService.getRole(roleName);
-        if (roleName != null) {
-            // remove users in role first
-            List<User> users = roleManagerService.getUsersInRole(role);
-            if (!users.isEmpty()) {
-                for (User user : users) {
-                    roleManagerService.deleteUserInRole(user, role);
+
+        String[] roleNames = req.getParameterValues("rolesCB");
+        if (roleNames != null) {
+            for (int i = 0; i < roleNames.length; i++) {
+                PortletRole role = roleManagerService.getRole(roleNames[i]);
+                if (role != null) {
+                    // remove users in role first
+                    List<User> users = roleManagerService.getUsersInRole(role);
+                    if (!users.isEmpty()) {
+                        for (User user : users) {
+                            roleManagerService.deleteUserInRole(user, role);
+                        }
+                    }
+                    roleManagerService.deleteRole(role);
+                    // if role has been used in layouts, rename it to empty role
+                    PortletPageFactory pageFactory = PortletPageFactory.getInstance();
+                    pageFactory.renameRole(req, role.getName(), "");
+                    createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_DELETE_MSG") + ": " + role.getName());
                 }
             }
-            roleManagerService.deleteRole(role);
-            // if role has been used in layouts, rename it to empty role
-            PortletPageFactory pageFactory = PortletPageFactory.getInstance();
-            pageFactory.renameRole(req, role.getName(), "");
-            createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_DELETE_MSG") + ": " + role.getName());
         }
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
