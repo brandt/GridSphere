@@ -254,28 +254,15 @@ public class ActionPortlet extends GenericPortlet {
 
         } catch (NoSuchMethodException e) {
             String error = "No such method: " + methodName + "\n" + e.getMessage();
-            //log.error(error, e);
-            //request.getPortletSession(true).setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e, PortletSession.APPLICATION_SCOPE);
-
-            // If action is not illegal do error undefined action
-            //doErrorInvalidAction(request, error);
+            log.error(error, e);
             throw new PortletException(error, e);
         } catch (IllegalAccessException e) {
             String error = "Error accessing action method: " + methodName + "\n" + e.getMessage();
-            //log.error(error, e);
-            // If action is not illegal do error undefined action
-            //doErrorInvalidAction(request, error);
+            log.error(error, e);
             throw new PortletException(error, e);
         } catch (InvocationTargetException e) {
-            //log.error("THIS IS AN INVOCATION EXCEPTION!!!!!");
             String error = "Error invoking action method: " + methodName;
-            //log.error(error, e.getTargetException());
-
-            // JN request.setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e.getTargetException());
-            //request.getPortletSession(true).setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e.getTargetException(), PortletSession.APPLICATION_SCOPE);
-
-            // If action is not illegal do error undefined action
-            //doErrorInvalidAction(request, error);
+            log.error(error, e.getTargetException());
             throw new PortletException(error, e.getTargetException());
         }
 

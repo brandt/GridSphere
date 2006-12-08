@@ -374,10 +374,10 @@ public class PortletServlet extends HttpServlet
 
             if (pm != null) pm.endTransaction();
 
-            redirect(request, response, actionRequest, actionResponse, portalContext);
+
         } catch (Throwable ex) {
-            log.error("Error during processAction:", ex);
-            //request.getSession(true).setAttribute(SportletProperties.PORTLETERROR + pid, new PortletException(ex));
+            //log.error("Error during processAction:", ex);
+            request.setAttribute(SportletProperties.PORTLETERROR + pid, ex);
 
             //ex.printStackTrace();
             if (pm != null) {
@@ -389,7 +389,13 @@ public class PortletServlet extends HttpServlet
                 }
             }
             // Let others handle it... maybe another interceptor for exceptions?
-            throw new ServletException(ex.getCause());
+            //throw new ServletException(ex.getCause());
+        } finally {
+            try {
+                redirect(request, response, actionRequest, actionResponse, portalContext);
+            } catch (IOException e) {
+                log.error("Unable to handle redirect", e);
+            }
         }
 
     }
