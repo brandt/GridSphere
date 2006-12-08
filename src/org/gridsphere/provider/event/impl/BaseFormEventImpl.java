@@ -857,57 +857,6 @@ public abstract class BaseFormEventImpl {
         return parameters;
     }
 
-//    protected Map parseFileUpload(Object req) {
-//        log.debug("parseFileUpload");
-//        Map parameters = new Hashtable();
-//        DiskFileItemFactory df = new DiskFileItemFactory();
-//        df.setSizeThreshold(FileInputBean.MAX_UPLOAD_SIZE);
-//        String tmpDir = System.getProperty("java.io.tmpdir");
-//        df.setRepository(new File(tmpDir));
-//        if (req instanceof HttpServletRequest) {
-//            log.debug("Checking http servlet request for file items");
-//            HttpServletRequest hReq = (HttpServletRequest)req;
-//            ServletRequestContext ctx = new ServletRequestContext(hReq);
-//            if (FileUpload.isMultipartContent(ctx)) {
-//                log.debug("File upload event occured");
-//                ServletFileUpload sfupload = new ServletFileUpload(df);
-//                try {
-//                    fileItems = sfupload.parseRequest(hReq);
-//                } catch (Exception e) {
-//                    log.error("Error Parsing multi Part form.Error in workaround!!!", e);
-//                }
-//            }
-//        }
-//        if (req instanceof ActionRequest) {
-//            log.debug("Checking action request for file items");
-//            ActionRequest areq = (ActionRequest)req;
-//            if (PortletFileUpload.isMultipartContent(areq)) {
-//                log.debug("File upload event occured");
-//                PortletFileUpload pfupload = new PortletFileUpload(df);
-//                try {
-//                    fileItems = pfupload.parseRequest(areq);
-//                } catch (Exception e) {
-//                    log.error("Error Parsing multi Part form.Error in workaround!!!", e);
-//                }
-//            }
-//        }
-//        if (fileItems != null) {
-//            log.debug("Number of file items " + fileItems.size());
-//            for (int i = 0; i < fileItems.size(); i++) {
-//                FileItem item = (FileItem) fileItems.get(i);
-//                String[] tmpstr = new String[1];
-//                if (item.isFormField()) {
-//                    tmpstr[0] = item.getString();
-//                } else {
-//                    tmpstr[0] = "fileinput";
-//                }
-//                log.debug("Name: " + item.getFieldName() + " Value: " + tmpstr[0]);
-//                parameters.put(item.getFieldName(), tmpstr);
-//            }
-//        }
-//        return parameters;
-//    }
-
     /**
      * Returns a bean key identifier using the component identifier
      *

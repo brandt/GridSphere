@@ -14,7 +14,7 @@ import javax.portlet.ActionResponse;
 import java.util.HashMap;
 
 /**
- * An <code>ActionEvent</code> is sent by the portlet container when an HTTP request is
+ * An <code>ActionFormEvent</code> is sent by the portlet container when an HTTP request is
  * received that is associated with an action.
  */
 public class ActionFormEventImpl extends BaseFormEventImpl implements ActionFormEvent {
@@ -45,7 +45,7 @@ public class ActionFormEventImpl extends BaseFormEventImpl implements ActionForm
     }
 
     /**
-     * Returns the action that this action event carries.
+     * Returns the event action
      *
      * @return the portlet action
      */
@@ -54,9 +54,9 @@ public class ActionFormEventImpl extends BaseFormEventImpl implements ActionForm
     }
 
     /**
-     * Returns the action that this action event carries.
+     * Returns the event action as a String
      *
-     * @return the portlet action
+     * @return the portlet action as a String
      */
     public String getActionString() {
         return action.getName();

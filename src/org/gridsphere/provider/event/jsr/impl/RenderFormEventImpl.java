@@ -6,6 +6,7 @@ package org.gridsphere.provider.event.jsr.impl;
 
 import org.gridsphere.provider.event.impl.BaseFormEventImpl;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
+import org.gridsphere.provider.portletui.beans.TagBean;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -13,8 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * An <code>ActionEvent</code> is sent by the portlet container when an HTTP request is
- * received that is associated with an action.
+ * A <code>RenderFormEvent</code> is sent by the portlet container when an HTTP request is
+ * received that is associated with an render event
  */
 public class RenderFormEventImpl extends BaseFormEventImpl implements RenderFormEvent {
 
@@ -28,14 +29,14 @@ public class RenderFormEventImpl extends BaseFormEventImpl implements RenderForm
      * @param response the <code>RenderResponse</code>
      * @param tagBeans a collection of tag beans
      */
-    public RenderFormEventImpl(RenderRequest request, RenderResponse response, Map tagBeans) {
+    public RenderFormEventImpl(RenderRequest request, RenderResponse response, Map<String, TagBean> tagBeans) {
         super(request, response);
         this.request = request;
         this.response = response;
         this.tagBeans = tagBeans;
         // Unless tagBeans is null, don't recreate them
         if (tagBeans == null) {
-            tagBeans = new HashMap();
+            tagBeans = new HashMap<String, TagBean>();
             createTagBeans(getRequest());
         }
         //logRequestParameters();

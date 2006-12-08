@@ -8,20 +8,20 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 /**
- * An <code>ActionEvent</code> is sent by the portlet container when an HTTP request is received that is
- * associated with an action.
+ * A <code>RenderFormEvent</code> is sent by the portlet container when an HTTP request is
+ * received that is associated with an render event
  */
 public interface RenderFormEvent extends FormEvent {
 
     /**
-     * Return the render request associated with this action event
+     * Return the render request associated with this render event
      *
      * @return the <code>RenderRequest</code>
      */
     public RenderRequest getRenderRequest();
 
     /**
-     * Return the render response associated with this action event
+     * Return the render response associated with this render event
      *
      * @return the <code>RenderResponse</code>
      */
