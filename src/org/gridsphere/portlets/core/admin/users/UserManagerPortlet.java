@@ -327,18 +327,20 @@ public class UserManagerPortlet extends ActionPortlet {
 
         ActionRequest req = event.getActionRequest();
         String[] users = req.getParameterValues("usersCB");
-        for (int i = 0; i < users.length; i++) {
-            User user = this.userManagerService.getUser(users[i]);
-            this.passwordManagerService.deletePassword(user);
-            List<PortletRole> userRoles = this.roleManagerService.getRolesForUser(user);
-            for (PortletRole role : userRoles) {
-                this.roleManagerService.deleteUserInRole(user, role);
+        if (users != null) {
+            for (int i = 0; i < users.length; i++) {
+                User user = this.userManagerService.getUser(users[i]);
+                this.passwordManagerService.deletePassword(user);
+                List<PortletRole> userRoles = this.roleManagerService.getRolesForUser(user);
+                for (PortletRole role : userRoles) {
+                    this.roleManagerService.deleteUserInRole(user, role);
+                }
+                this.userManagerService.deleteUser(user);
             }
-            this.userManagerService.deleteUser(user);
         }
         createSuccessMessage(event, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
 
-      /*
+        /*
         HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
         String userId = hf.getValue();
         User user = this.userManagerService.getUser(userId);
