@@ -179,20 +179,22 @@ public class PortletContent extends BasePortletComponent implements Serializable
                             PortalConfigService portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
                             String localPortalURLdeploy = portalConfigService.getProperty("gridsphere.deploy");
                             String localPortalURLcontext = portalConfigService.getProperty("gridsphere.context");
-                            String patternFindLinks = "\\[{2}[A-Za-z0-9\\s]++\\|{1}[A-Za-z0-9/\\s]++\\]{2}";
+                            String patternFindLinks = "\\[{2}[A-Za-z0-9\\s]++\\|{1}[A-Za-z0-9/\\s]++\\|{1}[A-Za-z0-9/\\s]++\\]{2}";
                             for (Matcher m = Pattern.compile(patternFindLinks).matcher(output); m.find();) {
                                 String match = m.toMatchResult().group().toString();
-                                String match2 = match.substring(2, match.length() - 2);
-                                String name = match2.substring(0, match2.indexOf("|"));
-//                                String link = match2.substring(match2.indexOf("|")+1, match2.length());
+                                String match2 = match.substring(2, match.length() - 2); // subtract [[ and ]]
+                                String name = match2.substring(0, match2.indexOf("|")); // get the name
+                                String temp = match2.substring(match2.indexOf("|") + 1, match2.length());
+                                String layout = temp.substring(0, temp.indexOf("|"));  // layout name
+                                String id = temp.substring(temp.indexOf("|") + 1, temp.length()); // fragment id
                                 String link = "";
                                 try {
-                                    link = URLEncoder.encode(match2.substring(match2.indexOf("|") + 1, match2.length()), "UTF-8");
+                                    link = URLEncoder.encode(id, "UTF-8");
                                 } catch (UnsupportedEncodingException e) {
                                     e.printStackTrace();
                                 }
                                 String replaceString = "<a href=\"/" + localPortalURLdeploy + "/" + localPortalURLcontext + "/"
-                                        + link + "\">" + name + "</a>";
+                                        + layout + "/" + link + "\">" + name + "</a>";
                                 output = output.replace(match, replaceString);
                             }
                             output = "<div class=\"gridsphere-content\">" + output + "</div>";
