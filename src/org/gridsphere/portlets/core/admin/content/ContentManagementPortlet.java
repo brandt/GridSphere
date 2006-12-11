@@ -4,7 +4,10 @@ import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.FormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
-import org.gridsphere.provider.portletui.beans.*;
+import org.gridsphere.provider.portletui.beans.ListBoxBean;
+import org.gridsphere.provider.portletui.beans.ListBoxItemBean;
+import org.gridsphere.provider.portletui.beans.RichTextEditorBean;
+import org.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridsphere.services.core.jcr.JCRNode;
 import org.gridsphere.services.core.jcr.JCRService;
 
@@ -13,6 +16,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.naming.NamingException;
+import javax.portlet.ActionRequest;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
@@ -67,6 +71,27 @@ public class ContentManagementPortlet extends ActionPortlet {
         //setRenderKitValue(event, JCRNode.RENDERKIT_DEFAULT);
     }
 
+    public void clearEditor(ActionFormEvent event) {
+        clearInputs(event);
+        ActionRequest request = event.getActionRequest();
+        Session session = null;
+        try {
+            session = jcrService.getSession();
+            listNodes(event, session);
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+            log.error("Could not retrieve Nodelist.");
+            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENTLIST"));
+        } catch (NamingException e) {
+            e.printStackTrace();
+            log.error("Could not retrieve Nodelist.");
+            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENTLIST"));
+        } finally {
+            if (session != null) session.logout();
+        }
+        setNextState(event.getActionRequest(), defaultViewJSP);
+    }
+
     protected void setRenderKitValue(FormEvent event, String kit) {
         ListBoxBean renderkit = event.getListBoxBean("renderkit");
         renderkit.clear();
@@ -83,9 +108,9 @@ public class ContentManagementPortlet extends ActionPortlet {
         }
     }
 
-    public void doView(RenderFormEvent event) throws PortletException {        
+    public void doView(RenderFormEvent event) throws PortletException {
         Session session = null;
-        PortletRequest request = event.getRenderRequest();        
+        PortletRequest request = event.getRenderRequest();
         try {
             session = jcrService.getSession();
             listNodes(event, session);
@@ -113,46 +138,64 @@ public class ContentManagementPortlet extends ActionPortlet {
         //String renderkit = event.getListBoxBean("renderkit").getSelectedName();
         String renderkit = "text/html";
         Session session = null;
-        try {
-            String action = "";
-            Node node = null;
-            session = jcrService.getSession();
+        if (nodeid != null && !nodeid.equals("")) {
+            try {
+                String action = "";
+                Node node = null;
+                session = jcrService.getSession();
 
-            if (jcrService.exists(nodeid)) {
-                // get existing node
-                String query = "select * from nt:base where " + JCRNode.GSID + "='" + nodeid + "'";
-                NodeIterator it = jcrService.query(query, session);
-                if (it.hasNext()) node = it.nextNode();
-                action = "EDIT";
-            } else {
-                // create a new node
-                Node rootnode = session.getRootNode();
-                node = rootnode.addNode(nodeid);
-                action = "NEW";
-            }
-            if (node != null) {
-                node.setProperty(JCRNode.CONTENT, nodecontent);
-                node.setProperty(JCRNode.GSID, nodeid);
-                node.setProperty(JCRNode.RENDERKIT, renderkit);
-                session.save();
+                if (jcrService.exists(nodeid)) {
+                    // get existing node
+                    String query = "select * from nt:base where " + JCRNode.GSID + "='" + nodeid + "'";
+                    NodeIterator it = jcrService.query(query, session);
+                    if (it.hasNext()) node = it.nextNode();
+                    action = "EDIT";
+                } else {
+                    // create a new node
+                    Node rootnode = session.getRootNode();
+                    node = rootnode.addNode(nodeid);
+                    action = "NEW";
+                }
+                if (node != null) {
+                    node.setProperty(JCRNode.CONTENT, nodecontent);
+                    node.setProperty(JCRNode.GSID, nodeid);
+                    node.setProperty(JCRNode.RENDERKIT, renderkit);
+                    session.save();
 
-                createSuccessMessage(event,getLocalizedText(request, "CM_SUCCESS_"+action+"DOCUMENT") + nodeid + ".");
-            } else {
-                createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTSAVEDOCUMENT") + nodeid + ".");
+                    createSuccessMessage(event, getLocalizedText(request, "CM_SUCCESS_" + action + "DOCUMENT") + ": " + nodeid + ".");
+                } else {
+                    createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTSAVEDOCUMENT") + ": " + nodeid + ".");
+                }
+                listNodes(event, session);
+            } catch (RepositoryException e) {
+                e.printStackTrace();
+                log.error("Could not retrieve Nodelist.");
+                createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENTLIST"));
+            } catch (NamingException e) {
+                e.printStackTrace();
+                log.error("Could not retrieve Nodelist.");
+                createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENTLIST"));
+            } finally {
+                if (session != null) session.logout();
             }
-            listNodes(event, session);
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-            log.error("Could not retrieve Nodelist.");
-            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENTLIST"));
-        } catch (NamingException e) {
-            e.printStackTrace();
-            log.error("Could not retrieve Nodelist.");
-            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENTLIST"));
-        } finally {
-            if (session != null) session.logout();
+            //clearInputs(event);
+        } else {
+            createErrorMessage(event, getLocalizedText(request, "CM_ERR_NONODEID"));
+            rteditor.setValue(nodecontent);
+            try {
+                listNodes(event, session);
+            } catch (RepositoryException e) {
+                e.printStackTrace();
+                log.error("Could not retrieve Nodelist.");
+                createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENTLIST"));
+            } catch (NamingException e) {
+                e.printStackTrace();
+                log.error("Could not retrieve Nodelist.");
+                createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENTLIST"));
+            } finally {
+                if (session != null) session.logout();
+            }
         }
-        clearInputs(event);
         setNextState(request, defaultViewJSP);
     }
 
@@ -166,21 +209,25 @@ public class ContentManagementPortlet extends ActionPortlet {
 
         Session session = null;
         try {
-            session = jcrService.getSession();
-            String query = "select * from nt:base where " + JCRNode.GSID + "='" + nodename + "'";
-            NodeIterator it = jcrService.query(query, session);
-            Node node = it.nextNode();
-            nodeid.setValue(node.getProperty(JCRNode.GSID).getString());
-            nodecontent.setValue(node.getProperty(JCRNode.CONTENT).getString());
-            renderkit = node.getProperty(JCRNode.RENDERKIT).getString();
+            if (nodeid != null && !nodeid.equals("")) {
+                session = jcrService.getSession();
+                String query = "select * from nt:base where " + JCRNode.GSID + "='" + nodename + "'";
+                NodeIterator it = jcrService.query(query, session);
+                Node node = it.nextNode();
+                nodeid.setValue(node.getProperty(JCRNode.GSID).getString());
+                nodecontent.setValue(node.getProperty(JCRNode.CONTENT).getString());
+                renderkit = node.getProperty(JCRNode.RENDERKIT).getString();
+            } else {
+                createErrorMessage(event, getLocalizedText(request, "CM_ERR_SELECTNODE"));
+            }
             listNodes(event, jcrService.getSession());
         } catch (RepositoryException e) {
             e.printStackTrace();
-            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + nodename);
+            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + ": " + nodename);
             log.error("Could not load node (RepositoryException): " + nodename);
         } catch (NamingException e) {
             e.printStackTrace();
-            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + nodename);
+            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + ": " + nodename);
             log.error("Could not load node (NamingException): " + nodename);
         } finally {
             if (session != null) session.logout();
@@ -194,27 +241,35 @@ public class ContentManagementPortlet extends ActionPortlet {
         String nodename = nodelist.getSelectedName();
         PortletRequest request = event.getActionRequest();
         Session session = null;
+
         try {
-            session = jcrService.getSession();
-            String query = "select * from nt:base where " + JCRNode.GSID + "='" + nodename + "'";
-            NodeIterator it = jcrService.query(query, session);
-            Node node = it.nextNode();
-            node.remove();
-            session.save();
-            createSuccessMessage(event, getLocalizedText(request, "CM_AVAILDOCUMENTS") + nodename + ".");
+            if (nodename != null && !nodename.equals("")) {
+                session = jcrService.getSession();
+                String query = "select * from nt:base where " + JCRNode.GSID + "='" + nodename + "'";
+                NodeIterator it = jcrService.query(query, session);
+                Node node = it.nextNode();
+                node.remove();
+                session.save();
+                createSuccessMessage(event, getLocalizedText(request, "CM_AVAILDOCUMENTS") + ": " + nodename + ".");
+            } else {
+                createErrorMessage(event, getLocalizedText(request, "CM_ERR_SELECTNODE"));
+            }
             listNodes(event, jcrService.getSession());
         } catch (RepositoryException e) {
             e.printStackTrace();
-            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + nodename);
+            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + ": " + nodename);
             log.error("Could not load node (RepositoryException): " + nodename);
         } catch (NamingException e) {
             e.printStackTrace();
-            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + nodename);
+            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + ": " + nodename);
             log.error("Could not load node (NamingException): " + nodename);
         } finally {
             if (session != null) session.logout();
         }
+
+
         clearInputs(event);
+
         setNextState(request, defaultViewJSP);
     }
 
@@ -224,7 +279,7 @@ public class ContentManagementPortlet extends ActionPortlet {
         String nodeid = event.getTextFieldBean("nodeid").getValue();
 
         Session session = null;
-        
+
         try {
             session = jcrService.getSession();
             listNodes(event, session);

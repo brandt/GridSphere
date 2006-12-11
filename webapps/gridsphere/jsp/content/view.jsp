@@ -1,4 +1,3 @@
-<%@ page import="org.gridsphere.services.core.jcr.JCRNode" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 <portlet:defineObjects/>
@@ -16,16 +15,19 @@
                     <ui:text key="CM_DOCUMENT_TITLE"/>
                     <ui:textfield beanId="nodeid"/>
                 </ui:group>
-                <ui:group key="CM_AVAILDOCUMENTS" cssStyle="border: 1px dashed #c7c7c7;">
-                    <ui:listbox beanId="nodelist" size="10"/>
+                <ui:group key="CM_AVAILDOCUMENTS" cssStyle="text-align:center; border: 1px dashed #c7c7c7;">
+                    <ui:listbox beanId="nodelist" size="20"/>
                     <br/>
                     <ui:actionsubmit action="showNode" key="CM_SHOWDOCUMENT"/>
                     <br/>
                     <ui:actionsubmit action="removeNode" key="CM_DELETEDOCUMENT"/>
                     <br/>
+                    <ui:actionsubmit action="clearEditor" key="CM_CLEAREDITOR"/>
+                    <br/>
                 </ui:group>
-                <ui:actionsubmit action="createNode" key="CM_CREATEUPDATEDOCUMENT"/>
-
+                <ui:group cssStyle="border: none; text-align:center">
+                    <ui:actionsubmit action="createNode" key="CM_CREATEUPDATEDOCUMENT"/>
+                </ui:group>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:group label="Content" cssStyle="border: 1px dashed #c7c7c7;">
