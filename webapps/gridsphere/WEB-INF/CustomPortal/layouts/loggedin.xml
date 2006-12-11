@@ -2,22 +2,21 @@
 
 <!--
 
-    Layout Manager Descriptor
+Logged In User Layout Descriptor
 
-    This descriptor defines the guest user's portal layout configuration
+This descriptor defines the user's portal layout upon logging into the portal
 
-    $Id: SetupLayout.xml 4633 2006-03-09 16:44:16Z wehrens $
+$Id$
 -->
 
-<page label="layout"
-      title="GridSphere Content Management"
+<page label="user"
+      title="GridSphere Portal"
       keywords="gridsphere"
       icon="images/favicon.ico"
       renderkit="brush"
-      editable="false"
-      required-role="ADMIN">
+      editable="true"
+      required-role="USER">
 
-    <!-- Header components -->
     <header>
         <table>
             <row>
@@ -31,17 +30,21 @@
         </table>
     </header>
 
-    <bar>
-        <table>
-            <row>
-                <column width="100%">
-                    <frame label="contentmanager">
-                        <portlet-class>org.gridsphere.portlets.core.admin.content.ContentManagementPortlet</portlet-class>
-                    </frame>
-                </column>
-            </row>
-        </table>
-    </bar>
+    <menu>
+        <tab label="home">
+            <title lang="en">Home</title>
+            <table>
+                <row>
+                    <column width="70%">
+                        <frame transparent="true" outer-padding="0px 20px" label="rss">
+                            <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</portlet-class>
+                        </frame>
+                    </column>
+                </row>
+            </table>
+        </tab>
+    </menu>
+
 
     <footer>
         <table>
@@ -59,3 +62,4 @@
     </footer>
 
 </page>
+

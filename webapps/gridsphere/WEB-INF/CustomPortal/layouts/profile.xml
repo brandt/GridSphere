@@ -10,12 +10,12 @@
 -->
 
 <page label="profile"
-             title="GridSphere Portal"
-             keywords="gridsphere"
-             icon="images/favicon.ico"
-             renderkit="brush"
-             editable="false"
-             required-role="USER">
+      title="GridSphere Portal"
+      keywords="gridsphere"
+      icon="images/favicon.ico"
+      renderkit="brush"
+      editable="false"
+      required-role="USER">
 
     <!-- Header components -->
     <header>
@@ -48,7 +48,7 @@
     <footer>
         <table style="footer">
             <row>
-            <column width="50%">
+                <column width="50%">
                     <frame transparent="true" outer-padding="0px" label="date">
                         <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
                     </frame>

@@ -1,6 +1,6 @@
 <%@ page import="org.gridsphere.portlet.impl.SportletProperties" %>
-<%@ page import="javax.portlet.RenderRequest" %>
 <%@ page import="org.gridsphere.services.core.user.User" %>
+<%@ page import="javax.portlet.RenderRequest" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
@@ -13,24 +13,25 @@
 <div class="gridsphere-navbar">
     <ul>
         <li>
-<ui:text style="nostyle" key="LOGIN_SUCCESS"/>, <%= username %>
+            <ui:text style="nostyle" key="LOGIN_SUCCESS"/>
+            , <%= username %>
         </li>
         <ui:hasrole role="ADMIN">
+            <li>
+                <ui:actionlink layout="admin" value="Administration"/>
+            </li>
+            <li>
+                <ui:actionlink layout="content" value="Content"/>
+            </li>
+            <li>
+                <ui:actionlink layout="layout" value="Layout"/>
+            </li>
+        </ui:hasrole>
         <li>
-            <ui:actionlink layout="AdminLayout" value="Administration"/>
+            <ui:actionlink layout="profile" value="Profile"/>
         </li>
         <li>
-            <ui:actionlink layout="ContentManager" value="Content"/>
-        </li>
-        <li>
-            <ui:actionlink layout="LayoutManager" value="Layout"/>
-        </li>
-         </ui:hasrole>
-        <li>
-            <ui:actionlink layout="ProfileManager" value="Profile"/>
-        </li>
-        <li>
-            <ui:actionlink layout="LoggedInUserLayout" value="Home"/>
+            <ui:actionlink layout="loggedin" value="Home"/>
         </li>
         <li>
             <ui:actionlink action="<%= SportletProperties.LOGOUT %>" key="LOGOUT"/>

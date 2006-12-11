@@ -1,4 +1,3 @@
-
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
@@ -7,7 +6,7 @@
 <div class="gridsphere-navbar">
     <ul>
         <li>
-            <ui:actionlink layout="GuestUserLayout" value="Home"/>
+            <ui:actionlink layout="guest" value="Home"/>
         </li>
     </ul>
 </div>

@@ -2,13 +2,13 @@ package org.gridsphere.layout;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.portletcontainer.PortletSessionListener;
-import org.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridsphere.portletcontainer.PortletSessionListener;
 import org.gridsphere.portletcontainer.impl.PortletSessionManager;
 import org.gridsphere.services.core.portal.PortalConfigService;
+import org.gridsphere.services.core.user.User;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
@@ -30,12 +30,12 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public static final String TCK_PAGE = "TCK";
     //public static final String SETUP_PAGE = "SetupLayout";
-    public static final String ERROR_PAGE = "ErrorLayout";
-    public static final String GUEST_PAGE = "GuestUserLayout";
+    public static final String ERROR_PAGE = "error";
+    public static final String GUEST_PAGE = "guest";
 
     // TODO these need refactoring later on
     public static final String TEMPLATE_PAGE = "TemplateLayout";
-    public static final String USER_PAGE = "LoggedInUserLayout";
+    public static final String USER_PAGE = "loggedin";
 
     private static String USER_LAYOUT_DIR = null;
 
@@ -96,7 +96,7 @@ public class PortletPageFactory implements PortletSessionListener {
             userdir.mkdir();
         }
 
-        portalConfigService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+        portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
     }
 
     public static synchronized PortletPageFactory getInstance() {
@@ -114,11 +114,11 @@ public class PortletPageFactory implements PortletSessionListener {
         log.debug("in logout PortletPageFactory");
         String sessionId = session.getId();
 
-        Map usersLayouts = (Map)layouts.get(sessionId);
+        Map usersLayouts = (Map) layouts.get(sessionId);
         if (usersLayouts != null) {
             Iterator it = usersLayouts.keySet().iterator();
             while (it.hasNext()) {
-                String layoutId = (String)it.next();
+                String layoutId = (String) it.next();
                 log.debug("Removing " + layoutId + " container for:" + sessionId);
                 it.remove();
             }
@@ -146,11 +146,11 @@ public class PortletPageFactory implements PortletSessionListener {
         String userLayout = USER_LAYOUT_DIR + File.separator + req.getUserPrincipal().getName();
 
         if (userLayouts.containsKey(sessionId)) {
-            PortletPage page = (PortletPage)userLayouts.get(USER_PAGE);
+            PortletPage page = (PortletPage) userLayouts.get(USER_PAGE);
             PortletTabbedPane pane = new PortletTabbedPane();
             pane.setLayoutDescriptor(userLayout);
-            PortletComponent comp = (PortletComponent)page.getPortletComponent();
-            PortletTabbedPane existPane = (PortletTabbedPane)comp;
+            PortletComponent comp = (PortletComponent) page.getPortletComponent();
+            PortletTabbedPane existPane = (PortletTabbedPane) comp;
             List<PortletTab> tabs = existPane.getPortletTabs();
             for (PortletTab tab : tabs) {
                 if (tab.getCanModify()) {
@@ -199,7 +199,7 @@ public class PortletPageFactory implements PortletSessionListener {
         String defaultTheme = portalConfigService.getProperty(PortalConfigService.DEFAULT_THEME);
         String theme = null;
         if (defaultTheme != null) theme = defaultTheme;
-        Map userAttrs = (Map)req.getAttribute(PortletRequest.USER_INFO);
+        Map userAttrs = (Map) req.getAttribute(PortletRequest.USER_INFO);
         if (userAttrs != null) {
             theme = (String) userAttrs.get(User.THEME);
         }
@@ -266,7 +266,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public PortletPage createPortletPageCopy(String layoutId) {
         // get the master copy of the page
-        PortletPage masterPage = (PortletPage)masterLayouts.get(layoutId);
+        PortletPage masterPage = (PortletPage) masterLayouts.get(layoutId);
         PortletPage copy = null;
         // there are two cases where a master may not be there, TCK case and logged in  user
         try {
@@ -280,7 +280,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public void savePortletPageMaster(PortletPage page) {
         String layoutDesc = page.getLayoutDescriptor();
-        String layoutId = layoutDesc.substring(layoutDesc.lastIndexOf(File.separator)+1, layoutDesc.lastIndexOf(".xml"));
+        String layoutId = layoutDesc.substring(layoutDesc.lastIndexOf(File.separator) + 1, layoutDesc.lastIndexOf(".xml"));
         log.debug("saving layout: " + layoutId);
 
 
@@ -310,7 +310,7 @@ public class PortletPageFactory implements PortletSessionListener {
     public PortletPage getPortletPage(GridSphereEvent event) {
         // first check for layout id in request parameter
         PortletRequest req = event.getRenderRequest();
-        String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
+        String layoutId = (String) req.getAttribute(SportletProperties.LAYOUT_PAGE);
         //System.err.println("layoutId==" + layoutId);
         if (layoutId == null) {
             if (req.getUserPrincipal() == null) {
@@ -330,21 +330,21 @@ public class PortletPageFactory implements PortletSessionListener {
     /**
      * This returns the page from the hashtable or creates a new one if necessary
      *
-     * @param req the portlet request
+     * @param req      the portlet request
      * @param layoutId the layout id
      * @return the page
      */
     protected PortletPage getPortletPageFromHash(PortletRequest req, String layoutId) {
         PortletSession session = req.getPortletSession();
         PortletPage page = null;
-        Map<String, PortletPage> usersLayouts = (Map<String, PortletPage>)layouts.get(session.getId());
+        Map<String, PortletPage> usersLayouts = (Map<String, PortletPage>) layouts.get(session.getId());
         if (usersLayouts == null) {
             usersLayouts = new HashMap<String, PortletPage>();
             layouts.put(session.getId(), usersLayouts);
         }
 
         // now check for existing layout in hash
-        page = (PortletPage)usersLayouts.get(layoutId);
+        page = (PortletPage) usersLayouts.get(layoutId);
         // only if no page exists, create a new one and place in hash
         if (page == null) {
             page = createPortletPage(req, layoutId);
@@ -358,7 +358,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 } else {
                     layoutId = USER_PAGE;
                 }
-                page = (PortletPage)usersLayouts.get(layoutId);
+                page = (PortletPage) usersLayouts.get(layoutId);
                 if (page == null) page = createPortletPage(req, layoutId);
                 req.setAttribute(SportletProperties.LAYOUT_PAGE, layoutId);
             }
@@ -372,7 +372,7 @@ public class PortletPageFactory implements PortletSessionListener {
     public PortletPage createPortletPage(PortletRequest req, String layoutId) {
         // get the master copy of the page
 
-        PortletPage masterPage = (PortletPage)masterLayouts.get(layoutId);
+        PortletPage masterPage = (PortletPage) masterLayouts.get(layoutId);
         PortletPage copy = null;
         // there are two cases where a master may not be there, TCK case and logged in  user
         if (masterPage == null) {
@@ -380,12 +380,12 @@ public class PortletPageFactory implements PortletSessionListener {
             if (layoutId.equals(TCK_PAGE)) {
                 copy = createTCKPage(req);
             } else {
-              if (req.getUserPrincipal() == null) {
+                if (req.getUserPrincipal() == null) {
                     // if no reference to a layout exists, return a guest layout
                     return getPortletPageFromHash(req, GUEST_PAGE);
                 } else {
                     return getPortletPageFromHash(req, USER_PAGE);
-                }  
+                }
             }
         } else {
             try {
@@ -412,7 +412,6 @@ public class PortletPageFactory implements PortletSessionListener {
     }
 
 
-
     public static Object deepCopy(Object oldObj) throws Exception {
         ObjectOutputStream oos = null;
         ObjectInputStream ois = null;
@@ -431,7 +430,7 @@ public class PortletPageFactory implements PortletSessionListener {
         } catch (Exception e) {
             //log.error("Exception in ObjectCloner = ", e);
             e.printStackTrace();
-            throw(e);
+            throw (e);
         } finally {
             if (oos != null) oos.close();
             if (ois != null) ois.close();
@@ -465,50 +464,50 @@ public class PortletPageFactory implements PortletSessionListener {
         PortletPage page = null;
         // Sun TCK test uses Jakarta Commons-HttpClient/2.0beta1
 
-       // if (event.getClient().getUserAgent().indexOf("HttpClient") > 0) {
-            if (portletNames != null) {
-                log.info("Creating TCK LAYOUT!");
-                String pageName = req.getParameter("pageName");
-                page = new PortletPage();
-                PortletTableLayout tableLayout = new PortletTableLayout();
-                StringTokenizer tokenizer;
-                for (int i = 0; i < portletNames.length; i++) {
-                    tokenizer = new StringTokenizer(portletNames[i], "/");
-                    String appName = tokenizer.nextToken();
-                    String portletName = tokenizer.nextToken();
-                    //String portletClass = registry.getPortletClassName(appName, portletName);
-                    //if (portletClass == null) {
-                    //    log.error("Unable to find portlet class for " + portletName);
-                    //}
-                    if (pageName == null) {
-                        pageName = "TCK_testpage_" + portletName;
-                    }
-                    PortletFrame frame = new PortletFrame();
-                    PortletTitleBar tb = new PortletTitleBar();
-                    //tb.setPortletClass(portletClass);
-                    tb.setPortletClass(appName + "#" + portletName);
-                    frame.setPortletTitleBar(tb);
-                    //frame.setPortletClass(portletClass);
-                    frame.setPortletClass(appName + "#" + portletName);
-                    tableLayout.addPortletComponent(frame);
+        // if (event.getClient().getUserAgent().indexOf("HttpClient") > 0) {
+        if (portletNames != null) {
+            log.info("Creating TCK LAYOUT!");
+            String pageName = req.getParameter("pageName");
+            page = new PortletPage();
+            PortletTableLayout tableLayout = new PortletTableLayout();
+            StringTokenizer tokenizer;
+            for (int i = 0; i < portletNames.length; i++) {
+                tokenizer = new StringTokenizer(portletNames[i], "/");
+                String appName = tokenizer.nextToken();
+                String portletName = tokenizer.nextToken();
+                //String portletClass = registry.getPortletClassName(appName, portletName);
+                //if (portletClass == null) {
+                //    log.error("Unable to find portlet class for " + portletName);
+                //}
+                if (pageName == null) {
+                    pageName = "TCK_testpage_" + portletName;
                 }
-
-                PortletTab tab = new PortletTab();
-                tab.setTitle("en", pageName);
-                tab.setPortletComponent(tableLayout);
-                PortletTabbedPane pane = new PortletTabbedPane();
-                pane.addTab(tab);
-                page.setPortletComponent(pane);
-                page.setLayoutDescriptor("/tmp/test.xml");
-                try {
-                    page.save(context);
-                    this.setPageTheme(page, req);
-                    page.init(req, new ArrayList<ComponentIdentifier>());
-                } catch (IOException e) {
-                    log.error("Unable to save TCK page to /tmp/test.xml", e);
-                }
+                PortletFrame frame = new PortletFrame();
+                PortletTitleBar tb = new PortletTitleBar();
+                //tb.setPortletClass(portletClass);
+                tb.setPortletClass(appName + "#" + portletName);
+                frame.setPortletTitleBar(tb);
+                //frame.setPortletClass(portletClass);
+                frame.setPortletClass(appName + "#" + portletName);
+                tableLayout.addPortletComponent(frame);
             }
-      //  }
+
+            PortletTab tab = new PortletTab();
+            tab.setTitle("en", pageName);
+            tab.setPortletComponent(tableLayout);
+            PortletTabbedPane pane = new PortletTabbedPane();
+            pane.addTab(tab);
+            page.setPortletComponent(pane);
+            page.setLayoutDescriptor("/tmp/test.xml");
+            try {
+                page.save(context);
+                this.setPageTheme(page, req);
+                page.init(req, new ArrayList<ComponentIdentifier>());
+            } catch (IOException e) {
+                log.error("Unable to save TCK page to /tmp/test.xml", e);
+            }
+        }
+        //  }
         return page;
     }
 
@@ -519,7 +518,7 @@ public class PortletPageFactory implements PortletSessionListener {
         pages.add(masterLayouts.get("LoggedInUserLayout"));
         try {
             for (PortletPage p : pages) {
-                PortletPage page = (PortletPage)deepCopy(p);
+                PortletPage page = (PortletPage) deepCopy(p);
                 page.init(req, new ArrayList<ComponentIdentifier>());
                 List<ComponentIdentifier> compList = page.getComponentIdentifierList();
                 boolean resetLayout = false;
