@@ -9,10 +9,10 @@ import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.services.core.jcr.JCRNode;
 import org.gridsphere.services.core.jcr.JCRService;
 
+import javax.jcr.*;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
-import javax.jcr.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -22,11 +22,13 @@ import java.util.Hashtable;
 public class JCRServiceImpl implements PortletServiceProvider, JCRService {
 
     private static Logger log = LogManager.getLogger(JCRServiceImpl.class);
-    private String repositorybasepath = "";
+    private String repositoryconfigpath = "";
+    private String repositorypath = "";
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        repositorybasepath = config.getServletContext().getRealPath("WEB-INF/CustomPortal/portal/");
-        log.debug("JCR Path " + repositorybasepath);
+        repositoryconfigpath = config.getServletContext().getRealPath("WEB-INF/CustomPortal/portal/");
+        repositorypath = config.getServletContext().getRealPath("WEB-INF/CustomPortal/content/");
+        log.debug("JCR Path " + repositoryconfigpath);
     }
 
     public void destroy() {
@@ -48,8 +50,8 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
 
         RegistryHelper.registerRepository(ctx,
                 "repo",
-                repositorybasepath + File.separator + "repository.xml",
-                repositorybasepath + File.separator + repHomeDir,
+                repositoryconfigpath + File.separator + "repository.xml",
+                repositorypath + File.separator + repHomeDir,
                 true);
 
         Repository repository = (Repository) ctx.lookup("repo");
