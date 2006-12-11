@@ -11,6 +11,7 @@ import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.services.core.jcr.JCRNode;
 import org.gridsphere.services.core.jcr.JCRService;
+import org.gridsphere.services.core.portal.PortalConfigService;
 import org.radeox.api.engine.RenderEngine;
 import org.radeox.api.engine.context.RenderContext;
 import org.radeox.engine.BaseRenderEngine;
@@ -175,6 +176,9 @@ public class PortletContent extends BasePortletComponent implements Serializable
                         if (kit.equals(JCRNode.RENDERKIT_HTML)) {
                             // do some wiki markup link replacement for links to other tabs/pages within the portal
                             // [[This|myRef]] will be <a href=".../myRef">This</a>
+                            PortalConfigService portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+                            String localPortalURLdeploy = portalConfigService.getProperty("gridsphere.deploy");
+                            String localPortalURLcontext = portalConfigService.getProperty("gridsphere.context");
                             String patternFindLinks = "\\[{2}[A-Za-z0-9\\s]++\\|{1}[A-Za-z0-9/\\s]++\\]{2}";
                             for (Matcher m = Pattern.compile(patternFindLinks).matcher(output); m.find();) {
                                 String match = m.toMatchResult().group().toString();
@@ -187,7 +191,8 @@ public class PortletContent extends BasePortletComponent implements Serializable
                                 } catch (UnsupportedEncodingException e) {
                                     e.printStackTrace();
                                 }
-                                String replaceString = "<a href=\"/" + link + "\">" + name + "</a>";
+                                String replaceString = "<a href=\"/" + localPortalURLdeploy + "/" + localPortalURLcontext + "/"
+                                        + link + "\">" + name + "</a>";
                                 output = output.replace(match, replaceString);
                             }
                             output = "<div class=\"gridsphere-content\">" + output + "</div>";
