@@ -112,3 +112,12 @@ FORMS
 input, select, textarea {
     font-size: inherit;
 }
+
+/*-------------------------------------------------
+style for Gridsphere snippets from the content manager
+-------------------------------------------------*/
+
+.gridsphere-content {
+    padding: 20px 40px;
+}
+
