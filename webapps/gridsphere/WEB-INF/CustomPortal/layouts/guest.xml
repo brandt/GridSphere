@@ -41,7 +41,6 @@
             <row>
                 <column width="100%">
                     <content include="/WEB-INF/CustomPortal/content/main.html"/>
-                    <content include="jcr://start"/>
                 </column>
             </row>
         </table>
