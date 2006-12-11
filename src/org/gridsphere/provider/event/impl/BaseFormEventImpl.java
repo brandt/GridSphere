@@ -790,6 +790,7 @@ public abstract class BaseFormEventImpl {
                 configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
+
             } else if (vb.equals(HiddenFieldBean.NAME)) {
                 //log.debug("Creating a hidden bean bean with id:" + beanId);
                 HiddenFieldBean bean = new HiddenFieldBean(beanId);
@@ -797,6 +798,12 @@ public abstract class BaseFormEventImpl {
                 bean.setName(name);
                 configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
+                tagBeans.put(beanKey, bean);
+            } else if (vb.equals(RichTextEditorBean.NAME)) {
+                RichTextEditorBean bean = new RichTextEditorBean(beanId);
+                bean.setValue(vals[0]);
+                bean.setName(name);
+                configureBean(bean);
                 tagBeans.put(beanKey, bean);
             } else {
                 log.error("unable to find suitable bean type for : " + uiname);
