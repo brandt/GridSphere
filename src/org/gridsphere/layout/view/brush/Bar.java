@@ -11,31 +11,28 @@ import org.gridsphere.portletcontainer.GridSphereEvent;
  */
 public class Bar extends BaseRender implements Render {
 
-    private static StringBuffer START_BAR = new StringBuffer()
-            .append("<!-- START BAR -->")
-            .append("<div id=\"gridsphere-layout-navigation\">")
-            .append("<ul id=\"gridsphere-nav\"></ul>")
-            .append("<ul id=\"gridsphere-sub-nav\">")
-            .append("<li id=\"gridsphere-sub-nav-border-right\">");
-
-    private static StringBuffer END_BORDER_BAR = new StringBuffer("&nbsp;</li></ul>");
-
-    private static StringBuffer END_BAR = new StringBuffer("</div> <!-- END BAR -->\n");
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
-        return START_BAR;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<!-- START BAR -->")
+                .append("<div id=\"gridsphere-layout-navigation\">")
+                .append("</div> <!-- end layout navigation -->");
+
+        return buffer;
     }
 
     public StringBuffer doEndBorder(GridSphereEvent event, PortletComponent comp) {
-        return END_BORDER_BAR;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<div id=\"gridsphere-menu-bottom-line\">&nbsp;</div>");
+        buffer.append("<div id=\"gridsphere-layout-body\"> <!-- start the main portlets -->\n");
+        return buffer;
     }
 
     public StringBuffer doEnd(GridSphereEvent event, PortletComponent comp) {
-        return END_BAR;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("\n</div> <!-- END gridsphere-layout-body -->\n");
+        return buffer;
     }
-
-    
-
 }
 
 
