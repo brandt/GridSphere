@@ -16,6 +16,7 @@ import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.DefaultPortletAction;
+import org.gridsphere.portletcontainer.DefaultPortletRender;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.portletcontainer.impl.PortletInvoker;
 import org.gridsphere.services.core.cache.CacheService;
@@ -197,16 +198,16 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      */
     public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         try {
-            cacheService = (CacheService)PortletServiceFactory.createPortletService(CacheService.class, true);
-            portalConfigService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
-            portletRegistryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
+            cacheService = (CacheService) PortletServiceFactory.createPortletService(CacheService.class, true);
+            portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+            portletRegistryService = (PortletRegistryService) PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
         } catch (PortletServiceException e) {
             log.error("Unable to init services! ", e);
         }
         list = super.init(req, list);
 
         portletInvoker = new PortletInvoker();
-        frameView = (FrameView)getRenderClass(req, "Frame");
+        frameView = (FrameView) getRenderClass(req, "Frame");
 
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
@@ -236,7 +237,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         // invalidate cache
         req.setAttribute(CacheService.NO_CACHE, "true");
 
-	    if (windowId == null) windowId = componentIDStr;
+        if (windowId == null) windowId = componentIDStr;
         String appID = portletRegistryService.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -287,7 +288,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             PortletTitleBarEvent tbEvt = (PortletTitleBarEvent) titleBarEvent;
             if (tbEvt.hasWindowStateAction()) {
-               WindowState state = tbEvt.getState();
+                WindowState state = tbEvt.getState();
                 System.err.println("it's a titlebar event! ws = " + state.toString());
 
                 PortletFrameEventImpl frameEvent = null;
@@ -336,7 +337,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             request.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
-	        request.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
+            request.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
 
             ActionResponse res = event.getActionResponse();
 
@@ -367,11 +368,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
                 renderParams.clear();
                 onlyRender = false;
-                String pid = (String)request.getAttribute(SportletProperties.PORTLETID);
+                String pid = (String) request.getAttribute(SportletProperties.PORTLETID);
 
                 try {
                     portletInvoker.actionPerformed(pid, action, event.getHttpServletRequest(), event.getHttpServletResponse());
-                    Throwable e = (Throwable)request.getAttribute(SportletProperties.PORTLETERROR + pid);
+                    Throwable e = (Throwable) request.getAttribute(SportletProperties.PORTLETERROR + pid);
                     if (e != null) {
                         setError(event.getActionRequest(), e);
                     }
@@ -382,7 +383,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 }
 
                 // see if mode has been set
-                PortletMode mymode = (PortletMode)request.getAttribute(SportletProperties.PORTLET_MODE);
+                PortletMode mymode = (PortletMode) request.getAttribute(SportletProperties.PORTLET_MODE);
                 //PortletMode mymode = new PortletMode(mymodeStr);
                 if (mymode != null) {
                     //System.err.println("setting title mode to " + mymode);
@@ -391,7 +392,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
                 // see if state has been set
                 PortletFrameEventImpl frameEvent = null;
-                WindowState mystate  = (WindowState)request.getAttribute(SportletProperties.PORTLET_WINDOW);
+                WindowState mystate = (WindowState) request.getAttribute(SportletProperties.PORTLET_WINDOW);
                 if (mystate != null) {
                     //System.err.println("setting title state to " + mystate);
                     titleBar.setWindowState(mystate);
@@ -421,7 +422,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             }
 
             // see if render params are set from actionResponse
-            Map tmpParams = (Map)request.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
+            Map tmpParams = (Map) request.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
             if (tmpParams != null) renderParams = tmpParams;
 
             addRenderParams(event.getHttpServletRequest());
@@ -444,7 +445,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if (onlyRender) {
             it = renderParams.keySet().iterator();
             while (it.hasNext()) {
-                String key = (String)it.next();
+                String key = (String) it.next();
                 if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
                     if (req.getParameter(key) == null) {
                         //System.err.println("removing existing render param " + key);
@@ -457,7 +458,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if (tmpParams != null) {
             it = tmpParams.keySet().iterator();
             while (it.hasNext()) {
-                String key = (String)it.next();
+                String key = (String) it.next();
                 ///String[] paramValues = req.getParameterValues( key );
                 if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
                     //System.err.println("replacing render param " + key);
@@ -489,16 +490,16 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
             StringBuffer content = new StringBuffer();
 
-                PortletURL portletURI = res.createActionURL();
-                String link = portletURI.toString();
-                content.append("<br/><fieldset><a href=\"" + link + "\">" + portletName + "</a></fieldset>");
-                setBufferedOutput(req, content);
-           
+            PortletURL portletURI = res.createActionURL();
+            String link = portletURI.toString();
+            content.append("<br/><fieldset><a href=\"" + link + "\">" + portletName + "</a></fieldset>");
+            setBufferedOutput(req, content);
+
             return;
         }
 
         // check for render params
-        if (onlyRender)  {
+        if (onlyRender) {
             if ((event.getComponentID().equals(componentIDStr))) {
                 addRenderParams(event.getHttpServletRequest());
             }
@@ -572,7 +573,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                             //System.err.println("in render " + portletClass + " there are render params in the frame setting in request! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
                             req.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr, renderParams);
                         }
-                        portletInvoker.service((String)req.getAttribute(SportletProperties.PORTLETID), (HttpServletRequest)req, (HttpServletResponse)wrappedResponse);
+                        DefaultPortletRender render = event.getRender();
+                        portletInvoker.service((String) req.getAttribute(SportletProperties.PORTLETID), render, (HttpServletRequest) req, (HttpServletResponse) wrappedResponse);
                         lastFrame = storedWriter.toString();
                         postframe.append(lastFrame);
                     } catch (Exception e) {
@@ -610,11 +612,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         setBufferedOutput(req, frame);
 
         // check if expiration was set in render response
-        Map props = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map props = (Map) req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (props != null) {
-            List vals = (List)props.get(RenderResponse.EXPIRATION_CACHE);
+            List vals = (List) props.get(RenderResponse.EXPIRATION_CACHE);
             if (vals != null) {
-                String cacheExpiryStr = (String)vals.get(0);
+                String cacheExpiryStr = (String) vals.get(0);
                 if (cacheExpiryStr != null) {
                     try {
                         cacheExpiration = Integer.valueOf(cacheExpiryStr).intValue();
@@ -637,7 +639,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     }
 
     public Throwable getError(PortletRequest req) {
-        Throwable ex = (Throwable)req.getPortletSession(true).getAttribute(SportletProperties.PORTLETERROR + portletClass, PortletSession.APPLICATION_SCOPE);
+        Throwable ex = (Throwable) req.getPortletSession(true).getAttribute(SportletProperties.PORTLETERROR + portletClass, PortletSession.APPLICATION_SCOPE);
         removeError(req);
         return ex;
     }
@@ -658,7 +660,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             cause = ex;
         }
         try {
-            MailService mailService = (MailService)PortletServiceFactory.createPortletService(MailService.class, true);
+            MailService mailService = (MailService) PortletServiceFactory.createPortletService(MailService.class, true);
             Boolean sendMail = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.ENABLE_ERROR_HANDLING));
             if (sendMail.booleanValue()) {
                 MailMessage mailToUser = new MailMessage();
@@ -671,7 +673,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 body.append("portlet title: ");
                 body.append(titleBar.getTitle());
                 body.append("\n\n");
-                User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
+                User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
                 body.append(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
                 body.append("\n\n");
                 if (user != null) {
