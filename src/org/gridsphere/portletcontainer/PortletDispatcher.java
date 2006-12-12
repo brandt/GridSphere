@@ -1,7 +1,6 @@
 package org.gridsphere.portletcontainer;
 
 import org.gridsphere.layout.event.PortletWindowEvent;
-import org.gridsphere.portletcontainer.DefaultPortletAction;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,11 +50,12 @@ public interface PortletDispatcher {
      * the markup will be different. Also, the portlet can take language preferences and/or
      * personalized settings into account.
      *
-     * @param req the servlet request
-     * @param res the servlet response
+     * @param render the default portlet render
+     * @param req    the servlet request
+     * @param res    the servlet response
      * @throws PortletDispatcherException if an exception has occurrred during dispatching
      */
-    public void service(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
+    public void service(DefaultPortletRender render, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
      * Performs a portlet login dispatch request.

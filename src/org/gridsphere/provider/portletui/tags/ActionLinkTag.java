@@ -161,7 +161,7 @@ public class ActionLinkTag extends ActionTag {
 
         if (action != null) {
             actionlink.setPortletURI(createActionURI());
-        }  else {
+        } else {
             actionlink.setPortletURI(createRenderURI());
         }
         if ((bodyContent != null) && (value == null)) {
@@ -169,16 +169,16 @@ public class ActionLinkTag extends ActionTag {
         }
 
         if (pageContext.getRequest().getAttribute(SportletProperties.USE_AJAX) != null) {
-            String paction = ((!action.equals("")) ? "&" + portletAction.toString() : "");
-            String portlet = (String)pageContext.getRequest().getAttribute(SportletProperties.PORTLET_NAME);
-            String compname = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_NAME);
+            String paction = ((!action.equals("")) ? "&" + portletPhase.toString() : "");
+            String portlet = (String) pageContext.getRequest().getAttribute(SportletProperties.PORTLET_NAME);
+            String compname = (String) pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_NAME);
             actionlink.setUseAjax(true);
             actionlink.setOnClick("GridSphereAjaxHandler2.startRequest('" + portlet + "', '" + compname + "', '" + paction + "');");
         }
 
         if (useAjax) {
-            String cid = (String)pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
-            String paction = ((!action.equals("")) ? "&" + portletAction.toString() : "");
+            String cid = (String) pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
+            String paction = ((!action.equals("")) ? "&" + portletPhase.toString() : "");
             actionlink.setOnClick("GridSphereAjaxHandler.startRequest(" + cid + ", '" + paction + "');");
         }
 

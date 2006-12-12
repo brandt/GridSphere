@@ -9,11 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.gridsphere.layout.event.PortletWindowEvent;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridsphere.portletcontainer.PortletDispatcher;
-import org.gridsphere.portletcontainer.PortletDispatcherException;
-import org.gridsphere.portletcontainer.DefaultPortletAction;
-import org.gridsphere.portletcontainer.impl.PortletWebApplicationLoader;
+import org.gridsphere.portletcontainer.*;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +29,7 @@ public class PortletInvoker {
 
     public PortletInvoker() {
         try {
-            registry = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
+            registry = (PortletRegistryService) PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
         } catch (PortletServiceException e) {
             log.error("Unable to init services! ", e);
         }
@@ -43,18 +39,19 @@ public class PortletInvoker {
      * Performs service method on a concrete portlet instance
      *
      * @param concretePortletID the concrete portlet id
+     * @param render            the default portlet render
      * @param req               the <code>HttpServletRequest</code>
      * @param res               the <code>HttpServletResponse</code>
      * @throws PortletDispatcherException if a dispatching error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException                if an I/O error occurs
      */
-    public void service(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletDispatcherException {
+    public void service(String concretePortletID, DefaultPortletRender render, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletDispatcherException {
         log.debug("in service " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
             PortletDispatcher dispatcher = appPortlet.getPortletDispatcher(req, res);
-            dispatcher.service(req, res);
+            dispatcher.service(render, req, res);
         } else {
             log.info("in service: Unable to find portlet in registry: " + concretePortletID);
         }
@@ -134,9 +131,9 @@ public class PortletInvoker {
     /**
      * Lohgout a portlet web application
      *
-     * @param appLoader          the web application loader
-     * @param req                the <code>HttpServletRequest</code>
-     * @param res                the <code>HttpServletResponse</code>
+     * @param appLoader the web application loader
+     * @param req       the <code>HttpServletRequest</code>
+     * @param res       the <code>HttpServletResponse</code>
      * @throws PortletDispatcherException if a dispatching error occurs
      */
     public void logoutPortletWebApp(PortletWebApplicationLoader appLoader, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
@@ -145,13 +142,12 @@ public class PortletInvoker {
     }
 
 
-
     /**
      * Shuts down a portlet web application
      *
      * @param webAppLoader the name of the JSR portlet web application loader
-     * @param req                the <code>HttpServletRequest</code>
-     * @param res                the <code>HttpServletResponse</code>
+     * @param req          the <code>HttpServletRequest</code>
+     * @param res          the <code>HttpServletResponse</code>
      * @throws PortletDispatcherException if a dispatching error occurs
      */
     public void destroyPortletWebApp(PortletWebApplicationLoader webAppLoader, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {

@@ -23,13 +23,6 @@ public interface ActionFormEvent extends FormEvent {
     public DefaultPortletAction getAction();
 
     /**
-     * Returns the event action as a String
-     *
-     * @return the portlet action as a String
-     */
-    public String getActionString();
-
-    /**
      * Return the action request associated with this action event
      *
      * @return the <code>PortletRequest</code>

@@ -5,8 +5,6 @@
 package org.gridsphere.portletcontainer;
 
 import org.gridsphere.layout.event.PortletComponentEvent;
-import org.gridsphere.portletcontainer.Client;
-import org.gridsphere.portletcontainer.DefaultPortletAction;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -40,11 +38,18 @@ public interface GridSphereEvent {
     public ActionResponse getActionResponse();
 
     /**
-     * Return the portlet action associated with this event
+     * Return the portlet action event
      *
-     * @return the portlet action associated with this event
+     * @return the portlet action event
      */
     public DefaultPortletAction getAction();
+
+    /**
+     * Return the portlet render event
+     *
+     * @return the portlet render event
+     */
+    public DefaultPortletRender getRender();
 
     /**
      * Determines if there is an action associated with this event

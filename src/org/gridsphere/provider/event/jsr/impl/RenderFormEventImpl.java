@@ -4,6 +4,7 @@
  */
 package org.gridsphere.provider.event.jsr.impl;
 
+import org.gridsphere.portletcontainer.DefaultPortletRender;
 import org.gridsphere.provider.event.impl.BaseFormEventImpl;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portletui.beans.TagBean;
@@ -21,16 +22,19 @@ public class RenderFormEventImpl extends BaseFormEventImpl implements RenderForm
 
     private RenderRequest request;
     private RenderResponse response;
+    private DefaultPortletRender render;
 
     /**
      * Constructs an instance of RenderFormEventImpl given a render request and response
      *
+     * @param render   the <code>DefaultPortletRender</code>
      * @param request  the <code>RenderRequest</code>
      * @param response the <code>RenderResponse</code>
      * @param tagBeans a collection of tag beans
      */
-    public RenderFormEventImpl(RenderRequest request, RenderResponse response, Map<String, TagBean> tagBeans) {
+    public RenderFormEventImpl(DefaultPortletRender render, RenderRequest request, RenderResponse response, Map<String, TagBean> tagBeans) {
         super(request, response);
+        this.render = render;
         this.request = request;
         this.response = response;
         this.tagBeans = tagBeans;
@@ -59,6 +63,15 @@ public class RenderFormEventImpl extends BaseFormEventImpl implements RenderForm
      */
     public RenderResponse getRenderResponse() {
         return response;
+    }
+
+    /**
+     * Returns the render event
+     *
+     * @return the render event
+     */
+    public DefaultPortletRender getRender() {
+        return render;
     }
 
 }

@@ -7,6 +7,8 @@ package org.gridsphere.provider.portletui.tags;
 import org.gridsphere.portlet.impl.PortletURLImpl;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.DefaultPortletAction;
+import org.gridsphere.portletcontainer.DefaultPortletPhase;
+import org.gridsphere.portletcontainer.DefaultPortletRender;
 import org.gridsphere.provider.portletui.beans.ImageBean;
 import org.gridsphere.provider.portletui.beans.ParamBean;
 
@@ -27,6 +29,7 @@ import java.util.List;
 public abstract class ActionTag extends BaseComponentTag {
 
     protected String action = null;
+    protected String render = null;
     protected String anchor = null;
     protected String var = null;
     protected String onClick = null;
@@ -40,7 +43,8 @@ public abstract class ActionTag extends BaseComponentTag {
 
     protected String windowState = null;
     protected String portletMode = null;
-    protected DefaultPortletAction portletAction = null;
+    //protected DefaultPortletAction portletAction = null;
+    protected DefaultPortletPhase portletPhase = null;
     protected List<ParamBean> paramBeans = new ArrayList<ParamBean>();
     protected String label = null;
     protected String layout = null;
@@ -282,15 +286,13 @@ public abstract class ActionTag extends BaseComponentTag {
         return action;
     }
 
-    /*
-    public void setPortletAction(DefaultPortletAction portletAction) {
-        this.portletAction = portletAction;
+    public String getRender() {
+        return render;
     }
 
-    public DefaultPortletAction getPortletAction() {
-        return portletAction;
+    public void setRender(String render) {
+        this.render = render;
     }
-    */
 
     public void addParamBean(ParamBean paramBean) {
         paramBeans.add(paramBean);
@@ -350,12 +352,24 @@ public abstract class ActionTag extends BaseComponentTag {
         if (action != null) {
             if (compId == null) {
                 ((PortletURLImpl) url).setAction(action);
-                portletAction = new DefaultPortletAction(action);
+                portletPhase = new DefaultPortletAction(action);
             } else {
                 ((PortletURLImpl) url).setAction(compId + "%" + action);
-                portletAction = new DefaultPortletAction(compId + "%" + action);
+                portletPhase = new DefaultPortletAction(compId + "%" + action);
             }
         } else {
+            if (render == null) render = "";
+            if (compId == null) {
+                ((PortletURLImpl) url).setRender(render);
+                portletPhase = new DefaultPortletRender(render);
+            } else {
+                ((PortletURLImpl) url).setRender(compId + "%" + render);
+                portletPhase = new DefaultPortletRender(compId + "%" + render);
+            }
+        }
+
+        /*
+        else {
             if (compId == null) {
                 // since action is NULL at this point, make it an empty string
                 action = "";
@@ -364,23 +378,24 @@ public abstract class ActionTag extends BaseComponentTag {
                 portletAction = new DefaultPortletAction(compId + "%" + action);
             }
         }
+        */
 
         if (!paramBeans.isEmpty()) {
             String id = createUniquePrefix(2);
             Iterator it = paramBeans.iterator();
             if (paramPrefixing) {
                 url.setParameter(SportletProperties.PREFIX, id);
-                portletAction.addParameter(SportletProperties.PREFIX, id);
+                portletPhase.addParameter(SportletProperties.PREFIX, id);
             }
             while (it.hasNext()) {
                 ParamBean pbean = (ParamBean) it.next();
                 //System.err.println("have param bean name= " + pbean.getName() + " value= " + pbean.getValue());
                 if (paramPrefixing) {
                     url.setParameter(id + "_" + pbean.getName(), pbean.getValue());
-                    portletAction.addParameter(id + "_" + pbean.getName(), pbean.getValue());
+                    portletPhase.addParameter(id + "_" + pbean.getName(), pbean.getValue());
                 } else {
                     url.setParameter(pbean.getName(), pbean.getValue());
-                    portletAction.addParameter(pbean.getName(), pbean.getValue());
+                    portletPhase.addParameter(pbean.getName(), pbean.getValue());
                 }
             }
         }
@@ -412,7 +427,7 @@ public abstract class ActionTag extends BaseComponentTag {
         isSecure = false;
         windowState = null;
         portletMode = null;
-        portletAction = null;
+        portletPhase = null;
         paramBeans.clear();
         label = null;
         layout = null;

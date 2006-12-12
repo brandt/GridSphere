@@ -12,6 +12,7 @@ import org.gridsphere.portlet.service.PortletService;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.DefaultPortletAction;
+import org.gridsphere.portletcontainer.DefaultPortletRender;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.FormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
@@ -19,13 +20,14 @@ import org.gridsphere.provider.event.jsr.impl.ActionFormEventImpl;
 import org.gridsphere.provider.event.jsr.impl.RenderFormEventImpl;
 import org.gridsphere.provider.portletui.beans.MessageBoxBean;
 import org.gridsphere.provider.portletui.beans.MessageStyle;
+import org.gridsphere.provider.portletui.beans.TagBean;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -92,12 +94,12 @@ public class ActionPortlet extends GenericPortlet {
      */
     protected String getNextState(PortletRequest request) {
         String id = getUniqueId();
-        return (String)request.getPortletSession(true).getAttribute(id+".state", PortletSession.PORTLET_SCOPE);
+        return (String) request.getPortletSession(true).getAttribute(id + ".state", PortletSession.PORTLET_SCOPE);
     }
 
     protected void removeNextState(PortletRequest request) {
         String id = getUniqueId();
-        request.getPortletSession(true).removeAttribute(id+".state", PortletSession.PORTLET_SCOPE);
+        request.getPortletSession(true).removeAttribute(id + ".state", PortletSession.PORTLET_SCOPE);
     }
 
     /**
@@ -146,13 +148,13 @@ public class ActionPortlet extends GenericPortlet {
     protected void setTagBeans(PortletRequest request, Map tagBeans) {
         String id = getUniqueId();
         log.debug("saving tag beans in session " + id + ".beans");
-        request.getPortletSession(true).setAttribute(id + ".beans", tagBeans, PortletSession.PORTLET_SCOPE);
+        request.getPortletSession(true).setAttribute(id + ".beans", tagBeans, PortletSession.APPLICATION_SCOPE);
     }
 
     protected void removeTagBeans(PortletRequest request) {
         String id = getUniqueId();
         log.debug("removing tag beans from session " + id + ".beans");
-        request.getPortletSession(true).removeAttribute(id + ".beans", PortletSession.PORTLET_SCOPE);
+        request.getPortletSession(true).removeAttribute(id + ".beans", PortletSession.APPLICATION_SCOPE);
     }
 
     /**
@@ -162,10 +164,10 @@ public class ActionPortlet extends GenericPortlet {
      * @param request the <code>PortletRequest</code>
      * @return the visual beans
      */
-    protected Map getTagBeans(PortletRequest request) {
+    protected Map<String, TagBean> getTagBeans(PortletRequest request) {
         String id = getUniqueId();
         log.debug("getting tag beans from session " + id + ".beans");
-        return (Map) request.getPortletSession(true).getAttribute(id + ".beans", PortletSession.PORTLET_SCOPE);
+        return (Map<String, TagBean>) request.getPortletSession(true).getAttribute(id + ".beans", PortletSession.APPLICATION_SCOPE);
     }
 
     /**
@@ -180,14 +182,14 @@ public class ActionPortlet extends GenericPortlet {
         log.debug("in ActionPortlet: processAction\t\t\t");
 
         // if cid is null (true in non-GS portlet container) then use the portlet name
-        String cid = (String)actionRequest.getAttribute(SportletProperties.COMPONENT_ID);
+        String cid = (String) actionRequest.getAttribute(SportletProperties.COMPONENT_ID);
         if (cid == null) actionRequest.setAttribute(SportletProperties.COMPONENT_ID, getUniqueId());
 
         DefaultPortletAction action = (DefaultPortletAction) actionRequest.getAttribute(SportletProperties.ACTION_EVENT);
         // In non-GS container this will need to be created
 
         // TODO
-        if (!(actionRequest instanceof ActionRequestImpl))  {
+        if (!(actionRequest instanceof ActionRequestImpl)) {
             //action = GridSphereEventImpl.createAction(actionRequest);
             //System.err.println("action name" + action.getName());
         }
@@ -199,7 +201,7 @@ public class ActionPortlet extends GenericPortlet {
         String methodName = formEvent.getAction().getName();
         // reset next state
         removeNextState(actionRequest);
-        
+
         doAction(actionRequest, actionResponse, methodName, parameterTypes, arguments);
         //System.err.println("in processAction: befoire store cid=" + actionRequest.getAttribute(SportletProperties.COMPONENT_ID));
 
@@ -231,7 +233,6 @@ public class ActionPortlet extends GenericPortlet {
                             Class[] parameterTypes,
                             Object[] arguments) throws PortletException {
 
-
         // Get object and class references
         Class thisClass = this.getClass();
         // Call method specified by action name
@@ -247,8 +248,8 @@ public class ActionPortlet extends GenericPortlet {
                 sb.append(" session id=").append(request.getPortletSession().getId());
             }
             if (request instanceof HttpServletRequestWrapper) {
-                sb.append(" remote ip=").append(((HttpServletRequestWrapper)request).getRemoteAddr());
-                sb.append(" user agent=").append(((HttpServletRequestWrapper)request).getHeader("user-agent"));
+                sb.append(" remote ip=").append(((HttpServletRequestWrapper) request).getRemoteAddr());
+                sb.append(" user agent=").append(((HttpServletRequestWrapper) request).getHeader("user-agent"));
             }
             log.info(sb.toString());
 
@@ -295,8 +296,8 @@ public class ActionPortlet extends GenericPortlet {
      *
      * @param request  the portlet request
      * @param response the portlet response
-     * @throws PortletException    if a portlet exception occurs
-     * @throws IOException if an I/O error occurs
+     * @throws PortletException if a portlet exception occurs
+     * @throws IOException      if an I/O error occurs
      */
     public void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         String next = getNextState(request);
@@ -312,24 +313,25 @@ public class ActionPortlet extends GenericPortlet {
         log.debug("in ActionPortlet: portlet id= " + getUniqueId() + "  next page is= " + next);
 
         // if cid is null (true in non-GS portlet container) then use the portlet name
-        String cid = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
+        String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
         if (cid == null) request.setAttribute(SportletProperties.COMPONENT_ID, getUniqueId());
+
+        DefaultPortletRender render = (DefaultPortletRender) request.getAttribute(SportletProperties.RENDER_EVENT);
 
         if (next.endsWith(".jsp")) {
             // this is necessary in case beans were modified in action method and set next state is a JSP to render which needs the beans
-            Map tagBeans = getTagBeans(request);
-            RenderFormEvent formEvent = new RenderFormEventImpl(request, response, tagBeans);
+            Map<String, TagBean> tagBeans = getTagBeans(request);
+            RenderFormEvent formEvent = new RenderFormEventImpl(render, request, response, tagBeans);
             formEvent.store();
             doViewJSP(request, response, next);
         } else {
-            Map tagBeans = getTagBeans(request);
-            RenderFormEvent formEvent = new RenderFormEventImpl(request, response, tagBeans);
+            Map<String, TagBean> tagBeans = getTagBeans(request);
+            RenderFormEvent formEvent = new RenderFormEventImpl(render, request, response, tagBeans);
             Class[] paramTypes = new Class[]{RenderFormEvent.class};
             Object[] arguments = new Object[]{formEvent};
 
 
             doAction(request, response, next, paramTypes, arguments);
-          
 
             //System.err.println("in doMode: befoire store cid=" + request.getAttribute(SportletProperties.COMPONENT_ID));
             formEvent.store();
@@ -344,14 +346,13 @@ public class ActionPortlet extends GenericPortlet {
         removeNextState(request);
 
 
-
     }
 
     protected void doDispatch(RenderRequest request,
                               RenderResponse response) throws PortletException, IOException {
 
         // if cid is null (true in non-GS portlet container) then use the portlet name
-        String cid = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
+        String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
         if (cid == null) request.setAttribute(SportletProperties.COMPONENT_ID, getUniqueId());
 
         WindowState state = request.getWindowState();
@@ -394,8 +395,8 @@ public class ActionPortlet extends GenericPortlet {
      *
      * @param request  the portlet request
      * @param response the portlet response
-     * @throws PortletException    if a portlet exception occurs
-     * @throws IOException if an I/O error occurs
+     * @throws PortletException if a portlet exception occurs
+     * @throws IOException      if an I/O error occurs
      */
     public void doConfigure(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         log.debug("ActionPortlet: in doConfigure");
@@ -412,8 +413,8 @@ public class ActionPortlet extends GenericPortlet {
      *
      * @param request  the portlet request
      * @param response the portlet response
-     * @throws PortletException    if a portlet exception occurs
-     * @throws IOException if an I/O error occurs
+     * @throws PortletException if a portlet exception occurs
+     * @throws IOException      if an I/O error occurs
      */
     public void doHelp(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         log.debug("ActionPortlet: in doHelp");

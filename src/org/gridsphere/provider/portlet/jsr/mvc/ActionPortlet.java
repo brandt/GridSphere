@@ -2,12 +2,13 @@ package org.gridsphere.provider.portlet.jsr.mvc;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.portlet.impl.ActionRequestImpl;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.PortletService;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.portletcontainer.DefaultPortletAction;
+import org.gridsphere.portletcontainer.DefaultPortletRender;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.FormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
@@ -73,7 +74,7 @@ public class ActionPortlet extends GenericPortlet {
         List actionPortletList = actionPortletCollection.getActionPortletList();
         Iterator it = actionPortletList.iterator();
         while (it.hasNext()) {
-            ActionPortletDefinition def = (ActionPortletDefinition)it.next();
+            ActionPortletDefinition def = (ActionPortletDefinition) it.next();
             String appName = def.getName();
             if (appName.equals(portletName)) {
                 loadPages(def);
@@ -87,7 +88,7 @@ public class ActionPortlet extends GenericPortlet {
         List pageList = def.getPageList();
         Iterator it = pageList.iterator();
         while (it.hasNext()) {
-            ActionPageDefinition pageDef = (ActionPageDefinition)it.next();
+            ActionPageDefinition pageDef = (ActionPageDefinition) it.next();
 
             String pageName = pageDef.getName();
             String className = pageDef.getClassName();
@@ -152,7 +153,7 @@ public class ActionPortlet extends GenericPortlet {
 
     public ActionPageDefinition getActionPageDef(PortletRequest req) {
         PortletMode mode = req.getPortletMode();
-        return (ActionPageDefinition)req.getPortletSession(true).getAttribute("org.gridsphere.provider.ActionPortlet.PAGE." + mode.toString() + "." + portletName);
+        return (ActionPageDefinition) req.getPortletSession(true).getAttribute("org.gridsphere.provider.ActionPortlet.PAGE." + mode.toString() + "." + portletName);
     }
 
     public void setActionPageDef(PortletRequest req, ActionPageDefinition def) {
@@ -166,8 +167,8 @@ public class ActionPortlet extends GenericPortlet {
      *
      * @param request  the portlet request
      * @param response the portlet response
-     * @throws javax.portlet.PortletException    if a portlet exception occurs
-     * @throws java.io.IOException if an I/O error occurs
+     * @throws javax.portlet.PortletException if a portlet exception occurs
+     * @throws java.io.IOException            if an I/O error occurs
      */
     public void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         String next = getNextResult(request);
@@ -176,7 +177,7 @@ public class ActionPortlet extends GenericPortlet {
             next = DEFAULT_VIEW_PAGE;
             //setNextResult(request, next);
         }
-        ActionPageDefinition pageDef = (ActionPageDefinition)viewPages.get(next);
+        ActionPageDefinition pageDef = (ActionPageDefinition) viewPages.get(next);
         doMode(request, response, "doView", pageDef);
     }
 
@@ -185,8 +186,8 @@ public class ActionPortlet extends GenericPortlet {
      *
      * @param request  the portlet request
      * @param response the portlet response
-     * @throws javax.portlet.PortletException    if a portlet exception occurs
-     * @throws java.io.IOException if an I/O error occurs
+     * @throws javax.portlet.PortletException if a portlet exception occurs
+     * @throws java.io.IOException            if an I/O error occurs
      */
     public void doEdit(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         String next = getNextResult(request);
@@ -195,7 +196,7 @@ public class ActionPortlet extends GenericPortlet {
             next = DEFAULT_EDIT_PAGE;
             //setNextResult(request, next);
         }
-        ActionPageDefinition pageDef = (ActionPageDefinition)editPages.get(next);
+        ActionPageDefinition pageDef = (ActionPageDefinition) editPages.get(next);
         doMode(request, response, "doEdit", pageDef);
     }
 
@@ -204,8 +205,8 @@ public class ActionPortlet extends GenericPortlet {
      *
      * @param request  the portlet request
      * @param response the portlet response
-     * @throws javax.portlet.PortletException    if a portlet exception occurs
-     * @throws java.io.IOException if an I/O error occurs
+     * @throws javax.portlet.PortletException if a portlet exception occurs
+     * @throws java.io.IOException            if an I/O error occurs
      */
     public void doHelp(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         String next = getNextResult(request);
@@ -214,7 +215,7 @@ public class ActionPortlet extends GenericPortlet {
             next = DEFAULT_HELP_PAGE;
             //setNextResult(request, next);
         }
-        ActionPageDefinition pageDef = (ActionPageDefinition)helpPages.get(next);
+        ActionPageDefinition pageDef = (ActionPageDefinition) helpPages.get(next);
         doMode(request, response, "doHelp", pageDef);
     }
 
@@ -223,8 +224,8 @@ public class ActionPortlet extends GenericPortlet {
      *
      * @param request  the portlet request
      * @param response the portlet response
-     * @throws javax.portlet.PortletException    if a portlet exception occurs
-     * @throws java.io.IOException if an I/O error occurs
+     * @throws javax.portlet.PortletException if a portlet exception occurs
+     * @throws java.io.IOException            if an I/O error occurs
      */
     public void doConfigure(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         String next = getNextResult(request);
@@ -233,7 +234,7 @@ public class ActionPortlet extends GenericPortlet {
             next = DEFAULT_CONFIG_PAGE;
             //setNextResult(request, next);
         }
-        ActionPageDefinition pageDef = (ActionPageDefinition)helpPages.get(next);
+        ActionPageDefinition pageDef = (ActionPageDefinition) helpPages.get(next);
         doMode(request, response, "doConfigure", pageDef);
     }
 
@@ -242,7 +243,9 @@ public class ActionPortlet extends GenericPortlet {
         log.debug("in ActionPortlet: portlet id= " + getUniqueId() + " mode= " + request.getPortletMode() + " next page is= " + next);
 
         Map tagBeans = getTagBeans(request);
-        RenderFormEvent formEvent = new RenderFormEventImpl(request, response, tagBeans);
+        DefaultPortletRender render = (DefaultPortletRender) request.getAttribute(SportletProperties.RENDER_EVENT);
+
+        RenderFormEvent formEvent = new RenderFormEventImpl(render, request, response, tagBeans);
         Class[] paramTypes = new Class[]{RenderFormEvent.class};
         Object[] arguments = new Object[]{formEvent};
 
@@ -364,8 +367,8 @@ public class ActionPortlet extends GenericPortlet {
         DefaultPortletAction action = (DefaultPortletAction) actionRequest.getAttribute(SportletProperties.ACTION_EVENT);
         // In non-GS container this will need to be created
         //TODO
-        if (!(actionRequest instanceof ActionRequestImpl))  {
-          //  action = GridSphereEventImpl.createAction(actionRequest);
+        if (!(actionRequest instanceof ActionRequestImpl)) {
+            //  action = GridSphereEventImpl.createAction(actionRequest);
             //System.err.println("action name" + action.getName());
         }
         ActionFormEvent formEvent = new ActionFormEventImpl(action, actionRequest, actionResponse);
@@ -404,7 +407,7 @@ public class ActionPortlet extends GenericPortlet {
         // Call method specified by action name
         try {
             Method method = thisClass.getMethod(methodName, parameterTypes);
-            result = (String)method.invoke(this, arguments);
+            result = (String) method.invoke(this, arguments);
             StringBuffer sb = new StringBuffer();
             sb.append("Invoking portlet action ").append(thisClass.getName()).append("#").append(methodName);
 
@@ -436,7 +439,7 @@ public class ActionPortlet extends GenericPortlet {
         List resultList = pageDef.getResultList();
         Iterator it = resultList.iterator();
         while (it.hasNext()) {
-            ResultDefinition resultDef = (ResultDefinition)it.next();
+            ResultDefinition resultDef = (ResultDefinition) it.next();
             if (resultDef.getResult().equals(result)) {
                 try {
                     response.setRenderParameter(ACTION_PAGE_LABEL, resultDef.getState());

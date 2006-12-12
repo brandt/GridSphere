@@ -4,6 +4,8 @@
  */
 package org.gridsphere.provider.event.jsr;
 
+import org.gridsphere.portletcontainer.DefaultPortletRender;
+
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -12,6 +14,13 @@ import javax.portlet.RenderResponse;
  * received that is associated with an render event
  */
 public interface RenderFormEvent extends FormEvent {
+
+    /**
+     * Returns the render event
+     *
+     * @return the render event
+     */
+    public DefaultPortletRender getRender();
 
     /**
      * Return the render request associated with this render event

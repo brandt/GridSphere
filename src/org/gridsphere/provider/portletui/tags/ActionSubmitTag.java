@@ -84,16 +84,16 @@ public class ActionSubmitTag extends ActionTag {
 
         for (ParamBean paramBean : paramBeans) {
             ParamBean pbean = (ParamBean) paramBean;
-            portletAction.addParameter(pbean.getName(), pbean.getValue());
+            portletPhase.addParameter(pbean.getName(), pbean.getValue());
         }
 
         String actionURI = createActionURI().toString();
         actionSubmitBean.setName(actionURI);
 
-        if (portletAction != null) actionSubmitBean.setAction(portletAction.toString());
+        if (portletPhase != null) actionSubmitBean.setAction(portletPhase.toString());
 
         if (pageContext.getRequest().getAttribute(SportletProperties.USE_AJAX) != null) {
-            String paction = ((!action.equals("")) ? "&" + portletAction.toString() : "");
+            String paction = ((!action.equals("")) ? "&" + portletPhase.toString() : "");
             String portlet = (String) pageContext.getRequest().getAttribute(SportletProperties.PORTLET_NAME);
             String compname = (String) pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_NAME);
             actionSubmitBean.setUseAjax(true);
@@ -102,7 +102,7 @@ public class ActionSubmitTag extends ActionTag {
 
         if (useAjax) {
             String cid = (String) pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID);
-            String paction = ((!action.equals("")) ? "&" + portletAction.toString() : "");
+            String paction = ((!action.equals("")) ? "&" + portletPhase.toString() : "");
             actionSubmitBean.setOnClick("GridSphereAjaxHandler.startRequest('" + cid + "', '" + paction + "');");
         }
 

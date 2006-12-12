@@ -68,6 +68,12 @@ public class SportletProperties {
     public static final String ACTION_EVENT = "org.gridsphere.event.ActionEvent";
 
     /**
+     * The variable name of the RenderEvent object
+     */
+    public static final String RENDER_EVENT = "org.gridsphere.event.RenderEvent";
+
+
+    /**
      * The variable name of the WindowEvent object
      */
     public static final String WINDOW_EVENT = "org.gridsphere.event.WindowEvent";
@@ -120,6 +126,8 @@ public class SportletProperties {
     public static final String DEFAULT_PORTLET_ACTION = "gs_action";
 
     public static final String DEFAULT_PORTLET_ACTION_2 = "gs_action2";
+
+    public static final String DEFAULT_PORTLET_RENDER = "gs_render";
 
     public static final String DEFAULT_PORTLET_MESSAGE = "message";
 

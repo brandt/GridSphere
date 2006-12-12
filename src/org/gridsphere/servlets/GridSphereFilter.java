@@ -25,24 +25,21 @@ package org.gridsphere.servlets;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.layout.PortletLayoutEngine;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.services.core.registry.PortletManagerService;
-import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridsphere.services.core.persistence.PersistenceManagerService;
+import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
-import org.gridsphere.services.core.portal.PortalConfigService;
 import org.hibernate.StaleObjectStateException;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 import java.util.StringTokenizer;
-import java.util.Enumeration;
 
 /**
  * GridSphereFilter is used for first time portal initialization including portlets
@@ -69,8 +66,8 @@ public class GridSphereFilter implements Filter {
 
         log.info("START");
         if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
-            HttpServletRequest req = (HttpServletRequest)request;
-            HttpServletResponse res = (HttpServletResponse)response;
+            HttpServletRequest req = (HttpServletRequest) request;
+            HttpServletResponse res = (HttpServletResponse) response;
 
             //PersistenceManagerService pms = null;
 
@@ -78,11 +75,10 @@ public class GridSphereFilter implements Filter {
 
             if (firstDoGet.equals(Boolean.TRUE)) {
 
-
                 // check if database file exists
                 String release = SportletProperties.getInstance().getProperty("gridsphere.release");
                 int idx = release.lastIndexOf(" ");
-                String gsversion = release.substring(idx+1);
+                String gsversion = release.substring(idx + 1);
 
                 //System.err.println("gsversion=" + gsversion);
 
@@ -97,7 +93,7 @@ public class GridSphereFilter implements Filter {
                     return;
                 }
 
-                PersistenceManagerService pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+                PersistenceManagerService pms = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
                 PersistenceManagerRdbms pm = null;
                 boolean noAdmin = true;
                 try {
@@ -133,7 +129,7 @@ public class GridSphereFilter implements Filter {
                 log.info("Initializing portlets");
                 try {
                     // initialize all portlets
-                    PortletManagerService portletManager = (PortletManagerService)PortletServiceFactory.createPortletService(PortletManagerService.class, true);
+                    PortletManagerService portletManager = (PortletManagerService) PortletServiceFactory.createPortletService(PortletManagerService.class, true);
                     portletManager.initAllPortletWebApplications(req, res);
                     firstDoGet = Boolean.FALSE;
                 } catch (Exception e) {
@@ -153,7 +149,7 @@ public class GridSphereFilter implements Filter {
             log.info("\ncontext path = " + req.getContextPath() + " servlet path=" + req.getServletPath());
             log.info("\n pathInfo= " + pathInfo + " query= " + query);
             log.info(" requestURL= " + requestURL + " requestURI= " + requestURI + "\n");
-            
+
             String extraInfo = "";
 
             // use the servlet path to determine where to forward
@@ -162,32 +158,40 @@ public class GridSphereFilter implements Filter {
             String path = req.getServletPath();
             int start = path.indexOf("/", 1);
 
-            if ((start > 0) && (path.length()-1) > start) {
+            if ((start > 0) && (path.length() - 1) > start) {
 
-                String parsePath = path.substring(start+1);
+                String parsePath = path.substring(start + 1);
                 //System.err.println(parsePath);
                 extraInfo = "?";
 
                 StringTokenizer st = new StringTokenizer(parsePath, "/");
 
                 if (st.hasMoreTokens()) {
-                    String layoutId = (String)st.nextElement();
+                    String layoutId = (String) st.nextElement();
                     extraInfo += SportletProperties.LAYOUT_PAGE_PARAM + "=" + layoutId;
                 }
                 if (st.hasMoreTokens()) {
-                    String cid = (String)st.nextElement();
-                    extraInfo += "&" + SportletProperties.COMPONENT_ID+ "=" + cid;
+                    String cid = (String) st.nextElement();
+                    extraInfo += "&" + SportletProperties.COMPONENT_ID + "=" + cid;
                 }
                 if (st.hasMoreTokens()) {
-                    String action = (String)st.nextElement();
-                    extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
+                    // check for /a/ or /r/ to indicate if it's a render or action
+                    String phase = (String) st.nextElement();
+                    if (phase.equals("a")) {
+                        if (st.hasMoreTokens()) {
+                            extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + (String) st.nextElement();
+                        }
+                    } else if (phase.equals("r")) {
+                        if (st.hasMoreTokens()) {
+                            extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_RENDER + "=" + (String) st.nextElement();
+                        }
+                    }
                 }
                 if (query != null) {
                     extraInfo += "&" + query;
                 }
                 //String ctxPath = "/" + configService.getProperty("gridsphere.context");
             }
-
 
             //chain.doFilter(request, response);
 
@@ -202,7 +206,6 @@ public class GridSphereFilter implements Filter {
         }
 
     }
-
 
 
 }

@@ -87,7 +87,9 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return a portlet render URL
      */
     public PortletURL createRenderURL() {
-        return new PortletURLImpl(req, (HttpServletResponse) this.getHttpServletResponse(), true);
+        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse) this.getHttpServletResponse(), true);
+        portletURL.setRender("");
+        return portletURL;
     }
 
     /**
@@ -119,8 +121,8 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      */
     public String getNamespace() {
         // this is done due to an issue with MyFaces using getNamespace
-        String pid = ((String)req.getAttribute(SportletProperties.PORTLETID)).replace('#', '_');
-        return "gridsphere_" + pid + "_" + (String)req.getAttribute(SportletProperties.COMPONENT_ID);
+        String pid = ((String) req.getAttribute(SportletProperties.PORTLETID)).replace('#', '_');
+        return "gridsphere_" + pid + "_" + (String) req.getAttribute(SportletProperties.COMPONENT_ID);
     }
 
     /**
@@ -153,7 +155,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     public void setContentType(String type) {
         if (type == null) throw new IllegalArgumentException("supplied MIME type is null!");
         String mimeType = stripCharacterEncoding(type);
-        SortedSet<String> types = (SortedSet<String>)req.getAttribute(SportletProperties.PORTLET_MIMETYPES);
+        SortedSet<String> types = (SortedSet<String>) req.getAttribute(SportletProperties.PORTLET_MIMETYPES);
         if (types != null) {
             if (!types.contains(type)) throw new IllegalArgumentException("Unsupported portlet mimeType: " + type);
         }
@@ -169,7 +171,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * <p>See <a href="http://ds.internic.net/rfc/rfc2045.txt">RFC 2047</a>
      * for more information about character encoding and MIME.
      *
-     * @return		a <code>String</code> specifying the
+     * @return a <code>String</code> specifying the
      * name of the charset, for
      * example, <code>ISO-8859-1</code>
      */
@@ -201,7 +203,8 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see #getPortletOutputStream
      */
     public java.io.PrintWriter getWriter() throws java.io.IOException {
-        if ((contentType == null) || (hasOutputStream)) throw new IllegalStateException("A writer has already been obtained or the content type has not been set!");
+        if ((contentType == null) || (hasOutputStream))
+            throw new IllegalStateException("A writer has already been obtained or the content type has not been set!");
         hasWriter = true;
         return this.getHttpServletResponse().getWriter();
     }
@@ -250,7 +253,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * Returns the actual buffer size used for the response.  If no buffering
      * is used, this method returns 0.
      *
-     * @return	 the actual buffer size used
+     * @return the actual buffer size used
      * @see #setBufferSize
      * @see #flushBuffer
      * @see #isCommitted
@@ -297,7 +300,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * Returns a boolean indicating if the response has been
      * committed.
      *
-     * @return		a boolean indicating if the response has been
+     * @return a boolean indicating if the response has been
      * committed
      * @see #setBufferSize
      * @see #getBufferSize
@@ -346,12 +349,13 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      *                             if no content type was set using the
      *                             <code>setContentType</code> method.
      * @throws java.io.IOException if an input or output exception occurred
-     * @return	a <code>OutputStream</code> for writing binary data
+     * @return a <code>OutputStream</code> for writing binary data
      * @see #setContentType
      * @see #getWriter
      */
     public java.io.OutputStream getPortletOutputStream() throws java.io.IOException {
-        if ((contentType == null) || (hasWriter)) throw new IllegalStateException("A writer has already been obtained or the content type has not been set!");
+        if ((contentType == null) || (hasWriter))
+            throw new IllegalStateException("A writer has already been obtained or the content type has not been set!");
         hasOutputStream = true;
         return this.getHttpServletResponse().getOutputStream();
     }

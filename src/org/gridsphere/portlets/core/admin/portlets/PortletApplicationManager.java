@@ -4,8 +4,8 @@
  */
 package org.gridsphere.portlets.core.admin.portlets;
 
-import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
@@ -73,6 +73,7 @@ public class PortletApplicationManager extends ActionPortlet {
             portletapps = new ArrayList();
             otherapps = new ArrayList();
         }
+
         event.getRenderRequest().setAttribute("result", portletapps);
         event.getRenderRequest().setAttribute("others", otherapps);
         //if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
@@ -86,8 +87,8 @@ public class PortletApplicationManager extends ActionPortlet {
         PortletRequest req = event.getActionRequest();
         PortletResponse res = event.getActionResponse();
 
-        HttpServletRequest hReq = (HttpServletRequest)req;
-        HttpServletResponse hRes = (HttpServletResponse)res;
+        HttpServletRequest hReq = (HttpServletRequest) req;
+        HttpServletResponse hRes = (HttpServletResponse) res;
 
         MessageBoxBean msg = event.getMessageBoxBean("msg");
 
@@ -143,8 +144,8 @@ public class PortletApplicationManager extends ActionPortlet {
     public void uploadPortletWAR(ActionFormEvent event) throws PortletException {
         PortletRequest req = event.getActionRequest();
         PortletResponse res = event.getActionResponse();
-        HttpServletRequest hReq = (HttpServletRequest)req;
-        HttpServletResponse hRes = (HttpServletResponse)res;
+        HttpServletRequest hReq = (HttpServletRequest) req;
+        HttpServletResponse hRes = (HttpServletResponse) res;
 
         try {
             FileInputBean fi = event.getFileInputBean("userfile");
@@ -152,7 +153,7 @@ public class PortletApplicationManager extends ActionPortlet {
             String fileName = fi.getFileName();
             int fdx = fileName.lastIndexOf(File.separator);
             if (fdx > 0) fileName = fileName.substring(fdx);
-            if (fileName.substring(0,1).equals(File.separator)) fileName = fileName.substring(1);
+            if (fileName.substring(0, 1).equals(File.separator)) fileName = fileName.substring(1);
 
             log.info("filename = " + fileName);
 
@@ -179,7 +180,7 @@ public class PortletApplicationManager extends ActionPortlet {
                     //System.err.println("file exists");
                     portletManager.initPortletWebApplication(appName, hReq, hRes);
                 }
-                 // add portlet app to gridsphere portlet app directory
+                // add portlet app to gridsphere portlet app directory
                 String portletAppFile = getPortletContext().getRealPath("/WEB-INF/CustomPortal/portlets/" + appName);
                 File portletFile = new File(portletAppFile);
                 portletFile.createNewFile();
@@ -199,8 +200,8 @@ public class PortletApplicationManager extends ActionPortlet {
         log.debug("in PortletApplicationManager: deployWebapp");
         PortletRequest req = event.getActionRequest();
         PortletResponse res = event.getActionResponse();
-        HttpServletRequest hReq = (HttpServletRequest)req;
-        HttpServletResponse hRes = (HttpServletResponse)res;
+        HttpServletRequest hReq = (HttpServletRequest) req;
+        HttpServletResponse hRes = (HttpServletResponse) res;
 
         try {
             TextFieldBean tf = event.getTextFieldBean("webappNameTF");
@@ -209,7 +210,7 @@ public class PortletApplicationManager extends ActionPortlet {
             if (webappName == null) return;
             String webappPath = getPortletContext().getRealPath("");
             int idx = webappPath.lastIndexOf(File.separator);
-            webappPath = webappPath.substring(0, idx+1);
+            webappPath = webappPath.substring(0, idx + 1);
             tomcatManager.installWebApp(req, res, webappName);
 
             File pfile = new File(webappPath + webappName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
@@ -238,7 +239,7 @@ public class PortletApplicationManager extends ActionPortlet {
     public void displayWebApp(RenderFormEvent event) {
         RenderRequest req = event.getRenderRequest();
         RenderResponse res = event.getRenderResponse();
-        String webapp = (String)req.getAttribute("webappname");
+        String webapp = (String) req.getAttribute("webappname");
 
         PanelBean panel = event.getPanelBean("panel");
         FrameBean frame = new FrameBean();

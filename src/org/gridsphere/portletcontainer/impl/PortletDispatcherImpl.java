@@ -7,8 +7,9 @@ package org.gridsphere.portletcontainer.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gridsphere.layout.event.PortletWindowEvent;
-import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portletcontainer.DefaultPortletAction;
+import org.gridsphere.portletcontainer.DefaultPortletRender;
 import org.gridsphere.portletcontainer.PortletDispatcher;
 import org.gridsphere.portletcontainer.PortletDispatcherException;
 
@@ -39,7 +40,7 @@ public class PortletDispatcherImpl implements PortletDispatcher {
     /**
      * Constructs a PortletDispatcher from a <code>RequestDispatcher</code> and an <code>ApplicationPortletConfig</code>
      *
-     * @param rd               the <code>RequestDispatcher</code>
+     * @param rd the <code>RequestDispatcher</code>
      */
     public PortletDispatcherImpl(RequestDispatcher rd) {
         this.rd = rd;
@@ -67,7 +68,8 @@ public class PortletDispatcherImpl implements PortletDispatcher {
         }
     }
 
-    public void service(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
+    public void service(DefaultPortletRender render, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
+        req.setAttribute(SportletProperties.RENDER_EVENT, render);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         try {
             include(req, res);
@@ -149,7 +151,7 @@ public class PortletDispatcherImpl implements PortletDispatcher {
      *
      * @param req a <code>HttpServletRequest</code>
      * @param res a <code>HttpServletResponse</code>
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      * @throws ServletException if a servlet exception occurs
      */
     protected synchronized void include(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {

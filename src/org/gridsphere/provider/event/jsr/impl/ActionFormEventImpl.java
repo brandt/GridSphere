@@ -54,15 +54,6 @@ public class ActionFormEventImpl extends BaseFormEventImpl implements ActionForm
     }
 
     /**
-     * Returns the event action as a String
-     *
-     * @return the portlet action as a String
-     */
-    public String getActionString() {
-        return action.getName();
-    }
-
-    /**
      * Return the action request associated with this action event
      *
      * @return the <code>PortletRequest</code>
