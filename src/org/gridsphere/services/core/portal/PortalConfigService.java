@@ -30,6 +30,10 @@ public interface PortalConfigService {
     public static String ADMIN_ACCOUNT_APPROVAL = "ADMIN_ACCOUNT_APPROVAL";
     public static String USE_USERNAME_FOR_LOGIN = "USE_USERNAME_FOR_LOGIN";
 
+    public static String PORTAL_PORT = "gridsphere.port.http";
+    public static String PORTAL_SECURE_PORT = "gridsphere.port.https";
+    public static String PORTAL_HOST = "gridsphere.host";
+
     public String getProperty(String key);
 
     public void setProperty(String key, String value);

@@ -214,10 +214,10 @@ public class PortletURLImpl implements PortletURL {
      *                   map must be of type String. The values
      *                   in the parameter map must be of type
      *                   String array (<code>String[]</code>).
-     * @exception IllegalArgumentException if parameters is <code>null</code>, if
-     * any of the key/values in the Map are <code>null</code>,
-     * if any of the keys is not a String, or if any of
-     * the values is not a String array.
+     * @throws IllegalArgumentException if parameters is <code>null</code>, if
+     *                                  any of the key/values in the Map are <code>null</code>,
+     *                                  if any of the keys is not a String, or if any of
+     *                                  the values is not a String array.
      */
     public void setParameters(java.util.Map parameters) {
         if (parameters == null) {
@@ -298,12 +298,15 @@ public class PortletURLImpl implements PortletURL {
         String port = null;
         if (req.isSecure() || isSecure || (req.getAttribute(SportletProperties.SSL_REQUIRED) != null)) {
             s.append("https://");
-            port = configService.getProperty("gridsphere.port.https");
+            port = configService.getProperty(PortalConfigService.PORTAL_SECURE_PORT);
         } else {
             s.append("http://");
-            port = configService.getProperty("gridsphere.port.http");
+            port = configService.getProperty(PortalConfigService.PORTAL_PORT);
         }
-        s.append(req.getServerName());
+        String hostname = configService.getProperty(PortalConfigService.PORTAL_HOST);
+
+        if (hostname.equals("")) hostname = req.getServerName();
+        s.append(hostname);
         s.append(":");
         s.append((!port.equals("")) ? port : String.valueOf(req.getServerPort()));
 
