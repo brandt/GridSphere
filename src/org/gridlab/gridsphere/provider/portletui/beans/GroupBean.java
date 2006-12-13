@@ -36,8 +36,8 @@ public class GroupBean extends BeanContainer implements TagBean {
 
     public String toStartString() {
 
-        if (width != null) this.addCssStyle(" width=\"" + width + "\" ");
-        if (height != null) this.addCssStyle(" height=\"" + height + "\" ");
+        if (width != null) this.addCssStyle(" width:" + width + "; ");
+        if (height != null) this.addCssStyle(" height:" + height + "; ");
 
         StringBuffer sb = new StringBuffer();
         sb.append("<fieldset");
