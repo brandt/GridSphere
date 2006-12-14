@@ -150,18 +150,23 @@ public class ContentManagementPortlet extends ActionPortlet {
                     NodeIterator it = jcrService.query(query, session);
                     if (it.hasNext()) node = it.nextNode();
                     action = "EDIT";
+
                 } else {
                     // create a new node
                     Node rootnode = session.getRootNode();
                     node = rootnode.addNode(nodeid);
                     action = "NEW";
+                    node.setProperty(JCRNode.AUTHOR, "");
+                    //node.addMixin("mix:versionable");
                 }
                 if (node != null) {
+                    //node.checkout();
                     node.setProperty(JCRNode.CONTENT, nodecontent);
                     node.setProperty(JCRNode.GSID, nodeid);
                     node.setProperty(JCRNode.RENDERKIT, renderkit);
+                    node.setProperty(JCRNode.MODIFIED_BY, "");
                     session.save();
-
+                    //node.checkin();
                     createSuccessMessage(event, getLocalizedText(request, "CM_SUCCESS_" + action + "DOCUMENT") + ": " + nodeid + ".");
                 } else {
                     createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTSAVEDOCUMENT") + ": " + nodeid + ".");
@@ -183,6 +188,7 @@ public class ContentManagementPortlet extends ActionPortlet {
             createErrorMessage(event, getLocalizedText(request, "CM_ERR_NONODEID"));
             rteditor.setValue(nodecontent);
             try {
+                session = jcrService.getSession();
                 listNodes(event, session);
             } catch (RepositoryException e) {
                 e.printStackTrace();
