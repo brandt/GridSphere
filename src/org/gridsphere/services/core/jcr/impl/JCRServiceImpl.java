@@ -50,14 +50,13 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
 
         RegistryHelper.registerRepository(ctx,
                 "repo",
-                repositoryconfigpath + File.separator + "repository.xml",
+                repositoryconfigpath + File.separator + "contentrepository.xml",
                 repositorypath + File.separator + repHomeDir,
                 true);
 
         Repository repository = (Repository) ctx.lookup("repo");
 
-        SimpleCredentials cred = new SimpleCredentials("userid",
-                "".toCharArray());
+        SimpleCredentials cred = new SimpleCredentials("userid", "".toCharArray());
 
         return repository.login(cred, null);
     }
