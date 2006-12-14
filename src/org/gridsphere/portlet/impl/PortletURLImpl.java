@@ -305,7 +305,7 @@ public class PortletURLImpl implements PortletURL {
         }
         String hostname = configService.getProperty(PortalConfigService.PORTAL_HOST);
 
-        if (hostname.equals("")) hostname = req.getServerName();
+        if (hostname == null || hostname.equals("")) hostname = req.getServerName();
         s.append(hostname);
         s.append(":");
         s.append((!port.equals("")) ? port : String.valueOf(req.getServerPort()));
