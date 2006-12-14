@@ -29,7 +29,7 @@
                     <ui:actionsubmit action="createNode" key="CM_CREATEUPDATEDOCUMENT"/>
                 </ui:group>
             </ui:tablecell>
-            <ui:tablecell>
+            <ui:tablecell valign="top">
                 <ui:group label="Content" cssStyle="border: 1px dashed #c7c7c7;">
                     <ui:richtexteditor beanId="nodecontent" cols="80" rows="30"/>
                 </ui:group>
