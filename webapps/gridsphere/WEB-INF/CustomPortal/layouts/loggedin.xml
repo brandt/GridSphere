@@ -35,8 +35,8 @@ $Id$
             <title lang="en">Home</title>
             <table>
                 <row>
-                    <column width="70%">
-                        <frame transparent="true" outer-padding="0px 20px" label="rss">
+                    <column width="100%">
+                        <frame outer-padding="0px 20px" label="rss">
                             <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</portlet-class>
                         </frame>
                     </column>
