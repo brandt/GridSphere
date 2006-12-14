@@ -2,8 +2,8 @@ package org.gridsphere.layout;
 
 
 import org.gridsphere.layout.view.Render;
-import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
@@ -47,7 +47,7 @@ public class PortletBar extends BasePortletComponent implements Serializable, Cl
      * @see org.gridsphere.layout.ComponentIdentifier
      */
     public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
-        barView = (Render)getRenderClass(req, "Bar");
+        barView = (Render) getRenderClass(req, "Bar");
         list = super.init(req, list);
 
         ComponentIdentifier compId = new ComponentIdentifier();
@@ -95,7 +95,9 @@ public class PortletBar extends BasePortletComponent implements Serializable, Cl
     }
 
     public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+        PortletBar b = (PortletBar) super.clone();
+        b.component = (PortletComponent) this.component.clone();
+        return b;
     }
 
 

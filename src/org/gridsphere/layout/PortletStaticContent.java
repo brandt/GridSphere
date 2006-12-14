@@ -71,7 +71,7 @@ public class PortletStaticContent extends BasePortletComponent implements Serial
 
             // Try the localized version first
             StringWriter writer = new StringWriter();
-            RenderResponse sres = new StoredPortletResponseImpl((HttpServletRequest)req, (HttpServletResponse)res, writer);
+            RenderResponse sres = new StoredPortletResponseImpl((HttpServletRequest) req, (HttpServletResponse) res, writer);
             InputStream resourceStream = req.getPortletSession(true).getPortletContext().getResourceAsStream(textFile);
             if (resourceStream != null) {
                 try {
@@ -110,6 +110,8 @@ public class PortletStaticContent extends BasePortletComponent implements Serial
     public Object clone() throws CloneNotSupportedException {
         PortletStaticContent t = (PortletStaticContent) super.clone();
         t.textFile = this.textFile;
+        t.content = this.content;
+        t.encoding = this.encoding;
         return t;
     }
 

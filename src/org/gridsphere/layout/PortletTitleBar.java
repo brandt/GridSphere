@@ -161,7 +161,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         /**
          * Constructs an instance of PortletModeLink with the supplied portlet mode
          *
-         * @param mode the portlet mode
+         * @param mode   the portlet mode
          * @param locale the locale
          * @throws IllegalArgumentException if the mode is not supported
          */
@@ -174,17 +174,17 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             // Set the image src
             if (mode.equals(new PortletMode("CONFIGURE"))) {
                 imageSrc = configImage;
-                symbol=configSymbol;//WAP 2.0
+                symbol = configSymbol;//WAP 2.0
             } else if (mode.equals(PortletMode.EDIT)) {
                 imageSrc = editImage;
-                symbol=editSymbol;//WAP 2.0
+                symbol = editSymbol;//WAP 2.0
             } else if (mode.equals(PortletMode.HELP)) {
                 imageSrc = helpImage;
-                symbol=helpSymbol;//WAP 2.0
+                symbol = helpSymbol;//WAP 2.0
                 cursor = "help";
             } else if (mode.equals(PortletMode.VIEW)) {
                 imageSrc = viewImage;
-                symbol=viewSymbol;//WAP 2.0
+                symbol = viewSymbol;//WAP 2.0
             } else {
                 throw new IllegalArgumentException("Unsupported portlet mode: " + mode);
             }
@@ -212,7 +212,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         /**
          * Constructs an instance of PortletStateLink with the supplied window state
          *
-         * @param state the window state
+         * @param state  the window state
          * @param locale the client locale
          * @throws IllegalArgumentException if the state is unsupported
          */
@@ -226,7 +226,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 imageSrc = maximizeImage;
                 symbol = maximizeSymbol;
             } else if (state.equals(new WindowState("resizing"))) {
-                 imageSrc = resizeImage;
+                imageSrc = resizeImage;
                 symbol = resizeSymbol;
             } else if (state.equals(new WindowState("closed"))) {
                 imageSrc = closeImage;
@@ -426,7 +426,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      */
     public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         list = super.init(req, list);
-        titleView = (Render)getRenderClass(req, "TitleBar");
+        titleView = (Render) getRenderClass(req, "TitleBar");
         portletInvoker = new PortletInvoker();
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
@@ -435,7 +435,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
-        portletRegistryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
+        portletRegistryService = (PortletRegistryService) PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
         String appID = portletRegistryService.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -516,7 +516,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             windowStates.remove(new WindowState("floating"));
         }
 
-
         // Localize the window state names
         RenderRequest req = event.getRenderRequest();
 
@@ -559,7 +558,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         RenderRequest req = event.getRenderRequest();
         // make modes from supported modes
 
-        Set<String> supportedModes = (Set<String>)req.getAttribute(SportletProperties.ALLOWED_MODES);
+        Set<String> supportedModes = (Set<String>) req.getAttribute(SportletProperties.ALLOWED_MODES);
         if (supportedModes == null) return null;
 
         // Unless user is admin they should not see configure mode
@@ -640,7 +639,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 if (titleBarEvent.hasWindowStateAction()) {
 
                     // don't set window state if it is floating
-                    if (!titleBarEvent.getState().equals(new WindowState("floating"))) windowState = titleBarEvent.getState();
+                    if (!titleBarEvent.getState().equals(new WindowState("floating")))
+                        windowState = titleBarEvent.getState();
 
                     PortletWindowEvent winEvent = null;
 
@@ -658,7 +658,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                     }
                     if (winEvent != null) {
                         try {
-                            portletInvoker.windowEvent((String)req.getAttribute(SportletProperties.PORTLETID), winEvent, req, (HttpServletResponse)res);
+                            portletInvoker.windowEvent((String) req.getAttribute(SportletProperties.PORTLETID), winEvent, req, (HttpServletResponse) res);
                         } catch (Exception e) {
                             hasError = true;
                             errorMessage += "Failed to invoke window event method of portlet: " + portletClass;
@@ -754,11 +754,11 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         StringWriter storedWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(storedWriter);
-        PortletResponse wrappedResponse = new StoredPortletResponseImpl((HttpServletRequest)req, (HttpServletResponse)res, writer);
+        PortletResponse wrappedResponse = new StoredPortletResponseImpl((HttpServletRequest) req, (HttpServletResponse) res, writer);
 
         try {
             //System.err.println("invoking  doTitle:" + title);
-            portletInvoker.doTitle((String)req.getAttribute(SportletProperties.PORTLETID), (HttpServletRequest)req, (HttpServletResponse)wrappedResponse);
+            portletInvoker.doTitle((String) req.getAttribute(SportletProperties.PORTLETID), (HttpServletRequest) req, (HttpServletResponse) wrappedResponse);
             //out.println(" (" + portletMode.toString() + ") ");
             title = storedWriter.toString();
         } catch (Exception e) {
@@ -771,13 +771,13 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     }
 
     public String getPreBufferedTitle(PortletRequest req) {
-        String preTitle = (String)req.getAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID + ".pre");
+        String preTitle = (String) req.getAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID + ".pre");
         req.removeAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID + ".pre");
         return preTitle;
     }
 
     public String getPostBufferedTitle(PortletRequest req) {
-        String postTitle = (String)req.getAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID + ".post");
+        String postTitle = (String) req.getAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID + ".post");
         req.removeAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID + ".post");
         return postTitle;
     }
@@ -790,12 +790,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         t.portletMode = new PortletMode(this.portletMode.toString());
         t.windowState = new WindowState(this.windowState.toString());
         t.previousMode = this.previousMode;
-        t.errorMessage = this.errorMessage;
-        t.hasError = this.hasError;
-        t.allowedWindowStates = new ArrayList<javax.portlet.WindowState>(this.allowedWindowStates.size());
-
         return t;
-
     }
 
     public String toString() {

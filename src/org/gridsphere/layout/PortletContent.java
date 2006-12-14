@@ -222,6 +222,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
     public Object clone() throws CloneNotSupportedException {
         PortletContent t = (PortletContent) super.clone();
         t.textFile = this.textFile;
+        t.context = this.context;
         return t;
     }
 

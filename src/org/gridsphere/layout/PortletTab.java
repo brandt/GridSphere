@@ -158,7 +158,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         RenderResponse res = event.getRenderResponse();
 
         PortletURL portletURL = res.createActionURL();
-        
+
         return portletURL.toString();
     }
 
@@ -275,7 +275,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     }
 
 
-
     public int compare(Object left, Object right) {
         int leftID = ((PortletTab) left).getTabOrder();
         int rightID = ((PortletTab) right).getTabOrder();
@@ -294,13 +293,15 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public Object clone() throws CloneNotSupportedException {
         PortletTab t = (PortletTab) super.clone();
         t.tabOrder = this.tabOrder;
+        t.outline = this.outline;
+        t.padding = this.padding;
         t.url = this.url;
         t.portletComponent = (this.portletComponent == null) ? null : (PortletComponent) this.portletComponent.clone();
         t.selected = this.selected;
         t.titles = new ArrayList<Description>(titles.size());
         for (int i = 0; i < titles.size(); i++) {
             Description title = (Description) titles.get(i);
-            t.titles.add((Description)title.clone());
+            t.titles.add((Description) title.clone());
         }
         return t;
     }

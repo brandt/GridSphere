@@ -2,8 +2,9 @@ package org.gridsphere.layout;
 
 import org.gridsphere.layout.event.PortletTabListener;
 import org.gridsphere.layout.view.TabbedPaneView;
-import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portletcontainer.GridSphereEvent;
+
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 import java.io.Serializable;
@@ -35,9 +36,7 @@ public class PortletMenu extends PortletNavMenu implements Serializable, Portlet
      * @see org.gridsphere.layout.ComponentIdentifier
      */
     public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
-
-        menuView = (TabbedPaneView)getRenderClass(req, "Menu");
-
+        menuView = (TabbedPaneView) getRenderClass(req, "Menu");
         return super.init(req, list);
     }
 
@@ -50,7 +49,6 @@ public class PortletMenu extends PortletNavMenu implements Serializable, Portlet
         //super.doRender(event);
         StringBuffer pane = new StringBuffer();
         RenderRequest req = event.getRenderRequest();
-
 
         //log.debug("in tabbed pane: my comp is=" + componentIDStr);
         pane.append(menuView.doStart(event, this));
@@ -82,7 +80,6 @@ public class PortletMenu extends PortletNavMenu implements Serializable, Portlet
 
         pane.append(menuView.doEndBorder(event, this));
 
-
         // render the selected tab
         if (!tabs.isEmpty()) {
             PortletTab selectedTab = getSelectedTab();
@@ -94,7 +91,7 @@ public class PortletMenu extends PortletNavMenu implements Serializable, Portlet
         }
 
         pane.append(menuView.doEnd(event, this));
-        
+
 
         setBufferedOutput(req, pane);
 

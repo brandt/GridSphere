@@ -207,7 +207,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                     if (p instanceof PortletFrame) {
                         it.remove();
                     }
-                }  else {
+                } else {
                     p.setVisible(true);
                 }
             }
@@ -273,13 +273,10 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
 
     public Object clone() throws CloneNotSupportedException {
         PortletFrameLayout f = (PortletFrameLayout) super.clone();
-        List scomponents = Collections.synchronizedList(components);
-        synchronized (scomponents) {
-            f.components = new ArrayList<PortletComponent>(scomponents.size());
-            for (int i = 0; i < scomponents.size(); i++) {
-                PortletComponent comp = (PortletComponent) scomponents.get(i);
-                f.components.add((PortletComponent)comp.clone());
-            }
+        f.components = new ArrayList<PortletComponent>(components.size());
+        for (int i = 0; i < components.size(); i++) {
+            PortletComponent comp = (PortletComponent) components.get(i);
+            f.components.add((PortletComponent) comp.clone());
         }
         return f;
     }

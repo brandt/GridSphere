@@ -19,7 +19,10 @@ import javax.portlet.RenderRequest;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The <code>PortletPage</code> is the generic container for a collection of
@@ -38,7 +41,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     protected PortletComponent component = null;
 
     // The component ID's of each of the layout components
-    protected List<ComponentIdentifier> componentIdentifiers = new ArrayList<ComponentIdentifier>();
+    protected List<ComponentIdentifier> componentIdentifiers = null;
 
     protected String keywords = "";
     protected String title = "";
@@ -48,7 +51,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
     private String layoutDescriptor = null;
 
-    private Map<String, Integer> labelsHash = new HashMap<String, Integer>();
+    private Map<String, Integer> labelsHash = null;
 
     private transient Render pageView = null;
 
@@ -260,7 +263,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      * @see ComponentIdentifier
      */
     public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
-
+        componentIdentifiers = new ArrayList<ComponentIdentifier>();
+        labelsHash = new HashMap<String, Integer>();
         try {
             cacheService = (CacheService) PortletServiceFactory.createPortletService(CacheService.class, true);
         } catch (PortletServiceException e) {
@@ -272,7 +276,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         req.getPortletSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, renderKit, PortletSession.APPLICATION_SCOPE);
 
 
-        pageView = (Render)getRenderClass(req, "Page");
+        pageView = (Render) getRenderClass(req, "Page");
 
         if (headerContainer != null) {
             list = headerContainer.init(req, list);
@@ -406,7 +410,6 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             }
         } else {
 
-
             // A Portal page in 3 lines -- voila!
             //  -------- header ---------
             if (headerContainer != null) {
@@ -431,11 +434,14 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         }
 
         StringBuffer page = new StringBuffer();
+
         page.append(pageView.doStart(event, this));
+
         if (floating) page.append(f.getBufferedOutput(req));
         if (headerContainer != null) page.append(headerContainer.getBufferedOutput(req));
         if (component != null) page.append(component.getBufferedOutput(req));
         if (footerContainer != null) page.append(footerContainer.getBufferedOutput(req));
+
         page.append(pageView.doEnd(event, this));
 
         setBufferedOutput(req, page);
@@ -443,26 +449,22 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     }
 
     public Object clone() throws CloneNotSupportedException {
-        int i;
+
         PortletPage c = (PortletPage) super.clone();
         c.COMPONENT_ID = this.COMPONENT_ID;
         c.renderKit = this.renderKit;
-        List<ComponentIdentifier> compList = new ArrayList<ComponentIdentifier>(this.componentIdentifiers.size());
-        for (i = 0; i < this.componentIdentifiers.size(); i++) {
-            ComponentIdentifier cid = (ComponentIdentifier) this.componentIdentifiers.get(i);
-            compList.add(new ComponentIdentifier(cid));
-        }
-        c.componentIdentifiers = compList;
+        c.editable = this.editable;
+        c.keywords = this.keywords;
         c.title = title;
         c.headerContainer = (this.headerContainer == null) ? null : (PortletContainer) this.headerContainer.clone();
         c.footerContainer = (this.footerContainer == null) ? null : (PortletContainer) this.footerContainer.clone();
-        c.component = (this.component == null) ? null : (PortletTabbedPane) this.component.clone();
+        c.component = (this.component == null) ? null : (PortletComponent) this.component.clone();
         return c;
     }
 
     public void save(ServletContext ctx) throws IOException {
         if (component instanceof PortletTabbedPane) {
-            PortletTabbedPane tabbedPane = (PortletTabbedPane)component;
+            PortletTabbedPane tabbedPane = (PortletTabbedPane) component;
             try {
                 // save user tab
                 PortletTabbedPane myPane = new PortletTabbedPane();
@@ -480,69 +482,5 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             }
         }
     }
-
-    /**
-     * Processes a message. The message is directed at a concrete portlet with
-     * a given concrete portlet ID. If the target ID is "*" the message is delivered
-     * to every portlet in the PortletPage.
-     *
-     * @param concPortletID The target concrete portlet's ID
-     * @param msg           The message to deliver
-     * @param event         The GridsphereEvent associated with the message delivery
-     */
-    /*
-    public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
-
-        // support for broadcast messages
-        if (concPortletID.equals("*")) {
-            Iterator entryIter = portletHash.keySet().iterator();
-            while (entryIter.hasNext()) {
-                Map.Entry entry = (Map.Entry) entryIter.next();
-                Integer cint = (Integer) entry.getValue();
-                String portletID = (String) entry.getKey();
-
-                int compIntId = cint.intValue();
-                ComponentIdentifier compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
-
-                if (compId != null) {
-                    PortletComponent comp = compId.getPortletComponent();
-
-                    // perform an action if the component is non null
-                    if (comp == null) {
-                        //log.warn("Event has invalid component id associated with it!");
-                    } else {
-                        //log.debug("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
-                        comp.messageEvent(portletID, msg, event);
-                    }
-                }
-            }
-            return;
-        }
-
-        // the component id determines where in the list the portlet component is
-        // first check the hash
-        ComponentIdentifier compId = null;
-
-        int compIntId;
-        if (portletHash.containsKey(concPortletID)) {
-            Integer cint = (Integer) portletHash.get(concPortletID);
-            compIntId = cint.intValue();
-            compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
-        } else {
-            log.debug("Delivery of the message " + msg.toString() + " failed: " + concPortletID + " not found");
-        }
-
-        if (compId != null) {
-            PortletComponent comp = compId.getPortletComponent();
-            // perform an action if the component is non null
-            if (comp == null) {
-                //log.warn("Event has invalid component id associated with it!");
-            } else {
-                //log.debug("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
-                comp.messageEvent(concPortletID, msg, event);
-            }
-        }
-    }
-    */
 }
 

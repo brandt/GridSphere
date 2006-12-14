@@ -21,6 +21,9 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
     protected int COMPONENT_ID = 0;
     protected String componentIDStr = "0";
 
+    protected BaseComponentLifecycle() {
+    }
+
     /**
      * Initializes the portlet component. Since the components are isolated
      * after Castor unmarshalls from XML, the ordering is determined by a
@@ -57,7 +60,7 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
      * @param compId the portlet component id
      */
     public void setComponentID(int compId) {
-       this.COMPONENT_ID = compId;
+        this.COMPONENT_ID = compId;
     }
 
     /**

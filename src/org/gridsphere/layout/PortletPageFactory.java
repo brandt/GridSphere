@@ -15,7 +15,8 @@ import javax.portlet.PortletSession;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.*;
@@ -95,6 +96,27 @@ public class PortletPageFactory implements PortletSessionListener {
         if (!userdir.exists()) {
             userdir.mkdir();
         }
+
+        // test page creation times
+        /*
+        PortletPage copy = null;
+        PortletPage guest = masterLayouts.get(GUEST_PAGE);
+        long startTime = System.currentTimeMillis();
+        try {
+            for (int i = 0; i < 1000; i++) {
+                copy = (PortletPage) deepCopy2(guest);
+            }
+            long endTime = System.currentTimeMillis();
+            System.err.println("Serialize copy 1000 pages in = " + (endTime - startTime) + " (ms) ");
+            for (int i = 0; i < 1000; i++) {
+                copy = (PortletPage) deepCopy(guest);
+            }
+            startTime = System.currentTimeMillis();
+            System.err.println("Clone copy 1000 pages in = " + (startTime - endTime) + " (ms) ");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        */
 
         portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
     }
@@ -392,7 +414,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 copy = (PortletPage) deepCopy(masterPage);
                 log.info("Creating deep copy of page " + layoutId);
             } catch (Exception e) {
-                log.error("Failed to make a copy of the master page: " + layoutId);
+                log.error("Failed to make a copy of the master page: " + layoutId, e);
                 return createErrorPage();
             }
         }
@@ -411,8 +433,16 @@ public class PortletPageFactory implements PortletSessionListener {
         //log.debug("removed user layout: " + userLayout);
     }
 
+    public synchronized PortletPage deepCopy(PortletPage page) throws CloneNotSupportedException {
+        return (PortletPage) page.clone();
+    }
 
-    public static Object deepCopy(Object oldObj) throws Exception {
+    public synchronized PortletTabbedPane deepCopy(PortletTabbedPane pane) throws CloneNotSupportedException {
+        return (PortletTabbedPane) pane.clone();
+    }
+
+    /*
+    public synchronized Object deepCopy2(Object oldObj) throws Exception {
         ObjectOutputStream oos = null;
         ObjectInputStream ois = null;
         try {
@@ -436,6 +466,7 @@ public class PortletPageFactory implements PortletSessionListener {
             if (ois != null) ois.close();
         }
     }
+    */
 
     public void logStatistics() {
         /*

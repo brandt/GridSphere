@@ -24,7 +24,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
 
     protected URL LAYOUT_MAPPING_PATH = this.getClass().getResource("/org/gridsphere/layout/layout-mapping.xml");
 
-    protected PortletComponent parent;
+    protected PortletComponent parent = null;
     protected String defaultWidth = "";
     protected String width = "";
     protected String height = "";
@@ -39,6 +39,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected boolean canModify = false;
 
     protected Log log = LogFactory.getLog(PortletPageFactory.class);
+
 
     /**
      * Initializes the portlet component. Since the components are isolated
@@ -226,7 +227,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     }
 
     public StringBuffer getBufferedOutput(PortletRequest req) {
-        StringBuffer sb =  (StringBuffer)req.getAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID);
+        StringBuffer sb = (StringBuffer) req.getAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID);
         req.removeAttribute(SportletProperties.RENDER_OUTPUT + COMPONENT_ID);
         return ((sb != null) ? sb : new StringBuffer());
     }
@@ -242,31 +243,19 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         b.name = this.name;
         b.label = this.label;
         b.requiredRoleName = this.requiredRoleName;
+        b.defaultWidth = defaultWidth;
+        b.height = height;
+        b.canModify = canModify;
         return b;
     }
 
-
-    /* (non-Javadoc)
-     * @see org.gridsphere.layout.PortletComponent#messageEvent(java.lang.String, org.gridsphere.portlet.PortletMessage, org.gridsphere.portletcontainer.GridSphereEvent)
-     */
-    /*
-    public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
-        Iterator iter = listeners.iterator();
-        while (iter.hasNext()) {
-            PortletComponent comp = (PortletComponent) iter.next();
-            comp.messageEvent(concPortletID, msg, event);
-        }
-
-    }
-    */
-
     protected Object getRenderClass(PortletRequest req, String renderClassName) {
-        Object render= null;
-        String renderKit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
+        Object render = null;
+        String renderKit = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
         try {
-             render = Class.forName("org.gridsphere.layout.view." + renderKit + "." + renderClassName).newInstance();
+            render = Class.forName("org.gridsphere.layout.view." + renderKit + "." + renderClassName).newInstance();
         } catch (Exception e) {
-            log.error("Problems using files for renderkit: '"+renderKit+"' renderclass: "+renderClassName, e);
+            log.error("Problems using files for renderkit: '" + renderKit + "' renderclass: " + renderClassName, e);
         }
         return render;
     }
