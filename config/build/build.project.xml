@@ -24,8 +24,6 @@ Copyright:
     <property file="build.properties"/>
     <property file="${gridsphere.home}/build.properties"/>
 
-    <import file="userbuild.xml" optional="true"/>
-
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
             <pathelement location="${gridsphere.home}/lib/ant-contrib-0.3.jar"/>
@@ -145,7 +143,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Compiles all source code in distribution                            -->
     <!-- =================================================================== -->
-    <target name="compile-all" depends="compile, compile-tests" description="Compiles all source code in distribution"/>
+    <target name="compile-all" depends="compile" description="Compiles all source code in distribution"/>
 
     <!-- =================================================================== -->
     <!-- Compiles source code                                                -->
@@ -183,20 +181,6 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Compiles JUnit tests                                                -->
-    <!-- =================================================================== -->
-    <target name="compile-tests" depends="compile" description="Compiles all JUnit tests">
-        <echo>Compiling JUnit Tests</echo>
-        <javac srcdir="tests"
-               destdir="${build.classes}"
-               classpathref="classpath"
-               debug="${debug}"
-               optimize="${optimize}"
-               deprecation="${deprecation}">
-        </javac>
-    </target>
-
-    <!-- =================================================================== -->
     <!-- Database stuff                                         -->
     <!-- =================================================================== -->
 
@@ -215,8 +199,8 @@ Copyright:
     <target name="create-database" depends="setenv, deploy">
         <echo message="Creating database"/>
         <taskdef name="dbtask"
-                  classname="org.gridsphere.tools.DBTask"
-                  classpathref="classpath">
+                 classname="org.gridsphere.tools.DBTask"
+                 classpathref="classpath">
             <classpath id="hib.classpth">
                 <pathelement location="webapp/WEB-INF/classes/"/>
             </classpath>
@@ -236,12 +220,12 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Creates a JAR library archive configured for                       -->
+    <!-- Creates all JAR libraries                                           -->
     <!-- =================================================================== -->
-    <target name="jar" depends="portlets-jar, services-jar" description="Creates project JAR"/>
+    <target name="jar" depends="portlets-jar, services-jar, services-impl-jar" description="Creates project JAR"/>
 
     <!-- =================================================================== -->
-    <!-- Creates a JAR library archive configured for                        -->
+    <!-- Creates a portlet JAR library                                       -->
     <!-- =================================================================== -->
     <target name="portlets-jar" depends="compile" description="Creates portlets JAR">
         <echo>Creating JAR</echo>
@@ -251,12 +235,23 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Creates a @PROJECT_TITLE@ JAR library archive configured for        -->
+    <!-- Creates a services JAR library                                      -->
     <!-- =================================================================== -->
     <target name="services-jar" depends="compile" description="Creates services JAR">
         <echo>Creating services JAR</echo>
         <jar jarfile="${build.lib}/${project.name}-services.jar" basedir="${build.classes}">
             <include name="**/services/**"/>
+            <exclude name="**/impl/**"/>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates a services implementation JAR                               -->
+    <!-- =================================================================== -->
+    <target name="services-impl-jar" depends="compile" description="Creates services impl JAR">
+        <echo>Creating services JAR</echo>
+        <jar jarfile="${build.lib}/${project.name}-services-impl.jar" basedir="${build.classes}">
+            <include name="**/services/**/impl/**"/>
         </jar>
     </target>
 
@@ -268,6 +263,7 @@ Copyright:
         <delete quiet="true" dir="${project.dist}"/>
         <delete quiet="true" file="lib/${project.name}.jar"/>
         <delete quiet="true" file="lib/${project.name}-services.jar"/>
+        <delete quiet="true" file="lib/${project.name}-services-impl.jar"/>
     </target>
 
     <target name="docs" depends="javadocs" description="Create project documentation"/>
@@ -337,7 +333,6 @@ Copyright:
     <target name="deploy" depends="jar" description="Deploys portlet to a local server">
         <echo>Deploying project</echo>
 
-
         <!-- Copy the gridsphere web app to build directory -->
         <property name="project.webapp" value="${appserver.home}/webapps/${project.name}"/>
         <mkdir dir="${project.webapp}"/>
@@ -363,19 +358,38 @@ Copyright:
             <fileset dir="${gridsphere.home}/lib/">
                 <include name="log4j*.jar"/>
                 <include name="castor*.jar"/>
+                <include name="commons-fileupload*.jar"/>
             </fileset>
         </copy>
 
-        <touch file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portlets/${project.name}"/>
+        <if>
+            <equals arg1="${project.priority}" arg2=""/>
+            <then>
+                <touch file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portlets/${project.name}"/>
+            </then>
+            <else>
+                <touch file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portlets/${project.name}.${project.priority}"/>
+            </else>
+        </if>
+
         <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="${build.lib}">
-                <include name="${project.name}-services*.jar"/>
-                <include name="${project.name}-test*.jar"/>
+                <include name="${project.name}-services-impl.jar"/>
             </fileset>
             <fileset dir="lib">
                 <include name="*.jar"/>
             </fileset>
         </copy>
+
+        <if>
+            <equals arg1="${project.shared}" arg2="false"/>
+            <then>
+                <copy todir="${project.webapp}/WEB-INF/lib" file="${build.lib}/${project.name}-services.jar"/>
+            </then>
+            <else>
+                <copy todir="${appserver.home}/shared/lib" file="${build.lib}/${project.name}-services.jar"/>
+            </else>
+        </if>
 
         <antcall target="configure-database"/>
     </target>
