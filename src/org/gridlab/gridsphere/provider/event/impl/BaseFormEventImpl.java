@@ -769,7 +769,8 @@ public abstract class BaseFormEventImpl {
                 try {
                     fileItems = upload.parseRequest(hreq);
                 } catch (Exception e) {
-                    log.error("Error Parsing multi Part form.Error in workaround!!!", e);
+                    log.error("Error Parsing multi Part form!!!", e);
+                    hreq.setAttribute("FILE_UPLOAD_ERROR", e);
                 }
                 if (fileItems != null) {
                     //log.debug("File items has size " + fileItems.size());
