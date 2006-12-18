@@ -36,7 +36,7 @@ public class Page extends BaseRender implements Render {
         // page header
         Locale locale = req.getLocale();
         ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
-       // page.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+        // page.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
         page.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" ");
         page.append("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
         if (orientation.isLeftToRight()) {
@@ -54,9 +54,12 @@ public class Page extends BaseRender implements Render {
         page.append("\n\t<meta http-equiv=\"Pragma\" content=\"no-cache\" />");
         page.append("\n\t<meta http-equiv=\"Expires\" content=\"-1\"/>");
 
-        if (portletPage.getRefresh() > 0) page.append("\n\t<meta http-equiv=\"refresh\" content=\"").append(portletPage.getRefresh()).append("\"/>");
-        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
+        if (portletPage.getRefresh() > 0)
+            page.append("\n\t<meta http-equiv=\"refresh\" content=\"").append(portletPage.getRefresh()).append("\"/>");
+        String theme = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
         page.append("\n\t<link type=\"text/css\" href=\"").append(req.getContextPath()).append("/themes/").append(portletPage.getRenderKit()).append("/").append(theme).append("/css" + "/default.css\" rel=\"stylesheet\"/>");
+        // use Yahoo fonts.css
+        page.append("\n\t<link type=\"text/css\" href=\"").append(req.getContextPath()).append("/css/yahoo/fonts.css\" rel=\"stylesheet\"/>");
 
         // Add portlet defined stylesheet if defined
         Map props = (Map) req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
