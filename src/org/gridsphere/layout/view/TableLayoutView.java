@@ -9,6 +9,7 @@ public interface TableLayoutView extends Render {
 
     public StringBuffer doEndMaximizedComponent(GridSphereEvent event, PortletTableLayout tableLayout);
 
-    public StringBuffer doRenderUserSelects(GridSphereEvent event, PortletTableLayout tableLayout);
-    
+    public StringBuffer doRenderSelectPortlets(GridSphereEvent event, PortletTableLayout tableLayout);
+
+    public StringBuffer doRenderSelectContent(GridSphereEvent event, PortletTableLayout tableLayout);
 }

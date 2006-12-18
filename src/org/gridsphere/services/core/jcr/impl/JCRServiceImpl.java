@@ -17,7 +17,9 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 public class JCRServiceImpl implements PortletServiceProvider, JCRService {
 
@@ -82,5 +84,24 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
         NodeIterator it = query(query, session);
         if (it.hasNext()) result = true;
         return result;
+    }
+
+    public List<String> getAllNodeNames() {
+        List<String> names = new ArrayList<String>();
+        String query = "select * from nt:base where " + JCRNode.GSID + " IS NOT NULL";
+        Session session = null;
+        try {
+            session = getSession();
+            NodeIterator it = query(query, session);
+            while (it.hasNext()) {
+                Node n = it.nextNode();
+                names.add(n.getName());
+            }
+        } catch (Exception e) {
+            log.error("Failed to get content nodes!", e);
+        } finally {
+            session.logout();
+        }
+        return names;
     }
 }

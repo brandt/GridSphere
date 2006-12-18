@@ -12,6 +12,7 @@ import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.provider.portlet.jsr.PortletServlet;
+import org.gridsphere.services.core.jcr.JCRService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 
 import javax.portlet.PortletRequest;
@@ -26,12 +27,16 @@ import java.util.*;
 public class PortletTableLayout extends PortletFrameLayout implements Serializable, Cloneable {
 
     public static final String PORTLET_COL = "gs_col";
-    public static final String PORTLET_ADD_ACTION = "gs_addPortlet";
+    public static final String PORTLET_ADD_PORTLET = "gs_addPortlet";
     public static final String PORTLET_NO_ACTION = "gs_none";
+
+    public static final String PORTLET_ADD_CONTENT = "gs_addContent";
 
     protected transient TableLayoutView tableView = null;
 
     protected transient PortletRegistryService registryService;
+    protected transient JCRService contentService;
+
     /**
      * css Style of the table
      */
@@ -66,11 +71,12 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
 
     public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         try {
-            registryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
+            registryService = (PortletRegistryService) PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
+            contentService = (JCRService) PortletServiceFactory.createPortletService(JCRService.class, true);
         } catch (PortletServiceException e) {
             log.error("Unable to create instance of PortletRegistryService!");
         }
-        tableView = (TableLayoutView)getRenderClass(req, "TableLayout");
+        tableView = (TableLayoutView) getRenderClass(req, "TableLayout");
         return super.init(req, list);
     }
 
@@ -95,7 +101,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
 
         PortletRequest req = event.getActionRequest();
 
-        String portletId = req.getParameter(PORTLET_ADD_ACTION);
+        String portletId = req.getParameter(PORTLET_ADD_PORTLET);
 
         if (portletId.equals(PORTLET_NO_ACTION)) return;
 
@@ -122,14 +128,50 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
                 }
             }
         }
+        req.setAttribute(SportletProperties.INIT_PAGE, "true");
+    }
 
+    protected void addContent(GridSphereEvent event) {
+
+        PortletRequest req = event.getActionRequest();
+
+        String textFile = req.getParameter(PORTLET_ADD_CONTENT);
+
+        if (textFile.equals(PORTLET_NO_ACTION)) return;
+
+        String colStr = req.getParameter(PORTLET_COL);
+        int col = Integer.valueOf(colStr).intValue();
+
+        // first loop thru rows to see if one is empty for the requested column
+        if (!components.isEmpty()) {
+            Object o = components.get(0);
+            if (o instanceof PortletFrameLayout) {
+                PortletFrameLayout r = (PortletFrameLayout) o;
+                List cols = r.getPortletComponents();
+
+                Object c = cols.get(col);
+
+                if (c instanceof PortletFrameLayout) {
+                    PortletFrameLayout existingColumn = (PortletFrameLayout) c;
+
+                    if (!textFile.equals("")) {
+                        PortletContent content = new PortletContent();
+                        content.setInclude(textFile);
+                        existingColumn.addPortletComponent(content);
+                    }
+                }
+            }
+        }
         req.setAttribute(SportletProperties.INIT_PAGE, "true");
     }
 
     public void customActionPerformed(GridSphereEvent event) {
         if (event.hasAction()) {
-            if (event.getAction().getName().equals(PORTLET_ADD_ACTION)) {
+            if (event.getAction().getName().equals(PORTLET_ADD_PORTLET)) {
                 addPortlet(event);
+            }
+            if (event.getAction().getName().equals(PORTLET_ADD_CONTENT)) {
+                addContent(event);
             }
         }
     }
@@ -150,6 +192,15 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         return allPortlets;
     }
 
+    public Map getAllContentToAdd(GridSphereEvent event) {
+        Map<String, String> allContent = new HashMap<String, String>();
+        List<String> nodeNames = contentService.getAllNodeNames();
+        for (String nodeName : nodeNames) {
+            allContent.put(nodeName, nodeName);
+        }
+        return allContent;
+    }
+
     public void doRender(GridSphereEvent event) {
         super.doRender(event);
         PortletRequest req = event.getRenderRequest();
@@ -167,7 +218,8 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
                     table.append(maxi.getBufferedOutput(req));
                     table.append(tableView.doEndMaximizedComponent(event, this));
                     if (((canModify) && (!hasFrameMaximized)) || (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null)) {
-                        table.append(tableView.doRenderUserSelects(event, this));
+                        table.append(tableView.doRenderSelectPortlets(event, this));
+                        table.append(tableView.doRenderSelectContent(event, this));
                     }
                     setBufferedOutput(req, table);
                     return;
@@ -178,7 +230,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         table.append(tableView.doStart(event, this));
 
         for (int i = 0; i < components.size(); i++) {
-            p = (PortletComponent)components.get(i);
+            p = (PortletComponent) components.get(i);
             table.append(tableView.doStartBorder(event, p));
             if (p.getVisible()) {
                 p.doRender(event);
@@ -186,12 +238,14 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
             }
             table.append(tableView.doEndBorder(event, this));
         }
-        
+
         req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
-        /** setup bottom add portlet listbox */
+        /** setup bottom add portlet and content listboxes */
         if (((canModify) && (!hasFrameMaximized)) || (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null)) {
-            table.append(tableView.doRenderUserSelects(event, this));
+
+            table.append(tableView.doRenderSelectPortlets(event, this));
+            table.append(tableView.doRenderSelectContent(event, this));
         }
 
         table.append(tableView.doEnd(event, this));
