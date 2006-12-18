@@ -47,7 +47,10 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <delete file="${gridsphere.build}/${gridsphere.deploy}.war"/>
 
-        <copy todir="${gridsphere.build}/${gridsphere.deploy}">
+        <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
+        <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
+
+        <copy filtering="true" todir="${gridsphere.build}/${gridsphere.deploy}">
             <fileset dir="${build.webapps}/${gridsphere.deploy}"/>
         </copy>
 
@@ -94,7 +97,8 @@ Build include file for the GridSphere Portal source code, see build.xml
         </copy>
     </target>
 
-    <target name="deploy-common" depends="jar" description="Filters and copies all necessary files to build directory">
+    <target name="deploy-common" depends="copy-buildwebapp"
+            description="Filters and copies all necessary files to build directory">
 
         <!-- Copy the gridsphere web app to build directory -->
         <pathconvert targetos="windows" dirsep="/" property="cathome">
@@ -102,7 +106,8 @@ Build include file for the GridSphere Portal source code, see build.xml
         </pathconvert>
 
         <!-- copy the hibernate properties to the build.lib and replace the @GRIDSPHERE_DB@ with the path -->
-        <copy overwrite="true" tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/database/hibernate.properties"
+        <copy overwrite="true"
+              tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/database/hibernate.properties"
               file="${gswebapp.dir}/WEB-INF/CustomPortal/database/hibernate.properties"
               filtering="true">
             <filterset>
@@ -158,7 +163,7 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- ++++++++++++++++++++++ -->
     <!-- deploy-copy -->
 
-    <target name="deploy-copy" depends="copy-buildwebapp, deploy-common, gridsphere-jsp-jar"
+    <target name="deploy-copy" depends="deploy-common, gridsphere-jsp-jar"
             description="Performs deploy-common and deploys build directory to app server">
 
         <!-- copy build.webappsdir to deployed location -->
@@ -177,7 +182,8 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
                 <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
                 <copy file="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"
-                      todir="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/" filtering="true"/>
+                      todir="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/"
+                      filtering="true"/>
             </else>
         </if>
     </target>
