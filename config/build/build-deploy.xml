@@ -49,7 +49,7 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
         <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
-
+        <filter token="GRIDSPHERE_VERSION" value="${gridsphere.version}"/>
         <copy filtering="true" todir="${gridsphere.build}/${gridsphere.deploy}">
             <fileset dir="${build.webapps}/${gridsphere.deploy}"/>
         </copy>
@@ -87,7 +87,8 @@ Build include file for the GridSphere Portal source code, see build.xml
         </copy>
 
         <!-- copy webapp to build dir excluding files which need special handling-->
-        <copy todir="${build.webapps}/${gridsphere.deploy}">
+        <filter token="GRIDSPHERE_VERSION" value="${gridsphere.version}"/>
+        <copy filtering="true" todir="${build.webapps}/${gridsphere.deploy}">
             <fileset dir="${gswebapp.dir}">
                 <exclude name="**/tlds/**"/>
                 <exclude name="index.html"/>
@@ -108,8 +109,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         <!-- copy the hibernate properties to the build.lib and replace the @GRIDSPHERE_DB@ with the path -->
         <copy overwrite="true"
               tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/database/hibernate.properties"
-              file="${gswebapp.dir}/WEB-INF/CustomPortal/database/hibernate.properties"
-              filtering="true">
+              file="${gswebapp.dir}/WEB-INF/CustomPortal/database/hibernate.properties">
             <filterset>
                 <filter token="GRIDSPHERE_DB"
                         value="${cathome}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/database/gridsphere"/>
@@ -117,7 +117,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         </copy>
 
         <!-- copy the rest of the webapps dir to -->
-        <copy todir="${build.webapps}/${gridsphere.deploy}">
+        <copy filtering="true" todir="${build.webapps}/${gridsphere.deploy}">
             <fileset dir="${gswebapp.dir}">
                 <exclude name="**/tlds/**"/>
                 <exclude name="index.html"/>

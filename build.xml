@@ -44,7 +44,7 @@ Invoke "ant help"
     <property name="build.lib" value="${gridsphere.build}/lib"/>
     <property name="build.classes" value="${gridsphere.build}/classes"/>
     <property name="build.webapps" value="${gridsphere.build}/webapps"/>
-    <property name="build.javadoc" value="${build.webapps}/${gridsphere.deploy}/docs"/>
+    <property name="build.javadoc" value="${build.webapps}/${gridsphere.deploy}/docs-${gridsphere.version}"/>
 
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
