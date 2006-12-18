@@ -7,13 +7,12 @@
 
 body {
     padding: 10px;
-    margin: 0px;
-    font-size: small;
+    margin: 0px; /*    font-size: small;  */
 }
 
 * html body {
-    font-size: small; /* for IE5/Win */
-
+/*    font-size: small; */
+/* for IE5/Win */
 }
 
 html {
