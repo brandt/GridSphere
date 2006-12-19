@@ -199,6 +199,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
                             }
                             output = "<div class=\"gridsphere-content\">" + output + "</div>";
                         }
+                        session.logout();
                         writer.write(output);
                     }
                 } else {
