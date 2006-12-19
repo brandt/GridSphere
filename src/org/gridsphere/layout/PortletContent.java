@@ -146,6 +146,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
         }
         if (textFile != null) {
             RequestDispatcher rd = null;
+            Session session = null;
             try {
                 // put a URL in an iframe
                 if (textFile.startsWith("http://")) {
@@ -153,7 +154,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
                 } else if (textFile.startsWith("jcr://")) {
                     // handle content management
                     JCRService jcrService = (JCRService) PortletServiceFactory.createPortletService(JCRService.class, true);
-                    Session session = jcrService.getSession();
+                    session = jcrService.getSession();
                     Workspace ws = session.getWorkspace();
                     QueryManager qm = ws.getQueryManager();
                     String nodename = textFile.substring(6, textFile.length()); // remove 'jcr://'
@@ -215,6 +216,8 @@ public class PortletContent extends BasePortletComponent implements Serializable
             } catch (Exception e) {
                 log.error("Unable to include : " + textFile, e);
                 content.append("Unable to include : ").append(textFile);
+            } finally {
+                if (session != null) session.logout();
             }
             setBufferedOutput(req, content);
         }

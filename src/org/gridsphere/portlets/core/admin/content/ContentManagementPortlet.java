@@ -47,7 +47,6 @@ public class ContentManagementPortlet extends ActionPortlet {
         renderKits.add(JCRNode.RENDERKIT_HTML);
         renderKits.add(JCRNode.RENDERKIT_RADEOX);
         renderKits.add(JCRNode.RENDERKIT_TEXT);
-
     }
 
     protected String getUsername(PortletRequest request) {
@@ -224,8 +223,8 @@ public class ContentManagementPortlet extends ActionPortlet {
 
         Session session = null;
         try {
+            session = jcrService.getSession();
             if (nodeid != null && !nodeid.equals("")) {
-                session = jcrService.getSession();
                 String query = "select * from nt:base where " + JCRNode.GSID + "='" + nodename + "'";
                 NodeIterator it = jcrService.query(query, session);
                 Node node = it.nextNode();
@@ -235,7 +234,8 @@ public class ContentManagementPortlet extends ActionPortlet {
             } else {
                 createErrorMessage(event, getLocalizedText(request, "CM_ERR_SELECTNODE"));
             }
-            listNodes(event, jcrService.getSession());
+
+            listNodes(event, session);
         } catch (RepositoryException e) {
             e.printStackTrace();
             createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + ": " + nodename);
@@ -258,8 +258,8 @@ public class ContentManagementPortlet extends ActionPortlet {
         Session session = null;
 
         try {
+            session = jcrService.getSession();
             if (nodename != null && !nodename.equals("")) {
-                session = jcrService.getSession();
                 String query = "select * from nt:base where " + JCRNode.GSID + "='" + nodename + "'";
                 NodeIterator it = jcrService.query(query, session);
                 Node node = it.nextNode();
@@ -269,7 +269,7 @@ public class ContentManagementPortlet extends ActionPortlet {
             } else {
                 createErrorMessage(event, getLocalizedText(request, "CM_ERR_SELECTNODE"));
             }
-            listNodes(event, jcrService.getSession());
+            listNodes(event, session);
         } catch (RepositoryException e) {
             e.printStackTrace();
             createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + ": " + nodename);
@@ -282,33 +282,6 @@ public class ContentManagementPortlet extends ActionPortlet {
             if (session != null) session.logout();
         }
         clearInputs(event);
-
         setNextState(request, defaultViewJSP);
     }
-
-//    public void changeEditor(ActionFormEvent event) throws PortletException {
-//        PortletRequest request = event.getActionRequest();
-//        String renderkit = event.getListBoxBean("renderkit").getSelectedName();
-//        String nodeid = event.getTextFieldBean("nodeid").getValue();
-//
-//        Session session = null;
-//
-//        try {
-//            session = jcrService.getSession();
-//            listNodes(event, session);
-//        } catch (RepositoryException e) {
-//            e.printStackTrace();
-//            log.error("Could not retrieve Nodelist.");
-//            createErrorMessage(event, "Could not create Nodelist.");
-//        } catch (NamingException e) {
-//            e.printStackTrace();
-//            log.error("Could not retrieve Nodelist.");
-//            createErrorMessage(event, "Could not create Nodelist.");
-//        } finally {
-//            if (session != null) session.logout();
-//        }
-//        request.setAttribute("editortype", renderkit);
-//        setRenderKitValue(event, renderkit);
-//        setNextState(request, defaultViewJSP);
-//    }
 }
