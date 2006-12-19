@@ -22,6 +22,7 @@ import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /*
  * @author <a href="mailto:wehrens@gridsphere.org">Oliver Wehrens</a>
@@ -49,6 +50,11 @@ public class ContentManagementPortlet extends ActionPortlet {
 
     }
 
+    protected String getUsername(PortletRequest request) {
+        Map userInfo = (Map) request.getAttribute(PortletRequest.USER_INFO);
+        return (String) userInfo.get("user.name");
+    }
+
     public void listNodes(FormEvent event, Session session) throws RepositoryException, NamingException {
         ListBoxBean nodelist = event.getListBoxBean("nodelist");
         nodelist.clear();
@@ -58,6 +64,9 @@ public class ContentManagementPortlet extends ActionPortlet {
             Node n = it.nextNode();
             ListBoxItemBean item = new ListBoxItemBean();
             item.setValue(n.getName());
+            if (n.hasNodes()) {
+                item.setName("<" + n.getName() + ">");
+            }
             nodelist.addBean(item);
         }
     }
@@ -156,7 +165,7 @@ public class ContentManagementPortlet extends ActionPortlet {
                     Node rootnode = session.getRootNode();
                     node = rootnode.addNode(nodeid);
                     action = "NEW";
-                    node.setProperty(JCRNode.AUTHOR, "");
+                    node.setProperty(JCRNode.AUTHOR, getUsername(request));
                     //node.addMixin("mix:versionable");
                 }
                 if (node != null) {
@@ -164,7 +173,7 @@ public class ContentManagementPortlet extends ActionPortlet {
                     node.setProperty(JCRNode.CONTENT, nodecontent);
                     node.setProperty(JCRNode.GSID, nodeid);
                     node.setProperty(JCRNode.RENDERKIT, renderkit);
-                    node.setProperty(JCRNode.MODIFIED_BY, "");
+                    node.setProperty(JCRNode.MODIFIED_BY, getUsername(request));
                     session.save();
                     //node.checkin();
                     createSuccessMessage(event, getLocalizedText(request, "CM_SUCCESS_" + action + "DOCUMENT") + ": " + nodeid + ".");
@@ -272,36 +281,34 @@ public class ContentManagementPortlet extends ActionPortlet {
         } finally {
             if (session != null) session.logout();
         }
-
-
         clearInputs(event);
 
         setNextState(request, defaultViewJSP);
     }
 
-    public void changeEditor(ActionFormEvent event) throws PortletException {
-        PortletRequest request = event.getActionRequest();
-        String renderkit = event.getListBoxBean("renderkit").getSelectedName();
-        String nodeid = event.getTextFieldBean("nodeid").getValue();
-
-        Session session = null;
-
-        try {
-            session = jcrService.getSession();
-            listNodes(event, session);
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-            log.error("Could not retrieve Nodelist.");
-            createErrorMessage(event, "Could not create Nodelist.");
-        } catch (NamingException e) {
-            e.printStackTrace();
-            log.error("Could not retrieve Nodelist.");
-            createErrorMessage(event, "Could not create Nodelist.");
-        } finally {
-            if (session != null) session.logout();
-        }
-        request.setAttribute("editortype", renderkit);
-        setRenderKitValue(event, renderkit);
-        setNextState(request, defaultViewJSP);
-    }
+//    public void changeEditor(ActionFormEvent event) throws PortletException {
+//        PortletRequest request = event.getActionRequest();
+//        String renderkit = event.getListBoxBean("renderkit").getSelectedName();
+//        String nodeid = event.getTextFieldBean("nodeid").getValue();
+//
+//        Session session = null;
+//
+//        try {
+//            session = jcrService.getSession();
+//            listNodes(event, session);
+//        } catch (RepositoryException e) {
+//            e.printStackTrace();
+//            log.error("Could not retrieve Nodelist.");
+//            createErrorMessage(event, "Could not create Nodelist.");
+//        } catch (NamingException e) {
+//            e.printStackTrace();
+//            log.error("Could not retrieve Nodelist.");
+//            createErrorMessage(event, "Could not create Nodelist.");
+//        } finally {
+//            if (session != null) session.logout();
+//        }
+//        request.setAttribute("editortype", renderkit);
+//        setRenderKitValue(event, renderkit);
+//        setNextState(request, defaultViewJSP);
+//    }
 }

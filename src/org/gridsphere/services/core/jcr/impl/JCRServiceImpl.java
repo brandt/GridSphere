@@ -110,7 +110,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
 
     public boolean exists(String gsid) throws NamingException, RepositoryException {
         boolean result = false;
-        String query = "select * from nt:base where " + JCRNode.GSID + "='" + gsid + "' and jcr:primaryType='nt:unstructured'";
+        String query = "select * from nt:base where " + JCRNode.GSID + "='" + gsid + "'";
         Session session = getSession();
         NodeIterator it = query(query, session);
         if (it.hasNext()) result = true;
