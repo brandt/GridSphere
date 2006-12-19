@@ -39,7 +39,6 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
     private Repository repository = null;
     private SimpleCredentials cred = null;
 
-
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         repositoryconfigpath = config.getServletContext().getRealPath("WEB-INF/CustomPortal/portal/");
         repositorypath = config.getServletContext().getRealPath("WEB-INF/CustomPortal/content/");
@@ -78,15 +77,9 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
 
             s.logout();
 
-        } catch (NamingException e) {
-            e.printStackTrace();
-            log.error("Could not start repository.");
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-            log.error("Could not start repository.");
+        } catch (Exception e) {
+            log.error("Could not start repository!", e);
         }
-
-
     }
 
     public void destroy() {
@@ -97,12 +90,8 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
             RepositoryImpl r = (RepositoryImpl) s.getRepository();
             s.logout();
             r.shutdown();
-        } catch (RepositoryException e) {
-            e.printStackTrace();
-            log.error("");
-        } catch (NamingException e) {
-            e.printStackTrace();
-            log.error("");
+        } catch (Exception e) {
+            log.error("Error shutting down repository!", e);
         }
     }
 
