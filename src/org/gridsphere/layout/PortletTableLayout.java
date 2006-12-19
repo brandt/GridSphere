@@ -156,7 +156,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
 
                     if (!textFile.equals("")) {
                         PortletContent content = new PortletContent();
-                        content.setInclude(textFile);
+                        content.setInclude("jcr://" + textFile);
                         existingColumn.addPortletComponent(content);
                     }
                 }
@@ -257,6 +257,4 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         g.style = this.style;
         return g;
     }
-
-
 }
