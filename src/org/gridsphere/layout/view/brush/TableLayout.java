@@ -202,7 +202,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
         ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
         String addLabel = bundle.getString("ADDCONTENT");
         String addButton = bundle.getString("ADD");
-        String noPortletsMsg = bundle.getString("NOPORTLETS");
+        String noPortletsMsg = bundle.getString("NOCONTENT");
 
         table.append("<b>" + addLabel + "</b>&nbsp;&nbsp;&nbsp;");
         table.append("<select name=\"" + PortletTableLayout.PORTLET_ADD_CONTENT + "\">");

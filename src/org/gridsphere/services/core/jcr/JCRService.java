@@ -9,6 +9,8 @@ import java.util.List;
 public interface JCRService {
 
 
+    public String getContent(String contentFile);
+
     /**
      * Returns a JCR session.
      *

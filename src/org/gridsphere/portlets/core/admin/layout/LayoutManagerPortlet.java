@@ -3,12 +3,12 @@ package org.gridsphere.portlets.core.admin.layout;
 import org.gridsphere.layout.*;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.portletcontainer.DefaultPortletAction;
+import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
-import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.event.jsr.FormEvent;
+import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.content.ContentFile;
@@ -52,9 +52,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletRequest req = event.getRenderRequest();
         PortletResponse res = event.getRenderResponse();
         PortletContext context = getPortletConfig().getPortletContext();
-        GridSphereEvent gsevent = new GridSphereEventImpl(context, (HttpServletRequest)req, (HttpServletResponse)res);
+        GridSphereEvent gsevent = new GridSphereEventImpl(context, (HttpServletRequest) req, (HttpServletResponse) res);
         String sessionId = req.getPortletSession().getId();
-        PortletPage page = (PortletPage)pages.get(sessionId);
+        PortletPage page = (PortletPage) pages.get(sessionId);
         page.actionPerformed(gsevent);
         pages.put(sessionId, page);
 
@@ -65,7 +65,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     public PortletPage createLayout(FormEvent event, PortletRequest req) throws PortletException, IOException {
 
         PortletSession session = req.getPortletSession();
-        String layoutId = (String)session.getAttribute(SELECTED_LAYOUT);
+        String layoutId = (String) session.getAttribute(SELECTED_LAYOUT);
 
         PortletPage page = pageFactory.createPortletPageCopy(layoutId);
 
@@ -89,7 +89,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletRequest req = event.getActionRequest();
 
         String sessionId = req.getPortletSession().getId();
-        PortletPage page = (PortletPage)pages.get(sessionId);
+        PortletPage page = (PortletPage) pages.get(sessionId);
 
         HiddenFieldBean compHF = event.getHiddenFieldBean("compHF");
         String activeComp = compHF.getValue();
@@ -99,7 +99,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletComponent comp = page.getActiveComponent(activeComp);
 
         if (comp instanceof PortletFrame) {
-            PortletFrame frame = (PortletFrame)comp;
+            PortletFrame frame = (PortletFrame) comp;
             if (reqRole.toUpperCase().equals("NONE")) reqRole = "";
             frame.setRequiredRole(reqRole);
             frame.setLabel(label);
@@ -116,10 +116,30 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     }
 
+    public void doDeleteContent(ActionFormEvent event) throws PortletException, IOException {
+        PortletRequest req = event.getActionRequest();
+        String sessionId = req.getPortletSession().getId();
+        PortletPage page = (PortletPage) pages.get(sessionId);
+
+        HiddenFieldBean compHF = event.getHiddenFieldBean("compHF");
+        String activeComp = compHF.getValue();
+
+        PortletComponent comp = page.getActiveComponent(activeComp);
+
+        if (comp instanceof PortletContent) {
+            PortletContent content = (PortletContent) comp;
+            PortletComponent parent = content.getParentComponent();
+            parent.remove(content, req);
+        }
+
+        pageFactory.savePortletPageMaster(page);
+
+    }
+
     public void doDeleteFrame(ActionFormEvent event) throws PortletException, IOException {
         PortletRequest req = event.getActionRequest();
         String sessionId = req.getPortletSession().getId();
-        PortletPage page = (PortletPage)pages.get(sessionId);
+        PortletPage page = (PortletPage) pages.get(sessionId);
 
         HiddenFieldBean compHF = event.getHiddenFieldBean("compHF");
         String activeComp = compHF.getValue();
@@ -127,7 +147,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletComponent comp = page.getActiveComponent(activeComp);
 
         if (comp instanceof PortletFrame) {
-            PortletFrame frame = (PortletFrame)comp;
+            PortletFrame frame = (PortletFrame) comp;
             PortletComponent parent = frame.getParentComponent();
             parent.remove(frame, req);
         }
@@ -140,7 +160,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletRequest req = event.getActionRequest();
 
         String sessionId = req.getPortletSession().getId();
-        PortletPage page = (PortletPage)pages.get(sessionId);
+        PortletPage page = (PortletPage) pages.get(sessionId);
 
 
         HiddenFieldBean compHF = event.getHiddenFieldBean("compHF");
@@ -149,7 +169,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletComponent comp = page.getActiveComponent(activeComp);
 
         if (comp instanceof PortletBar) {
-            PortletBar bar = (PortletBar)comp;
+            PortletBar bar = (PortletBar) comp;
             ListBoxBean colsLB = event.getListBoxBean("colsLB");
             String colTemplateNum = colsLB.getSelectedName();
             if (colTemplateNum != null) {
@@ -165,7 +185,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletRequest req = event.getActionRequest();
 
         String sessionId = req.getPortletSession().getId();
-        PortletPage page = (PortletPage)pages.get(sessionId);
+        PortletPage page = (PortletPage) pages.get(sessionId);
 
 
         HiddenFieldBean compHF = event.getHiddenFieldBean("compHF");
@@ -176,7 +196,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletComponent comp = page.getActiveComponent(activeComp);
 
         if (comp instanceof PortletTab) {
-            PortletTab tab = (PortletTab)comp;
+            PortletTab tab = (PortletTab) comp;
             if (reqRole.equalsIgnoreCase("NONE")) reqRole = "";
             tab.setRequiredRole(reqRole);
             tab.setLabel(label);
@@ -188,7 +208,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             if (colTemplateNum != null) {
                 PortletComponent table = createLayoutStrategy(colTemplateNum, tab.getPortletComponent());
                 tab.setPortletComponent(table);
-                PortletNavMenu parent = (PortletNavMenu)tab.getParentComponent();
+                PortletNavMenu parent = (PortletNavMenu) tab.getParentComponent();
                 parent.setSelectedPortletTab(tab);
             }
         }
@@ -200,7 +220,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletRequest req = event.getActionRequest();
 
         String sessionId = req.getPortletSession().getId();
-        PortletPage page = (PortletPage)pages.get(sessionId);
+        PortletPage page = (PortletPage) pages.get(sessionId);
 
         HiddenFieldBean compHF = event.getHiddenFieldBean("compHF");
         String activeComp = compHF.getValue();
@@ -212,7 +232,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         log.debug("compHF=" + activeComp);
         log.debug("active comp = " + comp.getComponentID());
         if (comp instanceof PortletTabbedPane) {
-            PortletTabbedPane pane = (PortletTabbedPane)comp;
+            PortletTabbedPane pane = (PortletTabbedPane) comp;
             //System.err.println("tab name " + thistab.getTitle("en"));
             //PortletTabbedPane pane = (PortletTabbedPane)thistab.getParentComponent();
 
@@ -224,9 +244,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
             if (pane.getStyle().equals("menu")) {
                 //RadioButtonBean addSubTab = event.getRadioButtonBean("subcompRB");
                 //if (addSubTab.getSelectedValue().equals("double")) {
-                    PortletTabbedPane newpane = new PortletTabbedPane();
-                    newpane.setStyle("sub-menu");
-                    tab.setPortletComponent(newpane);
+                PortletTabbedPane newpane = new PortletTabbedPane();
+                newpane.setStyle("sub-menu");
+                tab.setPortletComponent(newpane);
                 /*} else {
                     PortletRowLayout row = new PortletRowLayout();
                     PortletColumnLayout col = new PortletColumnLayout();
@@ -252,7 +272,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
             pages.put(sessionId, page);
         } else if (comp instanceof PortletMenu) {
-            PortletMenu menu = (PortletMenu)comp;
+            PortletMenu menu = (PortletMenu) comp;
             //System.err.println("tab name " + thistab.getTitle("en"));
             //PortletTabbedPane pane = (PortletTabbedPane)thistab.getParentComponent();
             log.debug("creating new menu tab!");
@@ -282,7 +302,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     public void doDeleteTab(ActionFormEvent event) throws PortletException, IOException {
         PortletRequest req = event.getActionRequest();
         String sessionId = req.getPortletSession().getId();
-        PortletPage page = (PortletPage)pages.get(sessionId);
+        PortletPage page = (PortletPage) pages.get(sessionId);
 
         HiddenFieldBean compHF = event.getHiddenFieldBean("compHF");
         String activeComp = compHF.getValue();
@@ -290,13 +310,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletComponent comp = page.getActiveComponent(activeComp);
 
         if (comp instanceof PortletTab) {
-            PortletTab tab = (PortletTab)comp;
-            PortletNavMenu menu = (PortletNavMenu)tab.getParentComponent();
+            PortletTab tab = (PortletTab) comp;
+            PortletNavMenu menu = (PortletNavMenu) tab.getParentComponent();
 
             int index = menu.getIndexOfTab(tab);
 
             if (index < (menu.getTabCount() - 1)) {
-                menu.setSelectedPortletTabIndex(index+1);
+                menu.setSelectedPortletTabIndex(index + 1);
             } else if (index > 0) {
                 menu.setSelectedPortletTabIndex(index - 1);
             }
@@ -312,7 +332,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     public void doMoveTabLeft(ActionFormEvent event) throws PortletException, IOException {
         PortletRequest req = event.getActionRequest();
         String sessionId = req.getPortletSession().getId();
-        PortletPage page = (PortletPage)pages.get(sessionId);
+        PortletPage page = (PortletPage) pages.get(sessionId);
 
         HiddenFieldBean compHF = event.getHiddenFieldBean("compHF");
         String activeComp = compHF.getValue();
@@ -320,12 +340,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletComponent comp = page.getActiveComponent(activeComp);
 
         if (comp instanceof PortletTab) {
-            PortletTab tab = (PortletTab)comp;
-            PortletNavMenu pane = (PortletNavMenu)tab.getParentComponent();
+            PortletTab tab = (PortletTab) comp;
+            PortletNavMenu pane = (PortletNavMenu) tab.getParentComponent();
             int index = pane.getIndexOfTab(tab);
             pane.removeTab(tab);
-            pane.insertTab(tab, index-1);
-            pane.setSelectedPortletTabIndex(index-1);
+            pane.insertTab(tab, index - 1);
+            pane.setSelectedPortletTabIndex(index - 1);
         }
 
 
@@ -336,7 +356,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     public void doMoveTabRight(ActionFormEvent event) throws PortletException, IOException {
         PortletRequest req = event.getActionRequest();
         String sessionId = req.getPortletSession().getId();
-        PortletPage page = (PortletPage)pages.get(sessionId);
+        PortletPage page = (PortletPage) pages.get(sessionId);
 
         HiddenFieldBean compHF = event.getHiddenFieldBean("compHF");
         String activeComp = compHF.getValue();
@@ -344,12 +364,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletComponent comp = page.getActiveComponent(activeComp);
 
         if (comp instanceof PortletTab) {
-            PortletTab tab = (PortletTab)comp;
-            PortletNavMenu pane = (PortletNavMenu)tab.getParentComponent();
+            PortletTab tab = (PortletTab) comp;
+            PortletNavMenu pane = (PortletNavMenu) tab.getParentComponent();
             int index = pane.getIndexOfTab(tab);
             pane.removeTab(tab);
-            pane.insertTab(tab, index+1);
-            pane.setSelectedPortletTabIndex(index+1);
+            pane.insertTab(tab, index + 1);
+            pane.setSelectedPortletTabIndex(index + 1);
         }
 
 
@@ -383,7 +403,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             session.setAttribute(SELECTED_LAYOUT, PortletPageFactory.GUEST_PAGE);
         }
 
-        String selectedLayout = (String)session.getAttribute(SELECTED_LAYOUT);
+        String selectedLayout = (String) session.getAttribute(SELECTED_LAYOUT);
         ListBoxBean layoutsLB = event.getListBoxBean("layoutsLB");
         layoutsLB.clear();
         for (String layoutId : layoutIds) {
@@ -394,9 +414,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
             layoutsLB.addBean(item);
         }
 
-        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
+        String theme = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
 
-        String renderkit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
+        String renderkit = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
 
         ListBoxBean themesLB = event.getListBoxBean("themesLB");
 
@@ -423,23 +443,21 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         // theme has to be set before it is inited
         req.setAttribute(SportletProperties.LAYOUT_EDIT_MODE, "true");
-        String cid = (String)req.getAttribute(SportletProperties.COMPONENT_ID);
+        String cid = (String) req.getAttribute(SportletProperties.COMPONENT_ID);
 
         String sessionId = session.getId();
         String extraURI = "&" + SportletProperties.COMPONENT_ID + "=" + cid +
-                        "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=doShowLayout";
+                "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=doShowLayout";
 
         log.debug("extraURI= " + extraURI);
         req.setAttribute(SportletProperties.EXTRA_QUERY_INFO, extraURI);
 
-        PortletPage page = (PortletPage)pages.get(sessionId);
+        PortletPage page = (PortletPage) pages.get(sessionId);
         if (page == null) page = createLayout(event, req);
 
 
-        GridSphereEventImpl gsevent = new GridSphereEventImpl(context, (HttpServletRequest)req, (HttpServletResponse)res);
+        GridSphereEventImpl gsevent = new GridSphereEventImpl(context, (HttpServletRequest) req, (HttpServletResponse) res);
         req.setAttribute(SportletProperties.IGNORE_PARSING, "true");
-
-                
 
         String controlUI = "";
         String compid = req.getParameter(SportletProperties.COMPONENT_ID_2);
@@ -453,7 +471,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             gsevent.setAction(new DefaultPortletAction(action));
             System.err.println("found action2 = " + action);
         }
-        
+
         if (req.getParameter("usertable") != null) {
             page.init(req, new ArrayList<ComponentIdentifier>());
             page.actionPerformed(gsevent);
@@ -468,7 +486,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
             if (comp instanceof PortletFrame) {
                 log.debug("it's a frame!");
-                PortletFrame frame = (PortletFrame)comp;
+                PortletFrame frame = (PortletFrame) comp;
                 // don't perform action on portlet frame
                 controlUI = "frame";
 
@@ -481,7 +499,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 Locale loc = req.getLocale();
 
                 for (ApplicationPortlet app : appColl) {
-                    
+
                     String concID = app.getConcretePortletID();
                     // we don't want to list PortletServlet loader!
                     // if (concID.startsWith(PortletServlet.class.getName())) continue;
@@ -500,15 +518,15 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 ListBoxBean contentLB = event.getListBoxBean("contentLB");
                 List contentFiles = contentManagerService.getAllContent();
                 for (int i = 0; i < contentFiles.size(); i++) {
-                    ContentFile contentFile = (ContentFile)contentFiles.get(i);
+                    ContentFile contentFile = (ContentFile) contentFiles.get(i);
                     ListBoxItemBean item = new ListBoxItemBean();
                     item.setName(contentFile.getFile().getName());
                     item.setValue(contentFile.getFile().getName());
                     contentLB.addBean(item);
                 }
             } else if (comp instanceof PortletTab) {
-                PortletTab tab = (PortletTab)comp;
-                PortletNavMenu pane = (PortletNavMenu)tab.getParentComponent();
+                PortletTab tab = (PortletTab) comp;
+                PortletNavMenu pane = (PortletNavMenu) tab.getParentComponent();
                 if (pane.getStyle().equals("menu")) {
                     log.debug("it's a tab!");
                     controlUI = "tab";
@@ -534,7 +552,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
                 page.actionPerformed(gsevent);
             } else if (comp instanceof PortletBar) {
-                PortletBar bar = (PortletBar)comp;
+                PortletBar bar = (PortletBar) comp;
                 controlUI = "bar";
                 createColsListBox(event, bar.getPortletComponent());
 
@@ -570,7 +588,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 moveLeftButton.setDisabled(true);
                 ActionSubmitBean moveRightButton = event.getActionSubmitBean("moveRightButton");
                 moveRightButton.setDisabled(true);
-                req.setAttribute("isnewtab","true");
+                req.setAttribute("isnewtab", "true");
             }
 
             ListBoxBean rolesLB = event.getListBoxBean("rolesLB");
@@ -637,7 +655,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         req.setAttribute("pane", pageBuffer.toString());
         pages.put(sessionId, page);
 
-        
         // put old cid back so beans/tags work!!
         req.setAttribute(SportletProperties.COMPONENT_ID, cid);
         // remove special layout attributes so the rest of "real" layout after this portlet renders properly
@@ -659,7 +676,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletRequest req = event.getActionRequest();
 
         String sessionId = req.getPortletSession().getId();
-        PortletPage page = (PortletPage)pages.get(sessionId);
+        PortletPage page = (PortletPage) pages.get(sessionId);
 
         PortletComponent navComp = page.getPortletComponent();
         ListBoxBean navLB = event.getListBoxBean("navigationLB");
@@ -673,17 +690,17 @@ public class LayoutManagerPortlet extends ActionPortlet {
             PortletBar bar = new PortletBar();
             // set the first menu tab component to be the bar component
             if (navComp instanceof PortletMenu) {
-                PortletMenu menu = (PortletMenu)navComp;
+                PortletMenu menu = (PortletMenu) navComp;
                 List<PortletTab> tabs = menu.getPortletTabs();
                 PortletTab tab = tabs.get(0);
                 bar.setPortletComponent(tab.getPortletComponent());
             }
             // set the component of the first subtab to be the bar component
             if (navComp instanceof PortletTabbedPane) {
-                PortletTabbedPane pane = (PortletTabbedPane)navComp;
+                PortletTabbedPane pane = (PortletTabbedPane) navComp;
                 List<PortletTab> tabs = pane.getPortletTabs();
                 PortletTab tab = tabs.get(0);
-                PortletTabbedPane subpane = (PortletTabbedPane)tab.getPortletComponent();
+                PortletTabbedPane subpane = (PortletTabbedPane) tab.getPortletComponent();
                 PortletTab subtab = subpane.getPortletTabAt(0);
                 bar.setPortletComponent(subtab.getPortletComponent());
             }
@@ -695,7 +712,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             }
             PortletMenu menu = new PortletMenu();
             if (navComp instanceof PortletBar) {
-                PortletBar bar = (PortletBar)navComp;
+                PortletBar bar = (PortletBar) navComp;
                 PortletTab tab = new PortletTab();
                 tab.setTitle(req.getLocale().getLanguage(), "Default");
                 tab.setPortletComponent(bar.getPortletComponent());
@@ -703,10 +720,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
             }
 
             if (navComp instanceof PortletTabbedPane) {
-                PortletTabbedPane pane = (PortletTabbedPane)navComp;
+                PortletTabbedPane pane = (PortletTabbedPane) navComp;
                 List<PortletTab> tabs = pane.getPortletTabs();
                 for (PortletTab atab : tabs) {
-                    PortletTabbedPane subpane = (PortletTabbedPane)atab.getPortletComponent();
+                    PortletTabbedPane subpane = (PortletTabbedPane) atab.getPortletComponent();
                     List<PortletTab> subtabs = subpane.getPortletTabs();
                     menu.addTab(subtabs.get(0));
 
@@ -737,9 +754,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 table.addPortletComponent(row);
                 subtab.setPortletComponent(table);
             } else if (navComp instanceof PortletMenu) {
-                PortletMenu menu = (PortletMenu)navComp;
+                PortletMenu menu = (PortletMenu) navComp;
                 List<PortletTab> tabs = menu.getPortletTabs();
-                for (PortletTab atab : tabs)  {
+                for (PortletTab atab : tabs) {
                     PortletTab newtab = new PortletTab();
                     newtab.setTitle(req.getLocale().getLanguage(), atab.getTitle(req.getLocale().getLanguage()));
                     pane.addTab(newtab);
@@ -767,18 +784,18 @@ public class LayoutManagerPortlet extends ActionPortlet {
      * "five" - 3 col, 33%, 33%, 33%
      * "six" - 3 col 25%, 50%, 25%
      *
-     * @param strategyNum  the string as one of the above
-     * @param comp a portlet component
+     * @param strategyNum the string as one of the above
+     * @param comp        a portlet component
      * @return the updated table layout
      */
     private PortletComponent createLayoutStrategy(String strategyNum, PortletComponent comp) {
         if ((comp != null) && (comp instanceof PortletTableLayout)) {
-            PortletTableLayout table = (PortletTableLayout)comp;
+            PortletTableLayout table = (PortletTableLayout) comp;
             List rows = table.getPortletComponents();
             if ((rows != null) && (!rows.isEmpty())) {
-                PortletComponent c = (PortletComponent)rows.get(0);
+                PortletComponent c = (PortletComponent) rows.get(0);
                 if (c instanceof PortletRowLayout) {
-                    PortletRowLayout row = (PortletRowLayout)c;
+                    PortletRowLayout row = (PortletRowLayout) c;
                     List cols = row.getPortletComponents();
                     if (cols.size() == 1) {
                         if (strategyNum.equals("one")) {
@@ -786,28 +803,28 @@ public class LayoutManagerPortlet extends ActionPortlet {
                         }
                         if (strategyNum.equals("two")) {
                             // deal with case where column layout needs to be extended
-                            PortletColumnLayout oldcol = (PortletColumnLayout)cols.get(0);
+                            PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(0);
                             PortletColumnLayout col = new PortletColumnLayout();
                             oldcol.setWidth("33%");
                             col.setWidth("66%");
                             row.addPortletComponent(col);
                         }
                         if (strategyNum.equals("three")) {
-                            PortletColumnLayout oldcol = (PortletColumnLayout)cols.get(0);
+                            PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(0);
                             PortletColumnLayout col = new PortletColumnLayout();
                             oldcol.setWidth("50%");
                             col.setWidth("50%");
                             row.addPortletComponent(col);
                         }
                         if (strategyNum.equals("four")) {
-                            PortletColumnLayout oldcol = (PortletColumnLayout)cols.get(0);
+                            PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(0);
                             PortletColumnLayout col = new PortletColumnLayout();
                             oldcol.setWidth("66%");
                             col.setWidth("33%");
                             row.addPortletComponent(col);
                         }
                         if (strategyNum.equals("five")) {
-                            PortletColumnLayout oldcol = (PortletColumnLayout)cols.get(0);
+                            PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(0);
                             PortletColumnLayout col = new PortletColumnLayout();
                             PortletColumnLayout newcol = new PortletColumnLayout();
                             oldcol.setWidth("33%");
@@ -817,7 +834,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
                             row.addPortletComponent(newcol);
                         }
                         if (strategyNum.equals("six")) {
-                            PortletColumnLayout oldcol = (PortletColumnLayout)cols.get(0);
+                            PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(0);
                             PortletColumnLayout col = new PortletColumnLayout();
                             PortletColumnLayout newcol = new PortletColumnLayout();
                             oldcol.setWidth("25%");
@@ -831,31 +848,31 @@ public class LayoutManagerPortlet extends ActionPortlet {
                     if (cols.size() == 2) {
                         if (strategyNum.equals("one")) {
                             // deal with case where column layout needs to be reduced
-                            PortletColumnLayout oldcol = (PortletColumnLayout)cols.get(1);
+                            PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(1);
                             row.removePortletComponent(oldcol);
                         }
                         if (strategyNum.equals("two")) {
-                            PortletColumnLayout oldcol = (PortletColumnLayout)cols.get(0);
-                            PortletColumnLayout col = (PortletColumnLayout)cols.get(1);
+                            PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(0);
+                            PortletColumnLayout col = (PortletColumnLayout) cols.get(1);
                             oldcol.setWidth("33%");
                             col.setWidth("66%");
                         }
                         if (strategyNum.equals("three")) {
-                            PortletColumnLayout oldcol = (PortletColumnLayout)cols.get(0);
-                            PortletColumnLayout col = (PortletColumnLayout)cols.get(1);
+                            PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(0);
+                            PortletColumnLayout col = (PortletColumnLayout) cols.get(1);
                             oldcol.setWidth("50%");
                             col.setWidth("50%");
                         }
                         if (strategyNum.equals("four")) {
-                            PortletColumnLayout oldcol = (PortletColumnLayout)cols.get(0);
-                            PortletColumnLayout col = (PortletColumnLayout)cols.get(1);
+                            PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(0);
+                            PortletColumnLayout col = (PortletColumnLayout) cols.get(1);
                             oldcol.setWidth("66%");
                             col.setWidth("33%");
 
                         }
                         if (strategyNum.equals("five")) {
-                            PortletColumnLayout oldcol = (PortletColumnLayout)cols.get(0);
-                            PortletColumnLayout col = (PortletColumnLayout)cols.get(1);
+                            PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(0);
+                            PortletColumnLayout col = (PortletColumnLayout) cols.get(1);
                             PortletColumnLayout newcol = new PortletColumnLayout();
                             oldcol.setWidth("33%");
                             col.setWidth("33%");
@@ -863,8 +880,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
                             row.addPortletComponent(newcol);
                         }
                         if (strategyNum.equals("six")) {
-                            PortletColumnLayout oldcol = (PortletColumnLayout)cols.get(0);
-                            PortletColumnLayout col = (PortletColumnLayout)cols.get(1);
+                            PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(0);
+                            PortletColumnLayout col = (PortletColumnLayout) cols.get(1);
                             PortletColumnLayout newcol = new PortletColumnLayout();
                             oldcol.setWidth("25%");
                             col.setWidth("50%");
@@ -877,50 +894,50 @@ public class LayoutManagerPortlet extends ActionPortlet {
                     if (cols.size() == 3) {
                         if (strategyNum.equals("one")) {
                             // deal with case where column layout needs to be reduced
-                            PortletColumnLayout newcol = (PortletColumnLayout)cols.get(2);
-                            PortletColumnLayout oldcol = (PortletColumnLayout)cols.get(1);
+                            PortletColumnLayout newcol = (PortletColumnLayout) cols.get(2);
+                            PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(1);
                             row.removePortletComponent(oldcol);
                             row.removePortletComponent(newcol);
                         }
 
                         if (strategyNum.equals("two")) {
-                            PortletColumnLayout col1 = (PortletColumnLayout)cols.get(0);
-                            PortletColumnLayout col2 = (PortletColumnLayout)cols.get(1);
-                            PortletColumnLayout col3 = (PortletColumnLayout)cols.get(2);
+                            PortletColumnLayout col1 = (PortletColumnLayout) cols.get(0);
+                            PortletColumnLayout col2 = (PortletColumnLayout) cols.get(1);
+                            PortletColumnLayout col3 = (PortletColumnLayout) cols.get(2);
                             col1.setWidth("33%");
                             col2.setWidth("66%");
                             row.removePortletComponent(col3);
 
                         }
                         if (strategyNum.equals("three")) {
-                            PortletColumnLayout col1 = (PortletColumnLayout)cols.get(0);
-                            PortletColumnLayout col2 = (PortletColumnLayout)cols.get(1);
-                            PortletColumnLayout col3 = (PortletColumnLayout)cols.get(2);
+                            PortletColumnLayout col1 = (PortletColumnLayout) cols.get(0);
+                            PortletColumnLayout col2 = (PortletColumnLayout) cols.get(1);
+                            PortletColumnLayout col3 = (PortletColumnLayout) cols.get(2);
                             col1.setWidth("50%");
                             col2.setWidth("50%");
                             row.removePortletComponent(col3);
                         }
                         if (strategyNum.equals("four")) {
-                            PortletColumnLayout col1 = (PortletColumnLayout)cols.get(0);
-                            PortletColumnLayout col2 = (PortletColumnLayout)cols.get(1);
-                            PortletColumnLayout col3 = (PortletColumnLayout)cols.get(2);
+                            PortletColumnLayout col1 = (PortletColumnLayout) cols.get(0);
+                            PortletColumnLayout col2 = (PortletColumnLayout) cols.get(1);
+                            PortletColumnLayout col3 = (PortletColumnLayout) cols.get(2);
                             col1.setWidth("66%");
                             col2.setWidth("33%");
                             row.removePortletComponent(col3);
                         }
 
                         if (strategyNum.equals("five")) {
-                            PortletColumnLayout col1 = (PortletColumnLayout)cols.get(0);
-                            PortletColumnLayout col2 = (PortletColumnLayout)cols.get(1);
-                            PortletColumnLayout col3 = (PortletColumnLayout)cols.get(2);
+                            PortletColumnLayout col1 = (PortletColumnLayout) cols.get(0);
+                            PortletColumnLayout col2 = (PortletColumnLayout) cols.get(1);
+                            PortletColumnLayout col3 = (PortletColumnLayout) cols.get(2);
                             col1.setWidth("33%");
                             col2.setWidth("33%");
                             col3.setWidth("33%");
                         }
                         if (strategyNum.equals("six")) {
-                            PortletColumnLayout col1 = (PortletColumnLayout)cols.get(0);
-                            PortletColumnLayout col2 = (PortletColumnLayout)cols.get(1);
-                            PortletColumnLayout col3 = (PortletColumnLayout)cols.get(2);
+                            PortletColumnLayout col1 = (PortletColumnLayout) cols.get(0);
+                            PortletColumnLayout col2 = (PortletColumnLayout) cols.get(1);
+                            PortletColumnLayout col3 = (PortletColumnLayout) cols.get(2);
                             col1.setWidth("25%");
                             col2.setWidth("50%");
                             col3.setWidth("25%");
@@ -996,11 +1013,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         }
         System.err.println("return comp" + comp.getClass().getName());
-        
+
         return comp;
     }
-
-
 
 
     private void createColsListBox(FormEvent event, PortletComponent comp) {
@@ -1008,14 +1023,14 @@ public class LayoutManagerPortlet extends ActionPortlet {
         String colType = "one";
 
         if ((comp != null) && (comp instanceof PortletTableLayout)) {
-            PortletTableLayout tableLayout = (PortletTableLayout)comp;
+            PortletTableLayout tableLayout = (PortletTableLayout) comp;
             List rows = tableLayout.getPortletComponents();
-            PortletComponent row = (PortletComponent)rows.get(0);
+            PortletComponent row = (PortletComponent) rows.get(0);
             if (row instanceof PortletRowLayout) {
-                PortletRowLayout r = (PortletRowLayout)row;
+                PortletRowLayout r = (PortletRowLayout) row;
                 List cols = r.getPortletComponents();
                 if (cols.size() == 2) {
-                    PortletColumnLayout col = (PortletColumnLayout)cols.get(0);
+                    PortletColumnLayout col = (PortletColumnLayout) cols.get(0);
                     if (col.getWidth().equals("33%")) {
                         colType = "two";
                     }
@@ -1027,7 +1042,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
                     }
                 }
                 if (cols.size() == 3) {
-                    PortletColumnLayout col = (PortletColumnLayout)cols.get(0);
+                    PortletColumnLayout col = (PortletColumnLayout) cols.get(0);
                     if (col.getWidth().equals("33%")) {
                         colType = "five";
                     }

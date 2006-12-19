@@ -9,21 +9,9 @@ import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridsphere.services.core.jcr.JCRNode;
 import org.gridsphere.services.core.jcr.JCRService;
-import org.gridsphere.services.core.portal.PortalConfigService;
-import org.radeox.api.engine.RenderEngine;
-import org.radeox.api.engine.context.RenderContext;
-import org.radeox.engine.BaseRenderEngine;
-import org.radeox.engine.context.BaseRenderContext;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.Session;
-import javax.jcr.Workspace;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.query.QueryResult;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
@@ -34,11 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * <code>PortletContent</code> is used to display the contents of an included
@@ -152,57 +136,8 @@ public class PortletContent extends BasePortletComponent implements Serializable
                 if (textFile.startsWith("http://")) {
                     writer.write("<iframe border=\"0\" width=\"100%\" height=\"100%\" src=\"" + textFile + "\"></iframe>");
                 } else if (textFile.startsWith("jcr://")) {
-                    // handle content management
                     JCRService jcrService = (JCRService) PortletServiceFactory.createPortletService(JCRService.class, true);
-                    session = jcrService.getSession();
-                    Workspace ws = session.getWorkspace();
-                    QueryManager qm = ws.getQueryManager();
-                    String nodename = textFile.substring(6, textFile.length()); // remove 'jcr://'
-                    String query = "select * from nt:base where " + JCRNode.GSID + "='" + nodename + "'";
-                    Query q = qm.createQuery(query, Query.SQL);
-                    QueryResult result = q.execute();
-                    NodeIterator it = result.getNodes();
-                    while (it.hasNext()) {
-                        Node n = it.nextNode();
-                        String output = n.getProperty(JCRNode.CONTENT).getString();
-                        String kit = n.getProperty(JCRNode.RENDERKIT).getString();
-                        if (kit.equals(JCRNode.RENDERKIT_RADEOX)) {
-                            RenderContext context = new BaseRenderContext();
-                            RenderEngine engine = new BaseRenderEngine();
-                            output = engine.render(output, context);
-                        }
-                        if (kit.equals(JCRNode.RENDERKIT_TEXT)) {
-                            output = "<pre>" + output + "</pre>";
-                        }
-                        if (kit.equals(JCRNode.RENDERKIT_HTML)) {
-                            // do some wiki markup link replacement for links to other tabs/pages within the portal
-                            // [[This|myRef]] will be <a href=".../myRef">This</a>
-                            PortalConfigService portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
-                            String localPortalURLdeploy = portalConfigService.getProperty("gridsphere.deploy");
-                            String localPortalURLcontext = portalConfigService.getProperty("gridsphere.context");
-                            String patternFindLinks = "\\[{2}[A-Za-z0-9\\s]++\\|{1}[A-Za-z0-9/\\s]++\\|{1}[A-Za-z0-9/\\s]++\\]{2}";
-                            for (Matcher m = Pattern.compile(patternFindLinks).matcher(output); m.find();) {
-                                String match = m.toMatchResult().group().toString();
-                                String match2 = match.substring(2, match.length() - 2); // subtract [[ and ]]
-                                String name = match2.substring(0, match2.indexOf("|")); // get the name
-                                String temp = match2.substring(match2.indexOf("|") + 1, match2.length());
-                                String layout = temp.substring(0, temp.indexOf("|"));  // layout name
-                                String id = temp.substring(temp.indexOf("|") + 1, temp.length()); // fragment id
-                                String link = "";
-                                try {
-                                    link = URLEncoder.encode(id, "UTF-8");
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                }
-                                String replaceString = "<a href=\"/" + localPortalURLdeploy + "/" + localPortalURLcontext + "/"
-                                        + layout + "/" + link + "\">" + name + "</a>";
-                                output = output.replace(match, replaceString);
-                            }
-                            output = "<div class=\"gridsphere-content\">" + output + "</div>";
-                        }
-                        session.logout();
-                        writer.write(output);
-                    }
+                    writer.write(jcrService.getContent(textFile));
                 } else {
                     // do a normal dispatch
                     rd = ctx.getRequestDispatcher(textFile);
