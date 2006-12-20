@@ -13,8 +13,7 @@
       title="GridSphere Portal"
       keywords="gridsphere"
       icon="images/favicon.ico"
-      editable="false"
-      renderkit="brush">
+      editable="false">
 
     <!-- Header components -->
     <header>

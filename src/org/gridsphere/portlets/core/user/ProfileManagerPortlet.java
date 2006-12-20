@@ -80,7 +80,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         ListBoxBean themeLB = event.getListBoxBean("themeLB");
         String[] themes = new String[]{};
 
-        String theme = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
+        String theme = (String) user.getAttribute(User.THEME);
         String renderkit = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
         themeLB.clear();
 
@@ -379,7 +379,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         saveTheme(event);
 //        savePrivacy(event);
     }
-
 
 
 }

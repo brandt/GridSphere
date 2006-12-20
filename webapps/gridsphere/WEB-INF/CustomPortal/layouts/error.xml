@@ -11,8 +11,7 @@
 
 <page label="error"
       title="GridSphere Error"
-      editable="false"
-      renderkit="brush">
+      editable="false">
 
     <header>
         <table>

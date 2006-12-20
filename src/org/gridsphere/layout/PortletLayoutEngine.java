@@ -43,6 +43,9 @@ public class PortletLayoutEngine {
 
     private boolean inited = false;
 
+    public static final String DEFAULT_THEME = "default";
+    public static final String DEFAULT_RENDERKIT = "brush";
+
     /**
      * Constructs a concrete instance of the PortletLayoutEngine
      */
@@ -84,10 +87,10 @@ public class PortletLayoutEngine {
         HttpServletRequest req = event.getHttpServletRequest();
         HttpServletResponse res = event.getHttpServletResponse();
         res.setContentType("text/html; charset=utf-8"); // Necessary to display UTF-8 encoded characters
-        res.setHeader("Cache-Control","no-cache"); //Forces caches to obtain a new copy of the page from the origin server
-        res.setHeader("Cache-Control","no-store"); //Directs caches not to store the page under any circumstance
+        res.setHeader("Cache-Control", "no-cache"); //Forces caches to obtain a new copy of the page from the origin server
+        res.setHeader("Cache-Control", "no-store"); //Directs caches not to store the page under any circumstance
         res.setHeader("Expires", "0"); //Causes the proxy cache to see the page as "stale"
-        res.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
+        res.setHeader("Pragma", "no-cache"); //HTTP 1.0 backward compatibility
         String ae = req.getHeader("accept-encoding");
         if (ae != null && ae.indexOf("gzip") != -1) {
             res.setHeader("Content-Encoding", "gzip");
@@ -113,30 +116,30 @@ public class PortletLayoutEngine {
         StringBuffer pageBuffer = new StringBuffer();
         if (req.getParameter("ajax") != null) {
 
-           
+
             String portlet = req.getParameter("portlet");
             System.err.println("it's ajax: " + portlet);
             String cid = event.getComponentID();
             if ((cid != null) && (cid.startsWith("portlet"))) {
-                portlet = cid.substring("portlet".length()+1);
+                portlet = cid.substring("portlet".length() + 1);
             }
             if (portlet != null) {
                 PortletFrameRegistry registry = PortletFrameRegistry.getInstance();
                 int idx = portlet.indexOf("#");
-                String portletName = portlet.substring(idx+1, portlet.length());
+                String portletName = portlet.substring(idx + 1, portlet.length());
                 PortletFrame frame = registry.getPortletFrame(portletName, portlet, event);
                 frame.setInnerPadding("");
                 frame.setOuterPadding("");
                 frame.setTransparent(false);
 
-                req.getSession().setAttribute(SportletProperties.LAYOUT_THEME, "default");
-                req.getSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, "brush");
+                req.getSession().setAttribute(SportletProperties.LAYOUT_THEME, DEFAULT_THEME);
+                req.getSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, DEFAULT_RENDERKIT);
 
                 req.setAttribute(SportletProperties.USE_AJAX, "true");
                 req.setAttribute(SportletProperties.PORTLET_NAME, portlet);
                 String compName = req.getParameter("compname");
 
-                System.err.println("compname= "+ compName);
+                System.err.println("compname= " + compName);
 
                 req.setAttribute(SportletProperties.COMPONENT_NAME, compName);
 
@@ -172,7 +175,7 @@ public class PortletLayoutEngine {
                 GZIPOutputStream gzos = new GZIPOutputStream(res.getOutputStream());
                 gzos.write(pageBuffer.toString().getBytes(req.getCharacterEncoding()));
                 gzos.close();
-            }  else {
+            } else {
                 PrintWriter out = res.getWriter();
                 out.print(pageBuffer.toString());
             }
@@ -183,18 +186,18 @@ public class PortletLayoutEngine {
     }
 
     public void doAction(GridSphereEvent event) {
-         String cid = event.getComponentID();
-         if (!cid.equals("")) {
-             PortletFrame frame = registry.getPortletFrame(cid, null, event);
-             if (frame != null)  {
-                 try {
-                     frame.actionPerformed(event);
-                 } catch (Exception e) {
-                     e.printStackTrace();
-                 }
-             }
-         }
-     }
+        String cid = event.getComponentID();
+        if (!cid.equals("")) {
+            PortletFrame frame = registry.getPortletFrame(cid, null, event);
+            if (frame != null) {
+                try {
+                    frame.actionPerformed(event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     /**
      * Performs an action on the portlet container referenced by the

@@ -7,15 +7,10 @@ package org.gridsphere.servlets;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.services.core.filter.PortalFilter;
-import org.gridsphere.services.core.filter.PortalFilterService;
 import org.gridsphere.layout.PortletLayoutEngine;
 import org.gridsphere.layout.PortletPageFactory;
-import org.gridsphere.services.core.user.User;
-import org.gridsphere.services.core.user.UserPrincipal;
 import org.gridsphere.portlet.impl.PortletContextImpl;
 import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.services.core.user.impl.UserImpl;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceCollection;
@@ -24,13 +19,18 @@ import org.gridsphere.portletcontainer.PortletDispatcherException;
 import org.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridsphere.portletcontainer.impl.PortletServiceDescriptor;
 import org.gridsphere.portletcontainer.impl.PortletSessionManager;
+import org.gridsphere.services.core.filter.PortalFilter;
+import org.gridsphere.services.core.filter.PortalFilterService;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
+import org.gridsphere.services.core.user.UserPrincipal;
+import org.gridsphere.services.core.user.impl.UserImpl;
 import org.hibernate.StaleObjectStateException;
 
 import javax.activation.DataHandler;
@@ -43,7 +43,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.SocketException;
 import java.security.Principal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -62,7 +63,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private RoleManagerService roleService = null;
 
     private UserManagerService userManagerService = null;
-
 
     /* GridSphere Portlet layout Engine handles rendering */
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
@@ -113,7 +113,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         PersistenceManagerService pms = null;
 
-        pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+        pms = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
 
         PersistenceManagerRdbms pm = null;
         try {
@@ -169,7 +169,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletContext ctx = new PortletContextImpl(getServletContext());
         GridSphereEvent event = new GridSphereEventImpl(ctx, req, res);
 
-
         // check to see if user has been authorized by means of container managed authorization
         checkWebContainerAuthorization(event);
 
@@ -202,12 +201,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         // perform a redirect-after-POST!
         if (event.hasAction() && req.getMethod().toUpperCase().equals("POST")) {
-            String requestURL = (String)req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
+            String requestURL = (String) req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
             if (req.getParameter("ajax") == null) {
                 log.debug("redirect after POST to: " + requestURL);
                 res.sendRedirect(requestURL);
                 return;
-            }           
+            }
         }
 
         // is this a file download operation?
@@ -251,14 +250,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param req the HttpServletRequest
      * @param res the HttpServletResponse
      * @throws PortletException if a portlet exception occurs
-     * @throws IOException if an IO error occurs
+     * @throws IOException      if an IO error occurs
      */
     public void downloadFile(HttpServletRequest req, HttpServletResponse res) throws PortletException, IOException {
 
         String fileName = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
         if (fileName == null) return;
         String path = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
-        Boolean deleteFile = (Boolean)req.getAttribute(SportletProperties.FILE_DELETE);
+        Boolean deleteFile = (Boolean) req.getAttribute(SportletProperties.FILE_DELETE);
         File file = (File) req.getAttribute(SportletProperties.FILE_DOWNLOAD_BINARY);
 
         req.removeAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
@@ -322,7 +321,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             UserPrincipal userPrincipal = new UserPrincipal(user.getUserName());
             req.setAttribute(SportletProperties.PORTLET_USER_PRINCIPAL, userPrincipal);
             List<PortletRole> proles = roleService.getRolesForUser(user);
-            for (PortletRole  role : proles) {
+            for (PortletRole role : proles) {
                 roles.add(role.getName());
             }
         }
@@ -338,9 +337,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletRequest request = event.getActionRequest();
         PortletSession session = request.getPortletSession();
         if (session.getAttribute(SportletProperties.PORTLET_USER) != null) return;
-        if(!(event.hasAction() && event.getAction().getName().equals(SportletProperties.LOGOUT))) {
+        if (!(event.hasAction() && event.getAction().getName().equals(SportletProperties.LOGOUT))) {
             Principal principal = request.getUserPrincipal();
-            if(principal != null) {
+            if (principal != null) {
                 // fix for OC4J. it must work in Tomcat also
                 int indeDelimeter = principal.getName().lastIndexOf('/');
                 indeDelimeter = (indeDelimeter > 0) ? (indeDelimeter + 1) : 0;
@@ -379,7 +378,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         for (PortalFilter filter : portalFilters) {
             filter.doAfterLogout(event.getHttpServletRequest(), event.getHttpServletResponse());
         }
-        
+
 
         try {
             String url = res.createRenderURL().toString();
@@ -395,7 +394,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public final void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         System.err.println("do post!!");
-        
+
         doGet(req, res);
     }
 
@@ -426,7 +425,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void attributeAdded(HttpSessionBindingEvent event) {
         try {
             log.debug("attributeAdded('" + event.getSession().getId() + "', '" +
-                event.getName() + "', '" + event.getValue() + "')");
+                    event.getName() + "', '" + event.getValue() + "')");
         } catch (IllegalStateException e) {
             // do nothing
         }
@@ -440,7 +439,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void attributeRemoved(HttpSessionBindingEvent event) {
         try {
             log.debug("attributeRemoved('" + event.getSession().getId() + "', '" +
-                event.getName() + "', '" + event.getValue() + "')");
+                    event.getName() + "', '" + event.getValue() + "')");
         } catch (IllegalStateException e) {
             // do nothing
         }
@@ -455,7 +454,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void attributeReplaced(HttpSessionBindingEvent event) {
         try {
             log.debug("attributeReplaced('" + event.getSession().getId() + "', '" +
-                event.getName() + "', '" + event.getValue() + "')");
+                    event.getName() + "', '" + event.getValue() + "')");
         } catch (IllegalStateException e) {
             // do nothing
         }
@@ -511,7 +510,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public void updateDatabase() {
         // loop thru users make sure first and last name are created from full name
-        List<User> users = userManagerService.getUsers();     
+        List<User> users = userManagerService.getUsers();
         for (User user : users) {
             if (user.getFirstName().equals("") && user.getLastName().equals("")) {
                 String full = user.getFullName();

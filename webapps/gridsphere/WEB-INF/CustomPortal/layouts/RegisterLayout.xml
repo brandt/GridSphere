@@ -13,8 +13,7 @@
       title="GridSphere Portal"
       keywords="gridsphere"
       icon="images/favicon.ico"
-      editable="false"
-      renderkit="brush">
+      editable="false">
 
     <!-- Header components -->
     <header>
@@ -23,7 +22,7 @@
                 <column width="60%">
                     <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
                 </column>
-              
+
                 <column width="40%">
                     <frame transparent="true" outer-padding="0px" label="locale">
                         <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet</portlet-class>

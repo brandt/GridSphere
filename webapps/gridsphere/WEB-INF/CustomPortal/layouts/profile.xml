@@ -13,7 +13,6 @@
       title="GridSphere Portal"
       keywords="gridsphere"
       icon="images/favicon.ico"
-      renderkit="brush"
       editable="false"
       required-role="USER">
 

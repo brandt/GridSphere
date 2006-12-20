@@ -13,7 +13,6 @@
       title="GridSphere Layout Management"
       keywords="gridsphere"
       icon="images/favicon.ico"
-      renderkit="brush"
       editable="false"
       required-role="ADMIN">
 

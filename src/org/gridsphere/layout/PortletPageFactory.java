@@ -218,13 +218,11 @@ public class PortletPageFactory implements PortletSessionListener {
     }
 
     public void setPageTheme(PortletPage page, PortletRequest req) {
-        String defaultTheme = portalConfigService.getProperty(PortalConfigService.DEFAULT_THEME);
         String theme = null;
+        String defaultTheme = portalConfigService.getProperty(PortalConfigService.DEFAULT_THEME);
         if (defaultTheme != null) theme = defaultTheme;
-        Map userAttrs = (Map) req.getAttribute(PortletRequest.USER_INFO);
-        if (userAttrs != null) {
-            theme = (String) userAttrs.get(User.THEME);
-        }
+        User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
+        if (user != null) theme = (String) user.getAttribute(User.THEME);
         if (theme == null) theme = DEFAULT_THEME;
         req.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, theme, PortletSession.APPLICATION_SCOPE);
     }
@@ -388,6 +386,7 @@ public class PortletPageFactory implements PortletSessionListener {
             log.debug("Creating new page " + layoutId + " placing in session " + session.getId());
             sessionManager.addSessionListener(session.getId(), this);
         }
+        setPageTheme(page, req);
         return page;
     }
 

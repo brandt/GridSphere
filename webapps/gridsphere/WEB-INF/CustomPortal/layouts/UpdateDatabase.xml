@@ -13,7 +13,6 @@
       title="GridSphere Portal Setup"
       keywords="gridsphere"
       icon="images/favicon.ico"
-      renderkit="brush"
       editable="false"
       required-role="setup">
 
@@ -43,7 +42,7 @@
     <!-- Footer components (if any) -->
     <footer>
         <table>
-        <row>
+            <row>
                 <column width="50%">
                     <content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
                 </column>

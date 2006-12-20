@@ -12,8 +12,7 @@ $Id$
 <page label="user"
       title="GridSphere Portal"
       keywords="gridsphere"
-      icon="images/favicon.ico"
-      renderkit="brush"
+      icon="images/favicon.icon"
       editable="true"
       required-role="USER">
 

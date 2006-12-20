@@ -272,7 +272,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
         }
         portletInvoker = new PortletInvoker();
         list = super.init(req, list);
-        if (renderKit == null) renderKit = "standard";
+
         req.getPortletSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, renderKit, PortletSession.APPLICATION_SCOPE);
 
 
