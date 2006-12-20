@@ -12,6 +12,7 @@ import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
 import java.awt.*;
 import java.util.Iterator;
 import java.util.List;
@@ -56,7 +57,7 @@ public class Page extends BaseRender implements Render {
 
         if (portletPage.getRefresh() > 0)
             page.append("\n\t<meta http-equiv=\"refresh\" content=\"").append(portletPage.getRefresh()).append("\"/>");
-        String theme = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME);
+        String theme = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
         page.append("\n\t<link type=\"text/css\" href=\"").append(req.getContextPath()).append("/themes/").append(portletPage.getRenderKit()).append("/").append(theme).append("/css" + "/default.css\" rel=\"stylesheet\"/>");
         // use Yahoo fonts.css
         page.append("\n\t<link type=\"text/css\" href=\"").append(req.getContextPath()).append("/css/yahoo/fonts.css\" rel=\"stylesheet\"/>");
