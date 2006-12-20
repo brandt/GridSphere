@@ -134,9 +134,9 @@
         <resource-bundle>Locale.Portlet</resource-bundle>
     </portlet>
     <portlet>
-        <description xml:lang="en">Shows RSS information</description>
+        <description xml:lang="en">Displays RSS feeds</description>
         <portlet-name>RSSPortlet</portlet-name>
-        <display-name xml:lang="en">RSS Portlet</display-name>
+        <display-name xml:lang="en">News Portlet</display-name>
         <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</portlet-class>
         <expiration-cache>0</expiration-cache>
         <supports>
@@ -145,9 +145,9 @@
         </supports>
         <supported-locale>en</supported-locale>
         <portlet-info>
-            <title>RSS News</title>
-            <short-title>RSS News</short-title>
-            <keywords>RSS</keywords>
+            <title>News</title>
+            <short-title>News</short-title>
+            <keywords>RSS, news</keywords>
         </portlet-info>
         <portlet-preferences>
             <preference>
@@ -178,7 +178,6 @@
             <keywords>jcr, content, jsr170</keywords>
         </portlet-info>
     </portlet>
-
 
     <portlet>
         <description xml:lang="ar">يمكن مدير النظام من إدارة حسابات المستخدمين</description>
