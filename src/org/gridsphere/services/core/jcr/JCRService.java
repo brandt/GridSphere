@@ -9,7 +9,13 @@ import java.util.List;
 public interface JCRService {
 
 
-    public String getContent(String contentFile);
+    /**
+     * Returns the content of the nodename.
+     *
+     * @param nodename
+     * @return content of the nodename
+     */
+    public String getContent(String nodename);
 
     /**
      * Returns a JCR session.
@@ -30,7 +36,21 @@ public interface JCRService {
      */
     NodeIterator query(String query, Session session) throws NamingException, RepositoryException;
 
+    /**
+     * Checks if the node with a given id exists.
+     *
+     * @param gsid
+     * @return
+     * @throws NamingException
+     * @throws RepositoryException
+     */
     boolean exists(String gsid) throws NamingException, RepositoryException;
 
+
+    /**
+     * Returns all nodes as a list.
+     *
+     * @return List of nodes.
+     */
     public List<String> getAllNodeNames();
 }

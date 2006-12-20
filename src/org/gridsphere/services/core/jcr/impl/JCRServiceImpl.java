@@ -158,7 +158,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
         return names;
     }
 
-    public String getContent(String contentFile) {
+    public String getContent(String nodename) {
         // handle content management
         Session session = null;
         String output = null;
@@ -166,7 +166,6 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
             session = getSession();
             Workspace ws = session.getWorkspace();
             QueryManager qm = ws.getQueryManager();
-            String nodename = contentFile.substring(6, contentFile.length()); // remove 'jcr://'
             String query = "select * from nt:base where " + JCRNode.GSID + "='" + nodename + "'";
             Query q = qm.createQuery(query, Query.SQL);
             QueryResult result = q.execute();
@@ -210,7 +209,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
                     output = "<div class=\"gridsphere-content\">" + output + "</div>";
                 }
             } else {
-                output = "Content " + contentFile + "not found!";
+                output = "Content " + nodename + "not found!";
             }
         } catch (Exception e) {
             log.error(e);

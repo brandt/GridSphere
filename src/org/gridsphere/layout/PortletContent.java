@@ -137,7 +137,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
                     writer.write("<iframe border=\"0\" width=\"100%\" height=\"100%\" src=\"" + textFile + "\"></iframe>");
                 } else if (textFile.startsWith("jcr://")) {
                     JCRService jcrService = (JCRService) PortletServiceFactory.createPortletService(JCRService.class, true);
-                    writer.write(jcrService.getContent(textFile));
+                    writer.write(jcrService.getContent(textFile.substring(6, textFile.length())));
                 } else {
                     // do a normal dispatch
                     rd = ctx.getRequestDispatcher(textFile);
