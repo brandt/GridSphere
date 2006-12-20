@@ -15,8 +15,7 @@ public class Bar extends BaseRender implements Render {
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<!-- START BAR -->")
-                .append("<div id=\"gridsphere-layout-navigation\">")
-                .append("</div> <!-- end layout navigation -->");
+                .append("<div id=\"gridsphere-layout-navigation\">");
 
         return buffer;
     }
@@ -24,6 +23,7 @@ public class Bar extends BaseRender implements Render {
     public StringBuffer doEndBorder(GridSphereEvent event, PortletComponent comp) {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<div id=\"gridsphere-menu-bottom-line\">&nbsp;</div>");
+        buffer.append("</div> <!-- end layout navigation -->");
         buffer.append("<div id=\"gridsphere-layout-body\"> <!-- start the main portlets -->\n");
         return buffer;
     }
