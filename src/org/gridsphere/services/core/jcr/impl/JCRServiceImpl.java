@@ -206,7 +206,6 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
                                 + layout + "/" + link + "\">" + name + "</a>";
                         output = output.replace(match, replaceString);
                     }
-                    output = "<div class=\"gridsphere-content\">" + output + "</div>";
                 }
             } else {
                 output = "Content " + nodename + "not found!";
