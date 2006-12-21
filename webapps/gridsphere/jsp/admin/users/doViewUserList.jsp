@@ -53,7 +53,6 @@
                 <ui:text key="SELECT"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:image src="<%= request.getContextPath() + "/images/editor.png" %>" alt="Edit"/>
                 <ui:text key="USER_EDIT_USER"/>
             </ui:tablecell>
             <ui:tablecell>
@@ -103,7 +102,8 @@
                 <% if (user.getLastLoginTime() == null) { %>
                 <ui:text value="--"/>
                 <% } else { %>
-                <ui:text value="<%= new SimpleDateFormat("MMM d yyyy hh:mm a").format(user.getLastLoginTime()).toString() %>"/>
+                <ui:text
+                        value="<%= new SimpleDateFormat("MMM d yyyy hh:mm a").format(user.getLastLoginTime()).toString() %>"/>
                 <% } %>
             </ui:tablecell>
         </ui:tablerow>
