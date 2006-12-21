@@ -103,14 +103,26 @@ public class Page extends BaseRender implements Render {
         page.append("<body");
         if (props != null) {
             Object bodyOnLoadObj = props.get("BODY_ONLOAD");
-            if ((bodyOnLoadObj != null) && (bodyOnLoadObj instanceof java.util.List)) {
-                java.util.List onLoad = (java.util.List) bodyOnLoadObj;
+            if ((bodyOnLoadObj != null) && (bodyOnLoadObj instanceof List)) {
+                List onLoad = (List) bodyOnLoadObj;
                 Iterator it = onLoad.iterator();
                 page.append(" onload=");
                 while (it.hasNext()) {
                     String onLoadFunc = (String) it.next();
                     if (onLoadFunc != null) {
                         page.append(onLoadFunc);
+                    }
+                }
+            }
+            Object bodyOnUnLoadObj = props.get("BODY_ONUNLOAD");
+            if ((bodyOnUnLoadObj != null) && (bodyOnUnLoadObj instanceof List)) {
+                List onUnLoad = (List) bodyOnUnLoadObj;
+                Iterator it = onUnLoad.iterator();
+                page.append(" onunload=");
+                while (it.hasNext()) {
+                    String onUnLoadFunc = (String) it.next();
+                    if (onUnLoadFunc != null) {
+                        page.append(onUnLoadFunc);
                     }
                 }
             }
