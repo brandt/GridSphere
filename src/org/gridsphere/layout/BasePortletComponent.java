@@ -30,6 +30,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String height = "";
     protected String label = "";
     protected String name = "";
+    protected String style = "";
 
     protected boolean isVisible = true;
     protected String requiredRoleName = "";
@@ -160,6 +161,25 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
 
     public boolean getCanModify() {
         return canModify;
+    }
+
+
+    /**
+     * Returns the portlet component css.
+     *
+     * @return portlet component css
+     */
+    public String getStyle() {
+        return style;
+    }
+
+    /**
+     * Sets the portlet component css
+     *
+     * @param style style to be set
+     */
+    public void setStyle(String style) {
+        this.style = style;
     }
 
     /**

@@ -23,7 +23,7 @@
                 <column width="400px">
                     <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
                 </column>
-                <column width="500px">
+                <column width="500px" style="float: right;">
                     <content include="/jsp/returnnav.jsp"/>
                 </column>
             </row>

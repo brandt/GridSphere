@@ -22,7 +22,7 @@ $Id$
                 <column width="400px">
                     <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
                 </column>
-                <column width="500px">
+                <column width="500px" style="float: right;">
                     <content include="/jsp/returnnav.jsp"/>
                 </column>
             </row>
@@ -35,7 +35,7 @@ $Id$
             <table>
                 <row>
                     <column width="100%">
-                        <frame outer-padding="0px 20px" label="rss">
+                        <frame label="rss">
                             <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</portlet-class>
                         </frame>
                     </column>

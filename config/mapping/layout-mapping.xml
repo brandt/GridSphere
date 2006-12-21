@@ -65,7 +65,11 @@
         <field name="RequiredRole" type="string">
             <bind-xml name="required-role" node="attribute"/>
         </field>
+        <field name="Style" type="string">
+            <bind-xml name="style" node="attribute"/>
+        </field>
     </class>
+
 
     <class name="org.gridsphere.layout.PortletContainer">
         <field name="PortletComponents" type="org.gridsphere.layout.PortletComponent" collection="arraylist">
@@ -169,7 +173,8 @@
 
     <class name="org.gridsphere.layout.PortletTab" extends="org.gridsphere.layout.BasePortletComponent">
         <map-to xml="tab"/>
-        <field name="Titles" type="org.gridsphere.portlet.service.spi.impl.descriptor.Description" collection="arraylist">
+        <field name="Titles" type="org.gridsphere.portlet.service.spi.impl.descriptor.Description"
+               collection="arraylist">
             <bind-xml name="title"/>
         </field>
         <field name="Url" type="string">

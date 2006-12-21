@@ -106,4 +106,19 @@ public interface PortletComponent extends ComponentLifecycle {
 
     public StringBuffer getBufferedOutput(PortletRequest req);
 
+    /**
+     * Returns the portlet component css.
+     *
+     * @return portlet component css
+     */
+    public String getStyle();
+
+    /**
+     * Sets the portlet component css
+     *
+     * @param style style to be set
+     */
+    public void setStyle(String style);
+
+
 }
