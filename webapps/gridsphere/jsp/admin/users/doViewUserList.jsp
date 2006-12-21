@@ -53,6 +53,7 @@
                 <ui:text key="SELECT"/>
             </ui:tablecell>
             <ui:tablecell>
+                <ui:image src="<%= request.getContextPath() + "/images/editor.png" %>" alt="Edit"/>
                 <ui:text key="USER_EDIT_USER"/>
             </ui:tablecell>
             <ui:tablecell>
