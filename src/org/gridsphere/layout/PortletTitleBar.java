@@ -644,7 +644,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                         winEvent = new PortletWindowEventImpl(req, PortletWindowEvent.WINDOW_MINIMIZED);
                     } else if (windowState.equals(new WindowState("resizing"))) {
                         winEvent = new PortletWindowEventImpl(req, PortletWindowEvent.WINDOW_RESTORED);
-                    } else if (windowState.equals("CLOSED")) {
+                    } else if (windowState.equals(new WindowState("CLOSED"))) {
                         winEvent = new PortletWindowEventImpl(req, PortletWindowEvent.WINDOW_CLOSED);
                     }
                     if (winEvent != null) {
@@ -657,13 +657,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                     }
                 }
                 if (titleBarEvent.hasPortletModeAction()) {
-                    /*
-                    if (titleBarEvent.getMode().equals(Portlet.Mode.CONFIGURE)) {
-                        @TODO fix me
-                        boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
-                        if (!hasrole) return;
-
-                    }*/
                     previousMode = portletMode;
                     portletMode = titleBarEvent.getMode();
                     //System.err.println("mode = " + portletMode);
