@@ -617,6 +617,16 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
+        // Render title bar
+
+        Set supportedModes = null;
+        String appID = portletRegistryService.getApplicationPortletID(portletClass);
+        ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
+        if (appPortlet != null) {
+            supportedModes = appPortlet.getSupportedModes(event.getClient().getMimeType());
+        }
+        req.setAttribute(SportletProperties.ALLOWED_MODES, supportedModes);
+
         // pop last event off stack
         event.getLastRenderEvent();
 
@@ -657,6 +667,13 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                     }
                 }
                 if (titleBarEvent.hasPortletModeAction()) {
+                    /*
+                    if (titleBarEvent.getMode().equals(Portlet.Mode.CONFIGURE)) {
+                        @TODO fix me
+                        boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
+                        if (!hasrole) return;
+
+                    }*/
                     previousMode = portletMode;
                     portletMode = titleBarEvent.getMode();
                     //System.err.println("mode = " + portletMode);
@@ -711,14 +728,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // title bar: configure, edit, help, title, min, max
         RenderRequest req = event.getRenderRequest();
         RenderResponse res = event.getRenderResponse();
-
-        Set supportedModes = null;
-        String appID = portletRegistryService.getApplicationPortletID(portletClass);
-        ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
-        if (appPortlet != null) {
-            supportedModes = appPortlet.getSupportedModes(event.getClient().getMimeType());
-        }
-        req.setAttribute(SportletProperties.ALLOWED_MODES, supportedModes);
 
         // get the appropriate title for this client
 
