@@ -26,27 +26,10 @@
         <filter-class>org.gridsphere.servlets.GridSphereFilter</filter-class>
     </filter>
 
-
     <filter-mapping>
         <filter-name>GridSphere Filter</filter-name>
         <url-pattern>/@GRIDSPHERE_CONTEXT@/*</url-pattern>
     </filter-mapping>
-    <!--
-       <filter-mapping>
-           <filter-name>GridSphere Filter</filter-name>
-           <url-pattern>/a/*</url-pattern>
-       </filter-mapping>
-
-       <filter-mapping>
-           <filter-name>GridSphere Filter</filter-name>
-           <url-pattern>/r/*</url-pattern>
-       </filter-mapping>
-    -->
-
-    <servlet>
-        <servlet-name>redirect</servlet-name>
-        <servlet-class>org.gridsphere.servlets.RedirectServlet</servlet-class>
-    </servlet>
 
     <servlet>
         <servlet-name>gridsphere</servlet-name>
@@ -126,19 +109,19 @@
     <!-- the 401 page -->
     <error-page>
         <error-code>401</error-code>
-        <location>/@GRIDSPHERE_CONTEXT@?gs_PageLayout=ErrorLayout&amp;errorPage=unauthorized.jsp</location>
+        <location>/ErrorLayout&amp;errorPage=unauthorized.jsp</location>
     </error-page>
 
     <!-- the 403 page -->
     <error-page>
         <error-code>403</error-code>
-        <location>/@GRIDSPHERE_CONTEXT@?gs_PageLayout=ErrorLayout&amp;errorPage=unauthorized.jsp</location>
+        <location>/ErrorLayout&amp;errorPage=unauthorized.jsp</location>
     </error-page>
 
     <!-- the 404 page -->
     <error-page>
         <error-code>404</error-code>
-        <location>/@GRIDSPHERE_CONTEXT@/ErrorLayout/errorPage=notfound.jsp</location>
+        <location>/ErrorLayout&amp;errorPage=notfound.jsp</location>
     </error-page>
 
 
