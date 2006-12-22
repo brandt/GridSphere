@@ -618,7 +618,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
         // Render title bar
-
         Set supportedModes = null;
         String appID = portletRegistryService.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
@@ -728,6 +727,14 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // title bar: configure, edit, help, title, min, max
         RenderRequest req = event.getRenderRequest();
         RenderResponse res = event.getRenderResponse();
+
+        Set supportedModes = null;
+        String appID = portletRegistryService.getApplicationPortletID(portletClass);
+        ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
+        if (appPortlet != null) {
+            supportedModes = appPortlet.getSupportedModes(event.getClient().getMimeType());
+        }
+        req.setAttribute(SportletProperties.ALLOWED_MODES, supportedModes);
 
         // get the appropriate title for this client
 
