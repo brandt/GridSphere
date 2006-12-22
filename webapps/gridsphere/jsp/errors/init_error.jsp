@@ -1,7 +1,7 @@
 <jsp:useBean id="error" class="java.lang.Throwable" scope="request"/>
 
 
-<%@ include file="/WEB-INF/CustomPortal/content/pagehead.jsp" %>
+<%@ include file="/WEB-INF/CustomPortal/content/pagehead.html" %>
 
 <h2>GridSphere portal failed to initialize!</h2>
 

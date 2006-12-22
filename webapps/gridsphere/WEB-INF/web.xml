@@ -3,8 +3,8 @@
  $Id$
 -->
 <!DOCTYPE web-app
-    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/dtd/web-app_2_3.dtd">
+        PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
 
@@ -26,10 +26,27 @@
         <filter-class>org.gridsphere.servlets.GridSphereFilter</filter-class>
     </filter>
 
+
     <filter-mapping>
         <filter-name>GridSphere Filter</filter-name>
         <url-pattern>/@GRIDSPHERE_CONTEXT@/*</url-pattern>
     </filter-mapping>
+    <!--
+       <filter-mapping>
+           <filter-name>GridSphere Filter</filter-name>
+           <url-pattern>/a/*</url-pattern>
+       </filter-mapping>
+
+       <filter-mapping>
+           <filter-name>GridSphere Filter</filter-name>
+           <url-pattern>/r/*</url-pattern>
+       </filter-mapping>
+    -->
+
+    <servlet>
+        <servlet-name>redirect</servlet-name>
+        <servlet-class>org.gridsphere.servlets.RedirectServlet</servlet-class>
+    </servlet>
 
     <servlet>
         <servlet-name>gridsphere</servlet-name>
@@ -132,9 +149,9 @@
         <location>/@GRIDSPHERE_CONTEXT@?gs_PageLayout=ErrorLayout&amp;errorPage=error.jsp</location>
     </error-page>
     -->
-    
+
     <session-config>
         <session-timeout>30</session-timeout>
-     </session-config>
+    </session-config>
 
 </web-app>

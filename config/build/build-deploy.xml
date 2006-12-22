@@ -106,18 +106,13 @@ Build include file for the GridSphere Portal source code, see build.xml
             <path location="${appserver.home}"/>
         </pathconvert>
 
-        <!-- copy the hibernate properties to the build.lib and replace the @GRIDSPHERE_DB@ with the path -->
-        <copy overwrite="true"
-              tofile="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/database/hibernate.properties"
-              file="${gswebapp.dir}/WEB-INF/CustomPortal/database/hibernate.properties">
-            <filterset>
-                <filter token="GRIDSPHERE_DB"
-                        value="${cathome}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/database/gridsphere"/>
-            </filterset>
-        </copy>
 
+        <filter token="GRIDSPHERE_DB"
+                value="${cathome}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/database/gridsphere"/>
+        <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
+        <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
         <!-- copy the rest of the webapps dir to -->
-        <copy filtering="true" todir="${build.webapps}/${gridsphere.deploy}">
+        <copy overwrite="true" filtering="true" todir="${build.webapps}/${gridsphere.deploy}">
             <fileset dir="${gswebapp.dir}">
                 <exclude name="**/tlds/**"/>
                 <exclude name="index.html"/>
@@ -144,8 +139,6 @@ Build include file for the GridSphere Portal source code, see build.xml
             </then>
         </if>
 
-        <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
-        <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
 
         <!-- overwrite the following files in the build.dir again with files from the source
              but parsed and with replaced text -->

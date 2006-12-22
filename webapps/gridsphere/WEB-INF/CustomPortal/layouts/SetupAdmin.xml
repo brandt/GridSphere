@@ -21,7 +21,7 @@
         <table>
             <row>
                 <column width="70%">
-                    <content include="/WEB-INF/CustomPortal/content/pagehead.jsp"/>
+                    <content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
                 </column>
             </row>
         </table>
@@ -43,7 +43,7 @@
         <table>
             <row>
                 <column width="50%">
-                    <content include="/WEB-INF/CustomPortal/content/pagefooter.jsp"/>
+                    <content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
                 </column>
             </row>
         </table>
