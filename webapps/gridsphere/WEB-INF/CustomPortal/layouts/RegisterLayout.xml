@@ -20,7 +20,7 @@
         <table>
             <row>
                 <column width="60%">
-                    <content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
+                    <content include="jcr://pageheader" nodiv="true"/>
                 </column>
 
                 <column width="40%">
@@ -59,7 +59,7 @@
                     </frame>
                 </column>
                 <column width="50%">
-                    <content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
+                    <content include="jcr://pagefooter" nodiv="true"/>
                 </column>
             </row>
         </table>

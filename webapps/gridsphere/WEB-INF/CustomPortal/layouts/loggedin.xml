@@ -20,7 +20,7 @@ $Id$
         <table>
             <row>
                 <column width="400px">
-                    <content include="/WEB-INF/CustomPortal/content/pagehead.html"/>
+                    <content include="jcr://pageheader" nodiv="true"/>
                 </column>
                 <column width="500px" style="float: right;">
                     <content include="/jsp/returnnav.jsp"/>
@@ -54,7 +54,7 @@ $Id$
                     </frame>
                 </column>
                 <column width="50%">
-                    <content include="/WEB-INF/CustomPortal/content/pagefooter.html"/>
+                    <content include="jcr://pagefooter" nodiv="true"/>
                 </column>
             </row>
         </table>
