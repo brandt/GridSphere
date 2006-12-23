@@ -126,6 +126,9 @@
         <field name="Include" type="string">
             <bind-xml name="include" node="attribute"/>
         </field>
+        <field name="Nodiv" type="boolean">
+            <bind-xml name="nodiv" node="attribute"/>
+        </field>
         <field name="Context" type="string">
             <bind-xml name="context" node="attribute"/>
         </field>

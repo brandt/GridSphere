@@ -32,6 +32,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
 
     private String textFile = null;
     private String context = null;
+    private boolean nodiv = false;
 
     /**
      * Constructs an instance of PortletContent
@@ -87,6 +88,25 @@ public class PortletContent extends BasePortletComponent implements Serializable
         return context;
     }
 
+
+    /**
+     * Returns if the included content is in the nodiv and should have no gridsphere-content div around it
+     *
+     * @return if content is in the nodiv
+     */
+    public boolean isNodiv() {
+        return nodiv;
+    }
+
+    /**
+     * Set if the included content is in the nodiv and should have no gridsphere-content div around it
+     *
+     * @param nodiv if nodiv or not
+     */
+    public void setNodiv(boolean nodiv) {
+        this.nodiv = nodiv;
+    }
+
     /**
      * Sets the web application context if not specified assumes included file is located in gridsphere context
      *
@@ -137,7 +157,11 @@ public class PortletContent extends BasePortletComponent implements Serializable
                     writer.write("<iframe border=\"0\" width=\"100%\" height=\"100%\" src=\"" + textFile + "\"></iframe>");
                 } else if (textFile.startsWith("jcr://")) {
                     JCRService jcrService = (JCRService) PortletServiceFactory.createPortletService(JCRService.class, true);
-                    writer.write("<div class=\"gridsphere-content\">" + jcrService.getContent(textFile.substring(6, textFile.length())) + "</div>");
+                    if (nodiv) {
+                        writer.write(jcrService.getContent(textFile.substring(6, textFile.length())));
+                    } else {
+                        writer.write("<div class=\"gridsphere-content\">" + jcrService.getContent(textFile.substring(6, textFile.length())) + "</div>");
+                    }
                 } else {
                     // do a normal dispatch
                     rd = ctx.getRequestDispatcher(textFile);
