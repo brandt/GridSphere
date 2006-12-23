@@ -23,8 +23,7 @@ import javax.jcr.query.QueryResult;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.io.File;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -74,6 +73,50 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
 
             if (!nameSpaces.containsKey(JCRNode.PREFIX))
                 ws.getNamespaceRegistry().registerNamespace(JCRNode.PREFIX, JCRNode.NAMESPACE);
+
+            // load all .html files in repositorypath, create Nodes out of them (if they do not exist) and delete them
+            File repDir = new File(repositorypath);
+            String[] children = repDir.list();
+
+            if (children != null) {
+                // Create list from children array
+                List filenameList = Arrays.asList(children);
+                for (Iterator filenames = filenameList.iterator(); filenames.hasNext();) {
+                    String filename = (String) filenames.next();
+                    if (filename.endsWith(".html")) {
+                        // Get filename of file or directory
+                        String checkNodeName = filename.substring(0, filename.length() - 5);
+                        if (!exists(checkNodeName)) {
+
+                            StringBuffer fileContent = new StringBuffer();
+
+                            try {
+                                BufferedReader in = new BufferedReader(new FileReader(repositorypath + File.separator + filename));
+                                String str;
+                                while ((str = in.readLine()) != null) {
+                                    fileContent.append(str);
+                                }
+                                in.close();
+                                Node rootNode = s.getRootNode();
+                                Node newNode = rootNode.addNode(checkNodeName);
+                                newNode.setProperty(JCRNode.CONTENT, fileContent.toString());
+                                newNode.setProperty(JCRNode.GSID, checkNodeName);
+                                newNode.setProperty(JCRNode.RENDERKIT, JCRNode.RENDERKIT_HTML);
+                                newNode.setProperty(JCRNode.AUTHOR, "System");
+                                s.save();
+                                log.info("Adding " + filename + " as document to ContentManagement.");
+                                File deleteFile = new File(repositorypath + File.separator + filename);
+                                deleteFile.delete();
+
+                            } catch (IOException e) {
+                                log.error("Could not read file " + filename);
+                            }
+
+                        }
+                    }
+                }
+
+            }
 
             s.logout();
 
