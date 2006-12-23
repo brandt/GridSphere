@@ -105,8 +105,8 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
                                 newNode.setProperty(JCRNode.AUTHOR, "System");
                                 s.save();
                                 log.info("Adding " + filename + " as document to ContentManagement.");
-                                File deleteFile = new File(repositorypath + File.separator + filename);
-                                deleteFile.delete();
+//                                File deleteFile = new File(repositorypath + File.separator + filename);
+//                                deleteFile.delete();
 
                             } catch (IOException e) {
                                 log.error("Could not read file " + filename);
