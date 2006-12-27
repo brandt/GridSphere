@@ -4,12 +4,10 @@
  */
 package org.gridsphere.portlets.core.login;
 
-import com.octo.captcha.service.CaptchaServiceException;
-import org.gridsphere.services.core.user.User;
+import org.gridsphere.layout.PortletPageFactory;
 import org.gridsphere.portlet.impl.PortletURLImpl;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.PortletServiceException;
-import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
@@ -17,32 +15,30 @@ import org.gridsphere.provider.portletui.beans.HiddenFieldBean;
 import org.gridsphere.provider.portletui.beans.MessageBoxBean;
 import org.gridsphere.provider.portletui.beans.PasswordBean;
 import org.gridsphere.provider.portletui.beans.TextFieldBean;
-import org.gridsphere.services.core.captcha.impl.CaptchaServiceSingleton;
+import org.gridsphere.services.core.filter.PortalFilter;
+import org.gridsphere.services.core.filter.PortalFilterService;
 import org.gridsphere.services.core.mail.MailMessage;
 import org.gridsphere.services.core.mail.MailService;
 import org.gridsphere.services.core.portal.PortalConfigService;
-import org.gridsphere.services.core.request.RequestService;
 import org.gridsphere.services.core.request.Request;
+import org.gridsphere.services.core.request.RequestService;
+import org.gridsphere.services.core.security.auth.AuthModuleService;
+import org.gridsphere.services.core.security.auth.AuthenticationException;
+import org.gridsphere.services.core.security.auth.AuthorizationException;
+import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
-import org.gridsphere.services.core.security.auth.AuthenticationException;
-import org.gridsphere.services.core.security.auth.AuthorizationException;
-import org.gridsphere.services.core.security.auth.AuthModuleService;
-import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
-import org.gridsphere.layout.PortletPageFactory;
-import org.gridsphere.services.core.filter.PortalFilter;
-import org.gridsphere.services.core.filter.PortalFilterService;
-import org.gridsphere.services.core.registry.PortletManagerService;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.*;
-import java.io.IOException;
 
 public class LoginPortlet extends ActionPortlet {
 
@@ -70,7 +66,7 @@ public class LoginPortlet extends ActionPortlet {
 
     private PortalFilterService portalFilterService = null;
 
-    private String  notificationURL = null;
+    private String notificationURL = null;
     private String newpasswordURL = null;
     private String activateAccountURL = null;
     private String denyAccountURL = null;
@@ -87,7 +83,7 @@ public class LoginPortlet extends ActionPortlet {
         requestService = (RequestService) createPortletService(RequestService.class);
         mailService = (MailService) createPortletService(MailService.class);
         portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
-        portalFilterService = (PortalFilterService)createPortletService(PortalFilterService.class);
+        portalFilterService = (PortalFilterService) createPortletService(PortalFilterService.class);
         authModuleService = (AuthModuleService) createPortletService(AuthModuleService.class);
 
         DEFAULT_VIEW_PAGE = "doViewUser";
@@ -101,13 +97,13 @@ public class LoginPortlet extends ActionPortlet {
 
         if (newpasswordURL == null) {
             PortletURL url = response.createActionURL();
-            ((PortletURLImpl)url).setAction("newpassword");
+            ((PortletURLImpl) url).setAction("newpassword");
             newpasswordURL = url.toString();
         }
 
         if (redirectURL == null) {
             PortletURL url = response.createRenderURL();
-            ((PortletURLImpl)url).setLayout(PortletPageFactory.USER_PAGE);
+            ((PortletURLImpl) url).setLayout(PortletPageFactory.USER_PAGE);
             redirectURL = url.toString();
         }
 
@@ -118,12 +114,12 @@ public class LoginPortlet extends ActionPortlet {
 
         if (activateAccountURL == null) {
             PortletURL url = response.createActionURL();
-            ((PortletURLImpl)url).setAction("approveAccount");
+            ((PortletURLImpl) url).setAction("approveAccount");
             activateAccountURL = url.toString();
         }
         if (denyAccountURL == null) {
             PortletURL url = response.createActionURL();
-            ((PortletURLImpl)url).setAction("denyAccount");
+            ((PortletURLImpl) url).setAction("denyAccount");
             denyAccountURL = url.toString();
         }
         PasswordBean pass = event.getPasswordBean("password");
@@ -209,13 +205,14 @@ public class LoginPortlet extends ActionPortlet {
     }
 
 
-
     /**
      * Handles login requests
      *
      * @param event a <code>GridSphereEvent</code>
-     * @throws org.gridsphere.services.core.security.auth.AuthenticationException if auth fails
-     * @throws org.gridsphere.services.core.security.auth.AuthorizationException if authz fails
+     * @throws org.gridsphere.services.core.security.auth.AuthenticationException
+     *          if auth fails
+     * @throws org.gridsphere.services.core.security.auth.AuthorizationException
+     *          if authz fails
      */
     protected void login(ActionFormEvent event) throws AuthenticationException, AuthorizationException {
 
@@ -253,7 +250,7 @@ public class LoginPortlet extends ActionPortlet {
 
         List<PortalFilter> portalFilters = portalFilterService.getPortalFilters();
         for (PortalFilter filter : portalFilters) {
-            filter.doAfterLogin((HttpServletRequest)req, (HttpServletResponse)res);
+            filter.doAfterLogin((HttpServletRequest) req, (HttpServletResponse) res);
         }
 
         log.debug("in login redirecting to portal: " + realuri.toString());
@@ -269,7 +266,6 @@ public class LoginPortlet extends ActionPortlet {
         }
     }
 
-    
 
     public User login(PortletRequest req)
             throws AuthenticationException, AuthorizationException {
@@ -304,13 +300,13 @@ public class LoginPortlet extends ActionPortlet {
             log.debug("Using certificate for login :" + certificate);
             List userList = userManagerService.getUsersByAttribute("certificate", certificate, null);
             if (!userList.isEmpty()) {
-                user = (User)userList.get(0);
+                user = (User) userList.get(0);
             }
         }
 
         if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
 
-        String accountStatus = (String)user.getAttribute(User.DISABLED);
+        String accountStatus = (String) user.getAttribute(User.DISABLED);
         if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
             throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
 
@@ -349,17 +345,18 @@ public class LoginPortlet extends ActionPortlet {
     }
 
     /**
-     *  Transform certificate subject from :
-     *  CN=Engbert Heupers, O=sara, O=users, O=dutchgrid
-     *  to :
-     *  /O=dutchgrid/O=users/O=sara/CN=Engbert Heupers
+     * Transform certificate subject from :
+     * CN=Engbert Heupers, O=sara, O=users, O=dutchgrid
+     * to :
+     * /O=dutchgrid/O=users/O=sara/CN=Engbert Heupers
+     *
      * @param certificate string
      * @return certificate string
      */
     private String certificateTransform(String certificate) {
         String ls[] = certificate.split(", ");
         StringBuffer res = new StringBuffer();
-        for(int i = ls.length - 1; i >= 0; i--) {
+        for (int i = ls.length - 1; i >= 0; i--) {
             res.append("/");
             res.append(ls[i]);
         }
@@ -509,19 +506,15 @@ public class LoginPortlet extends ActionPortlet {
             if (isInvalidPassword(event)) throw new PortletException("password no good!");
         }
 
-
         //remenber that we need an id to validate!
         String captchaId = req.getPortletSession().getId();
         //retrieve the response
         String response = event.getTextFieldBean("captchaTF").getValue();
         // Call the Service method
         boolean isInvalid = false;
-        try {
-            isInvalid = CaptchaServiceSingleton.getInstance().validateResponseForID(captchaId, response);
-        } catch (CaptchaServiceException e) {
-            //should not happen, may be thrown if the id is not valid
-        }
-        if (!isInvalid) {
+
+        String captchaValue = (String) req.getPortletSession(true).getAttribute(nl.captcha.servlet.Constants.SIMPLE_CAPCHA_SESSION_KEY, PortletSession.APPLICATION_SCOPE);
+        if (!response.equals(captchaValue)) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_CAPTCHA_MISMATCH"));
             throw new PortletException("captcha challenge mismatch!");
         }
@@ -547,6 +540,7 @@ public class LoginPortlet extends ActionPortlet {
             // If they do match, then validate password with our service
         } else {
             passwordValue = passwordValue.trim();
+
             if (passwordValue.length() == 0) {
                 createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
                 return true;
@@ -644,7 +638,7 @@ public class LoginPortlet extends ActionPortlet {
         String forgotMail = portalConfigService.getProperty("LOGIN_FORGOT_BODY");
         if (forgotMail == null) forgotMail = getLocalizedText(req, "LOGIN_FORGOT_MAIL");
         body.append(forgotMail).append("\n\n");
-        
+
         body.append(newpasswordURL).append("&reqid=").append(request.getOid());
         mailToUser.setBody(body.toString());
 
@@ -662,7 +656,6 @@ public class LoginPortlet extends ActionPortlet {
         PortletRequest req = evt.getActionRequest();
 
         TextFieldBean emailTF = evt.getTextFieldBean("emailAddress");
-
 
         // create a request
         Request request = requestService.createRequest(ACTIVATE_ACCOUNT_LABEL);
