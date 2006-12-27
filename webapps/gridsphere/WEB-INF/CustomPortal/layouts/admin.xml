@@ -21,7 +21,7 @@
         <table>
             <row>
                 <column width="400px">
-                    <content include="jcr://pageheader" nodiv="true"/>
+                    <content include="jcr://pageheader" border="false"/>
                 </column>
                 <column width="500px" style="float: right;">
                     <content include="/jsp/returnnav.jsp"/>
@@ -102,7 +102,7 @@
                     </frame>
                 </column>
                 <column width="50%">
-                    <content include="jcr://pagefooter" nodiv="true"/>
+                    <content include="jcr://pagefooter" border="false"/>
                 </column>
             </row>
         </table>

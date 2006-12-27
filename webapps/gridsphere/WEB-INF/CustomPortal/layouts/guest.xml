@@ -19,14 +19,14 @@
         <table>
             <row>
                 <column width="60%">
-                    <content include="jcr://pageheader" nodiv="true"/>
+                    <content include="jcr://pageheader" border="false"/>
                 </column>
-                <column width="20%" >
+                <column width="20%">
                     <frame transparent="true" outer-padding="0px" label="locale">
                         <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet</portlet-class>
                     </frame>
                 </column>
-                <column width="20%" >
+                <column width="20%">
                     <content include="/jsp/login/loginnav.jsp"/>
                 </column>
             </row>
@@ -55,7 +55,7 @@
                     </frame>
                 </column>
                 <column width="50%">
-                    <content include="jcr://pagefooter" nodiv="true"/>
+                    <content include="jcr://pagefooter" border="false"/>
                 </column>
             </row>
         </table>
