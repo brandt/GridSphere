@@ -8,8 +8,6 @@
 <div class="gridsphere-navbar">
     <ul>
         <li>
-            <%--     <ui:portletlink close="true" resizable="true" portletId="gridsphere#Login" titleColor="green" name="bar" value="Login" width="300"/> --%>
-
             <ui:actionlink layout="login" value="Login"/>
         </li>
         <% PortalConfigService portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
