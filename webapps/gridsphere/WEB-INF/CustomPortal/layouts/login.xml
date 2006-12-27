@@ -10,7 +10,7 @@
 -->
 
 <page label="login"
-      title="GridSphere Portal"
+      title="Login"
       keywords="gridsphere"
       icon="images/favicon.ico"
       editable="false">
