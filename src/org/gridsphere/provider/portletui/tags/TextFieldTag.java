@@ -20,15 +20,6 @@ public class TextFieldTag extends InputTag {
     protected TextFieldBean textFieldBean = null;
     protected int size = 0;
     protected int maxlength = 0;
-    protected String beanIdSource = null;
-
-    public String getBeanidsource() {
-        return beanIdSource;
-    }
-
-    public void setBeanidsource(String beanIdSource) {
-        this.beanIdSource = beanIdSource;
-    }
 
     /**
      * Returns the (html) size of the field
@@ -105,7 +96,7 @@ public class TextFieldTag extends InputTag {
             if (!validatorBeans.isEmpty()) {
                 ValidatorBean validatorBean = null;
                 for (int i = 0; i < validatorBeans.size(); i++) {
-                    validatorBean = (ValidatorBean)validatorBeans.get(i);
+                    validatorBean = (ValidatorBean) validatorBeans.get(i);
                     validatorBean.setName(textFieldBean.getEncodedName());
                     out.print(validatorBean.toStartString());
                 }

@@ -15,9 +15,16 @@ public abstract class InputTag extends BaseComponentTag {
 
     protected String onFocus = null;
     protected String onClick = null;
+    protected String onDblClick = null;
     protected String onChange = null;
     protected String onBlur = null;
     protected String onSelect = null;
+
+    protected String onmousedown = null;
+    protected String onmousemove = null;
+    protected String onmouseout = null;
+    protected String onmouseover = null;
+    protected String onmouseup = null;
 
     /**
      * Sets the onFocus JavaScript function
@@ -49,10 +56,28 @@ public abstract class InputTag extends BaseComponentTag {
     /**
      * Sets the onClick JavaScript function
      *
-     * @param onClick the onFocus JavaScript function
+     * @param onClick the onClick JavaScript function
      */
     public void setOnClick(String onClick) {
         this.onClick = onClick;
+    }
+
+    /**
+     * Returns the onDblClick javascript function
+     *
+     * @return the onDblClick javascript function
+     */
+    public String getOnDblClick() {
+        return onDblClick;
+    }
+
+    /**
+     * Sets the onDblClick JavaScript function
+     *
+     * @param onDblClick the onDblClick JavaScript function
+     */
+    public void setOnDblClick(String onDblClick) {
+        this.onDblClick = onDblClick;
     }
 
     /**
@@ -109,6 +134,95 @@ public abstract class InputTag extends BaseComponentTag {
         this.onSelect = onSelect;
     }
 
+    /**
+     * Returns the onmousedown event
+     *
+     * @return the onmousedown function
+     */
+    public String getOnMouseDown() {
+        return onmousedown;
+    }
+
+    /**
+     * Sets the onmousedown event
+     *
+     * @param onmousedown the onmousedown function
+     */
+    public void setOnMouseDown(String onmousedown) {
+        this.onmousedown = onmousedown;
+    }
+
+    /**
+     * Returns the onmousemove function
+     *
+     * @return the onmousemove function
+     */
+    public String getOnMouseMove() {
+        return onmousemove;
+    }
+
+    /**
+     * Sets the onmousemove function
+     *
+     * @param onmousemove the onmousemove function
+     */
+    public void setOnMouseMove(String onmousemove) {
+        this.onmousemove = onmousemove;
+    }
+
+    /**
+     * Returns the onmouseout function
+     *
+     * @return the onmouseout function
+     */
+    public String getOnMouseOut() {
+        return onmouseout;
+    }
+
+    /**
+     * Sets the onmouseout function
+     *
+     * @param onmouseout the onmouseout function
+     */
+    public void setOnMouseOut(String onmouseout) {
+        this.onmouseout = onmouseout;
+    }
+
+    /**
+     * Returns the onmouseover function
+     *
+     * @return the onmouseover function
+     */
+    public String getOnMouseOver() {
+        return onmouseover;
+    }
+
+    /**
+     * Sets the onmouseover javascript function
+     *
+     * @param onmouseover the onmouseover function
+     */
+    public void setOnMouseOver(String onmouseover) {
+        this.onmouseover = onmouseover;
+    }
+
+    /**
+     * Returns the onMouseUp javascript function
+     *
+     * @return the onmouseup event
+     */
+    public String getOnMouseUp() {
+        return onmouseup;
+    }
+
+    /**
+     * Sets the onMouseUp javascript function
+     *
+     * @param onmouseup a mouseup event
+     */
+    public void setOnMouseUp(String onmouseup) {
+        this.onmouseup = onmouseup;
+    }
 
     public abstract int doStartTag() throws JspException;
 

@@ -17,9 +17,17 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
 
     protected String onFocus = null;
     protected String onClick = null;
+    protected String onDblClick = null;
     protected String onChange = null;
     protected String onBlur = null;
     protected String onSelect = null;
+
+    protected String onmousedown = null;
+    protected String onmousemove = null;
+    protected String onmouseout = null;
+    protected String onmouseover = null;
+    protected String onmouseup = null;
+
 
     /**
      * Constructs a default input bean
@@ -130,6 +138,114 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
     }
 
     /**
+     * Returns the onDblClick javascript function
+     *
+     * @return the onDblClick javascript function
+     */
+    public String getOnDblClick() {
+        return onDblClick;
+    }
+
+    /**
+     * Sets the onDblClick JavaScript function
+     *
+     * @param onDblClick the onDblClick JavaScript function
+     */
+    public void setOnDblClick(String onDblClick) {
+        this.onDblClick = onDblClick;
+    }
+
+    /**
+     * Returns the onmousedown event
+     *
+     * @return the onmousedown function
+     */
+    public String getOnMouseDown() {
+        return onmousedown;
+    }
+
+    /**
+     * Sets the onmousedown event
+     *
+     * @param onmousedown the onmousedown function
+     */
+    public void setOnMouseDown(String onmousedown) {
+        this.onmousedown = onmousedown;
+    }
+
+    /**
+     * Returns the onmousemove function
+     *
+     * @return the onmousemove function
+     */
+    public String getOnMouseMove() {
+        return onmousemove;
+    }
+
+    /**
+     * Sets the onmousemove function
+     *
+     * @param onmousemove the onmousemove function
+     */
+    public void setOnMouseMove(String onmousemove) {
+        this.onmousemove = onmousemove;
+    }
+
+    /**
+     * Returns the onmouseout function
+     *
+     * @return the onmouseout function
+     */
+    public String getOnMouseOut() {
+        return onmouseout;
+    }
+
+    /**
+     * Sets the onmouseout function
+     *
+     * @param onmouseout the onmouseout function
+     */
+    public void setOnMouseOut(String onmouseout) {
+        this.onmouseout = onmouseout;
+    }
+
+    /**
+     * Returns the onmouseover function
+     *
+     * @return the onmouseover function
+     */
+    public String getOnMouseOver() {
+        return onmouseover;
+    }
+
+    /**
+     * Sets the onmouseover javascript function
+     *
+     * @param onmouseover the onmouseover function
+     */
+    public void setOnMouseOver(String onmouseover) {
+        this.onmouseover = onmouseover;
+    }
+
+    /**
+     * Returns the onMouseUp javascript function
+     *
+     * @return the onmouseup event
+     */
+    public String getOnMouseUp() {
+        return onmouseup;
+    }
+
+    /**
+     * Sets the onMouseUp javascript function
+     *
+     * @param onmouseup a mouseup event
+     */
+    public void setOnMouseUp(String onmouseup) {
+        this.onmouseup = onmouseup;
+    }
+
+    /**
      * Returns the size of this input element
      *
      * @return the size of this input element
@@ -183,11 +299,17 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
         if (value != null) sb.append("value=\"").append(value).append("\" ");
         if (size != 0) sb.append("size=\"").append(size).append("\" ");
         if (maxlength != 0) sb.append("maxlength=\"").append(maxlength).append("\" ");
-        if (onFocus != null) sb.append("onfocus=\"").append(onFocus).append("\"");
-        if (onClick != null) sb.append("onclick=\"").append(onClick).append("\"");
-        if (onChange != null) sb.append("onchange=\"").append(onChange).append("\"");
-        if (onBlur != null) sb.append("onblur=\"").append(onBlur).append("\"");
-        if (onSelect != null) sb.append("onselect=\"").append(onSelect).append("\"");
+        if (onFocus != null) sb.append("onfocus=\"").append(onFocus).append("\" ");
+        if (onClick != null) sb.append("onclick=\"").append(onClick).append("\" ");
+        if (onDblClick != null) sb.append("ondblclick=\"").append(onDblClick).append("\" ");
+        if (onChange != null) sb.append("onchange=\"").append(onChange).append("\" ");
+        if (onBlur != null) sb.append("onblur=\"").append(onBlur).append("\" ");
+        if (onSelect != null) sb.append("onselect=\"").append(onSelect).append("\" ");
+        if (onmouseout != null) sb.append("onmouseout=\"").append(onmouseout).append("\" ");
+        if (onmousedown != null) sb.append("onmousedown=\"").append(onmousedown).append("\" ");
+        if (onmouseup != null) sb.append("onmouseup=\"").append(onmouseup).append("\" ");
+        if (onmousemove != null) sb.append("onmousemove=\"").append(onmousemove).append("\" ");
+        if (onmouseover != null) sb.append("onmouseover=\"").append(onmouseover).append("\" ");
 
         sb.append(checkReadOnly());
         sb.append(checkDisabled());
