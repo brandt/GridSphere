@@ -14,7 +14,7 @@
             if (Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.CAN_USER_CREATE_ACCOUNT)).booleanValue()) {
         %>
         <li>
-            <ui:actionlink layout="RegisterLayout" value="Register" label="login" action="doNewUser"/>
+            <ui:actionlink layout="register" value="Register" label="login" action="doNewUser"/>
         </li>
         <% } %>
     </ul>
