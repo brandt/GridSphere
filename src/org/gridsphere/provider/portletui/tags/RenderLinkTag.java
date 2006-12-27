@@ -7,6 +7,7 @@ import org.gridsphere.provider.portletui.beans.RenderLinkBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 
 /**
@@ -181,11 +182,15 @@ public class RenderLinkTag extends ActionTag {
             renderlink.setValue(imageBean.toStartString() + val);
         }
 
-        try {
-            JspWriter out = pageContext.getOut();
-            out.print(renderlink.toEndString());
-        } catch (Exception e) {
-            throw new JspException(e.getMessage());
+        if (var == null) {
+            try {
+                JspWriter out = pageContext.getOut();
+                out.print(renderlink.toEndString());
+            } catch (Exception e) {
+                throw new JspException(e.getMessage());
+            }
+        } else {
+            pageContext.setAttribute(var, renderlink.toEndString(), PageContext.PAGE_SCOPE);
         }
         release();
         return EVAL_PAGE;

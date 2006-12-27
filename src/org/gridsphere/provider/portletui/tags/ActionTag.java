@@ -43,7 +43,7 @@ public abstract class ActionTag extends BaseComponentTag {
 
     protected String windowState = null;
     protected String portletMode = null;
-    //protected DefaultPortletAction portletAction = null;
+
     protected DefaultPortletPhase portletPhase = null;
     protected List<ParamBean> paramBeans = new ArrayList<ParamBean>();
     protected String label = null;
