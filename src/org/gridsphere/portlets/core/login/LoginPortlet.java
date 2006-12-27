@@ -506,12 +506,8 @@ public class LoginPortlet extends ActionPortlet {
             if (isInvalidPassword(event)) throw new PortletException("password no good!");
         }
 
-        //remenber that we need an id to validate!
-        String captchaId = req.getPortletSession().getId();
         //retrieve the response
         String response = event.getTextFieldBean("captchaTF").getValue();
-        // Call the Service method
-        boolean isInvalid = false;
 
         String captchaValue = (String) req.getPortletSession(true).getAttribute(nl.captcha.servlet.Constants.SIMPLE_CAPCHA_SESSION_KEY, PortletSession.APPLICATION_SCOPE);
         if (!response.equals(captchaValue)) {
