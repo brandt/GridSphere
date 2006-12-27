@@ -1,17 +1,20 @@
-<%@ page import="org.gridsphere.layout.PortletTab"%>
+<%@ page import="org.gridsphere.layout.PortletTab" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
 <portlet:defineObjects/>
 
-<jsp:useBean id="controlUI"  class="java.lang.String" scope="request"/>
+<jsp:useBean id="controlUI" class="java.lang.String" scope="request"/>
 
-<% PortletTab tab = (PortletTab)request.getAttribute("portletComp"); %>
-<%  String label;
+<ui:text var="msg1" key="LAYOUT_CREATE_SUBTAB"/>
+<ui:text var="msg2" key="LAYOUT_EDIT_SUBTAB"/>
+
+<% PortletTab tab = (PortletTab) request.getAttribute("portletComp"); %>
+<% String label;
     if (request.getAttribute("isnewtab") != null) {
-        label = "Create new subtab";
+        label = msg1;
     } else {
-        label = "Edit subtab: <b>" + tab.getTitle("en") + "</b>";
+        label = msg2 + " <b>" + tab.getTitle("en") + "</b>";
     }
 %>
 
@@ -19,32 +22,35 @@
     <ui:table>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit beanId="moveLeftButton" action="doMoveTabLeft" value="Move left"/>
+                <ui:actionsubmit beanId="moveLeftButton" action="doMoveTabLeft" key="LAYOUT_MV_LEFT"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:actionsubmit beanId="moveRightButton" action="doMoveTabRight" value="Move right"/>
+                <ui:actionsubmit beanId="moveRightButton" action="doMoveTabRight" key="LAYOUT_MV_RIGHT"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:table>
     <ui:table>
         <ui:tablerow>
             <ui:tablecell>
-                Edit tab name: <ui:textfield beanId="nameTF" value="<%= tab.getTitle("en") %>"/>
+                <ui:text key="LAYOUT_EDIT_SUBTABNAME"/>
+                <ui:textfield beanId="nameTF" value="<%= tab.getTitle("en") %>"/>
             </ui:tablecell>
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
-                Select required role: <ui:listbox beanId="rolesLB"/>
+                <ui:text key="LAYOUT_SEL_ROLES"/>
+                <ui:listbox beanId="rolesLB"/>
             </ui:tablecell>
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
-                Edit label used for bookmarking: <ui:textfield beanId="labelTF" value="<%= tab.getLabel() %>"/>
+                <ui:text key="LAYOUT_SEL_BOOKMARKING"/>
+                <ui:textfield beanId="labelTF" value="<%= tab.getLabel() %>"/>
             </ui:tablecell>
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
-                Select column layout:
+                <ui:text key="LAYOUT_SEL_COLLAYOUT"/>
                 <ui:listbox beanId="colsLB"/>
             </ui:tablecell>
         </ui:tablerow>
@@ -53,16 +59,16 @@
         <ui:tablerow>
             <ui:tablecell>
                 <% if (request.getAttribute("isnewtab") != null) { %>
-                <ui:actionsubmit action="doSaveNewTab" value="Save"/>
+                <ui:actionsubmit action="doSaveNewTab" key="SAVE"/>
                 <% } else { %>
-                <ui:actionsubmit action="doSaveTab" value="Save"/>
+                <ui:actionsubmit action="doSaveTab" key="SAVE"/>
                 <% } %>
             </ui:tablecell>
             <ui:tablecell>
                 <% if (request.getAttribute("isnewtab") != null) { %>
-                <ui:actionsubmit action="doCancel" value="Cancel"/>
+                <ui:actionsubmit action="doCancel" key="CANCEL"/>
                 <% } else { %>
-                <ui:actionsubmit action="doDeleteTab" value="Delete"/>
+                <ui:actionsubmit action="doDeleteTab" key="DELETE"/>
                 <% } %>
             </ui:tablecell>
         </ui:tablerow>

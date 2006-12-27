@@ -48,6 +48,15 @@ public class LayoutManagerPortlet extends ActionPortlet {
         DEFAULT_VIEW_PAGE = "doShowLayout";
     }
 
+    public void saveTitle(ActionFormEvent event) {
+        PortletRequest req = event.getActionRequest();
+        String sessionId = req.getPortletSession().getId();
+        PortletPage page = (PortletPage) pages.get(sessionId);
+        String title = event.getTextFieldBean("titleTF").getValue();
+        page.setTitle(title);
+        pageFactory.savePortletPageMaster(page);
+    }
+
     public void editComponent(RenderFormEvent event) throws PortletException, IOException {
         PortletRequest req = event.getRenderRequest();
         PortletResponse res = event.getRenderResponse();
@@ -404,6 +413,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
         }
 
         String selectedLayout = (String) session.getAttribute(SELECTED_LAYOUT);
+        req.setAttribute("pageName", selectedLayout);
+
         ListBoxBean layoutsLB = event.getListBoxBean("layoutsLB");
         layoutsLB.clear();
         for (String layoutId : layoutIds) {
@@ -455,6 +466,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletPage page = (PortletPage) pages.get(sessionId);
         if (page == null) page = createLayout(event, req);
 
+        event.getTextFieldBean("titleTF").setValue(page.getTitle());
 
         GridSphereEventImpl gsevent = new GridSphereEventImpl(context, (HttpServletRequest) req, (HttpServletResponse) res);
         req.setAttribute(SportletProperties.IGNORE_PARSING, "true");

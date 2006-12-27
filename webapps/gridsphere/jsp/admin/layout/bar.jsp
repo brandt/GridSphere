@@ -3,13 +3,10 @@
 
 <portlet:defineObjects/>
 
-<jsp:useBean id="controlUI"  class="java.lang.String" scope="request"/>
+<jsp:useBean id="controlUI" class="java.lang.String" scope="request"/>
 
-<%  String label = "Edit bar layout";
 
-%>
-
-<ui:group label="<%= label %>">
+<ui:group key="LAYOUT_EDIT_BAR">
     <ui:table>
         <ui:tablerow>
             <ui:tablecell>
