@@ -6,7 +6,6 @@
 package org.gridsphere.provider.portletui.beans;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -147,9 +146,8 @@ public class ListBoxBean extends BeanContainer implements TagBean {
 
     public String toEndString() {
         StringBuffer sb = new StringBuffer();
-        Iterator it = container.iterator();
-        while (it.hasNext()) {
-            ListBoxItemBean itemBean = (ListBoxItemBean) it.next();
+        for (BaseComponentBean aContainer : container) {
+            ListBoxItemBean itemBean = (ListBoxItemBean) aContainer;
             sb.append(itemBean.toStartString());
             sb.append(itemBean.toEndString());
         }
@@ -163,9 +161,8 @@ public class ListBoxBean extends BeanContainer implements TagBean {
      * @return selected value of the list, null if nothing is selected
      */
     public String getSelectedValue() {
-        Iterator it = container.iterator();
-        while (it.hasNext()) {
-            ListBoxItemBean item = (ListBoxItemBean) it.next();
+        for (BaseComponentBean aContainer : container) {
+            ListBoxItemBean item = (ListBoxItemBean) aContainer;
             if (item.isSelected()) {
                 return item.getValue();
             }
@@ -179,9 +176,8 @@ public class ListBoxBean extends BeanContainer implements TagBean {
      * @return true if an item is selected, otherwise false
      */
     public boolean hasSelectedValue() {
-        Iterator it = container.iterator();
-        while (it.hasNext()) {
-            ListBoxItemBean item = (ListBoxItemBean) it.next();
+        for (BaseComponentBean aContainer : container) {
+            ListBoxItemBean item = (ListBoxItemBean) aContainer;
             if (item.isSelected()) {
                 return true;
             }
@@ -190,10 +186,9 @@ public class ListBoxBean extends BeanContainer implements TagBean {
     }
 
     private List getSelectedNamesValues(boolean names) {
-        List result = new ArrayList();
-        Iterator it = container.iterator();
-        while (it.hasNext()) {
-            ListBoxItemBean item = (ListBoxItemBean) it.next();
+        List<String> result = new ArrayList<String>();
+        for (BaseComponentBean aContainer : container) {
+            ListBoxItemBean item = (ListBoxItemBean) aContainer;
             if (item.isSelected()) {
                 if (names) {
                     result.add(item.getName());
@@ -230,9 +225,8 @@ public class ListBoxBean extends BeanContainer implements TagBean {
      * @return selected values of the list
      */
     public String getSelectedName() {
-        Iterator it = container.iterator();
-        while (it.hasNext()) {
-            ListBoxItemBean item = (ListBoxItemBean) it.next();
+        for (BaseComponentBean aContainer : container) {
+            ListBoxItemBean item = (ListBoxItemBean) aContainer;
             if (item.isSelected()) {
                 return item.getName();
             }
@@ -246,10 +240,9 @@ public class ListBoxBean extends BeanContainer implements TagBean {
      * @return the selected item of the list
      */
     public List getSelectedItems() {
-        ArrayList result = new ArrayList();
-        Iterator it = container.iterator();
-        while (it.hasNext()) {
-            ListBoxItemBean item = (ListBoxItemBean) it.next();
+        ArrayList<ListBoxItemBean> result = new ArrayList<ListBoxItemBean>();
+        for (BaseComponentBean aContainer : container) {
+            ListBoxItemBean item = (ListBoxItemBean) aContainer;
             if (item.isSelected()) {
                 result.add(item);
             }
