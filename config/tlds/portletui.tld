@@ -442,13 +442,8 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>name</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
             <name>id</name>
-            <required>false</required>
+            <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
@@ -516,13 +511,8 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>name</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
             <name>id</name>
-            <required>false</required>
+            <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
