@@ -15,8 +15,7 @@ import javax.portlet.PortletSession;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.*;
@@ -432,16 +431,17 @@ public class PortletPageFactory implements PortletSessionListener {
         //log.debug("removed user layout: " + userLayout);
     }
 
-    public synchronized PortletPage deepCopy(PortletPage page) throws CloneNotSupportedException {
+    /*
+    public synchronized PortletPage shallowCopy(PortletPage page) throws CloneNotSupportedException {
         return (PortletPage) page.clone();
     }
+    */
 
     public synchronized PortletTabbedPane deepCopy(PortletTabbedPane pane) throws CloneNotSupportedException {
-        return (PortletTabbedPane) pane.clone();
+        return (PortletTabbedPane) deepCopy(pane);
     }
 
-    /*
-    public synchronized Object deepCopy2(Object oldObj) throws Exception {
+    public synchronized Object deepCopy(Object oldObj) throws Exception {
         ObjectOutputStream oos = null;
         ObjectInputStream ois = null;
         try {
@@ -457,15 +457,13 @@ public class PortletPageFactory implements PortletSessionListener {
             // return the new object
             return ois.readObject(); // G
         } catch (Exception e) {
-            //log.error("Exception in ObjectCloner = ", e);
-            e.printStackTrace();
-            throw (e);
+            throw e;
         } finally {
             if (oos != null) oos.close();
             if (ois != null) ois.close();
         }
     }
-    */
+
 
     public void logStatistics() {
         /*
