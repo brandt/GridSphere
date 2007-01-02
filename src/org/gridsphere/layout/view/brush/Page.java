@@ -133,14 +133,10 @@ public class Page extends BaseRender implements Render {
 
     public StringBuffer doEnd(GridSphereEvent event, PortletComponent comp) {
         StringBuffer end = new StringBuffer("\n</div> <!-- gridsphere-layout-page -->\n");
-        /*
-        StringBuffer pagebuffer = (StringBuffer)event.getRenderRequest().getAttribute(SportletProperties.PAGE_BUFFER);
-        if (pagebuffer != null) {
-            end.append(pagebuffer);
-        }
-        */
         end.append("</body>\n</html>\n");
         return end;
     }
+
+
 }
 
