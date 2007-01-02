@@ -19,7 +19,6 @@ public class TabTag extends BaseComponentTag {
 
     protected String label = "";
     protected String page = null;
-    protected String key = null;
 
     public void setActive(boolean isActive) {
         this.isActive = isActive;
@@ -35,24 +34,6 @@ public class TabTag extends BaseComponentTag {
 
     public String getLabel() {
         return label;
-    }
-
-    /**
-     * Returns the key used to identify localized text
-     *
-     * @return the key used to identify localized text
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * Sets the key used to identify localized text
-     *
-     * @param key the key used to identify localized text
-     */
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public void setPage(String page) {

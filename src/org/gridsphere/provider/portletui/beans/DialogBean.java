@@ -3,14 +3,13 @@ package org.gridsphere.provider.portletui.beans;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.services.core.portal.PortalConfigService;
 
-import javax.portlet.RenderResponse;
-
 public class DialogBean extends BaseComponentBean {
 
     protected String header = "";
     protected String body = "";
     protected String footer = "";
     protected String width = "";
+    protected String height = "";
     protected String titleColor = null;
     protected Boolean isModal = false;
     protected Boolean isClose = true;
@@ -115,6 +114,13 @@ public class DialogBean extends BaseComponentBean {
         this.width = width;
     }
 
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
 
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
@@ -137,13 +143,14 @@ public class DialogBean extends BaseComponentBean {
         renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/dragdrop.js");
         if (isResizable) renderResponse.addProperty("JAVASCRIPT_SRC", contextPath + "/javascript/yahoo/ResizePanel.js");
         sb.append("<script type=\"text/javascript\">\n");
-        sb.append("YAHOO.namespace(\"").append(name).append("\");\n");
+        sb.append("YAHOO.namespace(\"").append(id).append("\");\n");
         sb.append("function init() {\n");
-        if (!width.endsWith("px")) width = width + "px";
+        if (!width.endsWith("px")) width += "px";
+        if (!height.endsWith("px")) height += "px";
         String resizable = "";
         if (isResizable.booleanValue()) resizable = "Resize";
-        sb.append("YAHOO." + name + ".panel  = new YAHOO.widget." + resizable + "Panel(\"" + name + "\", { width:\"" + width + "\", fixedcenter: true, constraintoviewport: true, iframe: true, underlay:\"shadow\", close:" + isClose + ", modal:" + isModal + ", visible:false, draggable:" + isDraggable + "} );\n");
-        sb.append("YAHOO." + name + ".panel.render( document.body );\n");
+        sb.append("YAHOO.").append(id).append(".panel  = new YAHOO.widget.").append(resizable).append("Panel(\"").append(name).append("\", { width:\"").append(width).append("\", height:\"").append(height).append("\", fixedcenter: true, constraintoviewport: true, iframe: true, underlay:\"shadow\", close:").append(isClose).append(", modal:").append(isModal).append(", visible:false, draggable:").append(isDraggable).append("} );\n");
+        sb.append("YAHOO.").append(id).append(".panel.render( document.body );\n");
         // sb.append("YAHOO." + name + ".panel.setHeader(\"" + header + "\");\n");
         // sb.append("YAHOO." + name + ".panel.setBody(\"" + body + "\");\n");
         // sb.append("YAHOO." + name + ".panel.setFooter(\"" + footer + "\");\n");
@@ -152,12 +159,12 @@ public class DialogBean extends BaseComponentBean {
         sb.append("</script>");
         if (isLink) {
             sb.append("<a href=\"#\" ");
-            if (onClick != null) sb.append("onclick=\"" + onClick);
-            sb.append("\">" + value + "</a>\n");
+            if (onClick != null) sb.append("onclick=\"").append(onClick);
+            sb.append("\">").append(value).append("</a>\n");
         } else {
-            sb.append("<button type=\"button\" onclick=\"" + onClick + "\">" + value + "</button>\n");
+            sb.append("<button type=\"button\" onclick=\"").append(onClick).append("\">").append(value).append("</button>\n");
         }
-        sb.append("<div id=\"").append(name).append("\">");
+        sb.append("<div id=\"").append(id).append("\">");
         sb.append("<div ");
         if (titleColor != null) sb.append("style=\"background-color: ").append(titleColor).append(";\" ");
         sb.append("class=\"hd\">").append(header).append("</div>");
@@ -171,3 +178,5 @@ public class DialogBean extends BaseComponentBean {
     }
 
 }
+
+

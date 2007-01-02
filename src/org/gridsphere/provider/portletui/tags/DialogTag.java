@@ -1,7 +1,7 @@
 package org.gridsphere.provider.portletui.tags;
 
-import org.gridsphere.provider.portletui.beans.DialogBean;
 import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.provider.portletui.beans.DialogBean;
 
 import javax.portlet.RenderResponse;
 import javax.servlet.jsp.JspException;
@@ -9,20 +9,17 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 
 /**
- * The <code>TableRowTag</code> represents a table row element that is conatined within a <code>TableTag</code>
- * and itself may contain <code>TableCellTag</code>s
+ * The <code>DialogTag</code> is a wrapper for the
+ * <a href="http://developer.yahoo.com/yui/container/panel/">Yahoo UI Panel</a> javascript widget
  */
 public class DialogTag extends BaseComponentTag {
 
-    protected String name = null;
-    protected String key = null;
-    protected String value = "";
-    protected String id = null;
     protected String body = "";
     protected String titleColor = null;
     protected String header = "";
     protected String footer = "";
     protected String width = "";
+    protected String height = "";
     protected Boolean isModal = false;
     protected Boolean isClose = true;
     protected Boolean isDraggable = true;
@@ -38,12 +35,12 @@ public class DialogTag extends BaseComponentTag {
         this.width = width;
     }
 
-    public String getName() {
-        return name;
+    public String getHeight() {
+        return height;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setHeight(String height) {
+        this.height = height;
     }
 
     public Boolean getModal() {
@@ -78,22 +75,6 @@ public class DialogTag extends BaseComponentTag {
         isDraggable = draggable;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     public String getTitleColor() {
         return titleColor;
     }
@@ -126,24 +107,29 @@ public class DialogTag extends BaseComponentTag {
         this.footer = footer;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public void release() {
         super.release();
+        body = "";
+        titleColor = null;
+        header = "";
+        footer = "";
+        width = "";
+        height = "";
+        isModal = false;
+        isClose = true;
+        isDraggable = true;
+        isResizable = false;
+        onClick = null;
+        isLink = false;
     }
 
     protected void setProperties(DialogBean dialog) {
         if (key != null) value = getLocalizedText(key);
-        RenderResponse res = (RenderResponse)pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+        RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
         dialog.setRenderResponse(res);
         dialog.setId(id);
         dialog.setWidth(width);
+        dialog.setHeight(height);
         dialog.setHeader(header);
         dialog.setBody(body);
         dialog.setOnClick(onClick);
@@ -152,7 +138,6 @@ public class DialogTag extends BaseComponentTag {
         dialog.setModal(isModal);
         dialog.setDraggable(isDraggable);
         dialog.setResizable(isResizable);
-        dialog.setName(name);
         dialog.setTitleColor(titleColor);
         dialog.setLink(isLink);
         dialog.setValue(value);
@@ -161,7 +146,7 @@ public class DialogTag extends BaseComponentTag {
     public int doStartTag() throws JspException {
 
         DialogBean dialog = new DialogBean();
-        onClick = "YAHOO." + name + ".panel.show();";
+        onClick = "YAHOO." + id + ".panel.show();";
         setProperties(dialog);
 
         JspWriter out;
@@ -175,6 +160,7 @@ public class DialogTag extends BaseComponentTag {
     }
 
     public int doEndTag() throws JspException {
+        release();
         return EVAL_PAGE;
     }
 }

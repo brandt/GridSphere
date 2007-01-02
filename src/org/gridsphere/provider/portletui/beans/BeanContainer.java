@@ -42,7 +42,7 @@ public abstract class BeanContainer extends BaseComponentBean {
      * Adds a visual bean to the bean container
      *
      * @param index the position in the container to insert the bean
-     * @param bean a base component bean
+     * @param bean  a base component bean
      */
     public void setBean(int index, BaseComponentBean bean) {
         container.set(index, bean);
@@ -69,7 +69,7 @@ public abstract class BeanContainer extends BaseComponentBean {
      *
      * @return the list of visual beans
      */
-    public List getBeans() {
+    public List<BaseComponentBean> getBeans() {
         return Collections.unmodifiableList(container);
     }
 

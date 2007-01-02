@@ -21,7 +21,6 @@ import java.util.Locale;
 public class TextTag extends BaseComponentTag {
 
     protected TextBean textBean = null;
-    protected String key = null;
     protected String style = MessageStyle.MSG_INFO;
     protected String var = null;
 
@@ -78,33 +77,15 @@ public class TextTag extends BaseComponentTag {
         return style;
     }
 
-    /**
-     * Returns the key used to identify localized text
-     *
-     * @return the key used to identify localized text
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * Sets the key used to identify localized text
-     *
-     * @param key the key used to identify localized text
-     */
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     protected void setBaseComponentBean(BaseComponentBean componentBean) {
         super.setBaseComponentBean(componentBean);
-        if (style != null) ((TextBean)componentBean).setStyle(style);
+        if (style != null) ((TextBean) componentBean).setStyle(style);
     }
 
     protected void updateBaseComponentBean(BaseComponentBean componentBean) {
         super.setBaseComponentBean(componentBean);
-        if (style != null && ((TextBean)componentBean).getStyle() == null) {
-            ((TextBean)componentBean).setStyle(style);
+        if (style != null && ((TextBean) componentBean).getStyle() == null) {
+            ((TextBean) componentBean).setStyle(style);
         }
     }
 
@@ -113,10 +94,10 @@ public class TextTag extends BaseComponentTag {
         // 1st of property defined in tag put it in bean
         //if (style != null) ((TextBean)componentBean).setStyle(style);
         // 2nd if property exists in bean then use it
-        if (((TextBean)componentBean).getStyle() != null) {
-            style = ((TextBean)componentBean).getStyle();
+        if (((TextBean) componentBean).getStyle() != null) {
+            style = ((TextBean) componentBean).getStyle();
         } else {
-            ((TextBean)componentBean).setStyle(style);
+            ((TextBean) componentBean).setStyle(style);
         }
     }
 
@@ -126,7 +107,7 @@ public class TextTag extends BaseComponentTag {
 
     public int doEndTag() throws JspException {
         if (!beanId.equals("")) {
-            textBean = (TextBean)getTagBean();
+            textBean = (TextBean) getTagBean();
             if (textBean == null) {
                 textBean = new TextBean();
                 this.setBaseComponentBean(textBean);
@@ -167,7 +148,7 @@ public class TextTag extends BaseComponentTag {
             if (key != null) value = getLocalizedText(key);
             pageContext.setAttribute(var, value, PageContext.PAGE_SCOPE);
         }
-
+        super.release();
         return EVAL_PAGE;
     }
 

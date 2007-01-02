@@ -9,13 +9,11 @@ package org.gridsphere.provider.portletui.beans;
  */
 public class TextFieldBean extends InputBean implements TagBean {
 
-    public static final String NAME = "tf";
-
     /**
      * Constructs a default text field bean
      */
     public TextFieldBean() {
-        super(NAME);
+        super(TagBean.TEXTFIELD_NAME);
         this.inputtype = "text";
     }
 
@@ -25,7 +23,7 @@ public class TextFieldBean extends InputBean implements TagBean {
      * @param beanId the bean identifier
      */
     public TextFieldBean(String beanId) {
-        super(NAME);
+        super(TagBean.TEXTFIELD_NAME);
         this.beanId = beanId;
         this.inputtype = "text";
     }
@@ -33,7 +31,7 @@ public class TextFieldBean extends InputBean implements TagBean {
     /**
      * Constructs a text field bean using the supplied bean name and identifier
      *
-     * @param vbName   the visual bean name, a 2 character identifier
+     * @param vbName the visual bean name, a 2 character identifier
      * @param beanId the bean identifier
      */
     public TextFieldBean(String vbName, String beanId) {

@@ -12,6 +12,28 @@ import java.util.Locale;
  */
 public interface TagBean {
 
+    public static final String CALENDAR_NAME = "ca";
+
+    public static final String CHECKBOX_NAME = "cb";
+
+    public static final String FILEINPUT_NAME = "fi";
+
+    public static final String HIDDENFIELD_NAME = "hf";
+
+    public static final String LISTBOXITEM_NAME = "li";
+
+    public static final String TEXTFIELD_NAME = "tf";
+
+    public static final String TEXTAREA_NAME = "ta";
+
+    public static final String TEXTEDITOR_NAME = "te";
+
+    public static final String PASSWORD_NAME = "pb";
+
+    public static final String RADIOBUTTON_NAME = "rb";
+
+    public static final String RICHTEXTEDITOR_NAME = "rt";
+
     /**
      * Returns the bean identifier
      *

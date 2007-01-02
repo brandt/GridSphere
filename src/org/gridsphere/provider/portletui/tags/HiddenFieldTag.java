@@ -40,7 +40,7 @@ public class HiddenFieldTag extends BaseComponentTag {
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
-
+        super.release();
         return SKIP_BODY;
     }
 

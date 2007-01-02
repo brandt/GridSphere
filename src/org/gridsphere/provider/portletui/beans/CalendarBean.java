@@ -1,7 +1,7 @@
 package org.gridsphere.provider.portletui.beans;
 
-import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.services.core.portal.PortalConfigService;
 
 import javax.portlet.RenderResponse;
 
@@ -11,15 +11,13 @@ import javax.portlet.RenderResponse;
  */
 public class CalendarBean extends InputBean implements TagBean {
 
-    public static final String NAME = "ca";
-
     public RenderResponse renderResponse;
 
     /**
      * Constructs a default text bean
      */
     public CalendarBean() {
-        super(CalendarBean.NAME);
+        super(TagBean.CALENDAR_NAME);
         this.inputtype = "text";
     }
 
@@ -29,9 +27,8 @@ public class CalendarBean extends InputBean implements TagBean {
      * @param beanId the bean identifier
      */
     public CalendarBean(String beanId) {
-        super(CalendarBean.NAME);
+        this();
         this.beanId = beanId;
-        this.inputtype = "text";
     }
 
     public RenderResponse getRenderResponse() {
@@ -64,7 +61,6 @@ public class CalendarBean extends InputBean implements TagBean {
         sb.append("/>");
         sb.append("<button class=\"cal\" type=\"submit\" title=\"Calendar\" alt=\"Calendar\" onclick=\"scwShow(document.getElementById('" + id + "'),this);\">Calendar</button>");
         return sb.toString();
-        //return "<input id='" + id + "' type='text' value='" + value + "'/><img src='images/scw.gif' title='Click Here' alt='Click Here' onclick=\"scwShow(document.getElementById('date2'),this,3);\"/>";
     }
 
 }

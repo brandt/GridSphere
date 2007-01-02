@@ -54,24 +54,6 @@ public class RenderLinkTag extends ActionTag {
     }
 
     /**
-     * Sets the action link key used to locate localized text
-     *
-     * @param key the action link key
-     */
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    /**
-     * Returns the action link key used to locate localized text
-     *
-     * @return the action link key
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
      * Sets the image bean
      *
      * @param imageBean the image bean
@@ -187,7 +169,7 @@ public class RenderLinkTag extends ActionTag {
                 JspWriter out = pageContext.getOut();
                 out.print(renderlink.toEndString());
             } catch (Exception e) {
-                throw new JspException(e.getMessage());
+                throw new JspException(e);
             }
         } else {
             pageContext.setAttribute(var, renderlink.toEndString(), PageContext.PAGE_SCOPE);

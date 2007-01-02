@@ -3,15 +3,11 @@ package org.gridsphere.provider.portletui.beans;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.services.core.portal.PortalConfigService;
 
-import javax.portlet.RenderResponse;
-
 /*
 * @author <a href="mailto:wehrens@gridsphere.org">Oliver Wehrens</a>
 * @version $Id$
 */
 public class RichTextEditorBean extends BaseComponentBean implements TagBean {
-
-    public static final String NAME = "rt";
 
     private int cols = 0;
     private int rows = 0;
@@ -23,7 +19,7 @@ public class RichTextEditorBean extends BaseComponentBean implements TagBean {
      * Constructs a default text area bean
      */
     public RichTextEditorBean() {
-        super(RichTextEditorBean.NAME);
+        super(TagBean.RICHTEXTEDITOR_NAME);
     }
 
     /**
@@ -32,7 +28,7 @@ public class RichTextEditorBean extends BaseComponentBean implements TagBean {
      * @param beanId the bean identifier
      */
     public RichTextEditorBean(String beanId) {
-        super(RichTextEditorBean.NAME);
+        super(TagBean.RICHTEXTEDITOR_NAME);
         this.beanId = beanId;
     }
 

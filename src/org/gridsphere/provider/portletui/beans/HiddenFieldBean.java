@@ -9,13 +9,11 @@ package org.gridsphere.provider.portletui.beans;
  */
 public class HiddenFieldBean extends TextFieldBean {
 
-    public static final String NAME = "hf";
-
     /**
      * Constructs a default hidden field bean
      */
     public HiddenFieldBean() {
-        this.vbName = NAME;
+        this.vbName = TagBean.HIDDENFIELD_NAME;
     }
 
     /**
@@ -24,7 +22,7 @@ public class HiddenFieldBean extends TextFieldBean {
      * @param beanId the bean identifier
      */
     public HiddenFieldBean(String beanId) {
-        super(NAME, beanId);
+        super(TagBean.HIDDENFIELD_NAME, beanId);
     }
 
     public String toStartString() {

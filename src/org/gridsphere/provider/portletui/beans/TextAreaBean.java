@@ -10,8 +10,6 @@ package org.gridsphere.provider.portletui.beans;
  */
 public class TextAreaBean extends InputBean implements TagBean {
 
-    public static final String NAME = "ta";
-
     private int cols = 0;
     private int rows = 0;
 
@@ -19,7 +17,7 @@ public class TextAreaBean extends InputBean implements TagBean {
      * Constructs a default text area bean
      */
     public TextAreaBean() {
-        super(NAME);
+        super(TagBean.TEXTAREA_NAME);
         this.cssClass = MessageStyle.MSG_INFO;
     }
 
@@ -29,7 +27,7 @@ public class TextAreaBean extends InputBean implements TagBean {
      * @param beanId the bean identifier
      */
     public TextAreaBean(String beanId) {
-        super(NAME);
+        super(TagBean.TEXTAREA_NAME);
         this.cssClass = MessageStyle.MSG_INFO;
         this.beanId = beanId;
     }

@@ -106,7 +106,7 @@ public class TextFieldTag extends InputTag {
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
-
+        super.release();
         return EVAL_PAGE;
     }
 

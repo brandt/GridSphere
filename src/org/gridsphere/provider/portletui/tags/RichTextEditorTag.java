@@ -1,7 +1,6 @@
 package org.gridsphere.provider.portletui.tags;
 
 import org.gridsphere.provider.portletui.beans.RichTextEditorBean;
-import org.gridsphere.provider.portletui.beans.TextEditorBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -16,7 +15,6 @@ public class RichTextEditorTag extends ActionTag {
     protected RichTextEditorBean textEditorBean = null;
     private int cols = 0;
     private int rows = 0;
-    private String value = null;
 
 
     /**
@@ -106,7 +104,7 @@ public class RichTextEditorTag extends ActionTag {
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
-
+        super.release();
         return EVAL_PAGE;
     }
 }

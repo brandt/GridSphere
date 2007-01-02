@@ -1,17 +1,13 @@
 package org.gridsphere.provider.portletui.beans;
 
-import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-
-import javax.portlet.RenderResponse;
+import org.gridsphere.services.core.portal.PortalConfigService;
 
 /**
  * The <code>TextEditorBean</code> represents a text editor provided
  * by Cezary Tomczak at http://gosu.pl/dhtml/SimpleTextEditor.html
  */
 public class TextEditorBean extends BaseComponentBean implements TagBean {
-
-    public static final String NAME = "te";
 
     private int cols = 0;
     private int rows = 0;
@@ -23,7 +19,7 @@ public class TextEditorBean extends BaseComponentBean implements TagBean {
      * Constructs a default text area bean
      */
     public TextEditorBean() {
-        super(TextEditorBean.NAME);
+        super(TagBean.TEXTEDITOR_NAME);
     }
 
     /**
@@ -32,7 +28,7 @@ public class TextEditorBean extends BaseComponentBean implements TagBean {
      * @param beanId the bean identifier
      */
     public TextEditorBean(String beanId) {
-        super(TextEditorBean.NAME);
+        super(TagBean.TEXTEDITOR_NAME);
         this.beanId = beanId;
     }
 

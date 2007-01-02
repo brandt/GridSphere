@@ -10,13 +10,11 @@ package org.gridsphere.provider.portletui.beans;
  */
 public class ListBoxItemBean extends SelectElementBean {
 
-    public static final String NAME = "li";
-
     /**
      * Constructs a default listbox item bean
      */
     public ListBoxItemBean() {
-        super(NAME);
+        super(TagBean.LISTBOXITEM_NAME);
     }
 
     /**
@@ -25,7 +23,7 @@ public class ListBoxItemBean extends SelectElementBean {
      * @param beanId the listbox item bean identifier
      */
     public ListBoxItemBean(String beanId) {
-        super(NAME);
+        this();
         this.beanId = beanId;
     }
 

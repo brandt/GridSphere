@@ -117,7 +117,7 @@ public class TextAreaTag extends InputTag {
             throw new JspException(e.getMessage());
         }
 
-
+        super.release();
         return EVAL_PAGE;
     }
 

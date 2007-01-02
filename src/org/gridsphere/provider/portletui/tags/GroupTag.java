@@ -16,15 +16,6 @@ public class GroupTag extends BaseComponentTag {
     private String width = null;
     private String height = null;
     private GroupBean groupBean = null;
-    private String key = null;
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
 
     public String getLabel() {
         return label;
@@ -57,7 +48,7 @@ public class GroupTag extends BaseComponentTag {
         groupBean.setLabel(label);
         groupBean.setCssClass(cssClass);
         groupBean.setCssStyle(cssStyle);
-        if (key!=null) {
+        if (key != null) {
             groupBean.setLabel(getLocalizedText(key));
         }
 

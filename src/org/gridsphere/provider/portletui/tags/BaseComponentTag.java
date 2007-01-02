@@ -24,6 +24,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
 
     protected String name = null;
     protected String value = null;
+    protected String key = null;
     protected boolean readonly = false;
     protected boolean disabled = false;
     protected String cssStyle = null;
@@ -84,6 +85,24 @@ public abstract class BaseComponentTag extends BaseBeanTag {
      */
     public String getValue() {
         return value;
+    }
+
+    /**
+     * Return the key used to identify the value in the properties file
+     *
+     * @return the key
+     */
+    public String getKey() {
+        return key;
+    }
+
+    /**
+     * Sets the key used to identify the value in the properties file
+     *
+     * @param key the property key
+     */
+    public void setKey(String key) {
+        this.key = key;
     }
 
     /**
@@ -198,8 +217,8 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         componentBean.setBeanId(beanId);
         if (id != null) componentBean.setId(id);
         componentBean.setLocale(getLocale());
-        componentBean.addParam(SportletProperties.COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.COMPONENT_ID));
-        componentBean.addParam(SportletProperties.GP_COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID));
+        componentBean.addParam(SportletProperties.COMPONENT_ID, (String) pageContext.findAttribute(SportletProperties.COMPONENT_ID));
+        componentBean.addParam(SportletProperties.GP_COMPONENT_ID, (String) pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID));
         if (cssStyle != null) componentBean.setCssStyle(cssStyle);
         if (cssClass != null) componentBean.setCssClass(cssStyle);
         componentBean.setDisabled(disabled);
@@ -208,9 +227,9 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         if (value != null) componentBean.setValue(value);
         //componentBean.setSupportsJS(supportsJS);
         componentBean.setReadOnly(readonly);
-        RenderResponse res = (RenderResponse)pageContext.getAttribute("renderResponse");
+        RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse");
         componentBean.setRenderResponse(res);
-        RenderRequest req = (RenderRequest)pageContext.getAttribute("renderRequest");
+        RenderRequest req = (RenderRequest) pageContext.getAttribute("renderRequest");
         componentBean.setRenderRequest(req);
     }
 
@@ -222,8 +241,8 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     protected void updateBaseComponentBean(BaseComponentBean componentBean) {
         componentBean.setLocale(getLocale());
         if (id != null) componentBean.setId(id);
-        componentBean.addParam(SportletProperties.COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.COMPONENT_ID));
-        componentBean.addParam(SportletProperties.GP_COMPONENT_ID, (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID));
+        componentBean.addParam(SportletProperties.COMPONENT_ID, (String) pageContext.findAttribute(SportletProperties.COMPONENT_ID));
+        componentBean.addParam(SportletProperties.GP_COMPONENT_ID, (String) pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID));
         if ((cssClass != null) && componentBean.getCssClass() == null) {
             componentBean.setCssClass(cssClass);
         }
@@ -236,9 +255,9 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         if ((value != null) && (componentBean.getValue() == null)) {
             componentBean.setValue(value);
         }
-        RenderResponse res = (RenderResponse)pageContext.getAttribute("renderResponse");
+        RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse");
         componentBean.setRenderResponse(res);
-        RenderRequest req = (RenderRequest)pageContext.getAttribute("renderRequest");
+        RenderRequest req = (RenderRequest) pageContext.getAttribute("renderRequest");
         componentBean.setRenderRequest(req);
     }
 
@@ -293,6 +312,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     public void release() {
         name = null;
         value = null;
+        key = null;
         readonly = false;
         disabled = false;
         cssStyle = null;

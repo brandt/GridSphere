@@ -11,7 +11,6 @@ import javax.servlet.jsp.tagext.Tag;
 public class ValidatorTag extends BaseComponentTag {
 
     protected ValidatorBean validatorBean = null;
-    protected String key = null;
     protected String type = "";
 
     /**
@@ -32,28 +31,10 @@ public class ValidatorTag extends BaseComponentTag {
         return type;
     }
 
-    /**
-     * Returns the key used to identify localized text
-     *
-     * @return the key used to identify localized text
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * Sets the key used to identify localized text
-     *
-     * @param key the key used to identify localized text
-     */
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public int doStartTag() throws JspException {
         Tag parent = this.getParent();
         if (parent instanceof TextFieldTag) {
-            TextFieldTag textField = (TextFieldTag)parent;
+            TextFieldTag textField = (TextFieldTag) parent;
             if (key != null) value = this.getLocalizedText(key);
             String tfClass = type;
             textField.addCssClass(tfClass + "#");
@@ -62,6 +43,7 @@ public class ValidatorTag extends BaseComponentTag {
             validatorBean.setType(type);
             textField.addValidatorBean(validatorBean);
         }
+        super.release();
         return SKIP_BODY;
     }
 

@@ -54,7 +54,7 @@ public class ActionURLTagImpl extends ActionTag {
         return style;
     }
 
-    public int doStartTag() throws JspException {      
+    public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
             actionlink = (ActionLinkBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (actionlink == null) {
@@ -104,7 +104,7 @@ public class ActionURLTagImpl extends ActionTag {
                 JspWriter out = pageContext.getOut();
                 out.print(actionString);
             } catch (Exception e) {
-                throw new JspException(e.getMessage());
+                throw new JspException(e);
             }
         } else {
             pageContext.setAttribute(var, actionString, PageContext.PAGE_SCOPE);

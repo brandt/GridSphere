@@ -36,6 +36,7 @@ public class TabbedPaneTag extends BaseComponentTag {
     public void addTabBean(TabBean tabBean) {
         tabBeans.add(tabBean);
     }
+
     public void setCurrentTab(String currentTab) {
         this.currentTabLabel = currentTab;
     }
@@ -61,18 +62,18 @@ public class TabbedPaneTag extends BaseComponentTag {
             RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
             currentTabLabel = req.getParameter(TAB_LABEL_PARAM);
             if (currentTabLabel == null) {
-                currentTabLabel = (String)req.getPortletSession(true).getAttribute(getClass().getName());
+                currentTabLabel = (String) req.getPortletSession(true).getAttribute(getClass().getName());
             }
 
             JspWriter out = pageContext.getOut();
-            out.println("<ul class=\"basictab\">");
+            out.println("<ul class=\"ui-tab\">");
             // if this tab is not set, then use this tab (the first tab in the sequence)
             if (currentTabLabel == null) {
-                currentTabLabel = ((TabBean)tabBeans.get(0)).getLabel();
+                currentTabLabel = ((TabBean) tabBeans.get(0)).getLabel();
             }
 
             RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-                    
+
             // print out all tabs
             for (int i = 0; i < tabBeans.size(); i++) {
                 TabBean tabBean = (TabBean) tabBeans.get(i);
@@ -96,8 +97,8 @@ public class TabbedPaneTag extends BaseComponentTag {
             StringWriter writer = new StringWriter();
             ServletResponse sres = pageContext.getResponse();
             if (res instanceof HttpServletResponse) {
-                HttpServletResponse hres = (HttpServletResponse)sres;
-                HttpServletRequest hreq = (HttpServletRequest)pageContext.getRequest();
+                HttpServletResponse hres = (HttpServletResponse) sres;
+                HttpServletRequest hreq = (HttpServletRequest) pageContext.getRequest();
                 StoredPortletResponseImpl resWrapper = new StoredPortletResponseImpl(hreq, hres, writer);
                 pageContext.getServletContext().getRequestDispatcher(currentPage).include(pageContext.getRequest(), resWrapper);
                 out.println(writer.getBuffer());
@@ -106,6 +107,7 @@ public class TabbedPaneTag extends BaseComponentTag {
         } catch (Exception e) {
             throw new JspException(e);
         }
+        super.release();
         return EVAL_PAGE;
     }
 }

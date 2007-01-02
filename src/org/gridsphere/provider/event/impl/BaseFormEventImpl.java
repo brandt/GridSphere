@@ -672,7 +672,7 @@ public abstract class BaseFormEventImpl {
 
             //log.debug("Adding bean " + beanId + " with bean key " + beanKey);
 
-            if (vb.equals(TextFieldBean.NAME)) {
+            if (vb.equals(TagBean.TEXTFIELD_NAME)) {
                 //log.debug("Creating a textfieldbean bean with id:" + beanId);
                 TextFieldBean bean = new TextFieldBean(beanId);
                 bean.setValue(vals[0]);
@@ -681,7 +681,7 @@ public abstract class BaseFormEventImpl {
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 configureBean(bean);
                 tagBeans.put(beanKey, bean);
-            } else if (vb.equals(FileInputBean.NAME)) {
+            } else if (vb.equals(TagBean.FILEINPUT_NAME)) {
                 //logRequestAttributes();
                 //log.debug("Creating a fileinput bean with id:" + beanId);
 
@@ -709,7 +709,7 @@ public abstract class BaseFormEventImpl {
                 tagBeans.put(beanKey, bean);
 
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
-            } else if (vb.equals(CalendarBean.NAME)) {
+            } else if (vb.equals(TagBean.CALENDAR_NAME)) {
                 //log.debug("Creating a calendarbean bean with id:" + beanId);
                 CalendarBean bean = new CalendarBean(beanId);
                 bean.setValue(vals[0]);
@@ -717,7 +717,7 @@ public abstract class BaseFormEventImpl {
                 configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
-            } else if (vb.equals(CheckBoxBean.NAME)) {
+            } else if (vb.equals(TagBean.CHECKBOX_NAME)) {
                 CheckBoxBean bean = (CheckBoxBean) tagBeans.get(beanKey);
                 if (bean == null) {
                     //log.debug("Creating a checkbox bean with id:" + beanId);
@@ -750,7 +750,7 @@ public abstract class BaseFormEventImpl {
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 configureBean(bean);
                 tagBeans.put(beanKey, bean);
-            } else if (vb.equals(RadioButtonBean.NAME)) {
+            } else if (vb.equals(TagBean.RADIOBUTTON_NAME)) {
                 RadioButtonBean bean = (RadioButtonBean) tagBeans.get(beanKey);
                 if (bean == null) {
                     //log.debug("Creating a new radiobutton bean with id:" + beanId);
@@ -766,7 +766,7 @@ public abstract class BaseFormEventImpl {
                 configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
-            } else if (vb.equals(PasswordBean.NAME)) {
+            } else if (vb.equals(TagBean.PASSWORD_NAME)) {
                 //log.debug("Creating a passwordbean bean with id:" + beanId);
                 PasswordBean bean = new PasswordBean(beanId);
                 bean.setValue(vals[0]);
@@ -774,7 +774,7 @@ public abstract class BaseFormEventImpl {
                 configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
-            } else if (vb.equals(TextAreaBean.NAME)) {
+            } else if (vb.equals(TagBean.TEXTAREA_NAME)) {
                 //log.debug("Creating a textareabean bean with id:" + beanId);
                 TextAreaBean bean = new TextAreaBean(beanId);
                 bean.setValue(vals[0]);
@@ -782,7 +782,7 @@ public abstract class BaseFormEventImpl {
                 configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
-            } else if (vb.equals(TextEditorBean.NAME)) {
+            } else if (vb.equals(TagBean.TEXTEDITOR_NAME)) {
                 //log.debug("Creating a textareabean bean with id:" + beanId);
                 TextEditorBean bean = new TextEditorBean(beanId);
                 bean.setValue(vals[0]);
@@ -791,7 +791,7 @@ public abstract class BaseFormEventImpl {
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
 
-            } else if (vb.equals(HiddenFieldBean.NAME)) {
+            } else if (vb.equals(TagBean.HIDDENFIELD_NAME)) {
                 //log.debug("Creating a hidden bean bean with id:" + beanId);
                 HiddenFieldBean bean = new HiddenFieldBean(beanId);
                 bean.setValue(vals[0]);
@@ -799,7 +799,7 @@ public abstract class BaseFormEventImpl {
                 configureBean(bean);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
-            } else if (vb.equals(RichTextEditorBean.NAME)) {
+            } else if (vb.equals(TagBean.RICHTEXTEDITOR_NAME)) {
                 RichTextEditorBean bean = new RichTextEditorBean(beanId);
                 bean.setValue(vals[0]);
                 bean.setName(name);

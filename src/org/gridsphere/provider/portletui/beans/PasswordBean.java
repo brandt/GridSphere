@@ -10,13 +10,12 @@ package org.gridsphere.provider.portletui.beans;
  */
 public class PasswordBean extends TextFieldBean {
 
-    public static final String NAME = "pb";
 
     /**
      * Constructs a default password bean
      */
     public PasswordBean() {
-        this.vbName = NAME;
+        this.vbName = TagBean.PASSWORD_NAME;
         this.inputtype = "password";
     }
 
@@ -26,7 +25,7 @@ public class PasswordBean extends TextFieldBean {
      * @param beanId the bean identifier
      */
     public PasswordBean(String beanId) {
-        super(NAME, beanId);
+        super(TagBean.PASSWORD_NAME, beanId);
         this.inputtype = "password";
     }
 

@@ -4,7 +4,6 @@ import org.gridsphere.provider.portletui.beans.TextEditorBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.portlet.RenderResponse;
 
 /**
  * The <code>TextEditorTag</code> uses the SimpleTextEditor javscript provided
@@ -15,7 +14,6 @@ public class TextEditorTag extends ActionTag {
     protected TextEditorBean textEditorBean = null;
     private int cols = 0;
     private int rows = 0;
-    private String value = null;
     private boolean viewsource = true;
 
     /**
@@ -98,7 +96,7 @@ public class TextEditorTag extends ActionTag {
             textEditorBean.setViewsource(viewsource);
             this.setBaseComponentBean(textEditorBean);
         }
-      
+
         textEditorBean.setAction(createActionURI());
 
         //debug();
@@ -125,7 +123,7 @@ public class TextEditorTag extends ActionTag {
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
-
+        super.release();
         return EVAL_PAGE;
     }
 

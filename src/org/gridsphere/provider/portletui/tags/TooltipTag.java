@@ -12,43 +12,6 @@ import javax.servlet.jsp.JspWriter;
  */
 public class TooltipTag extends BaseComponentTag {
 
-    public String name = null;
-    public String key = null;
-    public String value = "";
-    public String id = null;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public void release() {
         super.release();
     }
@@ -59,7 +22,7 @@ public class TooltipTag extends BaseComponentTag {
         try {
             out = pageContext.getOut();
             TooltipBean tooltip = new TooltipBean();
-            RenderResponse res = (RenderResponse)pageContext.getAttribute("renderResponse");
+            RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse");
             tooltip.setRenderResponse(res);
             tooltip.setId(id);
             tooltip.setName(name);
@@ -72,6 +35,7 @@ public class TooltipTag extends BaseComponentTag {
     }
 
     public int doEndTag() throws JspException {
+        release();
         return EVAL_PAGE;
     }
 }

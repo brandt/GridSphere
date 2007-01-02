@@ -5,11 +5,11 @@
  */
 package org.gridsphere.provider.portletui.tags;
 
+import org.gridsphere.provider.portletui.beans.BaseComponentBean;
 import org.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridsphere.provider.portletui.beans.ListBoxItemBean;
 
 import javax.servlet.jsp.JspException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -21,26 +21,6 @@ public class ListBoxItemTag extends BaseComponentTag {
 
     protected ListBoxItemBean listboxitem = null;
     protected boolean selected = false;
-    protected String key = null;
-
-    /**
-     * Returns the key used to identify localized text
-     *
-     * @return the key used to identify localized text
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * Sets the key used to identify localized text
-     *
-     * @param key the key used to identify localized text
-     */
-    public void setKey(String key) {
-        this.key = key;
-    }
-
 
     /**
      * Sets the element to be selected
@@ -68,10 +48,8 @@ public class ListBoxItemTag extends BaseComponentTag {
      */
     protected boolean itemExists(ListBoxTag listboxTag) {
         ListBoxBean listbox = listboxTag.getListBoxBean();
-        List beans = listbox.getBeans();
-        Iterator it = beans.iterator();
-        while (it.hasNext()) {
-            ListBoxItemBean listboxitem = (ListBoxItemBean) it.next();
+        List<BaseComponentBean> beans = listbox.getBeans();
+        for (BaseComponentBean listboxitem : beans) {
             if (name != null) {
                 if (name.equals(listboxitem.getName())) {
                     listboxitem.setValue(value);
@@ -94,10 +72,9 @@ public class ListBoxItemTag extends BaseComponentTag {
         if (selected) {
             if (!listboxTag.getMultiple()) {
                 ListBoxBean listbox = listboxTag.getListBoxBean();
-                List beans = listbox.getBeans();
-                Iterator it = beans.iterator();
-                while (it.hasNext()) {
-                    ListBoxItemBean listboxitem = (ListBoxItemBean) it.next();
+                List<BaseComponentBean> beans = listbox.getBeans();
+                for (BaseComponentBean bean : beans) {
+                    ListBoxItemBean listboxitem = (ListBoxItemBean) bean;
                     if (listboxitem.isSelected()) {
                         selected = false;
                     }

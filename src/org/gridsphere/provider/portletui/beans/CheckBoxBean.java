@@ -12,13 +12,11 @@ public class CheckBoxBean extends SelectElementBean {
 
     public static final String CHECKBOX_STYLE = "portlet-form-field";
 
-    public static final String NAME = "cb";
-
     /**
      * Constructs a default check box bean
      */
     public CheckBoxBean() {
-        super(NAME);
+        super(TagBean.CHECKBOX_NAME);
         this.cssClass = CHECKBOX_STYLE;
     }
 
@@ -28,9 +26,8 @@ public class CheckBoxBean extends SelectElementBean {
      * @param beanId the bean identifier
      */
     public CheckBoxBean(String beanId) {
-        super(NAME);
+        this();
         this.beanId = beanId;
-        this.cssClass = CHECKBOX_STYLE;
     }
 
     public String toStartString() {

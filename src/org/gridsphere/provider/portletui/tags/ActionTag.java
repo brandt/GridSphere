@@ -38,7 +38,7 @@ public abstract class ActionTag extends BaseComponentTag {
     protected String onMouseOut = null;
     protected String onReset = null;
     protected boolean useAjax = false;
-    protected String key = null;
+
     protected boolean isSecure = false;
 
     protected String windowState = null;
@@ -98,24 +98,6 @@ public abstract class ActionTag extends BaseComponentTag {
      */
     public String getAnchor() {
         return anchor;
-    }
-
-    /**
-     * Sets the action link key used to locate localized text
-     *
-     * @param key the action link key
-     */
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    /**
-     * Returns the action link key used to locate localized text
-     *
-     * @return the action link key
-     */
-    public String getKey() {
-        return key;
     }
 
     /**
@@ -423,7 +405,6 @@ public abstract class ActionTag extends BaseComponentTag {
         onMouseOut = null;
         onMouseOver = null;
         useAjax = false;
-        key = null;
         isSecure = false;
         windowState = null;
         portletMode = null;

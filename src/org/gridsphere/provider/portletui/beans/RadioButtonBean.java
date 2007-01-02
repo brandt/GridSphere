@@ -12,13 +12,11 @@ public class RadioButtonBean extends SelectElementBean {
 
     public static final String RADIO_STYLE = "portlet-form-field";
 
-    public static final String NAME = "rb";
-
     /**
      * Constructs a default radio button bean
      */
     public RadioButtonBean() {
-        super(NAME);
+        super(TagBean.RADIOBUTTON_NAME);
         this.cssClass = RADIO_STYLE;
     }
 
@@ -28,7 +26,7 @@ public class RadioButtonBean extends SelectElementBean {
      * @param id the bean identifier
      */
     public RadioButtonBean(String id) {
-        super(NAME);
+        super(TagBean.RADIOBUTTON_NAME);
         this.cssClass = RADIO_STYLE;
         this.beanId = id;
     }

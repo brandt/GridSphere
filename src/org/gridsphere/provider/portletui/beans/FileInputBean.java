@@ -19,8 +19,6 @@ public class FileInputBean extends InputBean implements TagBean {
 
     public static final String SUBMIT_STYLE = "portlet-form-button";
 
-    public static final String NAME = "fi";
-
     private FileItem savedFileItem = null;
     private int maxUploadSize = MAX_UPLOAD_SIZE;
 
@@ -28,7 +26,7 @@ public class FileInputBean extends InputBean implements TagBean {
      * Constructs a default file input bean
      */
     public FileInputBean() {
-        super(NAME);
+        super(TagBean.FILEINPUT_NAME);
         this.cssClass = SUBMIT_STYLE;
         this.inputtype = "file";
     }
@@ -39,17 +37,12 @@ public class FileInputBean extends InputBean implements TagBean {
      * @param beanId the bean identifier
      */
     public FileInputBean(String beanId) {
-        super(NAME);
-        this.cssClass = SUBMIT_STYLE;
-        this.inputtype = "file";
+        this();
         this.beanId = beanId;
     }
 
     public FileInputBean(String beanId, FileItem fileItem) {
-        super(NAME);
-        this.cssClass = SUBMIT_STYLE;
-        this.inputtype = "file";
-        this.beanId = beanId;
+        this(beanId);
         savedFileItem = fileItem;
     }
 
@@ -107,11 +100,11 @@ public class FileInputBean extends InputBean implements TagBean {
 
         // Added by Chrono to check if directory needs creating
         int ddx = filePath.lastIndexOf(pathChar);
-        String dirPath = filePath.substring(0,ddx);
+        String dirPath = filePath.substring(0, ddx);
         try {
             File dirCreate = new File(dirPath);
             dirCreate.mkdirs();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Unable to create directory: " + dirPath);
         }
 

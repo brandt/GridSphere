@@ -13,26 +13,7 @@ import javax.servlet.jsp.JspWriter;
 public class MessageBoxTag extends BaseComponentTag {
 
     protected MessageBoxBean messageBoxBean = null;
-    protected String key = null;
     protected String style = null;
-
-    /**
-     * Returns the key used to identify localized text
-     *
-     * @return the key used to identify localized text
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * Sets the key used to identify localized text
-     *
-     * @param key the key used to identify localized text
-     */
-    public void setKey(String key) {
-        this.key = key;
-    }
 
     /**
      * Sets the style of the text: Available styles are
