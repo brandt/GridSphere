@@ -11,7 +11,7 @@ Version: $Id: ui.css 4736 2006-04-10 22:10:44Z novotny $
     padding: 5px 5px 5px 25px;
     background-image: url( ../images/msgicons/portlet-msg-alert.gif );
     background-repeat: no-repeat;
-    background-position: 5px 0;
+    background-position: center left;
 }
 
 .ui-messagebox-portlet-msg-error {
@@ -20,7 +20,7 @@ Version: $Id: ui.css 4736 2006-04-10 22:10:44Z novotny $
     padding: 5px 5px 5px 25px;
     background-image: url( ../images/msgicons/portlet-msg-alert.gif );
     background-repeat: no-repeat;
-    background-position: 5px 0;
+    background-position: center left;
 }
 
 .ui-messagebox-portlet-msg-info {
@@ -29,7 +29,7 @@ Version: $Id: ui.css 4736 2006-04-10 22:10:44Z novotny $
     padding: 5px 5px 5px 25px;
     background-image: url( ../images/msgicons/portlet-msg-info.gif );
     background-repeat: no-repeat;
-    background-position: 5px 0;
+    background-position: center left;
 }
 
 .ui-messagebox-portlet-msg-success {
@@ -38,7 +38,7 @@ Version: $Id: ui.css 4736 2006-04-10 22:10:44Z novotny $
     padding: 5px 5px 5px 25px;
     background-image: url( ../images/msgicons/portlet-msg-success.gif );
     background-repeat: no-repeat;
-    background-position: 5px 0;
+    background-position: center left;
 }
 
 .ui-tab {
