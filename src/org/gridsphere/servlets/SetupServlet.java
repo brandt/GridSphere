@@ -1,35 +1,38 @@
 package org.gridsphere.servlets;
 
-import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.portlet.impl.PortletContextImpl;
-import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.services.core.persistence.impl.CreateDatabase;
-import org.gridsphere.services.core.persistence.PersistenceManagerService;
-import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
-import org.gridsphere.services.core.security.role.PortletRole;
-import org.gridsphere.services.core.security.role.RoleManagerService;
-import org.gridsphere.services.core.security.password.PasswordEditor;
-import org.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridsphere.services.core.user.User;
-import org.gridsphere.services.core.user.UserManagerService;
-import org.gridsphere.services.core.portal.PortalConfigService;
-import org.gridsphere.layout.PortletLayoutEngine;
-import org.gridsphere.portletcontainer.impl.GridSphereEventImpl;
-import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.gridsphere.layout.PortletLayoutEngine;
+import org.gridsphere.portlet.impl.PortletContextImpl;
+import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridsphere.portletcontainer.impl.GridSphereEventImpl;
+import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridsphere.services.core.persistence.PersistenceManagerService;
+import org.gridsphere.services.core.persistence.impl.CreateDatabase;
+import org.gridsphere.services.core.portal.PortalConfigService;
+import org.gridsphere.services.core.security.password.PasswordEditor;
+import org.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridsphere.services.core.security.role.PortletRole;
+import org.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridsphere.services.core.user.User;
+import org.gridsphere.services.core.user.UserManagerService;
 import org.hibernate.StaleObjectStateException;
 
+import javax.portlet.PortletContext;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.portlet.PortletContext;
-import java.io.*;
-import java.util.Properties;
-import java.util.List;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
@@ -52,14 +55,12 @@ public class SetupServlet extends HttpServlet {
         PortletContext ctx = new PortletContextImpl(getServletContext());
         GridSphereEventImpl event = new GridSphereEventImpl(ctx, req, res);
 
-        System.err.println("in do get!!!");
-
         if (req.getAttribute("setup") == null) {
             redirect(event);
             return;
         }
 
-        String error = (String)req.getSession(true).getAttribute("error");
+        String error = (String) req.getSession(true).getAttribute("error");
         if (error != null) {
             req.setAttribute("error", error);
             req.getSession().removeAttribute("error");
@@ -67,8 +68,8 @@ public class SetupServlet extends HttpServlet {
         // check current GS release and the DB meta file
         String release = SportletProperties.getInstance().getProperty("gridsphere.release");
         int idx = release.lastIndexOf(" ");
-        String gsversion = release.substring(idx+1);
-        System.err.println("gsversion=" + gsversion);
+        String gsversion = release.substring(idx + 1);
+        //System.err.println("gsversion=" + gsversion);
 
         String dbpath = getServletContext().getRealPath("/WEB-INF/CustomPortal/database");
 
@@ -92,7 +93,7 @@ public class SetupServlet extends HttpServlet {
 
             PersistenceManagerService pms = null;
 
-            pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+            pms = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
             List admins = null;
             PersistenceManagerRdbms pm = null;
             try {
@@ -207,7 +208,7 @@ public class SetupServlet extends HttpServlet {
         }
 
     }
-    
+
     private void createExternalDatabase(GridSphereEvent event) {
         HttpServletRequest req = event.getHttpServletRequest();
         InputStream hibInputStream = getServletContext().getResourceAsStream("/WEB-INF/CustomPortal/database/hibernate.properties");
@@ -216,11 +217,14 @@ public class SetupServlet extends HttpServlet {
         String dbtype = req.getParameter("dbtype");
 
         String connURL = req.getParameter("databaseURL");
-        if ((connURL == null) || (connURL.equals(""))) throw new IllegalArgumentException("Please provide a value for the Database URL!");
+        if ((connURL == null) || (connURL.equals("")))
+            throw new IllegalArgumentException("Please provide a value for the Database URL!");
         String dialect = req.getParameter("dialect");
-        if ((dialect == null) || (dialect.equals(""))) throw new IllegalArgumentException("Please provide a value for the Hibernate Dialect!");
+        if ((dialect == null) || (dialect.equals("")))
+            throw new IllegalArgumentException("Please provide a value for the Hibernate Dialect!");
         String driverClass = req.getParameter("driverClass");
-        if ((driverClass == null) || (driverClass.equals(""))) throw new IllegalArgumentException("Please provide a value for the Driver Class Name!");
+        if ((driverClass == null) || (driverClass.equals("")))
+            throw new IllegalArgumentException("Please provide a value for the Driver Class Name!");
 
         String name = req.getParameter("username");
         if (name == null) name = "";
@@ -255,7 +259,7 @@ public class SetupServlet extends HttpServlet {
         dbtask.setConfigDir(getServletContext().getRealPath(""));
         try {
             dbtask.execute();
-       } catch (Exception e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
@@ -275,7 +279,7 @@ public class SetupServlet extends HttpServlet {
 
         String release = SportletProperties.getInstance().getProperty("gridsphere.release");
         int idx = release.lastIndexOf(" ");
-        String gsversion = release.substring(idx+1);
+        String gsversion = release.substring(idx + 1);
         String dbpath = getServletContext().getRealPath("/WEB-INF/CustomPortal/database/GS_" + gsversion);
         try {
             File dbfile = new File(dbpath);
@@ -327,18 +331,18 @@ public class SetupServlet extends HttpServlet {
         if (firstname.equals("")) throw new IllegalArgumentException("Please provide a First Name!");
         if (lastname.equals("")) throw new IllegalArgumentException("Please provide a Last Name!");
         if (email.equals("")) throw new IllegalArgumentException("Please provide an Email Address!");
-        if (!email.contains("@") || (!email.contains("."))) throw new IllegalArgumentException("Please provide a valid Email Address!");
+        if (!email.contains("@") || (!email.contains(".")))
+            throw new IllegalArgumentException("Please provide a valid Email Address!");
         if (!passwd.equals(passwd2)) throw new IllegalArgumentException("The supplied passwords do not match!");
         if (passwd.equals("")) throw new IllegalArgumentException("Please provide a Password!");
 
 
-        PersistenceManagerService pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+        PersistenceManagerService pms = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
         PersistenceManagerRdbms pm = pms.createGridSphereRdbms();
 
         try {
             log.debug("Starting a database transaction");
             pm.beginTransaction();
-
 
 
             User accountRequest = this.userManagerService.createUser();
@@ -357,7 +361,6 @@ public class SetupServlet extends HttpServlet {
 
             roleService.addUserToRole(accountRequest, PortletRole.ADMIN);
             roleService.addUserToRole(accountRequest, PortletRole.USER);
-
 
             // Commit and cleanup
             log.debug("Committing the database transaction");

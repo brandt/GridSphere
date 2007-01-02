@@ -49,7 +49,6 @@ public class GridSphereFilter implements Filter {
     private static Boolean firstDoGet = Boolean.TRUE;
 
     private Log log = LogFactory.getLog(GridSphereFilter.class);
-    private RoleManagerService roleService = null;
 
     private ServletContext context = null;
 
@@ -101,7 +100,7 @@ public class GridSphereFilter implements Filter {
                     pm = pms.createGridSphereRdbms();
                     pm.beginTransaction();
 
-                    roleService = (RoleManagerService) PortletServiceFactory.createPortletService(RoleManagerService.class, true);
+                    RoleManagerService roleService = (RoleManagerService) PortletServiceFactory.createPortletService(RoleManagerService.class, true);
                     noAdmin = roleService.getUsersInRole(PortletRole.ADMIN).isEmpty();
 
                     pm.endTransaction();
@@ -194,6 +193,7 @@ public class GridSphereFilter implements Filter {
             }
 
             //chain.doFilter(request, response);
+
 
             String ctxPath = "/gs";
 

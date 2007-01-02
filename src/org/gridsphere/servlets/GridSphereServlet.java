@@ -393,8 +393,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @see #doGet
      */
     public final void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        System.err.println("do post!!");
-
         doGet(req, res);
     }
 
