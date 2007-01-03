@@ -4,7 +4,7 @@
  */
 package org.gridsphere.portlets.core.admin.roles;
 
-import org.gridsphere.services.core.user.User;
+import org.gridsphere.layout.PortletPageFactory;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.FormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
@@ -13,8 +13,8 @@ import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.persistence.QueryFilter;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
-import org.gridsphere.layout.PortletPageFactory;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
@@ -32,7 +32,7 @@ public class RoleManagerPortlet extends ActionPortlet {
 
     // Portlet services
     private RoleManagerService roleManagerService = null;
-   private UserManagerService userManagerService = null;
+    private UserManagerService userManagerService = null;
 
     public void init(PortletConfig config) throws PortletException {
         super.init(config);
@@ -92,8 +92,8 @@ public class RoleManagerPortlet extends ActionPortlet {
 
 
             List notusers = userManagerService.getUsers();
-            for(int i = 0; i < users.size(); i++) {
-                User u = (User)users.get(i);
+            for (int i = 0; i < users.size(); i++) {
+                User u = (User) users.get(i);
                 if (notusers.contains(u)) notusers.remove(u);
             }
 
@@ -106,7 +106,7 @@ public class RoleManagerPortlet extends ActionPortlet {
                 req.setAttribute("nousers", "true");
             }
             for (int i = 0; i < notusers.size(); i++) {
-                User user = (User)notusers.get(i);
+                User user = (User) notusers.get(i);
                 ListBoxItemBean item = new ListBoxItemBean();
                 item.setName(user.getID());
                 item.setValue(user.getFullName());
@@ -126,7 +126,7 @@ public class RoleManagerPortlet extends ActionPortlet {
 
     public void doDeleteRole(ActionFormEvent evt) {
         PortletRequest req = evt.getActionRequest();
-
+        String roleStr = "";
         String[] roleNames = req.getParameterValues("rolesCB");
         if (roleNames != null) {
             for (int i = 0; i < roleNames.length; i++) {
@@ -143,9 +143,10 @@ public class RoleManagerPortlet extends ActionPortlet {
                     // if role has been used in layouts, rename it to empty role
                     PortletPageFactory pageFactory = PortletPageFactory.getInstance();
                     pageFactory.renameRole(req, role.getName(), "");
-                    createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_DELETE_MSG") + ": " + role.getName());
+                    roleStr += " " + role.getName();
                 }
             }
+            createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_DELETE_MSG") + ": " + roleStr);
         }
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
@@ -178,7 +179,7 @@ public class RoleManagerPortlet extends ActionPortlet {
         if (isNewRole) {
             createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_CREATE_MSG") + ": " + role.getName());
         } else {
-            createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_UPDATE_MSG") + ": " + role.getName());            
+            createSuccessMessage(evt, this.getLocalizedText(req, "ROLE_UPDATE_MSG") + ": " + role.getName());
             PortletPageFactory pageFactory = PortletPageFactory.getInstance();
             String oldRole = roleHF.getValue();
             String newRole = roleNameTF.getValue();

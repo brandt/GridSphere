@@ -30,17 +30,23 @@
     </ui:frame>
 </ui:form>
 
-<ui:form>
-    <ui:frame>
-        <ui:tablerow>
-            <ui:tablecell>
-                <ui:text key="LAYOUT_EDIT_TITLE"/>
-                <ui:textfield beanId="titleTF"/>
-                <ui:actionsubmit action="saveTitle" key="SAVE"/>
-            </ui:tablecell>
-        </ui:tablerow>
-    </ui:frame>
-</ui:form>
+<ui:group key="LAYOUT_PAGE_DETAILS">
+    <ui:form>
+        <ui:frame>
+            <ui:tablerow>
+                <ui:tablecell>
+                    <ui:text key="LAYOUT_EDIT_TITLE"/>
+                    <ui:textfield beanId="titleTF"/>
+                </ui:tablecell>
+                <ui:tablecell>
+                    <ui:text key="LAYOUT_EDIT_KEYWORDS"/>
+                    <ui:textfield beanId="keywordsTF"/>
+                </ui:tablecell>
+            </ui:tablerow>
+        </ui:frame>
+        <ui:actionsubmit action="savePageDetails" key="SAVE"/>
+    </ui:form>
+</ui:group>
 
 <h3>
     <ui:text key="LAYOUT_EDIT_COMPS"/>
