@@ -11,27 +11,11 @@
         Provides @PROJECT_TITLE@
     </description>
 
-    <context-param>
-        <!-- preferred repository selector. "preferred" because
-        if one is already installed, this choice is ignored. -->
-        <param-name>log4j-selector</param-name>
-        <param-value>org.apache.log4j.selector.ContextJNDISelector</param-value>
-    </context-param>
-    <context-param>
-        <!-- relative path to config file within current webapp -->
-        <param-name>log4j-config</param-name>
-        <param-value>WEB-INF/classes/log4j.properties</param-value>
-    </context-param>
-
     <!-- uncomment only if using in non-GridSphere container
     <listener>
         <listener-class>org.gridsphere.provider.portlet.jsr.PortletServlet</listener-class>
     </listener>
      -->
-
-    <listener>
-        <listener-class>org.apache.log4j.servlet.InitContextListener</listener-class>
-    </listener>
 
     <servlet>
         <servlet-name>PortletServlet</servlet-name>
@@ -57,12 +41,5 @@
       <extension>wmls</extension>
       <mime-type>text/vnd.wap.wmlscript</mime-type>
     </mime-mapping>
-
-    <env-entry>
-        <description>JNDI logging context for this app</description>
-        <env-entry-name>log4j/logging-context</env-entry-name>
-        <env-entry-value>@PROJECT_NAME@</env-entry-value>
-        <env-entry-type>java.lang.String</env-entry-type>
-    </env-entry>
 
 </web-app>
