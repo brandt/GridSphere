@@ -79,10 +79,6 @@
         </copy>
         <copy file="config/template/hibernate.properties" todir="${project.dir}/webapp/WEB-INF/persistence"/>
 
-        <copy overwrite="true" file="config/template/portlet.xml.tpl"
-              tofile="${project.dir}/webapp/WEB-INF/portlet.xml"/>
-        <copy overwrite="true" file="config/template/web.xml.tpl" tofile="${project.dir}/webapp/WEB-INF/web.xml"/>
-
         <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_TITLE@"
                  value="${project.title}"/>
         <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_NAME@"
