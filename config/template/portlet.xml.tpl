@@ -6,11 +6,9 @@
     <portlet>
         <!-- place portlet description here -->
         <description xml:lang="en">This Portlet is a sample</description>
-        <description xml:lang="de">Diese Portlet ist ein sample</description>
         <!-- place unique portlet name here -->
         <portlet-name>SamplePortlet</portlet-name>
         <display-name xml:lang="en">A sample Portlet</display-name>
-        <display-name xml:lang="de">Ein sample Portlet</display-name>
         <!-- place your portlet class name here -->
         <portlet-class>org.gridsphere.portlets.SamplePortlet</portlet-class>
         <expiration-cache>0</expiration-cache>
