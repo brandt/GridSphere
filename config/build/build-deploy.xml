@@ -162,21 +162,20 @@ Build include file for the GridSphere Portal source code, see build.xml
         <!-- copy build.webappsdir to deployed location -->
         <copy todir="${appserver.home}/webapps">
             <fileset dir="${build.webapps}">
-                <exclude name="**/gridsphere.properties"/>
+                <exclude name="**/CustomPortal/**"/>
             </fileset>
         </copy>
 
         <!-- only copy over the portal properties if not there already -->
         <if>
-            <available
-                    file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"/>
+            <available type="dir" file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal"/>
             <then/>
             <else>
                 <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
                 <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
-                <copy file="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/gridsphere.properties"
-                      todir="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portal/"
-                      filtering="true"/>
+                <copy filtering="true" todir="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal">
+                    <fileset dir="${build.webapps}/${gridsphere.deploy}/WEB-INF/CustomPortal"/>
+                </copy>
             </else>
         </if>
     </target>
