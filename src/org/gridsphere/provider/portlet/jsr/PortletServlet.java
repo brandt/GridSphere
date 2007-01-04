@@ -8,20 +8,20 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.impl.*;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.services.core.user.User;
-import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.PortletPreferencesManager;
+import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.impl.ApplicationPortletImpl;
 import org.gridsphere.portletcontainer.impl.PortletWebApplicationImpl;
 import org.gridsphere.portletcontainer.impl.descriptor.*;
 import org.gridsphere.portletcontainer.impl.descriptor.types.TransportGuaranteeType;
+import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridsphere.services.core.persistence.PersistenceManagerService;
+import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.services.core.security.auth.AuthModuleService;
-import org.gridsphere.services.core.portal.PortalConfigService;
-import org.gridsphere.services.core.persistence.PersistenceManagerService;
-import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
+import org.gridsphere.services.core.user.User;
 
 import javax.portlet.*;
 import javax.servlet.Servlet;
@@ -37,7 +37,7 @@ import java.util.*;
 import java.util.ResourceBundle;
 
 public class PortletServlet extends HttpServlet
-        implements Servlet, ServletConfig, 
+        implements Servlet, ServletConfig,
         HttpSessionAttributeListener, HttpSessionListener, HttpSessionActivationListener {
 
     private transient Log log = LogFactory.getLog(PortletServlet.class);
@@ -57,7 +57,7 @@ public class PortletServlet extends HttpServlet
     private Map<String, String> userKeys = new HashMap<String, String>();
     private List<String> securePortlets = new ArrayList<String>();
 
-    private transient PersistenceManagerService pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+    private transient PersistenceManagerService pms = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
 
     private transient PersistenceManagerRdbms pm = null;
 
@@ -71,8 +71,8 @@ public class PortletServlet extends HttpServlet
     }
 
     public void initJSRPortletWebapp() {
-        registryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
-        configService = (PortalConfigService)PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+        registryService = (PortletRegistryService) PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
+        configService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
 
         ServletContext ctx = this.getServletContext();
 
@@ -137,13 +137,12 @@ public class PortletServlet extends HttpServlet
             }
         }
 
-
         // create portlet context
         portletContext = new PortletContextImpl(ctx);
 
         // load in any authentication modules if found-- this is a GridSphere extension
 
-        AuthModuleService authModuleService = (AuthModuleService)PortletServiceFactory.createPortletService(AuthModuleService.class, true);
+        AuthModuleService authModuleService = (AuthModuleService) PortletServiceFactory.createPortletService(AuthModuleService.class, true);
         InputStream is = getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
         if (is != null) {
             String authModulePath = this.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
@@ -194,7 +193,7 @@ public class PortletServlet extends HttpServlet
                 }
             }
 
-            PortletManagerService manager = (PortletManagerService)PortletServiceFactory.createPortletService(PortletManagerService.class, true);
+            PortletManagerService manager = (PortletManagerService) PortletServiceFactory.createPortletService(PortletManagerService.class, true);
             manager.addPortletWebApplication(portletWebApp);
             return;
         } else if (method.equals(SportletProperties.DESTROY)) {
@@ -237,10 +236,10 @@ public class PortletServlet extends HttpServlet
         int idx = pid.indexOf("#");
         Portlet portlet = null;
         if (idx > 0) {
-            portletName = pid.substring(idx+1);
+            portletName = pid.substring(idx + 1);
             // this hack uses the portletclasses hash that identifies classname to portlet mappings
         } else {
-            portletName = (String)portletclasses.get(pid);
+            portletName = (String) portletclasses.get(pid);
         }
         if (portletName == null) {
             log.debug("Check the layout descriptors to make sure the portlet identified as " + pid + " matches with the class and/or portlet name of the portlet.xml");
@@ -256,10 +255,10 @@ public class PortletServlet extends HttpServlet
             return;
         }
 
-
         // perform user conversion from gridsphere to JSR model
         User user = (User) request.getAttribute(SportletProperties.PORTLET_USER);
-        Map<String, String> userInfo = new HashMap<String, String>();;
+        Map<String, String> userInfo = new HashMap<String, String>();
+        ;
         String userId = null;
         if (user != null) {
             userId = user.getID();
@@ -268,20 +267,23 @@ public class PortletServlet extends HttpServlet
             if (userInfo.containsKey("user.id")) userInfo.put("user.id", user.getID());
             if (userInfo.containsKey("user.email")) userInfo.put("user.email", user.getEmailAddress());
             if (userInfo.containsKey("user.organization")) userInfo.put("user.organization", user.getOrganization());
-            if (userInfo.containsKey("user.lastlogintime")) userInfo.put("user.lastlogintime", String.valueOf(user.getLastLoginTime()));
+            if (userInfo.containsKey("user.lastlogintime"))
+                userInfo.put("user.lastlogintime", String.valueOf(user.getLastLoginTime()));
             if (userInfo.containsKey("user.name.full")) userInfo.put("user.name.full", user.getFullName());
             if (userInfo.containsKey("user.name.first")) userInfo.put("user.name.first", user.getFirstName());
             if (userInfo.containsKey("user.name.last")) userInfo.put("user.name.last", user.getLastName());
-            if (userInfo.containsKey("user.timezone")) userInfo.put("user.timezone", (String)user.getAttribute(User.TIMEZONE));
-            if (userInfo.containsKey("user.locale")) userInfo.put("user.locale", (String)user.getAttribute(User.LOCALE));
-            if (userInfo.containsKey("user.theme")) userInfo.put("user.theme", (String)user.getAttribute(User.THEME));
+            if (userInfo.containsKey("user.timezone"))
+                userInfo.put("user.timezone", (String) user.getAttribute(User.TIMEZONE));
+            if (userInfo.containsKey("user.locale"))
+                userInfo.put("user.locale", (String) user.getAttribute(User.LOCALE));
+            if (userInfo.containsKey("user.theme")) userInfo.put("user.theme", (String) user.getAttribute(User.THEME));
 
             if (userInfo.containsKey("user.login.id")) userInfo.put("user.login.id", user.getUserName());
 
             Enumeration e = user.getAttributeNames();
             while (e.hasMoreElements()) {
-                String key = (String)e.nextElement();
-                if (userInfo.containsKey(key)) userInfo.put(key, (String)user.getAttribute(key));
+                String key = (String) e.nextElement();
+                if (userInfo.containsKey(key)) userInfo.put(key, (String) user.getAttribute(key));
             }
 
             UserAttribute[] userAttrs = portletWebApp.getUserAttributes();
@@ -352,7 +354,6 @@ public class PortletServlet extends HttpServlet
         ActionResponse actionResponse = new ActionResponseImpl(request, response);
 
 
-
         try {
             String webappname = portletWebApp.getWebApplicationName();
             pm = pms.getPersistenceManagerRdbms(webappname);
@@ -421,8 +422,9 @@ public class PortletServlet extends HttpServlet
                     log.error("in PortletServlet(): destroy caught exception: ", d);
                 }
             } catch (Throwable ex) {
+                log.error("in render: caught exception: ", ex);
                 try {
-                    if (pm != null)  {
+                    if (pm != null) {
                         log.info("Committing database transaction for webapp: " + portletWebApp.getWebApplicationName());
                         pm.endTransaction();
                         pm.rollbackTransaction();
@@ -430,16 +432,17 @@ public class PortletServlet extends HttpServlet
                 } catch (Throwable rbEx) {
                     throw new ServletException("Could not rollback transaction after exception!", rbEx);
                 }
-                throw new ServletException(ex.getCause());
+                throw new ServletException(ex);
             }
         }
     }
 
     protected void doTitle(Portlet portlet, RenderRequest request, RenderResponse response) throws IOException, PortletException {
-        Portlet por = (Portlet)portlet;
+        Portlet por = (Portlet) portlet;
         if (por instanceof GenericPortlet) {
             GenericPortlet genPortlet = ((GenericPortlet) portlet);
-            if (genPortlet.getPortletConfig() == null) throw new PortletException("Unable to get PortletConfig from Portlet");
+            if (genPortlet.getPortletConfig() == null)
+                throw new PortletException("Unable to get PortletConfig from Portlet");
             ResourceBundle resBundle = genPortlet.getPortletConfig().getResourceBundle(request.getLocale());
             String title = resBundle.getString("javax.portlet.title");
             response.setContentType("text/html");
@@ -449,7 +452,7 @@ public class PortletServlet extends HttpServlet
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         super.doGet(req, res);
     }
 
@@ -503,7 +506,7 @@ public class PortletServlet extends HttpServlet
                 servletRequest.setAttribute(SportletProperties.PORTAL_REDIRECT_PATH, url.toString());
             }
 
-            
+
         }
     }
 
