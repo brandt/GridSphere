@@ -1,17 +1,17 @@
 package org.gridsphere.layout;
 
-import org.gridsphere.layout.event.PortletTabListener;
-import org.gridsphere.layout.event.PortletTabEvent;
 import org.gridsphere.layout.event.PortletComponentEvent;
+import org.gridsphere.layout.event.PortletTabEvent;
+import org.gridsphere.layout.event.PortletTabListener;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 
 import javax.portlet.PortletRequest;
-import java.io.Serializable;
 import java.io.IOException;
-import java.util.List;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * The <code>PortletTabbedPane</code> represents the visual portlet tabbed pane interface
@@ -19,7 +19,6 @@ import java.util.Iterator;
  */
 public abstract class PortletNavMenu extends BasePortletComponent implements Serializable, PortletTabListener, Cloneable {
 
-    private String style = "menu";
     private List<PortletTab> tabs = new ArrayList<PortletTab>();
 
     private String layoutDescriptor = null;
@@ -38,26 +37,6 @@ public abstract class PortletNavMenu extends BasePortletComponent implements Ser
 
     public String getLayoutDescriptor() {
         return layoutDescriptor;
-    }
-
-    /**
-     * Sets the tabbed pane style. Currently supported styles are "menu"
-     * and "sub-menu"
-     *
-     * @param style the tabbed pane style
-     */
-    public void setStyle(String style) {
-        this.style = style;
-    }
-
-    /**
-     * Returns the tabbed pane style. Currently supported styles are "menu"
-     * and "sub-menu"
-     *
-     * @return the tabbed pane style
-     */
-    public String getStyle() {
-        return style;
     }
 
     /**
@@ -303,7 +282,7 @@ public abstract class PortletNavMenu extends BasePortletComponent implements Ser
 
     public void remove(PortletComponent pc, PortletRequest req) {
         if (pc instanceof PortletTab) {
-            tabs.remove((PortletTab)pc);
+            tabs.remove((PortletTab) pc);
             if (tabs.isEmpty()) parent.remove(this, req);
         }
     }
@@ -322,7 +301,7 @@ public abstract class PortletNavMenu extends BasePortletComponent implements Ser
         t.tabs = new ArrayList<PortletTab>(tabs.size());
         for (int i = 0; i < tabs.size(); i++) {
             PortletTab tab = (PortletTab) tabs.get(i);
-            t.tabs.add((PortletTab)tab.clone());
+            t.tabs.add((PortletTab) tab.clone());
         }
         return t;
     }
