@@ -35,7 +35,7 @@ public class PersistenceManagerServiceImpl implements PersistenceManagerService,
      *
      * @return the core GS PersistenceManager
      */
-    public PersistenceManagerRdbms createGridSphereRdbms() {
+    public synchronized PersistenceManagerRdbms createGridSphereRdbms() {
         if (gsDB == null) {
             gsDB = new PersistenceManagerRdbmsImpl(context);
         }
@@ -48,7 +48,7 @@ public class PersistenceManagerServiceImpl implements PersistenceManagerService,
      * @param webappname the webapp identifier for this PersistenceManager
      * @return the new PersistenceManager
      */
-    public PersistenceManagerRdbms createPersistenceManagerRdbms(String webappname) {
+    public synchronized PersistenceManagerRdbms createPersistenceManagerRdbms(String webappname) {
         if (!databases.containsKey(webappname)) {
             log.info("Creating new PM for :" + webappname);
             String path = context.getRealPath("../" + webappname + "/WEB-INF/persistence/");
