@@ -23,7 +23,7 @@ import java.util.*;
 public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private transient Log log = LogFactory.getLog(PersistenceManagerRdbmsImpl.class);
 
-    private ThreadLocal sessionThread = new ThreadLocal();
+    private ThreadLocal<Session> sessionThread = new ThreadLocal<Session>();
 
     private SessionFactory factory = null;
 
@@ -41,17 +41,18 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     public PersistenceManagerRdbmsImpl(ServletContext context) {
         Properties prop = new Properties();
         pm = "gridsphere";
+        //pm = context.getRealPath("");
         String mappingPath = context.getRealPath("/WEB-INF/persistence");
         try {
             prop.load(context.getResourceAsStream("/WEB-INF/CustomPortal/database/hibernate.properties"));
             Configuration cfg = loadConfiguration(mappingPath, prop);
             factory = cfg.buildSessionFactory();
         } catch (IOException e) {
-            log.error("Unable to load file: gridsphere/WEB-INF/CustomPortal/database/hibernate.properties");
+            log.error("Unable to load file: " + context.getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties"));
         } catch (HibernateException e) {
             log.error("Could not instantiate Hibernate Factory", e);
         }
-        log.info("Creating Hibernate RDBMS Impl using config in gridsphere/WEB-INF/CustomPortal/database/hibernate.properties");
+        log.info("Creating Hibernate RDBMS Impl using config in " + context.getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties"));
     }
 
     public PersistenceManagerRdbmsImpl(String persistenceConfigDir) {
@@ -79,7 +80,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     /**
      * Load the mappingfiles from the given dirctory location
      *
-     * @param mappingPath the file path to find hibernate mapping files
+     * @param mappingPath         the file path to find hibernate mapping files
      * @param hibernateProperties the hibernate properties
      * @return a hibernate configuration object
      */
@@ -93,7 +94,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
             if (children != null) {
                 // Create list from children array
-                List filenameList = Arrays.asList(children);
+                List<String> filenameList = Arrays.asList(children);
                 // Ensure that this list is sorted alphabetically
                 Collections.sort(filenameList);
                 for (Iterator filenames = filenameList.iterator(); filenames.hasNext();) {
@@ -102,6 +103,44 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                         // Get filename of file or directory
                         log.debug("add hbm file :" + mappingPath + File.separator + filename);
                         cfg.addFile(mappingPath + File.separator + filename);
+                    }
+                }
+            }
+
+        } catch (MappingException e) {
+            log.error("Could not load Hibernate mapping files", e);
+        }
+
+        return cfg;
+    }
+
+    /**
+     * Load the mappingfiles from the given dirctory location
+     *
+     * @param mappingPath         the file path to find hibernate mapping files
+     * @param hibernateProperties the hibernate properties
+     * @return a hibernate configuration object
+     */
+    private Configuration loadConfiguration(String mappingPath, Properties hibernateProperties, ClassLoader loader) {
+        Configuration cfg = null;
+        try {
+            cfg = new Configuration();
+            cfg.setProperties(hibernateProperties);
+            File mappingdir = new File(mappingPath + "/../classes");
+            System.err.println(mappingdir.getAbsolutePath());
+            String[] children = mappingdir.list();
+
+            if (children != null) {
+                // Create list from children array
+                List<String> filenameList = Arrays.asList(children);
+                // Ensure that this list is sorted alphabetically
+                Collections.sort(filenameList);
+                for (Iterator filenames = filenameList.iterator(); filenames.hasNext();) {
+                    String filename = (String) filenames.next();
+                    if (filename.endsWith(".hbm.xml")) {
+                        // Get filename of file or directory
+                        log.debug("add hbm file :" + mappingPath + File.separator + filename);
+                        cfg.addResource(filename, loader);
                     }
                 }
             }
@@ -162,7 +201,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public int count(String query) throws PersistenceManagerException {
         try {
-            Long i = (Long)doTransaction(null, query, CMD_COUNT, null);
+            Long i = (Long) doTransaction(null, query, CMD_COUNT, null);
             return i.intValue();
         } catch (HibernateException e) {
             throw new PersistenceManagerException(e);
@@ -219,7 +258,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                 break;
             case CMD_COUNT:
                 q = session.createQuery(query);
-                result = (Long)q.uniqueResult();
+                result = (Long) q.uniqueResult();
                 break;
         }
         return result;
@@ -227,7 +266,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
 
     public Session currentSession() throws HibernateException {
-        Session session = (Session)sessionThread.get();
+        Session session = (Session) sessionThread.get();
         if (session == null) {
             session = factory.openSession();
             sessionThread.set(session);
