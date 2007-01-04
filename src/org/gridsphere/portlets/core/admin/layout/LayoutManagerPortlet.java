@@ -864,7 +864,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
                     if (cols.size() == 2) {
                         if (strategyNum.equals("one")) {
                             // deal with case where column layout needs to be reduced
+                            PortletColumnLayout col = (PortletColumnLayout) cols.get(0);
                             PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(1);
+                            col.setWidth("100%");
                             row.removePortletComponent(oldcol);
                         }
                         if (strategyNum.equals("two")) {
@@ -910,8 +912,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
                     if (cols.size() == 3) {
                         if (strategyNum.equals("one")) {
                             // deal with case where column layout needs to be reduced
+                            PortletColumnLayout col = (PortletColumnLayout) cols.get(0);
                             PortletColumnLayout newcol = (PortletColumnLayout) cols.get(2);
                             PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(1);
+                            col.setWidth("100%");
                             row.removePortletComponent(oldcol);
                             row.removePortletComponent(newcol);
                         }
