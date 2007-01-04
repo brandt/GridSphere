@@ -1,6 +1,20 @@
 ChangeLog.txt
 =============
 
+Changes since GridSphere 2.2.7
+==============================
+
+Bug
+
+    * [GPF-288] - PortletPreferences bug where request.getPreferences gives a new preferences object each time
+    * [GPF-290] - ValidatorTag sometimes puts error message in textfield value
+    * [GPF-291] - PORTLET_UNAVAILABLE missing in resources
+    * [GPF-315] - Wrong translation of ui:group-attribute "width"
+
+Improvement
+
+    * [GPF-322] - Missing german translations in Portlet_de.properties
+
 Changes since GridSphere 2.2.6
 ==============================
 
