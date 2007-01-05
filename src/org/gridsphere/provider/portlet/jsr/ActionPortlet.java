@@ -318,15 +318,18 @@ public class ActionPortlet extends GenericPortlet {
 
         DefaultPortletRender render = (DefaultPortletRender) request.getAttribute(SportletProperties.RENDER_EVENT);
 
+        Map<String, TagBean> tagBeans = getTagBeans(request);
+        RenderFormEvent formEvent = new RenderFormEventImpl(render, request, response, tagBeans);
+
+        // check to see if this render event should invoke a render method
+        String methodName = render.getName();
+        if (!methodName.equals("")) next = methodName;
+
         if (next.endsWith(".jsp")) {
             // this is necessary in case beans were modified in action method and set next state is a JSP to render which needs the beans
-            Map<String, TagBean> tagBeans = getTagBeans(request);
-            RenderFormEvent formEvent = new RenderFormEventImpl(render, request, response, tagBeans);
             formEvent.store();
             doViewJSP(request, response, next);
         } else {
-            Map<String, TagBean> tagBeans = getTagBeans(request);
-            RenderFormEvent formEvent = new RenderFormEventImpl(render, request, response, tagBeans);
             Class[] paramTypes = new Class[]{RenderFormEvent.class};
             Object[] arguments = new Object[]{formEvent};
 
