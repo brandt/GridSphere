@@ -1,12 +1,13 @@
 package org.gridsphere.services.core.filter.impl;
 
-import org.gridsphere.services.core.filter.PortalFilter;
-import org.gridsphere.services.core.filter.PortalFilterConfig;
-import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridsphere.services.core.request.RequestService;
+import org.gridsphere.services.core.filter.BasePortalFilter;
+import org.gridsphere.services.core.filter.PortalFilter;
+import org.gridsphere.services.core.filter.PortalFilterConfig;
 import org.gridsphere.services.core.request.Request;
+import org.gridsphere.services.core.request.RequestService;
+import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
 
 import javax.servlet.http.Cookie;
@@ -19,7 +20,7 @@ import java.util.Date;
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id$
  */
-public class RememberMeCookieFilter implements PortalFilter {
+public class RememberMeCookieFilter extends BasePortalFilter implements PortalFilter {
 
     private UserManagerService userManagerService;
     private RequestService requestService;
@@ -57,7 +58,7 @@ public class RememberMeCookieFilter implements PortalFilter {
     }
 
     protected void checkUserHasCookie(HttpServletRequest req) {
-        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
+        User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
         if (user != null) return;
         Cookie[] cookies = req.getCookies();
         if (cookies == null) return;
@@ -74,7 +75,7 @@ public class RememberMeCookieFilter implements PortalFilter {
                 Request genreq = requestService.getRequest(reqId, COOKIE_REQUEST);
                 if (genreq != null) {
                     String remoteAddr = genreq.getAttribute("ipaddress");
-                    if ((remoteAddr != null) && (!remoteAddr.equals(((HttpServletRequest)req).getRemoteAddr()))) {
+                    if ((remoteAddr != null) && (!remoteAddr.equals(((HttpServletRequest) req).getRemoteAddr()))) {
                         //System.err.println("ip address of host and cookie did not match!!");
                         return;
                     }
@@ -92,13 +93,13 @@ public class RememberMeCookieFilter implements PortalFilter {
     }
 
     protected void setUserCookie(HttpServletRequest req, HttpServletResponse res) {
-        User user = (User)req.getAttribute(SportletProperties.PORTLET_USER);
+        User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
         Request request = requestService.createRequest(COOKIE_REQUEST);
         Cookie cookie = new Cookie("gridsphere", request.getOid());
         request.setUserID(user.getID());
         long time = Calendar.getInstance().getTime().getTime() + COOKIE_EXPIRATION_TIME * 1000;
         request.setLifetime(new Date(time));
-        String remoteAddr =((HttpServletRequest)req).getRemoteAddr();
+        String remoteAddr = ((HttpServletRequest) req).getRemoteAddr();
         if (remoteAddr != null) request.setAttribute("ipaddress", remoteAddr);
         requestService.saveRequest(request);
 
