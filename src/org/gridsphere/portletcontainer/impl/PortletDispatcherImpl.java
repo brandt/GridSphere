@@ -50,6 +50,8 @@ public class PortletDispatcherImpl implements PortletDispatcher {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.INIT);
         try {
             include(req, res);
+        } catch (ServletException e) {
+            throw new PortletDispatcherException("Unable to initialize servlet", e.getRootCause());
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to initialize portlet: ", e);
         } finally {
@@ -61,6 +63,8 @@ public class PortletDispatcherImpl implements PortletDispatcher {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.DESTROY);
         try {
             include(req, res);
+        } catch (ServletException e) {
+            throw new PortletDispatcherException("Unable to perform destroy", e.getRootCause());
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform destroy: ", e);
         } finally {
@@ -73,6 +77,8 @@ public class PortletDispatcherImpl implements PortletDispatcher {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         try {
             include(req, res);
+        } catch (ServletException e) {
+            throw new PortletDispatcherException("Unable to perform service", e.getRootCause());
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform service", e);
         } finally {
@@ -84,6 +90,8 @@ public class PortletDispatcherImpl implements PortletDispatcher {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.LOGIN);
         try {
             include(req, res);
+        } catch (ServletException e) {
+            throw new PortletDispatcherException("Unable to perform login", e.getRootCause());
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform login", e);
         } finally {
@@ -95,6 +103,8 @@ public class PortletDispatcherImpl implements PortletDispatcher {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.LOGOUT);
         try {
             include(req, res);
+        } catch (ServletException e) {
+            throw new PortletDispatcherException("Unable to perform logout", e.getRootCause());
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform logout", e);
         } finally {
@@ -108,6 +118,8 @@ public class PortletDispatcherImpl implements PortletDispatcher {
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.ACTION_PERFORMED);
         try {
             include(req, res);
+        } catch (ServletException e) {
+            throw new PortletDispatcherException("Unable to perform actionPerformed", e.getRootCause());
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform actionPerformed", e);
         } finally {
@@ -122,6 +134,8 @@ public class PortletDispatcherImpl implements PortletDispatcher {
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.DO_TITLE);
         try {
             include(req, res);
+        } catch (ServletException e) {
+            throw new PortletDispatcherException("Unable to perform doTitle", e.getRootCause());
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform doTitle", e);
         } finally {
@@ -137,6 +151,8 @@ public class PortletDispatcherImpl implements PortletDispatcher {
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.WINDOW_EVENT);
         try {
             include(req, res);
+        } catch (ServletException e) {
+            throw new PortletDispatcherException("Unable to perform windowEvent", e.getRootCause());
         } catch (Exception e) {
             throw new PortletDispatcherException("Unable to perform windowEvent", e);
         } finally {

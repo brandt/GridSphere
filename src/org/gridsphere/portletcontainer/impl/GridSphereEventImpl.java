@@ -106,7 +106,8 @@ public class GridSphereEventImpl implements GridSphereEvent {
     }
 
     public DefaultPortletRender createRender() {
-        DefaultPortletRender myrender = null;
+        // create empty render event by default
+        DefaultPortletRender myrender = new DefaultPortletRender("");
         String renderStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_RENDER);
         if (renderStr != null) {
             myrender = new DefaultPortletRender(renderStr);
