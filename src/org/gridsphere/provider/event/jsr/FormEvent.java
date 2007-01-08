@@ -107,6 +107,14 @@ public interface FormEvent {
     public RichTextEditorBean getRichTextEditorBean(String beanId);
 
     /**
+     * Return an existing <code>TreeBean</code> or create a new one.
+     *
+     * @param beanId bendId of the bean Idetifier
+     * @return a TreeBean
+     */
+    public TreeBean getTreeBean(String beanId);
+
+    /**
      * Return an existing <code>HiddenFieldBean</code> or create a new one
      *
      * @param beanId the bean identifier

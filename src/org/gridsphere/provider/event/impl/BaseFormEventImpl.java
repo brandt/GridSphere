@@ -263,6 +263,24 @@ public abstract class BaseFormEventImpl {
     }
 
     /**
+     * Return an existing <code>TreeBean</code> or create a new one.
+     *
+     * @param beanId bendId of the bean Idetifier
+     * @return a TreeBean
+     */
+    public TreeBean getTreeBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (TreeBean) tagBeans.get(beanKey);
+        }
+        TreeBean tr = new TreeBean(beanId);
+        configureBean(tr);
+        tagBeans.put(beanKey, tr);
+        return tr;
+
+    }
+
+    /**
      * Return an existing <code>HiddenFieldBean</code> or create a new one
      *
      * @param beanId the bean identifier
