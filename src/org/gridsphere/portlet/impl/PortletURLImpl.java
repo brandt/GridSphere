@@ -223,6 +223,8 @@ public class PortletURLImpl implements PortletURL {
         if (parameters == null) {
             throw new IllegalArgumentException("parameters is NULL");
         }
+        // All previously set parameters are cleared.
+        this.store = new HashMap<String, Object>();
         for (Object key : parameters.keySet()) {
             if (key == null) throw new IllegalArgumentException("a parameters key is NULL");
             if (key instanceof String) {
