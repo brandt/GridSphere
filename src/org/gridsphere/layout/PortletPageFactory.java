@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -226,63 +225,6 @@ public class PortletPageFactory implements PortletSessionListener {
         req.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, theme, PortletSession.APPLICATION_SCOPE);
     }
 
-    public PortletTabbedPane createNewUserPane(PortletRequest req, int cols, String tabName) {
-
-        PortletTabbedPane pane = null;
-        try {
-            pane = getUserTabbedPane(req);
-            int tabNum = PortletTab.DEFAULT_USERTAB_ORDER;
-            if (pane == null) {
-                pane = new PortletTabbedPane();
-                String userLayout = USER_LAYOUT_DIR + File.separator + req.getUserPrincipal().getName();
-                pane.setLayoutDescriptor(userLayout);
-            } else {
-                tabNum = pane.getLastPortletTab().getTabOrder() + 1;
-            }
-
-            PortletTab topTab = new PortletTab();
-            topTab.setTabOrder(tabNum);
-
-            topTab.setCanModify(true);
-            topTab.setTitle(req.getLocale().getLanguage(), tabName);
-            PortletTabbedPane childPane = new PortletTabbedPane();
-            PortletTab childTab = new PortletTab();
-
-            childPane.setStyle("sub-menu");
-            topTab.setPortletComponent(childPane);
-            pane.addTab(topTab);
-            topTab.setName(tabName);
-            topTab.setLabel(URLEncoder.encode(tabName, "UTF-8") + "Tab");
-            //pane.save(userLayout);
-
-            PortletTableLayout table = new PortletTableLayout();
-
-            table.setCanModify(true);
-            table.setLabel(URLEncoder.encode(tabName, "UTF-8") + "TL");
-
-
-            PortletRowLayout row = new PortletRowLayout();
-            int width = 100 / cols;
-            for (int i = 0; i < cols; i++) {
-                PortletColumnLayout col = new PortletColumnLayout();
-                col.setWidth(String.valueOf(width) + "%");
-                row.addPortletComponent(col);
-            }
-
-            table.addPortletComponent(row);
-
-            childTab.setPortletComponent(table);
-            childTab.setTitle(req.getLocale().getLanguage(), "");
-            childPane.addTab(childTab);
-
-        } catch (Exception e) {
-            log.error("Unable to make a clone of the templatePage", e);
-
-        }
-        return pane;
-
-    }
-
     public PortletPage createPortletPageCopy(String layoutId) {
         // get the master copy of the page
         PortletPage masterPage = (PortletPage) masterLayouts.get(layoutId);
@@ -316,7 +258,6 @@ public class PortletPageFactory implements PortletSessionListener {
             userLayouts.remove(layoutId);
             log.debug("removing a layout: " + layoutId);
         }
-
     }
 
 

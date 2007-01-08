@@ -13,20 +13,6 @@ import javax.portlet.PortletRequest;
 public interface PortletComponent extends ComponentLifecycle {
 
     /**
-     * Returns the portlet component name
-     *
-     * @return the portlet component name
-     */
-    public String getName();
-
-    /**
-     * Sets the portlet component name
-     *
-     * @param name the portlet component name
-     */
-    public void setName(String name);
-
-    /**
      * Returns the portlet component label
      *
      * @return the portlet component label

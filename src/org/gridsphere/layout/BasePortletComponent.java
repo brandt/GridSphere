@@ -29,7 +29,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String width = "";
     protected String height = "";
     protected String label = "";
-    protected String name = "";
+    //protected String name = "";
     protected String style = "";
 
     protected boolean isVisible = true;
@@ -62,25 +62,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
             componentIDStr = label;
             return list;
         }
-    }
-
-    /**
-     * Returns the portlet component name
-     *
-     * @return the portlet component name
-     */
-    public String getName() {
-        return name;
-    }
-
-
-    /**
-     * Sets the portlet component name
-     *
-     * @param name the portlet component name
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -260,7 +241,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         BasePortletComponent b = (BasePortletComponent) super.clone();
         b.width = this.width;
         b.isVisible = this.isVisible;
-        b.name = this.name;
         b.label = this.label;
         b.requiredRoleName = this.requiredRoleName;
         b.defaultWidth = defaultWidth;
