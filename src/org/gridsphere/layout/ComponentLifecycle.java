@@ -13,14 +13,14 @@ import java.util.List;
  * The <code>ComponentLifecycle</code> represents the lifecycle methods required by any
  * PortletComponent.
  */
-public interface ComponentLifecycle extends ComponentRender {
+public interface ComponentLifecycle extends Cloneable {
 
     /**
      * Initializes the portlet component. Since the components are isolated
      * after Castor unmarshalls from XML, the ordering is determined by a
      * passed in List containing the previous portlet components in the tree.
      *
-     * @param req the portlet request
+     * @param req  the portlet request
      * @param list a list of component identifiers
      * @return a list of updated component identifiers
      * @see ComponentIdentifier
@@ -33,6 +33,15 @@ public interface ComponentLifecycle extends ComponentRender {
      * @param event a gridsphere event
      */
     public void actionPerformed(GridSphereEvent event);
+
+    /**
+     * Renders the portlet component
+     *
+     * @param event a gridsphere event
+     */
+    public void doRender(GridSphereEvent event);
+
+    public Object clone() throws CloneNotSupportedException;
 
     /**
      * Destroys this portlet component
@@ -52,5 +61,5 @@ public interface ComponentLifecycle extends ComponentRender {
      * @param compId the portlet component id
      */
     public void setComponentID(int compId);
-    
+
 }
