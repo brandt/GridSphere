@@ -1969,6 +1969,25 @@
     </tag>
 
     <tag>
+        <name>tree</name>
+        <tag-class>org.gridsphere.provider.portletui.tags.TreeTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+            Displays a tree
+        </description>
+        <attribute>
+            <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>action</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <name>textfield</name>
         <tag-class>org.gridsphere.provider.portletui.tags.TextFieldTag</tag-class>
         <body-content>JSP</body-content>
