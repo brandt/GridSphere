@@ -127,46 +127,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     }
 
-    public void doDeleteContent(ActionFormEvent event) throws PortletException, IOException {
-        PortletRequest req = event.getActionRequest();
-        String sessionId = req.getPortletSession().getId();
-        PortletPage page = (PortletPage) pages.get(sessionId);
-
-        HiddenFieldBean compHF = event.getHiddenFieldBean("compHF");
-        String activeComp = compHF.getValue();
-
-        PortletComponent comp = page.getActiveComponent(activeComp);
-
-        if (comp instanceof PortletContent) {
-            PortletContent content = (PortletContent) comp;
-            PortletComponent parent = content.getParentComponent();
-            parent.remove(content, req);
-        }
-
-        pageFactory.savePortletPageMaster(page);
-
-    }
-
-    public void doDeleteFrame(ActionFormEvent event) throws PortletException, IOException {
-        PortletRequest req = event.getActionRequest();
-        String sessionId = req.getPortletSession().getId();
-        PortletPage page = (PortletPage) pages.get(sessionId);
-
-        HiddenFieldBean compHF = event.getHiddenFieldBean("compHF");
-        String activeComp = compHF.getValue();
-
-        PortletComponent comp = page.getActiveComponent(activeComp);
-
-        if (comp instanceof PortletFrame) {
-            PortletFrame frame = (PortletFrame) comp;
-            PortletComponent parent = frame.getParentComponent();
-            parent.remove(frame, req);
-        }
-
-        pageFactory.savePortletPageMaster(page);
-
-    }
-
     public void doSaveBar(ActionFormEvent event) throws PortletException, IOException {
         PortletRequest req = event.getActionRequest();
 
@@ -504,8 +464,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 log.debug("it's a frame!");
                 PortletFrame frame = (PortletFrame) comp;
                 // don't perform action on portlet frame
-                controlUI = "frame";
-
+                if (action.equals(PortletFrame.DELETE_PORTLET)) {
+                    PortletComponent parent = frame.getParentComponent();
+                    parent.remove(frame);
+                    pageFactory.savePortletPageMaster(page);
+                } else {
+                    controlUI = "frame";
+                }
                 if (!frame.getTransparent()) {
                     req.setAttribute("isTitle", "true");
                 }
@@ -530,15 +495,22 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
                 }
             } else if (comp instanceof PortletContent) {
-                controlUI = "content";
-                ListBoxBean contentLB = event.getListBoxBean("contentLB");
-                List contentFiles = contentManagerService.getAllContent();
-                for (int i = 0; i < contentFiles.size(); i++) {
-                    ContentFile contentFile = (ContentFile) contentFiles.get(i);
-                    ListBoxItemBean item = new ListBoxItemBean();
-                    item.setName(contentFile.getFile().getName());
-                    item.setValue(contentFile.getFile().getName());
-                    contentLB.addBean(item);
+                if (!action.equals("")) {
+                    PortletContent content = (PortletContent) comp;
+                    PortletComponent parent = content.getParentComponent();
+                    parent.remove(content);
+                    pageFactory.savePortletPageMaster(page);
+                } else {
+                    controlUI = "content";
+                    ListBoxBean contentLB = event.getListBoxBean("contentLB");
+                    List contentFiles = contentManagerService.getAllContent();
+                    for (int i = 0; i < contentFiles.size(); i++) {
+                        ContentFile contentFile = (ContentFile) contentFiles.get(i);
+                        ListBoxItemBean item = new ListBoxItemBean();
+                        item.setName(contentFile.getFile().getName());
+                        item.setValue(contentFile.getFile().getName());
+                        contentLB.addBean(item);
+                    }
                 }
             } else if (comp instanceof PortletTab) {
                 PortletTab tab = (PortletTab) comp;
@@ -805,6 +777,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
      * @return the updated table layout
      */
     private PortletComponent createLayoutStrategy(String strategyNum, PortletComponent comp) {
+        log.debug("col strategy: " + strategyNum);
         if ((comp != null) && (comp instanceof PortletTableLayout)) {
             PortletTableLayout table = (PortletTableLayout) comp;
             List rows = table.getPortletComponents();
@@ -813,9 +786,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 if (c instanceof PortletRowLayout) {
                     PortletRowLayout row = (PortletRowLayout) c;
                     List cols = row.getPortletComponents();
+                    System.err.println("cols size= " + cols.size());
                     if (cols.size() == 1) {
                         if (strategyNum.equals("one")) {
-                            return comp;
+                            return table;
                         }
                         if (strategyNum.equals("two")) {
                             // deal with case where column layout needs to be extended
@@ -886,7 +860,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
                             PortletColumnLayout col = (PortletColumnLayout) cols.get(1);
                             oldcol.setWidth("66%");
                             col.setWidth("33%");
-
                         }
                         if (strategyNum.equals("five")) {
                             PortletColumnLayout oldcol = (PortletColumnLayout) cols.get(0);
@@ -904,7 +877,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
                             oldcol.setWidth("25%");
                             col.setWidth("50%");
                             newcol.setWidth("25%");
-
                             row.addPortletComponent(newcol);
                         }
                     }
@@ -968,7 +940,11 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
                 }
             }
+            System.err.println("return comp " + comp.getClass().getName());
+            return table;
         } else {
+
+            System.err.println("creating a new table");
             PortletTableLayout table = new PortletTableLayout();
             PortletRowLayout row = new PortletRowLayout();
 
@@ -1032,9 +1008,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             return table;
 
         }
-        System.err.println("return comp" + comp.getClass().getName());
 
-        return comp;
     }
 
 
@@ -1045,32 +1019,34 @@ public class LayoutManagerPortlet extends ActionPortlet {
         if ((comp != null) && (comp instanceof PortletTableLayout)) {
             PortletTableLayout tableLayout = (PortletTableLayout) comp;
             List rows = tableLayout.getPortletComponents();
-            PortletComponent row = (PortletComponent) rows.get(0);
-            if (row instanceof PortletRowLayout) {
-                PortletRowLayout r = (PortletRowLayout) row;
-                List cols = r.getPortletComponents();
-                if (cols.size() == 2) {
-                    PortletColumnLayout col = (PortletColumnLayout) cols.get(0);
-                    if (col.getWidth().equals("33%")) {
-                        colType = "two";
+            if ((rows != null) && (!rows.isEmpty())) {
+                PortletComponent row = (PortletComponent) rows.get(0);
+                if (row instanceof PortletRowLayout) {
+                    PortletRowLayout r = (PortletRowLayout) row;
+                    List cols = r.getPortletComponents();
+                    if (cols.size() == 2) {
+                        PortletColumnLayout col = (PortletColumnLayout) cols.get(0);
+                        if (col.getWidth().equals("33%")) {
+                            colType = "two";
+                        }
+                        if (col.getWidth().equals("50%")) {
+                            colType = "three";
+                        }
+                        if (col.getWidth().equals("66%")) {
+                            colType = "four";
+                        }
                     }
-                    if (col.getWidth().equals("50%")) {
-                        colType = "three";
+                    if (cols.size() == 3) {
+                        PortletColumnLayout col = (PortletColumnLayout) cols.get(0);
+                        if (col.getWidth().equals("33%")) {
+                            colType = "five";
+                        }
+                        if (col.getWidth().equals("25%")) {
+                            colType = "six";
+                        }
                     }
-                    if (col.getWidth().equals("66%")) {
-                        colType = "four";
-                    }
-                }
-                if (cols.size() == 3) {
-                    PortletColumnLayout col = (PortletColumnLayout) cols.get(0);
-                    if (col.getWidth().equals("33%")) {
-                        colType = "five";
-                    }
-                    if (col.getWidth().equals("25%")) {
-                        colType = "six";
-                    }
-                }
 
+                }
             }
         }
 

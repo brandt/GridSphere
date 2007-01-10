@@ -52,10 +52,10 @@
     <ui:table>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doSaveFrame" key="SAVE"/>
+                <ui:actionsubmit action="doSaveFrame" key="OK"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:actionsubmit action="doDeleteFrame" key="DELETE"/>
+                <ui:actionsubmit action="doCancel" key="CANCEL"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:table>

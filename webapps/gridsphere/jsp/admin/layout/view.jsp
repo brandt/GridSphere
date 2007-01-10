@@ -84,19 +84,23 @@
                 <ui:tablecell>
 
                     <ui:hiddenfield beanId="compHF"/>
-                    <% if (controlUI.equals("frame")) { %>
-                    <jsp:include page="frame.jsp"/>
-                    <% } else if (controlUI.equals("content")) { %>
-                    <jsp:include page="content.jsp"/>
-                    <% } else if (controlUI.equals("tab")) { %>
-                    <jsp:include page="tab.jsp"/>
-                    <% } else if (controlUI.equals("subtab")) { %>
-                    <jsp:include page="subtab.jsp"/>
-                    <% } else if (controlUI.equals("menu")) { %>
-                    <jsp:include page="menu.jsp"/>
-                    <% } else if (controlUI.equals("bar")) { %>
-                    <jsp:include page="bar.jsp"/>
+                    <% if (!controlUI.equals("")) { %>
+                    <jsp:include page="<%= controlUI + ".jsp" %>"/>
                     <% } %>
+                    <%--
+                <% if (controlUI.equals("frame")) { %>
+                <jsp:include page="frame.jsp"/>
+                <% } else if (controlUI.equals("content")) { %>
+                <jsp:include page="content.jsp"/>
+                <% } else if (controlUI.equals("tab")) { %>
+                <jsp:include page="tab.jsp"/>
+                <% } else if (controlUI.equals("subtab")) { %>
+                <jsp:include page="subtab.jsp"/>
+                <% } else if (controlUI.equals("menu")) { %>
+                <jsp:include page="menu.jsp"/>
+                <% } else if (controlUI.equals("bar")) { %>
+                <jsp:include page="bar.jsp"/>
+                <% } %>  --%>
                 </ui:tablecell>
             </ui:tablerow>
         </ui:frame>

@@ -39,10 +39,10 @@
     <ui:table>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doSaveContent" key="SAVE"/>
+                <ui:actionsubmit action="doSaveContent" key="OK"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:actionsubmit action="doDeleteContent" key="DELETE"/>
+                <ui:actionsubmit action="doCancel" key="CANCEL"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:table>
