@@ -422,7 +422,7 @@ public class PortletServlet extends HttpServlet
                     log.error("in PortletServlet(): destroy caught exception: ", d);
                 }
             } catch (Throwable ex) {
-                log.error("in render: caught exception: ", ex);
+                //log.error("in render: caught exception: ", ex);
                 try {
                     if (pm != null) {
                         log.info("Committing database transaction for webapp: " + portletWebApp.getWebApplicationName());
@@ -505,7 +505,6 @@ public class PortletServlet extends HttpServlet
                 url.setParameters(params);
                 servletRequest.setAttribute(SportletProperties.PORTAL_REDIRECT_PATH, url.toString());
             }
-
 
         }
     }
