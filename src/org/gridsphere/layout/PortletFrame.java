@@ -10,6 +10,7 @@ import org.gridsphere.layout.event.PortletFrameListener;
 import org.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridsphere.layout.event.impl.PortletFrameEventImpl;
 import org.gridsphere.layout.view.FrameView;
+import org.gridsphere.portlet.impl.PortletURLImpl;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridsphere.portlet.service.PortletServiceException;
@@ -45,6 +46,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     public static final String FRAME_CLOSE_OK_ACTION = "close";
 
     public static final String FRAME_CLOSE_CANCEL_ACTION = "cancelClose";
+
+    public static final String DELETE_PORTLET = "deletePortlet";
 
     private transient CacheService cacheService = null;
 
@@ -248,10 +251,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         return list;
     }
 
-    public void remove(PortletComponent pc, PortletRequest req) {
+    /*
+    public void remove(PortletRequest req) {
         if (parent != null) parent.remove(this, req);
     }
-
+    */
     /**
      * Fires a frame event notification
      *
@@ -489,12 +493,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         req.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
         if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
             StringBuffer content = new StringBuffer();
-
-            PortletURL portletURI = res.createActionURL();
-            String link = portletURI.toString();
-            content.append("<br/><fieldset><a href=\"" + link + "\">" + portletName + "</a></fieldset>");
+            PortletURLImpl portletURI = (PortletURLImpl) res.createActionURL();
+            String editLink = portletURI.toString();
+            portletURI.setAction(DELETE_PORTLET);
+            String deleteLink = portletURI.toString();
+            content.append("<br/><fieldset>" + portletName + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"" + editLink + "\">" + getLocalizedText(req, "EDIT") + "</a>&nbsp;&nbsp;&nbsp;<a href=\"" + deleteLink + "\">" + getLocalizedText(req, "DELETE") + "</a></fieldset>");
             setBufferedOutput(req, content);
-
             return;
         }
 
@@ -646,12 +650,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     public void removeError(PortletRequest req) {
         req.getPortletSession(true).removeAttribute(SportletProperties.PORTLETERROR + portletClass, PortletSession.APPLICATION_SCOPE);
-    }
-
-    protected String getLocalizedText(PortletRequest req, String key) {
-        Locale locale = req.getLocale();
-        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
-        return bundle.getString(key);
     }
 
     public void doRenderError(RenderRequest req, RenderResponse res, Throwable ex) {

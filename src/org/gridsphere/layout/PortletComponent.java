@@ -86,7 +86,9 @@ public interface PortletComponent extends ComponentLifecycle {
 
     public void setParentComponent(PortletComponent parent);
 
-    public void remove(PortletComponent pc, PortletRequest req);
+    public void remove(PortletComponent pc);
+
+    public void remove();
 
     public void setBufferedOutput(PortletRequest req, StringBuffer sb);
 

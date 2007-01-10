@@ -24,28 +24,21 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
 
     public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
         list = super.init(req, list);
-        colView = (Render)getRenderClass(req, "ColumnLayout");
+        colView = (Render) getRenderClass(req, "ColumnLayout");
         return list;
-    }
-
-    public void remove(PortletComponent pc, PortletRequest req) {
-        components.remove(pc);
-        if (getPortletComponents().isEmpty()) {
-            parent.remove(this, req);
-        }
     }
 
     public void doRender(GridSphereEvent event) {
         //System.err.println("\t\tin render ColumnLayout");
         StringBuffer col = new StringBuffer();
         // starting of the gridtable
-        
+
         if (!components.isEmpty()) {
             col.append(colView.doStart(event, this));
             PortletComponent p;
             for (int i = 0; i < components.size(); i++) {
                 p = (PortletComponent) components.get(i);
-                col.append(colView.doStartBorder(event,this));
+                col.append(colView.doStartBorder(event, this));
                 if (p.getVisible()) {
                     p.doRender(event);
                     col.append(p.getBufferedOutput(event.getRenderRequest()));

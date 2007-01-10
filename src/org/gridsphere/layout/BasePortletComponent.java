@@ -14,6 +14,8 @@ import javax.portlet.PortletSession;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
 /**
@@ -27,9 +29,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected PortletComponent parent = null;
     protected String defaultWidth = "";
     protected String width = "";
-    protected String height = "";
     protected String label = "";
-    //protected String name = "";
     protected String style = "";
 
     protected boolean isVisible = true;
@@ -118,24 +118,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         return width;
     }
 
-    /**
-     * Sets the portlet component height
-     *
-     * @param height the portlet component height
-     */
-    public void setHeight(String height) {
-        this.height = height;
-    }
-
-    /**
-     * Returns the portlet component width
-     *
-     * @return the portlet component width
-     */
-    public String getHeight() {
-        return width;
-    }
-
     public void setCanModify(boolean canModify) {
         this.canModify = canModify;
     }
@@ -199,8 +181,12 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         this.parent = parent;
     }
 
-    public void remove(PortletComponent pc, PortletRequest req) {
+    public void remove(PortletComponent pc) {
+        if (parent != null) parent.remove(this);
+    }
 
+    public void remove() {
+        if (parent != null) parent.remove();
     }
 
     /**
@@ -237,6 +223,12 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         listeners.add(component);
     }
 
+    protected String getLocalizedText(PortletRequest req, String key) {
+        Locale locale = req.getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+        return bundle.getString(key);
+    }
+
     public Object clone() throws CloneNotSupportedException {
         BasePortletComponent b = (BasePortletComponent) super.clone();
         b.width = this.width;
@@ -244,7 +236,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         b.label = this.label;
         b.requiredRoleName = this.requiredRoleName;
         b.defaultWidth = defaultWidth;
-        b.height = height;
         b.canModify = canModify;
         return b;
     }

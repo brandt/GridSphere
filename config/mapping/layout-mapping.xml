@@ -50,9 +50,6 @@
         <field name="Width" type="string">
             <bind-xml name="width" node="attribute"/>
         </field>
-        <field name="Height" type="string">
-            <bind-xml name="height" node="attribute"/>
-        </field>
         <field name="Visible" type="boolean">
             <bind-xml name="visible" node="attribute"/>
         </field>

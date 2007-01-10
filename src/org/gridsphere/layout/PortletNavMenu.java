@@ -280,10 +280,10 @@ public abstract class PortletNavMenu extends BasePortletComponent implements Ser
      */
     public abstract void doRender(GridSphereEvent event);
 
-    public void remove(PortletComponent pc, PortletRequest req) {
+    public void remove(PortletComponent pc) {
         if (pc instanceof PortletTab) {
             tabs.remove((PortletTab) pc);
-            if (tabs.isEmpty()) parent.remove(this, req);
+            if (tabs.isEmpty()) parent.remove(this);
         }
     }
 

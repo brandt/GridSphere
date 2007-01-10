@@ -5,6 +5,7 @@
 package org.gridsphere.layout;
 
 import org.gridsphere.portlet.impl.PortletContextImpl;
+import org.gridsphere.portlet.impl.PortletURLImpl;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
@@ -14,7 +15,6 @@ import org.gridsphere.services.core.jcr.JCRService;
 import javax.jcr.Session;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 import javax.portlet.RenderResponse;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -33,6 +33,8 @@ public class PortletContent extends BasePortletComponent implements Serializable
     private String textFile = null;
     private String context = null;
     private boolean border = true;
+
+    public static final String DELETE_CONTENT = "deleteContent";
 
     /**
      * Constructs an instance of PortletContent
@@ -136,9 +138,11 @@ public class PortletContent extends BasePortletComponent implements Serializable
         StringBuffer content = new StringBuffer();
         String textFileName = textFile.substring(textFile.lastIndexOf("/") + 1);
         if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
-            PortletURL portletURI = res.createRenderURL();
-            String link = portletURI.toString();
-            content.append("<br><fieldset><a href=\"" + link + "\">" + textFileName + "</a></fieldset>");
+            PortletURLImpl portletURI = (PortletURLImpl) res.createRenderURL();
+            String editLink = portletURI.toString();
+            portletURI.setAction(DELETE_CONTENT);
+            String deleteLink = portletURI.toString();
+            content.append("<br><fieldset>" + textFileName + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"" + editLink + "\">" + getLocalizedText(req, "EDIT") + "</a>&nbsp;&nbsp;&nbsp;<a href=\"" + deleteLink + "\">" + getLocalizedText(req, "DELETE") + "</a></fieldset>");
             setBufferedOutput(req, content);
             return;
         }
