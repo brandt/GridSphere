@@ -15,29 +15,29 @@ import java.util.*;
  */
 public class GridSphereParameters {
 
-    private Map origParams = null;
-    private Map renderParams = null;
-    private Map persistParams = null;
-    private Map params = null;
-    private List reservedParams = null;
+    private Map<String, String[]> origParams = null;
+    private Map<String, String[]> renderParams = null;
+    private Map<String, String[]> persistParams = null;
+    private Map<String, String[]> params = null;
+    private List<String> reservedParams = null;
 
 
-    public GridSphereParameters(Map origParams) {
+    public GridSphereParameters(Map<String, String[]> origParams) {
         this.origParams = origParams;
     }
 
-    public void addRenderParams(Map params) {
+    public void addRenderParams(Map<String, String[]> params) {
         persistParams.putAll(params);
     }
 
-    public Map parseQueryString(String queryString, boolean checkForRenderParams) {
+    public Map<String, String[]> parseQueryString(String queryString, boolean checkForRenderParams) {
 
         queryString = queryString + "&";
 
         //System.err.println("GP: queryString= " + queryString);
 
         StringTokenizer st = new StringTokenizer(queryString, "&");
-        Map tmpParams  = new HashMap();
+        Map<String, String[]> tmpParams = new HashMap<String, String[]>();
         while (st.hasMoreTokens()) {
             String namevar = (String) st.nextElement();
 
@@ -57,7 +57,7 @@ public class GridSphereParameters {
             }
 
             if (checkForRenderParams) {
-                if  (name.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
+                if (name.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
                     String sname = name.substring(3);
                     if (tmpParams.containsKey(sname)) {
                         String[] s = (String[]) tmpParams.get(sname);
@@ -88,9 +88,7 @@ public class GridSphereParameters {
 
     private void parseRequestParams() {
         //System.err.println("GP: parse req parms");
-        Iterator it = origParams.keySet().iterator();
-        while (it.hasNext()) {
-            String paramName = (String)it.next();
+        for (String paramName : origParams.keySet()) {
             String[] paramValues = (String[]) origParams.get(paramName);
             if (!reservedParams.contains(paramName)) {
                 if (paramName.startsWith("pr_" + SportletProperties.RENDER_PARAM_PREFIX)) continue;
@@ -114,9 +112,7 @@ public class GridSphereParameters {
      */
     private void parsePersistParams() {
         //System.err.println("GP: parse persist parms");
-        Iterator it = origParams.keySet().iterator();
-        while (it.hasNext()) {
-            String paramName = (String)it.next();
+        for (String paramName : origParams.keySet()) {
             String[] paramValues = (String[]) origParams.get(paramName);
             if (!reservedParams.contains(paramName)) {
                 if (paramName.startsWith("pr_" + SportletProperties.RENDER_PARAM_PREFIX)) {
@@ -132,15 +128,15 @@ public class GridSphereParameters {
     public Map getParameterMap(HttpServletRequest req, String queryString) {
         // A Magic parameter to ignore the special parsing required for JSR 168
         if (req.getAttribute(SportletProperties.IGNORE_PARSING) != null) return origParams;
-        
+
         // check request string for action
 
-        params = new HashMap();
-        renderParams = new HashMap();
-        persistParams = new HashMap();
+        params = new HashMap<String, String[]>();
+        renderParams = new HashMap<String, String[]>();
+        persistParams = new HashMap<String, String[]>();
 
         // create reserved params list
-        reservedParams = new ArrayList();
+        reservedParams = new ArrayList<String>();
 
 
         reservedParams.add(SportletProperties.COMPONENT_ID);
@@ -154,7 +150,6 @@ public class GridSphereParameters {
         String targetedCid = null;
         String[] tCid = (String[]) origParams.get(SportletProperties.COMPONENT_ID);
         if (tCid != null) targetedCid = tCid[0];
-      
 
         //System.err.println("target cid= " + targetedCid);
 
@@ -163,11 +158,11 @@ public class GridSphereParameters {
             //System.err.println("mycid is null");
             return origParams;
         }
-        
-        Map map = new HashMap();
+
+        Map<String, String[]> map = new HashMap<String, String[]>();
 
         // check for any query params from an included JSP
-        queryString = (String)req.getAttribute("javax.servlet.include.query_string");
+        queryString = (String) req.getAttribute("javax.servlet.include.query_string");
         if (queryString != null) {
             //System.err.println("found query string");
             map.putAll(parseQueryString(queryString, false));
