@@ -483,13 +483,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         RenderRequest req = event.getRenderRequest();
         RenderResponse res = event.getRenderResponse();
 
-        // check permissions
-
-        if (!requiredRoleName.equals("") && (!req.isUserInRole(requiredRoleName))) return;
-
-        if (!requiredRoleName.equals("")) return;
-
-
         req.setAttribute(SportletProperties.PORTLET_WINDOW_ID, windowId);
         if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
             StringBuffer content = new StringBuffer();
@@ -501,6 +494,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             setBufferedOutput(req, content);
             return;
         }
+
+        // check permissions
+        if (!requiredRoleName.equals("") && (!req.isUserInRole(requiredRoleName))) return;
 
         // check for render params
         if (onlyRender) {

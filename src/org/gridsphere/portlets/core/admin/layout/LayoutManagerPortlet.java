@@ -518,11 +518,11 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 if (pane.getStyle().equals("menu")) {
                     log.debug("it's a tab!");
                     controlUI = "tab";
-                    createColsListBox(event, tab.getPortletComponent());
+                    createColsListBox(event, req, tab.getPortletComponent());
                 } else {
                     log.debug("it's a subtab");
                     controlUI = "subtab";
-                    createColsListBox(event, tab.getPortletComponent());
+                    createColsListBox(event, req, tab.getPortletComponent());
                 }
                 log.debug("tab name=" + tab.getTitle(req.getLocale().getLanguage()));
 
@@ -542,31 +542,31 @@ public class LayoutManagerPortlet extends ActionPortlet {
             } else if (comp instanceof PortletBar) {
                 PortletBar bar = (PortletBar) comp;
                 controlUI = "bar";
-                createColsListBox(event, bar.getPortletComponent());
+                createColsListBox(event, req, bar.getPortletComponent());
 
             }
             boolean itsanewtab = false;
             if (req.getParameter("newtab") != null) {
                 controlUI = "tab";
                 TextFieldBean nameTF = event.getTextFieldBean("nameTF");
-                nameTF.setValue("New tab");
+                nameTF.setValue(this.getLocalizedText(req, "LAYOUT_NEW_TAB2"));
                 itsanewtab = true;
                 comp = new PortletTab();
             } else if (req.getParameter("newsubtab") != null) {
                 controlUI = "subtab";
                 TextFieldBean nameTF = event.getTextFieldBean("nameTF");
-                nameTF.setValue("New subtab");
+                nameTF.setValue(this.getLocalizedText(req, "LAYOUT_NEW_SUBTAB2"));
                 itsanewtab = true;
                 PortletTab tab = new PortletTab();
-                createColsListBox(event, tab.getPortletComponent());
+                createColsListBox(event, req, tab.getPortletComponent());
                 comp = tab;
             } else if (req.getParameter("newmenutab") != null) {
                 controlUI = "menu";
                 TextFieldBean nameTF = event.getTextFieldBean("nameTF");
-                nameTF.setValue("New menu tab");
+                nameTF.setValue(this.getLocalizedText(req, "LAYOUT_NEW_MENUTAB"));
                 itsanewtab = true;
                 PortletTab tab = new PortletTab();
-                createColsListBox(event, tab.getPortletComponent());
+                createColsListBox(event, req, tab.getPortletComponent());
                 comp = tab;
             }
             if (itsanewtab) {
@@ -580,8 +580,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
             }
 
             ListBoxBean rolesLB = event.getListBoxBean("rolesLB");
+            rolesLB.clear();
             ListBoxItemBean item = new ListBoxItemBean();
-            item.setValue("None required");
+
+            item.setValue(this.getLocalizedText(req, "LAYOUT_ROLE_NONE_REQUIRED"));
             item.setName("NONE");
 
             rolesLB.addBean(item);
@@ -619,21 +621,21 @@ public class LayoutManagerPortlet extends ActionPortlet {
         navigationLB.clear();
         ListBoxItemBean item = new ListBoxItemBean();
         item.setName("bar");
-        item.setValue("Single divider bar");
+        item.setValue(this.getLocalizedText(req, "LAYOUT_SINGLE_DIVIDER"));
         if (comp instanceof PortletBar) {
             item.setSelected(true);
         }
         navigationLB.addBean(item);
         item = new ListBoxItemBean();
         item.setName("menu");
-        item.setValue("Menu bar");
+        item.setValue(this.getLocalizedText(req, "LAYOUT_MENUBAR"));
         if (comp instanceof PortletMenu) {
             item.setSelected(true);
         }
         navigationLB.addBean(item);
         item = new ListBoxItemBean();
         item.setName("pane");
-        item.setValue("Double tabbed pane");
+        item.setValue(this.getLocalizedText(req, "LAYOUT_TABBEDPANE"));
         if (comp instanceof PortletTabbedPane) {
             item.setSelected(true);
         }
@@ -702,7 +704,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             if (navComp instanceof PortletBar) {
                 PortletBar bar = (PortletBar) navComp;
                 PortletTab tab = new PortletTab();
-                tab.setTitle(req.getLocale().getLanguage(), "Default");
+                tab.setTitle(req.getLocale().getLanguage(), this.getLocalizedText(req, "LAYOUT_DEFAULT_TAB_NAME"));
                 tab.setPortletComponent(bar.getPortletComponent());
                 menu.addTab(tab);
             }
@@ -726,13 +728,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
             pane.setStyle("menu");
             if (navComp instanceof PortletBar) {
                 PortletTab newtab = new PortletTab();
-                newtab.setTitle(req.getLocale().getLanguage(), "Default");
+                newtab.setTitle(req.getLocale().getLanguage(), this.getLocalizedText(req, "LAYOUT_DEFAULT_TAB_NAME"));
                 pane.addTab(newtab);
                 PortletTabbedPane subpane = new PortletTabbedPane();
                 subpane.setStyle("sub-menu");
                 newtab.setPortletComponent(subpane);
                 PortletTab subtab = new PortletTab();
-                subtab.setTitle(req.getLocale().getLanguage(), "Default");
+                subtab.setTitle(req.getLocale().getLanguage(), this.getLocalizedText(req, "LAYOUT_DEFAULT_TAB_NAME"));
 
                 PortletTableLayout table = new PortletTableLayout();
                 PortletRowLayout row = new PortletRowLayout();
@@ -1012,7 +1014,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     }
 
 
-    private void createColsListBox(FormEvent event, PortletComponent comp) {
+    private void createColsListBox(FormEvent event, PortletRequest req, PortletComponent comp) {
         // TODO  deal with column layouts
         String colType = "one";
 
@@ -1058,22 +1060,23 @@ public class LayoutManagerPortlet extends ActionPortlet {
         ListBoxItemBean four = new ListBoxItemBean();
         ListBoxItemBean five = new ListBoxItemBean();
         ListBoxItemBean six = new ListBoxItemBean();
-        one.setValue("1 column");
+        one.setValue(this.getLocalizedText(req, "LAYOUT_ONECOL"));
         one.setName("one");
         if (colType.equals("one")) one.setSelected(true);
-        two.setValue("2 columns / (33%, 66%)");
+        two.setValue(this.getLocalizedText(req, "LAYOUT_TWOCOL1"));
         two.setName("two");
         if (colType.equals("two")) two.setSelected(true);
-        three.setValue("2 columns / (50%, 50%)");
+        three.setValue(this.getLocalizedText(req, "LAYOUT_TWOCOL2"));
+
         three.setName("three");
         if (colType.equals("three")) three.setSelected(true);
-        four.setValue("2 columns / (66%, 33%)");
+        four.setValue(this.getLocalizedText(req, "LAYOUT_TWOCOL3"));
         four.setName("four");
         if (colType.equals("four")) four.setSelected(true);
-        five.setValue("3 columns / (33%, 33%, 33%)");
+        five.setValue(this.getLocalizedText(req, "LAYOUT_THREECOL1"));
         five.setName("five");
         if (colType.equals("five")) five.setSelected(true);
-        six.setValue("3 columns / (25%, 50%, 25%)");
+        six.setValue(this.getLocalizedText(req, "LAYOUT_THREECOL2"));
         six.setName("six");
         if (colType.equals("six")) six.setSelected(true);
         colsLB.addBean(one);
