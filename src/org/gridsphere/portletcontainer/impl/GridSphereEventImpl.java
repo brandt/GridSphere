@@ -92,7 +92,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
         String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
         if (actionStr != null) {
             myaction = new DefaultPortletAction(actionStr);
-            myaction.setParameters(getPhaseParams());
+            myaction.setParameters(getPhaseParams(SportletProperties.DEFAULT_PORTLET_ACTION));
         } else {
             Map<String, String> params = parsePhaseParams(SportletProperties.DEFAULT_PORTLET_ACTION);
             if (params != null) {
@@ -111,7 +111,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
         String renderStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_RENDER);
         if (renderStr != null) {
             myrender = new DefaultPortletRender(renderStr);
-            myrender.setParameters(getPhaseParams());
+            myrender.setParameters(getPhaseParams(SportletProperties.DEFAULT_PORTLET_RENDER));
         } else {
             Map<String, String> params = parsePhaseParams(SportletProperties.DEFAULT_PORTLET_RENDER);
             if (params != null) {
@@ -124,15 +124,21 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return myrender;
     }
 
-    protected Map<String, String> getPhaseParams() {
+    protected Map<String, String> getPhaseParams(String phase) {
         String prefix = null;
         String name, newname, value;
-        prefix = req.getParameter(SportletProperties.PREFIX);
+        if (phase.equals(SportletProperties.DEFAULT_PORTLET_RENDER)) {
+            prefix = SportletProperties.RENDER_PARAM_PREFIX + req.getParameter(SportletProperties.RENDER_PARAM_PREFIX + SportletProperties.PREFIX);
+        } else {
+            prefix = req.getParameter(SportletProperties.PREFIX);
+        }
         Enumeration e = req.getParameterNames();
         Map<String, String> params = new HashMap<String, String>();
         if ((prefix != null) && (e != null)) {
+            System.err.println("prefix= " + prefix);
             while (e.hasMoreElements()) {
                 name = ((String) e.nextElement());
+                System.err.println("name= " + name);
                 if (name.startsWith(prefix)) {
                     newname = name.substring(prefix.length() + 1);
                     value = req.getParameter(name);
@@ -255,7 +261,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
     }
 
     public DefaultPortletRender getRender() {
-        return render;
+        return componentID.equals(req.getAttribute(SportletProperties.COMPONENT_ID)) ? render : null;
     }
 
     public void setAction(DefaultPortletAction action) {

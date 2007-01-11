@@ -32,7 +32,7 @@ import java.util.*;
 
 /**
  * An <code>ActionPortlet</code> provides an abstraction on top of
- * <code>AbstractPortlet</code> to develop portlets under the action provider model.
+ * <code>GenericPortlet</code> to develop portlets under the action provider model.
  */
 public class ActionPortlet extends GenericPortlet {
 
@@ -322,8 +322,10 @@ public class ActionPortlet extends GenericPortlet {
         RenderFormEvent formEvent = new RenderFormEventImpl(render, request, response, tagBeans);
 
         // check to see if this render event should invoke a render method
-        String methodName = render.getName();
-        if (!methodName.equals("")) next = methodName;
+        if (render != null) {
+            String methodName = render.getName();
+            if (!methodName.equals("")) next = methodName;
+        }
 
         if (next.endsWith(".jsp")) {
             // this is necessary in case beans were modified in action method and set next state is a JSP to render which needs the beans
@@ -347,8 +349,6 @@ public class ActionPortlet extends GenericPortlet {
         removeTagBeans(request);
         removeNextTitle(request);
         removeNextState(request);
-
-
     }
 
     protected void doDispatch(RenderRequest request,
