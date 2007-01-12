@@ -38,7 +38,7 @@
 
 
 %>
-<ui:group label="<%=entryTitle%>" cssStyle="border: 1px dashed #c7c7c7;">
+<ui:group label="<%=entryTitle%>">
     <ui:text cssStyle="font-size: x-small;  font-weight: italic"><%=entryDate%><br/></ui:text>
     <p/>
     <%=value%>

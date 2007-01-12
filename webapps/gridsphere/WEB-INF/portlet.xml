@@ -162,6 +162,26 @@
     </portlet>
 
     <portlet>
+        <description xml:lang="en">Displays Message of the Day</description>
+        <portlet-name>Message of the Day</portlet-name>
+        <display-name xml:lang="en">Message of the Day</display-name>
+        <portlet-class>org.gridsphere.portlets.core.news.NewsPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>help</portlet-mode>
+            <portlet-mode>edit</portlet-mode>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <portlet-info>
+            <title>Message of the Day</title>
+            <short-title>Message</short-title>
+            <keywords>Message of the day, news</keywords>
+        </portlet-info>
+    </portlet>
+
+
+    <portlet>
         <description xml:lang="en">Content Repository Management</description>
         <portlet-name>ContentManagement</portlet-name>
         <display-name xml:lang="en">Content Repository Management</display-name>
@@ -169,6 +189,7 @@
         <expiration-cache>0</expiration-cache>
         <supports>
             <mime-type>text/html</mime-type>
+            <portlet-mode>edit</portlet-mode>
             <portlet-mode>help</portlet-mode>
         </supports>
         <supported-locale>en</supported-locale>

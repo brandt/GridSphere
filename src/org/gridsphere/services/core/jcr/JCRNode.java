@@ -8,8 +8,14 @@ public interface JCRNode {
     // Data
     public final static String AUTHOR = PREFIX + ":" + "author";
     public final static String CONTENT = PREFIX + ":" + "content";
+    public final static String TITLE = PREFIX + ":" + "title";
 
     // Metadata
+    public final static String GS_ROOT_NODE_NAME = "gridsphere";
+    public final static String GS_ROOT_NODE_PATH = "/" + GS_ROOT_NODE_NAME;
+    public final static String GS_ROOT_CONTENTDOCUMENT_NAME = "contentdocuments";
+    public final static String GS_ROOT_CONTENTDOCUMENT_PATH = "/" + GS_ROOT_NODE_NAME + "/" + GS_ROOT_CONTENTDOCUMENT_NAME;
+
     public final static String GSID = PREFIX + ":" + "gsid";
     public final static String MODIFIED_DATE = PREFIX + ":" + "modifieddate";
     public final static String CREATED_DATE = PREFIX + ":" + "createddate";

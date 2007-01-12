@@ -47,10 +47,10 @@ public class RSSPortlet extends ActionPortlet {
                 createErrorMessage(event, getLocalizedText(event.getRenderRequest(), "RSS_ERR_COULDNOTCREATEFEED"));
             } catch (MalformedURLException e) {
                 log.error("RSS URL " + feedURL + " is not valid.", e);
-                createErrorMessage(event, getLocalizedText(event.getRenderRequest(), "RSS_ERR_RSSURLNOTVALID") + feedURL[i]);
+                createErrorMessage(event, getLocalizedText(event.getRenderRequest(), "RSS_ERR_RSSURLNOTVALID") + ": " + feedURL[i]);
             } catch (IOException e) {
                 log.error("Could not read RSS feed from " + feedURL[i], e);
-                createErrorMessage(event, getLocalizedText(event.getRenderRequest(), "RSS_ERR_COULDNOTREADURL") + feedURL[i]);
+                createErrorMessage(event, getLocalizedText(event.getRenderRequest(), "RSS_ERR_COULDNOTREADURL") + ": " + feedURL[i]);
             }
             ListBoxItemBean item = new ListBoxItemBean();
             item.setName(feedURL[i]);
@@ -69,6 +69,11 @@ public class RSSPortlet extends ActionPortlet {
         ListBoxBean feedsLB = event.getListBoxBean("feedsLB");
         String selectedFeed = feedsLB.getSelectedValue();
         event.getActionRequest().getPortletSession(true).setAttribute("selectedfeed", selectedFeed);
+    }
+
+    public void saveFeed(ActionFormEvent event) {
+        PortletPreferences pref = event.getActionRequest().getPreferences();
+
     }
 
 }
