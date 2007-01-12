@@ -157,8 +157,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         String sessionId = req.getPortletSession().getId();
         PortletPage page = (PortletPage) pages.get(sessionId);
-
-
         HiddenFieldBean compHF = event.getHiddenFieldBean("compHF");
         String activeComp = compHF.getValue();
         String reqRole = event.getListBoxBean("rolesLB").getSelectedName();
@@ -172,8 +170,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
             tab.setRequiredRole(reqRole);
             tab.setLabel(label);
             tab.setTitle(req.getLocale().getLanguage(), name);
-
-
             ListBoxBean colsLB = event.getListBoxBean("colsLB");
             String colTemplateNum = colsLB.getSelectedName();
             if (colTemplateNum != null) {
@@ -199,14 +195,15 @@ public class LayoutManagerPortlet extends ActionPortlet {
         String name = event.getTextFieldBean("nameTF").getValue();
         String label = event.getTextFieldBean("labelTF").getValue();
         PortletComponent comp = page.getActiveComponent(activeComp);
+        //PortletComponent comp = active.getParentComponent();
 
         log.debug("compHF=" + activeComp);
+        log.debug("comp class= " + comp.getClass());
         log.debug("active comp = " + comp.getComponentID());
         if (comp instanceof PortletTabbedPane) {
             PortletTabbedPane pane = (PortletTabbedPane) comp;
             //System.err.println("tab name " + thistab.getTitle("en"));
             //PortletTabbedPane pane = (PortletTabbedPane)thistab.getParentComponent();
-
             PortletTab tab = new PortletTab();
             tab.setTitle(req.getLocale().getLanguage(), name);
             if (reqRole.equalsIgnoreCase("NONE")) reqRole = "";
@@ -238,9 +235,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
             pageFactory.savePortletPageMaster(page);
 
-
             page.init(req, new ArrayList<ComponentIdentifier>());
-
             pages.put(sessionId, page);
         } else if (comp instanceof PortletMenu) {
             PortletMenu menu = (PortletMenu) comp;
