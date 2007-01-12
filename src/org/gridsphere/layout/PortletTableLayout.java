@@ -12,6 +12,8 @@ import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.provider.portlet.jsr.PortletServlet;
+import org.gridsphere.services.core.jcr.ContentDocument;
+import org.gridsphere.services.core.jcr.ContentException;
 import org.gridsphere.services.core.jcr.JCRService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 
@@ -194,9 +196,15 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
 
     public Map getAllContentToAdd(GridSphereEvent event) {
         Map<String, String> allContent = new HashMap<String, String>();
-        List<String> nodeNames = contentService.getAllNodeNames();
-        for (String nodeName : nodeNames) {
-            allContent.put(nodeName, nodeName);
+        List<ContentDocument> docs = null;
+        try {
+            docs = contentService.listChildContentDocuments("");
+            for (int i = 0; i < docs.size(); i++) {
+                ContentDocument doc = docs.get(i);
+                allContent.put(doc.getTitle(), doc.getTitle());
+            }
+        } catch (ContentException e) {
+            e.printStackTrace();
         }
         return allContent;
     }
