@@ -490,7 +490,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
                 }
             } else if (comp instanceof PortletContent) {
-                if (!action.equals("")) {
+                if ((action != null) && (!action.equals(""))) {
                     PortletContent content = (PortletContent) comp;
                     PortletComponent parent = content.getParentComponent();
                     parent.remove(content);
