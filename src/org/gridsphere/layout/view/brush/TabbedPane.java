@@ -7,14 +7,17 @@
 package org.gridsphere.layout.view.brush;
 
 import org.gridsphere.layout.PortletComponent;
+import org.gridsphere.layout.PortletNavMenu;
 import org.gridsphere.layout.PortletTab;
 import org.gridsphere.layout.PortletTabbedPane;
-import org.gridsphere.layout.PortletNavMenu;
 import org.gridsphere.layout.view.BaseRender;
 import org.gridsphere.layout.view.TabbedPaneView;
+import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 
-import javax.portlet.*;
+import javax.portlet.PortletURL;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -35,15 +38,15 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
     // SIDEMENU
     protected static final StringBuffer TAB_START_SIDEMENU =
             new StringBuffer("\n<!-- BEGIN NAVIGATION SIDE MENU -->\n")
-                .append("<div id=\"gridsphere-layout-body\">\n")
-                .append("<div class=\"gridsphere-layout-row\">\n ")
-                .append("<div class=\"gridsphere-layout-column\" style=\"width: 20%\">\n")
-                .append("<div id=\"gridsphere-layout-sidemenu\">\n")
-                .append("<div id=\"button\">\n <ul>\n");
+                    .append("<div id=\"gridsphere-layout-body\">\n")
+                    .append("<div class=\"gridsphere-layout-row\">\n ")
+                    .append("<div class=\"gridsphere-layout-column\" style=\"width: 20%\">\n")
+                    .append("<div id=\"gridsphere-layout-sidemenu\">\n")
+                    .append("<div id=\"button\">\n <ul>\n");
 
     protected static final StringBuffer TAB_END_SIDEMENU =
             new StringBuffer("</ul>\n</div><!-- END BUTTON -->\n</div> <!-- END SIDEMENU -->\n </div> <!-- END LAYOUT COLUMN -->\n")
-                .append("<div class=\"gridsphere-layout-column\" style=\"width: 80%\"> <!-- START MAIN PORTLET AREA -->\n");
+                    .append("<div class=\"gridsphere-layout-column\" style=\"width: 80%\"> <!-- START MAIN PORTLET AREA -->\n");
 
     // TOPMENU
     protected static final StringBuffer TAB_START_TOPMENU =
@@ -69,7 +72,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
      * the portlet tabs.
      *
      * @param event the gridsphere event
-     * @param menu the menu parent
+     * @param menu  the menu parent
      * @return a string array of the tab hyperlinks
      */
     protected static String[] createTabLinks(GridSphereEvent event, PortletNavMenu menu) {
@@ -113,7 +116,6 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
         if (pane.getStyle().equalsIgnoreCase(TAB_STYLE_TOPMENU)) {
             result.append(TAB_START_TOPMENU);
         }
-
 
 
         return result;
@@ -179,10 +181,11 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
 
     public StringBuffer doRenderEditTab(GridSphereEvent event, PortletNavMenu tabPane, boolean isSelected) {
         RenderResponse res = event.getRenderResponse();
+        RenderRequest req = event.getRenderRequest();
         PortletURL portletURL = res.createActionURL();
 
         StringBuffer pane = new StringBuffer();
-        
+        req.setAttribute(SportletProperties.COMPONENT_ID, String.valueOf(tabPane.getComponentID()));
         if (tabPane.getStyle().equals(TAB_STYLE_SUBMENU)) {
             pane.append("\n<li");
             if (isSelected) {
@@ -190,7 +193,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             }
             pane.append(">");
             portletURL.setParameter("newsubtab", "true");
-            pane.append("<a href=\"").append(portletURL.toString()).append("\">").append(replaceBlanks("New subtab")).append("</a></li>\n");
+            pane.append("<a href=\"").append(portletURL.toString()).append("\">").append(replaceBlanks(tabPane.getLocalizedText(req, "NEW_SUBTAB"))).append("</a></li>\n");
         }
         if (tabPane.getStyle().equals(TAB_STYLE_MENU)) {
             String selected = "nav-nonsel";
@@ -199,7 +202,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             }
             pane.append("<li class=\"").append(selected).append("\">");
             portletURL.setParameter("newtab", "true");
-            pane.append("<a href=\"").append(portletURL.toString()).append("\"><span>").append(replaceBlanks("New tab")).append("</span></a></li>");
+            pane.append("<a href=\"").append(portletURL.toString()).append("\"><span>").append(replaceBlanks(tabPane.getLocalizedText(req, "NEW_TAB"))).append("</span></a></li>");
         }
 
         return pane;

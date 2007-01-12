@@ -64,16 +64,6 @@ public class Menu extends BaseRender implements TabbedPaneView {
         }
         pane.append("</span></a></li>");
 
-//        if (tab.isSelected()) {
-//            pane.append("\n<li class=\"selected\">");
-//        } else {
-//            pane.append("\n<li>");
-//        }
-//        pane.append("<a href=\"").append(link).append("\">");
-//        if (title != null) {
-//            pane.append(replaceBlanks(title));
-//        }
-//        pane.append("</a></li>\n");
         return pane;
     }
 

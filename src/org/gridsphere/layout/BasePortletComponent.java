@@ -223,7 +223,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         listeners.add(component);
     }
 
-    protected String getLocalizedText(PortletRequest req, String key) {
+    public String getLocalizedText(PortletRequest req, String key) {
         Locale locale = req.getLocale();
         ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
         return bundle.getString(key);

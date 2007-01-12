@@ -10,6 +10,7 @@ import org.gridsphere.layout.event.PortletTabListener;
 import org.gridsphere.layout.view.TabbedPaneView;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portletcontainer.GridSphereEvent;
+
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 import java.io.Serializable;
@@ -40,7 +41,7 @@ public class PortletTabbedPane extends PortletNavMenu implements Serializable, P
      * @see ComponentIdentifier
      */
     public List<ComponentIdentifier> init(PortletRequest req, List<ComponentIdentifier> list) {
-        tabbedPaneView = (TabbedPaneView)getRenderClass(req, "TabbedPane");
+        tabbedPaneView = (TabbedPaneView) getRenderClass(req, "TabbedPane");
         return super.init(req, list);
     }
 
@@ -53,7 +54,6 @@ public class PortletTabbedPane extends PortletNavMenu implements Serializable, P
         //super.doRender(event);
         StringBuffer pane = new StringBuffer();
         RenderRequest req = event.getRenderRequest();
-
 
         //log.debug("in tabbed pane: my comp is=" + componentIDStr);
         pane.append(tabbedPaneView.doStart(event, this));
@@ -78,11 +78,9 @@ public class PortletTabbedPane extends PortletNavMenu implements Serializable, P
             }
         }
 
-
         if (req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE) != null) {
             pane.append(tabbedPaneView.doRenderEditTab(event, this, false));
         }
-
 
         pane.append(tabbedPaneView.doEndBorder(event, this));
 
@@ -100,7 +98,6 @@ public class PortletTabbedPane extends PortletNavMenu implements Serializable, P
         setBufferedOutput(req, pane);
 
     }
-
 
 
     public Object clone() throws CloneNotSupportedException {
