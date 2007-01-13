@@ -172,7 +172,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             String key = mode.toString().toUpperCase();
             altTag = bundle.getString(key);
             // Set the image src
-            if (mode.equals(new PortletMode("CONFIGURE"))) {
+            if (mode.equals(new PortletMode("CONFIG"))) {
                 imageSrc = configImage;
                 symbol = configSymbol;//WAP 2.0
             } else if (mode.equals(PortletMode.EDIT)) {
@@ -568,7 +568,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         for (String supportedMode : supportedModes) {
             mode = (String) supportedMode;
-            if (mode.equalsIgnoreCase("configure")) {
+            if (mode.equalsIgnoreCase("config")) {
                 if (hasConfigurePermission) {
                     smodes.add(mode);
                 }

@@ -235,8 +235,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         titleBar.addComponentListener(this);
         titleBar.setParentComponent(this);
 
-        //System.err.println("useDiv= " + useDiv);
-
         // invalidate cache
         req.setAttribute(CacheService.NO_CACHE, "true");
 
@@ -251,11 +249,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         return list;
     }
 
-    /*
-    public void remove(PortletRequest req) {
-        if (parent != null) parent.remove(this, req);
-    }
-    */
     /**
      * Fires a frame event notification
      *
@@ -283,17 +276,14 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         // remove cached output
         cacheService.removeCached(this.getComponentID() + portletClass + id);
-        //frame = null;
 
         PortletComponentEvent titleBarEvent = event.getLastRenderEvent();
 
         if ((titleBarEvent != null) && (titleBarEvent instanceof PortletTitleBarEvent)) {
 
-
             PortletTitleBarEvent tbEvt = (PortletTitleBarEvent) titleBarEvent;
             if (tbEvt.hasWindowStateAction()) {
                 WindowState state = tbEvt.getState();
-                System.err.println("it's a titlebar event! ws = " + state.toString());
 
                 PortletFrameEventImpl frameEvent = null;
                 if (state.equals(WindowState.MINIMIZED)) {
