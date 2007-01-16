@@ -12,7 +12,10 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.servlet.ServletContext;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 
@@ -38,15 +41,10 @@ public class PersistenceManagerFactory {
         return (PersistenceManagerRdbms) databases.get(databaseName);
     }
 
-    public static Collection getAllPersistenceManagers() {
-        return databases.values();
-    }
-
     /**
-     * Creates a new persistenc emanager.
+     * Creates a new persistencemanager.
      *
-     * @param webappname the name of the web app
-     * @return a new persistence manager
+     * @param webappname
      */
     public static synchronized PersistenceManagerRdbms createPersistenceManagerRdbms(String webappname) {
         ServletContext ctx = GridSphereConfig.getServletContext();
