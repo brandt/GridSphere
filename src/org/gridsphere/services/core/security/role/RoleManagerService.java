@@ -8,9 +8,9 @@
  */
 package org.gridsphere.services.core.security.role;
 
-import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.service.PortletService;
 import org.gridsphere.services.core.persistence.QueryFilter;
+import org.gridsphere.services.core.user.User;
 
 import java.util.List;
 
@@ -37,5 +37,11 @@ public interface RoleManagerService extends PortletService {
     public void addUserToRole(User user, PortletRole role);
 
     public void deleteUserInRole(User user, PortletRole role);
+
+    public List<PortletRole> getDefaultRoles();
+
+    public void addDefaultRole(PortletRole role);
+
+    public void removeDefaultRole(PortletRole role);
 
 }

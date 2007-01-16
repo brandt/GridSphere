@@ -30,7 +30,8 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
     private String jdoUserRoles = UserRole.class.getName();
     private String jdoUser = UserImpl.class.getName();
 
-    public RoleManagerServiceImpl() {}
+    public RoleManagerServiceImpl() {
+    }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
@@ -41,6 +42,7 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
         if (userRole == null) {
             userRole = new PortletRole();
             userRole.setName("USER");
+            userRole.setIsDefault(1);
             userRole.setDescription("portal user");
             saveRole(userRole);
         }
@@ -51,8 +53,11 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
             adminRole = new PortletRole();
             adminRole.setName("ADMIN");
             adminRole.setDescription("portal administrator");
+            userRole.setIsDefault(0);
             saveRole(adminRole);
         }
+
+
     }
 
     public void destroy() {
@@ -100,7 +105,7 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
                 + jdoUserRoles
                 + " userRole where userRole.role.Name='" + role.getName() + "'";
 
-        users = (List<User>)pm.restoreList(oql, filter);
+        users = (List<User>) pm.restoreList(oql, filter);
         return (users != null) ? users : new ArrayList<User>();
     }
 
@@ -112,7 +117,7 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
         String oql = "select uzer from "
                 + this.jdoUser
                 + " uzer left join fetch userRole.user where userRole.role.Name!='" + role.getName() + "'";
-        users = (List<User>)pm.restoreList(oql, filter);
+        users = (List<User>) pm.restoreList(oql, filter);
         return (users != null) ? users : new ArrayList<User>();
     }
 
@@ -141,7 +146,7 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
                 + jdoUserRoles
                 + " userRole where userRole.user.oid='" + user.getID() + "'"
                 + " and userRole.role.Name='" + role.getName() + "'";
-        userRole = (UserRole)pm.restore(oql);
+        userRole = (UserRole) pm.restore(oql);
         return userRole;
     }
 
@@ -158,7 +163,7 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
 
     public PortletRole getRole(String roleName) {
         if (roleName == null) throw new IllegalArgumentException("role name cannot be null!");
-        return (PortletRole)pm.restore("select prole from " + PortletRole.class.getName() + " prole where prole.Name='" + roleName + "'");
+        return (PortletRole) pm.restore("select prole from " + PortletRole.class.getName() + " prole where prole.Name='" + roleName + "'");
     }
 
     public void saveRole(PortletRole role) {
@@ -166,4 +171,25 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
         pm.saveOrUpdate(role);
     }
 
+    public List<PortletRole> getDefaultRoles() {
+        List<PortletRole> roles = null;
+        roles = pm.restoreList("select prole from " + PortletRole.class.getName() + " prole where prole.IsDefault=1");
+        return (roles != null) ? roles : new ArrayList<PortletRole>();
+    }
+
+    public void addDefaultRole(PortletRole role) {
+        PortletRole myrole = getRole(role.getName());
+        if (myrole != null) {
+            myrole.setIsDefault(1);
+            saveRole(myrole);
+        }
+    }
+
+    public void removeDefaultRole(PortletRole role) {
+        PortletRole myrole = getRole(role.getName());
+        if (myrole != null) {
+            myrole.setIsDefault(0);
+            saveRole(myrole);
+        }
+    }
 }

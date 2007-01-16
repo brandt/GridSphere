@@ -10,7 +10,6 @@ import java.io.Serializable;
 /**
  * The <code>PortletRole</code> describes the supported portlet roles used
  * by the portal.
- *
  */
 public class PortletRole implements Serializable, Cloneable {
 
@@ -18,6 +17,8 @@ public class PortletRole implements Serializable, Cloneable {
 
     private String roleName = null;
     private String description = "";
+    // if 0 isdefault is false
+    private Integer isDefault = 0;
 
     private static final String USER_ROLE_STRING = "USER";
     private static final String ADMIN_ROLE_STRING = "ADMIN";
@@ -25,7 +26,8 @@ public class PortletRole implements Serializable, Cloneable {
     public static final PortletRole USER = new PortletRole(USER_ROLE_STRING);
     public static final PortletRole ADMIN = new PortletRole(ADMIN_ROLE_STRING);
 
-    public PortletRole() {}
+    public PortletRole() {
+    }
 
     /**
      * Constructs an instance of PortletRole
@@ -42,6 +44,14 @@ public class PortletRole implements Serializable, Cloneable {
 
     public void setOid(String oid) {
         this.oid = oid;
+    }
+
+    public void setIsDefault(Integer isDefault) {
+        this.isDefault = isDefault;
+    }
+
+    public Integer getIsDefault() {
+        return isDefault;
     }
 
     /**
