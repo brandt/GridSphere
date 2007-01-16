@@ -49,14 +49,20 @@ public class PersistenceManagerServiceImpl implements PersistenceManagerService,
      * @return the new PersistenceManager
      */
     public synchronized PersistenceManagerRdbms createPersistenceManagerRdbms(String webappname) {
+        String path = context.getRealPath("../" + webappname + "/WEB-INF/persistence/");
+        return createPersistenceManagerRdbms(webappname, path, path);
+    }
+
+    public synchronized PersistenceManagerRdbms createPersistenceManagerRdbms(String webappname, String pathTohibernateProperties, String pathToHibernateMappings) {
         if (!databases.containsKey(webappname)) {
             log.info("Creating new PM for :" + webappname);
-            String path = context.getRealPath("../" + webappname + "/WEB-INF/persistence/");
-            PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(path);
+            PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(pathTohibernateProperties,
+                    pathToHibernateMappings);
             databases.put(webappname, pm);
         }
-        return databases.get(webappname);
+        return (PersistenceManagerRdbms) databases.get(webappname);
     }
+
 
     /**
      * Returns all persistence managers.

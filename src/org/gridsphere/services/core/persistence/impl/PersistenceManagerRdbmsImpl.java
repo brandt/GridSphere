@@ -56,20 +56,22 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     }
 
     public PersistenceManagerRdbmsImpl(String persistenceConfigDir) {
-        log.info("Creating Hibernate RDBMS Impl using config in " + persistenceConfigDir);
-        pm = persistenceConfigDir;
-        String filename = persistenceConfigDir + File.separator + "hibernate.properties";
-        File file = new File(filename);
+        this(persistenceConfigDir, persistenceConfigDir);
+    }
 
+    public PersistenceManagerRdbmsImpl(String pathTohibernateProperties, String pathToHibernateMappings) {
+        log.info("Creating Hibernate RDBMS Impl using config in " + pathTohibernateProperties);
+        String filename = pathTohibernateProperties + File.separator + "hibernate.properties";
+        File file = new File(filename);
         log.debug("Loading properties from :" + file);
         Properties hibernateProperties = new Properties();
         try {
             FileInputStream fis = new FileInputStream(file);
             hibernateProperties.load(fis);
-            Configuration cfg = loadConfiguration(persistenceConfigDir, hibernateProperties);
+            Configuration cfg = loadConfiguration(pathToHibernateMappings, hibernateProperties);
             factory = cfg.buildSessionFactory();
         } catch (FileNotFoundException e) {
-            log.error("Could not find Hibernate config file. Make sure you have a file  " + file);
+            log.error("Could not find Hibernate config file. Make sure you have a file " + file);
         } catch (IOException e) {
             log.error("Could not load Hibernate config File", e);
         } catch (HibernateException e) {
