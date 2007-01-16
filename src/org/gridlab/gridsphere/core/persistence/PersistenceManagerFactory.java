@@ -12,10 +12,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.servlet.ServletContext;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 
@@ -41,17 +38,26 @@ public class PersistenceManagerFactory {
         return (PersistenceManagerRdbms) databases.get(databaseName);
     }
 
+    public static Collection getAllPersistenceManagers() {
+        return databases.values();
+    }
+
     /**
-     * Creates a new persistencemanager.
+     * Creates a new persistenc emanager.
      *
-     * @param webappname
+     * @param webappname the name of the web app
+     * @return a new persistence manager
      */
     public static synchronized PersistenceManagerRdbms createPersistenceManagerRdbms(String webappname) {
+        ServletContext ctx = GridSphereConfig.getServletContext();
+        String path = ctx.getRealPath("../" + webappname + "/WEB-INF/persistence/");
+        return createPersistenceManagerRdbms(webappname, path, path);
+    }
+
+    public static synchronized PersistenceManagerRdbms createPersistenceManagerRdbms(String webappname, String pathTohibernateProperties, String pathToHibernateMappings) {
         if (!databases.containsKey(webappname)) {
             log.info("Creating new PM for :" + webappname);
-            ServletContext ctx = GridSphereConfig.getServletContext();
-            String path = ctx.getRealPath("../" + webappname + "/WEB-INF/persistence/");
-            PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(path);
+            PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(pathTohibernateProperties, pathToHibernateMappings);
             databases.put(webappname, pm);
         }
         return (PersistenceManagerRdbms) databases.get(webappname);

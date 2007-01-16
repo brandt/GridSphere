@@ -38,7 +38,6 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private static final ThreadLocal threadSession = new ThreadLocal();
     private static final ThreadLocal threadTransaction = new ThreadLocal();
 
-
     public PersistenceManagerRdbmsImpl() {
         ServletContext ctx = GridSphereConfig.getServletContext();
         String gsPropsPath = ctx.getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties");
@@ -81,20 +80,22 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     }
 
     public PersistenceManagerRdbmsImpl(String persistenceConfigDir) {
-        log.info("Creating Hibernate RDBMS Impl using config in " + persistenceConfigDir);
+        this(persistenceConfigDir, persistenceConfigDir);
+    }
 
-        String filename = persistenceConfigDir + File.separator + "hibernate.properties";
+    public PersistenceManagerRdbmsImpl(String pathTohibernateProperties, String pathToHibernateMappings) {
+        log.info("Creating Hibernate RDBMS Impl using config in " + pathTohibernateProperties);
+        String filename = pathTohibernateProperties + File.separator + "hibernate.properties";
         File file = new File(filename);
-
         log.debug("Loading properties from :" + file);
         Properties hibernateProperties = new Properties();
         try {
             FileInputStream fis = new FileInputStream(file);
             hibernateProperties.load(fis);
-            Configuration cfg = loadConfiguration(persistenceConfigDir, hibernateProperties);
+            Configuration cfg = loadConfiguration(pathToHibernateMappings, hibernateProperties);
             factory = cfg.buildSessionFactory();
         } catch (FileNotFoundException e) {
-            log.error("Could not find Hibernate config file. Make sure you have a file  " + file);
+            log.error("Could not find Hibernate config file. Make sure you have a file " + file);
         } catch (IOException e) {
             log.error("Could not load Hibernate config File", e);
         } catch (HibernateException e) {
@@ -149,13 +150,12 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public org.gridlab.gridsphere.core.persistence.Session getSession() throws PersistenceManagerException {
         try {
-            org.gridlab.gridsphere.core.persistence.Session s = (org.gridlab.gridsphere.core.persistence.Session)threadSession.get();
+            net.sf.hibernate.Session s = (net.sf.hibernate.Session)threadSession.get();
             if (s == null) {
-                Session session = factory.openSession();
-                org.gridlab.gridsphere.core.persistence.Session gsSession = new SessionImpl(session);
-                threadSession.set(gsSession);
+                s = factory.openSession();
+                threadSession.set(s);
             }
-            return (org.gridlab.gridsphere.core.persistence.Session)threadSession.get();
+            return new SessionImpl(s);
         } catch (HibernateException e) {
             throw new PersistenceManagerException(e);
         }
@@ -239,95 +239,86 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         }
     }
 
+    private net.sf.hibernate.Session currentSession() throws net.sf.hibernate.HibernateException {
+        Session s = (Session)threadSession.get();
+        // Open a new Session, if this Thread has none yet
+        if (s == null) {
+            s = factory.openSession();
+            threadSession.set(s);
+        }
+        return s;
+    }
+
     public void beginTransaction() throws PersistenceManagerException {
-        org.gridlab.gridsphere.core.persistence.Transaction tx = (org.gridlab.gridsphere.core.persistence.Transaction) threadTransaction.get();
-        if (tx == null) {
-            tx = getSession().beginTransaction();
-            threadTransaction.set(tx);
+        try {
+            net.sf.hibernate.Transaction transaction = currentSession().beginTransaction();
+            threadTransaction.set(transaction);
+        } catch (HibernateException e) {
+            throw new PersistenceManagerException(e);
         }
     }
 
     public void commitTransaction() throws PersistenceManagerException {
-        org.gridlab.gridsphere.core.persistence.Transaction tx = (org.gridlab.gridsphere.core.persistence.Transaction) threadTransaction.get();
         try {
-            if ( tx != null && !tx.wasCommitted()
-                    && !tx.wasRolledBack() )
-                tx.commit();
-            threadTransaction.set(null);
-        } catch (Exception ex) {
-            rollbackTransaction();
-            throw new PersistenceManagerException(ex);
+            net.sf.hibernate.Transaction transaction = (net.sf.hibernate.Transaction)threadTransaction.get();
+            if (transaction != null) transaction.commit();
+        } catch (HibernateException e) {
+            throw new PersistenceManagerException(e);
         }
     }
 
     public void rollbackTransaction() throws PersistenceManagerException {
-        org.gridlab.gridsphere.core.persistence.Transaction tx = (org.gridlab.gridsphere.core.persistence.Transaction) threadTransaction.get();
         try {
-            threadTransaction.set(null);
-            if ( tx != null && !tx.wasCommitted()
-                    && !tx.wasRolledBack() ) {
-                tx.rollback();
+            net.sf.hibernate.Transaction transaction = (net.sf.hibernate.Transaction)threadTransaction.get();
+            if (!transaction.wasRolledBack()) {
+                log.debug("Trying to rollback database transaction after exception");
+                transaction.rollback();
             }
-        } catch (Exception ex) {
-            throw new PersistenceManagerException(ex);
-        } finally {
-            closeSession();
+        } catch (HibernateException e) {
+            throw new PersistenceManagerException(e);
         }
     }
 
     private Object doTransaction(Object object, String query, int command, QueryFilter queryFilter) throws HibernateException {
-        Session session = null;
-        Transaction tx = null;
+        net.sf.hibernate.Session session = null;
         Object result = null;
         Query q = null;
+        session = currentSession();
 
-        try {
-            session = factory.openSession();
-            // Open a new Session, if this thread has none yet
-            tx = null;
-            tx = session.beginTransaction();
-            switch (command) {
-                case CMD_CREATE:
-                    session.save(object);
-                    break;
-                case CMD_DELETE:
-                    session.delete(object);
-                    break;
-                case CMD_DELETE_LIST:
-                    session.delete(query);
-                    break;
-                case CMD_UPDATE:
-                    session.update(object);
-                    break;
-                case CMD_SAVEORUPDATE:
-                    session.saveOrUpdate(object);
-                    break;
-                case CMD_RESTORE_LIST:
-                    q = session.createQuery(query);
-                    if (queryFilter != null) {
-                        q.setFirstResult(queryFilter.getFirstResult());
-                        q.setMaxResults(queryFilter.getMaxResults());
-                    }
-                    result = q.list();
-                    break;
-                case CMD_RESTORE:
-                    q = session.createQuery(query);
-                    result = q.list().get(0);
-                    break;
-                case CMD_COUNT:
-                    q = session.createQuery(query);
-                    result = new Integer(q.list().size());
-                    break;
-            }
-            tx.commit();
-        } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            throw e;
-        } finally {
-            session.close();
+        switch (command) {
+            case CMD_CREATE:
+                session.save(object);
+                break;
+            case CMD_DELETE:
+                session.delete(object);
+                break;
+            case CMD_DELETE_LIST:
+                session.delete(query);
+                break;
+            case CMD_UPDATE:
+                session.update(object);
+                break;
+            case CMD_SAVEORUPDATE:
+                session.saveOrUpdate(object);
+                break;
+            case CMD_RESTORE_LIST:
+                q = session.createQuery(query);
+                if (queryFilter != null) {
+                    q.setFirstResult(queryFilter.getFirstResult());
+                    q.setMaxResults(queryFilter.getMaxResults());
+                }
+                result = q.list();
+                break;
+            case CMD_RESTORE:
+                q = session.createQuery(query);
+                result = q.list().get(0);
+                break;
+            case CMD_COUNT:
+                q = session.createQuery(query);
+                result = new Integer(q.list().size());
+                break;
         }
+
         return result;
     }
 
