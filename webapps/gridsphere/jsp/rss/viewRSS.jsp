@@ -19,7 +19,6 @@
 %>
 
 <ui:form action="selectFeed">
-    <ui:text key="RSS_SELECT_FEED"/>
     <ui:listbox submitOnChange="true" beanId="feedsLB"/>
 </ui:form>
 

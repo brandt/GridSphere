@@ -23,7 +23,7 @@ public class RssServiceImpl implements RssService, PortletServiceProvider {
     private Map<String, SyndFeed> cachedStore = new HashMap<String, SyndFeed>();
     private Map<String, Long> cachedTime = new HashMap<String, Long>();
 
-    public SyndFeed getFeed(String url) throws FeedException, IOException {
+    public SyndFeed getFeed(String url) throws FeedException {
         SyndFeedInput input = new SyndFeedInput();
         SyndFeed feed = null;
         long diff = CACHE_TIME + 1;
@@ -33,7 +33,11 @@ public class RssServiceImpl implements RssService, PortletServiceProvider {
             diff = System.currentTimeMillis() - cachedTime.longValue();
         }
         if (diff > CACHE_TIME) {
-            feed = input.build(new XmlReader(new URL(url)));
+            try {
+                feed = input.build(new XmlReader(new URL(url)));
+            } catch (IOException e) {
+                throw new FeedException("Invalid URL.");
+            }
             cachedStore.put(url, feed);
             cachedTime.put(url, new Long(System.currentTimeMillis()));
         }
