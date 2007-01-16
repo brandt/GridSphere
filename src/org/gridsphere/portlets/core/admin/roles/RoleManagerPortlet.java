@@ -16,10 +16,7 @@ import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
 
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletException;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
+import javax.portlet.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,11 +44,12 @@ public class RoleManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getRenderRequest();
         List roleList = this.roleManagerService.getRoles();
         req.setAttribute("roleList", roleList);
-        List coreRolesList = new ArrayList();
+        List<String> coreRolesList = new ArrayList<String>();
         coreRolesList.add(PortletRole.USER.getName());
         coreRolesList.add(PortletRole.ADMIN.getName());
-
         req.setAttribute("coreRoleList", coreRolesList);
+        List<PortletRole> defRoles = roleManagerService.getDefaultRoles();
+        req.setAttribute("defRoles", defRoles);
         setNextState(req, ROLES_LIST);
     }
 
@@ -68,6 +66,25 @@ public class RoleManagerPortlet extends ActionPortlet {
     public void doEditRole(ActionFormEvent event) {
         String roleName = event.getAction().getParameter("roleName");
         doPrepareRole(event, event.getActionRequest(), event.getActionResponse(), roleName);
+    }
+
+    public void doSaveDefaultRoles(ActionFormEvent event) {
+        ActionRequest request = event.getActionRequest();
+        String[] rolesCB = request.getParameterValues("rolesDefCB");
+        List<PortletRole> allRoles = roleManagerService.getRoles();
+        List<User> users = userManagerService.getUsers();
+        for (PortletRole role : allRoles) {
+            roleManagerService.removeDefaultRole(role);
+            for (int i = 0; i < rolesCB.length; i++) {
+                if (rolesCB[i].equals(role.getName())) {
+                    roleManagerService.addDefaultRole(role);
+                    for (User user : users) {
+                        roleManagerService.addUserToRole(user, role);
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     public void doPrepareRole(FormEvent event, PortletRequest req, PortletResponse res, String roleName) {
@@ -89,7 +106,6 @@ public class RoleManagerPortlet extends ActionPortlet {
             QueryFilter filter = event.getQueryFilter(20, numUsers);
 
             users = roleManagerService.getUsersInRole(role, filter);
-
 
             List notusers = userManagerService.getUsers();
             for (int i = 0; i < users.size(); i++) {

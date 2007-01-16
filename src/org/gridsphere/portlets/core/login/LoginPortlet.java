@@ -588,7 +588,10 @@ public class LoginPortlet extends ActionPortlet {
 
     private void saveUserRole(User user) {
         log.debug("Entering saveUserRole()");
-        roleService.addUserToRole(user, PortletRole.USER);
+        List<PortletRole> defaultRoles = roleService.getDefaultRoles();
+        for (PortletRole role : defaultRoles) {
+            roleService.addUserToRole(user, role);
+        }
     }
 
     public void displayForgotPassword(ActionFormEvent event) {

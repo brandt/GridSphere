@@ -1,27 +1,27 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE hibernate-mapping PUBLIC
-    "-//Hibernate/Hibernate Mapping DTD 1.1//EN"
-    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD 1.1//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-lazy="false">
     <class
-        name="org.gridsphere.services.core.security.role.PortletRole"
-        table="portletrole"
-        >
+            name="org.gridsphere.services.core.security.role.PortletRole"
+            table="portletrole"
+            >
         <cache usage="read-write"/>
         <id
-            name="oid"
-            column="gsoid"
-            type="java.lang.String"
-            length="32"
-            >
+                name="oid"
+                column="gsoid"
+                type="java.lang.String"
+                length="32"
+                >
             <generator class="uuid.hex"/>
 
         </id>
 
-        <property name="Name" type="string" column="rolename"/>
-        <property name="Description" type="string" column="description"/>
-
+        <property name="Name" type="string" column="rolename" not-null="true"/>
+        <property name="Description" type="string" column="description" not-null="true"/>
+        <property name="IsDefault" type="java.lang.Integer" column="isdefault"/>
     </class>
 </hibernate-mapping>

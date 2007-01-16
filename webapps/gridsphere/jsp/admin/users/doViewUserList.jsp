@@ -72,10 +72,7 @@
                 <ui:text key="LASTLOGINDATE"/>
             </ui:tablecell>
         </ui:tablerow>
-        <%
-            for (User user : userList) {
-
-        %>
+        <% for (User user : userList) { %>
         <ui:tablerow>
             <ui:tablecell>
                 <ui:checkbox name="usersCB" value="<%= user.getID() %>"/>
@@ -108,9 +105,7 @@
                 <% } %>
             </ui:tablecell>
         </ui:tablerow>
-        <%
-            }
-        %>
+        <% } %>
     </ui:table>
     <ui:actionsubmit action="doDeleteUser" key="USER_DELETE_USER"/>
     <ui:actionsubmit action="doComposeEmail" key="USER_SEND_EMAIL"/>

@@ -213,6 +213,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
         List<PortletRole> roles = roleManagerService.getRoles();
         List myroles = new ArrayList<PortletRole>();
+        List defaultRoles = roleManagerService.getDefaultRoles();
         if (user != null) myroles = roleManagerService.getRolesForUser(user);
 
         for (PortletRole role : roles) {
@@ -222,7 +223,7 @@ public class UserManagerPortlet extends ActionPortlet {
             if (myroles.contains(role)) {
                 cb.setSelected(true);
             }
-            if ((user == null) && (role.equals(PortletRole.USER))) cb.setSelected(true);
+            if ((user == null) && (defaultRoles.contains(role))) cb.setSelected(true);
             cb.setBeanId(role.getName() + "CB");
             tc.addBean(cb);
             tr.addBean(tc);
@@ -368,7 +369,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
     public void doComposeEmail(RenderFormEvent event) {
         RenderRequest req = event.getRenderRequest();
-        String[] users = (String[])req.getPortletSession().getAttribute("emails");
+        String[] users = (String[]) req.getPortletSession().getAttribute("emails");
         StringBuffer emails = new StringBuffer();
         for (int i = 0; i < users.length; i++) {
             User user = this.userManagerService.getUser(users[i]);
@@ -382,7 +383,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
         TextFieldBean emailAddressTF = event.getTextFieldBean("emailAddressTF");
         // chop off last , from emails CSV
-        emailAddressTF.setValue(emails.substring(0, emails.length()-2));
+        emailAddressTF.setValue(emails.substring(0, emails.length() - 2));
         req.getPortletSession().removeAttribute("emails");
         setNextState(req, DO_SEND_EMAIL);
     }
