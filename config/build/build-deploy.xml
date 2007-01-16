@@ -94,6 +94,18 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <exclude name="index.html"/>
                 <exclude name="WEB-INF/web.xml"/>
                 <exclude name="META-INF/context.xml"/>
+                <exclude name="images/**"/>
+                <exclude name="themes/**"/>
+                <exclude name="javascript/**"/>
+            </fileset>
+        </copy>
+
+        <!-- Copy images without filtering -->
+        <copy overwrite="true" filtering="false" todir="${build.webapps}/${gridsphere.deploy}">
+            <fileset dir="${gswebapp.dir}">
+                <include name="images/**"/>
+                <include name="themes/**"/>
+                <include name="javascript/**"/>
             </fileset>
         </copy>
     </target>
@@ -118,6 +130,18 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <exclude name="index.html"/>
                 <exclude name="WEB-INF/web.xml"/>
                 <exclude name="META-INF/context.xml"/>
+                <exclude name="images/**"/>
+                <exclude name="themes/**"/>
+                <exclude name="javascript/**"/>
+            </fileset>
+        </copy>
+
+        <!-- Copy images without filtering -->
+        <copy overwrite="true" todir="${build.webapps}/${gridsphere.deploy}">
+            <fileset dir="${gswebapp.dir}">
+                <include name="images/**"/>
+                <include name="themes/**"/>
+                <include name="javascript/**"/>
             </fileset>
         </copy>
 
