@@ -13,7 +13,12 @@ import org.gridsphere.services.core.jcr.JCRService;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletMode;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 /*
 * @author <a href="mailto:wehrens@gridsphere.org">Oliver Wehrens</a>
@@ -23,12 +28,25 @@ public class NewsPortlet extends ActionPortlet {
 
     private JCRService jcrService = null;
     private String document = "MessageOfTheDay";
-    //private String 
+    private String storeFileName = "motd.properties";
+    private Properties props = new Properties();
+    //private String
 
     public void init(PortletConfig config) throws PortletException {
         super.init(config);
         DEFAULT_VIEW_PAGE = "doView";
         DEFAULT_EDIT_PAGE = "doConfigure";
+        storeFileName = config.getPortletContext().getRealPath("WEB-INF/CustomPortal/portal/") + File.separator + storeFileName;
+
+        File file = new File(storeFileName);
+        props = new Properties();
+        try {
+            props.load(new FileInputStream(file));
+            document = props.getProperty("message");
+        } catch (IOException e) {
+            log.error("Could not load properties from " + storeFileName);
+            e.printStackTrace();
+        }
         jcrService = (JCRService) createPortletService(JCRService.class);
     }
 
@@ -70,8 +88,14 @@ public class NewsPortlet extends ActionPortlet {
     public void doSave(ActionFormEvent event) throws PortletException {
         ListBoxBean cmsDocument = event.getListBoxBean("document");
         document = cmsDocument.getSelectedName();
+        props.setProperty("message", document);
         event.getActionResponse().setPortletMode(PortletMode.VIEW);
+        try {
+            props.store(new FileOutputStream(storeFileName), "Message of the day.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("Could not save MOTD prefs to " + storeFileName);
+        }
         setNextState(event.getActionRequest(), "doView");
     }
-
 }
