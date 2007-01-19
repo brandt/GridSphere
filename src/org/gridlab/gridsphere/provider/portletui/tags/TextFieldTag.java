@@ -93,6 +93,7 @@ public class TextFieldTag extends InputTag {
             this.setBaseComponentBean(textFieldBean);
         }
         if (cssClass != null) textFieldBean.addCssClass(cssClass);
+        if (readonly) textFieldBean.setReadOnly(true);
         //debug();
         Tag parent = getParent();
         JspWriter out;
