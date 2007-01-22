@@ -326,7 +326,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             }
             throw e;
         } finally {
-            session.close();
+            if (session!=null) session.close();
         }
         return result;
     }
