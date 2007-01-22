@@ -175,6 +175,9 @@ Build include file for the GridSphere Portal source code, see build.xml
         <copy overwrite="true" tofile="${build.webapps}/${gridsphere.deploy}/META-INF/context.xml"
               file="${gswebapp.dir}/META-INF/context.xml" filtering="true"/>
 
+        <!-- copy LICENSE, RELEASE-NOTES ... -->
+        <copy file="LICENSE.txt" tofile="${build.webapps}/${gridsphere.deploy}/LICENSE.txt"/>
+        <copy file="README.txt" tofile="${build.webapps}/${gridsphere.deploy}/README.txt"/>
 
     </target>
     <!-- ++++++++++++++++++++++ -->
