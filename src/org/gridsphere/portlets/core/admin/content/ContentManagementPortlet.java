@@ -59,20 +59,22 @@ public class ContentManagementPortlet extends ActionPortlet {
         return (String) userInfo.get("user.name");
     }
 
-    public void listNodes(FormEvent event) {
-        ListBoxBean nodelist = event.getListBoxBean("nodelist");
-        nodelist.clear();
+    public void listNodes(RenderFormEvent event) {
+        //ListBoxBean nodelist = event.getListBoxBean("nodelist");
+        //nodelist.clear();
         try {
             List<ContentDocument> list = jcrService.listChildContentDocuments("/"); //JCRNode.GS_ROOT_CONTENTDOCUMENT_PATH);
+            /*
             for (int i = 0; i < list.size(); i++) {
                 ListBoxItemBean item = new ListBoxItemBean();
                 item.setValue(list.get(i).getTitle());
                 item.setName(list.get(i).getUuid());
                 nodelist.addBean(item);
             }
+            */
+            event.getRenderRequest().setAttribute("contentDocs", list);
         } catch (ContentException e) {
-            e.printStackTrace();
-            log.error("Could not retrieve List.");
+            log.error("Could not retrieve list of content documents.", e);
         }
     }
 
@@ -89,7 +91,7 @@ public class ContentManagementPortlet extends ActionPortlet {
 
     public void clearEditor(ActionFormEvent event) {
         clearInputs(event);
-        listNodes(event);
+        //listNodes(event);
         setNextState(event.getActionRequest(), defaultViewJSP);
     }
 
@@ -138,13 +140,12 @@ public class ContentManagementPortlet extends ActionPortlet {
             createSuccessMessage(event, getLocalizedText(request, "CM_SUCCESS_" + action + "DOCUMENT") + ": " + title + ".");
 
         } catch (ContentException e) {
-            e.printStackTrace();
-            log.error("Err.");
+            log.error("Err.", e);
             createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTSAVEDOCUMENT") + ": " + title + ".");
         }
         clearInputs(event);
-        listNodes(event);
-        nodeBean.setReadOnly(false);
+        //listNodes(event);
+        //nodeBean.setReadOnly(false);
         setNextState(request, DEFAULT_VIEW_PAGE);
     }
 
@@ -152,56 +153,70 @@ public class ContentManagementPortlet extends ActionPortlet {
         PortletRequest request = event.getRenderRequest();
         listNodes(event);
         clearInputs(event);
-        event.getTextFieldBean("title").setReadOnly(true);
+        //event.getTextFieldBean("title").setReadOnly(true);
         setNextState(request, defaultViewJSP);
     }
 
 
-    public void showNode(ActionFormEvent event) throws PortletException {
-        PortletRequest request = event.getActionRequest();
-        ListBoxBean nodelist = event.getListBoxBean("nodelist");
+    public void showNode(RenderFormEvent event) throws PortletException {
+        PortletRequest request = event.getRenderRequest();
+        //ListBoxBean nodelist = event.getListBoxBean("nodelist");
         RichTextEditorBean content = event.getRichTextEditorBean("content");
         TextFieldBean title = event.getTextFieldBean("title");
         String renderkit = JCRNode.RENDERKIT_DEFAULT;
-        String uuid = nodelist.getSelectedName();
-        HiddenFieldBean uuidBean = event.getHiddenFieldBean("uuid");
 
-        try {
-            ContentDocument doc = jcrService.getDocumentByUUID(uuid);
-            content.setValue(doc.getContent());
-            title.setValue(doc.getTitle());
-            uuidBean.setValue(uuid);
-        } catch (ContentException e) {
-            e.printStackTrace();
-            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + ": " + nodelist.getSelectedValue());
+        //String uuid = nodelist.getSelectedName();
+        String uuid = event.getRender().getParameter("nodeId");
+        HiddenFieldBean uuidBean = event.getHiddenFieldBean("uuid");
+        System.err.println("uuid= " + uuid);
+
+        if (uuid != null) {
+            try {
+                ContentDocument doc = jcrService.getDocumentByUUID(uuid);
+                content.setValue(doc.getContent());
+                title.setValue(doc.getTitle());
+                uuidBean.setValue(uuid);
+                request.setAttribute("showContent", "true");
+            } catch (ContentException e) {
+                log.error("Unable to retrieve content: " + uuid, e);
+                createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + ": " + uuid);
+            }
+        } else {
+            title.setValue("New Title");
+            content.setValue("Please add content!");
+            request.setAttribute("showContent", "true");
         }
         listNodes(event);
         setRenderKitValue(event, renderkit);
-        event.getTextFieldBean("title").setReadOnly(true);
+        //event.getTextFieldBean("title").setReadOnly(true);
         setNextState(request, defaultViewJSP);
     }
 
     public void removeNode(ActionFormEvent event) throws PortletException {
-        ListBoxBean nodelist = event.getListBoxBean("nodelist");
-        String uuid = nodelist.getSelectedName();
-        String value = nodelist.getSelectedValue();
+        //ListBoxBean nodelist = event.getListBoxBean("nodelist");
+        //String uuid = nodelist.getSelectedName();
+        //String value = nodelist.getSelectedValue();
         PortletRequest request = event.getActionRequest();
 
-        try {
-            if (uuid != null && !uuid.equals((""))) {
-                jcrService.removeDocumentByUuid(uuid);
-                createSuccessMessage(event, getLocalizedText(request, "CM_DELETEDOCUMENT"));
-            } else {
-                createErrorMessage(event, getLocalizedText(request, "CM_ERR_SELECTNODE"));
+        String[] nodes = request.getParameterValues("nodeCB");
+        for (int i = 0; i < nodes.length; i++) {
+            String uuid = nodes[i];
+            try {
+                if (uuid != null && !uuid.equals((""))) {
+                    jcrService.removeDocumentByUuid(uuid);
+                    createSuccessMessage(event, getLocalizedText(request, "CM_DELETEDOCUMENT"));
+                } else {
+                    createErrorMessage(event, getLocalizedText(request, "CM_ERR_SELECTNODE"));
+                }
+            } catch (ContentException e) {
+                log.error("Unable to delete content: " + uuid);
+                createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + ": " + uuid);
             }
-        } catch (ContentException e) {
-            e.printStackTrace();
-            createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + ": " + value);
         }
-        listNodes(event);
+        //listNodes(event);
         clearInputs(event);
         event.getTextFieldBean("title").setReadOnly(false);
-        setNextState(request, defaultViewJSP);
+        setNextState(request, DEFAULT_VIEW_PAGE);
     }
 
     public void backupContent(ActionFormEvent event) {
