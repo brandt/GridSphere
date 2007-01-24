@@ -135,10 +135,10 @@ public class GridSphereEventImpl implements GridSphereEvent {
         Enumeration e = req.getParameterNames();
         Map<String, String> params = new HashMap<String, String>();
         if ((prefix != null) && (e != null)) {
-            System.err.println("prefix= " + prefix);
+            //System.err.println("prefix= " + prefix);
             while (e.hasMoreElements()) {
                 name = ((String) e.nextElement());
-                System.err.println("name= " + name);
+                //System.err.println("name= " + name);
                 if (name.startsWith(prefix)) {
                     newname = name.substring(prefix.length() + 1);
                     value = req.getParameter(name);
