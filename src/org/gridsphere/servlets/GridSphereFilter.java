@@ -184,6 +184,14 @@ public class GridSphereFilter implements Filter {
                         if (st.hasMoreTokens()) {
                             extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_RENDER + "=" + (String) st.nextElement();
                         }
+                    } else if (phase.equals("m")) {
+                        if (st.hasMoreTokens()) {
+                            extraInfo += "&" + SportletProperties.PORTLET_MODE + "=" + (String) st.nextElement();
+                        }
+                    } else if (phase.equals("s")) {
+                        if (st.hasMoreTokens()) {
+                            extraInfo += "&" + SportletProperties.PORTLET_WINDOW + "=" + (String) st.nextElement();
+                        }
                     }
                 }
                 if (query != null) {

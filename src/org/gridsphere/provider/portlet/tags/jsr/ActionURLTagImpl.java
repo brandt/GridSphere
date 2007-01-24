@@ -11,7 +11,6 @@ import org.gridsphere.provider.portletui.tags.ActionTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import java.util.ArrayList;
 
 /**
  * The <code>ActionLinkTag</code> provides a hyperlink element that includes a <code>DefaultPortletAction</code>
@@ -70,8 +69,6 @@ public class ActionURLTagImpl extends ActionTag {
 
         if (name != null) actionlink.setName(name);
         if (anchor != null) actionlink.setAnchor(anchor);
-
-        paramBeans = new ArrayList();
 
         if (key != null) {
             actionlink.setKey(key);

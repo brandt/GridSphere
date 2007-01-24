@@ -53,6 +53,9 @@ public class PortletURLImpl implements PortletURL {
 
     private PortalConfigService configService = null;
 
+    private PortletMode mode = null;
+    private WindowState state = null;
+
     protected PortletURLImpl() {
     }
 
@@ -105,7 +108,7 @@ public class PortletURLImpl implements PortletURL {
         }
         if (windowState.equals(WindowState.NORMAL)) windowState = new WindowState("RESIZING");
         if (isSupported) {
-            store.put(SportletProperties.PORTLET_WINDOW, windowState);
+            state = windowState;
         } else {
             throw new WindowStateException("Illegal window state", windowState);
         }
@@ -136,7 +139,7 @@ public class PortletURLImpl implements PortletURL {
         if (allowedModes.contains(portletMode.toString())) {
             // hack to handle config mode
             if (portletMode.toString().equals("config")) portletMode = new PortletMode("configure");
-            store.put(SportletProperties.PORTLET_MODE, portletMode);
+            mode = portletMode;
         } else {
             throw new PortletModeException("Illegal portlet mode", portletMode);
         }
@@ -313,9 +316,9 @@ public class PortletURLImpl implements PortletURL {
         s.append((!port.equals("")) ? port : String.valueOf(req.getServerPort()));
 
         // if underlying window state is floating then set it in the URI
-        if (req.getAttribute(SportletProperties.FLOAT_STATE) != null)
+        if (req.getAttribute(SportletProperties.FLOAT_STATE) != null) {
             store.put(SportletProperties.PORTLET_WINDOW, "FLOATING");
-
+        }
         String contextPath = "/" + configService.getProperty("gridsphere.deploy");
         // handle ROOT context
         if (contextPath.equals("/")) contextPath = "";
@@ -389,6 +392,8 @@ public class PortletURLImpl implements PortletURL {
 
             if (cid != null) {
                 url += "/" + cid;
+                if (mode != null) url += "/m/" + mode.toString();
+                if (state != null) url += "/s/" + state.toString();
                 String action = (String) store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
                 if (action != null) {
                     store.remove(SportletProperties.DEFAULT_PORTLET_ACTION);
@@ -410,7 +415,6 @@ public class PortletURLImpl implements PortletURL {
         if (!set.isEmpty()) {
             // add question mark
             url += "?";
-
 
             Iterator it = set.iterator();
             boolean firstParam = true;
@@ -455,7 +459,7 @@ public class PortletURLImpl implements PortletURL {
         }
 
         s.append(url);
-        //System.err.println("created URL= " + s.toString());
+        System.err.println("created URL= " + s.toString());
         return s.toString();
     }
 

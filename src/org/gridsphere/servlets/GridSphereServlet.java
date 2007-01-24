@@ -105,7 +105,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         userManagerService = (UserManagerService) PortletServiceFactory.createPortletService(UserManagerService.class, true);
         portletManager = (PortletManagerService) PortletServiceFactory.createPortletService(PortletManagerService.class, true);
         portalFilterService = (PortalFilterService) PortletServiceFactory.createPortletService(PortalFilterService.class, true);
-
     }
 
 

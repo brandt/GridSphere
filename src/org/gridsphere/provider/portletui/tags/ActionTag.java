@@ -321,9 +321,8 @@ public abstract class ActionTag extends BaseComponentTag {
         if (portletMode != null) {
             PortletMode mode = new PortletMode(portletMode);
             try {
-                //actionURL = res.createRenderURL();
                 url.setPortletMode(mode);
-                //System.err.println("set mode to:" + mode);
+                //System.err.println("set mode to:" + mode + " url=" + url);
             } catch (PortletModeException e) {
                 throw new JspException("Unknown portlet mode in renderURL tag: " + portletMode);
             }
