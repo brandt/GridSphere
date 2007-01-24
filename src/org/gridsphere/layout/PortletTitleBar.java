@@ -466,11 +466,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         if (list.contains(WindowState.NORMAL)) {
             tmp.add(WindowState.NORMAL);
         }
-        /*
-        if (list.contains(new WindowState("RESIZING"))) {
-            tmp.add(new WindowState("RESIZING"));
-        }
-        */
         if (list.contains(WindowState.MAXIMIZED)) {
             tmp.add(WindowState.MAXIMIZED);
         }
@@ -505,12 +500,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 windowStates.remove(state);
             }
         }
-        // get rid of resized if window state is normal
-        /*
-        if (windowState.equals(WindowState.NORMAL) || windowState.equals(new WindowState("closed"))) {
-            windowStates.remove(WindowState.NORMAL);
-        }
-        */
+
         // get rid of floating if window state is minimized
         if (windowState.equals(WindowState.MINIMIZED)) {
             windowStates.remove(new WindowState("floating"));
@@ -535,7 +525,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 }
                 stateLinks.add(stateLink);
             } catch (WindowStateException e) {
-                log.error("a window state exception occurred! " + state, e);
+                log.error("a window state exception occurred! " + state);
             }
         }
         return stateLinks;
@@ -593,7 +583,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 modeLink.setHref(portletURL.toString());
                 portletLinks.add(modeLink);
             } catch (PortletModeException e) {
-                //log.debug("Unable to get mode for : " + mode.toString());
+                log.error("Unable to get mode for : " + mode.toString());
             }
         }
         return portletLinks;
@@ -638,7 +628,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                     if (!titleBarEvent.getState().equals(new WindowState("floating")))
                         windowState = titleBarEvent.getState();
 
-                    System.err.println("setting window state= " + windowState);
+                    //System.err.println("setting window state= " + windowState);
                     PortletWindowEvent winEvent = null;
 
                     // if receive a window state that is not supported do nothing

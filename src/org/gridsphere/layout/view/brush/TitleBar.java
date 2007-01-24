@@ -61,7 +61,6 @@ public class TitleBar extends BaseRender implements Render {
         // states
         if (windowLinks != null) {
             for (PortletTitleBar.PortletStateLink state : windowLinks) {
-                System.err.println("state= " + state.toString());
                 titleBuffer.append("<a href=\"").append(state.getHref()).append("\"><img  border=\"0\" src=\"").append(req.getContextPath()).append("/themes/").append(renderKit).append("/").append(theme).append("/").append(state.getImageSrc()).append("\" title=\"").append(state.getAltTag()).append("\" alt=\"").append(state.getAltTag()).append("\" /></a>");
             }
         }
