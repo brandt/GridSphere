@@ -539,7 +539,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      */
     public List<PortletTitleBar.PortletModeLink> createModeLinks(GridSphereEvent event) {
         super.doRender(event);
-        int i;
         RenderResponse res = event.getRenderResponse();
         RenderRequest req = event.getRenderRequest();
         // make modes from supported modes
@@ -550,10 +549,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // Unless user is admin they should not see configure mode
         boolean hasConfigurePermission = req.isUserInRole(PortletRole.ADMIN.getName());
         List<String> smodes = new ArrayList<String>();
-        String mode;
 
-        for (String supportedMode : supportedModes) {
-            mode = (String) supportedMode;
+        for (String mode : supportedModes) {
             if (mode.equalsIgnoreCase("config")) {
                 if (hasConfigurePermission) {
                     smodes.add(mode);
@@ -561,7 +558,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             } else {
                 smodes.add(mode);
             }
-
             // remove current mode from list
             smodes.remove(portletMode.toString());
         }
@@ -570,12 +566,11 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         Locale locale = req.getLocale();
 
         List<PortletModeLink> portletLinks = new ArrayList<PortletModeLink>();
-        for (i = 0; i < smodes.size(); i++) {
+        for (String mode : smodes) {
             // create a URI for each of the portlet modes
             PortletModeLink modeLink;
-            mode = (String) smodes.get(i);
-            PortletURL portletURL = res.createActionURL();
 
+            PortletURL portletURL = res.createActionURL();
             try {
                 PortletMode pmode = new PortletMode(mode);
                 modeLink = new PortletModeLink(pmode, locale);
@@ -672,14 +667,11 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         try {
             res.setPortletMode(portletMode);
         } catch (PortletModeException e) {
-            System.err.println("Unable to set mode to " + portletMode);
+            log.error("Unable to set mode to " + portletMode);
         }
         req.setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
 
-        Iterator it = listeners.iterator();
-        PortletComponent comp;
-        while (it.hasNext()) {
-            comp = (PortletComponent) it.next();
+        for (PortletComponent comp : listeners) {
             event.addNewRenderEvent(titleBarEvent);
             comp.actionPerformed(event);
         }
@@ -691,11 +683,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * @param event a portlet title bar event
      */
     protected void fireTitleBarEvent(PortletTitleBarEvent event) {
-        Iterator it = listeners.iterator();
-        PortletTitleBarListener l;
-        while (it.hasNext()) {
-            l = (PortletTitleBarListener) it.next();
-            l.handleTitleBarEvent(event);
+        for (PortletComponent titleBarListener : listeners) {
+            ((PortletTitleBarListener) titleBarListener).handleTitleBarEvent(event);
         }
     }
 
@@ -793,7 +782,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(super.toString());
-
         return sb.toString();
     }
 

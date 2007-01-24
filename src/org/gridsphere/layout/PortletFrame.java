@@ -402,17 +402,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                         frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);
                     }
 
-
-                    Iterator it = listeners.iterator();
-                    PortletComponent comp;
-                    while (it.hasNext()) {
-                        comp = (PortletComponent) it.next();
+                    for (PortletComponent comp : listeners) {
                         event.addNewRenderEvent(frameEvent);
                         comp.actionPerformed(event);
                     }
 
                 }
-
             }
 
             // see if render params are set from actionResponse
@@ -421,16 +416,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             addRenderParams(event.getHttpServletRequest());
 
-            Iterator it = listeners.iterator();
-            PortletComponent comp;
-            while (it.hasNext()) {
-                comp = (PortletComponent) it.next();
+            for (PortletComponent comp : listeners) {
                 event.addNewRenderEvent(titleBarEvent);
                 comp.actionPerformed(event);
             }
-
         }
-
     }
 
     private void addRenderParams(HttpServletRequest req) {
