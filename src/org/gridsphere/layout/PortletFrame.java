@@ -289,7 +289,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 if (state.equals(WindowState.MINIMIZED)) {
                     renderPortlet = false;
                     frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_MINIMIZED, COMPONENT_ID);
-                } else if (state.equals(new WindowState("RESIZING"))) {
+                } else if (state.equals(WindowState.NORMAL)) {
                     renderPortlet = true;
                     frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_RESTORED, COMPONENT_ID);
                     frameEvent.setOriginalWidth(originalWidth);
@@ -393,7 +393,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
                     if (mystate.equals(WindowState.MINIMIZED)) {
                         renderPortlet = false;
-                    } else if ((mystate.equals(new WindowState("RESIZING"))) || (mystate.equals(WindowState.NORMAL))) {
+                    } else if (mystate.equals(WindowState.NORMAL)) {
                         renderPortlet = true;
                         frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_RESTORED, COMPONENT_ID);
                         frameEvent.setOriginalWidth(originalWidth);

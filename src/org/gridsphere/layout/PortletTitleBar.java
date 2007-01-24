@@ -55,11 +55,10 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private transient boolean hasError = false;
     private transient boolean isActive = false;
 
-    private transient List modeLinks = null;
-    private transient List windowLinks = null;
+    private transient List<PortletTitleBar.PortletModeLink> modeLinks = null;
+    private transient List<PortletTitleBar.PortletStateLink> windowLinks = null;
 
     private transient Render titleView = null;
-
 
     /**
      * Link is an abstract representation of a hyperlink with an href, image and
@@ -163,9 +162,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
          *
          * @param mode   the portlet mode
          * @param locale the locale
-         * @throws IllegalArgumentException if the mode is not supported
+         * @throws PortletModeException if the mode is not supported
          */
-        public PortletModeLink(PortletMode mode, Locale locale) throws IllegalArgumentException {
+        public PortletModeLink(PortletMode mode, Locale locale) throws PortletModeException {
             if (mode == null) return;
 
             ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
@@ -186,7 +185,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 imageSrc = viewImage;
                 symbol = viewSymbol;//WAP 2.0
             } else {
-                throw new IllegalArgumentException("Unsupported portlet mode: " + mode);
+                throw new PortletModeException("Unsupported portlet mode: ", mode);
             }
         }
     }
@@ -200,13 +199,13 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         public static final String closeImage = "images/window_close.gif";
         public static final String minimizeImage = "images/window_minimize.gif";
         public static final String maximizeImage = "images/window_maximize.gif";
-        public static final String resizeImage = "images/window_resize.gif";
+        public static final String normalImage = "images/window_normal.gif";
         public static final String floatImage = "images/window_float.gif";
 
         public static final String closeSymbol = "X"; //WAP 2.0
         public static final String minimizeSymbol = "_"; //WAP 2.0
         public static final String maximizeSymbol = "="; //WAP 2.0
-        public static final String resizeSymbol = "-"; //WAP 2.0
+        public static final String normalSymbol = "-"; //WAP 2.0
         public static final String floatSymbol = "^"; //WAP 2.0
 
         /**
@@ -214,9 +213,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
          *
          * @param state  the window state
          * @param locale the client locale
-         * @throws IllegalArgumentException if the state is unsupported
+         * @throws WindowStateException if the state is unsupported
          */
-        public PortletStateLink(WindowState state, Locale locale) throws IllegalArgumentException {
+        public PortletStateLink(WindowState state, Locale locale) throws WindowStateException {
             if (state == null) return;
             // Set the image src
             if (state.equals(WindowState.MINIMIZED)) {
@@ -225,9 +224,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             } else if (state.equals(WindowState.MAXIMIZED)) {
                 imageSrc = maximizeImage;
                 symbol = maximizeSymbol;
-            } else if (state.equals(new WindowState("resizing"))) {
-                imageSrc = resizeImage;
-                symbol = resizeSymbol;
+            } else if (state.equals(WindowState.NORMAL)) {
+                imageSrc = normalImage;
+                symbol = normalSymbol;
             } else if (state.equals(new WindowState("closed"))) {
                 imageSrc = closeImage;
                 symbol = closeSymbol;
@@ -235,7 +234,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 imageSrc = floatImage;
                 symbol = floatSymbol;
             } else {
-                throw new IllegalArgumentException("Unsupported window state window mode: " + state);
+                throw new WindowStateException("Unsupported window state window mode: ", state);
             }
             ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
             String key = state.toString().toUpperCase();
@@ -460,15 +459,18 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private List<javax.portlet.WindowState> sort(List<javax.portlet.WindowState> list) {
 
         List<javax.portlet.WindowState> tmp = new ArrayList<javax.portlet.WindowState>();
-        if (list.contains(WindowState.NORMAL)) {
-            tmp.add(WindowState.NORMAL);
-        }
+
         if (list.contains(WindowState.MINIMIZED)) {
             tmp.add(WindowState.MINIMIZED);
         }
+        if (list.contains(WindowState.NORMAL)) {
+            tmp.add(WindowState.NORMAL);
+        }
+        /*
         if (list.contains(new WindowState("RESIZING"))) {
             tmp.add(new WindowState("RESIZING"));
         }
+        */
         if (list.contains(WindowState.MAXIMIZED)) {
             tmp.add(WindowState.MAXIMIZED);
         }
@@ -487,30 +489,28 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * @param event the gridsphere event
      * @return a list of window state hyperlinks
      */
-    public List createWindowLinks(GridSphereEvent event) {
+    public List<PortletStateLink> createWindowLinks(GridSphereEvent event) {
         super.doRender(event);
         PortletURL portletURL;
         RenderResponse res = event.getRenderResponse();
-        WindowState tmp;
 
         if (allowedWindowStates.isEmpty()) return null;
 
         //String[] windowStates = new String[allowedWindowStates.size()];
         List<javax.portlet.WindowState> windowStates = new ArrayList<javax.portlet.WindowState>();
-        for (int i = 0; i < allowedWindowStates.size(); i++) {
-
-            tmp = (WindowState) allowedWindowStates.get(i);
-            windowStates.add(tmp);
+        for (WindowState state : allowedWindowStates) {
+            windowStates.add(state);
             // remove current state from list
-            if (tmp.equals(windowState) && (!windowState.equals(new WindowState("closed")))) {
-                windowStates.remove(i);
+            if (state.equals(windowState) && (!windowState.equals(new WindowState("closed")))) {
+                windowStates.remove(state);
             }
         }
         // get rid of resized if window state is normal
+        /*
         if (windowState.equals(WindowState.NORMAL) || windowState.equals(new WindowState("closed"))) {
-            windowStates.remove(new WindowState("resizing"));
+            windowStates.remove(WindowState.NORMAL);
         }
-
+        */
         // get rid of floating if window state is minimized
         if (windowState.equals(WindowState.MINIMIZED)) {
             windowStates.remove(new WindowState("floating"));
@@ -524,23 +524,19 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // create a URI for each of the window states
         PortletStateLink stateLink;
         List<PortletStateLink> stateLinks = new ArrayList<PortletStateLink>();
-        for (int i = 0; i < windowStates.size(); i++) {
-            tmp = (WindowState) windowStates.get(i);
+        for (WindowState state : windowStates) {
             portletURL = res.createActionURL();
-            //portletURL.setParameter(this.getComponentIDVar(req), this.componentIDStr);
-
             try {
-                stateLink = new PortletStateLink(tmp, locale);
-                portletURL.setParameter(SportletProperties.PORTLET_WINDOW, tmp.toString());
+                stateLink = new PortletStateLink(state, locale);
+                portletURL.setWindowState(state);
                 stateLink.setHref(portletURL.toString());
-                if (tmp.equals(new WindowState("floating"))) {
+                if (state.equals(new WindowState("floating"))) {
                     stateLink.setHref(portletURL.toString() + "\" onclick=\"return GridSphere_popup(this, 'notes')\"");
                 }
                 stateLinks.add(stateLink);
-            } catch (IllegalArgumentException e) {
-                // do nothing
+            } catch (WindowStateException e) {
+                log.error("a window state exception occurred! " + state, e);
             }
-
         }
         return stateLinks;
     }
@@ -551,7 +547,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * @param event the gridsphere event
      * @return a list of portlet mode hyperlinks
      */
-    public List createModeLinks(GridSphereEvent event) {
+    public List<PortletTitleBar.PortletModeLink> createModeLinks(GridSphereEvent event) {
         super.doRender(event);
         int i;
         RenderResponse res = event.getRenderResponse();
@@ -591,15 +587,15 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             PortletURL portletURL = res.createActionURL();
 
             try {
-                modeLink = new PortletModeLink(new PortletMode(mode), locale);
-                portletURL.setParameter(SportletProperties.PORTLET_MODE, mode.toString());
+                PortletMode pmode = new PortletMode(mode);
+                modeLink = new PortletModeLink(pmode, locale);
+                portletURL.setPortletMode(pmode);
                 modeLink.setHref(portletURL.toString());
                 portletLinks.add(modeLink);
-            } catch (IllegalArgumentException e) {
+            } catch (PortletModeException e) {
                 //log.debug("Unable to get mode for : " + mode.toString());
             }
         }
-
         return portletLinks;
     }
 
@@ -642,6 +638,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                     if (!titleBarEvent.getState().equals(new WindowState("floating")))
                         windowState = titleBarEvent.getState();
 
+                    System.err.println("setting window state= " + windowState);
                     PortletWindowEvent winEvent = null;
 
                     // if receive a window state that is not supported do nothing
@@ -651,7 +648,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                         winEvent = new PortletWindowEventImpl(req, PortletWindowEvent.WINDOW_MAXIMIZED);
                     } else if (windowState.equals(WindowState.MINIMIZED)) {
                         winEvent = new PortletWindowEventImpl(req, PortletWindowEvent.WINDOW_MINIMIZED);
-                    } else if (windowState.equals(new WindowState("resizing"))) {
+                    } else if (windowState.equals(WindowState.NORMAL)) {
                         winEvent = new PortletWindowEventImpl(req, PortletWindowEvent.WINDOW_RESTORED);
                     } else if (windowState.equals(new WindowState("CLOSED"))) {
                         winEvent = new PortletWindowEventImpl(req, PortletWindowEvent.WINDOW_CLOSED);
@@ -712,11 +709,11 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         }
     }
 
-    public List getModeLinks() {
+    public List<PortletTitleBar.PortletModeLink> getModeLinks() {
         return modeLinks;
     }
 
-    public List getWindowLinks() {
+    public List<PortletTitleBar.PortletStateLink> getWindowLinks() {
         return windowLinks;
     }
 
@@ -735,6 +732,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             supportedModes = appPortlet.getSupportedModes(event.getClient().getMimeType());
         }
         req.setAttribute(SportletProperties.ALLOWED_MODES, supportedModes);
+        PortalContext portalContext = appPortlet.getPortalContext();
+        req.setAttribute(SportletProperties.PORTAL_CONTEXT, portalContext);
 
         // get the appropriate title for this client
 

@@ -13,7 +13,6 @@ import org.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
-import java.util.Iterator;
 import java.util.List;
 
 public class TitleBar extends BaseRender implements Render {
@@ -40,20 +39,17 @@ public class TitleBar extends BaseRender implements Render {
         StringBuffer titleBuffer = new StringBuffer();
         titleBuffer.append("</div>"); // close window title name
         // Output window state icons
-        List windowLinks = titleBar.getWindowLinks();
+        List<PortletTitleBar.PortletStateLink> windowLinks = titleBar.getWindowLinks();
         titleBuffer.append("<div class=\"gridsphere-window-title-icon-right\">");
-        List modeLinks = titleBar.getModeLinks();
-        String renderKit = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
-        String theme = (String)req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
+        List<PortletTitleBar.PortletModeLink> modeLinks = titleBar.getModeLinks();
+        String renderKit = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
+        String theme = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
         // modes
         if (modeLinks != null) {
-            Iterator modesIt = modeLinks.iterator();
-            PortletTitleBar.PortletModeLink mode;
-            if (!modesIt.hasNext()) {
+            if (modeLinks.isEmpty()) {
                 titleBuffer.append("&nbsp;");
             }
-            while (modesIt.hasNext()) {
-                mode = (PortletTitleBar.PortletModeLink) modesIt.next();
+            for (PortletTitleBar.PortletModeLink mode : modeLinks) {
                 titleBuffer.append("<a href=\"").append(mode.getHref()).append("\"><img border=\"0\" src=\"").append(req.getContextPath()).append("/themes/").append(renderKit).append("/").append(theme).append("/").append(mode.getImageSrc()).append("\" title=\"").append(mode.getAltTag()).append("\" alt=\"").append(mode.getAltTag()).append("\"");
                 if (!mode.getCursor().equals("")) {
                     titleBuffer.append(" style=\"cursor: ").append(mode.getCursor()).append(";\"");
@@ -64,10 +60,8 @@ public class TitleBar extends BaseRender implements Render {
 
         // states
         if (windowLinks != null) {
-            Iterator windowsIt = windowLinks.iterator();
-            PortletTitleBar.PortletStateLink state;
-            while (windowsIt.hasNext()) {
-                state = (PortletTitleBar.PortletStateLink) windowsIt.next();
+            for (PortletTitleBar.PortletStateLink state : windowLinks) {
+                System.err.println("state= " + state.toString());
                 titleBuffer.append("<a href=\"").append(state.getHref()).append("\"><img  border=\"0\" src=\"").append(req.getContextPath()).append("/themes/").append(renderKit).append("/").append(theme).append("/").append(state.getImageSrc()).append("\" title=\"").append(state.getAltTag()).append("\" alt=\"").append(state.getAltTag()).append("\" /></a>");
             }
         }

@@ -8,7 +8,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.impl.PortalContextImpl;
 import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.portletcontainer.*;
+import org.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridsphere.portletcontainer.PortletDispatcher;
+import org.gridsphere.portletcontainer.PortletPreferencesManager;
+import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.impl.descriptor.*;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 
@@ -18,8 +21,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
 
@@ -78,7 +81,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
      * @param webApplication the ui application name for this application portlet
      * @param context        the <code>ServletContext</code> containing this application portlet
      */
-    public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, PortletDefinition portletDef, String webApplication, ServletContext context)  {
+    public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, PortletDefinition portletDef, String webApplication, ServletContext context) {
         this.portletDef = portletDef;
         this.webAppName = webApplication;
         this.portletClassName = portletDef.getPortletClass().getContent();
@@ -164,14 +167,15 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
                 if (statesAllowed != null) {
                     for (int j = 0; j < statesAllowed.length; j++) {
                         org.gridsphere.portletcontainer.impl.descriptor.WindowState w = statesAllowed[j];
-                        if (customStatesList.contains(w.getContent())) states.add(new javax.portlet.WindowState(w.getContent()));
+                        if (customStatesList.contains(w.getContent()))
+                            states.add(new javax.portlet.WindowState(w.getContent()));
                     }
                 }
             }
         }
         states.add(javax.portlet.WindowState.MAXIMIZED);
         states.add(javax.portlet.WindowState.MINIMIZED);
-        states.add(new javax.portlet.WindowState("RESIZING"));
+        states.add(javax.portlet.WindowState.NORMAL);
 
 
         org.gridsphere.portletcontainer.impl.descriptor.PortletPreferences prefDesc = portletDef.getPortletPreferences();
@@ -183,7 +187,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
                     try {
                         prefsValidator = (javax.portlet.PreferencesValidator) Class.forName(validatorClass).newInstance();
                     } catch (Exception e) {
-                        log.error("Unable to create validator: " + validatorClass + "! ",  e);
+                        log.error("Unable to create validator: " + validatorClass + "! ", e);
                     }
                 }
             }
@@ -284,7 +288,6 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
         // before it adds ".1" to real webappName
         //String realWebAppName = webAppName.substring(0, webAppName.length() - 2);
 
-
         //System.err.println("in getPortletDispatcher of jsr query string " + "/jsr/" + webAppName  + extraInfo);
         // TODO change dangerously hardcoded value!!!
         RequestDispatcher rd = context.getRequestDispatcher("/jsr/" + webAppName + extraInfo.toString());
@@ -316,7 +319,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
     }
 
     public String getPortletDescription(Locale locale) {
-        if (locale == null) throw new IllegalArgumentException("supplied locale cannot be null!");        
+        if (locale == null) throw new IllegalArgumentException("supplied locale cannot be null!");
         Description[] descs = portletDef.getDescription();
         for (int i = 0; i < descs.length; i++) {
             if (descs[i].getLang().equals(locale.getLanguage())) {

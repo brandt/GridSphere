@@ -106,7 +106,7 @@ public class PortletURLImpl implements PortletURL {
                 break;
             }
         }
-        if (windowState.equals(WindowState.NORMAL)) windowState = new WindowState("RESIZING");
+
         if (isSupported) {
             state = windowState;
         } else {
@@ -407,11 +407,8 @@ public class PortletURLImpl implements PortletURL {
             }
             //System.err.println("url=" + layoutId);
         }
-
         ///////////// JASON ADDED ABOVE
-
         Set set = store.keySet();
-
         if (!set.isEmpty()) {
             // add question mark
             url += "?";
@@ -457,9 +454,8 @@ public class PortletURLImpl implements PortletURL {
                 url = res.encodeURL(url);
             }
         }
-
         s.append(url);
-        System.err.println("created URL= " + s.toString());
+        //System.err.println("created URL= " + s.toString());
         return s.toString();
     }
 
