@@ -77,7 +77,7 @@
             <title lang="en">Roles</title>
             <table>
                 <row>
-                    <column width="80%">
+                    <column width="100%">
                         <frame label="rolemanager">
                             <portlet-class>
                                 org.gridsphere.portlets.core.admin.roles.RoleManagerPortlet
