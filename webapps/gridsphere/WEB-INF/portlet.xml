@@ -142,6 +142,7 @@
         <supports>
             <mime-type>text/html</mime-type>
             <portlet-mode>help</portlet-mode>
+            <portlet-mode>edit</portlet-mode>
         </supports>
         <supported-locale>en</supported-locale>
         <portlet-info>
@@ -156,7 +157,7 @@
                 <value>http://rss.cnn.com/rss/cnn_topstories.rss</value>
                 <value>http://digg.com/rss/index.xml</value>
                 <value>http://www.theserverside.com/rss/theserverside-rss2.xml</value>
-                <read-only>true</read-only>
+                <read-only>false</read-only>
             </preference>
         </portlet-preferences>
     </portlet>
