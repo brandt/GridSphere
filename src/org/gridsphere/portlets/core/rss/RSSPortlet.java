@@ -44,7 +44,7 @@ public class RSSPortlet extends ActionPortlet {
                 if (result == null) result = feed;
             } catch (FeedException e) {
                 log.error("Could not create Feed.", e);
-                createErrorMessage(event, getLocalizedText(request, "RSS_ERR_COULDNOTCREATEFEED"));
+                createErrorMessage(event, getLocalizedText(request, "RSS_ERR_COULDNOTCREATEFEED") + ": " + feedURL[i] + "<br/>");
             }
             ListBoxItemBean item = new ListBoxItemBean();
             item.setName(feedURL[i]);
