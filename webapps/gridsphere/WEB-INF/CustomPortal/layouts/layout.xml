@@ -23,7 +23,7 @@
                 <column width="400px">
                     <content include="jcr://pageheader" border="false"/>
                 </column>
-                <column width="500px">
+                <column width="500px" style="float: right;">
                     <content include="/jsp/returnnav.jsp"/>
                 </column>
             </row>
