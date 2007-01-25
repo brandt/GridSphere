@@ -24,8 +24,8 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
 
     private Log log = LogFactory.getLog(PortletRegistryServiceImpl.class);
 
-    private static Map allApplicationPortlets = new Hashtable();
-    private static Map webApps = new Hashtable();
+    private static Map<String, ApplicationPortlet> allApplicationPortlets = new Hashtable<String, ApplicationPortlet>();
+    private static Map<String, PortletWebApplication> webApps = new Hashtable<String, PortletWebApplication>();
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
 
@@ -41,9 +41,8 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
     }
 
     public PortletWebApplication getWebApplication(String webappName) {
-        return (PortletWebApplication)webApps.get(webappName);
+        return (PortletWebApplication) webApps.get(webappName);
     }
-
 
     /**
      * Adds an application portlet to the registry
@@ -85,12 +84,11 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
             //webapp = applicationPortletID.substring(0, idx);
             //portletName = applicationPortletID.substring(idx+1);
             //System.err.println("webapp= " + webapp + " pname= " + portletName);
-            return (ApplicationPortlet)allApplicationPortlets.get(applicationPortletID);
+            return (ApplicationPortlet) allApplicationPortlets.get(applicationPortletID);
         }
-        Collection coll = allApplicationPortlets.values();
-        Iterator it = coll.iterator();
-        while (it.hasNext()) {
-            ApplicationPortlet app = (ApplicationPortlet) it.next();
+        Collection<ApplicationPortlet> coll = allApplicationPortlets.values();
+
+        for (ApplicationPortlet app : coll) {
             if (app.getApplicationPortletID().equals(applicationPortletID)) return app;
             if (app.getApplicationPortletClassName().equals(applicationPortletID)) return app;
         }
@@ -98,13 +96,13 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
         return null;
     }
 
- 
+
     /**
      * Returns all application portlets from the registry
      *
      * @return the collection of application portlets
      */
-    public Collection getAllApplicationPortlets() {
+    public Collection<ApplicationPortlet> getAllApplicationPortlets() {
         return allApplicationPortlets.values();
     }
 
@@ -115,13 +113,11 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
      * @param webApplicationName the portlet web application name
      * @return the list of application portlets
      */
-    public List getApplicationPortlets(String webApplicationName) {
-        List webappPortlets = new Vector();
-        Set set = allApplicationPortlets.keySet();
+    public List<ApplicationPortlet> getApplicationPortlets(String webApplicationName) {
+        List<ApplicationPortlet> webappPortlets = new Vector<ApplicationPortlet>();
+        Set<String> set = allApplicationPortlets.keySet();
         ApplicationPortlet appPortlet;
-        Iterator it = set.iterator();
-        while (it.hasNext()) {
-            String concretePortletID = (String) it.next();
+        for (String concretePortletID : set) {
             appPortlet = (ApplicationPortlet) allApplicationPortlets.get(concretePortletID);
             if (appPortlet.getWebApplicationName().equals((webApplicationName))) {
                 webappPortlets.add(appPortlet);
@@ -155,9 +151,8 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
 
     public void logRegistry() {
         log.debug("Displaying Portlet registry contents:\n");
-        Iterator it = allApplicationPortlets.keySet().iterator();
-        while (it.hasNext()) {
-            String appID = (String) it.next();
+        for (String s : allApplicationPortlets.keySet()) {
+            String appID = (String) s;
             ApplicationPortlet appPortlet = (ApplicationPortlet) allApplicationPortlets.get(appID);
             log.debug("\tApplication portlet : " + appPortlet.getApplicationPortletID() + "\n");
             log.debug("\t" + appPortlet + "\n");
