@@ -199,19 +199,23 @@ public class ContentManagementPortlet extends ActionPortlet {
         PortletRequest request = event.getActionRequest();
 
         String[] nodes = request.getParameterValues("nodeCB");
-        for (int i = 0; i < nodes.length; i++) {
-            String uuid = nodes[i];
-            try {
-                if (uuid != null && !uuid.equals((""))) {
-                    jcrService.removeDocumentByUuid(uuid);
-                    createSuccessMessage(event, getLocalizedText(request, "CM_DELETEDOCUMENT"));
-                } else {
-                    createErrorMessage(event, getLocalizedText(request, "CM_ERR_SELECTNODE"));
+        if (nodes != null) {
+            for (int i = 0; i < nodes.length; i++) {
+                String uuid = nodes[i];
+                try {
+                    if (uuid != null && !uuid.equals((""))) {
+                        jcrService.removeDocumentByUuid(uuid);
+                        createSuccessMessage(event, getLocalizedText(request, "CM_DELETEDOCUMENT"));
+                    } else {
+                        createErrorMessage(event, getLocalizedText(request, "CM_ERR_SELECTNODE"));
+                    }
+                } catch (ContentException e) {
+                    log.error("Unable to delete content: " + uuid);
+                    createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + ": " + uuid);
                 }
-            } catch (ContentException e) {
-                log.error("Unable to delete content: " + uuid);
-                createErrorMessage(event, getLocalizedText(request, "CM_ERR_COULDNOTLOADDOCUMENT") + ": " + uuid);
             }
+        } else {
+            createErrorMessage(event, getLocalizedText(request, "CM_ERR_SELECTNODE"));
         }
         //listNodes(event);
         clearInputs(event);
