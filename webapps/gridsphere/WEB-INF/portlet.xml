@@ -73,7 +73,6 @@
         <!-- place supported modes here -->
         <supports>
             <mime-type>text/html</mime-type>
-            <portlet-mode>help</portlet-mode>
         </supports>
         <supported-locale>ar</supported-locale>
         <supported-locale>cs</supported-locale>
@@ -141,7 +140,6 @@
         <expiration-cache>0</expiration-cache>
         <supports>
             <mime-type>text/html</mime-type>
-            <portlet-mode>help</portlet-mode>
             <portlet-mode>edit</portlet-mode>
         </supports>
         <supported-locale>en</supported-locale>
@@ -181,6 +179,22 @@
         </portlet-info>
     </portlet>
 
+    <portlet>
+        <description xml:lang="en">About GridSphere</description>
+        <portlet-name>AboutGridSphere</portlet-name>
+        <display-name xml:lang="en">About GridSphere</display-name>
+        <portlet-class>org.gridsphere.portlets.core.about.AboutPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <portlet-info>
+            <title>About</title>
+            <short-title>About GridSphere</short-title>
+            <keywords>about, gridsphere</keywords>
+        </portlet-info>
+    </portlet>
 
     <portlet>
         <description xml:lang="en">Content Repository Management</description>
