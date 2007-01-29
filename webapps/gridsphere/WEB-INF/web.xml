@@ -6,6 +6,7 @@
         PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
         "http://java.sun.com/dtd/web-app_2_3.dtd">
 
+
 <web-app>
 
     <display-name>GridSphere Portlet Container</display-name>
@@ -17,10 +18,6 @@
     <!-- this is needed for clustering of multiple Tomcats -->
     <distributable/>
 
-    <listener>
-        <listener-class>org.gridsphere.servlets.GridSphereServlet</listener-class>
-    </listener>
-
     <filter>
         <filter-name>GridSphere Filter</filter-name>
         <filter-class>org.gridsphere.servlets.GridSphereFilter</filter-class>
@@ -31,6 +28,11 @@
         <url-pattern>/@GRIDSPHERE_CONTEXT@/*</url-pattern>
     </filter-mapping>
 
+    <listener>
+        <listener-class>org.gridsphere.servlets.GridSphereServlet</listener-class>
+    </listener>
+
+
     <servlet>
         <servlet-name>gridsphere</servlet-name>
         <servlet-class>org.gridsphere.servlets.GridSphereServlet</servlet-class>
@@ -40,6 +42,11 @@
     <servlet>
         <servlet-name>setup</servlet-name>
         <servlet-class>org.gridsphere.servlets.SetupServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>rss</servlet-name>
+        <servlet-class>org.gridsphere.servlets.RssFeedServlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -68,6 +75,12 @@
     </servlet-mapping>
 
     <servlet-mapping>
+        <servlet-name>rss</servlet-name>
+        <url-pattern>/rss/*</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet-mapping>
         <servlet-name>PortletServlet</servlet-name>
         <url-pattern>/jsr/@GRIDSPHERE_DEPLOY@</url-pattern>
     </servlet-mapping>
@@ -76,6 +89,10 @@
         <servlet-name>Captcha</servlet-name>
         <url-pattern>/Captcha.jpg</url-pattern>
     </servlet-mapping>
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
 
     <mime-mapping>
         <extension>wbmp</extension>
@@ -118,9 +135,5 @@
         <location>/@GRIDSPHERE_CONTEXT@?gs_PageLayout=ErrorLayout&amp;errorPage=error.jsp</location>
     </error-page>
     -->
-
-    <session-config>
-        <session-timeout>30</session-timeout>
-    </session-config>
 
 </web-app>
