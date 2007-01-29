@@ -295,7 +295,6 @@ public class TableTag extends BaseComponentTag {
 
         super.doStartTag();
 
-   
         // get any parameter values if data is divided
 
 
@@ -339,6 +338,8 @@ public class TableTag extends BaseComponentTag {
         if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);
         if (cellPadding != null) tableBean.setCellPadding(cellPadding);
         if (border != null) tableBean.setBorder(border);
+        if (cssStyle != null) tableBean.setCssStyle(cssStyle);
+        if (cssClass != null) tableBean.setCssClass(cssClass);
         if (sortable) {
             tableBean.setSortable(sortable);
             tableBean.setSortableID("td" + this.getUniqueId("gs_tableNum"));
@@ -358,7 +359,7 @@ public class TableTag extends BaseComponentTag {
             throw new JspException(e.getMessage());
         }
         //if (includeBody) {
-            return EVAL_BODY_INCLUDE;
+        return EVAL_BODY_INCLUDE;
         //} else {
         //    return SKIP_BODY;
         //}
@@ -367,15 +368,15 @@ public class TableTag extends BaseComponentTag {
     public int doEndTag() throws JspException {
         tableBean.setRowCount(rowCount);
 
-            RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse");
-            RenderRequest req = (RenderRequest) pageContext.getAttribute("renderRequest");
-            PortletURL url = res.createRenderURL();
-            try {
-                url.setPortletMode(req.getPortletMode());
-            } catch (PortletModeException e) {
-                throw new JspException(e);
-            }
-            tableBean.setURIString(url.toString());
+        RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse");
+        RenderRequest req = (RenderRequest) pageContext.getAttribute("renderRequest");
+        PortletURL url = res.createRenderURL();
+        try {
+            url.setPortletMode(req.getPortletMode());
+        } catch (PortletModeException e) {
+            throw new JspException(e);
+        }
+        tableBean.setURIString(url.toString());
 
         try {
             JspWriter out = pageContext.getOut();
