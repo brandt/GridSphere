@@ -173,6 +173,7 @@ public class TableCellTag extends BaseComponentTag {
             if (cssClass != null) cellBean.setCssClass(cssClass);
             if (cssStyle != null) cellBean.setCssStyle(cssStyle);
         }
+
         /*
         TableRowTag rowTag = (TableRowTag) getParent();
         if (rowTag.getHeader()) {

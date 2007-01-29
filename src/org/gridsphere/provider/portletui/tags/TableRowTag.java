@@ -154,6 +154,7 @@ public class TableRowTag extends BaseComponentTag {
             if (align != null) rowBean.setAlign(align);
             if (valign != null) rowBean.setValign(valign);
             if (cssStyle != null) rowBean.setCssStyle(cssStyle);
+            if (cssClass != null) rowBean.setCssClass(cssClass);
         }
 
         rowBean.setZebra(isZebra);
