@@ -4,8 +4,6 @@
  */
 package org.gridsphere.services.core.registry.impl;
 
-import static java.util.Arrays.sort;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
@@ -15,8 +13,8 @@ import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.PortletDispatcherException;
 import org.gridsphere.portletcontainer.PortletWebApplication;
-import org.gridsphere.portletcontainer.impl.PortletWebApplicationLoader;
 import org.gridsphere.portletcontainer.impl.PortletInvoker;
+import org.gridsphere.portletcontainer.impl.PortletWebApplicationLoader;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 
@@ -26,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import static java.util.Arrays.sort;
 import java.util.*;
 
 /**
@@ -100,9 +99,9 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      *
      * @param config the <code>PortletServiceConfig</code>
      */
-    public  void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
 
-        registryService = (PortletRegistryService)PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
+        registryService = (PortletRegistryService) PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
 
         portletInvoker = new PortletInvoker();
 
@@ -114,13 +113,17 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
 
             // add the portal to the top spot
             String realPath = context.getRealPath("");
+            // patch for jetty, path has always a / at the end as opposed to tomcat, so remove it
+            if (realPath.endsWith("/")) {
+                realPath = realPath.substring(0, realPath.length() - 1);
+            }
             int l = realPath.lastIndexOf(File.separator);
             String webappName = realPath.substring(l + 1);
             String file = context.getRealPath(PORTLETS_PATH + "/" + webappName + ".1");
             File myportletapp = new File(file);
             try {
                 myportletapp.createNewFile();
-            } catch(IOException e) {
+            } catch (IOException e) {
                 throw new PortletServiceUnavailableException("Unable to create blank file:" + file);
             }
 
@@ -145,7 +148,8 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
         }
     }
 
-    public void destroy() {}
+    public void destroy() {
+    }
 
     /**
      * Adds a portlet web application to the registry
@@ -199,10 +203,10 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     /**
      * Initializes all known portlet web applications in order
      *
-     * @param req                the <code>HttpServletRequest</code>
-     * @param res                the <code>HttpServletResponse</code>
-     * @throws PortletDispatcherException      if a dispatching error occurs
-     * @throws PortletException if an exception occurs initializing the portlet web application
+     * @param req the <code>HttpServletRequest</code>
+     * @param res the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
+     * @throws PortletException           if an exception occurs initializing the portlet web application
      */
     public synchronized void initAllPortletWebApplications(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException {
         for (int i = 0; i < webappFiles.length; i++) {
@@ -224,9 +228,9 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      * @param webApplicationName the name of the portlet web application
      * @param req                the <code>HttpServletRequest</code>
      * @param res                the <code>HttpServletResponse</code>
-     * @throws PortletDispatcherException      if a dispatching error occurs
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
-    public synchronized void destroyPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException  {
+    public synchronized void destroyPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         log.debug("in destroyPortletWebApplication: " + webApplicationName);
         PortletWebApplicationLoader webAppLoader = webappLoaders.get(webApplicationName);
         portletInvoker.destroyPortletWebApp(webAppLoader, req, res);
@@ -238,7 +242,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      * @param webApplicationName the name of the portlet web application
      * @param req                the <code>HttpServletRequest</code>
      * @param res                the <code>HttpServletresponse</code>
-     * @throws PortletDispatcherException      if a dispatching error occurs
+     * @throws PortletDispatcherException if a dispatching error occurs
      */
     public synchronized void logoutPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         log.debug("logout web app " + webApplicationName);
