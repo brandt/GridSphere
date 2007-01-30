@@ -258,20 +258,24 @@ Build include file for the GridSphere Portal source code, see build.xml
             <available file="${appserver.home}/conf/Catalina" type="dir" property="tomcat5"/>
             <then>
                 <echo message="Detected Tomcat 5"/>
+                <copy overwrite="true" todir="${appserver.home}/shared/lib">
+                    <fileset dir="${build.lib}">
+                        <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
+                        <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
+                    </fileset>
+                </copy>
             </then>
             <else>
-                <echo message="Detected Tomcat 4"/>
-                <copy file="webapps/gridsphere/META-INF/context.xml"
-                      tofile="${appserver.home}/webapps/${gridsphere.deploy}.xml" filtering="true"/>
+                <echo message="Detected Tomcat 6"/>
+                <copy overwrite="true" todir="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/lib">
+                    <fileset dir="${build.lib}">
+                        <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
+                        <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
+                    </fileset>
+                </copy>
             </else>
         </if>
 
-        <copy overwrite="true" todir="${appserver.home}/shared/lib">
-            <fileset dir="${build.lib}">
-                <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
-                <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
-            </fileset>
-        </copy>
 
     </target>
 

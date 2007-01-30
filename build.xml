@@ -84,15 +84,39 @@ Invoke "ant help"
         <if>
             <equals arg1="${gridsphere.appserver}" arg2="tomcat"/>
             <then>
-                <echo message="Installing for Tomcat"/>
                 <property name="appserver.home" value="${env.CATALINA_HOME}"/>
-                <path id="servletpath">
-                    <fileset dir="${appserver.home}/common/lib/">
-                        <include name="*.jar"/>
-                    </fileset>
-                </path>
+
+                <if>
+
+                    <available file="${appserver.home}/common/lib" type="dir"/>
+                    <then>
+                        <echo message="Installing for Tomcat 5.x"/>
+                        <path id="servletpath">
+                            <fileset dir="${appserver.home}/common/lib/">
+                                <include name="*.jar"/>
+                            </fileset>
+                        </path>
+                    </then>
+
+                </if>
+                <if>
+                    <available file="${appserver.home}/lib" type="dir"/>
+                    <then>
+                        <echo message="Installing for Tomcat 6.x"/>
+                        <path id="servletpath">
+                            <fileset dir="${appserver.home}/lib/">
+                                <include name="*.jar"/>
+                            </fileset>
+                            <fileset dir="${appserver.home}/bin/">
+                                <include name="*.jar"/>
+                            </fileset>
+                        </path>
+                    </then>
+                </if>
             </then>
         </if>
+
+
         <if>
             <equals arg1="${gridsphere.appserver}" arg2="jetty"/>
             <then>
@@ -103,25 +127,11 @@ Invoke "ant help"
                         <exclude name="*.LICENSE"/>
                         <include name="*.jar"/>
                     </fileset>
-                    <fileset dir="${appserver.home}/lib/jsp-api-2.1">
+                    <fileset dir="${appserver.home}/lib/jsp-2.1/">
                         <exclude name="*.LICENSE"/>
                         <include name="*.jar"/>
                     </fileset>
 
-                </path>
-            </then>
-        </if>
-
-        <if>
-            <equals arg1="${gridsphere.appserver}" arg2="jetty6"/>
-            <then>
-                <echo message="Installing for Jetty6"/>
-                <property name="appserver.home" value="${env.APPSERVER_HOME}"/>
-                <path id="servletpath">
-                    <fileset file="${appserver.home}/lib/servlet-*.jar"/>
-                    <fileset dir="${appserver.home}/lib/jsp-2.0/">
-                        <include name="*.jar"/>
-                    </fileset>
                 </path>
             </then>
         </if>
