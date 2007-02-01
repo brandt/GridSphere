@@ -344,7 +344,7 @@ public class LoginPortlet extends ActionPortlet {
         }
         if (!success) {
 
-            user.setAttribute();
+            //user.setAttribute();
 
             throw authEx;
         }
