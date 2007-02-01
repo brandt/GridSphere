@@ -45,8 +45,6 @@ public class LoginPortlet extends ActionPortlet {
     private static String FORGOT_PASSWORD_LABEL = "forgotpassword";
     private static String ACTIVATE_ACCOUNT_LABEL = "activateaccount";
 
-    private static String LOGIN_NAME = "LOGIN_NAME";
-
     private static long REQUEST_LIFETIME = 1000 * 60 * 24 * 3; // 3 days
 
     public static final String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
@@ -150,32 +148,6 @@ public class LoginPortlet extends ActionPortlet {
         String errorMsg = (String) request.getPortletSession(true).getAttribute(LOGIN_ERROR_FLAG);
 
         if (errorMsg != null) {
-            Integer numTries = (Integer) request.getPortletSession(true).getAttribute(PortalConfigService.LOGIN_NUMTRIES);
-            String loginname = (String) request.getPortletSession(true).getAttribute(LOGIN_NAME);
-            int i = 1;
-            if (numTries != null) {
-                i = numTries.intValue();
-                i++;
-            }
-            numTries = new Integer(i);
-            request.getPortletSession(true).setAttribute(PortalConfigService.LOGIN_NUMTRIES, numTries);
-            request.getPortletSession(true).setAttribute(LoginPortlet.LOGIN_NAME, request.getParameter("username"));
-
-            User user = userManagerService.getUserByUserName(loginname);
-
-            System.err.println("num tries = " + i);
-            // tried one to many times using same name
-
-            int defaultNumTries = Integer.valueOf(portalConfigService.getProperty(PortalConfigService.LOGIN_NUMTRIES)).intValue();
-
-            if (request.getParameter("username") != null && request.getParameter("username").equals(loginname)) {
-                if ((i >= defaultNumTries) && (defaultNumTries != -1)) {
-                    disableAccount(event);
-                    errorMsg = this.getLocalizedText(request, "LOGIN_TOOMANY_ATTEMPTS");
-                    request.getPortletSession(true).removeAttribute(PortalConfigService.LOGIN_NUMTRIES);
-                    request.getPortletSession(true).removeAttribute(LOGIN_NAME);
-                }
-            }
             createErrorMessage(event, errorMsg);
             request.getPortletSession(true).removeAttribute(LOGIN_ERROR_FLAG);
         }
@@ -230,6 +202,8 @@ public class LoginPortlet extends ActionPortlet {
         numLogins++;
 
         user.setNumLogins(numLogins);
+        user.setAttribute(PortalConfigService.LOGIN_NUMTRIES, "0");
+
         userManagerService.saveUser(user);
 
         req.setAttribute(SportletProperties.PORTLET_USER, user);
@@ -309,6 +283,21 @@ public class LoginPortlet extends ActionPortlet {
 
         if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
 
+        // tried one to many times using same name
+        int defaultNumTries = Integer.valueOf(portalConfigService.getProperty(PortalConfigService.LOGIN_NUMTRIES)).intValue();
+        int numTriesInt;
+        String numTries = (String) user.getAttribute(PortalConfigService.LOGIN_NUMTRIES);
+        if (numTries == null) {
+            numTriesInt = 1;
+        } else {
+            numTriesInt = Integer.valueOf(numTries).intValue();
+        }
+        System.err.println("num tries = " + numTriesInt);
+        if ((defaultNumTries != -1) && (numTriesInt >= defaultNumTries)) {
+            disableAccount(req);
+            throw new AuthorizationException(getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS"));
+        }
+
         String accountStatus = (String) user.getAttribute(User.DISABLED);
         if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
             throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
@@ -344,7 +333,9 @@ public class LoginPortlet extends ActionPortlet {
         }
         if (!success) {
 
-            //user.setAttribute();
+            numTriesInt++;
+            user.setAttribute(PortalConfigService.LOGIN_NUMTRIES, String.valueOf(numTriesInt));
+            userManagerService.saveUser(user);
 
             throw authEx;
         }
@@ -377,8 +368,8 @@ public class LoginPortlet extends ActionPortlet {
         return bundle.getString(key);
     }
 
-    public void disableAccount(RenderFormEvent event) {
-        PortletRequest req = event.getRenderRequest();
+    public void disableAccount(PortletRequest req) {
+        //PortletRequest req = event.getRenderRequest();
         String loginName = req.getParameter("username");
         User user = userManagerService.getUserByUserName(loginName);
         if (user != null) {
@@ -405,7 +396,7 @@ public class LoginPortlet extends ActionPortlet {
                 mailService.sendMail(mailToAdmin);
             } catch (PortletServiceException e) {
                 log.error("Unable to send mail message!", e);
-                createErrorMessage(event, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
+                //createErrorMessage(event, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
             }
         }
     }
