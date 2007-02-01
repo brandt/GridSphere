@@ -160,6 +160,9 @@ public class LoginPortlet extends ActionPortlet {
             numTries = new Integer(i);
             request.getPortletSession(true).setAttribute(PortalConfigService.LOGIN_NUMTRIES, numTries);
             request.getPortletSession(true).setAttribute(LoginPortlet.LOGIN_NAME, request.getParameter("username"));
+
+            User user = userManagerService.getUserByUserName(loginname);
+
             System.err.println("num tries = " + i);
             // tried one to many times using same name
 
@@ -339,7 +342,12 @@ public class LoginPortlet extends ActionPortlet {
             }
             if (success) break;
         }
-        if (!success) throw authEx;
+        if (!success) {
+
+            user.setAttribute();
+
+            throw authEx;
+        }
 
         return user;
     }
