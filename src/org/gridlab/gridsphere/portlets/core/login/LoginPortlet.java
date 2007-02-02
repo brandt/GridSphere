@@ -34,7 +34,7 @@ public class LoginPortlet extends ActionPortlet {
     private static String FORGOT_PASSWORD_LABEL ="forgotpassword";
     private static String ACTIVATE_ACCOUNT_LABEL ="activateaccount";
     private static String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
-    private static String LOGIN_NAME = "LOGIN_NAME";
+    //private static String LOGIN_NAME = "LOGIN_NAME";
     public static String SAVE_PASSWORDS = "SAVE_PASSWORDS";
     public static String SEND_USER_FORGET_PASSWORD = "SEND_USER_FORGET_PASSWD";
 
@@ -141,26 +141,6 @@ public class LoginPortlet extends ActionPortlet {
         String errorMsg = (String) req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
 
         if (errorMsg != null) {
-            Integer numTries = (Integer)req.getSession(true).getAttribute(LoginPortlet.LOGIN_NUMTRIES);
-            String loginname = (String)req.getSession(true).getAttribute(LoginPortlet.LOGIN_NAME);
-            int i = 1;
-            if (numTries != null) {
-                i = numTries.intValue();
-                i++;
-            }
-            numTries = new Integer(i);
-            req.getSession(true).setAttribute(LoginPortlet.LOGIN_NUMTRIES, numTries);
-            req.getSession(true).setAttribute(LoginPortlet.LOGIN_NAME, req.getParameter("username"));
-            System.err.println("num tries = " + i);
-            // tried one to many times using same name
-            if (req.getParameter("username").equals(loginname)) {
-                if ((i >= defaultNumTries) && (defaultNumTries != -1)) {
-                    disableAccount(event);
-                    errorMsg = this.getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS");
-                    req.getSession(true).removeAttribute(LoginPortlet.LOGIN_NUMTRIES);
-                    req.getSession(true).removeAttribute(LoginPortlet.LOGIN_NAME);
-                }
-            }
             createErrorMessage(event, errorMsg);
             req.removeAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
         }
@@ -168,43 +148,7 @@ public class LoginPortlet extends ActionPortlet {
         setNextState(req, "doViewUser");
     }
 
-    public void disableAccount(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        String loginName = req.getParameter("username");
-        User user = userManagerService.getUserByUserName(loginName);
-        if (user != null) {
-            System.err.println("user= " + user);
-            SportletUser suser = userManagerService.editUser(user);
-            suser.setAttribute(User.DISABLED, "true");
-            userManagerService.saveUser(suser);
-
-            org.gridsphere.tmf.message.MailMessage mailToUser = tms.getMailMessage();
-            StringBuffer body = new StringBuffer();
-            body.append(getLocalizedText(req, "LOGIN_DISABLED_MSG1") + " " + getLocalizedText(req, "LOGIN_DISABLED_MSG2") + "\n\n");
-            mailToUser.setBody(body.toString());
-            mailToUser.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT"));
-            mailToUser.setTo(user.getEmailAddress());
-            mailToUser.setServiceid("mail");
-
-            org.gridsphere.tmf.message.MailMessage mailToAdmin = tms.getMailMessage();
-            StringBuffer body2 = new StringBuffer();
-            body2.append(getLocalizedText(req, "LOGIN_DISABLED_ADMIN_MSG") + " " + user.getUserName());
-            mailToAdmin.setBody(body2.toString());
-            mailToAdmin.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT") + " " + user.getUserName());
-            mailToAdmin.setTo(tms.getServiceUserID("mail", "root"));
-            mailToUser.setServiceid("mail");
-
-
-            try {
-                tms.send(mailToUser);
-                tms.send(mailToAdmin);
-            } catch (TextMessagingException e) {
-                log.error("Unable to send mail message!", e);
-                createErrorMessage(event, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
-                return;
-            }
-        }
-    }
+    
 
     public void doNewUser(FormEvent evt)
             throws PortletException {

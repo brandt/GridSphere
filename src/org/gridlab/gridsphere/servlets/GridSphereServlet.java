@@ -513,6 +513,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         try {
             User user = loginService.login(req);
 
+            String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
+            ((SportletUser)user).setAttribute(LOGIN_NUMTRIES, "0");
+
+            userManagerService.saveUser(user);
+
             setUserSettings(event, user);
 
             String remme = req.getParameter("remlogin");

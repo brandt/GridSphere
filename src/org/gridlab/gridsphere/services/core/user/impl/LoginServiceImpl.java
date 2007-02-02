@@ -11,8 +11,10 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
@@ -25,7 +27,12 @@ import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descripto
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.LoginUserModule;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridsphere.tmf.TextMessagingException;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -48,8 +55,14 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
     private String authMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/auth-modules-mapping.xml");
     private String authModulesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
+    private UserManagerService userManagerService;
+    private TextMessagingService tms = null;
+    private PortalConfigService portalConfigService = null;
+
+    private int defaultNumTries;
 
     public LoginServiceImpl() {
+
     }
 
     public List getAuthModules() {
@@ -91,10 +104,9 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         log.debug("in login service init");
         if (!inited) {
             pm = PersistenceManagerFactory.createGridSphereRdbms();
-
+            PortletServiceFactory factory = SportletServiceFactory.getInstance();
             String loginClassName = config.getInitParameter("LOGIN_MODULE");
             try {
-                PortletServiceFactory factory = SportletServiceFactory.getInstance();
                 Class loginModClass = Class.forName(loginClassName);
                 activeLoginModule = (LoginUserModule) factory.createPortletService(loginModClass, config.getServletContext(), true);
             } catch (ClassNotFoundException e) {
@@ -102,6 +114,28 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             } catch (PortletServiceNotFoundException e) {
                 log.error("Unable to get service from portlet service factory: " + loginClassName, e);
             }
+
+            try {
+                userManagerService = (UserManagerService)factory.createPortletService(UserManagerService.class, null, true);
+                tms = (TextMessagingService)factory.createPortletService(TextMessagingService.class, null, true);
+                portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, null, true);
+
+                PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+
+                String numTries = settings.getAttribute("ACCOUNT_NUMTRIES");
+
+                if (numTries == null) {
+                    settings.setAttribute("ACCOUNT_NUMTRIES", "-1");
+                    defaultNumTries = -1;
+                } else {
+                    defaultNumTries = Integer.valueOf(numTries).intValue();
+                }
+                portalConfigService.savePortalConfigSettings(settings);
+            } catch (PortletServiceException e) {
+                log.error("Unable to init services! ", e);
+            }
+
+
             log.debug("Created a login module service: " + loginClassName);
 
             loadAuthModules(authModulesPath, Thread.currentThread().getContextClassLoader());
@@ -192,6 +226,42 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     public void destroy() {
     }
 
+    private void disableAccount(PortletRequest req) {
+
+        String loginName = req.getParameter("username");
+
+        User user = userManagerService.getUserByUserName(loginName);
+        if (user != null) {
+            System.err.println("user= " + user);
+            SportletUser suser = userManagerService.editUser(user);
+            suser.setAttribute(User.DISABLED, "true");
+            userManagerService.saveUser(suser);
+
+            org.gridsphere.tmf.message.MailMessage mailToUser = tms.getMailMessage();
+            StringBuffer body = new StringBuffer();
+            body.append(getLocalizedText(req, "LOGIN_DISABLED_MSG1") + " " + getLocalizedText(req, "LOGIN_DISABLED_MSG2") + "\n\n");
+            mailToUser.setBody(body.toString());
+            mailToUser.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT"));
+            mailToUser.setTo(user.getEmailAddress());
+            mailToUser.setServiceid("mail");
+
+            org.gridsphere.tmf.message.MailMessage mailToAdmin = tms.getMailMessage();
+            StringBuffer body2 = new StringBuffer();
+            body2.append(getLocalizedText(req, "LOGIN_DISABLED_ADMIN_MSG") + " " + user.getUserName());
+            mailToAdmin.setBody(body2.toString());
+            mailToAdmin.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT") + " " + user.getUserName());
+            mailToAdmin.setTo(tms.getServiceUserID("mail", "root"));
+            mailToUser.setServiceid("mail");
+
+
+            try {
+                tms.send(mailToUser);
+                tms.send(mailToAdmin);
+            } catch (TextMessagingException e) {
+                log.error("Unable to send mail message!", e);
+            }
+        }
+    }
     public User login(PortletRequest req)
             throws AuthenticationException, AuthorizationException {
         String loginName = req.getParameter("username");
@@ -205,6 +275,19 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         User user = activeLoginModule.getLoggedInUser(loginName);
 
         if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
+        // tried one to many times using same name
+        int numTriesInt;
+        String numTries = (String) user.getAttribute("ACCOUNT_NUMTRIES");
+        if (numTries == null) {
+            numTriesInt = 1;
+        } else {
+            numTriesInt = Integer.valueOf(numTries).intValue();
+        }
+        System.err.println("num tries = " + numTriesInt);
+        if ((defaultNumTries != -1) && (numTriesInt >= defaultNumTries)) {
+            disableAccount(req);
+            throw new AuthorizationException(getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS"));
+        }
 
         String accountStatus = (String)user.getAttribute(User.DISABLED);
         if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
@@ -237,7 +320,12 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             }
             if (success) break;
         }
-        if (!success) throw authEx;
+        if (!success) {
+            numTriesInt++;
+            ((SportletUser)user).setAttribute("ACCOUNT_NUMTRIES", String.valueOf(numTriesInt));
+            userManagerService.saveUser(user);
+            throw authEx;
+        }
 
         return user;
     }
