@@ -200,9 +200,9 @@ public class UserManagerPortlet extends ActionPortlet {
             PortletGroup coreGroup = aclManagerService.getCoreGroup();
             PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
             req.setAttribute("role", role.getName());
-            this.userManagerService.deleteUser(user);
             this.passwordManagerService.deletePassword(user);
             this.aclManagerService.deleteGroupEntries(user);
+            this.userManagerService.deleteUser(user);
             createSuccessMessage(evt, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
         }
         setNextState(req, "doListUsers");
