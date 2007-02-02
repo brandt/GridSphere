@@ -486,11 +486,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletResponse res = event.getPortletResponse();
         try {
             User user = loginService.login(req);
-
+            String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
+            user.setAttribute(LOGIN_NUMTRIES, "0");
+            userManagerService.saveUser(user);
             setUserSettings(event, user);
-
             String query = event.getAction().getParameter("queryString");
-
             String remme = req.getParameter("remlogin");
             if (remme != null) {
                 setUserCookie(event);
