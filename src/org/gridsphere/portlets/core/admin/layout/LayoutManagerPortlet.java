@@ -13,6 +13,7 @@ import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.content.ContentFile;
 import org.gridsphere.services.core.content.ContentManagerService;
+import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
@@ -33,7 +34,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     private static Map<String, PortletPage> pages = new HashMap<String, PortletPage>();
     private static RoleManagerService roleManagerService;
     private static ContentManagerService contentManagerService;
-
+    private static PortalConfigService portalConfigService = null;
     private PortletRegistryService portletRegistryService = null;
     private PortletPageFactory pageFactory = null;
 
@@ -44,6 +45,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         roleManagerService = (RoleManagerService) createPortletService(RoleManagerService.class);
         contentManagerService = (ContentManagerService) createPortletService(ContentManagerService.class);
         portletRegistryService = (PortletRegistryService) createPortletService(PortletRegistryService.class);
+        portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
         pageFactory = PortletPageFactory.getInstance();
         DEFAULT_VIEW_PAGE = "doShowLayout";
     }
@@ -382,9 +384,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
             layoutsLB.addBean(item);
         }
 
-        String theme = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
+        //String theme = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
+
+        String theme = portalConfigService.getProperty(PortalConfigService.DEFAULT_THEME);
 
         String renderkit = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
+
 
         ListBoxBean themesLB = event.getListBoxBean("themesLB");
 
@@ -656,6 +661,14 @@ public class LayoutManagerPortlet extends ActionPortlet {
         pages.remove(session.getId());
     }
 
+    public void selectTheme(ActionFormEvent event) throws PortletException, IOException {
+        ListBoxBean themesLB = event.getListBoxBean("themesLB");
+        String selectedTheme = themesLB.getSelectedValue();
+        portalConfigService.setProperty(PortalConfigService.DEFAULT_THEME, selectedTheme);
+        MessageBoxBean msg = event.getMessageBoxBean("msg");
+        String value = this.getLocalizedText(event.getActionRequest(), "LAYOUT_SAVETHEMEMSG") + " " + selectedTheme;
+        msg.setValue(value);
+    }
 
     public void doSaveNav(ActionFormEvent event) {
         PortletRequest req = event.getActionRequest();

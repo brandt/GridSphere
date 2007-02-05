@@ -1,7 +1,6 @@
-<%@ page import="java.util.List,
-                 java.util.Iterator,
+<%@ page import="org.gridsphere.portletcontainer.PortletStatus,
                  org.gridsphere.services.core.tomcat.TomcatWebAppDescription" %>
-<%@ page import="org.gridsphere.portletcontainer.PortletStatus"%>
+<%@ page import="java.util.List" %>
 
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
@@ -36,7 +35,7 @@
 
         <% List result = (List) request.getAttribute("result"); %>
         <% for (int i = 0; i < result.size(); i++) { %>
-        <% TomcatWebAppDescription description = (TomcatWebAppDescription)result.get(i); %>
+        <% TomcatWebAppDescription description = (TomcatWebAppDescription) result.get(i); %>
 
         <ui:tablerow>
             <ui:tablecell>
@@ -55,39 +54,54 @@
             </ui:tablecell>
             <ui:tablecell>
                 <% if (request.getContextPath().equalsIgnoreCase("/" + description.getContextPath())) { %>
-                    <ui:text key="PORTLET_GS_MSG"/>
+                <ui:text key="PORTLET_GS_MSG"/>
                 <% } else { %>
                 <% if (description.getRunningState() == TomcatWebAppDescription.STOPPED) { %>
-                &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_START">
-                <ui:actionparam name="operation" value="start"/>
-                <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
-            </ui:actionlink>&nbsp;&nbsp;
-                &nbsp;&nbsp;<ui:text key="PORTLET_STOP"/>&nbsp;&nbsp;
+                &nbsp;&nbsp;
+                <ui:actionlink action="doPortletManager" key="PORTLET_START">
+                    <ui:actionparam name="operation" value="start"/>
+                    <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
+                </ui:actionlink>
+                &nbsp;&nbsp;
+                &nbsp;&nbsp;
+                <ui:text key="PORTLET_STOP"/>
+                &nbsp;&nbsp;
                 <% } else { %>
-                &nbsp;&nbsp;<ui:text key="PORTLET_START"/>&nbsp;&nbsp;
-                &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_STOP">
-                <ui:actionparam name="operation" value="stop"/>
-                <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
-            </ui:actionlink>&nbsp;&nbsp;
+                &nbsp;&nbsp;
+                <ui:text key="PORTLET_START"/>
+                &nbsp;&nbsp;
+                &nbsp;&nbsp;
+                <ui:actionlink action="doPortletManager" key="PORTLET_STOP">
+                    <ui:actionparam name="operation" value="stop"/>
+                    <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
+                </ui:actionlink>
+                &nbsp;&nbsp;
                 <% } %>
-                &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_RELOAD">
-                <ui:actionparam name="operation" value="reload"/>
-                <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
-            </ui:actionlink>&nbsp;&nbsp;
-                &nbsp;&nbsp;<ui:actionlink action="doPortletManager" key="PORTLET_REMOVE">&nbsp;&nbsp;
-                <ui:actionparam name="operation" value="remove"/>
-                <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
-            </ui:actionlink>
+                &nbsp;&nbsp;
+                <ui:actionlink action="doPortletManager" key="PORTLET_RELOAD">
+                    <ui:actionparam name="operation" value="reload"/>
+                    <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
+                </ui:actionlink>
+                &nbsp;&nbsp;
+                &nbsp;&nbsp;
+                <ui:actionlink action="doPortletManager" key="PORTLET_REMOVE">&nbsp;&nbsp;
+                    <ui:actionparam name="operation" value="remove"/>
+                    <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
+                </ui:actionlink>
                 <% } %>
             </ui:tablecell>
             <ui:tablecell align="center">
                 <% if (description.getStatus().equals(PortletStatus.SUCCESS)) { %>
-                    <ui:image  src="<%= request.getContextPath() + "/themes/brush/default/images/msgicons/portlet-msg-success.gif" %>"/>
+                <ui:image
+                        src="<%= request.getContextPath() + "/themes/brush/default/images/msgicons/portlet-msg-success.gif" %>"/>
                 <ui:text key="SUCCESS"/>
                 <% } else { %>
-                    <ui:image  src="<%= request.getContextPath() + "/themes/brush/default/images/msgicons/portlet-msg-error.gif" %>"/>
-                    <ui:text style="underline" id="<%= description.getContextPath() %>" key="FAILURE"/>
-                    <ui:tooltip name="<%= description.getContextPath() %>" id="<%= description.getContextPath() + "tooltip" %>" value="<%= description.getStatusMessage() %>"/>
+                <ui:image
+                        src="<%= request.getContextPath() + "/themes/brush/default/images/msgicons/portlet-msg-error.gif" %>"/>
+                <ui:text style="underline" id="<%= description.getContextPath() %>" key="FAILURE"/>
+                <ui:tooltip name="<%= description.getContextPath() %>"
+                            id="<%= description.getContextPath() + "tooltip" %>"
+                            value="<%= description.getStatusMessage() %>"/>
                 <% } %>
             </ui:tablecell>
         </ui:tablerow>

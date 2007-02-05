@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:michael.russell@aei.mpg.de">Michael Russell</a>
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @version $Id: RoleManagerPortlet.java 5032 2006-08-17 18:15:06Z novotny $
  */
 package org.gridsphere.portlets.core.admin.roles;

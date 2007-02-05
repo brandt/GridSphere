@@ -51,10 +51,6 @@ public class PortletApplicationManager extends ActionPortlet {
         DEFAULT_HELP_PAGE = HELP_JSP;
     }
 
-    public void listPortlets(ActionFormEvent event) {
-        setNextState(event.getActionRequest(), "listPortlets");
-    }
-
     public void listPortlets(RenderFormEvent event) {
 
         PortletRequest req = event.getRenderRequest();

@@ -61,7 +61,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private String portletClass = null;
 
     private PortletTitleBar titleBar = null;
-    //private PortletErrorFrame errorFrame = new PortletErrorFrame();
+
     private boolean transparent = false;
     private String innerPadding = "";   // has to be empty and not 0!
     private String outerPadding = "";   // has to be empty and not 0!

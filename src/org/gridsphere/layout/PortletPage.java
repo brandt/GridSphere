@@ -162,16 +162,16 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     }
 
     /**
-     * Returns the render kit  'standard' or 'classic'
+     * Returns the render kit
      *
-     * @return the render kit  'standard' or 'classic'
+     * @return the render kit
      */
     public String getRenderKit() {
         return renderKit;
     }
 
     /**
-     * Sets the render kit  'standard' or 'classic'
+     * Sets the render kit
      *
      * @param renderKit the render kit
      */

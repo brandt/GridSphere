@@ -38,7 +38,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private static String USER_LAYOUT_DIR = null;
 
-    private static final String DEFAULT_THEME = "default";
+    public static final String DEFAULT_THEME = "default";
 
     private static PortletPageFactory instance = null;
     private PortletSessionManager sessionManager = PortletSessionManager.getInstance();
@@ -217,11 +217,11 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public void setPageTheme(PortletPage page, PortletRequest req) {
         String theme = null;
-        String defaultTheme = portalConfigService.getProperty(PortalConfigService.DEFAULT_THEME);
-        if (defaultTheme != null) theme = defaultTheme;
         User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
         if (user != null) theme = (String) user.getAttribute(User.THEME);
-        if (theme == null) theme = DEFAULT_THEME;
+        if (theme == null) {
+            theme = portalConfigService.getProperty(PortalConfigService.DEFAULT_THEME);
+        }
         req.getPortletSession().setAttribute(SportletProperties.LAYOUT_THEME, theme, PortletSession.APPLICATION_SCOPE);
     }
 
