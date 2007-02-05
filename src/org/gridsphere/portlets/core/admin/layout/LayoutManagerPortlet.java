@@ -384,10 +384,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
             layoutsLB.addBean(item);
         }
 
-        //String theme = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
-
-        String theme = portalConfigService.getProperty(PortalConfigService.DEFAULT_THEME);
-
+        String theme = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_THEME, PortletSession.APPLICATION_SCOPE);
+        //String theme = portalConfigService.getProperty(PortalConfigService.DEFAULT_THEME);
         String renderkit = (String) req.getPortletSession().getAttribute(SportletProperties.LAYOUT_RENDERKIT, PortletSession.APPLICATION_SCOPE);
 
 
