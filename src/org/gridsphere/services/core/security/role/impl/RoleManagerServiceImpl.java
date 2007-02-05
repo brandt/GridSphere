@@ -56,8 +56,6 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
             userRole.setIsDefault(0);
             saveRole(adminRole);
         }
-
-
     }
 
     public void destroy() {
