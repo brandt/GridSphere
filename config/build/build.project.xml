@@ -308,6 +308,7 @@ Copyright:
                 <include name="log4j*.jar"/>
                 <include name="castor*.jar"/>
                 <include name="commons-fileupload*.jar"/>
+                <include name="commons-io*.jar"/>
             </fileset>
         </copy>
 
@@ -359,6 +360,7 @@ Copyright:
                 <include name="log4j*.jar"/>
                 <include name="castor*.jar"/>
                 <include name="commons-fileupload*.jar"/>
+                <include name="commons-io*.jar"/>
             </fileset>
         </copy>
 
