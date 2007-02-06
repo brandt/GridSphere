@@ -45,7 +45,7 @@ public class LoginPortlet extends ActionPortlet {
     private static String FORGOT_PASSWORD_LABEL = "forgotpassword";
     private static String ACTIVATE_ACCOUNT_LABEL = "activateaccount";
 
-    private static long REQUEST_LIFETIME = 1000 * 60 * 24 * 3; // 3 days
+    private static long REQUEST_LIFETIME = 1000 * 60 * 60 * 24 * 3; // 3 days
 
     public static final String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
     public static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
