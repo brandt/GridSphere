@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlets.core.login;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
@@ -21,7 +22,6 @@ import org.gridlab.gridsphere.services.core.security.password.PasswordManagerSer
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridsphere.tmf.TextMessagingException;
 import org.gridsphere.tmf.message.MailMessage;
 
@@ -44,7 +44,7 @@ public class LoginPortlet extends ActionPortlet {
     public static String SUPPORT_X509_AUTH = "SUPPORT_X509_AUTH";
     public static String SEND_USER_FORGET_PASSWORD = "SEND_USER_FORGET_PASSWD";
 
-    private static long REQUEST_LIFETIME = 1000 * 60 * 24 * 3; // 3 days
+    private static long REQUEST_LIFETIME = 1000 * 60 * 60 * 24 * 3; // 3 days
 
     public static final String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
     public static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
