@@ -45,7 +45,6 @@ public class NewsPortlet extends ActionPortlet {
             document = props.getProperty("message");
         } catch (IOException e) {
             log.error("Could not load properties from " + storeFileName);
-            e.printStackTrace();
         }
         jcrService = (JCRService) createPortletService(JCRService.class);
     }
@@ -70,7 +69,6 @@ public class NewsPortlet extends ActionPortlet {
                 docList.addBean(item);
             }
         } catch (ContentException e) {
-            e.printStackTrace();
             createErrorMessage(event, "Could not get list of documents.");
         }
     }
@@ -93,7 +91,6 @@ public class NewsPortlet extends ActionPortlet {
         try {
             props.store(new FileOutputStream(storeFileName), "Message of the day.");
         } catch (IOException e) {
-            e.printStackTrace();
             log.error("Could not save MOTD prefs to " + storeFileName);
         }
         setNextState(event.getActionRequest(), "doView");
