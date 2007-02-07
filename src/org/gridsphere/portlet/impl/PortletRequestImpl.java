@@ -4,9 +4,9 @@
  */
 package org.gridsphere.portlet.impl;
 
+import org.gridsphere.portletcontainer.PortletPreferencesManager;
 import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserPrincipal;
-import org.gridsphere.portletcontainer.PortletPreferencesManager;
 
 import javax.portlet.*;
 import javax.servlet.ServletInputStream;
@@ -45,7 +45,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * Constructor creates a proxy for a HttpServletRequest
      * All PortletRequest objects come from request or session attributes
      *
-     * @param req the HttpServletRequest
+     * @param req            the HttpServletRequest
      * @param portletContext the portlet context
      */
     public PortletRequestImpl(HttpServletRequest req, PortletContext portletContext) {
@@ -60,7 +60,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             contextPath = contextPath.replace('\\', '/');
         }
 
-        Map<String, List> map = (Map<String, List>)getHttpServletRequest().getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map<String, List> map = (Map<String, List>) getHttpServletRequest().getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (map == null) {
             map = new HashMap<String, List>();
             getHttpServletRequest().setAttribute(SportletProperties.PORTAL_PROPERTIES, new HashMap());
@@ -68,11 +68,11 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
 
         Enumeration e = getHttpServletRequest().getHeaderNames();
         while (e.hasMoreElements()) {
-            String name = (String)e.nextElement();
+            String name = (String) e.nextElement();
             Enumeration headersEnum = getHttpServletRequest().getHeaders(name);
             List<String> vals = new ArrayList<String>();
             while (headersEnum.hasMoreElements()) {
-                String val = (String)headersEnum.nextElement();
+                String val = (String) headersEnum.nextElement();
                 vals.add(val);
             }
             map.put(name, vals);
@@ -80,8 +80,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         getHttpServletRequest().setAttribute(SportletProperties.PORTAL_PROPERTIES, map);
 
         for (Enumeration parameters = super.getParameterNames(); parameters.hasMoreElements();) {
-            String   paramName   = (String)parameters.nextElement();
-            String[] paramValues = (String[])super.getParameterValues(paramName);
+            String paramName = (String) parameters.nextElement();
+            String[] paramValues = (String[]) super.getParameterValues(paramName);
             origParams.put(paramName, paramValues);
         }
 
@@ -132,7 +132,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     public boolean isIncluded() {
         return included;
     }
-    
+
     public void addRenderParams(Map renderParams) {
         portalParameters.addRenderParams(renderParams);
     }
@@ -159,7 +159,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *         given window state
      */
     public boolean isWindowStateAllowed(WindowState state) {
-        PortalContext context = (PortalContext)getAttribute(SportletProperties.PORTAL_CONTEXT);
+        PortalContext context = (PortalContext) getAttribute(SportletProperties.PORTAL_CONTEXT);
         Enumeration statesEnum = context.getSupportedWindowStates();
         while (statesEnum.hasMoreElements()) {
             WindowState s = (WindowState) statesEnum.nextElement();
@@ -179,7 +179,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *         given portlet mode
      */
     public boolean isPortletModeAllowed(PortletMode mode) {
-        Set modesAllowed = (Set)this.getHttpServletRequest().getAttribute(SportletProperties.ALLOWED_MODES);
+        Set modesAllowed = (Set) this.getHttpServletRequest().getAttribute(SportletProperties.ALLOWED_MODES);
         if (modesAllowed.contains(mode.toString())) return true;
         return false;
     }
@@ -190,7 +190,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the portlet mode
      */
     public PortletMode getPortletMode() {
-        return (PortletMode)getAttribute(SportletProperties.PORTLET_MODE);
+        return (PortletMode) getAttribute(SportletProperties.PORTLET_MODE);
     }
 
     /**
@@ -207,8 +207,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *
      * @return the portlet preferences
      */
-    public PortletPreferences getPreferences() {        
-        PortletPreferencesManager prefsManager =  (PortletPreferencesManager)getAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER);
+    public PortletPreferences getPreferences() {
+        PortletPreferencesManager prefsManager = (PortletPreferencesManager) getAttribute(SportletProperties.PORTLET_PREFERENCES_MANAGER);
         return prefsManager.getPortletPreferences();
     }
 
@@ -229,7 +229,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * Returns the current portlet session or, if there is no current session
      * and the given flag is <CODE>true</CODE>, creates one and returns
      * the new session.
-     * <P>
+     * <p/>
      * If the given flag is <CODE>false</CODE> and there is no current
      * portlet session, this method returns <CODE>null</CODE>.
      * <p/>
@@ -281,7 +281,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @param name a <code>String</code> specifying the
      *             property name
      * @throws IllegalArgumentException if name is <code>null</code>.
-     * @return			a <code>String</code> containing the
+     * @return a <code>String</code> containing the
      * value of the requested
      * property, or <code>null</code>
      * if the request does not
@@ -289,7 +289,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public String getProperty(String name) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
-        Map props = (Map)getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map props = (Map) getAttribute(SportletProperties.PORTAL_PROPERTIES);
         Object o = props.get(name);
         if (o instanceof String) {
             return (String) o;
@@ -315,14 +315,14 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @param name a <code>String</code> specifying the
      *             property name
      * @throws IllegalArgumentException if name is <code>null</code>.
-     * @return		a <code>Enumeration</code> containing
+     * @return a <code>Enumeration</code> containing
      * the values of the requested property. If
      * the request does not have any properties of
      * that name return an empty <code>Enumeration</code>.
      */
     public java.util.Enumeration getProperties(String name) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
-        Map props = (Map)getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map props = (Map) getAttribute(SportletProperties.PORTAL_PROPERTIES);
         Object o = props.get(name);
         if (o instanceof List) {
             List l = (List) o;
@@ -336,13 +336,13 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * this request contains. If the request has no
      * properties, this method returns an empty <code>Enumeration</code>.
      *
-     * @return			an <code>Enumeration</code> of all the
+     * @return an <code>Enumeration</code> of all the
      * property names sent with this
      * request; if the request has
      * no properties, an empty <code>Enumeration</code>.
      */
     public java.util.Enumeration getPropertyNames() {
-        Map props = (Map)getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map props = (Map) getAttribute(SportletProperties.PORTAL_PROPERTIES);
         return new Enumerator(props.keySet().iterator());
     }
 
@@ -352,7 +352,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the context of the calling portal
      */
     public PortalContext getPortalContext() {
-        return (PortalContext)getAttribute(SportletProperties.PORTAL_CONTEXT);
+        return (PortalContext) getAttribute(SportletProperties.PORTAL_CONTEXT);
     }
 
     /**
@@ -361,7 +361,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * for example, <code>BASIC_AUTH</code>, <code>CLIENT_CERT_AUTH</code>,
      * a custom one or <code>null</code> if there was no authentication.
      *
-     * @return		one of the static members <code>BASIC_AUTH</code>,
+     * @return one of the static members <code>BASIC_AUTH</code>,
      * <code>FORM_AUTH</code>, <code>CLIENT_CERT_AUTH</code>,
      * <code>DIGEST_AUTH</code> (suitable for == comparison)
      * indicating the authentication scheme,
@@ -383,26 +383,26 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * <p/>
      * To encode a URL the {@link PortletResponse#encodeURL} method must be used.
      *
-     * @return		a <code>String</code> specifying the
+     * @return a <code>String</code> specifying the
      * portion of the request URL that indicates the context
      * of the request
      * @see PortletResponse#encodeURL
      */
     public String getContextPath() {
-        //return contextPath;
-        return this.getHttpServletRequest().getContextPath();
+        return contextPath;
+        //return this.getHttpServletRequest().getContextPath();
     }
 
     /**
      * Returns the login of the user making this request, if the user
      * has been authenticated, or null if the user has not been authenticated.
      *
-     * @return		a <code>String</code> specifying the login
+     * @return a <code>String</code> specifying the login
      * of the user making this request, or <code>null</code>
      * if the user login is not known.
      */
     public String getRemoteUser() {
-        UserPrincipal userPrincipal = (UserPrincipal)getAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
+        UserPrincipal userPrincipal = (UserPrincipal) getAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
         return (userPrincipal != null) ? userPrincipal.getName() : this.getHttpServletRequest().getRemoteUser();
     }
 
@@ -410,13 +410,13 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * Returns a java.security.Principal object containing the name of the
      * current authenticated user.
      *
-     * @return		a <code>java.security.Principal</code> containing
+     * @return a <code>java.security.Principal</code> containing
      * the name of the user making this request, or
      * <code>null</code> if the user has not been
      * authenticated.
      */
     public java.security.Principal getUserPrincipal() {
-        UserPrincipal userPrincipal = (UserPrincipal)getAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
+        UserPrincipal userPrincipal = (UserPrincipal) getAttribute(SportletProperties.PORTLET_USER_PRINCIPAL);
         return (userPrincipal != null) ? userPrincipal : this.getHttpServletRequest().getUserPrincipal();
     }
 
@@ -428,7 +428,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *
      * @param role a <code>String</code> specifying the name
      *             of the role
-     * @return		a <code>boolean</code> indicating whether
+     * @return a <code>boolean</code> indicating whether
      * the user making this request belongs to a given role;
      * <code>false</code> if the user has not been
      * authenticated.
@@ -437,7 +437,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         // TODO
         // As specified in PLT-20-3, the <security-role-ref> mapping in portlet.xml must be used.
         if (role.equals("")) return true;
-        List roles = (List)getAttribute(SportletProperties.PORTLET_ROLE);
+        List roles = (List) getAttribute(SportletProperties.PORTLET_ROLE);
         return (roles != null) && (roles.contains(role) || (getUserPrincipal() != null) && this.getHttpServletRequest().isUserInRole(role));
     }
 
@@ -455,7 +455,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @param name a <code>String</code> specifying the name of
      *             the attribute
      * @throws IllegalArgumentException if name is <code>null</code>.
-     * @return		an <code>Object</code> containing the value
+     * @return an <code>Object</code> containing the value
      * of the attribute, or <code>null</code> if
      * the attribute does not exist.
      */
@@ -470,7 +470,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * This method returns an empty <code>Enumeration</code>
      * if the request has no attributes available to it.
      *
-     * @return		an <code>Enumeration</code> of strings
+     * @return an <code>Enumeration</code> of strings
      * containing the names
      * of the request attributes, or an empty
      * <code>Enumeration</code> if the request
@@ -499,7 +499,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @param name a <code>String</code> specifying the
      *             name of the parameter
      * @throws IllegalArgumentException if name is <code>null</code>.
-     * @return		a <code>String</code> representing the
+     * @return a <code>String</code> representing the
      * single value of the parameter
      * @see #getParameterValues
      */
@@ -528,7 +528,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * <p/>
      * Only parameters targeted to the current portlet are returned.
      *
-     * @return		an <code>Enumeration</code> of <code>String</code>
+     * @return an <code>Enumeration</code> of <code>String</code>
      * objects, each <code>String</code> containing
      * the name of a request parameter; or an
      * empty <code>Enumeration</code> if the
@@ -551,9 +551,9 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @param name a <code>String</code> containing the name of
      *             the parameter the value of which is requested
      * @throws IllegalArgumentException if name is <code>null</code>.
-     * @return		an array of <code>String</code> objects
+     * @return an array of <code>String</code> objects
      * containing the parameter values.
-     * @see		#getParameter
+     * @see        #getParameter
      */
     public String[] getParameterValues(String name) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
@@ -644,10 +644,10 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * did not specify a session ID, this method returns
      * <code>null</code>.
      *
-     * @return		a <code>String</code> specifying the session
+     * @return a <code>String</code> specifying the session
      * ID, or <code>null</code> if the request did
      * not specify a session ID
-     * @see		#isRequestedSessionIdValid
+     * @see        #isRequestedSessionIdValid
      */
     public String getRequestedSessionId() {
         return this.getHttpServletRequest().getRequestedSessionId();
@@ -656,12 +656,12 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     /**
      * Checks whether the requested session ID is still valid.
      *
-     * @return			<code>true</code> if this
+     * @return            <code>true</code> if this
      * request has an id for a valid session
      * in the current session context;
      * <code>false</code> otherwise
-     * @see			#getRequestedSessionId
-     * @see			#getPortletSession
+     * @see            #getRequestedSessionId
+     * @see            #getPortletSession
      */
     public boolean isRequestedSessionIdValid() {
         return this.getHttpServletRequest().isRequestedSessionIdValid();
@@ -682,9 +682,9 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return preferred MIME type of the response
      */
     public String getResponseContentType() {
-        SortedSet  types = (SortedSet)getAttribute(SportletProperties.PORTLET_MIMETYPES);
+        SortedSet types = (SortedSet) getAttribute(SportletProperties.PORTLET_MIMETYPES);
         if ((types == null) || (types.isEmpty())) return null;
-        return (String)types.first();
+        return (String) types.first();
     }
 
     /**
@@ -702,8 +702,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *
      * @return ordered list of MIME types for the response
      */
-    public java.util.Enumeration getResponseContentTypes() {     
-        SortedSet  types = (SortedSet)getAttribute(SportletProperties.PORTLET_MIMETYPES);
+    public java.util.Enumeration getResponseContentTypes() {
+        SortedSet types = (SortedSet) getAttribute(SportletProperties.PORTLET_MIMETYPES);
         if (types == null) types = new TreeSet();
         return new Enumerator(types);
     }
@@ -751,7 +751,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * Different schemes have different rules for constructing URLs,
      * as noted in RFC 1738.
      *
-     * @return		a <code>String</code> containing the name
+     * @return a <code>String</code> containing the name
      * of the scheme used to make this request
      */
     public String getScheme() {
@@ -761,7 +761,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     /**
      * Returns the host name of the server that received the request.
      *
-     * @return		a <code>String</code> containing the name
+     * @return a <code>String</code> containing the name
      * of the server to which the request was sent
      */
     public String getServerName() {
@@ -771,7 +771,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     /**
      * Returns the port number on which this request was received.
      *
-     * @return		an integer specifying the port number
+     * @return an integer specifying the port number
      */
     public int getServerPort() {
         return this.getHttpServletRequest().getServerPort();
@@ -823,7 +823,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     }
 
     public String getPathInfo() {
-        String cmd = (String)getAttribute("org.gridsphere.tomcat_hack");
+        String cmd = (String) getAttribute("org.gridsphere.tomcat_hack");
         if (cmd != null) return cmd;
         if (included) {
             return (String) super.getAttribute("javax.servlet.include.path_info");
