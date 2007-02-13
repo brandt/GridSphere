@@ -288,6 +288,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<input ");
+        if (id != null) sb.append("id=\"").append(id).append("\" ");
         sb.append(getFormattedCss());
         sb.append(" type=\"");
         sb.append(inputtype);

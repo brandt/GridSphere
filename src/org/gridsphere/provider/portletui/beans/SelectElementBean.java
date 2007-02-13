@@ -15,7 +15,7 @@ import java.util.List;
 public abstract class SelectElementBean extends BaseComponentBean implements TagBean {
 
     protected boolean selected = false;
-    protected List results = new ArrayList();
+    protected List<String> results = new ArrayList<String>();
     protected String onClick = null;
 
 
@@ -91,7 +91,7 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
      *
      * @return selected values as a the list
      */
-    public List getSelectedValues() {
+    public List<String> getSelectedValues() {
         return results;
     }
 
@@ -129,7 +129,7 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
         String sname = createTagName(name);
         StringBuffer sb = new StringBuffer();
         sb.append("<input ");
-        if (id != null) sb.append("id=" + id + " ");
+        if (id != null) sb.append("id=").append(id).append(" ");
         sb.append(getFormattedCss());
         sb.append(" type='").append(type).append("' name='");
         if (value == null) value = "";
@@ -137,7 +137,7 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
         sb.append("' ").append(checkDisabled()).append(" ");
         sb.append(checkSelected("checked=\"checked\""));
 
-        if (onClick != null) sb.append(" onclick=\"" + onClick + "\"");
+        if (onClick != null) sb.append(" onclick=\"").append(onClick).append("\"");
         sb.append(" />");
         return sb.toString();
     }

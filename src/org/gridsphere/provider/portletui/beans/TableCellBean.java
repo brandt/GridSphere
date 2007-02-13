@@ -5,8 +5,6 @@
 
 package org.gridsphere.provider.portletui.beans;
 
-import java.util.Iterator;
-
 /**
  * A <code>TableCellBean</code> represents a table cell and is contained by a <code>TableRowBean</code>
  */
@@ -162,15 +160,13 @@ public class TableCellBean extends BeanContainer implements TagBean {
         if (width != null) sb.append(" style=\"width:" + width + "\"");
         if (height != null) sb.append(" height=\"" + height + "\"");
         if (align != null) sb.append(" align=\"" + align + "\"");
-        if (valign != null)  {
+        if (valign != null) {
             sb.append(" valign=\"" + valign + "\"");
         }
         if (rowspan != null) sb.append(" rowspan=\"" + rowspan + "\"");
         if (colspan != null) sb.append(" colspan=\"" + colspan + "\"");
         sb.append(">");
-        Iterator it = container.iterator();
-        while (it.hasNext()) {
-            BaseComponentBean bean = (BaseComponentBean) it.next();
+        for (BaseComponentBean bean : container) {
             sb.append(bean.toStartString());
             sb.append(bean.toEndString());
         }

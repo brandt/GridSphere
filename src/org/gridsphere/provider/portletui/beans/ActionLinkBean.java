@@ -89,7 +89,7 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         StringBuffer sb = new StringBuffer();
         sb.append("<a");
         if (name != null) sb.append(" name=\"").append(name).append("\"");
-
+        if (id != null) sb.append(" id=\"").append(id).append("\" ");
         if (useAjax) action = "#";
         sb.append(" href=\"").append(action).append("\"");
 
