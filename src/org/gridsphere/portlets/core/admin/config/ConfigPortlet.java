@@ -17,7 +17,6 @@ import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 public class ConfigPortlet extends ActionPortlet {
@@ -122,7 +121,7 @@ public class ConfigPortlet extends ActionPortlet {
         TextFieldBean deniedHeaderTF = event.getTextFieldBean("deniedHeaderTF");
         deniedHeaderTF.setValue(subject);
 
-        String  body = portalConfigService.getProperty("LOGIN_DENIED_BODY");
+        String body = portalConfigService.getProperty("LOGIN_DENIED_BODY");
         if (body == null) body = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_DENY");
         TextAreaBean deniedBodyTA = event.getTextAreaBean("deniedBodyTA");
         deniedBodyTA.setValue(body);
@@ -221,10 +220,8 @@ public class ConfigPortlet extends ActionPortlet {
             System.err.println("active auth mod: " + (String) activeAuthMods.get(i));
         }
 
-        List authModules = authModuleService.getAuthModules();
-        Iterator it = authModules.iterator();
-        while (it.hasNext()) {
-            LoginAuthModule authMod = (LoginAuthModule) it.next();
+        List<LoginAuthModule> authModules = authModuleService.getAuthModules();
+        for (LoginAuthModule authMod : authModules) {
             // see if a checked active auth module appears
             if (activeAuthMods.contains(authMod.getModuleName())) {
                 authMod.setModuleActive(true);
@@ -235,7 +232,7 @@ public class ConfigPortlet extends ActionPortlet {
             authMod.setModulePriority(Integer.valueOf(priority).intValue());
             authModuleService.saveAuthModule(authMod);
         }
-
+        createSuccessMessage(event, getLocalizedText(req, "CONFIG_SAVE_SUCCESS"));
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
@@ -255,6 +252,7 @@ public class ConfigPortlet extends ActionPortlet {
         portalConfigService.setProperty(PortalConfigService.PORTAL_ADMIN_EMAIL, admin);
         try {
             portalConfigService.storeProperties();
+            createSuccessMessage(event, getLocalizedText(event.getActionRequest(), "CONFIG_SAVE_SUCCESS"));
         } catch (IOException e) {
             log.error("Unable to save gridsphere.properties!", e);
         }
@@ -266,13 +264,16 @@ public class ConfigPortlet extends ActionPortlet {
         if (type != null) {
             System.err.println("/n/n/n" + type + "/n/n/n");
             TextFieldBean subjectTF = event.getTextFieldBean(type + "HeaderTF");
-            if (!subjectTF.getValue().equals("")) portalConfigService.setProperty("LOGIN_" + type.toUpperCase() + "_SUBJECT", subjectTF.getValue());
+            if (!subjectTF.getValue().equals(""))
+                portalConfigService.setProperty("LOGIN_" + type.toUpperCase() + "_SUBJECT", subjectTF.getValue());
             System.err.println("tf=" + subjectTF.getValue());
             TextAreaBean bodyTA = event.getTextAreaBean(type + "BodyTA");
-            if (!bodyTA.getValue().equals("")) portalConfigService.setProperty("LOGIN_" + type.toUpperCase() + "_BODY", bodyTA.getValue());
+            if (!bodyTA.getValue().equals(""))
+                portalConfigService.setProperty("LOGIN_" + type.toUpperCase() + "_BODY", bodyTA.getValue());
             System.err.println("ta=" + bodyTA.getValue());
             try {
                 portalConfigService.storeProperties();
+                createSuccessMessage(event, getLocalizedText(event.getActionRequest(), "CONFIG_SAVE_SUCCESS"));
             } catch (IOException e) {
                 log.error("Unable to save gridsphere.properties!", e);
             }
