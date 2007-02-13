@@ -36,7 +36,7 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     public String toStartString() {
         String inputType = "submit";
         if (useAjax) inputType = "button";
-        return "<input " + getFormattedCss() + " type=\"" + inputType + "\" " + checkDisabled();
+        return new StringBuffer().append("<input ").append(getFormattedCss()).append(" type=\"").append(inputType).append("\" ").append(checkDisabled()).toString();
     }
 
     public String toEndString() {
@@ -46,9 +46,10 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
         if (anchor != null) sname += "#" + anchor;
         if (onClick != null) {
             // 'onClick' replaced by 'onclick' for XHTML 1.0 Strict compliance
-            sb.append(" onclick=\"" + onClick + "\" ");
+            sb.append(" onclick=\"").append(onClick).append("\" ");
         }
-        sb.append("name=\"" + sname + "\" value=\"" + value + "\"/>");
+        if (id != null) sb.append("id=\"").append(id).append("\" ");
+        sb.append("name=\"").append(sname).append("\" value=\"").append(value).append("\"/>");
         return sb.toString();
     }
 

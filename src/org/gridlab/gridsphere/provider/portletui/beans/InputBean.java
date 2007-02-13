@@ -4,9 +4,6 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-
 /**
  * An abstract <code>InputBean</code> provides a generic input HTML element
  */
@@ -102,6 +99,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
             sb.append(value);
             sb.append("\" ");
         }
+        if (id != null) sb.append("id=\"").append(id).append("\" ");
         if (size != 0) {
             sb.append("size=\"");
             sb.append(size);

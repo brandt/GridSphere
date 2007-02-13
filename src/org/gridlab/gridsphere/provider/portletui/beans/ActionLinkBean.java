@@ -23,6 +23,8 @@ public class ActionLinkBean extends ActionBean implements TagBean {
 
     /**
      * Constructs an action link bean from a portlet request and supplied bean identifier
+     * 
+     * @param beanId the bean id
      */
     public ActionLinkBean(String beanId) {
         this.beanId = beanId;
@@ -90,24 +92,25 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         }
         StringBuffer sb = new StringBuffer();
         sb.append("<a");
-        if (name != null) sb.append(" name=\"" + name + "\"");
+        if (id != null) sb.append("id=\"").append(id).append("\" ");
+        if (name != null) sb.append(" name=\"").append(name).append("\"");
         if (trackMe != null) {
             try {
                 if (extUrl != null) {
-                    sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=" + trackMe + "&amp;" + TrackerService.REDIRECT_URL + "=" + URLEncoder.encode(extUrl, "UTF-8") + "\"" + getFormattedCss() + "\">" + value);
+                    sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=").append(trackMe).append("&amp;" + TrackerService.REDIRECT_URL + "=").append(URLEncoder.encode(extUrl, "UTF-8")).append("\"").append(getFormattedCss()).append("\">").append(value);
                 } else {
-                    sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=" + trackMe + "&amp;" + TrackerService.REDIRECT_URL + "=" + URLEncoder.encode(action, "UTF-8") + "\"" + getFormattedCss() + "\">" + value);
+                    sb.append(" href=\"" + "?" + TrackerService.TRACK_PARAM + "=").append(trackMe).append("&amp;" + TrackerService.REDIRECT_URL + "=").append(URLEncoder.encode(action, "UTF-8")).append("\"").append(getFormattedCss()).append("\">").append(value);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             if (useAjax) action = "#";
-            sb.append(" href=\"" + action + "\"");
+            sb.append(" href=\"").append(action).append("\"");
         }
         sb.append(getFormattedCss());
-        if (onClick != null) sb.append(" onclick=\"" + onClick + "\"");
-        sb.append(">" + value + "</a>");
+        if (onClick != null) sb.append(" onclick=\"").append(onClick).append("\"");
+        sb.append(">").append(value).append("</a>");
         return sb.toString();
     }
 
