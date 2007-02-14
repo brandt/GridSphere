@@ -367,6 +367,8 @@ public class UserManagerPortlet extends ActionPortlet {
             accountRequest.setAttribute(User.DISABLED, "true");
         } else {
             accountRequest.setAttribute(User.DISABLED, "false");
+            String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
+            accountRequest.setAttribute(LOGIN_NUMTRIES, "0");
         }
     }
 
