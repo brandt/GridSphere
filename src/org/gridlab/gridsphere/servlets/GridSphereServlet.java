@@ -653,7 +653,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     protected String getLocalizedText(PortletRequest req, String key) {
         Locale locale = req.getLocale();
-        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+        ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
         return bundle.getString(key);
     }
 
