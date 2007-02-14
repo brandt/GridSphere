@@ -59,8 +59,6 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     private TextMessagingService tms = null;
     private PortalConfigService portalConfigService = null;
 
-    private int defaultNumTries;
-
     public LoginServiceImpl() {
 
     }
@@ -126,9 +124,6 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
                 if (numTries == null) {
                     settings.setAttribute("ACCOUNT_NUMTRIES", "-1");
-                    defaultNumTries = -1;
-                } else {
-                    defaultNumTries = Integer.valueOf(numTries).intValue();
                 }
                 portalConfigService.savePortalConfigSettings(settings);
             } catch (PortletServiceException e) {
@@ -284,6 +279,10 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             numTriesInt = Integer.valueOf(numTries).intValue();
         }
         System.err.println("num tries = " + numTriesInt);
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+
+        String defNumTries = settings.getAttribute("ACCOUNT_NUMTRIES");
+        int defaultNumTries = Integer.valueOf(defNumTries).intValue();
         if ((defaultNumTries != -1) && (numTriesInt >= defaultNumTries)) {
             disableAccount(req);
             throw new AuthorizationException(getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS"));
