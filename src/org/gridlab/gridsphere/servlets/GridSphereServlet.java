@@ -646,9 +646,15 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             body2.append(getLocalizedText(req, "LOGIN_DISABLED_ADMIN_MSG") + " " + user.getUserName());
             mailToAdmin.setBody(body2.toString());
             mailToAdmin.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT") + " " + user.getUserName());
-            mailToAdmin.setTo(tms.getServiceUserID("mail", "root"));
-            mailToUser.setServiceid("mail");
-
+            List supers = roleService.getUsersInRole(PortletRole.SUPER);
+            String supermail = "";
+            for (int i = 0; i < supers.size(); i++) {
+                User supUser = (User)supers.get(i);
+                supermail += supUser.getEmailAddress() + ",";
+            }
+            supermail = supermail.substring(0, supermail.length() - 2);
+            mailToAdmin.setTo(tms.getServiceUserID("mail", supermail));
+            mailToAdmin.setServiceid("mail");
 
             try {
                 tms.send(mailToUser);
