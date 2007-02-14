@@ -22,6 +22,7 @@ import org.gridlab.gridsphere.services.core.security.group.impl.UserGroup;
 import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
+import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
@@ -29,6 +30,9 @@ import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
+import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
+import org.gridsphere.tmf.TextMessagingException;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -39,6 +43,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.security.Principal;
+import java.security.cert.X509Certificate;
 import java.net.SocketException;
 
 
@@ -71,6 +76,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     private static PortalConfigService portalConfigService = null;
     private PortletMessageManager messageManager = SportletMessageManager.getInstance();
+    private static TextMessagingService tms = null;
 
     /* GridSphere Portlet layout Engine handles rendering */
     private static PortletLayoutEngine layoutEngine = null;
@@ -122,6 +128,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, true);
         portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
         trackerService = (TrackerService) factory.createPortletService(TrackerService.class, true);
+        tms = (TextMessagingService)factory.createPortletService(TextMessagingService.class, null, true);
+
     }
 
     /**
@@ -485,7 +493,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         try {
-            User user = loginService.login(req);
+            User user = login(req);
             String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
             user.setAttribute(LOGIN_NUMTRIES, "0");
             userManagerService.saveUser(user);
@@ -520,6 +528,161 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             log.error("Unable to perform a redirect!", e);
         }
     }
+
+    public User login(PortletRequest req)
+            throws AuthenticationException, AuthorizationException {
+        String loginName = req.getParameter("username");
+        String loginPassword = req.getParameter("password");
+        String certificate = null;
+
+        X509Certificate[] certs = (X509Certificate[]) req.getAttribute("javax.servlet.request.X509Certificate");
+        if (certs != null && certs.length > 0) {
+            certificate = certificateTransform(certs[0].getSubjectDN().toString());
+        }
+
+        User user = null;
+
+        // if using client certificate, then don't use login modules
+        if (certificate == null) {
+            if ((loginName == null) || (loginPassword == null)) {
+                throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_BLANK"));
+            }
+            // first get user
+            user = loginService.getActiveLoginModule().getLoggedInUser(loginName);
+        } else {
+
+            log.debug("Using certificate for login :" + certificate);
+            List userList = userManagerService.getUsersByAttribute("certificate", certificate, null);
+            if (!userList.isEmpty()) {
+                user = (User)userList.get(0);
+            }
+        }
+
+        if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
+
+        // tried one to many times using same name
+        int numTriesInt;
+        String numTries = (String) user.getAttribute("ACCOUNT_NUMTRIES");
+        if (numTries == null) {
+            numTriesInt = 1;
+        } else {
+            numTriesInt = Integer.valueOf(numTries).intValue();
+        }
+
+        System.err.println("num tries = " + numTriesInt);
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+
+        String defNumTries = settings.getAttribute("ACCOUNT_NUMTRIES");
+        int defaultNumTries = Integer.valueOf(defNumTries).intValue();
+        if ((defaultNumTries != -1) && (numTriesInt >= defaultNumTries - 1)) {
+            disableAccount(req);
+            throw new AuthorizationException(getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS"));
+        }
+
+        String accountStatus = (String)user.getAttribute(User.DISABLED);
+        if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
+            throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
+
+        // If authorized via certificates no other authorization needed
+        if (certificate != null) return user;
+
+        // second invoke the appropriate auth module
+        List modules = loginService.getActiveAuthModules();
+
+        Collections.sort(modules);
+        AuthenticationException authEx = null;
+
+        Iterator it = modules.iterator();
+        log.debug("in login: Active modules are: ");
+        boolean success = false;
+        while (it.hasNext()) {
+            success = false;
+            LoginAuthModule mod = (LoginAuthModule) it.next();
+            log.debug(mod.getModuleName());
+            try {
+                mod.checkAuthentication(user, loginPassword);
+                success = true;
+            } catch (AuthenticationException e) {
+                String errMsg = mod.getModuleError(e.getMessage(), req.getLocale());
+                if (errMsg != null) {
+                    authEx = new AuthenticationException(errMsg);
+                } else {
+                    authEx = e;
+                }
+            }
+            if (success) break;
+        }
+        if (!success) {
+            numTriesInt++;
+            user.setAttribute("ACCOUNT_NUMTRIES", String.valueOf(numTriesInt));
+            userManagerService.saveUser(user);
+            throw authEx;
+        }
+
+        return user;
+    }
+
+    private void disableAccount(PortletRequest req) {
+
+        String loginName = req.getParameter("username");
+
+        User user = userManagerService.getUserByUserName(loginName);
+        if (user != null) {
+            System.err.println("user= " + user);
+
+            user.setAttribute(User.DISABLED, "true");
+            userManagerService.saveUser(user);
+
+            org.gridsphere.tmf.message.MailMessage mailToUser = tms.getMailMessage();
+            StringBuffer body = new StringBuffer();
+            body.append(getLocalizedText(req, "LOGIN_DISABLED_MSG1") + " " + getLocalizedText(req, "LOGIN_DISABLED_MSG2") + "\n\n");
+            mailToUser.setBody(body.toString());
+            mailToUser.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT"));
+            mailToUser.setTo(user.getEmailAddress());
+            mailToUser.setServiceid("mail");
+
+            org.gridsphere.tmf.message.MailMessage mailToAdmin = tms.getMailMessage();
+            StringBuffer body2 = new StringBuffer();
+            body2.append(getLocalizedText(req, "LOGIN_DISABLED_ADMIN_MSG") + " " + user.getUserName());
+            mailToAdmin.setBody(body2.toString());
+            mailToAdmin.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT") + " " + user.getUserName());
+            mailToAdmin.setTo(tms.getServiceUserID("mail", "root"));
+            mailToUser.setServiceid("mail");
+
+
+            try {
+                tms.send(mailToUser);
+                tms.send(mailToAdmin);
+            } catch (TextMessagingException e) {
+                log.error("Unable to send mail message!", e);
+            }
+        }
+    }
+
+     protected String getLocalizedText(PortletRequest req, String key) {
+        Locale locale = req.getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+        return bundle.getString(key);
+     }
+
+    /**
+     *  Transform certificate subject from :
+     *  CN=Engbert Heupers, O=sara, O=users, O=dutchgrid
+     *  to :
+     *  /O=dutchgrid/O=users/O=sara/CN=Engbert Heupers
+     * @param certificate string
+     * @return certificate string
+     */
+    private String certificateTransform(String certificate) {
+        String ls[] = certificate.split(", ");
+        StringBuffer res = new StringBuffer();
+        for(int i = ls.length - 1; i >= 0; i--) {
+            res.append("/");
+            res.append(ls[i]);
+        }
+        return res.toString();
+    }
+
 
     public void setUserSettings(GridSphereEvent event, User user) {
         PortletRequest req = event.getPortletRequest();
