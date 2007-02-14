@@ -4,12 +4,9 @@
  */
 package org.gridlab.gridsphere.services.core.user;
 
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
-import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
+
 import java.util.List;
 
 /**
@@ -42,19 +39,6 @@ public interface LoginService extends PortletService {
     //public LoginAuthModule getAuthModule(String moduleClassName);
     
     public LoginUserModule getActiveLoginModule();
-
-    /**
-     * Login a user. Implementation
-     * obtains username and password from supplied PortletRequest
-     *
-     * @param req the portlet request
-     *
-     * @return User The associated user.
-     * @throws org.gridlab.gridsphere.services.core.security.auth.AuthorizationException
-     *          If login unsuccessful
-     */
-    public User login(PortletRequest req)
-            throws AuthenticationException, AuthorizationException;
 
     public void saveAuthModule(LoginAuthModule authModule);
 

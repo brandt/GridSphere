@@ -8,34 +8,28 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
-import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
-import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
-import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModulesDescriptor;
-import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleCollection;
-import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
-import org.gridlab.gridsphere.services.core.user.LoginService;
-import org.gridlab.gridsphere.services.core.user.LoginUserModule;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridsphere.tmf.TextMessagingException;
+import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
+import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleCollection;
+import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
+import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModulesDescriptor;
+import org.gridlab.gridsphere.services.core.user.LoginService;
+import org.gridlab.gridsphere.services.core.user.LoginUserModule;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * The <code>LoginService</code> is the primary interface that defines the login method used to obtain a
@@ -55,8 +49,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
     private String authMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/auth-modules-mapping.xml");
     private String authModulesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
-    private UserManagerService userManagerService;
-    private TextMessagingService tms = null;
+
     private PortalConfigService portalConfigService = null;
 
     public LoginServiceImpl() {
@@ -114,8 +107,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             }
 
             try {
-                userManagerService = (UserManagerService)factory.createPortletService(UserManagerService.class, null, true);
-                tms = (TextMessagingService)factory.createPortletService(TextMessagingService.class, null, true);
+
                 portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, null, true);
 
                 PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
@@ -221,118 +213,6 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     public void destroy() {
     }
 
-    private void disableAccount(PortletRequest req) {
 
-        String loginName = req.getParameter("username");
-
-        User user = userManagerService.getUserByUserName(loginName);
-        if (user != null) {
-            System.err.println("user= " + user);
-            SportletUser suser = userManagerService.editUser(user);
-            suser.setAttribute(User.DISABLED, "true");
-            userManagerService.saveUser(suser);
-
-            org.gridsphere.tmf.message.MailMessage mailToUser = tms.getMailMessage();
-            StringBuffer body = new StringBuffer();
-            body.append(getLocalizedText(req, "LOGIN_DISABLED_MSG1") + " " + getLocalizedText(req, "LOGIN_DISABLED_MSG2") + "\n\n");
-            mailToUser.setBody(body.toString());
-            mailToUser.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT"));
-            mailToUser.setTo(user.getEmailAddress());
-            mailToUser.setServiceid("mail");
-
-            org.gridsphere.tmf.message.MailMessage mailToAdmin = tms.getMailMessage();
-            StringBuffer body2 = new StringBuffer();
-            body2.append(getLocalizedText(req, "LOGIN_DISABLED_ADMIN_MSG") + " " + user.getUserName());
-            mailToAdmin.setBody(body2.toString());
-            mailToAdmin.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT") + " " + user.getUserName());
-            mailToAdmin.setTo(tms.getServiceUserID("mail", "root"));
-            mailToUser.setServiceid("mail");
-
-
-            try {
-                tms.send(mailToUser);
-                tms.send(mailToAdmin);
-            } catch (TextMessagingException e) {
-                log.error("Unable to send mail message!", e);
-            }
-        }
-    }
-    public User login(PortletRequest req)
-            throws AuthenticationException, AuthorizationException {
-        String loginName = req.getParameter("username");
-        String loginPassword = req.getParameter("password");
-
-        if ((loginName == null) || (loginPassword == null)) {
-            throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_BLANK"));
-        }
-
-        // first get user
-        User user = activeLoginModule.getLoggedInUser(loginName);
-
-        if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
-        // tried one to many times using same name
-        int numTriesInt;
-        String numTries = (String) user.getAttribute("ACCOUNT_NUMTRIES");
-        if (numTries == null) {
-            numTriesInt = 1;
-        } else {
-            numTriesInt = Integer.valueOf(numTries).intValue();
-        }
-        System.err.println("num tries = " + numTriesInt);
-        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-
-        String defNumTries = settings.getAttribute("ACCOUNT_NUMTRIES");
-        int defaultNumTries = Integer.valueOf(defNumTries).intValue();
-        if ((defaultNumTries != -1) && (numTriesInt >= defaultNumTries)) {
-            disableAccount(req);
-            throw new AuthorizationException(getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS"));
-        }
-
-        String accountStatus = (String)user.getAttribute(User.DISABLED);
-        if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
-            throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
-
-        // second invoke the appropriate auth module
-
-        List modules = this.getActiveAuthModules();
-
-        Collections.sort(modules);
-        AuthenticationException authEx = null;
-
-        Iterator it = modules.iterator();
-        log.debug("in login: Active modules are: ");
-        boolean success = false;
-        while (it.hasNext()) {
-            success = false;
-            LoginAuthModule mod = (LoginAuthModule) it.next();
-            log.debug(mod.getModuleName());
-            try {
-                mod.checkAuthentication(user, loginPassword);
-                success = true;
-            } catch (AuthenticationException e) {
-                String errMsg = mod.getModuleError(e.getMessage(), req.getLocale());
-                if (errMsg != null) {
-                    authEx = new AuthenticationException(errMsg);
-                } else {
-                    authEx = e;
-                }
-            }
-            if (success) break;
-        }
-        if (!success) {
-            numTriesInt++;
-            ((SportletUser)user).setAttribute("ACCOUNT_NUMTRIES", String.valueOf(numTriesInt));
-            userManagerService.saveUser(user);
-            throw authEx;
-        }
-
-        return user;
-    }
-
-    protected String getLocalizedText(PortletRequest req, String key) {
-        Locale locale = req.getLocale();
-        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
-        return bundle.getString(key);
-    }
 
 }
