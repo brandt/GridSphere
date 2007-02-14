@@ -568,7 +568,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
             String defNumTries = settings.getAttribute("ACCOUNT_NUMTRIES");
             int defaultNumTries = Integer.valueOf(defNumTries).intValue();
-            if ((defaultNumTries != -1) && (numTriesInt >= defaultNumTries)) {
+            if ((defaultNumTries != -1) && (numTriesInt >= defaultNumTries - 1)) {
                 disableAccount(req);
                 throw new AuthorizationException(getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS"));
             }
