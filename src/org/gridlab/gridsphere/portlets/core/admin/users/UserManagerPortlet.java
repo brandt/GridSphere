@@ -6,19 +6,18 @@ package org.gridlab.gridsphere.portlets.core.admin.users;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlets.core.login.LoginPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
+import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
-import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.portlets.core.login.LoginPortlet;
-import org.gridlab.gridsphere.core.persistence.QueryFilter;
 
 import javax.servlet.UnavailableException;
 import java.util.Iterator;
@@ -461,6 +460,8 @@ public class UserManagerPortlet extends ActionPortlet {
             accountRequest.setAttribute(User.DISABLED, "true");
         } else {
             accountRequest.setAttribute(User.DISABLED, "false");
+            String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
+            accountRequest.setAttribute(LOGIN_NUMTRIES, "0");
         }
         String certval = event.getTextFieldBean("certificate").getValue();
         if (certval != null) accountRequest.setAttribute("user.certificate", certval);
