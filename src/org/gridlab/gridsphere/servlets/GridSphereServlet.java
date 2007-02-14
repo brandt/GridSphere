@@ -18,15 +18,19 @@ import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.impl.GroupRequestImpl;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
+import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.request.RequestService;
 import org.gridlab.gridsphere.services.core.request.GenericRequest;
 import org.gridlab.gridsphere.services.core.tracker.TrackerService;
+import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
+import org.gridsphere.tmf.TextMessagingException;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -67,6 +71,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static TrackerService trackerService = null;
 
     private static PortalConfigService portalConfigService = null;
+
+    private static TextMessagingService tms = null;
 
     private PortletMessageManager messageManager = SportletMessageManager.getInstance();
 
@@ -121,7 +127,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, getServletConfig().getServletContext(), true);
         portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, getServletConfig().getServletContext(),true);
         trackerService = (TrackerService) factory.createPortletService(TrackerService.class, getServletConfig().getServletContext(), true);
-
+        tms = (TextMessagingService)factory.createPortletService(TextMessagingService.class, null, true);
         //trackerService = (TrackerDaoImpl)factory.getSpringService("trackerDao");
     }
 
@@ -511,7 +517,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletRequest req = event.getPortletRequest();
 
         try {
-            User user = loginService.login(req);
+            User user = login(req);
 
             String LOGIN_NUMTRIES = "ACCOUNT_NUMTRIES";
             ((SportletUser)user).setAttribute(LOGIN_NUMTRIES, "0");
@@ -534,6 +540,121 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             log.debug(err.getMessage());
             req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
         }
+    }
+
+    public User login(PortletRequest req)
+                throws AuthenticationException, AuthorizationException {
+            String loginName = req.getParameter("username");
+            String loginPassword = req.getParameter("password");
+
+            if ((loginName == null) || (loginPassword == null)) {
+                throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_BLANK"));
+            }
+
+            // first get user
+            User user = loginService.getActiveLoginModule().getLoggedInUser(loginName);
+
+            if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
+            // tried one to many times using same name
+            int numTriesInt;
+            String numTries = (String) user.getAttribute("ACCOUNT_NUMTRIES");
+            if (numTries == null) {
+                numTriesInt = 1;
+            } else {
+                numTriesInt = Integer.valueOf(numTries).intValue();
+            }
+            System.err.println("num tries = " + numTriesInt);
+            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+
+            String defNumTries = settings.getAttribute("ACCOUNT_NUMTRIES");
+            int defaultNumTries = Integer.valueOf(defNumTries).intValue();
+            if ((defaultNumTries != -1) && (numTriesInt >= defaultNumTries)) {
+                disableAccount(req);
+                throw new AuthorizationException(getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS"));
+            }
+
+            String accountStatus = (String)user.getAttribute(User.DISABLED);
+            if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
+                throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
+
+            // second invoke the appropriate auth module
+
+            List modules = loginService.getActiveAuthModules();
+
+            Collections.sort(modules);
+            AuthenticationException authEx = null;
+
+            Iterator it = modules.iterator();
+            log.debug("in login: Active modules are: ");
+            boolean success = false;
+            while (it.hasNext()) {
+                success = false;
+                LoginAuthModule mod = (LoginAuthModule) it.next();
+                log.debug(mod.getModuleName());
+                try {
+                    mod.checkAuthentication(user, loginPassword);
+                    success = true;
+                } catch (AuthenticationException e) {
+                    String errMsg = mod.getModuleError(e.getMessage(), req.getLocale());
+                    if (errMsg != null) {
+                        authEx = new AuthenticationException(errMsg);
+                    } else {
+                        authEx = e;
+                    }
+                }
+                if (success) break;
+            }
+            if (!success) {
+                numTriesInt++;
+                ((SportletUser)user).setAttribute("ACCOUNT_NUMTRIES", String.valueOf(numTriesInt));
+                userManagerService.saveUser(user);
+                throw authEx;
+            }
+
+            return user;
+        }
+
+    private void disableAccount(PortletRequest req) {
+
+        String loginName = req.getParameter("username");
+
+        User user = userManagerService.getUserByUserName(loginName);
+        if (user != null) {
+            System.err.println("user= " + user);
+            SportletUser suser = userManagerService.editUser(user);
+            suser.setAttribute(User.DISABLED, "true");
+            userManagerService.saveUser(suser);
+
+            org.gridsphere.tmf.message.MailMessage mailToUser = tms.getMailMessage();
+            StringBuffer body = new StringBuffer();
+            body.append(getLocalizedText(req, "LOGIN_DISABLED_MSG1") + " " + getLocalizedText(req, "LOGIN_DISABLED_MSG2") + "\n\n");
+            mailToUser.setBody(body.toString());
+            mailToUser.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT"));
+            mailToUser.setTo(user.getEmailAddress());
+            mailToUser.setServiceid("mail");
+
+            org.gridsphere.tmf.message.MailMessage mailToAdmin = tms.getMailMessage();
+            StringBuffer body2 = new StringBuffer();
+            body2.append(getLocalizedText(req, "LOGIN_DISABLED_ADMIN_MSG") + " " + user.getUserName());
+            mailToAdmin.setBody(body2.toString());
+            mailToAdmin.setSubject(getLocalizedText(req, "LOGIN_DISABLED_SUBJECT") + " " + user.getUserName());
+            mailToAdmin.setTo(tms.getServiceUserID("mail", "root"));
+            mailToUser.setServiceid("mail");
+
+
+            try {
+                tms.send(mailToUser);
+                tms.send(mailToAdmin);
+            } catch (TextMessagingException e) {
+                log.error("Unable to send mail message!", e);
+            }
+        }
+    }
+
+    protected String getLocalizedText(PortletRequest req, String key) {
+        Locale locale = req.getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+        return bundle.getString(key);
     }
 
     public void setUserSettings(GridSphereEvent event, User user) {
