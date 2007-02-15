@@ -185,6 +185,7 @@ public class ConfigPortlet extends ActionPortlet {
             portalConfigService.setProperty(PortalConfigService.SAVE_PASSWORDS, Boolean.toString(savePasswords));
             portalConfigService.setProperty(PortalConfigService.SEND_USER_FORGET_PASSWORD, Boolean.toString(sendForget));
             portalConfigService.storeProperties();
+            createSuccessMessage(event, getLocalizedText(event.getActionRequest(), "CONFIG_SAVE_SUCCESS"));
         } catch (IOException e) {
             log.error("unable to save gridsphere.properties", e);
         } catch (NumberFormatException e) {
@@ -204,6 +205,7 @@ public class ConfigPortlet extends ActionPortlet {
         portalConfigService.setProperty(PortalConfigService.ENABLE_ERROR_HANDLING, sendMail.toString());
         try {
             portalConfigService.storeProperties();
+            createSuccessMessage(event, getLocalizedText(event.getActionRequest(), "CONFIG_SAVE_SUCCESS"));
         } catch (IOException e) {
             log.error("Unable to save gridsphere.properties", e);
         }
