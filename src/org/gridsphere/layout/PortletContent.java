@@ -142,7 +142,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
             String editLink = portletURI.toString();
             portletURI.setAction(DELETE_CONTENT);
             String deleteLink = portletURI.toString();
-            content.append("<br><fieldset>" + textFileName + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"" + editLink + "\">" + getLocalizedText(req, "EDIT") + "</a>&nbsp;&nbsp;&nbsp;<a href=\"" + deleteLink + "\">" + getLocalizedText(req, "DELETE") + "</a></fieldset>");
+            content.append("<br><fieldset>").append(textFileName).append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"").append(editLink).append("\">").append(getLocalizedText(req, "EDIT")).append("</a>&nbsp;&nbsp;&nbsp;<a href=\"").append(deleteLink).append("\">").append(getLocalizedText(req, "DELETE")).append("</a></fieldset>");
             setBufferedOutput(req, content);
             return;
         }

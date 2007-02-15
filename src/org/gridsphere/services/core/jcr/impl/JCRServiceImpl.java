@@ -46,7 +46,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
         log.debug("JCR Path " + repositoryconfigpath);
 
         String repHomeDir = "repository";
-        Hashtable env = new Hashtable();
+        Hashtable<String, String> env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "org.apache.jackrabbit.core.jndi.provider.DummyInitialContextFactory");
         env.put(Context.PROVIDER_URL, "localhost");
 
@@ -64,7 +64,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
             Session s = repository.login(cred, null);
 
             Workspace ws = s.getWorkspace();
-            Map nameSpaces = new HashMap();
+            Map<String, String> nameSpaces = new HashMap<String, String>();
 
             log.info("Registering " + JCRNode.PREFIX + " with Namespace " + JCRNode.NAMESPACE);
             String[] prefixes = ws.getNamespaceRegistry().getPrefixes();
@@ -107,8 +107,11 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
                     if (filename.endsWith(".html")) {
                         // Get filename of file or directory
                         String checkNodeName = filename.substring(0, filename.length() - 5);
+
                         if (!existsContentDocument(checkNodeName)) {
+
                             StringBuffer fileContent = new StringBuffer();
+
                             try {
                                 BufferedReader in = new BufferedReader(new FileReader(repositorypath + File.separator + filename));
                                 String str;
@@ -121,10 +124,13 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
                                 doc.setTitle(checkNodeName);
                                 doc.setAuthor("System");
                                 doc.setMimeType(JCRNode.RENDERKIT_HTML);
+
                                 saveDocument(doc);
+
                                 log.info("Adding " + filename + " as document to ContentManagement.");
 //                                File deleteFile = new File(repositorypath + File.separator + filename);
 //                                deleteFile.delete();
+
                             } catch (IOException e) {
                                 log.error("Could not read file " + filename);
                             }
@@ -132,8 +138,11 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
                         }
                     }
                 }
+
             }
+
             s.logout();
+
         } catch (Exception e) {
             log.error("Could not start repository!", e);
         }
@@ -178,8 +187,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
         QueryManager qm = ws.getQueryManager();
         Query q = qm.createQuery(query, Query.SQL);
         QueryResult res = q.execute();
-        NodeIterator it = res.getNodes();
-        return it;
+        return res.getNodes();
     }
 
     public boolean existsContentDocument(String path) {
@@ -226,7 +234,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
                     try {
                         link = URLEncoder.encode(id, "UTF-8");
                     } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                        log.error("Unable to encode the URL ", e);
                     }
                     String replaceString = "<a href=\"/" + localPortalURLdeploy + "/" + localPortalURLcontext + "/"
                             + layout + "/" + link + "\">" + name + "</a>";
@@ -234,7 +242,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
                 }
             }
         } catch (ContentException e) {
-            output = "Content " + nodename + "not found!";
+            output = "Content " + nodename + " not found!";
         }
         return output;
     }
@@ -330,8 +338,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
 
     public Node getGridSphereRootNode(Session s) throws RepositoryException {
         Node n = s.getRootNode();
-        Node gsRoot = n.getNode(JCRNode.GS_ROOT_NODE_NAME);
-        return gsRoot;
+        return n.getNode(JCRNode.GS_ROOT_NODE_NAME);
     }
 
 
@@ -343,9 +350,11 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
             Node node = (Node) session.getItem(JCRNode.GS_ROOT_CONTENTDOCUMENT_PATH + "/" + path);
             result = createDocument(node);
         } catch (RepositoryException e) {
-            throw new ContentException("JCR Repository Error or Node does not exsit.");
+            e.printStackTrace();
+            throw new ContentException("JCR Repository Error.");
         } catch (NamingException e) {
-            throw new ContentException("JCR Naming Error or Node does not exist.");
+            e.printStackTrace();
+            throw new ContentException("JCR Naming Error.");
         } finally {
             if (session != null) session.logout();
         }
@@ -373,6 +382,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
         } catch (RepositoryException e) {
             throw new ContentException("JCR Repository Error.");
         } catch (NamingException e) {
+            e.printStackTrace();
             throw new ContentException("JCR Naming Error.");
         } finally {
             if (session != null) session.logout();
@@ -381,8 +391,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
 
     protected Node getGsDocRootNode(Session s) throws RepositoryException {
         Node rootNode = s.getRootNode();
-        Node result = rootNode.getNode(JCRNode.GS_ROOT_NODE_NAME + "/" + JCRNode.GS_ROOT_CONTENTDOCUMENT_NAME);
-        return result;
+        return rootNode.getNode(JCRNode.GS_ROOT_NODE_NAME + "/" + JCRNode.GS_ROOT_CONTENTDOCUMENT_NAME);
     }
 
     protected ContentDocument createDocument(Node n) throws ContentException {
@@ -392,6 +401,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
             doc.setTitle(n.getProperty(JCRNode.TITLE).getString());
             doc.setUuid(n.getUUID());
         } catch (RepositoryException e) {
+            e.printStackTrace();
             throw new ContentException("Could not create document from node.");
         }
         return doc;
@@ -407,13 +417,14 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
             NodeIterator ni = node.getNodes();
             while (ni.hasNext()) {
                 Node n = ni.nextNode();
-                ContentDocument doc = new ContentDocument();
                 result.add(createDocument(n));
             }
 
         } catch (RepositoryException e) {
+            e.printStackTrace();
             throw new ContentException("JCR Repository Error.");
         } catch (NamingException e) {
+            e.printStackTrace();
             throw new ContentException("JCR Naming Error.");
         } finally {
             if (session != null) session.logout();
@@ -432,6 +443,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
         } catch (RepositoryException e) {
             throw new ContentException("JCR Repository Error.");
         } catch (NamingException e) {
+            e.printStackTrace();
             throw new ContentException("JCR Naming Error.");
         } finally {
             if (session != null) session.logout();
@@ -453,6 +465,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
         } catch (RepositoryException e) {
             throw new ContentException("JCR Repository Error.");
         } catch (NamingException e) {
+            e.printStackTrace();
             throw new ContentException("JCR Naming Error.");
         } finally {
             if (session != null) session.logout();
