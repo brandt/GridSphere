@@ -1,7 +1,7 @@
-<%@ page import="java.util.List,
-                 java.util.Iterator,
-                 org.gridsphere.services.core.security.auth.modules.LoginAuthModule" %>
-<%@ page import="javax.portlet.RenderRequest"%>
+<%@ page import="org.gridsphere.services.core.security.auth.modules.LoginAuthModule,
+                 javax.portlet.RenderRequest,
+                 java.util.Iterator" %>
+<%@ page import="java.util.List" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
@@ -11,6 +11,8 @@
 <% RenderRequest pReq = (RenderRequest) pageContext.getAttribute("renderRequest"); %>
 <% List authModules = (List) request.getAttribute("authModules"); %>
 
+
+<ui:messagebox beanId="msg"/>
 <ui:form>
     <ui:group key="LOGIN_AUTHMODULES_MSG">
         <% if (authModules.size() == 1) { %>

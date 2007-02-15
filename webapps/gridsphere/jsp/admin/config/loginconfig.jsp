@@ -1,4 +1,3 @@
-
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
@@ -6,40 +5,48 @@
 <jsp:useBean id="services" class="java.lang.String" scope="request"/>
 
 <script type="text/javascript">
-function checkUserCreate( elem, id ) {
-    if (elem ) {
-        document.getElementById(id).checked = true;
+    function checkUserCreate(elem, id) {
+        if (elem) {
+            document.getElementById(id).checked = true;
+        }
     }
-}
 
-function checkAllowUsers( elem, id ) {
-    if (!elem) {
-        document.getElementById(id).checked = false;
+    function checkAllowUsers(elem, id) {
+        if (!elem) {
+            document.getElementById(id).checked = false;
+        }
     }
-}
 
-function checkSavePass( elem, id ) {
-    if (elem) {
-        document.getElementById(id).checked = true;
-    } else {
-        document.getElementById(id).checked = false;
+    function checkSavePass(elem, id) {
+        if (elem) {
+            document.getElementById(id).checked = true;
+        } else {
+            document.getElementById(id).checked = false;
+        }
     }
-}
-//  End -->
+    //  End -->
 </script>
+<ui:messagebox beanId="msg"/>
 <ui:form>
     <ui:group key="LOGIN_CONFIG_MSG">
         <ul style="list-style-type: none;">
             <li>
-                <ui:checkbox id="allowCreateCB" beanId="acctCB" value="TRUE" onClick="checkAllowUsers( this.checked, 'userApprovalCB' )"/>
+                <ui:checkbox id="allowCreateCB" beanId="acctCB" value="TRUE"
+                             onClick="checkAllowUsers( this.checked, 'userApprovalCB' )"/>
                 <ui:text key="LOGIN_CONFIG_ALLOW"/>
             </li>
-            <li><ul style="list-style-type: none;"><li>
-                <ui:checkbox id="userApprovalCB" onClick="checkUserCreate( this.checked, 'allowCreateCB' )" beanId="acctApproval" value="FALSE"/>
-                <ui:text key="LOGIN_ACCOUNT_APPROVAL"/>
-            </li></ul></li>
             <li>
-                <ui:checkbox id="notifyCB" onClick="checkUserCreate( this.checked, 'savePassCB' )" beanId="notifyCB" value="TRUE"/>
+                <ul style="list-style-type: none;">
+                    <li>
+                        <ui:checkbox id="userApprovalCB" onClick="checkUserCreate( this.checked, 'allowCreateCB' )"
+                                     beanId="acctApproval" value="FALSE"/>
+                        <ui:text key="LOGIN_ACCOUNT_APPROVAL"/>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <ui:checkbox id="notifyCB" onClick="checkUserCreate( this.checked, 'savePassCB' )" beanId="notifyCB"
+                             value="TRUE"/>
                 <ui:text key="LOGIN_CONFIG_NOTIFY"/>
             </li>
             <li>
@@ -51,19 +58,22 @@ function checkSavePass( elem, id ) {
                 <ui:text key="LOGIN_REMUSER"/>
             </li>
             <li>
-                <ui:checkbox id="savePassCB" onClick="checkSavePass( this.checked, 'notifyCB' )" beanId="savepassCB" value="TRUE"/>
+                <ui:checkbox id="savePassCB" onClick="checkSavePass( this.checked, 'notifyCB' )" beanId="savepassCB"
+                             value="TRUE"/>
                 <ui:text key="LOGIN_CONFIG_PASSWD"/>
                 <br/>
                 <ui:text style="alert" key="LOGIN_CONFIG_PASSWD1"/>
             </li>
-           <li>
-            <ui:text key="LOGIN_TRIES_MSG"/>
-            <ui:textfield beanId="numTriesTF"/>
+            <li>
+                <ui:text key="LOGIN_TRIES_MSG"/>
+                <ui:textfield beanId="numTriesTF"/>
             </li>
             <li>
-                <% Boolean isUsernameLogin = (Boolean)request.getAttribute("isUsernameLogin"); %>
-                <ui:radiobutton beanId="loginRB" value="TRUE" selected="<%= (isUsernameLogin == Boolean.TRUE) %>"/><ui:text key="LOGIN_USERNAME"/>
-                <ui:radiobutton beanId="loginRB" value="FALSE" selected="<%= (isUsernameLogin == Boolean.FALSE) %>"/><ui:text key="LOGIN_EMAIL"/>
+                <% Boolean isUsernameLogin = (Boolean) request.getAttribute("isUsernameLogin"); %>
+                <ui:radiobutton beanId="loginRB" value="TRUE" selected="<%= (isUsernameLogin == Boolean.TRUE) %>"/>
+                <ui:text key="LOGIN_USERNAME"/>
+                <ui:radiobutton beanId="loginRB" value="FALSE" selected="<%= (isUsernameLogin == Boolean.FALSE) %>"/>
+                <ui:text key="LOGIN_EMAIL"/>
             </li>
         </ul>
         <ui:frame>
@@ -73,7 +83,7 @@ function checkSavePass( elem, id ) {
                 </ui:tablecell>
             </ui:tablerow>
         </ui:frame>
-     </ui:group>
+    </ui:group>
 </ui:form>
 
 

@@ -401,14 +401,14 @@ public class LoginPortlet extends ActionPortlet {
         }
     }
 
-    public void doNewUser(ActionFormEvent evt)
+    public void doNewUser(RenderFormEvent evt)
             throws PortletException {
 
         boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.CAN_USER_CREATE_ACCOUNT)).booleanValue();
         if (!canUserCreateAccount) return;
 
-        ActionRequest req = evt.getActionRequest();
-
+        RenderRequest req = evt.getRenderRequest();
+        RenderResponse res = evt.getRenderResponse();
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
 
         String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
@@ -422,7 +422,7 @@ public class LoginPortlet extends ActionPortlet {
             msg.setKey("LOGIN_CREATE_ACCT");
         }
 
-        setNextTitle(req, "Create Account");
+        res.setTitle("Create Account");
         setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
         log.debug("in doViewNewUser");
     }

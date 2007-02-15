@@ -10,21 +10,21 @@
 <ui:form secure="<%= Boolean.valueOf(useSecureLogin).booleanValue() %>">
     <ui:messagebox beanId="msg"/>
 
-  <%-- <ui:dialoglink titleColor="green" id="foo" name="bar" value="Click Me" header="This is a header" body="This is a body" footer="This is a footer" width="200"/> --%>
- 
-    
-    <% if (request.getAttribute("certificate") != null && ((String) request.getAttribute("certificate")).length() > 0)  { %>
+    <%-- <ui:dialoglink titleColor="green" id="foo" name="bar" value="Click Me" header="This is a header" body="This is a body" footer="This is a footer" width="200"/> --%>
+
+
+    <% if (request.getAttribute("certificate") != null && ((String) request.getAttribute("certificate")).length() > 0) { %>
     <ui:table>
-            <ui:tablerow>
-                <ui:tablecell width="160">
-                    <ui:text key="LOGIN_CERTIFICATE"/>
-                </ui:tablecell>
-            </ui:tablerow>
-            <ui:tablerow>
-                <ui:tablecell width="160">
-                    <%= certificate %>
-                </ui:tablecell>
-            </ui:tablerow>
+        <ui:tablerow>
+            <ui:tablecell width="160">
+                <ui:text key="LOGIN_CERTIFICATE"/>
+            </ui:tablecell>
+        </ui:tablerow>
+        <ui:tablerow>
+            <ui:tablecell width="160">
+                <%= certificate %>
+            </ui:tablecell>
+        </ui:tablerow>
     </ui:table>
     <% } else { %>
 
@@ -42,7 +42,7 @@
             <ui:tablecell/>
         </ui:tablerow>
 
-       <% } else { %>
+        <% } else { %>
 
         <ui:tablerow>
             <ui:tablecell width="100">
@@ -76,7 +76,8 @@
 
     <% if (request.getAttribute("remUser") != null) { %>
     <p>
-        <input type="checkbox" name="remlogin" value="yes"/><ui:text key="LOGIN_REMEMBER_ME"/>
+        <input type="checkbox" name="remlogin" value="yes"/>
+        <ui:text key="LOGIN_REMEMBER_ME"/>
     </p>
     <% } %>
 
@@ -89,11 +90,6 @@
         <% } %>
     </ui:actionsubmit>
 
-    <%--
-     <% if (request.getAttribute("canUserCreateAcct") != null) { %>
-     <ui:actionlink action="doNewUser" key="LOGIN_SIGNUP"/>
-     <% } %>
-    --%>
     <% if ((request.getAttribute("dispPass") != null) && ((request.getAttribute("certificate") == null) || ((String) request.getAttribute("certificate")).length() == 0)) { %>
     <ui:actionlink action="displayForgotPassword" key="LOGIN_FORGOT_PASSWORD"/>
     <% } %>

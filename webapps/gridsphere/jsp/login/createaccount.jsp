@@ -79,7 +79,7 @@
     </ui:frame>
 
     <ui:image src="<%= request.getContextPath() + "/Captcha.jpg" %>"/>
-    <ui:actionlink key="LOGIN_CANT_READ" action="doNewUser"/>
+    <ui:renderlink key="LOGIN_CANT_READ" render="doNewUser"/>
     <p/>
 
     <ui:text key="CAPTCHA_TEXT"/>

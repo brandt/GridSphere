@@ -2,13 +2,16 @@
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 <portlet:defineObjects/>
 
-<% Boolean sendMail = (Boolean)request.getAttribute("sendMail"); %>
+<% Boolean sendMail = (Boolean) request.getAttribute("sendMail"); %>
+
+<ui:messagebox beanId="msg"/>
 <ui:form>
     <ui:group key="LOGIN_CONFIG_ERROR_MSG">
         <p>
             <ui:radiobutton beanId="errorRB" value="NOMAIL" selected="<%= !sendMail.booleanValue() %>"/>
             <ui:text key="LOGIN_CONFIG_ERROR_STACKTRACE_MSG"/>
         </p>
+
         <p>
             <ui:radiobutton beanId="errorRB" value="MAIL" selected="<%= sendMail.booleanValue() %>"/>
             <ui:text key="LOGIN_CONFIG_ERROR_MAIL_MSG"/>

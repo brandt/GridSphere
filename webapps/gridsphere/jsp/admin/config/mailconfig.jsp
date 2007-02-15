@@ -1,9 +1,9 @@
-
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
 <portlet:defineObjects/>
 
+<ui:messagebox beanId="msg"/>
 <ui:form>
     <ui:group key="LOGIN_CONFIG_SMTP">
         <ui:frame>
