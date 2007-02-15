@@ -5,7 +5,6 @@
 package org.gridsphere.provider.event.jsr.impl;
 
 import org.gridsphere.portletcontainer.DefaultPortletRender;
-import org.gridsphere.provider.event.impl.BaseFormEventImpl;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portletui.beans.TagBean;
 

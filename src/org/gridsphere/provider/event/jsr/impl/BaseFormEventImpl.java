@@ -3,7 +3,7 @@
  *
  * @version $Id: BaseFormEventImpl.java 4709 2006-03-31 20:41:54Z novotny $
  */
-package org.gridsphere.provider.event.impl;
+package org.gridsphere.provider.event.jsr.impl;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
