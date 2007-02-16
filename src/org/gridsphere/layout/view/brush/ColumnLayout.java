@@ -12,23 +12,22 @@ import org.gridsphere.portletcontainer.GridSphereEvent;
 
 public class ColumnLayout extends BaseRender implements Render {
 
-    protected StringBuffer cssStyle = new StringBuffer();
+    private static final StringBuffer COL_LAYOUT = new StringBuffer("\n<div class=\"gridsphere-layout-column\"");
 
     public ColumnLayout() {
     }
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
-        StringBuffer temp = new StringBuffer("\n<div class=\"gridsphere-layout-column\"");
+        StringBuffer cssStyle = new StringBuffer();
         if (!comp.getWidth().equals("")) {
             cssStyle.append(" width: ").append(comp.getWidth()).append(";");
         }
         if (!comp.getStyle().equals("")) {
             cssStyle.append(comp.getStyle());
         }
-
-        if (cssStyle.length() > 0) temp.append(" style=\"").append(cssStyle).append("\"");
-        temp.append("> <!-- ========================== start column -->\n");
-        return temp;
+        if (cssStyle.length() > 0) cssStyle.append(COL_LAYOUT).append(" style=\"").append(cssStyle).append("\"");
+        cssStyle.append("> <!-- ========================== start column -->\n");
+        return cssStyle;
     }
 
     public StringBuffer doEnd(GridSphereEvent event, PortletComponent comp) {
