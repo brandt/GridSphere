@@ -149,13 +149,13 @@ public class PortletContent extends BasePortletComponent implements Serializable
             content.append("\">");
             content.append("<img src=\"");
             content.append(req.getContextPath());
-            content.append("/images/edit.gif\" alt=\"" + getLocalizedText(req, "EDIT") + "\"/>");
+            content.append("/images/edit.gif\" alt=\"").append(getLocalizedText(req, "EDIT")).append("\"/>");
             content.append("</a>&nbsp;&nbsp;&nbsp;<a href=\"");
             content.append(deleteLink);
             content.append("\">");
             content.append("<img src=\"");
             content.append(req.getContextPath());
-            content.append("/images/delete.gif\" alt=\"" + getLocalizedText(req, "DELETE") + "\"/>");
+            content.append("/images/delete.gif\" alt=\"").append(getLocalizedText(req, "DELETE")).append("\"/>");
             content.append("</a></fieldset>");
             setBufferedOutput(req, content);
             return;
