@@ -141,8 +141,22 @@ public class PortletContent extends BasePortletComponent implements Serializable
             PortletURLImpl portletURI = (PortletURLImpl) res.createRenderURL();
             String editLink = portletURI.toString();
             portletURI.setAction(DELETE_CONTENT);
-            String deleteLink = portletURI.toString();
-            content.append("<br><fieldset>").append(textFileName).append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"").append(editLink).append("\">").append(getLocalizedText(req, "EDIT")).append("</a>&nbsp;&nbsp;&nbsp;<a href=\"").append(deleteLink).append("\">").append(getLocalizedText(req, "DELETE")).append("</a></fieldset>");
+            String deleteLink = portletURI.toString();                                                                                               /*  getLocalizedText(req, "EDIT") */
+            content.append("<br><fieldset>");
+            content.append(textFileName);
+            content.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"");
+            content.append(editLink);
+            content.append("\">");
+            content.append("<img src=\"");
+            content.append(req.getContextPath());
+            content.append("/images/edit.gif\" alt=\"" + getLocalizedText(req, "EDIT") + "\"/>");
+            content.append("</a>&nbsp;&nbsp;&nbsp;<a href=\"");
+            content.append(deleteLink);
+            content.append("\">");
+            content.append("<img src=\"");
+            content.append(req.getContextPath());
+            content.append("/images/delete.gif\" alt=\"" + getLocalizedText(req, "DELETE") + "\"/>");
+            content.append("</a></fieldset>");
             setBufferedOutput(req, content);
             return;
         }
