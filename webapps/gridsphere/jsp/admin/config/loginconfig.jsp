@@ -18,11 +18,7 @@
     }
 
     function checkSavePass(elem, id) {
-        if (elem) {
-            document.getElementById(id).checked = true;
-        } else {
-            document.getElementById(id).checked = false;
-        }
+        document.getElementById(id).checked = elem;
     }
     //  End -->
 </script>
