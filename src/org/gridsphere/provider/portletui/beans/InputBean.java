@@ -285,6 +285,26 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
         return createTagName(name);
     }
 
+    /**
+     * Returns the bean value
+     *
+     * @return the bean value
+     */
+    public String getValue() {
+        return parseUserInput();
+    }
+
+    /**
+     * An attempt to parse user supplied input for any HTML tags and convert it
+     *
+     * @return
+     */
+    private String parseUserInput() {
+        value = value.replaceAll("<", "&lt;");
+        value = value.replaceAll(">", "&gt;");
+        return value;
+    }
+
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<input ");
