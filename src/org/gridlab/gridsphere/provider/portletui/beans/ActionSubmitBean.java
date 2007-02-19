@@ -14,12 +14,22 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     public static final String SUBMIT_STYLE = "portlet-form-button";
     public static final String NAME = "as";
 
+    protected String imageSrc = null;
+
     /**
      * Constructs a default action submit bean
      */
     public ActionSubmitBean() {
         super(NAME);
         this.cssClass = SUBMIT_STYLE;
+    }
+
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 
     /**
@@ -36,6 +46,7 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     public String toStartString() {
         String inputType = "submit";
         if (useAjax) inputType = "button";
+        if (imageSrc != null) inputType = "image";
         return new StringBuffer().append("<input ").append(getFormattedCss()).append(" type=\"").append(inputType).append("\" ").append(checkDisabled()).toString();
     }
 
@@ -48,6 +59,8 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
             // 'onClick' replaced by 'onclick' for XHTML 1.0 Strict compliance
             sb.append(" onclick=\"").append(onClick).append("\" ");
         }
+        if (imageSrc != null) sb.append(" src=\"").append(imageSrc).append("\"");
+
         if (id != null) sb.append("id=\"").append(id).append("\" ");
         sb.append("name=\"").append(sname).append("\" value=\"").append(value).append("\"/>");
         return sb.toString();
