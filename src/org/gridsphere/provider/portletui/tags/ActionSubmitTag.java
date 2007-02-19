@@ -18,6 +18,16 @@ import javax.servlet.jsp.JspWriter;
 public class ActionSubmitTag extends ActionTag {
 
     protected ActionSubmitBean actionSubmitBean = null;
+    protected String imageSrc = null;
+
+
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
+    }
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
@@ -51,6 +61,7 @@ public class ActionSubmitTag extends ActionTag {
         actionSubmitBean.setUseAjax(useAjax);
 
         if (anchor != null) actionSubmitBean.setAnchor(anchor);
+        if (imageSrc != null) actionSubmitBean.setImageSrc(imageSrc);
 
         if (key != null) {
             actionSubmitBean.setKey(key);

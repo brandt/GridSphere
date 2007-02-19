@@ -230,6 +230,11 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>imageSrc</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>secure</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
