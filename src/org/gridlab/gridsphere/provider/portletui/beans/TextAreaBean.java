@@ -70,6 +70,27 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
         this.rows = rows;
     }
 
+    /**
+     * Returns the bean value
+     *
+     * @return the bean value
+     */
+    public String getValue() {
+        return parseUserInput(value);
+    }
+
+    /**
+     * An attempt to parse user supplied input for any HTML arrow tags and convert them
+     *
+     * @param userInput some user supplied input
+     * @return the parsed user input text
+     */
+    private static String parseUserInput(String userInput) {
+        userInput = userInput.replaceAll("<", "&lt;");
+        userInput = userInput.replaceAll(">", "&gt;");
+        return userInput;
+    }
+    
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<textarea ");
