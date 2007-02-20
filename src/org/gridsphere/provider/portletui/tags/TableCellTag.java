@@ -173,7 +173,6 @@ public class TableCellTag extends BaseComponentTag {
             if (cssClass != null) cellBean.setCssClass(cssClass);
             if (cssStyle != null) cellBean.setCssStyle(cssStyle);
         }
-
         /*
         TableRowTag rowTag = (TableRowTag) getParent();
         if (rowTag.getHeader()) {
@@ -186,9 +185,8 @@ public class TableCellTag extends BaseComponentTag {
             JspWriter out = pageContext.getOut();
             out.print(cellBean.toStartString());
         } catch (Exception e) {
-            throw new JspException(e.getMessage());
+            throw new JspException(e);
         }
-
         return EVAL_BODY_INCLUDE;
     }
 
@@ -198,7 +196,7 @@ public class TableCellTag extends BaseComponentTag {
             JspWriter out = pageContext.getOut();
             out.print(cellBean.toEndString());
         } catch (Exception e) {
-            throw new JspException(e.getMessage());
+            throw new JspException(e);
         }
         super.doEndTag();
         return EVAL_PAGE;

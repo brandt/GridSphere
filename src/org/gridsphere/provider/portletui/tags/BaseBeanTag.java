@@ -101,10 +101,4 @@ public abstract class BaseBeanTag extends BodyTagSupport {
         return uniqueId;
     }
 
-    protected boolean isJSR() {
-        // simply check for existence of jsr portlet objects
-        //Object o = pageContext.getRequest().getAttribute(SportletProperties.RENDER_REQUEST);
-        Object o = pageContext.getAttribute("renderRequest", PageContext.REQUEST_SCOPE);
-        return (o != null);
-    }
 }

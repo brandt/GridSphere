@@ -7,11 +7,11 @@ package org.gridsphere.provider.portletui.tags;
 
 import org.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridsphere.provider.portletui.beans.ListBoxItemBean;
+import org.gridsphere.provider.portletui.beans.TagBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * A <code>ListBoxTag</code> represents a list box element
@@ -115,7 +115,7 @@ public class ListBoxTag extends ContainerTag {
     public void setOnFocus(String onFocus) {
         this.onFocus = onFocus;
     }
-    
+
     /**
      * Sets multiple selection
      *
@@ -143,9 +143,8 @@ public class ListBoxTag extends ContainerTag {
     }
 
     public int doStartTag() throws JspException {
-        list = new Vector();
-
-        if (submitOnChange) onChange="GridSphere_SelectSubmit( this.form )";
+        list = new ArrayList<TagBean>();
+        if (submitOnChange) onChange = "GridSphere_SelectSubmit( this.form )";
         if (!beanId.equals("")) {
             listbox = (ListBoxBean) getTagBean();
             if (listbox == null) {
@@ -178,10 +177,8 @@ public class ListBoxTag extends ContainerTag {
     }
 
     public int doEndTag() throws JspException {
-
-        Iterator it = list.iterator();
-        while (it.hasNext()) {
-            ListBoxItemBean itembean = (ListBoxItemBean) it.next();
+        for (TagBean aList : list) {
+            ListBoxItemBean itembean = (ListBoxItemBean) aList;
             listbox.addBean(itembean);
         }
         try {

@@ -17,7 +17,6 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     protected boolean readonly = false;
     protected boolean disabled = false;
     protected String key = null;
-    protected boolean visible = true;
 
     protected String cssStyle = null;
     protected String cssClass = null;
@@ -172,24 +171,6 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
         } else {
             return "";
         }
-    }
-
-    /**
-     * Sets the bean visibility
-     *
-     * @param visible is true if the bean shoudl be visible, false otherwise
-     */
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    /**
-     * Returns the bean visibility
-     *
-     * @return the bean visibility
-     */
-    public boolean getVisible() {
-        return visible;
     }
 
     public int compareTo(Object o) {

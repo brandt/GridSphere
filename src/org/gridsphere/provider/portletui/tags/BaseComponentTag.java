@@ -29,7 +29,6 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     protected boolean disabled = false;
     protected String cssStyle = null;
     protected String cssClass = null;
-    protected boolean isVisible = true;
     protected Locale locale = null;
     protected String id = null;
 
@@ -317,7 +316,6 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         disabled = false;
         cssStyle = null;
         cssClass = null;
-        isVisible = true;
         locale = null;
         id = null;
     }

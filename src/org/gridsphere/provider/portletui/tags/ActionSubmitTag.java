@@ -20,7 +20,6 @@ public class ActionSubmitTag extends ActionTag {
     protected ActionSubmitBean actionSubmitBean = null;
     protected String imageSrc = null;
 
-
     public String getImageSrc() {
         return imageSrc;
     }
