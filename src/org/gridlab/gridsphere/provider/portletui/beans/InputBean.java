@@ -99,6 +99,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
      * @return the parsed user input text
      */
     private static String parseUserInput(String userInput) {
+	if (userInput == null) return null;
         userInput = userInput.replaceAll("<", "&lt;");
         userInput = userInput.replaceAll(">", "&gt;");
         return userInput;
