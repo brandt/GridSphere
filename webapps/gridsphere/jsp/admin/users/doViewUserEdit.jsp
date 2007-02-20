@@ -8,7 +8,7 @@
 <h3>
     <% if (request.getAttribute("newuser") != null) { %>
     <ui:text key="USER_EDIT_USER_MSG" style="nostyle"/>
-<% } else { %>
+    <% } else { %>
     <ui:text key="USER_NEW_USER_MSG" style="nostyle"/>
     <% } %>
 
@@ -86,14 +86,16 @@
 <ui:frame beanId="roleFrame"/>
 
 <% if (request.getAttribute("certSupport") != null) { %>
-<ui:tablerow>
-            <ui:tablecell width="200">
-                <ui:text key="CERTIFICATE"/>
-            </ui:tablecell>
-            <ui:tablecell>
-                <ui:textfield beanId="certificate"/>
-            </ui:tablecell>
-</ui:tablerow>
+<ui:frame>
+    <ui:tablerow>
+        <ui:tablecell width="200">
+            <ui:text key="CERTIFICATE"/>
+        </ui:tablecell>
+        <ui:tablecell>
+            <ui:textfield beanId="certificate"/>
+        </ui:tablecell>
+    </ui:tablerow>
+</ui:frame>
 <% } %>
 
 <% if (request.getAttribute("savePass") != null) { %>
@@ -119,7 +121,8 @@
 <% } %>
 
 <% if (request.getAttribute("newuser") != null) { %>
-<ui:checkbox beanId="emailUserCB"/><ui:text key="USER_EMAIL_USER"/>
+<ui:checkbox beanId="emailUserCB"/>
+<ui:text key="USER_EMAIL_USER"/>
 <% } %>
 <p/>
 <ui:frame>
