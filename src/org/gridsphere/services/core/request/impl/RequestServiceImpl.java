@@ -11,22 +11,20 @@ import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
-import org.gridsphere.services.core.request.impl.GenericRequest;
-import org.gridsphere.services.core.request.RequestService;
 import org.gridsphere.services.core.request.Request;
+import org.gridsphere.services.core.request.RequestService;
 
 import java.util.*;
 
 public class RequestServiceImpl implements RequestService, PortletServiceProvider {
 
-    private static final long REQUEST_SWEEP_FREQUENCY =  5000 * 60; // 5 minute intervals
+    private static final long REQUEST_SWEEP_FREQUENCY = 5000 * 60; // 5 minute intervals
 
     private PersistenceManagerRdbms pm = null;
-    private static Log log = LogFactory.getLog(RequestServiceImpl.class);
+    private Log log = LogFactory.getLog(RequestServiceImpl.class);
     private Timer timer = null;
 
     private class RequestSweeperTask extends TimerTask {
-
         public void run() {
             clearExpiredEntries();
         }
@@ -36,7 +34,7 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
         PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
         pm = pmservice.createGridSphereRdbms();
         timer = new Timer(true);
-        timer.schedule(new RequestSweeperTask(),  Calendar.getInstance().getTime(), REQUEST_SWEEP_FREQUENCY );
+        timer.schedule(new RequestSweeperTask(), Calendar.getInstance().getTime(), REQUEST_SWEEP_FREQUENCY);
     }
 
     public void destroy() {
@@ -48,7 +46,7 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
         Request request = null;
         String query = "select gsreq from "
                 + GenericRequest.class.getName()
-                + " gsreq where gsreq.oid='" + requestId + "' and gsreq.label='"+ label + "'";
+                + " gsreq where gsreq.oid='" + requestId + "' and gsreq.label='" + label + "'";
         try {
             request = (Request) this.pm.restore(query);
         } catch (PersistenceManagerException e) {
@@ -66,11 +64,7 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
 
     public void saveRequest(Request request) {
         try {
-            if (request.getOid() != null) {
-                pm.update(request);
-            } else {
-                pm.create(request);
-            }
+            pm.saveOrUpdate(request);
         } catch (PersistenceManagerException e) {
             log.error("Unable to create or update password for user", e);
         }
@@ -79,10 +73,8 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
     protected void clearExpiredEntries() {
         //log.debug("Updating generic requests");
         Date date = Calendar.getInstance().getTime();
-        List reqs = getAllRequests();
-        Iterator it = reqs.iterator();
-        while (it.hasNext()) {
-            Request req = (Request)it.next();
+        List<Request> reqs = getAllRequests();
+        for (Request req : reqs) {
             if (req.getLifetime() == null) {
                 log.debug("deleting request with no lifetime specified " + req.getOid());
                 deleteRequest(req);
@@ -102,16 +94,15 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
 
     }
 
-    public List getAllRequests() {
+    public List<Request> getAllRequests() {
         String oql = "select gsreq from "
                 + GenericRequest.class.getName()
                 + " gsreq ";
         try {
             return pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving requests";
-            log.error(msg, e);
-            return new Vector();
+            log.error("Error retrieving requests", e);
+            return new ArrayList();
         }
 
     }
