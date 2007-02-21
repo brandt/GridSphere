@@ -96,14 +96,6 @@
         <description lang="en">Provides User Administration Capabilities</description>
         <interface>org.gridsphere.services.core.user.UserManagerService</interface>
         <implementation>org.gridsphere.services.core.user.impl.UserManagerServiceImpl</implementation>
-        <service-config>
-            <param-name>userid</param-name>
-            <param-value>root</param-value>
-        </service-config>
-        <service-config>
-            <param-name>password</param-name>
-            <param-value></param-value>
-        </service-config>
     </service>
 
     <service>
