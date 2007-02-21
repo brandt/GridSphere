@@ -103,42 +103,6 @@ public class ActionPortlet extends GenericPortlet {
     }
 
     /**
-     * Returns the title to display in the portlet
-     * Doesn't work since title rendering occurs before title is set!
-     *
-     * @param request the <code>PortletRequest</code>
-     * @return the title to display in the portlet
-     */
-    public String getNextTitle(PortletRequest request) {
-        String id = getUniqueId();
-        String title = (String) request.getAttribute(id + ".title");
-        if (title == null) {
-            Locale locale = request.getLocale();
-            ResourceBundle rb = this.getPortletConfig().getResourceBundle(locale);
-            title = rb.getString("java.portlet.title");
-            log.debug("Printing default title: " + title);
-        }
-        return title;
-    }
-
-    /**
-     * Sets the title to display in the portlet
-     * Doesn't work since title rendering occurs before title is set!
-     *
-     * @param request the <code>PortletRequest</code>
-     * @param title   the title display in the portlet
-     */
-    public void setNextTitle(PortletRequest request, String title) {
-        String id = getUniqueId();
-        request.setAttribute(id + ".title", title);
-    }
-
-    public void removeNextTitle(PortletRequest request) {
-        String id = getUniqueId();
-        request.removeAttribute(id + ".title");
-    }
-
-    /**
      * Sets the tag beans obtained from the FormEvent. Used internally and should not
      * normally need to be invoked by portlet developers.
      *
@@ -347,7 +311,6 @@ public class ActionPortlet extends GenericPortlet {
             }
         }
         removeTagBeans(request);
-        removeNextTitle(request);
         removeNextState(request);
     }
 

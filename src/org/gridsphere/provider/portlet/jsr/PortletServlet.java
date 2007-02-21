@@ -59,8 +59,6 @@ public class PortletServlet extends HttpServlet
 
     private transient PersistenceManagerService pms = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
 
-    private transient PersistenceManagerRdbms pm = null;
-
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         log.info("in init of PortletServlet");
@@ -353,10 +351,11 @@ public class PortletServlet extends HttpServlet
         ActionRequestImpl actionRequest = new ActionRequestImpl(request, portletContext);
         ActionResponse actionResponse = new ActionResponseImpl(request, response);
 
+        String webappname = portletWebApp.getWebApplicationName();
+        PersistenceManagerRdbms pm = pms.getPersistenceManagerRdbms(webappname);
 
         try {
-            String webappname = portletWebApp.getWebApplicationName();
-            pm = pms.getPersistenceManagerRdbms(webappname);
+
             if (pm != null) {
                 log.debug("Starting a database transaction for webapp: " + webappname);
                 pm.beginTransaction();
@@ -375,12 +374,10 @@ public class PortletServlet extends HttpServlet
 
             if (pm != null) pm.endTransaction();
 
-
         } catch (Throwable ex) {
             //log.error("Error during processAction:", ex);
             request.setAttribute(SportletProperties.PORTLETERROR + pid, ex);
 
-            //ex.printStackTrace();
             if (pm != null) {
                 pm.endTransaction();
                 try {
@@ -411,10 +408,13 @@ public class PortletServlet extends HttpServlet
 
         log.debug("in PortletServlet: rendering  portlet " + pid);
         if (renderRequest.getAttribute(SportletProperties.RESPONSE_COMMITTED) == null) {
+            String webappname = portletWebApp.getWebApplicationName();
+            PersistenceManagerRdbms pm = pms.getPersistenceManagerRdbms(webappname);
             try {
                 if (pm != null) pm.beginTransaction();
                 portlet.render(renderRequest, renderResponse);
                 if (pm != null) pm.endTransaction();
+
             } catch (UnavailableException e) {
                 try {
                     portlet.destroy();
@@ -423,6 +423,7 @@ public class PortletServlet extends HttpServlet
                 }
             } catch (Throwable ex) {
                 //log.error("in render: caught exception: ", ex);
+
                 try {
                     if (pm != null) {
                         log.info("Committing database transaction for webapp: " + portletWebApp.getWebApplicationName());
@@ -432,6 +433,7 @@ public class PortletServlet extends HttpServlet
                 } catch (Throwable rbEx) {
                     throw new ServletException("Could not rollback transaction after exception!", rbEx);
                 }
+
                 throw new ServletException(ex);
             }
         }
