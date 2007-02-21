@@ -45,11 +45,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>rss</servlet-name>
-        <servlet-class>org.gridsphere.servlets.RssFeedServlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>PortletServlet</servlet-name>
         <servlet-class>org.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>
     </servlet>
@@ -73,12 +68,6 @@
         <servlet-name>setup</servlet-name>
         <url-pattern>/setup/*</url-pattern>
     </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>rss</servlet-name>
-        <url-pattern>/rss/*</url-pattern>
-    </servlet-mapping>
-
 
     <servlet-mapping>
         <servlet-name>PortletServlet</servlet-name>
