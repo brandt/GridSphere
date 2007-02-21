@@ -16,19 +16,19 @@ import org.gridsphere.services.core.registry.PortletRegistryService;
 import java.util.*;
 
 /**
- * The <code>PortletRegistry</code> is simply a static <code>Hashtable</code> that keeps track
+ * The <code>PortletRegistry</code> is simply a static <code>Map</code> that keeps track
  * of all the application portlets known to the container.
  */
 public class PortletRegistryServiceImpl implements PortletRegistryService, PortletServiceProvider {
 
-
     private Log log = LogFactory.getLog(PortletRegistryServiceImpl.class);
 
-    private static Map<String, ApplicationPortlet> allApplicationPortlets = new Hashtable<String, ApplicationPortlet>();
-    private static Map<String, PortletWebApplication> webApps = new Hashtable<String, PortletWebApplication>();
+    private static Map<String, ApplicationPortlet> allApplicationPortlets = null;
+    private static Map<String, PortletWebApplication> webApps = null;
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-
+        allApplicationPortlets = new Hashtable<String, ApplicationPortlet>();
+        webApps = new Hashtable<String, PortletWebApplication>();
     }
 
     public void destroy() {
@@ -78,12 +78,7 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
      */
     public ApplicationPortlet getApplicationPortlet(String applicationPortletID) {
         int idx = applicationPortletID.indexOf("#");
-        //String portletName = "";
-        //String webapp = "";
         if (idx > 0) {
-            //webapp = applicationPortletID.substring(0, idx);
-            //portletName = applicationPortletID.substring(idx+1);
-            //System.err.println("webapp= " + webapp + " pname= " + portletName);
             return (ApplicationPortlet) allApplicationPortlets.get(applicationPortletID);
         }
         Collection<ApplicationPortlet> coll = allApplicationPortlets.values();
