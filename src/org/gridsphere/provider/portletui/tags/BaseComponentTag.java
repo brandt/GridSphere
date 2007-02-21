@@ -224,7 +224,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         componentBean.setReadOnly(readonly);
         if (name != null) componentBean.setName(name);
         if (value != null) componentBean.setValue(value);
-        //componentBean.setSupportsJS(supportsJS);
+
         componentBean.setReadOnly(readonly);
         RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse");
         componentBean.setRenderResponse(res);
