@@ -91,6 +91,7 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
                 + jdoUserRoles
                 + " userRole where userRole.role.Name='" + role.getName() + "'";
         users = pm.restoreList(oql);
+        System.err.println(oql);
         return (users != null) ? users : new ArrayList<User>();
     }
 

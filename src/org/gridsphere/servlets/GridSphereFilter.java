@@ -98,6 +98,7 @@ public class GridSphereFilter implements Filter {
                 try {
                     log.info("Starting a database transaction");
                     pm = pms.createGridSphereRdbms();
+                    pm.setClassLoader(Thread.currentThread().getContextClassLoader());
                     pm.beginTransaction();
 
                     RoleManagerService roleService = (RoleManagerService) PortletServiceFactory.createPortletService(RoleManagerService.class, true);

@@ -16,7 +16,10 @@ import org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceDefiniti
 
 import javax.servlet.ServletContext;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.List;
 
 /**
  * The <code>PortletServiceFactory</code> provides a factory for the creation
@@ -24,7 +27,7 @@ import java.util.*;
  * responsible for portlet service lifecycle management including
  * initialization and shutdown.
  */
-public class PortletServiceFactory  {
+public class PortletServiceFactory {
 
     private static PortletServiceFactory instance = null;
 
@@ -62,41 +65,13 @@ public class PortletServiceFactory  {
     }
 
     /**
-     * Adds services to the portlet service factory
-     *
-     * @param ctx the servlet context
-     * @param serviceCollection the portlet service collection
-     * @throws PortletServiceException if an error occurs instantiating the service class
-     */
-    public static void addServices(ServletContext ctx, PortletServiceCollection serviceCollection) throws PortletServiceException {
-        // check if services path represents a single file or a directory
-        Log log = LogFactory.getLog(PortletServiceFactory.class);
-        List<PortletServiceDefinition> services = serviceCollection.getPortletServicesList();
-        for (PortletServiceDefinition serviceDef : services) {
-            allServices.put(serviceDef.getServiceInterface(), serviceDef);
-            log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
-            serviceContexts.put(serviceDef.getServiceInterface(), ctx);
-        }
-        for (PortletServiceDefinition serviceDef : services) {
-            if (serviceDef.isLoadOnStartup()) {
-                log.debug("loading service : " + serviceDef.getServiceInterface());
-                try {
-                    createPortletService(Class.forName(serviceDef.getServiceImplementation()), true);
-                } catch (ClassNotFoundException e) {
-                    log.error("Unable to find class : " + serviceDef.getServiceImplementation());
-                }
-            }
-        }
-    }
-
-    /**
      * Umarshalls services from the descriptor file found in servicesPath
      * using the mapping file specified
      *
-     * @param webappName the name of the web application
-     * @param ctx the servlet context
+     * @param webappName        the name of the web application
+     * @param ctx               the servlet context
      * @param serviceCollection the collection of portlet service definitions
-     * @param loader the class loader
+     * @param loader            the class loader
      * @throws PortletServiceException if an error occurs instantiating the service class
      */
     public static void addServices(String webappName, ServletContext ctx, PortletServiceCollection serviceCollection, ClassLoader loader) throws PortletServiceException {
@@ -129,7 +104,7 @@ public class PortletServiceFactory  {
     /**
      * createPortletServiceFactory instantiates the given class and initializes it.
      *
-     * @param service the class of the service
+     * @param service          the class of the service
      * @param useCachedService if true will us an existing service instance if one exists, false will create a new instance
      * @return the instantiated portlet service
      * @throws PortletServiceUnavailableException
@@ -138,8 +113,8 @@ public class PortletServiceFactory  {
      *          if the PortletService is not found
      */
     public static PortletService createPortletService(Class service,
-                                               boolean useCachedService)
-        throws PortletServiceUnavailableException, PortletServiceNotFoundException {
+                                                      boolean useCachedService)
+            throws PortletServiceUnavailableException, PortletServiceNotFoundException {
 
         Log log = LogFactory.getLog(PortletServiceFactory.class);
 
@@ -175,8 +150,8 @@ public class PortletServiceFactory  {
         ServletContext ctx = serviceContexts.get(serviceName);
         PortletServiceConfig portletServiceConfig = new PortletServiceConfigImpl(def, ctx);
 
+        ClassLoader loader = classLoaders.get(serviceName);
         try {
-            ClassLoader loader = classLoaders.get(serviceName);
             if (loader != null) {
                 psp = (PortletServiceProvider) Class.forName(serviceImpl, true, loader).newInstance();
             } else {

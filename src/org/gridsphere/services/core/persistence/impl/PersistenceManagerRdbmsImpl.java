@@ -27,6 +27,8 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     private SessionFactory factory = null;
 
+    private ClassLoader classLoader;
+
     private final static int CMD_DELETE = 1;
     private final static int CMD_DELETE_LIST = 2;
     private final static int CMD_RESTORE = 3;
@@ -37,6 +39,10 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private final static int CMD_COUNT = 8;
 
     private String pm = null;
+
+    public void setClassLoader(ClassLoader loader) {
+        this.classLoader = loader;
+    }
 
     public PersistenceManagerRdbmsImpl(ServletContext context) {
         Properties prop = new Properties();
@@ -105,44 +111,6 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                         // Get filename of file or directory
                         log.debug("add hbm file :" + mappingPath + File.separator + filename);
                         cfg.addFile(mappingPath + File.separator + filename);
-                    }
-                }
-            }
-
-        } catch (MappingException e) {
-            log.error("Could not load Hibernate mapping files", e);
-        }
-
-        return cfg;
-    }
-
-    /**
-     * Load the mappingfiles from the given dirctory location
-     *
-     * @param mappingPath         the file path to find hibernate mapping files
-     * @param hibernateProperties the hibernate properties
-     * @return a hibernate configuration object
-     */
-    private Configuration loadConfiguration(String mappingPath, Properties hibernateProperties, ClassLoader loader) {
-        Configuration cfg = null;
-        try {
-            cfg = new Configuration();
-            cfg.setProperties(hibernateProperties);
-            File mappingdir = new File(mappingPath + "/../classes");
-            System.err.println(mappingdir.getAbsolutePath());
-            String[] children = mappingdir.list();
-
-            if (children != null) {
-                // Create list from children array
-                List<String> filenameList = Arrays.asList(children);
-                // Ensure that this list is sorted alphabetically
-                Collections.sort(filenameList);
-                for (Iterator filenames = filenameList.iterator(); filenames.hasNext();) {
-                    String filename = (String) filenames.next();
-                    if (filename.endsWith(".hbm.xml")) {
-                        // Get filename of file or directory
-                        log.debug("add hbm file :" + mappingPath + File.separator + filename);
-                        cfg.addResource(filename, loader);
                     }
                 }
             }
@@ -227,6 +195,8 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     }
 
     private Object doTransaction(Object object, String query, int command, QueryFilter queryFilter) throws HibernateException {
+        ClassLoader currentloader = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(classLoader);
         Object result = null;
         Query q = null;
         Session session = currentSession();
@@ -247,6 +217,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                 session.saveOrUpdate(object);
                 break;
             case CMD_RESTORE_LIST:
+
                 q = session.createQuery(query);
                 if (queryFilter != null) {
                     q.setFirstResult(queryFilter.getFirstResult());
@@ -263,6 +234,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                 result = (Long) q.uniqueResult();
                 break;
         }
+        Thread.currentThread().setContextClassLoader(currentloader);
         return result;
     }
 
@@ -277,10 +249,12 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     }
 
     public void beginTransaction() {
+        log.debug("begin transaction");
         currentSession().beginTransaction();
     }
 
     public void endTransaction() {
+        log.debug("end transaction");
         currentSession().getTransaction().commit();
         currentSession().close();
         sessionThread.set(null);

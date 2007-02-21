@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface PersistenceManagerRdbms {
 
+    public void setClassLoader(ClassLoader loader);
 
     public void beginTransaction();
 
@@ -62,7 +63,7 @@ public interface PersistenceManagerRdbms {
     /**
      * Restores objects from storage matching the query and the supplied query filter
      *
-     * @param query Query describing the objects
+     * @param query       Query describing the objects
      * @param queryFilter a query filter specifying a subset of the list of objects to return
      * @return list List of objects from OQL query
      * @throws PersistenceManagerException
@@ -70,7 +71,6 @@ public interface PersistenceManagerRdbms {
     public List restoreList(String query, QueryFilter queryFilter) throws PersistenceManagerException;
 
     /**
-     *
      * @param query Query describing the objects
      * @return the number of objects returned by the query
      * @throws PersistenceManagerException
