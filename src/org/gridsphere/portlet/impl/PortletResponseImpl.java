@@ -42,9 +42,9 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
     public PortletResponseImpl(HttpServletRequest req, HttpServletResponse res) {
         super(res);
         this.req = req;
-        Map map = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map map = (Map) req.getSession(true).getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (map == null) {
-            req.setAttribute(SportletProperties.PORTAL_PROPERTIES, new HashMap());
+            req.getSession(true).setAttribute(SportletProperties.PORTAL_PROPERTIES, new HashMap());
         }
     }
 
@@ -63,7 +63,7 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
      */
     public void addProperty(String key, String value) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
-        Map<String, List<String>> properties = (Map<String, List<String>>)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map<String, List<String>> properties = (Map<String, List<String>>) req.getSession(true).getAttribute(SportletProperties.PORTAL_PROPERTIES);
         List<String> vals = (List<String>) properties.get(key);
         if (vals == null) vals = new ArrayList<String>();
         if (!vals.contains(value)) vals.add(value);
@@ -85,7 +85,7 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
      */
     public void setProperty(String key, String value) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
-        Map<String, List<String>> properties = (Map<String, List<String>>)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map<String, List<String>> properties = (Map<String, List<String>>) req.getSession(true).getAttribute(SportletProperties.PORTAL_PROPERTIES);
         List<String> vals = new ArrayList<String>();
         vals.add(value);
         properties.put(key, vals);
