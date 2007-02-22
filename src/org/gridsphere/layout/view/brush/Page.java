@@ -63,7 +63,7 @@ public class Page extends BaseRender implements Render {
         page.append("\n\t<link type=\"text/css\" href=\"").append(req.getContextPath()).append("/css/yahoo/fonts.css\" rel=\"stylesheet\"/>");
 
         // Add portlet defined stylesheet if defined
-        Map props = (Map) req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map props = (Map) req.getPortletSession(true).getAttribute(SportletProperties.PORTAL_PROPERTIES, PortletSession.APPLICATION_SCOPE);
         if (props != null) {
             Object cssHrefObj = props.get("CSS_HREF");
             if ((cssHrefObj != null) && (cssHrefObj instanceof List)) {

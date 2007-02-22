@@ -7,6 +7,7 @@ package org.gridsphere.services.core.portal.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.gridsphere.layout.PortletPageFactory;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
@@ -40,6 +41,9 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
             propertiesOutputStream = new FileOutputStream(ctx.getRealPath(GRIDSPHERE_PROPERTIES));
             props = new Properties();
             props.load(propsStream);
+            // init config params here
+            String theme = getProperty(PortalConfigService.DEFAULT_THEME);
+            if (theme == null) setProperty(PortalConfigService.DEFAULT_THEME, PortletPageFactory.DEFAULT_THEME);
             props.store(propertiesOutputStream, "GridSphere Portal Properties");
         } catch (FileNotFoundException e) {
             log.error("Unable to find gridsphere.properties", e);
