@@ -404,7 +404,7 @@ public class UserManagerPortlet extends ActionPortlet {
         }
         try {
             mailService.sendMail(msg);
-            createErrorMessage(event, "Succesfully sent message");
+            createErrorMessage(event, "Successfully sent message");
             setNextState(req, "doListUsers");
         } catch (PortletServiceException e) {
             log.error("Unable to send mail message!", e);
@@ -625,7 +625,7 @@ public class UserManagerPortlet extends ActionPortlet {
         String subject = portalConfigService.getProperty("LOGIN_APPROVED_SUBJECT");
         if (subject == null) subject = getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
         mailToUser.setSubject(subject);
-
+        message.append("\n\n");
         message.append(getLocalizedText(req, "USERNAME")).append("\t");
         message.append(user.getUserName()).append("\n");
         message.append(getLocalizedText(req, "GIVENNAME")).append("\t");
@@ -638,7 +638,7 @@ public class UserManagerPortlet extends ActionPortlet {
         message.append(user.getEmailAddress()).append("\n");
         message.append("\n");
         message.append(getLocalizedText(req, "USER_PASSWD_MSG"));
-        message.append("\t").append(evt.getPasswordBean("password"));
+        message.append("\t").append(evt.getPasswordBean("password").getValue());
         mailToUser.setBody(message.toString());
         mailToUser.setEmailAddress(user.getEmailAddress());
         mailToUser.setSender(portalConfigService.getProperty(PortalConfigService.MAIL_FROM));
