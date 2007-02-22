@@ -641,7 +641,7 @@ public class UserManagerPortlet extends ActionPortlet {
         message.append("\t").append(evt.getPasswordBean("password"));
         mailToUser.setBody(message.toString());
         mailToUser.setEmailAddress(user.getEmailAddress());
-
+        mailToUser.setSender(portalConfigService.getProperty(PortalConfigService.MAIL_FROM));
         try {
             mailService.sendMail(mailToUser);
         } catch (PortletServiceException e) {
