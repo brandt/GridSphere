@@ -606,7 +606,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         setBufferedOutput(req, frame);
 
         // check if expiration was set in render response
-        Map props = (Map) req.getPortletSession().getAttribute(SportletProperties.PORTAL_PROPERTIES, PortletSession.APPLICATION_SCOPE);
+        Map props = (Map) req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (props != null) {
             List vals = (List) props.get(RenderResponse.EXPIRATION_CACHE);
             if (vals != null) {

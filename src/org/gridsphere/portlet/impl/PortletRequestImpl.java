@@ -60,10 +60,10 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             contextPath = contextPath.replace('\\', '/');
         }
 
-        Map<String, List> map = (Map<String, List>) getHttpServletRequest().getSession().getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map<String, List> map = (Map<String, List>) getHttpServletRequest().getAttribute(SportletProperties.PORTAL_PROPERTIES);
         if (map == null) {
             map = new HashMap<String, List>();
-            getHttpServletRequest().getSession(true).setAttribute(SportletProperties.PORTAL_PROPERTIES, new HashMap());
+            getHttpServletRequest().setAttribute(SportletProperties.PORTAL_PROPERTIES, new HashMap());
         }
 
         Enumeration e = getHttpServletRequest().getHeaderNames();
@@ -77,7 +77,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             }
             map.put(name, vals);
         }
-        getHttpServletRequest().getSession(true).setAttribute(SportletProperties.PORTAL_PROPERTIES, map);
+        getHttpServletRequest().setAttribute(SportletProperties.PORTAL_PROPERTIES, map);
 
         for (Enumeration parameters = super.getParameterNames(); parameters.hasMoreElements();) {
             String paramName = (String) parameters.nextElement();
@@ -289,7 +289,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public String getProperty(String name) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
-        Map props = (Map) getSession(true).getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map props = (Map) getAttribute(SportletProperties.PORTAL_PROPERTIES);
         Object o = props.get(name);
         if (o instanceof String) {
             return (String) o;
@@ -322,7 +322,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public java.util.Enumeration getProperties(String name) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
-        Map props = (Map) getSession(true).getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map props = (Map) getAttribute(SportletProperties.PORTAL_PROPERTIES);
         Object o = props.get(name);
         if (o instanceof List) {
             List l = (List) o;
@@ -342,7 +342,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *         no properties, an empty <code>Enumeration</code>.
      */
     public java.util.Enumeration getPropertyNames() {
-        Map props = (Map) getSession(true).getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        Map props = (Map) getAttribute(SportletProperties.PORTAL_PROPERTIES);
         return new Enumerator(props.keySet().iterator());
     }
 
