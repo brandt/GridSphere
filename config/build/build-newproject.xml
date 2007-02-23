@@ -1,5 +1,7 @@
 <project name="New Project" default="new-project" basedir=".">
 
+    <property file="build.properties"/>
+    <property name="version.release" value="${version.release}"/>
 
     <target name="check-project-exists">
         <condition property="new-project-exists">
@@ -20,6 +22,9 @@
         <echo message="Overwriting ${newproject.dir}/build.xml and copying existing ${newproject.dir}/build.xml to ${newproject.dir}/build.xml.bak"/>
         <copy file="${newproject.dir}/build.xml" tofile="${newproject.dir}/build.xml.bak" overwrite="true"/>
         <copy file="config/build/build.project.xml" tofile="${newproject.dir}/build.xml" overwrite="true"/>
+        <replace file="${newproject.dir}/build.xml"
+                 token="@GRIDSPHERE_VERSION@"
+                 value="${version.release}"/>
         <replace file="${newproject.dir}/build.xml"
                  token="@PROJECT_TITLE@"
                  value="${project.title}"/>
@@ -50,10 +55,10 @@
         <copy file="config/build/build.project.xml" tofile="${project.dir}/build.xml"/>
 
         <copy file="config/build/build.properties" tofile="${project.dir}/build.properties" filtering="true"/>
-        <replace file="${project.dir}/build.properties"
-                 token="@GRIDSPHERE_HOME@"
-                 value="${GRIDSPHERE_HOME}"/>
 
+        <replace file="${newproject.dir}/build.xml"
+                 token="@GRIDSPHERE_VERSION@"
+                 value="${version.release}"/>
         <replace file="${project.dir}/build.properties"
                  token="@PROJECT_TITLE@"
                  value="${project.title}"/>

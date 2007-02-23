@@ -1,9 +1,9 @@
 <!-- =======================================================================
 
-   GridSphere generated build file 
+   GridSphere @GRIDSPHERE_VERSION@ generated build file
 
 Notes:
-   This is a build file for use with the Jakarta Ant build tool.
+   This is a build file for use with the Ant build tool.
 
 Prerequisites:
 
@@ -13,7 +13,7 @@ Build Instructions:
    To build, invoke "ant"
 
 Copyright:
-  2002,2003
+  2002-2007
 
 - $Id$
 
