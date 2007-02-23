@@ -244,7 +244,6 @@ public class PortletPageFactory implements PortletSessionListener {
         String layoutId = layoutDesc.substring(layoutDesc.lastIndexOf(File.separator) + 1, layoutDesc.lastIndexOf(".xml"));
         log.debug("saving layout: " + layoutId);
 
-
         try {
             PortletLayoutDescriptor.saveLayoutComponent(page, layoutDesc, LAYOUT_MAPPING_PATH);
             masterLayouts.put(layoutId, page);
@@ -281,7 +280,12 @@ public class PortletPageFactory implements PortletSessionListener {
                 //System.err.println("user page");
                 layoutId = USER_PAGE;
             }
-            if (event.getLayoutID() != null) layoutId = event.getLayoutID();
+            if (event.getLayoutID() != null) {
+                layoutId = event.getLayoutID();
+                // make sure if user has logged in and URL specifies guest page, then user gets directed to user page
+                if (layoutId.equals(GUEST_PAGE) && (req.getUserPrincipal() != null)) layoutId = USER_PAGE;
+            }
+
             req.setAttribute(SportletProperties.LAYOUT_PAGE, layoutId);
         }
         return getPortletPageFromHash(req, layoutId);
