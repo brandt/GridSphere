@@ -45,7 +45,7 @@ public class PortletURLImpl implements PortletURL {
     private boolean isSecure = false;
     private Map<String, Object> store = null;
     private boolean redirect = false;
-
+    private boolean encoding = true;
     private boolean isRender = false;
     private String label = null;
 
@@ -289,6 +289,14 @@ public class PortletURLImpl implements PortletURL {
         this.isSecure = secure;
     }
 
+    public void setEncoding(boolean encoding) {
+        this.encoding = encoding;
+    }
+
+    public boolean isEncoding() {
+        return encoding;
+    }
+
     /**
      * Returns the portlet URL string representation to be embedded in the
      * markup.<br>
@@ -448,10 +456,12 @@ public class PortletURLImpl implements PortletURL {
                 System.err.println("Unable to support UTF-8 encoding!");
             }
 
-            if (redirect) {
-                url = res.encodeRedirectURL(url);
-            } else {
-                url = res.encodeURL(url);
+            if (encoding) {
+                if (redirect) {
+                    url = res.encodeRedirectURL(url);
+                } else {
+                    url = res.encodeURL(url);
+                }
             }
         }
         s.append(url);
