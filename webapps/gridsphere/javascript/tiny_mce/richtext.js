@@ -1,5 +1,6 @@
 tinyMCE.init({
-	mode : "exact",
+    mode : "exact",
     elements : "gridsphere-richtext",
-    theme : "advanced"
+    theme : "advanced",
+    convert_urls : false
 });
