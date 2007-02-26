@@ -284,12 +284,7 @@ public class PortletServlet extends HttpServlet
                 if (userInfo.containsKey(key)) userInfo.put(key, (String) user.getAttribute(key));
             }
 
-            UserAttribute[] userAttrs = portletWebApp.getUserAttributes();
-            for (int i = 0; i < userAttrs.length; i++) {
-                UserAttribute userAttr = userAttrs[i];
-                String name = userAttr.getName().getContent();
-                userInfo.put(name, "");
-            }
+
             request.setAttribute(PortletRequest.USER_INFO, userInfo);
         }
 
