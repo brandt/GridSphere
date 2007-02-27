@@ -450,6 +450,8 @@ public class LoginPortlet extends ActionPortlet {
             //invalid user, an exception was thrown
             //back to edit
             log.error("Could not create account: ", e);
+            MessageBoxBean msg = evt.getMessageBoxBean("msg");
+            msg.setValue(e.getMessage());
             setNextState(req, "doNewUser");
         }
     }
