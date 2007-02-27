@@ -69,7 +69,6 @@ public class LoginPortlet extends ActionPortlet {
     private String activateAccountURL = null;
     private String denyAccountURL = null;
     private String redirectURL = null;
-    private String logoutURL = null;
 
     public void init(PortletConfig config) throws PortletException {
 
@@ -96,31 +95,30 @@ public class LoginPortlet extends ActionPortlet {
         if (newpasswordURL == null) {
             PortletURL url = response.createActionURL();
             ((PortletURLImpl) url).setAction("newpassword");
-            ((PortletURLImpl) url).setLayout("guest");
+            ((PortletURLImpl) url).setLayout("register");
+            ((PortletURLImpl) url).setEncoding(false);
             newpasswordURL = url.toString();
         }
 
         if (redirectURL == null) {
             PortletURL url = response.createRenderURL();
             ((PortletURLImpl) url).setLayout(PortletPageFactory.USER_PAGE);
+            ((PortletURLImpl) url).setEncoding(false);
             redirectURL = url.toString();
-        }
-
-        if (logoutURL == null) {
-            PortletURL url = response.createRenderURL();
-            logoutURL = url.toString();
         }
 
         if (activateAccountURL == null) {
             PortletURL url = response.createActionURL();
             ((PortletURLImpl) url).setAction("approveAccount");
-            ((PortletURLImpl) url).setLayout("guest");
+            ((PortletURLImpl) url).setLayout("register");
             ((PortletURLImpl) url).setEncoding(false);
             activateAccountURL = url.toString();
         }
         if (denyAccountURL == null) {
             PortletURL url = response.createActionURL();
             ((PortletURLImpl) url).setAction("denyAccount");
+            ((PortletURLImpl) url).setLayout("register");
+            ((PortletURLImpl) url).setEncoding(false);
             denyAccountURL = url.toString();
         }
         PasswordBean pass = event.getPasswordBean("password");
