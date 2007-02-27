@@ -799,7 +799,7 @@ public class LoginPortlet extends ActionPortlet {
 
             MailMessage mailToUser = new MailMessage();
             mailToUser.setEmailAddress(user.getEmailAddress());
-
+            mailToUser.setSender(portalConfigService.getProperty(PortalConfigService.MAIL_FROM));
             mailToUser.setSubject(subject);
             StringBuffer msgbody = new StringBuffer();
 
