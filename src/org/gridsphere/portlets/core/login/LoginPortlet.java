@@ -688,6 +688,7 @@ public class LoginPortlet extends ActionPortlet {
         requestService.saveRequest(request);
 
         MailMessage mailToUser = new MailMessage();
+        mailToUser.setSender(portalConfigService.getProperty(PortalConfigService.MAIL_FROM));
         StringBuffer body = new StringBuffer();
 
         String activateURL = activateAccountURL + "&reqid=" + request.getOid();
