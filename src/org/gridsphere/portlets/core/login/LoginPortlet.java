@@ -415,17 +415,18 @@ public class LoginPortlet extends ActionPortlet {
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
         }
-        String adminApproval = portalConfigService.getProperty("ADMIN_ACCOUNT_APPROVAL");
-        if (adminApproval.equals(Boolean.TRUE.toString())) {
-            msg.setKey("LOGIN_ACCOUNT_CREATE_APPROVAL");
-        } else {
-            msg.setKey("LOGIN_CREATE_ACCT");
-        }
 
         String error = (String) req.getPortletSession(true).getAttribute("error");
         if (error != null) {
             msg.setValue(error);
             req.getPortletSession(true).removeAttribute("error");
+        } else {
+            String adminApproval = portalConfigService.getProperty("ADMIN_ACCOUNT_APPROVAL");
+            if (adminApproval.equals(Boolean.TRUE.toString())) {
+                msg.setKey("LOGIN_ACCOUNT_CREATE_APPROVAL");
+            } else {
+                msg.setKey("LOGIN_CREATE_ACCT");
+            }
         }
 
         res.setTitle("Create Account");
