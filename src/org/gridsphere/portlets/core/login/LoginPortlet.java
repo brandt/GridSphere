@@ -96,6 +96,7 @@ public class LoginPortlet extends ActionPortlet {
         if (newpasswordURL == null) {
             PortletURL url = response.createActionURL();
             ((PortletURLImpl) url).setAction("newpassword");
+            ((PortletURLImpl) url).setLayout("guest");
             newpasswordURL = url.toString();
         }
 
@@ -113,6 +114,8 @@ public class LoginPortlet extends ActionPortlet {
         if (activateAccountURL == null) {
             PortletURL url = response.createActionURL();
             ((PortletURLImpl) url).setAction("approveAccount");
+            ((PortletURLImpl) url).setLayout("guest");
+            ((PortletURLImpl) url).setEncoding(false);
             activateAccountURL = url.toString();
         }
         if (denyAccountURL == null) {
@@ -659,8 +662,8 @@ public class LoginPortlet extends ActionPortlet {
     }
 
     public void notifyNewUser(ActionFormEvent evt) throws PortletException {
-        PortletRequest req = evt.getActionRequest();
-
+        ActionRequest req = evt.getActionRequest();
+        ActionResponse res = evt.getActionResponse();
         TextFieldBean emailTF = evt.getTextFieldBean("emailAddress");
 
         // create a request
