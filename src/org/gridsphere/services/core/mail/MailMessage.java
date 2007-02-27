@@ -131,10 +131,10 @@ public class MailMessage {
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("subject= ").append(subject);
-        sb.append("emailAddress= ").append(emailAddress);
-        sb.append("sender= ").append(sender);
-        sb.append("body= ").append(body);
+        sb.append("\nsubject= ").append(subject);
+        sb.append("\nemailAddress= ").append(emailAddress);
+        sb.append("\nsender= ").append(sender);
+        sb.append("\nbody= ").append(body);
         return sb.toString();
     }
 }
