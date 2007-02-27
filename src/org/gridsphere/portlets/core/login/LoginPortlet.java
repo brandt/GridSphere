@@ -410,7 +410,8 @@ public class LoginPortlet extends ActionPortlet {
         RenderRequest req = evt.getRenderRequest();
         RenderResponse res = evt.getRenderResponse();
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
-
+        String error = req.getParameter("error");
+        if (error != null) msg.setValue("error");
         String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
@@ -429,8 +430,8 @@ public class LoginPortlet extends ActionPortlet {
 
     public void doConfirmEditUser(ActionFormEvent evt)
             throws PortletException {
-        PortletRequest req = evt.getActionRequest();
-
+        ActionRequest req = evt.getActionRequest();
+        ActionResponse res = evt.getActionResponse();
         String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
@@ -450,8 +451,7 @@ public class LoginPortlet extends ActionPortlet {
             //invalid user, an exception was thrown
             //back to edit
             log.error("Could not create account: ", e);
-            MessageBoxBean msg = evt.getMessageBoxBean("msg");
-            msg.setValue(e.getMessage());
+            res.setRenderParameter("error", e.getMessage());
             setNextState(req, "doNewUser");
         }
     }
