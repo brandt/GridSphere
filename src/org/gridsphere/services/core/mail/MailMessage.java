@@ -128,4 +128,13 @@ public class MailMessage {
     public void setRecipientType(String recType) {
         this.recType = recType;
     }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("subject= ").append(subject);
+        sb.append("emailAddress= ").append(emailAddress);
+        sb.append("sender= ").append(sender);
+        sb.append("body= ").append(body);
+        return sb.toString();
+    }
 }

@@ -13,7 +13,6 @@ import org.gridsphere.services.core.mail.MailService;
 import org.gridsphere.services.core.portal.PortalConfigService;
 
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -23,7 +22,6 @@ import java.util.Properties;
 
 /**
  * <code>MailServiceImpl</code> is a mail utility used to send {@link org.gridsphere.services.core.mail.MailMessage}s.
- *
  */
 public class MailServiceImpl implements PortletServiceProvider, MailService {
 
@@ -40,7 +38,7 @@ public class MailServiceImpl implements PortletServiceProvider, MailService {
      * Send an email regarding job completion
      *
      * @param msg the MailMessage containing e-mail parameters
-     * @throws MessagingException if a an error occurs sending the message
+     * @throws PortletServiceException if an error occurs sending the message
      */
     public void sendMail(MailMessage msg) throws PortletServiceException {
         Properties props = System.getProperties();
@@ -51,6 +49,8 @@ public class MailServiceImpl implements PortletServiceProvider, MailService {
         Session session = Session.getDefaultInstance(props, null);
         session.setDebug(true);
         Message mimeMessage = new MimeMessage(session);
+        System.err.println(msg.toString());
+
         try {
             InternetAddress from = new InternetAddress(msg.getSender());
             InternetAddress to[] = InternetAddress.parse(msg.getEmailAddress());
