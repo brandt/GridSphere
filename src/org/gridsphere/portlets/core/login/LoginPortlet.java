@@ -810,7 +810,7 @@ public class LoginPortlet extends ActionPortlet {
             try {
                 mailService.sendMail(mailToUser);
             } catch (PortletServiceException e) {
-                log.error("Error: " + e.getMessage());
+                log.error("Error: ", e);
                 createErrorMessage(event, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
             }
         }
