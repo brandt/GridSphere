@@ -410,11 +410,7 @@ public class LoginPortlet extends ActionPortlet {
         RenderRequest req = evt.getRenderRequest();
         RenderResponse res = evt.getRenderResponse();
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
-        String error = (String) req.getPortletSession(true).getAttribute("error");
-        if (error != null) {
-            msg.setValue(error);
-            req.getPortletSession(true).removeAttribute("error");
-        }
+
         String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
@@ -424,6 +420,12 @@ public class LoginPortlet extends ActionPortlet {
             msg.setKey("LOGIN_ACCOUNT_CREATE_APPROVAL");
         } else {
             msg.setKey("LOGIN_CREATE_ACCT");
+        }
+
+        String error = (String) req.getPortletSession(true).getAttribute("error");
+        if (error != null) {
+            msg.setValue(error);
+            req.getPortletSession(true).removeAttribute("error");
         }
 
         res.setTitle("Create Account");
