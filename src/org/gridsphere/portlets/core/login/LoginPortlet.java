@@ -410,8 +410,11 @@ public class LoginPortlet extends ActionPortlet {
         RenderRequest req = evt.getRenderRequest();
         RenderResponse res = evt.getRenderResponse();
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
-        String error = req.getParameter("error");
-        if (error != null) msg.setValue("error");
+        String error = (String) req.getPortletSession(true).getAttribute("error");
+        if (error != null) {
+            msg.setValue(error);
+            req.getPortletSession(true).removeAttribute("error");
+        }
         String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
@@ -451,7 +454,7 @@ public class LoginPortlet extends ActionPortlet {
             //invalid user, an exception was thrown
             //back to edit
             log.error("Could not create account: ", e);
-            res.setRenderParameter("error", e.getMessage());
+            req.getPortletSession(true).setAttribute("error", e.getMessage());
             setNextState(req, "doNewUser");
         }
     }
