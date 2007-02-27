@@ -320,8 +320,10 @@ public class PortletURLImpl implements PortletURL {
 
         if (hostname == null || hostname.equals("")) hostname = req.getServerName();
         s.append(hostname);
-        s.append(":");
-        s.append((!port.equals("")) ? port : String.valueOf(req.getServerPort()));
+        if (!port.equals("80") && (!port.equals("443"))) {
+            s.append(":");
+            s.append((!port.equals("")) ? port : String.valueOf(req.getServerPort()));
+        }
 
         // if underlying window state is floating then set it in the URI
         if (req.getAttribute(SportletProperties.FLOAT_STATE) != null) {
