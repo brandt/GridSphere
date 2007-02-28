@@ -189,7 +189,7 @@ public class LoginPortlet extends ActionPortlet {
 
         body.append(newpasswordURL).append("&reqid=").append(request.getOid());
         mailToUser.setBody(body.toString());
-
+        mailToUser.setSender(portalConfigService.getProperty(PortalConfigService.MAIL_FROM));
         try {
             mailService.sendMail(mailToUser);
             createSuccessMessage(evt, this.getLocalizedText(req, "LOGIN_SUCCESS_MAIL"));
