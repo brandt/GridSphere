@@ -336,23 +336,6 @@ public class PortletURLImpl implements PortletURL {
         //String servletPath = req.getServletPath();
         String url = contextPath + servletPath;
 
-        //System.err.println("\n\n\nContext path=" + contextPath);
-        /*
-         String layoutId = (String)req.getAttribute(SportletProperties.LAYOUT_PAGE);
-         if (layoutId != null) {
-             //System.err.println("layoutId=" + layoutId);
-             store.put(SportletProperties.LAYOUT_PAGE_PARAM, layoutId);
-         }
-         String compVar = (String)req.getAttribute(SportletProperties.COMPONENT_ID_VAR);
-             if (compVar == null) compVar = SportletProperties.COMPONENT_ID;
-             String cid = (String)req.getAttribute(compVar);
-             store.put(compVar, cid);
-         String action = (String)store.get(SportletProperties.DEFAULT_PORTLET_ACTION);
-                 if (action != null) {
-                     store.put(SportletProperties.DEFAULT_PORTLET_ACTION, action);
-                 }
-        */
-        ///////////  JASON ADDED BELOW
         String cid = (String) req.getAttribute(SportletProperties.COMPONENT_ID);
         /*
           This bit of jiggery is here only for the LayoutManager portlet currently.
@@ -398,7 +381,6 @@ public class PortletURLImpl implements PortletURL {
             */
             // if a label exists, use it instead
             if (label != null) cid = label;
-            //if (layout != null) cid = null;
 
             if (cid != null) {
                 url += "/" + cid;

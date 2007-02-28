@@ -1,6 +1,5 @@
 package org.gridsphere.portlets.core.registration;
 
-import org.gridsphere.layout.PortletPageFactory;
 import org.gridsphere.portlet.impl.PortletURLImpl;
 import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
@@ -42,11 +41,8 @@ public class SignupPortlet extends ActionPortlet {
     private RequestService requestService = null;
     private MailService mailService = null;
 
-    private String notificationURL = null;
-    private String newpasswordURL = null;
-    private String activateAccountURL = null;
-    private String denyAccountURL = null;
-    private String redirectURL = null;
+    private PortletURL activateAccountURL = null;
+    private PortletURL denyAccountURL = null;
 
     public void init(PortletConfig config) throws PortletException {
 
@@ -75,44 +71,21 @@ public class SignupPortlet extends ActionPortlet {
         RenderRequest req = evt.getRenderRequest();
         RenderResponse res = evt.getRenderResponse();
 
-        if (notificationURL == null) notificationURL = res.createActionURL().toString();
-
-        if (newpasswordURL == null) {
-            PortletURL url = res.createActionURL();
-            ((PortletURLImpl) url).setAction("newpassword");
-            ((PortletURLImpl) url).setLayout("register");
-            //((PortletURLImpl) url).setLabel("register");
-            ((PortletURLImpl) url).setEncoding(false);
-            newpasswordURL = url.toString();
-        }
-
-        if (redirectURL == null) {
-            PortletURL url = res.createRenderURL();
-            ((PortletURLImpl) url).setLayout(PortletPageFactory.USER_PAGE);
-            ((PortletURLImpl) url).setEncoding(false);
-            redirectURL = url.toString();
-        }
-
         if (activateAccountURL == null) {
-            PortletURL url = res.createActionURL();
-            ((PortletURLImpl) url).setAction("approveAccount");
-            ((PortletURLImpl) url).setLayout("register");
-            //((PortletURLImpl) url).setLabel("register");
-            ((PortletURLImpl) url).setEncoding(false);
-            activateAccountURL = url.toString();
+            activateAccountURL = res.createRenderURL();
+            ((PortletURLImpl) activateAccountURL).setRender("approveAccount");
+            ((PortletURLImpl) activateAccountURL).setLayout("register");
+            ((PortletURLImpl) activateAccountURL).setEncoding(false);
         }
         if (denyAccountURL == null) {
-            PortletURL url = res.createActionURL();
-            ((PortletURLImpl) url).setAction("denyAccount");
-            ((PortletURLImpl) url).setLayout("register");
-            //((PortletURLImpl) url).setLabel("register");
-            ((PortletURLImpl) url).setEncoding(false);
-            denyAccountURL = url.toString();
+            denyAccountURL = res.createRenderURL();
+            ((PortletURLImpl) denyAccountURL).setRender("denyAccount");
+            ((PortletURLImpl) denyAccountURL).setLayout("register");
+            ((PortletURLImpl) denyAccountURL).setEncoding(false);
         }
 
         boolean canUserCreateAccount = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.CAN_USER_CREATE_ACCOUNT)).booleanValue();
         if (!canUserCreateAccount) return;
-
 
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
 
@@ -133,8 +106,6 @@ public class SignupPortlet extends ActionPortlet {
                 msg.setKey("LOGIN_CREATE_ACCT");
             }
         }
-
-        res.setTitle("Create Account");
         setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
         log.debug("in doViewNewUser");
     }
@@ -142,7 +113,6 @@ public class SignupPortlet extends ActionPortlet {
     public void doConfirmEditUser(ActionFormEvent evt)
             throws PortletException {
         ActionRequest req = evt.getActionRequest();
-        ActionResponse res = evt.getActionResponse();
         String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
         if (savePasswds.equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
@@ -163,7 +133,7 @@ public class SignupPortlet extends ActionPortlet {
             //back to edit
             log.error("Could not create account: ", e);
             req.getPortletSession(true).setAttribute("error", e.getMessage());
-            setNextState(req, "doNewUser");
+            setNextState(req, DEFAULT_VIEW_PAGE);
         }
     }
 
@@ -293,17 +263,13 @@ public class SignupPortlet extends ActionPortlet {
         }
 
         // Save user role
-        saveUserRole(newuser);
-        log.debug("Exiting saveUser()");
-        return newuser;
-    }
-
-    private void saveUserRole(User user) {
-        log.debug("Entering saveUserRole()");
         List<PortletRole> defaultRoles = roleService.getDefaultRoles();
         for (PortletRole role : defaultRoles) {
-            roleService.addUserToRole(user, role);
+            roleService.addUserToRole(newuser, role);
         }
+
+        log.debug("Exiting saveUser()");
+        return newuser;
     }
 
 
@@ -340,9 +306,11 @@ public class SignupPortlet extends ActionPortlet {
         mailToUser.setSender(portalConfigService.getProperty(PortalConfigService.MAIL_FROM));
         StringBuffer body = new StringBuffer();
 
-        String activateURL = activateAccountURL + "&reqid=" + request.getOid();
+        PortletURL activateURL = activateAccountURL;
+        activateURL.setParameter("reqid", request.getOid());
 
-        String denyURL = denyAccountURL + "&reqid=" + request.getOid();
+        PortletURL denyURL = denyAccountURL;
+        denyURL.setParameter("reqid", request.getOid());
 
         // check if this account request should be approved by an administrator
         boolean accountApproval = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.ADMIN_ACCOUNT_APPROVAL)).booleanValue();
@@ -402,8 +370,9 @@ public class SignupPortlet extends ActionPortlet {
 
     }
 
-    private void doEmailAction(ActionFormEvent event, String msg, boolean createAccount) {
-        PortletRequest req = event.getActionRequest();
+    private void doEmailAction(RenderFormEvent event, String msg, boolean createAccount) {
+        RenderRequest req = event.getRenderRequest();
+        RenderResponse res = event.getRenderResponse();
         String id = req.getParameter("reqid");
         User user = null;
         Request request = requestService.getRequest(id, ACTIVATE_ACCOUNT_LABEL);
@@ -437,6 +406,8 @@ public class SignupPortlet extends ActionPortlet {
             mailToUser.setSubject(subject);
             StringBuffer msgbody = new StringBuffer();
 
+            String notificationURL = res.createRenderURL().toString();
+
             msgbody.append(body).append("\n\n");
             msgbody.append(notificationURL);
             mailToUser.setBody(body.toString());
@@ -452,21 +423,21 @@ public class SignupPortlet extends ActionPortlet {
 
     }
 
-    public void activate(ActionFormEvent event) {
-        PortletRequest req = event.getActionRequest();
+    public void activate(RenderFormEvent event) {
+        PortletRequest req = event.getRenderRequest();
         String msg = this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
                 "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN");
         doEmailAction(event, msg, true);
     }
 
-    public void approveAccount(ActionFormEvent event) {
-        PortletRequest req = event.getActionRequest();
+    public void approveAccount(RenderFormEvent event) {
+        PortletRequest req = event.getRenderRequest();
         String msg = this.getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
         doEmailAction(event, msg, true);
     }
 
-    public void denyAccount(ActionFormEvent event) {
-        PortletRequest req = event.getActionRequest();
+    public void denyAccount(RenderFormEvent event) {
+        PortletRequest req = event.getRenderRequest();
         String msg = this.getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_DENY");
         doEmailAction(event, msg, false);
     }
