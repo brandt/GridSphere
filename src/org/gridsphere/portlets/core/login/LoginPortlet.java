@@ -96,7 +96,7 @@ public class LoginPortlet extends ActionPortlet {
             PortletURL url = response.createActionURL();
             ((PortletURLImpl) url).setAction("newpassword");
             ((PortletURLImpl) url).setLayout("register");
-            ((PortletURLImpl) url).setLabel("register");
+            //((PortletURLImpl) url).setLabel("register");
             ((PortletURLImpl) url).setEncoding(false);
             newpasswordURL = url.toString();
         }
@@ -112,7 +112,7 @@ public class LoginPortlet extends ActionPortlet {
             PortletURL url = response.createActionURL();
             ((PortletURLImpl) url).setAction("approveAccount");
             ((PortletURLImpl) url).setLayout("register");
-            ((PortletURLImpl) url).setLabel("register");
+            //((PortletURLImpl) url).setLabel("register");
             ((PortletURLImpl) url).setEncoding(false);
             activateAccountURL = url.toString();
         }
@@ -120,7 +120,7 @@ public class LoginPortlet extends ActionPortlet {
             PortletURL url = response.createActionURL();
             ((PortletURLImpl) url).setAction("denyAccount");
             ((PortletURLImpl) url).setLayout("register");
-            ((PortletURLImpl) url).setLabel("register");
+            //((PortletURLImpl) url).setLabel("register");
             ((PortletURLImpl) url).setEncoding(false);
             denyAccountURL = url.toString();
         }
