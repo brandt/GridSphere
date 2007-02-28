@@ -25,6 +25,8 @@ import org.gridsphere.services.core.security.auth.AuthModuleService;
 import org.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
+import org.gridsphere.services.core.security.password.PasswordEditor;
+import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
 
@@ -54,6 +56,7 @@ public class LoginPortlet extends ActionPortlet {
     private RequestService requestService = null;
     private MailService mailService = null;
     private AuthModuleService authModuleService = null;
+    private PasswordManagerService passwordManagerService = null;
 
     private PortalFilterService portalFilterService = null;
 
@@ -62,16 +65,14 @@ public class LoginPortlet extends ActionPortlet {
 
 
     public void init(PortletConfig config) throws PortletException {
-
         super.init(config);
-
         userManagerService = (UserManagerService) createPortletService(UserManagerService.class);
         requestService = (RequestService) createPortletService(RequestService.class);
         mailService = (MailService) createPortletService(MailService.class);
         portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
         portalFilterService = (PortalFilterService) createPortletService(PortalFilterService.class);
         authModuleService = (AuthModuleService) createPortletService(AuthModuleService.class);
-
+        passwordManagerService = (PasswordManagerService) createPortletService(PasswordManagerService.class);
         DEFAULT_VIEW_PAGE = "doViewUser";
     }
 
@@ -441,6 +442,53 @@ public class LoginPortlet extends ActionPortlet {
             setNextState(req, DO_NEW_PASSWORD);
         } else {
             setNextState(req, DEFAULT_VIEW_PAGE);
+        }
+    }
+
+    public void doSavePass(ActionFormEvent event) {
+
+        PortletRequest req = event.getActionRequest();
+
+        HiddenFieldBean reqid = event.getHiddenFieldBean("reqid");
+        String id = reqid.getValue();
+        Request request = requestService.getRequest(id, FORGOT_PASSWORD_LABEL);
+        if (request != null) {
+            String uid = request.getUserID();
+            User user = userManagerService.getUser(uid);
+            passwordManagerService.editPassword(user);
+            String passwordValue = event.getPasswordBean("password").getValue();
+            String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
+
+            if (passwordValue == null) {
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
+                setNextState(req, DO_NEW_PASSWORD);
+                return;
+            }
+
+            // Otherwise, password must match confirmation
+            if (!passwordValue.equals(confirmPasswordValue)) {
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_MISMATCH"));
+                setNextState(req, DO_NEW_PASSWORD);
+                // If they do match, then validate password with our service
+            } else {
+                if (passwordValue.length() == 0) {
+                    createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
+                    setNextState(req, DO_NEW_PASSWORD);
+                } else if (passwordValue.length() < 5) {
+                    System.err.println("length < 5 password= " + passwordValue);
+                    createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT"));
+                    setNextState(req, DO_NEW_PASSWORD);
+                } else {
+                    // save password
+                    //System.err.println("saving password= " + passwordValue);
+                    PasswordEditor editPasswd = passwordManagerService.editPassword(user);
+                    editPasswd.setValue(passwordValue);
+                    editPasswd.setDateLastModified(Calendar.getInstance().getTime());
+                    passwordManagerService.savePassword(editPasswd);
+                    createSuccessMessage(event, this.getLocalizedText(req, "USER_PASSWORD_SUCCESS"));
+                    requestService.deleteRequest(request);
+                }
+            }
         }
     }
 
