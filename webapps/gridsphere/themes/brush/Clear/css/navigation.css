@@ -20,6 +20,7 @@
     margin: 0;
     padding: 0;
     font-family: "Lucida Grande", sans-serif;
+    font-size: small;
 }
 
 #gridsphere-nav .nav-nonsel a {
@@ -78,8 +79,7 @@
     width: 100%;
     margin: 0;
     padding: 0 0 0 0px;
-    list-style: none;
-/*    border-bottom: 1px solid #BBBBBB;*/
+    list-style: none; /*    border-bottom: 1px solid #BBBBBB;*/
     background: #FFFFFF;
 }
 
@@ -88,6 +88,7 @@
     margin: 0;
     padding: 0;
     font-family: "Lucida Grande", sans-serif;
+    font-size: small;
     color: #000;
 }
 
