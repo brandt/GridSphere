@@ -11,7 +11,7 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:rendersubmit render="doNewUser" key="OK"/>
+                <ui:rendersubmit layout="login" key="LOGIN"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
