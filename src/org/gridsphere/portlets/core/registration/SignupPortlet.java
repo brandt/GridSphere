@@ -445,14 +445,14 @@ public class SignupPortlet extends ActionPortlet {
         PortletRequest req = event.getActionRequest();
         String msg = this.getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
         doEmailAction(event, msg, true);
-        setNextState(req, "signup/approveAccount.jsp");
+        setNextState(req, "signup/approve.jsp");
     }
 
     public void denyAccount(ActionFormEvent event) {
         PortletRequest req = event.getActionRequest();
         String msg = this.getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_DENY");
         doEmailAction(event, msg, false);
-        setNextState(req, "signup/denyAccount.jsp");
+        setNextState(req, "signup/deny.jsp");
     }
 
 
