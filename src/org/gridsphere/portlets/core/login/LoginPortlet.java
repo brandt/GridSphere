@@ -120,6 +120,7 @@ public class LoginPortlet extends ActionPortlet {
             PortletURL url = response.createActionURL();
             ((PortletURLImpl) url).setAction("denyAccount");
             ((PortletURLImpl) url).setLayout("register");
+            ((PortletURLImpl) url).setLabel("register");
             ((PortletURLImpl) url).setEncoding(false);
             denyAccountURL = url.toString();
         }
