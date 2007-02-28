@@ -110,7 +110,7 @@ public class SignupPortlet extends ActionPortlet {
         log.debug("in doViewNewUser");
     }
 
-    public void doConfirmEditUser(ActionFormEvent evt)
+    public void doSaveAccount(ActionFormEvent evt)
             throws PortletException {
         ActionRequest req = evt.getActionRequest();
         String savePasswds = portalConfigService.getProperty(PortalConfigService.SAVE_PASSWORDS);
@@ -127,7 +127,7 @@ public class SignupPortlet extends ActionPortlet {
             //new and valid user and will save it
             notifyNewUser(evt);
 
-            setNextState(req, DEFAULT_VIEW_PAGE);
+            setNextState(req, "doConfirmSave");
         } catch (PortletException e) {
             //invalid user, an exception was thrown
             //back to edit
@@ -135,6 +135,12 @@ public class SignupPortlet extends ActionPortlet {
             req.getPortletSession(true).setAttribute("error", e.getMessage());
             setNextState(req, DEFAULT_VIEW_PAGE);
         }
+    }
+
+    public void doConfirmSave(RenderFormEvent evt) {
+        MessageBoxBean msg = evt.getMessageBoxBean("msg");
+        msg.setKey("SIGNUP_CONFIRM");
+        setNextState(evt.getRenderRequest(), "signup/confirmsave.jsp");
     }
 
     private void validateUser(ActionFormEvent event)

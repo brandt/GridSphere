@@ -89,7 +89,7 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doConfirmEditUser" key="SAVE"/>
+                <ui:actionsubmit action="doSaveAccount" key="SAVE"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
