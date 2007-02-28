@@ -5,7 +5,7 @@
 
 <ui:form>
 
-    <ui:messagebox beanId="msg"/>
+    <ui:messagebox key="LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED"/>
 
 
     <ui:frame>
