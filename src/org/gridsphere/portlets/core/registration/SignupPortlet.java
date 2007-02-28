@@ -78,14 +78,14 @@ public class SignupPortlet extends ActionPortlet {
 
         if (activateAccountURL == null) {
             PortletURL accountURL = res.createActionURL();
-            ((PortletURLImpl) accountURL).setRender("approveAccount");
+            ((PortletURLImpl) accountURL).setAction("approveAccount");
             ((PortletURLImpl) accountURL).setLayout("register");
             ((PortletURLImpl) accountURL).setEncoding(false);
             activateAccountURL = accountURL.toString();
         }
         if (denyAccountURL == null) {
             PortletURL denyURL = res.createActionURL();
-            ((PortletURLImpl) denyURL).setRender("denyAccount");
+            ((PortletURLImpl) denyURL).setAction("denyAccount");
             ((PortletURLImpl) denyURL).setLayout("register");
             ((PortletURLImpl) denyURL).setEncoding(false);
             denyAccountURL = denyURL.toString();
