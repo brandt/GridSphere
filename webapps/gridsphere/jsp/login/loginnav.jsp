@@ -8,13 +8,13 @@
 <div class="gridsphere-navbar">
     <ul>
         <li>
-            <ui:renderlink layout="login" value="Login"/>
+            <ui:renderlink layout="login" key="LOGIN_ACTION"/>
         </li>
         <% PortalConfigService portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
             if (Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.CAN_USER_CREATE_ACCOUNT)).booleanValue()) {
         %>
         <li>
-            <ui:renderlink layout="register" value="Register" label="register" render="doNewUser"/>
+            <ui:renderlink layout="register" key="SIGNUP_REGISTER" label="signup" render="doNewUser"/>
         </li>
         <% } %>
     </ul>

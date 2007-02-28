@@ -7,7 +7,9 @@
 
 <ui:form>
 
-    <h3><ui:text value="Update password" style="nostyle"/></h3>
+    <h3>
+        <ui:text key="PROFILE_UPDATE_PASS" style="nostyle"/>
+    </h3>
 
     <p>
         <ui:hiddenfield beanId="reqid"/>
@@ -15,12 +17,20 @@
     <ui:group>
         <ui:frame width="50%">
             <ui:tablerow>
-                <ui:tablecell><ui:text key="PASSWORD"/></ui:tablecell>
-                <ui:tablecell><ui:password beanId="password"/></ui:tablecell>
+                <ui:tablecell>
+                    <ui:text key="PASSWORD"/>
+                </ui:tablecell>
+                <ui:tablecell>
+                    <ui:password beanId="password"/>
+                </ui:tablecell>
             </ui:tablerow>
             <ui:tablerow>
-                <ui:tablecell><ui:text key="CONFIRM_PASS"/></ui:tablecell>
-                <ui:tablecell><ui:password beanId="confirmPassword"/></ui:tablecell>
+                <ui:tablecell>
+                    <ui:text key="CONFIRM_PASS"/>
+                </ui:tablecell>
+                <ui:tablecell>
+                    <ui:password beanId="confirmPassword"/>
+                </ui:tablecell>
             </ui:tablerow>
         </ui:frame>
         <p>

@@ -91,7 +91,7 @@
     </ui:actionsubmit>
 
     <% if ((request.getAttribute("dispPass") != null) && ((request.getAttribute("certificate") == null) || ((String) request.getAttribute("certificate")).length() == 0)) { %>
-    <ui:actionlink action="displayForgotPassword" key="LOGIN_FORGOT_PASSWORD"/>
+    <ui:renderlink render="displayForgotPassword" key="LOGIN_FORGOT_PASSWORD"/>
     <% } %>
 
 </ui:form>

@@ -91,6 +91,22 @@
     </portlet>
     <portlet>
         <!-- place portlet description here -->
+        <description xml:lang="en">Portlet provides registration capabilities</description>
+        <!-- place unique portlet name here -->
+        <portlet-name>Signup</portlet-name>
+        <display-name xml:lang="en">Login</display-name>
+        <!-- place your portlet class name here -->
+        <portlet-class>org.gridsphere.portlets.core.registration.SignupPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <!-- place supported modes here -->
+        <supports>
+            <mime-type>text/html</mime-type>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <resource-bundle>Signup.Portlet</resource-bundle>
+    </portlet>
+    <portlet>
+        <!-- place portlet description here -->
         <description xml:lang="ar">إختيار اللغة</description>
         <description xml:lang="cs">Vybírá místní nastavení</description>
         <description xml:lang="de">Wählt eine Spracheinstellungen</description>

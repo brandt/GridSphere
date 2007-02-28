@@ -39,8 +39,8 @@
         <table>
             <row>
                 <column width="100%">
-                    <frame label="register" outer-padding="5% 30%">
-                        <portlet-class>org.gridsphere.portlets.core.login.LoginPortlet</portlet-class>
+                    <frame label="signup" outer-padding="5% 30%">
+                        <portlet-class>org.gridsphere.portlets.core.registration.SignupPortlet</portlet-class>
                     </frame>
                 </column>
             </row>
