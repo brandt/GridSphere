@@ -11,7 +11,7 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:rendersubmit layout="login" key="LOGIN"/>
+                <ui:rendersubmit layout="login" render="doViewUser" key="LOGIN"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
