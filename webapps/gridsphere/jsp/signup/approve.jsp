@@ -3,18 +3,14 @@
 
 <portlet:defineObjects/>
 
-<ui:form>
-
-    <ui:messagebox key="LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED"/>
+<ui:messagebox key="LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED"/>
 
 
-    <ui:frame>
-        <ui:tablerow>
-            <ui:tablecell>
-                <ui:rendersubmit layout="login" render="doViewUser" key="LOGIN"/>
-            </ui:tablecell>
-        </ui:tablerow>
-    </ui:frame>
-
-</ui:form>
+<ui:frame>
+    <ui:tablerow>
+        <ui:tablecell>
+            <ui:renderlink layout="login" key="LOGIN_ACTION"/>
+        </ui:tablecell>
+    </ui:tablerow>
+</ui:frame>
 
