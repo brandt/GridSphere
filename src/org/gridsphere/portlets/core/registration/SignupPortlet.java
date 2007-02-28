@@ -433,14 +433,6 @@ public class SignupPortlet extends ActionPortlet {
 
     }
 
-    public void activate(ActionFormEvent event) {
-        PortletRequest req = event.getActionRequest();
-        String msg = this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
-                "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN");
-        doEmailAction(event, msg, true);
-        setNextState(req, "signup/activate.jsp");
-    }
-
     public void approveAccount(ActionFormEvent event) {
         PortletRequest req = event.getActionRequest();
         String msg = this.getLocalizedText(req, "LOGIN_ACCOUNT_APPROVAL_ACCOUNT_CREATED");
