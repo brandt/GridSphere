@@ -1,6 +1,72 @@
 ChangeLog.txt
 =============
 
+Changes since GridSphere 2.2.X
+==============================
+
+Bug
+
+    * [GPF-57] - DataTag did not work or is not documented correctly
+    * [GPF-267] - Portal should not allow users to attempt to connect to portlets thru URL mappings
+    * [GPF-277] - Can not deploy portlets through web interface
+    * [GPF-287] - <ui:form> automatically adds <p></p> after it
+    * [GPF-289] - deploy as ROOT context in Tomcat
+    * [GPF-315] - Wrong translation of ui:group-attribute "width"
+    * [GPF-323] - Layout options disappear
+    * [GPF-324] - Can't create new tab.
+    * [GPF-325] - Stack Trace: On layout portlet
+    * [GPF-326] - New subTab function doesn't work
+    * [GPF-327] - Portlet required role save deletes portlet in tab.
+    * [GPF-332] - Images got mangled by ant script
+    * [GPF-335] - NDAR Portal Login Attempts Linked to browser session
+    * [GPF-336] - request.getContextPath not returning correct path
+    * [GPF-339] - getValue of textfield and textarea should format user input and convert >, < to &gt;, &lt;
+
+Improvement
+
+    * [GPF-254] - Rename SportletServiceFactory to PortletServiceFactory
+    * [GPF-255] - Make PortletServiceException a type of RuntimeException
+    * [GPF-256] - Do not support existing LayoutManagerPortlet
+    * [GPF-257] - Do not support existing user layout manager portlet
+    * [GPF-258] - Save portal configuration settings in a properties file
+    * [GPF-259] - No longer support group manager portlet
+    * [GPF-260] - Get rid of the gridlab namespace
+    * [GPF-261] - Refactor PersistenceManagerFactory to PersistenceManagerService as a portlet service
+    * [GPF-262] - upgrade castor XML library to 1.0.2
+    * [GPF-274] - no longer load layouts from each webapp
+    * [GPF-278] - make URLs prettier
+    * [GPF-284] - upgrade PM to use Hibernate3
+    * [GPF-298] - Eliminate old style portlet API
+    * [GPF-299] - Add HibernateFilter to GS in order to support OpenSessionInView pattern
+    * [GPF-300] - Provide setup page where admin can configure database and create admin account
+    * [GPF-305] - add javascript handlers to all tags that use them
+    * [GPF-312] - JSP precompiling
+    * [GPF-317] - Provide gridsphere.host property that can be customized if needed
+    * [GPF-319] - Make deep copies of layouts by using clone instead of serialization
+    * [GPF-333] - Alternative path for database configuration file (hibernate.properties)
+
+New Feature
+
+    * [GPF-101] - Support JSP precompiling
+    * [GPF-248] - add content manager service to manage html fragments
+    * [GPF-268] - Provide ability for a tab to include arbitrary JSP for creating title
+    * [GPF-269] - Add attributes to tab component to not render the tab outline, set alignment and padding
+    * [GPF-276] - Add Captcha support for new user registration
+    * [GPF-294] - Add Tooltip UI tag
+    * [GPF-295] - Add Dialog UI tag
+    * [GPF-297] - Add support for portal filters
+    * [GPF-301] - Package GridSphere as a WAR
+    * [GPF-302] - store account creation date for user
+    * [GPF-303] - track number of times a user has logged in
+    * [GPF-306] - add PortletLink tag to create new draggable Yahoo container with an AJAX enabled portlet
+    * [GPF-313] - add ability to configure whether username or email address is used for logging in
+    * [GPF-314] - add ability to send email to multiple users from UserManagerPortlet
+    * [GPF-316] - Add renderlink and rendersubmit tags
+    * [GPF-321] - Add BODY_ONUNLOAD property to set <body onunload javascript events
+    * [GPF-334] - allow default roles, so a new or existing user is placed in default roles
+    * [GPF-338] - GridSphere UI Tag for creating an input type="image" needed
+
+
 Changes since GridSphere 2.2.4
 ==============================
 
