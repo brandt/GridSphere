@@ -1,6 +1,19 @@
 ChangeLog.txt
 =============
 
+Changes since GS 3.0.1
+======================
+
+Bug
+
+    * [GPF-341] - class and style don't work for ActionFormTag
+    * [GPF-342] - normal action creation using res.createActionURL does not trigger an action
+
+Improvement
+
+    * [GPF-340] - tab links should be render URLs for bookmarkability
+
+
 Changes since GridSphere 2.2.X
 ==============================
 
