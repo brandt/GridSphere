@@ -1,0 +1,72 @@
+<!--
+Build include file for the GridSphere Portal source code, see build.xml
+
+ - $Id$
+
+-->
+
+
+<project name="GridSphere documentation">
+
+    <!-- Generates the documentation. Include file to build.xm -->
+
+    <target name="answer-docs" description="Check whether to create GridSphere Documentation" if="install.docs">
+        <antcall target="docs"/>
+    </target>
+
+    <target name="docs" depends="javadoc" description="Create GridSphere Documentation"/>
+
+    <target name="check-javadocs">
+        <condition property="javadocs.exists">
+            <available file="${build.javadoc}/index.html"/>
+        </condition>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates all the API documentation                                   -->
+    <!-- =================================================================== -->
+    <target name="javadoc" depends="setenv, check-javadocs" description="Create GridSphere Javadocs" unless="javadocs.exists">
+        <mkdir dir="${build.javadoc}"/>
+        <javadoc packagenames="org.gridsphere.*, javax.*"
+            sourcepath="src"
+            classpathref="classpath"
+            destdir="${build.javadoc}"
+            author="true"
+            version="true"
+            splitindex="true"
+            use="true"
+            breakiterator="true"
+            maxmemory="256m"
+            windowtitle="${gridsphere.name}"
+            doctitle="${gridsphere.api}"
+            bottom="Copyright &#169; 2002-2006 GridSphere Project. All Rights Reserved.">
+
+            <group title="GridSphere Framework API"
+                packages="org.gridsphere:org.gridsphere.*"/>
+
+            <group title="GridSphere Service API"
+                packages="org.gridsphere.portlet.service:org.gridsphere.portlet.service.*,
+                          org.gridsphere.portlet.service.spi:org.gridsphere.portlet.service.spi.*"/>
+
+            <group title="JSR 168 Portlet API"
+                packages="javax.portlet:javax.portlet.*"/>
+
+            <group title="GridSphere JSR 168 Portlet API Implementation"
+                packages="org.gridsphere.portlet.impl:org.gridsphere.portlet.impl.*"/>
+
+            <group title="GridSphere Layout Component Library"
+                packages="org.gridsphere.layout:org.gridsphere.layout.*"/>
+
+            <group title="GridSphere UI Tag Library"
+                packages="org.gridsphere.tags:org.gridsphere.tags.*"/>
+
+            <group title="GridSphere Portlet Service Library"
+                packages="org.gridsphere.services:org.gridsphere.services.*"/>
+
+            <group title="GridSphere Portlets"
+                packages="org.gridsphere.portlets:org.gridsphere.portlets.*"/>
+
+        </javadoc>
+    </target>
+
+</project>

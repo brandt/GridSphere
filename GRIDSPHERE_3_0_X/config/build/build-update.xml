@@ -1,0 +1,23 @@
+<!--
+Build include file for the GridSphere Portal source code, see build.xml
+
+ - $Id$
+
+-->
+
+<project name="GridSphere Update">
+
+    <!-- ==================================================================== -->
+    <!-- Start Tomcat                                                         -->
+    <!-- ==================================================================== -->
+    <target name="update" depends="setenv">
+        <delete verbose="true" file="${appserver.home}/shared/lib/castor-0.9.5.3-xml.jar"/>
+        <delete verbose="true" file="${appserver.home}/shared/lib/cglib-full-2.0.1.jar"/>
+        <delete verbose="true" file="${appserver.home}/shared/lib/commons-collections-2.1.jar"/>
+        <delete verbose="true" file="${appserver.home}/shared/lib/commons-logging-1.0.3.jar"/>
+        <delete verbose="true" file="${appserver.home}/shared/lib/ehcache-0.7.jar"/>
+        <antcall target="create-database"/>
+        <antcall target="update-database"/>
+    </target>
+
+</project>

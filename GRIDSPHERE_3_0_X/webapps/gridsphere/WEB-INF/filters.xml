@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Portal Filters
+
+    This descriptor defines the portal filters supported
+
+    $Id$
+-->
+
+<portal-filters>
+
+    <filter>
+        <name>GridSphere Cookie Filter</name>
+        <description lang="en">GridSphere "Remember Me" functionality used in Login Portlet</description>
+        <implementation>org.gridsphere.services.core.filter.impl.RememberMeCookieFilter</implementation>
+        <active>true</active>
+        <!-- configure cookie expiration time in seconds -->
+        <filter-param>
+            <param-name>COOKIE_EXPIRATION_TIME</param-name>
+            <param-value>604800</param-value>
+        </filter-param>
+    </filter>
+
+</portal-filters>

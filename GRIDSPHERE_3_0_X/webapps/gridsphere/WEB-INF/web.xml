@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ $Id$
+-->
+<!DOCTYPE web-app
+        PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+
+<web-app>
+
+    <display-name>GridSphere Portlet Container</display-name>
+
+    <description>
+        GridSphere Portlet Container
+    </description>
+
+    <!-- this is needed for clustering of multiple Tomcats -->
+    <distributable/>
+
+    <filter>
+        <filter-name>GridSphere Filter</filter-name>
+        <filter-class>org.gridsphere.servlets.GridSphereFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>GridSphere Filter</filter-name>
+        <url-pattern>/@GRIDSPHERE_CONTEXT@/*</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>org.gridsphere.servlets.GridSphereServlet</listener-class>
+    </listener>
+
+
+    <servlet>
+        <servlet-name>gridsphere</servlet-name>
+        <servlet-class>org.gridsphere.servlets.GridSphereServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>setup</servlet-name>
+        <servlet-class>org.gridsphere.servlets.SetupServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>PortletServlet</servlet-name>
+        <servlet-class>org.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>Captcha</servlet-name>
+        <display-name>Captcha</display-name>
+        <servlet-class>nl.captcha.servlet.CaptchaServlet</servlet-class>
+    </servlet>
+
+    <!-- PRECOMPILED JSP (if any)-->
+
+    @PRECOMPILED-JSP@
+
+    <servlet-mapping>
+        <servlet-name>gridsphere</servlet-name>
+        <url-pattern>/gs/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>setup</servlet-name>
+        <url-pattern>/setup/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PortletServlet</servlet-name>
+        <url-pattern>/jsr/@GRIDSPHERE_DEPLOY@</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Captcha</servlet-name>
+        <url-pattern>/Captcha.jpg</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <mime-mapping>
+        <extension>wbmp</extension>
+        <mime-type>image/vnd.wap.wbmp</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>wml</extension>
+        <mime-type>text/vnd.wap.wml</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+        <extension>wmls</extension>
+        <mime-type>text/vnd.wap.wmlscript</mime-type>
+    </mime-mapping>
+
+    <!-- the 401 page -->
+    <error-page>
+        <error-code>401</error-code>
+        <location>/ErrorLayout&amp;errorPage=unauthorized.jsp</location>
+    </error-page>
+
+    <!-- the 403 page -->
+    <error-page>
+        <error-code>403</error-code>
+        <location>/ErrorLayout&amp;errorPage=unauthorized.jsp</location>
+    </error-page>
+
+    <!-- the 404 page -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/ErrorLayout&amp;errorPage=notfound.jsp</location>
+    </error-page>
+
+
+    <!-- for internal errors -->
+    <!--
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/@GRIDSPHERE_CONTEXT@?gs_PageLayout=ErrorLayout&amp;errorPage=error.jsp</location>
+    </error-page>
+    -->
+
+</web-app>

@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<body>
+<b>GridSphere Portlet Services API</b>
+<p>
+The Portlet Services API is an implementation based upon the GridLab Portal
+Technical Specification. The Portlet Services API presented was based originally
+on the IBM WebSphere Portlet API 4.1 (which in turn was based on the
+Jakarta Turbine-2 services model).
+<p>
+The two primary differences in the GridSphere Portlet Service API and
+the WebSphere 4.1 API are:
+<p>
+<ol>
+<li>The use of an XML schema for defining portlet services as opposed to a
+plain text properties file</li>
+</ol>
+More information on developing portlet services using the GridSphere Portlet
+Services API can be found in the GridSphere documentation.
+<p>
+An example portlet service descriptor file is the following:
+<code>
+<p>
+    &lt;portlet-services&gt;
+<p>
+    &lt;service&gt;    <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;Portlet Manager Service&lt;/name&gt;  <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;Provides Administration Capabilities for Portlet Web Applications&lt;/description&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;interface&gt;org.gridsphere.services.core.registry.PortletManagerService&lt;/interface&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;implementation&gt;org.gridsphere.services.core.registry.impl.PortletManagerServiceImpl&lt;/implementation&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;service-config&gt;  <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param-name&gt;coreContext&lt;/param-name&gt; <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param-value&gt;gsmanager, coreportlets, gridportlets&lt;/param-value&gt;  <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/service-config&gt; <br>
+    &lt;/service&gt;   <br>
+<p>
+    &lt;service&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;Login Service&lt;/name&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;Provides Login Capabilities&lt;/description&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;interface&gt;org.gridsphere.services.core.user.LoginService&lt;/interface&gt; <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;implementation&gt;org.gridsphere.services.core.user.impl.LoginServiceImpl&lt;/implementation&gt; <br>
+    &lt;/service&gt; <br>
+ <p>
+    ...
+ <p>
+</code>
+<p>
+The following definitions are used in defining a portlet service:
+<ul>
+<li><b>portlet name</b> - the portlet name</li>
+<li><b>description</b> - a description of the portlet service</li>
+<li><b>interface</b> - the portlet service interface class</li>
+<li><b>implementation</b> - the portlet service implementation class</li>
+<li><b>service-config</b> - specifies additional configuration requirements of
+the portlet service</li>
+    <ul>
+    <li><b>param-name</b> - specifies an initialization parameter name</li>
+    <li><b>param-value</b> - specifies an initialization parameter value</li>
+    </ul>
+</ul>
+
+</body>
+</html>

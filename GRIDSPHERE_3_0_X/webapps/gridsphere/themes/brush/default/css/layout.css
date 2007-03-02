@@ -1,0 +1,116 @@
+xx/*
+  Author: Oliver Wehrens (wehrens@gridsphere.org)
+  $Id$
+*/
+
+/* overall page styling, gs controled */
+#gridsphere-layout-page {
+    width: 98%;
+
+    margin-left: 1%;
+    margin-right: 1%;
+    font-family: "Arial, Helvetica, Lucida Grande", sans-serif;
+    font-size: small;
+    padding: 0px;
+    border: 0px;
+}
+
+#gridsphere-layout-logo {
+    float: left;
+    padding-top: 3px;
+    margin: 0px 0px 0px 10px;
+    padding-left: 8px;
+    padding-right: 5px;
+    padding-bottom: 1px;
+}
+
+/* layout for the head */
+#gridsphere-layout-head {
+    background-color: #FFFFFF;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    font-family: "Arial", sans-serif;
+    font-size: small;
+}
+
+/* layout for navigation */
+#gridsphere-layout-navigation {
+    overflow: hidden;
+    background-color: #ebebeb;
+}
+
+/* ... for portlet body */
+#gridsphere-layout-body {
+    background-color: #ebebeb;
+    padding: 0 0 10px 0;
+    overflow: hidden;
+    margin: 0px;
+    width: 100%;
+    font-family: "Arial", sans-serif;
+    font-size: small;
+}
+
+/* ... for the footer */
+#gridsphere-layout-footer {
+    background-color: #ffffff;
+    text-align: center;
+    overflow: hidden;
+    padding: 10px 0 0 0;
+    width: 100%;
+    font-family: "Arial", sans-serif;
+    font-size: small;
+}
+
+/*-------------------------------------------------
+    rules for table-like layout
+-------------------------------------------------*/
+div {
+    border-width: 0px;
+    font-size: inherit;
+    margin: 0px;
+    padding: 0px;
+}
+
+div.gridsphere-layout-row {
+    clear: both;
+}
+
+div.gridsphere-layout-column {
+    float: left;
+    overflow: hidden;
+}
+
+/* Rounded corners */
+
+b.rtop, b.rbottom {
+    display: block;
+    background: #52A5F2;
+}
+
+b.rtop b, b.rbottom b {
+    display: block;
+    height: 1px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+b.r1 {
+    margin: 0 5px
+}
+
+b.r2 {
+    margin: 0 3px
+}
+
+b.r3 {
+    margin: 0 2px
+}
+
+b.rtop b.r4, b.rbottom b.r4 {
+    margin: 0 1px;
+    height: 2px
+}
+
+

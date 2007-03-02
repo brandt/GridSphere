@@ -1,0 +1,240 @@
+<!--
+Build file for the GridSphere Portal source code
+
+This is a build file for use with the Jakarta Ant build tool.
+
+ Prerequisites:
+
+jakarta-ant from http://jakarta.apache.org
+
+ Build Instructions:
+Invoke "ant help"
+
+ Copyright:
+   2002,2003,2004,2005,2006,2007
+
+ - $Id: build.xml 5248 2006-09-04 13:22:40Z wehrens $
+-->
+
+<project name="GridSphere 3.X" default="help">
+
+    <!-- get environment vars -->
+    <property environment="env"/>
+
+    <property file="build.properties"/>
+
+    <property name="optimize" value="false"/>
+    <property name="debug" value="on"/>
+    <property name="deprecation" value="false"/>
+
+    <!-- Version properties -->
+    <property name="version.release" value="${gridsphere.version}${gridsphere.release}"/>
+    <property name="gridsphere.project" value="gridsphere"/>
+    <property name="gridsphere.name" value="GridSphere ${version.release}"/>
+    <property name="gridsphere.api" value="GridSphere Portal Framework API ${version.release}"/>
+
+    <!-- GridSphere build and dist directories -->
+
+    <!-- GridSphere webapps files -->
+    <property name="gswebapp.dir" value="webapps/gridsphere"/>
+
+    <property name="projects.dir" value="projects"/>
+
+    <!-- GridSphere build targets -->
+    <property name="build.lib" value="${gridsphere.build}/lib"/>
+    <property name="build.classes" value="${gridsphere.build}/classes"/>
+    <property name="build.webapps" value="${gridsphere.build}/webapps"/>
+    <property name="build.javadoc" value="${build.webapps}/${gridsphere.deploy}/docs-${gridsphere.version}"/>
+
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="lib/ant-contrib-0.3.jar"/>
+        </classpath>
+    </taskdef>
+
+    <!-- ============================= Include the other build files =============================== -->
+
+    <import file="config/build/build-compile.xml"/>
+    <import file="config/build/build-database.xml"/>
+    <import file="config/build/build-dist.xml"/>
+    <import file="config/build/build-docs.xml"/>
+    <import file="config/build/build-deploy.xml"/>
+    <import file="config/build/build-server-tomcat.xml"/>
+    <import file="config/build/build-update.xml"/>
+    <import file="config/build/build-jsp-compile.xml"/>
+
+    <!-- ============================= Targets ===================================================== -->
+
+    <target name="help" description="Displays this help">
+
+    </target>
+
+    <target name="setenv" description="Check for libraries and print out config information">
+        <mkdir dir="${gridsphere.build}"/>
+        <mkdir dir="${projects.dir}"/>
+        <mkdir dir="${build.classes}"/>
+        <mkdir dir="${build.lib}"/>
+        <mkdir dir="${build.webapps}"/>
+
+        <!--
+           if tomcat check first for env.CATALINA_HOME
+
+           on jetty set it to APPSERVER_HOME
+        -->
+        <if>
+            <equals arg1="${gridsphere.appserver}" arg2="tomcat"/>
+            <then>
+                <property name="appserver.home" value="${env.CATALINA_HOME}"/>
+
+                <if>
+
+                    <available file="${appserver.home}/common/lib" type="dir"/>
+                    <then>
+                        <echo message="Installing for Tomcat 5.x"/>
+                        <path id="servletpath">
+                            <fileset dir="${appserver.home}/common/lib/">
+                                <include name="*.jar"/>
+                            </fileset>
+                        </path>
+                    </then>
+
+                </if>
+                <if>
+                    <available file="${appserver.home}/lib" type="dir"/>
+                    <then>
+                        <echo message="Installing for Tomcat 6.x"/>
+                        <path id="servletpath">
+                            <fileset dir="${appserver.home}/lib/">
+                                <include name="*.jar"/>
+                            </fileset>
+                            <fileset dir="${appserver.home}/bin/">
+                                <include name="*.jar"/>
+                            </fileset>
+                        </path>
+                    </then>
+                </if>
+            </then>
+        </if>
+
+
+        <if>
+            <equals arg1="${gridsphere.appserver}" arg2="jetty"/>
+            <then>
+                <echo message="Installing for Jetty"/>
+                <property name="appserver.home" value="${env.APPSERVER_HOME}"/>
+                <path id="servletpath">
+                    <fileset dir="${appserver.home}/lib/">
+                        <exclude name="*.LICENSE"/>
+                        <include name="*.jar"/>
+                    </fileset>
+                    <fileset dir="${appserver.home}/lib/jsp-2.1/">
+                        <exclude name="*.LICENSE"/>
+                        <include name="*.jar"/>
+                    </fileset>
+
+                </path>
+            </then>
+        </if>
+
+        <path id="classpath">
+            <pathelement location="${build.classes}"/>
+            <fileset dir="lib">
+                <exclude name="*.LICENSE"/>
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${env.ANT_HOME}/lib">
+                <include name="*.jar"/>
+            </fileset>
+            <pathelement location="config"/>
+            <path refid="servletpath"/>
+        </path>
+
+        <echo message="GridSphere Webserver is ${gridsphere.appserver}"/>
+        <echo message="GridSphere will be deployed to ${appserver.home} as the ${gridsphere.deploy} web application"/>
+    </target>
+
+
+    <!-- =================================================================== -->
+    <!-- Cleans everything                                                   -->
+    <!-- =================================================================== -->
+    <target name="clean" description="Delete classes and existing library">
+        <delete quiet="true" dir="${gridsphere.build}"/>
+        <delete quiet="true" dir="${gridsphere.dist}"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates a new portlet project "newproject" in projects directory    -->
+    <!-- =================================================================== -->
+    <target name="new-project" depends="setenv" description="Creates a new portlet project in projects directory">
+        <ant antfile="config/build/build-newproject.xml" target="new-project"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates a new portlet project "newproject" in projects directory    -->
+    <!-- =================================================================== -->
+    <target name="update-project" depends="setenv" description="Updates a portlet project in projects directory">
+        <ant antfile="config/build/build-newproject.xml" target="update-project"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Prints GridSphere license agreement                                 -->
+    <!-- =================================================================== -->
+    <target name="license" description="Prints GridSphere license">
+        <loadfile property="license" srcFile="LICENSE.txt"/>
+        <echo message="${license}"/>
+        <input message="Do you agree to these terms? Hit y or n" validargs="y,n" addProperty="agreed"/>
+        <condition property="do.abort">
+            <equals arg1="n" arg2="${agreed}"/>
+        </condition>
+        <fail if="do.abort">Build aborted by user.</fail>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Deploys TCK                                                         -->
+    <!-- =================================================================== -->
+
+    <target name="deploy-tck" depends="jar">
+        <taskdef name="deploytck"
+                 classname="org.gridsphere.tools.DeployGridSphereTCK"
+                 classpathref="classpath"/>
+        <deploytck builddir="${gridsphere.build}" wardir="webapps/tck" server="${appserver.home}"/>
+    </target>
+
+
+    <!-- =================================================================== -->
+    <!-- Shows splash install screen                                         -->
+    <!-- =================================================================== -->
+
+    <target name="splash" description="Display the logo">
+        <property name="splash.dir" location="."/>
+        <splash imageurl="file:webapps/gridsphere/images/gridsphere_logo.png" showduration="0"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Builds and deploys GridSphere                                       -->
+    <!-- =================================================================== -->
+
+    <target name="install" depends="clean, license" description="Build and deploy GridSphere">
+        <echo>------------------------------------------------------------</echo>
+        <echo>-- Installing GridSphere documentation is recommended --</echo>
+        <echo>------------------------------------------------------------</echo>
+        <echo>Answering 'y' below will deploy GridSphere javadoc API.</echo>
+        <echo>If you answer 'n' you can deploy the javadoc API documentation at a later time</echo>
+        <echo>with 'ant docs'.</echo>
+        <echo>------------------------------------------------------------</echo>
+        <input message="Do you want to install GridSphere JavaDoc API? "
+               validargs="y,n" defaultvalue="y" addProperty="install.docs.agreed"/>
+        <condition property="install.docs">
+            <equals arg1="y" arg2="${install.docs.agreed}"/>
+        </condition>
+        <antcall target="answer-docs"/>
+        <antcall target="deploy"/>
+        <antcall target="create-database"/>
+        <echo message="GridSphere successfully installed."/>
+        <echo message=" "/>
+        <echo message="+--------------------------------------------------------------------------+"/>
+        <echo message="| Please start up your webserver and go to http://server:port/gridsphere/  |"/>
+        <echo message="+--------------------------------------------------------------------------+"/>
+    </target>
+
+</project>

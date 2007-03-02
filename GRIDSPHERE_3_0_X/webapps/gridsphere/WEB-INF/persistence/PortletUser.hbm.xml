@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 1.1//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="org.gridsphere.services.core.user.impl.UserImpl"
+        table="sportletuserimpl"
+        >
+        <cache usage="read-write"/>
+        <id
+            name="oid"
+            column="gsoid"
+            type="java.lang.String"
+            length="32"
+            >
+            <generator class="uuid.hex"/>
+
+        </id>
+
+        <property name="UserID" type="string" column="userid"/>
+        <property name="LastName" type="string" column="familyname"/>
+        <property name="FullName" type="string" column="fullname"/>
+        <property name="FirstName" type="string" column="givenname"/>
+        <property name="EmailAddress" type="string" column="emailaddress"/>
+        <property name="Organization" type="string" column="organization"/>
+        <property name="NumLogins" type="integer" column="numlogins"/>
+        <property name="LastLoginTime" column="lastlogintime"/>
+        <map name="attributes" table="sportletuserattributes">
+            <cache usage="read-write"/>
+            <key column="gsoid"/>
+            <index column="attribute" type="string"/>
+            <element column="value" type="string"/>
+        </map>
+
+    </class>
+
+
+</hibernate-mapping>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 1.1//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition" table="authmoddef">
+        <cache usage="read-write"/>
+        <id name="oid" column="gsoid" type="string" length="32">
+            <generator class="uuid.hex"/>
+        </id>
+        <property name="ModuleName" column="authmodulename"  type="string"/>
+        <property name="ModuleImplementation" column="authmoduleclassname"  type="string"/>
+        <property name="ModulePriority" column="authmodulepriority"  type="integer"/>
+        <property name="ModuleActive" column="authmoduleactive"  type="boolean"/>
+
+    </class>
+
+</hibernate-mapping>

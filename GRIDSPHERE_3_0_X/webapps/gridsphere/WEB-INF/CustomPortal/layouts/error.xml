@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+    Error Layout Descriptor
+
+    This descriptor defines the error layout configuration
+
+    $Id$
+-->
+
+<page label="error"
+      title="GridSphere Error"
+      editable="false">
+
+    <header>
+        <table>
+            <row>
+                <column width="80%">
+                    <content include="jcr://pageheader" border="false"/>
+                </column>
+                <column width="20%">
+                    <content include="/jsp/returnnav.jsp"/>
+                </column>
+            </row>
+        </table>
+    </header>
+
+    <bar>
+        <content include="/jsp/errors/error.jsp"/>
+    </bar>
+
+    <footer>
+        <table>
+            <row>
+                <column width="50%">
+                    <frame transparent="true" outer-padding="0px" label="date">
+                        <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
+                    </frame>
+                </column>
+                <column width="50%">
+                    <content include="jcr://pagefooter" border="false"/>
+                </column>
+            </row>
+        </table>
+    </footer>
+
+</page>

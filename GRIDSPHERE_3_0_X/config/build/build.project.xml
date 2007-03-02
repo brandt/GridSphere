@@ -1,0 +1,405 @@
+<!-- =======================================================================
+
+   GridSphere @GRIDSPHERE_VERSION@ generated build file
+
+Notes:
+   This is a build file for use with the Ant build tool.
+
+Prerequisites:
+
+   jakarta-ant from http://jakarta.apache.org
+
+Build Instructions:
+   To build, invoke "ant"
+
+Copyright:
+  2002-2007
+
+- $Id$
+
+============================================================================ -->
+
+<project name="@PROJECT_NAME@" default="help" basedir=".">
+
+    <property file="build.properties"/>
+    <property file="${gridsphere.home}/build.properties"/>
+
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="${gridsphere.home}/lib/ant-contrib-0.3.jar"/>
+        </classpath>
+    </taskdef>
+
+    <property name="optimize" value="false"/>
+    <property name="debug" value="on"/>
+    <property name="deprecation" value="true"/>
+
+    <property name="project" value="${project.title} ${project.version}"/>
+    <property name="project.api" value="${project.title} API ${project.version}"/>
+
+    <!-- GridSphere build targets -->
+    <property name="build.lib" value="${project.build}/lib"/>
+    <property name="build.classes" value="${project.build}/classes"/>
+    <property name="build.webapp" value="${project.build}/webapp"/>
+    <property name="build.docs" value="${project.build}/docs"/>
+    <property name="build.javadoc" value="${build.docs}/javadocs"/>
+    <property name="build.tests" value="${project.build}/tests"/>
+
+
+    <property environment="env"/>
+
+    <!-- =================================================================== -->
+    <!-- Functions                                                           -->
+    <!-- =================================================================== -->
+    <target name="setenv" description="Check for libraries and print out config information">
+
+        <!-- Make build directories -->
+        <mkdir dir="src"/>
+        <mkdir dir="lib"/>
+        <mkdir dir="${project.build}"/>
+        <mkdir dir="${build.lib}"/>
+        <mkdir dir="${build.classes}"/>
+        <mkdir dir="${build.webapp}"/>
+        <mkdir dir="${build.docs}"/>
+
+        <if>
+            <equals arg1="${gridsphere.appserver}" arg2="tomcat"/>
+            <then>
+                <echo message="Installing for Tomcat"/>
+                <property name="appserver.home" value="${env.CATALINA_HOME}"/>
+                <path id="servletpath">
+                    <fileset dir="${appserver.home}/common/lib/">
+                        <include name="*.jar"/>
+                    </fileset>
+
+                </path>
+            </then>
+        </if>
+        <if>
+            <equals arg1="${gridsphere.appserver}" arg2="jetty"/>
+            <then>
+                <echo message="Installing for Jetty"/>
+                <property name="appserver.home" value="${env.APPSERVER_HOME}"/>
+                <path id="servletpath">
+                    <fileset file="${appserver.home}/lib/javax.servlet.jar"/>
+                    <fileset dir="${appserver.home}/ext/">
+                        <exclude name="*.LICENSE"/>
+                        <include name="*.jar"/>
+                    </fileset>
+                </path>
+            </then>
+        </if>
+
+        <path id="classpath">
+            <pathelement location="${build.classes}"/>
+            <fileset dir="lib">
+                <exclude name="*.LICENSE"/>
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${gridsphere.build}/lib">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${gridsphere.home}/lib">
+                <include name="*.jar"/>
+            </fileset>
+
+            <path refid="servletpath"/>
+            <pathelement path="${java.class.path}"/>
+
+        </path>
+
+        <echo message="--- Build environment for ${project} ---"/>
+        <echo message="--- Flags (Note: If the {property name} is displayed,"/>
+        <echo message="           then the component is not present)"/>
+        <echo message=""/>
+
+        <echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
+        <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}"/>
+
+        <echo message="GridSphere Webserver is ${gridsphere.appserver}"/>
+        <echo message="This project will be deployed to ${appserver.home}/webapps"/>
+
+        <echo message="--- Property values ---"/>
+        <echo message="debug=${debug}"/>
+        <echo message="deprecation=${deprecation}"/>
+        <echo message="optimize=${optimize}"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Print usage information                                             -->
+    <!-- =================================================================== -->
+    <target name="help" description="shows help about useful target">
+        <echo message="target                 description"/>
+        <echo message="-----------------------------------------------------------------"/>
+        <echo message="clean                  Cleans up the build dir                       "/>
+        <echo message="compile                Compiles all the code                         "/>
+        <echo message="jar                    Create a ${project.name} JAR                  "/>
+        <echo message="war                    Create a ${project.name} WAR                  "/>
+        <echo message="docs                   Creates ${project.title} Javadoc API          "/>
+        <echo message="deploy                 Deploys ${project.title}                      "/>
+        <echo message="dist                   Builds a binary ${project.title} distribution "/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Compiles all source code in distribution                            -->
+    <!-- =================================================================== -->
+    <target name="compile-all" depends="compile" description="Compiles all source code in distribution"/>
+
+    <!-- =================================================================== -->
+    <!-- Compiles source code                                                -->
+    <!-- =================================================================== -->
+    <target name="compile" depends="setenv" description="Compile project source code">
+        <echo>Compiling project source code</echo>
+        <javac srcdir="src"
+               destdir="${build.classes}"
+               classpathref="classpath"
+               debug="${debug}"
+               optimize="${optimize}"
+               deprecation="false"/>
+    </target>
+
+    <target name="precompile-jsp" depends="setenv">
+        <taskdef name="jspc50" classname="org.apache.jasper.JspC" classpathref="classpath">
+        </taskdef>
+
+
+        <mkdir dir="${project.build}/jsp/source"/>
+        <mkdir dir="${project.build}/jsp/classes"/>
+        <if>
+            <equals arg1="${gridsphere.useprecompiledjsp}" arg2="true"/>
+            <then>
+
+                <jspc50 outputDir="${project.build}/jsp/source"
+                        uriroot="webapp/"
+                        webXmlFragment="${project.build}/jsp/web.inc"
+                        validateXml="false">
+                </jspc50>
+            </then>
+        </if>
+
+
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Database stuff                                         -->
+    <!-- =================================================================== -->
+
+    <target name="configure-database" depends="setenv">
+        <mkdir dir="${appserver.home}/webapps/${project.name}/WEB-INF/persistence/"/>
+        <copy overwrite="true" file="webapp/WEB-INF/persistence/hibernate.properties"
+              todir="${appserver.home}/webapps/${project.name}/WEB-INF/persistence/"/>
+        <pathconvert targetos="windows" dirsep="/" property="cathome">
+            <path location="${appserver.home}"/>
+        </pathconvert>
+        <replace file="${appserver.home}/webapps/${project.name}/WEB-INF/persistence/hibernate.properties"
+                 token="@3RDPARTY_WEBAPP@"
+                 value="${cathome}/webapps/${project.name}"/>
+    </target>
+
+    <target name="create-database" depends="setenv, deploy">
+        <echo message="Creating database"/>
+        <taskdef name="dbtask"
+                 classname="org.gridsphere.tools.DBTask"
+                 classpathref="classpath">
+            <classpath id="hib.classpth">
+                <pathelement location="webapp/WEB-INF/classes/"/>
+            </classpath>
+        </taskdef>
+        <dbtask
+                configdir="${appserver.home}/webapps/${project.name}"
+                action="CREATE"/>
+    </target>
+
+    <target name="update-database" depends="setenv, configure-database, deploy">
+        <taskdef name="dbtask"
+                 classname="org.gridsphere.tools.DBTask"
+                 classpathref="classpath"/>
+        <dbtask
+                configdir="${appserver.home}/webapps/${project.name}"
+                action="UPDATE"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates all JAR libraries                                           -->
+    <!-- =================================================================== -->
+    <target name="jar" depends="portlets-jar, services-jar, services-impl-jar" description="Creates project JAR"/>
+
+    <!-- =================================================================== -->
+    <!-- Creates a portlet JAR library                                       -->
+    <!-- =================================================================== -->
+    <target name="portlets-jar" depends="compile" description="Creates portlets JAR">
+        <echo>Creating JAR</echo>
+        <jar jarfile="${build.lib}/${project.name}.jar" basedir="${build.classes}">
+            <include name="**/portlets/**"/>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates a services JAR library                                      -->
+    <!-- =================================================================== -->
+    <target name="services-jar" depends="compile" description="Creates services JAR">
+        <echo>Creating services JAR</echo>
+        <jar jarfile="${build.lib}/${project.name}-services.jar" basedir="${build.classes}">
+            <include name="**/services/**"/>
+            <exclude name="**/impl/**"/>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates a services implementation JAR                               -->
+    <!-- =================================================================== -->
+    <target name="services-impl-jar" depends="compile" description="Creates services impl JAR">
+        <echo>Creating services JAR</echo>
+        <jar jarfile="${build.lib}/${project.name}-services-impl.jar" basedir="${build.classes}">
+            <include name="**/services/**/impl/**"/>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Cleans everything                                                   -->
+    <!-- =================================================================== -->
+    <target name="clean" description="Delete classes and existing library">
+        <delete quiet="true" dir="${project.build}"/>
+        <delete quiet="true" dir="${project.dist}"/>
+        <delete quiet="true" file="lib/${project.name}.jar"/>
+        <delete quiet="true" file="lib/${project.name}-services.jar"/>
+        <delete quiet="true" file="lib/${project.name}-services-impl.jar"/>
+    </target>
+
+    <target name="docs" depends="javadocs" description="Create project documentation"/>
+
+    <!-- =================================================================== -->
+    <!-- Creates all the API documentation                                   -->
+    <!-- =================================================================== -->
+    <target name="javadocs" depends="setenv" description="Create Javadocs">
+        <echo>Creating Javadocs</echo>
+        <delete quiet="true" dir="${build.javadoc}"/>
+        <mkdir dir="${build.javadoc}"/>
+        <javadoc sourcepath="src"
+                 classpathref="classpath"
+                 destdir="${build.javadoc}"
+                 author="true"
+                 version="true"
+                 splitindex="true"
+                 use="true"
+                 maxmemory="180m"
+                 windowtitle="${project.title}"
+                 doctitle="${project.api}">
+            <!-- bottom="Copyright &#169; 2002,2003 GridLab Project. All Rights Reserved."> -->
+        </javadoc>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates the WAR file                                                -->
+    <!-- =================================================================== -->
+    <target name="war" depends="jar" description="Create project WAR">
+        <echo>Creating project web application WAR</echo>
+
+        <mkdir dir="${project.build}/webapp/WEB-INF/lib"/>
+        <mkdir dir="${project.build}/webapp/WEB-INF/classes"/>
+
+        <copy todir="${project.webapp}/WEB-INF/lib">
+            <fileset dir="${gridsphere.build}/lib/">
+                <include name="gridsphere-provider*.jar"/>
+                <include name="gridsphere-portal*.jar"/>
+                <exclude name="gridsphere-portal-api*.jar"/>
+            </fileset>
+            <fileset dir="${gridsphere.home}/lib/">
+                <include name="log4j*.jar"/>
+                <include name="castor*.jar"/>
+                <include name="xerces*.jar"/>
+                <include name="commons-fileupload*.jar"/>
+                <include name="commons-io*.jar"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${project.build}/webapp/WEB-INF/classes">
+            <fileset dir="${project.build}/classes/">
+                <include name="**/*"/>
+            </fileset>
+            <fileset dir="lib/"/>
+        </copy>
+
+        <war warfile="${project.build}/${project.name}.war" update="true"
+             webxml="webapp/WEB-INF/web.xml">
+            <fileset dir="webapp/">
+                <exclude name="WEB-INF/web.xml"/>
+            </fileset>
+            <fileset dir="${project.build}/webapp/"/>
+        </war>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Deploys portlets to a local server                                  -->
+    <!-- =================================================================== -->
+    <target name="deploy" depends="jar" description="Deploys portlet to a local server">
+        <echo>Deploying project</echo>
+
+        <!-- Copy the gridsphere web app to build directory -->
+        <property name="project.webapp" value="${appserver.home}/webapps/${project.name}"/>
+        <mkdir dir="${project.webapp}"/>
+
+        <copy overwrite="true" todir="${project.webapp}">
+            <fileset dir="webapp"/>
+        </copy>
+
+        <mkdir dir="${project.webapp}/WEB-INF/lib"/>
+
+        <copy overwrite="true" todir="${project.webapp}/WEB-INF/lib">
+            <fileset dir="${build.lib}">
+                <include name="${project.name}.jar"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${project.webapp}/WEB-INF/lib">
+            <fileset dir="${gridsphere.build}/lib/">
+                <include name="gridsphere-provider*.jar"/>
+                <include name="gridsphere-portal*.jar"/>
+                <exclude name="gridsphere-portal-api*.jar"/>
+            </fileset>
+            <fileset dir="${gridsphere.home}/lib/">
+                <include name="log4j*.jar"/>
+                <include name="castor*.jar"/>
+                <include name="xerces*.jar"/>
+                <include name="commons-fileupload*.jar"/>
+                <include name="commons-io*.jar"/>
+            </fileset>
+        </copy>
+
+        <if>
+            <equals arg1="${project.priority}" arg2=""/>
+            <then>
+                <touch file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portlets/${project.name}"/>
+            </then>
+            <else>
+                <touch file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/portlets/${project.name}.${project.priority}"/>
+            </else>
+        </if>
+
+        <copy todir="${project.webapp}/WEB-INF/lib">
+            <fileset dir="${build.lib}">
+                <include name="${project.name}-services-impl.jar"/>
+            </fileset>
+            <fileset dir="lib">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+
+        <if>
+            <equals arg1="${project.shared}" arg2="false"/>
+            <then>
+                <copy todir="${project.webapp}/WEB-INF/lib" file="${build.lib}/${project.name}-services.jar"/>
+            </then>
+            <else>
+                <copy todir="${appserver.home}/shared/lib" file="${build.lib}/${project.name}-services.jar"/>
+            </else>
+        </if>
+
+        <antcall target="configure-database"/>
+    </target>
+
+    <target name="install" depends="deploy">
+        <antcall target="create-database"/>
+    </target>
+
+</project>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 1.1//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false">
+    <class
+        name="org.gridsphere.services.core.security.group.PortletGroup"
+        table="sportletgroup"
+        >
+        <cache usage="read-write"/>
+        <id
+            name="oid"
+            column="gsoid"
+            type="java.lang.String"
+            length="32"
+            >
+            <generator class="uuid.hex"/>
+        </id>
+
+        <property name="Name" type="string" column="name"/>
+        <property name="Description" type="string" column="description"/>
+        <property name="Public" type="boolean" column="ispublic"/>
+        <property name="Core" type="boolean" column="iscore"/>
+
+    </class>
+
+</hibernate-mapping>

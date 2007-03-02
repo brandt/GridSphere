@@ -1,0 +1,38 @@
+<!--
+Build include file for the GridSphere Portal source code, see build.xml
+
+ - $Id$
+
+-->
+
+<!-- =================================================================== -->
+<!-- Creates sourcetarball                                               -->
+<!-- =================================================================== -->
+<project name="GridSphere Distribution">
+
+<target name="dist" depends="clean" description="Create GridSphere source zip/tarball distributions">
+    <tar destfile="${gridsphere.project}-${version.release}-src.tar" longfile="gnu">
+        <tarfileset dir="." prefix="${gridsphere.project}-${version.release}">
+            <exclude name="**/CVS"/>
+            <exclude name="*.ipr"/>
+            <exclude name="*.iws"/>
+            <exclude name="projects"/>
+            <exclude name="${gridsphere.project}-${version.release}-src.tgz"/>
+            <exclude name="${gridsphere.project}-${version.release}-src.zip"/>
+        </tarfileset>
+    </tar>
+    <gzip src="${gridsphere.project}-${version.release}-src.tar" zipfile="${gridsphere.project}-${version.release}-src.tgz"/>
+    <delete file="${gridsphere.project}-${version.release}-src.tar"/>
+
+    <zip destfile="${gridsphere.project}-${version.release}-src.zip">
+        <zipfileset dir="." prefix="${gridsphere.project}-${version.release}">
+            <exclude name="**/CVS"/>
+            <exclude name="*.ipr"/>
+            <exclude name="*.iws"/>
+            <exclude name="projects"/>
+            <exclude name="${gridsphere.project}-${version.release}-src.zip"/>
+            <exclude name="${gridsphere.project}-${version.release}-src.tgz"/>
+        </zipfileset>
+    </zip>
+</target>
+</project>

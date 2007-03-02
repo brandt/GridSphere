@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<!--
+
+    ActionPortlet mapping file
+
+    $Id: auth-modules-mapping.xml 5092 2006-08-19 04:17:21Z novotny $
+
+-->
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
+<mapping>
+
+    <class name="org.gridsphere.provider.portlet.jsr.mvc.descriptor.ActionPortletCollection">
+        <map-to xml="portlet-app"/>
+        <field name="ActionPortletList" type="org.gridsphere.provider.portlet.jsr.mvc.descriptor.ActionPortletDefinition" collection="vector">
+            <bind-xml name="actionportlet"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.provider.portlet.jsr.mvc.descriptor.ActionPortletDefinition">
+        <map-to xml="actionportlet"/>
+        <field name="Name" type="string" node="attribute">
+            <bind-xml name="name"/>
+        </field>
+        <field name="ActionPageList" type="org.gridsphere.provider.portlet.jsr.mvc.descriptor.ActionPageDefinition" collection="vector">
+            <bind-xml name="page"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.provider.portlet.jsr.mvc.descriptor.ActionPageDefinition">
+        <map-to xml="page"/>
+        <field name="Name" type="string">
+            <bind-xml name="name" node="attribute"/>
+        </field>
+        <field name="Mode" type="string">
+            <bind-xml name="mode" node="attribute"/>
+        </field>
+        <field name="ClassName" type="string">
+            <bind-xml name="class" node="attribute"/>
+        </field>
+        <field name="State" type="string">
+            <bind-xml name="state" node="attribute"/>
+        </field>
+        <field name="ResultList" type="org.gridsphere.provider.portlet.jsr.mvc.descriptor.ResultDefinition" collection="vector">
+            <bind-xml name="page"/>
+        </field>
+    </class>
+
+    <class name="org.gridsphere.provider.portlet.jsr.mvc.descriptor.ResultDefinition">
+        <map-to xml="result"/>
+        <field name="Result" type="string">
+            <bind-xml name="result" node="attribute"/>
+        </field>
+        <field name="State" type="string">
+            <bind-xml name="state" node="attribute"/>
+        </field>
+    </class>
+
+</mapping>

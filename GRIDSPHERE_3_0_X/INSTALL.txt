@@ -1,0 +1,67 @@
+$Id$
+
+	Building the GridSphere Distribution
+==================================================
+
+
+Requirements
+------------
+
+1) Building the GridSphere distribution requires JDK 1.4.2 
+(JDK 1.4.1 ships with a broken xalan.jar). You will also need Ant 1.6+ 
+available at http://jakarta.apache.org/ant. 
+
+2) You will also need a Tomcat 4.1+ or Tomcat 5.0.25+ servlet container 
+available at http://jakarta.apache.org/tomcat. In addition to providing
+a hosting environment for GridSphere, Tomcat provides some of the required 
+XML (JAR) libraries that are needed for compilation.
+
+Compiling and Deploying
+-----------------------
+
+The Ant build script, build.xml, uses the build.properties file to specify any
+compilation options. Edit build.properties appropriately for your needs.
+
+At this point, simply invoking "ant install" will deploy the GridSphere portlet 
+container to Tomcat using the default database. Please see the User Guide for more details on configuring the database.
+
+
+The build.xml supports the following basic tasks:
+
+install -- builds and deploys GridSphere, makes the documentation and
+           installs the database
+
+clean -- removes the build and dist directories including all the
+	 compiled classes
+
+update -- updates the existing source code from CVS
+
+compile -- compiles the GridSphere source code 
+
+deploy -- deploys the GridSphere framework and all portlets to a
+	  Tomcat servlet container located at $CATALINA_HOME
+
+create-database - creates a new, fresh database with original
+                 GridSphere settings, this wipes out your current database!
+
+docs -- builds the Javadoc documentation from the source code
+
+To see all the targets invoke "ant --projecthelp".
+
+2) Read the documentation found at  
+http://www.gridsphere.org/gridsphere/gridsphere?cid=docs
+for more information on using and developing portlets with  GridSphere.
+
+3) Startup Tomcat and then go to http://127.0.0.1:8080/gridsphere/gridsphere
+to see the portal!
+
+Errors & Troubleshooting
+------------------------
+
+If you experience problems, please subscribe to the mailing lists and consider filing bugs at http://bugs.gridsphere.org
+
+Thanks,
+
+The GridSphere Team		http://www.gridsphere.org
+
+

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+    Layout Manager Descriptor
+
+    This descriptor defines the guest user's portal layout configuration
+
+    $Id: SetupLayout.xml 4633 2006-03-09 16:44:16Z wehrens $
+-->
+
+<page label="profile"
+      title="GridSphere Portal"
+      keywords="gridsphere"
+      icon="images/favicon.ico"
+      editable="false"
+      required-role="USER">
+
+    <!-- Header components -->
+    <header>
+        <table>
+            <row>
+                <column width="400px">
+                    <content include="jcr://pageheader" border="false"/>
+                </column>
+                <column width="510px" style="float: right;">
+                    <content include="/jsp/returnnav.jsp"/>
+                </column>
+            </row>
+        </table>
+    </header>
+
+    <bar>
+        <title lang="en">Profile</title>
+        <table>
+            <row>
+                <column width="100%">
+                    <frame label="profilemanager">
+                        <portlet-class>org.gridsphere.portlets.core.user.ProfileManagerPortlet</portlet-class>
+                    </frame>
+                </column>
+            </row>
+        </table>
+    </bar>
+
+    <!-- Footer components (if any) -->
+    <footer>
+        <table style="footer">
+            <row>
+                <column width="50%">
+                    <frame transparent="true" outer-padding="0px" label="date">
+                        <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
+                    </frame>
+                </column>
+                <column width="50%">
+                    <content include="jcr://pagefooter" border="false"/>
+                </column>
+            </row>
+        </table>
+    </footer>
+</page>

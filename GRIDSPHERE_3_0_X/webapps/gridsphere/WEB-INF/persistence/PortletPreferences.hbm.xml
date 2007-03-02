@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 1.1//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="org.gridsphere.portlet.impl.PortletPreferencesImpl"
+        table="portletpreferencesimpl"
+        >
+        <cache usage="read-write"/>
+        <id
+            name="oid"
+            column="gsoid"
+            type="java.lang.String"
+            length="32"
+            >
+            <generator class="uuid.hex"/>
+
+        </id>
+
+        <property name="userId" type="string" column="userid"/>
+        <property name="portletId" type="string" column="portletid"/>
+
+        <map name="attributes" table="portletprefattr" cascade="all">
+            <cache usage="read-write"/>
+            <key column="attribute_oid"/>
+            <index column="attribute_ndx" type="string"/>
+            <many-to-many column="attr_oid" class="org.gridsphere.portlet.impl.PersistencePreferenceAttribute"/>
+        </map>
+
+    </class>
+
+
+</hibernate-mapping>

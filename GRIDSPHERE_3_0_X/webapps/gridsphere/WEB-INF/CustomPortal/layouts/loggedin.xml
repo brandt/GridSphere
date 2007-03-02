@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+Logged In User Layout Descriptor
+
+This descriptor defines the user's portal layout upon logging into the portal
+
+$Id$
+-->
+
+<page label="user"
+      title="GridSphere Portal"
+      keywords="gridsphere"
+      icon="images/favicon.icon"
+      editable="true"
+      required-role="USER">
+
+    <header>
+        <table>
+            <row>
+                <column width="400px">
+                    <content include="jcr://pageheader" border="false"/>
+                </column>
+                <column width="510px" style="float: right;">
+                    <content include="/jsp/returnnav.jsp"/>
+                </column>
+            </row>
+        </table>
+    </header>
+
+    <menu>
+        <tab label="home">
+            <title lang="en">Home</title>
+            <table>
+                <row>
+                    <column width="100%">
+                        <frame label="rss">
+                            <portlet-class>org.gridsphere.portlets.core.rss.RSSPortlet</portlet-class>
+                        </frame>
+                    </column>
+                </row>
+            </table>
+        </tab>
+    </menu>
+
+
+    <footer>
+        <table>
+            <row>
+                <column width="50%">
+                    <frame transparent="true" outer-padding="0px" label="date">
+                        <portlet-class>org.gridsphere.portlets.core.date.DatePortlet</portlet-class>
+                    </frame>
+                </column>
+                <column width="50%">
+                    <content include="jcr://pagefooter" border="false"/>
+                </column>
+            </row>
+        </table>
+    </footer>
+
+</page>
+

@@ -1,0 +1,178 @@
+<!--
+
+    Portlet Services XML Descriptor
+
+    Edit this file to add/modify GridSphere Portlet Services
+
+
+    $Id$
+-->
+
+<portlet-services>
+
+    <service>
+        <name>Persistence Manager Service</name>
+        <description lang="en">Provides JDBC Persistence Capabilities using Hibernate</description>
+        <interface>org.gridsphere.services.core.persistence.PersistenceManagerService</interface>
+        <implementation>org.gridsphere.services.core.persistence.impl.PersistenceManagerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Portlet Manager Service</name>
+        <description lang="en">Provides Administration Capabilities for Portlet Web Applications</description>
+        <interface>org.gridsphere.services.core.registry.PortletManagerService</interface>
+        <implementation>org.gridsphere.services.core.registry.impl.PortletManagerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Tomcat Manager Service</name>
+        <description lang="en">Provides Portlet Reloading Capabilities uisng Tomcat manager webapp</description>
+        <interface>org.gridsphere.services.core.tomcat.TomcatManagerService</interface>
+        <implementation>org.gridsphere.services.core.tomcat.impl.TomcatManagerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>RSS Service</name>
+        <description lang="en">Provides RSS Service</description>
+        <interface>org.gridsphere.services.core.rss.RssService</interface>
+        <implementation>org.gridsphere.services.core.rss.impl.RssServiceImpl</implementation>
+        <service-config>
+            <param-name>cache_time</param-name>
+            <param-value>10</param-value>
+        </service-config>
+    </service>
+
+    <service>
+        <name>Portlet Registry Service</name>
+        <description lang="en">Provides Portlet Registry</description>
+        <interface>org.gridsphere.services.core.registry.PortletRegistryService</interface>
+        <implementation>org.gridsphere.services.core.registry.impl.PortletRegistryServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Authentication Module Service</name>
+        <description lang="en">Provides Authentication Modules</description>
+        <interface>org.gridsphere.services.core.security.auth.AuthModuleService</interface>
+        <implementation>org.gridsphere.services.core.security.auth.impl.AuthModuleServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Portal Config Service</name>
+        <description lang="en">Provides GridSphere portal configuration settings</description>
+        <interface>org.gridsphere.services.core.portal.PortalConfigService</interface>
+        <implementation>org.gridsphere.services.core.portal.impl.PortalConfigServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Portal Filter Service</name>
+        <description lang="en">Provides portal filters</description>
+        <interface>org.gridsphere.services.core.filter.PortalFilterService</interface>
+        <implementation>org.gridsphere.services.core.filter.impl.PortalFilterServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Content Manager Service</name>
+        <description lang="en">Provides Content Management Capabilities</description>
+        <interface>org.gridsphere.services.core.content.ContentManagerService</interface>
+        <implementation>org.gridsphere.services.core.content.impl.ContentManagerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Role Manager Service</name>
+        <description lang="en">Provides Role Capabilities to Portal Users</description>
+        <interface>org.gridsphere.services.core.security.role.RoleManagerService</interface>
+        <implementation>org.gridsphere.services.core.security.role.impl.RoleManagerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Group Manager Service</name>
+        <description lang="en">Provides Group Capabilities to Portal Users</description>
+        <interface>org.gridsphere.services.core.security.group.GroupManagerService</interface>
+        <implementation>org.gridsphere.services.core.security.group.impl.GroupManagerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>User Account Manager Service</name>
+        <description lang="en">Provides User Administration Capabilities</description>
+        <interface>org.gridsphere.services.core.user.UserManagerService</interface>
+        <implementation>org.gridsphere.services.core.user.impl.UserManagerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Password Manager Service</name>
+        <description lang="en">Provides Password Management Capabilities</description>
+        <interface>org.gridsphere.services.core.security.password.PasswordManagerService</interface>
+        <implementation>org.gridsphere.services.core.security.password.impl.PasswordManagerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>JCR Service</name>
+        <description lang="en">Java Content Repository Service</description>
+        <interface>org.gridsphere.services.core.jcr.JCRService</interface>
+        <implementation>org.gridsphere.services.core.jcr.impl.JCRServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Generic Request Service</name>
+        <description lang="en">Provides Generic Request Capabilities</description>
+        <interface>org.gridsphere.services.core.request.RequestService</interface>
+        <implementation>org.gridsphere.services.core.request.impl.RequestServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Layout Manager Service</name>
+        <description lang="en">Provides Layout Management Capabilities</description>
+        <interface>org.gridsphere.services.core.layout.LayoutManagerService</interface>
+        <implementation>org.gridsphere.services.core.layout.impl.LayoutManagerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Mail Service</name>
+        <description lang="en">Simple e-mail service</description>
+        <interface>org.gridsphere.services.core.mail.MailService</interface>
+        <implementation>org.gridsphere.services.core.mail.impl.MailServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Locale Service</name>
+        <description lang="en">Manages supported list of locales</description>
+        <interface>org.gridsphere.services.core.locale.LocaleService</interface>
+        <implementation>org.gridsphere.services.core.locale.impl.LocaleServiceImpl</implementation>
+        <service-config>
+            <param-name>display-locale</param-name>
+            <param-value>en,es,cs,de,nl,fr,hr,hu,pl,it,ar,zh,ja</param-value>
+        </service-config>
+    </service>
+
+    <service>
+        <name>Timer Service</name>
+        <description lang="en">Timer Service</description>
+        <interface>org.gridsphere.services.core.timer.TimerService</interface>
+        <implementation>org.gridsphere.services.core.timer.impl.TimerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Cache Service</name>
+        <description lang="en">Cache Service</description>
+        <interface>org.gridsphere.services.core.cache.CacheService</interface>
+        <implementation>org.gridsphere.services.core.cache.impl.CacheServiceImpl</implementation>
+        <service-config>
+            <param-name>isCachingOn</param-name>
+            <param-value>true</param-value>
+        </service-config>
+    </service>
+
+    <service>
+        <name>Secure Directory Service</name>
+        <description lang="en">Provides Secure Directory Capabilities</description>
+        <interface>org.gridsphere.services.core.secdir.SecureDirectoryService</interface>
+        <implementation>org.gridsphere.services.core.secdir.impl.SecureDirectoryServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Chart Service</name>
+        <description lang="en">Provides chart generation and management capabilities</description>
+        <interface>org.gridsphere.services.core.charts.ChartService</interface>
+        <implementation>org.gridsphere.services.core.charts.impl.ChartServiceImpl</implementation>
+    </service>
+</portlet-services>

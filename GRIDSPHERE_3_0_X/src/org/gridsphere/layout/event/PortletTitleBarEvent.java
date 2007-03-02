@@ -1,0 +1,75 @@
+/*
+ * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
+ * @version $Id: PortletTitleBarEvent.java 5032 2006-08-17 18:15:06Z novotny $
+ */
+package org.gridsphere.layout.event;
+
+import javax.portlet.PortletMode;
+import javax.portlet.WindowState;
+
+/**
+ * A <code>PortletTitleBarEvent</code> is created by a <code>PortletTitleBar</code>
+ * when a title bar event has been triggered.
+ */
+public interface PortletTitleBarEvent extends PortletComponentEvent {
+
+    /**
+     * Action is an immutable representing the window state and portlet mode
+     * of the portlet title bar.
+     */
+    public static final class TitleBarAction implements ComponentAction {
+
+        public static final TitleBarAction WINDOW_MODIFY = new TitleBarAction(1);
+
+        public static final TitleBarAction MODE_MODIFY = new TitleBarAction(5);
+
+        private int action = 0;
+
+        /**
+         * Action cannot be instantiated outside of this class
+         */
+        private TitleBarAction(int action) {
+            this.action = action;
+        }
+
+        public int getID() {
+            return action;
+        }
+    }
+
+    /**
+     * Returns the portlet title bar mode
+     *
+     * @return mode the portlet title bar mode
+     */
+    public PortletMode getMode();
+
+    /**
+     * Returns the portlet title bar window state
+     *
+     * @return the portlet title bar window state
+     */
+    public WindowState getState();
+
+    /**
+     * Returns true if this title bar event signals a window state change
+     *
+     * @return true if this title bar event signals a window state change
+     */
+    public boolean hasWindowStateAction();
+
+    /**
+     * Returns true if this title bar event signals a portlet mode change
+     *
+     * @return true if this title bar event signals a portlet mode change
+     */
+    public boolean hasPortletModeAction();
+
+    /**
+     * Returns the portlet title bar component id
+     *
+     * @return the portlet title bar component id
+     */
+    public int getID();
+
+}

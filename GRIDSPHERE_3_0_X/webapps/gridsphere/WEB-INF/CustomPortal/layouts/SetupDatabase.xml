@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+    Guest User Layout Descriptor
+
+    This descriptor defines the guest user's portal layout configuration
+
+    $Id: SetupLayout.xml 5319 2006-09-11 21:04:47Z novotny $
+-->
+
+<page label="setupdb"
+      title="GridSphere Portal Setup"
+      keywords="gridsphere"
+      icon="images/favicon.ico"
+      editable="false"
+      required-role="setup">
+
+    <!-- Header components -->
+    <header>
+        <table>
+            <row>
+                <column width="70%">
+                    <content include="jcr://pageheader" border="false"/>
+                </column>
+            </row>
+        </table>
+    </header>
+
+    <bar>
+        <table>
+            <row>
+                <column width="70%">
+                    <content label="setup" include="/jsp/setup/selectDatabase.jsp"/>
+                </column>
+                <column width="30%"/>
+            </row>
+        </table>
+    </bar>
+
+    <!-- Footer components (if any) -->
+    <footer>
+        <table>
+            <row>
+                <column width="50%">
+                    <content include="jcr://pagefooter" border="false"/>
+                </column>
+            </row>
+        </table>
+    </footer>
+
+</page>

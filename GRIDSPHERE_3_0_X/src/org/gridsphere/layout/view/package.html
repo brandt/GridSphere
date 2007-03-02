@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<body>
+<b>Pluggable Look and Feel (PLAF) API</b>
+<p>
+GridSphere supports two pluggable look and feels (PLAF)s:
+ {@link org.gridsphere.layout.view.classic}
+and {@link org.gridsphere.layout.view.standard}
+The classic PLAF remains the old (GS 2.1.2 and earlier) look and feel using a
+combination of nested tables and some CSS.
+The current default PLAF used by the layout components is the 'standard' PLAF which is
+evolving towards a much more configurable pure CSS layout.
+<p>
+The PLAF interfaces define the bare minimum required by the concrete look and feel classes.
+The {@link org.gridsphere.layout.view.Render} interface defines 4 methods: doStart, doStartBorder,
+doEndBorder and doEnd as we determined that these four methods seem to satisfy the majority of our currently
+used layout components. Layout components that have no border would simply return empty. To make it easier,
+a base class {@link org.gridsphere.layout.view.BaseRender} implementing the Render interface is
+provided for PLAF developers to use.
+<p>
+The current list describes the concrete portlet components that are in use:
+<ul>
+<li>{@link org.gridsphere.layout.view.Render}</li>
+<li>{@link org.gridsphere.layout.view.BaseRender}</li>
+<li>{@link org.gridsphere.layout.view.FrameView}</li>
+<li>{@link org.gridsphere.layout.view.TabbedPaneView}</li>
+<li>{@link org.gridsphere.layout.view.TableLayoutView}</li>
+</ul>
+
+</body>
+</html>

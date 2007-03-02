@@ -1,0 +1,149 @@
+.gridsphere-navbar {
+    /*
+    height: 30px;
+	width: 100%;
+	border-top: solid #000 1px;
+	border-bottom: solid #000 1px;
+	background-color: #336699;
+	*/
+    float: right;
+}
+
+.gridsphere-navbar ul {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: small; /* color: #FFF; */
+    line-height: 30px;
+    white-space: nowrap;
+}
+
+.gridsphere-navbar li {
+    list-style-type: none;
+    display: inline;
+}
+
+.gridsphere-navbar li a {
+    font-size: 12px;
+    text-decoration: underline;
+    padding: 7px 5px; /* color: blue; */
+}
+
+/*
+.gridsphere-menu {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    margin:0;
+    background-color: #2D5B89;
+}
+
+.gridsphere-menu ul li a, .menu ul li a:visited {
+    display:block;
+    text-decoration:none;
+    width:109px;
+    height:20px;
+    text-align:center;
+    color:#FFFFFF;
+    border-bottom:1px solid #b4bfcc;
+    line-height:20px;
+    font-size:12px;
+    overflow:hidden;
+    background-color: #2D5B89;
+    font-weight: bold;
+}
+.gridsphere-menu ul {
+    padding:0;
+    margin:0;
+    list-style-type: none;
+}
+.gridsphere-menu ul li {
+    float:left;
+    margin-right:1px;
+    position:relative;
+
+}
+
+.gridsphere-menu ul li.selected a {
+    float:left;
+    margin-right:1px;
+    position:relative;
+    color:#2D5B89;
+    background:#b4bfcc;
+}
+
+.gridsphere-menu ul li ul {
+    display: none;
+}
+
+.gridsphere-menu ul li:hover a {
+    color:#2D5B89;
+    background:#b4bfcc;
+}
+
+.gridsphere-menu ul li:hover ul {
+    display:block;
+    position:absolute;
+    top:20px; left:0;
+    width:109px;
+}
+*/
+
+#gridsphere-menu {
+    float: left;
+    width: 100%;
+    margin: 0;
+    padding: 10px 0 0 0;
+    list-style: none;
+    background: #FFFFFF url( ../images/navr_bg.gif ) repeat-x bottom left;
+    text-decoration: none;
+}
+
+#gridsphere-menu li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    font-family: "Lucida Grande", sans-serif;
+}
+
+#gridsphere-menu .gridsphere-menu-nonsel a {
+    padding-bottom: 3px;
+    padding-left: 5px;
+    background: url( ../images/tab-inactive-left.gif ) no-repeat top left;
+}
+
+#gridsphere-menu .gridsphere-menu-nonsel a span {
+    color: #000;
+    padding: 4px 10px 3px 5px;
+    text-decoration: none;
+    background: url( ../images/tab-inactive-right.gif ) no-repeat top right;
+}
+
+#gridsphere-menu .gridsphere-menu-nonsel a:hover span {
+    color: #000;
+    text-decoration: none;
+}
+
+#gridsphere-menu .gridsphere-menu-sel a {
+    padding-bottom: 4px;
+    font-weight: bold;
+    padding-left: 5px;
+    background: url( ../images/tab-active-left.gif ) no-repeat top left;
+}
+
+#gridsphere-menu .gridsphere-menu-sel a span {
+    color: #000;
+    padding: 4px 10px 4px 5px;
+    background: url( ../images/tab-active-right.gif ) no-repeat top right;
+}
+
+#gridsphere-menu a {
+    float: left;
+    display: block;
+    margin: 0 0px 0 0;
+    padding: 4px 2px;
+    border-bottom: none;
+    text-decoration: none;
+}
+
+
+
+

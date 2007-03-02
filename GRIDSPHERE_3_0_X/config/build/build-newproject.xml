@@ -1,0 +1,102 @@
+<project name="New Project" default="new-project" basedir=".">
+
+    <property file="build.properties"/>
+    <property name="version.release" value="${version.release}"/>
+
+    <target name="check-project-exists">
+        <condition property="new-project-exists">
+            <not>
+                <available file="${project.dir}/build.xml"/>
+            </not>
+        </condition>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Updates a portlet project in projects directory                     -->
+    <!-- =================================================================== -->
+    <target name="update-project" description="Updates existing project with updated build.xml script">
+        <echo>Updating a Portlet Project</echo>
+        <input message="Please enter the project web app to update inside projects/ directory"
+               addproperty="project.name"/>
+        <property name="newproject.dir" value="projects/${project.name}"/>
+        <echo message="Overwriting ${newproject.dir}/build.xml and copying existing ${newproject.dir}/build.xml to ${newproject.dir}/build.xml.bak"/>
+        <copy file="${newproject.dir}/build.xml" tofile="${newproject.dir}/build.xml.bak" overwrite="true"/>
+        <copy file="config/build/build.project.xml" tofile="${newproject.dir}/build.xml" overwrite="true"/>
+        <replace file="${newproject.dir}/build.xml"
+                 token="@GRIDSPHERE_VERSION@"
+                 value="${version.release}"/>
+        <replace file="${newproject.dir}/build.xml"
+                 token="@PROJECT_TITLE@"
+                 value="${project.title}"/>
+        <replace file="${newproject.dir}/build.xml"
+                 token="@PROJECT_NAME@"
+                 value="${project.name}"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates a new portlet project  in projects directory                -->
+    <!-- =================================================================== -->
+    <target name="new-project" description="Creates a new portlet project in projects directory">
+        <echo>Creating a New Portlet Project</echo>
+        <mkdir dir="projects"/>
+        <input message="Please enter a Project Title e.g. Cool Portlets" addproperty="project.title"/>
+
+        <input message="Please enter a Project Name this will be used for your portlet web application and should be lowercase e.g. coolportlets"
+               addproperty="project.name"/>
+
+        <property name="project.dir" value="projects/${project.name}"/>
+
+        <antcall target="check-project-exists"/>
+        <fail if="${new-project-exists}"
+              message="This project already exists! Please delete the old one in ${project.dir}"/>
+        <mkdir dir="${project.dir}"/>
+
+
+        <copy file="config/build/build.project.xml" tofile="${project.dir}/build.xml"/>
+
+        <copy file="config/build/build.properties" tofile="${project.dir}/build.properties" filtering="true"/>
+
+        <replace file="${newproject.dir}/build.xml"
+                 token="@GRIDSPHERE_VERSION@"
+                 value="${version.release}"/>
+        <replace file="${project.dir}/build.properties"
+                 token="@PROJECT_TITLE@"
+                 value="${project.title}"/>
+        <replace file="${project.dir}/build.properties"
+                 token="@PROJECT_NAME@"
+                 value="${project.name}"/>
+        <replace file="${project.dir}/build.xml"
+                 token="@PROJECT_NAME@"
+                 value="${project.name}"/>
+
+        <mkdir dir="${project.dir}/src"/>
+        <mkdir dir="${project.dir}/lib"/>
+
+        <mkdir dir="${project.dir}/webapp"/>
+        <mkdir dir="${project.dir}/webapp/WEB-INF"/>
+        <mkdir dir="${project.dir}/webapp/WEB-INF/classes"/>
+        <copy file="config/log4j.properties" tofile="${project.dir}/webapp/WEB-INF/classes/log4j.properties"/>
+
+        <mkdir dir="${project.dir}/webapp/WEB-INF/persistence"/>
+        <copy todir="${project.dir}/webapp/WEB-INF">
+            <fileset dir="config/template"/>
+            <mapper type="glob" from="*.xml.tpl" to="*.xml"/>
+        </copy>
+        <copy file="config/template/hibernate.properties" todir="${project.dir}/webapp/WEB-INF/persistence"/>
+
+        <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_TITLE@"
+                 value="${project.title}"/>
+        <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_NAME@"
+                 value="${project.name}"/>
+
+        <mkdir dir="${project.dir}/webapp/html"/>
+        <mkdir dir="${project.dir}/webapp/jsp"/>
+
+        <echo>Creation of new portlet project ${project.title} in projects/${project.name} is complete.</echo>
+        <echo>Please edit src/ webapps/ and webapps/WEB-INF/{web.xml, PortletServices.xml} appropriately</echo>
+        <echo>Please place portlets in src/**/portlets/ directory and service in src/**/services directory for proper
+            compilation!
+        </echo>
+    </target>
+
+</project>
