@@ -157,7 +157,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         if (url != null) return url;
         RenderResponse res = event.getRenderResponse();
 
-        PortletURL portletURL = res.createActionURL();
+        PortletURL portletURL = res.createRenderURL();
 
         return portletURL.toString();
     }
