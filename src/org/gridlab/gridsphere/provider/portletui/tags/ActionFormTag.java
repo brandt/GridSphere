@@ -110,6 +110,13 @@ public class ActionFormTag extends ActionTag {
                 out.print(" onsubmit=\"" + onSubmit + "\" ");
             }
 
+            if (this.cssStyle != null) {
+                out.print(" style=\"" + this.cssStyle + "\"");
+            }
+            if (this.cssClass != null) {
+                out.print(" class=\"" + this.cssClass + "\"");
+            }
+
             out.println(">");
             // add JS info
             //out.println("<p>"); // added for XHTML 1.0 Strict compliance
