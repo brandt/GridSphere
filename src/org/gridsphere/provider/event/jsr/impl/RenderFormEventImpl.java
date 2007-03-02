@@ -19,8 +19,6 @@ import java.util.Map;
  */
 public class RenderFormEventImpl extends BaseFormEventImpl implements RenderFormEvent {
 
-    private RenderRequest request;
-    private RenderResponse response;
     private DefaultPortletRender render;
 
     /**
@@ -34,13 +32,11 @@ public class RenderFormEventImpl extends BaseFormEventImpl implements RenderForm
     public RenderFormEventImpl(DefaultPortletRender render, RenderRequest request, RenderResponse response, Map<String, TagBean> tagBeans) {
         super(request, response);
         this.render = render;
-        this.request = request;
-        this.response = response;
         this.tagBeans = tagBeans;
         // Unless tagBeans is null, don't recreate them
         if (tagBeans == null) {
             tagBeans = new HashMap<String, TagBean>();
-            createTagBeans(getRequest());
+            createTagBeans();
         }
         //logRequestParameters();
         //logTagBeans();
@@ -52,7 +48,7 @@ public class RenderFormEventImpl extends BaseFormEventImpl implements RenderForm
      * @return the <code>RenderRequest</code>
      */
     public RenderRequest getRenderRequest() {
-        return request;
+        return (RenderRequest) portletRequest;
     }
 
     /**
@@ -61,7 +57,7 @@ public class RenderFormEventImpl extends BaseFormEventImpl implements RenderForm
      * @return the <code>RenderResponse</code>
      */
     public RenderResponse getRenderResponse() {
-        return response;
+        return (RenderResponse) portletResponse;
     }
 
     /**

@@ -20,7 +20,6 @@ import org.gridsphere.services.core.persistence.QueryFilter;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
@@ -31,9 +30,6 @@ import java.util.*;
 public abstract class BaseFormEventImpl {
 
     protected transient static Log log = LogFactory.getLog(BaseFormEventImpl.class);
-
-    protected HttpServletRequest request;
-    protected HttpServletResponse response;
 
     protected PortletRequest portletRequest;
     protected PortletResponse portletResponse;
@@ -49,16 +45,6 @@ public abstract class BaseFormEventImpl {
 
     }
 
-    public BaseFormEventImpl(HttpServletRequest request, HttpServletResponse response) {
-        this.request = request;
-        this.response = response;
-        locale = (Locale) request.getSession(true).getAttribute(SportletProperties.LOCALE);
-        if (locale == null) locale = request.getLocale();
-        if (locale == null) locale = Locale.ENGLISH;
-        cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
-        compId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
-    }
-
     public BaseFormEventImpl(PortletRequest request, PortletResponse response) {
         this.portletRequest = request;
         this.portletResponse = response;
@@ -69,19 +55,8 @@ public abstract class BaseFormEventImpl {
         compId = (String) portletRequest.getAttribute(SportletProperties.GP_COMPONENT_ID);
     }
 
-    /**
-     * Returns the collection of visual tag beans contained by this form event
-     *
-     * @return the collection of visual tag beans
-     */
-    public Map getTagBeans() {
-        return tagBeans;
-    }
-
-    public Object getRequest() {
-        if (request != null) return request;
-        if (portletRequest != null) return portletRequest;
-        return null;
+    public PortletRequest getRequest() {
+        return portletRequest;
     }
 
     protected void configureBean(TagBean tagBean) {
@@ -548,9 +523,6 @@ public abstract class BaseFormEventImpl {
         sb.append("\n\n show request params\n--------------------\n");
 
         Enumeration e = null;
-        if (request != null) {
-            e = request.getParameterNames();
-        }
         if (portletRequest != null) {
             e = portletRequest.getParameterNames();
         }
@@ -559,9 +531,6 @@ public abstract class BaseFormEventImpl {
                 String name = (String) e.nextElement();
                 sb.append("\t\tname :").append(name);
                 String values[] = null;
-                if (request != null) {
-                    values = request.getParameterValues(name);
-                }
                 if (portletRequest != null) {
                     values = portletRequest.getParameterValues(name);
                 }
@@ -591,9 +560,6 @@ public abstract class BaseFormEventImpl {
         StringBuffer sb = new StringBuffer();
         sb.append("\n\n show request attributes\n--------------------\n");
         Enumeration e = null;
-        if (request != null) {
-            e = request.getAttributeNames();
-        }
         if (portletRequest != null) {
             e = portletRequest.getAttributeNames();
         }
@@ -613,35 +579,21 @@ public abstract class BaseFormEventImpl {
      * ui_<visual bean element>_<bean Id>_name
      * where <visual bean element> is a two letter encoding of the kind of
      * visual bean that it is.
-     *
-     * @param req the PortletRequest
      */
-    protected void createTagBeans(Object req) {
+    protected void createTagBeans() {
         if (tagBeans == null) tagBeans = new HashMap<String, TagBean>();
         Map<String, String[]> paramsMap;
         // check for file upload
-        paramsMap = parseFileUpload(req);
-        Enumeration e = null;
-        if (request != null) {
-            e = request.getParameterNames();
-        }
-        if (portletRequest != null) {
-            e = portletRequest.getParameterNames();
-        }
+        paramsMap = parseFileUpload();
+        Enumeration e = portletRequest.getParameterNames();
         if (e != null) {
             while (e.hasMoreElements()) {
                 String uiname = (String) e.nextElement();
                 String[] vals = null;
-                if (request != null) {
-                    vals = request.getParameterValues(uiname);
-                }
-                if (portletRequest != null) {
-                    vals = portletRequest.getParameterValues(uiname);
-                }
+                vals = portletRequest.getParameterValues(uiname);
                 paramsMap.put(uiname, vals);
             }
         }
-        //Enumeration enum = request.getParameterNames();
         for (String s : paramsMap.keySet()) {
 
             String uiname = (String) s;
@@ -846,11 +798,11 @@ public abstract class BaseFormEventImpl {
         }
     }
 
-    protected Map<String, String[]> parseFileUpload(Object req) {
+    protected Map<String, String[]> parseFileUpload() {
         //log.debug("parseFileUpload");
         Map<String, String[]> parameters = new Hashtable<String, String[]>();
-        if (req instanceof HttpServletRequest) {
-            HttpServletRequest hreq = (HttpServletRequest) req;
+        if (portletRequest instanceof HttpServletRequest) {
+            HttpServletRequest hreq = (HttpServletRequest) portletRequest;
             //logRequestParameters();
             //logRequestAttributes();
             ServletRequestContext ctx = new ServletRequestContext(hreq);
@@ -861,7 +813,7 @@ public abstract class BaseFormEventImpl {
                 try {
                     fileItems = upload.parseRequest(hreq);
                 } catch (Exception e) {
-                    log.error("Error Parsing multi Part form.Error in workaround!!!", e);
+                    log.error("Unable to parse multi part form!!!", e);
                 }
                 if (fileItems != null) {
                     //log.debug("File items has size " + fileItems.size());
@@ -900,9 +852,17 @@ public abstract class BaseFormEventImpl {
     }
 
     /**
+     * Returns the collection of visual tag beans contained by this form event
+     *
+     * @return the collection of visual tag beans
+     */
+    public Map getTagBeans() {
+        return tagBeans;
+    }
+
+    /**
      * Stores any created beans into the request
      */
-
     public void store() {
         Iterator it = tagBeans.keySet().iterator();
         TagBean tagBean;
@@ -910,7 +870,6 @@ public abstract class BaseFormEventImpl {
             String beanKey = (String) it.next();
             tagBean = (TagBean) tagBeans.get(beanKey);
             //log.debug("storing bean in attribute: " + beanKey);
-            if (request != null) request.setAttribute(beanKey, tagBean);
             if (portletRequest != null) portletRequest.setAttribute(beanKey, tagBean);
         }
         //logRequestAttributes();
