@@ -101,6 +101,13 @@ public class ActionFormTag extends ActionTag {
                 name = "form" + this.getUniqueId("gs_formNumber");
             }
 
+	    if (this.cssStyle != null) {
+                out.print(" style=\"" + this.cssStyle + "\"");
+            }
+            if (this.cssClass != null) {
+                out.print(" class=\"" + this.cssClass + "\"");
+            }
+
             // 'name' attribute replaced by 'id' for XHTML 1.0 Strict compliance     
             out.print(" id=\"" + name + "\"");
 
