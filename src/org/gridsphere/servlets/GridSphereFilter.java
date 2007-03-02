@@ -180,10 +180,14 @@ public class GridSphereFilter implements Filter {
                     if (phase.equals("a")) {
                         if (st.hasMoreTokens()) {
                             extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + (String) st.nextElement();
+                        } else {
+                            extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=";
                         }
                     } else if (phase.equals("r")) {
                         if (st.hasMoreTokens()) {
                             extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_RENDER + "=" + (String) st.nextElement();
+                        } else {
+                            extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_RENDER + "=";
                         }
                     } else if (phase.equals("m")) {
                         if (st.hasMoreTokens()) {
