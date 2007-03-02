@@ -19,8 +19,6 @@ import java.util.HashMap;
 public class ActionFormEventImpl extends BaseFormEventImpl implements ActionFormEvent {
 
     private DefaultPortletAction action;
-    private ActionRequest request;
-    private ActionResponse response;
 
     /**
      * Constructs an instance of ActionEventImpl given an action, request and response
@@ -32,12 +30,10 @@ public class ActionFormEventImpl extends BaseFormEventImpl implements ActionForm
     public ActionFormEventImpl(DefaultPortletAction action, ActionRequest request, ActionResponse response) {
         super(request, response);
         this.action = action;
-        this.request = request;
-        this.response = response;
         // Unless tagBeans is null, don't recreate them
         if (tagBeans == null) {
             tagBeans = new HashMap<String, TagBean>();
-            createTagBeans(request);
+            createTagBeans();
         }
         //logRequestParameters();
         //logTagBeans();
@@ -58,7 +54,7 @@ public class ActionFormEventImpl extends BaseFormEventImpl implements ActionForm
      * @return the <code>PortletRequest</code>
      */
     public ActionRequest getActionRequest() {
-        return request;
+        return (ActionRequest) portletRequest;
     }
 
     /**
@@ -67,7 +63,7 @@ public class ActionFormEventImpl extends BaseFormEventImpl implements ActionForm
      * @return the <code>PortletResponse</code>
      */
     public ActionResponse getActionResponse() {
-        return response;
+        return (ActionResponse) portletResponse;
     }
 
 }

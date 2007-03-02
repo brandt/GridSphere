@@ -112,13 +112,13 @@ public class ActionPortlet extends GenericPortlet {
     protected void setTagBeans(PortletRequest request, Map tagBeans) {
         String id = getUniqueId();
         log.debug("saving tag beans in session " + id + ".beans");
-        request.getPortletSession(true).setAttribute(id + ".beans", tagBeans, PortletSession.APPLICATION_SCOPE);
+        request.getPortletSession(true).setAttribute(id + ".beans", tagBeans, PortletSession.PORTLET_SCOPE);
     }
 
     protected void removeTagBeans(PortletRequest request) {
         String id = getUniqueId();
         log.debug("removing tag beans from session " + id + ".beans");
-        request.getPortletSession(true).removeAttribute(id + ".beans", PortletSession.APPLICATION_SCOPE);
+        request.getPortletSession(true).removeAttribute(id + ".beans", PortletSession.PORTLET_SCOPE);
     }
 
     /**
@@ -131,7 +131,7 @@ public class ActionPortlet extends GenericPortlet {
     protected Map<String, TagBean> getTagBeans(PortletRequest request) {
         String id = getUniqueId();
         log.debug("getting tag beans from session " + id + ".beans");
-        return (Map<String, TagBean>) request.getPortletSession(true).getAttribute(id + ".beans", PortletSession.APPLICATION_SCOPE);
+        return (Map<String, TagBean>) request.getPortletSession(true).getAttribute(id + ".beans", PortletSession.PORTLET_SCOPE);
     }
 
     /**
@@ -170,7 +170,6 @@ public class ActionPortlet extends GenericPortlet {
         //System.err.println("in processAction: befoire store cid=" + actionRequest.getAttribute(SportletProperties.COMPONENT_ID));
 
         // If it's a POST then remove state
-
         /*
         if (((HttpServletRequest)actionRequest).getMethod().toUpperCase().equals("POST")) {
             removeNextState(actionRequest);
@@ -178,7 +177,6 @@ public class ActionPortlet extends GenericPortlet {
             removeNextTitle(actionRequest);
         }
         */
-
         setTagBeans(actionRequest, formEvent.getTagBeans());
     }
 
@@ -302,7 +300,7 @@ public class ActionPortlet extends GenericPortlet {
 
             doAction(request, response, next, paramTypes, arguments);
 
-            //System.err.println("in doMode: befoire store cid=" + request.getAttribute(SportletProperties.COMPONENT_ID));
+            //System.err.println("in doMode: before store cid=" + request.getAttribute(SportletProperties.COMPONENT_ID));
             formEvent.store();
             next = getNextState(request);
             if ((next != null) && (next.endsWith(".jsp"))) {
