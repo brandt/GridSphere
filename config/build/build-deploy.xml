@@ -88,7 +88,7 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <!-- copy webapp to build dir excluding files which need special handling-->
         <filter token="GRIDSPHERE_VERSION" value="${gridsphere.version}"/>
-        <copy filtering="true" todir="${build.webapps}/${gridsphere.deploy}">
+        <copy filtering="true" todir="${build.webapps}/${gridsphere.deploy}" encoding="UTF-8">
             <fileset dir="${gswebapp.dir}">
                 <exclude name="**/tlds/**"/>
                 <exclude name="index.html"/>
@@ -124,7 +124,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
         <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
         <!-- copy the rest of the webapps dir to -->
-        <copy overwrite="true" filtering="true" todir="${build.webapps}/${gridsphere.deploy}">
+        <copy overwrite="true" filtering="true" todir="${build.webapps}/${gridsphere.deploy}" encoding="UTF-8">
             <fileset dir="${gswebapp.dir}">
                 <exclude name="**/tlds/**"/>
                 <exclude name="index.html"/>
