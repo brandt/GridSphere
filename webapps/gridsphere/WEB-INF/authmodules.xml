@@ -14,7 +14,7 @@
         <name>GridSphere Password</name>
         <description lang="en">Hashed password based authentication using GridSphere database</description>
         <implementation>org.gridsphere.services.core.security.auth.modules.impl.PasswordAuthModule</implementation>
-        <active>true</active>
+        <active>true</active>   
         <priority>100</priority>
         <auth-config>
             <param-name>aname</param-name>

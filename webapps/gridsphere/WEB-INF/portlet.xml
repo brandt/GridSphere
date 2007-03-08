@@ -8,7 +8,7 @@
         <portlet-name>ConfigPortlet</portlet-name>
         <display-name xml:lang="en">GridSphere Configuration</display-name>
         <portlet-class>org.gridsphere.portlets.core.admin.config.ConfigPortlet</portlet-class>
-        <expiration-cache>0</expiration-cache>
+        <expiration-cache>0</expiration-cache>     
         <supports>
             <mime-type>text/html</mime-type>
             <portlet-mode>help</portlet-mode>
