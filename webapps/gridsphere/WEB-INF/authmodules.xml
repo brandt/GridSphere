@@ -13,6 +13,7 @@
     <auth-module>
         <name>GridSphere Password</name>
         <description lang="en">Hashed password based authentication using GridSphere database</description>
+        <description lang="ja">GridSphereデータベースを用いたハッシュベースのパスワード認証</description>
         <implementation>org.gridsphere.services.core.security.auth.modules.impl.PasswordAuthModule</implementation>
         <active>true</active>
         <priority>100</priority>
@@ -22,6 +23,8 @@
         </auth-config>
         <error key="key1" lang="en">Password is not provided</error>
         <error key="key2" lang="en">Incorrect password provided</error>
+        <error key="key1" lang="ja">パスワードが入力されていません</error>
+        <error key="key2" lang="ja">間違ったパスワードが入力されました</error>
         <error key="key1" lang="es">No fué proporcionada la Contraseña</error>
         <error key="key2" lang="es">La contraseña proporcionada, es incorrecta</error>
     </auth-module>
@@ -29,6 +32,7 @@
     <auth-module>
         <name>GridSphere JAAS</name>
         <description lang="en">Use the Java Authentication and Authorization Framework</description>
+        <description lang="ja">Java認証＆授権フレームワーク(Java Authentication and Authorization Framework)を使用</description>
         <implementation>org.gridsphere.services.core.security.auth.modules.impl.JaasAuthModule</implementation>
         <active>false</active>
         <priority>40</priority>
@@ -39,6 +43,9 @@
         <error key="key1" lang="en">Account Expired</error>
         <error key="key2" lang="en">Credentials Expired</error>
         <error key="key3" lang="en">Unexpected Error</error>
+        <error key="key1" lang="ja">アカウント失効</error>
+        <error key="key2" lang="ja">信用証明書失効</error>
+        <error key="key3" lang="ja">予期せぬエラー</error>
         <error key="key1" lang="es">La cuenta ha expiradi</error>
         <error key="key2" lang="es">Credenciales expiradas</error>
         <error key="key3" lang="es">Error Inesperado</error>

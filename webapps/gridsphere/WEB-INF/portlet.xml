@@ -26,6 +26,7 @@
         <description xml:lang="en">Portlet provides date capabilities</description>
         <description xml:lang="es">Portlet proporciona las capacidades de la fecha</description>
         <description xml:lang="hr">Portlet ostvaruje funkcionalnost dohvata datuma</description>
+        <description xml:lang="ja">Portletは日時機能を提供します</description>
         <description xml:lang="nl">Portlet biedt datum functionaliteiten</description>
         <!-- place unique portlet name here -->
         <portlet-name>DatePortlet</portlet-name>
@@ -42,6 +43,7 @@
         <supported-locale>en</supported-locale>
         <supported-locale>es</supported-locale>
         <supported-locale>hr</supported-locale>
+        <supported-locale>ja</supported-locale>
         <supported-locale>nl</supported-locale>
         <resource-bundle>Date.Portlet</resource-bundle>
     </portlet>
@@ -56,8 +58,10 @@
         <description xml:lang="hr">Portlet ostvaruje funkcionalnosti ulaza korisnika u portal</description>
         <description xml:lang="hu">A portlet a portálba való bejelentkezésre szolgál</description>
         <description xml:lang="it">La Portlet fornisce funzionalità di login</description>
+        <description xml:lang="ja"></description>
         <description xml:lang="nl">Portlet biedt login mogelijkheden</description>
         <description xml:lang="pl">Portlet umożliwia zalogowanie się</description>
+        <description xml:lang="zh">门件提供了登录功能</description>
 
         <!-- place unique portlet name here -->
         <portlet-name>Login</portlet-name>
@@ -79,8 +83,10 @@
         <supported-locale>hr</supported-locale>
         <supported-locale>hu</supported-locale>
         <supported-locale>it</supported-locale>
+        <supported-locale>ja</supported-locale>
         <supported-locale>nl</supported-locale>
         <supported-locale>pl</supported-locale>
+        <supported-locale>zh</supported-locale>
         <resource-bundle>Login.Portlet</resource-bundle>
     </portlet>
     <portlet>
@@ -110,8 +116,10 @@
         <description xml:lang="hr">Portlet omogućava administriranje jezika</description>
         <description xml:lang="hu">Nyelv választása</description>
         <description xml:lang="it">Seleziona una localizzazione</description>
+        <description xml:lang="ja">言語を選択して下さい</description>
         <description xml:lang="nl">Selecteer een landinstelling</description>
         <description xml:lang="pl">Wybór lokalizacji</description>
+        <description xml:lang="zh">选择一门语言</description>
 
         <!-- place unique portlet name here -->
         <portlet-name>LocalePortlet</portlet-name>
@@ -134,8 +142,10 @@
         <supported-locale>hr</supported-locale>
         <supported-locale>hu</supported-locale>
         <supported-locale>it</supported-locale>
+        <supported-locale>ja</supported-locale>
         <supported-locale>nl</supported-locale>
         <supported-locale>pl</supported-locale>
+        <supported-locale>zh</supported-locale>
         <resource-bundle>Locale.Portlet</resource-bundle>
     </portlet>
     <portlet>
@@ -233,6 +243,7 @@
         </description>
         <description xml:lang="it">Permette agli gestire del portale di amministrare gli account utente</description>
         <description xml:lang="pl">Umożliwia administratorowi portalu administrowanie kontami użytkowników</description>
+        <description xml:lang="zh">使门户网站管理者能够管理用户帐号</description>
         <portlet-name>UserAccountManager</portlet-name>
         <display-name xml:lang="en">User Account Manager</display-name>
         <portlet-class>org.gridsphere.portlets.core.admin.users.UserManagerPortlet</portlet-class>
@@ -251,8 +262,10 @@
         <supported-locale>hr</supported-locale>
         <supported-locale>hu</supported-locale>
         <supported-locale>it</supported-locale>
+        <supported-locale>ja</supported-locale>
         <supported-locale>nl</supported-locale>
         <supported-locale>pl</supported-locale>
+        <supported-locale>zh</supported-locale>
         <resource-bundle>UserManager.Portlet</resource-bundle>
     </portlet>
 
@@ -262,6 +275,7 @@
         <description xml:lang="es">Les permite a administradores del portal que administren los Roles de seguridad
         </description>
         <description xml:lang="hr">Portlet omogućava administriranje uloga</description>
+        <description xml:lang="ja">ポータル管理者にセキュリティ権限管理機能を提供します</description>
 
         <!-- place unique portlet name here -->
         <portlet-name>RoleManager</portlet-name>
@@ -278,6 +292,7 @@
         <supported-locale>en</supported-locale>
         <supported-locale>es</supported-locale>
         <supported-locale>hr</supported-locale>
+        <supported-locale>ja</supported-locale>
         <resource-bundle>RoleManager.Portlet</resource-bundle>
     </portlet>
 
@@ -292,8 +307,10 @@
         <description xml:lang="hr">Portlet omogućava administriranje profila</description>
         <description xml:lang="hu">Lehetővé teszi a felhasználók számára, saját beállításaik szerkesztését</description>
         <description xml:lang="it">Personalizza il profilo utente</description>
+        <description xml:lang="ja">ユーザープロファイルをカスタマイズ</description>
         <description xml:lang="nl">Beheer gebruikersprofielen</description>
         <description xml:lang="pl">Dostosowywanie profili użytkownika</description>
+        <description xml:lang="zh">定制用户成形</description>
 
         <!-- place unique portlet name here -->
         <portlet-name>ProfileManager</portlet-name>
@@ -316,8 +333,10 @@
         <supported-locale>hr</supported-locale>
         <supported-locale>hu</supported-locale>
         <supported-locale>it</supported-locale>
+        <supported-locale>ja</supported-locale>
         <supported-locale>nl</supported-locale>
         <supported-locale>pl</supported-locale>
+        <supported-locale>zh</supported-locale>
         <resource-bundle>ProfileManager.Portlet</resource-bundle>
     </portlet>
     <portlet>
@@ -331,8 +350,10 @@
         <description xml:lang="hr">Portlet omogućava administriranje portleta</description>
         <description xml:lang="hu">Lehetővé teszi a portal adminisztrátorok számára, portletek kezelését</description>
         <description xml:lang="it">Consente agli amministratori del portale di gestire le portlet</description>
+        <description xml:lang="ja">ポータル管理者にportletの管理機能を提供する</description>
         <description xml:lang="nl">Portal administratoren kunnen portlets beheren</description>
         <description xml:lang="pl">Umożliwia administratorowi portalu administrowanie portletami</description>
+        <description xml:lang="zh">使门户网站管理者管理门件</description>
 
         <!-- place unique portlet name here -->
         <portlet-name>Portlet Application Manager</portlet-name>
@@ -358,8 +379,10 @@
         <supported-locale>hr</supported-locale>
         <supported-locale>hu</supported-locale>
         <supported-locale>it</supported-locale>
+        <supported-locale>ja</supported-locale>
         <supported-locale>nl</supported-locale>
         <supported-locale>pl</supported-locale>
+        <supported-locale>zh</supported-locale>
         <resource-bundle>PortletApplicationManager.Portlet</resource-bundle>
     </portlet>
     <portlet>
@@ -373,8 +396,10 @@
         <description xml:lang="hr">Portlet omogućava administriranje izgleda</description>
         <description xml:lang="hu">Lehetővé teszi a portletekből egyéni weblapok felépítését</description>
         <description xml:lang="it">Consente la personalizzazione del layout utente</description>
+        <description xml:lang="ja">管理上のレイアウトカスタマイズ</description>
         <description xml:lang="nl">Gebruikers kunnen hun eigen layout bepalen</description>
         <description xml:lang="pl">Udostępnia użytkownikowi dostosowywanie układów graficznych</description>
+        <description xml:lang="zh">提供了用户版面定制化功能</description>
 
         <!-- place unique portlet name here -->
         <portlet-name>Layout Manager</portlet-name>
@@ -397,8 +422,10 @@
         <supported-locale>hr</supported-locale>
         <supported-locale>hu</supported-locale>
         <supported-locale>it</supported-locale>
+        <supported-locale>ja</supported-locale>
         <supported-locale>nl</supported-locale>
         <supported-locale>pl</supported-locale>
+        <supported-locale>zh</supported-locale>
         <resource-bundle>LayoutManager.Portlet</resource-bundle>
     </portlet>
 
