@@ -54,7 +54,7 @@
 
         <copy file="config/build/build.project.xml" tofile="${project.dir}/build.xml"/>
 
-        <copy file="config/build    /build.properties" tofile="${project.dir}/build.properties" filtering="true"/>
+        <copy file="config/build/build.properties" tofile="${project.dir}/build.properties" filtering="true"/>
 
         <replace file="${project.dir}/build.xml"
                  token="@GRIDSPHERE_VERSION@"
