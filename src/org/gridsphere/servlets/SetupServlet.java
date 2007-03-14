@@ -247,6 +247,8 @@ public class SetupServlet extends HttpServlet {
             hibProps.setProperty("hibernate.connection.url", connURL);
             hibProps.setProperty("hibernate.connection.driver_class", driverClass);
             hibProps.store(hibOut, "Hibernate Properties");
+            hibOut.close();
+            hibInputStream.close();            
         } catch (IOException e) {
             log.error("Unable to load/save hibernate.properties", e);
             throw new IllegalArgumentException("Unable to  save hibernate.properties file! Please check the log file for more details");
