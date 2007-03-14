@@ -18,7 +18,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
 
 public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private transient Log log = LogFactory.getLog(PersistenceManagerRdbmsImpl.class);
@@ -50,7 +53,8 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         //pm = context.getRealPath("");
         String mappingPath = context.getRealPath("/WEB-INF/persistence");
         try {
-            prop.load(context.getResourceAsStream("/WEB-INF/CustomPortal/database/hibernate.properties"));
+            String hibPath = context.getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties");
+            prop.load(new FileInputStream(hibPath));
             Configuration cfg = loadConfiguration(mappingPath, prop);
             factory = cfg.buildSessionFactory();
         } catch (IOException e) {
@@ -105,8 +109,8 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                 List<String> filenameList = Arrays.asList(children);
                 // Ensure that this list is sorted alphabetically
                 Collections.sort(filenameList);
-                for (Iterator filenames = filenameList.iterator(); filenames.hasNext();) {
-                    String filename = (String) filenames.next();
+                for (String aFilenameList : filenameList) {
+                    String filename = aFilenameList;
                     if (filename.endsWith(".hbm.xml")) {
                         // Get filename of file or directory
                         log.debug("add hbm file :" + mappingPath + File.separator + filename);
@@ -198,7 +202,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         ClassLoader currentloader = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(classLoader);
         Object result = null;
-        Query q = null;
+        Query q;
         Session session = currentSession();
         switch (command) {
             case CMD_CREATE:
@@ -231,7 +235,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                 break;
             case CMD_COUNT:
                 q = session.createQuery(query);
-                result = (Long) q.uniqueResult();
+                result = q.uniqueResult();
                 break;
         }
         Thread.currentThread().setContextClassLoader(currentloader);
@@ -240,7 +244,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
 
     public Session currentSession() throws HibernateException {
-        Session session = (Session) sessionThread.get();
+        Session session = sessionThread.get();
         if (session == null) {
             session = factory.openSession();
             sessionThread.set(session);
