@@ -187,6 +187,7 @@ public class LoginPortlet extends ActionPortlet {
         String forgotMail = portalConfigService.getProperty("LOGIN_FORGOT_BODY");
         if (forgotMail == null) forgotMail = getLocalizedText(req, "LOGIN_FORGOT_MAIL");
         body.append(forgotMail).append("\n\n");
+        body.append(getLocalizedText(req, "USERNAME")).append(" :").append(user.getUserName()).append("\n\n");
 
         body.append(newpasswordURL).append("&reqid=").append(request.getOid());
         mailToUser.setBody(body.toString());
