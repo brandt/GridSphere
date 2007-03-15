@@ -568,6 +568,7 @@ public class LoginPortlet extends ActionPortlet {
         StringBuffer body = new StringBuffer();
 
         body.append(getLocalizedText(req, "LOGIN_FORGOT_MAIL") + "\n\n");
+        body.append(getLocalizedText(req, "USERNAME")).append(" :").append(user.getUserName()).append("\n\n");
 
         PortletURI uri = res.createURI();
 
