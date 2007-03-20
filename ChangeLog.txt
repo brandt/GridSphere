@@ -1,6 +1,15 @@
 ChangeLog.txt
 =============
 
+
+Changes since GS 3.0.3
+======================
+
+    * [GPF-343] - No logo because of wrong path to image
+    * [GPF-347] - ant new-project does not work
+    * [GPF-350] - Portal does not startup in windows
+
+
 Changes since GS 3.0.1
 ======================
 
