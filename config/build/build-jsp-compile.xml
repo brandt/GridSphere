@@ -26,7 +26,7 @@
             <then>
 
                 <jspc50 outputDir="${gridsphere.build}/jsp/source"
-                        uriroot="${gridsphere.build}/webapps/gridsphere/"
+                        uriroot="${gridsphere.build}/webapps/${gridsphere.deploy}/"
                         webXmlFragment="${gridsphere.build}/jsp/web.inc"
                         validateXml="false">
                 </jspc50>
