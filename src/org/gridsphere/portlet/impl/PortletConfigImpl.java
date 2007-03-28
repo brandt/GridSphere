@@ -41,9 +41,9 @@ public class PortletConfigImpl implements PortletConfig {
             String shortTitle = ((portletInfo.getShortTitle() != null) ? portletInfo.getShortTitle().getContent() : "");
             String keywords = ((portletInfo.getKeywords() != null) ? portletInfo.getKeywords().getContent() : "");
             resources = new Object[][]{
-                {"javax.portlet.title", title},
-                {"javax.portlet.short-title", shortTitle},
-                {"javax.portlet.keywords", keywords}
+                    {"javax.portlet.title", title},
+                    {"javax.portlet.short-title", shortTitle},
+                    {"javax.portlet.keywords", keywords}
             };
         }
 
@@ -132,7 +132,7 @@ public class PortletConfigImpl implements PortletConfig {
 
     /**
      * Returns the name of the portlet.
-     * <P>
+     * <p/>
      * The name may be provided via server administration, assigned in the
      * portlet application deployment descriptor with the <code>portlet-name</code>
      * tag.
@@ -189,6 +189,8 @@ public class PortletConfigImpl implements PortletConfig {
             if (infoBundle != null) {
                 return infoBundle;
             }
+            // if everything goes wrong get the english locale (which needs to be there)
+            resourceBundle = ResourceBundle.getBundle(resources, Locale.ENGLISH, classLoader);
         }
         return resourceBundle;
     }
@@ -199,9 +201,9 @@ public class PortletConfigImpl implements PortletConfig {
      *
      * @param name a <code>String</code> specifying the name
      *             of the initialization parameter
-     * @return		a <code>String</code> containing the value
+     * @return a <code>String</code> containing the value
      * of the initialization parameter
-     * @exception	IllegalArgumentException if name is <code>null</code>.
+     * @exception IllegalArgumentException if name is <code>null</code>.
      */
     public String getInitParameter(String name) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
@@ -214,7 +216,7 @@ public class PortletConfigImpl implements PortletConfig {
      * <code>Enumeration</code> of String objects, or an empty <code>Enumeration</code> if the
      * portlet has no initialization parameters.
      *
-     * @return		an <code>Enumeration</code> of <code>String</code>
+     * @return an <code>Enumeration</code> of <code>String</code>
      * objects containing the names of the portlet
      * initialization parameters, or an empty <code>Enumeration</code> if the
      * portlet has no initialization parameters.
