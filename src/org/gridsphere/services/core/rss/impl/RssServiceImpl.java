@@ -3,19 +3,21 @@ package org.gridsphere.services.core.rss.impl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
-import com.sun.syndication.io.XmlReader;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.services.core.rss.RssService;
+import org.xml.sax.InputSource;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Implementation of the RssService.
+ * $Id$
  */
 public class RssServiceImpl implements RssService, PortletServiceProvider {
 
@@ -32,9 +34,17 @@ public class RssServiceImpl implements RssService, PortletServiceProvider {
             Long cachedTime = (Long) this.cachedTime.get(url);
             diff = System.currentTimeMillis() - cachedTime.longValue();
         }
+
+
         if (diff > CACHE_TIME) {
             try {
-                feed = input.build(new XmlReader(new URL(url)));
+                URL rssUrl = new URL(url);
+                URLConnection c = rssUrl.openConnection();
+                c.setConnectTimeout(2000);
+                c.setReadTimeout(2000);
+                c.connect();
+                InputSource src = new InputSource(c.getInputStream());
+                feed = input.build(src);
             } catch (IOException e) {
                 throw new FeedException("Invalid URL.");
             }
