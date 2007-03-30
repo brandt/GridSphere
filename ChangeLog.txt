@@ -2,6 +2,13 @@ ChangeLog.txt
 =============
 
 
+Release Notes - GridSphere Portal Framework - Version 3.0.5
+
+    * [GPF-352] - Could not use gridsphere.useprecompiledjsp=true
+    * [GPF-366] - if rss feeds not available gs hangs at login for a little while
+    * [GPF-365] - jsp precompiling with changed deploy context does not work
+
+
 Changes since GS 3.0.3
 ======================
 
