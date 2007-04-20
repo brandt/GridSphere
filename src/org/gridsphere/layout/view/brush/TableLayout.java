@@ -13,7 +13,9 @@ import org.gridsphere.layout.view.BaseRender;
 import org.gridsphere.layout.view.TableLayoutView;
 import org.gridsphere.portlet.impl.PortletURLImpl;
 import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridsphere.provider.portlet.jsr.PortletServlet;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderResponse;
@@ -84,8 +86,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
                         }
                         table.append(">");
                         // render add portlets listbox
-                        Map availPortlets = tableLayout.getAllPortletsToAdd(event);
-                        table.append(renderAddPortlets(event, j, availPortlets));
+                        table.append(renderAddPortlets(event, j, tableLayout.getAllPortletsToAdd(event)));
 
                         table.append("</div>");
                     }
@@ -131,7 +132,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
         return table;
     }
 
-    public StringBuffer renderAddPortlets(GridSphereEvent event, int col, Map availPortlets) {
+    public StringBuffer renderAddPortlets(GridSphereEvent event, int col, Set<ApplicationPortlet> availPortlets) {
         StringBuffer table = new StringBuffer();
 
         PortletRequest req = event.getRenderRequest();
@@ -148,33 +149,35 @@ public class TableLayout extends BaseRender implements TableLayoutView {
             url.setParameter("usertable", "edit");
         }
 
-        table.append("<form action=\"" + url.toString() + "\"  method=\"post\" name=\"addform\"><p>");
-        table.append("<input type=\"hidden\" name=\"" + PortletTableLayout.PORTLET_COL + "\" value=\"" + col + "\"/>");
+        table.append("<form action=\"").append(url.toString()).append("\"  method=\"post\" name=\"addform\"><p>");
+        table.append("<input type=\"hidden\" name=\"" + PortletTableLayout.PORTLET_COL + "\" value=\"").append(col).append("\"/>");
 
         ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
         String addLabel = bundle.getString("ADDPORTLETS");
         String addButton = bundle.getString("ADD");
         String noPortletsMsg = bundle.getString("NOPORTLETS");
 
-        table.append("<b>" + addLabel + "</b>&nbsp;&nbsp;&nbsp;");
+        table.append("<b>").append(addLabel).append("</b>&nbsp;&nbsp;&nbsp;");
         table.append("<select name=\"" + PortletTableLayout.PORTLET_ADD_PORTLET + "\">");
 
         if (availPortlets.isEmpty()) {
-            table.append("<option value=\"" + PortletTableLayout.PORTLET_NO_ACTION + "\">" + noPortletsMsg + "</option>");
+            table.append("<option value=\"" + PortletTableLayout.PORTLET_NO_ACTION + "\">").append(noPortletsMsg).append("</option>");
         }
 
-        Iterator it = availPortlets.keySet().iterator();
-        while (it.hasNext()) {
-            String pid = (String) it.next();
-            String dispName = (String) availPortlets.get(pid);
-            table.append("<option value=\"" + pid + "\">" + dispName + "</option>");
+        for (ApplicationPortlet appPortlet : availPortlets) {
+            String concID = appPortlet.getConcretePortletID();
+            // we don't want to list PortletServlet loader!
+            if (concID.startsWith(PortletServlet.class.getName())) continue;
+            String dispName = appPortlet.getDisplayName(locale);
+            table.append("<option value=\"").append(appPortlet.getConcretePortletID()).append("\">").append(appPortlet.getWebApplicationName()).append(" - ").append(dispName).append("</option>");
         }
+
 
         table.append("</select>");
 
         String action = SportletProperties.DEFAULT_PORTLET_ACTION + "=addportlet";
 
-        table.append("&nbsp;&nbsp;<input type=\"submit\" name=\"" + action + "\" value=\"" + addButton + "\">");
+        table.append("&nbsp;&nbsp;<input type=\"submit\" name=\"").append(action).append("\" value=\"").append(addButton).append("\">");
         table.append("</p></form>");
         return table;
     }

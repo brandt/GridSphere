@@ -11,6 +11,7 @@ import org.gridsphere.portlet.service.PortletServiceException;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridsphere.portletcontainer.impl.ApplicationPortletImpl;
 import org.gridsphere.provider.portlet.jsr.PortletServlet;
 import org.gridsphere.services.core.jcr.ContentDocument;
 import org.gridsphere.services.core.jcr.ContentException;
@@ -178,10 +179,9 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         }
     }
 
-    public Map getAllPortletsToAdd(GridSphereEvent event) {
+    public Set getAllPortletsToAdd(GridSphereEvent event) {
         PortletRequest req = event.getRenderRequest();
-
-        Map<String, String> allPortlets = new HashMap<String, String>();
+        SortedSet<ApplicationPortlet> result = new TreeSet();
         Collection<ApplicationPortlet> appColl = registryService.getAllApplicationPortlets();
         Locale locale = req.getLocale();
         for (ApplicationPortlet appPortlet : appColl) {
@@ -189,9 +189,11 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
             // we don't want to list PortletServlet loader!
             if (concID.startsWith(PortletServlet.class.getName())) continue;
             String dispName = appPortlet.getDisplayName(locale);
-            allPortlets.put(concID, dispName);
+            ApplicationPortletImpl api = (ApplicationPortletImpl) appPortlet;
+            api.setCompareLocale(locale);
+            result.add(api);
         }
-        return allPortlets;
+        return result;
     }
 
     public Map getAllContentToAdd(GridSphereEvent event) {

@@ -33,7 +33,7 @@ import java.util.*;
  * The <code>ApplicationPortlet</code> represents the portlet application instance
  * defined in the portlet descriptor file.
  */
-public class ApplicationPortletImpl implements ApplicationPortlet {
+public class ApplicationPortletImpl implements ApplicationPortlet, Comparable {
 
     private Log log = LogFactory.getLog(ApplicationPortletImpl.class);
     private PortletDefinition portletDef = null;
@@ -41,6 +41,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
     private String portletClassName = null;
     private String webAppName = null;
 
+    private Locale compareLocale = null;
 
     private Portlet portletInstance = null;
 
@@ -527,5 +528,18 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
         }
         */
         return sb.toString();
+    }
+
+    public void setCompareLocale(Locale loc) {
+        compareLocale = loc;
+    }
+
+    public int compareTo(Object o) {
+        ApplicationPortletImpl otherApplicationPortlet = (ApplicationPortletImpl) o;
+        if (compareLocale == null)
+            return getDisplayName(new Locale(getDefaultLocale())).
+                    compareToIgnoreCase(otherApplicationPortlet.getDisplayName(new Locale(getDefaultLocale())));
+        else
+            return getDisplayName(compareLocale).compareToIgnoreCase(otherApplicationPortlet.getDisplayName(compareLocale));
     }
 }
