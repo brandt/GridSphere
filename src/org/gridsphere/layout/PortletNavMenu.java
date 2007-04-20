@@ -150,10 +150,12 @@ public abstract class PortletNavMenu extends BasePortletComponent implements Ser
      * @param tab the portlet tab to remove
      */
     public void removeTab(PortletTab tab) {
-        Iterator<PortletTab> it = tabs.iterator();
-        while (it.hasNext()) {
-            PortletTab atab = it.next();
-            if (tab.getLabel().equals(atab.getLabel())) it.remove();
+        for (int i = 0; i < tabs.size(); i++) {
+            PortletTab atab = tabs.get(i);
+            if (atab.getComponentID() == tab.getComponentID()) {
+                tabs.remove(atab);
+                i = tabs.size();
+            }
         }
     }
 
