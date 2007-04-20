@@ -721,7 +721,11 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 for (PortletTab atab : tabs) {
                     PortletTabbedPane subpane = (PortletTabbedPane) atab.getPortletComponent();
                     List<PortletTab> subtabs = subpane.getPortletTabs();
-                    menu.addTab(subtabs.get(0));
+                    if (subtabs.size() > 0) {
+                        for (PortletTab stab : subtabs) {
+                            menu.addTab(stab);
+                        }
+                    }
 
                 }
             }
