@@ -452,8 +452,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 }
             }
         }
-        displayModes = req.getAttribute(SportletProperties.DISPLAY_MODES).equals(Boolean.FALSE);
-        displayStates = req.getAttribute(SportletProperties.DISPLAY_STATES).equals(Boolean.FALSE);
+        displayModes = req.getAttribute(SportletProperties.DISPLAY_MODES).equals(Boolean.TRUE);
+        displayStates = req.getAttribute(SportletProperties.DISPLAY_STATES).equals(Boolean.TRUE);
         return list;
     }
 
