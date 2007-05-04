@@ -209,6 +209,10 @@ public class SportletProperties {
 
     public static final String FLOAT_STATE = "org.gridsphere.portlet.FLOAT_STATE";
 
+    public static final String DISPLAY_MODES = "org.gridsphere.layout.DISPLAY_MODES";
+
+    public static final String DISPLAY_STATES = "org.gridsphere.layout.DISPLAY_STATES";
+
     public static final String SSL_REQUIRED = "javax.portlet.SSL_REQUIRED";
 
     public static final String PORTLET_USER_PRINCIPAL = "org.gridsphere.services.core.user.UserPrincipal";
