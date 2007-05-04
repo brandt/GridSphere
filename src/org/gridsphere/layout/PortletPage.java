@@ -48,7 +48,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
     protected String icon = "images/favicon.ico";
     protected int refresh = 0;
     protected boolean editable = true;
-
+    protected boolean displayModes = true;
+    protected boolean displayStates = true;
     private String layoutDescriptor = null;
 
     private Map<String, Integer> labelsHash = null;
@@ -105,6 +106,42 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
      */
     public boolean getEditable() {
         return editable;
+    }
+
+    /**
+     * Boolean flag to determine if the portlet modes should be displayed
+     *
+     * @param displayModes flag to determine if this layout can be customized
+     */
+    public void setDisplayModes(boolean displayModes) {
+        this.displayModes = displayModes;
+    }
+
+    /**
+     * Boolean flag to determine if the portlet modes should be displayed
+     *
+     * @return true if this layout can be customized
+     */
+    public boolean getDisplayModes() {
+        return displayModes;
+    }
+
+    /**
+     * Boolean flag to determine if thie window states should be displaed
+     *
+     * @param displayStates to determine if thie window states should be displaed
+     */
+    public void setDisplayStates(boolean displayStates) {
+        this.displayStates = displayStates;
+    }
+
+    /**
+     * Boolean flag to determine if the window states should be displayed
+     *
+     * @return true if this layout can be customized
+     */
+    public boolean getDisplayStates() {
+        return displayStates;
     }
 
     /**
@@ -275,6 +312,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
         req.getPortletSession().setAttribute(SportletProperties.LAYOUT_RENDERKIT, renderKit, PortletSession.APPLICATION_SCOPE);
 
+        req.setAttribute(SportletProperties.DISPLAY_MODES, Boolean.valueOf(displayModes));
+        req.setAttribute(SportletProperties.DISPLAY_STATES, Boolean.valueOf(displayStates));
 
         pageView = (Render) getRenderClass(req, "Page");
 
