@@ -60,6 +60,12 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
     private transient Render titleView = null;
 
+    // display modes in title bar at all?
+    private transient boolean displayModes = true;
+
+    // display states in title bar at all?
+    private transient boolean displayStates = true;
+
     /**
      * Link is an abstract representation of a hyperlink with an href, image and
      * alt tags.
@@ -446,6 +452,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 }
             }
         }
+        displayModes = req.getAttribute(SportletProperties.DISPLAY_MODES).equals(Boolean.TRUE);
+        displayStates = req.getAttribute(SportletProperties.DISPLAY_STATES).equals(Boolean.TRUE);
         return list;
     }
 
@@ -490,6 +498,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         RenderResponse res = event.getRenderResponse();
 
         if (allowedWindowStates.isEmpty()) return null;
+
+        if (!displayStates) return null;
 
         //String[] windowStates = new String[allowedWindowStates.size()];
         List<javax.portlet.WindowState> windowStates = new ArrayList<javax.portlet.WindowState>();
@@ -541,8 +551,10 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         super.doRender(event);
         RenderResponse res = event.getRenderResponse();
         RenderRequest req = event.getRenderRequest();
-        // make modes from supported modes
 
+        if (!displayStates) return null;
+
+        // make modes from supported modes
         Set<String> supportedModes = (Set<String>) req.getAttribute(SportletProperties.ALLOWED_MODES);
         if (supportedModes == null) return null;
 
