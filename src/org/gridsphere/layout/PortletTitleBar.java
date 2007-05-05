@@ -552,7 +552,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         RenderResponse res = event.getRenderResponse();
         RenderRequest req = event.getRenderRequest();
 
-        if (!displayStates) return null;
+        if (!displayModes) return null;
 
         // make modes from supported modes
         Set<String> supportedModes = (Set<String>) req.getAttribute(SportletProperties.ALLOWED_MODES);
@@ -590,7 +590,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 modeLink.setHref(portletURL.toString());
                 portletLinks.add(modeLink);
             } catch (PortletModeException e) {
-                log.error("Unable to get mode for : " + mode.toString());
+                log.error("Unable to get mode for : " + mode);
             }
         }
         return portletLinks;
@@ -611,7 +611,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
         // Render title bar
-        Set supportedModes = null;
+        Set<String> supportedModes = null;
         String appID = portletRegistryService.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -716,7 +716,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         RenderRequest req = event.getRenderRequest();
         RenderResponse res = event.getRenderResponse();
 
-        Set supportedModes = null;
+        Set<String> supportedModes = null;
         String appID = portletRegistryService.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
         if (appPortlet != null) {
