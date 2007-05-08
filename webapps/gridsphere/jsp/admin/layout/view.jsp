@@ -60,6 +60,8 @@
                 <ui:tablecell>
                     <ui:text key="LAYOUT_SEL_TOPS"/>
                     <ui:listbox beanId="navigationLB"/>
+                    <ui:text key="LAYOUT_SEL_SHOW_MODES"/> <ui:checkbox beanId="showModesCB"/>
+                    <ui:text key="LAYOUT_SEL_SHOW_STATES"/><ui:checkbox beanId="showStatesCB"/>
                     <ui:actionsubmit action="doSaveNav" key="SAVE"/>
                 </ui:tablecell>
             </ui:tablerow>
