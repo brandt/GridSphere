@@ -426,6 +426,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletPage page = (PortletPage) pages.get(sessionId);
         if (page == null) page = createLayout(event, req);
 
+
+        CheckBoxBean showModesCB = event.getCheckBoxBean("showModesCB");
+        CheckBoxBean showStatesCB = event.getCheckBoxBean("showStatesCB");
+        showStatesCB.setSelected(page.getDisplayStates());
+        showModesCB.setSelected(page.getDisplayModes());
+
         // set page details
         event.getTextFieldBean("titleTF").setValue(page.getTitle());
         event.getTextFieldBean("keywordsTF").setValue(page.getKeywords());
@@ -678,96 +684,98 @@ public class LayoutManagerPortlet extends ActionPortlet {
         ListBoxBean navLB = event.getListBoxBean("navigationLB");
         String name = navLB.getSelectedName();
 
+        CheckBoxBean showModesCB = event.getCheckBoxBean("showModesCB");
+        CheckBoxBean showStatesCB = event.getCheckBoxBean("showStatesCB");
+        page.setDisplayModes(showModesCB.isSelected());
+        page.setDisplayStates(showStatesCB.isSelected());
+
         if (name.equals("bar")) {
             // the actual component matches the selected one, do nothing
-            if (navComp instanceof PortletBar) {
-                return;
+            if (!(navComp instanceof PortletBar)) {
+                PortletBar bar = new PortletBar();
+                // set the first menu tab component to be the bar component
+                if (navComp instanceof PortletMenu) {
+                    PortletMenu menu = (PortletMenu) navComp;
+                    List<PortletTab> tabs = menu.getPortletTabs();
+                    PortletTab tab = tabs.get(0);
+                    bar.setPortletComponent(tab.getPortletComponent());
+                }
+                // set the component of the first subtab to be the bar component
+                if (navComp instanceof PortletTabbedPane) {
+                    PortletTabbedPane pane = (PortletTabbedPane) navComp;
+                    List<PortletTab> tabs = pane.getPortletTabs();
+                    PortletTab tab = tabs.get(0);
+                    PortletTabbedPane subpane = (PortletTabbedPane) tab.getPortletComponent();
+                    PortletTab subtab = subpane.getPortletTabAt(0);
+                    bar.setPortletComponent(subtab.getPortletComponent());
+                }
+                page.setPortletComponent(bar);
             }
-            PortletBar bar = new PortletBar();
-            // set the first menu tab component to be the bar component
-            if (navComp instanceof PortletMenu) {
-                PortletMenu menu = (PortletMenu) navComp;
-                List<PortletTab> tabs = menu.getPortletTabs();
-                PortletTab tab = tabs.get(0);
-                bar.setPortletComponent(tab.getPortletComponent());
-            }
-            // set the component of the first subtab to be the bar component
-            if (navComp instanceof PortletTabbedPane) {
-                PortletTabbedPane pane = (PortletTabbedPane) navComp;
-                List<PortletTab> tabs = pane.getPortletTabs();
-                PortletTab tab = tabs.get(0);
-                PortletTabbedPane subpane = (PortletTabbedPane) tab.getPortletComponent();
-                PortletTab subtab = subpane.getPortletTabAt(0);
-                bar.setPortletComponent(subtab.getPortletComponent());
-            }
-            page.setPortletComponent(bar);
 
         } else if (name.equals("menu")) {
-            if (navComp instanceof PortletMenu) {
-                return;
-            }
-            PortletMenu menu = new PortletMenu();
-            if (navComp instanceof PortletBar) {
-                PortletBar bar = (PortletBar) navComp;
-                PortletTab tab = new PortletTab();
-                tab.setTitle(req.getLocale().getLanguage(), this.getLocalizedText(req, "LAYOUT_DEFAULT_TAB_NAME"));
-                tab.setPortletComponent(bar.getPortletComponent());
-                menu.addTab(tab);
-            }
-
-            if (navComp instanceof PortletTabbedPane) {
-                PortletTabbedPane pane = (PortletTabbedPane) navComp;
-                List<PortletTab> tabs = pane.getPortletTabs();
-                for (PortletTab atab : tabs) {
-                    PortletTabbedPane subpane = (PortletTabbedPane) atab.getPortletComponent();
-                    List<PortletTab> subtabs = subpane.getPortletTabs();
-                    if (subtabs.size() > 0) {
-                        for (PortletTab stab : subtabs) {
-                            menu.addTab(stab);
-                        }
-                    }
-
+            if (!(navComp instanceof PortletMenu)) {
+                PortletMenu menu = new PortletMenu();
+                if (navComp instanceof PortletBar) {
+                    PortletBar bar = (PortletBar) navComp;
+                    PortletTab tab = new PortletTab();
+                    tab.setTitle(req.getLocale().getLanguage(), this.getLocalizedText(req, "LAYOUT_DEFAULT_TAB_NAME"));
+                    tab.setPortletComponent(bar.getPortletComponent());
+                    menu.addTab(tab);
                 }
-            }
-            page.setPortletComponent(menu);
-        } else if (name.equals("pane")) {
-            if (navComp instanceof PortletTabbedPane) {
-                return;
-            }
-            PortletTabbedPane pane = new PortletTabbedPane();
-            pane.setStyle("menu");
-            if (navComp instanceof PortletBar) {
-                PortletTab newtab = new PortletTab();
-                newtab.setTitle(req.getLocale().getLanguage(), this.getLocalizedText(req, "LAYOUT_DEFAULT_TAB_NAME"));
-                pane.addTab(newtab);
-                PortletTabbedPane subpane = new PortletTabbedPane();
-                subpane.setStyle("sub-menu");
-                newtab.setPortletComponent(subpane);
-                PortletTab subtab = new PortletTab();
-                subtab.setTitle(req.getLocale().getLanguage(), this.getLocalizedText(req, "LAYOUT_DEFAULT_TAB_NAME"));
 
-                PortletTableLayout table = new PortletTableLayout();
-                PortletRowLayout row = new PortletRowLayout();
-                PortletColumnLayout col = new PortletColumnLayout();
-                col.setWidth("100%");
-                row.addPortletComponent(col);
-                table.addPortletComponent(row);
-                subtab.setPortletComponent(table);
-            } else if (navComp instanceof PortletMenu) {
-                PortletMenu menu = (PortletMenu) navComp;
-                List<PortletTab> tabs = menu.getPortletTabs();
-                for (PortletTab atab : tabs) {
+                if (navComp instanceof PortletTabbedPane) {
+                    PortletTabbedPane pane = (PortletTabbedPane) navComp;
+                    List<PortletTab> tabs = pane.getPortletTabs();
+                    for (PortletTab atab : tabs) {
+                        PortletTabbedPane subpane = (PortletTabbedPane) atab.getPortletComponent();
+                        List<PortletTab> subtabs = subpane.getPortletTabs();
+                        if (subtabs.size() > 0) {
+                            for (PortletTab stab : subtabs) {
+                                menu.addTab(stab);
+                            }
+                        }
+
+                    }
+                }
+                page.setPortletComponent(menu);
+            }
+        } else if (name.equals("pane")) {
+            if (!(navComp instanceof PortletTabbedPane)) {
+                PortletTabbedPane pane = new PortletTabbedPane();
+                pane.setStyle("menu");
+                if (navComp instanceof PortletBar) {
                     PortletTab newtab = new PortletTab();
-                    newtab.setTitle(req.getLocale().getLanguage(), atab.getTitle(req.getLocale().getLanguage()));
+                    newtab.setTitle(req.getLocale().getLanguage(), this.getLocalizedText(req, "LAYOUT_DEFAULT_TAB_NAME"));
                     pane.addTab(newtab);
                     PortletTabbedPane subpane = new PortletTabbedPane();
                     subpane.setStyle("sub-menu");
                     newtab.setPortletComponent(subpane);
-                    subpane.addTab(atab);
-                }
+                    PortletTab subtab = new PortletTab();
+                    subtab.setTitle(req.getLocale().getLanguage(), this.getLocalizedText(req, "LAYOUT_DEFAULT_TAB_NAME"));
 
+                    PortletTableLayout table = new PortletTableLayout();
+                    PortletRowLayout row = new PortletRowLayout();
+                    PortletColumnLayout col = new PortletColumnLayout();
+                    col.setWidth("100%");
+                    row.addPortletComponent(col);
+                    table.addPortletComponent(row);
+                    subtab.setPortletComponent(table);
+                } else if (navComp instanceof PortletMenu) {
+                    PortletMenu menu = (PortletMenu) navComp;
+                    List<PortletTab> tabs = menu.getPortletTabs();
+                    for (PortletTab atab : tabs) {
+                        PortletTab newtab = new PortletTab();
+                        newtab.setTitle(req.getLocale().getLanguage(), atab.getTitle(req.getLocale().getLanguage()));
+                        pane.addTab(newtab);
+                        PortletTabbedPane subpane = new PortletTabbedPane();
+                        subpane.setStyle("sub-menu");
+                        newtab.setPortletComponent(subpane);
+                        subpane.addTab(atab);
+                    }
+
+                }
+                page.setPortletComponent(pane);
             }
-            page.setPortletComponent(pane);
         }
         pageFactory.savePortletPageMaster(page);
         page.init(req, new ArrayList<ComponentIdentifier>());
