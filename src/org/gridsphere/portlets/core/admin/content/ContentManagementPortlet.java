@@ -25,9 +25,6 @@ import java.util.Map;
  * @version $Id$
  */
 
-// todo add admin interface to backupContent all nodes as files/as one .xml file
-// todo help mode
-
 public class ContentManagementPortlet extends ActionPortlet {
 
     private JCRService jcrService = null;
@@ -60,18 +57,8 @@ public class ContentManagementPortlet extends ActionPortlet {
     }
 
     public void listNodes(RenderFormEvent event) {
-        //ListBoxBean nodelist = event.getListBoxBean("nodelist");
-        //nodelist.clear();
         try {
-            List<ContentDocument> list = jcrService.listChildContentDocuments("/"); //JCRNode.GS_ROOT_CONTENTDOCUMENT_PATH);
-            /*
-            for (int i = 0; i < list.size(); i++) {
-                ListBoxItemBean item = new ListBoxItemBean();
-                item.setValue(list.get(i).getTitle());
-                item.setName(list.get(i).getUuid());
-                nodelist.addBean(item);
-            }
-            */
+            List<ContentDocument> list = jcrService.listChildContentDocuments("/");
             event.getRenderRequest().setAttribute("contentDocs", list);
         } catch (ContentException e) {
             log.error("Could not retrieve list of content documents.", e);
@@ -284,5 +271,3 @@ public class ContentManagementPortlet extends ActionPortlet {
     }
 
 }
-
-

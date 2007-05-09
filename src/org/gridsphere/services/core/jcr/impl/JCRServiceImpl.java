@@ -400,6 +400,8 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
     public List<ContentDocument> listChildContentDocuments(String path) throws ContentException {
         Session session = null;
         String childPath = JCRNode.GS_ROOT_CONTENTDOCUMENT_PATH + path;
+
+        SortedSet<ContentDocument> sorted = new TreeSet<ContentDocument>();
         List<ContentDocument> result = new ArrayList<ContentDocument>();
         try {
             session = getSession();
@@ -407,8 +409,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
             NodeIterator ni = node.getNodes();
             while (ni.hasNext()) {
                 Node n = ni.nextNode();
-                ContentDocument doc = new ContentDocument();
-                result.add(createDocument(n));
+                sorted.add(createDocument(n));
             }
 
         } catch (RepositoryException e) {
@@ -418,6 +419,11 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
         } finally {
             if (session != null) session.logout();
         }
+
+        for (ContentDocument aSorted : sorted) {
+            result.add(aSorted);
+        }
+
         return result;
     }
 

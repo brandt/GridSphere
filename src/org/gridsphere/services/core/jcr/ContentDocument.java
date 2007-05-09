@@ -6,7 +6,7 @@ import java.util.Date;
 * @author <a href="mailto:wehrens@gridsphere.org">Oliver Wehrens</a>
 * @version $Id$
 */
-public class ContentDocument {
+public class ContentDocument implements Comparable {
 
     private String content = "";
     private Date created = new Date();
@@ -95,5 +95,10 @@ public class ContentDocument {
 
     public void setModifiedBy(String modifiedBy) {
         this.modifiedBy = modifiedBy;
+    }
+
+    public int compareTo(Object o) {
+        ContentDocument cd = (ContentDocument) o;
+        return title.compareToIgnoreCase(cd.getTitle());
     }
 }
