@@ -1,6 +1,54 @@
 ChangeLog.txt
 =============
 
+Release Notes - GridSphere Portal Framework - Version 3.0.6
+
+Bug
+
+[GPF-372] - Exceptions while saving top-level navigation in guest-layout
+[GPF-375] - Editing user creates a new one
+[GPF-377] - Calendar widget causes security warning in IE
+[GPF-378] - Deleting one subtab deletes all subtabs
+
+Improvement
+
+[GPF-358] - Sort (and separate) "Add portlets" listbox values
+[GPF-386] - Sort List of available content document
+
+New Feature
+
+[GPF-384] - provide layout settings to not display modes or states in portlets
+
+
+
+Release Notes - GridSphere Portal Framework - Version 3.0.5
+
+    * [GPF-352] - Could not use gridsphere.useprecompiledjsp=true
+    * [GPF-366] - if rss feeds not available gs hangs at login for a little while
+    * [GPF-365] - jsp precompiling with changed deploy context does not work
+
+
+Changes since GS 3.0.3
+======================
+
+    * [GPF-343] - No logo because of wrong path to image
+    * [GPF-347] - ant new-project does not work
+    * [GPF-350] - Portal does not startup in windows
+
+
+Changes since GS 3.0.1
+======================
+
+Bug
+
+    * [GPF-341] - class and style don't work for ActionFormTag
+    * [GPF-342] - normal action creation using res.createActionURL does not trigger an action
+
+Improvement
+
+    * [GPF-340] - tab links should be render URLs for bookmarkability
+
+
 Changes since GridSphere 2.2.X
 ==============================
 
