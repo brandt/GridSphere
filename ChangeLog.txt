@@ -1,6 +1,25 @@
 ChangeLog.txt
 =============
 
+Release Notes - GridSphere Portal Framework - Version 3.0.6
+
+Bug
+
+[GPF-372] - Exceptions while saving top-level navigation in guest-layout
+[GPF-375] - Editing user creates a new one
+[GPF-377] - Calendar widget causes security warning in IE
+[GPF-378] - Deleting one subtab deletes all subtabs
+
+Improvement
+
+[GPF-358] - Sort (and separate) "Add portlets" listbox values
+[GPF-386] - Sort List of available content document
+
+New Feature
+
+[GPF-384] - provide layout settings to not display modes or states in portlets
+
+
 
 Release Notes - GridSphere Portal Framework - Version 3.0.5
 
