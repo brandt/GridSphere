@@ -74,10 +74,17 @@ public class LocalePortlet extends ActionPortlet {
         ListBoxBean localeSelector = event.getListBoxBean("localeLB");
         PortletSession session = event.getPortletRequest().getPortletSession(true);
         String loc = localeSelector.getSelectedValue();
+        // Javascript exploit found by PSNC and Tomek Kuczynski, check the loc to not allow a javascript attack
         if (loc != null) {
-            Locale locale = new Locale(loc, "", "");
-            session.setAttribute(User.LOCALE, locale);
-
+            Locale[] locales = localeService.getSupportedLocales();
+            boolean valid = false;
+            for (Locale l : locales) {
+                if (loc.equals(l.toString())) valid = true;
+            }
+            if (valid) {
+                Locale locale = new Locale(loc, "", "");
+                session.setAttribute(User.LOCALE, locale);
+            }
         }
     }
 
