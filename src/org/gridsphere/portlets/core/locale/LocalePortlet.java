@@ -4,13 +4,13 @@
  */
 package org.gridsphere.portlets.core.locale;
 
-import org.gridsphere.services.core.user.User;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridsphere.provider.portletui.beans.ListBoxItemBean;
 import org.gridsphere.services.core.locale.LocaleService;
+import org.gridsphere.services.core.user.User;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
@@ -23,7 +23,7 @@ public class LocalePortlet extends ActionPortlet {
     private LocaleService localeService = null;
 
     public void init(PortletConfig config) throws PortletException {
-        super.init(config);    
+        super.init(config);
         localeService = (LocaleService) createPortletService(LocaleService.class);
         DEFAULT_VIEW_PAGE = "showLocale";
     }
@@ -67,9 +67,17 @@ public class LocalePortlet extends ActionPortlet {
         ListBoxBean localeSelector = event.getListBoxBean("localeLB");
         PortletSession session = event.getActionRequest().getPortletSession(true);
         String loc = localeSelector.getSelectedValue();
+        // Javascript exploit found by PSNC and Tomek Kuczynski, check the loc to not allow a javascript attack
         if (loc != null) {
-            Locale locale = new Locale(loc, "", "");
-            session.setAttribute(User.LOCALE, locale, PortletSession.APPLICATION_SCOPE);
+            Locale[] locales = localeService.getSupportedLocales();
+            boolean valid = false;
+            for (Locale l : locales) {
+                if (loc.equals(l.toString())) valid = true;
+            }
+            if (valid) {
+                Locale locale = new Locale(loc, "", "");
+                session.setAttribute(User.LOCALE, locale, PortletSession.APPLICATION_SCOPE);
+            }
         }
     }
 
