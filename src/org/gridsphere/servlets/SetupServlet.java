@@ -151,7 +151,7 @@ public class SetupServlet extends HttpServlet {
 
         PortletContext ctx = new PortletContextImpl(getServletContext());
         GridSphereEventImpl event = new GridSphereEventImpl(ctx, req, res);
-        req.setCharacterEncoding("utf-8");
+
 
         System.err.println("in do post!!!");
 
@@ -176,7 +176,6 @@ public class SetupServlet extends HttpServlet {
                     updateDatabase();
                     removeOldDatabaseFile();
                     createDatabaseFile();
-                    redirect(event);
                 }
                 if (installType.equals("admin")) {
                     req.setAttribute(SportletProperties.LAYOUT_PAGE, "SetupAdmin");
@@ -248,7 +247,7 @@ public class SetupServlet extends HttpServlet {
             hibProps.setProperty("hibernate.connection.driver_class", driverClass);
             hibProps.store(hibOut, "Hibernate Properties");
             hibOut.close();
-            hibInputStream.close();            
+            hibInputStream.close();
         } catch (IOException e) {
             log.error("Unable to load/save hibernate.properties", e);
             throw new IllegalArgumentException("Unable to  save hibernate.properties file! Please check the log file for more details");
