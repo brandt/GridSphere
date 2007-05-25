@@ -1,27 +1,40 @@
 ChangeLog.txt
 =============
 
-Release Notes - GridSphere Portal Framework - Version 3.0.6
+Release Notes - GridSphere Portal Framework - Version 3.0.7
+-----------------------------------------------------------
 
 Bug
 
-[GPF-372] - Exceptions while saving top-level navigation in guest-layout
-[GPF-375] - Editing user creates a new one
-[GPF-377] - Calendar widget causes security warning in IE
-[GPF-378] - Deleting one subtab deletes all subtabs
+    * [GPF-388] - XSS problem in locale portlet
+    * [GPF-390] - Update database on a new version of gs fails
+    * [GPF-391] - LayoutManager problem when changing from DoubbleTabbedPane to SingleDividerbar
+
+
+
+Release Notes - GridSphere Portal Framework - Version 3.0.6
+-----------------------------------------------------------
+
+Bug
+
+    * [GPF-372] - Exceptions while saving top-level navigation in guest-layout
+    * [GPF-375] - Editing user creates a new one
+    * [GPF-377] - Calendar widget causes security warning in IE
+    * [GPF-378] - Deleting one subtab deletes all subtabs
 
 Improvement
 
-[GPF-358] - Sort (and separate) "Add portlets" listbox values
-[GPF-386] - Sort List of available content document
+    * [GPF-358] - Sort (and separate) "Add portlets" listbox values
+    * [GPF-386] - Sort List of available content document
 
 New Feature
 
-[GPF-384] - provide layout settings to not display modes or states in portlets
+    * [GPF-384] - provide layout settings to not display modes or states in portlets
 
 
 
 Release Notes - GridSphere Portal Framework - Version 3.0.5
+-----------------------------------------------------------
 
     * [GPF-352] - Could not use gridsphere.useprecompiledjsp=true
     * [GPF-366] - if rss feeds not available gs hangs at login for a little while
