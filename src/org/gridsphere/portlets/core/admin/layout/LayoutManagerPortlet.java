@@ -689,33 +689,45 @@ public class LayoutManagerPortlet extends ActionPortlet {
         page.setDisplayModes(showModesCB.isSelected());
         page.setDisplayStates(showStatesCB.isSelected());
 
+        // switch to a PortletBar, no tabs whatsoever
         if (name.equals("bar")) {
             // the actual component matches the selected one, do nothing
             if (!(navComp instanceof PortletBar)) {
+
                 PortletBar bar = new PortletBar();
                 // set the first menu tab component to be the bar component
-                if (navComp instanceof PortletMenu) {
+                if (navComp instanceof PortletMenu) {         // MB  -> SDB
                     PortletMenu menu = (PortletMenu) navComp;
                     List<PortletTab> tabs = menu.getPortletTabs();
-                    PortletTab tab = tabs.get(0);
-                    bar.setPortletComponent(tab.getPortletComponent());
+                    if (tabs.size() > 0) {
+                        PortletTab tab = tabs.get(0);
+                        bar.setPortletComponent(tab.getPortletComponent());
+                    } else {
+
+                    }
                 }
-                // set the component of the first subtab to be the bar component
-                if (navComp instanceof PortletTabbedPane) {
-                    PortletTabbedPane pane = (PortletTabbedPane) navComp;
-                    List<PortletTab> tabs = pane.getPortletTabs();
-                    PortletTab tab = tabs.get(0);
-                    PortletTabbedPane subpane = (PortletTabbedPane) tab.getPortletComponent();
-                    PortletTab subtab = subpane.getPortletTabAt(0);
-                    bar.setPortletComponent(subtab.getPortletComponent());
+                // converting tabbespane into single diver bar, we remove the all portlets since many could exist and we
+                // just have one plain layout
+                if (navComp instanceof PortletTabbedPane) {   // DTP -> SDB
+
+                    PortletTableLayout table = new PortletTableLayout();
+                    PortletRowLayout row = new PortletRowLayout();
+                    PortletColumnLayout col = new PortletColumnLayout();
+                    col.setWidth("100%");
+                    row.addPortletComponent(col);
+                    table.addPortletComponent(row);
+                    bar.setPortletComponent(table);
+
+
                 }
                 page.setPortletComponent(bar);
             }
 
+            // switch to a menu, single row of tabs
         } else if (name.equals("menu")) {
             if (!(navComp instanceof PortletMenu)) {
                 PortletMenu menu = new PortletMenu();
-                if (navComp instanceof PortletBar) {
+                if (navComp instanceof PortletBar) {  // SDB -> MB
                     PortletBar bar = (PortletBar) navComp;
                     PortletTab tab = new PortletTab();
                     tab.setTitle(req.getLocale().getLanguage(), this.getLocalizedText(req, "LAYOUT_DEFAULT_TAB_NAME"));
@@ -723,7 +735,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
                     menu.addTab(tab);
                 }
 
-                if (navComp instanceof PortletTabbedPane) {
+                if (navComp instanceof PortletTabbedPane) {   // DTP -> MB
                     PortletTabbedPane pane = (PortletTabbedPane) navComp;
                     List<PortletTab> tabs = pane.getPortletTabs();
                     for (PortletTab atab : tabs) {
@@ -739,11 +751,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 }
                 page.setPortletComponent(menu);
             }
+            // switch to a tabbed pane, double line of tabs
         } else if (name.equals("pane")) {
             if (!(navComp instanceof PortletTabbedPane)) {
                 PortletTabbedPane pane = new PortletTabbedPane();
                 pane.setStyle("menu");
-                if (navComp instanceof PortletBar) {
+                if (navComp instanceof PortletBar) {  // SDB ->  DTP
                     PortletTab newtab = new PortletTab();
                     newtab.setTitle(req.getLocale().getLanguage(), this.getLocalizedText(req, "LAYOUT_DEFAULT_TAB_NAME"));
                     pane.addTab(newtab);
@@ -760,7 +773,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
                     row.addPortletComponent(col);
                     table.addPortletComponent(row);
                     subtab.setPortletComponent(table);
-                } else if (navComp instanceof PortletMenu) {
+                    subpane.addTab(subtab);
+                } else if (navComp instanceof PortletMenu) { // MB -> DTP
                     PortletMenu menu = (PortletMenu) navComp;
                     List<PortletTab> tabs = menu.getPortletTabs();
                     for (PortletTab atab : tabs) {
