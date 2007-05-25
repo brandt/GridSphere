@@ -1,6 +1,16 @@
 ChangeLog.txt
 =============
 
+Changes since GridSphere 2.2.9
+==============================
+
+Bug
+
+    * [GPF-337] - ActionSubmit id-attribute not usable
+    * [GPF-341] - class and style don't work for ActionFormTag
+    * [GPF-388] - XSS problem in locale portlet
+
+
 Changes since GridSphere 2.2.7
 ==============================
 
