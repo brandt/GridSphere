@@ -4,6 +4,7 @@
  */
 package org.gridsphere.portlets.core.admin.portlets;
 
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.portletcontainer.PortletStatus;
@@ -14,6 +15,7 @@ import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portlet.jsr.PortletServlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.provider.portletui.model.DefaultTableModel;
+import org.gridsphere.services.core.customization.SettingsService;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.services.core.tomcat.TomcatManagerException;
@@ -177,7 +179,8 @@ public class PortletApplicationManager extends ActionPortlet {
                     portletManager.initPortletWebApplication(appName, hReq, hRes);
                 }
                 // add portlet app to gridsphere portlet app directory
-                String portletAppFile = getPortletContext().getRealPath("/WEB-INF/CustomPortal/portlets/" + appName);
+                SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
+                String portletAppFile = settingsService.getRealSettingsPath("portlets/" + appName);
                 File portletFile = new File(portletAppFile);
                 portletFile.createNewFile();
                 System.err.println(portletAppFile);

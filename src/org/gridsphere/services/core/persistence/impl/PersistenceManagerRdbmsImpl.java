@@ -6,6 +6,8 @@ package org.gridsphere.services.core.persistence.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.services.core.customization.SettingsService;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.QueryFilter;
@@ -51,18 +53,20 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         Properties prop = new Properties();
         pm = "gridsphere";
         //pm = context.getRealPath("");
+        SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
+
         String mappingPath = context.getRealPath("/WEB-INF/persistence");
         try {
-            String hibPath = context.getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties");
+            String hibPath = settingsService.getRealSettingsPath("database/hibernate.properties");
             prop.load(new FileInputStream(hibPath));
             Configuration cfg = loadConfiguration(mappingPath, prop);
             factory = cfg.buildSessionFactory();
         } catch (IOException e) {
-            log.error("Unable to load file: " + context.getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties"));
+            log.error("Unable to load file: " + settingsService.getRealSettingsPath("database/hibernate.properties"));
         } catch (HibernateException e) {
             log.error("Could not instantiate Hibernate Factory", e);
         }
-        log.info("Creating Hibernate RDBMS Impl using config in " + context.getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties"));
+        log.info("Creating Hibernate RDBMS Impl using config in " + settingsService.getRealSettingsPath("database/hibernate.properties"));
     }
 
     public PersistenceManagerRdbmsImpl(String persistenceConfigDir) {

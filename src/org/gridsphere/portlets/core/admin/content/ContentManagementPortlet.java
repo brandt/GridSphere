@@ -1,10 +1,12 @@
 package org.gridsphere.portlets.core.admin.content;
 
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.FormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
+import org.gridsphere.services.core.customization.SettingsService;
 import org.gridsphere.services.core.jcr.ContentDocument;
 import org.gridsphere.services.core.jcr.ContentException;
 import org.gridsphere.services.core.jcr.JCRNode;
@@ -39,7 +41,8 @@ public class ContentManagementPortlet extends ActionPortlet {
         super.init(config);
         jcrService = (JCRService) createPortletService(JCRService.class);
         timerService = (TimerService) createPortletService(TimerService.class);
-        backupDir = config.getPortletContext().getRealPath("WEB-INF/CustomPortal/content/backupContent");
+        SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
+        backupDir = settingsService.getRealSettingsPath("content/backupContent");
         BackupTask backup = new BackupTask(backupDir);
         timerService.schedule("contentbackup", backup, 1000 * 60, 1000 * 60 * 60 * 24); // 1000*60*60*24 one day
         DEFAULT_VIEW_PAGE = "doView";

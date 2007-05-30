@@ -8,6 +8,7 @@ import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridsphere.services.core.customization.SettingsService;
 import org.gridsphere.services.core.jcr.ContentDocument;
 import org.gridsphere.services.core.jcr.ContentException;
 import org.gridsphere.services.core.jcr.JCRNode;
@@ -41,9 +42,10 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
     private SimpleCredentials cred = null;
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        repositoryconfigpath = config.getServletContext().getRealPath("WEB-INF/CustomPortal/portal/");
-        repositorypath = config.getServletContext().getRealPath("WEB-INF/CustomPortal/content/");
-        log.debug("JCR Path " + repositoryconfigpath);
+        SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
+        repositoryconfigpath = settingsService.getRealSettingsPath("portal");
+        repositorypath = settingsService.getRealSettingsPath("content");
+        log.warn("JCR Path " + repositoryconfigpath);
 
         String repHomeDir = "repository";
         Hashtable env = new Hashtable();

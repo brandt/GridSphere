@@ -2,26 +2,28 @@ package org.gridsphere.services.core.persistence.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
-import org.hibernate.tool.hbm2ddl.SchemaUpdate;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.services.core.customization.SettingsService;
+import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.connection.DriverManagerConnectionProvider;
-import org.gridsphere.services.core.persistence.PersistenceManagerException;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 
-import java.util.*;
-import java.io.FileInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.*;
 
 /**
  * Ant task to create/update the database.
  */
-public class CreateDatabase  {
+public class CreateDatabase {
 
     private Log log = LogFactory.getLog(CreateDatabase.class);
 
@@ -44,20 +46,12 @@ public class CreateDatabase  {
 
     private String hibernatePropertiesFileName = "hibernate.properties";
 
-    private String configDir = "";
+    // where the persistence Mappings are stored
+    private String persistenceMappingDir = "";
 
     private String action = "";
 
-    public CreateDatabase() {}
-
-    /**
-     * Sets the configuration directory of the database. All mappingfiles and the hibernate.properties
-     * are located in this directory.
-     *
-     * @param configDir full path to the configuration directory
-     */
-    public void setConfigDir(String configDir) {
-        this.configDir = configDir;
+    public CreateDatabase() {
     }
 
     public void setAction(String action) {
@@ -65,8 +59,12 @@ public class CreateDatabase  {
     }
 
 
-    public String getConfigDir() {
-        return configDir;
+    public String getPersistenceMappingDir() {
+        return persistenceMappingDir;
+    }
+
+    public void setPersistenceMappingDir(String persistenceMappingDir) {
+        this.persistenceMappingDir = persistenceMappingDir;
     }
 
     public String getAction() {
@@ -79,7 +77,7 @@ public class CreateDatabase  {
             log.info("Successfully created DB");
         } catch (HibernateException e) {
             log.error("DB Error: " + CREATION_ERROR + " !", e);
-            throw new PersistenceManagerException("DB Error: " + CREATION_ERROR + " ! " +  e.getMessage());
+            throw new PersistenceManagerException("DB Error: " + CREATION_ERROR + " ! " + e.getMessage());
         }
     }
 
@@ -87,14 +85,13 @@ public class CreateDatabase  {
         try {
             new SchemaUpdate(cfg).execute(false, true);
         } catch (HibernateException e) {
-            log.error("DB Error: " + UPDATE_ERROR +  " !", e);
+            log.error("DB Error: " + UPDATE_ERROR + " !", e);
             throw new PersistenceManagerException("DB Error: " + UPDATE_ERROR + " ! " + e.getMessage());
         }
     }
 
     /**
      * Loads properties from a given directory.
-     *
      */
     private Properties loadProperties() throws IOException {
         Properties prop = new Properties();
@@ -102,15 +99,12 @@ public class CreateDatabase  {
         FileInputStream fis = null;
         String hibPath = "";
         try {
-            hibPath = configDir + File.separator + "WEB-INF" + File.separator + "CustomPortal" +
-                    File.separator + "database" + File.separator + hibernatePropertiesFileName;
+            SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
+            hibPath = settingsService.getRealSettingsPath("database") + hibernatePropertiesFileName;
             fis = new FileInputStream(hibPath);
         } catch (FileNotFoundException e) {
-            hibPath = configDir + File.separator + "WEB-INF" + File.separator + "persistence" + File.separator + hibernatePropertiesFileName;
-
-            fis = new FileInputStream(hibPath);
-
-
+            // todo  I think I should fix this....oliver 
+            log.warn("This should not happen. Check the DB Config!");
         }
 
         prop.load(fis);
@@ -124,6 +118,7 @@ public class CreateDatabase  {
      *
      * @param props
      * @throws org.apache.tools.ant.BuildException
+     *
      */
     private void testDBConnection(Properties props) throws PersistenceManagerException {
         DriverManagerConnectionProvider dmcp = new DriverManagerConnectionProvider();
@@ -147,14 +142,15 @@ public class CreateDatabase  {
      * @param props
      * @return
      * @throws org.apache.tools.ant.BuildException
+     *
      */
     private Configuration getDBConfiguration(Properties props) throws PersistenceManagerException {
         Configuration cfg = null;
         try {
             cfg = new Configuration();
             cfg.setProperties(props);
-            String mappingPath = configDir + File.separator  + "WEB-INF" + File.separator + "persistence";
-            File mappingdir = new File(mappingPath);
+            log.debug("MappingPath is :" + persistenceMappingDir);
+            File mappingdir = new File(persistenceMappingDir);
             String[] children = mappingdir.list();
 
             if (children == null) {
@@ -168,8 +164,8 @@ public class CreateDatabase  {
                     String filename = (String) filenames.next();
                     if (filename.endsWith(".hbm.xml")) {
                         // Get filename of file or directory
-                        log.debug("add hbm file :" + mappingPath + File.separator + filename);
-                        cfg.addFile(mappingPath + File.separator + filename);
+                        log.debug("add hbm file :" + persistenceMappingDir + File.separator + filename);
+                        cfg.addFile(persistenceMappingDir + File.separator + filename);
                     }
                 }
             }
@@ -187,7 +183,6 @@ public class CreateDatabase  {
     public void execute() throws IOException, PersistenceManagerException {
 
         log.info("Database:");
-        log.info("Config: " + this.configDir);
         log.info("Action: " + this.action);
 
         // try to load the properties

@@ -15,6 +15,7 @@ import org.gridsphere.portletcontainer.PortletDispatcherException;
 import org.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridsphere.portletcontainer.impl.PortletInvoker;
 import org.gridsphere.portletcontainer.impl.PortletWebApplicationLoader;
+import org.gridsphere.services.core.customization.SettingsService;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 
@@ -107,11 +108,15 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
 
         context = config.getServletContext();
 
-        String portletsPath = context.getRealPath(PORTLETS_PATH);
-        File f = new File(portletsPath);
+        // get the real path where the info is (will be) stored
+        SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
+        PORTLETS_PATH = settingsService.getRealSettingsPath("portlets");
+
+        File f = new File(settingsService.getRealSettingsPath("portlets"));
         if (f.exists() && f.isDirectory()) {
 
-            // add the portal to the top spot
+            // add the portal to the top spot (usually the name is '..../gridsphere' but could be something else, look at
+            // gridsphere.properties
             String realPath = context.getRealPath("");
             // patch for jetty, path has always a / at the end as opposed to tomcat, so remove it
             if (realPath.endsWith("/")) {
@@ -119,7 +124,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
             }
             int l = realPath.lastIndexOf(File.separator);
             String webappName = realPath.substring(l + 1);
-            String file = context.getRealPath(PORTLETS_PATH + "/" + webappName + ".1");
+            String file = PORTLETS_PATH + "/" + webappName + ".1";
             File myportletapp = new File(file);
             try {
                 myportletapp.createNewFile();
@@ -143,8 +148,8 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
             }
 
         } else {
-            log.error("Portlet application " + portletsPath + " does not exist!");
-            throw new PortletServiceUnavailableException("Portlet application " + portletsPath + " does not exist!");
+            log.error("Portlet application " + PORTLETS_PATH + " does not exist!");
+            throw new PortletServiceUnavailableException("Portlet application " + PORTLETS_PATH + " does not exist!");
         }
     }
 

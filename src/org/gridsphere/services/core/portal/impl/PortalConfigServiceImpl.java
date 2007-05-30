@@ -10,14 +10,13 @@ import org.apache.commons.logging.LogFactory;
 import org.gridsphere.layout.PortletPageFactory;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridsphere.services.core.customization.SettingsService;
 import org.gridsphere.services.core.portal.PortalConfigService;
 
 import javax.servlet.ServletContext;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 
 /**
@@ -27,24 +26,21 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
 
     private Log log = LogFactory.getLog(PortalConfigServiceImpl.class);
 
-
-    private String GRIDSPHERE_PROPERTIES = "/WEB-INF/CustomPortal/portal/gridsphere.properties";
-
-    protected Properties props = null;
+    protected Properties props = new Properties();
     protected ServletContext ctx = null;
+    private SettingsService settingsService = null;
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         ctx = config.getServletContext();
-        InputStream propsStream = config.getServletContext().getResourceAsStream(GRIDSPHERE_PROPERTIES);
+        settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
         try {
-            FileOutputStream propertiesOutputStream = null;
-            propertiesOutputStream = new FileOutputStream(ctx.getRealPath(GRIDSPHERE_PROPERTIES));
-            props = new Properties();
-            props.load(propsStream);
-            // init config params here
+            File propFile = new File(settingsService.getRealSettingsPath("portal/gridsphere.properties"));
+            props.load(new FileInputStream(propFile));
+
+            // init config params here, just make sure we do have a theme set
             String theme = getProperty(PortalConfigService.DEFAULT_THEME);
             if (theme == null) setProperty(PortalConfigService.DEFAULT_THEME, PortletPageFactory.DEFAULT_THEME);
-            props.store(propertiesOutputStream, "GridSphere Portal Properties");
+            props.store(new FileOutputStream(propFile), "GridSphere Portal Properties");
         } catch (FileNotFoundException e) {
             log.error("Unable to find gridsphere.properties", e);
         } catch (IOException e) {
@@ -68,8 +64,7 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
     }
 
     public void storeProperties() throws IOException {
-        FileOutputStream propertiesOutputStream = null;
-        propertiesOutputStream = new FileOutputStream(ctx.getRealPath(GRIDSPHERE_PROPERTIES));
+        FileOutputStream propertiesOutputStream = new FileOutputStream(settingsService.getRealSettingsPath("portal/gridsphere.properties"));
         props.store(propertiesOutputStream, "GridSphere Portal Properties");
     }
 

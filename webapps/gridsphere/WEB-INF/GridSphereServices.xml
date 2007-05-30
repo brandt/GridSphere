@@ -175,4 +175,12 @@
         <interface>org.gridsphere.services.core.charts.ChartService</interface>
         <implementation>org.gridsphere.services.core.charts.impl.ChartServiceImpl</implementation>
     </service>
+
+    <service>
+        <name>Settings Service</name>
+        <description lang="en">GridSphere settings service</description>
+        <interface>org.gridsphere.services.core.customization.SettingsService</interface>
+        <implementation>org.gridsphere.services.core.customization.impl.SettingsServiceImpl</implementation>
+    </service>
+
 </portlet-services>

@@ -27,6 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.services.core.customization.SettingsService;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.registry.PortletManagerService;
@@ -74,6 +75,7 @@ public class GridSphereFilter implements Filter {
 
             if (firstDoGet.equals(Boolean.TRUE)) {
 
+                SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
                 // check if database file exists
                 String release = SportletProperties.getInstance().getProperty("gridsphere.release");
                 int idx = release.lastIndexOf(" ");
@@ -81,7 +83,7 @@ public class GridSphereFilter implements Filter {
 
                 //System.err.println("gsversion=" + gsversion);
 
-                String dbpath = context.getRealPath("/WEB-INF/CustomPortal/database/GS_" + gsversion);
+                String dbpath = settingsService.getRealSettingsPath("/database/GS_" + gsversion);
 
                 File dbfile = new File(dbpath);
 

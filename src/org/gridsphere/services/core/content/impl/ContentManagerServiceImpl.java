@@ -1,9 +1,11 @@
 package org.gridsphere.services.core.content.impl;
 
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.services.core.content.ContentFile;
 import org.gridsphere.services.core.content.ContentManagerService;
+import org.gridsphere.services.core.customization.SettingsService;
 
 import javax.servlet.ServletContext;
 import java.io.File;
@@ -20,7 +22,8 @@ public class ContentManagerServiceImpl implements ContentManagerService, Portlet
 
     public void init(PortletServiceConfig config) {
         ServletContext ctx = config.getServletContext();
-        String contentDirPath = ctx.getRealPath("/WEB-INF/CustomPortal/content");
+        SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
+        String contentDirPath = settingsService.getRealSettingsPath("content");
         File contentDir = new File(contentDirPath);
         File[] contentFiles = contentDir.listFiles();
         ContentFile content = null;

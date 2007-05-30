@@ -7,6 +7,7 @@ import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.portletcontainer.PortletSessionListener;
 import org.gridsphere.portletcontainer.impl.PortletSessionManager;
+import org.gridsphere.services.core.customization.SettingsService;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.user.User;
 
@@ -66,10 +67,11 @@ public class PortletPageFactory implements PortletSessionListener {
     public void init(ServletContext ctx) {
 
         this.context = ctx;
+        SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
 
-        USER_LAYOUT_DIR = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/users");
+        USER_LAYOUT_DIR = settingsService.getRealSettingsPath("layouts/users");
 
-        String layoutsDirPath = ctx.getRealPath("/WEB-INF/CustomPortal/layouts");
+        String layoutsDirPath = settingsService.getRealSettingsPath("layouts");
         File layoutsDir = new File(layoutsDirPath);
         File[] layoutFiles = layoutsDir.listFiles();
         PortletPage page = null;
@@ -89,7 +91,7 @@ public class PortletPageFactory implements PortletSessionListener {
             }
         }
 
-        String newuserLayoutPath = ctx.getRealPath("/WEB-INF/CustomPortal/layouts/users/");
+        String newuserLayoutPath = settingsService.getRealSettingsPath("layouts/users");
         File userdir = new File(newuserLayoutPath);
         if (!userdir.exists()) {
             userdir.mkdir();

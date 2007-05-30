@@ -8,6 +8,7 @@ import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.portletcontainer.impl.GridSphereEventImpl;
+import org.gridsphere.services.core.customization.SettingsService;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.persistence.impl.CreateDatabase;
@@ -46,9 +47,11 @@ public class SetupServlet extends HttpServlet {
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordService = null;
     private PortalConfigService portalConfigService = null;
+    private SettingsService settingsService = null;
 
     public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
+        settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -71,7 +74,7 @@ public class SetupServlet extends HttpServlet {
         String gsversion = release.substring(idx + 1);
         //System.err.println("gsversion=" + gsversion);
 
-        String dbpath = getServletContext().getRealPath("/WEB-INF/CustomPortal/database");
+        String dbpath = settingsService.getRealSettingsPath("database");
 
         File dbdir = new File(dbpath);
         String[] filenames = dbdir.list();
@@ -152,9 +155,6 @@ public class SetupServlet extends HttpServlet {
         PortletContext ctx = new PortletContextImpl(getServletContext());
         GridSphereEventImpl event = new GridSphereEventImpl(ctx, req, res);
 
-
-        System.err.println("in do post!!!");
-
         req.setAttribute(SportletProperties.LAYOUT_PAGE, "SetupDatabase");
         try {
             String installType = req.getParameter("install");
@@ -191,12 +191,18 @@ public class SetupServlet extends HttpServlet {
 
 
     private void createDefaultDatabase() {
+
+        // read in the original from the WEB-INF dir
         InputStream hibInputStream = getServletContext().getResourceAsStream("/WEB-INF/CustomPortal/database/hibernate.properties");
-        String hibPath = getServletContext().getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties");
+
+        // write it to the new settings location
+        String hibPath = settingsService.getRealSettingsPath("database/hibernate.properties");
+        // String hibPath = settingsService.getSettingsPath()+File.separator+"database"+File.separator+"hibernate.properties";
+        //String hibPath = getServletContext().getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties");
         try {
             FileOutputStream hibOut = new FileOutputStream(hibPath);
             Properties hibProps = new Properties();
-            String connURL = "jdbc:hsqldb:" + getServletContext().getRealPath("/WEB-INF/CustomPortal/database/gridsphere");
+            String connURL = "jdbc:hsqldb:" + settingsService.getRealSettingsPath("database/gridsphere");
             log.debug("using connURL= " + connURL);
             hibProps.load(hibInputStream);
             hibProps.setProperty("hibernate.connection.url", connURL);
@@ -210,8 +216,9 @@ public class SetupServlet extends HttpServlet {
 
     private void createExternalDatabase(GridSphereEvent event) {
         HttpServletRequest req = event.getHttpServletRequest();
+        // get the original path as default
         InputStream hibInputStream = getServletContext().getResourceAsStream("/WEB-INF/CustomPortal/database/hibernate.properties");
-        String hibPath = getServletContext().getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties");
+        String hibPath = settingsService.getRealSettingsPath("database/hibernate.properties");
 
         String dbtype = req.getParameter("dbtype");
 
@@ -257,7 +264,9 @@ public class SetupServlet extends HttpServlet {
     private void makeDatabase() {
         CreateDatabase dbtask = new CreateDatabase();
         dbtask.setAction("CREATE");
-        dbtask.setConfigDir(getServletContext().getRealPath(""));
+        // todo fix the dir
+        // dbtask.setConfigDir(getServletContext().getRealPath(""));
+        dbtask.setPersistenceMappingDir(getServletContext().getRealPath("WEB-INF/persistence"));
         try {
             dbtask.execute();
         } catch (Exception e) {
@@ -268,7 +277,9 @@ public class SetupServlet extends HttpServlet {
     private void updateDatabase() {
         CreateDatabase dbtask = new CreateDatabase();
         dbtask.setAction("UPDATE");
-        dbtask.setConfigDir(getServletContext().getRealPath(""));
+        // todo fix the dir 
+        //dbtask.setConfigDir(getServletContext().getRealPath(""));
+        dbtask.setPersistenceMappingDir(getServletContext().getRealPath("WEB-INF/persistence"));
         try {
             dbtask.execute();
         } catch (Exception e) {
@@ -281,7 +292,7 @@ public class SetupServlet extends HttpServlet {
         String release = SportletProperties.getInstance().getProperty("gridsphere.release");
         int idx = release.lastIndexOf(" ");
         String gsversion = release.substring(idx + 1);
-        String dbpath = getServletContext().getRealPath("/WEB-INF/CustomPortal/database/GS_" + gsversion);
+        String dbpath = settingsService.getRealSettingsPath("database/GS_" + gsversion);
         try {
             File dbfile = new File(dbpath);
             dbfile.createNewFile();
@@ -305,7 +316,7 @@ public class SetupServlet extends HttpServlet {
     }
 
     private void removeOldDatabaseFile() {
-        String dbpath = getServletContext().getRealPath("/WEB-INF/CustomPortal/database");
+        String dbpath = settingsService.getRealSettingsPath("database");
         File dbdir = new File(dbpath);
         String[] filenames = dbdir.list();
         String currentVersion = null;

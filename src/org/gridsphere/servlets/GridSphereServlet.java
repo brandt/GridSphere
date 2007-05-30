@@ -69,6 +69,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     private PortletSessionManager sessionManager = PortletSessionManager.getInstance();
 
+//    private SettingsService settingsService = null;
+
     private PortalFilterService portalFilterService = null;
 
     private boolean firstDoGet = true;

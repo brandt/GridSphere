@@ -3,12 +3,11 @@ package org.gridsphere.provider.portletui.model;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
  * User: novotny
  * Date: May 16, 2006
- * Time: 2:58:27 PM
- * To change this template use File | Settings | File Templates.
+ * Time: 2:45:49 PM
  */
+
 public interface DataSource {
 
     public void setFirstResult(int firstResult);

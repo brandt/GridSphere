@@ -1,11 +1,13 @@
 package org.gridsphere.portlets.core.news;
 
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.FormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridsphere.provider.portletui.beans.ListBoxItemBean;
+import org.gridsphere.services.core.customization.SettingsService;
 import org.gridsphere.services.core.jcr.ContentDocument;
 import org.gridsphere.services.core.jcr.ContentException;
 import org.gridsphere.services.core.jcr.JCRService;
@@ -36,7 +38,8 @@ public class NewsPortlet extends ActionPortlet {
         super.init(config);
         DEFAULT_VIEW_PAGE = "doView";
         DEFAULT_EDIT_PAGE = "doConfigure";
-        storeFileName = config.getPortletContext().getRealPath("WEB-INF/CustomPortal/portal/") + File.separator + storeFileName;
+        SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
+        storeFileName = settingsService.getRealSettingsPath("portal") + File.separator + storeFileName;
 
         File file = new File(storeFileName);
         props = new Properties();
