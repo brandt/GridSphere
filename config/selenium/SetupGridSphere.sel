@@ -1,0 +1,98 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>SetupGridSphere</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+        <tr>
+            <td rowspan="1" colspan="3">SetupGridSphere</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>open</td>
+            <td>/gridsphere/gridsphere</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>clickAndWait</td>
+            <td>standard</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td>username</td>
+            <td>root</td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td>firstname</td>
+            <td>Root User</td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td>lastname</td>
+            <td>root</td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td>email</td>
+            <td>nobody@gridsphere.org</td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td>organization</td>
+            <td>GridSphere</td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td>password</td>
+            <td>user</td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td>password2</td>
+            <td>user</td>
+        </tr>
+        <tr>
+            <td>clickAndWait</td>
+            <td>//input[@value='Create Account']</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>clickAndWait</td>
+            <td>link=Login</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td>username</td>
+            <td>root</td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td>password</td>
+            <td>user</td>
+        </tr>
+        <tr>
+            <td>click</td>
+            <td>remlogin</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>clickAndWait</td>
+            <td>gs_action=gs_login</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>verifyTextPresent</td>
+            <td>Welcome , Root User root</td>
+            <td></td>
+        </tr>
+
+    </tbody>
+</table>
+</body>
+</html>
