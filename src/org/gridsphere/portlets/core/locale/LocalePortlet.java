@@ -50,6 +50,7 @@ public class LocalePortlet extends ActionPortlet {
 
         ListBoxBean localeSelector = event.getListBoxBean("localeLB");
         localeSelector.clear();
+
         localeSelector.setOnChange("this.form.submit()");
         localeSelector.setSize(1);
 
@@ -80,5 +81,4 @@ public class LocalePortlet extends ActionPortlet {
             }
         }
     }
-
 }

@@ -83,10 +83,10 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         return super.init(req, list);
     }
 
-    private PortletComponent getMaximizedComponent(List components) {
+    private PortletComponent getMaximizedComponent(List<PortletComponent> components) {
         PortletComponent p;
         for (int i = 0; i < components.size(); i++) {
-            p = (PortletComponent) components.get(i);
+            p = components.get(i);
             if (p instanceof PortletLayout) {
                 PortletComponent layout = this.getMaximizedComponent(((PortletLayout) p).getPortletComponents());
                 if (layout != null) {
@@ -116,7 +116,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
             Object o = components.get(0);
             if (o instanceof PortletFrameLayout) {
                 PortletFrameLayout r = (PortletFrameLayout) o;
-                List cols = r.getPortletComponents();
+                List<PortletComponent> cols = r.getPortletComponents();
 
                 Object c = cols.get(col);
 
@@ -150,7 +150,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
             Object o = components.get(0);
             if (o instanceof PortletFrameLayout) {
                 PortletFrameLayout r = (PortletFrameLayout) o;
-                List cols = r.getPortletComponents();
+                List<PortletComponent> cols = r.getPortletComponents();
 
                 Object c = cols.get(col);
 
@@ -179,24 +179,24 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         }
     }
 
-    public Set getAllPortletsToAdd(GridSphereEvent event) {
+    public Set<ApplicationPortlet> getAllPortletsToAdd(GridSphereEvent event) {
         PortletRequest req = event.getRenderRequest();
-        SortedSet<ApplicationPortlet> result = new TreeSet();
+        SortedSet<ApplicationPortlet> result = new TreeSet<ApplicationPortlet>();
+        //Set<ApplicationPortlet> result = new HashSet<ApplicationPortlet>();
         Collection<ApplicationPortlet> appColl = registryService.getAllApplicationPortlets();
         Locale locale = req.getLocale();
         for (ApplicationPortlet appPortlet : appColl) {
             String concID = appPortlet.getConcretePortletID();
             // we don't want to list PortletServlet loader!
             if (concID.startsWith(PortletServlet.class.getName())) continue;
-            String dispName = appPortlet.getDisplayName(locale);
             ApplicationPortletImpl api = (ApplicationPortletImpl) appPortlet;
             api.setCompareLocale(locale);
-            result.add(api);
+            result.add(appPortlet);
         }
         return result;
     }
 
-    public Map getAllContentToAdd(GridSphereEvent event) {
+    public Map<String, String> getAllContentToAdd(GridSphereEvent event) {
         Map<String, String> allContent = new HashMap<String, String>();
         List<ContentDocument> docs = null;
         try {

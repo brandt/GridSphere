@@ -16,7 +16,7 @@ Invoke "ant help"
  - $Id: build.xml 5248 2006-09-04 13:22:40Z wehrens $
 -->
 
-<project name="GridSphere 3.1" default="help">
+<project name="GridSphere 3.X" default="help">
 
     <!-- get environment vars -->
     <property environment="env"/>

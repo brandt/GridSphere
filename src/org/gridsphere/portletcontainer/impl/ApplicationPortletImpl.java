@@ -537,9 +537,10 @@ public class ApplicationPortletImpl implements ApplicationPortlet, Comparable {
     public int compareTo(Object o) {
         ApplicationPortletImpl otherApplicationPortlet = (ApplicationPortletImpl) o;
         if (compareLocale == null)
-            return getDisplayName(new Locale(getDefaultLocale())).
-                    compareToIgnoreCase(otherApplicationPortlet.getDisplayName(new Locale(getDefaultLocale())));
+            return (this.getWebApplicationName() + " - " + getDisplayName(new Locale(getDefaultLocale()))).
+                    compareToIgnoreCase(otherApplicationPortlet.getWebApplicationName() + " - " + otherApplicationPortlet.getDisplayName(new Locale(getDefaultLocale())));
         else
-            return getDisplayName(compareLocale).compareToIgnoreCase(otherApplicationPortlet.getDisplayName(compareLocale));
+            return (this.getWebApplicationName() + " - " + getDisplayName(compareLocale)).compareToIgnoreCase(
+                    otherApplicationPortlet.getWebApplicationName() + " - " + (otherApplicationPortlet.getDisplayName(compareLocale)));
     }
 }

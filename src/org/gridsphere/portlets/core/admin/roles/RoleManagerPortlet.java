@@ -20,11 +20,23 @@ import javax.portlet.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author wehrens
+ */
 public class RoleManagerPortlet extends ActionPortlet {
 
     // JSP pages used by this portlet
+    /**
+     *
+     */
     public static final String ROLES_LIST = "admin/roles/doViewRolesList.jsp";
+    /**
+     *
+     */
     public static final String ROLES_EDIT = "admin/roles/doEditRole.jsp";
+    /**
+     *
+     */
     public static final String ROLES_CREATE = "admin/roles/doCreateRole.jsp";
 
     // Portlet services
@@ -39,6 +51,10 @@ public class RoleManagerPortlet extends ActionPortlet {
         DEFAULT_VIEW_PAGE = "doListRoles";
     }
 
+    /**
+     * @param evt
+     * @throws javax.portlet.PortletException
+     */
     public void doListRoles(RenderFormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getRenderRequest();
@@ -53,21 +69,33 @@ public class RoleManagerPortlet extends ActionPortlet {
         setNextState(req, ROLES_LIST);
     }
 
+    /**
+     * @param event
+     */
     public void doReturn(ActionFormEvent event) {
         setNextState(event.getActionRequest(), DEFAULT_VIEW_PAGE);
     }
 
+    /**
+     * @param event
+     */
     public void doShowRole(RenderFormEvent event) {
         HiddenFieldBean roleHF = event.getHiddenFieldBean("roleHF");
         String roleName = roleHF.getValue();
         doPrepareRole(event, event.getRenderRequest(), event.getRenderResponse(), roleName);
     }
 
+    /**
+     * @param event
+     */
     public void doEditRole(ActionFormEvent event) {
         String roleName = event.getAction().getParameter("roleName");
         doPrepareRole(event, event.getActionRequest(), event.getActionResponse(), roleName);
     }
 
+    /**
+     * @param event
+     */
     public void doSaveDefaultRoles(ActionFormEvent event) {
         ActionRequest request = event.getActionRequest();
         String[] rolesCB = request.getParameterValues("rolesDefCB");
@@ -87,6 +115,12 @@ public class RoleManagerPortlet extends ActionPortlet {
         }
     }
 
+    /**
+     * @param event
+     * @param req
+     * @param res
+     * @param roleName
+     */
     public void doPrepareRole(FormEvent event, PortletRequest req, PortletResponse res, String roleName) {
         HiddenFieldBean roleHF = event.getHiddenFieldBean("roleHF");
         PortletRole role = null;
@@ -140,6 +174,9 @@ public class RoleManagerPortlet extends ActionPortlet {
         setNextState(req, ROLES_EDIT);
     }
 
+    /**
+     * @param evt
+     */
     public void doDeleteRole(ActionFormEvent evt) {
         PortletRequest req = evt.getActionRequest();
         String roleStr = "";
@@ -167,6 +204,9 @@ public class RoleManagerPortlet extends ActionPortlet {
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
+    /**
+     * @param evt
+     */
     public void doSaveRole(ActionFormEvent evt) {
         PortletRequest req = evt.getActionRequest();
         boolean isNewRole = false;
@@ -207,6 +247,9 @@ public class RoleManagerPortlet extends ActionPortlet {
 
     }
 
+    /**
+     * @param event
+     */
     public void doAddUser(ActionFormEvent event) {
         PortletRequest req = event.getActionRequest();
         ListBoxBean addusersLB = event.getListBoxBean("addusersLB");
@@ -221,6 +264,9 @@ public class RoleManagerPortlet extends ActionPortlet {
         setNextState(req, "doShowRole");
     }
 
+    /**
+     * @param event
+     */
     public void doRemoveUser(ActionFormEvent event) {
         PortletRequest req = event.getActionRequest();
         HiddenFieldBean roleHF = event.getHiddenFieldBean("roleHF");

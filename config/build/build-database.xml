@@ -14,32 +14,32 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- Creates database                                                    -->
     <!-- =================================================================== -->
 
-    <!--   <target name="create-database" depends="setenv">
-     <taskdef name="dbtask"
-         classname="org.gridsphere.tools.DBTask"
-         classpathref="classpath">
-     </taskdef>
-     <dbtask
-         configdir="${appserver.home}/webapps/${gridsphere.deploy}"
-         action="CREATE"/>
-     <touch file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/database/GS_${version.release}"/>
- </target>
+    <target name="create-database" depends="setenv">
+        <taskdef name="dbtask"
+                 classname="org.gridsphere.tools.DBTask"
+                 classpathref="classpath">
+        </taskdef>
+        <dbtask
+                configdir="${appserver.home}/webapps/${gridsphere.deploy}"
+                action="CREATE"/>
+        <touch file="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/database/GS_${version.release}"/>
+    </target>
 
- <target name="update-database" depends="setenv">
-     <taskdef name="dbtask"
-         classname="org.gridsphere.tools.DBTask"
-         classpathref="classpath">
-     </taskdef>
-     <dbtask
-         configdir="${appserver.home}/webapps/${gridsphere.deploy}"
-         action="UPDATE"/>
- </target>
+    <target name="update-database" depends="setenv">
+        <taskdef name="dbtask"
+                 classname="org.gridsphere.tools.DBTask"
+                 classpathref="classpath">
+        </taskdef>
+        <dbtask
+                configdir="${appserver.home}/webapps/${gridsphere.deploy}"
+                action="UPDATE"/>
+    </target>
 
- <target name="hsql" depends="setenv">
-     <echo message="Starting HSQLDB"/>
-     <java dir="." fork="true" classname="org.hsqldb.Server" classpathref="classpath">
-         <arg line="-database ${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/database/gridsphere"/>
-     </java>
- </target>   -->
+    <target name="hsql" depends="setenv">
+        <echo message="Starting HSQLDB"/>
+        <java dir="." fork="true" classname="org.hsqldb.Server" classpathref="classpath">
+            <arg line="-database ${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/CustomPortal/database/gridsphere"/>
+        </java>
+    </target>
 
 </project>

@@ -86,5 +86,5 @@
 
 <div id="gsinfo" style="text-align: center">
     <ui:text key="ABOUT_GRIDSPHERE_WRITTEN_BY"/>
-    Jason Novotny, Michael Russell, Oliver Wehrens
+    Jason Novotny, Michael Russell &amp; Oliver Wehrens
 </div>

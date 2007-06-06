@@ -163,7 +163,7 @@ public class PortletPreferencesImpl implements PortletPreferences {
      * @throws java.lang.IllegalArgumentException
      *          if <code>key</code> is <code>null</code>. (A
      *          <code>null</code> value for <code>def</code> <i>is</i> permitted.)
-     * @see #getValues(java.lang.String, java.lang.String[])
+     * @see #getValues(java.lang.String,java.lang.String[])
      */
     public String getValue(String key, String def) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
@@ -220,7 +220,7 @@ public class PortletPreferencesImpl implements PortletPreferences {
      *          or <code>key.length()</code>
      *          or <code>value.length</code> are to long. The maximum length
      *          for key and value are implementation specific.
-     * @see #setValues(java.lang.String, java.lang.String[])
+     * @see #setValues(java.lang.String,java.lang.String[])
      */
     public void setValue(String key, String value) throws ReadOnlyException {
         if (key == null) throw new IllegalArgumentException("key is NULL");
@@ -349,16 +349,16 @@ public class PortletPreferencesImpl implements PortletPreferences {
     /**
      * Commits all changes made to the preferences via the
      * <code>set</code> methods in the persistent store.
-     * <P>
+     * <p/>
      * If this call returns succesfull, all changes are made
      * persistent. If this call fails, no changes are made
      * in the persistent store. This call is an atomic operation
      * regardless of how many preference attributes have been modified.
-     * <P>
+     * <p/>
      * All changes made to preferences not followed by a call
      * to the <code>store</code> method are discarded when the
      * portlet finishes the <code>processAction</code> method.
-     * <P>
+     * <p/>
      * If a validator is defined for this preferences in the
      * deployment descriptor, this validator is called before
      * the actual store is performed to check wether the given
@@ -378,6 +378,7 @@ public class PortletPreferencesImpl implements PortletPreferences {
         if (isRender) throw new IllegalStateException("Cannot persist PortletPreferences in render method!");
         if (validator != null) validator.validate(this);
         try {
+//            if (oid!=null) pm.saveOrUpdate(this); else pm.create(this);
             pm.saveOrUpdate(this);
         } catch (PersistenceManagerException e) {
             throw new IOException(e.getMessage());
