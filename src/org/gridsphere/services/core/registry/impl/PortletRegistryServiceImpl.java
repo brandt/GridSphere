@@ -37,11 +37,12 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
     }
 
     public void addWebApplication(PortletWebApplication webApp) {
+        log.debug("Adding PortleWebapp to registry: " + webApp.getWebApplicationName());
         webApps.put(webApp.getWebApplicationName(), webApp);
     }
 
     public PortletWebApplication getWebApplication(String webappName) {
-        return (PortletWebApplication) webApps.get(webappName);
+        return webApps.get(webappName);
     }
 
     /**

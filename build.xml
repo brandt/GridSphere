@@ -229,7 +229,6 @@ Invoke "ant help"
         </condition>
         <antcall target="answer-docs"/>
         <antcall target="deploy"/>
-        <antcall target="create-database"/>
         <echo message="GridSphere successfully installed."/>
         <echo message=" "/>
         <echo message="+--------------------------------------------------------------------------+"/>

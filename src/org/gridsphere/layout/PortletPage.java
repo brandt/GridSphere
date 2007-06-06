@@ -403,7 +403,7 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
 
     /**
-     * Renders the portlet cotainer by performing doRender on all portlet components
+     * Renders the portlet container by performing doRender on all portlet components
      *
      * @param event a gridsphere event
      */
@@ -412,6 +412,9 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
 
         super.doRender(event);
         RenderRequest req = event.getRenderRequest();
+
+        req.setAttribute(SportletProperties.DISPLAY_MODES, Boolean.valueOf(displayModes));
+        req.setAttribute(SportletProperties.DISPLAY_STATES, Boolean.valueOf(displayStates));
 
         boolean floating = false;
         PortletFrame f = null;

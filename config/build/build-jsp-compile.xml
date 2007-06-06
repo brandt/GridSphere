@@ -16,6 +16,11 @@
     <target name="jsp-precompile" depends="gridsphere-provider-jar">
 
         <taskdef name="jspc50" classname="org.apache.jasper.JspC" classpathref="classpath">
+            <classpath id="jspc50.classpath">
+                <fileset dir="${gridsphere.build}/lib/">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
         </taskdef>
 
 
@@ -56,7 +61,7 @@
             <equals arg1="${gridsphere.useprecompiledjsp}" arg2="true"/>
             <then>
                 <!-- create the jar and copy it in the webapp -->
-                <jar jarfile="${build.webapps}/${gridsphere.deploy}/WEB-INF/lib/gridsphere-jsp-${gridsphere.version}.jar"
+                <jar jarfile="${gridsphere.build}/lib/gridsphere-jsp-${gridsphere.version}.jar"
                      basedir="${gridsphere.build}/jsp/classes/">
                     <include name="**"/>
                 </jar>

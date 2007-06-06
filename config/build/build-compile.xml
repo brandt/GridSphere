@@ -50,7 +50,7 @@ Build include file for the GridSphere Portal source code, see build.xml
               todir="${build.classes}/org/gridsphere/filters/"/>
         <jar jarfile="${build.lib}/gridsphere-core-${gridsphere.version}.jar" basedir="${build.classes}">
             <!-- core portlets, GS servlet & filter, event impl -->
-            <include name="org/gridsphere/portlets/**"/>
+            <exclude name="org/gridsphere/portlets/**"/>
             <include name="org/gridsphere/servlets/**"/>
             <include name="org/gridsphere/filters/**"/>
             <!-- layout impl classes -->
@@ -63,6 +63,23 @@ Build include file for the GridSphere Portal source code, see build.xml
             <!-- core service impl classes -->
             <include name="org/gridsphere/services/**/impl/**"/>
         </jar>
+    </target>
+
+    <target name="gridsphere-core-portlets-jar" depends="compile" description="Core Gridsphere portlets">
+        <jar jarfile="${build.lib}/gridsphere-coreportlets-${gridsphere.version}.jar" basedir="${build.classes}">
+            <include name="org/gridsphere/portlets/**"/>
+        </jar>
+    </target>
+
+    <target name="gridsphere-portlet-servlet-jar" depends="compile" description="Contains the portlet servlet">
+        <jar jarfile="${build.lib}/gridsphere-portletservlet-${gridsphere.version}.jar" basedir="${build.classes}">
+            <include name="org/gridsphere/provider/portlet/jsr/PortletServlet.class"/>
+        </jar>
+    </target>
+
+    <target name="gridsphere-locale-jar" description="Contains the locale info">
+        <jar jarfile="${build.lib}/gridsphere-locale-${gridsphere.version}.jar"
+             basedir="webapps/gridsphere/WEB-INF/classes"/>
     </target>
 
     <target name="gridsphere-ant-tools-jar" depends="compile" description="Create GridSphere Core JAR">
@@ -121,8 +138,9 @@ Build include file for the GridSphere Portal source code, see build.xml
         </copy>
         <jar jarfile="${build.lib}/gridsphere-provider-${gridsphere.version}.jar" basedir="${build.classes}">
             <include name="org/gridsphere/provider/**"/>
+            <exclude name="org/gridsphere/provider/portlet/jsr/PortletServlet.class"/>
             <include name="gridsphere/**"/>
-            <metainf dir="config/tlds"/>
+            <metainf dir="webapps/gridsphere/META-INF/tlds"/>
         </jar>
     </target>
 
@@ -130,7 +148,9 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
     <target name="jar"
-            depends="gridsphere-service-framework-jar, gridsphere-provider-jar, gridsphere-portal-api-jar, gridsphere-core-jar, gridsphere-portal-jar, gridsphere-ant-tools-jar"
+            depends="gridsphere-service-framework-jar, gridsphere-provider-jar, gridsphere-portal-api-jar,
+            gridsphere-core-jar, gridsphere-portal-jar, gridsphere-ant-tools-jar, gridsphere-core-portlets-jar,
+            gridsphere-portlet-servlet-jar, gridsphere-locale-jar"
             description="Creates all jars"/>
 
 </project>

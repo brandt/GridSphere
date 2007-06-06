@@ -15,21 +15,21 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <echo message="GridSphere AppServer: ${gridsphere.appserver}"/>
 
-        <if>
-            <equals arg1="${gridsphere.appserver}" arg2="jetty"/>
-            <then>
-                <echo message="Installing for Jetty"/>
-                <antcall target="deploy-jetty"/>
-            </then>
-        </if>
+        <!--<if>-->
+        <!--<equals arg1="${gridsphere.appserver}" arg2="jetty"/>-->
+        <!--<then>-->
+        <!--<echo message="Installing for Jetty"/>-->
+        <!--<antcall target="deploy-jetty"/>-->
+        <!--</then>-->
+        <!--</if>-->
 
-        <if>
-            <equals arg1="${gridsphere.appserver}" arg2="jetty6"/>
-            <then>
-                <echo message="Installing for Jetty6"/>
-                <antcall target="deploy-jetty6"/>
-            </then>
-        </if>
+        <!--<if>-->
+        <!--<equals arg1="${gridsphere.appserver}" arg2="jetty6"/>-->
+        <!--<then>-->
+        <!--<echo message="Installing for Jetty6"/>-->
+        <!--<antcall target="deploy-jetty6"/>-->
+        <!--</then>-->
+        <!--</if>-->
 
         <if>
             <equals arg1="${gridsphere.appserver}" arg2="tomcat"/>
@@ -41,62 +41,23 @@ Build include file for the GridSphere Portal source code, see build.xml
     </target>
 
     <!-- ++++++++++++++++++++++ -->
-    <!-- war -->
-
-    <target name="war" depends="deploy-common" description="Creates a GridSphere WAR distribution">
-
-        <delete file="${gridsphere.build}/${gridsphere.deploy}.war"/>
-
-        <filter token="GRIDSPHERE_CONTEXT" value="${gridsphere.context}"/>
-        <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
-        <filter token="GRIDSPHERE_VERSION" value="${gridsphere.version}"/>
-        <copy filtering="true" todir="${gridsphere.build}/${gridsphere.deploy}">
-            <fileset dir="${build.webapps}/${gridsphere.deploy}"/>
-        </copy>
-
-        <copy todir="${gridsphere.build}/${gridsphere.deploy}/WEB-INF/lib">
-            <fileset dir="${build.lib}">
-                <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
-                <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
-            </fileset>
-        </copy>
-
-        <jar destfile="${gridsphere.build}/${gridsphere.deploy}.war"
-             basedir="${gridsphere.build}/${gridsphere.deploy}"/>
-
-        <delete dir="${gridsphere.build}/${gridsphere.deploy}"/>
-
-    </target>
-
-    <!-- ++++++++++++++++++++++ -->
     <!-- deploy-common -->
 
     <target name="copy-buildwebapp" depends="jar" description="Copies jars and webapp to the build.deploy directory">
 
-        <!-- copy libs & gs jars to build dir -->
-        <copy overwrite="true" todir="${build.webapps}/${gridsphere.deploy}/WEB-INF/lib">
-            <fileset dir="lib">
-                <exclude name="licenses/**"/>
-                <exclude name="*.txt"/>
-            </fileset>
-            <fileset dir="${build.lib}">
-                <include name="gridsphere-core-${gridsphere.version}.jar"/>
-                <include name="gridsphere-portal-${gridsphere.version}.jar"/>
-                <include name="gridsphere-provider-${gridsphere.version}.jar"/>
-            </fileset>
-        </copy>
 
         <!-- copy webapp to build dir excluding files which need special handling-->
         <filter token="GRIDSPHERE_VERSION" value="${gridsphere.version}"/>
         <copy filtering="true" todir="${build.webapps}/${gridsphere.deploy}" encoding="UTF-8">
             <fileset dir="${gswebapp.dir}">
-                <exclude name="**/tlds/**"/>
+                <!--<exclude name="**/tlds/**"/>-->
                 <exclude name="index.html"/>
                 <exclude name="WEB-INF/web.xml"/>
                 <exclude name="META-INF/context.xml"/>
                 <exclude name="images/**"/>
                 <exclude name="themes/**"/>
                 <exclude name="javascript/**"/>
+                <exclude name="WEB-INF/classes/**"/>
             </fileset>
         </copy>
 
@@ -126,13 +87,14 @@ Build include file for the GridSphere Portal source code, see build.xml
         <!-- copy the rest of the webapps dir to -->
         <copy overwrite="true" filtering="true" todir="${build.webapps}/${gridsphere.deploy}" encoding="UTF-8">
             <fileset dir="${gswebapp.dir}">
-                <exclude name="**/tlds/**"/>
+                <!--<exclude name="**/tlds/**"/>-->
                 <exclude name="index.html"/>
                 <exclude name="WEB-INF/web.xml"/>
                 <exclude name="META-INF/context.xml"/>
                 <exclude name="images/**"/>
                 <exclude name="themes/**"/>
                 <exclude name="javascript/**"/>
+                <exclude name="WEB-INF/classes/**"/>
             </fileset>
         </copy>
 
@@ -259,10 +221,14 @@ Build include file for the GridSphere Portal source code, see build.xml
             <then>
                 <echo message="Detected Tomcat 5"/>
                 <copy overwrite="true" todir="${appserver.home}/shared/lib">
-                    <fileset dir="${build.lib}">
-                        <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
-                        <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
+                    <fileset dir="lib">
+                        <exclude name="licenses/**"/>
+                        <exclude name="*.txt"/>
                     </fileset>
+                    <fileset dir="${build.lib}">
+                        <include name="*.jar"/>
+                    </fileset>
+
                 </copy>
             </then>
             <else>

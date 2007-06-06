@@ -317,17 +317,18 @@ Copyright:
 
         <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="${gridsphere.build}/lib/">
-                <include name="gridsphere-provider*.jar"/>
-                <include name="gridsphere-portal*.jar"/>
-                <exclude name="gridsphere-portal-api*.jar"/>
+                <include name="gridsphere-portletservlet*.jar"/>
+                <!--<include name="gridsphere-provider*.jar"/>-->
+                <!--<include name="gridsphere-portal*.jar"/>-->
+                <!--<exclude name="gridsphere-portal-api*.jar"/>-->
             </fileset>
-            <fileset dir="${gridsphere.home}/lib/">
-                <include name="log4j*.jar"/>
-                <include name="castor*.jar"/>
-                <include name="xerces*.jar"/>
-                <include name="commons-fileupload*.jar"/>
-                <include name="commons-io*.jar"/>
-            </fileset>
+            <!--<fileset dir="${gridsphere.home}/lib/">-->
+            <!--<include name="log4j*.jar"/>-->
+            <!--<include name="castor*.jar"/>-->
+            <!--<include name="xerces*.jar"/>-->
+            <!--<include name="commons-fileupload*.jar"/>-->
+            <!--<include name="commons-io*.jar"/>-->
+            <!--</fileset>-->
         </copy>
 
         <copy todir="${project.build}/webapp/WEB-INF/classes">
@@ -370,17 +371,18 @@ Copyright:
 
         <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="${gridsphere.build}/lib/">
-                <include name="gridsphere-provider*.jar"/>
-                <include name="gridsphere-portal*.jar"/>
-                <exclude name="gridsphere-portal-api*.jar"/>
+                <include name="gridsphere-portletservlet*.jar"/>
+                <!--<include name="gridsphere-provider*.jar"/>-->
+                <!--<include name="gridsphere-portal*.jar"/>-->
+                <!--<exclude name="gridsphere-portal-api*.jar"/>-->
             </fileset>
-            <fileset dir="${gridsphere.home}/lib/">
-                <include name="log4j*.jar"/>
-                <include name="castor*.jar"/>
-                <include name="xerces*.jar"/>
-                <include name="commons-fileupload*.jar"/>
-                <include name="commons-io*.jar"/>
-            </fileset>
+            <!--<fileset dir="${gridsphere.home}/lib/">-->
+            <!--<include name="log4j*.jar"/>-->
+            <!--<include name="castor*.jar"/>-->
+            <!--<include name="xerces*.jar"/>-->
+            <!--<include name="commons-fileupload*.jar"/>-->
+            <!--<include name="commons-io*.jar"/>-->
+            <!--</fileset>-->
         </copy>
 
         <if>

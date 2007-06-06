@@ -81,5 +81,4 @@ public class LocalePortlet extends ActionPortlet {
             }
         }
     }
-
 }
