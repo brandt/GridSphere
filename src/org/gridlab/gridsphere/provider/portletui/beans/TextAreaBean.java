@@ -71,12 +71,21 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
     }
 
     /**
-     * Returns the bean value
+     * Returns the bean value with < and > replaced with &lt; and &gt;
      *
      * @return the bean value
      */
     public String getValue() {
         return parseUserInput(value);
+    }
+
+    /**
+     * Returns the raw value of the field
+     *
+     * @return
+     */
+    public String getRawValue() {
+        return value;
     }
 
     /**
