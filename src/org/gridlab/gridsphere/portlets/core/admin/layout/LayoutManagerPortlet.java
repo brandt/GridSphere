@@ -19,7 +19,10 @@ import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 
 import javax.servlet.UnavailableException;
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class LayoutManagerPortlet extends ActionPortlet {
 
@@ -89,7 +92,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         ta.setValue(sb.toString());
 
         String themesPath = getPortletConfig().getContext().getRealPath("/themes");
-        
+
         /// retrieve the current renderkit
         PortletPage page = layoutMgr.getPortletPage(req);
         themesPath += "/" + page.getRenderKit();
@@ -132,7 +135,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     public void saveBanner(FormEvent event) throws PortletException, IOException {
 
         TextAreaBean ta = event.getTextAreaBean("bannerTA");
-        String newText = ta.getValue();
+        String newText = ta.getRawValue();
         String filename = this.getPortletConfig().getContext().getRealPath("/WEB-INF/CustomPortal/layouts/html/pagehead.html");
 
         FileWriter f = new FileWriter(filename);
@@ -145,7 +148,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     public void saveFooter(FormEvent event) throws PortletException, IOException {
 
         TextAreaBean ta = event.getTextAreaBean("footerTA");
-        String newText = ta.getValue();
+        String newText = ta.getRawValue();
         String filename = this.getPortletConfig().getContext().getRealPath("/WEB-INF/CustomPortal/layouts/html/pagefooter.html");
 
         FileWriter f = new FileWriter(filename);
@@ -262,10 +265,11 @@ public class LayoutManagerPortlet extends ActionPortlet {
     public void saveLayout(FormEvent event) throws PortletException, IOException {
         HiddenFieldBean groupHF = event.getHiddenFieldBean("layoutHF");
         TextAreaBean ta = event.getTextAreaBean("layoutFile");
-        String newText = ta.getValue();
+        String newText = ta.getRawValue();
         PortletRequest req = event.getPortletRequest();
         if (groupHF.getValue().equals("guest")) {
-            if (req.getRoles().contains(PortletRole.SUPER.getName())) return;
+            // continue only if req has super role           
+            if (!req.getRoles().contains(PortletRole.SUPER.getName())) return;
             String guestFile = PortletTabRegistry.getGuestLayoutFile();
             String tmpFile = guestFile + "-tmp";
             Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpFile), "UTF-8"));
@@ -295,7 +299,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             return;
         }
         */
-        
+
         String groupFile = PortletTabRegistry.getTabDescriptorPath(group);
         log.info("saving group layout: " + group.getName());
         String tmpFile = groupFile + "-tmp";
