@@ -68,7 +68,7 @@ public class UserManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getRenderRequest();
 
         String numPages = (String) req.getPortletSession().getAttribute(NUM_PAGES);
-        numPages = (numPages != null) ? numPages : "500";
+        numPages = (numPages != null) ? numPages : "10";
 
         String[] itemList = {"10", "20", "50", "100", "200", "500"};
         ListBoxBean usersPageLB = evt.getListBoxBean("usersPageLB");
