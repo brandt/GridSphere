@@ -338,7 +338,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
             if (numEntries != 0) {
                 numpages = numEntries / maxRows;
                 numpages += numEntries % maxRows > 0 ? 1 : 0;
-            }  else {
+            } else {
                 numpages = rowCount / maxRows;
                 numpages += rowCount % maxRows > 0 ? 1 : 0;
             }
@@ -362,7 +362,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
                     //System.err.println("uri = " + uris);
                     String curPage = TableBean.CURRENT_PAGE;
                     curPage = "rp_" + curPage;
-                    uri = uris + "&amp;" + curPage + "=" + i;
+                    uri = uris + "?" + curPage + "=" + i;
                     sb.append(" | " + "<a href=\"" + uri + "\">" + c + "</a>");
                 }
             }
@@ -371,14 +371,11 @@ public class TableBean extends BaseComponentBean implements TagBean {
                 sb.append(" | ");
                 String showall = TableBean.SHOW_ALL;
                 showall = "rp_" + TableBean.SHOW_ALL;
-                sb.append("<a href=\"" + uri + "&amp;" + showall + "\">" + this.getLocalizedText("SHOW_ALL") + "</a>");
+                sb.append("<a href=\"" + uri + "?" + showall + "\">" + this.getLocalizedText("SHOW_ALL") + "</a>");
             }
             sb.append("</p>"); // added for XHTML 1.0 Strict compliance
             rowCount = 0;
         }
-
         return sb.toString();
     }
-
-
 }
