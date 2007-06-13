@@ -60,19 +60,17 @@ public class UserManagerPortlet extends ActionPortlet {
         DEFAULT_VIEW_PAGE = "doListUsers";
     }
 
-    public void doListUsers(ActionFormEvent evt)
-            throws PortletException {
+    public void doListUsers(ActionFormEvent evt) throws PortletException {
         setNextState(evt.getActionRequest(), DEFAULT_VIEW_PAGE);
     }
 
-    public void doListUsers(RenderFormEvent evt)
-            throws PortletException {
+    public void doListUsers(RenderFormEvent evt) throws PortletException {
         PortletRequest req = evt.getRenderRequest();
 
         String numPages = (String) req.getPortletSession().getAttribute(NUM_PAGES);
-        numPages = (numPages != null) ? numPages : "10";
+        numPages = (numPages != null) ? numPages : "500";
 
-        String[] itemList = {"10", "20", "50", "100"};
+        String[] itemList = {"10", "20", "50", "100", "200", "500"};
         ListBoxBean usersPageLB = evt.getListBoxBean("usersPageLB");
         usersPageLB.clear();
         for (int i = 0; i < itemList.length; i++) {
@@ -118,8 +116,7 @@ public class UserManagerPortlet extends ActionPortlet {
         setNextState(event.getActionRequest(), "doListUsers");
     }
 
-    public void doViewUser(ActionFormEvent evt)
-            throws PortletException {
+    public void doViewUser(ActionFormEvent evt) throws PortletException {
         PortletRequest req = evt.getActionRequest();
 
         String userID = evt.getAction().getParameter("userID");
@@ -428,8 +425,7 @@ public class UserManagerPortlet extends ActionPortlet {
         event.getTextFieldBean("certificate").setValue((String) user.getAttribute("user.certificate"));
     }
 
-    private void validateUser(ActionFormEvent event, boolean newuser)
-            throws PortletException {
+    private void validateUser(ActionFormEvent event, boolean newuser) throws PortletException {
         log.debug("Entering validateUser()");
         PortletRequest req = event.getActionRequest();
         StringBuffer message = new StringBuffer();
