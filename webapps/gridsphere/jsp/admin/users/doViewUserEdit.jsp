@@ -98,7 +98,7 @@
 </ui:frame>
 <% } %>
 
-<% if (request.getAttribute("savePass") != null) { %>
+<% //if (request.getAttribute("savePass") != null) { %>
 <ui:frame>
     <ui:tablerow>
         <ui:tablecell width="200">
@@ -118,7 +118,9 @@
         </ui:tablecell>
     </ui:tablerow>
 </ui:frame>
-<% } %>
+
+<% // } %>
+
 
 <% if (request.getAttribute("newuser") != null) { %>
 <ui:checkbox beanId="emailUserCB"/>
