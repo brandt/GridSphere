@@ -23,7 +23,7 @@ public class TitleBar extends BaseRender implements Render {
     }
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
-        PortletTitleBar titleBar = (PortletTitleBar)comp;
+        PortletTitleBar titleBar = (PortletTitleBar) comp;
         PortletRequest req = event.getPortletRequest();
         StringBuffer titleBuffer = new StringBuffer();
         if (titleBar.isActive()) {
@@ -33,7 +33,7 @@ public class TitleBar extends BaseRender implements Render {
         }
         titleBar.setActive(false);
         List modeLinks = titleBar.getModeLinks();
-        titleBuffer.append("<div class=\"window-icon-left\">");        
+        titleBuffer.append("<div class=\"window-icon-left\">");
         if (modeLinks != null) {
             Iterator modesIt = modeLinks.iterator();
             PortletTitleBar.PortletModeLink mode;
@@ -63,7 +63,9 @@ public class TitleBar extends BaseRender implements Render {
                     tmp.append(mode.getCursor());
                     tmp.append(";\"");
                 }
-                tmp.append("\" /></a>");
+                //tmp.append("\" /></a>");
+                // fix for GPF-413
+                tmp.append(" /></a>");
             }
             titleBuffer.append(tmp);
         }
@@ -73,24 +75,24 @@ public class TitleBar extends BaseRender implements Render {
     }
 
     public StringBuffer doEnd(GridSphereEvent event, PortletComponent comp) {
-        PortletTitleBar titleBar = (PortletTitleBar)comp;
+        PortletTitleBar titleBar = (PortletTitleBar) comp;
         PortletRequest req = event.getPortletRequest();
         StringBuffer titleBuffer = new StringBuffer();
         titleBuffer.append("</div>");
         // Output window state icons
         List windowLinks = titleBar.getWindowLinks();
-        titleBuffer.append("<div class=\"window-icon-right\">");        
+        titleBuffer.append("<div class=\"window-icon-right\">");
         String tmp = "";
         if (windowLinks != null) {
             Iterator windowsIt = windowLinks.iterator();
             PortletTitleBar.PortletStateLink state;
             while (windowsIt.hasNext()) {
                 state = (PortletTitleBar.PortletStateLink) windowsIt.next();
-                tmp += "<a href=\"" + state.getHref() + "\"><img src=\"" + req.getContextPath() +"/themes/" + titleBar.getRenderKit() + "/" + titleBar.getTheme() + "/" + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\" alt=\"" + state.getAltTag() + "\" /></a>";
+                tmp += "<a href=\"" + state.getHref() + "\"><img src=\"" + req.getContextPath() + "/themes/" + titleBar.getRenderKit() + "/" + titleBar.getTheme() + "/" + state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\" alt=\"" + state.getAltTag() + "\" /></a>";
             }
         }
         titleBuffer.append(tmp);
-        titleBuffer.append("</div>");        
+        titleBuffer.append("</div>");
         titleBuffer.append("</div>");
         tmp = null;
         return titleBuffer;
