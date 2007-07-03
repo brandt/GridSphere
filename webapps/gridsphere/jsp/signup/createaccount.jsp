@@ -62,7 +62,7 @@
                 <ui:text key="PASSWORD"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:password size="15" beanId="password"/>
+                <ui:password size="15" beanId="organization"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -79,7 +79,7 @@
     </ui:frame>
 
     <ui:image src="<%= request.getContextPath() + "/Captcha.jpg" %>"/>
-    <ui:renderlink key="LOGIN_CANT_READ" render="doNewUser"/>
+    <ui:actionsubmit key="LOGIN_CANT_READ" action="cantRead"/>
     <p/>
 
     <ui:text key="CAPTCHA_TEXT"/>
