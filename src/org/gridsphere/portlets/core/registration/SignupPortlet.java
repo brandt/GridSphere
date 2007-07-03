@@ -66,6 +66,26 @@ public class SignupPortlet extends ActionPortlet {
         return bundle.getString(key);
     }
 
+    public void cantRead(ActionFormEvent evt) {
+
+        TextFieldBean userName = evt.getTextFieldBean("userName");
+        userName.setValue(userName.getValue());
+        TextFieldBean firstName = evt.getTextFieldBean("firstName");
+        firstName.setValue(firstName.getValue());
+        TextFieldBean lastName = evt.getTextFieldBean("lastName");
+        lastName.setValue(lastName.getValue());
+        TextFieldBean emailAddress = evt.getTextFieldBean("emailAddress");
+        emailAddress.setValue(emailAddress.getValue());
+        TextFieldBean organization = evt.getTextFieldBean("organization");
+        organization.setValue(organization.getValue());
+        TextFieldBean password = evt.getPasswordBean("password");
+        password.setValue(password.getValue());
+        TextFieldBean password2 = evt.getPasswordBean("confirmPassword");
+        password2.setValue(password2.getValue());
+
+        setNextState(evt.getActionRequest(), DEFAULT_VIEW_PAGE);
+    }
+
     public void doNewUser(RenderFormEvent evt)
             throws PortletException {
 
