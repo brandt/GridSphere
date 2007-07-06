@@ -429,6 +429,8 @@ public class UserManagerPortlet extends ActionPortlet {
         log.debug("Entering validateUser()");
         PortletRequest req = event.getActionRequest();
         StringBuffer message = new StringBuffer();
+        String eMail = event.getTextFieldBean("emailAddress").getValue();
+
         boolean isInvalid = false;
         // Validate user name
         String userName = event.getTextFieldBean("userName").getValue();
@@ -438,6 +440,10 @@ public class UserManagerPortlet extends ActionPortlet {
         } else if (newuser) {
             if (this.userManagerService.existsUserName(userName)) {
                 createErrorMessage(event, this.getLocalizedText(req, "USER_EXISTS") + "<br />");
+                isInvalid = true;
+            }
+            if (this.userManagerService.getUserByEmail(eMail) != null) {
+                createErrorMessage(event, this.getLocalizedText(req, "EMAIL_EXISTS") + "<br/>");
                 isInvalid = true;
             }
         }
@@ -457,8 +463,7 @@ public class UserManagerPortlet extends ActionPortlet {
             isInvalid = true;
         }
 
-        // Validate e-mail
-        String eMail = event.getTextFieldBean("emailAddress").getValue();
+        // Validate e-mail        
         if (eMail.equals("")) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br />");
             isInvalid = true;
