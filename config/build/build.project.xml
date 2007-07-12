@@ -362,7 +362,7 @@ Copyright:
         <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="${gridsphere.build}/lib/">
                 <include name="gridsphere-portletservlet*.jar"/>
-                <!--<include name="gridsphere-provider*.jar"/>-->
+                <include name="gridsphere-provider*.jar"/>
                 <!--<include name="gridsphere-portal*.jar"/>-->
                 <!--<exclude name="gridsphere-portal-api*.jar"/>-->
             </fileset>
