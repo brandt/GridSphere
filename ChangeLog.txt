@@ -1,6 +1,27 @@
 ChangeLog.txt
 =============
 
+
+Release Notes - GridSphere Portal Framework - Version 3.0.8
+-----------------------------------------------------------
+
+ Bug
+    * [GPF-396] - Cannot store PortletPreferences
+    * [GPF-400] - ui:table tag can not handle multiple pages
+    * [GPF-402] - User creation - if password is too short, password fields disappear
+    * [GPF-403] - ui:frame tld is broken
+    * [GPF-407] - Old xercesImpl.jar
+    * [GPF-408] - New project build template "build.project.xml" has variable "${project.webapp}" instead of ${project.build}/webapp" in "war" target
+    * [GPF-410] - New user can register with existing mail adress
+    * [GPF-412] - War target is broken, as it does not include lib/ in the correct place, and it uses an uninitialised ${project.webapp} variable.
+    * [GPF-415] - ui:dialoglink & ui:dialogbutton don't work
+    * [GPF-416] - Error invoking action method: doShowLayout
+
+ Improvement
+    * [GPF-371] - Reload registration captcha and form values
+
+
+
 Release Notes - GridSphere Portal Framework - Version 3.0.7
 -----------------------------------------------------------
 

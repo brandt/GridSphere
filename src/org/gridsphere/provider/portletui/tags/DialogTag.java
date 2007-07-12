@@ -141,6 +141,7 @@ public class DialogTag extends BaseComponentTag {
         dialog.setTitleColor(titleColor);
         dialog.setLink(isLink);
         dialog.setValue(value);
+        dialog.setName(name);
     }
 
     public int doStartTag() throws JspException {
