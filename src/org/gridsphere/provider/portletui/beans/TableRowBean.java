@@ -109,12 +109,14 @@ public class TableRowBean extends BeanContainer implements TagBean {
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<tr");
-        if (align != null) sb.append(" align=\"").append(align).append("\"");   // todo check usage of 'layout' instead of 'align' ??
+        if (align != null)
+            sb.append(" align=\"").append(align).append("\"");   // todo check usage of 'layout' instead of 'align' ??
         if (valign != null) sb.append(" valign=\"" + valign + "\"");
         if (isHeader) {
             sb.append(" class=\"" + TABLE_HEADER_STYLE + "\"");
         } else {
             if (isZebra) {
+
                 sb.append(" onmouseover=\"this.className='" + TABLE_ROLLOVER_STYLE + "'\" onmouseout=\"this.className='" + TABLE_NORMAL_STYLE + "'\" class=\"'" + TABLE_ALTERNATE_STYLE + "'\"");
             }
         }

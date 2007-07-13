@@ -255,8 +255,14 @@ in lighter color
     background-color: #ebebeb;
 }
 
+.portlet-section-rollover {
+    font-family: inherit;
+    color: black;
+    background-color: #ebebeb;
+}
+
 /* *********************************************
-  Normal text in a table cell
+ Normal text in a table cell
 ********************************************* */
 .portlet-section-body {
     border: none;

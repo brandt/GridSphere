@@ -21,6 +21,16 @@ public class TableCellTag extends BaseComponentTag {
     protected String valign = null;
     protected String rowspan = null;
     protected String colspan = null;
+    protected String header = "false";
+
+
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
 
     /**
      * Sets the table alignment e.g. "left", "center" or "right"
@@ -172,6 +182,7 @@ public class TableCellTag extends BaseComponentTag {
             if (colspan != null) cellBean.setColspan(colspan);
             if (cssClass != null) cellBean.setCssClass(cssClass);
             if (cssStyle != null) cellBean.setCssStyle(cssStyle);
+            if (header != null) cellBean.setHeader(header);
         }
         /*
         TableRowTag rowTag = (TableRowTag) getParent();

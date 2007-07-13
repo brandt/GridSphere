@@ -16,6 +16,7 @@ public class TableCellBean extends BeanContainer implements TagBean {
     protected String valign = null;
     protected String colspan = null;
     protected String rowspan = null;
+    protected String header = "false";
 
     //protected String TABLE_CELL_STYLE = "portlet-section-body";
 
@@ -42,6 +43,23 @@ public class TableCellBean extends BeanContainer implements TagBean {
         super();
         this.beanId = beanId;
         //this.cssClass = TABLE_CELL_STYLE;
+    }
+
+
+    /**
+     * Returns 'true' if cell is a tableheader (th)
+     *
+     * @return
+     */
+    public String getHeader() {
+        return header;
+    }
+
+    /**
+     * @param header
+     */
+    public void setHeader(String header) {
+        this.header = header;
     }
 
     /**
@@ -154,7 +172,8 @@ public class TableCellBean extends BeanContainer implements TagBean {
 
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("<td ");
+        if (!header.equalsIgnoreCase("true")) sb.append("<td ");
+        else sb.append("<th ");
         sb.append(getFormattedCss());
         // Attribute 'width' replaced by 'style="width:"' for XHTML 1.0 Strict compliance                            
         if (width != null) sb.append(" style=\"width:" + width + "\"");
@@ -174,7 +193,9 @@ public class TableCellBean extends BeanContainer implements TagBean {
     }
 
     public String toEndString() {
-        return "</td>";
+        String result = "</td>";
+        if (header.equalsIgnoreCase("true")) result = "</th>";
+        return result;
     }
 
 }
