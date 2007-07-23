@@ -1,0 +1,26 @@
+RELEASE NOTES
+
+GridSphere 3.0.8
+================
+
+Due to some class loading issues, most of the files are now copied to the shared lib of tomcat 5.x.
+
+* Upgrading
+
+  Since the loading of classes changed it is needed to install a fresh version of GridSphere and tomcat. It is always
+  recommended to run GridSphere in it's own Servlet Container (Tomcat 5.x is supported). To migrate your settings
+  to the new instance copy your $CATALINA_HOME/webapps/gridsphere/WEB-INF/CustomPortal directory to the new destination.
+  Be aware that if you are using the buildin hsqldb you might need to change the DB path in hibernate.properties (or
+  just save it and install the new version in the same location).
+
+* 3rd party GridSphere Style projects
+
+  You need to upgrade your build files for your gridsphere based projects. To do that run the command
+
+     ant update-project
+
+  in the source directory of GridSphere and answer the questions. The need to duplicate some files in the WEB-INF/lib
+  directory of your projects is gone since they are all available from the servlet containers classloader. If you don't
+  use our build scripts just make sure you have 'gridsphere-portletservlet-VERSION.jar' in you WEB-INF/lib directory.
+  That's all you need.
+
