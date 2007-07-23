@@ -17,7 +17,7 @@ Due to some class loading issues, most of the files are now copied to the shared
 
   You need to upgrade your build files for your gridsphere based projects. To do that run the command
 
-     ant upgrade-project
+     ant update-project
 
   in the source directory of GridSphere and answer the questions. The need to duplicate some files in the WEB-INF/lib
   directory of your projects is gone since they are all available from the servlet containers classloader. If you don't
