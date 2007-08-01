@@ -274,7 +274,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
             String month = checkLength(m + "", 2, "0", true);
             String backupName = "PortalContentBackup-" + c.get(Calendar.YEAR) + "." + month + "." +
                     checkLength(c.get(Calendar.DAY_OF_MONTH) + "", 2, "0", true) + "-" +
-                    checkLength(c.get(Calendar.HOUR_OF_DAY) + "", 2, "0", true) + ":" +
+                    checkLength(c.get(Calendar.HOUR_OF_DAY) + "", 2, "0", true) + 
                     checkLength(c.get(Calendar.MINUTE) + "", 2, "0", true) + ".xml";
             String filename = fullPathBackupDir + File.separator + backupName;
             Session s = null;
