@@ -25,6 +25,8 @@ import org.gridsphere.services.core.security.auth.AuthModuleService;
 import org.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
+import org.gridsphere.services.core.security.auth.modules.LateUserRetrievalAuthModule;
+import org.gridsphere.services.core.security.auth.modules.impl.UserDescriptor;
 import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.user.User;
@@ -269,6 +271,8 @@ public class LoginPortlet extends ActionPortlet {
 
     public User login(PortletRequest req)
             throws AuthenticationException, AuthorizationException {
+        boolean lateUserRetrieval = false;
+        boolean hasLateUserRetrievalAuthModules = false;
 
         String loginName = req.getParameter("username");
         String loginPassword = req.getParameter("password");
@@ -295,6 +299,18 @@ public class LoginPortlet extends ActionPortlet {
                 user = userManagerService.getUserByEmail(loginName);
             }
 
+            // check if there are late user retrieval modules in case user is not obtained from the active login module
+            List<LoginAuthModule> modules = authModuleService.getActiveAuthModules();
+            Iterator modulesIterator = modules.iterator();
+            while (modulesIterator.hasNext()) {
+                if (modulesIterator.next() instanceof LateUserRetrievalAuthModule) {
+                    hasLateUserRetrievalAuthModules = true;
+                    break;
+                }
+            }
+
+            if (null == user && hasLateUserRetrievalAuthModules)
+                lateUserRetrieval = true;
         } else {
 
             log.debug("Using certificate for login :" + certificate);
@@ -304,26 +320,26 @@ public class LoginPortlet extends ActionPortlet {
             }
         }
 
-        if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
+        int numTriesInt = 1;
+        if (!lateUserRetrieval) {
+            if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
 
-        // tried one to many times using same name
-        int defaultNumTries = Integer.valueOf(portalConfigService.getProperty(PortalConfigService.LOGIN_NUMTRIES)).intValue();
-        int numTriesInt;
-        String numTries = (String) user.getAttribute(PortalConfigService.LOGIN_NUMTRIES);
-        if (numTries == null) {
-            numTriesInt = 1;
-        } else {
-            numTriesInt = Integer.valueOf(numTries).intValue();
-        }
-        System.err.println("num tries = " + numTriesInt);
-        if ((defaultNumTries != -1) && (numTriesInt >= defaultNumTries)) {
-            disableAccount(req);
-            throw new AuthorizationException(getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS"));
-        }
+            // tried one to many times using same name
+            int defaultNumTries = Integer.valueOf(portalConfigService.getProperty(PortalConfigService.LOGIN_NUMTRIES)).intValue();
+            String numTries = (String) user.getAttribute(PortalConfigService.LOGIN_NUMTRIES);
+            if (numTries != null)
+                numTriesInt = Integer.valueOf(numTries).intValue();
 
-        String accountStatus = (String) user.getAttribute(User.DISABLED);
-        if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
-            throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
+            System.err.println("num tries = " + numTriesInt);
+            if ((defaultNumTries != -1) && (numTriesInt >= defaultNumTries)) {
+                disableAccount(req);
+                throw new AuthorizationException(getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS"));
+            }
+
+            String accountStatus = (String) user.getAttribute(User.DISABLED);
+            if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
+                throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
+        }
 
         // If authorized via certificates no other authorization needed
         if (certificate != null) return user;
@@ -334,34 +350,93 @@ public class LoginPortlet extends ActionPortlet {
         Collections.sort(modules);
         AuthenticationException authEx = null;
 
+        Map parametersMap = new HashMap();
+        Map attributesMap = new HashMap();
+        if(hasLateUserRetrievalAuthModules){
+            Enumeration attributesNamesEnumeration = req.getAttributeNames();
+            while (attributesNamesEnumeration.hasMoreElements()) {
+                String attributeName = (String) attributesNamesEnumeration.nextElement();
+                attributesMap.put(attributeName, req.getAttribute(attributeName));
+            }
+            Enumeration parametersNamesEnumeration = req.getParameterNames();
+            while (parametersNamesEnumeration.hasMoreElements()) {
+                String parameterName = (String) parametersNamesEnumeration.nextElement();
+                parametersMap.put(parameterName, req.getParameter(parameterName));
+            }
+        }
+
         Iterator it = modules.iterator();
+        if (lateUserRetrieval)
+            log.debug("in login: Use late user retrieval modules only");
         log.debug("in login: Active modules are: ");
         boolean success = false;
         while (it.hasNext()) {
             success = false;
             LoginAuthModule mod = (LoginAuthModule) it.next();
+            //in case of late user retrieval use LateUserRetrievalAuthModule modules only
+            if (lateUserRetrieval && !(mod instanceof LateUserRetrievalAuthModule)) {
+                log.debug(mod.getModuleName() + " (NOT late user retrieval module)");
+                continue;
+            }
             log.debug(mod.getModuleName());
             try {
-                mod.checkAuthentication(user, loginPassword);
+                if (mod instanceof LateUserRetrievalAuthModule) {
+                    UserDescriptor userDescriptor = ((LateUserRetrievalAuthModule) mod).checkAuthentication(parametersMap, attributesMap);
+                    //TODO: substitute with localized messages
+                    if(null == userDescriptor)
+                        throw new AuthenticationException("Late user retrieval module did not return user descriptor");
+                    //TODO: substitute with localized messages
+                    if(null == userDescriptor.getUserName() && null == userDescriptor.getEmailAddress())
+                        throw new AuthenticationException("Late user retrieval module did not return user descriptor containing login name or email");
+
+                    //obtain user by user name or email
+                    if(null != userDescriptor.getUserName())
+                        user = userManagerService.getUserByUserName(userDescriptor.getUserName());
+                    else
+                        user = userManagerService.getUserByEmail(userDescriptor.getEmailAddress());
+
+                    //TODO: substitute with localized messages
+                    if(null == user)
+                        throw new AuthenticationException("Login name returned by late user retrieval is invalid");
+
+                    //check if user descriptor matches user object
+
+                    //TODO: substitute with localized messages
+                    if(null != userDescriptor.getID() && !user.getID().equals(userDescriptor.getID()))
+                        throw new AuthenticationException("ID in auth module and GridSphere doesn't match");
+
+                    //TODO: substitute with localized messages
+                    if(null != userDescriptor.getEmailAddress() && !user.getEmailAddress().equals(userDescriptor.getEmailAddress()))
+                        throw new AuthenticationException("User email in auth module and GridSphere doesn't match");
+
+                    //TODO: substitute with localized messages
+                    if(null != userDescriptor.getUserName() && !user.getUserName().equals(userDescriptor.getUserName()))
+                        throw new AuthenticationException("User name in auth module and GridSphere doesn't match");
+                } else {
+                    mod.checkAuthentication(user, loginPassword);
+                }
                 success = true;
             } catch (AuthenticationException e) {
+                //TODO: shouldn't we accumulate authentication error messages from all modules - not from the last only ?
                 String errMsg = mod.getModuleError(e.getMessage(), req.getLocale());
                 if (errMsg != null) {
                     authEx = new AuthenticationException(errMsg);
                 } else {
                     authEx = e;
                 }
+            } catch (Exception e){
+                log.error("",e);
             }
             if (success) break;
         }
-        if (!success) {
+        if (!lateUserRetrieval && !success) {
 
             numTriesInt++;
             user.setAttribute(PortalConfigService.LOGIN_NUMTRIES, String.valueOf(numTriesInt));
             userManagerService.saveUser(user);
-
-            throw authEx;
         }
+        if (!success)
+            throw authEx;
 
         return user;
     }

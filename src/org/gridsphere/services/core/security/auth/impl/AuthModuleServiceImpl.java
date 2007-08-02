@@ -20,6 +20,7 @@ import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthMo
 import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModulesDescriptor;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -93,11 +94,20 @@ public class AuthModuleServiceImpl implements AuthModuleService, PortletServiceP
                     pm.saveOrUpdate(def);
                 }
                 Class c = Class.forName(modClassName, true, classloader);
-                Class[] parameterTypes = new Class[]{AuthModuleDefinition.class};
-                Object[] obj = new Object[]{def};
-                Constructor con = c.getConstructor(parameterTypes);
-                LoginAuthModule authModule = (LoginAuthModule) con.newInstance(obj);
-                authModules.add(authModule);
+                try {
+                    Class[] parameterTypes = new Class[]{AuthModuleDefinition.class};
+                    Object[] obj = new Object[]{def};
+                    Constructor con = c.getConstructor(parameterTypes);
+                    LoginAuthModule authModule = (LoginAuthModule) con.newInstance(obj);
+                    authModules.add(authModule);
+                } catch (NoSuchMethodException e) {
+                    //for modules with Object (instead of AuthModuleDefinition) parametered constructor
+                    Class[] parameterTypes = new Class[]{Object.class};
+                    Object[] obj = new Object[]{def};
+                    Constructor con = c.getConstructor(parameterTypes);
+                    LoginAuthModule authModule = (LoginAuthModule) con.newInstance(obj);
+                    authModules.add(authModule);
+                }
             }
         } catch (Exception e) {
             log.error("Error loading auth module!", e);
