@@ -30,6 +30,7 @@ import org.gridlab.gridsphere.services.core.security.auth.AuthenticationExceptio
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridsphere.services.core.security.auth.modules.LateUserRetrievalAuthModule;
 import org.gridsphere.services.core.security.auth.modules.impl.UserDescriptor;
+import org.gridsphere.services.core.security.auth.modules.impl.AuthenticationParameters;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
@@ -616,13 +617,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         Collections.sort(modules);
         AuthenticationException authEx = null;
         Map parametersMap = new HashMap();
-        Map attributesMap = new HashMap();
         if(hasLateUserRetrievalAuthModules){
-            Enumeration attributesNamesEnumeration = req.getAttributeNames();
-            while (attributesNamesEnumeration.hasMoreElements()) {
-                String attributeName = (String) attributesNamesEnumeration.nextElement();
-                attributesMap.put(attributeName, req.getAttribute(attributeName));
-            }
             Enumeration parametersNamesEnumeration = req.getParameterNames();
             while (parametersNamesEnumeration.hasMoreElements()) {
                 String parameterName = (String) parametersNamesEnumeration.nextElement();
@@ -647,7 +642,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
             try {
                 if (mod instanceof LateUserRetrievalAuthModule) {
-                    UserDescriptor userDescriptor = ((LateUserRetrievalAuthModule) mod).checkAuthentication(parametersMap, attributesMap);
+                    UserDescriptor userDescriptor = ((LateUserRetrievalAuthModule) mod).checkAuthentication(new AuthenticationParameters(loginName, loginPassword, parametersMap, req));
                     //TODO: substitute with localized messages
                     if(null == userDescriptor)
                         throw new AuthenticationException("Late user retrieval module did not return user descriptor");
