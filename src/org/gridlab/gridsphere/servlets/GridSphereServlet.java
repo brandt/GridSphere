@@ -655,28 +655,39 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     if(null == userDescriptor.getUserName() && null == userDescriptor.getEmailAddress())
                         throw new AuthenticationException("Late user retrieval module did not return user descriptor containing login name or email");
 
-                    //obtain user by user name or email
+                    User tmpUser = null;
+                    //obtain user by user name or email or id
                     if(null != userDescriptor.getUserName())
-                        user = userManagerService.getUserByUserName(userDescriptor.getUserName());
-                    else
-                        user = userManagerService.getUserByEmail(userDescriptor.getEmailAddress());
-
+                        tmpUser = userManagerService.getUserByUserName(userDescriptor.getUserName());
+                    else if(null != userDescriptor.getEmailAddress())
+                        tmpUser = userManagerService.getUserByEmail(userDescriptor.getEmailAddress());
+                    else if(null != userDescriptor.getID()) {
+                        List users = userManagerService.getUsers();
+                        for (int i = 0; i < users.size(); i++) {
+                            User user1 = (User) users.get(i);
+                            if(user1.getID().equals(userDescriptor.getID())){
+                                tmpUser = user1;
+                                break;
+                            }
+                        }
+                    }
                     //TODO: substitute with localized messages
-                    if(null == user)
+                    if(null == tmpUser)
                         throw new AuthenticationException("Login name returned by late user retrieval is invalid");
 
                     //check if user descriptor matches user object
 
                     //TODO: substitute with localized messages
-                    if(null != userDescriptor.getID() && !user.getID().equals(userDescriptor.getID()))
+                    if(null != userDescriptor.getID() && !tmpUser.getID().equals(userDescriptor.getID()))
                         throw new AuthenticationException("ID in auth module and GridSphere doesn't match");
                     //TODO: substitute with localized messages
-                    if(null != userDescriptor.getEmailAddress() && !user.getEmailAddress().equals(userDescriptor.getEmailAddress()))
+                    if(null != userDescriptor.getEmailAddress() && !tmpUser.getEmailAddress().equals(userDescriptor.getEmailAddress()))
                         throw new AuthenticationException("User email in auth module and GridSphere doesn't match");
-
                     //TODO: substitute with localized messages
-                    if(null != userDescriptor.getUserName() && !user.getUserName().equals(userDescriptor.getUserName()))
+                    if(null != userDescriptor.getUserName() && !tmpUser.getUserName().equals(userDescriptor.getUserName()))
                         throw new AuthenticationException("User name in auth module and GridSphere doesn't match");
+
+                    user = tmpUser;
                 } else {
                     mod.checkAuthentication(user, loginPassword);
                 }
