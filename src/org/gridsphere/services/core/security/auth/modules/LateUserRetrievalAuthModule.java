@@ -1,6 +1,7 @@
 package org.gridsphere.services.core.security.auth.modules;
 
 import org.gridsphere.services.core.security.auth.modules.impl.UserDescriptor;
+import org.gridsphere.services.core.security.auth.modules.impl.AuthenticationParameters;
 
 import java.util.Map;
 
@@ -9,5 +10,5 @@ import java.util.Map;
  * @version $Id$
  */
 public interface LateUserRetrievalAuthModule extends LoginAuthModule {
-    public UserDescriptor checkAuthentication(Map parametersMap, Map attributesMap) throws Exception;
+    public UserDescriptor checkAuthentication(AuthenticationParameters authenticationParameters) throws Exception;
 }
