@@ -389,29 +389,32 @@ public class LoginPortlet extends ActionPortlet {
                     if(null == userDescriptor.getUserName() && null == userDescriptor.getEmailAddress())
                         throw new AuthenticationException("Late user retrieval module did not return user descriptor containing login name or email");
 
+                    User tmpUser = null;
                     //obtain user by user name or email
                     if(null != userDescriptor.getUserName())
-                        user = userManagerService.getUserByUserName(userDescriptor.getUserName());
+                        tmpUser = userManagerService.getUserByUserName(userDescriptor.getUserName());
                     else
-                        user = userManagerService.getUserByEmail(userDescriptor.getEmailAddress());
+                        tmpUser = userManagerService.getUserByEmail(userDescriptor.getEmailAddress());
 
                     //TODO: substitute with localized messages
-                    if(null == user)
+                    if(null == tmpUser)
                         throw new AuthenticationException("Login name returned by late user retrieval is invalid");
 
                     //check if user descriptor matches user object
 
                     //TODO: substitute with localized messages
-                    if(null != userDescriptor.getID() && !user.getID().equals(userDescriptor.getID()))
+                    if(null != userDescriptor.getID() && !tmpUser.getID().equals(userDescriptor.getID()))
                         throw new AuthenticationException("ID in auth module and GridSphere doesn't match");
 
                     //TODO: substitute with localized messages
-                    if(null != userDescriptor.getEmailAddress() && !user.getEmailAddress().equals(userDescriptor.getEmailAddress()))
+                    if(null != userDescriptor.getEmailAddress() && !tmpUser.getEmailAddress().equals(userDescriptor.getEmailAddress()))
                         throw new AuthenticationException("User email in auth module and GridSphere doesn't match");
 
                     //TODO: substitute with localized messages
-                    if(null != userDescriptor.getUserName() && !user.getUserName().equals(userDescriptor.getUserName()))
+                    if(null != userDescriptor.getUserName() && !tmpUser.getUserName().equals(userDescriptor.getUserName()))
                         throw new AuthenticationException("User name in auth module and GridSphere doesn't match");
+                    
+                    user = tmpUser;
                 } else {
                     mod.checkAuthentication(user, loginPassword);
                 }
