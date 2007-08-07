@@ -390,12 +390,21 @@ public class LoginPortlet extends ActionPortlet {
                         throw new AuthenticationException("Late user retrieval module did not return user descriptor containing login name or email");
 
                     User tmpUser = null;
-                    //obtain user by user name or email
+                    //obtain user by user name or email or id
                     if(null != userDescriptor.getUserName())
                         tmpUser = userManagerService.getUserByUserName(userDescriptor.getUserName());
-                    else
+                    else if(null != userDescriptor.getEmailAddress())
                         tmpUser = userManagerService.getUserByEmail(userDescriptor.getEmailAddress());
-
+                    else if(null != userDescriptor.getID()) {
+                        List users = userManagerService.getUsers();
+                        for (int i = 0; i < users.size(); i++) {
+                            User user1 = (User) users.get(i);
+                            if(user1.getID().equals(userDescriptor.getID())){
+                                tmpUser = user1;
+                                break;
+                            }
+                        }
+                    }
                     //TODO: substitute with localized messages
                     if(null == tmpUser)
                         throw new AuthenticationException("Login name returned by late user retrieval is invalid");
