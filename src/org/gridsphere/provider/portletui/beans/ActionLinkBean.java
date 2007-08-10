@@ -4,12 +4,16 @@
  */
 package org.gridsphere.provider.portletui.beans;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * An <code>ActionLinkBean</code> is a visual bean that represents a hyperlink containing a portlet action
  */
 public class ActionLinkBean extends ActionBean implements TagBean {
 
     protected String style = "none";
+    protected List<TagBean> beans = new ArrayList<TagBean>();
 
     /**
      * Constructs a default action link bean
@@ -58,6 +62,26 @@ public class ActionLinkBean extends ActionBean implements TagBean {
     }
 
 
+    /**
+     * Gets the beans to be rendered before the text in the ActionLink.
+     *
+     * @return TagBean
+     */
+
+    public List<TagBean> getTagBeans() {
+        return beans;
+    }
+
+    /**
+     * Sets  beans to be rendered before the text in the ActionLink.
+     *
+     * @param beans Bean to be rendered
+     */
+    public void setTagBeans(List<TagBean> beans) {
+        this.beans = beans;
+    }
+
+
     public String toStartString() {
         return "";
     }
@@ -97,7 +121,14 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         if (onClick != null) sb.append(" onclick=\"").append(onClick).append("\"");
         if (onMouseOut != null) sb.append(" onMouseOut=\"").append(onMouseOut).append("\"");
         if (onMouseOver != null) sb.append(" onMouseOver=\"").append(onMouseOver).append("\"");
-        sb.append(">").append(value).append("</a>");
+        sb.append(">");
+
+        for (TagBean bean : beans) {
+            sb.append(bean.toStartString());
+            sb.append(bean.toEndString());
+        }
+
+        sb.append(value).append("</a>");
         return sb.toString();
     }
 
