@@ -76,7 +76,7 @@ public class CalendarTag extends BaseComponentTag {
         }
         RenderResponse res = (RenderResponse)pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
         calendarBean.setRenderResponse(res);
-        calendarBean.setId("cal_" + pageContext.findAttribute(SportletProperties.COMPONENT_ID));
+        calendarBean.setId("cal_" + pageContext.findAttribute(SportletProperties.COMPONENT_ID) + "_" + beanId);
         try {
             JspWriter out = pageContext.getOut();
             out.print(calendarBean.toStartString());
