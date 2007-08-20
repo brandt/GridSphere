@@ -35,7 +35,7 @@ public class ListBoxItemBean extends SelectElementBean {
             sname = "ui_" + vbName + "_" + beanId + "_" + pval;
         }
         // 'selected' replaced by 'selected="selected"' for XHTML 1.0 Strict compliance
-        return "<option value='" + sname + "' " + checkDisabled() + " " + checkSelected("selected=\"selected\"") + ">" + value + "</option>";
+        return "<option " + getFormattedCss() + " value='" + sname + "' " + checkDisabled() + " " + checkSelected("selected=\"selected\"") + ">" + value + "</option>";
     }
 
     public String toEndString() {
