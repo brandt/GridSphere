@@ -99,13 +99,13 @@ public class TextTag extends BaseComponentTag {
 
     protected void setBaseComponentBean(BaseComponentBean componentBean) {
         super.setBaseComponentBean(componentBean);
-        if (style != null) ((TextBean)componentBean).setStyle(style);
+        if (style != null) ((TextBean) componentBean).setStyle(style);
     }
 
     protected void updateBaseComponentBean(BaseComponentBean componentBean) {
         super.setBaseComponentBean(componentBean);
-        if (style != null && ((TextBean)componentBean).getStyle() == null) {
-            ((TextBean)componentBean).setStyle(style);
+        if (style != null && ((TextBean) componentBean).getStyle() == null) {
+            ((TextBean) componentBean).setStyle(style);
         }
     }
 
@@ -114,10 +114,10 @@ public class TextTag extends BaseComponentTag {
         // 1st of property defined in tag put it in bean
         //if (style != null) ((TextBean)componentBean).setStyle(style);
         // 2nd if property exists in bean then use it
-        if (((TextBean)componentBean).getStyle() != null) {
-            style = ((TextBean)componentBean).getStyle();
+        if (((TextBean) componentBean).getStyle() != null) {
+            style = ((TextBean) componentBean).getStyle();
         } else {
-            ((TextBean)componentBean).setStyle(style);
+            ((TextBean) componentBean).setStyle(style);
         }
     }
 
@@ -127,7 +127,7 @@ public class TextTag extends BaseComponentTag {
 
     public int doEndTag() throws JspException {
         if (!beanId.equals("")) {
-            textBean = (TextBean)getTagBean();
+            textBean = (TextBean) getTagBean();
             if (textBean == null) {
                 textBean = new TextBean();
                 this.setBaseComponentBean(textBean);
@@ -135,7 +135,7 @@ public class TextTag extends BaseComponentTag {
                 //this.updateBaseComponentBean(textBean);
                 this.overrideBaseComponentBean(textBean);
                 textBean.setStyle(style);
-                key = textBean.getValue();
+                key = textBean.getKey();
             }
         } else {
             textBean = new TextBean();
