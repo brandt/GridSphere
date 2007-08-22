@@ -91,7 +91,8 @@ public final class DefaultPortletAction implements PortletAction, Serializable {
 
     public String toString() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append(SportletProperties.DEFAULT_PORTLET_ACTION + "=");
+        if (!name.startsWith(SportletProperties.DEFAULT_PORTLET_ACTION))
+            buffer.append(SportletProperties.DEFAULT_PORTLET_ACTION + "=");
         buffer.append(name);
         Object[] parameterNames = store.keySet().toArray();
         for (int ii = 0; ii < parameterNames.length; ++ii) {
