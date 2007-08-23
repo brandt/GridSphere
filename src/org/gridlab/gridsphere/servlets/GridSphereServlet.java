@@ -11,6 +11,11 @@ import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 import org.gridlab.gridsphere.layout.PortletPageFactory;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.UserPrincipal;
+import org.gridlab.gridsphere.portlet.PortletContext;
+import org.gridlab.gridsphere.portlet.PortletException;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletSession;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -23,6 +28,9 @@ import org.gridlab.gridsphere.services.core.security.group.GroupManagerService;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
+import org.gridsphere.services.core.security.auth.modules.LateUserRetrievalAuthModule;
+import org.gridsphere.services.core.security.auth.modules.impl.UserDescriptor;
+import org.gridsphere.services.core.security.auth.modules.impl.AuthenticationParameters;
 import org.gridlab.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
@@ -126,9 +134,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         loginService = (LoginService) factory.createPortletService(LoginService.class, true);
         log.debug("Creating portlet manager service");
         portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, true);
-        portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, true);
+        portalConfigService = (PortalConfigService) factory.createPortletService(PortalConfigService.class, true);
         trackerService = (TrackerService) factory.createPortletService(TrackerService.class, true);
-        tms = (TextMessagingService)factory.createPortletService(TextMessagingService.class, null, true);
+        tms = (TextMessagingService) factory.createPortletService(TextMessagingService.class, null, true);
 
     }
 
@@ -201,7 +209,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 System.err.println("redirect: " + url);
                 res.sendRedirect(url);
             }
-         }
+        }
 
         checkUserHasCookie(event);
 
@@ -228,7 +236,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
         layoutEngine.actionPerformed(event);
-
 
         // is this a file download operation?
         if (isDownload(req)) {
@@ -284,12 +291,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param req the HttpServletRequest
      * @param res the HttpServletResponse
      * @throws org.gridlab.gridsphere.portlet.PortletException
+     *
      */
     public void downloadFile(HttpServletRequest req, HttpServletResponse res) throws PortletException, IOException {
         try {
             String fileName = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
             String path = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
-            Boolean deleteFile = (Boolean)req.getAttribute(SportletProperties.FILE_DELETE);
+            Boolean deleteFile = (Boolean) req.getAttribute(SportletProperties.FILE_DELETE);
             if (deleteFile == null) deleteFile = Boolean.FALSE;
             if (fileName == null) return;
             log.debug("in downloadFile");
@@ -369,7 +377,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             List roles = new ArrayList();
             it = proles.iterator();
             while (it.hasNext()) {
-                roles.add(((PortletRole)it.next()).getName());
+                roles.add(((PortletRole) it.next()).getName());
             }
             PortletRequest req = event.getPortletRequest();
             // set user, role and groups in request
@@ -385,10 +393,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private void checkWebContainerAuthorization(GridSphereEvent event) {
         PortletSession session = event.getPortletRequest().getPortletSession();
         if (session.getAttribute(SportletProperties.PORTLET_USER) != null) return;
-        if(!(event.hasAction() && event.getAction().getName().equals(SportletProperties.LOGOUT))) {
+        if (!(event.hasAction() && event.getAction().getName().equals(SportletProperties.LOGOUT))) {
             PortletRequest portletRequest = event.getPortletRequest();
             Principal principal = portletRequest.getUserPrincipal();
-            if(principal != null) {
+            if (principal != null) {
                 // fix for OC4J. it must work in Tomcat also
                 int indeDelimeter = principal.getName().lastIndexOf('/');
                 indeDelimeter = (indeDelimeter > 0) ? (indeDelimeter + 1) : 0;
@@ -421,7 +429,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
                             System.err.println("uid = " + uid);
 
-                            String reqid = cookieVal.substring(hashidx+1);
+                            String reqid = cookieVal.substring(hashidx + 1);
                             System.err.println("reqid = " + reqid);
 
                             GenericRequest genreq = requestService.getRequest(reqid, COOKIE_REQUEST);
@@ -470,7 +478,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 if (c.getName().equals("gsuid")) {
                     int idx = c.getValue().indexOf("#");
                     if (idx > 0) {
-                        String reqid = c.getValue().substring(idx+1);
+                        String reqid = c.getValue().substring(idx + 1);
                         //System.err.println("reqid= " + reqid);
                         GenericRequest request = requestService.getRequest(reqid, COOKIE_REQUEST);
                         if (request != null) requestService.deleteRequest(request);
@@ -531,6 +539,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public User login(PortletRequest req)
             throws AuthenticationException, AuthorizationException {
+        boolean lateUserRetrieval = false;
+        boolean hasLateUserRetrievalAuthModules = false;
+
         String loginName = req.getParameter("username");
         String loginPassword = req.getParameter("password");
         String certificate = null;
@@ -549,6 +560,20 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
             // first get user
             user = loginService.getActiveLoginModule().getLoggedInUser(loginName);
+
+            // check if there are late user retrieval modules in case user is not obtained from the active login module
+            List modules = loginService.getActiveAuthModules();
+            Iterator modulesIterator = modules.iterator();
+            while (modulesIterator.hasNext()) {
+                if (modulesIterator.next() instanceof LateUserRetrievalAuthModule) {
+                    hasLateUserRetrievalAuthModules = true;
+                    break;
+                }
+            }
+
+            if (null == user && hasLateUserRetrievalAuthModules)
+                lateUserRetrieval = true;
+
         } else {
 
             log.debug("Using certificate for login :" + certificate);
@@ -558,30 +583,30 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
         }
 
-        if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
 
-        // tried one to many times using same name
-        int numTriesInt;
-        String numTries = (String) user.getAttribute("ACCOUNT_NUMTRIES");
-        if (numTries == null) {
-            numTriesInt = 1;
-        } else {
-            numTriesInt = Integer.valueOf(numTries).intValue();
+        int numTriesInt = 1;
+        if (!lateUserRetrieval) {
+            if (user == null) throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_NOUSER"));
+
+            // tried one to many times using same name
+            String numTries = (String) user.getAttribute("ACCOUNT_NUMTRIES");
+            if (numTries != null)
+                numTriesInt = Integer.valueOf(numTries).intValue();
+
+            System.err.println("num tries = " + numTriesInt);
+            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+
+            String defNumTries = settings.getAttribute("ACCOUNT_NUMTRIES");
+            int defaultNumTries = Integer.valueOf(defNumTries).intValue();
+            if ((defaultNumTries != -1) && (numTriesInt >= defaultNumTries - 1)) {
+                disableAccount(req);
+                throw new AuthorizationException(getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS"));
+            }
+
+            String accountStatus = (String) user.getAttribute(User.DISABLED);
+            if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
+                throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
         }
-
-        System.err.println("num tries = " + numTriesInt);
-        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
-
-        String defNumTries = settings.getAttribute("ACCOUNT_NUMTRIES");
-        int defaultNumTries = Integer.valueOf(defNumTries).intValue();
-        if ((defaultNumTries != -1) && (numTriesInt >= defaultNumTries - 1)) {
-            disableAccount(req);
-            throw new AuthorizationException(getLocalizedText(req, "LOGIN_TOOMANY_ATTEMPTS"));
-        }
-
-        String accountStatus = (String)user.getAttribute(User.DISABLED);
-        if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
-            throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
 
         // If authorized via certificates no other authorization needed
         if (certificate != null) return user;
@@ -591,33 +616,98 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         Collections.sort(modules);
         AuthenticationException authEx = null;
+        Map parametersMap = new HashMap();
+        if(hasLateUserRetrievalAuthModules){
+            Enumeration parametersNamesEnumeration = req.getParameterNames();
+            while (parametersNamesEnumeration.hasMoreElements()) {
+                String parameterName = (String) parametersNamesEnumeration.nextElement();
+                parametersMap.put(parameterName, req.getParameter(parameterName));
+            }
+        }
 
         Iterator it = modules.iterator();
+        if (lateUserRetrieval)
+            log.debug("in login: Use late user retrieval modules only");
         log.debug("in login: Active modules are: ");
         boolean success = false;
         while (it.hasNext()) {
             success = false;
             LoginAuthModule mod = (LoginAuthModule) it.next();
+            //in case of late user retrieval use LateUserRetrievalAuthModule modules only
+            if (lateUserRetrieval && !(mod instanceof LateUserRetrievalAuthModule)) {
+                log.debug(mod.getModuleName() + " (NOT late user retrieval module)");
+                continue;
+            }
             log.debug(mod.getModuleName());
+
             try {
-                mod.checkAuthentication(user, loginPassword);
+                if (mod instanceof LateUserRetrievalAuthModule) {
+                    UserDescriptor userDescriptor = ((LateUserRetrievalAuthModule) mod).checkAuthentication(new AuthenticationParameters(loginName, loginPassword, parametersMap, req));
+                    //TODO: substitute with localized messages
+                    if(null == userDescriptor)
+                        throw new AuthenticationException("Late user retrieval module did not return user descriptor");
+                    //TODO: substitute with localized messages
+                    if(null == userDescriptor.getUserName() && null == userDescriptor.getEmailAddress())
+                        throw new AuthenticationException("Late user retrieval module did not return user descriptor containing login name or email");
+
+                    User tmpUser = null;
+                    //obtain user by user name or email or id
+                    if(null != userDescriptor.getUserName())
+                        tmpUser = userManagerService.getUserByUserName(userDescriptor.getUserName());
+                    else if(null != userDescriptor.getEmailAddress())
+                        tmpUser = userManagerService.getUserByEmail(userDescriptor.getEmailAddress());
+                    else if(null != userDescriptor.getID()) {
+                        List users = userManagerService.getUsers();
+                        for (int i = 0; i < users.size(); i++) {
+                            User user1 = (User) users.get(i);
+                            if(user1.getID().equals(userDescriptor.getID())){
+                                tmpUser = user1;
+                                break;
+                            }
+                        }
+                    }
+                    //TODO: substitute with localized messages
+                    if(null == tmpUser)
+                        throw new AuthenticationException("Login name returned by late user retrieval is invalid");
+
+                    //check if user descriptor matches user object
+
+                    //TODO: substitute with localized messages
+                    if(null != userDescriptor.getID() && !tmpUser.getID().equals(userDescriptor.getID()))
+                        throw new AuthenticationException("ID in auth module and GridSphere doesn't match");
+                    //TODO: substitute with localized messages
+                    if(null != userDescriptor.getEmailAddress() && !tmpUser.getEmailAddress().equals(userDescriptor.getEmailAddress()))
+                        throw new AuthenticationException("User email in auth module and GridSphere doesn't match");
+                    //TODO: substitute with localized messages
+                    if(null != userDescriptor.getUserName() && !tmpUser.getUserName().equals(userDescriptor.getUserName()))
+                        throw new AuthenticationException("User name in auth module and GridSphere doesn't match");
+
+                    user = tmpUser;
+                } else {
+                    mod.checkAuthentication(user, loginPassword);
+                }
                 success = true;
             } catch (AuthenticationException e) {
+                //TODO: shouldn't we accumulate authentication error messages from all modules - not from the last only ?
                 String errMsg = mod.getModuleError(e.getMessage(), req.getLocale());
                 if (errMsg != null) {
                     authEx = new AuthenticationException(errMsg);
                 } else {
                     authEx = e;
                 }
+            } catch (Exception e){
+                log.error("",e);
             }
             if (success) break;
         }
-        if (!success) {
+        if (!lateUserRetrieval && !success) {
             numTriesInt++;
             user.setAttribute("ACCOUNT_NUMTRIES", String.valueOf(numTriesInt));
             userManagerService.saveUser(user);
             throw authEx;
         }
+        if (!success)
+            throw authEx;
 
         return user;
     }
@@ -649,7 +739,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             List supers = roleService.getUsersInRole(PortletRole.SUPER);
             String supermail = "";
             for (int i = 0; i < supers.size(); i++) {
-                User supUser = (User)supers.get(i);
+                User supUser = (User) supers.get(i);
                 supermail += supUser.getEmailAddress() + ",";
             }
             supermail = supermail.substring(0, supermail.length() - 2);
@@ -665,24 +755,25 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
     }
 
-     protected String getLocalizedText(PortletRequest req, String key) {
+    protected String getLocalizedText(PortletRequest req, String key) {
         Locale locale = req.getLocale();
         ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
         return bundle.getString(key);
-     }
+    }
 
     /**
-     *  Transform certificate subject from :
-     *  CN=Engbert Heupers, O=sara, O=users, O=dutchgrid
-     *  to :
-     *  /O=dutchgrid/O=users/O=sara/CN=Engbert Heupers
+     * Transform certificate subject from :
+     * CN=Engbert Heupers, O=sara, O=users, O=dutchgrid
+     * to :
+     * /O=dutchgrid/O=users/O=sara/CN=Engbert Heupers
+     *
      * @param certificate string
      * @return certificate string
      */
     private String certificateTransform(String certificate) {
         String ls[] = certificate.split(", ");
         StringBuffer res = new StringBuffer();
-        for(int i = ls.length - 1; i >= 0; i--) {
+        for (int i = ls.length - 1; i >= 0; i--) {
             res.append("/");
             res.append(ls[i]);
         }
@@ -697,7 +788,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         req.setAttribute(SportletProperties.PORTLET_USER, user);
         session.setAttribute(SportletProperties.PORTLET_USER, user.getID());
         if (user.getAttribute(User.LOCALE) != null) {
-            session.setAttribute(User.LOCALE, new Locale((String)user.getAttribute(User.LOCALE), "", ""));
+            session.setAttribute(User.LOCALE, new Locale((String) user.getAttribute(User.LOCALE), "", ""));
         }
         setUserAndGroups(event);
         layoutEngine.loginPortlets(event);
@@ -764,7 +855,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void attributeAdded(HttpSessionBindingEvent event) {
         try {
             log.debug("attributeAdded('" + event.getSession().getId() + "', '" +
-                event.getName() + "', '" + event.getValue() + "')");
+                    event.getName() + "', '" + event.getValue() + "')");
         } catch (IllegalStateException e) {
             // do nothing
         }
@@ -779,7 +870,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void attributeRemoved(HttpSessionBindingEvent event) {
         try {
             log.debug("attributeRemoved('" + event.getSession().getId() + "', '" +
-                event.getName() + "', '" + event.getValue() + "')");
+                    event.getName() + "', '" + event.getValue() + "')");
         } catch (IllegalStateException e) {
             // do nothing
         }
@@ -795,7 +886,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void attributeReplaced(HttpSessionBindingEvent event) {
         try {
             log.debug("attributeReplaced('" + event.getSession().getId() + "', '" +
-                event.getName() + "', '" + event.getValue() + "')");
+                    event.getName() + "', '" + event.getValue() + "')");
         } catch (IllegalStateException e) {
             // do nothing
         }
@@ -856,7 +947,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         List groupEntries = groupService.getUserGroups();
         Iterator it = groupEntries.iterator();
         while (it.hasNext()) {
-            UserGroup ge = (UserGroup)it.next();
+            UserGroup ge = (UserGroup) it.next();
             String roleName = ge.getRoleName();
             //System.err.println(ge.getUser() + " " + ge.getGroup() + ge.getRole());
             if ((roleName != null) && !roleName.equals("")) {
@@ -894,11 +985,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         List groups = groupService.getGroups();
         it = groups.iterator();
         while (it.hasNext()) {
-            PortletGroup group = (PortletGroup)it.next();
+            PortletGroup group = (PortletGroup) it.next();
             Set portletSet = group.getPortletRoleList();
             Iterator portletSetIt = portletSet.iterator();
             while (portletSetIt.hasNext()) {
-                SportletRoleInfo roleInfo = (SportletRoleInfo)portletSetIt.next();
+                SportletRoleInfo roleInfo = (SportletRoleInfo) portletSetIt.next();
                 String roleName = roleInfo.getRole();
                 if (roleName != null) {
                     PortletRole portletRole = roleService.getRole(roleName);
