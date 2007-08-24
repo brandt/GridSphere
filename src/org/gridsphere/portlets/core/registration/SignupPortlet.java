@@ -233,10 +233,9 @@ public class SignupPortlet extends ActionPortlet {
 
             String captchaValue = (String) req.getPortletSession(true).getAttribute(nl.captcha.servlet.Constants.SIMPLE_CAPCHA_SESSION_KEY, PortletSession.APPLICATION_SCOPE);
             if (!response.equals(captchaValue)) {
-                createErrorMessage(event, this.getLocalizedText(req, "USER_CAPTCHA_MISMATCH"));
-
+                createErrorMessage(event, this.getLocalizedText(req, "USER_CAPTCHA_MISMATCH") + ":" + captchaValue);
+                throw new PortletException("captcha challenge mismatch!");
             }
-            throw new PortletException("captcha challenge mismatch!");
         }
 
         log.debug("Exiting validateUser()");
