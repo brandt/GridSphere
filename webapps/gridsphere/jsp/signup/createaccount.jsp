@@ -63,7 +63,7 @@
                 <ui:text key="PASSWORD"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:password size="15" beanId="organization"/>
+                <ui:password size="15" beanId="password"/>
             </ui:tablecell>
         </ui:tablerow>
 
