@@ -133,6 +133,11 @@ public class SignupPortlet extends ActionPortlet {
                 msg.setKey("LOGIN_CREATE_ACCT");
             }
         }
+
+        String useCaptcha = portalConfigService.getProperty(PortalConfigService.USE_CAPTCHA);
+        PortletSession ps = evt.getRenderRequest().getPortletSession();
+        ps.setAttribute("usecaptcha", useCaptcha);
+
         setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
         log.debug("in doViewNewUser");
     }
@@ -221,12 +226,16 @@ public class SignupPortlet extends ActionPortlet {
             if (isInvalidPassword(event)) throw new PortletException("password no good!");
         }
 
-        //retrieve the response
-        String response = event.getTextFieldBean("captchaTF").getValue();
+        // captcha
+        String useCaptcha = portalConfigService.getProperty(PortalConfigService.USE_CAPTCHA);
+        if (useCaptcha.equals(Boolean.TRUE.toString())) {
+            String response = event.getTextFieldBean("captchaTF").getValue();
 
-        String captchaValue = (String) req.getPortletSession(true).getAttribute(nl.captcha.servlet.Constants.SIMPLE_CAPCHA_SESSION_KEY, PortletSession.APPLICATION_SCOPE);
-        if (!response.equals(captchaValue)) {
-            createErrorMessage(event, this.getLocalizedText(req, "USER_CAPTCHA_MISMATCH"));
+            String captchaValue = (String) req.getPortletSession(true).getAttribute(nl.captcha.servlet.Constants.SIMPLE_CAPCHA_SESSION_KEY, PortletSession.APPLICATION_SCOPE);
+            if (!response.equals(captchaValue)) {
+                createErrorMessage(event, this.getLocalizedText(req, "USER_CAPTCHA_MISMATCH"));
+
+            }
             throw new PortletException("captcha challenge mismatch!");
         }
 
