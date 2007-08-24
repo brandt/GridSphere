@@ -71,6 +71,11 @@
                 <ui:radiobutton beanId="loginRB" value="FALSE" selected="<%= (isUsernameLogin == Boolean.FALSE) %>"/>
                 <ui:text key="LOGIN_EMAIL"/>
             </li>
+            <li>
+                <ui:checkbox beanId="captchaCB"/>
+                <ui:text key="LOGIN_USE_CAPTCHA"/>
+
+            </li>
         </ul>
         <ui:frame>
             <ui:tablerow>

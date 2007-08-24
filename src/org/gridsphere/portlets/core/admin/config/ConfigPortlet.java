@@ -58,6 +58,9 @@ public class ConfigPortlet extends ActionPortlet {
         CheckBoxBean remUserCB = event.getCheckBoxBean("remUserCB");
         remUserCB.setSelected(Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.REMEMBER_USER)).booleanValue());
 
+        CheckBoxBean captchaCB = event.getCheckBoxBean("captchaCB");
+        captchaCB.setSelected(Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.USE_CAPTCHA)).booleanValue());
+
         String numTries = portalConfigService.getProperty(PortalConfigService.LOGIN_NUMTRIES);
         TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
         if (numTries == null) {
@@ -178,6 +181,10 @@ public class ConfigPortlet extends ActionPortlet {
 
         RadioButtonBean isUsernameLogin = event.getRadioButtonBean("loginRB");
         portalConfigService.setProperty(PortalConfigService.USE_USERNAME_FOR_LOGIN, isUsernameLogin.getValue());
+
+        CheckBoxBean useCaptacha = event.getCheckBoxBean("captchaCB");
+        portalConfigService.setProperty(PortalConfigService.USE_CAPTCHA, Boolean.toString(useCaptacha.isSelected()));
+
         try {
             numtries = Integer.valueOf(numTries).intValue();
             portalConfigService.setProperty(PortalConfigService.LOGIN_NUMTRIES, String.valueOf(numtries));

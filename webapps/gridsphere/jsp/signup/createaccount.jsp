@@ -1,3 +1,4 @@
+<%@ page import="javax.portlet.PortletSession" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
 
@@ -78,6 +79,12 @@
 
     </ui:frame>
 
+    <%
+        PortletSession ps = renderRequest.getPortletSession(false);
+        String useCaptcha = (String) ps.getAttribute("usecaptcha");
+        if (useCaptcha.equals(Boolean.TRUE.toString())) {
+    %>
+
     <ui:image src="<%= request.getContextPath() + "/Captcha.jpg" %>"/>
     <ui:actionsubmit key="LOGIN_CANT_READ" action="cantRead"/>
     <p/>
@@ -86,6 +93,9 @@
     <p/>
     <ui:textfield size="10" beanId="captchaTF"/>
     <p/>
+    <%
+        }
+    %>
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
