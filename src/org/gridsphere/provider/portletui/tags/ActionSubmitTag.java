@@ -63,8 +63,8 @@ public class ActionSubmitTag extends ActionTag {
         if (imageSrc != null) actionSubmitBean.setImageSrc(imageSrc);
 
         if (key != null) {
-            actionSubmitBean.setKey(key);
             value = getLocalizedText(key);
+            actionSubmitBean.setKey(key);
         }
 
         if (!beanId.equals("")) {
