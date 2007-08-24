@@ -18,20 +18,20 @@
         </li>
         <ui:hasrole role="ADMIN">
             <li>
-                <ui:actionlink layout="admin" value="Administration"/>
+                <ui:actionlink layout="admin" key="NAV_ADMIN"/>
             </li>
             <li>
-                <ui:actionlink layout="content" value="Content"/>
+                <ui:actionlink layout="content" key="NAV_CONTENT"/>
             </li>
             <li>
-                <ui:actionlink layout="layout" value="Layout"/>
+                <ui:actionlink layout="layout" key="NAV_LAYOUT"/>
             </li>
         </ui:hasrole>
         <li>
-            <ui:actionlink layout="profile" value="Profile"/>
+            <ui:actionlink layout="profile" key="NAV_PROFILE"/>
         </li>
         <li>
-            <ui:actionlink layout="loggedin" value="Home"/>
+            <ui:actionlink layout="loggedin" key="NAV_HOME"/>
         </li>
         <li>
             <ui:actionlink action="<%= SportletProperties.LOGOUT %>" key="LOGOUT"/>
