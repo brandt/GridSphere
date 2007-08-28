@@ -219,7 +219,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         componentBean.addParam(SportletProperties.COMPONENT_ID, (String) pageContext.findAttribute(SportletProperties.COMPONENT_ID));
         componentBean.addParam(SportletProperties.GP_COMPONENT_ID, (String) pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID));
         if (cssStyle != null) componentBean.setCssStyle(cssStyle);
-        if (cssClass != null) componentBean.setCssClass(cssStyle);
+        if (cssClass != null) componentBean.setCssClass(cssClass);
         componentBean.setDisabled(disabled);
         componentBean.setReadOnly(readonly);
         if (name != null) componentBean.setName(name);
