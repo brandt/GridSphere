@@ -56,7 +56,7 @@ public class SecureDirectory extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String userID = (String) request.getSession().getAttribute(SportletProperties.PORTLET_USER);
+        String userID = getUserID(request);
 /*
         if (userID == null || userID.equals("")) {
             if (DEBUG)
@@ -170,7 +170,7 @@ public class SecureDirectory extends HttpServlet {
 
     public long getLastModified(HttpServletRequest request) {
         if (Calendar.getInstance().getTimeInMillis() > 0) return Calendar.getInstance().getTimeInMillis(); //comment this line if you want allow browser to check when resource was last modified
-        String userID = (String) request.getSession().getAttribute(SportletProperties.PORTLET_USER);
+        String userID = getUserID(request);
         if (userID == null || userID.equals("")) {
             if (DEBUG)
                 log("LastModifiedRequest blocked (userID=" + userID + ") !!! Request: " + request.getRequestURI() + "\nIP: " + request.getRemoteAddr() + "\n");
@@ -202,5 +202,9 @@ public class SecureDirectory extends HttpServlet {
         while (!((numRead = input.read(buf)) < 0)) {
             output.write(buf, 0, numRead);
         }
+    }
+
+    protected String getUserID(HttpServletRequest request) {
+        return (String) request.getSession().getAttribute(SportletProperties.PORTLET_USER);
     }
 }
