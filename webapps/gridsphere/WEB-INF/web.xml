@@ -50,6 +50,15 @@
     </servlet>
 
     <servlet>
+        <servlet-name>SecureDirectory</servlet-name>
+        <servlet-class>org.gridsphere.servlets.SecureDirectory</servlet-class>
+        <init-param>
+            <param-name>strongProtection</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
         <servlet-name>Captcha</servlet-name>
         <display-name>Captcha</display-name>
         <servlet-class>nl.captcha.servlet.CaptchaServlet</servlet-class>
@@ -72,6 +81,11 @@
     <servlet-mapping>
         <servlet-name>PortletServlet</servlet-name>
         <url-pattern>/jsr/@GRIDSPHERE_DEPLOY@</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SecureDirectory</servlet-name>
+        <url-pattern>/secure/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
