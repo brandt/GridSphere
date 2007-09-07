@@ -67,7 +67,7 @@ public class SettingsServiceImpl implements PortletServiceProvider, SettingsServ
 
     public String getRealSettingsPath(String path) {
         String result = settingsPath + File.separator + path;
-        result = result.replaceAll("/", File.separator);
+        //result = result.replaceAll("/", File.separator);
         File f = new File(result);
         if (f.isDirectory() && !result.endsWith(File.separator)) result = result + File.separator;
         return result;
