@@ -13,6 +13,8 @@ import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.impl.PortletServiceConfigImpl;
 import org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceCollection;
 import org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceDefinition;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletContext;
 import java.net.URL;
@@ -49,6 +51,11 @@ public class PortletServiceFactory {
     //public static String servicesMappingPath = null;
 
     public static URL servicesMappingStream = null;
+
+    // contains springBeans
+
+    public static Hashtable<String, WebApplicationContext> springBeans = new Hashtable<String, WebApplicationContext>();
+
 
     /**
      * Private constructor. Use getDefault() instead.
@@ -100,6 +107,39 @@ public class PortletServiceFactory {
             }
         }
     }
+
+    /**
+     * Adds spring beans defined in a portlet application's aaplicationContext.xml to the springbeans HashMap
+     * to be access using the createSpringService method
+     *
+     * @param ctx the Servlet Context
+     */
+    public static synchronized void addSpringServices(ServletContext ctx) {
+        Log log = LogFactory.getLog(PortletServiceFactory.class);
+        try {
+            WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(ctx);
+            String[] beanDefs = context.getBeanDefinitionNames();
+            for (int i = 0; i < beanDefs.length; i++) {
+                springBeans.put(beanDefs[i], context);
+            }
+            log.info("Loaded applicationContext.xml for webapp " + ctx.getServletContextName() + ".");
+        } catch (IllegalStateException e) {
+            log.error("No applicationContext.xml found for: " + ctx.getServletContextName());
+        }
+    }
+
+    /**
+     * Returns a Spring (www.springframework.org) service defined in applicationContext.xml by its
+     * bean name
+     *
+     * @param beanName the bean name identifying the spring service
+     * @return the Spring service defined in applicationContext.xml or null if none exists
+     */
+    public static Object createSpringService(String beanName) {
+        WebApplicationContext ctx = springBeans.get(beanName);
+        return (ctx != null) ? ctx.getBean(beanName) : null;
+    }
+
 
     /**
      * createPortletServiceFactory instantiates the given class and initializes it.

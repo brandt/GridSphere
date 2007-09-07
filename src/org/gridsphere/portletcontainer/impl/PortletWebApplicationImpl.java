@@ -6,22 +6,22 @@ package org.gridsphere.portletcontainer.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portlet.service.PortletServiceException;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceCollection;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.PortletStatus;
 import org.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridsphere.portletcontainer.impl.descriptor.*;
-import org.gridsphere.portlet.service.PortletServiceException;
-import org.gridsphere.portlet.service.spi.impl.descriptor.PortletServiceCollection;
-import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 
 import javax.portlet.PortletException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Collection;
-import java.util.ArrayList;
 
 /**
  * The <code>PortletWebApplicationImpl</code> is an implementation of a <code>PortletWebApplication</code> that
@@ -68,7 +68,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     /**
      * Loads collection of portlets from portlet descriptor file using the associated <code>ServletContext</code>
      *
-     * @param ctx the <code>ServletContext</code>
+     * @param ctx    the <code>ServletContext</code>
      * @param loader the classloader of the web application
      * @throws PortletException if an error occurs loading the portlets
      */
@@ -89,7 +89,6 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         // Every SportletDefinition has a PortletApplication and possibly multiple ConcretePortletConfig's
         PortletDefinition[] portletDefs = pdd.getPortletDefinitionList();
 
-
         // Iterate thru portlet definitions for portlet applications
         for (int i = 0; i < portletDefs.length; i++) {
             ApplicationPortlet portletApp = new ApplicationPortletImpl(pdd, portletDefs[i], webApplicationName, ctx);
@@ -108,7 +107,8 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         return portletDefinitions.get(portletName);
     }
 
-    public void init() {}
+    public void init() {
+    }
 
     public void destroy() {
         portletWebApp = null;
@@ -137,7 +137,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     /**
      * Loads in a service descriptor file from the associated servlet context
      *
-     * @param ctx the <code>ServletContext</code>
+     * @param ctx    the <code>ServletContext</code>
      * @param loader the classloader of the web application
      * @throws PortletException if an error occurs loading the portlets
      */
@@ -183,6 +183,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
                 log.debug("Did not find PortletServices.xml or portlet-services directory for: " + ctx.getServletContextName());
             }
         }
+        PortletServiceFactory.addSpringServices(ctx);
     }
 
     /**
