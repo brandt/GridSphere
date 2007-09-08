@@ -182,11 +182,13 @@ Invoke "ant help"
     <target name="license" description="Prints GridSphere license">
         <loadfile property="license" srcFile="LICENSE.txt"/>
         <echo message="${license}"/>
+<!--
         <input message="Do you agree to these terms? Hit y or n" validargs="y,n" addProperty="agreed"/>
         <condition property="do.abort">
             <equals arg1="n" arg2="${agreed}"/>
         </condition>
         <fail if="do.abort">Build aborted by user.</fail>
+-->
     </target>
 
     <!-- =================================================================== -->
