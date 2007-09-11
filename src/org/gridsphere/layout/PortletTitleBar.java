@@ -718,10 +718,15 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         Set<String> supportedModes = null;
         String appID = portletRegistryService.getApplicationPortletID(portletClass);
+
         ApplicationPortlet appPortlet = portletRegistryService.getApplicationPortlet(appID);
-        if (appPortlet != null) {
-            supportedModes = appPortlet.getSupportedModes(event.getClient().getMimeType());
+        if (appPortlet == null) {
+            errorMessage = "Unable to retrieve application portlet for: " + appID;
+            log.debug(errorMessage);
+            hasError = true;
+            return;
         }
+        supportedModes = appPortlet.getSupportedModes(event.getClient().getMimeType());
         req.setAttribute(SportletProperties.ALLOWED_MODES, supportedModes);
         PortalContext portalContext = appPortlet.getPortalContext();
         req.setAttribute(SportletProperties.PORTAL_CONTEXT, portalContext);
