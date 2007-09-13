@@ -7,14 +7,15 @@ $Id$
 Requirements
 ------------
 
-1) Building the GridSphere distribution requires JDK 1.4.2 
-(JDK 1.4.1 ships with a broken xalan.jar). You will also need Ant 1.6+ 
+
+1) Building the GridSphere distribution requires 1.5+. You will also need Ant 1.6+ 
 available at http://jakarta.apache.org/ant. 
 
-2) You will also need a Tomcat 4.1+ or Tomcat 5.0.25+ servlet container 
+2) You will also need a Tomcat 5.5.x servlet container 
 available at http://jakarta.apache.org/tomcat. In addition to providing
 a hosting environment for GridSphere, Tomcat provides some of the required 
 XML (JAR) libraries that are needed for compilation.
+
 
 Compiling and Deploying
 -----------------------
