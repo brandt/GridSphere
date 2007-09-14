@@ -183,7 +183,10 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
                 log.debug("Did not find PortletServices.xml or portlet-services directory for: " + ctx.getServletContextName());
             }
         }
-        //PortletServiceFactory.addSpringServices(ctx);
+        String loadSpring = ctx.getInitParameter("spring4gridsphere");
+        if (loadSpring != null && loadSpring.equalsIgnoreCase("true")) {
+            PortletServiceFactory.addSpringServices(ctx);
+        }
     }
 
     /**
