@@ -113,6 +113,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
         PORTLETS_PATH = settingsService.getRealSettingsPath("portlets");
 
         File f = new File(settingsService.getRealSettingsPath("portlets"));
+        
         if (f.exists() && f.isDirectory()) {
 
             // add the portal to the top spot (usually the name is '..../gridsphere' but could be something else, look at
@@ -124,7 +125,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
             }
             int l = realPath.lastIndexOf(File.separator);
             String webappName = realPath.substring(l + 1);
-            String file = PORTLETS_PATH + "/" + webappName + ".1";
+            String file = PORTLETS_PATH + webappName + ".1";
             File myportletapp = new File(file);
             try {
                 myportletapp.createNewFile();
