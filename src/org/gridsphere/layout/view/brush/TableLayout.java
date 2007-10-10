@@ -65,7 +65,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
 
     public StringBuffer doRenderSelectPortlets(GridSphereEvent event, PortletTableLayout tableLayout) {
         event.getRenderRequest().setAttribute(SportletProperties.COMPONENT_ID, String.valueOf(tableLayout.getComponentID()));
-        System.err.println("in doRenderSelPortlets cid=" + (String) event.getRenderRequest().getAttribute(SportletProperties.COMPONENT_ID));
+        //System.err.println("in doRenderSelPortlets cid=" + (String) event.getRenderRequest().getAttribute(SportletProperties.COMPONENT_ID));
         StringBuffer table = new StringBuffer();
         table.append("<div class=\"gridsphere-layout-row\">");
         List components = tableLayout.getPortletComponents();
@@ -99,7 +99,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
 
     public StringBuffer doRenderSelectContent(GridSphereEvent event, PortletTableLayout tableLayout) {
         event.getRenderRequest().setAttribute(SportletProperties.COMPONENT_ID, String.valueOf(tableLayout.getComponentID()));
-        System.err.println("in doRenderSelContent cid=" + (String) event.getRenderRequest().getAttribute(SportletProperties.COMPONENT_ID));
+        //System.err.println("in doRenderSelContent cid=" + (String) event.getRenderRequest().getAttribute(SportletProperties.COMPONENT_ID));
         StringBuffer table = new StringBuffer();
         table.append("<div class=\"gridsphere-layout-row\">");
         List components = tableLayout.getPortletComponents();
@@ -122,6 +122,7 @@ public class TableLayout extends BaseRender implements TableLayoutView {
                         // render add portlets listbox
                         Map availContent = tableLayout.getAllContentToAdd(event);
                         table.append(renderAddContent(event, j, availContent));
+                        table.append(renderAddUrl(event, j));
 
                         table.append("</div>");
                     }
@@ -132,18 +133,13 @@ public class TableLayout extends BaseRender implements TableLayoutView {
         return table;
     }
 
-    public StringBuffer renderAddPortlets(GridSphereEvent event, int col, Set<ApplicationPortlet> availPortlets) {
+    private StringBuffer renderAddStart(GridSphereEvent event, int col, String addLayout, String addLabel) {
         StringBuffer table = new StringBuffer();
 
         PortletRequest req = event.getRenderRequest();
         RenderResponse res = event.getRenderResponse();
-        Locale locale = req.getLocale();
-
         PortletURLImpl url = (PortletURLImpl) res.createActionURL();
-
-        System.err.println("in doRenderSel cid=" + (String) event.getRenderRequest().getAttribute(SportletProperties.COMPONENT_ID));
-
-        url.setAction(PortletTableLayout.PORTLET_ADD_PORTLET);
+        url.setAction(addLayout);
         String extraMode = (String) req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE);
         if (extraMode != null) {
             url.setParameter("usertable", "edit");
@@ -151,15 +147,48 @@ public class TableLayout extends BaseRender implements TableLayoutView {
 
         table.append("<form action=\"").append(url.toString()).append("\"  method=\"post\" name=\"addform\"><p>");
         table.append("<input type=\"hidden\" name=\"" + PortletTableLayout.PORTLET_COL + "\" value=\"").append(col).append("\"/>");
-
-        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
-        String addLabel = bundle.getString("ADDPORTLETS");
-        String addButton = bundle.getString("ADD");
-        String noPortletsMsg = bundle.getString("NOPORTLETS");
-
         table.append("<b>").append(addLabel).append("</b>&nbsp;&nbsp;&nbsp;");
-        table.append("<select name=\"" + PortletTableLayout.PORTLET_ADD_PORTLET + "\">");
 
+        return table;
+    }
+
+    private StringBuffer renderAddEnd(GridSphereEvent event) {
+        PortletRequest req = event.getRenderRequest();
+        Locale locale = req.getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+        String addButton = bundle.getString("ADD");
+        StringBuffer table = new StringBuffer();
+
+        String action = SportletProperties.DEFAULT_PORTLET_ACTION + "=addportlet";
+
+        table.append("&nbsp;&nbsp;<input type=\"submit\" name=\"").append(action).append("\" value=\"").append(addButton).append("\">");
+        table.append("</p></form>");
+        return table;
+    }
+
+    public StringBuffer renderAddUrl(GridSphereEvent event, int col) {
+        StringBuffer table = new StringBuffer();
+        PortletRequest req = event.getRenderRequest();
+        Locale locale = req.getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+
+        table.append(renderAddStart(event, col, PortletTableLayout.PORTLET_ADD_URL, bundle.getString("ADDURL")));
+
+        table.append("<input type=\"text\" name=\"").append(PortletTableLayout.PORTLET_ADD_URL).append("\"/>&nbsp;").append(bundle.getString("ADDURLHEIGHT"));
+        table.append("<input size=\"7\" type=\"text\" name=\"").append(PortletTableLayout.PORTLET_ADD_URL_HEIGHT).append("\"/>");
+        table.append(renderAddEnd(event));
+        return table;
+    }
+
+    public StringBuffer renderAddPortlets(GridSphereEvent event, int col, Set<ApplicationPortlet> availPortlets) {
+        StringBuffer table = new StringBuffer();
+        PortletRequest req = event.getRenderRequest();
+        Locale locale = req.getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+        String noPortletsMsg = bundle.getString("NOPORTLETS");
+        table.append(renderAddStart(event, col, PortletTableLayout.PORTLET_ADD_PORTLET, bundle.getString("ADDPORTLETS")));
+
+        table.append("<select name=\"" + PortletTableLayout.PORTLET_ADD_PORTLET + "\">");
         if (availPortlets.isEmpty()) {
             table.append("<option value=\"" + PortletTableLayout.PORTLET_NO_ACTION + "\">").append(noPortletsMsg).append("</option>");
         }
@@ -171,62 +200,33 @@ public class TableLayout extends BaseRender implements TableLayoutView {
             String dispName = appPortlet.getDisplayName(locale);
             table.append("<option value=\"").append(appPortlet.getConcretePortletID()).append("\">").append(appPortlet.getWebApplicationName()).append(" - ").append(dispName).append("</option>");
         }
-
-
         table.append("</select>");
 
-        String action = SportletProperties.DEFAULT_PORTLET_ACTION + "=addportlet";
-
-        table.append("&nbsp;&nbsp;<input type=\"submit\" name=\"").append(action).append("\" value=\"").append(addButton).append("\">");
-        table.append("</p></form>");
+        table.append(renderAddEnd(event));
         return table;
     }
 
     public StringBuffer renderAddContent(GridSphereEvent event, int col, Map availContent) {
         StringBuffer table = new StringBuffer();
-
         PortletRequest req = event.getRenderRequest();
-        RenderResponse res = event.getRenderResponse();
         Locale locale = req.getLocale();
-
-        PortletURLImpl url = (PortletURLImpl) res.createActionURL();
-
-        System.err.println("in doRenderSel cid=" + (String) event.getRenderRequest().getAttribute(SportletProperties.COMPONENT_ID));
-
-        url.setAction(PortletTableLayout.PORTLET_ADD_CONTENT);
-        String extraMode = (String) req.getAttribute(SportletProperties.LAYOUT_EDIT_MODE);
-        if (extraMode != null) {
-            url.setParameter("usertable", "edit");
-        }
-
-        table.append("<form action=\"" + url.toString() + "\"  method=\"post\" name=\"addform\"><p>");
-        table.append("<input type=\"hidden\" name=\"" + PortletTableLayout.PORTLET_COL + "\" value=\"" + col + "\"/>");
-
         ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
-        String addLabel = bundle.getString("ADDCONTENT");
-        String addButton = bundle.getString("ADD");
         String noPortletsMsg = bundle.getString("NOCONTENT");
-
-        table.append("<b>" + addLabel + "</b>&nbsp;&nbsp;&nbsp;");
+        table.append(renderAddStart(event, col, PortletTableLayout.PORTLET_ADD_CONTENT, bundle.getString("ADDCONTENT")));
         table.append("<select name=\"" + PortletTableLayout.PORTLET_ADD_CONTENT + "\">");
 
         if (availContent.isEmpty()) {
-            table.append("<option value=\"" + PortletTableLayout.PORTLET_NO_ACTION + "\">" + noPortletsMsg + "</option>");
+            table.append("<option value=\"" + PortletTableLayout.PORTLET_NO_ACTION + "\">").append(noPortletsMsg).append("</option>");
         }
 
-        Iterator it = availContent.keySet().iterator();
-        while (it.hasNext()) {
-            String pid = (String) it.next();
+        for (Object o : availContent.keySet()) {
+            String pid = (String) o;
             String dispName = (String) availContent.get(pid);
-            table.append("<option value=\"" + pid + "\">" + dispName + "</option>");
+            table.append("<option value=\"").append(pid).append("\">").append(dispName).append("</option>");
         }
-
         table.append("</select>");
 
-        String action = SportletProperties.DEFAULT_PORTLET_ACTION + "=addcontent";
-
-        table.append("&nbsp;&nbsp;<input type=\"submit\" name=\"" + action + "\" value=\"" + addButton + "\">");
-        table.append("</p></form>");
+        table.append(renderAddEnd(event));
         return table;
     }
 

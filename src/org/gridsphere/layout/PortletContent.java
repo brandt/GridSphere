@@ -12,7 +12,6 @@ import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridsphere.services.core.jcr.JCRService;
 
-import javax.jcr.Session;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderResponse;
@@ -33,6 +32,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
     private String textFile = null;
     private String context = null;
     private boolean border = true;
+    private String height = null;
 
     public static final String DELETE_CONTENT = "deleteContent";
 
@@ -122,6 +122,25 @@ public class PortletContent extends BasePortletComponent implements Serializable
         return textFile.substring(textFile.lastIndexOf("/") + 1);
     }
 
+
+    /**
+     * Gets the height of the iframe.
+     *
+     * @return height of the iframe
+     */
+    public String getHeight() {
+        return height;
+    }
+
+    /**
+     * Sets the height of the iframe.
+     *
+     * @param height of the iframe
+     */
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
     /**
      * Renders the portlet text component
      *
@@ -168,11 +187,11 @@ public class PortletContent extends BasePortletComponent implements Serializable
         }
         if (textFile != null) {
             RequestDispatcher rd = null;
-            Session session = null;
+
             try {
                 // put a URL in an iframe
                 if (textFile.startsWith("http://")) {
-                    writer.write("<iframe border=\"0\" width=\"100%\" height=\"100%\" src=\"" + textFile + "\"></iframe>");
+                    writer.write("<iframe border=\"0\" width=\"100%\" height=\"" + height + "\" src=\"" + textFile + "\"></iframe>");
                 } else if (textFile.startsWith("jcr://")) {
                     JCRService jcrService = (JCRService) PortletServiceFactory.createPortletService(JCRService.class, true);
                     if (!border) {
@@ -193,8 +212,6 @@ public class PortletContent extends BasePortletComponent implements Serializable
             } catch (Exception e) {
                 log.error("Unable to include : " + textFile, e);
                 content.append("Unable to include : ").append(textFile);
-            } finally {
-                if (session != null) session.logout();
             }
             setBufferedOutput(req, content);
         }
