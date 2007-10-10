@@ -32,8 +32,9 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
     public static final String PORTLET_COL = "gs_col";
     public static final String PORTLET_ADD_PORTLET = "gs_addPortlet";
     public static final String PORTLET_NO_ACTION = "gs_none";
-
     public static final String PORTLET_ADD_CONTENT = "gs_addContent";
+    public static final String PORTLET_ADD_URL = "gs_addUrl";
+    public static final String PORTLET_ADD_URL_HEIGHT = "gs_UrlHeight";
 
     protected transient TableLayoutView tableView = null;
 
@@ -85,8 +86,8 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
 
     private PortletComponent getMaximizedComponent(List<PortletComponent> components) {
         PortletComponent p;
-        for (int i = 0; i < components.size(); i++) {
-            p = components.get(i);
+        for (PortletComponent component : components) {
+            p = component;
             if (p instanceof PortletLayout) {
                 PortletComponent layout = this.getMaximizedComponent(((PortletLayout) p).getPortletComponents());
                 if (layout != null) {
@@ -109,7 +110,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         if (portletId.equals(PORTLET_NO_ACTION)) return;
 
         String colStr = req.getParameter(PORTLET_COL);
-        int col = Integer.valueOf(colStr).intValue();
+        int col = Integer.valueOf(colStr);
 
         // first loop thru rows to see if one is empty for the requested column
         if (!components.isEmpty()) {
@@ -143,7 +144,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         if (textFile.equals(PORTLET_NO_ACTION)) return;
 
         String colStr = req.getParameter(PORTLET_COL);
-        int col = Integer.valueOf(colStr).intValue();
+        int col = Integer.valueOf(colStr);
 
         // first loop thru rows to see if one is empty for the requested column
         if (!components.isEmpty()) {
@@ -168,6 +169,40 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
         req.setAttribute(SportletProperties.INIT_PAGE, "true");
     }
 
+    protected void addUrl(GridSphereEvent event) {
+        PortletRequest req = event.getActionRequest();
+        String url = req.getParameter(PORTLET_ADD_URL);
+        String height = req.getParameter(PORTLET_ADD_URL_HEIGHT);
+        if (url.equals("")) return;
+        String colStr = req.getParameter(PORTLET_COL);
+        int col = Integer.valueOf(colStr);
+
+        // first loop thru rows to see if one is empty for the requested column
+        if (!components.isEmpty()) {
+            Object o = components.get(0);
+            if (o instanceof PortletFrameLayout) {
+                PortletFrameLayout r = (PortletFrameLayout) o;
+                List<PortletComponent> cols = r.getPortletComponents();
+
+                Object c = cols.get(col);
+
+                if (c instanceof PortletFrameLayout) {
+                    PortletFrameLayout existingColumn = (PortletFrameLayout) c;
+
+                    if (!url.equals("")) {
+                        PortletContent content = new PortletContent();
+                        content.setInclude(url);
+                        content.setHeight(height);
+                        existingColumn.addPortletComponent(content);
+                    }
+                }
+            }
+        }
+        req.setAttribute(SportletProperties.INIT_PAGE, "true");
+
+
+    }
+
     public void customActionPerformed(GridSphereEvent event) {
         if (event.hasAction()) {
             if (event.getAction().getName().equals(PORTLET_ADD_PORTLET)) {
@@ -175,6 +210,9 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
             }
             if (event.getAction().getName().equals(PORTLET_ADD_CONTENT)) {
                 addContent(event);
+            }
+            if (event.getAction().getName().equals(PORTLET_ADD_URL)) {
+                addUrl(event);
             }
         }
     }
@@ -198,11 +236,9 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
 
     public Map<String, String> getAllContentToAdd(GridSphereEvent event) {
         Map<String, String> allContent = new HashMap<String, String>();
-        List<ContentDocument> docs = null;
         try {
-            docs = contentService.listChildContentDocuments("");
-            for (int i = 0; i < docs.size(); i++) {
-                ContentDocument doc = docs.get(i);
+            List<ContentDocument> docs = contentService.listChildContentDocuments("");
+            for (ContentDocument doc : docs) {
                 allContent.put(doc.getTitle(), doc.getTitle());
             }
         } catch (ContentException e) {
@@ -239,8 +275,8 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
 
         table.append(tableView.doStart(event, this));
 
-        for (int i = 0; i < components.size(); i++) {
-            p = (PortletComponent) components.get(i);
+        for (PortletComponent component : components) {
+            p = component;
             table.append(tableView.doStartBorder(event, p));
             if (p.getVisible()) {
                 p.doRender(event);

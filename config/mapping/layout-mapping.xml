@@ -129,6 +129,9 @@
         <field name="Context" type="string">
             <bind-xml name="context" node="attribute"/>
         </field>
+        <field name="Height" type="string">
+            <bind-xml name="height" node="attribute"/>
+        </field>
     </class>
 
     <class name="org.gridsphere.layout.PortletStaticContent" extends="org.gridsphere.layout.BasePortletComponent">
