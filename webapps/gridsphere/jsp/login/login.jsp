@@ -1,4 +1,7 @@
 <%@ page import="org.gridlab.gridsphere.portlet.impl.SportletProperties" %>
+<%@ page import="java.net.URLDecoder" %>
+<%@ page import="java.util.regex.Matcher" %>
+<%@ page import="java.util.regex.Pattern" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
@@ -10,18 +13,18 @@
 <ui:form secure="<%= Boolean.valueOf(useSecureLogin).booleanValue() %>">
     <ui:messagebox beanId="msg"/>
 
-    <% if (request.getAttribute("certificate") != null && ((String) request.getAttribute("certificate")).length() > 0)  { %>
+    <% if (request.getAttribute("certificate") != null && ((String) request.getAttribute("certificate")).length() > 0) { %>
     <ui:table>
-            <ui:tablerow>
-                <ui:tablecell width="160">
-                    <ui:text key="LOGIN_CERTIFICATE"/>
-                </ui:tablecell>
-            </ui:tablerow>
-            <ui:tablerow>
-                <ui:tablecell width="160">
-                    <%= certificate %>
-                </ui:tablecell>
-            </ui:tablerow>
+        <ui:tablerow>
+            <ui:tablecell width="160">
+                <ui:text key="LOGIN_CERTIFICATE"/>
+            </ui:tablecell>
+        </ui:tablerow>
+        <ui:tablerow>
+            <ui:tablecell width="160">
+                <%= certificate %>
+            </ui:tablecell>
+        </ui:tablerow>
     </ui:table>
     <% } else { %>
 
@@ -62,10 +65,25 @@
     <ui:table>
         <ui:tablerow>
             <ui:tablecell width="100">
+
                 <ui:actionsubmit action="<%= SportletProperties.LOGIN %>" key="LOGIN_ACTION">
-                    <% if (request.getParameter("cid") != null) { %>
-                    <ui:actionparam name="queryString" value="<%= request.getParameter("cid") %>"/>
-                    <% } %>
+
+
+                    <%
+
+                        if (request.getParameter("cid") != null) {
+                            String cid = URLDecoder.decode(request.getParameter("cid"), "UTF-8");
+                            // to prevent xss, this may only work with english chars ??
+                            Pattern p = Pattern.compile("a-zA-Z0-9");
+                            Matcher m = p.matcher(cid);
+                            boolean b = m.matches();
+                            if (b) {
+
+                    %>
+
+                    <ui:actionparam name="queryString" value="<%= cid %>"/>
+                    <% }
+                    } %>
                 </ui:actionsubmit>
             </ui:tablecell>
             <ui:tablecell/>
