@@ -200,6 +200,17 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         layoutEngine.actionPerformed(event);
 
+        //GPF-457 fix
+        if (null != req.getAttribute(SportletProperties.PORTAL_FILTER_EVENT)) {
+            //only doAfterLogin is checked since logout request doesn't reach this code
+            if (SportletProperties.PORTAL_FILTER_EVENT_AFTER_LOGIN.equals(req.getAttribute(SportletProperties.PORTAL_FILTER_EVENT))) {
+                for (PortalFilter portalFilter : portalFilters) {
+                    PortalFilter filter = (PortalFilter) portalFilter;
+                    filter.doAfterLogin(req, res);
+                }
+            }
+        }
+
         // perform a redirect-after-POST!
         if (event.hasAction() && req.getMethod().toUpperCase().equals("POST")) {
             String requestURL = (String) req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
@@ -349,6 +360,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 if (user != null) {
                     request.setAttribute(SportletProperties.PORTLET_USER, user);
                     session.setAttribute(SportletProperties.PORTLET_USER, user.getID(), PortletSession.APPLICATION_SCOPE);
+                    request.setAttribute(SportletProperties.PORTAL_FILTER_EVENT, SportletProperties.PORTAL_FILTER_EVENT_AFTER_LOGIN);
                 }
             }
         }

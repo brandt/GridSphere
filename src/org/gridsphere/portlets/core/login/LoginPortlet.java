@@ -60,9 +60,6 @@ public class LoginPortlet extends ActionPortlet {
     private MailService mailService = null;
     private AuthModuleService authModuleService = null;
     private PasswordManagerService passwordManagerService = null;
-
-    private PortalFilterService portalFilterService = null;
-
     private String newpasswordURL = null;
     private String redirectURL = null;
 
@@ -73,7 +70,6 @@ public class LoginPortlet extends ActionPortlet {
         requestService = (RequestService) createPortletService(RequestService.class);
         mailService = (MailService) createPortletService(MailService.class);
         portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
-        portalFilterService = (PortalFilterService) createPortletService(PortalFilterService.class);
         authModuleService = (AuthModuleService) createPortletService(AuthModuleService.class);
         passwordManagerService = (PasswordManagerService) createPortletService(PasswordManagerService.class);
         DEFAULT_VIEW_PAGE = "doViewUser";
@@ -251,10 +247,8 @@ public class LoginPortlet extends ActionPortlet {
             realuri = "http" + realuri;
         }
 
-        List<PortalFilter> portalFilters = portalFilterService.getPortalFilters();
-        for (PortalFilter filter : portalFilters) {
-            filter.doAfterLogin((HttpServletRequest) req, (HttpServletResponse) res);
-        }
+        //mark request as successfull login in order to invoke doAfterLogin (GPF-457 fix)
+        req.setAttribute(SportletProperties.PORTAL_FILTER_EVENT, SportletProperties.PORTAL_FILTER_EVENT_AFTER_LOGIN);
 
         log.debug("in login redirecting to portal: " + realuri.toString());
         try {

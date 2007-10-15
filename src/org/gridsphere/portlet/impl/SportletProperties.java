@@ -233,6 +233,17 @@ public class SportletProperties {
 
     public static final String PORTAL_REDIRECT_PATH = "org.gridsphere.PORTAL_REDIRECT_PATH";
 
+    // Portal Filter events
+    /**
+     * The variable name of the method to be performed on PortalFilters
+     */
+    public static final String PORTAL_FILTER_EVENT = "org.gridsphere.services.core.filter.EVENT";
+
+    /**
+     * Command to perform the doAfterLogin method on a PortalFilters
+     */
+    public static final String PORTAL_FILTER_EVENT_AFTER_LOGIN = "org.gridsphere.services.core.filter.EVENT_AFTER_LOGIN";
+
     private SportletProperties() {
         if (props == null) {
             InputStream propsStream = getClass().getResourceAsStream("/org/gridsphere/portlet/impl/portlet.properties");
