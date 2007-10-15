@@ -83,8 +83,8 @@ public class RememberMeCookieFilter extends BasePortalFilter implements PortalFi
                     User newuser = userManagerService.getUser(uid);
                     if (newuser != null) {
                         //System.err.println("in checkUserHasCookie-- seting user settings!!");
-                        req.setAttribute(SportletProperties.PORTLET_USER, user);
-                        req.getSession(true).setAttribute(SportletProperties.PORTLET_USER, user.getID());
+                        req.setAttribute(SportletProperties.PORTLET_USER, newuser);
+                        req.getSession(true).setAttribute(SportletProperties.PORTLET_USER, newuser.getID());
                     }
 
                 }
@@ -105,6 +105,7 @@ public class RememberMeCookieFilter extends BasePortalFilter implements PortalFi
 
         // COOKIE_EXPIRATION_TIME is specified in secs
         cookie.setMaxAge(COOKIE_EXPIRATION_TIME);
+        cookie.setPath("/"); //TODO: should be path of the context, but it is configurable during deployment
         res.addCookie(cookie);
         //System.err.println("adding a  cookie");
     }
