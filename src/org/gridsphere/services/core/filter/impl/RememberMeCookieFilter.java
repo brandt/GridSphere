@@ -31,8 +31,12 @@ public class RememberMeCookieFilter extends BasePortalFilter implements PortalFi
     public void init(PortalFilterConfig config) {
         userManagerService = (UserManagerService) PortletServiceFactory.createPortletService(UserManagerService.class, true);
         requestService = (RequestService) PortletServiceFactory.createPortletService(RequestService.class, true);
-        //System.err.println(config.getInitParameter("COOKIE_EXPIRATION_TIME"));
-        //COOKIE_EXPIRATION_TIME = Integer.parseInt(config.getInitParameter("COOKIE_EXPIRATION_TIME"));
+        try {
+            COOKIE_EXPIRATION_TIME = Integer.parseInt(config.getInitParameter("COOKIE_EXPIRATION_TIME"));
+        } catch (NumberFormatException e) {
+            System.err.println(config.getInitParameter("COOKIE_EXPIRATION_TIME"));
+            e.printStackTrace();
+        }
     }
 
     public void doAfterLogin(HttpServletRequest req, HttpServletResponse res) {
