@@ -27,7 +27,7 @@
             <bind-xml name="implementation"/>
         </field>
         <field name="ConfigParamList" type="org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="vector">
-            <bind-xml name="auth-config"/>
+            <bind-xml name="filter-param"/>
         </field>
     </class>
 
