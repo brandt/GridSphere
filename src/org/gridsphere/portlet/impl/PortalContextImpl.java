@@ -37,7 +37,8 @@ public class PortalContextImpl implements PortalContext {
 
         for (int i = 0; i < customStates.length; i++) {
             CustomWindowState state = customStates[i];
-            windowStates.add(state);
+            // GFP-460
+            windowStates.add(new WindowState(state.getWindowState().getContent()));
         }
         portletModes = new ArrayList();
         portletModes.add(PortletMode.EDIT);
@@ -57,7 +58,7 @@ public class PortalContextImpl implements PortalContext {
      *
      * @param name property name
      * @return portal property with key <code>name</code>
-     * @exception	IllegalArgumentException if name is <code>null</code>.
+     * @exception IllegalArgumentException if name is <code>null</code>.
      */
     public String getProperty(String name) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
