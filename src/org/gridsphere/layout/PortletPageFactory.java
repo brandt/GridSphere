@@ -67,11 +67,12 @@ public class PortletPageFactory implements PortletSessionListener {
     public void init(ServletContext ctx) {
 
         this.context = ctx;
+
         SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
 
         USER_LAYOUT_DIR = settingsService.getRealSettingsPath("layouts/users");
-
         String layoutsDirPath = settingsService.getRealSettingsPath("layouts");
+
         File layoutsDir = new File(layoutsDirPath);
         File[] layoutFiles = layoutsDir.listFiles();
         PortletPage page = null;
@@ -91,7 +92,8 @@ public class PortletPageFactory implements PortletSessionListener {
             }
         }
 
-        String newuserLayoutPath = settingsService.getRealSettingsPath("layouts/users");
+        String newuserLayoutPath = settingsService.getRealSettingsPath("layouts/users/");
+
         File userdir = new File(newuserLayoutPath);
         if (!userdir.exists()) {
             userdir.mkdir();
@@ -203,7 +205,7 @@ public class PortletPageFactory implements PortletSessionListener {
         PortletPage tmpPage = new PortletPage();
         try {
             //tmpPage.setLayoutDescriptor(userLayout + ".tmp");
-            PortletTabbedPane tmpPane = (PortletTabbedPane) deepCopy(pane);
+            PortletTabbedPane tmpPane = (PortletTabbedPane) deepCopy((PortletComponent) pane);//changed by Valia: deepCopy for PortletTabbedPane throws exception...
             tmpPage.setPortletComponent(tmpPane);
             this.setPageTheme(tmpPage, req);
             tmpPage.init(req, new ArrayList<ComponentIdentifier>());
@@ -294,6 +296,15 @@ public class PortletPageFactory implements PortletSessionListener {
     }
 
     /**
+     * Added by Valia Tsagkalidou: We need this method so as to know where to put user's custom layout from a portlet.
+     *
+     * @return the path where users' layout are stored
+     */
+    public String getUserLayoutPath() {
+        return USER_LAYOUT_DIR;
+    }
+
+    /**
      * This returns the page from the hashtable or creates a new one if necessary
      *
      * @param req      the portlet request
@@ -349,9 +360,11 @@ public class PortletPageFactory implements PortletSessionListener {
             } else {
                 if (req.getUserPrincipal() == null) {
                     // if no reference to a layout exists, return a guest layout
-                    return getPortletPageFromHash(req, GUEST_PAGE);
+                    //changed by Valia: previously it returned
+                    copy = getPortletPageFromHash(req, GUEST_PAGE);
                 } else {
-                    return getPortletPageFromHash(req, USER_PAGE);
+                    //changed by Valia: previously it returned
+                    copy = getPortletPageFromHash(req, USER_PAGE);
                 }
             }
         } else {
@@ -363,6 +376,31 @@ public class PortletPageFactory implements PortletSessionListener {
                 return createErrorPage();
             }
         }
+
+        /* added by Valia Tsagkalidou */
+        PortletComponent generalPane = copy.getPortletComponent();
+        if (req.getUserPrincipal() != null && generalPane instanceof PortletTabbedPane) {
+            PortletTabbedPane pane = (PortletTabbedPane) generalPane;
+            // place user tabs after group tabs
+            PortletTabbedPane userPane = getUserTabbedPane(req);
+            if (userPane != null) {
+                List userTabs = userPane.getPortletTabs();
+                for (int i = 0; i < userTabs.size(); i++) {
+                    PortletTab subTab = (PortletTab) userTabs.get(i);
+                    log.debug("adding user tab: " + subTab.getTitle("en"));
+                    try {
+                        pane.addTab((PortletTab) deepCopy(subTab));
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            copy.setPortletComponent(pane);
+        }
+        /* End of addition */
+
         setPageTheme(copy, req);
         copy.init(req, new ArrayList<ComponentIdentifier>());
         return copy;
