@@ -53,7 +53,7 @@ public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManag
             adminRole = new PortletRole();
             adminRole.setName("ADMIN");
             adminRole.setDescription("portal administrator");
-            userRole.setIsDefault(0);
+            adminRole.setIsDefault(0);
             saveRole(adminRole);
         }
     }
