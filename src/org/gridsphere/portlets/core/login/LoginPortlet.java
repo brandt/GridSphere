@@ -247,6 +247,12 @@ public class LoginPortlet extends ActionPortlet {
             realuri = "http" + realuri;
         }
 
+        //after login redirect (GPF-463 feature) to URI from session
+        String redirectURI = (String) ((HttpServletRequest)req).getSession().getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
+        if(null != redirectURI){
+            realuri = realuri.substring(0,realuri.indexOf('/',7))+redirectURI;
+        }
+
         //mark request as successfull login in order to invoke doAfterLogin (GPF-457 fix)
         req.setAttribute(SportletProperties.PORTAL_FILTER_EVENT, SportletProperties.PORTAL_FILTER_EVENT_AFTER_LOGIN);
 

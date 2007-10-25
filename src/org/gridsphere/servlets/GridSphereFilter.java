@@ -38,6 +38,7 @@ import org.hibernate.StaleObjectStateException;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.StringTokenizer;
@@ -168,8 +169,9 @@ public class GridSphereFilter implements Filter {
 
                 StringTokenizer st = new StringTokenizer(parsePath, "/");
 
+                String layoutId = null;
                 if (st.hasMoreTokens()) {
-                    String layoutId = (String) st.nextElement();
+                    layoutId = (String) st.nextElement();
                     extraInfo += SportletProperties.LAYOUT_PAGE_PARAM + "=" + layoutId;
                 }
                 if (st.hasMoreTokens()) {
@@ -200,6 +202,20 @@ public class GridSphereFilter implements Filter {
                             extraInfo += "&" + SportletProperties.PORTLET_WINDOW + "=" + (String) st.nextElement();
                         }
                     }
+                    HttpSession session = req.getSession();
+                    //capture after login redirect (GPF-463 feature) URI but not for:
+                    // - login layout
+                    // - logged in users
+                    // - actions (security reasons)
+                    // - sessions which already has captured URI
+                    if(!"login".equals(layoutId) && !"a".equals(phase) && null != session && null == session.getAttribute(SportletProperties.PORTLET_USER) && null == session.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH)){
+                        String afterLoginRedirect = requestURI;
+                        if(null != query){
+                            afterLoginRedirect+='?'+query;
+                        }
+                        session.setAttribute(SportletProperties.PORTAL_REDIRECT_PATH, afterLoginRedirect);
+                    }
+
                 }
                 if (query != null) {
                     extraInfo += "&" + query;
