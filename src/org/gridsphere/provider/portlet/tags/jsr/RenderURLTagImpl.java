@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: RenderURLTagImpl.java 4595 2006-03-06 00:23:28Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.provider.portlet.tags.jsr;
 

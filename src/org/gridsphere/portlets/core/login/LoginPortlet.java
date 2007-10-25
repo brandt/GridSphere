@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: LoginPortlet.java 5087 2006-08-18 22:52:23Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.portlets.core.login;
 

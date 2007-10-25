@@ -20,7 +20,7 @@ import java.util.Date;
 
 /**
  * @author <a href="mailto:tkucz@icis.pcz.pl">Tomasz Kuczynski</a>
- * @version $Id: ChartServiceImpl.java 5032 2006-08-17 18:15:06Z novotny $
+ * @version $Id$
  */
 
 public class ChartServiceImpl implements ChartService, PortletServiceProvider {

@@ -2,7 +2,7 @@ package org.gridsphere.portletcontainer.impl.descriptor;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
- * @version $Id: PersistencePreference.java 4496 2006-02-08 20:27:04Z wehrens $
+ * @version $Id$
  */
 
 public class PersistencePreference {

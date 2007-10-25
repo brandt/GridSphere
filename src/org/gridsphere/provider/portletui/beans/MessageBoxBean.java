@@ -6,7 +6,7 @@ import java.util.List;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
- * @version $Id: MessageBoxBean.java 4884 2006-06-26 23:52:48Z novotny $
+ * @version $Id$
  */
 
 public class MessageBoxBean extends BaseComponentBean implements TagBean {

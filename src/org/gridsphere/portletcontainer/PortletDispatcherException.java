@@ -1,6 +1,6 @@
 /*
 * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
-* @version $Id: PortletException.java 4670 2006-03-27 17:56:20Z novotny $
+* @version $Id$
 */
 package org.gridsphere.portletcontainer;
 

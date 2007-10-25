@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: SportletProperties.java 5089 2006-08-18 22:54:05Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.portlet.impl;
 

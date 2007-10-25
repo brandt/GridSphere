@@ -1,7 +1,7 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
- * @version $Id: PortletPreferencesManager.java 5412 2006-09-28 23:44:53Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.portletcontainer.impl;
 

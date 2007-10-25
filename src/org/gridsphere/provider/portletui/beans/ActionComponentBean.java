@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 
 /*
  * @author <a href="mailto:russell@aei.mpg.de">Michael Russell</a>
- * @version $Id: ActionComponentBean.java 4496 2006-02-08 20:27:04Z wehrens $
+ * @version $Id$
  * <p>
  * Includes jsp pages from any web application.
  */

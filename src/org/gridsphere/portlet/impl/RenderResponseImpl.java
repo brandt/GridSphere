@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: RenderResponseImpl.java 4988 2006-08-04 09:57:48Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.portlet.impl;
 

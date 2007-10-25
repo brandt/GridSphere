@@ -5,7 +5,7 @@
     Portlet Layout mapping file controls mappings between layout descriptors and
     org.gridsphere.layout.* classes
 
-    $Id: layout-mapping.xml 5127 2006-08-24 07:21:25Z novotny $
+    $Id$
 
 -->
 

@@ -1,7 +1,7 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  *
- * @version $Id: BaseFormEventImpl.java 4709 2006-03-31 20:41:54Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.provider.event.jsr.impl;
 

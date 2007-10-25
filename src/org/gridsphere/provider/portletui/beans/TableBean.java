@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: TableBean.java 4870 2006-06-23 15:36:06Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.provider.portletui.beans;
 

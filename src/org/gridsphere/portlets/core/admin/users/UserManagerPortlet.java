@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: UserManagerPortlet.java 5088 2006-08-18 22:53:27Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.portlets.core.admin.users;
 

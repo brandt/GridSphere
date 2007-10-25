@@ -7,7 +7,7 @@ import javax.servlet.jsp.JspWriter;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
- * @version $Id: MessageBoxTag.java 4745 2006-04-10 22:17:39Z novotny $
+ * @version $Id$
  */
 
 public class MessageBoxTag extends BaseComponentTag {

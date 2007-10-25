@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: BaseComponentTag.java 4883 2006-06-26 23:52:13Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.provider.portletui.tags;
 

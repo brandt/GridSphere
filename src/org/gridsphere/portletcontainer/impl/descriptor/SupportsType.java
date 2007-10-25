@@ -2,7 +2,7 @@
  * This class was automatically generated with
  * <a href="http://www.castor.org">Castor 0.9.5.2</a>, using an XML
  * Schema.
- * $Id: SupportsType.java 4892 2006-06-28 22:56:26Z novotny $
+ * $Id$
  */
 
 package org.gridsphere.portletcontainer.impl.descriptor;

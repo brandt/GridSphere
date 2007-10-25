@@ -1,6 +1,6 @@
 /*
 * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
-* @version $Id: GridSphereServlet.java 4956 2006-07-26 16:15:56Z novotny $
+* @version $Id$
 */
 package org.gridsphere.servlets;
 

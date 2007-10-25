@@ -22,7 +22,7 @@ import java.util.*;
 
 /**
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: PortletPageFactory.java 5032 2006-08-17 18:15:06Z novotny $
+ * @version $Id$
  */
 public class PortletPageFactory implements PortletSessionListener {
 

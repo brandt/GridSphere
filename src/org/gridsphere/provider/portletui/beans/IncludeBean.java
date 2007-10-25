@@ -6,7 +6,7 @@ import javax.servlet.jsp.JspWriter;
 
 /*
  * @author <a href="mailto:russell@aei.mpg.de">Michael Russell</a>
- * @version $Id: IncludeBean.java 4496 2006-02-08 20:27:04Z wehrens $
+ * @version $Id$
  * <p>
  * Includes jsp pages from any web application.
  */

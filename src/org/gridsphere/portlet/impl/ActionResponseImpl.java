@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: ActionResponseImpl.java 4889 2006-06-28 18:36:43Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.portlet.impl;
 

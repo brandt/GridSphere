@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: MessageStyle.java 4744 2006-04-10 22:16:34Z novotny $
+ * @version $Id$
  */
 
 package org.gridsphere.provider.portletui.beans;

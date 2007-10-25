@@ -1,7 +1,7 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
- * @version $Id: TextTag.java 4883 2006-06-26 23:52:13Z novotny $
+ * @version $Id$
  */
 
 package org.gridsphere.provider.portletui.tags;

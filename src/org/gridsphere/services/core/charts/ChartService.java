@@ -8,7 +8,7 @@ import java.io.IOException;
 
 /**
  * @author <a href="mailto:tkucz@icis.pcz.pl">Tomasz Kuczynski</a>
- * @version $Id: ChartService.java 4496 2006-02-08 20:27:04Z wehrens $
+ * @version $Id$
  */
 
 public interface ChartService extends PortletService {

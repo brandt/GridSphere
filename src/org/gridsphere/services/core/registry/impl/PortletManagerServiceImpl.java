@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: PortletManager.java 4733 2006-04-10 18:29:36Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.services.core.registry.impl;
 

@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: ListBoxBean.java 4514 2006-02-17 18:22:27Z novotny $
+ * @version $Id$
  */
 
 package org.gridsphere.provider.portletui.beans;

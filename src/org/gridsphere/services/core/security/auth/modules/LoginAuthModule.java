@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: LoginAuthModule.java 4496 2006-02-08 20:27:04Z wehrens $
+ * @version $Id$
  */
 public interface LoginAuthModule extends Comparable {
 

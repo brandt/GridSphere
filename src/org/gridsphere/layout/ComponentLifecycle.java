@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: ComponentLifecycle.java 4986 2006-08-04 09:54:38Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.layout;
 

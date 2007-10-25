@@ -8,7 +8,7 @@ import javax.servlet.jsp.tagext.Tag;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
- * @version $Id: ActionMenuItemTag.java 4666 2006-03-27 17:47:56Z novotny $
+ * @version $Id$
  */
 
 public class ActionMenuItemTag extends ContainerTag {

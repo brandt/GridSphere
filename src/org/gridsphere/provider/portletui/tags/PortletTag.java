@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: PortletTag.java 4992 2006-08-04 10:03:27Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.provider.portletui.tags;
 

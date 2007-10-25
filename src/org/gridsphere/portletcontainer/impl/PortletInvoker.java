@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: PortletInvoker.java 4848 2006-06-10 18:06:15Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.portletcontainer.impl;
 

@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: LDAPAuthModule.java,v 1.5 2005/06/06 12:31:12 russell Exp $
+ * @version $Id$
  */
 package org.gridsphere.services.core.security.auth.modules.impl;
 

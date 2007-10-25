@@ -6,7 +6,7 @@
 
     This descriptor defines the guest user's portal layout configuration
 
-    $Id: SetupLayout.xml 4633 2006-03-09 16:44:16Z wehrens $
+    $Id$
 -->
 
 <page label="profile"

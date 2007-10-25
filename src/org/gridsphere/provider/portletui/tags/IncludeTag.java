@@ -15,7 +15,7 @@ import javax.servlet.jsp.JspException;
 
 /*
  * @author <a href="mailto:russell@aei.mpg.de">Michael Russell</a>
- * @version $Id: IncludeTag.java 4666 2006-03-27 17:47:56Z novotny $
+ * @version $Id$
  * <p>
  * Includes jsp pages from any web application.
  */

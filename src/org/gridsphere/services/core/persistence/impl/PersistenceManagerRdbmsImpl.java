@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
- * @version $Id: PersistenceManagerRdbmsImpl.java 4877 2006-06-26 23:13:40Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.services.core.persistence.impl;
 

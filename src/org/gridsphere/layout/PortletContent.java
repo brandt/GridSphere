@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: PortletContent.java 4993 2006-08-04 10:10:43Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.layout;
 

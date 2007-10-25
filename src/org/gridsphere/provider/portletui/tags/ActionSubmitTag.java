@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: ActionSubmitTag.java 4915 2006-07-10 20:51:49Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.provider.portletui.tags;
 

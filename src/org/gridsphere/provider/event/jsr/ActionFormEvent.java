@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: ActionFormEvent.java 4687 2006-03-29 06:12:09Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.provider.event.jsr;
 

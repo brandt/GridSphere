@@ -1,6 +1,6 @@
 /*
  * @author <a href="mailto:michael.russell@aei.mpg.de">Michael Russell</a>
- * @version $Id: ProfileManagerPortlet.java 5062 2006-08-17 21:31:25Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.portlets.core.user;
 

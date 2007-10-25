@@ -9,7 +9,7 @@ import org.gridsphere.services.core.persistence.impl.CreateDatabase;
 /*
 * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
 * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
-* @version $Id: DBTask.java 4728 2006-04-10 04:37:52Z novotny $
+* @version $Id$
 */
 
 /**

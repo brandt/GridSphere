@@ -1,5 +1,5 @@
 /**
- * @version $Id: JaasAuthModule.java 4496 2006-02-08 20:27:04Z wehrens $
+ * @version $Id$
  */
 package org.gridsphere.services.core.security.auth.modules.impl;
 

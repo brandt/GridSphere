@@ -13,7 +13,7 @@ Invoke "ant help"
  Copyright:
    2002,2003,2004,2005,2006,2007
 
- - $Id: build.xml 5248 2006-09-04 13:22:40Z wehrens $
+ - $Id$
 -->
 
 <project name="GridSphere 3.X" default="help">

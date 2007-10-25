@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: TableRowTag.java 4797 2006-05-17 20:49:45Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.provider.portletui.tags;
 

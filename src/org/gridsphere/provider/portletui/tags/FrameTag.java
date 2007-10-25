@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: FrameTag.java 4762 2006-04-14 17:07:31Z novotny $
+ * @version $Id$
  */
 package org.gridsphere.provider.portletui.tags;
 

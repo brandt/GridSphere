@@ -1,7 +1,7 @@
 /**
  * @author <a href="mailto:kisg@mailbox.hu">Gergely Kis</a>
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: CacheServiceImpl.java 4496 2006-02-08 20:27:04Z wehrens $
+ * @version $Id$
  */
 package org.gridsphere.services.core.cache.impl;
 

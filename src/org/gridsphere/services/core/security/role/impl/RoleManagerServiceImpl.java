@@ -1,6 +1,6 @@
 /*
  *
- * @version: $Id: RoleManagerServiceImpl.java 5032 2006-08-17 18:15:06Z novotny $
+ * @version: $Id$
  */
 package org.gridsphere.services.core.security.role.impl;
 

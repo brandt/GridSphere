@@ -11,7 +11,7 @@ import java.util.*;
 
 /**
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
- * @version $Id: PortletSessionManager.java 4985 2006-08-04 09:54:28Z novotny $
+ * @version $Id$
  */
 public class PortletSessionManager implements HttpSessionListener {
 

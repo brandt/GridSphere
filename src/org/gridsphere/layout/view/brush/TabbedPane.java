@@ -1,7 +1,7 @@
 /*
 * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
 * @author <a href="mailto:wehrens@aei.mpg.de">Oliver Wehrens</a>
-* @version $Id: TabbedPane.java 4496 2006-02-08 20:27:04Z wehrens $
+* @version $Id$
 */
 
 package org.gridsphere.layout.view.brush;
