@@ -204,11 +204,11 @@ public class GridSphereFilter implements Filter {
                     }
                     HttpSession session = req.getSession();
                     //capture after login redirect (GPF-463 feature) URI but not for:
-                    // - login layout
+                    // - login or register layout
                     // - logged in users
                     // - actions (security reasons)
                     // - sessions which already has captured URI
-                    if(!"login".equals(layoutId) && !"a".equals(phase) && null != session && null == session.getAttribute(SportletProperties.PORTLET_USER) && null == session.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH)){
+                    if(!"login".equals(layoutId) && !"register".equals(layoutId) && !"a".equals(phase) && null != session && null == session.getAttribute(SportletProperties.PORTLET_USER) && null == session.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH)){
                         String afterLoginRedirect = requestURI;
                         if(null != query){
                             afterLoginRedirect+='?'+query;
