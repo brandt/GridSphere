@@ -128,9 +128,9 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         int id = event.getID();
         while (it.hasNext()) {
             p = (PortletComponent) it.next();
-            // check for the frame that has been maximized
+            // check for the frame that has been maximized, set to 101%, means maximized
             if (p.getComponentID() == id) {
-                p.setWidth("100%");
+                p.setWidth("101%");
             } else {
                 // If this is not the right frame, make it invisible
                 p.setVisible(false);

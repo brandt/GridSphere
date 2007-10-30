@@ -94,7 +94,8 @@ public class PortletTableLayout extends PortletFrameLayout implements Serializab
                     p = layout;
                 }
             }
-            if (p.getWidth().equals("100%")) {
+            // little cheating, if set to 101%, it means this window is maximized
+            if (p.getWidth().equals("101%")) {
                 return p;
             }
         }
