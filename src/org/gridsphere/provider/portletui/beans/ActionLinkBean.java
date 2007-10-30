@@ -106,9 +106,9 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         } else if (style.equalsIgnoreCase(MessageStyle.MSG_BOLD)) {
             this.addCssStyle("font-weight: bold;");
         } else if (style.equalsIgnoreCase(MessageStyle.MSG_ITALIC)) {
-            this.addCssStyle("font-weight: italic;");
+            this.addCssStyle("font-style: italic;");
         } else if (style.equalsIgnoreCase(MessageStyle.MSG_UNDERLINE)) {
-            this.addCssStyle("font-weight: underline;");
+            this.addCssStyle("text-decoration: underline;");
         }
         StringBuffer sb = new StringBuffer();
         sb.append("<a");
