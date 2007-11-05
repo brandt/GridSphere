@@ -63,7 +63,7 @@ public class PortletTabbedPane extends PortletNavMenu implements Serializable, P
         for (int i = 0; i < tabs.size(); i++) {
             tab = (PortletTab) tabs.get(i);
             String tabRole = tab.getRequiredRole();
-            if (tabRole.equals("") || (req.isUserInRole(tabRole))) {
+            if (tabRole.equals("") || (req.isUserInRole(tabRole)) || req.isUserInRole("ADMIN")) {
                 pane.append(tabbedPaneView.doRenderTab(event, this, tab));
             } else {
                 // if role is < required role we try selecting the next possible tab

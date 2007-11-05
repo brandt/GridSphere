@@ -369,7 +369,8 @@ public class PortletPage extends BasePortletComponent implements Serializable, C
             if (comp != null) {
                 System.err.println("Calling action performed on " + comp.getClass().getName() + ": label=" + comp.getLabel());
                 String reqRole = comp.getRequiredRole();
-                if (reqRole.equals("") || req.isUserInRole(reqRole)) comp.actionPerformed(event);
+                if (reqRole.equals("") || req.isUserInRole(reqRole) || req.isUserInRole("ADMIN"))
+                    comp.actionPerformed(event);
             }
         }
     }

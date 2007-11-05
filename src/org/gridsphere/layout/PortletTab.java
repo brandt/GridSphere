@@ -269,7 +269,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         PortletRequest req = event.getRenderRequest();
         if (portletComponent == null) return;
         StringBuffer tab = new StringBuffer();
-        if ((requiredRoleName.equals("")) || (req.isUserInRole(requiredRoleName))) {
+        if ((requiredRoleName.equals("")) || (req.isUserInRole(requiredRoleName)) || req.isUserInRole("ADMIN")) {
             portletComponent.doRender(event);
             tab.append(portletComponent.getBufferedOutput(req));
         }
