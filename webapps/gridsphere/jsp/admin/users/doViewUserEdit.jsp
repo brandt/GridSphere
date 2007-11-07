@@ -14,9 +14,10 @@
 
 </h3>
 
+
 <p>
     <% if ((request.getAttribute("savePass") != null) && (request.getAttribute("newuser") == null)) { %>
-    <ui:text style="alert" key="USER_PASS_BLANK_MSG"/>
+    o <ui:text style="alert" key="USER_PASS_BLANK_MSG"/>
     <% } %>
 </p>
 <ui:form>
@@ -98,7 +99,8 @@
 </ui:frame>
 <% } %>
 
-<% if (request.getAttribute("savePass") != null) { %>
+<%-- why does this not work ... ?? --%>
+<%--<% if (request.getAttribute("savePass") != null) { %>--%>
 <ui:frame>
     <ui:tablerow>
         <ui:tablecell width="200">
@@ -118,7 +120,7 @@
         </ui:tablecell>
     </ui:tablerow>
 </ui:frame>
-<% } %>
+<%--<% } %>--%>
 
 <% if (request.getAttribute("newuser") != null) { %>
 <ui:checkbox beanId="emailUserCB"/>
