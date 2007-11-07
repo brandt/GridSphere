@@ -118,8 +118,7 @@ public class UserManagerPortlet extends ActionPortlet {
         setNextState(event.getActionRequest(), "doListUsers");
     }
 
-    public void doViewUser(ActionFormEvent evt)
-            throws PortletException {
+    public void doViewUser(ActionFormEvent evt) throws PortletException {
         PortletRequest req = evt.getActionRequest();
 
         String userID = evt.getAction().getParameter("userID");
@@ -163,8 +162,7 @@ public class UserManagerPortlet extends ActionPortlet {
         }
     }
 
-    public void doNewUser(ActionFormEvent evt)
-            throws PortletException {
+    public void doNewUser(ActionFormEvent evt) throws PortletException {
 
         PortletRequest req = evt.getActionRequest();
         req.setAttribute("newuser", "true");
@@ -237,8 +235,7 @@ public class UserManagerPortlet extends ActionPortlet {
         roleFrame.setTableModel(model);
     }
 
-    public void doEditUser(ActionFormEvent evt)
-            throws PortletException {
+    public void doEditUser(ActionFormEvent evt) throws PortletException {
 
         PortletRequest req = evt.getActionRequest();
 
@@ -286,8 +283,10 @@ public class UserManagerPortlet extends ActionPortlet {
 
         HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
         String newuser = hf.getValue();
+        hf.setValue(newuser);
         try {
             User user;
+
 
             log.debug("in doConfirmEditUser: " + newuser);
             if (newuser.equals("true")) {
@@ -316,10 +315,9 @@ public class UserManagerPortlet extends ActionPortlet {
             if (savePasswds.equals(Boolean.TRUE.toString())) {
                 req.setAttribute("savePass", "true");
             }
+            makeRoleFrame(evt, null);
             if (newuser.equals("true")) {
-                // setNextState(req, "doNewUser");
-            } else {
-
+                req.setAttribute("newuser", "true");
             }
             setNextState(req, DO_VIEW_USER_EDIT);
         }
