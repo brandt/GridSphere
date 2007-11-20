@@ -381,8 +381,8 @@ public class LoginPortlet extends ActionPortlet {
                     if(null == userDescriptor)
                         throw new AuthenticationException("Late user retrieval module did not return user descriptor");
                     //TODO: substitute with localized messages
-                    if(null == userDescriptor.getUserName() && null == userDescriptor.getEmailAddress())
-                        throw new AuthenticationException("Late user retrieval module did not return user descriptor containing login name or email");
+                    if(null == userDescriptor.getUserName() && null == userDescriptor.getEmailAddress() && null == userDescriptor.getID())
+                        throw new AuthenticationException("Late user retrieval module did not return user descriptor containing login name or email or id");
 
                     User tmpUser = null;
                     //obtain user by user name or email or id
@@ -402,7 +402,7 @@ public class LoginPortlet extends ActionPortlet {
                     }
                     //TODO: substitute with localized messages
                     if(null == tmpUser)
-                        throw new AuthenticationException("Login name returned by late user retrieval is invalid");
+                        throw new AuthenticationException("User descriptor returned by late user retrieval is invalid");
 
                     //check if user descriptor matches user object
 
