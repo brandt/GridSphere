@@ -1,4 +1,5 @@
 <%@ page import="org.gridsphere.provider.portletui.beans.MessageStyle"%>
+<%@ page import="java.io.StringWriter" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 
 
@@ -8,13 +9,18 @@
 <% if (error != null) { %>
 <ui:messagebox style="<%= MessageStyle.MSG_ALERT %>" value="An error occurred!"/>
 
-<% if (error.getMessage() != null) { %>
-Error message:    <%= error.getMessage() %>
+<% if (error.getMessage() != null) {
+        String errorMsg = error.getMessage().replaceAll("<","&lt;").replaceAll(">","&gt;");
+%>
+Error message:    <%= errorMsg %>
 <% } %>
 
 <p>
     <b>Stack Trace:</b><br/>
-    <% error.printStackTrace(new java.io.PrintWriter(out)); %>
+    <%
+        StringWriter stringWriter = new StringWriter();
+        error.printStackTrace(new java.io.PrintWriter(stringWriter));
+    %><%= stringWriter.toString().replaceAll("<","&lt;").replaceAll(">","&gt;") %>
 </p>
 
 <% } else { %>
