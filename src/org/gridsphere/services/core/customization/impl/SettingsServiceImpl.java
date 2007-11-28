@@ -2,6 +2,8 @@ package org.gridsphere.services.core.customization.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.oro.text.regex.MatchResult;
+import org.apache.oro.text.perl.Perl5Util;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
@@ -20,6 +22,7 @@ public class SettingsServiceImpl implements PortletServiceProvider, SettingsServ
 
     private Log log = LogFactory.getLog(GridSphereServlet.class);
     private String settingsPath = System.getProperty("user.home") + File.separator + ".gridsphere";
+    private Perl5Util util = new Perl5Util();
 
     /**
      * Checks if the JNDI variable for storing gs settings data is set, if not the default is assumed
@@ -36,9 +39,20 @@ public class SettingsServiceImpl implements PortletServiceProvider, SettingsServ
             Context initCtx = new InitialContext();
             javax.naming.Context env = (Context) initCtx.lookup("java:comp/env");
             settingsPath = (String) env.lookup("gridspheresettingsdir");
+
+            //GPF-480 feature: change ${ENV.SYS_VAR_NAME} to value of system environment variable with named "SYS_VAR_NAME"
+            while(util.match("m/\\$\\{ENV\\.([^}]+)\\}/",settingsPath)){
+                MatchResult matchResult = util.getMatch();
+                String systemEnvironmentVariableName = matchResult.group(1);
+                //can cause NPE if system environment variable was not set
+                settingsPath = settingsPath.replaceAll("\\$\\{ENV\\."+systemEnvironmentVariableName+"\\}",System.getenv(systemEnvironmentVariableName));
+            }
             log.info("Got config settings from JNDI");
         } catch (NamingException e) {
             // it does not exist, which is ok as well, we just use the default
+            settingsPath = System.getProperty("user.home") + File.separator + ".gridsphere";
+        } catch (NullPointerException e) {
+            // it exists, but some of system environment variable used in it's value was not set
             settingsPath = System.getProperty("user.home") + File.separator + ".gridsphere";
         }
         // check if the path exist, if not create it and copy the template files (from WEB-INF/CustomPortal) to it
