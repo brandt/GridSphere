@@ -239,7 +239,7 @@ public class LoginPortlet extends ActionPortlet {
         //req.setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
 
 
-        String realuri = redirectURL.toString().substring("http".length());
+        String realuri = redirectURL.substring(redirectURL.startsWith("https")?"https".length():"http".length());
         Boolean useSecureRedirect = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.USE_HTTPS_REDIRECT));
         if (useSecureRedirect.booleanValue()) {
             realuri = "https" + realuri;
@@ -250,7 +250,7 @@ public class LoginPortlet extends ActionPortlet {
         //after login redirect (GPF-463 feature) to URI from session
         String redirectURI = (String) ((HttpServletRequest)req).getSession().getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
         if(null != redirectURI){
-            realuri = realuri.substring(0,realuri.indexOf('/',7))+redirectURI;
+            realuri = realuri.substring(0,realuri.indexOf('/',8))+redirectURI;
         }
 
         //mark request as successfull login in order to invoke doAfterLogin (GPF-457 fix)
