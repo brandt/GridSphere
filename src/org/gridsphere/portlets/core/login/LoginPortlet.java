@@ -239,12 +239,21 @@ public class LoginPortlet extends ActionPortlet {
         //req.setAttribute(SportletProperties.LAYOUT_PAGE, PortletPageFactory.USER_PAGE);
 
 
-        String realuri = redirectURL.substring(redirectURL.startsWith("https")?"https".length():"http".length());
+        String realuri = null;
         Boolean useSecureRedirect = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.USE_HTTPS_REDIRECT));
         if (useSecureRedirect.booleanValue()) {
-            realuri = "https" + realuri;
+            if(redirectURL.startsWith("https")){
+                realuri = redirectURL;
+            }else{
+                realuri = "https" + redirectURL.substring("http".length());
+                String port = portalConfigService.getProperty(PortalConfigService.PORTAL_PORT);
+                String securePort = portalConfigService.getProperty(PortalConfigService.PORTAL_SECURE_PORT);
+                if(null != port && !"".equals(port) && null != securePort && !"".equals(securePort)){
+                    realuri = realuri.replaceAll(port,securePort);
+                }
+            }
         } else {
-            realuri = "http" + realuri;
+            realuri = redirectURL;
         }
 
         //after login redirect (GPF-463 feature) to URI from session
