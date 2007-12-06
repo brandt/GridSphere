@@ -92,6 +92,8 @@ public class TextAreaTag extends InputTag {
         if (onChange != null) textAreaBean.setOnChange(onChange);
         if (onBlur != null) textAreaBean.setOnBlur(onBlur);
         if (onSelect != null) textAreaBean.setOnSelect(onBlur);
+        if (cssClass != null) textAreaBean.setCssClass(cssClass);
+        if (cssStyle != null) textAreaBean.setCssStyle(cssStyle);
         //debug();
 
         try {
