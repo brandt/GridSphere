@@ -183,9 +183,9 @@ public class GridSphereFilter implements Filter {
                     String phase = (String) st.nextElement();
                     if (phase.equals("a")) {
                         if (st.hasMoreTokens()) {
-                            extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + (String) st.nextElement();
+                            extraInfo += "&" + SportletProperties.IS_ACTION + "=1" + "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + (String) st.nextElement();
                         } else {
-                            extraInfo += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=";
+                            extraInfo += "&" + SportletProperties.IS_ACTION + "=1";
                         }
                     } else if (phase.equals("r")) {
                         if (st.hasMoreTokens()) {

@@ -41,7 +41,11 @@ public class RenderSubmitTag extends ActionTag {
             renderSubmitBean = new RenderSubmitBean();
         }
 
-        if (onClick != null) renderSubmitBean.setOnClick(onClick);
+        if (onClick != null){
+            renderSubmitBean.setOnClick("this.form.action=this.form.action.replace('/a/','/r/');"+onClick);
+        }else{
+            renderSubmitBean.setOnClick("this.form.action=this.form.action.replace('/a/','/r/')");
+        }
 
         renderSubmitBean.setName(createActionURI());
         renderSubmitBean.setUseAjax(useAjax);

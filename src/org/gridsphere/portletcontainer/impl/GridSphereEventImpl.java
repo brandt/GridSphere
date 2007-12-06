@@ -88,7 +88,11 @@ public class GridSphereEventImpl implements GridSphereEvent {
     }
 
     public DefaultPortletAction createAction() {
-        DefaultPortletAction myaction = null;
+        String isAction = req.getParameter(SportletProperties.IS_ACTION);
+        if(null == isAction)
+            return null;
+
+        DefaultPortletAction myaction = new DefaultPortletAction("");
         String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
         if (actionStr != null) {
             myaction = new DefaultPortletAction(actionStr);

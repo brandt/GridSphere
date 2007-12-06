@@ -296,7 +296,7 @@ public abstract class ActionTag extends BaseComponentTag {
         this.useAjax = useAjax;
     }
 
-    protected String createURI(PortletURL url) throws JspException {
+    protected String createURI(PortletURL url, boolean isAction) throws JspException {
         // Builds a URI containing the actin and associated params
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
         //RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
@@ -339,13 +339,15 @@ public abstract class ActionTag extends BaseComponentTag {
                 portletPhase = new DefaultPortletAction(compId + "%" + action);
             }
         } else {
-            if (render == null) render = "";
-            if (compId == null) {
-                ((PortletURLImpl) url).setRender(render);
-                portletPhase = new DefaultPortletRender(render);
-            } else {
-                ((PortletURLImpl) url).setRender(compId + "%" + render);
-                portletPhase = new DefaultPortletRender(compId + "%" + render);
+            if (!isAction && render == null) render = "";
+            if (null != render) {
+                if (compId == null) {
+                    ((PortletURLImpl) url).setRender(render);
+                    portletPhase = new DefaultPortletRender(render);
+                } else {
+                    ((PortletURLImpl) url).setRender(compId + "%" + render);
+                    portletPhase = new DefaultPortletRender(compId + "%" + render);
+                }
             }
         }
 
@@ -386,12 +388,12 @@ public abstract class ActionTag extends BaseComponentTag {
 
     public String createActionURI() throws JspException {
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-        return createURI(res.createActionURL());
+        return createURI(res.createActionURL(), true);
     }
 
     public String createRenderURI() throws JspException {
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-        return createURI(res.createRenderURL());
+        return createURI(res.createRenderURL(), false);
     }
 
     public void release() {

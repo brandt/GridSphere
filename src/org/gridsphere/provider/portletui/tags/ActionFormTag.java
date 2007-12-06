@@ -74,19 +74,7 @@ public class ActionFormTag extends ActionTag {
 
             out.print("action=\"");
 
-            // if using JSR then create render link
-            RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-            String actionStr;
-            if (res != null) {
-                if (res instanceof RenderResponseImpl) {
-                    actionStr = createRenderURI();
-                } else {
-                    // if non-GS container this will have to be an ActionURL
-                    actionStr = createActionURI();
-                }
-            } else {
-                actionStr = createActionURI();
-            }
+            String actionStr = createActionURI();
 
             out.print(actionStr);
 

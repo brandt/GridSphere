@@ -127,6 +127,8 @@ public class SportletProperties {
 
     public static final String DEFAULT_PORTLET_ACTION_2 = "gs_action2";
 
+    public static final String IS_ACTION = "gs_isaction";
+
     public static final String DEFAULT_PORTLET_RENDER = "gs_render";
 
     public static final String DEFAULT_PORTLET_MESSAGE = "message";
