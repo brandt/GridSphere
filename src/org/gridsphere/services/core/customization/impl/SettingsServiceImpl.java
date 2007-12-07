@@ -45,7 +45,7 @@ public class SettingsServiceImpl implements PortletServiceProvider, SettingsServ
                 MatchResult matchResult = util.getMatch();
                 String systemEnvironmentVariableName = matchResult.group(1);
                 //can cause NPE if system environment variable was not set
-                settingsPath = settingsPath.replaceAll("\\$\\{ENV\\."+systemEnvironmentVariableName+"\\}",System.getenv(systemEnvironmentVariableName));
+                settingsPath = settingsPath.replaceAll("\\$\\{ENV\\."+systemEnvironmentVariableName+"\\}",System.getenv(systemEnvironmentVariableName).replace('\\','/'));
             }
             log.info("Got config settings from JNDI");
         } catch (NamingException e) {
