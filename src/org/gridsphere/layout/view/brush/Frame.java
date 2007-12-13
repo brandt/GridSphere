@@ -35,7 +35,7 @@ public class Frame extends BaseRender implements FrameView {
         ///// begin portlet frame
         StringBuffer frameBuffer = new StringBuffer();
         frameBuffer.append("\n<!-- |||||||||||| PORTLET STARTS HERE -->\n");
-        frameBuffer.append("<div id=\"").append(frame.getComponentID()).append("\"");
+        frameBuffer.append("<div id=\"").append(frame.getComponentIDAsString()).append("\"");
         if (frame.getOuterPadding().equals("")) {
             frameBuffer.append(" class=\"gridsphere-window-portlet\"");
         } else {

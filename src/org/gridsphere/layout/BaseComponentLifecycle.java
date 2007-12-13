@@ -55,6 +55,15 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
     }
 
     /**
+     * Returns the associated portlet component id
+     *
+     * @return the portlet component id
+     */
+    public String getComponentIDAsString() {
+        return componentIDStr;
+    }
+
+    /**
      * Sets the associated portlet component id
      *
      * @param compId the portlet component id

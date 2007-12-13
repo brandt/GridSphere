@@ -56,6 +56,13 @@ public interface ComponentLifecycle extends Cloneable {
     public int getComponentID();
 
     /**
+     * Returns the associated portlet component id
+     *
+     * @return the portlet component id
+     */
+    public String getComponentIDAsString();
+
+    /**
      * Sets the associated portlet component id
      *
      * @param compId the portlet component id

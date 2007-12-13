@@ -650,7 +650,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         try {
             MailService mailService = (MailService) PortletServiceFactory.createPortletService(MailService.class, true);
             Boolean sendMail = Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.ENABLE_ERROR_HANDLING));
-            if (sendMail.booleanValue()) {
+            if (sendMail) {
                 MailMessage mailToUser = new MailMessage();
                 String noreply = portalConfigService.getProperty(PortalConfigService.MAIL_FROM);
                 mailToUser.setSender(noreply);
