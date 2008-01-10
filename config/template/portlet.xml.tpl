@@ -17,7 +17,7 @@
             <name>aname</name>
             <value>avalue</value>
         </init-param>
-	<!-- place supported modes here -->
+        <!-- place supported modes here -->
         <supports>
             <mime-type>text/html</mime-type>
             <portlet-mode>configure</portlet-mode>
@@ -44,10 +44,7 @@
             </preference>
         </portlet-preferences>
     </portlet>
-    <custom-portlet-mode>
-        <description xml:lang="en">Pre-defined custom portlet mode CONFIGURE</description>
-        <portlet-mode>CONFIGURE</portlet-mode>
-    </custom-portlet-mode>
+
     <user-attribute>
         <description xml:lang="en">User Name</description>
         <name>user.name</name>
