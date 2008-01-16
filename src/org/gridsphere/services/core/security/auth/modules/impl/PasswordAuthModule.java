@@ -18,7 +18,7 @@ public class PasswordAuthModule extends BaseAuthModule implements LoginAuthModul
 
     private PasswordManagerService passwordManager = null;
 
-    private static Log log = LogFactory.getLog(PasswordAuthModule.class);
+    private Log log = LogFactory.getLog(PasswordAuthModule.class);
 
     public PasswordAuthModule(AuthModuleDefinition moduleDef) {
 

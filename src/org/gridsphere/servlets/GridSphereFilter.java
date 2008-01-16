@@ -50,7 +50,7 @@ public class GridSphereFilter implements Filter {
 
     private static Boolean firstDoGet = Boolean.TRUE;
 
-    private static Log log = LogFactory.getLog(GridSphereFilter.class);
+    private Log log = LogFactory.getLog(GridSphereFilter.class);
 
     private ServletContext context = null;
 

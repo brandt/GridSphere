@@ -16,7 +16,7 @@ import java.util.*;
 public class PortletSessionManager implements HttpSessionListener {
 
     private static PortletSessionManager instance = new PortletSessionManager();
-    private static Log log = LogFactory.getLog(PortletSessionManager.class);
+    private Log log = LogFactory.getLog(PortletSessionManager.class);
 
     private Hashtable sessions = new Hashtable();
     private Hashtable sessionListeners = new Hashtable();

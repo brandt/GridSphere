@@ -23,7 +23,7 @@ import java.util.Calendar;
 
 public class PasswordManagerServiceImpl implements PortletServiceProvider, PasswordManagerService {
 
-    private static Log log = LogFactory.getLog(PasswordManagerServiceImpl.class);
+    private Log log = LogFactory.getLog(PasswordManagerServiceImpl.class);
     private PersistenceManagerRdbms pm = null;
     private String userPasswordImpl = PasswordImpl.class.getName();
 

@@ -20,7 +20,7 @@ import java.io.IOException;
 
 public class SettingsServiceImpl implements PortletServiceProvider, SettingsService {
 
-    private static Log log = LogFactory.getLog(GridSphereServlet.class);
+    private Log log = LogFactory.getLog(GridSphereServlet.class);
     private String settingsPath = System.getProperty("user.home") + File.separator + ".gridsphere";
     private Perl5Util util = new Perl5Util();
 

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SessionImpl {
 
-    private static Log log = LogFactory.getLog(SessionImpl.class);
+    private Log log = LogFactory.getLog(SessionImpl.class);
 
     private org.hibernate.Session hbSession = null;
 
@@ -274,8 +274,8 @@ public class SessionImpl {
      * Completely clear the session. Evict all loaded instances and cancel all pending
      * saves, updates and deletions. Do not close open iterators or instances of
      * <tt>ScrollableResults</tt>.
-	 */
-	public void clear() {
+     */
+    public void clear() {
         this.hbSession.clear();
     }
 }

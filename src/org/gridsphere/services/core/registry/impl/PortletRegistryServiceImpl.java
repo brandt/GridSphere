@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class PortletRegistryServiceImpl implements PortletRegistryService, PortletServiceProvider {
 
-    private static Log log = LogFactory.getLog(PortletRegistryServiceImpl.class);
+    private Log log = LogFactory.getLog(PortletRegistryServiceImpl.class);
 
     private static Map<String, ApplicationPortlet> allApplicationPortlets = null;
     private static Map<String, PortletWebApplication> webApps = null;

@@ -14,7 +14,7 @@ public class JaasCallbackHandler implements CallbackHandler {
     protected String username = null;
     protected String password = null;
 
-    private static Log log = LogFactory.getLog(JaasCallbackHandler.class);
+    private Log log = LogFactory.getLog(JaasCallbackHandler.class);
 
     public JaasCallbackHandler(String username, String password) {
         super();

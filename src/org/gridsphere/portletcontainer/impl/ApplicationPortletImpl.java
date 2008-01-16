@@ -35,7 +35,7 @@ import java.util.*;
  */
 public class ApplicationPortletImpl implements ApplicationPortlet, Comparable {
 
-    private static Log log = LogFactory.getLog(ApplicationPortletImpl.class);
+    private Log log = LogFactory.getLog(ApplicationPortletImpl.class);
     private PortletDefinition portletDef = null;
 
     private String portletClassName = null;

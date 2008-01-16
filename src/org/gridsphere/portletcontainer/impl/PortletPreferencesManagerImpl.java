@@ -21,7 +21,7 @@ import javax.portlet.PreferencesValidator;
  */
 public class PortletPreferencesManagerImpl implements PortletPreferencesManager {
 
-    private static Log log = LogFactory.getLog(PortletPreferencesManagerImpl.class);
+    private Log log = LogFactory.getLog(PortletPreferencesManagerImpl.class);
 
     private PersistenceManagerRdbms pm = null;
 

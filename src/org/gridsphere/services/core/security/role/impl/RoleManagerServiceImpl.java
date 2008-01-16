@@ -23,7 +23,7 @@ import java.util.List;
 
 public class RoleManagerServiceImpl implements PortletServiceProvider, RoleManagerService {
 
-    private static Log log = LogFactory.getLog(RoleManagerServiceImpl.class);
+    private Log log = LogFactory.getLog(RoleManagerServiceImpl.class);
 
     private PersistenceManagerRdbms pm = null;
 

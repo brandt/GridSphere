@@ -22,7 +22,7 @@ import javax.servlet.jsp.PageContext;
 
 public class ActionComponentTag extends IncludeTag {
 
-    private static Log log = LogFactory.getLog(ActionComponentTag.class);
+    private Log log = LogFactory.getLog(ActionComponentTag.class);
     private String activeCompId = "";
 
     protected String getActiveComponentId() {
@@ -40,14 +40,14 @@ public class ActionComponentTag extends IncludeTag {
         ServletRequest request = pageContext.getRequest();
         ServletResponse response = pageContext.getResponse();
 
-        String baseCompId = (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
+        String baseCompId = (String) pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
 
         if (includeBean != null) {
             //log.debug("Using active component id ");
             activeCompId = ((ActionComponentBean) includeBean).getActiveComponentId();
         } else {
             //log.debug("Using request component id ");
-            activeCompId = (String)pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
+            activeCompId = (String) pageContext.findAttribute(SportletProperties.GP_COMPONENT_ID);
         }
 
         //log.debug("Changing component id from " + baseCompId + " to " + activeCompId);
@@ -69,7 +69,7 @@ public class ActionComponentTag extends IncludeTag {
             // Or else this include won't be contained within the parent content
             // but either before or after it.
             //rd.include(request, new ServletResponseWrapperInclude(response, pageContext.getOut()));
-            rd.include(request, new StoredPortletResponseImpl((HttpServletRequest)request, (HttpServletResponse) response, pageContext.getOut()));
+            rd.include(request, new StoredPortletResponseImpl((HttpServletRequest) request, (HttpServletResponse) response, pageContext.getOut()));
             //rd.include(pageContext.getRequest(), pageContext.getResponse());
         } catch (Exception e) {
             log.error("Unable to include page ", e);

@@ -16,7 +16,7 @@ public class JaasAuthModule extends BaseAuthModule implements LoginAuthModule {
 
     private String contextName = "Gridsphere";
 
-    private static Log log = LogFactory.getLog(JaasAuthModule.class);
+    private Log log = LogFactory.getLog(JaasAuthModule.class);
 
     public JaasAuthModule(AuthModuleDefinition moduleDef) {
         super(moduleDef);

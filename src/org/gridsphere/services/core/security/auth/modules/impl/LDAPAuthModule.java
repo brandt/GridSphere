@@ -6,10 +6,10 @@ package org.gridsphere.services.core.security.auth.modules.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
+import org.gridsphere.services.core.user.User;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -22,7 +22,7 @@ import java.util.Hashtable;
  */
 public class LDAPAuthModule extends BaseAuthModule implements LoginAuthModule {
 
-    private static Log log = LogFactory.getLog(LDAPAuthModule.class);
+    private Log log = LogFactory.getLog(LDAPAuthModule.class);
 
     private static final String SZTAKI = "ldap://n0.iit.bme.hu:389";
     private static final String SZTAKI_DN = "ou=People, dc=ikpc, dc=iit, dc=bme, dc=hu";

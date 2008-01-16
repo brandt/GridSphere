@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class PortalFilterDescriptor {
 
-    private static Log log = LogFactory.getLog(PortalFilterDescriptor.class);
+    private Log log = LogFactory.getLog(PortalFilterDescriptor.class);
     private List<PortalFilter> portalFilters = new ArrayList<PortalFilter>();
     private URL FILTER_MAPPING_PATH = getClass().getResource("/org/gridsphere/filters/portal-filters-mapping.xml");
 

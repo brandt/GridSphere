@@ -54,7 +54,7 @@ import java.util.List;
  */
 public class GridSphereServlet extends HttpServlet implements ServletContextListener, HttpSessionListener {
 
-    private static Log log = LogFactory.getLog(GridSphereServlet.class);
+    private Log log = LogFactory.getLog(GridSphereServlet.class);
 
     /* GridSphere Portlet Registry Service */
     private PortletManagerService portletManager = null;

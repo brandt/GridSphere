@@ -19,7 +19,7 @@ import org.gridsphere.services.core.persistence.impl.CreateDatabase;
  */
 public class DBTask extends Task {
 
-    private static Log log = LogFactory.getLog(DBTask.class);
+    private Log log = LogFactory.getLog(DBTask.class);
 
     private CreateDatabase createDB = new CreateDatabase();
 

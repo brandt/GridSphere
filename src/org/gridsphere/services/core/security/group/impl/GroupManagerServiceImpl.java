@@ -22,7 +22,7 @@ import java.util.Vector;
 
 public class GroupManagerServiceImpl implements PortletServiceProvider, GroupManagerService {
 
-    private static Log log = LogFactory.getLog(GroupManagerServiceImpl.class);
+    private Log log = LogFactory.getLog(GroupManagerServiceImpl.class);
 
     private PersistenceManagerRdbms pm = null;
 

@@ -34,7 +34,7 @@ import java.util.*;
  */
 public class PortletManagerServiceImpl implements PortletManagerService, PortletServiceProvider {
 
-    private static Log log = LogFactory.getLog(PortletManagerServiceImpl.class);
+    private Log log = LogFactory.getLog(PortletManagerServiceImpl.class);
 
     private ServletContext context = null;
 

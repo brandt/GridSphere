@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class AuthModuleServiceImpl implements AuthModuleService, PortletServiceProvider {
 
-    private static Log log = LogFactory.getLog(AuthModuleServiceImpl.class);
+    private Log log = LogFactory.getLog(AuthModuleServiceImpl.class);
 
     private List<LoginAuthModule> authModules = new ArrayList<LoginAuthModule>();
 
