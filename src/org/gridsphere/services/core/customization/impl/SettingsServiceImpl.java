@@ -2,8 +2,8 @@ package org.gridsphere.services.core.customization.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.perl.Perl5Util;
+import org.apache.oro.text.regex.MatchResult;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
@@ -20,7 +20,7 @@ import java.io.IOException;
 
 public class SettingsServiceImpl implements PortletServiceProvider, SettingsService {
 
-    private Log log = LogFactory.getLog(GridSphereServlet.class);
+    private static Log log = LogFactory.getLog(GridSphereServlet.class);
     private String settingsPath = System.getProperty("user.home") + File.separator + ".gridsphere";
     private Perl5Util util = new Perl5Util();
 
@@ -41,11 +41,11 @@ public class SettingsServiceImpl implements PortletServiceProvider, SettingsServ
             settingsPath = (String) env.lookup("gridspheresettingsdir");
 
             //GPF-480 feature: change ${ENV.SYS_VAR_NAME} to value of system environment variable with named "SYS_VAR_NAME"
-            while(util.match("m/\\$\\{ENV\\.([^}]+)\\}/",settingsPath)){
+            while (util.match("m/\\$\\{ENV\\.([^}]+)\\}/", settingsPath)) {
                 MatchResult matchResult = util.getMatch();
                 String systemEnvironmentVariableName = matchResult.group(1);
                 //can cause NPE if system environment variable was not set
-                settingsPath = settingsPath.replaceAll("\\$\\{ENV\\."+systemEnvironmentVariableName+"\\}",System.getenv(systemEnvironmentVariableName).replace('\\','/'));
+                settingsPath = settingsPath.replaceAll("\\$\\{ENV\\." + systemEnvironmentVariableName + "\\}", System.getenv(systemEnvironmentVariableName).replace('\\', '/'));
             }
             log.info("Got config settings from JNDI");
         } catch (NamingException e) {

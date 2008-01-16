@@ -24,7 +24,7 @@ import java.util.Properties;
  */
 public class PortalConfigServiceImpl implements PortletServiceProvider, PortalConfigService {
 
-    private Log log = LogFactory.getLog(PortalConfigServiceImpl.class);
+    private static Log log = LogFactory.getLog(PortalConfigServiceImpl.class);
 
     protected Properties props = new Properties();
     protected ServletContext ctx = null;

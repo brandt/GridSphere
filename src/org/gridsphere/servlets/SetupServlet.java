@@ -41,7 +41,7 @@ import java.util.Properties;
  */
 public class SetupServlet extends HttpServlet {
 
-    private Log log = LogFactory.getLog(SetupServlet.class);
+    private static Log log = LogFactory.getLog(SetupServlet.class);
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
     private RoleManagerService roleService = null;
     private UserManagerService userManagerService = null;

@@ -50,7 +50,7 @@ public class GridSphereFilter implements Filter {
 
     private static Boolean firstDoGet = Boolean.TRUE;
 
-    private Log log = LogFactory.getLog(GridSphereFilter.class);
+    private static Log log = LogFactory.getLog(GridSphereFilter.class);
 
     private ServletContext context = null;
 
@@ -208,10 +208,10 @@ public class GridSphereFilter implements Filter {
                     // - logged in users
                     // - actions (security reasons)
                     // - sessions which already has captured URI
-                    if(!"login".equals(layoutId) && !"register".equals(layoutId) && !"a".equals(phase) && null != session && null == session.getAttribute(SportletProperties.PORTLET_USER) && null == session.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH)){
+                    if (!"login".equals(layoutId) && !"register".equals(layoutId) && !"a".equals(phase) && null != session && null == session.getAttribute(SportletProperties.PORTLET_USER) && null == session.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH)) {
                         String afterLoginRedirect = requestURI;
-                        if(null != query){
-                            afterLoginRedirect+='?'+query;
+                        if (null != query) {
+                            afterLoginRedirect += '?' + query;
                         }
                         session.setAttribute(SportletProperties.PORTAL_REDIRECT_PATH, afterLoginRedirect);
                     }

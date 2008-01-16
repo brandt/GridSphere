@@ -34,7 +34,7 @@ import java.util.*;
  */
 public class PortletManagerServiceImpl implements PortletManagerService, PortletServiceProvider {
 
-    private Log log = LogFactory.getLog(PortletManagerServiceImpl.class);
+    private static Log log = LogFactory.getLog(PortletManagerServiceImpl.class);
 
     private ServletContext context = null;
 
@@ -113,7 +113,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
         PORTLETS_PATH = settingsService.getRealSettingsPath("portlets");
 
         File f = new File(settingsService.getRealSettingsPath("portlets"));
-        
+
         if (f.exists() && f.isDirectory()) {
 
             // add the portal to the top spot (usually the name is '..../gridsphere' but could be something else, look at

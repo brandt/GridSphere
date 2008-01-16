@@ -328,7 +328,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
             sb.append("<p>"); // added for XHTML 1.0 Strict compliance
             String showPages = TableBean.SHOW_PAGES;
             showPages = "rp_" + showPages;
-            sb.append("<a href=\"" + uri + "&amp;" + showPages + "\">" + this.getLocalizedText("SHOW_PAGES") + "</a>");
+            sb.append("<a href=\"" + uri + "?" + showPages + "\">" + this.getLocalizedText("SHOW_PAGES") + "</a>");
             sb.append("</p>"); // added for XHTML 1.0 Strict compliance
         }
         if (maxRows > 0) {

@@ -7,8 +7,8 @@ package org.gridsphere.portletcontainer.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.impl.PortletPreferencesImpl;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.PortletPreferencesManager;
 import org.gridsphere.services.core.persistence.PersistenceManagerRdbms;
 import org.gridsphere.services.core.persistence.PersistenceManagerService;
@@ -21,7 +21,7 @@ import javax.portlet.PreferencesValidator;
  */
 public class PortletPreferencesManagerImpl implements PortletPreferencesManager {
 
-    private Log log = LogFactory.getLog(PortletPreferencesManagerImpl.class);
+    private static Log log = LogFactory.getLog(PortletPreferencesManagerImpl.class);
 
     private PersistenceManagerRdbms pm = null;
 
@@ -32,7 +32,7 @@ public class PortletPreferencesManagerImpl implements PortletPreferencesManager 
     private boolean isRender = true;
 
     public PortletPreferencesManagerImpl(org.gridsphere.portletcontainer.impl.descriptor.PortletPreferences prefsDesc, PreferencesValidator validator) {
-        PersistenceManagerService pms = (PersistenceManagerService)PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
+        PersistenceManagerService pms = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
         pm = pms.createGridSphereRdbms();
         this.prefsDesc = prefsDesc;
         this.validator = validator;
@@ -47,7 +47,7 @@ public class PortletPreferencesManagerImpl implements PortletPreferencesManager 
     }
 
     public void setRender(boolean isRender) {
-        this.isRender= isRender;
+        this.isRender = isRender;
     }
 
 

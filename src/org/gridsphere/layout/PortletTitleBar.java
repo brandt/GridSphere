@@ -37,7 +37,7 @@ import java.util.*;
  */
 public class PortletTitleBar extends BasePortletComponent implements Serializable, Cloneable {
 
-    private Log log = LogFactory.getLog(PortletTitleBar.class);
+    private static Log log = LogFactory.getLog(PortletTitleBar.class);
 
     private String title = "unknown title";
     private String portletClass = null;

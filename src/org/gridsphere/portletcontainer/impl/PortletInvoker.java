@@ -24,7 +24,7 @@ import java.io.IOException;
  */
 public class PortletInvoker {
 
-    private Log log = LogFactory.getLog(PortletInvoker.class);
+    private static Log log = LogFactory.getLog(PortletInvoker.class);
     private PortletRegistryService registry = null;
 
     public PortletInvoker() {

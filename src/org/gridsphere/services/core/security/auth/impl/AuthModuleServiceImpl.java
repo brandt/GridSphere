@@ -20,7 +20,6 @@ import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthMo
 import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModulesDescriptor;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,7 +32,7 @@ import java.util.List;
  */
 public class AuthModuleServiceImpl implements AuthModuleService, PortletServiceProvider {
 
-    private Log log = LogFactory.getLog(AuthModuleServiceImpl.class);
+    private static Log log = LogFactory.getLog(AuthModuleServiceImpl.class);
 
     private List<LoginAuthModule> authModules = new ArrayList<LoginAuthModule>();
 

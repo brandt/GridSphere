@@ -25,7 +25,7 @@ import java.util.*;
  */
 public class CreateDatabase {
 
-    private Log log = LogFactory.getLog(CreateDatabase.class);
+    private static Log log = LogFactory.getLog(CreateDatabase.class);
 
     public final static String ACTION_CREATE = "CREATE";
     public final static String ACTION_UPDATE = "UPDATE";

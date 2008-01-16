@@ -5,7 +5,6 @@ package org.gridsphere.services.core.security.password.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
@@ -16,26 +15,28 @@ import org.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridsphere.services.core.security.password.Password;
 import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridsphere.services.core.user.User;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 
-public class PasswordManagerServiceImpl
-        implements PortletServiceProvider, PasswordManagerService {
+public class PasswordManagerServiceImpl implements PortletServiceProvider, PasswordManagerService {
 
-    private Log log = LogFactory.getLog(PasswordManagerServiceImpl.class);
+    private static Log log = LogFactory.getLog(PasswordManagerServiceImpl.class);
     private PersistenceManagerRdbms pm = null;
     private String userPasswordImpl = PasswordImpl.class.getName();
 
-    public PasswordManagerServiceImpl() {}
+    public PasswordManagerServiceImpl() {
+    }
 
     public void init(PortletServiceConfig config) {
         PersistenceManagerService pmservice = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);
         pm = pmservice.createGridSphereRdbms();
     }
 
-    public void destroy() {}
+    public void destroy() {
+    }
 
     public Password getPassword(User user) {
         return getPasswordImpl(user);
@@ -51,7 +52,7 @@ public class PasswordManagerServiceImpl
                 + this.userPasswordImpl
                 + " pw where pw.sportletUser.oid='" + user.getID() + "'";
         try {
-            password = (PasswordImpl)pm.restore(query);
+            password = (PasswordImpl) pm.restore(query);
         } catch (PersistenceManagerException e) {
             log.error("Unable to retrieve password for user", e);
         }

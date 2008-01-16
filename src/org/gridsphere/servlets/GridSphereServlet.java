@@ -54,7 +54,7 @@ import java.util.List;
  */
 public class GridSphereServlet extends HttpServlet implements ServletContextListener, HttpSessionListener {
 
-    private Log log = LogFactory.getLog(GridSphereServlet.class);
+    private static Log log = LogFactory.getLog(GridSphereServlet.class);
 
     /* GridSphere Portlet Registry Service */
     private PortletManagerService portletManager = null;
@@ -94,6 +94,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             descriptor = new PortletServiceDescriptor(descriptorPath);
             PortletServiceCollection serviceCollection = descriptor.getServiceCollection();
             PortletServiceFactory.addServices("gridsphere", config.getServletContext(), serviceCollection, Thread.currentThread().getContextClassLoader());
+            PortletServiceFactory.addSpringServices(config.getServletContext());
         } catch (PersistenceManagerException e) {
             //log.error("error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
             throw new PortletServiceException("error unmarshalling " + descriptorPath, e);
@@ -118,14 +119,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         PersistenceManagerRdbms pm = null;
         try {
-            log.info("Starting a database transaction");
+            log.debug("Starting a database transaction");
 
             pm = pms.createGridSphereRdbms();
             pm.beginTransaction();
 
             processRequest(req, res);
             // Commit and cleanup
-            log.info("Committing the database transaction");
+            log.debug("Committing the database transaction");
 
             pm.endTransaction();
         } catch (StaleObjectStateException staleEx) {

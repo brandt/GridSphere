@@ -6,19 +6,19 @@ package org.gridsphere.services.core.security.auth.modules.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.gridsphere.services.core.user.User;
 import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
 import org.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridsphere.services.core.user.User;
 
 public class PasswordAuthModule extends BaseAuthModule implements LoginAuthModule {
 
     private PasswordManagerService passwordManager = null;
 
-    private Log log = LogFactory.getLog(PasswordAuthModule.class);
+    private static Log log = LogFactory.getLog(PasswordAuthModule.class);
 
     public PasswordAuthModule(AuthModuleDefinition moduleDef) {
 
@@ -26,7 +26,7 @@ public class PasswordAuthModule extends BaseAuthModule implements LoginAuthModul
 
         // Get instance of password manager service
         try {
-            this.passwordManager = (PasswordManagerService)PortletServiceFactory.createPortletService(PasswordManagerService.class, true);
+            this.passwordManager = (PasswordManagerService) PortletServiceFactory.createPortletService(PasswordManagerService.class, true);
         } catch (Exception e) {
             log.error("Unable to get instance of password manager service!", e);
         }

@@ -14,7 +14,7 @@ public class JaasCallbackHandler implements CallbackHandler {
     protected String username = null;
     protected String password = null;
 
-    private Log log = LogFactory.getLog(JaasCallbackHandler.class);
+    private static Log log = LogFactory.getLog(JaasCallbackHandler.class);
 
     public JaasCallbackHandler(String username, String password) {
         super();
@@ -23,7 +23,7 @@ public class JaasCallbackHandler implements CallbackHandler {
     }
 
     public void handle(Callback callbacks[])
-        throws IOException, UnsupportedCallbackException {
+            throws IOException, UnsupportedCallbackException {
         for (int i = 0; i < callbacks.length; i++) {
             if (callbacks[i] instanceof NameCallback) {
                 if (log.isDebugEnabled()) log.debug("responding to NameCallback");

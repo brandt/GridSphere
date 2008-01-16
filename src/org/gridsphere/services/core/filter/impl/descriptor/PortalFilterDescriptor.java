@@ -2,14 +2,13 @@ package org.gridsphere.services.core.filter.impl.descriptor;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portletcontainer.impl.JavaXMLBindingFactory;
 import org.gridsphere.services.core.filter.PortalFilter;
 import org.gridsphere.services.core.filter.PortalFilterConfig;
 import org.gridsphere.services.core.filter.impl.PortalFilterConfigImpl;
-import org.gridsphere.portletcontainer.impl.JavaXMLBindingFactory;
 import org.gridsphere.services.core.persistence.PersistenceManagerException;
 import org.gridsphere.services.core.persistence.PersistenceManagerXml;
 
-import javax.servlet.ServletConfig;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.List;
  */
 public class PortalFilterDescriptor {
 
-    private Log log = LogFactory.getLog(PortalFilterDescriptor.class);
+    private static Log log = LogFactory.getLog(PortalFilterDescriptor.class);
     private List<PortalFilter> portalFilters = new ArrayList<PortalFilter>();
     private URL FILTER_MAPPING_PATH = getClass().getResource("/org/gridsphere/filters/portal-filters-mapping.xml");
 

@@ -18,7 +18,7 @@ import javax.servlet.ServletContext;
  */
 public class PortletWebApplicationLoader {
 
-    private Log log = LogFactory.getLog(PortletWebApplicationLoader.class);
+    private static Log log = LogFactory.getLog(PortletWebApplicationLoader.class);
 
     protected String webApplicationName = "Unknown portlet web application";
     protected String webAppDescription = "Unknown portlet web application description";

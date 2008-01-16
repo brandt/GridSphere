@@ -21,7 +21,7 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
     private static final long REQUEST_SWEEP_FREQUENCY = 5000 * 60; // 5 minute intervals
 
     private PersistenceManagerRdbms pm = null;
-    private Log log = LogFactory.getLog(RequestServiceImpl.class);
+    private static Log log = LogFactory.getLog(RequestServiceImpl.class);
     private Timer timer = null;
 
     private class RequestSweeperTask extends TimerTask {

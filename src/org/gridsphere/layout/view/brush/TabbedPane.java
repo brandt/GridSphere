@@ -60,6 +60,8 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
     private static String TAB_STYLE_SIDEMENU = "side-menu";
     private static String TAB_STYLE_TOPMENU = "top-menu";
 
+    private boolean canModify = false;
+
     /**
      * Constructs an instance of PortletTabbedPane
      */
@@ -103,6 +105,7 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
 
     public StringBuffer doStart(GridSphereEvent event, PortletComponent comp) {
         PortletTabbedPane pane = (PortletTabbedPane) comp;
+
         StringBuffer result = new StringBuffer();
         if (pane.getStyle().equalsIgnoreCase(TAB_STYLE_SUBMENU)) {
             result.append(TAB_START_SUBMENU);
@@ -137,7 +140,8 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
                 pane.append(" class=\"sub-nav-sel\"");
             }
             pane.append(">");
-            pane.append("<a href=\"").append(link).append("\">").append(replaceBlanks(title)).append("</a></li>\n");
+            pane.append("<a href=\"").append(link).append("\">").append(replaceBlanks(title)).append("</a>\n");
+            pane.append("</li>\n");
         }
         if (tabPane.getStyle().equalsIgnoreCase(TAB_STYLE_MENU) || tabPane.getStyle().equalsIgnoreCase(TAB_STYLE_TOPMENU)) {
             String selected = "nav-nonsel";
@@ -165,8 +169,8 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             if (title != null) {
                 pane.append(replaceBlanks(title));
             }
-
-            pane.append("</span></a></li>");
+            pane.append("</span></a>");
+            pane.append("</li>");
         }
         if (tabPane.getStyle().equalsIgnoreCase(TAB_STYLE_SIDEMENU)) {
             String selected = "";
@@ -176,6 +180,8 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
             pane.append("<li ").append(selected).append("><a href=\"").append(link).append("\">").
                     append(replaceBlanks(title)).append("</a></li>");
         }
+
+
         return pane;
     }
 
@@ -211,6 +217,11 @@ public class TabbedPane extends BaseRender implements TabbedPaneView {
     public StringBuffer doEndBorder(GridSphereEvent event, PortletComponent comp) {
         StringBuffer result = new StringBuffer();
         PortletTabbedPane pane = (PortletTabbedPane) comp;
+        if (pane.getCanModify()) {
+
+
+            result.append("<div style='float:right'>M2</div>");
+        }
         if (pane.getStyle().equalsIgnoreCase(TAB_STYLE_SUBMENU)) {
             result.append(TAB_END_SUBMENU);
             result.append("\n</div> <!--  END LAYOUT NAVIGATION -->\n<div id=\"gridsphere-layout-body\"> <!-- start the main portlets -->\n");

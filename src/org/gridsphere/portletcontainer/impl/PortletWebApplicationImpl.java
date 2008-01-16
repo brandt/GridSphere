@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class PortletWebApplicationImpl implements PortletWebApplication {
 
-    private Log log = LogFactory.getLog(PortletWebApplicationImpl.class);
+    private static Log log = LogFactory.getLog(PortletWebApplicationImpl.class);
     private PortletApp portletWebApp = null;
 
     protected Map<String, PortletDefinition> portletDefinitions = new Hashtable<String, PortletDefinition>();
