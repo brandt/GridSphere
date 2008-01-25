@@ -98,6 +98,8 @@ Build include file for the GridSphere Portal source code, see build.xml
         </copy>
         <copy file="config/mapping/auth-modules-mapping.xml"
               todir="${build.classes}/org/gridsphere/services/core/security/auth/modules/impl/descriptor"/>
+        <copy file="config/mapping/portlets-setup-modules-mapping.xml"
+              todir="${build.classes}/org/gridsphere/services/core/setup/modules/impl/descriptor"/>
         <jar jarfile="${build.lib}/gridsphere-portal-api-${gridsphere.version}.jar" basedir="${build.classes}">
             <!-- portlet container interfaces -->
             <include name="org/gridsphere/portletcontainer/**"/>

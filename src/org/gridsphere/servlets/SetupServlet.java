@@ -19,6 +19,8 @@ import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
 import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
+import org.gridsphere.services.core.setup.PortletsSetupModuleService;
+import org.gridsphere.services.core.setup.modules.impl.descriptor.PortletsSetupModuleStateDescriptor;
 import org.hibernate.StaleObjectStateException;
 
 import javax.portlet.PortletContext;
@@ -47,6 +49,7 @@ public class SetupServlet extends HttpServlet {
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordService = null;
     private PortalConfigService portalConfigService = null;
+    private PortletsSetupModuleService portletsSetupModuleService = null;
     private SettingsService settingsService = null;
 
     public void init(ServletConfig servletConfig) throws ServletException {
@@ -93,6 +96,7 @@ public class SetupServlet extends HttpServlet {
             userManagerService = (UserManagerService) PortletServiceFactory.createPortletService(UserManagerService.class, true);
             passwordService = (PasswordManagerService) PortletServiceFactory.createPortletService(PasswordManagerService.class, true);
             portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+            portletsSetupModuleService = (PortletsSetupModuleService) PortletServiceFactory.createPortletService(PortletsSetupModuleService.class, true);
 
             PersistenceManagerService pms = null;
 
@@ -128,6 +132,22 @@ public class SetupServlet extends HttpServlet {
 
             if (admins.isEmpty()) {
                 req.setAttribute(SportletProperties.LAYOUT_PAGE, "SetupAdmin");
+            } else if (!portletsSetupModuleService.isPrePortletsInitializingSetupDone()) {
+                try {
+                    PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = portletsSetupModuleService.getModuleStateDescriptor();
+                    setPrePortletsInitializationSetupAttributes(req, portletsSetupModuleStateDescriptor);
+                } catch (IllegalAccessException e) {
+                    portletsSetupModuleService.skipPrePortletsInitializingSetup();
+                    log.error("Could not process setup module", e);
+                }
+            } else if (!portletsSetupModuleService.isPostPortletsInitializingSetupDone()) {
+                try {
+                    PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = portletsSetupModuleService.getModuleStateDescriptor();
+                    setPostPortletsInitializationSetupAttributes(req, portletsSetupModuleStateDescriptor);
+                } catch (IllegalAccessException e) {
+                    portletsSetupModuleService.skipPostPortletsInitializingSetup();
+                    log.error("Could not process setup module", e);
+                }
             } else {
                 redirect(event);
                 return;
@@ -181,12 +201,68 @@ public class SetupServlet extends HttpServlet {
                     req.setAttribute(SportletProperties.LAYOUT_PAGE, "SetupAdmin");
                     createAdmin(event);
                 }
+                if (installType.equals("portlet")) {
+                    String setupType = req.getParameter(SportletProperties.PORTLET_SETUP_TYPE);
+                    String setupOperation = req.getParameter(SportletProperties.PORTLET_SETUP_OPERATION);
+                    if (setupType.equals(SportletProperties.PORTLET_SETUP_TYPE_PRE)) {
+                        if (setupOperation.toLowerCase().equals("skip")) {
+                            System.out.println("0125B SKIP");
+                            portletsSetupModuleService.skipPrePortletsInitializingSetup();
+                        } else {
+                            try {
+                                portletsSetupModuleService.invokePrePortletInitialization(req);
+                                PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = portletsSetupModuleService.getModuleStateDescriptor();
+                                setPrePortletsInitializationSetupAttributes(req, portletsSetupModuleStateDescriptor);  //for errors
+                            } catch (IllegalAccessException e) {
+                                portletsSetupModuleService.skipPrePortletsInitializingSetup();
+                                log.error("Could not process setup module", e);
+                            }
+                        }
+                    } else if (setupType.equals(SportletProperties.PORTLET_SETUP_TYPE_POST)) {
+                        if (setupOperation.toLowerCase().equals("skip")) {
+                            portletsSetupModuleService.skipPostPortletsInitializingSetup();
+                        } else {
+                            try {
+                                portletsSetupModuleService.invokePostPortletInitialization(req);
+                                PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = portletsSetupModuleService.getModuleStateDescriptor();
+                                setPostPortletsInitializationSetupAttributes(req, portletsSetupModuleStateDescriptor);  //for errors
+                            } catch (IllegalAccessException e) {
+                                portletsSetupModuleService.skipPostPortletsInitializingSetup();
+                                log.error("Could not process setup module", e);
+                            }
+                        }
+                    } else {
+                        System.out.println("DOCENTT 0116C: WTF");
+                        req.setAttribute(SportletProperties.LAYOUT_PAGE, "SetupPortlet");
+                        throw new IllegalArgumentException("WTF ???");
+                    }
+                }
             }
 
         } catch (IllegalArgumentException e) {
             req.getSession(true).setAttribute("error", e.getMessage());
         }
         redirect(event);
+    }
+
+    private void setPrePortletsInitializationSetupAttributes(HttpServletRequest req, PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor) {
+        req.setAttribute(SportletProperties.LAYOUT_PAGE, "SetupPortlet");
+        req.setAttribute(SportletProperties.PORTLET_SETUP_TYPE, SportletProperties.PORTLET_SETUP_TYPE_PRE);
+
+        req.setAttribute(SportletProperties.PORTLET_SETUP_PAGE_INCLUDE, portletsSetupModuleStateDescriptor.getJspFile());
+        req.setAttribute(SportletProperties.PORTLET_SETUP_PAGE_CONTEXT, portletsSetupModuleStateDescriptor.getContext());
+        req.setAttribute(SportletProperties.PORTLET_SETUP_TITLE, portletsSetupModuleStateDescriptor.getTitle());
+        req.setAttribute(SportletProperties.PORTLET_SETUP_DESCRIPTION, portletsSetupModuleStateDescriptor.getDescription());
+    }
+
+    private void setPostPortletsInitializationSetupAttributes(HttpServletRequest req, PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor) {
+        req.setAttribute(SportletProperties.LAYOUT_PAGE, "SetupPortlet");
+        req.setAttribute(SportletProperties.PORTLET_SETUP_TYPE, SportletProperties.PORTLET_SETUP_TYPE_POST);
+
+        req.setAttribute(SportletProperties.PORTLET_SETUP_PAGE_INCLUDE, portletsSetupModuleStateDescriptor.getJspFile());
+        req.setAttribute(SportletProperties.PORTLET_SETUP_PAGE_CONTEXT, portletsSetupModuleStateDescriptor.getContext());
+        req.setAttribute(SportletProperties.PORTLET_SETUP_TITLE, portletsSetupModuleStateDescriptor.getTitle());
+        req.setAttribute(SportletProperties.PORTLET_SETUP_DESCRIPTION, portletsSetupModuleStateDescriptor.getDescription());
     }
 
 

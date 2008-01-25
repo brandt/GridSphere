@@ -287,9 +287,9 @@ public class ApplicationPortletImpl implements ApplicationPortlet, Comparable {
         }
 
         // before it adds ".1" to real webappName
-        //String realWebAppName = webAppName.substring(0, webAppName.length() - 2);
+        //String realWebAppName = contextName.substring(0, contextName.length() - 2);
 
-        //System.err.println("in getPortletDispatcher of jsr query string " + "/jsr/" + webAppName  + extraInfo);
+        //System.err.println("in getPortletDispatcher of jsr query string " + "/jsr/" + contextName  + extraInfo);
         // TODO change dangerously hardcoded value!!!
         RequestDispatcher rd = context.getRequestDispatcher("/jsr/" + webAppName + extraInfo.toString());
         //RequestDispatcher rd = context.getNamedDispatcher(servletName);

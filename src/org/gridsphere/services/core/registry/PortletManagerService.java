@@ -30,6 +30,16 @@ public interface PortletManagerService extends PortletService {
     public void initAllPortletWebApplications(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException;
 
     /**
+     * Loads all known portlet web applications in order
+     *
+     * @param req                the <code>HttpServletRequest</code>
+     * @param res                the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException      if a dispatching error occurs
+     * @throws PortletException if an exception occurs loading the portlet web application
+     */
+    public void loadAllPortletWebApplications(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException;
+
+    /**
      * Initializes a portlet web application
      *
      * @param webApplicationName the name of the portlet web application
@@ -39,6 +49,17 @@ public interface PortletManagerService extends PortletService {
      * @throws PortletException if an exception occurs initializing the portlet web application
      */
     public void initPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException;
+
+    /**
+     * Loads a portlet web application
+     *
+     * @param webApplicationName the name of the portlet web application
+     * @param req                the <code>HttpServletRequest</code>
+     * @param res                the <code>HttpServletresponse</code>
+     * @throws PortletDispatcherException      if a dispatching error occurs
+     * @throws PortletException if an exception occurs loading the portlet web application
+     */
+    public void loadPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException;
 
     /**
      * Shuts down a currently active portlet web application from the portlet container

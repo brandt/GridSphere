@@ -22,6 +22,7 @@ import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.services.core.security.auth.AuthModuleService;
 import org.gridsphere.services.core.user.User;
+import org.gridsphere.services.core.setup.PortletsSetupModuleService;
 
 import javax.portlet.*;
 import javax.servlet.Servlet;
@@ -68,7 +69,7 @@ public class PortletServlet extends HttpServlet
         portletConfigHash = new Hashtable<String, PortletConfig>();
     }
 
-    public void initJSRPortletWebapp() {
+    public void loadJSRPortletWebapp() {
         registryService = (PortletRegistryService) PortletServiceFactory.createPortletService(PortletRegistryService.class, true);
         configService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
 
@@ -144,12 +145,27 @@ public class PortletServlet extends HttpServlet
         InputStream is = getServletContext().getResourceAsStream("/WEB-INF/authmodules.xml");
         if (is != null) {
             String authModulePath = this.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
-            authModuleService.loadAuthModules(authModulePath, Thread.currentThread().getContextClassLoader());
             log.info("loading authentication modules from: " + authModulePath);
+            authModuleService.loadAuthModules(authModulePath, Thread.currentThread().getContextClassLoader());
         } else {
             log.debug("no auth module descriptor found");
         }
 
+        // load in any portlets setup modules if found-- this is a GridSphere extension
+
+        PortletsSetupModuleService portletsSetupModuleService = (PortletsSetupModuleService) PortletServiceFactory.createPortletService(PortletsSetupModuleService.class, true);
+        is = getServletContext().getResourceAsStream("/WEB-INF/portletssetupmodules.xml");
+        if (is != null) {
+            String portletsSetupModulePath = this.getServletContext().getRealPath("/WEB-INF/portletssetupmodules.xml");
+            if (portletWebApp.getWebApplicationStatus().equals(PortletStatus.FAILURE)){
+                log.debug("portlets setup modules from: " + portletsSetupModulePath +" will not be loaded due to webapp loading failure");
+                return;
+            }
+            log.info("loading portlets setup modules from: " + portletsSetupModulePath);
+            portletsSetupModuleService.loadPortletsSetupModules(portletsSetupModulePath, portletWebApp, portlets, Thread.currentThread().getContextClassLoader());
+        } else {
+            log.debug("no portlets setup module descriptor found");
+        }
     }
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -162,8 +178,10 @@ public class PortletServlet extends HttpServlet
             return;
         }
 
-        if (method.equals(SportletProperties.INIT)) {
-            initJSRPortletWebapp();
+        if (method.equals(SportletProperties.LOAD)) {
+            loadJSRPortletWebapp();
+            return;
+        }else if (method.equals(SportletProperties.INIT)) {
             if (portletWebApp.getWebApplicationStatus().equals(PortletStatus.FAILURE)) return;
             Set set = portlets.keySet();
             Iterator it = set.iterator();

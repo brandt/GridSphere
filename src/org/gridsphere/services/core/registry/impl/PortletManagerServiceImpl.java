@@ -221,11 +221,32 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
         }
     }
 
+    /**
+     * Loads all known portlet web applications in order
+     *
+     * @param req the <code>HttpServletRequest</code>
+     * @param res the <code>HttpServletResponse</code>
+     * @throws PortletDispatcherException if a dispatching error occurs
+     * @throws PortletException           if an exception occurs loading the portlet web application
+     */
+    public synchronized void loadAllPortletWebApplications(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException {
+        for (int i = 0; i < webappFiles.length; i++) {
+            if (webappFiles[i].startsWith("README")) continue;
+            loadPortletWebApplication(webappFiles[i], req, res);
+        }
+    }
+
     public synchronized void initPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException {
         log.debug("initing web app " + webApplicationName);
+        PortletWebApplicationLoader webAppLoader = webappLoaders.get(webApplicationName);
+        portletInvoker.initPortletWebApp(webAppLoader, req, res);
+    }
+
+    public synchronized void loadPortletWebApplication(String webApplicationName, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException, PortletException {
+        log.debug("loading web app " + webApplicationName);
         PortletWebApplicationLoader webAppLoader = new PortletWebApplicationLoader(webApplicationName, context);
         webappLoaders.put(webApplicationName, webAppLoader);
-        portletInvoker.initPortletWebApp(webAppLoader, req, res);
+        portletInvoker.loadPortletWebApp(webAppLoader, req, res);
     }
 
     /**

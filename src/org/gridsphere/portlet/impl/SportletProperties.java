@@ -36,6 +36,11 @@ public class SportletProperties {
 
     // Portlet Lifecyle methods
     /**
+     * Command to load a portlet
+     */
+    public static final String LOAD = "org.gridsphere.portlet.lifecycle.load";
+
+    /**
      * Command to perform the init method on a portlet
      */
     public static final String INIT = "org.gridsphere.portlet.lifecycle.init";
@@ -115,6 +120,22 @@ public class SportletProperties {
     public static final String LAYOUT_PAGE_PARAM = "gs_PageLayout";
 
     public static final String LAYOUT_PAGE = "org.gridsphere.layout.PAGE";
+
+    public static final String PORTLET_SETUP_PAGE_INCLUDE = "org.gridsphere.services.core.setup.PAGE_INCLUDE";
+
+    public static final String PORTLET_SETUP_PAGE_CONTEXT = "org.gridsphere.services.core.setup.PAGE_CONTEXT";
+
+    public static final String PORTLET_SETUP_TYPE = "org.gridsphere.services.core.setup.TYPE";
+
+    public static final String PORTLET_SETUP_TYPE_PRE = "org.gridsphere.services.core.setup.TYPE_PRE";
+
+    public static final String PORTLET_SETUP_TYPE_POST = "org.gridsphere.services.core.setup.TYPE_POST";
+
+    public static final String PORTLET_SETUP_OPERATION = "org.gridsphere.services.core.setup.OPERATION";
+
+    public static final String PORTLET_SETUP_TITLE = "org.gridsphere.services.core.setup.TITLE";
+
+    public static final String PORTLET_SETUP_DESCRIPTION = "org.gridsphere.services.core.setup.DESCRIPTION";    
 
     public static final String IGNORE_PARSING = "org.gridsphere.portlet.impl.IGNORE_PARSING";
 

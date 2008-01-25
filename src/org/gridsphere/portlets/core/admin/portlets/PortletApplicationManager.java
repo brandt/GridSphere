@@ -101,6 +101,7 @@ public class PortletApplicationManager extends ActionPortlet {
                 if (operation.equals("start")) {
                     result = tomcatManager.startWebApp(req, res, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
+                    portletManager.loadPortletWebApplication(appName, hReq, hRes);
                     portletManager.initPortletWebApplication(appName, hReq, hRes);
                 } else if (operation.equals("stop")) {
                     portletManager.destroyPortletWebApplication(appName, hReq, hRes);
@@ -111,6 +112,7 @@ public class PortletApplicationManager extends ActionPortlet {
                     result = tomcatManager.stopWebApp(req, res, appName);
                     result = tomcatManager.startWebApp(req, res, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
+                    portletManager.loadPortletWebApplication(appName, hReq, hRes);
                     portletManager.initPortletWebApplication(appName, hReq, hRes);
                 } else if (operation.equals("remove")) {
                     portletManager.destroyPortletWebApplication(appName, hReq, hRes);
@@ -121,6 +123,7 @@ public class PortletApplicationManager extends ActionPortlet {
                     result = tomcatManager.deployWebApp(req, res, appName);
                     result = tomcatManager.startWebApp(req, res, appName);
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
+                    portletManager.loadPortletWebApplication(appName, hReq, hRes);
                     portletManager.initPortletWebApplication(appName, hReq, hRes);
                 } else if (operation.equals("undeploy")) {
                     result = tomcatManager.undeployWebApp(req, res, appName);
@@ -176,6 +179,7 @@ public class PortletApplicationManager extends ActionPortlet {
                 System.err.println(webappPath + appName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
                 if (pfile.exists()) {
                     //System.err.println("file exists");
+                    portletManager.loadPortletWebApplication(appName, hReq, hRes);
                     portletManager.initPortletWebApplication(appName, hReq, hRes);
                 }
                 // add portlet app to gridsphere portlet app directory
@@ -215,6 +219,7 @@ public class PortletApplicationManager extends ActionPortlet {
             File pfile = new File(webappPath + webappName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
             System.err.println(webappPath + webappName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
             if (pfile.exists()) {
+                portletManager.loadPortletWebApplication(webappName, hReq, hRes);
                 portletManager.initPortletWebApplication(webappName, hReq, hRes);
             }
 

@@ -30,6 +30,15 @@ public interface PortletDispatcher {
     public void init(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
 
     /**
+     * Called by the portlet container to indicate to this portlet that it is to be loaded.
+     *
+     * @param req the servlet request
+     * @param res the servlet response
+     * @throws PortletDispatcherException if an exception has occurrred during dispatching
+     */
+    public void load(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException;
+
+    /**
      * Called by the portlet container to indicate to this portlet that it is taken out of service.
      * This method is only called once all threads within the portlet's service() method have exited
      * or after a timeout period has passed. After the portlet container calls this method,

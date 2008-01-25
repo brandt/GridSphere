@@ -33,6 +33,7 @@ import org.gridsphere.services.core.persistence.PersistenceManagerService;
 import org.gridsphere.services.core.registry.PortletManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridsphere.services.core.setup.PortletsSetupModuleService;
 import org.hibernate.StaleObjectStateException;
 
 import javax.servlet.*;
@@ -49,6 +50,10 @@ import java.util.StringTokenizer;
 public class GridSphereFilter implements Filter {
 
     private static Boolean firstDoGet = Boolean.TRUE;
+
+    private static Boolean portletsLoaded = Boolean.FALSE;
+
+    private static Boolean portletsInitialized = Boolean.FALSE;
 
     private Log log = LogFactory.getLog(GridSphereFilter.class);
 
@@ -128,13 +133,31 @@ public class GridSphereFilter implements Filter {
                     return;
                 }
 
-                System.err.println("Initializing portlets!!!");
-                log.info("Initializing portlets");
+                if (!portletsLoaded) {
+                    System.err.println("Loading portlets!!!");
+                    log.info("Loading portlets");
+                    try {
+                        // load all portlets
+                        PortletManagerService portletManager = (PortletManagerService) PortletServiceFactory.createPortletService(PortletManagerService.class, true);
+                        portletManager.loadAllPortletWebApplications(req, res);
+                        portletsLoaded = Boolean.TRUE;
+                    } catch (Exception e) {
+                        log.error("GridSphere initialization failed!", e);
+                        RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/init_error.jsp");
+                        req.setAttribute("error", e);
+                        rd.forward(req, res);
+                        return;
+                    }
+                }
+                PortletsSetupModuleService portletsSetupModuleService = null;
                 try {
-                    // initialize all portlets
-                    PortletManagerService portletManager = (PortletManagerService) PortletServiceFactory.createPortletService(PortletManagerService.class, true);
-                    portletManager.initAllPortletWebApplications(req, res);
-                    firstDoGet = Boolean.FALSE;
+                    portletsSetupModuleService = (PortletsSetupModuleService) PortletServiceFactory.createPortletService(PortletsSetupModuleService.class, true);
+                    if (!portletsSetupModuleService.isPrePortletsInitializingSetupDone()) {
+                        request.setAttribute("setup", "true");
+                        RequestDispatcher rd = request.getRequestDispatcher("/setup");
+                        rd.forward(request, response);
+                        return;
+                    }
                 } catch (Exception e) {
                     log.error("GridSphere initialization failed!", e);
                     RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/init_error.jsp");
@@ -143,6 +166,29 @@ public class GridSphereFilter implements Filter {
                     return;
                 }
 
+                if (!portletsInitialized) {
+                    System.err.println("Initializing portlets!!!");
+                    log.info("Initializing portlets");
+                    try {
+                        // initialize all portlets
+                        PortletManagerService portletManager = (PortletManagerService) PortletServiceFactory.createPortletService(PortletManagerService.class, true);
+                        portletManager.initAllPortletWebApplications(req, res);
+                        portletsInitialized = Boolean.TRUE;
+                    } catch (Exception e) {
+                        log.error("GridSphere initialization failed!", e);
+                        RequestDispatcher rd = req.getRequestDispatcher("/jsp/errors/init_error.jsp");
+                        req.setAttribute("error", e);
+                        rd.forward(req, res);
+                        return;
+                    }
+                }
+                if (!portletsSetupModuleService.isPostPortletsInitializingSetupDone()) {
+                    request.setAttribute("setup", "true");
+                    RequestDispatcher rd = request.getRequestDispatcher("/setup");
+                    rd.forward(request, response);
+                    return;
+                }
+                firstDoGet = Boolean.FALSE;
             }
 
             String pathInfo = req.getPathInfo();

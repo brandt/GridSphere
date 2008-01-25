@@ -128,6 +128,15 @@ public class PortletInvoker {
 
     }
 
+    public void loadPortletWebApp(PortletWebApplicationLoader appLoader, HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
+        // Initialize all concrete portlets for each application portlet
+        PortletDispatcher portletDispatcher = appLoader.getPortletDispatcher();
+        // initialize the application portlet
+        log.debug("loading portlet web app " + appLoader.getWebApplicationName());
+        portletDispatcher.load(req, res);
+
+    }
+
     /**
      * Lohgout a portlet web application
      *

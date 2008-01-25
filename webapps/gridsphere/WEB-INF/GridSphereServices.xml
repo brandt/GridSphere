@@ -57,6 +57,13 @@
     </service>
 
     <service>
+        <name>Portlets Setup Module Service</name>
+        <description lang="en">Provides Portlets Setup Modules</description>
+        <interface>org.gridsphere.services.core.setup.PortletsSetupModuleService</interface>
+        <implementation>org.gridsphere.services.core.setup.impl.PortletsSetupModuleServiceImpl</implementation>
+    </service>
+
+    <service>
         <name>Portal Config Service</name>
         <description lang="en">Provides GridSphere portal configuration settings</description>
         <interface>org.gridsphere.services.core.portal.PortalConfigService</interface>

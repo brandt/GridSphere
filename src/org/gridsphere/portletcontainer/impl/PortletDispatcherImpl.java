@@ -59,6 +59,19 @@ public class PortletDispatcherImpl implements PortletDispatcher {
         }
     }
 
+    public void load(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
+        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.LOAD);
+        try {
+            include(req, res);
+        } catch (ServletException e) {
+            throw new PortletDispatcherException("Unable to initialize servlet", e.getRootCause());
+        } catch (Exception e) {
+            throw new PortletDispatcherException("Unable to load portlet: ", e);
+        } finally {
+            req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
+        }
+    }
+
     public void destroy(HttpServletRequest req, HttpServletResponse res) throws PortletDispatcherException {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.DESTROY);
         try {
