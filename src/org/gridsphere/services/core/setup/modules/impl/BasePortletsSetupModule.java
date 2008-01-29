@@ -2,6 +2,7 @@ package org.gridsphere.services.core.setup.modules.impl;
 
 import org.gridsphere.services.core.setup.modules.PortletsSetupModule;
 import org.gridsphere.services.core.setup.modules.impl.descriptor.PortletsSetupModuleDefinition;
+import org.gridsphere.services.core.setup.modules.impl.descriptor.PortletsSetupModuleStateDescriptor;
 import org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam;
 import org.gridsphere.portlet.service.spi.impl.descriptor.Description;
 import org.gridsphere.portletcontainer.impl.descriptor.PortletDefinition;
@@ -35,11 +36,27 @@ public abstract class BasePortletsSetupModule implements PortletsSetupModule, Co
     }
 
     public void invokePrePortletInitialization(HttpServletRequest request, PortletDefinition portletDefinition) throws IllegalArgumentException {
-        throw new IllegalArgumentException("Not implemented !!!");
+        if(moduleDef.getPrePortletInitializationModule())
+            throw new IllegalArgumentException("Not implemented !!!");
+        throw new IllegalArgumentException("Not supported");
     }
 
     public void invokePostPortletInitialization(HttpServletRequest request) throws IllegalArgumentException {
-        throw new IllegalArgumentException("Not implemented !!!");
+        if(moduleDef.getPostPortletInitializationModule())
+            throw new IllegalArgumentException("Not implemented !!!");
+        throw new IllegalArgumentException("Not supported");
+    }
+
+    public PortletsSetupModuleStateDescriptor getPrePortletInitializationModuleStateDescriptor(PortletDefinition portletDefinition) throws IllegalArgumentException {
+        if(moduleDef.getPrePortletInitializationModule())
+            throw new IllegalArgumentException("Not implemented !!!");
+        throw new IllegalArgumentException("Not supported");
+    }
+
+    public PortletsSetupModuleStateDescriptor getPostPortletInitializationModuleStateDescriptor() throws IllegalArgumentException {
+        if(moduleDef.getPostPortletInitializationModule())
+            throw new IllegalArgumentException("Not implemented !!!");
+        throw new IllegalArgumentException("Not supported");
     }
 
     public String getAttribute(String name) {

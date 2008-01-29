@@ -112,20 +112,30 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
     }
 
     public PortletsSetupModuleStateDescriptor getModuleStateDescriptor() throws IllegalAccessException{
-        return getProcessedPortletsSetupModule().getModuleStateDescriptor(!prePortletsInitializingSetupDone? SportletProperties.PORTLET_SETUP_TYPE_PRE : SportletProperties.PORTLET_SETUP_TYPE_POST);
+        PortletsSetupModule portletsSetupModule = getProcessedPortletsSetupModule();
+        if(!prePortletsInitializingSetupDone){
+            PortletDefinition portletDefinition = getPortletDefinitionForModule(portletsSetupModule);
+            return portletsSetupModule.getPrePortletInitializationModuleStateDescriptor(portletDefinition);
+        }
+        return portletsSetupModule.getPostPortletInitializationModuleStateDescriptor();
     }
 
     public void invokePrePortletInitialization(HttpServletRequest request) throws IllegalArgumentException, IllegalAccessException {
         PortletsSetupModule portletsSetupModule = getProcessedPortletsSetupModule();
-        String contextName = portletsSetupModule.getContextName();
-        String portletName = portletsSetupModule.getPortletName();
-        PortletDefinition portletDefinition = null;
-        if(null != portletName && !"".equals(portletName))
-            portletDefinition = portletsDefinitions.get(contextName).get(portletName);
+        PortletDefinition portletDefinition = getPortletDefinitionForModule(portletsSetupModule);
         portletsSetupModule.invokePrePortletInitialization(request, portletDefinition);
         if(portletsSetupModule.isPrePortletsInitializationPhaseProcessed() && prePortletInitializationPortletsSetupModules.isEmpty()){
             setPrePortletsInitializingSetupDone();
         }
+    }
+
+    private PortletDefinition getPortletDefinitionForModule(PortletsSetupModule portletsSetupModule){
+        PortletDefinition portletDefinition = null;
+        String contextName = portletsSetupModule.getContextName();
+        String portletName = portletsSetupModule.getPortletName();
+        if(null != portletName && !"".equals(portletName))
+            portletDefinition = portletsDefinitions.get(contextName).get(portletName);
+        return portletDefinition;
     }
 
     public void invokePostPortletInitialization(HttpServletRequest request) throws IllegalArgumentException, IllegalAccessException {

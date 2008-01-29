@@ -33,9 +33,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author <a href="mailto:novotny@gridsphere.org">Jason Novotny</a>
@@ -253,6 +251,14 @@ public class SetupServlet extends HttpServlet {
         req.setAttribute(SportletProperties.PORTLET_SETUP_PAGE_CONTEXT, portletsSetupModuleStateDescriptor.getContext());
         req.setAttribute(SportletProperties.PORTLET_SETUP_TITLE, portletsSetupModuleStateDescriptor.getTitle());
         req.setAttribute(SportletProperties.PORTLET_SETUP_DESCRIPTION, portletsSetupModuleStateDescriptor.getDescription());
+        Map<String,Object> attributes = portletsSetupModuleStateDescriptor.getAttributes();
+        if(null != attributes){
+            Iterator<String> attributeKeyIterator = attributes.keySet().iterator();
+            while (attributeKeyIterator.hasNext()) {
+                String attributeKey =  attributeKeyIterator.next();
+                req.setAttribute(attributeKey, attributes.get(attributeKey));
+            }
+        }
     }
 
     private void setPostPortletsInitializationSetupAttributes(HttpServletRequest req, PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor) {
@@ -263,6 +269,14 @@ public class SetupServlet extends HttpServlet {
         req.setAttribute(SportletProperties.PORTLET_SETUP_PAGE_CONTEXT, portletsSetupModuleStateDescriptor.getContext());
         req.setAttribute(SportletProperties.PORTLET_SETUP_TITLE, portletsSetupModuleStateDescriptor.getTitle());
         req.setAttribute(SportletProperties.PORTLET_SETUP_DESCRIPTION, portletsSetupModuleStateDescriptor.getDescription());
+        Map<String,Object> attributes = portletsSetupModuleStateDescriptor.getAttributes();
+        if(null != attributes){
+            Iterator<String> attributeKeyIterator = attributes.keySet().iterator();
+            while (attributeKeyIterator.hasNext()) {
+                String attributeKey =  attributeKeyIterator.next();
+                req.setAttribute(attributeKey, attributes.get(attributeKey));
+            }
+        }
     }
 
 

@@ -48,7 +48,9 @@ public interface PortletsSetupModule extends Comparable {
 
     public String getModuleError(String key, Locale locale);
 
-    public PortletsSetupModuleStateDescriptor getModuleStateDescriptor(String phase);
+    public PortletsSetupModuleStateDescriptor getPrePortletInitializationModuleStateDescriptor(PortletDefinition portletDefinition);
+    
+    public PortletsSetupModuleStateDescriptor getPostPortletInitializationModuleStateDescriptor();
 
     public void invokePrePortletInitialization(HttpServletRequest request, PortletDefinition portletDefinition) throws IllegalArgumentException;
 
