@@ -152,7 +152,7 @@ public class GridSphereFilter implements Filter {
                 PortletsSetupModuleService portletsSetupModuleService = null;
                 try {
                     portletsSetupModuleService = (PortletsSetupModuleService) PortletServiceFactory.createPortletService(PortletsSetupModuleService.class, true);
-                    if (!portletsSetupModuleService.isPrePortletsInitializingSetupDone()) {
+                    if (!portletsSetupModuleService.isPreInitSetupDone()) {
                         request.setAttribute("setup", "true");
                         RequestDispatcher rd = request.getRequestDispatcher("/setup");
                         rd.forward(request, response);
@@ -182,7 +182,7 @@ public class GridSphereFilter implements Filter {
                         return;
                     }
                 }
-                if (!portletsSetupModuleService.isPostPortletsInitializingSetupDone()) {
+                if (!portletsSetupModuleService.isPostInitSetupDone()) {
                     request.setAttribute("setup", "true");
                     RequestDispatcher rd = request.getRequestDispatcher("/setup");
                     rd.forward(request, response);

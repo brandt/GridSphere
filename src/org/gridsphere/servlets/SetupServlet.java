@@ -130,21 +130,27 @@ public class SetupServlet extends HttpServlet {
 
             if (admins.isEmpty()) {
                 req.setAttribute(SportletProperties.LAYOUT_PAGE, "SetupAdmin");
-            } else if (!portletsSetupModuleService.isPrePortletsInitializingSetupDone()) {
+            } else if (!portletsSetupModuleService.isPreInitSetupDone()) {
                 try {
                     PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = portletsSetupModuleService.getModuleStateDescriptor();
-                    setPrePortletsInitializationSetupAttributes(req, portletsSetupModuleStateDescriptor);
-                } catch (IllegalAccessException e) {
-                    portletsSetupModuleService.skipPrePortletsInitializingSetup();
+                    setPreInitSetupAttributes(req, portletsSetupModuleStateDescriptor);
+                } catch (IllegalStateException e) {
+                    portletsSetupModuleService.skipPreInitSetup();
                     log.error("Could not process setup module", e);
+                } catch (NullPointerException e){
+                    log.error("Could not process setup module", e);
+                    throw new IllegalStateException("NullPointerException in portlets setup module (it might be caused by wrong value of portlet-name in the setup module descriptor).",e);
                 }
-            } else if (!portletsSetupModuleService.isPostPortletsInitializingSetupDone()) {
+            } else if (!portletsSetupModuleService.isPostInitSetupDone()) {
                 try {
                     PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = portletsSetupModuleService.getModuleStateDescriptor();
-                    setPostPortletsInitializationSetupAttributes(req, portletsSetupModuleStateDescriptor);
-                } catch (IllegalAccessException e) {
-                    portletsSetupModuleService.skipPostPortletsInitializingSetup();
+                    setPostInitSetupAttributes(req, portletsSetupModuleStateDescriptor);
+                } catch (IllegalStateException e) {
+                    portletsSetupModuleService.skipPostInitSetup();
                     log.error("Could not process setup module", e);
+                } catch (NullPointerException e){
+                    log.error("Could not process setup module", e);
+                    throw new IllegalStateException("NullPointerException in portlets setup module (it might be caused by wrong value of portlet-name in the setup module descriptor).",e);
                 }
             } else {
                 redirect(event);
@@ -203,36 +209,31 @@ public class SetupServlet extends HttpServlet {
                     String setupType = req.getParameter(SportletProperties.PORTLET_SETUP_TYPE);
                     String setupOperation = req.getParameter(SportletProperties.PORTLET_SETUP_OPERATION);
                     if (setupType.equals(SportletProperties.PORTLET_SETUP_TYPE_PRE)) {
-                        if (setupOperation.toLowerCase().equals("skip")) {
-                            System.out.println("0125B SKIP");
-                            portletsSetupModuleService.skipPrePortletsInitializingSetup();
+                        if (setupOperation.toLowerCase().equals("skip module")) {
+                            portletsSetupModuleService.skipModule();
+                        } else if (setupOperation.toLowerCase().equals("skip pre portlet initialization setup")) {
+                            portletsSetupModuleService.skipPreInitSetup();
                         } else {
                             try {
-                                portletsSetupModuleService.invokePrePortletInitialization(req);
-                                PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = portletsSetupModuleService.getModuleStateDescriptor();
-                                setPrePortletsInitializationSetupAttributes(req, portletsSetupModuleStateDescriptor);  //for errors
-                            } catch (IllegalAccessException e) {
-                                portletsSetupModuleService.skipPrePortletsInitializingSetup();
+                                portletsSetupModuleService.invokePreInit(req);
+                            } catch (IllegalStateException e) {
+                                portletsSetupModuleService.skipModule();
                                 log.error("Could not process setup module", e);
                             }
                         }
                     } else if (setupType.equals(SportletProperties.PORTLET_SETUP_TYPE_POST)) {
-                        if (setupOperation.toLowerCase().equals("skip")) {
-                            portletsSetupModuleService.skipPostPortletsInitializingSetup();
+                        if (setupOperation.toLowerCase().equals("skip module")) {
+                            portletsSetupModuleService.skipModule();
+                        } else if (setupOperation.toLowerCase().equals("skip post portlet initialization setup")) {
+                            portletsSetupModuleService.skipPostInitSetup();
                         } else {
                             try {
-                                portletsSetupModuleService.invokePostPortletInitialization(req);
-                                PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = portletsSetupModuleService.getModuleStateDescriptor();
-                                setPostPortletsInitializationSetupAttributes(req, portletsSetupModuleStateDescriptor);  //for errors
-                            } catch (IllegalAccessException e) {
-                                portletsSetupModuleService.skipPostPortletsInitializingSetup();
+                                portletsSetupModuleService.invokePostInit(req);
+                            } catch (IllegalStateException e) {
+                                portletsSetupModuleService.skipModule();
                                 log.error("Could not process setup module", e);
                             }
                         }
-                    } else {
-                        System.out.println("DOCENTT 0116C: WTF");
-                        req.setAttribute(SportletProperties.LAYOUT_PAGE, "SetupPortlet");
-                        throw new IllegalArgumentException("WTF ???");
                     }
                 }
             }
@@ -243,7 +244,7 @@ public class SetupServlet extends HttpServlet {
         redirect(event);
     }
 
-    private void setPrePortletsInitializationSetupAttributes(HttpServletRequest req, PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor) {
+    private void setPreInitSetupAttributes(HttpServletRequest req, PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor) {
         req.setAttribute(SportletProperties.LAYOUT_PAGE, "SetupPortlet");
         req.setAttribute(SportletProperties.PORTLET_SETUP_TYPE, SportletProperties.PORTLET_SETUP_TYPE_PRE);
 
@@ -251,17 +252,17 @@ public class SetupServlet extends HttpServlet {
         req.setAttribute(SportletProperties.PORTLET_SETUP_PAGE_CONTEXT, portletsSetupModuleStateDescriptor.getContext());
         req.setAttribute(SportletProperties.PORTLET_SETUP_TITLE, portletsSetupModuleStateDescriptor.getTitle());
         req.setAttribute(SportletProperties.PORTLET_SETUP_DESCRIPTION, portletsSetupModuleStateDescriptor.getDescription());
-        Map<String,Object> attributes = portletsSetupModuleStateDescriptor.getAttributes();
-        if(null != attributes){
+        Map<String, Object> attributes = portletsSetupModuleStateDescriptor.getAttributes();
+        if (null != attributes) {
             Iterator<String> attributeKeyIterator = attributes.keySet().iterator();
             while (attributeKeyIterator.hasNext()) {
-                String attributeKey =  attributeKeyIterator.next();
+                String attributeKey = attributeKeyIterator.next();
                 req.setAttribute(attributeKey, attributes.get(attributeKey));
             }
         }
     }
 
-    private void setPostPortletsInitializationSetupAttributes(HttpServletRequest req, PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor) {
+    private void setPostInitSetupAttributes(HttpServletRequest req, PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor) {
         req.setAttribute(SportletProperties.LAYOUT_PAGE, "SetupPortlet");
         req.setAttribute(SportletProperties.PORTLET_SETUP_TYPE, SportletProperties.PORTLET_SETUP_TYPE_POST);
 
@@ -269,16 +270,15 @@ public class SetupServlet extends HttpServlet {
         req.setAttribute(SportletProperties.PORTLET_SETUP_PAGE_CONTEXT, portletsSetupModuleStateDescriptor.getContext());
         req.setAttribute(SportletProperties.PORTLET_SETUP_TITLE, portletsSetupModuleStateDescriptor.getTitle());
         req.setAttribute(SportletProperties.PORTLET_SETUP_DESCRIPTION, portletsSetupModuleStateDescriptor.getDescription());
-        Map<String,Object> attributes = portletsSetupModuleStateDescriptor.getAttributes();
-        if(null != attributes){
+        Map<String, Object> attributes = portletsSetupModuleStateDescriptor.getAttributes();
+        if (null != attributes) {
             Iterator<String> attributeKeyIterator = attributes.keySet().iterator();
             while (attributeKeyIterator.hasNext()) {
-                String attributeKey =  attributeKeyIterator.next();
+                String attributeKey = attributeKeyIterator.next();
                 req.setAttribute(attributeKey, attributes.get(attributeKey));
             }
         }
     }
-
 
     private void createDefaultDatabase() {
 

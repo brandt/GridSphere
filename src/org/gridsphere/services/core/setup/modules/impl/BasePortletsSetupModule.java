@@ -8,6 +8,7 @@ import org.gridsphere.portlet.service.spi.impl.descriptor.Description;
 import org.gridsphere.portletcontainer.impl.descriptor.PortletDefinition;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.Portlet;
 import java.util.*;
 
 /**
@@ -18,8 +19,8 @@ public abstract class BasePortletsSetupModule implements PortletsSetupModule, Co
 
     protected Map attributes = new HashMap();
     protected PortletsSetupModuleDefinition moduleDef = null;
-    protected boolean prePortletsInitializationPhaseProcessed = false;
-    protected boolean postPortletsInitializationPhaseProcessed = false;
+    protected boolean preInitPhaseProcessed = false;
+    protected boolean postInitPhaseProcessed = false;
 
     public BasePortletsSetupModule(PortletsSetupModuleDefinition moduleDef) {
         this.moduleDef = moduleDef;
@@ -29,34 +30,36 @@ public abstract class BasePortletsSetupModule implements PortletsSetupModule, Co
             ConfigParam param = (ConfigParam)it.next();
             attributes.put(param.getParamName(), param.getParamValue());
         }
-        if(!moduleDef.getPrePortletInitializationModule())
-            prePortletsInitializationPhaseProcessed = true;
-        if(!moduleDef.getPostPortletInitializationModule())
-            postPortletsInitializationPhaseProcessed = true;
+        if(!moduleDef.getPreInitModule())
+            preInitPhaseProcessed = true;
+        if(!moduleDef.getPostInitModule())
+            postInitPhaseProcessed = true;
     }
 
-    public void invokePrePortletInitialization(HttpServletRequest request, PortletDefinition portletDefinition) throws IllegalArgumentException {
-        if(moduleDef.getPrePortletInitializationModule())
+
+    private BasePortletsSetupModule() {
+    }
+
+    public void invokePreInit(HttpServletRequest request, PortletDefinition portletDefinition) throws IllegalArgumentException {
+        if(moduleDef.getPreInitModule())
             throw new IllegalArgumentException("Not implemented !!!");
         throw new IllegalArgumentException("Not supported");
     }
 
-    public void invokePostPortletInitialization(HttpServletRequest request) throws IllegalArgumentException {
-        if(moduleDef.getPostPortletInitializationModule())
+    public void invokePostInit(HttpServletRequest request, Portlet portlet) throws IllegalArgumentException {
+        if(moduleDef.getPostInitModule())
             throw new IllegalArgumentException("Not implemented !!!");
         throw new IllegalArgumentException("Not supported");
     }
 
-    public PortletsSetupModuleStateDescriptor getPrePortletInitializationModuleStateDescriptor(PortletDefinition portletDefinition) throws IllegalArgumentException {
-        if(moduleDef.getPrePortletInitializationModule())
-            throw new IllegalArgumentException("Not implemented !!!");
-        throw new IllegalArgumentException("Not supported");
+    public void fillPreInitStateDescriptor(PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor, PortletDefinition portletDefinition) throws IllegalArgumentException {
+        if(!moduleDef.getPreInitModule())
+            throw new IllegalArgumentException("Not supported");
     }
 
-    public PortletsSetupModuleStateDescriptor getPostPortletInitializationModuleStateDescriptor() throws IllegalArgumentException {
-        if(moduleDef.getPostPortletInitializationModule())
-            throw new IllegalArgumentException("Not implemented !!!");
-        throw new IllegalArgumentException("Not supported");
+    public void fillPostInitStateDescriptor(PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor) throws IllegalArgumentException {
+        if(!moduleDef.getPostInitModule())
+            throw new IllegalArgumentException("Not supported");
     }
 
     public String getAttribute(String name) {
@@ -83,12 +86,16 @@ public abstract class BasePortletsSetupModule implements PortletsSetupModule, Co
         return moduleDef.getPortletName();
     }
 
-    public boolean isPrePortletsInitializationModule() {
-        return moduleDef.getPrePortletInitializationModule();
+    public String getDefaultJSP() {
+        return moduleDef.getDefaultJSP();
     }
 
-    public boolean isPostPortletsInitializationModule() {
-        return moduleDef.getPostPortletInitializationModule();
+    public boolean isPreInitModule() {
+        return moduleDef.getPreInitModule();
+    }
+
+    public boolean isPostInitModule() {
+        return moduleDef.getPostInitModule();
     }
 
     public String getModuleError(String key, Locale locale) {
@@ -145,20 +152,20 @@ public abstract class BasePortletsSetupModule implements PortletsSetupModule, Co
         this.moduleDef = moduleDef;
     }
 
-    public boolean isPrePortletsInitializationPhaseProcessed() {
-        return prePortletsInitializationPhaseProcessed;
+    public boolean isPreInitPhaseProcessed() {
+        return preInitPhaseProcessed;
     }
 
-    public void setPrePortletsInitializationPhaseProcessed(boolean prePortletsInitializationPhaseProcessed) {
-        this.prePortletsInitializationPhaseProcessed = prePortletsInitializationPhaseProcessed;
+    public void setPreInitPhaseProcessed(boolean prePortletsInitializationPhaseProcessed) {
+        this.preInitPhaseProcessed = prePortletsInitializationPhaseProcessed;
     }
 
-    public boolean isPostPortletsInitializationPhaseProcessed() {
-        return postPortletsInitializationPhaseProcessed;
+    public boolean isPostInitPhaseProcessed() {
+        return postInitPhaseProcessed;
     }
 
-    public void setPostPortletsInitializationPhaseProcessed(boolean postPortletsInitializationPhaseProcessed) {
-        this.postPortletsInitializationPhaseProcessed = postPortletsInitializationPhaseProcessed;
+    public void setPostInitPhaseProcessed(boolean postPortletsInitializationPhaseProcessed) {
+        this.postInitPhaseProcessed = postPortletsInitializationPhaseProcessed;
     }
 
     public int compareTo(Object obj) {

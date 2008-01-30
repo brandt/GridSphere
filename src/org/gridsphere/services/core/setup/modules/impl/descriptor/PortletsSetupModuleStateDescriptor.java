@@ -20,13 +20,6 @@ public class PortletsSetupModuleStateDescriptor {
         this.context = portletsSetupModule.getContextName();
     }
 
-    public PortletsSetupModuleStateDescriptor(String title, String description, String jspFile, PortletsSetupModule portletsSetupModule) {
-        this.title = title;
-        this.description = description;
-        this.jspFile = jspFile;
-        this.context = portletsSetupModule.getContextName();
-    }
-
     public String getTitle() {
         return title;
     }

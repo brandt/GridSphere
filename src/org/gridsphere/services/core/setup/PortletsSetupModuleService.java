@@ -16,17 +16,19 @@ public interface PortletsSetupModuleService extends PortletService {
 
     public void loadPortletsSetupModules(String setupModsPath, PortletWebApplication portletWebApplication, Map<String, Portlet> portlets, ClassLoader classloader);
 
-    public boolean isPrePortletsInitializingSetupDone();
+    public boolean isPreInitSetupDone();
 
-    public void skipPrePortletsInitializingSetup();
+    public void skipPreInitSetup();
 
-    public boolean isPostPortletsInitializingSetupDone();
+    public boolean isPostInitSetupDone();
 
-    public void skipPostPortletsInitializingSetup();
+    public void skipPostInitSetup();
 
-    public PortletsSetupModuleStateDescriptor getModuleStateDescriptor() throws IllegalAccessException;
+    public void skipModule();
 
-    public void invokePrePortletInitialization(HttpServletRequest request) throws IllegalArgumentException, IllegalAccessException;
+    public PortletsSetupModuleStateDescriptor getModuleStateDescriptor() throws IllegalStateException;
 
-    public void invokePostPortletInitialization(HttpServletRequest request) throws IllegalArgumentException, IllegalAccessException;
+    public void invokePreInit(HttpServletRequest request) throws IllegalArgumentException, IllegalStateException;
+
+    public void invokePostInit(HttpServletRequest request) throws IllegalArgumentException, IllegalStateException;
 }

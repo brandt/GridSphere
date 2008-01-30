@@ -22,10 +22,11 @@ public class PortletsSetupModuleDefinition {
     protected int priority = 100;
     protected String moduleImplementation = "";
     protected String portletName = "";
+    protected String defaultJSP = "";
     protected String contextName = "";
     protected boolean moduleActive = false;
-    protected boolean prePortletInitializationModule = false;
-    protected boolean postPortletInitializationModule = false;
+    protected boolean preInitModule = false;
+    protected boolean postInitModule = false;
 
     protected List configParamList = new Vector();
     protected Map attributes = new HashMap();
@@ -78,7 +79,7 @@ public class PortletsSetupModuleDefinition {
     }
 
     /**
-     * Returns the name of portlet which the module is for (used only for pre portlets initialization modules)
+     * Returns the name of portlet which the module is for (if null or empty invoke method of module will receive null PortletDefinition or null Portlet object as a parameter)
      *
      * @return the name of the portlet
      */
@@ -87,12 +88,31 @@ public class PortletsSetupModuleDefinition {
     }
 
     /**
-     * Sets the name of portlet which the module is for (used only for pre portlets initialization modules)
+     * Sets the name of portlet which the module is for (if null or empty invoke method of module will receive null PortletDefinition or null Portlet object as a parameter)
      *
      * @param portletName the name of the portlet
      */
     public void setPortletName(String portletName) {
         this.portletName = portletName;
+    }
+
+
+    /**
+     * Returns the default JSP location used by the module
+     *
+     * @return the default JSP location
+     */
+    public String getDefaultJSP() {
+        return defaultJSP;
+    }
+
+    /**
+     * Sets the default JSP location used by the module
+     *
+     * @param defaultJSP the default JSP location
+     */
+    public void setDefaultJSP(String defaultJSP) {
+        this.defaultJSP = defaultJSP;
     }
 
     /**
@@ -208,17 +228,17 @@ public class PortletsSetupModuleDefinition {
      *
      * @return true if this module is pre portlets initialization module
      */            
-    public boolean getPrePortletInitializationModule() {
-        return prePortletInitializationModule;
+    public boolean getPreInitModule() {
+        return preInitModule;
     }
 
     /**
      * If true, this module will be pre portlets initialization module
      *
-     * @param prePortletInitializationModule if true, this module will be pre portlets initialization module
+     * @param preInitModule if true, this module will be pre portlets initialization module
      */
-    public void setPrePortletInitializationModule(boolean prePortletInitializationModule) {
-        this.prePortletInitializationModule = prePortletInitializationModule;
+    public void setPreInitModule(boolean preInitModule) {
+        this.preInitModule = preInitModule;
     }
 
    /**
@@ -226,17 +246,17 @@ public class PortletsSetupModuleDefinition {
      *
      * @return true if this module is post portlets initialization module
      */
-    public boolean getPostPortletInitializationModule() {
-        return postPortletInitializationModule;
+    public boolean getPostInitModule() {
+        return postInitModule;
     }
 
     /**
      * If true, this module will be post portlets initialization module
      *
-     * @param postPortletInitializationModule if true, this module will be post portlets initialization module
+     * @param postInitModule if true, this module will be post portlets initialization module
      */
-    public void setPostPortletInitializationModule(boolean postPortletInitializationModule) {
-        this.postPortletInitializationModule = postPortletInitializationModule;
+    public void setPostInitModule(boolean postInitModule) {
+        this.postInitModule = postInitModule;
     }
 
     /**
@@ -327,8 +347,8 @@ public class PortletsSetupModuleDefinition {
             sb.append("portlets setup module portlet name: " + this.portletName + "\n");
         sb.append("portlets setup module context: " + this.contextName + "\n");
         sb.append("portlets setup module priority: " + this.priority + "\n");
-        sb.append("portlets setup module pre portlets initialization : " + this.prePortletInitializationModule + "\n");
-        sb.append("portlets setup module post portlets initialization : " + this.postPortletInitializationModule + "\n");
+        sb.append("portlets setup module pre portlets initialization : " + this.preInitModule + "\n");
+        sb.append("portlets setup module post portlets initialization : " + this.postInitModule + "\n");
         sb.append("config properties: ");
         Iterator it = this.configParamList.iterator();
         ConfigParam c;

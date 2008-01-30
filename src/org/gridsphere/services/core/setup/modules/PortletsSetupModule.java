@@ -4,6 +4,7 @@ import org.gridsphere.services.core.setup.modules.impl.descriptor.PortletsSetupM
 import org.gridsphere.portletcontainer.impl.descriptor.PortletDefinition;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.portlet.Portlet;
 import java.util.Map;
 import java.util.Locale;
 
@@ -24,11 +25,13 @@ public interface PortletsSetupModule extends Comparable {
 
     public String getPortletName();
 
+    public String getDefaultJSP();
+    
     public String getModuleDescription(Locale locale);
 
-    public boolean isPrePortletsInitializationModule();
+    public boolean isPreInitModule();
 
-    public boolean isPostPortletsInitializationModule();
+    public boolean isPostInitModule();
 
     public int getModulePriority();
 
@@ -38,21 +41,21 @@ public interface PortletsSetupModule extends Comparable {
 
     public void setModuleActive(boolean isActive);
 
-    public boolean isPrePortletsInitializationPhaseProcessed();
+    public boolean isPreInitPhaseProcessed();
 
-    public void setPrePortletsInitializationPhaseProcessed(boolean isModuleProcessed);
+    public void setPreInitPhaseProcessed(boolean isModuleProcessed);
 
-    public boolean isPostPortletsInitializationPhaseProcessed();
+    public boolean isPostInitPhaseProcessed();
 
-    public void setPostPortletsInitializationPhaseProcessed(boolean isModuleProcessed);
+    public void setPostInitPhaseProcessed(boolean isModuleProcessed);
 
     public String getModuleError(String key, Locale locale);
 
-    public PortletsSetupModuleStateDescriptor getPrePortletInitializationModuleStateDescriptor(PortletDefinition portletDefinition);
+    public void fillPreInitStateDescriptor(PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor, PortletDefinition portletDefinition);
     
-    public PortletsSetupModuleStateDescriptor getPostPortletInitializationModuleStateDescriptor();
+    public void fillPostInitStateDescriptor(PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor);
 
-    public void invokePrePortletInitialization(HttpServletRequest request, PortletDefinition portletDefinition) throws IllegalArgumentException;
+    public void invokePreInit(HttpServletRequest request, PortletDefinition portletDefinition) throws IllegalArgumentException;
 
-    public void invokePostPortletInitialization(HttpServletRequest request) throws IllegalArgumentException;
+    public void invokePostInit(HttpServletRequest request, Portlet portlet) throws IllegalArgumentException;
 }

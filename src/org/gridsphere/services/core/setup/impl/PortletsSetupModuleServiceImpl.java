@@ -3,7 +3,6 @@ package org.gridsphere.services.core.setup.impl;
 import org.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridsphere.portlet.impl.SportletProperties;
 import org.gridsphere.services.core.setup.PortletsSetupModuleService;
 import org.gridsphere.services.core.setup.modules.PortletsSetupModule;
 import org.gridsphere.services.core.setup.modules.impl.descriptor.PortletsSetupModulesDescriptor;
@@ -29,14 +28,15 @@ import java.lang.reflect.Constructor;
 public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, PortletsSetupModuleService {
     private Log log = LogFactory.getLog(PortletsSetupModuleServiceImpl.class);
 
-    private List<PortletsSetupModule> prePortletInitializationPortletsSetupModules = new ArrayList<PortletsSetupModule>();
-    private List<PortletsSetupModule> postPortletInitializationPortletsSetupModules = new ArrayList<PortletsSetupModule>();
+    private List<PortletsSetupModule> preInitPortletsSetupModules = new ArrayList<PortletsSetupModule>();
+    private List<PortletsSetupModule> postInitPortletsSetupModules = new ArrayList<PortletsSetupModule>();
     private Map<String, Map<String, PortletDefinition>> portletsDefinitions = new HashMap<String, Map<String, PortletDefinition>>();
+    private Map<String, Map<String, Portlet>> portlets = new HashMap<String, Map<String, Portlet>>();
     private PortletsSetupModule processedModule = null;
 
-    private boolean prePortletsInitializingSetupDone = false;
+    private boolean preInitSetupDone = true;
 
-    private boolean postPortletsInitializingSetupDone = false;
+    private boolean postInitSetupDone = true;
 
     private URL setupMappingStream = getClass().getResource("/org/gridsphere/services/core/setup/modules/impl/descriptor/portlets-setup-modules-mapping.xml");
 
@@ -62,7 +62,8 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
 
             List<PortletsSetupModule> tmpPrePortletInitializationPortletsSetupModules = new ArrayList<PortletsSetupModule>();
             List<PortletsSetupModule> tmpPostPortletInitializationPortletsSetupModules = new ArrayList<PortletsSetupModule>();
-            Set<String> prePortletsInitializationPortlets = new HashSet<String>();
+            Set<String> preInitPortlets = new HashSet<String>();
+            Set<String> postInitPortlets = new HashSet<String>();
             PortletsSetupModuleCollection coll = desc.getCollection();
             List modList = coll.getPortletsSetupModulesList();
             Iterator it = modList.iterator();
@@ -77,33 +78,52 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
                 Constructor con = c.getConstructor(parameterTypes);
                 PortletsSetupModule portletsSetupModule = (PortletsSetupModule) con.newInstance(obj);
 
-                if(portletsSetupModule.isPrePortletsInitializationModule())
+                if(portletsSetupModule.isPreInitModule()){
                     tmpPrePortletInitializationPortletsSetupModules.add(portletsSetupModule);
-                if(portletsSetupModule.isPostPortletsInitializationModule())
+                    preInitSetupDone = false;
+                }
+                if(portletsSetupModule.isPostInitModule()){
                     tmpPostPortletInitializationPortletsSetupModules.add(portletsSetupModule);
-
-                if (portletsSetupModule.isPrePortletsInitializationModule() && null != portletsSetupModule.getPortletName() && !"".equals(portletsSetupModule.getPortletName())) {
-                    prePortletsInitializationPortlets.add(portletsSetupModule.getPortletName());
+                    postInitSetupDone = false;
+                }
+                if (portletsSetupModule.isPreInitModule() && null != portletsSetupModule.getPortletName() && !"".equals(portletsSetupModule.getPortletName())) {
+                    preInitPortlets.add(portletsSetupModule.getPortletName());
+                }
+                if (portletsSetupModule.isPostInitModule() && null != portletsSetupModule.getPortletName() && !"".equals(portletsSetupModule.getPortletName())) {
+                    postInitPortlets.add(portletsSetupModule.getPortletName());
                 }
             }
 
             Collections.sort(tmpPrePortletInitializationPortletsSetupModules);
             Collections.sort(tmpPostPortletInitializationPortletsSetupModules);
-            prePortletInitializationPortletsSetupModules.addAll(tmpPrePortletInitializationPortletsSetupModules);
-            postPortletInitializationPortletsSetupModules.addAll(tmpPostPortletInitializationPortletsSetupModules);
+            preInitPortletsSetupModules.addAll(tmpPrePortletInitializationPortletsSetupModules);
+            postInitPortletsSetupModules.addAll(tmpPostPortletInitializationPortletsSetupModules);
 
-            if (!prePortletsInitializationPortlets.isEmpty()) {
+            if (!preInitPortlets.isEmpty()) {
                 HashMap<String, PortletDefinition> contextPortletDefinitions = new HashMap<String, PortletDefinition>();
                 Set set = portlets.keySet();
                 it = set.iterator();
                 while (it.hasNext()) {
                     String portletName = (String) it.next();
-                    if (prePortletsInitializationPortlets.contains(portletName)) {
+                    if (preInitPortlets.contains(portletName)) {
                         PortletDefinition portletDef = ((PortletWebApplicationImpl) portletWebApplication).getPortletDefinition(portletName);
                         contextPortletDefinitions.put(portletName, portletDef);
                     }
                 }
-                portletsDefinitions.put(portletWebApplication.getWebApplicationName(), contextPortletDefinitions);
+                this.portletsDefinitions.put(portletWebApplication.getWebApplicationName(), contextPortletDefinitions);
+            }
+            if (!postInitPortlets.isEmpty()) {
+                HashMap<String, Portlet> contextPortlets = new HashMap<String, Portlet>();
+                Set set = portlets.keySet();
+                it = set.iterator();
+                while (it.hasNext()) {
+                    String portletName = (String) it.next();
+                    if (postInitPortlets.contains(portletName)) {
+                        Portlet portlet = portlets.get(portletName);
+                        contextPortlets.put(portletName, portlet);
+                    }
+                }
+                this.portlets.put(portletWebApplication.getWebApplicationName(), contextPortlets);
             }
         } catch (Exception e) {
             log.error("Error loading portlets setup module!", e);
@@ -111,21 +131,31 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
 
     }
 
-    public PortletsSetupModuleStateDescriptor getModuleStateDescriptor() throws IllegalAccessException{
+    public PortletsSetupModuleStateDescriptor getModuleStateDescriptor() throws IllegalStateException {
         PortletsSetupModule portletsSetupModule = getProcessedPortletsSetupModule();
-        if(!prePortletsInitializingSetupDone){
+        PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = new PortletsSetupModuleStateDescriptor(portletsSetupModule);
+        portletsSetupModuleStateDescriptor.setTitle(portletsSetupModule.getModuleName());
+        portletsSetupModuleStateDescriptor.setDescription(portletsSetupModule.getModuleDescription(Locale.getDefault()));
+        portletsSetupModuleStateDescriptor.setJspFile(portletsSetupModule.getDefaultJSP());
+        if(!preInitSetupDone){
             PortletDefinition portletDefinition = getPortletDefinitionForModule(portletsSetupModule);
-            return portletsSetupModule.getPrePortletInitializationModuleStateDescriptor(portletDefinition);
+            portletsSetupModule.fillPreInitStateDescriptor(portletsSetupModuleStateDescriptor, portletDefinition);
+        }else{
+            portletsSetupModule.fillPostInitStateDescriptor(portletsSetupModuleStateDescriptor);
         }
-        return portletsSetupModule.getPostPortletInitializationModuleStateDescriptor();
+        return portletsSetupModuleStateDescriptor;
     }
 
-    public void invokePrePortletInitialization(HttpServletRequest request) throws IllegalArgumentException, IllegalAccessException {
+    public void invokePreInit(HttpServletRequest request) throws IllegalArgumentException, IllegalStateException {
         PortletsSetupModule portletsSetupModule = getProcessedPortletsSetupModule();
         PortletDefinition portletDefinition = getPortletDefinitionForModule(portletsSetupModule);
-        portletsSetupModule.invokePrePortletInitialization(request, portletDefinition);
-        if(portletsSetupModule.isPrePortletsInitializationPhaseProcessed() && prePortletInitializationPortletsSetupModules.isEmpty()){
-            setPrePortletsInitializingSetupDone();
+        try {
+            portletsSetupModule.invokePreInit(request, portletDefinition);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(portletsSetupModule.getModuleError(e.getMessage(),Locale.getDefault()));
+        }
+        if(portletsSetupModule.isPreInitPhaseProcessed() && preInitPortletsSetupModules.isEmpty()){
+            setPreInitSetupDone();
         }
     }
 
@@ -138,27 +168,41 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
         return portletDefinition;
     }
 
-    public void invokePostPortletInitialization(HttpServletRequest request) throws IllegalArgumentException, IllegalAccessException {
+    public void invokePostInit(HttpServletRequest request) throws IllegalArgumentException, IllegalStateException {
         PortletsSetupModule portletsSetupModule = getProcessedPortletsSetupModule();
-        portletsSetupModule.invokePostPortletInitialization(request);
-        if(portletsSetupModule.isPostPortletsInitializationPhaseProcessed() && postPortletInitializationPortletsSetupModules.isEmpty()){
-            setPostPortletsInitializingSetupDone();
+        Portlet portlet = getPortletForModule(portletsSetupModule);
+        try {
+            portletsSetupModule.invokePostInit(request, portlet);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(portletsSetupModule.getModuleError(e.getMessage(),Locale.getDefault()));
+        }
+        if(portletsSetupModule.isPostInitPhaseProcessed() && postInitPortletsSetupModules.isEmpty()){
+            setPostInitSetupDone();
         }
     }
 
-    private PortletsSetupModule getProcessedPortletsSetupModule() throws IllegalAccessException{
-        if((null == processedModule || (!prePortletsInitializingSetupDone && processedModule.isPrePortletsInitializationPhaseProcessed()) || (prePortletsInitializingSetupDone && processedModule.isPostPortletsInitializationPhaseProcessed())) && !pickNextModule())
-            throw new IllegalAccessException();
+    private Portlet getPortletForModule(PortletsSetupModule portletsSetupModule){
+        Portlet portlet = null;
+        String contextName = portletsSetupModule.getContextName();
+        String portletName = portletsSetupModule.getPortletName();
+        if(null != portletName && !"".equals(portletName))
+            portlet = portlets.get(contextName).get(portletName);
+        return portlet;
+    }
+
+    private PortletsSetupModule getProcessedPortletsSetupModule() throws IllegalStateException{
+        if((null == processedModule || (!preInitSetupDone && processedModule.isPreInitPhaseProcessed()) || (preInitSetupDone && processedModule.isPostInitPhaseProcessed())) && !pickNextModule())
+            throw new IllegalStateException();
         return processedModule;
     }
 
     private boolean pickNextModule(){
-        if(!prePortletsInitializingSetupDone){
-            processedModule = prePortletInitializationPortletsSetupModules.get(0);
-            prePortletInitializationPortletsSetupModules.remove(processedModule);
-        }else if(!postPortletsInitializingSetupDone){
-            processedModule = postPortletInitializationPortletsSetupModules.get(0);
-            postPortletInitializationPortletsSetupModules.remove(processedModule);
+        if(!preInitSetupDone){
+            processedModule = preInitPortletsSetupModules.get(0);
+            preInitPortletsSetupModules.remove(processedModule);
+        }else if(!postInitSetupDone){
+            processedModule = postInitPortletsSetupModules.get(0);
+            postInitPortletsSetupModules.remove(processedModule);
         }else{
             return false;
         }
@@ -169,23 +213,23 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
         portletsDefinitions.clear();
     }
 
-    public boolean isPrePortletsInitializingSetupDone() {
-        return prePortletsInitializingSetupDone;
+    public boolean isPreInitSetupDone() {
+        return preInitSetupDone;
     }
 
-    public void skipPrePortletsInitializingSetup() {
-        setPrePortletsInitializingSetupDone();
+    public void skipPreInitSetup() {
+        setPreInitSetupDone();
     }
 
-    private void setPrePortletsInitializingSetupDone() {
-        if(isPrePortletsInitializingSetupDone())
+    private void setPreInitSetupDone() {
+        if(isPreInitSetupDone())
             return;
-        if(null != processedModule && !processedModule.isPrePortletsInitializationPhaseProcessed()){
-            processedModule.setPrePortletsInitializationPhaseProcessed(true);
+        if(null != processedModule && !processedModule.isPreInitPhaseProcessed()){
+            processedModule.setPreInitPhaseProcessed(true);
         }
-        while(!prePortletInitializationPortletsSetupModules.isEmpty()){
+        while(!preInitPortletsSetupModules.isEmpty()){
             pickNextModule();
-            processedModule.setPrePortletsInitializationPhaseProcessed(true);
+            processedModule.setPreInitPhaseProcessed(true);
         }
         Iterator<String> webAppIterator = portletsDefinitions.keySet().iterator();
         while (webAppIterator.hasNext()) {
@@ -193,30 +237,53 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
             portletsDefinitions.get(webApp).clear();
         }
         portletsDefinitions.clear();        
-        this.prePortletsInitializingSetupDone = true;
+        this.preInitSetupDone = true;
     }
 
-    public boolean isPostPortletsInitializingSetupDone() {
-        return postPortletsInitializingSetupDone;
+    public boolean isPostInitSetupDone() {
+        return postInitSetupDone;
     }
 
-    public void skipPostPortletsInitializingSetup() {
-        setPostPortletsInitializingSetupDone();
+    public void skipPostInitSetup() {
+        setPostInitSetupDone();
     }
 
-    public void setPostPortletsInitializingSetupDone() {
-        if(isPostPortletsInitializingSetupDone())
+    public void skipModule() {
+        PortletsSetupModule portletsSetupModule = getProcessedPortletsSetupModule();
+        if(!preInitSetupDone){
+            if(!portletsSetupModule.isPreInitPhaseProcessed()){
+                portletsSetupModule.setPreInitPhaseProcessed(true);
+                if(preInitPortletsSetupModules.isEmpty())
+                    setPreInitSetupDone();
+            }
+        }else{
+            if(!portletsSetupModule.isPostInitPhaseProcessed()){
+                portletsSetupModule.setPostInitPhaseProcessed(true);
+                if(postInitPortletsSetupModules.isEmpty())
+                    setPostInitSetupDone();
+            }
+        }
+    }
+
+    private void setPostInitSetupDone() {
+        if(isPostInitSetupDone())
             return;
         PortletsSetupModule tmpPortletsSetupModule = processedModule;
-        if(null != processedModule && !processedModule.isPostPortletsInitializationPhaseProcessed()){
-            processedModule.setPostPortletsInitializationPhaseProcessed(true);
+        if(null != processedModule && !processedModule.isPostInitPhaseProcessed()){
+            processedModule.setPostInitPhaseProcessed(true);
         }
-        while(!postPortletInitializationPortletsSetupModules.isEmpty()){
+        while(!postInitPortletsSetupModules.isEmpty()){
             pickNextModule();
-            processedModule.setPostPortletsInitializationPhaseProcessed(true);
+            processedModule.setPostInitPhaseProcessed(true);
         }
-        this.postPortletsInitializingSetupDone = true;
-        if(null != tmpPortletsSetupModule && !this.prePortletsInitializingSetupDone && tmpPortletsSetupModule.isPrePortletsInitializationModule() && !tmpPortletsSetupModule.isPrePortletsInitializationPhaseProcessed())
+        Iterator<String> webAppIterator = portlets.keySet().iterator();
+        while (webAppIterator.hasNext()) {
+            String webApp = webAppIterator.next();
+            portlets.get(webApp).clear();
+        }
+        portlets.clear();
+        this.postInitSetupDone = true;
+        if(null != tmpPortletsSetupModule && !this.preInitSetupDone && tmpPortletsSetupModule.isPreInitModule() && !tmpPortletsSetupModule.isPreInitPhaseProcessed())
             processedModule = tmpPortletsSetupModule;
     }
 }
