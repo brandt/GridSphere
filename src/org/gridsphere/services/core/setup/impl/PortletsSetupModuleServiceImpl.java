@@ -71,6 +71,8 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
             while (it.hasNext()) {
                 PortletsSetupModuleDefinition def = (PortletsSetupModuleDefinition) it.next();
                 log.info(def.toString());
+                if(!def.getModuleActive())
+                    continue;
                 String modClassName = def.getModuleImplementation();
                 Class c = Class.forName(modClassName, true, classloader);
                 Class[] parameterTypes = new Class[]{PortletsSetupModuleDefinition.class};

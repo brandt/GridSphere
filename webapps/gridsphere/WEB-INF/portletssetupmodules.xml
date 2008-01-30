@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <portlets-setup-modules>
 
-<!--
     <portlets-setup-module>
         <name>RSSPortlet setup module</name>
         <description lang="en">This module allows to edit list of RSS feeds used by the RSSPortlet</description>
         <implementation>org.gridsphere.portlets.core.rss.setup.RSSPortletSetupModule</implementation>
         <defaultJSP>/WEB-INF/jsp/rss/setup.jsp</defaultJSP>
         <portlet-name>RSSPortlet</portlet-name>
-        <active>true</active>
+        <active>false</active>
         <prePortletInitialization>true</prePortletInitialization>
         <postPortletInitialization>false</postPortletInitialization>
         <priority>1</priority>
         <error key="emptyValueError" lang="en">Cannot add empty feed</error>
     </portlets-setup-module>
--->
 
 </portlets-setup-modules>
