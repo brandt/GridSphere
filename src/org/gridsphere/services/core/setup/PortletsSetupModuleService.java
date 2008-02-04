@@ -26,7 +26,7 @@ public interface PortletsSetupModuleService extends PortletService {
 
     public void skipModule();
 
-    public PortletsSetupModuleStateDescriptor getModuleStateDescriptor() throws IllegalStateException;
+    public PortletsSetupModuleStateDescriptor getModuleStateDescriptor(HttpServletRequest request) throws IllegalStateException;
 
     public void invokePreInit(HttpServletRequest request) throws IllegalArgumentException, IllegalStateException;
 

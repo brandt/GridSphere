@@ -133,11 +133,11 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
 
     }
 
-    public PortletsSetupModuleStateDescriptor getModuleStateDescriptor() throws IllegalStateException {
+    public PortletsSetupModuleStateDescriptor getModuleStateDescriptor(HttpServletRequest request) throws IllegalStateException {
         PortletsSetupModule portletsSetupModule = getProcessedPortletsSetupModule();
         PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = new PortletsSetupModuleStateDescriptor(portletsSetupModule);
         portletsSetupModuleStateDescriptor.setTitle(portletsSetupModule.getModuleName());
-        portletsSetupModuleStateDescriptor.setDescription(portletsSetupModule.getModuleDescription(Locale.getDefault()));
+        portletsSetupModuleStateDescriptor.setDescription(portletsSetupModule.getModuleDescription(request.getLocale()));
         portletsSetupModuleStateDescriptor.setJspFile(portletsSetupModule.getDefaultJSP());
         if(!preInitSetupDone){
             PortletDefinition portletDefinition = getPortletDefinitionForModule(portletsSetupModule);
@@ -154,7 +154,7 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
         try {
             portletsSetupModule.invokePreInit(request, portletDefinition);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(portletsSetupModule.getModuleError(e.getMessage(),Locale.getDefault()));
+            throw new IllegalArgumentException(portletsSetupModule.getModuleError(e.getMessage(),request.getLocale()));
         }
         if(portletsSetupModule.isPreInitPhaseProcessed() && preInitPortletsSetupModules.isEmpty()){
             setPreInitSetupDone();
@@ -176,7 +176,7 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
         try {
             portletsSetupModule.invokePostInit(request, portlet);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(portletsSetupModule.getModuleError(e.getMessage(),Locale.getDefault()));
+            throw new IllegalArgumentException(portletsSetupModule.getModuleError(e.getMessage(),request.getLocale()));
         }
         if(portletsSetupModule.isPostInitPhaseProcessed() && postInitPortletsSetupModules.isEmpty()){
             setPostInitSetupDone();

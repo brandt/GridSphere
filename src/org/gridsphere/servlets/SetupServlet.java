@@ -132,7 +132,7 @@ public class SetupServlet extends HttpServlet {
                 req.setAttribute(SportletProperties.LAYOUT_PAGE, "SetupAdmin");
             } else if (!portletsSetupModuleService.isPreInitSetupDone()) {
                 try {
-                    PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = portletsSetupModuleService.getModuleStateDescriptor();
+                    PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = portletsSetupModuleService.getModuleStateDescriptor(req);
                     setPreInitSetupAttributes(req, portletsSetupModuleStateDescriptor);
                 } catch (IllegalStateException e) {
                     portletsSetupModuleService.skipPreInitSetup();
@@ -143,7 +143,7 @@ public class SetupServlet extends HttpServlet {
                 }
             } else if (!portletsSetupModuleService.isPostInitSetupDone()) {
                 try {
-                    PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = portletsSetupModuleService.getModuleStateDescriptor();
+                    PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = portletsSetupModuleService.getModuleStateDescriptor(req);
                     setPostInitSetupAttributes(req, portletsSetupModuleStateDescriptor);
                 } catch (IllegalStateException e) {
                     portletsSetupModuleService.skipPostInitSetup();
