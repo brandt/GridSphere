@@ -17,12 +17,13 @@ public class PortletsSetupModuleDefinition {
     protected String moduleName = "";
 
     private List moduleDescriptions = new Vector();
+    private List moduleDefaultJSPs = new Vector();
+    private List moduleTitles = new Vector();
     private List moduleErrors = new Vector();
 
     protected int priority = 100;
     protected String moduleImplementation = "";
     protected String portletName = "";
-    protected String defaultJSP = "";
     protected String contextName = "";
     protected boolean moduleActive = false;
     protected boolean preInitModule = false;
@@ -96,25 +97,6 @@ public class PortletsSetupModuleDefinition {
         this.portletName = portletName;
     }
 
-
-    /**
-     * Returns the default JSP location used by the module
-     *
-     * @return the default JSP location
-     */
-    public String getDefaultJSP() {
-        return defaultJSP;
-    }
-
-    /**
-     * Sets the default JSP location used by the module
-     *
-     * @param defaultJSP the default JSP location
-     */
-    public void setDefaultJSP(String defaultJSP) {
-        this.defaultJSP = defaultJSP;
-    }
-
     /**
      * Returns the context name
      *
@@ -134,6 +116,15 @@ public class PortletsSetupModuleDefinition {
     }
 
     /**
+     * Returns the module descriptions
+     *
+     * @return the module descriptions
+     */
+    public List getModuleDescriptions() {
+        return this.moduleDescriptions;
+    }
+
+    /**
      * Sets the list of module descriptions
      *
      * @param moduleDescriptions the list of module descriptions
@@ -143,12 +134,39 @@ public class PortletsSetupModuleDefinition {
     }
 
     /**
-     * Returns the module descriptions
+     * Returns the module titles
      *
-     * @return the module descriptions
+     * @return the module titles
      */
-    public List getModuleDescriptions() {
-        return this.moduleDescriptions;
+    public List getModuleTitles() {
+        return moduleTitles;
+    }
+
+    /**
+     * Sets the list of module titles
+     *
+     * @param moduleTitles the list of module titles
+     */
+    public void setModuleTitles(List moduleTitles) {
+        this.moduleTitles = moduleTitles;
+    }
+
+    /**
+     * Returns the module default JSPs
+     *
+     * @return the module default JSPs
+     */
+    public List getModuleDefaultJSPs() {
+        return moduleDefaultJSPs;
+    }
+
+    /**
+     * Sets the list of module default JSPs
+     *
+     * @param moduleDefaultJSPs the list of module default JSPs
+     */
+    public void setModuleDefaultJSPs(List moduleDefaultJSPs) {
+        this.moduleDefaultJSPs = moduleDefaultJSPs;
     }
 
     /**

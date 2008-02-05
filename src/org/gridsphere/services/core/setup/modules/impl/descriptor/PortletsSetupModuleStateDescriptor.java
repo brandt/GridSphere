@@ -4,6 +4,7 @@ import org.gridsphere.services.core.setup.modules.PortletsSetupModule;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * @author <a href="mailto:docentt@man.poznan.pl">Tomasz Kuczynski</a>, PSNC
@@ -14,10 +15,12 @@ public class PortletsSetupModuleStateDescriptor {
     protected String description = "";
     protected String jspFile = "";
     protected String context = "";
+    protected Locale locale = null;
     protected Map<String,Object> attributes = new HashMap<String, Object>();
 
-    public PortletsSetupModuleStateDescriptor(PortletsSetupModule portletsSetupModule) {
+    public PortletsSetupModuleStateDescriptor(PortletsSetupModule portletsSetupModule, Locale locale) {
         this.context = portletsSetupModule.getContextName();
+        this.locale = locale;
     }
 
     public String getTitle() {
@@ -46,6 +49,10 @@ public class PortletsSetupModuleStateDescriptor {
 
     public String getContext() {
         return context;
+    }
+
+    public Locale getLocale() {
+        return locale;
     }
 
     public Map<String, Object> getAttributes() {

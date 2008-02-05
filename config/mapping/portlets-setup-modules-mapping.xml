@@ -23,8 +23,14 @@
         <field name="ModuleDescriptions" type="org.gridsphere.portlet.service.spi.impl.descriptor.Description" collection="vector">
             <bind-xml name="description"/>
         </field>
+        <field name="ModuleTitles" type="org.gridsphere.portlet.service.spi.impl.descriptor.Description" collection="vector">
+            <bind-xml name="title"/>
+        </field>
         <field name="ModuleErrors" type="org.gridsphere.portlet.service.spi.impl.descriptor.Description" collection="vector">
             <bind-xml name="error"/>
+        </field>
+        <field name="ModuleDefaultJSPs" type="org.gridsphere.portlet.service.spi.impl.descriptor.Description" collection="vector">
+            <bind-xml name="defaultJSP"/>
         </field>
         <field name="ModulePriority" type="integer">
             <bind-xml name="priority"/>
@@ -43,9 +49,6 @@
         </field>
         <field name="PortletName" type="string">
             <bind-xml name="portlet-name"/>
-        </field>
-        <field name="defaultJSP" type="string">
-            <bind-xml name="defaultJSP"/>
         </field>
         <field name="ConfigParamList" type="org.gridsphere.portlet.service.spi.impl.descriptor.ConfigParam" collection="vector">
             <bind-xml name="module-config"/>

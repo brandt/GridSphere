@@ -42,8 +42,8 @@ public class RSSPortletSetupModule extends BasePortletsSetupModule {
 
     public void invokePreInit(HttpServletRequest request, PortletDefinition portletDefinition) throws IllegalArgumentException {
         //Any change to PortletDefinition object is applies before portlet initialization process so you can update here f.e. init-parameters, preferences a.s.o.
-        String setupOperation = request.getParameter(SportletProperties.PORTLET_SETUP_OPERATION);
-        if (setupOperation.equals("Add")) {
+        String setupOperation = getOperation(request);
+        if (setupOperation.equals("add")) {
             //Add feed operation
             String newFeed = request.getParameter("newFeed");
             if (null != newFeed && !"".equals(newFeed)) {
@@ -59,7 +59,7 @@ public class RSSPortletSetupModule extends BasePortletsSetupModule {
                 portletDefinition.getPortletPreferences().getPreference(0).setValue(newValues);
             }else
                 throw new IllegalArgumentException("emptyValueError"); //throw IllegalArgumentException with error key (check portletssetupmodules.xml for details)
-        } else if (setupOperation.equals("Remove")) {
+        } else if (setupOperation.equals("remove")) {
             //Remove feed operation
             Enumeration parameterNames = request.getParameterNames();
             Value[] values = portletDefinition.getPortletPreferences().getPreference(0).getValue();
@@ -81,8 +81,18 @@ public class RSSPortletSetupModule extends BasePortletsSetupModule {
             }
             portletDefinition.getPortletPreferences().getPreference(0).setValue(newValues);
         } else {
-            //any other operation including "next" - mark module as processed
+            //non operation - mark module as processed
             setPreInitPhaseProcessed(true);
         }
+    }
+
+    private String getOperation(HttpServletRequest request){
+        Enumeration parameterNames = request.getParameterNames();
+        while (parameterNames.hasMoreElements()) {
+            String parameterName = (String) parameterNames.nextElement();
+            if(parameterName.startsWith("operation="))
+                return parameterName.substring("operation=".length()).toLowerCase();
+        }
+        return "";
     }
 }

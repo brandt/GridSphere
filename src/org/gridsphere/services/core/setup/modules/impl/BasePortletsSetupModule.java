@@ -86,8 +86,18 @@ public abstract class BasePortletsSetupModule implements PortletsSetupModule, Co
         return moduleDef.getPortletName();
     }
 
-    public String getDefaultJSP() {
-        return moduleDef.getDefaultJSP();
+    public String getModuleDefaultJSP(Locale locale) {
+        List modJSPs = moduleDef.getModuleDefaultJSPs();
+        if (locale == null) throw new IllegalArgumentException("locale is NULL");
+        Iterator it = modJSPs.iterator();
+        String defTitle = "";
+        while (it.hasNext()) {
+            Description t = (Description) it.next();
+            if (t.getLang() == null) t.setLang(Locale.ENGLISH.getLanguage());
+            if (locale.getLanguage().equals(new Locale(t.getLang(), "", "").getLanguage())) return t.getText();
+            if (t.getLang().equals(Locale.ENGLISH.getLanguage())) defTitle = t.getText();
+        }
+        return defTitle;
     }
 
     public boolean isPreInitModule() {
@@ -118,6 +128,20 @@ public abstract class BasePortletsSetupModule implements PortletsSetupModule, Co
         List modDescs = moduleDef.getModuleDescriptions();
         if (locale == null) throw new IllegalArgumentException("locale is NULL");
         Iterator it = modDescs.iterator();
+        String defTitle = "";
+        while (it.hasNext()) {
+            Description t = (Description) it.next();
+            if (t.getLang() == null) t.setLang(Locale.ENGLISH.getLanguage());
+            if (locale.getLanguage().equals(new Locale(t.getLang(), "", "").getLanguage())) return t.getText();
+            if (t.getLang().equals(Locale.ENGLISH.getLanguage())) defTitle = t.getText();
+        }
+        return defTitle;
+    }
+
+    public String getModuleTitle(Locale locale) {
+        List modTitls = moduleDef.getModuleTitles();
+        if (locale == null) throw new IllegalArgumentException("locale is NULL");
+        Iterator it = modTitls.iterator();
         String defTitle = "";
         while (it.hasNext()) {
             Description t = (Description) it.next();

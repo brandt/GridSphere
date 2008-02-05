@@ -25,9 +25,11 @@ public interface PortletsSetupModule extends Comparable {
 
     public String getPortletName();
 
-    public String getDefaultJSP();
+    public String getModuleDefaultJSP(Locale locale);
     
     public String getModuleDescription(Locale locale);
+
+    public String getModuleTitle(Locale locale);
 
     public boolean isPreInitModule();
 

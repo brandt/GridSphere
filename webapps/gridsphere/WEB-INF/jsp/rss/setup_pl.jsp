@@ -21,7 +21,7 @@
     %>
     <tr>
         <td colspan="2" align="center">
-            <input type="submit" name="operation=remove" value="Remove"/>
+            <input type="submit" name="operation=remove" value="Usu&#x0144;"/>
         </td>
     </tr>
     <tr>
@@ -39,7 +39,7 @@
     </tr>
     <tr>
         <td colspan="2" align="center">
-            <input type="submit" name="operation=add" value="Add"/>
+            <input type="submit" name="operation=add" value="Dodaj"/>
         </td>
     </tr>
 </table>

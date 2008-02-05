@@ -208,6 +208,8 @@ public class SetupServlet extends HttpServlet {
                 if (installType.equals("portlet")) {
                     String setupType = req.getParameter(SportletProperties.PORTLET_SETUP_TYPE);
                     String setupOperation = req.getParameter(SportletProperties.PORTLET_SETUP_OPERATION);
+                    if(null == setupOperation)
+                        setupOperation = "module operation";
                     if (setupType.equals(SportletProperties.PORTLET_SETUP_TYPE_PRE)) {
                         if (setupOperation.toLowerCase().equals("skip module")) {
                             portletsSetupModuleService.skipModule();

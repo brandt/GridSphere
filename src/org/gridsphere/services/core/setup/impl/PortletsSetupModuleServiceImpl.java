@@ -135,10 +135,10 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
 
     public PortletsSetupModuleStateDescriptor getModuleStateDescriptor(HttpServletRequest request) throws IllegalStateException {
         PortletsSetupModule portletsSetupModule = getProcessedPortletsSetupModule();
-        PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = new PortletsSetupModuleStateDescriptor(portletsSetupModule);
-        portletsSetupModuleStateDescriptor.setTitle(portletsSetupModule.getModuleName());
+        PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = new PortletsSetupModuleStateDescriptor(portletsSetupModule, request.getLocale());
+        portletsSetupModuleStateDescriptor.setTitle(portletsSetupModule.getModuleTitle(request.getLocale()));
         portletsSetupModuleStateDescriptor.setDescription(portletsSetupModule.getModuleDescription(request.getLocale()));
-        portletsSetupModuleStateDescriptor.setJspFile(portletsSetupModule.getDefaultJSP());
+        portletsSetupModuleStateDescriptor.setJspFile(portletsSetupModule.getModuleDefaultJSP(request.getLocale()));
         if(!preInitSetupDone){
             PortletDefinition portletDefinition = getPortletDefinitionForModule(portletsSetupModule);
             portletsSetupModule.fillPreInitStateDescriptor(portletsSetupModuleStateDescriptor, portletDefinition);
