@@ -11,7 +11,7 @@
         <defaultJSP lang="en">/WEB-INF/jsp/rss/setup.jsp</defaultJSP>
         <defaultJSP lang="pl">/WEB-INF/jsp/rss/setup_pl.jsp</defaultJSP>
         <portlet-name>RSSPortlet</portlet-name>
-        <active>true</active>
+        <active>false</active>
         <prePortletInitialization>true</prePortletInitialization>
         <postPortletInitialization>false</postPortletInitialization>
         <priority>1</priority>
