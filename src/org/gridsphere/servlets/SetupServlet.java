@@ -207,9 +207,7 @@ public class SetupServlet extends HttpServlet {
                 }
                 if (installType.equals("portlet")) {
                     String setupType = req.getParameter(SportletProperties.PORTLET_SETUP_TYPE);
-                    String setupOperation = req.getParameter(SportletProperties.PORTLET_SETUP_OPERATION);
-                    if(null == setupOperation)
-                        setupOperation = "module operation";
+                    String setupOperation = getSetupPortletOperation(req);
                     if (setupType.equals(SportletProperties.PORTLET_SETUP_TYPE_PRE)) {
                         if (setupOperation.toLowerCase().equals("skip_module")) {
                             portletsSetupModuleService.skipModule();
@@ -241,9 +239,24 @@ public class SetupServlet extends HttpServlet {
             }
 
         } catch (IllegalArgumentException e) {
-            req.getSession(true).setAttribute("error", e.getMessage());
+            req.getSession(true).setAttribute("error", getLocalizedText(e.getMessage(),req));
         }
         redirect(event);
+    }
+
+    protected String getLocalizedText(String key, HttpServletRequest request) {
+        Locale locale = request.getLocale();
+        try {
+            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+            return bundle.getString(key);
+        } catch (Exception e) {
+            try {
+                ResourceBundle bundle = ResourceBundle.getBundle("Portlet", Locale.ENGLISH);
+                return bundle.getString(key);
+            } catch (Exception ex) {
+                return key;
+            }
+        }
     }
 
     private String getSetupPortletOperation(HttpServletRequest request){
@@ -311,7 +324,7 @@ public class SetupServlet extends HttpServlet {
             hibProps.store(hibOut, "Hibernate Properties");
         } catch (IOException e) {
             log.error("Unable to load/save hibernate.properties", e);
-            throw new IllegalArgumentException("Unable to  save hibernate.properties file! Please check the log file for more details");
+            throw new IllegalArgumentException("SETUP_ERROR_UNABLE_TO_SAVE_HIBERNATE");
         }
 
     }
@@ -326,13 +339,13 @@ public class SetupServlet extends HttpServlet {
 
         String connURL = req.getParameter("databaseURL");
         if ((connURL == null) || (connURL.equals("")))
-            throw new IllegalArgumentException("Please provide a value for the Database URL!");
+            throw new IllegalArgumentException("SETUP_ERROR_NO_VALUE_FOR_DB_URL");
         String dialect = req.getParameter("dialect");
         if ((dialect == null) || (dialect.equals("")))
-            throw new IllegalArgumentException("Please provide a value for the Hibernate Dialect!");
+            throw new IllegalArgumentException("SETUP_ERROR_NO_VALUE_FOR_HIBERNATE_DIALECT");
         String driverClass = req.getParameter("driverClass");
         if ((driverClass == null) || (driverClass.equals("")))
-            throw new IllegalArgumentException("Please provide a value for the Driver Class Name!");
+            throw new IllegalArgumentException("SETUP_ERROR_NO_VALUE_FOR_DB_DRIVER_CLASS");
 
         String name = req.getParameter("username");
         if (name == null) name = "";
@@ -359,7 +372,7 @@ public class SetupServlet extends HttpServlet {
             hibInputStream.close();
         } catch (IOException e) {
             log.error("Unable to load/save hibernate.properties", e);
-            throw new IllegalArgumentException("Unable to  save hibernate.properties file! Please check the log file for more details");
+            throw new IllegalArgumentException("SETUP_ERROR_UNABLE_TO_SAVE_HIBERNATE");
         }
     }
 
@@ -441,14 +454,14 @@ public class SetupServlet extends HttpServlet {
         String passwd = req.getParameter("password");
         String passwd2 = req.getParameter("password2");
 
-        if (username.equals("")) throw new IllegalArgumentException("Please provide a User Name!");
-        if (firstname.equals("")) throw new IllegalArgumentException("Please provide a First Name!");
-        if (lastname.equals("")) throw new IllegalArgumentException("Please provide a Last Name!");
-        if (email.equals("")) throw new IllegalArgumentException("Please provide an Email Address!");
+        if (username.equals("")) throw new IllegalArgumentException("SETUP_ERROR_NO_VALUE_FOR_USERNAME");
+        if (firstname.equals("")) throw new IllegalArgumentException("SETUP_ERROR_NO_VALUE_FOR_FIRST_NAME");
+        if (lastname.equals("")) throw new IllegalArgumentException("SETUP_ERROR_NO_VALUE_FOR_LAST_NAME");
+        if (email.equals("")) throw new IllegalArgumentException("SETUP_ERROR_NO_VALUE_FOR_EMAIL");
         if (!email.contains("@") || (!email.contains(".")))
-            throw new IllegalArgumentException("Please provide a valid Email Address!");
-        if (!passwd.equals(passwd2)) throw new IllegalArgumentException("The supplied passwords do not match!");
-        if (passwd.equals("")) throw new IllegalArgumentException("Please provide a Password!");
+            throw new IllegalArgumentException("SETUP_ERROR_INVALID_EMAIL");
+        if (!passwd.equals(passwd2)) throw new IllegalArgumentException("SETUP_ERROR_PASSWORD_MISMATCH");
+        if (passwd.equals("")) throw new IllegalArgumentException("SETUP_ERROR_NO_VALUE_FOR_PASSWORD");
 
 
         PersistenceManagerService pms = (PersistenceManagerService) PortletServiceFactory.createPortletService(PersistenceManagerService.class, true);

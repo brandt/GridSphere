@@ -1,4 +1,21 @@
-
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
+<%!
+    protected String getLocalizedText(String key, HttpServletRequest request) {
+        Locale locale = request.getLocale();
+        try {
+            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+            return bundle.getString(key);
+        } catch (Exception e) {
+            try {
+                ResourceBundle bundle = ResourceBundle.getBundle("Portlet", Locale.ENGLISH);
+                return bundle.getString(key);
+            } catch (Exception ex) {
+                return key;
+            }
+        }
+    }
+%>
 
 <script type="text/javascript">
 <!--
@@ -35,7 +52,7 @@ function DisplayWait( formName ) {
 
     var waitDiv = document.getElementById("content");
 
-    waitDiv.innerHTML = '<div style="position: absolute; padding: 20px; border: solid 5px; background-color: white; left: 300px; width: 300px; z-index: 5;">  Please wait... database is being created!</div>';
+    waitDiv.innerHTML = '<div style="position: absolute; padding: 20px; border: solid 5px; background-color: white; left: 300px; width: 300px; z-index: 5;">  <%= getLocalizedText("SETUP_DB_CREATE_PLEASE_WAIT",request) %></div>';
 
     document.dbform.custom.disabled = true;
     document.simple.standard.disabled = true;
@@ -49,7 +66,7 @@ function DisplayWait( formName ) {
 
 <div style="padding-top: 3px; padding-left: 8px; padding-right: 5px; margin-left: 10px;">
 
-    <h1>GridSphere Setup</h1>
+    <h1><%= getLocalizedText("SETUP_DB_CREATE_SETUP_GRIDSPHERE",request) %></h1>
 
 
 
@@ -63,24 +80,22 @@ function DisplayWait( formName ) {
 
 
 
-    <h2>Choose a Database Configuration</h2>
+    <h2><%= getLocalizedText("SETUP_DB_CREATE_CHOOSE_DB_CONFIG",request) %></h2>
 
-    Select where GridSphere should store its data
+    <%= getLocalizedText("SETUP_DB_CREATE_WHERE_TO_STORE",request) %>
 
     <p/>
 
 
     <fieldset>
-        <legend>Embedded Database</legend>
+        <legend><%= getLocalizedText("SETUP_DB_CREATE_EMBEDDED_TITLE",request) %></legend>
 
-        The embedded database is provided by GridSphere and is <b>recommended for evaluation and
-        demonstration purposes</b>. Production systems should consider using an external database for improved scalability and reliability.
-        (This option will create a HSQL database in the gridsphere web application).
+        <%= getLocalizedText("SETUP_DB_CREATE_EMBEDDED_DESC",request) %>
         <p/>
         <form method="POST" name="simple" action="<%= request.getContextPath() %>/setup?install=default">
 
 
-            <input type="submit" name="standard" value="Embedded Database >>" onclick="DisplayWait( this.form.name )"/>
+            <input type="submit" name="standard" value="<%= getLocalizedText("SETUP_DB_CREATE_EMBEDDED_BUTTON",request) %>" onclick="DisplayWait( this.form.name )"/>
 
         </form>
 
@@ -92,19 +107,16 @@ function DisplayWait( formName ) {
     <div id="content"></div>
 
     <fieldset>
-        <legend>External Database</legend>
+        <legend><%= getLocalizedText("SETUP_DB_CREATE_EXTERNAL_TITLE",request) %></legend>
 
-        If you wish the portal to store its data in an external database, please provide the necessary connection values.
-        This is <b>recommended for production systems</b>. You must also make sure the JDBC driver (JAR) is placed in the
-        application classloader of the servlet container. (In the case of Tomcat, place JAR file in <b>$TOMCAT/common/lib</b>
-        directory.
+        <%= getLocalizedText("SETUP_DB_CREATE_EXTERNAL_DESC",request) %>
         <p/>
         <form name="dbform" method="POST" action="<%= request.getContextPath() %>/setup?install=custom">
 
             <table>
                 <tr>
                     <td align="right">
-                        <label for="dbtype">Choose your database:</label>
+                        <label for="dbtype"><%= getLocalizedText("SETUP_DB_CREATE_EXTERNAL_FIELD_TYPE",request) %>:</label>
                     </td>
                     <td align="left">
                         <select name="dbtype" id="dbtype" onchange="SelectDriver()">
@@ -112,13 +124,13 @@ function DisplayWait( formName ) {
                             <option value="mysql">MySQL</option>
                             <option value="oracle">Oracle 9/10g</option>
                             <option value="ms">MS SQL Server</option>
-                            <option value="other">Other</option>
+                            <option value="other"><%= getLocalizedText("SETUP_DB_CREATE_EXTERNAL_FIELD_TYPE_OTHER",request) %></option>
                         </select>
                     </td>
                 </tr>
                 <tr>
                     <td align="right">
-                        <label for="connection">Enter a Database URL:</label>
+                        <label for="connection"><%= getLocalizedText("SETUP_DB_CREATE_EXTERNAL_FIELD_URL",request) %>:</label>
                     </td>
                     <td align="left">
                         <input type="text" name="databaseURL" id="connection" size="40"/>
@@ -126,7 +138,7 @@ function DisplayWait( formName ) {
                 </tr>
                 <tr>
                     <td align="right">
-                        <label for="connection">Enter the driver class name:</label>
+                        <label for="connection"><%= getLocalizedText("SETUP_DB_CREATE_EXTERNAL_FIELD_DRIVER_CLASS",request) %>:</label>
                     </td>
                     <td align="left">
                         <input type="text" name="driverClass" id="driverclass" size="40"/>
@@ -134,7 +146,7 @@ function DisplayWait( formName ) {
                 </tr>
                 <tr>
                     <td align="right">
-                        <label for="connection">Enter the Hibernate dialect:</label>
+                        <label for="connection"><%= getLocalizedText("SETUP_DB_CREATE_EXTERNAL_FIELD_DIALECT",request) %>:</label>
                     </td>
                     <td align="left">
                         <input type="text" name="dialect" id="dialect" size="40"/>
@@ -142,7 +154,7 @@ function DisplayWait( formName ) {
                 </tr>
                 <tr>
                     <td align="right">
-                        <label for="username">Enter the User Name:</label>
+                        <label for="username"><%= getLocalizedText("SETUP_DB_CREATE_EXTERNAL_FIELD_USERNAME",request) %>:</label>
                     </td>
                     <td align="left">
                         <input type="text" name="username" id="username"/>
@@ -150,7 +162,7 @@ function DisplayWait( formName ) {
                 </tr>
                 <tr>
                     <td align="right">
-                        <label for="password">Enter the Password:</label>
+                        <label for="password"><%= getLocalizedText("SETUP_DB_CREATE_EXTERNAL_FIELD_PASSWORD",request) %>:</label>
                     </td>
                     <td align="left">
                         <input type="password" name="password" id="password"/>
@@ -158,7 +170,7 @@ function DisplayWait( formName ) {
                 </tr>
             </table>
             <p/>
-            <input type="submit" name="custom" value="External Database >>" onsubmit="DisplayWait( this.form.name )"/>
+            <input type="submit" name="custom" value="<%= getLocalizedText("SETUP_DB_CREATE_EXTERNAL_BUTTON",request) %>" onsubmit="DisplayWait( this.form.name )"/>
         </form>
 
     </fieldset>

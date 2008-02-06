@@ -1,14 +1,30 @@
-
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
+<%!
+    protected String getLocalizedText(String key, HttpServletRequest request) {
+        Locale locale = request.getLocale();
+        try {
+            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+            return bundle.getString(key);
+        } catch (Exception e) {
+            try {
+                ResourceBundle bundle = ResourceBundle.getBundle("Portlet", Locale.ENGLISH);
+                return bundle.getString(key);
+            } catch (Exception ex) {
+                return key;
+            }
+        }
+    }
+%>
 
 <div style="padding-top: 3px; padding-left: 8px; padding-right: 5px; margin-left: 10px;">
 
-    <h1>GridSphere Setup</h1>
+    <h1><%= getLocalizedText("SETUP_CRATE_ADMIN_SETUP_GRIDSPHERE",request) %></h1>
 
 
-    <h2>Create a Portal Administrator</h2>
+    <h2><%= getLocalizedText("SETUP_CRATE_ADMIN_TITLE",request) %></h2>
 
-The portal administrator has access to all administrative capabilities of the portal including adding/editing users, roles
-and layouts. After creating an account, you will be able to login using the provided user name and password.
+<%= getLocalizedText("SETUP_CRATE_ADMIN_DESC",request) %>
 
     <p/>
 
@@ -26,7 +42,7 @@ and layouts. After creating an account, you will be able to login using the prov
    <table>
        <tr>
            <td align="right">
-               <label for="username">User Name:</label>
+               <label for="username"><%= getLocalizedText("SETUP_CRATE_ADMIN_FIELD_USER_NAME",request) %>:</label>
            </td>
            <td align="left">
                 <input type="text" name="username" id="username">
@@ -34,7 +50,7 @@ and layouts. After creating an account, you will be able to login using the prov
        </tr>
        <tr>
            <td align="right">
-               <label for="firstname">First Name:</label>
+               <label for="firstname"><%= getLocalizedText("SETUP_CRATE_ADMIN_FIELD_FIRST_NAME",request) %>:</label>
            </td>
            <td align="left">
                 <input type="text" name="firstname" id="firstname">
@@ -42,7 +58,7 @@ and layouts. After creating an account, you will be able to login using the prov
        </tr>
        <tr>
            <td align="right">
-               <label for="lastname">Last Name:</label>
+               <label for="lastname"><%= getLocalizedText("SETUP_CRATE_ADMIN_FIELD_LAST_NAME",request) %>:</label>
            </td>
            <td align="left">
                 <input type="text" name="lastname" id="lastname">
@@ -50,7 +66,7 @@ and layouts. After creating an account, you will be able to login using the prov
        </tr>
        <tr>
            <td align="right">
-               <label for="email">Email Address:</label>
+               <label for="email"><%= getLocalizedText("SETUP_CRATE_ADMIN_FIELD_EMAIL",request) %>:</label>
            </td>
            <td align="left">
                 <input type="text" name="email" id="email">
@@ -58,7 +74,7 @@ and layouts. After creating an account, you will be able to login using the prov
        </tr>
        <tr>
            <td align="right">
-               <label for="organization">Organization:</label>
+               <label for="organization"><%= getLocalizedText("SETUP_CRATE_ADMIN_FIELD_ORGANIZATION",request) %>:</label>
            </td>
            <td align="left">
                 <input type="text" name="organization" id="organization">
@@ -66,7 +82,7 @@ and layouts. After creating an account, you will be able to login using the prov
        </tr>
        <tr>
            <td align="right">
-               <label for="password">Password:</label>
+               <label for="password"><%= getLocalizedText("SETUP_CRATE_ADMIN_FIELD_PASSWORD",request) %>:</label>
            </td>
            <td align="left">
                 <input type="password" name="password" id="password">
@@ -74,7 +90,7 @@ and layouts. After creating an account, you will be able to login using the prov
        </tr>
        <tr>
            <td align="right">
-               <label for="password2">Confirm Password:</label>
+               <label for="password2"><%= getLocalizedText("SETUP_CRATE_ADMIN_FIELD_CONFIRM_PASSWORD",request) %>:</label>
            </td>
            <td align="left">
                 <input type="password" name="password2" id="password2">
@@ -85,7 +101,7 @@ and layouts. After creating an account, you will be able to login using the prov
 
   <p/>
 
-    <input type="submit" value="Create Account"/>
+    <input type="submit" value="<%= getLocalizedText("SETUP_CRATE_ADMIN_BUTTON_CREATE_ACCOUNT",request) %>"/>
 
 </form>
 </div>
