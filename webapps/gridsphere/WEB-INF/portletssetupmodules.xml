@@ -3,8 +3,8 @@
 
     <portlets-setup-module>
         <name>RSSPortlet setup module</name>
-        <title lang="en">RSSPortlet setup module</title>
-        <title lang="pl">Ustawienia portletu RSSPortlet</title>
+        <title lang="en">RSSPortlet</title>
+        <title lang="pl">RSSPortlet</title>
         <description lang="en">This module allows to edit list of RSS feeds used by the RSSPortlet</description>
         <description lang="pl">Modu&#x0142; pozwala na edytowanie domy&#x015b;lnej listy &#x017a;r&#x00f3;de&#x0142; RSS (lista u&#x017c;ywana przez RSSPortlet)</description>
         <implementation>org.gridsphere.portlets.core.rss.setup.RSSPortletSetupModule</implementation>
@@ -17,6 +17,10 @@
         <priority>1</priority>
         <error key="emptyValueError" lang="en">Cannot add empty feed</error>
         <error key="emptyValueError" lang="pl">Nie mo&#x017c;na doda&#x0107; pustego &#x017a;r&#x00f3;d&#x0142;a</error>
+        <error key="alreadyOnListError" lang="en">Feed is already on list of feeds</error>
+        <error key="alreadyOnListError" lang="pl">&#x0179;r&#x00f3;d&#x0142;o znajduje si&#x0119; ju&#x017c; na li&#x015b;cie &#x017a;r&#x00f3;de&#x0142;</error>
+        <error key="checkAtLeastOneError" lang="en">Check at least one feed from the list in order to remove</error>
+        <error key="checkAtLeastOneError" lang="pl">W celu usuni&#x0119;cia zaznacz przynajmniej jedn&#x0105; pozycj&#x0119; na li&#x015b;cie</error>
     </portlets-setup-module>
 
 </portlets-setup-modules>

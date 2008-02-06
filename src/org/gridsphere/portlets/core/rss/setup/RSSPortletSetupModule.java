@@ -47,7 +47,13 @@ public class RSSPortletSetupModule extends BasePortletsSetupModule {
             //Add feed operation
             String newFeed = request.getParameter("newFeed");
             if (null != newFeed && !"".equals(newFeed)) {
+                newFeed = newFeed.trim();
                 Value[] values = portletDefinition.getPortletPreferences().getPreference(0).getValue();
+                for (int i = 0; i < values.length; i++) {
+                    Value value = values[i];
+                    if(value.getContent().trim().equals(newFeed))
+                        throw new IllegalArgumentException("alreadyOnListError"); //throw IllegalArgumentException with error key (check portletssetupmodules.xml for details)
+                }
                 Value[] newValues = new Value[values.length + 1];
                 for (int i = 0; i < values.length; i++) {
                     Value value1 = values[i];
@@ -71,6 +77,8 @@ public class RSSPortletSetupModule extends BasePortletsSetupModule {
                     feedsToRemove.add(feedName);
                 }
             }
+            if(feedsToRemove.isEmpty())
+                throw new IllegalArgumentException("checkAtLeastOneError"); //throw IllegalArgumentException with error key (check portletssetupmodules.xml for details)
             Value[] newValues = new Value[values.length - feedsToRemove.size()];
             for (int i = 0, j = 0; i < values.length; i++) {
                 Value value1 = values[i];

@@ -1,9 +1,10 @@
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.Iterator" %>
-<table>
+<table width="100%">
     <%
         Set preferences = (Set) request.getAttribute("preferences");
         Iterator preferencesIterator = preferences.iterator();
+        boolean first = true;
         while (preferencesIterator.hasNext()) {
             String value = (String) preferencesIterator.next();
     %>
@@ -15,17 +16,22 @@
         <td align="left">
             <input type="checkbox" name="feed_<%= value %>" id="feed_<%= value %>" value="<%= value %>"/>
         </td>
+        <%
+            if(first){
+                first=false;
+        %>
+        <td align="center" width="40%" valign="middle" rowspan="<%=preferences.size()%>">
+            <input type="submit" name="operation=remove" value="Usu&#x0144;"/>
+        </td>
+        <%
+            }
+        %>
     </tr>
     <%
         }
     %>
     <tr>
-        <td colspan="2" align="center">
-            <input type="submit" name="operation=remove" value="Usu&#x0144;"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" align="center">
+        <td colspan="3" align="center">
             <hr/>
         </td>
     </tr>
@@ -36,9 +42,7 @@
         <td align="left">
             <input type="text" name="newFeed" id="newFeed"/>
         </td>
-    </tr>
-    <tr>
-        <td colspan="2" align="center">
+        <td align="center" width="40%">
             <input type="submit" name="operation=add" value="Dodaj"/>
         </td>
     </tr>

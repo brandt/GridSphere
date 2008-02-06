@@ -211,9 +211,9 @@ public class SetupServlet extends HttpServlet {
                     if(null == setupOperation)
                         setupOperation = "module operation";
                     if (setupType.equals(SportletProperties.PORTLET_SETUP_TYPE_PRE)) {
-                        if (setupOperation.toLowerCase().equals("skip module")) {
+                        if (setupOperation.toLowerCase().equals("skip_module")) {
                             portletsSetupModuleService.skipModule();
-                        } else if (setupOperation.toLowerCase().equals("skip pre portlet initialization setup")) {
+                        } else if (setupOperation.toLowerCase().equals("skip_pre_or_post_setup")) {
                             portletsSetupModuleService.skipPreInitSetup();
                         } else {
                             try {
@@ -224,9 +224,9 @@ public class SetupServlet extends HttpServlet {
                             }
                         }
                     } else if (setupType.equals(SportletProperties.PORTLET_SETUP_TYPE_POST)) {
-                        if (setupOperation.toLowerCase().equals("skip module")) {
+                        if (setupOperation.toLowerCase().equals("skip_module")) {
                             portletsSetupModuleService.skipModule();
-                        } else if (setupOperation.toLowerCase().equals("skip post portlet initialization setup")) {
+                        } else if (setupOperation.toLowerCase().equals("skip_pre_or_post_setup")) {
                             portletsSetupModuleService.skipPostInitSetup();
                         } else {
                             try {
@@ -244,6 +244,16 @@ public class SetupServlet extends HttpServlet {
             req.getSession(true).setAttribute("error", e.getMessage());
         }
         redirect(event);
+    }
+
+    private String getSetupPortletOperation(HttpServletRequest request){
+        Enumeration parameterNames = request.getParameterNames();
+        while (parameterNames.hasMoreElements()) {
+            String parameterName = (String) parameterNames.nextElement();
+            if(parameterName.startsWith(SportletProperties.PORTLET_SETUP_OPERATION+"="))
+                return parameterName.substring((SportletProperties.PORTLET_SETUP_OPERATION+"=").length()).toLowerCase();
+        }
+        return "";
     }
 
     private void setPreInitSetupAttributes(HttpServletRequest req, PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor) {
