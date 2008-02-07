@@ -277,6 +277,8 @@ public class SetupServlet extends HttpServlet {
         req.setAttribute(SportletProperties.PORTLET_SETUP_PAGE_CONTEXT, portletsSetupModuleStateDescriptor.getContext());
         req.setAttribute(SportletProperties.PORTLET_SETUP_TITLE, portletsSetupModuleStateDescriptor.getTitle());
         req.setAttribute(SportletProperties.PORTLET_SETUP_DESCRIPTION, portletsSetupModuleStateDescriptor.getDescription());
+        req.setAttribute(SportletProperties.PORTLET_SETUP_MODULE_NUMBER, portletsSetupModuleStateDescriptor.getModuleNumber());
+        req.setAttribute(SportletProperties.PORTLET_SETUP_NUMBER_OF_MODULES, portletsSetupModuleStateDescriptor.getNumberOfModules());
         Map<String, Object> attributes = portletsSetupModuleStateDescriptor.getAttributes();
         if (null != attributes) {
             Iterator<String> attributeKeyIterator = attributes.keySet().iterator();
@@ -295,6 +297,8 @@ public class SetupServlet extends HttpServlet {
         req.setAttribute(SportletProperties.PORTLET_SETUP_PAGE_CONTEXT, portletsSetupModuleStateDescriptor.getContext());
         req.setAttribute(SportletProperties.PORTLET_SETUP_TITLE, portletsSetupModuleStateDescriptor.getTitle());
         req.setAttribute(SportletProperties.PORTLET_SETUP_DESCRIPTION, portletsSetupModuleStateDescriptor.getDescription());
+        req.setAttribute(SportletProperties.PORTLET_SETUP_MODULE_NUMBER, portletsSetupModuleStateDescriptor.getModuleNumber());
+        req.setAttribute(SportletProperties.PORTLET_SETUP_NUMBER_OF_MODULES, portletsSetupModuleStateDescriptor.getNumberOfModules());
         Map<String, Object> attributes = portletsSetupModuleStateDescriptor.getAttributes();
         if (null != attributes) {
             Iterator<String> attributeKeyIterator = attributes.keySet().iterator();

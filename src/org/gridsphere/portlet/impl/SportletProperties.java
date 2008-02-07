@@ -137,6 +137,10 @@ public class SportletProperties {
 
     public static final String PORTLET_SETUP_DESCRIPTION = "org.gridsphere.services.core.setup.DESCRIPTION";    
 
+    public static final String PORTLET_SETUP_MODULE_NUMBER = "org.gridsphere.services.core.setup.MODULE_NUM";    
+
+    public static final String PORTLET_SETUP_NUMBER_OF_MODULES = "org.gridsphere.services.core.setup.NUM_OF_MODULES";
+
     public static final String IGNORE_PARSING = "org.gridsphere.portlet.impl.IGNORE_PARSING";
 
     // Used for "action component model" in grid portlets currently

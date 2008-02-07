@@ -15,12 +15,16 @@ public class PortletsSetupModuleStateDescriptor {
     protected String description = "";
     protected String jspFile = "";
     protected String context = "";
+    protected Integer moduleNumber = null;
+    protected Integer numberOfModules = null;
     protected Locale locale = null;
     protected Map<String,Object> attributes = new HashMap<String, Object>();
 
-    public PortletsSetupModuleStateDescriptor(PortletsSetupModule portletsSetupModule, Locale locale) {
+    public PortletsSetupModuleStateDescriptor(PortletsSetupModule portletsSetupModule, Locale locale, Integer moduleNumber, Integer numberOfModules) {
         this.context = portletsSetupModule.getContextName();
         this.locale = locale;
+        this.numberOfModules = numberOfModules;
+        this.moduleNumber = moduleNumber;
     }
 
     public String getTitle() {
@@ -53,6 +57,14 @@ public class PortletsSetupModuleStateDescriptor {
 
     public Locale getLocale() {
         return locale;
+    }
+
+    public Integer getModuleNumber() {
+        return moduleNumber;
+    }
+
+    public Integer getNumberOfModules() {
+        return numberOfModules;
     }
 
     public Map<String, Object> getAttributes() {

@@ -38,6 +38,10 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
 
     private boolean postInitSetupDone = true;
 
+    private int modulesCount = 0;
+
+    private int moduleNumber = 0;
+
     private URL setupMappingStream = getClass().getResource("/org/gridsphere/services/core/setup/modules/impl/descriptor/portlets-setup-modules-mapping.xml");
 
     public PortletsSetupModuleServiceImpl() {
@@ -100,6 +104,7 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
             Collections.sort(tmpPostPortletInitializationPortletsSetupModules);
             preInitPortletsSetupModules.addAll(tmpPrePortletInitializationPortletsSetupModules);
             postInitPortletsSetupModules.addAll(tmpPostPortletInitializationPortletsSetupModules);
+            modulesCount = preInitPortletsSetupModules.size() + postInitPortletsSetupModules.size();
 
             if (!preInitPortlets.isEmpty()) {
                 HashMap<String, PortletDefinition> contextPortletDefinitions = new HashMap<String, PortletDefinition>();
@@ -135,7 +140,7 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
 
     public PortletsSetupModuleStateDescriptor getModuleStateDescriptor(HttpServletRequest request) throws IllegalStateException {
         PortletsSetupModule portletsSetupModule = getProcessedPortletsSetupModule();
-        PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = new PortletsSetupModuleStateDescriptor(portletsSetupModule, request.getLocale());
+        PortletsSetupModuleStateDescriptor portletsSetupModuleStateDescriptor = new PortletsSetupModuleStateDescriptor(portletsSetupModule, request.getLocale(), moduleNumber, modulesCount);
         portletsSetupModuleStateDescriptor.setTitle(portletsSetupModule.getModuleTitle(request.getLocale()));
         portletsSetupModuleStateDescriptor.setDescription(portletsSetupModule.getModuleDescription(request.getLocale()));
         portletsSetupModuleStateDescriptor.setJspFile(portletsSetupModule.getModuleDefaultJSP(request.getLocale()));
@@ -200,9 +205,11 @@ public class PortletsSetupModuleServiceImpl implements PortletServiceProvider, P
 
     private boolean pickNextModule(){
         if(!preInitSetupDone){
+            ++moduleNumber;
             processedModule = preInitPortletsSetupModules.get(0);
             preInitPortletsSetupModules.remove(processedModule);
         }else if(!postInitSetupDone){
+            ++moduleNumber;
             processedModule = postInitPortletsSetupModules.get(0);
             postInitPortletsSetupModules.remove(processedModule);
         }else{
