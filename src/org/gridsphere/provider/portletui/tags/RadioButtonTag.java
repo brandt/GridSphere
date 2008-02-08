@@ -80,6 +80,9 @@ public class RadioButtonTag extends BaseComponentTag {
         try {
             JspWriter out = pageContext.getOut();
             out.print(radiobutton.toStartString());
+            //GPF-114 fix
+            if(radiobutton.isSelected())
+                radiobutton.setSelected(false);
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
