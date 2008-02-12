@@ -31,7 +31,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public static String USER_PROFILE_PUBLIC = "user.publicprofile";
 
     // JSP pages used by this portlet
-    public static final String VIEW_USER_JSP = "profile/viewuser.jsp";
+    public static final String VIEW_USER_JSP = "profile/view.jsp";
     public static final String HELP_JSP = "profile/help.jsp";
     public static final String EDIT_PASSWD_JSP = "profile/editpassword.jsp";
 
