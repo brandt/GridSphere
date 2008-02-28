@@ -114,7 +114,8 @@ public class ActionLinkTag extends ActionTag {
         if (style != null) actionlink.setStyle(style);
         if (cssStyle != null) actionlink.setCssStyle(cssStyle);
         if (cssClass != null) actionlink.setCssClass(cssClass);
-        if (layout != null) actionlink.setLayout(label);
+        if (layout != null) actionlink.setLayout(layout);
+        if (label != null) actionlink.setLabel(label);
         if (onMouseOut != null) actionlink.setOnMouseOut(onMouseOut);
         if (onMouseOver != null) actionlink.setOnMouseOver(onMouseOver);
 
@@ -138,7 +139,6 @@ public class ActionLinkTag extends ActionTag {
     public int doEndTag() throws JspException {
         if (!beanId.equals("")) {
             paramBeans = actionlink.getParamBeanList();
-            label = actionlink.getLabel();
             action = actionlink.getAction();
         }
 
