@@ -63,10 +63,17 @@
             <title lang="en">Users</title>
             <table>
                 <row>
-                    <column width="100%">
+                    <column width="50%">
                         <frame label="usermanager">
                             <portlet-class>
                                 org.gridsphere.portlets.core.admin.users.UserManagerPortlet
+                            </portlet-class>
+                        </frame>
+                    </column>
+                    <column width="50%">
+                        <frame label="sessionview">
+                            <portlet-class>
+                                org.gridsphere.portlets.core.admin.users.SessionManagerPortlet
                             </portlet-class>
                         </frame>
                     </column>

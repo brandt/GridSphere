@@ -47,6 +47,8 @@
         <supported-locale>nl</supported-locale>
         <resource-bundle>Date.Portlet</resource-bundle>
     </portlet>
+
+
     <portlet>
         <!-- place portlet description here -->
         <description xml:lang="ar">البرنامج الذي يمكن من الدخول للنظام</description>
@@ -230,6 +232,24 @@
             <keywords>jcr, content, jsr170</keywords>
         </portlet-info>
     </portlet>
+
+    <portlet>
+        <description xml:lang="en">Session Viewer</description>
+        <portlet-name>Sessionview</portlet-name>
+        <display-name xml:lang="en">Session View</display-name>
+        <portlet-class>org.gridsphere.portlets.core.admin.users.SessionManagerPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <portlet-info>
+            <title>Session View</title>
+            <short-title>Session</short-title>
+            <keywords>session, view</keywords>
+        </portlet-info>
+    </portlet>
+
 
     <portlet>
         <description xml:lang="ar">يمكن مدير النظام من إدارة حسابات المستخدمين</description>
