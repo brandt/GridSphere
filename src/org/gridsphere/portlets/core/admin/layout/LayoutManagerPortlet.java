@@ -2,6 +2,7 @@ package org.gridsphere.portlets.core.admin.layout;
 
 import org.gridsphere.layout.*;
 import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridsphere.portletcontainer.DefaultPortletAction;
 import org.gridsphere.portletcontainer.GridSphereEvent;
@@ -13,6 +14,7 @@ import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
 import org.gridsphere.services.core.content.ContentFile;
 import org.gridsphere.services.core.content.ContentManagerService;
+import org.gridsphere.services.core.customization.SettingsService;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.services.core.security.role.PortletRole;
@@ -22,6 +24,8 @@ import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -48,6 +52,45 @@ public class LayoutManagerPortlet extends ActionPortlet {
         portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
         pageFactory = PortletPageFactory.getInstance();
         DEFAULT_VIEW_PAGE = "doShowLayout";
+    }
+
+    private Properties getLayoutNavigationProperties(FormEvent event) {
+        SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
+        String path = settingsService.getRealSettingsPath("navigation.properties");
+        Properties prop = new Properties();
+        if (new File(path).exists()) {
+            FileInputStream fis = null;
+            try {
+                fis = new FileInputStream(path);
+                prop = new Properties();
+                prop.load(fis);
+                prop.getProperty("homelabel", "");
+            } catch (IOException e) {
+                MessageBoxBean msg = event.getMessageBoxBean("msg");
+                msg.setMessageType(MessageStyle.MSG_ERROR);
+                msg.setKey("LAYOUT_NAVIGATION_FAILED_TO_READ_WRITE");
+            }
+        }
+        return prop;
+    }
+
+    public void saveHomeNavigation(ActionFormEvent event) {
+        SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
+        String path = settingsService.getRealSettingsPath("navigation.properties");
+        String navigation = event.getTextFieldBean("homenavigationTF").getValue();
+
+        if (new File(path).exists()) {
+            try {
+                Properties prop = getLayoutNavigationProperties(event);
+                prop.setProperty("homelabel", navigation);
+                FileOutputStream fos = new FileOutputStream(path);
+                prop.store(fos, "Properties for Main Navigation");
+            } catch (IOException e) {
+                MessageBoxBean msg = event.getMessageBoxBean("msg");
+                msg.setMessageType(MessageStyle.MSG_ERROR);
+                msg.setKey("LAYOUT_NAVIGATION_FAILED_TO_READ_WRITE");
+            }
+        }
     }
 
     public void savePageDetails(ActionFormEvent event) {
@@ -373,6 +416,11 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         String selectedLayout = (String) session.getAttribute(SELECTED_LAYOUT);
         req.setAttribute("pageName", selectedLayout);
+
+        // Layoutnavigation HOME
+        TextFieldBean layoutNavigationHome = event.getTextFieldBean("homenavigationTF");
+        Properties prop = getLayoutNavigationProperties(event);
+        layoutNavigationHome.setValue(prop.getProperty("homelabel", ""));
 
         ListBoxBean layoutsLB = event.getListBoxBean("layoutsLB");
         layoutsLB.clear();
@@ -1118,6 +1166,4 @@ public class LayoutManagerPortlet extends ActionPortlet {
         colsLB.addBean(five);
         colsLB.addBean(six);
     }
-
-
 }

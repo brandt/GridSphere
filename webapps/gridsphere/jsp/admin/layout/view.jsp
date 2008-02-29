@@ -30,6 +30,18 @@
     </ui:frame>
 </ui:form>
 
+<ui:group key="LAYOUT_NAVIGATION">
+    <ui:form>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:text key="LAYOUT_NAVIGATION_HOME"/>
+                <ui:textfield beanId="homenavigationTF"/>
+                <ui:actionsubmit action="saveHomeNavigation" key="SAVE"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:form>
+</ui:group>
+
 <ui:group key="LAYOUT_PAGE_DETAILS">
     <ui:form>
         <ui:frame>

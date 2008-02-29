@@ -90,6 +90,7 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         // now do the string rendering
         action = this.portletURI.toString();
 
+
         if (anchor != null) action += "#" + anchor;
 
         //String hlink = "<a href=\"" + action + "\"" + " onClick=\"this.href='" + action + "&amp;JavaScript=enabled'\"/>" + value + "</a>";
