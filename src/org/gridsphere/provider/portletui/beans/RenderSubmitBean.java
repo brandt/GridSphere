@@ -1,7 +1,7 @@
 package org.gridsphere.provider.portletui.beans;
 
 /**
- * An <code>RenderSubmitBean</code> is a visual bean that represents an HTML button and
+ * A <code>RenderSubmitBean</code> is a visual bean that represents an HTML button and
  * has an associated <code>DefaultPortletAction</code>
  */
 public class RenderSubmitBean extends ActionBean implements TagBean {
