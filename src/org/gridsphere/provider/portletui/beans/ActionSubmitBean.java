@@ -59,7 +59,6 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
         if (id != null) sb.append("id=\"").append(id).append("\" ");
         sb.append(getFormattedCss()).append("type=\"").append(inputType).append("\" ").append(checkDisabled());
         if (imageSrc != null) sb.append("src=\"").append(imageSrc).append("\" ");
-        if (disabled) sb.append("disabled ");
         if (action != null) sname = action;
         if (anchor != null) sname += "#" + anchor;
         if (onClick != null) {
