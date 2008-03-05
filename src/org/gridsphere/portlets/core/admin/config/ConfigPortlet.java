@@ -4,10 +4,8 @@ import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
-import org.gridsphere.provider.portletui.beans.CheckBoxBean;
-import org.gridsphere.provider.portletui.beans.RadioButtonBean;
-import org.gridsphere.provider.portletui.beans.TextAreaBean;
-import org.gridsphere.provider.portletui.beans.TextFieldBean;
+import org.gridsphere.provider.portletui.beans.*;
+import org.gridsphere.services.core.locale.LocaleService;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.security.auth.AuthModuleService;
 import org.gridsphere.services.core.security.auth.modules.LoginAuthModule;
@@ -18,6 +16,7 @@ import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public class ConfigPortlet extends ActionPortlet {
 
@@ -25,12 +24,28 @@ public class ConfigPortlet extends ActionPortlet {
 
     private PortalConfigService portalConfigService = null;
     private AuthModuleService authModuleService = null;
+    private LocaleService localeService = null;
 
     public void init(PortletConfig config) throws PortletException {
         super.init(config);
         portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
         authModuleService = (AuthModuleService) PortletServiceFactory.createPortletService(AuthModuleService.class, true);
+        localeService = (LocaleService) PortletServiceFactory.createPortletService(LocaleService.class, true);
         DEFAULT_VIEW_PAGE = "showConfigure";
+    }
+
+    private ListBoxItemBean makeLocaleBean(String language, String name, String locale) {
+        ListBoxItemBean bean = new ListBoxItemBean();
+        String display;
+        display = language.substring(0, 1).toUpperCase() + language.substring(1);
+
+        bean.setValue(display);
+        bean.setName(name);
+
+        if (locale.equals(name)) {
+            bean.setSelected(true);
+        }
+        return bean;
     }
 
     public void showConfigure(RenderFormEvent event) {
@@ -60,6 +75,20 @@ public class ConfigPortlet extends ActionPortlet {
 
         CheckBoxBean captchaCB = event.getCheckBoxBean("captchaCB");
         captchaCB.setSelected(Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.USE_CAPTCHA)).booleanValue());
+
+        CheckBoxBean defaultLanguageOverrideCB = event.getCheckBoxBean("defaultLanguageOverrideCB");
+        defaultLanguageOverrideCB.setSelected(Boolean.valueOf(portalConfigService.getProperty(PortalConfigService.DEFAULT_LANGUAGE_OVERRIDE)).booleanValue());
+        ListBoxBean defaultLanguageOverrideLB = event.getListBoxBean("defaultLanguageOverrideLB");
+        defaultLanguageOverrideLB.setMultipleSelection(false);
+        String defaultLanguage = portalConfigService.getProperty(PortalConfigService.DEFAULT_LANGUAGE_SELECTION);
+        if (defaultLanguage == null) defaultLanguage = Locale.ENGLISH.getDisplayLanguage();
+        Locale[] locales = localeService.getSupportedLocales();
+        for (int i = 0; i < locales.length; i++) {
+            Locale displayLocale = locales[i];
+            ListBoxItemBean localeBean = makeLocaleBean(displayLocale.getDisplayLanguage(displayLocale), displayLocale.getLanguage(), defaultLanguage);
+            defaultLanguageOverrideLB.addBean(localeBean);
+        }
+
 
         String numTries = portalConfigService.getProperty(PortalConfigService.LOGIN_NUMTRIES);
         TextFieldBean numTriesTF = event.getTextFieldBean("numTriesTF");
@@ -178,6 +207,11 @@ public class ConfigPortlet extends ActionPortlet {
         String numTries = numTriesTF.getValue();
         int numtries = -1;
 
+        CheckBoxBean defaultLanguageOverrideCB = event.getCheckBoxBean("defaultLanguageOverrideCB");
+        ListBoxBean defaultLanguageOverrideLB = event.getListBoxBean("defaultLanguageOverrideLB");
+
+        portalConfigService.setProperty(PortalConfigService.DEFAULT_LANGUAGE_OVERRIDE, Boolean.toString(defaultLanguageOverrideCB.isSelected()));
+        portalConfigService.setProperty(PortalConfigService.DEFAULT_LANGUAGE_SELECTION, defaultLanguageOverrideLB.getSelectedValue());
 
         RadioButtonBean isUsernameLogin = event.getRadioButtonBean("loginRB");
         portalConfigService.setProperty(PortalConfigService.USE_USERNAME_FOR_LOGIN, isUsernameLogin.getValue());

@@ -75,6 +75,10 @@
                 <ui:checkbox beanId="captchaCB"/><ui:text key="LOGIN_USE_CAPTCHA"/>
 
             </li>
+            <li>
+                <ui:checkbox beanId="defaultLanguageOverrideCB"/><ui:text key="LOGIN_DEFAULT_LANGUAGE_OVERRIDE"/>
+                <ui:listbox beanId="defaultLanguageOverrideLB"/>
+            </li>
         </ul>
         <ui:frame>
             <ui:tablerow>

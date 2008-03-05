@@ -4,12 +4,14 @@
  */
 package org.gridsphere.portlets.core.locale;
 
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.provider.event.jsr.ActionFormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridsphere.provider.portletui.beans.ListBoxItemBean;
 import org.gridsphere.services.core.locale.LocaleService;
+import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.user.User;
 
 import javax.portlet.PortletConfig;
@@ -21,10 +23,12 @@ import java.util.Locale;
 public class LocalePortlet extends ActionPortlet {
 
     private LocaleService localeService = null;
+    private PortalConfigService portalConfigService = null;
 
     public void init(PortletConfig config) throws PortletException {
         super.init(config);
         localeService = (LocaleService) createPortletService(LocaleService.class);
+        portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
         DEFAULT_VIEW_PAGE = "showLocale";
     }
 

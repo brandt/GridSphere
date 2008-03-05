@@ -400,6 +400,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
         RenderRequest req = event.getRenderRequest();
         RenderResponse res = event.getRenderResponse();
         doShowLayout(req, res, event);
+
+        res.addProperty("CSS_HREF", req.getContextPath() + "/css/file.css");
+        res.addProperty("JAVASCRIPT_SRC", req.getContextPath() + "/css/file.js");
+
         setNextState(event.getRenderRequest(), VIEW_JSP);
     }
 

@@ -4,7 +4,9 @@
  */
 package org.gridsphere.portlet.impl;
 
+import org.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridsphere.portletcontainer.PortletPreferencesManager;
+import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserPrincipal;
 
@@ -726,6 +728,15 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
                 return locale;
             }
         }
+        PortalConfigService portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
+        if (portalConfigService.getProperty(PortalConfigService.DEFAULT_LANGUAGE_OVERRIDE).equals(Boolean.TRUE.toString())) {
+            // we do want to have another locale then the browser language as default if nothing is set in the
+            // user profile (mostly for guest)
+            String defaultLocale = portalConfigService.getProperty(PortalConfigService.DEFAULT_LANGUAGE_SELECTION);
+            if (defaultLocale != null) locale = new Locale(defaultLocale);
+            return locale;
+        }
+
         locale = this.getHttpServletRequest().getLocale();
         if (locale != null) return locale;
         return Locale.ENGLISH;
