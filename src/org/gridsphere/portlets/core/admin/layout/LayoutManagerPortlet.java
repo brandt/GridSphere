@@ -12,9 +12,11 @@ import org.gridsphere.provider.event.jsr.FormEvent;
 import org.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridsphere.provider.portlet.jsr.ActionPortlet;
 import org.gridsphere.provider.portletui.beans.*;
-import org.gridsphere.services.core.content.ContentFile;
 import org.gridsphere.services.core.content.ContentManagerService;
 import org.gridsphere.services.core.customization.SettingsService;
+import org.gridsphere.services.core.jcr.ContentDocument;
+import org.gridsphere.services.core.jcr.ContentException;
+import org.gridsphere.services.core.jcr.JCRService;
 import org.gridsphere.services.core.portal.PortalConfigService;
 import org.gridsphere.services.core.registry.PortletRegistryService;
 import org.gridsphere.services.core.security.role.PortletRole;
@@ -37,7 +39,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     private static Map<String, PortletPage> pages = new HashMap<String, PortletPage>();
     private static RoleManagerService roleManagerService;
-    private static ContentManagerService contentManagerService;
+    private static ContentManagerService contentManagerService2;
+    private JCRService jcrService;
     private static PortalConfigService portalConfigService = null;
     private PortletRegistryService portletRegistryService = null;
     private PortletPageFactory pageFactory = null;
@@ -47,7 +50,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
     public void init(PortletConfig config) throws PortletException {
         super.init(config);
         roleManagerService = (RoleManagerService) createPortletService(RoleManagerService.class);
-        contentManagerService = (ContentManagerService) createPortletService(ContentManagerService.class);
+        jcrService = (JCRService) createPortletService(JCRService.class);
+
         portletRegistryService = (PortletRegistryService) createPortletService(PortletRegistryService.class);
         portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
         pageFactory = PortletPageFactory.getInstance();
@@ -555,12 +559,17 @@ public class LayoutManagerPortlet extends ActionPortlet {
                 } else {
                     controlUI = "content";
                     ListBoxBean contentLB = event.getListBoxBean("contentLB");
-                    List contentFiles = contentManagerService.getAllContent();
-                    for (int i = 0; i < contentFiles.size(); i++) {
-                        ContentFile contentFile = (ContentFile) contentFiles.get(i);
+                    contentLB.clear();
+                    List<ContentDocument> docs = new ArrayList();
+                    try {
+                        docs = jcrService.listChildContentDocuments("");
+                    } catch (ContentException e) {
+                        log.error("Could not access JCR Service.");
+                    }
+                    for (ContentDocument doc : docs) {
                         ListBoxItemBean item = new ListBoxItemBean();
-                        item.setName(contentFile.getFile().getName());
-                        item.setValue(contentFile.getFile().getName());
+                        item.setName(doc.getTitle());
+                        item.setValue(doc.getTitle());
                         contentLB.addBean(item);
                     }
                 }
