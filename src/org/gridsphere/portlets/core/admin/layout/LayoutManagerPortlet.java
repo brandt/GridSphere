@@ -154,13 +154,15 @@ public class LayoutManagerPortlet extends ActionPortlet {
         HiddenFieldBean compHF = event.getHiddenFieldBean("compHF");
         String activeComp = compHF.getValue();
         String reqRole = event.getListBoxBean("rolesLB").getSelectedName();
-        String portletClass = event.getListBoxBean("portletsLB").getSelectedName();
+        if (reqRole.toUpperCase().equals("NONE")) reqRole = "";
+
         String label = event.getTextFieldBean("labelTF").getValue();
         PortletComponent comp = page.getActiveComponent(activeComp);
 
         if (comp instanceof PortletFrame) {
+            String portletClass = event.getListBoxBean("portletsLB").getSelectedName();
             PortletFrame frame = (PortletFrame) comp;
-            if (reqRole.toUpperCase().equals("NONE")) reqRole = "";
+
             frame.setRequiredRole(reqRole);
             frame.setLabel(label);
             frame.setPortletClass(portletClass);
@@ -169,6 +171,15 @@ public class LayoutManagerPortlet extends ActionPortlet {
             if (!istitleRB.getSelectedValue().equalsIgnoreCase("yes")) {
                 frame.setTransparent(true);
             }
+            page.init(req, new ArrayList<ComponentIdentifier>());
+        }
+
+        if (comp instanceof PortletContent) {
+            String contentNode = event.getListBoxBean("contentLB").getSelectedName();
+            PortletContent content = (PortletContent) comp;
+            content.setRequiredRole(reqRole);
+            content.setLabel(label);
+            content.setInclude("jcr://" + contentNode);
             page.init(req, new ArrayList<ComponentIdentifier>());
         }
 
