@@ -39,7 +39,7 @@
     <ui:table>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doSaveContent" key="OK"/>
+                <ui:actionsubmit action="doSaveFrame" key="OK"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:actionsubmit action="doCancel" key="CANCEL"/>
