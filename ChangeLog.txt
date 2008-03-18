@@ -1,6 +1,55 @@
 ChangeLog.txt
 =============
 
+Release Notes - Changes in Version 3.1
+======================================
+Bug
+
+    * [GPF-114] - RadioButtonBean can't be set correctly
+    * [GPF-318] - Missing disabled-attribute in ui:listbox
+    * [GPF-429] - Problem in setting the localized text for ActionSubmitTag
+    * [GPF-437] - password recovery don't work correctly
+    * [GPF-441] - Setting the baseComponentBean sets the cssClass with the cssStyle attribute
+    * [GPF-457] - HTTP Response changes in doAfterLogin method of the org.gridsphere.services.core.filter.PortalFilter are ignored.
+    * [GPF-458] - Remember Me feature doesn't work.
+    * [GPF-459] - Init parameters are not accessible in portal filters
+    * [GPF-460] - Problem when adding customized window links: class cast exception
+    * [GPF-465] - USER role in fresh installation is not default
+    * [GPF-467] - JSP syntax translation and UI Tags
+    * [GPF-469] - User Account manager editing role does not work
+    * [GPF-470] - two rows won't be correctly rendered
+    * [GPF-479] - Two Tag2HTML-translation bugs in actionsubmit
+    * [GPF-481] - Secure login error
+    * [GPF-482] - Login error
+    * [GPF-485] - TextArea does not use cssStyle & class
+    * [GPF-486] - Path is not correctly handled for environmental variable
+    * [GPF-491] - onSubmit does not work with actionsubmit tag and conflicts with documents
+    * [GPF-497] - Layout Manager: Submit for "Edit content" not working
+
+Improvement
+
+    * [GPF-246] - New CSS Layout Engine
+    * [GPF-360] - If user forgets password the send email should also contain the username
+    * [GPF-382] - Who's logged in?
+    * [GPF-392] - Don't save the portlets settings in WEB-INF since this can be deleted after shutdown of the servlet container
+    * [GPF-393] - Make it deployable with Jetty
+    * [GPF-394] - Make it deployable with Tomcat 6
+    * [GPF-433] - Make captcha disengageable
+    * [GPF-439] - Navigation in upper right corner needs to be localized
+    * [GPF-461] - Allow users to have their own customized 'tabs'
+    * [GPF-462] - one language vs. automatic detection
+    * [GPF-480] - JNDI env-entry-name "gridspheresettingsdir" enhancement
+    * [GPF-483] - Update fileupload jar file
+    * [GPF-484] - Remove possibility of invoking action with render URLs
+
+New Feature
+
+    * [GPF-444] - editing the link behinde the "Home"-link in the navigation bar OR setting a default tab
+    * [GPF-449] - Support for Spring Beans as Services
+    * [GPF-463] - Implement redirect to url after login
+
+
+
 Release Notes - GridSphere Portal Framework - Version 3.0.6
 
 Bug
