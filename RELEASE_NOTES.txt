@@ -1,5 +1,12 @@
 RELEASE NOTES
 
+GridSphere 3.1
+==============
+
+All custom settings in the portal are now stored by default in ~/.gridsphere of the user
+who started the server. You can change that by setting a JNDI variable in tomcat called
+'gridspheresettingsdir' to override that location.
+
 GridSphere 3.0.8
 ================
 
