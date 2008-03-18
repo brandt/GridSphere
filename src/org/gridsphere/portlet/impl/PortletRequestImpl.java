@@ -729,11 +729,13 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             }
         }
         PortalConfigService portalConfigService = (PortalConfigService) PortletServiceFactory.createPortletService(PortalConfigService.class, true);
-        if (portalConfigService.getProperty(PortalConfigService.DEFAULT_LANGUAGE_OVERRIDE).equals(Boolean.TRUE.toString())) {
+        if (portalConfigService.getProperty(PortalConfigService.DEFAULT_LANGUAGE_OVERRIDE) != null &&
+                portalConfigService.getProperty(PortalConfigService.DEFAULT_LANGUAGE_OVERRIDE).equals(Boolean.TRUE.toString())) {
             // we do want to have another locale then the browser language as default if nothing is set in the
             // user profile (mostly for guest)
             String defaultLocale = portalConfigService.getProperty(PortalConfigService.DEFAULT_LANGUAGE_SELECTION);
-            if (defaultLocale != null) locale = new Locale(defaultLocale);
+            if (defaultLocale != null && defaultLocale != PortalConfigService.DEFAULT_LANGUAGE_SELECTION)
+                locale = new Locale(defaultLocale);
             return locale;
         }
 
