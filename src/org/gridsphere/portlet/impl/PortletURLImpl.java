@@ -138,7 +138,7 @@ public class PortletURLImpl implements PortletURL {
         Set allowedModes = (Set) req.getAttribute(SportletProperties.ALLOWED_MODES);
         if (allowedModes.contains(portletMode.toString())) {
             // hack to handle config mode
-            if (portletMode.toString().equals("config")) portletMode = new PortletMode("configure");
+            if (portletMode.toString().equals("config")) portletMode = new PortletMode("config");
             mode = portletMode;
         } else {
             throw new PortletModeException("Illegal portlet mode", portletMode);
