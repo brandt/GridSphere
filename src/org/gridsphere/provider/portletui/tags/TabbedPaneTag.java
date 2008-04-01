@@ -69,14 +69,13 @@ public class TabbedPaneTag extends BaseComponentTag {
             out.println("<ul class=\"ui-tab\">");
             // if this tab is not set, then use this tab (the first tab in the sequence)
             if (currentTabLabel == null) {
-                currentTabLabel = ((TabBean) tabBeans.get(0)).getLabel();
+                currentTabLabel = tabBeans.get(0).getLabel();
             }
 
             RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
 
             // print out all tabs
-            for (int i = 0; i < tabBeans.size(); i++) {
-                TabBean tabBean = (TabBean) tabBeans.get(i);
+            for (TabBean tabBean : tabBeans) {
                 PortletURL url = res.createRenderURL();
                 url.setParameter(TAB_LABEL_PARAM, tabBean.getLabel());
                 String href = url.toString();
