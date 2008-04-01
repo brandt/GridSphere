@@ -734,7 +734,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             // we do want to have another locale then the browser language as default if nothing is set in the
             // user profile (mostly for guest)
             String defaultLocale = portalConfigService.getProperty(PortalConfigService.DEFAULT_LANGUAGE_SELECTION);
-            if (defaultLocale != null && defaultLocale != PortalConfigService.DEFAULT_LANGUAGE_SELECTION)
+            if (defaultLocale != null && !defaultLocale.equals(PortalConfigService.DEFAULT_LANGUAGE_SELECTION))
                 locale = new Locale(defaultLocale);
             return locale;
         }
