@@ -222,18 +222,18 @@ Copyright:
                 <pathelement location="webapp/WEB-INF/classes/"/>
             </classpath>
         </taskdef>
-        <dbtask
-                configdir="${appserver.home}/webapps/${project.name}"
-                action="CREATE"/>
+        <!--<dbtask-->
+        <!--configdir="${appserver.home}/webapps/${project.name}"-->
+        <!--action="CREATE"/>-->
     </target>
 
     <target name="update-database" depends="setenv, configure-database, deploy">
         <taskdef name="dbtask"
                  classname="org.gridsphere.tools.DBTask"
                  classpathref="classpath"/>
-        <dbtask
-                configdir="${appserver.home}/webapps/${project.name}"
-                action="UPDATE"/>
+        <!--<dbtask-->
+        <!--configdir="${appserver.home}/webapps/${project.name}"-->
+        <!--action="UPDATE"/>-->
     </target>
 
     <!-- =================================================================== -->
