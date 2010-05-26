@@ -41,11 +41,11 @@
 </ui:tablecell>
 <ui:tablecell>
     <% if (req.isUserInRole(PortletRole.ADMIN.getName())) { %>
-<ui:textfield beanId="userNameTF">
+<ui:textfield beanId="userNameTF" maxlength="40">
     <ui:validator type="checkNotEmpty" key="USER_NAME_BLANK"/>
 </ui:textfield>
     <% } else { %>
-    <ui:text beanId="userName"/>
+    <ui:text beanId="userName" />
     <% } %>
 </ui:tablecell>
 </ui:tablerow>
@@ -54,7 +54,7 @@
     <ui:text key="GIVENNAME"/>
 </ui:tablecell>
 <ui:tablecell>
-<ui:textfield beanId="firstName">
+<ui:textfield beanId="firstName" maxlength="40">
     <ui:validator type="checkNotEmpty" key="USER_GIVENNAME_BLANK"/>
 </ui:textfield>
 </ui:tablecell>
@@ -64,7 +64,7 @@
     <ui:text key="FAMILYNAME"/>
 </ui:tablecell>
 <ui:tablecell>
-<ui:textfield beanId="lastName">
+<ui:textfield beanId="lastName" maxlength="40">
     <ui:validator type="checkNotEmpty" key="USER_FAMILYNAME_BLANK"/>
 </ui:textfield>
 </ui:tablecell>
@@ -74,7 +74,7 @@
     <ui:text key="ORGANIZATION"/>
 </ui:tablecell>
 <ui:tablecell>
-    <ui:textfield beanId="organization"/>
+    <ui:textfield beanId="organization" maxlength="40" />
 </ui:tablecell>
 </ui:tablerow>
 <ui:tablerow>
@@ -91,7 +91,7 @@
     <ui:text key="EMAILADDRESS"/>
 </ui:tablecell>
 <ui:tablecell>
-    <ui:textfield size="30" beanId="emailTF"/>
+    <ui:textfield size="30" beanId="emailTF" maxlength="60"/>
 </ui:tablecell>
 </ui:tablerow>
 <ui:tablerow>

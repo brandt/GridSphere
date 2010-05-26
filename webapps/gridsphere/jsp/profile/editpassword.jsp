@@ -26,7 +26,7 @@
                     <ui:text key="ORIG_PASSWORD"/>
                 </ui:tablecell>
                 <ui:tablecell width="150">
-                    <ui:password beanId="origPassword" size="20"/>
+                    <ui:password beanId="origPassword" size="20" maxlength="40"/>
                 </ui:tablecell>
             </ui:tablerow>
             <ui:tablerow>
@@ -34,7 +34,7 @@
                     <ui:text key="NEW_PASSWORD"/>
                 </ui:tablecell>
                 <ui:tablecell width="150">
-                    <ui:password beanId="password" size="20"/>
+                    <ui:password beanId="password" size="20" maxlength="40"/>
                 </ui:tablecell>
             </ui:tablerow>
             <ui:tablerow>
@@ -42,7 +42,7 @@
                     <ui:text key="CONFIRM_PASS"/>
                 </ui:tablecell>
     <ui:tablecell width="150">
-        <ui:password beanId="confirmPassword" size="20"/>
+        <ui:password beanId="confirmPassword" size="20" maxlength="40"/>
     </ui:tablecell>
     </ui:tablerow>
     </ui:frame>

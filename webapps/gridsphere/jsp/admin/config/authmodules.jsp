@@ -56,7 +56,7 @@
                 <% } %>
                 <ui:tablecell>
                     <ui:textfield name="<%= authModule.getModuleName() %>"
-                                  value="<%= String.valueOf(authModule.getModulePriority()) %>" size="3"/>
+                                  value="<%= String.valueOf(authModule.getModulePriority()) %>" size="3" maxlength="60"/>
                 </ui:tablecell>
                 <ui:tablecell>
                     <ui:text value="<%= authModule.getModuleDescription(pReq.getLocale()) %>"/>

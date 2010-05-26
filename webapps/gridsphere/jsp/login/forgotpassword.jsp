@@ -16,7 +16,7 @@
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:textfield beanId="emailTF" size="25" maxlength="40"/>
+                <ui:textfield beanId="emailTF" size="25" maxlength="60"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:table>

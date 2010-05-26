@@ -14,7 +14,7 @@
                 <ui:text key="USERNAME"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:textfield size="15" beanId="userName"/>
+                <ui:textfield size="15" beanId="userName" maxlength="40"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -24,7 +24,7 @@
                 <ui:text key="GIVENNAME"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:textfield size="15" beanId="firstName"/>
+                <ui:textfield size="15" beanId="firstName" maxlength="40"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -33,7 +33,7 @@
                 <ui:text key="FAMILYNAME"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:textfield size="15" beanId="lastName"/>
+                <ui:textfield size="15" beanId="lastName" maxlength="40"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -42,7 +42,7 @@
                 <ui:text key="EMAILADDRESS"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:textfield size="15" beanId="emailAddress"/>
+                <ui:textfield size="15" beanId="emailAddress" maxlength="60"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -51,7 +51,7 @@
                 <ui:text key="ORGANIZATION"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:textfield size="15" beanId="organization"/>
+                <ui:textfield size="15" beanId="organization" maxlength="40"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -62,7 +62,7 @@
                 <ui:text key="PASSWORD"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:password size="15" beanId="passwordx"/>
+                <ui:password size="15" beanId="passwordx" maxlength="40"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -71,20 +71,20 @@
                 <ui:text key="CONFIRM_PASS"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:password size="15" beanId="confirmPassword"/>
+                <ui:password size="15" beanId="confirmPassword" maxlength="40"/>
             </ui:tablecell>
         </ui:tablerow>
         <% } %>
 
     </ui:frame>
 
-    <ui:image src="<%= request.getContextPath() + "/Captcha.jpg" %>"/>
+    <ui:image src="<%= request.getContextPath() + \"/Captcha.jpg\" %>"/>
     <ui:renderlink key="LOGIN_CANT_READ" render="doNewUser"/>
     <p/>
 
     <ui:text key="CAPTCHA_TEXT"/>
     <p/>
-    <ui:textfield size="10" beanId="captchaTF"/>
+    <ui:textfield size="10" beanId="captchaTF" maxlength="40"/>
     <p/>
     <ui:frame>
         <ui:tablerow>

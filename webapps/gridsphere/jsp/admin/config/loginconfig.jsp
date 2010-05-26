@@ -62,7 +62,7 @@
             </li>
             <li>
                 <ui:text key="LOGIN_TRIES_MSG"/>
-                <ui:textfield beanId="numTriesTF"/>
+                <ui:textfield beanId="numTriesTF" maxlength="5"/>
             </li>
             <li>
                 <% Boolean isUsernameLogin = (Boolean) request.getAttribute("isUsernameLogin"); %>

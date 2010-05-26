@@ -19,7 +19,7 @@
             <ui:tablecell valign="top">
                 <%--  <ui:group key="CM_DOCUMENT">
                   <ui:text key="CM_DOCUMENT_TITLE"/>
-                  <ui:textfield beanId="title"/>
+                  <ui:textfield beanId="title" maxlength="40"/>
               </ui:group>  --%>
                 <ui:group key="CM_AVAILDOCUMENTS">
 
@@ -64,7 +64,7 @@
             <ui:tablecell valign="top">
                 <ui:group key="CM_DOCUMENT">
                     <ui:text key="CM_DOCUMENT_TITLE"/>
-                    <ui:textfield beanId="title"/>
+                    <ui:textfield beanId="title" maxlength="40"/>
                     <ui:actionsubmit action="saveDocument" key="CM_CREATEUPDATEDOCUMENT"/>
                     <ui:richtexteditor beanId="content" cols="80" rows="30"/>
                 </ui:group>

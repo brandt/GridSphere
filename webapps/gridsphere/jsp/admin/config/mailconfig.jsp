@@ -12,7 +12,7 @@
                     <ui:text key="CONFIG_MAILHOST"/>
                 </ui:tablecell>
                 <ui:tablecell width="100">
-                    <ui:textfield beanId="mailServerTF"/>
+                    <ui:textfield beanId="mailServerTF" maxlength="60"/>
                 </ui:tablecell>
             </ui:tablerow>
             <ui:tablerow>
@@ -20,7 +20,7 @@
                     <ui:text key="CONFIG_MAILPORT"/>
                 </ui:tablecell>
                 <ui:tablecell width="100">
-                    <ui:textfield beanId="mailPortTF"/>
+                    <ui:textfield beanId="mailPortTF" maxlength="10"/>
                 </ui:tablecell>
             </ui:tablerow>
             <ui:tablerow>
@@ -28,7 +28,7 @@
                     <ui:text key="CONFIG_MAILFROM"/>
                 </ui:tablecell>
                 <ui:tablecell width="100">
-                    <ui:textfield beanId="mailFromTF"/>
+                    <ui:textfield beanId="mailFromTF" maxlength="60"/>
                 </ui:tablecell>
             </ui:tablerow>
             <ui:tablerow>
@@ -36,7 +36,7 @@
                     <ui:text key="CONFIG_MAILADMIN"/>
                 </ui:tablecell>
                 <ui:tablecell width="100">
-                    <ui:textfield beanId="adminTF"/>
+                    <ui:textfield beanId="adminTF" maxlength="60"/>
                 </ui:tablecell>
             </ui:tablerow>
         </ui:frame>
