@@ -99,7 +99,7 @@
 
                     <ui:hiddenfield beanId="compHF"/>
                     <% if (!controlUI.equals("")) { %>
-                    <jsp:include page="<%= controlUI + ".jsp" %>"/>
+                    <jsp:include page="<%= controlUI + \".jsp\" %>"/>
                     <% } %>
                     <%--
                 <% if (controlUI.equals("frame")) { %>

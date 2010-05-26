@@ -93,14 +93,14 @@
             <ui:tablecell align="center">
                 <% if (description.getStatus().equals(PortletStatus.SUCCESS)) { %>
                 <ui:image
-                        src="<%= request.getContextPath() + "/themes/brush/default/images/msgicons/portlet-msg-success.gif" %>"/>
+                        src="<%= request.getContextPath() + \"/themes/brush/default/images/msgicons/portlet-msg-success.gif\" %>"/>
                 <ui:text key="SUCCESS"/>
                 <% } else { %>
                 <ui:image
-                        src="<%= request.getContextPath() + "/themes/brush/default/images/msgicons/portlet-msg-error.gif" %>"/>
+                        src="<%= request.getContextPath() + \"/themes/brush/default/images/msgicons/portlet-msg-error.gif\" %>"/>
                 <ui:text style="underline" id="<%= description.getContextPath() %>" key="FAILURE"/>
                 <ui:tooltip name="<%= description.getContextPath() %>"
-                            id="<%= description.getContextPath() + "tooltip" %>"
+                            id="<%= description.getContextPath() + \"tooltip\" %>"
                             value="<%= description.getStatusMessage() %>"/>
                 <% } %>
             </ui:tablecell>

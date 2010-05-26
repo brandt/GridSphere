@@ -33,7 +33,7 @@
         <ui:tablerow>
             <ui:tablecell>
                 <ui:text key="LAYOUT_EDIT_SUBTABNAME"/>
-                <ui:textfield beanId="nameTF" value="<%= tab.getTitle("en") %>"/>
+                <ui:textfield beanId="nameTF" value="<%= tab.getTitle(\"en\") %>"/>
             </ui:tablecell>
         </ui:tablerow>
         <ui:tablerow>

@@ -86,7 +86,7 @@
 
     <ui:actionsubmit cssStyle="margin-right: 30px;" action="<%= SportletProperties.LOGIN %>" key="LOGIN_ACTION">
         <% if (request.getParameter("cid") != null) { %>
-        <ui:actionparam name="queryString" value="<%= request.getParameter("cid") %>"/>
+        <ui:actionparam name="queryString" value="<%= request.getParameter(\"cid\") %>"/>
         <% } %>
     </ui:actionsubmit>
 

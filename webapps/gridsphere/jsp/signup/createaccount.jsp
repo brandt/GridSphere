@@ -85,7 +85,7 @@
         if (useCaptcha.equals(Boolean.TRUE.toString())) {
     %>
 
-    <ui:image src="<%= request.getContextPath() + "/Captcha.jpg" %>"/>
+    <ui:image src="<%= request.getContextPath() + \"/Captcha.jpg\" %>"/>
     <ui:actionsubmit key="LOGIN_CANT_READ" action="cantRead"/>
     <p/>
 

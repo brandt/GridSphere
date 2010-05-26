@@ -40,10 +40,10 @@
                 <ui:text key="LAYOUT_DISP_TB"/>
                 :
                 <ui:text key="YES"/>
-                <ui:radiobutton beanId="istitleRB" selected="<%= (request.getAttribute("isTitle") != null) %>"
+                <ui:radiobutton beanId="istitleRB" selected="<%= (request.getAttribute(\"isTitle\") != null) %>"
                                 value="yes"/>
                 <ui:text key="NO"/>
-                <ui:radiobutton beanId="istitleRB" selected="<%= (request.getAttribute("isTitle") == null) %>"
+                <ui:radiobutton beanId="istitleRB" selected="<%= (request.getAttribute(\"isTitle\") == null) %>"
                                 value="no"/>
             </ui:tablecell>
         </ui:tablerow>
