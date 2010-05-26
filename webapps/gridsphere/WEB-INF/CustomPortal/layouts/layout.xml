@@ -23,7 +23,14 @@
                 <column width="400px">
                     <content include="jcr://pageheader" border="false"/>
                 </column>
-                <column width="510px" style="float: right;">
+             </row>
+             <row>
+                 <column width="150px" style="float:right;">
+                     <frame transparent="true" outer-padding="0px" label="locale">
+                         <portlet-class>org.gridsphere.portlets.core.locale.LocalePortlet</portlet-class>
+                     </frame>
+                 </column>
+                 <column width="650px" style="float:right;">
                     <content include="/jsp/returnnav.jsp"/>
                 </column>
             </row>
