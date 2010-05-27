@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 1.1//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class
+		name="org.gridsphere.services.core.shibboleth.ShibbolethUser"
+		table="ShibbolethUser"
+	>
+		<cache usage="read-write"/>
+		<id
+			name="ID"
+			type="java.lang.String"
+			length="32"
+		>
+		<generator class="assigned"/>
+		</id>
+
+		<property name="ShibUsername" type="string"/>
+		<property name="ShibCN" type="string"/>
+		<property name="ShibLastname" type="string"/>
+		<property name="ShibFirstname" type="string"/>
+		<property name="ShibEmail" type="string"/>
+		<property name="ShibRole" type="string"/>
+		<property name="ShibAttr1" type="string"/>
+		<property name="ShibAttr2" type="string"/>
+		<property name="ShibAttr3" type="string"/>
+		<property name="ShibAttr4" type="string"/>
+	</class>
+</hibernate-mapping>
