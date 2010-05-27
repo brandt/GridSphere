@@ -17,7 +17,7 @@ public interface JCRService {
      * @param nodename
      * @return content of the nodename
      */
-    public String getContent(String nodename);
+    public String getContent(String nodename, String lang);
 
     /**
      * Returns a JCR session.

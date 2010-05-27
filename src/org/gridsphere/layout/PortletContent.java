@@ -190,14 +190,20 @@ public class PortletContent extends BasePortletComponent implements Serializable
 
             try {
                 // put a URL in an iframe
+            	String lang = null;
+            	try {
+            		lang = event.getRenderRequest().getLocale().getLanguage();
+            	} catch (Exception e) {
+            		// nothing to do (send null as lang)
+            	}
                 if (textFile.startsWith("http://")) {
                     writer.write("<iframe border=\"0\" width=\"100%\" height=\"" + height + "\" src=\"" + textFile + "\"></iframe>");
                 } else if (textFile.startsWith("jcr://")) {
                     JCRService jcrService = (JCRService) PortletServiceFactory.createPortletService(JCRService.class, true);
                     if (!border) {
-                        writer.write(jcrService.getContent(textFile.substring(6, textFile.length())));
+                        writer.write(jcrService.getContent(textFile.substring(6, textFile.length()), lang));
                     } else {
-                        writer.write("<div class=\"gridsphere-content\">" + jcrService.getContent(textFile.substring(6, textFile.length())) + "</div>");
+                        writer.write("<div class=\"gridsphere-content\">" + jcrService.getContent(textFile.substring(6, textFile.length()), lang) + "</div>");
                     }
                 } else {
                     // do a normal dispatch
