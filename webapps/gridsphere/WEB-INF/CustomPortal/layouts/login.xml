@@ -35,12 +35,17 @@
     </header>
 
     <bar>
-        <table>
+        <table width="80%">
             <row>
-                <column width="100%">
-                    <frame label="login" outer-padding="5% 35%">
+                <column align="right" width="50%">
+                    <frame label="login" outer-padding="5% 5%">
                         <portlet-class>org.gridsphere.portlets.core.login.LoginPortlet</portlet-class>
                     </frame>
+                </column>
+                <column align="left" width="50%">
+                	<frame label="shib_login" outer-padding="5% 5%">
+                	<portlet-class>org.gridsphere.portlets.core.login.ShibbolethLoginPortlet</portlet-class>
+                	</frame>
                 </column>
             </row>
         </table>

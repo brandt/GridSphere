@@ -18,6 +18,8 @@ import org.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridsphere.services.core.security.role.PortletRole;
 import org.gridsphere.services.core.security.role.RoleManagerService;
+import org.gridsphere.services.core.shibboleth.ShibbolethUser;
+import org.gridsphere.services.core.shibboleth.ShibbolethUserService;
 import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
 
@@ -40,6 +42,7 @@ public class UserManagerPortlet extends ActionPortlet {
     // Portlet services
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
+    private ShibbolethUserService shibUserService = null;
 
     private RoleManagerService roleManagerService = null;
     private PortalConfigService portalConfigService = null;
@@ -56,6 +59,7 @@ public class UserManagerPortlet extends ActionPortlet {
         this.passwordManagerService = (PasswordManagerService) createPortletService(PasswordManagerService.class);
         this.mailService = (MailService) createPortletService(MailService.class);
         this.portalConfigService = (PortalConfigService) createPortletService(PortalConfigService.class);
+        this.shibUserService = (ShibbolethUserService) createPortletService(ShibbolethUserService.class);
         DEFAULT_HELP_PAGE = "admin/users/help.jsp";
         DEFAULT_VIEW_PAGE = "doListUsers";
     }
@@ -337,6 +341,8 @@ public class UserManagerPortlet extends ActionPortlet {
                     this.roleManagerService.deleteUserInRole(user, role);
                 }
                 this.userManagerService.deleteUser(user);
+                ShibbolethUser shibUser = this.shibUserService.getShibUserByUserName(user.getUserID());
+                this.shibUserService.deleteShibUser(shibUser);
             }
         }
         createSuccessMessage(event, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));

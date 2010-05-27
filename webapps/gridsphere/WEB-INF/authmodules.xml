@@ -51,4 +51,24 @@
         <error key="key3" lang="es">Error Inesperado</error>
     </auth-module>
 
+	<auth-module>
+        <name>Shibboleth Authentication</name>
+        <description lang="en">Use the Shibboleth Authentication and Authorization</description>
+        <description lang="ja">Use the Shibboleth Authentication and Authorization</description>
+        <implementation>org.gridsphere.services.core.security.auth.modules.impl.ShibbolethAuthModule</implementation>
+        <active>true</active>
+        <priority>200</priority>
+        <auth-config>
+            <param-name>aname</param-name>
+            <param-value>avalue</param-value>
+        </auth-config>
+        <error key="key1" lang="en">Password is not provided</error>
+        <error key="key2" lang="en">Incorrect password provided</error>
+        <error key="key1" lang="ja">パスワードが入力されていません</error>
+        <error key="key2" lang="ja">間違ったパスワードが入力されました</error>
+        <error key="key1" lang="es">No fué proporcionada la Contraseña</error>
+        <error key="key2" lang="es">La contraseña proporcionada, es incorrecta</error>
+    </auth-module>
+	
+
 </auth-modules>

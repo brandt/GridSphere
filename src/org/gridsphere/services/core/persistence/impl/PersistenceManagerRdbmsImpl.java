@@ -283,4 +283,9 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         //session = null;
     }
 
+	public Object load(Class object, String stringId) throws PersistenceManagerException {
+		Session session = currentSession();
+		return session.load(object, new String(stringId));
+	}
+
 }

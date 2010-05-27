@@ -69,18 +69,18 @@ public class PasswordManagerServiceImpl implements PortletServiceProvider, Passw
         //log.debug("Stored value is " + password.getValue());
         //log.debug("Provided value is " + value);
 
-        // MD5 hash of password value
+        // SHA-512 hash of password value
         try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            md5.update(value.getBytes());
-            value = toHex(md5.digest());
+            MessageDigest sha = MessageDigest.getInstance("SHA-512");
+            sha.update(value.getBytes());
+            value = toHex(sha.digest());
 
             //log.debug("Hash of value is " + value);
             if (!password.getValue().equals(value)) {
                 throw new InvalidPasswordException("Supplied password does not match user password!");
             }
         } catch (NoSuchAlgorithmException e) {
-            log.error("No such algorithm: MD5", e);
+            log.error("No such algorithm: SHA-512", e);
         }
     }
 
@@ -89,12 +89,12 @@ public class PasswordManagerServiceImpl implements PortletServiceProvider, Passw
             if (editor instanceof PasswordImpl) {
                 PasswordImpl pass = (PasswordImpl) editor;
                 try {
-                    MessageDigest md5 = MessageDigest.getInstance("MD5");
-                    md5.update(pass.getValue().getBytes());
-                    String value = toHex(md5.digest());
+                    MessageDigest sha = MessageDigest.getInstance("SHA-512");
+                    sha.update(pass.getValue().getBytes());
+                    String value = toHex(sha.digest());
                     pass.setValue(value);
                 } catch (NoSuchAlgorithmException e) {
-                    throw new PersistenceManagerException("Can't get MD5 algorithm! " + e.getMessage());
+                    throw new PersistenceManagerException("Can't get SHA-512 algorithm! " + e.getMessage());
                 }
                 pm.saveOrUpdate(pass);
             }
@@ -105,11 +105,11 @@ public class PasswordManagerServiceImpl implements PortletServiceProvider, Passw
 
     public String getHashedPassword(String pass) {
         try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            md5.update(pass.getBytes());
-            return toHex(md5.digest());
+            MessageDigest sha = MessageDigest.getInstance("SHA-512");
+            sha.update(pass.getBytes());
+            return toHex(sha.digest());
         } catch (NoSuchAlgorithmException e) {
-            log.error("NoSuchAlgorithm MD5!", e);
+            log.error("NoSuchAlgorithm SHA-512!", e);
         }
         return null;
     }
@@ -157,7 +157,7 @@ public class PasswordManagerServiceImpl implements PortletServiceProvider, Passw
     }
 
     /**
-     * Return an 8 byte representation of the 32 byte MD5 digest
+     * Return an 8 byte representation of the 32 byte SHA-512 digest
      *
      * @param digest the message digest
      * @return String 8 byte hexadecimal

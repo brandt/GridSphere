@@ -14,7 +14,7 @@
 <% RenderRequest req = (RenderRequest) pageContext.getAttribute("renderRequest");
     User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
     String username = user.getFirstName() + " " + user.getLastName();
-
+	
     SettingsService settingsService = (SettingsService) PortletServiceFactory.createPortletService(SettingsService.class, true);
     String path = settingsService.getRealSettingsPath("navigation.properties");
 
@@ -57,3 +57,7 @@
         </li>
     </ul>
 </div>
+
+<!--
+String username = user.getFirstName() + " " + user.getLastName();
+-->

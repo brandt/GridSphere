@@ -98,24 +98,24 @@
         <mime-type>text/vnd.wap.wmlscript</mime-type>
     </mime-mapping>
 
-    <!-- the 401 page -->
+    <!-- the 401 page 
     <error-page>
         <error-code>401</error-code>
         <location>/ErrorLayout&amp;errorPage=unauthorized.jsp</location>
     </error-page>
-
-    <!-- the 403 page -->
+-->
+    <!-- the 403 page 
     <error-page>
         <error-code>403</error-code>
         <location>/ErrorLayout&amp;errorPage=unauthorized.jsp</location>
     </error-page>
-
-    <!-- the 404 page -->
+-->
+    <!-- the 404 page 
     <error-page>
         <error-code>404</error-code>
         <location>/ErrorLayout&amp;errorPage=notfound.jsp</location>
     </error-page>
-
+-->
 
     <!-- for internal errors -->
     <!--

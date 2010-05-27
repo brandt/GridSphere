@@ -33,6 +33,8 @@ import org.gridsphere.services.core.user.UserPrincipal;
 import org.gridsphere.services.core.user.impl.UserImpl;
 import org.hibernate.StaleObjectStateException;
 
+
+
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.portlet.*;
@@ -44,6 +46,7 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 
@@ -170,7 +173,28 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         PortletContext ctx = new PortletContextImpl(getServletContext());
         GridSphereEvent event = new GridSphereEventImpl(ctx, req, res);
-
+        
+        // Added by Lin fuer Shibboleth start
+        // Holt die Attribute aus der HTTPSession und schreibt sie in die GridSphere Session
+        /*String shib_flag = (String) req.getSession(true).getAttribute("shibboleth.user.attributes");
+        log.debug(">>>>>>>>>>>>  Attribute shibboleth.user.attributes = " + shib_flag + "  <<<<<<<<<<<<<<<<<<<<<");
+        if (shib_flag!=null && shib_flag.equals("true")) {
+        	event.getActionRequest().getPortletSession(true).setAttribute("shibboleth.user.username", req.getSession(true).getAttribute("shibboleth.user.username"));
+        	event.getActionRequest().getPortletSession(true).setAttribute("shibboleth.user.givenname", req.getSession(true).getAttribute("shibboleth.user.givenname"));
+        	event.getActionRequest().getPortletSession(true).setAttribute("shibboleth.user.surname", req.getSession(true).getAttribute("shibboleth.user.surname"));
+        	event.getActionRequest().getPortletSession(true).setAttribute("shibboleth.user.email", req.getSession(true).getAttribute("shibboleth.user.email"));
+        	event.getActionRequest().getPortletSession(true).setAttribute("shibboleth.user.organization", req.getSession(true).getAttribute("shibboleth.user.organization"));
+        	event.getActionRequest().getPortletSession(true).setAttribute("shibboleth.user.role", req.getSession(true).getAttribute("shibboleth.user.role"));
+        	event.getActionRequest().getPortletSession(true).setAttribute("shibboleth.user.idp", req.getSession(true).getAttribute("shibboleth.user.idp"));
+        	req.getSession(true).removeAttribute("shibboleth.user.attributes");
+        	log.debug("\n\n Attribute shibboleth.user.attributes = " + req.getSession(true).getAttribute("shibboleth.user.attribute"));
+        	//log.debug("PortletSession Attribute shibboleth.user.username = " + event.getActionRequest().getPortletSession().getAttribute("shibboleth.user.username") + "\n\n");
+        } */
+        // wozu dieses else von Lin?????
+        /*else {
+        	checkWebContainerAuthorization(event);
+        }*/
+        // Added by Lin fuer Shibboleth end
         // check to see if user has been authorized by means of container managed authorization
         checkWebContainerAuthorization(event);
 
@@ -212,16 +236,49 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
         }
 
-        // perform a redirect-after-POST!
+        // Schaue ob es ein POST oder GET ist
+        log.debug("\n\nreq.getMethod().toUpperCase().equals('POST'): "+req.getMethod().toUpperCase().equals("POST"));
+        log.debug("req.getMethod().toUpperCase().equals('GET'): "+req.getMethod().toUpperCase().equals("GET") + "\n\n");
+        
+        
+        //perform a redirect-after-POST
+        log.debug("\n\n\n shibboleth.user.somevalue = " + req.getSession(true).getAttribute("shibboleth.user.somevalue"));
         if (event.hasAction() && req.getMethod().toUpperCase().equals("POST")) {
             String requestURL = (String) req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
             if (req.getParameter("ajax") == null) {
-                log.debug("redirect after POST to: " + requestURL);
+                log.debug("\n\n\n\n\n >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> redirect after POST ERFOLGREICHER LOGIN!!!!! go to: " + requestURL);
+                req.getSession(true).removeAttribute("shibboleth.user.somevalue");
                 res.sendRedirect(requestURL);
                 return;
             }
+        } 
+        
+        // perform redirect-after-GET fuer Service Provider 1.3
+        /*if(event.hasAction() && req.getMethod().toUpperCase().equals("GET") && req.getHeaderNames().hasMoreElements()) {
+                String requestURL = (String) req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
+        		Enumeration headers = req.getHeaderNames();
+        		while ((headers !=null) && headers.hasMoreElements()) {
+        			String h = (String) headers.nextElement();
+        			if ( h.startsWith("Shib-") ) {
+        				if (h.toLowerCase().endsWith("identity-provider")) {
+        					log.debug("\n\n\n\n\n >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ERFOLGREICHER LOGIN!!!!!  redirect after GET to: " + requestURL);
+        	                res.sendRedirect(requestURL);
+        	                return;
+        				}
+        			}
+        		}
+        }*/
+        
+        // perform redirect-after-GET fuer Service Provider 2.1
+        log.debug("\n\n\n shibboleth.user.somevalue = " + req.getSession(true).getAttribute("shibboleth.user.somevalue"));
+        String somevalue = (String) req.getSession(true).getAttribute("shibboleth.user.somevalue");
+        if(event.hasAction() && req.getMethod().toUpperCase().equals("GET") && somevalue!= null && somevalue.equals("true")) {
+        	log.debug("\n\nim redirect-after-GET fuer SP 2.1");
+        	String requestURL = (String) req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
+        	req.getSession(true).removeAttribute("shibboleth.user.somevalue");
+        	res.sendRedirect(requestURL);
         }
-
+        
         // is this a file download operation?
         if (isDownload(req)) {
             try {
@@ -237,9 +294,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         if (isTCK) {
             setTCKUser(req);
         } else {
+        	log.debug("\n\n>>>>>>   Set User and Roles  <<<<<<<<<<\n\n");
             setUserAndRoles(event);
         }
-
+        
         layoutEngine.service(event);
 
         for (PortalFilter portalFilter : portalFilters) {
@@ -349,14 +407,17 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private void checkWebContainerAuthorization(GridSphereEvent event) {
         PortletRequest request = event.getActionRequest();
         PortletSession session = request.getPortletSession();
+        //log.debug("!!!!!!!!!!!!!!!! SportletProperties.PORTLET_USER = " + session.getAttribute(SportletProperties.PORTLET_USER));
         if (session.getAttribute(SportletProperties.PORTLET_USER) != null) return;
         if (!(event.hasAction() && event.getAction().getName().equals(SportletProperties.LOGOUT))) {
             Principal principal = request.getUserPrincipal();
+            //log.debug("!!!!!!!!!!!!!! in GridSphereServlet checkWebContainerAuthorization principal = " + principal);
             if (principal != null) {
                 // fix for OC4J. it must work in Tomcat also
                 int indeDelimeter = principal.getName().lastIndexOf('/');
                 indeDelimeter = (indeDelimeter > 0) ? (indeDelimeter + 1) : 0;
                 String login = principal.getName().substring(indeDelimeter);
+                //log.debug("!!!!!!!!!!!!!!!!! User to login = " + login);
                 User user = userManagerService.getUserByUserName(login);
                 if (user != null) {
                     request.setAttribute(SportletProperties.PORTLET_USER, user);

@@ -496,6 +496,7 @@ public class PortletServlet extends HttpServlet
                             ActionRequest actionRequest,
                             ActionResponse actionResponse, PortalContext portalContext)
             throws IOException {
+    	log.debug("\n\n In PortletServlet - redirect(HttpServletRequest, HttpServletResponse, ActionRequest, ActionResponse, PortalContext)\n\n");
         if (actionResponse instanceof ActionResponseImpl) {
             ActionResponseImpl aResponse = (ActionResponseImpl) actionResponse;
             String location = aResponse.getRedirectLocation();
@@ -510,6 +511,7 @@ public class PortletServlet extends HttpServlet
                 log.debug("redirecting to location= " + location);
 
                 servletRequest.setAttribute(SportletProperties.PORTAL_REDIRECT_PATH, location);
+                log.debug("\n\nPORTAL_REDIRECT_PATH = " + servletRequest.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH) + "\n\n");
                 //redirectResponse.sendRedirect(location);
 
             } else {
@@ -519,6 +521,7 @@ public class PortletServlet extends HttpServlet
                 Map params = aResponse.getRenderParameters();
                 url.setParameters(params);
                 servletRequest.setAttribute(SportletProperties.PORTAL_REDIRECT_PATH, url.toString());
+                log.debug("\n\nPORTAL_REDIRECT_PATH = " + servletRequest.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH) + "\n\n");
             }
 
         }

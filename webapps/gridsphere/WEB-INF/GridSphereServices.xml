@@ -189,5 +189,12 @@
         <interface>org.gridsphere.services.core.customization.SettingsService</interface>
         <implementation>org.gridsphere.services.core.customization.impl.SettingsServiceImpl</implementation>
     </service>
+    
+    <service>
+        <name>ShibbolethUser Service</name>
+        <description lang="en">GridSphere ShibbolethUser service</description>
+        <interface>org.gridsphere.services.core.shibboleth.ShibbolethUserService</interface>
+        <implementation>org.gridsphere.services.core.shibboleth.impl.ShibbolethUserServiceImpl</implementation>
+    </service>
 
 </portlet-services>

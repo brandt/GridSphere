@@ -94,6 +94,14 @@ public interface PersistenceManagerRdbms {
     public void deleteList(String query) throws PersistenceManagerException;
 
     /**
+    *  Returns Object of the Shibboleth user with the given primary key
+    *  @param Class object of the ShibbolethUser class
+    *  @param primary key (id) of the user
+    *  @return Object of Shibboleth user
+    */
+   public Object load(Class object, String stringId) throws PersistenceManagerException;
+    
+    /**
      * Shuts down the PersistenceManager. Used to free any ressources
      * still used by it.
      *
