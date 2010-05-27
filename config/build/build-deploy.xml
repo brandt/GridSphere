@@ -217,7 +217,7 @@ Build include file for the GridSphere Portal source code, see build.xml
         <!-- Copy context file -->
         <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
         <if>
-            <available file="${appserver.home}/conf/Catalina" type="dir" property="tomcat5"/>
+	    <available file="${appserver.home}/shared/lib" type="dir" property="tomcat5"/>
             <then>
                 <echo message="Detected Tomcat 5"/>
                 <copy overwrite="true" todir="${appserver.home}/shared/lib">
@@ -233,18 +233,15 @@ Build include file for the GridSphere Portal source code, see build.xml
             </then>
             <else>
                 <echo message="Detected Tomcat 6"/>
-                <echo message=" "/>
-                <echo message="+---------------------------------------------------------------------------+"/>
-                <echo message="| TOMCAT 6 IS NOT YET FULLY SUPPORTED WHEN DEPLOYING OTHER PORTLET WEBAPPS  |"/>
-                <echo message="| PLEASE USE TOMCAT 5.5.x                                                   |"/>
-                <echo message="+---------------------------------------------------------------------------+"/>
-                <echo message=" "/>
-
-                <copy overwrite="true" todir="${appserver.home}/webapps/${gridsphere.deploy}/WEB-INF/lib">
-                    <fileset dir="${build.lib}">
-                        <include name="gridsphere-service-framework-${gridsphere.version}.jar"/>
-                        <include name="gridsphere-portal-api-${gridsphere.version}.jar"/>
+		<copy overwrite="true" todir="${appserver.home}/lib">
+                    <fileset dir="lib">
+                        <exclude name="licenses/**"/>
+                        <exclude name="*.txt"/>
                     </fileset>
+                    <fileset dir="${build.lib}">
+                        <include name="*.jar"/>
+                    </fileset>
+
                 </copy>
             </else>
         </if>
