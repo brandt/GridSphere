@@ -141,6 +141,7 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
         }
     }
 
+    //TODO handle this exception!!
     public void destroy() {
         log.info("Shutting down content repository...");
         // just to make sure...
