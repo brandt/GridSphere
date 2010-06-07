@@ -142,8 +142,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             //throw staleEx;
         } catch (Throwable ex) {
             ex.printStackTrace();
-            pm.endTransaction();
             try {
+                pm.endTransaction();
                 pm.rollbackTransaction();
             } catch (Throwable rbEx) {
                 log.error("Could not rollback transaction after exception!", rbEx);
@@ -239,20 +239,40 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         // Schaue ob es ein POST oder GET ist
         log.debug("\n\nreq.getMethod().toUpperCase().equals('POST'): "+req.getMethod().toUpperCase().equals("POST"));
         log.debug("req.getMethod().toUpperCase().equals('GET'): "+req.getMethod().toUpperCase().equals("GET") + "\n\n");
-        
-        
-        //perform a redirect-after-POST
+
+        // moved by Bastian Boegel, University of Ulm, Germany, 2009
+        // otherwise block gets not executed 
+        // is this a file download operation?
+        if (isDownload(req)) {
+            try {
+                downloadFile(req, res);
+                return;
+            } catch (PortletException e) {
+                log.error("Unable to download file!", e);
+                req.setAttribute(SportletProperties.FILE_DOWNLOAD_ERROR, e);
+            }
+        }
+
+        // perform a redirect-after-POST!
         log.debug("\n\n\n shibboleth.user.somevalue = " + req.getSession(true).getAttribute("shibboleth.user.somevalue"));
         if (event.hasAction() && req.getMethod().toUpperCase().equals("POST")) {
             String requestURL = (String) req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
             if (req.getParameter("ajax") == null) {
                 log.debug("\n\n\n\n\n >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> redirect after POST ERFOLGREICHER LOGIN!!!!! go to: " + requestURL);
                 req.getSession(true).removeAttribute("shibboleth.user.somevalue");
-                res.sendRedirect(requestURL);
+                // changed by Bastian Boegel: before: always send redirect to requestURL
+                // if requestURL is null an empty page appears without any message
+                // now checking if requestURL is null and if it is null redirecting to
+                // the req.getRequestURL which will then show the login page
+                if (requestURL != null) {
+                    res.sendRedirect(requestURL);
+                } else {
+                    res.sendRedirect(req.getRequestURL().toString());
+                }
                 return;
             }
-        } 
-        
+        }
+
         // perform redirect-after-GET fuer Service Provider 1.3
         /*if(event.hasAction() && req.getMethod().toUpperCase().equals("GET") && req.getHeaderNames().hasMoreElements()) {
                 String requestURL = (String) req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
@@ -279,16 +299,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         	res.sendRedirect(requestURL);
         }
         
-        // is this a file download operation?
-        if (isDownload(req)) {
-            try {
-                downloadFile(req, res);
-                return;
-            } catch (PortletException e) {
-                log.error("Unable to download file!", e);
-                req.setAttribute(SportletProperties.FILE_DOWNLOAD_ERROR, e);
-            }
-        }
+        // old position of isDownload
 
         // Used for TCK tests
         if (isTCK) {

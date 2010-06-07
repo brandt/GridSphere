@@ -14,191 +14,220 @@ import javax.servlet.jsp.JspWriter;
  */
 public class TableCellTag extends BaseComponentTag {
 
-    protected TableCellBean cellBean = null;
-    protected String width = null;
-    protected String height = null;
-    protected String align = null;
-    protected String valign = null;
-    protected String rowspan = null;
-    protected String colspan = null;
+	protected TableCellBean cellBean = null;
+	protected String width = null;
+	protected String height = null;
+	protected String align = null;
+	protected String valign = null;
+	protected String rowspan = null;
+	protected String colspan = null;
 
-    /**
-     * Sets the table alignment e.g. "left", "center" or "right"
-     *
-     * @param align the table alignment
-     */
-    public void setAlign(String align) {
-        this.align = align;
-    }
+	/**
+	 * Sets the table alignment e.g. "left", "center" or "right"
+	 *
+	 * @param align the table alignment
+	 */
+	public void setAlign(String align) {
+		this.align = align;
+	}
 
-    /**
-     * Returns the table alignment e.g. "left", "center" or "right"
-     *
-     * @return the table alignment
-     */
-    public String getAlign() {
-        return align;
-    }
+	/**
+	 * Returns the table alignment e.g. "left", "center" or "right"
+	 *
+	 * @return the table alignment
+	 */
+	public String getAlign() {
+		return align;
+	}
 
-    /**
-     * Sets the table vertical alignment e.g. "top", "middle", "bottom" or "baseline"
-     *
-     * @param valign the table vertical alignment
-     */
-    public void setValign(String valign) {
-        this.valign = valign;
-    }
+	/**
+	 * Sets the table vertical alignment e.g. "top", "middle", "bottom" or "baseline"
+	 *
+	 * @param valign the table vertical alignment
+	 */
+	public void setValign(String valign) {
+		this.valign = valign;
+	}
 
-    /**
-     * Returns the table vertical alignment e.g. "top", "middle", "bottom" or "baseline"
-     *
-     * @return the table vertical alignment
-     */
-    public String getValign() {
-        return valign;
-    }
+	/**
+	 * Returns the table vertical alignment e.g. "top", "middle", "bottom" or "baseline"
+	 *
+	 * @return the table vertical alignment
+	 */
+	public String getValign() {
+		return valign;
+	}
 
-    /**
-     * Sets the table cell width
-     *
-     * @param width the table cell width
-     */
-    public void setWidth(String width) {
-        this.width = width;
-    }
+	/**
+	 * Sets the table cell width
+	 *
+	 * @param width the table cell width
+	 */
+	public void setWidth(String width) {
+		this.width = width;
+	}
 
-    /**
-     * Returns the table cell width
-     *
-     * @return the table cell width
-     */
-    public String getWidth() {
-        return width;
-    }
+	/**
+	 * Returns the table cell width
+	 *
+	 * @return the table cell width
+	 */
+	public String getWidth() {
+		return width;
+	}
 
-    /**
-     * Sets the table cell height
-     *
-     * @param height the table cell height
-     */
-    public void setHeight(String height) {
-        this.height = height;
-    }
+	/**
+	 * Sets the table cell height
+	 *
+	 * @param height the table cell height
+	 */
+	public void setHeight(String height) {
+		this.height = height;
+	}
 
-    /**
-     * Returns the table cell height
-     *
-     * @return the table cell height
-     */
-    public String getHeight() {
-        return height;
-    }
+	/**
+	 * Returns the table cell height
+	 *
+	 * @return the table cell height
+	 */
+	public String getHeight() {
+		return height;
+	}
 
-    /**
-     * Returns the table cell row span
-     *
-     * @return the table cell row span
-     */
-    public String getRowspan() {
-        return rowspan;
-    }
+	/**
+	 * Returns the table cell row span
+	 *
+	 * @return the table cell row span
+	 */
+	public String getRowspan() {
+		return rowspan;
+	}
 
-    /**
-     * Sets the table cell row span
-     *
-     * @param rowspan the table cell row span
-     */
-    public void setRowspan(String rowspan) {
-        this.rowspan = rowspan;
-    }
+	/**
+	 * Sets the table cell row span
+	 *
+	 * @param rowspan the table cell row span
+	 */
+	public void setRowspan(String rowspan) {
+		this.rowspan = rowspan;
+	}
 
-    /**
-     * Returns the table cell col span
-     *
-     * @return the table cell col span
-     */
-    public String getColspan() {
-        return colspan;
-    }
+	/**
+	 * Returns the table cell col span
+	 *
+	 * @return the table cell col span
+	 */
+	public String getColspan() {
+		return colspan;
+	}
 
-    /**
-     * Sets the table cell col span
-     *
-     * @param colspan the table cell col span
-     */
-    public void setColspan(String colspan) {
-        this.colspan = colspan;
-    }
+	/**
+	 * Sets the table cell col span
+	 *
+	 * @param colspan the table cell col span
+	 */
+	public void setColspan(String colspan) {
+		this.colspan = colspan;
+	}
 
 
-    /**
-     * Sets the table cell bean
-     *
-     * @param cellBean the table cell bean
-     */
-    public void setCellBean(TableCellBean cellBean) {
-        this.cellBean = cellBean;
-    }
+	/**
+	 * Sets the table cell bean
+	 *
+	 * @param cellBean the table cell bean
+	 */
+	public void setCellBean(TableCellBean cellBean) {
+		this.cellBean = cellBean;
+	}
 
-    /**
-     * Returns the table cell bean
-     *
-     * @return the table cell bean
-     */
-    public TableCellBean getCellBean() {
-        return cellBean;
-    }
+	/**
+	 * Returns the table cell bean
+	 *
+	 * @return the table cell bean
+	 */
+	public TableCellBean getCellBean() {
+		return cellBean;
+	}
 
-    public void release() {
-        cellBean = null;
-        width = null;
-        height = null;
-        align = null;
-        valign = null;
-        super.release();
-    }
+	public void release() {
+		cellBean = null;
+		width = null;
+		height = null;
+		align = null;
+		valign = null;
+		super.release();
+	}
 
-    public int doStartTag() throws JspException {
-        if (!beanId.equals("")) {
-            cellBean = (TableCellBean) getTagBean();
-            if (cellBean == null) cellBean = new TableCellBean();
-        } else {
-            cellBean = new TableCellBean();
-            if (width != null) cellBean.setWidth(width);
-            if (height != null) cellBean.setHeight(height);
-            if (align != null) cellBean.setAlign(align);
-            if (valign != null) cellBean.setValign(valign);
-            if (rowspan != null) cellBean.setRowspan(rowspan);
-            if (colspan != null) cellBean.setColspan(colspan);
-            if (cssClass != null) cellBean.setCssClass(cssClass);
-            if (cssStyle != null) cellBean.setCssStyle(cssStyle);
-        }
-        /*
+	public int doStartTag() throws JspException {
+		if (!beanId.equals("")) {
+			cellBean = (TableCellBean) getTagBean();
+			if (cellBean == null)  {
+				cellBean = new TableCellBean();
+			}
+		} else {
+			cellBean = new TableCellBean();
+//			if (width != null) cellBean.setWidth(width);
+//			if (height != null) cellBean.setHeight(height);
+//			if (align != null) cellBean.setAlign(align);
+//			if (valign != null) cellBean.setValign(valign);
+//			if (rowspan != null) cellBean.setRowspan(rowspan);
+//			if (colspan != null) cellBean.setColspan(colspan);
+//			if (cssClass != null) cellBean.setCssClass(cssClass);
+//			if (cssStyle != null) cellBean.setCssStyle(cssStyle);
+		}
+		if (cellBean != null) {
+			if ((cellBean.getWidth() == null) && (width != null)) {
+				cellBean.setWidth(width);
+			}
+			if ((cellBean.getHeight() == null) && (height != null)) {
+				cellBean.setHeight(height);
+			}
+			if ((cellBean.getAlign() == null) && (align != null)) {
+				cellBean.setAlign(align);
+			}
+			if ((cellBean.getValign() == null) && (valign != null)) {
+				cellBean.setValign(valign);
+			}
+			if ((cellBean.getRowspan() == null) && (rowspan != null)) {
+				cellBean.setRowspan(rowspan);
+			}
+			if ((cellBean.getColspan() == null) && (colspan != null)) {
+				cellBean.setColspan(colspan);
+			}
+			if ((cellBean.getCssClass() == null) && (cssClass != null)) {
+				cellBean.setCssClass(cssClass);
+			}
+			if ((cellBean.getCssStyle() == null) && (cssStyle != null)) {
+				cellBean.setCssStyle(cssStyle);
+			}
+
+		}
+		/*
         TableRowTag rowTag = (TableRowTag) getParent();
         if (rowTag.getHeader()) {
             cellBean.setCssClass(TableRowBean.TABLE_HEADER_STYLE);
         } else if (rowTag.getZebra()) {
             cellBean.setCssClass(TableRowBean.TABLE_ALTERNATE_STYLE);
         }
-         */
-        try {
-            JspWriter out = pageContext.getOut();
-            out.print(cellBean.toStartString());
-        } catch (Exception e) {
-            throw new JspException(e);
-        }
-        return EVAL_BODY_INCLUDE;
-    }
+		 */
+		try {
+			JspWriter out = pageContext.getOut();
+			out.print(cellBean.toStartString());
+		} catch (Exception e) {
+			throw new JspException(e);
+		}
+		return EVAL_BODY_INCLUDE;
+	}
 
-    public int doEndTag() throws JspException {
+	public int doEndTag() throws JspException {
 
-        try {
-            JspWriter out = pageContext.getOut();
-            out.print(cellBean.toEndString());
-        } catch (Exception e) {
-            throw new JspException(e);
-        }
-        super.doEndTag();
-        return EVAL_PAGE;
-    }
+		try {
+			JspWriter out = pageContext.getOut();
+			out.print(cellBean.toEndString());
+		} catch (Exception e) {
+			throw new JspException(e);
+		}
+		super.doEndTag();
+		return EVAL_PAGE;
+	}
 }

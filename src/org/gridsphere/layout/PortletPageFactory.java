@@ -238,6 +238,8 @@ public class PortletPageFactory implements PortletSessionListener {
             copy = (PortletPage) deepCopy(masterPage);
         } catch (Exception e) {
             log.error("Failed to make a copy of the master page: " + layoutId);
+            if (layoutId.equals(ERROR_PAGE))
+            	return null;
             return createErrorPage();
         }
         return copy;

@@ -141,7 +141,6 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
         }
     }
 
-    //TODO handle this exception!!
     public void destroy() {
         log.info("Shutting down content repository...");
         // just to make sure...
@@ -196,7 +195,13 @@ public class JCRServiceImpl implements PortletServiceProvider, JCRService {
         return result;
     }
 
-    public String getContent(String nodename) {
+    public String getContent(String nodename, String lang) {
+    	if (lang != null) {
+    		// try the localized message
+    		String nodename2 = nodename + "_" + lang;
+    		if (existsContentDocument(nodename2))
+    			nodename = nodename2;
+    	}
         // handle content management
         String output = "";
         try {

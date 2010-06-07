@@ -291,7 +291,15 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
      * @return the bean value
      */
     public String getValue() {
-        return parseUserInput(value);
+        return value;
+        // returning typed in value instead of changed value because 
+        // there is no possibility to distinguish the correct value.
+        // If a user user HTML entity and characters (e.g. for commands)
+        // the portlet can't know the correct value (e.g. the command
+        // >>>echo "Test data &gt; sdlj" > test.html<<< will be transformed
+        // to >>>echo "Test data &gt; sdlj" &gt; test.html<<< and an HTML unescape creates
+        // a wrong result: >>>echo "Test data > sdlj" > test.html"!
+//        return parseUserInput(value);
     }
 
     /**

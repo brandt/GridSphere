@@ -164,6 +164,9 @@ public class ActionPortlet extends GenericPortlet {
 
         String methodName = formEvent.getAction().getName();
         //log.debug("########### in ActionPortlet : processAction : ActionFormEvent.getAction() = " + formEvent.getAction());
+        // check methodName and set the DEFAULT_VIEW_PAGE if nothing is set
+        if ((methodName == null) || (methodName.length() == 0))
+        	methodName = DEFAULT_VIEW_PAGE;
         // reset next state
         removeNextState(actionRequest);
         //log.debug("########### in ActionPortlet : processAction : call doAction");
@@ -391,8 +394,13 @@ public class ActionPortlet extends GenericPortlet {
 
     protected String getLocalizedText(PortletRequest req, String key) {
         Locale locale = req.getLocale();
-        ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
-        return bundle.getString(key);
+       	ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+       	try {
+       		return bundle.getString(key);
+       	} catch (Exception e) {
+       		log.error("Error getting localized text for key: " + key, e);
+       		return "Error getting localized text for key: " + key;
+       	}
     }
 
     public String getParameter(PortletRequest request, String param) {

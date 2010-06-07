@@ -214,10 +214,12 @@ public class ProfileManagerPortlet extends ActionPortlet {
         String passwordValue = event.getPasswordBean("password").getValue();
         String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
 
-        if (origPasswd.equals("") && passwordValue.equals("") && confirmPasswordValue.equals("")) return;
+        if (((origPasswd == null) || (origPasswd.equals(""))) && passwordValue.equals("") && confirmPasswordValue.equals("")) return;
 
         try {
-            passwordManagerService.validateSuppliedPassword(user, origPasswd);
+        	// if user is logged in with certificate, the old password is not needed
+        	if (req.getAttribute("javax.servlet.request.X509Certificate") == null)
+        		passwordManagerService.validateSuppliedPassword(user, origPasswd);
         } catch (InvalidPasswordException e) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_INVALID"));
             return;
@@ -368,6 +370,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
     }
 
     public void doCancel(ActionFormEvent event) {
+    	event.getPasswordBean("origPassword").setValue("");
+    	event.getPasswordBean("password").setValue("");
+    	event.getPasswordBean("confirmPassword").setValue("");
         ActionRequest req = event.getActionRequest();
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
