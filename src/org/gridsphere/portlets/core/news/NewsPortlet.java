@@ -54,7 +54,13 @@ public class NewsPortlet extends ActionPortlet {
 
 
     public void doView(RenderFormEvent event) throws PortletException {
-        String content = jcrService.getContent(document);
+	String lang = null;
+	try {
+		lang = event.getRenderRequest().getLocale().getLanguage();
+	} catch (Execption e) {
+		// nothing to do (send null as lang)
+	}
+        String content = jcrService.getContent(document, lang);
         event.getRenderRequest().setAttribute("document", content);
         setNextState(event.getRenderRequest(), "news/view.jsp");
     }
