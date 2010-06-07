@@ -124,7 +124,8 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
             if (!allowedModes.contains(portletMode.toString())) throw new PortletModeException("Unsupported portlet mode!", portletMode);
             req.setAttribute(SportletProperties.PORTLET_MODE, portletMode);
         } else {
-            throw new IllegalStateException("No list of supported modes has been provided!");
+        	// removed because of problems when clicking HOME on the login page
+//            throw new IllegalStateException("No list of supported modes has been provided!");
         }
         isRedirectAllowed = false;
     }
