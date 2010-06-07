@@ -4,22 +4,28 @@
  */
 package org.gridsphere.layout;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.gridsphere.portlet.impl.SportletProperties;
-import org.gridsphere.portletcontainer.GridSphereEvent;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.zip.GZIPOutputStream;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.zip.GZIPOutputStream;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.gridsphere.portlet.impl.SportletProperties;
+import org.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridsphere.portletcontainer.DefaultPortletRender;
+import org.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridsphere.portletcontainer.PortletDispatcherException;
+import org.gridsphere.portletcontainer.impl.PortletInvoker;
 
 /**
  * The <code>PortletLayoutEngine</code> is a singleton that is responsible for managing
@@ -114,10 +120,11 @@ public class PortletLayoutEngine {
         PortletPage page = getPortletPage(event);
         setHeaders(event);
         StringBuffer pageBuffer = new StringBuffer();
+
         if (req.getParameter("ajax") != null) {
-
-
             String portlet = req.getParameter("portlet");
+            String gsRender = req.getParameter("gs_render");
+            
             System.err.println("it's ajax: " + portlet);
             String cid = event.getComponentID();
             if ((cid != null) && (cid.startsWith("portlet"))) {
@@ -149,6 +156,21 @@ public class PortletLayoutEngine {
                 frame.doRender(event);
                 pageBuffer = frame.getBufferedOutput(event.getRenderRequest());
                 res.setContentType("text/html");
+            } else if (gsRender != null && !gsRender.isEmpty()) {
+            	DefaultPortletRender render = new DefaultPortletRender(gsRender);
+            	PortletInvoker portletInvoker = new PortletInvoker();
+            	try {            		
+                    StringWriter storedWriter = new StringWriter();
+                    PrintWriter writer = new PrintWriter(storedWriter);
+            		RenderResponse wrappedResponse = new StoredPortletResponseImpl(event.getHttpServletRequest(), event.getHttpServletResponse(), writer);
+            		portletInvoker.service((String) req.getAttribute(SportletProperties.PORTLETID), render, (HttpServletRequest) req, (HttpServletResponse) wrappedResponse);
+            		pageBuffer = storedWriter.getBuffer();
+            		//portletInvoker.service((String) req.getAttribute(SportletProperties.PORTLETID), render, req, res);
+				} catch (PortletDispatcherException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
             } else {
                 PortletComponent comp = page.getActiveComponent(cid);
                 if (comp != null) {
