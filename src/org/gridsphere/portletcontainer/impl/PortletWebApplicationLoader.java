@@ -41,6 +41,7 @@ public class PortletWebApplicationLoader {
         this.webApplicationName = webApplicationName;
         // get the servlet context for the coreportlets webapp
         String contextURIPath;
+        log.info("webApplicationName: " + webApplicationName);
         if (webApplicationName.startsWith("/")) {
             contextURIPath = webApplicationName;
             this.webApplicationName = webApplicationName.substring(1);
@@ -50,6 +51,7 @@ public class PortletWebApplicationLoader {
 
         // Get the cross context servlet context
         ServletContext ctx = context.getContext(contextURIPath);
+        log.info("servletContextName: " + ctx.getServletContextName());
         //System.err.println("contextURIPath: " + contextURIPath);
         //System.err.println("contextName: " + ctx.getServletContextName());
         //System.err.println("context path: " + ctx.getRealPath(""));
@@ -58,9 +60,8 @@ public class PortletWebApplicationLoader {
             log.error(webApplicationName + ": Unable to get ServletContext for: " + contextURIPath);
             throw new PortletException(webApplicationName + ": Unable to get ServletContext for: " + contextURIPath);
         }
-        log.debug("context path: " + ctx.getRealPath(""));
+        log.info("context path: " + ctx.getRealPath(""));
         this.webAppDescription = ctx.getServletContextName();
-
 
         String servletName = "PortletServlet";
         RequestDispatcher rd = ctx.getNamedDispatcher(servletName);
