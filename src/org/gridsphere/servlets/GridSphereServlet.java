@@ -139,8 +139,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             //throw staleEx;
         } catch (Throwable ex) {
             ex.printStackTrace();
-            pm.endTransaction();
             try {
+                pm.endTransaction();
                 pm.rollbackTransaction();
             } catch (Throwable rbEx) {
                 log.error("Could not rollback transaction after exception!", rbEx);
@@ -212,16 +212,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
         }
 
-        // perform a redirect-after-POST!
-        if (event.hasAction() && req.getMethod().toUpperCase().equals("POST")) {
-            String requestURL = (String) req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
-            if (req.getParameter("ajax") == null) {
-                log.debug("redirect after POST to: " + requestURL);
-                res.sendRedirect(requestURL);
-                return;
-            }
-        }
-
+        // moved by Bastian Boegel, University of Ulm, Germany, 2009
+        // otherwise block gets not executed 
         // is this a file download operation?
         if (isDownload(req)) {
             try {
@@ -232,6 +224,26 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 req.setAttribute(SportletProperties.FILE_DOWNLOAD_ERROR, e);
             }
         }
+
+        // perform a redirect-after-POST!
+        if (event.hasAction() && req.getMethod().toUpperCase().equals("POST")) {
+            String requestURL = (String) req.getAttribute(SportletProperties.PORTAL_REDIRECT_PATH);
+            if (req.getParameter("ajax") == null) {
+                log.debug("redirect after POST to: " + requestURL);
+                // changed by Bastian Boegel: before: always send redirect to requestURL
+                // if requestURL is null an empty page appears without any message
+                // now checking if requestURL is null and if it is null redirecting to
+                // the req.getRequestURL which will then show the login page
+                if (requestURL != null) {
+                    res.sendRedirect(requestURL);
+                } else {
+                    res.sendRedirect(req.getRequestURL().toString());
+                }
+                return;
+            }
+        }
+        
+        // old position of isDownload
 
         // Used for TCK tests
         if (isTCK) {
