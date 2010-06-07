@@ -19,6 +19,7 @@ import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -252,6 +253,7 @@ public class ContentManagementPortlet extends ActionPortlet {
         filelist.clear();
         File dir = new File(backupDir);
         File files[] = dir.listFiles();
+        Arrays.sort(files);
         for (int i = 0; i < files.length; i++) {
             File f = files[i];
             if (f.isFile()) {
