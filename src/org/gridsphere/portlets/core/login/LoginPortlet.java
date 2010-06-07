@@ -121,7 +121,7 @@ public class LoginPortlet extends ActionPortlet {
         if (dispUser) request.setAttribute("dispPass", "true");
 
         String errorMsg = (String) request.getPortletSession(true).getAttribute(LOGIN_ERROR_FLAG);
-
+        log.debug("\n\nString errorMsg = " + errorMsg);
         if (errorMsg != null) {
             createErrorMessage(event, errorMsg);
             request.getPortletSession(true).removeAttribute(LOGIN_ERROR_FLAG);
@@ -138,10 +138,12 @@ public class LoginPortlet extends ActionPortlet {
         PortletRequest req = event.getActionRequest();
 
         try {
-            login(event);
+            log.debug("##########>>>>>>>>>> in LoginPortlet gs_login Aufruf von login(ActionEvent event) ");
+        	login(event);
         } catch (AuthorizationException err) {
             log.debug(err.getMessage());
             req.getPortletSession(true).setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
+            err.printStackTrace();
         } catch (AuthenticationException err) {
             log.debug(err.getMessage());
             req.getPortletSession(true).setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
@@ -217,6 +219,7 @@ public class LoginPortlet extends ActionPortlet {
         ActionResponse res = event.getActionResponse();
 
         User user = login(req);
+        log.debug("######## Der User ist : " + user);
         Long now = Calendar.getInstance().getTime().getTime();
         user.setLastLoginTime(now);
         Integer numLogins = user.getNumLogins();
@@ -265,7 +268,7 @@ public class LoginPortlet extends ActionPortlet {
         //mark request as successfull login in order to invoke doAfterLogin (GPF-457 fix)
         req.setAttribute(SportletProperties.PORTAL_FILTER_EVENT, SportletProperties.PORTAL_FILTER_EVENT_AFTER_LOGIN);
 
-        log.debug("in login redirecting to portal: " + realuri.toString());
+        log.debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! in login redirecting to portal: " + realuri.toString());
         try {
             if (req.getParameter("ajax") != null) {
                 //res.setContentType("text/html");
@@ -287,6 +290,9 @@ public class LoginPortlet extends ActionPortlet {
         String loginName = req.getParameter("username");
         String loginPassword = req.getParameter("password");
         String certificate = null;
+        
+        log.debug("###########>>>>>>>> in LoginPortlet login(PorletRequest req)");
+        log.debug("##########>>>>>>> loginName = " + loginName + "   loginPassword = " + loginPassword);
 
         X509Certificate[] certs = (X509Certificate[]) req.getAttribute("javax.servlet.request.X509Certificate");
         if (certs != null && certs.length > 0) {
@@ -347,8 +353,9 @@ public class LoginPortlet extends ActionPortlet {
             }
 
             String accountStatus = (String) user.getAttribute(User.DISABLED);
+            log.debug("\n\n\n\n##############  Account Status = " + accountStatus + "\n\n\n\n\n");
             if ((accountStatus != null) && ("TRUE".equalsIgnoreCase(accountStatus)))
-                throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
+            	throw new AuthorizationException(getLocalizedText(req, "LOGIN_AUTH_DISABLED"));
         }
 
         // If authorized via certificates no other authorization needed
@@ -429,9 +436,12 @@ public class LoginPortlet extends ActionPortlet {
                     
                     user = tmpUser;
                 } else {
-                    mod.checkAuthentication(user, loginPassword);
+                    
+                    	mod.checkAuthentication(user, loginPassword);
                 }
+                
                 success = true;
+                
             } catch (AuthenticationException e) {
                 //TODO: shouldn't we accumulate authentication error messages from all modules - not from the last only ?
                 String errMsg = mod.getModuleError(e.getMessage(), req.getLocale());

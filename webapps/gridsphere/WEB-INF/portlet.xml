@@ -91,6 +91,31 @@
         <supported-locale>zh</supported-locale>
         <resource-bundle>Login.Portlet</resource-bundle>
     </portlet>
+    
+	<portlet>
+        <!-- place portlet description here -->
+        <description xml:lang="de">Anmelden mit Shibboleth</description>
+        <description xml:lang="en">Shibboleth Login</description>
+        
+        <!-- place unique portlet name here -->
+        <portlet-name>ShibbolethLogin</portlet-name>
+        <display-name xml:lang="de">Shibboleth Login</display-name>
+        <display-name xml:lang="en">Shibboleth Login</display-name>
+
+        <!-- place your portlet class name here -->
+        <portlet-class>org.gridsphere.portlets.core.login.ShibbolethLoginPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+        <!-- place supported modes here -->
+        <supports>
+            <mime-type>text/html</mime-type>
+        </supports>
+        <supported-locale>de</supported-locale>
+        <supported-locale>en</supported-locale>
+        
+        <resource-bundle>Shibboleth.Portlet</resource-bundle>
+    </portlet>
+	    
+    
     <portlet>
         <!-- place portlet description here -->
         <description xml:lang="en">Portlet provides registration capabilities</description>

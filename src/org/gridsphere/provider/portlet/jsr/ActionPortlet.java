@@ -148,7 +148,7 @@ public class ActionPortlet extends GenericPortlet {
         // if cid is null (true in non-GS portlet container) then use the portlet name
         String cid = (String) actionRequest.getAttribute(SportletProperties.COMPONENT_ID);
         if (cid == null) actionRequest.setAttribute(SportletProperties.COMPONENT_ID, getUniqueId());
-
+        //log.debug("########### in ActionPortlet : processAction : cid = " + cid);
         DefaultPortletAction action = (DefaultPortletAction) actionRequest.getAttribute(SportletProperties.ACTION_EVENT);
         // In non-GS container this will need to be created
 
@@ -158,14 +158,16 @@ public class ActionPortlet extends GenericPortlet {
             //System.err.println("action name" + action.getName());
         }
         ActionFormEvent formEvent = new ActionFormEventImpl(action, actionRequest, actionResponse);
-
+        //log.debug("########### in ActionPortlet : processAction : ActionFormEvent = " + formEvent);
         Class[] parameterTypes = new Class[]{ActionFormEvent.class};
         Object[] arguments = new Object[]{formEvent};
 
         String methodName = formEvent.getAction().getName();
+        //log.debug("########### in ActionPortlet : processAction : ActionFormEvent.getAction() = " + formEvent.getAction());
         // reset next state
         removeNextState(actionRequest);
-
+        //log.debug("########### in ActionPortlet : processAction : call doAction");
+        log.debug("###### methodName = " + methodName);
         doAction(actionRequest, actionResponse, methodName, parameterTypes, arguments);
         //System.err.println("in processAction: befoire store cid=" + actionRequest.getAttribute(SportletProperties.COMPONENT_ID));
 
@@ -200,7 +202,7 @@ public class ActionPortlet extends GenericPortlet {
         // Call method specified by action name
         try {
             Method method = thisClass.getMethod(methodName, parameterTypes);
-
+            //log.debug("############ in ActionPortlet : doAction : Method Name = " + methodName);
             method.invoke(this, arguments);
 
             StringBuffer sb = new StringBuffer();
@@ -218,6 +220,7 @@ public class ActionPortlet extends GenericPortlet {
         } catch (NoSuchMethodException e) {
             String error = "No such method: " + methodName + "\n" + e.getMessage();
             log.error(error, e);
+            log.error(">>>>>>>>>>>>>>>>>>>>>   Methode Name : " + methodName);
             throw new PortletException(error, e);
         } catch (IllegalAccessException e) {
             String error = "Error accessing action method: " + methodName + "\n" + e.getMessage();
@@ -728,6 +731,7 @@ public class ActionPortlet extends GenericPortlet {
         MessageBoxBean msgBox = evt.getMessageBoxBean("msg");
         msgBox.setMessageType(MessageStyle.MSG_ERROR);
         String msgOld = msgBox.getValue();
+        log.debug("\n\n\n\n\n MessageBoxBean msgOld = "+ msgOld + "\n\n\n\n\n");
         msgBox.setValue((msgOld != null ? msgOld : "") + "\n" + text);
     }
 

@@ -20,9 +20,18 @@
 
 
 <h3>
-    <ui:text key="PROFILE_SETTINGS" style="bold"/>
-
-    <%--<ui:actionlink action="doEditPassword" value="Change password"/></h3>--%>
+    <!--  Modified by Alan start -->
+<%
+	String shib_flag = (String)request.getSession(true).getAttribute("shibboleth.login");
+	
+	if((shib_flag == null) || (!shib_flag.equals("true")))
+	{
+%>
+		<ui:actionlink action="doEditPassword" value="Change password"/></h3>
+<%
+	}
+%>
+<!--  Modified by Alan endt -->
 
 <ui:frame>
 <ui:tablerow>
@@ -41,11 +50,11 @@
 </ui:tablecell>
 <ui:tablecell>
     <% if (req.isUserInRole(PortletRole.ADMIN.getName())) { %>
-<ui:textfield beanId="userNameTF" maxlength="40">
+<ui:textfield beanId="userNameTF">
     <ui:validator type="checkNotEmpty" key="USER_NAME_BLANK"/>
 </ui:textfield>
     <% } else { %>
-    <ui:text beanId="userName" />
+    <ui:text beanId="userName"/>
     <% } %>
 </ui:tablecell>
 </ui:tablerow>
@@ -54,7 +63,7 @@
     <ui:text key="GIVENNAME"/>
 </ui:tablecell>
 <ui:tablecell>
-<ui:textfield beanId="firstName" maxlength="40">
+<ui:textfield beanId="firstName">
     <ui:validator type="checkNotEmpty" key="USER_GIVENNAME_BLANK"/>
 </ui:textfield>
 </ui:tablecell>
@@ -64,7 +73,7 @@
     <ui:text key="FAMILYNAME"/>
 </ui:tablecell>
 <ui:tablecell>
-<ui:textfield beanId="lastName" maxlength="40">
+<ui:textfield beanId="lastName">
     <ui:validator type="checkNotEmpty" key="USER_FAMILYNAME_BLANK"/>
 </ui:textfield>
 </ui:tablecell>
@@ -74,7 +83,7 @@
     <ui:text key="ORGANIZATION"/>
 </ui:tablecell>
 <ui:tablecell>
-    <ui:textfield beanId="organization" maxlength="40" />
+    <ui:textfield beanId="organization"/>
 </ui:tablecell>
 </ui:tablerow>
 <ui:tablerow>
@@ -91,7 +100,7 @@
     <ui:text key="EMAILADDRESS"/>
 </ui:tablecell>
 <ui:tablecell>
-    <ui:textfield size="30" beanId="emailTF" maxlength="60"/>
+    <ui:textfield size="30" beanId="emailTF"/>
 </ui:tablecell>
 </ui:tablerow>
 <ui:tablerow>
