@@ -308,8 +308,8 @@ public class LoginPortlet extends ActionPortlet {
 	}
 
         
-        log.debug("###########>>>>>>>> in LoginPortlet login(PorletRequest req)");
-        log.debug("##########>>>>>>> loginName = " + loginName + "   loginPassword = " + loginPassword);
+        //log.debug("###########>>>>>>>> in LoginPortlet login(PorletRequest req)");
+        //log.debug("##########>>>>>>> loginName = " + loginName + "   loginPassword = " + loginPassword);
 
 	public User login(PortletRequest req)
 	throws AuthenticationException, AuthorizationException {
@@ -448,38 +448,9 @@ public class LoginPortlet extends ActionPortlet {
 
 					//check if user descriptor matches user object
 
-<<<<<<< .working
-                    //TODO: substitute with localized messages
-                    if(null != userDescriptor.getUserName() && !tmpUser.getUserName().equals(userDescriptor.getUserName()))
-                        throw new AuthenticationException("User name in auth module and GridSphere doesn't match");
-                    
-                    user = tmpUser;
-                } else {
-                    
-                    	mod.checkAuthentication(user, loginPassword);
-                }
-                
-                success = true;
-                
-            } catch (AuthenticationException e) {
-                //TODO: shouldn't we accumulate authentication error messages from all modules - not from the last only ?
-                String errMsg = mod.getModuleError(e.getMessage(), req.getLocale());
-                if (errMsg != null) {
-                    authEx = new AuthenticationException(errMsg);
-                } else {
-                    authEx = e;
-                }
-            } catch (Exception e){
-                log.error("",e);
-            }
-            if (success) break;
-        }
-        if (!lateUserRetrieval && !success) {
-=======
 					//TODO: substitute with localized messages
 					if(null != userDescriptor.getID() && !tmpUser.getID().equals(userDescriptor.getID()))
 						throw new AuthenticationException("ID in auth module and GridSphere doesn't match");
->>>>>>> .merge-right.r6493
 
 					//TODO: substitute with localized messages
 					if(null != userDescriptor.getEmailAddress() && !tmpUser.getEmailAddress().equals(userDescriptor.getEmailAddress()))
