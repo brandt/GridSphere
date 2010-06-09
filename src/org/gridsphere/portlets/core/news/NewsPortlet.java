@@ -57,7 +57,7 @@ public class NewsPortlet extends ActionPortlet {
 	String lang = null;
 	try {
 		lang = event.getRenderRequest().getLocale().getLanguage();
-	} catch (Execption e) {
+	} catch (Exception e) {
 		// nothing to do (send null as lang)
 	}
         String content = jcrService.getContent(document, lang);
