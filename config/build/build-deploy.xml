@@ -216,8 +216,11 @@ Build include file for the GridSphere Portal source code, see build.xml
     <target name="deploy-tomcat" depends="deploy-copy">
         <!-- Copy context file -->
         <filter token="GRIDSPHERE_DEPLOY" value="${gridsphere.deploy}"/>
+	<exec dir="${src}" executable="java" os="linux" resultproperty="majorVersion">
+		<arg line="$CATALINA_HOME/lib/catalina.jar org.apache.catalina.util | grep &quot;Server number&quot; | awk '{print $3}' | sed -e &quot;s/\..*//&quot;"/>
+	</exec>
         <if>
-	    <available file="${appserver.home}/shared/lib" type="dir" property="tomcat5"/>
+	   <available file="${appserver.home}/shared/lib" type="dir" property="tomcat5"/>
             <then>
                 <echo message="Detected Tomcat 5"/>
                 <copy overwrite="true" todir="${appserver.home}/shared/lib">
@@ -233,6 +236,12 @@ Build include file for the GridSphere Portal source code, see build.xml
             </then>
             <else>
                 <echo message="Detected Tomcat 6"/>
+                <echo message=" "/>
+                <echo message="+---------------------------------------------------------------------------+"/>
+                <echo message="| TOMCAT 6 IS SUPPORTED (as far as I can tell :)  |                         |"/>
+                <echo message="| PLEASE USE TOMCAT 5.5.x if you find bugs and can't fix'em                 |"/>
+                <echo message="+---------------------------------------------------------------------------+"/>
+                <echo message=" "/>
 		<copy overwrite="true" todir="${appserver.home}/lib">
                     <fileset dir="lib">
                         <exclude name="licenses/**"/>
