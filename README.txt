@@ -5,6 +5,9 @@ $Id$
 
 Please follow the instructions in the INSTALL file to build GridSphere.
 
+Information about Shibboleth you find in the SHIBBOLETH file.
+Information about X.509 certificates you find in the X509 file.
+
 You can also check the online web site 
 (http://www.gridsphere.org) which contains the most up to date 
 information including slides, white papers, and other documentation on 

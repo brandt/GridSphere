@@ -7,10 +7,10 @@ $Id$
 Requirements
 ------------
 
-1) Building the GridSphere distribution requires 1.5+. You will also need Ant 1.6+ 
+1) Building the GridSphere distribution requires Java 1.6+. You will also need Ant 1.7+ 
 available at http://jakarta.apache.org/ant. 
 
-2) You will also need a Tomcat 5.5.x servlet container 
+2) You will also need a Tomcat 5.5.x / 6.x servlet container 
 available at http://jakarta.apache.org/tomcat. In addition to providing
 a hosting environment for GridSphere, Tomcat provides some of the required 
 XML (JAR) libraries that are needed for compilation.

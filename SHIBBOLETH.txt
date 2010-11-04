@@ -1,0 +1,57 @@
+Configuration GridSphere and Shibboleth
+
+For Tomcat and Apache to be able to communicate module mod_jk has to be installed.
+(see http://tomcat.apache.org/connectors-doc/webserver_howto/apache.html)
+
+In the file attribute-map.xml of the Shibboleth Service Provider 2.x the SAML attributes get mapped to Apache environment variables.
+These can be forwarded to Tomcat via the module mod_jk.
+
+The Apache environment variables that will be passed on to Tomcat have to be entered in the modules configuration file mod_jk.conf. This is done by directive JkEnvVar. Required for login in GridSphere are lastname, firstname and email. To be able to login to GridSphere, these have to be forwarded to Tomcat respectively GridSphere. The email serves as the username.
+In the file attribute-map.xml the users lastname must be mapped to Shib-surname, firstname to Shib-givenname and the e-mail to Shib-mail. Then they can be passed to Tomcat via mod_jk.conf.  
+Use of JkEnvVar in mod_jk.conf:
+	JkEnvVar Shib-givenname
+	JkEnvVar Shib-surname
+	JkEnvVar Shib-mail
+
+Currently the following attributes can be read in GridSphere:
+	Shib-givenname
+	Shib-surname	
+	Shib-mail
+	Shib-cn
+	Shib-role
+	Shib-eppn
+	Shib-Session-ID
+	Shib -Identity-Provider
+	Shib-EP-Affiliation
+	Shib-EP-UnscopedAffiliation
+
+The attributes are readout in ShibbolethLoginPortlet in the function public User login(PortletRequest request) via a HttpServletRequest:
+	String firstname = (String) req.getAttribute("Shib-givenname");
+	String lastname = (String) req.getAttribute("Shib-surname");
+	String email = (String) req.getAttribute("Shib-mail");
+	etc
+
+To adjust the shibbolised GridSphere to your needs, you need to customize mod_jk.conf.
+
+A new table was created in the GridSphere Database to save the Shibboleth attributes and a new service (ShibbolethService) was implemented to write and read the attributes into and from the database.
+GridSphere uses Hibernate. 
+The table is defined in webapps/gridsphere/WEB-INF/persistence/ShibbolethUser.hbm.xml. At this point the following attributes can be saved:
+	ShibUsername
+	ShibCN
+	ShibLastname
+	ShibFirstname
+	ShibEmail
+	ShibRole
+	ShibAttr1
+	ShibAttr2
+	ShibAttr3
+	ShibAttr4
+You find the associated getter/setter functions in the file src.org.gridsphere.services.core.shibboleth.ShibbolethUser.java. These two Files need to be changed before installation to adjust them to your needs.
+
+Requirements: 
+Java 1.6 and Tomcat 5/6
+
+Installation:
+Prior to installation enter Shibboleth Service Provider  in webapps/gridsphere/Shibboleth.properties (e.g. host.dns=shib2-sp.aei.mpg.de)
+Install as usual using ant install.
+
