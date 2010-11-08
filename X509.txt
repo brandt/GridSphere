@@ -1,0 +1,75 @@
+This is an overview of how to configure Tomcat to grant access with an x509 certificate. 
+The final resulte will be an install of Apachie Tomcat that supplise a certificate validating the servers 
+authenticity to the user as well as requesting a certifacate from the users to prove their authenticity.
+
+******************************START EXAMPLE CERT INSTALL********************
+
+For this example we will use self signed certifacates. This is good for testing the install, consider it getting your hands dirty.
+Later you can use your existing certificates.
+
+First you need a Certifacte Authority Cert. The Certifacet Authority is the entity that is responcible
+for the validity of any certifacate it signs. All the certifacates in this example must be sign by this "CA".
+
+1. First create a private key and cert request for your CA:
+	openssl req -new -newkey rsa:1024 -nodes -out ca.csr -keyout ca.key
+
+2. Now creat the CA's self-signed certificate:
+	openssl x509 -trustout -signkey ca.key -days 365 -req -in ca.csr -out ca.pem
+
+3. And create a file to hold your CA's serial numbers. This file starts with the number "2":
+	echo "02" > ca.srl
+
+The files needed to sign CA requests for certificates in the following steps are ca.srl, ca.key and ca.pem
+
+4. Now you can add the trusted CA to the root keystore: (This is required to make a cert chain that tomcat can trust.)
+	keytool -import -keystore $JAVA_HOME/jre/lib/cacerts -file ca.pem -alias [ca_name: must be unique]
+	default password for this keystore is "changeit"
+
+For Tomcat to trust a client request a host certificate is needed. This is what the client cert is checked against 
+to verify its authenticity. Both the host and client cert have to be signed by the above Certificate Authority. 
+When makeing a CA from scratch run these commands to create and sign a host cert.
+
+5. Create a host cert request.
+	openssl req -new -newkey rsa:512 -nodes -out host.req -keyout host.key
+
+6. Sign the request with the CA.
+	openssl x509 -CA ca.pem -CAkey ca.key -CAserial ca.srl -req -in host.req -out host.pem -days 365
+
+Now you have a certifacate for your host that can be used by tomcat to show the user its authenticity (not to trust worthy since 
+you signed it yourself). But tomcat does not know where to find this cert. You need to put it in a JAVA keystore and configure 
+tomcat to find and open this cert.
+
+7. First create a new keystore for Tomcat and import the host.pem:
+	keytool -import -alias tomcat -keystore tomcat_server.ks -storetype JKS -keysize 1024 -trustcacerts -file host.pem
+
+8. Now import the CA cert into this new keystore: <-- this is nessary for the host to use SSL client authentication.
+	keytool -import -alias [ca_name: must be unique] -truscacerts -file ca.pem
+
+Finnaly set-up server.xml in $CATALINA_HOME/conf/ to use ssl and certs:
+For the automated gridsphere install this is changed automatically in build.xml. You need to chage these values in the build.properties file.
+	tomcat.conf.keystore.file=/path/to/keystore [name is "tomcat_server.ks" in this example]
+	tomcat.conf.keystore.password=keystore_pass_word
+	tomcat.conf.keystore.alias= [In this example "tomcat" is used]
+
+For the sake of testing this install lets also make a client cert to be able to logon to tomcat once it is installed. This is just like makeing a host cert.
+9. First make the cert request:
+	openssl req -new -newkey rsa:512 -nodes -out client.req -keyout client.key
+
+10. Sign the request with the CA:
+	openssl x509 -CA ca.pem -CAkey ca.key -CAserial ca.srl -req -in client.req -out client.pem -days 365
+
+11. Now make a PKCS12 out of the signed cary and key:
+	openssl pkcs12 -export -clcerts -in clinet.pem -inkey client.key -out client.p12 -name "my_client_cert"
+
+This client.p12 can then be imported into a browser to be used to sign on to the tomcat/gridsphere/server.
+
+Now you have a setup that uses a client cert in a web browser that is checked against a host cert in tomcat when the client requests tomcats url.
+The only thing missing is Gridsphere having a map from the client cert given to it from Tomcat to a user in Gridspheres data base. 
+When you try to log in to Gridsphere on the secure port, default is 8443, you are prompted with a dialog like:
+	Login with certificate
+	CN=Max Muster, OU=AEI, O=GermanGrid, C=DE
+This string needs to be entered into the users profile in Gridsphere. But not as it apperes here. It must be reversed and replace ", " with "/"
+Like this:
+	/C=DE/O=GermanGrid/OU=AEI/CN=Max Muster
+Now you can log in with you certificate
+
